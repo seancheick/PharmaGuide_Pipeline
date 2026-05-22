@@ -37464,7 +37464,7 @@
     "statistics": {
       "total_parents": 621,
       "total_forms": 1392,
-      "total_form_aliases": 12133,
+      "total_form_aliases": 12126,
       "parents_with_parent_aliases": 187,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -47056,23 +47056,17 @@
         "absorption": "unknown",
         "notes": "Fucus vesiculosus/Laminaria powder providing natural iodine, fucoidan polysaccharides, and alginic acid. Primary use as iodine source for thyroid support. Fucoidan has immunomodulatory properties. Verify heavy metal and iodine testing \u2014 kelp iodine content varies widely (45-57,000 mcg/serving). B34 audit 2026-04-25: bulk class-application (unknown w/ bio=7 \u2192 low-mod) \u2014 mechanical mapping from absorption + bio_score.",
         "aliases": [
-          "brown kelp undaria pinnatifida powder",
-          "kelp powder",
-          "brown seaweed (laminaria japonica) extract",
           "atlantic kelp",
-          "norwegian kelp",
-          "ascophyllum nodosum",
           "sea kelp",
           "north atlantic kelp",
           "pacific kelp",
-          "Japanese Kelp extract",
-          "rockweed",
           "organic sea kelp",
           "brown seaweed extract",
           "brown seaweed concentrate",
           "brown seaweed"
         ],
-        "notes_2026_05_22_sb3a": "§7.5/§8.5 cleanup: removed Fucus vesiculosus (Bladderwrack) aliases — 'Bladder Wrack', 'Bladderwrack', 'Fucus vesiculosus', 'Fucus vesiculosus extract', 'bladder wrack extract', 'bladderwrack extract'. Bladderwrack (UNII 535G2ABX9M, Fucus vesiculosus) is a different species from generic brown kelp / Laminaria (UNII 4R2124HE76) — they have different bioactive profiles (fucoidan/iodine vs laminarin), different traditional uses, and different regulatory profiles. Bladderwrack identity now lives in standardized_botanicals.bladderwrack (fucoidan-marker bonus pathway). SB-3b will further decontaminate Ascophyllum, Saccharina japonica, and Undaria pinnatifida aliases. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md.",
+        "notes_2026_05_22_sb3a": "\u00a77.5/\u00a78.5 cleanup: removed Fucus vesiculosus (Bladderwrack) aliases \u2014 'Bladder Wrack', 'Bladderwrack', 'Fucus vesiculosus', 'Fucus vesiculosus extract', 'bladder wrack extract', 'bladderwrack extract'. Bladderwrack (UNII 535G2ABX9M, Fucus vesiculosus) is a different species from generic brown kelp / Laminaria (UNII 4R2124HE76) \u2014 they have different bioactive profiles (fucoidan/iodine vs laminarin), different traditional uses, and different regulatory profiles. Bladderwrack identity now lives in standardized_botanicals.bladderwrack (fucoidan-marker bonus pathway).",
+        "notes_2026_05_22_sb3b": "\u00a77.5/\u00a78.5 cleanup: removed Ascophyllum nodosum aliases ('kelp powder', 'norwegian kelp', 'ascophyllum nodosum', 'rockweed' \u2192 botanical_ingredients.kelp_powder, UNII 168S4EO8YJ); removed Saccharina japonica aliases ('brown seaweed (laminaria japonica) extract', 'Japanese Kelp extract' \u2192 botanical_ingredients.kombu, UNII WE98HW412B); removed Undaria pinnatifida alias ('brown kelp undaria pinnatifida powder' \u2192 botanical_ingredients.wakame, UNII ICV1OK7M1S). 7 alias removals total. Each species had a clean canonical home with its correct UNII; the IQM brown_kelp entry now scopes to generic/ambiguous-species kelp identity only. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md and the prior SB-3a commit 5592047d.",
         "dosage_importance": 0.8,
         "absorption_structured": {
           "value": 0.35,
