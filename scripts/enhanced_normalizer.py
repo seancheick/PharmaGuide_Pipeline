@@ -3668,6 +3668,12 @@ class EnhancedDSLDNormalizer:
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
                         continue
+                    if self._is_chemical_decomposition_leaf(nested_ing):
+                        logger.debug(
+                            "Skipping chemical-decomposition leaf '%s' (cat=%s) under DSLD group blend container '%s'",
+                            nested_name, nested_ing.get("category"), name,
+                        )
+                        continue
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
                     if parent_mass is not None:
@@ -3696,6 +3702,12 @@ class EnhancedDSLDNormalizer:
                 for nested_ing in nested:
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
+                        continue
+                    if self._is_chemical_decomposition_leaf(nested_ing):
+                        logger.debug(
+                            "Skipping chemical-decomposition leaf '%s' (cat=%s) under structural active container '%s'",
+                            nested_name, nested_ing.get("category"), name,
+                        )
                         continue
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
@@ -3763,6 +3775,12 @@ class EnhancedDSLDNormalizer:
                                     [nested_ing], _depth=_depth + 1,
                                 )
                                 flattened.extend(sub_flattened)
+                            continue
+                        if self._is_chemical_decomposition_leaf(nested_ing):
+                            logger.debug(
+                                "Skipping chemical-decomposition leaf '%s' (cat=%s) under skipped parent '%s'",
+                                nested_name, nested_ing.get("category"), name,
+                            )
                             continue
                         nested_ing["parentBlend"] = name
                         nested_ing["isNestedIngredient"] = True
@@ -3835,6 +3853,12 @@ class EnhancedDSLDNormalizer:
                                         )
                                         flattened.extend(sub)
                                     continue
+                                if self._is_chemical_decomposition_leaf(grand_ing):
+                                    logger.debug(
+                                        "Skipping chemical-decomposition grandchild '%s' (cat=%s) under skipped nested '%s'",
+                                        grand_name, grand_ing.get("category"), nested_name,
+                                    )
+                                    continue
                                 grand_ing["parentBlend"] = nested_name
                                 grand_ing["isNestedIngredient"] = True
                                 if skipped_mass is not None:
@@ -3850,6 +3874,13 @@ class EnhancedDSLDNormalizer:
                                     flattened.extend(sub)
                                 else:
                                     flattened.append(grand_ing)
+                        continue
+
+                    if self._is_chemical_decomposition_leaf(nested_ing):
+                        logger.debug(
+                            "Skipping chemical-decomposition leaf '%s' (cat=%s) under parent '%s'",
+                            nested_name, nested_ing.get("category"), name,
+                        )
                         continue
 
                     # Mark as part of a blend
@@ -4626,7 +4657,73 @@ class EnhancedDSLDNormalizer:
                     processed.append(processed_ing)
 
         return processed
-    
+
+    # Counter-ion descriptor pattern: "X Salt", "X Hydrochloride", "X HCl",
+    # "X Sulfate", "X Acetate", "X Citrate", "X Chloride", "X Phosphate",
+    # "X Bisulfite". Single prefix token only — multi-token names like
+    # "Glucosamine Sulfate Sodium" do not match.
+    _COUNTER_ION_LEAF_RE = re.compile(
+        r"^\s*[a-z][a-z\-]+\s+"
+        r"(salt|hydrochloride|hcl|sulfate|acetate|citrate|chloride|phosphate|bisulfite)\s*$"
+    )
+
+    @classmethod
+    def _is_chemical_decomposition_leaf(cls, nested_ing: Dict) -> bool:
+        """Detect nested rows that are chemical-name decomposition descriptors
+        of a parent compound, NOT separate scoreable ingredients.
+
+        Two real DSLD patterns this catches (each observed in production
+        data; see ``test_nested_counter_ion_and_blend_leaf_safety``):
+
+        1. Counter-ion descriptor leaf. ``Quatrefolic`` methylfolate
+           (DSLD 209368) carries a level-3 nested leaf ``"Glucosamine
+           Salt"`` (category=``non-nutrient/non-botanical``, group=
+           ``Glucosamine (unspecified)``, qty=0/NP). Surfacing this as
+           an active and aliasing it to IQM glucosamine would silently
+           mis-score a folate B-complex as a joint supplement.
+
+        2. Comma-joined blend leaf. Fish-oil products (DSLD 178317 and
+           others) carry a level-3 leaf ``"DHA, EPA"`` (category=
+           ``blend``, group=``Blend``). DSLD itself tags this as a blend
+           disclosure; surfacing it as an active produces the unmappable
+           token ``"dha epa"`` and blocks per-marker EPA/DHA scoring on
+           the parent path.
+
+        A standalone product whose sole ingredient name matches one of
+        these patterns is unaffected: the helper is only consulted at
+        the nested-row descent site, after the parent is established.
+        """
+        name = (nested_ing.get("name") or "").strip().lower()
+        if not name:
+            return False
+        cat = (nested_ing.get("category") or "").strip().lower()
+
+        # Pattern 2: DSLD-tagged blend leaf with comma-joined marker names
+        if cat == "blend" and "," in name:
+            return True
+
+        # Pattern 1: counter-ion descriptor leaf with no own dose
+        if cat == "non-nutrient/non-botanical":
+            qty_data = nested_ing.get("quantity")
+            if isinstance(qty_data, list) and qty_data:
+                qd = qty_data[0] if isinstance(qty_data[0], dict) else {}
+                qty = qd.get("quantity", 0)
+                unit = qd.get("unit", "")
+            else:
+                qty = nested_ing.get("quantity", 0)
+                unit = nested_ing.get("unit", "")
+            has_own_dose = (
+                isinstance(qty, (int, float))
+                and qty > 0
+                and unit not in ("", "NP")
+            )
+            if has_own_dose:
+                return False
+            if cls._COUNTER_ION_LEAF_RE.match(name):
+                return True
+
+        return False
+
     def _process_single_ingredient_enhanced(self, ing: Dict, is_active: bool) -> Union[Dict[str, Any], List[Dict[str, Any]], None]:
         """Process a single ingredient with enhanced mapping.
 
