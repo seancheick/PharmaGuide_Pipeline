@@ -1,0 +1,1254 @@
+{
+  "audit_run_date": "2026-05-22",
+  "audit_base_commit": "ea8adf34",
+  "total_std_entries": 241,
+  "v6_annotated_count": 15,
+  "has_marker_no_v6_count": 137,
+  "no_marker_total": 89,
+  "groups": {
+    "MOVE_TO_BOTANICAL_INGREDIENTS": [
+      {
+        "id": "african_mango",
+        "standard_name": "African Mango",
+        "unii": null,
+        "aliases": [
+          "irvingia gabonensis",
+          "wild mango",
+          "bush mango extract"
+        ],
+        "category": "herb",
+        "cui": "C1033652"
+      },
+      {
+        "id": "akarkara",
+        "standard_name": "Akarkara",
+        "unii": null,
+        "aliases": [
+          "anacyclus pyrethrum",
+          "akarkara extract",
+          "pellitory root",
+          "spanish chamomile",
+          "akarkara root"
+        ],
+        "category": "herb",
+        "cui": "C1669961"
+      },
+      {
+        "id": "alfalfa",
+        "standard_name": "Alfalfa",
+        "unii": "HY3L927V6M",
+        "aliases": [
+          "medicago sativa",
+          "alfalfa extract",
+          "alfalfa leaf extract",
+          "lucerne"
+        ],
+        "category": "herb",
+        "cui": "C2349204"
+      },
+      {
+        "id": "american_ginseng",
+        "standard_name": "American Ginseng",
+        "unii": "8W75VCV53Q",
+        "aliases": [
+          "panax quinquefolius",
+          "american ginseng root extract",
+          "panax quinquefolius root",
+          "american ginseng extract"
+        ],
+        "category": "adaptogen",
+        "cui": "C1119918"
+      },
+      {
+        "id": "astaxanthin",
+        "standard_name": "Astaxanthin",
+        "unii": "8XPW32PR7I",
+        "aliases": [
+          "haematococcus pluvialis extract",
+          "astaxanthin extract",
+          "natural astaxanthin"
+        ],
+        "category": "herb",
+        "cui": "C0052565"
+      },
+      {
+        "id": "astaxanthin_haematococcus_pluvialis",
+        "standard_name": "Astaxanthin (Haematococcus pluvialis)",
+        "unii": "31T0FF0472",
+        "aliases": [
+          "astaxanthin",
+          "Haematococcus pluvialis",
+          "astaxanthin algae extract",
+          "bioastin",
+          "astareal",
+          "zanthin",
+          "microalgal astaxanthin"
+        ],
+        "category": "herb",
+        "cui": "C0052565"
+      },
+      {
+        "id": "astazine",
+        "standard_name": "AstaZine",
+        "unii": null,
+        "aliases": [
+          "AstaZine",
+          "Astaferm"
+        ],
+        "category": "herb",
+        "cui": null
+      },
+      {
+        "id": "baobab",
+        "standard_name": "Baobab",
+        "unii": null,
+        "aliases": [
+          "adansonia digitata",
+          "baobab fruit powder",
+          "baobab extract"
+        ],
+        "category": "herb",
+        "cui": "C1084996"
+      },
+      {
+        "id": "barley_grass",
+        "standard_name": "Barley Grass",
+        "unii": "86507VZR9K",
+        "aliases": [
+          "hordeum vulgare",
+          "barley grass powder",
+          "barley grass extract"
+        ],
+        "category": "herb",
+        "cui": "C0004755"
+      },
+      {
+        "id": "bee_pollen",
+        "standard_name": "Bee Pollen",
+        "unii": "3729L8MA2C",
+        "aliases": [
+          "bee pollen extract",
+          "bee pollen granules",
+          "flower pollen",
+          "pollen granules"
+        ],
+        "category": "herb",
+        "cui": "C0795585"
+      },
+      {
+        "id": "black_cohosh",
+        "standard_name": "Black Cohosh",
+        "unii": "K73E24S6X9",
+        "aliases": [
+          "actaea racemosa",
+          "cimicifuga racemosa",
+          "black cohosh root extract",
+          "black cohosh root standardized extract"
+        ],
+        "category": "herb",
+        "cui": "C0885226"
+      },
+      {
+        "id": "black_musli",
+        "standard_name": "Black Musli",
+        "unii": "715B59598O",
+        "aliases": [
+          "curculigo orchioides",
+          "black musli extract",
+          "kali musli",
+          "talamuli",
+          "musli kand"
+        ],
+        "category": "herb",
+        "cui": "C2800341"
+      },
+      {
+        "id": "black_sesame",
+        "standard_name": "Black Sesame",
+        "unii": null,
+        "aliases": [
+          "black sesame seed",
+          "black sesame seed extract",
+          "sesame noir",
+          "sesamum indicum"
+        ],
+        "category": "herb",
+        "cui": "C0946894"
+      },
+      {
+        "id": "blackberry",
+        "standard_name": "Blackberry",
+        "unii": "8A6OMU3I8L",
+        "aliases": [
+          "rubus fruticosus",
+          "blackberry fruit extract",
+          "blackberry extract",
+          "blackberry juice",
+          "blackberry powder"
+        ],
+        "category": "seed_fruit",
+        "cui": "C2740597"
+      },
+      {
+        "id": "blue_green_algae",
+        "standard_name": "Blue-Green Algae",
+        "unii": "49VG1X560X",
+        "aliases": [
+          "aphanizomenon flos-aquae",
+          "afa",
+          "klamath algae",
+          "organic microalgae"
+        ],
+        "category": "algae",
+        "cui": "C0304057"
+      },
+      {
+        "id": "camu_camu",
+        "standard_name": "Camu Camu",
+        "unii": null,
+        "aliases": [
+          "myrciaria dubia",
+          "camu camu powder",
+          "camu camu extract",
+          "natural vitamin c",
+          "amazonian vitamin c",
+          "camu fruit c",
+          "camu camu supplement",
+          "natural vitamin c supplement",
+          "natural vit c",
+          "camu camu extract supplement",
+          "amazonian vitamin c supplement",
+          "amazonian vit c",
+          "camu fruit c supplement",
+          "camu camu fruit extract",
+          "Camu Camu Berry Extract"
+        ],
+        "category": "herb",
+        "cui": "C2293178"
+      },
+      {
+        "id": "caraway",
+        "standard_name": "Caraway",
+        "unii": "W2FH8O2BBE",
+        "aliases": [
+          "carum carvi",
+          "caraway seed",
+          "caraway oil",
+          "caraway extract"
+        ],
+        "category": "seed_fruit",
+        "cui": "C0331053"
+      },
+      {
+        "id": "century_plant",
+        "standard_name": "Century Plant",
+        "unii": "024852X0VD",
+        "aliases": [
+          "agave americana",
+          "agave americana extract",
+          "agave extract",
+          "maguey"
+        ],
+        "category": "herb",
+        "cui": "C0331586"
+      },
+      {
+        "id": "cinnamon",
+        "standard_name": "Cinnamon",
+        "unii": "5S29HWU6QB",
+        "aliases": [
+          "cinnamomum verum",
+          "ceylon cinnamon",
+          "cinnamomum cassia",
+          "cinnamon bark extract"
+        ],
+        "category": "herb",
+        "cui": "C0939899"
+      },
+      {
+        "id": "cistanche",
+        "standard_name": "Cistanche",
+        "unii": null,
+        "aliases": [
+          "cistanche tubulosa",
+          "cistanche deserticola",
+          "rou cong rong",
+          "desert hyacinth",
+          "cistanche extract"
+        ],
+        "category": "adaptogen",
+        "cui": "C1038769"
+      },
+      {
+        "id": "d_mannose",
+        "standard_name": "D-Mannose",
+        "unii": "PHA4727WTP",
+        "aliases": [
+          "d mannose",
+          "mannose"
+        ],
+        "category": "active_compound",
+        "cui": "C0024742"
+      },
+      {
+        "id": "damiana",
+        "standard_name": "Damiana",
+        "unii": "812R0W1I3K",
+        "aliases": [
+          "damiana leaf",
+          "damiana leaf extract",
+          "turnera",
+          "turnera diffusa"
+        ],
+        "category": "herb",
+        "cui": "C0772118"
+      },
+      {
+        "id": "elder_flower",
+        "standard_name": "Elder Flower",
+        "unii": "07V4DX094T",
+        "aliases": [
+          "sambucus nigra flos",
+          "elderflower extract"
+        ],
+        "category": "herb",
+        "cui": "C3486741"
+      },
+      {
+        "id": "flaxseed",
+        "standard_name": "Flaxseed",
+        "unii": null,
+        "aliases": [
+          "linum usitatissimum",
+          "flaxseed oil",
+          "flaxseed extract",
+          "ground flaxseed"
+        ],
+        "category": "seed_fruit",
+        "cui": "C0023753"
+      },
+      {
+        "id": "galdieria",
+        "standard_name": "Galdieria",
+        "unii": "2E5CL9KYZ8",
+        "aliases": [
+          "galdieria sulphuraria",
+          "galdieria extract",
+          "galdieria blue"
+        ],
+        "category": "algae",
+        "cui": "C1086344"
+      },
+      {
+        "id": "garlic",
+        "standard_name": "Garlic",
+        "unii": "V1V998DC17",
+        "aliases": [
+          "allium sativum",
+          "garlic extract",
+          "aged garlic extract",
+          "garlic bulb",
+          "garlic powder",
+          "kyolic",
+          "odorless garlic"
+        ],
+        "category": "herb",
+        "cui": "C0017102"
+      },
+      {
+        "id": "grapefruit_seed",
+        "standard_name": "Grapefruit Seed",
+        "unii": "598D944HOL",
+        "aliases": [
+          "citrus paradisi",
+          "citrus seed extract",
+          "grapefruit seed extract",
+          "grapefruit seed oil"
+        ],
+        "category": "seed_fruit",
+        "cui": "C0873113"
+      },
+      {
+        "id": "horsetail",
+        "standard_name": "Horsetail",
+        "unii": null,
+        "aliases": [
+          "equisetum arvense",
+          "horsetail extract",
+          "field horsetail"
+        ],
+        "category": "herb",
+        "cui": "C0331745"
+      },
+      {
+        "id": "huperzine_a",
+        "standard_name": "Huperzine A",
+        "unii": "0111871I23",
+        "aliases": [
+          "huperzia serrata extract",
+          "chinese club moss extract"
+        ],
+        "category": "herb",
+        "cui": "C0063033"
+      },
+      {
+        "id": "inulin",
+        "standard_name": "Inulin",
+        "unii": "JOS53KRJ01",
+        "aliases": [
+          "chicory root inulin",
+          "fructooligosaccharides",
+          "FOS"
+        ],
+        "category": "herb",
+        "cui": "C0021936"
+      },
+      {
+        "id": "kelp",
+        "standard_name": "Kelp",
+        "unii": "168S4EO8YJ",
+        "aliases": [
+          "laminaria",
+          "ascophyllum nodosum",
+          "kelp extract"
+        ],
+        "category": "herb",
+        "cui": "C0939804"
+      },
+      {
+        "id": "l_theanine",
+        "standard_name": "L-Theanine",
+        "unii": "8021PR16QO",
+        "aliases": [
+          "theanine",
+          "gamma-glutamylethylamide",
+          "suntheanine"
+        ],
+        "category": "herb",
+        "cui": "C0076380"
+      },
+      {
+        "id": "linden_flower",
+        "standard_name": "Linden Flower",
+        "unii": "CFN6G1F6YK",
+        "aliases": [
+          "tilia cordata",
+          "tilia platyphyllos",
+          "linden flower extract"
+        ],
+        "category": "herb",
+        "cui": "C0771627"
+      },
+      {
+        "id": "lion_s_mane",
+        "standard_name": "Lion's Mane",
+        "unii": null,
+        "aliases": [
+          "bearded tooth mushroom",
+          "hericium erinaceus",
+          "lion's mane mushroom extract",
+          "yamabushitake",
+          "lion's mane extract",
+          "hericium mushroom",
+          "hedgehog mushroom",
+          "lions mane mushroom"
+        ],
+        "category": "mushroom",
+        "cui": "C1001731"
+      },
+      {
+        "id": "mallow",
+        "standard_name": "Mallow",
+        "unii": null,
+        "aliases": [
+          "malva sylvestris",
+          "mallow flower extract",
+          "mallow leaf extract"
+        ],
+        "category": "herb",
+        "cui": "C1254223"
+      },
+      {
+        "id": "muira_puama",
+        "standard_name": "Muira Puama",
+        "unii": null,
+        "aliases": [
+          "ptychopetalum olacoides",
+          "potency wood",
+          "marapuama",
+          "muira puama bark extract"
+        ],
+        "category": "herb",
+        "cui": "C1136294"
+      },
+      {
+        "id": "mulungu",
+        "standard_name": "Mulungu",
+        "unii": "NU815YHH1S",
+        "aliases": [
+          "coral tree",
+          "erythrina",
+          "erythrina mulungu",
+          "mulungu bark extract"
+        ],
+        "category": "herb",
+        "cui": "C0996829"
+      },
+      {
+        "id": "onion",
+        "standard_name": "Onion",
+        "unii": "492225Q21H",
+        "aliases": [
+          "allium cepa",
+          "onion extract",
+          "onion bulb extract"
+        ],
+        "category": "herb",
+        "cui": "C2740652"
+      },
+      {
+        "id": "oregano",
+        "standard_name": "Oregano",
+        "unii": "0E5AT8T16U",
+        "aliases": [
+          "origanum vulgare",
+          "oregano extract",
+          "oregano oil",
+          "wild oregano",
+          "origanum"
+        ],
+        "category": "herb",
+        "cui": "C0946715"
+      },
+      {
+        "id": "phosphatidylserine",
+        "standard_name": "Phosphatidylserine",
+        "unii": "394XK0IH40",
+        "aliases": [
+          "ps",
+          "phosphatidyl serine",
+          "sharp ps",
+          "sunps"
+        ],
+        "category": "active_compound",
+        "cui": "C0301704"
+      },
+      {
+        "id": "pine_bark_extract",
+        "standard_name": "Pine Bark Extract",
+        "unii": "50JZ5Z98QY",
+        "aliases": [
+          "pinus pinaster",
+          "pycnogenol",
+          "pine bark",
+          "maritime pine bark"
+        ],
+        "category": "bark",
+        "cui": "C3255957"
+      },
+      {
+        "id": "polygala",
+        "standard_name": "Polygala",
+        "unii": null,
+        "aliases": [
+          "polygala extract",
+          "polygala root",
+          "polygala tenuifolia",
+          "yuan zhi"
+        ],
+        "category": "herb",
+        "cui": "C0997031"
+      },
+      {
+        "id": "psyllium",
+        "standard_name": "Psyllium",
+        "unii": "0SHO53407G",
+        "aliases": [
+          "plantago ovata",
+          "psyllium husk",
+          "psyllium fiber"
+        ],
+        "category": "herb",
+        "cui": "C0033979"
+      },
+      {
+        "id": "pycnogenol",
+        "standard_name": "Pycnogenol",
+        "unii": "50JZ5Z98QY",
+        "aliases": [
+          "french maritime pine bark extract",
+          "pinus pinaster",
+          "maritime pine bark"
+        ],
+        "category": "herb",
+        "cui": "C0072642"
+      },
+      {
+        "id": "rosehip",
+        "standard_name": "Rosehip",
+        "unii": null,
+        "aliases": [
+          "rosa canina",
+          "rosehip extract",
+          "rose hip powder"
+        ],
+        "category": "herb",
+        "cui": "C1030673"
+      },
+      {
+        "id": "saffron",
+        "standard_name": "Saffron",
+        "unii": "E849G4X5YJ",
+        "aliases": [
+          "crocus",
+          "crocus sativus",
+          "saffron extract",
+          "saffron stigma",
+          "affron",
+          "saffr'activ",
+          "saffr'active"
+        ],
+        "category": "herb",
+        "cui": "C0376238"
+      },
+      {
+        "id": "shilajit",
+        "standard_name": "Shilajit",
+        "unii": null,
+        "aliases": [
+          "shilajit extract",
+          "mumijo",
+          "mineral pitch",
+          "asphaltum punjabinum",
+          "primavie",
+          "asphaltum punjabianum",
+          "asphaltum"
+        ],
+        "category": "adaptogen",
+        "cui": "C0066936"
+      },
+      {
+        "id": "slippery_elm",
+        "standard_name": "Slippery Elm",
+        "unii": "63POE2M46Y",
+        "aliases": [
+          "red elm",
+          "slippery elm bark extract",
+          "ulmus",
+          "ulmus rubra"
+        ],
+        "category": "herb",
+        "cui": "C0330532"
+      },
+      {
+        "id": "soy_isoflavones",
+        "standard_name": "Soy Isoflavones",
+        "unii": "71B37NR06D",
+        "aliases": [
+          "glycine max",
+          "soy extract",
+          "soy isoflavone extract"
+        ],
+        "category": "herb",
+        "cui": "C4076257"
+      },
+      {
+        "id": "spinach",
+        "standard_name": "Spinach",
+        "unii": "6WO75C6WVB",
+        "aliases": [
+          "spinacia oleracea",
+          "spinach leaf",
+          "spinach powder",
+          "spinach extract"
+        ],
+        "category": "vegetable_greens",
+        "cui": "C2741499"
+      },
+      {
+        "id": "wheatgrass",
+        "standard_name": "Wheatgrass",
+        "unii": "3C3Y389JBU",
+        "aliases": [
+          "triticum",
+          "triticum aestivum",
+          "wheat grass juice",
+          "wheatgrass powder"
+        ],
+        "category": "herb",
+        "cui": "C1123020"
+      },
+      {
+        "id": "yellow_dock",
+        "standard_name": "Yellow Dock",
+        "unii": "S9T422Q956",
+        "aliases": [
+          "curly dock",
+          "rumex",
+          "rumex crispus",
+          "yellow dock root extract"
+        ],
+        "category": "herb",
+        "cui": "C1200905"
+      }
+    ],
+    "DELETE_OR_MERGE": [
+      {
+        "id": "aloe_vera",
+        "standard_name": "Aloe Vera",
+        "std_unii": "ZY81Z83H0X",
+        "bot_unii": "ZY81Z83H0X",
+        "std_aliases": [
+          "aloe barbadensis",
+          "aloe vera extract",
+          "aloe vera gel",
+          "aloe vera leaf"
+        ],
+        "bot_aliases": [
+          "aloe barbadensis miller",
+          "aloe vera leaf",
+          "organic aloe",
+          "aloe vera gel",
+          "Aloe vera Inner Leaf Gel",
+          "Aloe vera, Dehydrate, Powder",
+          "Aloe vera powder",
+          "Kumari",
+          "aloe vera organic powder",
+          "Aloe barbadensis",
+          "whole leaf Aloe vera",
+          "organic whole leaf Aloe vera",
+          "88% organic whole leaf Aloe vera",
+          "100% organic whole leaf Aloe vera",
+          "99% organic whole leaf Aloe vera",
+          "Aloe vera whole leaf"
+        ]
+      },
+      {
+        "id": "carrot",
+        "standard_name": "Carrot",
+        "std_unii": "L56Z1JK48B",
+        "bot_unii": "L56Z1JK48B",
+        "std_aliases": [
+          "daucus carota",
+          "carrot root",
+          "carrot extract",
+          "carrot powder"
+        ],
+        "bot_aliases": [
+          "Daucus sativus",
+          "daucus carota",
+          "carrot root"
+        ]
+      },
+      {
+        "id": "catuaba",
+        "standard_name": "Catuaba",
+        "std_unii": null,
+        "bot_unii": null,
+        "std_aliases": [
+          "catuaba bark",
+          "catuaba bark extract",
+          "erythroxylum catuaba",
+          "trichilia catigua"
+        ],
+        "bot_aliases": [
+          "catauba",
+          "catuaba bark",
+          "catuaba bark extract",
+          "erythroxylum catuaba",
+          "trichilia catigua"
+        ]
+      },
+      {
+        "id": "chamomile",
+        "standard_name": "Chamomile",
+        "std_unii": "FGL3685T2X",
+        "bot_unii": "FGL3685T2X",
+        "std_aliases": [
+          "matricaria recutita",
+          "matricaria chamomilla",
+          "german chamomile",
+          "chamomile extract",
+          "german chamomile extract",
+          "wild chamomile"
+        ],
+        "bot_aliases": [
+          "matricaria chamomilla",
+          "chamomile flower",
+          "organic chamomile",
+          "german chamomile",
+          "camomile",
+          "camomile flower",
+          "Camomile Flower"
+        ]
+      },
+      {
+        "id": "cranberry",
+        "standard_name": "Cranberry",
+        "std_unii": "0MVO31Q3QS",
+        "bot_unii": "0MVO31Q3QS",
+        "std_aliases": [
+          "vaccinium macrocarpon",
+          "cranberry extract",
+          "cranberry fruit extract",
+          "american cranberry",
+          "cranberry juice concentrate",
+          "urophenol"
+        ],
+        "bot_aliases": [
+          "Cranberry, Puree",
+          "organic Flowens whole Cranberry",
+          "organic Pacran whole Cranberry",
+          "Cran-Max Cranberry concentrate",
+          "Pacran SP Cranberry Vaccinium macrocarpon powder",
+          "Pacran SP Cranberry powder",
+          "Flowens Cranberry fruit solids",
+          "Cranberry Whole Fruit Concentrate",
+          "whole cranberry fruit concentrate",
+          "Vaccinium macrocarpon"
+        ]
+      },
+      {
+        "id": "cucumber",
+        "standard_name": "Cucumber",
+        "std_unii": "YY7C30VXJT",
+        "bot_unii": "YY7C30VXJT",
+        "std_aliases": [
+          "cucumis sativus",
+          "cucumber extract",
+          "cucumber seed extract"
+        ],
+        "bot_aliases": [
+          "cucumis sativus",
+          "cucumber powder",
+          "cucumber fruit"
+        ]
+      },
+      {
+        "id": "fennel",
+        "standard_name": "Fennel",
+        "std_unii": "557II4LLC3",
+        "bot_unii": "557II4LLC3",
+        "std_aliases": [
+          "foeniculum vulgare",
+          "fennel seed",
+          "fennel extract",
+          "sweet fennel"
+        ],
+        "bot_aliases": [
+          "foeniculum vulgare",
+          "fennel seed",
+          "fennel powder",
+          "wild crafted fennel",
+          "Fennel Oil",
+          "sweet fennel seed powder"
+        ]
+      },
+      {
+        "id": "graviola",
+        "standard_name": "Graviola",
+        "std_unii": "AN924793RM",
+        "bot_unii": "5EI0SM9VVE",
+        "std_aliases": [
+          "annona muricata",
+          "soursop",
+          "soursop extract"
+        ],
+        "bot_aliases": [
+          "graviola leaf",
+          "graviola leaf powder",
+          "graviola extract",
+          "soursop",
+          "annona muricata",
+          "guanabana"
+        ]
+      },
+      {
+        "id": "kale",
+        "standard_name": "Kale",
+        "std_unii": "0Y3L4J38H1",
+        "bot_unii": "0Y3L4J38H1",
+        "std_aliases": [
+          "brassica oleracea var. sabellica",
+          "kale leaf",
+          "kale powder",
+          "curly kale"
+        ],
+        "bot_aliases": [
+          "brassica oleracea var. acephala",
+          "kale powder",
+          "organic kale",
+          "kale leaf",
+          "Brassica oleracea var. sabellica"
+        ]
+      },
+      {
+        "id": "lavender",
+        "standard_name": "Lavender",
+        "std_unii": "ZBP1YXW0H8",
+        "bot_unii": "ZBP1YXW0H8",
+        "std_aliases": [
+          "lavandula angustifolia",
+          "lavender extract",
+          "lavender oil",
+          "lavandula",
+          "english lavender"
+        ],
+        "bot_aliases": [
+          "lavandula angustifolia",
+          "lavender extract",
+          "lavender oil",
+          "lavandula",
+          "english lavender",
+          "lavender flower oil",
+          "lavender flowering tops oil",
+          "lavender essential oil",
+          "lavender flower essential oil",
+          "english lavender flower essential oil",
+          "english lavender aerial extract",
+          "lavender flower",
+          "lavender"
+        ]
+      },
+      {
+        "id": "marshmallow_root",
+        "standard_name": "Marshmallow Root",
+        "std_unii": "TRW2FUF47H",
+        "bot_unii": "TRW2FUF47H",
+        "std_aliases": [
+          "althaea",
+          "althaea officinalis",
+          "marsh mallow",
+          "marshmallow root extract"
+        ],
+        "bot_aliases": [
+          "althaea officinalis root",
+          "marshmallow powder",
+          "althaea root",
+          "white mallow root",
+          "common marshmallow",
+          "marshmallow root (Althaea officinalis)",
+          "marshmallow",
+          "wild crafted marshmallow",
+          "Marshmallow extract",
+          "Althaea officinalis"
+        ]
+      },
+      {
+        "id": "mullein",
+        "standard_name": "Mullein",
+        "std_unii": "C9TD27U172",
+        "bot_unii": "C9TD27U172",
+        "std_aliases": [
+          "common mullein",
+          "mullein extract",
+          "mullein leaf extract",
+          "standardized mullein",
+          "verbascum thapsus"
+        ],
+        "bot_aliases": [
+          "verbascum thapsus",
+          "common mullein",
+          "mullein leaf",
+          "mullein flower",
+          "wild crafted mullein"
+        ]
+      },
+      {
+        "id": "sarsaparilla",
+        "standard_name": "Sarsaparilla",
+        "std_unii": "2H1576D5WG",
+        "bot_unii": "2H1576D5WG",
+        "std_aliases": [
+          "sarsaparilla extract",
+          "sarsaparilla root extract",
+          "smilax extract",
+          "smilax officinalis",
+          "smilax ornata"
+        ],
+        "bot_aliases": [
+          "smilax ornata",
+          "Smilax ornata",
+          "smilax ornata root",
+          "smilax ornata root extract",
+          "sarsaparilla",
+          "sarsaparilla root",
+          "sarsaparilla root extract",
+          "jamaican sarsaparilla"
+        ]
+      },
+      {
+        "id": "yucca",
+        "standard_name": "Yucca",
+        "std_unii": "08A0YG3VIC",
+        "bot_unii": "08A0YG3VIC",
+        "std_aliases": [
+          "mojave yucca",
+          "yucca extract",
+          "yucca root",
+          "yucca schidigera"
+        ],
+        "bot_aliases": [
+          "yucca juice extract",
+          "yucca extract",
+          "mojave yucca root extract",
+          "yucca 4:1 extract",
+          "Yucca schidigera"
+        ]
+      }
+    ],
+    "PROMOTE_V6_BRANDED": [
+      {
+        "id": "bil_max",
+        "standard_name": "Bil-Max",
+        "unii": null,
+        "aliases": [
+          "Bil-Max Bilberry Concentrate"
+        ],
+        "category": "standardized",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown if not specified."
+      },
+      {
+        "id": "blue_max",
+        "standard_name": "Blue-Max",
+        "unii": null,
+        "aliases": [
+          "Blue-Max Blueberry Concentrate"
+        ],
+        "category": "standardized",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown if not specified."
+      },
+      {
+        "id": "chromax",
+        "standard_name": "Chromax",
+        "unii": null,
+        "aliases": [
+          "Chromax",
+          "Cromax"
+        ],
+        "category": "mineral_chelate",
+        "notes_excerpt": "Chromax \u2014 chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose)."
+      },
+      {
+        "id": "cognigrape",
+        "standard_name": "Cognigrape",
+        "unii": "RDS2V6DVY5",
+        "aliases": [
+          "cognigrape",
+          "Cognigrape",
+          "CogniGrape",
+          "grape seed cognitive extract",
+          "Cognigrape red grape extract",
+          "Cognigrape standardized red grape extract"
+        ],
+        "category": "seed_fruit",
+        "notes_excerpt": "Cognigrape (Bionap branded red-grape, Vitis vinifera) anthocyanin-rich standardized extract clinically studied for cognitive support in older adults (Calapai 2017 PMID 28552883). UNII RDS2V6DVY5 (grap"
+      },
+      {
+        "id": "cran_max",
+        "standard_name": "Cran-Max",
+        "unii": null,
+        "aliases": [
+          "Cran-Max Cranberry concentrate"
+        ],
+        "category": "fruit",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown if not specified."
+      },
+      {
+        "id": "eps_7630",
+        "standard_name": "EPs 7630",
+        "unii": null,
+        "aliases": [
+          "EPs 7630"
+        ],
+        "category": "herb",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown."
+      },
+      {
+        "id": "floraglo",
+        "standard_name": "FloraGLO",
+        "unii": "X72A60C9MT",
+        "aliases": [
+          "FloraGLO"
+        ],
+        "category": "herb",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown."
+      },
+      {
+        "id": "flowens",
+        "standard_name": "Flowens",
+        "unii": null,
+        "aliases": [
+          "Flowens",
+          "organic Flowens whole Cranberry"
+        ],
+        "category": "standardized",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown."
+      },
+      {
+        "id": "fruitex_b_calcium_fructoborate",
+        "standard_name": "FruiteX-B Calcium Fructoborate",
+        "unii": null,
+        "aliases": [
+          "FruiteX-B Calcium Fructoborate"
+        ],
+        "category": "mineral_complex",
+        "notes_excerpt": "FruiteX-B \u2014 calcium fructoborate. Provides 3 mg elemental boron per clinical dose."
+      },
+      {
+        "id": "ksm_66_ashwagandha",
+        "standard_name": "KSM-66 Ashwagandha",
+        "unii": null,
+        "aliases": [
+          "KSM-66 Ashwagandha root extract",
+          "KSM66 Ashwagandha root extract",
+          "KSM66 Ashwagandha (Withania somnifera) root extract"
+        ],
+        "category": "herb",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown."
+      },
+      {
+        "id": "life_s_dha",
+        "standard_name": "Life's DHA",
+        "unii": null,
+        "aliases": [
+          "Life's DHA",
+          "life'sDHA"
+        ],
+        "category": "algal_oil",
+        "notes_excerpt": "Life's DHA \u2014 algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %."
+      },
+      {
+        "id": "lutemax_2020",
+        "standard_name": "Lutemax 2020",
+        "unii": null,
+        "aliases": [
+          "Lutemax 2020",
+          "Lutemax 2020 Marigold extract",
+          "Lutemax 2020 Marigold flower extract"
+        ],
+        "category": "herb",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown."
+      },
+      {
+        "id": "microactive_melatonin",
+        "standard_name": "MicroActive Melatonin",
+        "unii": null,
+        "aliases": [
+          "MicroActive Melatonin"
+        ],
+        "category": "hormone_analog",
+        "notes_excerpt": "MicroActive Melatonin \u2014 microencapsulated sustained-release melatonin. Dosed by mg/serving."
+      },
+      {
+        "id": "neurofactor",
+        "standard_name": "NeuroFactor",
+        "unii": null,
+        "aliases": [
+          "neurofactor",
+          "coffee fruit extract",
+          "coffeeberry extract",
+          "whole coffee fruit extract"
+        ],
+        "category": "fruit",
+        "notes_excerpt": "Patented coffee fruit extract shown to increase BDNF (brain-derived neurotrophic factor)."
+      },
+      {
+        "id": "optiberry",
+        "standard_name": "OptiBerry",
+        "unii": null,
+        "aliases": [
+          "OptiBerry",
+          "OpriBerry",
+          "OpriBerry(R)"
+        ],
+        "category": "berry",
+        "notes_excerpt": "Branded multiple-berry anthocyanin blend. Raw DSLD OpriBerry(R) rows match the documented OptiBerry composition of cranberry, elderberry, raspberry, strawberry, bilberry, and blueberry/wild blueberry."
+      },
+      {
+        "id": "organic_gold_standard_potentiating_nutrients",
+        "standard_name": "Organic Gold Standard Potentiating Nutrients",
+        "unii": null,
+        "aliases": [
+          "Organic Gold Standard Potentiating Nutrients"
+        ],
+        "category": "blend",
+        "notes_excerpt": "Proprietary blend \u2014 not a single-ingredient brand. Insufficient public data for standardization markers."
+      },
+      {
+        "id": "pacran",
+        "standard_name": "Pacran",
+        "unii": null,
+        "aliases": [
+          "Pacran",
+          "organic Pacran whole Cranberry"
+        ],
+        "category": "fruit",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown if not specified."
+      },
+      {
+        "id": "sharp_ps_green",
+        "standard_name": "Sharp-PS Green",
+        "unii": null,
+        "aliases": [
+          "Sharp-PS Green"
+        ],
+        "category": "standardized",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown if not specified."
+      },
+      {
+        "id": "slendesta",
+        "standard_name": "Slendesta",
+        "unii": null,
+        "aliases": [
+          "slendesta",
+          "potato protein extract",
+          "proteinase inhibitor II",
+          "PI2"
+        ],
+        "category": "tuber",
+        "notes_excerpt": "Patented potato protein extract that promotes satiety by triggering CCK release."
+      },
+      {
+        "id": "sunactive_iron",
+        "standard_name": "SunActive Iron",
+        "unii": null,
+        "aliases": [
+          "SunActive Iron"
+        ],
+        "category": "mineral",
+        "notes_excerpt": "SunActive Iron \u2014 micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron."
+      },
+      {
+        "id": "thermosil",
+        "standard_name": "Thermosil",
+        "unii": null,
+        "aliases": [
+          "Thermosil"
+        ],
+        "category": "mineral",
+        "notes_excerpt": "Thermosil \u2014 silicon/silica complex. Limited public standardization data. Requires verification."
+      },
+      {
+        "id": "turmipure_gold",
+        "standard_name": "TurmiPure Gold",
+        "unii": null,
+        "aliases": [
+          "TurmiPure Gold"
+        ],
+        "category": "herb",
+        "notes_excerpt": "Brand/standardized extract added from unmapped list; markers unknown."
+      },
+      {
+        "id": "uniflex",
+        "standard_name": "Uniflex",
+        "unii": null,
+        "aliases": [
+          "Uniflex"
+        ],
+        "category": "structural_protein",
+        "notes_excerpt": "Uniflex (UC-II) \u2014 undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization."
+      }
+    ]
+  }
+}
