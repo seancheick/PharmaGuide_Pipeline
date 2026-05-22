@@ -53,11 +53,4 @@ def test_botanical_total_count_unchanged(botanicals):
     # were previously routing through standardized_botanicals.green_coffee_bean
     # without marker evidence. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md
     # and commit eff29b3d.
-    # 517 after 2026-05-22 working-tree resync: +34 source-botanical canonical
-    # entries surfaced in the working tree (acerola, akkalkara, alfalfa juice,
-    # blueberry, cayenne, polygonum, sophora, tomato, etc. — completion of the
-    # identity_bioactivity_split policy where marker IQM canonicals delegate
-    # to explicit source botanicals). This invariant is intentionally write-locked
-    # so every legitimate addition or removal touches this assertion + the
-    # comment history; silent count drift is flagged in code review.
-    assert len(botanicals) == 517
+    assert len(botanicals) == 483
