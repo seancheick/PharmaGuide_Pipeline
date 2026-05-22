@@ -1,0 +1,30 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "description": "Reviewer-signed corrections for DSLD products where the manufacturer's printed label contains a typographical or transcription defect that produces a clinically dangerous or impossible ingredient.",
+    "purpose": "Per-product label correction with provenance. Each entry rewrites a single (dsld_id, raw_ingredient_text) pair to a corrected ingredient text BEFORE the cleaner does ingredient resolution. The override is scoped to the specific dsld_id — global aliasing of misspelled drug tokens is explicitly NOT supported because it would let future supplement labels silently rename the same token.",
+    "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
+    "review_policy": "Every entry must carry: dsld_id, brand, product_name (for human-readable audit trail), raw_ingredient_text (the label-printed text being corrected), corrected_ingredient_text (the canonical text the cleaner should see instead), evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer (signed by a clinician with the date), review_date (ISO 8601 YYYY-MM-DD).",
+    "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
+    "last_updated": "2026-05-22",
+    "total_entries": 1,
+    "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
+  },
+  "corrections": {
+    "69734": {
+      "brand": "GNC",
+      "product_name": "GNC Women's Ultra Mega Active Vanilla",
+      "raw_ingredient_text": "Insulin",
+      "corrected_ingredient_text": "Inulin",
+      "evidence": "Label printing/transcription error. Sibling ingredients in the same fiber-blend cell (Inositol, Fructooligosaccharides (FOS), Gum Acacia, Cellulose Gum, MCT Oil) make the fiber context unambiguous; 'Insulin' is the dictionary-nearest misprint of 'Inulin' (fructan fiber, FDA-recognized dietary fiber). Insulin itself is a hormone biologic regulated under FDA's Biologics Price Competition and Innovation Act (BPCIA, post-2020 transition from new-drug applications to biologic-license applications) and cannot legally appear on a US dietary-supplement label. Independent online cross-check confirms the same product is listed elsewhere with 'Inulin' rather than 'Insulin'.",
+      "sources": [
+        "https://www.fda.gov/drugs/therapeutic-biologics-applications-bla/biosimilars",
+        "https://www.fda.gov/about-fda/fda-history-exhibits/100-years-insulin"
+      ],
+      "reviewer": "PharmaGuide clinical review (Sean Cheick, owner of record)",
+      "review_date": "2026-05-22",
+      "scope": "dsld_id_only",
+      "provenance_tag": "label_typo_correction"
+    }
+  }
+}
