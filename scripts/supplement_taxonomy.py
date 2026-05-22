@@ -82,6 +82,9 @@ _VITAMIN_CANONICAL_IDS = frozenset({
     "vitamin_e", "vitamin_k", "vitamin_k1", "vitamin_k2",
     "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5",
     "vitamin_b6", "vitamin_b7", "vitamin_b12",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
     "folate", "folic_acid", "methylfolate", "niacin", "niacinamide",
     "thiamine", "riboflavin", "pyridoxine", "cobalamin",
     "pantothenic_acid", "biotin", "choline", "inositol",
@@ -97,6 +100,9 @@ _MINERAL_CANONICAL_IDS = frozenset({
 _B_VITAMIN_IDS = frozenset({
     "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5",
     "vitamin_b6", "vitamin_b7", "vitamin_b12",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
     "folate", "folic_acid", "methylfolate", "niacin", "niacinamide",
     "thiamine", "riboflavin", "pyridoxine", "cobalamin",
     "pantothenic_acid", "biotin", "choline", "inositol",
@@ -162,7 +168,7 @@ _SECONDARY_TYPE_MAP = {
     "magnesium": "magnesium",
     "vitamin_d": "vitamin_d", "vitamin_d3": "vitamin_d", "vitamin_d2": "vitamin_d",
     "vitamin_c": "vitamin_c",
-    "biotin": "biotin", "vitamin_b7": "biotin",
+    "biotin": "biotin", "vitamin_b7": "biotin", "vitamin_b7_biotin": "biotin",
     "ashwagandha": "ashwagandha",
     "turmeric": "turmeric_curcumin", "curcumin": "turmeric_curcumin",
     "berberine": "berberine",
@@ -193,6 +199,7 @@ _SECONDARY_TYPE_MAP = {
     "cordyceps": "cordyceps",
     "reishi": "reishi",
     "folic_acid": "folate", "folate": "folate", "methylfolate": "folate",
+    "vitamin_b9_folate": "folate",
     "creatine": "creatine",
     "5_htp": "5_htp",
     "gaba": "gaba",
@@ -499,14 +506,20 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     if (
         active_count == 0
         and probiotic_name_signal
-        and non_quantified_probiotic_count > 0
+        and (non_quantified_probiotic_count > 0 or probiotic_flag)
     ):
         primary_type = "probiotic"
-        confidence = 0.65
-        reasons.append(
-            f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
-        )
-    elif (probiotic_flag or probiotic_count > 0 or probiotic_name_signal) and active_count > 0:
+        confidence = 0.8 if probiotic_flag else 0.65
+        if probiotic_flag:
+            reasons.append("probiotic name + product-level CFU evidence")
+        else:
+            reasons.append(
+                f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
+            )
+    elif active_count > 0 and (
+        probiotic_count > 0
+        or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0))
+    ):
         probiotic_majority = probiotic_count >= max(1, ceil(active_count * 0.5))
         if active_count == 1 or probiotic_majority or (
             (probiotic_name_signal or probiotic_flag)
@@ -520,6 +533,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # Checked before the broad multivitamin panel: B-complexes can have 6+
     # vitamins but are still a narrower peer class than full multis.
     elif (
+        "prenatal" not in product_name
+        and
         (b_vitamin_ids and len(b_vitamin_ids) >= 3)
         or "b-complex" in product_name
         or "b complex" in product_name
@@ -579,6 +594,25 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif active_count >= 2 and _has_functional_name_signal(product_name):
         primary_type, confidence, reason = _detect_functional_name(product_name)
         reasons.append(reason)
+
+    # --- Sleep-support compounds with cofactors ---
+    elif cid_set & _SLEEP_SINGLE_IDS:
+        primary_type = "sleep_support"
+        confidence = 0.9
+        reasons.append(f"sleep-support ingredient with cofactors: {list(cid_set & _SLEEP_SINGLE_IDS)}")
+
+    # --- Named amino acid with cofactors ---
+    # L-Tryptophan + B6/Niacin style products are amino-acid products with
+    # nutrient cofactors, not vitamin/mineral combos.
+    elif (amino_ids - _SLEEP_SINGLE_IDS) and any(
+        cid.replace("_", " ") in product_name
+        or cid.replace("_", "-") in product_name
+        or cid.removeprefix("l_").replace("_", " ") in product_name
+        for cid in (amino_ids - _SLEEP_SINGLE_IDS)
+    ):
+        primary_type = "amino_acid"
+        confidence = 0.9
+        reasons.append(f"named amino acid with cofactors: {list(amino_ids - _SLEEP_SINGLE_IDS)}")
 
     # --- Single nutrient (active_count == 1) ---
     elif active_count == 1:
