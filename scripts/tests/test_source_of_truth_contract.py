@@ -379,6 +379,38 @@ def test_clinical_drift_gates_catch_known_failure_shapes(tmp_path):
     assert "FORM_FACTOR_CANONICAL_NOT_SOFTGEL" in codes
 
 
+def test_clinical_omega_gate_accepts_taxonomy_scorable_id_evidence(tmp_path):
+    product_file = tmp_path / "products.json"
+    write_json(
+        product_file,
+        [
+            {
+                "id": "scored-omega-without-iqd-rows",
+                "name": "High Concentrate EPA",
+                "supplement_taxonomy": {
+                    "primary_type": "omega_3",
+                    "percentile_category": "fish_oil",
+                    "classification_input_source": "ingredient_quality_data.ingredients_scorable",
+                    "classification_reasons": ["omega-3: ids=['epa'], name_match=False"],
+                    "category_breakdown": {"fatty_acid": 1},
+                },
+                "ingredient_quality_data": {"ingredients_scorable": []},
+            }
+        ],
+    )
+
+    args = argparse.Namespace(
+        enriched_file=[],
+        enriched_dir=[],
+        product_file=[str(product_file)],
+        products_dir=None,
+        dist_dir=None,
+    )
+    codes = {finding.code for finding in audit.audit_clinical(args)}
+
+    assert "PRODUCT_NAME_ONLY_OMEGA3" not in codes
+
+
 def test_shadow_diff_requires_approval_for_taxonomy_verdict_safety_or_coverage_shift(tmp_path):
     old_dir = tmp_path / "old"
     new_dir = tmp_path / "new"

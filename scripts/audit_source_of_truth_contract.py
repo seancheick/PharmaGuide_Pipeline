@@ -182,6 +182,13 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=False) + "\n", encoding="utf-8")
 
 
+def numeric_value(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as fh:
@@ -722,6 +729,32 @@ def safety_text(product: dict[str, Any]) -> str:
     return " ".join(pieces)
 
 
+def taxonomy_has_omega_scorable_evidence(product: dict[str, Any]) -> bool:
+    """Return true when taxonomy preserved explicit omega ingredient evidence.
+
+    Scored artifacts do not always carry full IQD rows. In that shape, the
+    clinical drift gate should still accept taxonomy that declares strict
+    scorable input plus EPA/DHA/fish-oil evidence in its structured reasons.
+    """
+    taxonomy = product.get("supplement_taxonomy")
+    if not isinstance(taxonomy, dict):
+        return False
+    if taxonomy.get("classification_input_source") != "ingredient_quality_data.ingredients_scorable":
+        return False
+    breakdown = taxonomy.get("category_breakdown")
+    if isinstance(breakdown, dict) and numeric_value(breakdown.get("fatty_acid"), 0.0) > 0:
+        return True
+    reasons = taxonomy.get("classification_reasons")
+    if not isinstance(reasons, list):
+        return False
+    reason_text = " ".join(str(item) for item in reasons).lower()
+    return (
+        "omega-3:" in reason_text
+        and "ids=" in reason_text
+        and any(hint in reason_text for hint in OMEGA_CANONICAL_HINTS)
+    )
+
+
 def audit_clinical(args: argparse.Namespace) -> list[Finding]:
     files = collect_product_files(args)
     findings: list[Finding] = []
@@ -751,7 +784,8 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                 findings.append(Finding("GENERIC_CHROMIUM_CRVI", f"{pid}: generic chromium appears to match Cr(VI) safety rule", str(file_path)))
 
             primary = taxonomy_primary(product).lower()
-            if primary == "omega_3" and not any(any(hint in cid for hint in OMEGA_CANONICAL_HINTS) for cid in row_ids):
+            has_omega_row = any(any(hint in cid for hint in OMEGA_CANONICAL_HINTS) for cid in row_ids)
+            if primary == "omega_3" and not (has_omega_row or taxonomy_has_omega_scorable_evidence(product)):
                 findings.append(Finding("PRODUCT_NAME_ONLY_OMEGA3", f"{pid}: omega_3 taxonomy lacks scorable omega canonical evidence", str(file_path)))
 
             if primary == "sleep_support":
