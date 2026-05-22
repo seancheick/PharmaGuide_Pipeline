@@ -203,11 +203,14 @@
         "Alfalfa dried juice",
         "concentrace alfalfa",
         "alfalfa (medicago sativa) aerial part extract",
-        "Medicago sativa"
+        "Medicago sativa",
+        "alfalfa extract",
+        "alfalfa leaf extract",
+        "alfalfa"
       ],
       "category": "leaf",
-      "notes": "Medicago sativa (Fabaceae) aerial parts. Traditional nutritive tonic rich in chlorophyll, vitamins K and C, and saponins. Botanical form is dried leaf powder, not standardized to specific marker compounds.",
-      "last_updated": "2026-03-01",
+      "notes": "Medicago sativa (Fabaceae) aerial parts. Traditional nutritive tonic rich in chlorophyll, vitamins K and C, and saponins. Botanical form is dried leaf powder, not standardized to specific marker compounds. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.alfalfa entry (no marker signal); merged 3 alias(es): ['alfalfa extract', 'alfalfa leaf extract', 'alfalfa'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "HY3L927V6M"
       },
@@ -5580,11 +5583,17 @@
         "allium sativum bulb",
         "garlic powder",
         "aged garlic",
-        "Allium sativum"
+        "Allium sativum",
+        "garlic extract",
+        "aged garlic extract",
+        "garlic bulb",
+        "kyolic",
+        "odorless garlic",
+        "garlic"
       ],
       "category": "bulb",
-      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin \u2192 allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized.",
-      "last_updated": "2026-03-01",
+      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin \u2192 allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.garlic entry (no marker signal); merged 6 alias(es): ['garlic extract', 'aged garlic extract', 'garlic bulb', 'kyolic', 'odorless garlic', 'garlic'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "V1V998DC17"
       },
@@ -7714,10 +7723,11 @@
         "kelp powder",
         "norwegian kelp",
         "ascophyllum nodosum",
-        "rockweed"
+        "rockweed",
+        "laminaria"
       ],
       "category": "seaweed",
-      "notes": "Ascophyllum nodosum (Fucaceae) thallus \u2014 Atlantic rockweed / Norwegian kelp. UNII 168S4EO8YJ. Brown seaweed naturally rich in iodine (varies widely; verify per-product testing) plus phlorotannins, fucoidan, and alginate polysaccharides. SB-3c \u00a77.5/\u00a78.5 cleanup 2026-05-22: realigned latin_name from 'Laminaria digitata' (different species) to 'Ascophyllum nodosum' to match UNII. SB-3d 2026-05-22: removed remaining species-mismatched aliases ('laminaria powder', 'laminaria digitata' \u2192 new laminaria_digitata canonical; 'Laminaria saccharina', 'Laminaria saccharina, Powder' \u2192 new saccharina_latissima canonical; 'ecklonia radiata' \u2192 new ecklonia_radiata canonical; 'ecklonia kurome' \u2192 new ecklonia_kurome canonical). Entry now scopes cleanly to Ascophyllum nodosum identity plus generic-kelp registry aliases.",
+      "notes": "Ascophyllum nodosum (Fucaceae) thallus \u2014 Atlantic rockweed / Norwegian kelp. UNII 168S4EO8YJ. Brown seaweed naturally rich in iodine (varies widely; verify per-product testing) plus phlorotannins, fucoidan, and alginate polysaccharides. SB-3c \u00a77.5/\u00a78.5 cleanup 2026-05-22: realigned latin_name from 'Laminaria digitata' (different species) to 'Ascophyllum nodosum' to match UNII. SB-3d 2026-05-22: removed remaining species-mismatched aliases ('laminaria powder', 'laminaria digitata' \u2192 new laminaria_digitata canonical; 'Laminaria saccharina', 'Laminaria saccharina, Powder' \u2192 new saccharina_latissima canonical; 'ecklonia radiata' \u2192 new ecklonia_radiata canonical; 'ecklonia kurome' \u2192 new ecklonia_kurome canonical). Entry now scopes cleanly to Ascophyllum nodosum identity plus generic-kelp registry aliases. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.kelp entry (no marker signal); merged 1 alias(es): ['laminaria'].",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "168S4EO8YJ"
@@ -10020,11 +10030,15 @@
         "oregano aerial extract",
         "oregano 4:1 extract",
         "Oregano",
-        "Origanum vulgare"
+        "Origanum vulgare",
+        "oregano extract",
+        "oregano oil",
+        "wild oregano",
+        "origanum"
       ],
       "category": "herb",
-      "notes": "Origanum vulgare (Lamiaceae) aerial parts. Contains carvacrol and thymol phenolic monoterpenes. Traditional antimicrobial and digestive herb. Botanical whole-herb/oil form, not standardized.",
-      "last_updated": "2026-03-01",
+      "notes": "Origanum vulgare (Lamiaceae) aerial parts. Contains carvacrol and thymol phenolic monoterpenes. Traditional antimicrobial and digestive herb. Botanical whole-herb/oil form, not standardized. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.oregano entry (no marker signal); merged 4 alias(es): ['oregano extract', 'oregano oil', 'wild oregano', 'origanum'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "0E5AT8T16U"
       },
@@ -10950,11 +10964,13 @@
         "plantago ovata husk",
         "psyllium fiber",
         "ispaghula husk",
-        "Plantago ovata"
+        "Plantago ovata",
+        "psyllium husk",
+        "psyllium"
       ],
       "category": "fiber",
-      "notes": "Plantago ovata (Plantaginaceae) seed husk. Contains arabinoxylan mucilage fiber (85% soluble). FDA health claim for cholesterol reduction at 7g/day. Gold standard bulk-forming laxative.",
-      "last_updated": "2026-03-01",
+      "notes": "Plantago ovata (Plantaginaceae) seed husk. Contains arabinoxylan mucilage fiber (85% soluble). FDA health claim for cholesterol reduction at 7g/day. Gold standard bulk-forming laxative. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.psyllium entry (no marker signal); merged 2 alias(es): ['psyllium husk', 'psyllium'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "0SHO53407G"
       },
@@ -13486,12 +13502,18 @@
         "triticum aestivum powder",
         "wheat grass",
         "dry wheat grass",
-        "Triticum aestivum"
+        "Triticum aestivum",
+        "triticum",
+        "wheat grass juice",
+        "wheatgrass powder",
+        "wheatgrass"
       ],
       "category": "grass",
-      "notes": "Triticum aestivum (Poaceae) young grass. Harvested before jointing stage. Rich in chlorophyll, SOD enzyme, and vitamins. Popularized by Ann Wigmore. Gluten-free when harvested at grass stage.",
-      "last_updated": "2026-03-01",
-      "external_ids": {},
+      "notes": "Triticum aestivum (Poaceae) young grass. Harvested before jointing stage. Rich in chlorophyll, SOD enzyme, and vitamins. Popularized by Ann Wigmore. Gluten-free when harvested at grass stage. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.wheatgrass entry (no marker signal); merged 4 alias(es): ['triticum', 'wheat grass juice', 'wheatgrass powder', 'wheatgrass']. UNII 3C3Y389JBU filled from std side.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "3C3Y389JBU"
+      },
       "cui": "C0043178",
       "functional_roles": [],
       "attributes": {
@@ -14108,11 +14130,13 @@
         "wild crafted yellow dock",
         "rumex crispus root",
         "yellow dock root extract",
-        "Rumex crispus"
+        "Rumex crispus",
+        "curly dock",
+        "rumex"
       ],
       "category": "root",
-      "notes": "Rumex crispus (Polygonaceae) root. Contains anthraquinone glycosides (chrysophanol, emodin) and iron-rich tannins. Traditional alterative for iron-deficiency anemia and skin conditions.",
-      "last_updated": "2026-03-01",
+      "notes": "Rumex crispus (Polygonaceae) root. Contains anthraquinone glycosides (chrysophanol, emodin) and iron-rich tannins. Traditional alterative for iron-deficiency anemia and skin conditions. [DM-3 2026-05-22] Absorbed broader standardized_botanicals.yellow_dock entry (no marker signal); merged 2 alias(es): ['curly dock', 'rumex'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "S9T422Q956"
       },

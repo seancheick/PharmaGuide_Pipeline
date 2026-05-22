@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 199,
+    "total_entries": 192,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -217,38 +217,6 @@
       "last_updated": "2026-01-05",
       "external_ids": {},
       "cui": "C1669961"
-    },
-    {
-      "standard_name": "Alfalfa",
-      "aliases": [
-        "medicago sativa",
-        "alfalfa extract",
-        "alfalfa leaf extract",
-        "lucerne"
-      ],
-      "markers": [
-        "saponins"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "alfalfa",
-      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "HY3L927V6M"
-      },
-      "gsrs": {
-        "substance_name": "ALFALFA LEAF",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C2349204"
     },
     {
       "standard_name": "AlphaWave L-Theanine",
@@ -2649,53 +2617,6 @@
       }
     },
     {
-      "standard_name": "Garlic",
-      "aliases": [
-        "allium sativum",
-        "garlic extract",
-        "aged garlic extract",
-        "garlic bulb",
-        "garlic powder",
-        "kyolic",
-        "odorless garlic"
-      ],
-      "markers": [
-        "allicin",
-        "S-allylcysteine",
-        "alliin"
-      ],
-      "min_threshold": 1,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "garlic",
-      "notes": "Cardiovascular support botanical standardized for allicin or aged garlic extract (S-allylcysteine). Used in heart health and immune supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "V1V998DC17"
-      },
-      "rxcui": "899414",
-      "gsrs": {
-        "substance_name": "GARLIC",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [
-          "21 CFR 184.1317"
-        ],
-        "dsld_count": 1363,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Garlic | 4 (Number of products:1363)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [
-          {
-            "type": "METABOLIC ENZYME->INHIBITOR",
-            "name": "AMINE OXIDASE (FLAVIN-CONTAINING) B",
-            "unii": "3OV8HVI592"
-          }
-        ],
-        "metabolites": []
-      },
-      "cui": "C0017102"
-    },
-    {
       "standard_name": "Gentian",
       "aliases": [
         "gentiana lutea",
@@ -3537,28 +3458,6 @@
       "cui": "C1004696",
       "min_threshold": 0.5,
       "threshold_source": "0.5% mesembrine \u2014 standard Sceletium tortuosum extract"
-    },
-    {
-      "standard_name": "Kelp",
-      "aliases": [
-        "laminaria",
-        "ascophyllum nodosum",
-        "kelp extract"
-      ],
-      "markers": [
-        "iodine"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "kelp",
-      "notes": "Botanical ingredient standardized for iodine. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "cas": "68844-77-9",
-        "pubchem_cid": 2247,
-        "unii": "168S4EO8YJ"
-      },
-      "cui": "C0939804"
     },
     {
       "standard_name": "KeraGLO",
@@ -4415,42 +4314,6 @@
       "branded_form": true
     },
     {
-      "standard_name": "Oregano",
-      "aliases": [
-        "origanum vulgare",
-        "oregano extract",
-        "oregano oil",
-        "wild oregano",
-        "origanum"
-      ],
-      "markers": [
-        "carvacrol",
-        "thymol"
-      ],
-      "min_threshold": 50,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "oregano",
-      "notes": "Botanical ingredient standardized for carvacrol, thymol. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "0E5AT8T16U"
-      },
-      "rxcui": "1010965",
-      "gsrs": {
-        "substance_name": "OREGANO",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 467,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|oregano | 312 (Number of products:467)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0946715"
-    },
-    {
       "standard_name": "Organic Gold Standard Potentiating Nutrients",
       "aliases": [
         "Organic Gold Standard Potentiating Nutrients"
@@ -4753,28 +4616,6 @@
       "cui": "C0033488",
       "min_threshold": 5,
       "threshold_source": "5% total polyphenols \u2014 commercial standard"
-    },
-    {
-      "standard_name": "Psyllium",
-      "aliases": [
-        "plantago ovata",
-        "psyllium husk",
-        "psyllium fiber"
-      ],
-      "markers": [
-        "fiber"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "psyllium",
-      "notes": "Botanical ingredient standardized for fiber. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "cas": "38232-03-0",
-        "pubchem_cid": 181572,
-        "unii": "0SHO53407G"
-      },
-      "cui": "C0033979"
     },
     {
       "standard_name": "Pumpkin Seed",
@@ -6196,38 +6037,6 @@
       }
     },
     {
-      "standard_name": "Wheatgrass",
-      "aliases": [
-        "triticum",
-        "triticum aestivum",
-        "wheat grass juice",
-        "wheatgrass powder"
-      ],
-      "markers": [
-        "chlorophyll"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "wheatgrass",
-      "notes": "Botanical ingredient standardized for chlorophyll. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "3C3Y389JBU"
-      },
-      "gsrs": {
-        "substance_name": "TRITICUM AESTIVUM WHOLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C1123020"
-    },
-    {
       "standard_name": "White Willow Bark",
       "aliases": [
         "salix alba",
@@ -6332,38 +6141,6 @@
       "cui": "C0331308",
       "min_threshold": 0.03,
       "threshold_source": "0.03% artemisinin \u2014 Artemisia annua leaf standard"
-    },
-    {
-      "standard_name": "Yellow Dock",
-      "aliases": [
-        "curly dock",
-        "rumex",
-        "rumex crispus",
-        "yellow dock root extract"
-      ],
-      "markers": [
-        "anthraquinones"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "yellow_dock",
-      "notes": "Botanical ingredient standardized for anthraquinones. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "S9T422Q956"
-      },
-      "gsrs": {
-        "substance_name": "RUMEX CRISPUS TOP",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 275,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Yellow Dock | 510 (Number of products:275)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C1200905"
     },
     {
       "standard_name": "Yerba Mate",
