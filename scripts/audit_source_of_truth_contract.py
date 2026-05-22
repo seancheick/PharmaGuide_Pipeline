@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 import sqlite3
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -573,6 +574,57 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                     scoring_diag = scoring_meta.get("iqd_contract_diagnostics")
             if isinstance(scoring_diag, dict) and scoring_diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("ENRICHMENT_SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed IQD ingredients fallback", str(file_path)))
+
+            product_evidence = product.get("product_scoring_evidence") or []
+            if isinstance(product_evidence, dict):
+                product_evidence = product_evidence.get("items") or product_evidence.get("evidence") or [product_evidence]
+            if not isinstance(product_evidence, list):
+                findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_SHAPE", f"{pid}: product_scoring_evidence must be a list/object", str(file_path)))
+                product_evidence = []
+            for idx, evidence in enumerate(product_evidence):
+                if not isinstance(evidence, dict):
+                    findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_SHAPE", f"{pid}: product evidence #{idx} is not an object", str(file_path)))
+                    continue
+                if evidence.get("scoreable") is True:
+                    missing = [
+                        field
+                        for field in (
+                            "evidence_type",
+                            "scoreable_identity",
+                            "score_eligible_by_cleaner",
+                            "dose_class",
+                            "dose_value",
+                            "dose_unit",
+                            "source",
+                            "raw_source_path",
+                            "evidence_scope",
+                            "linked_rows",
+                            "confidence",
+                            "reason",
+                        )
+                        if evidence.get(field) in (None, "", [])
+                    ]
+                    if missing:
+                        findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_FIELD_MISSING", f"{pid}: scoreable product evidence missing {missing}", str(file_path)))
+                    if evidence.get("evidence_type") == "probiotic_cfu":
+                        taxonomy_primary_type = str(_safe_dict(product.get("supplement_taxonomy")).get("primary_type") or "").lower()
+                        row_identity_reason = evidence.get("reason") == "product_level_cfu_with_probiotic_row_identity"
+                        strict_rows = _safe_dict(product.get("ingredient_quality_data")).get("ingredients_scorable") or []
+                        has_non_probiotic_strict_active = any(
+                            isinstance(row, dict)
+                            and not any(term in " ".join(str(row.get(key) or "").lower() for key in ("canonical_id", "name", "standard_name")) for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus"))
+                            and str(row.get("dose_class") or "").lower() != "probiotic_cfu"
+                            for row in strict_rows
+                        )
+                        if taxonomy_primary_type != "probiotic" and (not row_identity_reason or has_non_probiotic_strict_active):
+                            findings.append(Finding("ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE", f"{pid}: scoreable probiotic_cfu evidence on non-probiotic taxonomy {taxonomy_primary_type!r}", str(file_path)))
+                elif evidence.get("evidence_type") == "probiotic_cfu" and not evidence.get("rejection_reason"):
+                    findings.append(Finding("ENRICHMENT_PRODUCT_CFU_REJECTION_REASON_MISSING", f"{pid}: rejected probiotic_cfu evidence lacks rejection_reason", str(file_path)))
+
+            probiotic_data = _safe_dict(product.get("probiotic_data"))
+            total_cfu = numeric_value(probiotic_data.get("total_cfu"))
+            if total_cfu > 0 and not any(isinstance(e, dict) and e.get("evidence_type") == "probiotic_cfu" for e in product_evidence):
+                findings.append(Finding("ENRICHMENT_PRODUCT_CFU_EVIDENCE_MISSING", f"{pid}: probiotic_data.total_cfu has no probiotic_cfu product_scoring_evidence diagnostic", str(file_path)))
     return findings
 
 
@@ -963,6 +1015,29 @@ def newest_mtime(paths: Iterable[Path]) -> float | None:
     return max(mtimes) if mtimes else None
 
 
+def audit_artifact_lineage(args: argparse.Namespace) -> list[Finding]:
+    enriched_dir = repo_path(args.enriched_dir)
+    scored_dir = repo_path(args.scored_dir)
+    if not enriched_dir.exists():
+        return [Finding("ARTIFACT_LINEAGE_ENRICHED_MISSING", f"missing enriched dir {enriched_dir}", str(enriched_dir))]
+    if not scored_dir.exists():
+        return [Finding("ARTIFACT_LINEAGE_SCORED_MISSING", f"missing scored dir {scored_dir}", str(scored_dir))]
+    findings: list[Finding] = []
+    enriched_by_name = {path.name.replace("enriched_", "", 1): path for path in iter_json_files([enriched_dir])}
+    scored_files = list(iter_json_files([scored_dir]))
+    if not scored_files:
+        return [Finding("ARTIFACT_LINEAGE_SCORED_EMPTY", f"no scored JSON artifacts under {scored_dir}", str(scored_dir))]
+    for scored_path in scored_files:
+        key = scored_path.name.replace("scored_", "", 1)
+        enriched_path = enriched_by_name.get(key)
+        if not enriched_path:
+            findings.append(Finding("ARTIFACT_LINEAGE_MATCH_MISSING", f"{scored_path.name}: no matching enriched artifact", str(scored_path)))
+            continue
+        if scored_path.stat().st_mtime < enriched_path.stat().st_mtime:
+            findings.append(Finding("ARTIFACT_LINEAGE_SCORED_STALE", f"{scored_path.name}: scored artifact older than matching enriched artifact", str(scored_path)))
+    return findings
+
+
 def audit_flutter(args: argparse.Namespace) -> list[Finding]:
     dist_dir = repo_path(args.dist_dir)
     flutter_assets = repo_path(args.flutter_repo) / "assets" / "db"
@@ -1039,22 +1114,72 @@ def audit_shadow_diff(args: argparse.Namespace) -> list[Finding]:
     safety_shifts = 0
     coverage_drops = 0
     max_drop = 0.0
+    review_rows: list[dict[str, Any]] = []
     for pid in shared_ids:
         old = old_products[pid]
         new = new_products[pid]
-        if taxonomy_primary(old) != taxonomy_primary(new):
+        old_verdict = str(old.get("verdict") or old.get("safety_verdict") or "")
+        new_verdict = str(new.get("verdict") or new.get("safety_verdict") or "")
+        old_taxonomy = taxonomy_primary(old)
+        new_taxonomy = taxonomy_primary(new)
+        material_blocked_coverage_only = old_verdict == new_verdict == "BLOCKED" and safety_text(old) == safety_text(new)
+        shifted = False
+        if old_taxonomy != new_taxonomy:
             taxonomy_shifts += 1
-        if str(old.get("verdict") or old.get("safety_verdict") or "") != str(new.get("verdict") or new.get("safety_verdict") or ""):
+            shifted = True
+        if old_verdict != new_verdict:
             verdict_shifts += 1
+            shifted = True
         if safety_text(old) != safety_text(new):
             safety_shifts += 1
+            shifted = True
         old_cov = mapped_coverage_value(old)
         new_cov = mapped_coverage_value(new)
         if old_cov is not None and new_cov is not None:
             drop = old_cov - new_cov
-            if drop > args.max_mapped_coverage_drop:
+            if drop > args.max_mapped_coverage_drop and not material_blocked_coverage_only:
                 coverage_drops += 1
                 max_drop = max(max_drop, drop)
+                shifted = True
+        if shifted:
+            review_rows.append({
+                "product_id": pid,
+                "product_name": new.get("product_name") or new.get("fullName") or old.get("product_name") or old.get("fullName"),
+                "old_verdict": old_verdict,
+                "new_verdict": new_verdict,
+                "old_score": old.get("score_100_equivalent") or old.get("score_display_100_equivalent"),
+                "new_score": new.get("score_100_equivalent") or new.get("score_display_100_equivalent"),
+                "old_taxonomy": old_taxonomy,
+                "new_taxonomy": new_taxonomy,
+                "old_mapped_coverage": old_cov,
+                "new_mapped_coverage": new_cov,
+                "shift_reason": "pending_review",
+                "approval_status": "pending",
+                "reviewer_note": "",
+            })
+
+    review_output = getattr(args, "review_output", None)
+    if review_output:
+        try:
+            git_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
+        except Exception:
+            git_commit = None
+        output_path = repo_path(review_output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        write_json(output_path, {
+            "git_commit": git_commit,
+            "command": getattr(args, "command_text", None),
+            "old_dir": str(repo_path(args.old_dir)),
+            "new_dir": str(repo_path(args.new_dir)),
+            "old_dir_mtime": newest_mtime(old_files),
+            "new_dir_mtime": newest_mtime(new_files),
+            "shared_product_count": len(shared_ids),
+            "taxonomy_shifts": taxonomy_shifts,
+            "verdict_shifts": verdict_shifts,
+            "safety_shifts": safety_shifts,
+            "coverage_drops": coverage_drops,
+            "rows": review_rows,
+        })
 
     if getattr(args, "manual_approval", False):
         return []
@@ -1196,6 +1321,12 @@ def build_parser() -> argparse.ArgumentParser:
     freshness.add_argument("--skip-interaction-inputs", action="store_true")
     freshness.set_defaults(func=audit_freshness)
 
+    lineage = subparsers.add_parser("artifact-lineage", help="validate enriched/scored artifact lineage for shadow review")
+    add_common(lineage)
+    lineage.add_argument("--enriched-dir", required=True)
+    lineage.add_argument("--scored-dir", required=True)
+    lineage.set_defaults(func=audit_artifact_lineage)
+
     flutter = subparsers.add_parser("flutter", help="validate Flutter bundled DB parity")
     add_common(flutter)
     flutter.add_argument("--dist-dir", default="scripts/dist")
@@ -1211,6 +1342,8 @@ def build_parser() -> argparse.ArgumentParser:
     shadow.add_argument("--max-safety-shifts", type=int, default=0)
     shadow.add_argument("--max-mapped-coverage-drop", type=float, default=0.0)
     shadow.add_argument("--manual-approval", action="store_true")
+    shadow.add_argument("--review-output", default=None)
+    shadow.add_argument("--command-text", default=None)
     shadow.set_defaults(func=audit_shadow_diff)
 
     stamp = subparsers.add_parser("stamp-manifest", help="stamp export manifest with contract release metadata")

@@ -167,9 +167,19 @@ def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() 
             {
                 "name": "Total CFU",
                 "canonical_id": "probiotic_cfu_total",
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
                 "dose_class": "probiotic_cfu",
-                "quantity": 20,
-                "unit": "billion CFU",
+                "dose_value": 20_000_000_000,
+                "dose_unit": "CFU",
+                "source": "statements",
+                "raw_source_path": "statements[0]",
+                "evidence_scope": "product_level",
+                "linked_rows": ["statements[0]"],
+                "confidence": "high",
+                "reason": "product_level_cfu_with_probiotic_identity",
             }
         ],
     )

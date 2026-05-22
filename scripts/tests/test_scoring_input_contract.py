@@ -123,9 +123,19 @@ def test_product_level_probiotic_evidence_is_accepted_from_contract_only():
             {
                 "name": "Total CFU",
                 "canonical_id": "probiotic_cfu_total",
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
                 "dose_class": "probiotic_cfu",
-                "quantity": 20,
-                "unit": "billion CFU",
+                "dose_value": 20_000_000_000,
+                "dose_unit": "CFU",
+                "source": "statements",
+                "raw_source_path": "statements[0]",
+                "evidence_scope": "product_level",
+                "linked_rows": ["statements[0]"],
+                "confidence": "high",
+                "reason": "product_level_cfu_with_probiotic_identity",
             }
         ],
     )
@@ -133,7 +143,69 @@ def test_product_level_probiotic_evidence_is_accepted_from_contract_only():
     result = get_scoring_ingredients(product, strict=True)
 
     assert result.rows[0]["canonical_id"] == "probiotic_cfu_total"
+    assert result.rows[0]["scoring_input_kind"] == "product_level_evidence"
+    assert result.rows[0]["section_support"] == ["probiotic_dose_adequacy"]
+    assert result.rows[0]["generic_form_quality_credit"] is False
     assert "product_scoring_evidence" in result.source
+
+
+def test_product_level_evidence_missing_provenance_is_rejected():
+    product = _product(
+        [],
+        product_scoring_evidence=[
+            {
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "probiotic_cfu",
+                "dose_value": 20_000_000_000,
+                "dose_unit": "CFU",
+                "source": "probiotic_data.total_cfu",
+                "evidence_scope": "product_level",
+                "linked_rows": [],
+                "confidence": "low",
+                "reason": "missing_source",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert result.rejected_rows[0].reason == "malformed_product_scoring_evidence"
+    assert "raw_source_path" in result.rejected_rows[0].missing_fields
+    assert result.strict_contract_passed is False
+
+
+def test_rejected_product_evidence_is_visible_but_not_scorable():
+    product = _product(
+        [],
+        product_scoring_evidence=[
+            {
+                "evidence_type": "probiotic_cfu",
+                "scoreable": False,
+                "scoreable_identity": False,
+                "score_eligible_by_cleaner": False,
+                "dose_class": "probiotic_cfu",
+                "dose_value": 20_000_000_000,
+                "dose_unit": "CFU",
+                "source": "probiotic_data.total_cfu",
+                "raw_source_path": "statements[0]",
+                "evidence_scope": "product_level",
+                "linked_rows": ["statements[0]"],
+                "confidence": "low",
+                "reason": "probiotic_cfu_rejected_by_identity_or_provenance_gate",
+                "rejection_reason": "product_identity_not_probiotic",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert result.rejected_rows[0].reason == "product_evidence_not_scoreable:product_identity_not_probiotic"
+    assert result.strict_contract_passed is True
 
 
 def test_product_name_alone_does_not_create_product_level_evidence():

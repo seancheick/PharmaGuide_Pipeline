@@ -428,10 +428,10 @@
       "field_kind": "enriched",
       "source_data_files": ["scripts/data/clinically_relevant_strains.json", "scripts/config/enrichment_config.json"],
       "consumers": ["scripts/scoring_input_contract.py", "scripts/score_supplements.py", "scripts/scoring_v4"],
-      "forbidden_recomputation": ["scoring may consume product-level CFU/enzyme evidence only from enrichment contract fields, never from product names"],
+      "forbidden_recomputation": ["scoring may consume product_scoring_evidence only from enrichment contract fields with identity/provenance gates, never from product names or inherited metadata"],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
-      "tests": ["scripts/tests/test_scoring_input_contract.py", "scripts/tests/test_probiotic_strain_dose_label.py"],
+      "tests": ["scripts/tests/test_scoring_input_contract.py", "scripts/tests/test_enrichment_regressions.py", "scripts/tests/test_probiotic_strain_dose_label.py"],
       "retirement_status": "active"
     },
     {

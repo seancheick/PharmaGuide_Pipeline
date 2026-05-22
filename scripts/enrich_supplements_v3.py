@@ -11392,12 +11392,25 @@ class SupplementEnricherV3:
         all_ingredients = active_ingredients + product.get('inactiveIngredients', [])
 
         # Extract product-level CFU statement ONCE to avoid per-strain overcounting
-        product_statements_text = ' '.join([
-            s.get('notes', '') or s.get('text', '') or str(s)
-            for s in product.get('statements', [])
-            if isinstance(s, dict) or isinstance(s, str)
-        ])
-        product_level_cfu = self._extract_cfu(product_statements_text)
+        statement_parts: List[str] = []
+        statement_paths: List[str] = []
+        for idx, statement in enumerate(product.get('statements', []) or []):
+            if isinstance(statement, dict):
+                text = statement.get('notes', '') or statement.get('text', '') or ""
+            elif isinstance(statement, str):
+                text = statement
+            else:
+                continue
+            if text:
+                statement_parts.append(str(text))
+                statement_paths.append(f"statements[{idx}]")
+        product_statements_text = ' '.join(statement_parts)
+        product_cfu_source_path = statement_paths[0] if len(statement_paths) == 1 else ("statements" if statement_paths else None)
+        product_level_cfu = self._extract_cfu(
+            product_statements_text,
+            source_path=product_cfu_source_path,
+            evidence_scope="product_level",
+        )
 
         # Check if this is a probiotic product
         probiotic_blends = []
@@ -11433,7 +11446,13 @@ class SupplementEnricherV3:
 
                 # P1.1: Extract CFU from per-strain text only (not product statements)
                 cfu_text = harvest + ' ' + notes
-                cfu_data = self._extract_cfu(cfu_text, ingredient=ingredient)
+                ingredient_source_path = ingredient.get("raw_source_path") or "activeIngredients"
+                cfu_data = self._extract_cfu(
+                    cfu_text,
+                    ingredient=ingredient,
+                    source_path=ingredient_source_path,
+                    evidence_scope="row_level",
+                )
 
                 self.logger.debug(
                     "CFU extraction for ingredient %s -> %s",
@@ -11445,7 +11464,8 @@ class SupplementEnricherV3:
                     "name": ingredient.get('name', ''),
                     "strain_count": len(nested) if nested else 1,
                     "strains": [n.get('name', '') for n in nested] if nested else [ingredient.get('name', '')],
-                    "cfu_data": cfu_data
+                    "cfu_data": cfu_data,
+                    "raw_source_path": ingredient_source_path,
                 })
 
                 total_strains += len(nested) if nested else 1
@@ -11655,6 +11675,10 @@ class SupplementEnricherV3:
         has_cfu = False
         guarantee_type = None
         total_billion_count = 0.0
+        cfu_source = None
+        cfu_raw_source_path = None
+        cfu_evidence_scope = None
+        cfu_linked_rows: List[str] = []
 
         for blend in probiotic_blends:
             cfu_data = blend.get('cfu_data', {})
@@ -11662,6 +11686,14 @@ class SupplementEnricherV3:
                 has_cfu = True
                 total_cfu += cfu_data.get('cfu_count', 0)
                 total_billion_count += cfu_data.get('billion_count', 0)
+                if not cfu_source:
+                    cfu_source = cfu_data.get("source")
+                if not cfu_raw_source_path:
+                    cfu_raw_source_path = cfu_data.get("raw_source_path") or blend.get("raw_source_path")
+                if not cfu_evidence_scope:
+                    cfu_evidence_scope = cfu_data.get("evidence_scope") or "row_level"
+                linked = cfu_data.get("linked_rows") or [blend.get("raw_source_path")]
+                cfu_linked_rows.extend(str(path) for path in linked if path)
             # Take first non-None guarantee_type
             if not guarantee_type and cfu_data.get('guarantee_type'):
                 guarantee_type = cfu_data.get('guarantee_type')
@@ -11673,11 +11705,19 @@ class SupplementEnricherV3:
             if product_billion > total_billion_count and total_billion_count > 0:
                 total_cfu = product_level_cfu['cfu_count']
                 total_billion_count = product_billion
+                cfu_source = product_level_cfu.get("source")
+                cfu_raw_source_path = product_level_cfu.get("raw_source_path")
+                cfu_evidence_scope = product_level_cfu.get("evidence_scope")
+                cfu_linked_rows = list(product_level_cfu.get("linked_rows") or [])
             elif not has_cfu:
                 has_cfu = True
                 total_cfu = product_level_cfu['cfu_count']
                 total_billion_count = product_billion
                 guarantee_type = product_level_cfu.get('guarantee_type') or guarantee_type
+                cfu_source = product_level_cfu.get("source")
+                cfu_raw_source_path = product_level_cfu.get("raw_source_path")
+                cfu_evidence_scope = product_level_cfu.get("evidence_scope")
+                cfu_linked_rows = list(product_level_cfu.get("linked_rows") or [])
 
         self.logger.debug(
             "Returning probiotic_data with has_cfu=%s, first_blend_cfu_data=%s",
@@ -11755,6 +11795,10 @@ class SupplementEnricherV3:
             "total_cfu": total_cfu,
             "total_billion_count": total_billion_count,
             "guarantee_type": guarantee_type,
+            "cfu_source": cfu_source,
+            "cfu_raw_source_path": cfu_raw_source_path,
+            "cfu_evidence_scope": cfu_evidence_scope,
+            "cfu_linked_rows": sorted(set(cfu_linked_rows)),
             # Clinical and other data
             "clinical_strains": found_clinical_strains,
             "clinical_strain_count": len(found_clinical_strains),
@@ -11770,6 +11814,91 @@ class SupplementEnricherV3:
             "has_postbiotic_strains": has_postbiotic_strains,
             "detected_postbiotic_patterns": detected_postbiotic_patterns,
         }
+
+    def _collect_product_scoring_evidence(self, enriched: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Emit enrichment-owned product-level scoring evidence."""
+        evidence: List[Dict[str, Any]] = []
+        probiotic_data = enriched.get("probiotic_data") if isinstance(enriched.get("probiotic_data"), dict) else {}
+        try:
+            total_cfu_value = float(probiotic_data.get("total_cfu") or 0)
+        except (TypeError, ValueError):
+            total_cfu_value = 0.0
+        if total_cfu_value <= 0:
+            return evidence
+
+        taxonomy = enriched.get("supplement_taxonomy") if isinstance(enriched.get("supplement_taxonomy"), dict) else {}
+        primary_type = str(taxonomy.get("primary_type") or "").strip().lower()
+        raw_source_path = probiotic_data.get("cfu_raw_source_path")
+        linked_rows = [str(path) for path in (probiotic_data.get("cfu_linked_rows") or []) if path]
+        if raw_source_path and raw_source_path not in linked_rows:
+            linked_rows.append(str(raw_source_path))
+        iqd = enriched.get("ingredient_quality_data") if isinstance(enriched.get("ingredient_quality_data"), dict) else {}
+        strict_rows = [row for row in (iqd.get("ingredients_scorable") or []) if isinstance(row, dict)]
+        probiotic_blends = [row for row in (probiotic_data.get("probiotic_blends") or []) if isinstance(row, dict)]
+        has_probiotic_row_identity = bool(probiotic_blends) and int(probiotic_data.get("total_strain_count") or 0) > 0
+        has_non_probiotic_strict_active = False
+        for row in strict_rows:
+            row_text = " ".join(str(row.get(key) or "") for key in ("canonical_id", "name", "standard_name")).lower()
+            if any(term in row_text for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus")):
+                continue
+            if str(row.get("dose_class") or "").lower() == "probiotic_cfu":
+                continue
+            has_non_probiotic_strict_active = True
+            break
+        identity_proven = (
+            primary_type == "probiotic"
+            or (
+                bool(probiotic_data.get("is_probiotic_product"))
+                and has_probiotic_row_identity
+                and not has_non_probiotic_strict_active
+            )
+        )
+
+        base = {
+            "evidence_type": "probiotic_cfu",
+            "scoreable_identity": identity_proven,
+            "score_eligible_by_cleaner": bool(probiotic_data.get("is_probiotic_product")),
+            "dose_class": "probiotic_cfu",
+            "dose_value": total_cfu_value,
+            "dose_unit": "CFU",
+            "source": probiotic_data.get("cfu_source") or "probiotic_data.total_cfu",
+            "raw_source_path": raw_source_path,
+            "evidence_scope": probiotic_data.get("cfu_evidence_scope") or "product_level",
+            "linked_rows": linked_rows,
+            "confidence": "high" if identity_proven and raw_source_path and linked_rows else "low",
+            "reason": "product_level_cfu_with_probiotic_identity" if primary_type == "probiotic" else "product_level_cfu_with_probiotic_row_identity",
+            "name": "Total Probiotic CFU",
+            "canonical_id": "probiotic_cfu_total",
+            "source_section": "product",
+        }
+
+        rejection_reason = None
+        if has_non_probiotic_strict_active and primary_type != "probiotic":
+            rejection_reason = "non_probiotic_strict_active_present"
+        elif not identity_proven or not probiotic_data.get("is_probiotic_product"):
+            rejection_reason = "product_identity_not_probiotic"
+        elif not raw_source_path:
+            rejection_reason = "missing_raw_source_path"
+        elif not linked_rows:
+            rejection_reason = "missing_linked_rows"
+
+        if rejection_reason:
+            base.update({
+                "scoreable": False,
+                "scoreable_identity": False,
+                "score_eligible_by_cleaner": False,
+                "confidence": "low",
+                "reason": "probiotic_cfu_rejected_by_identity_or_provenance_gate",
+                "rejection_reason": rejection_reason,
+            })
+        else:
+            base.update({
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+            })
+        evidence.append(base)
+        return evidence
 
     # CFU-equivalent unit patterns — must match the ENTIRE unit string
     # (re.fullmatch). Earlier version used re.search with generic patterns
@@ -11811,7 +11940,13 @@ class SupplementEnricherV3:
 
         return False
 
-    def _extract_cfu(self, text: str, ingredient: Optional[Dict] = None) -> Dict:
+    def _extract_cfu(
+        self,
+        text: str,
+        ingredient: Optional[Dict] = None,
+        source_path: Optional[str] = None,
+        evidence_scope: Optional[str] = None,
+    ) -> Dict:
         """
         Extract CFU information from text and ingredient quantity.
 
@@ -11821,8 +11956,19 @@ class SupplementEnricherV3:
             "has_cfu": False,
             "cfu_count": 0,
             "billion_count": 0,
-            "guarantee_type": None  # 'at_manufacture' or 'at_expiration'
+            "guarantee_type": None,  # 'at_manufacture' or 'at_expiration'
+            "source": None,
+            "raw_source_path": None,
+            "evidence_scope": evidence_scope,
+            "linked_rows": [],
         }
+
+        def _mark_source(source: str, raw_source_path: Optional[str], scope: Optional[str]) -> None:
+            result["source"] = source
+            result["raw_source_path"] = raw_source_path
+            result["evidence_scope"] = scope or result.get("evidence_scope")
+            if raw_source_path:
+                result["linked_rows"] = [raw_source_path]
 
         self.logger.debug("Extracting CFU data from text; ingredient_present=%s", bool(ingredient))
         if ingredient:
@@ -11834,6 +11980,7 @@ class SupplementEnricherV3:
                     result["has_cfu"] = True
                     result["cfu_count"] = quantity
                     result["billion_count"] = quantity / 1e9
+                    _mark_source("activeIngredients.quantity_unit", source_path or ingredient.get("raw_source_path"), evidence_scope or "row_level")
 
         self.logger.debug("CFU extraction result: %s", result)
 
@@ -11848,6 +11995,11 @@ class SupplementEnricherV3:
                     result["has_cfu"] = True
                     result["billion_count"] = billion_from_text
                     result["cfu_count"] = billion_from_text * 1e9
+                    _mark_source(
+                        "activeIngredients.notes" if ingredient else "statements",
+                        source_path or (ingredient or {}).get("raw_source_path"),
+                        evidence_scope or ("row_level" if ingredient else "product_level"),
+                    )
 
             # Also check abbreviated billion format (e.g., "1.5 B CFU")
             if not result["has_cfu"]:
@@ -11857,6 +12009,11 @@ class SupplementEnricherV3:
                     result["has_cfu"] = True
                     result["billion_count"] = billion_from_text
                     result["cfu_count"] = billion_from_text * 1e9
+                    _mark_source(
+                        "activeIngredients.notes" if ingredient else "statements",
+                        source_path or (ingredient or {}).get("raw_source_path"),
+                        evidence_scope or ("row_level" if ingredient else "product_level"),
+                    )
 
             # Also check for million CFU (e.g., "500 Million CFUs")
             if not result["has_cfu"]:
@@ -11866,6 +12023,11 @@ class SupplementEnricherV3:
                     result["has_cfu"] = True
                     result["billion_count"] = million_from_text / 1000  # Convert to billions
                     result["cfu_count"] = million_from_text * 1e6
+                    _mark_source(
+                        "activeIngredients.notes" if ingredient else "statements",
+                        source_path or (ingredient or {}).get("raw_source_path"),
+                        evidence_scope or ("row_level" if ingredient else "product_level"),
+                    )
 
             # P1.1: Enhanced guarantee type parsing
             result["guarantee_type"] = self._extract_guarantee_type(text)
@@ -14168,6 +14330,7 @@ class SupplementEnricherV3:
             enriched["supplement_taxonomy"] = taxonomy
             enriched["primary_type"] = taxonomy["primary_type"]
             enriched["secondary_type"] = taxonomy["secondary_type"]
+            enriched["product_scoring_evidence"] = self._collect_product_scoring_evidence(enriched)
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)

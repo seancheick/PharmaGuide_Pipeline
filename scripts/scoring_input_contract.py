@@ -14,6 +14,11 @@ from typing import Any, Dict, List, Optional
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
 LEGACY_IQD_SOURCE = "ingredient_quality_data.ingredients"
 PRODUCT_EVIDENCE_SOURCE = "product_scoring_evidence"
+PRODUCT_EVIDENCE_SCOPES = {"product_level", "blend_level", "row_level"}
+PRODUCT_EVIDENCE_SECTION_SUPPORT = {
+    "probiotic_cfu": ["probiotic_dose_adequacy"],
+    "enzyme_activity": ["enzyme_activity_identity"],
+}
 
 VALID_DOSE_CLASSES = {
     "therapeutic_mass",
@@ -181,7 +186,11 @@ def _has_dose_evidence(row: Dict[str, Any]) -> bool:
     return unit not in {"", "np", "n/a", "na", "none", "0"}
 
 
-def _product_scoring_evidence_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+def _product_scoring_evidence_rows(
+    product: Dict[str, Any],
+    *,
+    strict: bool,
+) -> tuple[List[Dict[str, Any]], List[RejectedScoringRow], List[str]]:
     evidence = product.get("product_scoring_evidence")
     if isinstance(evidence, dict):
         evidence_rows = _safe_list(evidence.get("items") or evidence.get("evidence"))
@@ -191,24 +200,73 @@ def _product_scoring_evidence_rows(product: Dict[str, Any]) -> List[Dict[str, An
         evidence_rows = _safe_list(evidence)
 
     rows: List[Dict[str, Any]] = []
+    rejected: List[RejectedScoringRow] = []
+    findings: List[str] = []
     for idx, item in enumerate(evidence_rows):
         if not isinstance(item, dict):
             continue
+        evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
-        if dose_class not in VALID_NON_MASS_DOSE_CLASSES:
+        if item.get("scoreable") is False:
+            rejected.append(_reject(item, f"product_evidence_not_scoreable:{item.get('rejection_reason') or 'rejected_by_enrichment'}"))
             continue
-        row = dict(item)
-        row.setdefault("name", item.get("name") or item.get("label") or dose_class)
-        row.setdefault("canonical_id", item.get("canonical_id") or dose_class)
-        row.setdefault("mapped", True)
-        row.setdefault("scoreable_identity", True)
-        row.setdefault("role_classification", "active_scorable")
-        row.setdefault("cleaner_row_role", "active_scorable")
-        row.setdefault("score_eligible_by_cleaner", True)
-        row.setdefault("dose_class", dose_class)
-        row.setdefault("raw_source_path", f"product_scoring_evidence[{idx}]")
+        if evidence_type not in PRODUCT_EVIDENCE_SECTION_SUPPORT or dose_class != evidence_type:
+            if item.get("scoreable") is True:
+                findings.append(f"invalid_product_evidence_type:{evidence_type or dose_class or idx}")
+            continue
+        required = [
+            "evidence_type",
+            "scoreable",
+            "scoreable_identity",
+            "score_eligible_by_cleaner",
+            "dose_class",
+            "dose_value",
+            "dose_unit",
+            "source",
+            "raw_source_path",
+            "evidence_scope",
+            "linked_rows",
+            "confidence",
+            "reason",
+        ]
+        missing = [field_name for field_name in required if item.get(field_name) in (None, "", [])]
+        if item.get("scoreable") is not True:
+            missing.append("scoreable")
+        if item.get("scoreable_identity") is not True:
+            missing.append("scoreable_identity")
+        if item.get("score_eligible_by_cleaner") is not True:
+            missing.append("score_eligible_by_cleaner")
+        dose_value = _as_float(item.get("dose_value"), None)
+        if dose_value is None or dose_value <= 0:
+            missing.append("dose_value")
+        if _norm(item.get("evidence_scope")) not in PRODUCT_EVIDENCE_SCOPES:
+            missing.append("evidence_scope")
+        if missing:
+            rejected.append(_reject(item, "malformed_product_scoring_evidence", sorted(set(missing))))
+            if strict:
+                findings.append(f"malformed_product_scoring_evidence:{idx}:{','.join(sorted(set(missing)))}")
+            continue
+
+        row = {
+            **item,
+            "name": item.get("name") or item.get("label") or evidence_type,
+            "canonical_id": item.get("canonical_id") or evidence_type,
+            "mapped": item.get("mapped", True),
+            "mapped_identity": item.get("mapped_identity", True),
+            "scoreable_identity": True,
+            "role_classification": "active_scorable",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": True,
+            "dose_class": dose_class,
+            "quantity": dose_value,
+            "unit": item.get("dose_unit"),
+            "source_section": item.get("source_section") or PRODUCT_EVIDENCE_SOURCE,
+            "scoring_input_kind": "product_level_evidence",
+            "section_support": PRODUCT_EVIDENCE_SECTION_SUPPORT[evidence_type],
+            "generic_form_quality_credit": bool(item.get("generic_form_quality_credit", False)),
+        }
         rows.append(row)
-    return rows
+    return rows, rejected, findings
 
 
 def _reject(row: Dict[str, Any], reason: str, missing_fields: Optional[List[str]] = None) -> RejectedScoringRow:
@@ -281,10 +339,15 @@ def get_scoring_ingredients(
     if strict and not isinstance(iqd.get("ingredients_scorable"), list):
         contract_findings.append("missing_iqd_ingredients_scorable_list")
     candidates = [row for row in _safe_list(iqd.get("ingredients_scorable")) if isinstance(row, dict)]
-    product_evidence_rows = _product_scoring_evidence_rows(product)
+    product_evidence_rows, product_evidence_rejected, product_evidence_findings = _product_scoring_evidence_rows(
+        product,
+        strict=strict,
+    )
     if product_evidence_rows:
         candidates.extend(product_evidence_rows)
         source = f"{SCORING_SOURCE}+{PRODUCT_EVIDENCE_SOURCE}"
+    rejected: List[RejectedScoringRow] = list(product_evidence_rejected)
+    contract_findings.extend(product_evidence_findings)
 
     if not candidates and allow_legacy_fallback:
         legacy = [row for row in _safe_list(iqd.get("ingredients")) if isinstance(row, dict)]
@@ -297,7 +360,6 @@ def get_scoring_ingredients(
                 source=LEGACY_IQD_SOURCE,
             ))
     rows: List[Dict[str, Any]] = []
-    rejected: List[RejectedScoringRow] = []
     row_findings: List[str] = []
     for row in candidates:
         ok, rejection, findings = _evaluate_row(row, strict=strict)

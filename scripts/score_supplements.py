@@ -2239,6 +2239,11 @@ class SupplementScorer:
         return total
 
     def _has_usable_individual_dose(self, ingredient: Dict[str, Any]) -> bool:
+        if ingredient.get("scoring_input_kind") == "product_level_evidence":
+            # Product-level contracts feed only sections that explicitly
+            # support that evidence type. They are not ingredient form-quality
+            # rows and should not receive generic A1/A6 credit.
+            return False
         qty = as_float(ingredient.get("quantity"), None)
         if qty is None or qty <= 0:
             return False
