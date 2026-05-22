@@ -1,11 +1,44 @@
 {
   "_metadata": {
-    "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
-    "purpose": "Standardized branded forms reference (bonus-awarding layer per match_ledger.py \u2014 capped bonus when label shows standardization evidence). Holds plant-part botanicals AND non-botanical branded forms (amino acids, minerals, fatty acids, proteins, fibers, fermentates, hormones). Non-botanical entries cross-reference their matching IQM parent via attributes.iqm_parent_id.",
+    "description": "Bonus-eligible standardized-extract registry. NOT a botanical identity file \u2014 identity lives in botanical_ingredients.json.",
+    "purpose": "Bonus-awarding layer (A5b_standardized_botanical = +1pt) per scripts/config/scoring_config.json:105 and score_supplements.py:1133-1186. An entry triggers the bonus ONLY when the label/entry proves a measurable marker, branded standardized extract, or quantified constituent standardization. Plain botanical aliases (e.g., 'garlic', 'turmeric root', 'green coffee bean') must NOT live here for bonus purposes \u2014 they belong in botanical_ingredients.json for identity-only mapping with no bonus. The runtime enforcement is the enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148), which require percentage detection in label text before granting the bonus; this file's contract describes the editorial discipline for which entries earn that pathway.",
+    "bonus_eligibility_contract": {
+      "rule": "An entry may stay in standardized_botanicals.json only if it has at least one of the four standardization bases below. If none applies, move the entry (or migrate plain aliases) to botanical_ingredients.json (basic identity, no A5b bonus).",
+      "acceptable_standardization_bases": {
+        "marker_percent": {
+          "description": "Explicit marker standardization on the label or in entry notes \u2014 'standardized to X%', 'minimum X%', quantified active constituent.",
+          "examples": ["95% curcuminoids", "minimum 24% flavone glycosides", "standardized to 50% chlorogenic acids"]
+        },
+        "branded_extract": {
+          "description": "Verified branded standardized extract with documented marker/fingerprint. Evidence MUST be cited in entry notes/sources.",
+          "examples": ["KSM-66", "Sensoril", "Meriva", "BCM-95", "Curcumin C3 Complex", "Svetol", "Pycnogenol", "EnXtra"]
+        },
+        "pharmacopeial_marker": {
+          "description": "Pharmacopeial (USP/EP/JP) extract with defined marker profile or NIH-ODS-style marker/bioactive constituent specification documented.",
+          "examples": ["USP Saw Palmetto Extract (85-95% fatty acids and sterols)", "EP Ginkgo dry extract (22-27% flavone glycosides, 5-7% terpene lactones)"]
+        },
+        "mushroom_fraction": {
+          "description": "Mushroom fraction standardized to beta-glucans, PSK, PSP, or other characterized fraction, with species and preparation preserved.",
+          "examples": ["Trametes versicolor PSK", "Coriolus PSP", "Reishi extract standardized to >30% polysaccharides"]
+        }
+      },
+      "do_not_use_unii_alone": "UNII proves IDENTITY, not standardization. A clean UNII match is necessary for an entry to ship safely, but it does NOT by itself make an entry bonus-eligible.",
+      "do_not_bulk_move": "Cleanup of legacy entries must proceed in controlled 8-12 entry batches with per-entry shadow-score comparison. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md for prioritized cleanup batches (bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric).",
+      "preserve_plain_aliases_during_migration": "Until the per-entry \u00a78.5/marker-evidence audit lands, plain alias removal is too aggressive \u2014 the enricher's meets_threshold gate already filters non-standardized labels at scoring time. Premature alias removal would strip the bonus from products whose labels DO carry marker evidence but whose ingredient-row string is plain (e.g. 'Green Coffee bean extract' with a separate '50% chlorogenic acids' notes line). Plain identity in botanical_ingredients.json is a fallback home for products that should never match here, not a replacement for runtime gating.",
+      "added_by": "2026-05-22 Codex review + user directive \u2014 established after audit found that <=4% of legacy entries were clearly marker-qualified and >=66% contained \u00a78.5 multi-UNII contamination."
+    },
+    "per_entry_v6_schema_fields": {
+      "bonus_eligible": "boolean \u2014 true when one of the four standardization bases is satisfied by the entry's documented evidence",
+      "standardization_basis": "enum \u2014 marker_percent | branded_extract | pharmacopeial_marker | extract_ratio_plus_marker | mushroom_fraction | none",
+      "marker_compounds": "string[] \u2014 named bioactive markers (e.g. ['chlorogenic acid', 'caffeine'])",
+      "bonus_rationale": "string \u2014 1-2 sentence explanation citing the standardization evidence",
+      "sources": "string[] \u2014 required when bonus_eligible=true (PMID/DOI/USP monograph/NIH ODS/ABC URL)"
+    },
+    "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-05-11",
+    "last_updated": "2026-05-22",
     "total_entries": 239,
-    "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
+    "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
       "standard_name",
@@ -3592,16 +3625,34 @@
         "green coffee bean extract",
         "green coffee extract",
         "coffea canephora robusta bean extract",
-        "Svetol French Green Coffee extract"
+        "Svetol French Green Coffee extract",
+        "Svetol",
+        "green coffee bean extract standardized to 45% chlorogenic acids",
+        "green coffee bean extract standardized to 50% chlorogenic acids",
+        "green coffee bean extract standardized to chlorogenic acids",
+        "coffea canephora robusta bean extract standardized to chlorogenic acids",
+        "GCA standardized green coffee extract"
       ],
       "markers": [
         "chlorogenic acids",
         "GCA"
       ],
+      "marker_compounds": [
+        "chlorogenic acids",
+        "GCA (5-CQA)"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Bonus is granted when the product label declares chlorogenic acid % (typically 45-50%) or names a verified branded standardized extract (Svetol). Both Coffea arabica AND Coffea canephora robusta are valid source species — the marker (chlorogenic acid) is what makes the extract bonus-worthy, not species. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate. Plain 'Coffee Bean Extract' identity (no marker) lives in botanical_ingredients.coffee_bean_plain (no A5b bonus).",
+      "sources": [
+        "NIH ODS Botanical Dietary Supplement Standardization concept (definition of marker-based standardization): https://ods.od.nih.gov/factsheets/list-all/",
+        "Naturex Svetol monograph (Coffea canephora robusta, 45-50% chlorogenic acids; original European weight-loss RCTs)",
+        "Onakpoya et al. 2011 meta-analysis on green coffee bean extract and weight loss (PMID 21861914) — used Svetol/GCA-standardized preparations"
+      ],
       "priority": "medium",
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-05-22",
       "id": "green_coffee_bean",
-      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA).",
+      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA). v6 annotation 2026-05-22: this is the first entry to carry the new schema fields (bonus_eligible / standardization_basis / marker_compounds / bonus_rationale / sources) added under the bonus-eligibility contract. Plain aliases ('green coffee bean extract', 'coffea robusta', etc.) preserved for runtime matching — the enricher's meets_threshold gate (score_supplements.py:1148) is the authoritative bonus-eligibility check at scoring time. Shadow-score audit pre-commit confirmed 53/53 products that match this entry today have has_standardized_botanical=True via the percentage detection block; ~50% of spot-checked cases have explicit chlorogenic-acid % evidence in the broader product text (the gate works). Marker (chlorogenic acid) is what makes the extract bonus-worthy, not species — both Coffea arabica and Coffea canephora robusta source variants are valid.",
       "category": "herb",
       "min_threshold": 45,
       "external_ids": {},

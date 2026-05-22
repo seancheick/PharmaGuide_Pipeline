@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 482,
+    "total_entries": 483,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -3452,6 +3452,34 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "coffee_bean_plain",
+      "standard_name": "Coffee Bean (plain identity)",
+      "latin_name": "Coffea spp. (arabica / canephora robusta — seed)",
+      "aliases": [
+        "Coffee Bean Extract",
+        "coffee bean extract",
+        "Coffee bean extract",
+        "Coffea robusta",
+        "Coffea robusta Seed Extract",
+        "coffea robusta seed extract",
+        "coffea arabica seed",
+        "Coffea arabica bean",
+        "Coffee extract",
+        "Coffee, Powder",
+        "coffee powder"
+      ],
+      "category": "seed",
+      "notes": "Plain coffee bean / seed identity for unstandardized labels that do not match standardized_botanicals.green_coffee_bean's explicit aliases. Created 2026-05-22 alongside the v6 bonus-eligibility contract on standardized_botanicals — provides a fallback identity home for labels surfacing in the 2026-05-22 unmapped scan ('Coffea robusta Seed Extract' x5, 'Coffee Bean Extract' x5, 'Coffee, Powder' x3, etc., from GNC and Nature Made). NO A5b bonus from this entry — the bonus pathway lives in standardized_botanicals.green_coffee_bean, gated at runtime by the enricher's meets_threshold check. UNII varies by species and preparation (Coffea arabica seed UNII vs robusta seed UNII vs generic coffee bean extract UNII); no single target_unii assigned here.",
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false,
+        "bonus_eligible_companion": "standardized_botanicals.green_coffee_bean (marker-percent / Svetol-branded bonus pathway)"
       }
     },
     {
