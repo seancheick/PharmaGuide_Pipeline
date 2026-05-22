@@ -2196,8 +2196,11 @@
       "id": "cognigrape",
       "aliases": [
         "cognigrape",
-        "gognigrape",
-        "grape seed cognitive extract"
+        "Cognigrape",
+        "CogniGrape",
+        "grape seed cognitive extract",
+        "Cognigrape red grape extract",
+        "Cognigrape standardized red grape extract"
       ],
       "markers": [
         "proanthocyanidins",
@@ -2205,9 +2208,11 @@
       ],
       "category": "seed_fruit",
       "priority": "medium",
-      "notes": "Branded grape seed extract standardized for cognitive health benefits.",
-      "last_updated": "2026-01-05",
-      "external_ids": {},
+      "notes": "Cognigrape (Bionap branded red-grape, Vitis vinifera) anthocyanin-rich standardized extract clinically studied for cognitive support in older adults (Calapai 2017 PMID 28552883). UNII RDS2V6DVY5 (grape seed extract preparation registry — matches Cognigrape's grape-seed-pomace chemistry). SB-9 cleanup 2026-05-22: fixed copy-paste typo ('gognigrape' removed; canonical 'cognigrape' + case variants preserved); populated external_ids.unii.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "RDS2V6DVY5"
+      },
       "branded_form": true
     },
     {
@@ -3516,24 +3521,49 @@
       "threshold_source": "12.5% 6-paradol \u2014 Paradoxine standard"
     },
     {
-      "standard_name": "Grape Seed",
+      "standard_name": "Grape Seed (Vitis vinifera seed)",
       "aliases": [
         "vitis vinifera",
+        "Vitis vinifera",
         "grape seed extract",
         "grape seed proanthocyanidins",
         "grapeseed",
-        "masquelier's OPC"
+        "masquelier's OPC",
+        "Masquelier's OPC",
+        "grape seed extract standardized to 90% OPCs",
+        "grape seed extract standardized to 95% OPCs",
+        "grape seed extract standardized to 95% proanthocyanidins",
+        "MegaNatural-BP",
+        "MegaNatural-BP grape seed extract"
       ],
       "markers": [
         "OPCs",
         "proanthocyanidins",
         "polyphenols"
       ],
+      "marker_compounds": [
+        "OPCs (oligomeric proanthocyanidins)",
+        "proanthocyanidins",
+        "catechin",
+        "epicatechin",
+        "gallic acid",
+        "polyphenols"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Grape seed (Vitis vinifera, UNII RDS2V6DVY5 for the standardized extract preparation; C34U15ICXA for plain seed identity in botanical_ingredients.grape_seed) is bonus-eligible when the product label declares OPC % (typically 90-95% — the high-OPC threshold) OR a branded standardized extract (Masquelier's OPC, MegaNatural-BP). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'grape seed' identity matches but defers to meets_threshold. The audit's reported '5 distinct UNIIs in aliases' reflect marker-compound UNIIs (ZZE3L9H7KH proanthocyanidins, 7G50Y5P93W Masquelier's OPC) and preparation variants — not cross-species §8.5 misplacement.",
+      "sources": [
+        "NIH ODS — Grape Seed Extract: https://ods.od.nih.gov/factsheets/list-all/",
+        "NCCIH Grape Seed overview: https://www.nccih.nih.gov/health/grape-seed-extract",
+        "Sano et al. 2007 RCT on MegaNatural-BP for blood pressure (PMID 17190620)",
+        "Bagchi et al. 2003 systematic review on OPC pharmacology and cardiovascular outcomes (PMID 12867234)"
+      ],
+      "_sb9_pending_review": "Sibling entry 'grape_seed_extract' (id) also declares external_ids.unii='RDS2V6DVY5' and overlaps with this entry's content. Likely a duplicate that warrants merger or one of them becoming the canonical bonus pathway with the other retired. Flagged for a future SB-9b decision; SB-9 only annotates this primary entry to keep scope tight.",
       "min_threshold": 90,
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "grape_seed",
-      "notes": "Cardiovascular antioxidant standardized for 90-95% OPCs (oligomeric proanthocyanidins).",
+      "notes": "Vitis vinifera seed extract (Vitaceae). UNII RDS2V6DVY5 for the standardized extract preparation (botanical_ingredients.grape_seed holds plain seed identity, UNII C34U15ICXA). Cardiovascular antioxidant standardized for 90-95% OPCs (oligomeric proanthocyanidins). SB-9 §8.5 / v6 annotation 2026-05-22: added v6 contract fields + marker-explicit alias phrasings + Masquelier's OPC and MegaNatural-BP branded variants. Sibling 'grape_seed_extract' entry overlaps with this one (same UNII); flagged for future merger.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "RDS2V6DVY5"
