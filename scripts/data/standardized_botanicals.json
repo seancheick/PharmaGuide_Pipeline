@@ -1700,12 +1700,24 @@
       ],
       "category": "seed_fruit",
       "priority": "medium",
-      "notes": "Cognigrape (Bionap branded red-grape, Vitis vinifera) anthocyanin-rich standardized extract clinically studied for cognitive support in older adults (Calapai 2017 PMID 28552883). UNII RDS2V6DVY5 (grape seed extract preparation registry \u2014 matches Cognigrape's grape-seed-pomace chemistry). SB-9 cleanup 2026-05-22: fixed copy-paste typo ('gognigrape' removed; canonical 'cognigrape' + case variants preserved); populated external_ids.unii.",
+      "notes": "Cognigrape (Bionap branded red-grape, Vitis vinifera) anthocyanin-rich standardized extract clinically studied for cognitive support in older adults (Calapai 2017 PMID 28552883). UNII RDS2V6DVY5 (grape seed extract preparation registry \u2014 matches Cognigrape's grape-seed-pomace chemistry). SB-9 cleanup 2026-05-22: fixed copy-paste typo ('gognigrape' removed; canonical 'cognigrape' + case variants preserved); populated external_ids.unii. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "RDS2V6DVY5"
       },
-      "branded_form": true
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "anthocyanins",
+        "polyphenols",
+        "flavonoids"
+      ],
+      "bonus_rationale": "Cognigrape\u00ae (Bionap) is an anthocyanin-rich red-grape extract (Vitis vinifera fruit/seed/skin) standardized to a defined polyphenol profile. Clinical literature on cognitive performance endpoints in healthy adults. branded_extract basis: bonus is granted when the label names the Cognigrape\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/28391595/",
+        "https://www.bionap.com/portfolio/cognigrape/"
+      ]
     },
     {
       "standard_name": "Cognizin Citicoline",
@@ -1863,12 +1875,26 @@
         "proanthocyanidins"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "cran_max",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "fruit",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "0MVO31Q3QS"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "whole-fruit polyphenols",
+        "proanthocyanidins (PACs)",
+        "anthocyanins"
+      ],
+      "bonus_rationale": "Cran-Max\u00ae (PharmaChem Innovations) is a clinically-studied whole-cranberry fruit extract with the entire phytochemical complement (PACs, anthocyanins, phenolics). Used in UTI-prevention RCTs (Bio-Shield\u2122 delivery). branded_extract basis: bonus is granted when the label names the Cran-Max\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/cranberry",
+        "https://pubmed.ncbi.nlm.nih.gov/12010289/"
+      ]
     },
     {
       "standard_name": "CranRx",
@@ -2485,9 +2511,9 @@
         "lutein"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "floraglo",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
       "external_ids": {
         "cas": "127-40-2",
@@ -2506,7 +2532,19 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "branded_form": true
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "lutein",
+        "zeaxanthin",
+        "carotenoids"
+      ],
+      "bonus_rationale": "FloraGLO\u00ae (Kemin Industries) is the original commercial lutein extract from Tagetes erecta marigold, standardized to >5% lutein (free form). Used in AREDS2 macular-degeneration trial as the lutein source. branded_extract basis: bonus is granted when the label names the FloraGLO\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/23644932/",
+        "https://www.nei.nih.gov/research/clinical-trials/age-related-eye-disease-study-2-areds2"
+      ]
     },
     {
       "standard_name": "Flowens",
@@ -3437,12 +3475,26 @@
         "withanolides"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "ksm_66_ashwagandha",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "V038D626IF"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "withanolides",
+        "withaferin A"
+      ],
+      "bonus_rationale": "KSM-66\u00ae Ashwagandha (Ixoreal Biomed) is the most clinically-studied branded Withania somnifera root extract, standardized to 5%+ withanolides via a green-chemistry root-only extraction process. Extensive clinical literature on stress / cortisol / sleep / athletic endurance / testosterone endpoints. branded_extract basis: bonus is granted when the label names the KSM-66\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+        "https://pubmed.ncbi.nlm.nih.gov/26609282/",
+        "https://www.nccih.nih.gov/health/ashwagandha"
+      ]
     },
     {
       "standard_name": "Kudzu",
@@ -3639,12 +3691,27 @@
         "zeaxanthin"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "lutemax_2020",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "X72A60C9MT"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "lutein",
+        "zeaxanthin",
+        "meso-zeaxanthin",
+        "carotenoids"
+      ],
+      "bonus_rationale": "Lutemax\u00ae 2020 (OmniActive Health Technologies) is a clinically-studied Tagetes erecta (marigold) extract standardized to the three macular carotenoids (lutein + zeaxanthin + meso-zeaxanthin in a 5:1:1 ratio). Clinical literature (B.L.U.E. study, LAMA, etc.) on macular pigment optical density and visual performance. branded_extract basis: bonus is granted when the label names the Lutemax\u00ae 2020 brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/28494836/",
+        "https://pubmed.ncbi.nlm.nih.gov/29144655/"
+      ]
     },
     {
       "standard_name": "Maca",
@@ -4169,12 +4236,23 @@
         "anthocyanins"
       ],
       "priority": "medium",
-      "last_updated": "2026-03-16",
+      "last_updated": "2026-05-22",
       "id": "optiberry",
-      "notes": "Branded multiple-berry anthocyanin blend. Raw DSLD OpriBerry(R) rows match the documented OptiBerry composition of cranberry, elderberry, raspberry, strawberry, bilberry, and blueberry/wild blueberry.",
+      "notes": "Branded multiple-berry anthocyanin blend. Raw DSLD OpriBerry(R) rows match the documented OptiBerry composition of cranberry, elderberry, raspberry, strawberry, bilberry, and blueberry/wild blueberry. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "berry",
       "external_ids": {},
-      "branded_form": true
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "anthocyanins",
+        "OptiBerry polyphenol blend"
+      ],
+      "bonus_rationale": "OptiBerry\u00ae (InterHealth Nutraceuticals, now Lonza) is a clinically-studied blend of six berry extracts (wild blueberry, wild bilberry, cranberry, elderberry, raspberry seed, strawberry) standardized to high anthocyanin / polyphenol content. Used in antioxidant / anti-angiogenic research. Multi-source blend has no single-substance UNII; the brand name is the bonus trigger. branded_extract basis: bonus is granted when the label names the OptiBerry\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/15050362/",
+        "https://pubmed.ncbi.nlm.nih.gov/16219800/"
+      ]
     },
     {
       "standard_name": "Organic Gold Standard Potentiating Nutrients",
@@ -4203,12 +4281,26 @@
         "proanthocyanidins"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "pacran",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "fruit",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "0MVO31Q3QS"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "soluble proanthocyanidins (sPACs)",
+        "type-A proanthocyanidins (PACs)",
+        "phenolic acids"
+      ],
+      "bonus_rationale": "Pacran\u00ae (Naturex / Givaudan) is a clinically-studied whole-cranberry powder standardized to soluble proanthocyanidin content (typically 1.5%+ sPACs). Clinical literature on recurrent UTI prevention and urinary-tract anti-adhesion activity uses Pacran\u00ae standardization. branded_extract basis: bonus is granted when the label names the Pacran\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical (score_supplements.py:1148).",
+      "sources": [
+        "https://www.nccih.nih.gov/health/cranberry",
+        "https://pubmed.ncbi.nlm.nih.gov/27013539/"
+      ]
     },
     {
       "standard_name": "Panax Ginseng",
@@ -4529,9 +4621,9 @@
       ],
       "min_threshold": 65,
       "priority": "high",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-05-22",
       "id": "pycnogenol",
-      "notes": "Botanical ingredient standardized for OPC, procyanidins. Commonly used in dietary supplements.",
+      "notes": "Botanical ingredient standardized for OPC, procyanidins. Commonly used in dietary supplements. [PB-1 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
       "external_ids": {
         "unii": "50JZ5Z98QY"
@@ -4548,7 +4640,21 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0072642"
+      "cui": "C0072642",
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "procyanidins (OPCs)",
+        "proanthocyanidins",
+        "bioflavonoids",
+        "phenolic acids"
+      ],
+      "bonus_rationale": "Pycnogenol\u00ae (Horphag Research) is a clinically-studied French maritime pine bark extract (Pinus pinaster) standardized to 65-75% procyanidins (OPCs). Hundreds of clinical trials covering circulation / endothelial function / inflammation / skin / cognition. branded_extract basis: bonus is granted when the label names the Pycnogenol\u00ae brand. Plain pine bark identity (unstandardized) lives in botanical_ingredients.pine_bark_extract (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/22260513/",
+        "https://www.nccih.nih.gov/health/pycnogenol",
+        "https://www.horphag.com/Brand/Pycnogenol"
+      ]
     },
     {
       "standard_name": "Pygeum",
