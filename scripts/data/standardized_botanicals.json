@@ -997,24 +997,44 @@
       "branded_form": true
     },
     {
-      "standard_name": "Bilberry",
+      "standard_name": "Bilberry (Vaccinium myrtillus)",
       "aliases": [
         "vaccinium myrtillus",
         "european blueberry",
         "bilberry extract",
         "bilberry fruit extract",
         "european bilberry",
-        "whortleberry"
+        "whortleberry",
+        "bilberry extract standardized to 25% anthocyanosides",
+        "bilberry extract standardized to 36% anthocyanins",
+        "Mirtoselect",
+        "Mirtoselect bilberry extract",
+        "Mirtoselect standardized bilberry extract"
       ],
       "markers": [
         "anthocyanins",
         "anthocyanosides"
       ],
+      "marker_compounds": [
+        "anthocyanins",
+        "anthocyanosides",
+        "delphinidin glycosides",
+        "cyanidin glycosides"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Bilberry (Vaccinium myrtillus, UNII 9P2U39H18W) is bonus-eligible when the product label declares a measurable anthocyanin or anthocyanoside % (typically 25-36% — 'Mirtoselect' from Indena is the original 36%-anthocyanin standardized extract used in most European clinical trials). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Bilberry' identity matches but defers to meets_threshold. Preparation variants (UNIIs R911H793SU 'bilberry extract', V9S692O326 'bilberry fruit extract', KK0KHX972K 'european bilberry') are FDA-registered preparation variants of the SAME species (V. myrtillus, UNII 9P2U39H18W) — not cross-species §8.5 misplacement; retained for runtime identity matching.",
+      "sources": [
+        "NIH ODS — Bilberry: https://ods.od.nih.gov/factsheets/list-all/",
+        "NCCIH Bilberry overview: https://www.nccih.nih.gov/health/bilberry",
+        "Indena Mirtoselect monograph (Vaccinium myrtillus standardized to 36% anthocyanins per Indena HPLC method)",
+        "Chu et al. 2011 systematic review on Mirtoselect / anthocyanin-standardized bilberry (PMID 21660670)"
+      ],
       "min_threshold": 25,
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "bilberry",
-      "notes": "Eye health botanical standardized for 25% anthocyanins (anthocyanosides). Common in vision support supplements.",
+      "notes": "Bilberry (Vaccinium myrtillus, Ericaceae) fruit. UNII 9P2U39H18W. Eye-health and microcirculatory botanical standardized for anthocyanins/anthocyanosides (typical 25%; Mirtoselect 36%). SB-5 §8.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings (Mirtoselect branded + 25%/36% standardized) for direct matching of labels carrying the standardization claim. The audit's reported '4 distinct UNIIs in aliases' resolved to preparation variants of V. myrtillus (not cross-species misplacement) per the SB-4 same-species-different-UNII pattern; preparation-variant aliases retained.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "9P2U39H18W"
