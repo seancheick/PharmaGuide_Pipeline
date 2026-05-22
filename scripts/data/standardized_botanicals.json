@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 220,
+    "total_entries": 213,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -673,25 +673,6 @@
       "cui": "C1059156"
     },
     {
-      "standard_name": "Baobab",
-      "aliases": [
-        "adansonia digitata",
-        "baobab fruit powder",
-        "baobab extract"
-      ],
-      "markers": [
-        "vitamin C",
-        "polyphenols"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "baobab",
-      "notes": "Botanical ingredient standardized for vitamin C, polyphenols. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C1084996"
-    },
-    {
       "standard_name": "Barley Grass",
       "aliases": [
         "hordeum vulgare",
@@ -1097,26 +1078,6 @@
         "metabolites": []
       },
       "cui": "C2733644"
-    },
-    {
-      "standard_name": "Black Sesame",
-      "aliases": [
-        "black sesame seed",
-        "black sesame seed extract",
-        "sesame noir",
-        "sesamum indicum"
-      ],
-      "markers": [
-        "sesamin",
-        "sesamolin"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "black_sesame",
-      "notes": "Botanical ingredient standardized for sesamin, sesamolin. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C0946894"
     },
     {
       "standard_name": "Bladderwrack",
@@ -4341,25 +4302,6 @@
       "cui": "C0319804"
     },
     {
-      "standard_name": "Mallow",
-      "aliases": [
-        "malva sylvestris",
-        "mallow flower extract",
-        "mallow leaf extract"
-      ],
-      "markers": [
-        "mucilage",
-        "malvin"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "mallow",
-      "notes": "Botanical ingredient standardized for mucilage, malvin. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C1254223"
-    },
-    {
       "standard_name": "Maqui Berry",
       "aliases": [
         "aristotelia",
@@ -5080,25 +5022,6 @@
       "threshold_source": "38% menthol \u2014 USP monograph"
     },
     {
-      "standard_name": "Polygala",
-      "aliases": [
-        "polygala extract",
-        "polygala root",
-        "polygala tenuifolia",
-        "yuan zhi"
-      ],
-      "markers": [
-        "saponins"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "polygala",
-      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C0997031"
-    },
-    {
       "standard_name": "Pomegranate",
       "aliases": [
         "pomegranate fruit extract",
@@ -5698,44 +5621,6 @@
       "cui": "C0939869"
     },
     {
-      "standard_name": "Saffron",
-      "aliases": [
-        "crocus",
-        "crocus sativus",
-        "saffron extract",
-        "saffron stigma",
-        "affron",
-        "saffr'activ",
-        "saffr'active"
-      ],
-      "markers": [
-        "crocin",
-        "safranal",
-        "picrocrocin"
-      ],
-      "min_threshold": 0.3,
-      "priority": "high",
-      "last_updated": "2026-01-05",
-      "id": "saffron",
-      "notes": "Botanical ingredient standardized for crocin, safranal. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "E849G4X5YJ"
-      },
-      "gsrs": {
-        "substance_name": "SAFFRON",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 112,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Saffron | 460 (Number of products:112)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0376238"
-    },
-    {
       "standard_name": "Salvia Miltiorrhiza",
       "aliases": [
         "danshen",
@@ -6164,38 +6049,6 @@
       "branded_form": true
     },
     {
-      "standard_name": "Slippery Elm",
-      "aliases": [
-        "red elm",
-        "slippery elm bark extract",
-        "ulmus",
-        "ulmus rubra"
-      ],
-      "markers": [
-        "mucilage"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "slippery_elm",
-      "notes": "Botanical ingredient standardized for mucilage. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "63POE2M46Y"
-      },
-      "gsrs": {
-        "substance_name": "ELM",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 528,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Slippery Elm | 601 (Number of products:528)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0330532"
-    },
-    {
       "standard_name": "Soy Isoflavones",
       "aliases": [
         "glycine max",
@@ -6231,41 +6084,6 @@
         "metabolites": []
       },
       "cui": "C4076257"
-    },
-    {
-      "standard_name": "Spinach",
-      "aliases": [
-        "spinacia oleracea",
-        "spinach leaf",
-        "spinach powder",
-        "spinach extract"
-      ],
-      "markers": [
-        "lutein",
-        "zeaxanthin",
-        "nitrates"
-      ],
-      "priority": "medium",
-      "id": "spinach",
-      "last_updated": "2025-11-17",
-      "notes": "Leafy green used in greens blends for lutein, zeaxanthin, and nitrates. Popular in pre-workout formulas for nitric oxide support.",
-      "category": "vegetable_greens",
-      "external_ids": {
-        "unii": "6WO75C6WVB"
-      },
-      "rxcui": "901317",
-      "gsrs": {
-        "substance_name": "SPINACH",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 1090,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Spinach | 1609 (Number of products:1090)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C2741499"
     },
     {
       "standard_name": "Spirulina",

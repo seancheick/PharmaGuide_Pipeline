@@ -86,4 +86,10 @@ def test_botanical_total_count_unchanged(botanicals):
     # onion (UNII 492225Q21H), phosphatidylserine (UNII 394XK0IH40),
     # pine_bark_extract (UNII 50JZ5Z98QY — dropped 'pycnogenol' alias
     # to preserve future PROMOTE_V6_BRANDED routing for Pycnogenol®).
-    assert len(botanicals) == 507
+    # 514 after 2026-05-22 MO-4 batch: 7 more relocated. Moved: saffron
+    # (UNII E849G4X5YJ), slippery_elm (UNII 63POE2M46Y), spinach
+    # (UNII 6WO75C6WVB), baobab (UNII D5B40OA634 — NEW), black_sesame
+    # (UNII JD6YPE8XLT — NEW), mallow (UNII I01732476C — NEW), polygala
+    # (UNII F6BP27WG28 — NEW). The 4 NEW UNIIs were added during this
+    # batch (verified via scripts/data/fda_unii_cache.json).
+    assert len(botanicals) == 514

@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 507,
+    "total_entries": 514,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -910,6 +910,28 @@
       }
     },
     {
+      "id": "baobab",
+      "standard_name": "Baobab",
+      "latin_name": "Adansonia digitata",
+      "aliases": [
+        "adansonia digitata",
+        "baobab fruit powder",
+        "baobab extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII D5B40OA634 added on move (verified via scripts/data/fda_unii_cache.json). Botanical ingredient standardized for vitamin C, polyphenols. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "D5B40OA634"
+      },
+      "cui": "C1084996",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "barberry_root",
       "standard_name": "Barberry Root",
       "latin_name": "Berberis vulgaris",
@@ -1510,6 +1532,29 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "black_sesame",
+      "standard_name": "Black Sesame",
+      "latin_name": "Sesamum indicum (black variety)",
+      "aliases": [
+        "black sesame seed",
+        "black sesame seed extract",
+        "sesame noir",
+        "sesamum indicum"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII JD6YPE8XLT added on move (verified via scripts/data/fda_unii_cache.json). Botanical ingredient standardized for sesamin, sesamolin. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "JD6YPE8XLT"
+      },
+      "cui": "C0946894",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7769,6 +7814,28 @@
       }
     },
     {
+      "id": "mallow",
+      "standard_name": "Mallow",
+      "latin_name": "Malva sylvestris",
+      "aliases": [
+        "malva sylvestris",
+        "mallow flower extract",
+        "mallow leaf extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII I01732476C added on move (verified via scripts/data/fda_unii_cache.json). Botanical ingredient standardized for mucilage, malvin. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "I01732476C"
+      },
+      "cui": "C1254223",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "mulungu",
       "standard_name": "Mulungu",
       "latin_name": "Erythrina mulungu",
@@ -7856,6 +7923,29 @@
       },
       "cui": "C3255957",
       "rxcui": "1368708",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "polygala",
+      "standard_name": "Polygala",
+      "latin_name": "Polygala tenuifolia",
+      "aliases": [
+        "polygala extract",
+        "polygala root",
+        "polygala tenuifolia",
+        "yuan zhi"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII F6BP27WG28 added on move (verified via scripts/data/fda_unii_cache.json). Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "F6BP27WG28"
+      },
+      "cui": "C0997031",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant",
@@ -11502,6 +11592,32 @@
       }
     },
     {
+      "id": "saffron",
+      "standard_name": "Saffron",
+      "latin_name": "Crocus sativus",
+      "aliases": [
+        "crocus",
+        "crocus sativus",
+        "saffron extract",
+        "saffron stigma",
+        "affron",
+        "saffr'activ",
+        "saffr'active"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for crocin, safranal. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "E849G4X5YJ"
+      },
+      "cui": "C0376238",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "sage_leaf_extract",
       "standard_name": "Sage Leaf Extract",
       "latin_name": "Salvia officinalis",
@@ -11987,6 +12103,29 @@
       }
     },
     {
+      "id": "slippery_elm",
+      "standard_name": "Slippery Elm",
+      "latin_name": "Ulmus rubra",
+      "aliases": [
+        "red elm",
+        "slippery elm bark extract",
+        "ulmus",
+        "ulmus rubra"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for mucilage. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "63POE2M46Y"
+      },
+      "cui": "C0330532",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "solomons_seal_root",
       "standard_name": "Solomon's Seal",
       "latin_name": "Polygonatum multiflorum",
@@ -12078,6 +12217,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "spinach",
+      "standard_name": "Spinach",
+      "latin_name": "Spinacia oleracea",
+      "aliases": [
+        "spinacia oleracea",
+        "spinach leaf",
+        "spinach powder",
+        "spinach extract"
+      ],
+      "category": "vegetable_greens",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-4, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Leafy green used in greens blends for lutein, zeaxanthin, and nitrates. Popular in pre-workout formulas for nitric oxide support.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "6WO75C6WVB"
+      },
+      "cui": "C2741499",
+      "rxcui": "901317",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
