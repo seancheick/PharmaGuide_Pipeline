@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 234,
+    "total_entries": 227,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -1178,39 +1178,6 @@
       "threshold_source": "0.03% iodine content \u2014 typical standardization"
     },
     {
-      "standard_name": "Blue-Green Algae",
-      "aliases": [
-        "aphanizomenon flos-aquae",
-        "afa",
-        "klamath algae",
-        "organic microalgae"
-      ],
-      "markers": [
-        "phycocyanin"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "blue_green_algae",
-      "notes": "Botanical ingredient standardized for phycocyanin. Commonly used in dietary supplements.",
-      "category": "algae",
-      "external_ids": {
-        "unii": "49VG1X560X"
-      },
-      "rxcui": "1310848",
-      "gsrs": {
-        "substance_name": "APHANIZOMENON FLOSAQUAE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0304057"
-    },
-    {
       "standard_name": "Blue-Max",
       "aliases": [
         "Blue-Max Blueberry Concentrate"
@@ -1624,38 +1591,6 @@
       "cui": "C1365522",
       "min_threshold": 1,
       "threshold_source": "1% 3-n-butylphthalide \u2014 celery seed extract standard"
-    },
-    {
-      "standard_name": "Century Plant",
-      "aliases": [
-        "agave americana",
-        "agave americana extract",
-        "agave extract",
-        "maguey"
-      ],
-      "markers": [
-        "saponins"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "century_plant",
-      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "024852X0VD"
-      },
-      "gsrs": {
-        "substance_name": "AGAVE AMERICANA WHOLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0331586"
     },
     {
       "standard_name": "Chaga",
@@ -2411,75 +2346,6 @@
       "cui": "C0010467"
     },
     {
-      "standard_name": "D-Mannose",
-      "aliases": [
-        "d mannose",
-        "mannose"
-      ],
-      "markers": [
-        "mannose"
-      ],
-      "priority": "high",
-      "category": "active_compound",
-      "id": "d_mannose",
-      "notes": "Simple sugar used for urinary tract health. Not a botanical but commonly found in supplement formulas.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "cas": "530-26-7",
-        "pubchem_cid": 18950,
-        "unii": "PHA4727WTP"
-      },
-      "rxcui": "6633",
-      "gsrs": {
-        "substance_name": "Demannose",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 112,
-        "dsld_info_raw": "Dietary Supplement Label Database|carbohydrate|Mannose | 2627 (Number of products:112)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0024742",
-      "attributes": {
-        "iqm_parent_id": "d_mannose"
-      }
-    },
-    {
-      "standard_name": "Damiana",
-      "aliases": [
-        "damiana leaf",
-        "damiana leaf extract",
-        "turnera",
-        "turnera diffusa"
-      ],
-      "markers": [
-        "flavonoids"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "damiana",
-      "notes": "Botanical ingredient standardized for flavonoids. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "812R0W1I3K"
-      },
-      "rxcui": "1591919",
-      "gsrs": {
-        "substance_name": "TURNERA DIFFUSA LEAF",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0772118"
-    },
-    {
       "standard_name": "Dandelion",
       "aliases": [
         "taraxacum officinale",
@@ -2650,38 +2516,6 @@
         "metabolites": []
       },
       "cui": "C0886513"
-    },
-    {
-      "standard_name": "Elder Flower",
-      "aliases": [
-        "sambucus nigra flos",
-        "elderflower extract"
-      ],
-      "markers": [
-        "flavonoids",
-        "phenolic acids"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "elder_flower",
-      "notes": "Botanical ingredient standardized for flavonoids, phenolic acids. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "07V4DX094T"
-      },
-      "rxcui": "317808",
-      "gsrs": {
-        "substance_name": "SAMBUCUS NIGRA FLOWER",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 35,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Elder Flower | 1723 (Number of products:35)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C3486741"
     },
     {
       "standard_name": "Elderberry",
@@ -3091,28 +2925,6 @@
       "attributes": {
         "iqm_parent_id": "boron"
       }
-    },
-    {
-      "standard_name": "Galdieria",
-      "aliases": [
-        "galdieria sulphuraria",
-        "galdieria extract",
-        "galdieria blue"
-      ],
-      "markers": [
-        "c-phycocyanin",
-        "phycocyanin"
-      ],
-      "priority": "medium",
-      "category": "algae",
-      "id": "galdieria",
-      "notes": "Red algae producing blue phycocyanin pigment. FDA approved May 2025 as natural food colorant.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "unii": "2E5CL9KYZ8"
-      },
-      "cui": "C1086344",
-      "branded_form": true
     },
     {
       "standard_name": "Garlic",
@@ -3547,39 +3359,6 @@
         "metabolites": []
       },
       "cui": "C3256816"
-    },
-    {
-      "standard_name": "Grapefruit Seed",
-      "aliases": [
-        "citrus paradisi",
-        "citrus seed extract",
-        "grapefruit seed extract",
-        "grapefruit seed oil"
-      ],
-      "markers": [
-        "naringin"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "grapefruit_seed",
-      "notes": "Botanical ingredient standardized for naringin. Commonly used in dietary supplements.",
-      "category": "seed_fruit",
-      "external_ids": {
-        "unii": "598D944HOL"
-      },
-      "rxcui": "1306130",
-      "gsrs": {
-        "substance_name": "GRAPEFRUIT SEED OIL",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0873113"
     },
     {
       "standard_name": "Graviola",

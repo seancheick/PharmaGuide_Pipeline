@@ -75,4 +75,9 @@ def test_botanical_total_count_unchanged(botanicals):
     # (UNII 3729L8MA2C), black_cohosh (UNII K73E24S6X9), black_musli
     # (UNII 715B59598O), blackberry (UNII 8A6OMU3I8L), caraway
     # (UNII W2FH8O2BBE). See scripts/audits/sb_moveout_inventory_20260522/.
-    assert len(botanicals) == 493
+    # 500 after 2026-05-22 MO-2 batch: 7 more plain-identity entries
+    # relocated. Moved: blue_green_algae (UNII 49VG1X560X),
+    # century_plant (UNII 024852X0VD), d_mannose (UNII PHA4727WTP),
+    # damiana (UNII 812R0W1I3K), elder_flower (UNII 07V4DX094T),
+    # galdieria (UNII 2E5CL9KYZ8), grapefruit_seed (UNII 598D944HOL).
+    assert len(botanicals) == 500

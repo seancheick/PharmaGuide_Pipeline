@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 493,
+    "total_entries": 500,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1698,6 +1698,30 @@
       }
     },
     {
+      "id": "blue_green_algae",
+      "standard_name": "Blue-Green Algae",
+      "latin_name": "Aphanizomenon flos-aquae",
+      "aliases": [
+        "aphanizomenon flos-aquae",
+        "afa",
+        "klamath algae",
+        "organic microalgae"
+      ],
+      "category": "algae",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for phycocyanin. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "49VG1X560X"
+      },
+      "cui": "C0304057",
+      "rxcui": "1310848",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "blue_vervain",
       "standard_name": "Blue Vervain",
       "latin_name": "Verbena hastata",
@@ -2905,6 +2929,29 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "century_plant",
+      "standard_name": "Century Plant",
+      "latin_name": "Agave americana",
+      "aliases": [
+        "agave americana",
+        "agave americana extract",
+        "agave extract",
+        "maguey"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "024852X0VD"
+      },
+      "cui": "C0331586",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -4204,6 +4251,53 @@
       }
     },
     {
+      "id": "d_mannose",
+      "standard_name": "D-Mannose",
+      "aliases": [
+        "d mannose",
+        "mannose"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Simple sugar used for urinary tract health. Not a botanical but commonly found in supplement formulas.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "cas": "530-26-7",
+        "pubchem_cid": 18950,
+        "unii": "PHA4727WTP"
+      },
+      "cui": "C0024742",
+      "rxcui": "6633",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "synthetic_or_natural",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "damiana",
+      "standard_name": "Damiana",
+      "latin_name": "Turnera diffusa",
+      "aliases": [
+        "damiana leaf",
+        "damiana leaf extract",
+        "turnera",
+        "turnera diffusa"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for flavonoids. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "812R0W1I3K"
+      },
+      "cui": "C0772118",
+      "rxcui": "1591919",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "dandelion",
       "standard_name": "Dandelion",
       "latin_name": "Taraxacum officinale",
@@ -4667,6 +4761,28 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "elder_flower",
+      "standard_name": "Elder Flower",
+      "latin_name": "Sambucus nigra (flower)",
+      "aliases": [
+        "sambucus nigra flos",
+        "elderflower extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for flavonoids, phenolic acids. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "07V4DX094T"
+      },
+      "cui": "C3486741",
+      "rxcui": "317808",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -5305,6 +5421,28 @@
       }
     },
     {
+      "id": "galdieria",
+      "standard_name": "Galdieria",
+      "latin_name": "Galdieria sulphuraria",
+      "aliases": [
+        "galdieria sulphuraria",
+        "galdieria extract",
+        "galdieria blue"
+      ],
+      "category": "algae",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Red algae producing blue phycocyanin pigment. FDA approved May 2025 as natural food colorant.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "2E5CL9KYZ8"
+      },
+      "cui": "C1086344",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "galega_officinalis",
       "standard_name": "Galega Officinalis (French Lilac)",
       "latin_name": "Galega officinalis",
@@ -5909,6 +6047,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "grapefruit_seed",
+      "standard_name": "Grapefruit Seed",
+      "latin_name": "Citrus paradisi (seed)",
+      "aliases": [
+        "citrus paradisi",
+        "citrus seed extract",
+        "grapefruit seed extract",
+        "grapefruit seed oil"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-2, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for naringin. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "598D944HOL"
+      },
+      "cui": "C0873113",
+      "rxcui": "1306130",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
