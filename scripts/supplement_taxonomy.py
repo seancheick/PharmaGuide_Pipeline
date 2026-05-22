@@ -146,6 +146,11 @@ _BEAUTY_NAME_TOKENS = {"skin", "nail", "nails", "beauty", "glow", "radiance", "k
 # \bhair matches "hair", "hairfluence", "hairy" but NOT "chairman", "mohair"
 _BEAUTY_BOUNDARY_PATTERNS = [re.compile(r'\bhair')]
 _FIBER_NAME_TOKENS = {"fiber", "fibre", "digestive fiber", "prebiotic", "psyllium", "inulin"}
+_DIGESTIVE_ENZYME_NAME_TOKENS = {
+    "digestive", "digestion", "enzyme", "enzymes", "proteolytic",
+    "serrapeptase", "nattokinase", "lumbrokinase", "natto-serra",
+    "pepsin", "bitters", "betaine hcl",
+}
 _PRE_WORKOUT_NAME_TOKENS = {"pre-workout", "pre workout", "preworkout"}
 _PROTEIN_NAME_TOKENS = {
     "protein powder", "whey", "casein", "pea protein", "protein isolate",
@@ -161,6 +166,10 @@ _PRE_WORKOUT_IDS = frozenset({"caffeine", "beta_alanine", "creatine", "l_citrull
 _PROTEIN_IDS = frozenset({"whey_protein", "casein", "pea_protein", "protein"})
 _GREENS_IDS = frozenset({"spirulina", "chlorella", "wheatgrass", "barley_grass"})
 _ELECTROLYTE_IDS = frozenset({"sodium", "potassium", "magnesium", "calcium", "chloride"})
+_ENZYME_CANONICAL_IDS = frozenset({
+    "digestive_enzymes", "nattokinase", "serrapeptase", "pepsin",
+    "protease", "amylase", "lipase", "bromelain", "papain",
+})
 
 # Secondary type detection: compound → secondary_type
 _SECONDARY_TYPE_MAP = {
@@ -203,6 +212,10 @@ _SECONDARY_TYPE_MAP = {
     "creatine": "creatine",
     "5_htp": "5_htp",
     "gaba": "gaba",
+    "digestive_enzymes": "digestive_enzymes",
+    "nattokinase": "nattokinase",
+    "serrapeptase": "serrapeptase",
+    "pepsin": "pepsin",
 }
 
 
@@ -329,9 +342,35 @@ def _detect_functional_name(product_name: str) -> tuple[str, float, str]:
         return "immune_support", 0.85, f"immune name signal in '{product_name}'"
     if any(t in product_name for t in _JOINT_NAME_TOKENS):
         return "joint_support", 0.85, f"joint name signal in '{product_name}'"
+    if any(t in product_name for t in _DIGESTIVE_ENZYME_NAME_TOKENS):
+        return "fiber_digestive", 0.8, f"digestive enzyme name signal in '{product_name}'"
     if any(t in product_name for t in _FIBER_NAME_TOKENS):
         return "fiber_digestive", 0.8, f"fiber/digestive name signal in '{product_name}'"
     return "general_supplement", 0.3, "no functional match"
+
+
+def _cid_in_product_name(cid: str, product_name: str) -> bool:
+    """Return true when a canonical ID is explicitly named on the product."""
+    if not cid:
+        return False
+    candidates = {
+        cid.replace("_", " "),
+        cid.replace("_", "-"),
+        cid.removeprefix("l_").replace("_", " "),
+        cid.removeprefix("l_").replace("_", "-"),
+        _SECONDARY_TYPE_MAP.get(cid, ""),
+    }
+    short_forms = {
+        "vitamin_b12": "b12", "vitamin_b12_cobalamin": "b12",
+        "vitamin_d": "vitamin d", "vitamin_d3": "d3",
+        "vitamin_c": "vitamin c", "vitamin_k2": "k2",
+        "vitamin_b6": "b6", "vitamin_b7_biotin": "biotin",
+        "tmg_betaine": "betaine",
+    }
+    short = short_forms.get(cid)
+    if short:
+        candidates.add(short)
+    return any(token and token in product_name for token in candidates)
 
 
 def _has_omega_name_signal(product_name: str) -> bool:
@@ -382,6 +421,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     non_quantified_rows: list[dict[str, Any]] = []
     category_counts: dict[str, int] = {}
     canonical_ids: list[str] = []
+    canonical_categories: dict[str, str] = {}
     probiotic_count = 0
     non_quantified_probiotic_count = 0
 
@@ -444,6 +484,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
         if cid:
             canonical_ids.append(cid)
+            canonical_categories.setdefault(cid, counted_category)
 
         # Probiotic counting
         if category in {"probiotic", "bacteria"}:
@@ -474,6 +515,18 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     herb_count = category_counts.get("botanical", 0) + category_counts.get("herb", 0)
     vitamin_count = category_counts.get("vitamin", 0)
     mineral_count = category_counts.get("mineral", 0)
+    enzyme_identity_count = sum(1 for cid in canonical_ids if cid in _ENZYME_CANONICAL_IDS)
+    enzyme_count = max(category_counts.get("enzyme", 0), enzyme_identity_count)
+    enzyme_name_signal = any(t in product_name for t in _DIGESTIVE_ENZYME_NAME_TOKENS)
+    non_enzyme_cids = {
+        cid for cid in cid_set if canonical_categories.get(cid) != "enzyme"
+    }
+    enzyme_with_mineral_carrier_only = (
+        enzyme_count > 0
+        and active_count <= 3
+        and bool(non_enzyme_cids)
+        and non_enzyme_cids <= _MINERAL_CANONICAL_IDS
+    )
 
     # =========================================================================
     # CLASSIFICATION DECISION TREE
@@ -601,18 +654,38 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         confidence = 0.9
         reasons.append(f"sleep-support ingredient with cofactors: {list(cid_set & _SLEEP_SINGLE_IDS)}")
 
+    # --- Digestive enzymes / enzyme-forward formulas ---
+    elif enzyme_count > 0 and (
+        enzyme_count > active_count * 0.5
+        or enzyme_name_signal
+        or enzyme_with_mineral_carrier_only
+    ):
+        primary_type = "fiber_digestive"
+        confidence = 0.85 if enzyme_name_signal else 0.75
+        reasons.append(f"digestive enzyme evidence: {enzyme_count}/{active_count} enzyme rows")
+
+    # --- Digestive support formulas with no scored enzyme dose ---
+    elif active_count > 0 and enzyme_name_signal:
+        primary_type = "fiber_digestive"
+        confidence = 0.75
+        reasons.append(f"digestive support name signal in '{product_name}'")
+
     # --- Named amino acid with cofactors ---
     # L-Tryptophan + B6/Niacin style products are amino-acid products with
     # nutrient cofactors, not vitamin/mineral combos.
-    elif (amino_ids - _SLEEP_SINGLE_IDS) and any(
-        cid.replace("_", " ") in product_name
-        or cid.replace("_", "-") in product_name
-        or cid.removeprefix("l_").replace("_", " ") in product_name
-        for cid in (amino_ids - _SLEEP_SINGLE_IDS)
+    elif (
+        (named_amino_ids := {
+            cid for cid in ((amino_ids & _AMINO_ACID_IDS) - _SLEEP_SINGLE_IDS)
+            if _cid_in_product_name(cid, product_name)
+        })
+        and not {
+            cid for cid in cid_set - named_amino_ids
+            if _cid_in_product_name(cid, product_name)
+        }
     ):
         primary_type = "amino_acid"
         confidence = 0.9
-        reasons.append(f"named amino acid with cofactors: {list(amino_ids - _SLEEP_SINGLE_IDS)}")
+        reasons.append(f"named amino acid with cofactors: {list(named_amino_ids)}")
 
     # --- Single nutrient (active_count == 1) ---
     elif active_count == 1:
@@ -675,28 +748,9 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # B12 1000mcg + Calcium 50mg (excipient) → single_vitamin, not combo.
     # Fires when product name clearly names one ingredient but not the other.
     elif active_count == 2 and len(canonical_ids) == 2:
-        def _cid_in_name(cid: str, name: str) -> bool:
-            """Check if a canonical_id is referenced in the product name."""
-            # Try canonical_id as space-separated words
-            if cid.replace("_", " ") in name:
-                return True
-            # Try secondary_type_map token
-            token = _SECONDARY_TYPE_MAP.get(cid, "")
-            if token and token in name:
-                return True
-            # Try common short forms (b12, d3, k2, etc.)
-            short_forms = {
-                "vitamin_b12": "b12", "vitamin_b12_cobalamin": "b12",
-                "vitamin_d": "vitamin d", "vitamin_d3": "d3",
-                "vitamin_c": "vitamin c", "vitamin_k2": "k2",
-                "vitamin_b6": "b6", "vitamin_b7_biotin": "biotin",
-            }
-            sf = short_forms.get(cid)
-            return bool(sf and sf in name)
-
         cid_a, cid_b = canonical_ids[0], canonical_ids[1]
-        a_named = _cid_in_name(cid_a, product_name)
-        b_named = _cid_in_name(cid_b, product_name)
+        a_named = _cid_in_product_name(cid_a, product_name)
+        b_named = _cid_in_product_name(cid_b, product_name)
         if a_named and not b_named:
             dominant_cid = cid_a
         elif b_named and not a_named:
@@ -828,7 +882,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # SECONDARY TYPE
     # =========================================================================
     if not secondary_type:
-        secondary_type = _infer_secondary_type(canonical_ids, product_name, primary_type)
+        secondary_type = _infer_secondary_type(
+            canonical_ids,
+            product_name,
+            primary_type,
+            canonical_categories,
+        )
 
     # =========================================================================
     # DSLD productType cross-validation (confidence boost or flag)
@@ -900,8 +959,27 @@ def _infer_secondary_type(
     canonical_ids: list[str],
     product_name: str,
     primary_type: str,
+    canonical_categories: dict[str, str] | None = None,
 ) -> str | None:
     """Infer secondary_type from the dominant canonical ingredient or product name."""
+    canonical_categories = canonical_categories or {}
+
+    if primary_type == "fiber_digestive":
+        enzyme_name_map = {
+            "serrapeptase": "serrapeptase",
+            "nattokinase": "nattokinase",
+            "natto-serra": "digestive_enzymes",
+            "pepsin": "pepsin",
+            "enzyme": "digestive_enzymes",
+            "enzymes": "digestive_enzymes",
+        }
+        for token, stype in enzyme_name_map.items():
+            if token in product_name:
+                return stype
+        for cid in canonical_ids:
+            if cid in _ENZYME_CANONICAL_IDS or canonical_categories.get(cid) == "enzyme":
+                return _SECONDARY_TYPE_MAP.get(cid, cid)
+
     # For single-ingredient products, use the canonical ID directly
     if len(canonical_ids) == 1:
         cid = canonical_ids[0]
@@ -955,6 +1033,12 @@ def _infer_secondary_type(
     # would be arbitrary and misleading.
     if primary_type not in {"multivitamin"}:
         for cid in canonical_ids:
+            if (
+                primary_type == "general_supplement"
+                and (cid in _ENZYME_CANONICAL_IDS or canonical_categories.get(cid) == "enzyme")
+                and not any(t in product_name for t in _DIGESTIVE_ENZYME_NAME_TOKENS)
+            ):
+                continue
             if cid in _SECONDARY_TYPE_MAP:
                 return _SECONDARY_TYPE_MAP[cid]
 

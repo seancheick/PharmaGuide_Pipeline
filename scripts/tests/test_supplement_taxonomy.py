@@ -654,11 +654,11 @@ class TestSubstringCollisionGuards:
         """Actual greens product must still match."""
         assert self._classify("Super Greens Powder") == "greens_powder"
 
-    # --- Fiber: "digestive" alone must not catch enzyme products ---
+    # --- Fiber/digestive: canonical vocab includes digestive enzymes ---
 
-    def test_digestive_enzymes_not_fiber(self):
-        """Digestive enzymes are not fiber supplements."""
-        assert self._classify("Digestive Enzymes Complex", category="enzymes") != "fiber_digestive"
+    def test_digestive_enzymes_are_digestive(self):
+        """Digestive enzymes belong in the fiber_digestive vocab bucket."""
+        assert self._classify("Digestive Enzymes Complex", category="enzymes") == "fiber_digestive"
 
     def test_digestive_fiber_is_fiber(self):
         """Actual fiber product must still match."""
@@ -789,3 +789,74 @@ class TestBugRegressions:
         result = classify_supplement(p)
         assert result["primary_type"] == "sleep_support", \
             f"Sleep-named product with NP ingredients should be sleep_support, got {result['primary_type']}"
+
+
+def test_mixed_named_formula_not_pulled_into_amino_by_one_named_amino():
+    product = {
+        "product_name": "CoQ10 L-Carnitine Magnesium",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Magnesium", "canonical_id": "magnesium", "category": "minerals", "quantity": 200, "unit": "mg"},
+            {"name": "Magnesium Bisglycinate Chelate", "canonical_id": "magnesium", "category": "minerals", "quantity": 1112, "unit": "mg"},
+            {"name": "L-Carnitine Fumarate", "canonical_id": "l_carnitine", "category": "amino_acids", "quantity": 855, "unit": "mg"},
+            {"name": "L-Carnitine", "canonical_id": "l_carnitine", "category": "amino_acids", "quantity": 500, "unit": "mg"},
+            {"name": "Coenzyme Q10", "canonical_id": "coq10", "category": "antioxidants", "quantity": 200, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "general_supplement"
+
+
+def test_digestive_enzyme_with_calcium_carrier_is_fiber_digestive_not_mineral():
+    product = {
+        "product_name": "High Potency Serrapeptase 120,000 SPU",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Calcium", "canonical_id": "calcium", "category": "minerals", "quantity": 35, "unit": "mg"},
+            {
+                "name": "Serrapeptase",
+                "canonical_id": "digestive_enzymes",
+                "category": "enzymes",
+                "quantity": 0,
+                "unit": "NP",
+                "dose_class": "enzyme_activity",
+            },
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "fiber_digestive"
+    assert result["secondary_type"] == "serrapeptase"
+    assert result["primary_type"] != "single_mineral"
+
+
+def test_betaine_pepsin_bitters_is_digestive_not_amino_acid():
+    product = {
+        "product_name": "Betaine HCl Pepsin and Gentian Bitters",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Betaine HCl", "canonical_id": "tmg_betaine", "category": "amino_acids", "quantity": 650, "unit": "mg"},
+            {"name": "Pepsin", "canonical_id": "pepsin", "category": "enzymes", "quantity": 0, "unit": "NP"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "fiber_digestive"
+    assert result["secondary_type"] == "pepsin"
+
+
+def test_mixed_herb_enzyme_formula_does_not_get_enzyme_secondary_by_default():
+    product = {
+        "product_name": "Bladder Support Complex with Go-Less",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Horsetail", "canonical_id": "horsetail", "category": "herbs", "quantity": 450, "unit": "mg"},
+            {"name": "Bromelain", "canonical_id": "digestive_enzymes", "category": "enzymes", "quantity": 400, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "general_supplement"
+    assert result["secondary_type"] is None
+
+
+def test_digestive_enzyme_name_without_scorable_rows_stays_general():
+    product = {
+        "product_name": "Digestive Enzymes",
+        "ingredient_quality_data": {"ingredients_scorable": []},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "general_supplement"

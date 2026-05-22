@@ -440,7 +440,6 @@ def test_BUG_13_functional_short_tokens_are_not_substring_false_positives():
 
     Regression cases found during SP vocab review:
       - chairman -> contains "hair"
-      - digestive enzymes -> "digestive" alone is too broad for fiber
       - green tea superfood -> "superfood" alone is too broad for greens
     """
     false_positive_cases = [
@@ -449,12 +448,6 @@ def test_BUG_13_functional_short_tokens_are_not_substring_false_positives():
             [{"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamin", "quantity": 100, "unit": "mg"},
              {"name": "Zinc", "canonical_id": "zinc", "category": "mineral", "quantity": 15, "unit": "mg"}],
             "beauty_hair_skin_nails",
-        ),
-        (
-            "Digestive Enzymes",
-            [{"name": "Amylase", "canonical_id": "amylase", "category": "other", "quantity": 100, "unit": "mg"},
-             {"name": "Protease", "canonical_id": "protease", "category": "other", "quantity": 100, "unit": "mg"}],
-            "fiber_digestive",
         ),
         (
             "Green Tea Superfood",
@@ -487,6 +480,12 @@ def test_BUG_13b_functional_positive_cases_still_classify():
             "Digestive Fiber",
             [{"name": "Psyllium", "canonical_id": "psyllium", "category": "fiber", "quantity": 5, "unit": "g"},
              {"name": "Inulin", "canonical_id": "inulin", "category": "fiber", "quantity": 3, "unit": "g"}],
+            "fiber_digestive",
+        ),
+        (
+            "Digestive Enzymes",
+            [{"name": "Amylase", "canonical_id": "amylase", "category": "enzyme", "quantity": 100, "unit": "DU"},
+             {"name": "Protease", "canonical_id": "protease", "category": "enzyme", "quantity": 100, "unit": "HUT"}],
             "fiber_digestive",
         ),
         (
