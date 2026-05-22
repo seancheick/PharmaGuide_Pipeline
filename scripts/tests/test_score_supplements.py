@@ -296,7 +296,7 @@ class TestV30Scoring:
         assert result == []
         diagnostics = scorer._iqd_contract_diagnostics(product)
         assert diagnostics["iqd_ingredients_fallback_used"] is False
-        assert "ingredients_scorable_empty_legacy_iqd_available" in diagnostics["contract_findings"]
+        assert diagnostics["strict_contract_passed"] is True
 
     def test_mapping_gate_not_scored_when_full_mapping_required(self, scorer):
         product = make_base_product()

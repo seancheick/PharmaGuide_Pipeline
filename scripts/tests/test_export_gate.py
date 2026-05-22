@@ -261,6 +261,16 @@ class TestExportContractValidator:
         issues = validate_export_contract(_base_enriched(), s)
         assert any("strict_scoring_contract" in i for i in issues)
 
+    def test_failed_strict_scoring_contract_flagged(self):
+        s = _base_scored(
+            strict_scoring_contract={
+                "passed": False,
+                "findings": ["missing_required_fields:raw_source_path"],
+            }
+        )
+        issues = validate_export_contract(_base_enriched(), s)
+        assert any("failed strict scoring contract" in i for i in issues)
+
     def test_iqd_ingredients_scoring_fallback_flagged(self):
         s = _base_scored(
             scoring_ingredients_source="ingredient_quality_data.ingredients",

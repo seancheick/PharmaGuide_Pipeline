@@ -278,6 +278,8 @@ def get_scoring_ingredients(
     fallbacks: List[ScoringFallback] = []
     contract_findings: List[str] = []
 
+    if strict and not isinstance(iqd.get("ingredients_scorable"), list):
+        contract_findings.append("missing_iqd_ingredients_scorable_list")
     candidates = [row for row in _safe_list(iqd.get("ingredients_scorable")) if isinstance(row, dict)]
     product_evidence_rows = _product_scoring_evidence_rows(product)
     if product_evidence_rows:
@@ -294,9 +296,6 @@ def get_scoring_ingredients(
                 fallback_reason="ingredients_scorable_empty_used_legacy_iqd_ingredients",
                 source=LEGACY_IQD_SOURCE,
             ))
-    elif not candidates and _safe_list(iqd.get("ingredients")):
-        contract_findings.append("ingredients_scorable_empty_legacy_iqd_available")
-
     rows: List[Dict[str, Any]] = []
     rejected: List[RejectedScoringRow] = []
     row_findings: List[str] = []

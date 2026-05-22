@@ -736,6 +736,11 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     )
     if not strict_scoring_contract:
         issues.append("missing scored.strict_scoring_contract")
+    elif strict_scoring_contract.get("passed") is not True:
+        issues.append(
+            "review_queue: export cannot ship score with failed strict "
+            "scoring contract."
+        )
     source = (
         scored.get("scoring_ingredients_source")
         or scoring_diag.get("scoring_ingredients_source")

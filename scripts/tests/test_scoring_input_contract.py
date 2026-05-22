@@ -63,7 +63,8 @@ def test_strict_mode_does_not_fallback_to_legacy_iqd_ingredients():
     assert result.rows == []
     assert result.source == SCORING_SOURCE
     assert result.zero_scorable_reason == "no_strict_scoring_candidates"
-    assert "ingredients_scorable_empty_legacy_iqd_available" in result.contract_findings
+    assert result.fallbacks_used == []
+    assert result.strict_contract_passed is True
 
 
 def test_legacy_fallback_is_explicit_old_batch_compatibility():

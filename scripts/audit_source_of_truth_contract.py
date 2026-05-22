@@ -629,6 +629,12 @@ def audit_scoring(args: argparse.Namespace) -> list[Finding]:
                 strict_contract = _safe_dict(_safe_dict(product.get("scoring_metadata")).get("strict_scoring_contract"))
             if not strict_contract:
                 findings.append(Finding("SCORING_STRICT_CONTRACT_MISSING", f"{pid}: missing strict_scoring_contract diagnostics", str(file_path)))
+            elif strict_contract.get("passed") is not True:
+                findings.append(Finding(
+                    "SCORING_STRICT_CONTRACT_FAILED",
+                    f"{pid}: strict scoring contract did not pass: {strict_contract.get('findings') or strict_contract.get('reason')}",
+                    str(file_path),
+                ))
 
             coverage = mapped_coverage_value(product)
             if verdict == "SAFE" and coverage is not None and coverage < 0.3:
