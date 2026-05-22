@@ -7255,7 +7255,11 @@
         "kelp extract",
         "organic kelp",
         "Laminaria saccharina",
-        "Laminaria saccharina, Powder"
+        "Laminaria saccharina, Powder",
+        "kelp powder",
+        "norwegian kelp",
+        "ascophyllum nodosum",
+        "rockweed"
       ],
       "category": "seaweed",
       "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 \u00b5g/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
@@ -12503,7 +12507,8 @@
       "latin_name": "Undaria pinnatifida",
       "aliases": [
         "wakame powder",
-        "Undaria pinnatifida"
+        "Undaria pinnatifida",
+        "brown kelp undaria pinnatifida powder"
       ],
       "category": "seaweed",
       "notes": "Undaria pinnatifida (Alariaceae) thallus. Japanese edible brown seaweed containing fucoxanthin carotenoid and fucoidan polysaccharide. RCT evidence for metabolic support (PMID 19840063).",
@@ -13981,7 +13986,9 @@
         "kelp kombu",
         "dried kombu",
         "laminaria japonica aresch extract",
-        "Laminaria japonica Aresch extract"
+        "Laminaria japonica Aresch extract",
+        "brown seaweed (laminaria japonica) extract",
+        "Japanese Kelp extract"
       ],
       "category": "seaweed",
       "notes": "Laminaria japonica / Saccharina japonica \u2014 edible brown seaweed. Richest natural iodine source. 'Aresch' (or 'Areschoug') is the botanical authority suffix for Laminaria japonica Aresch., the original taxonomic citation; same species.",
