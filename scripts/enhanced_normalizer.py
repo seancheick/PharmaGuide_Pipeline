@@ -71,6 +71,7 @@ from constants import (
     BLEND_HEADER_EXACT_NAMES,
     BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE,
     SOURCE_WRAPPER_NAMES,
+    PRODUCT_LABEL_CORRECTIONS,
 )
 
 # Import the UnmappedIngredientTracker
@@ -879,6 +880,26 @@ class EnhancedDSLDNormalizer:
             CLINICALLY_RELEVANT_STRAINS
         )
         self.ingredient_classification = self._load_json(INGREDIENT_CLASSIFICATION)
+
+        # RC-5: reviewer-signed per-product label-typo corrections. Keyed by
+        # str(dsld_id) → {raw_ingredient_text, corrected_ingredient_text, ...}.
+        # Applied in normalize_product() before flattening so the cleaner's
+        # ingredient resolution sees corrected text. Missing-file is allowed
+        # (cleanly empty dict) so dev environments without the override file
+        # still run; the integration tests cover the populated path.
+        self._label_corrections_by_dsld_id: Dict[str, Dict[str, Any]] = {}
+        try:
+            overrides_doc = self._load_json(PRODUCT_LABEL_CORRECTIONS)
+            if isinstance(overrides_doc, dict):
+                self._label_corrections_by_dsld_id = (
+                    overrides_doc.get("corrections") or {}
+                )
+        except Exception as _e:  # pragma: no cover - defensive
+            logger.warning(
+                "RC-5: failed to load product_label_corrections.json (%s). "
+                "Continuing without label corrections.",
+                _e,
+            )
 
         # Load color indicators for context-aware mapping (REQUIRED)
         color_indicators_db = self._load_json(COLOR_INDICATORS)
@@ -3899,6 +3920,54 @@ class EnhancedDSLDNormalizer:
         
         return flattened
     
+    def _apply_label_corrections(self, ingredient_rows: List[Dict[str, Any]], product_id: str) -> List[Dict[str, Any]]:
+        """RC-5: rewrite ingredient name where (dsld_id, raw_text) matches.
+
+        Walks the (possibly nested) ingredientRows tree and replaces any
+        row whose ``name`` matches the override's ``raw_ingredient_text``
+        with the ``corrected_ingredient_text``. The original raw text is
+        retained under ``_pre_correction_name`` and the rewrite is tagged
+        ``_label_correction_applied=True`` plus the override's
+        ``provenance_tag`` for downstream audit.
+
+        Scope is strictly the requested product_id — no global aliasing.
+        Case-sensitive on raw_ingredient_text by design (the override file
+        documents this).
+        """
+        entry = self._label_corrections_by_dsld_id.get(str(product_id))
+        if not entry:
+            return ingredient_rows
+        raw_target = entry.get("raw_ingredient_text")
+        corrected = entry.get("corrected_ingredient_text")
+        if not raw_target or not corrected:
+            return ingredient_rows
+        provenance_tag = entry.get("provenance_tag") or "label_correction"
+
+        def rewrite(row):
+            if not isinstance(row, dict):
+                return row
+            name = row.get("name")
+            if isinstance(name, str) and name == raw_target:
+                row["_pre_correction_name"] = name
+                row["name"] = corrected
+                row["_label_correction_applied"] = True
+                row["_label_correction_provenance"] = provenance_tag
+                logger.info(
+                    "RC-5 label correction applied: pid=%s '%s' → '%s' (tag=%s)",
+                    product_id, raw_target, corrected, provenance_tag,
+                )
+            # Recurse into known nested-row keys
+            for nested_key in ("nestedRows", "forms"):
+                nested = row.get(nested_key)
+                if isinstance(nested, list):
+                    for child in nested:
+                        rewrite(child)
+            return row
+
+        for r in ingredient_rows:
+            rewrite(r)
+        return ingredient_rows
+
     def normalize_product(self, raw_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Enhanced product normalization with improved ingredient mapping
@@ -3921,6 +3990,15 @@ class EnhancedDSLDNormalizer:
             
             # Flatten and process ingredients with enhanced mapping
             raw_ingredients = raw_data.get("ingredientRows", []) or []
+
+            # RC-5: apply reviewer-signed per-product label-typo corrections
+            # BEFORE flattening / ingredient resolution. Scope is strictly
+            # (dsld_id, raw_ingredient_text) — no global aliasing.
+            if product_id and self._label_corrections_by_dsld_id:
+                raw_ingredients = self._apply_label_corrections(
+                    raw_ingredients, product_id
+                )
+
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
 
             # Extract nutritional info BEFORE filtering out nutrition facts

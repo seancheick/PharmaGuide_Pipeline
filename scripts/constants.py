@@ -38,6 +38,7 @@ CLINICALLY_RELEVANT_STRAINS = (
 )
 CERT_CLAIM_RULES = DATA_DIR / "cert_claim_rules.json"  # Versioned rules for certification/claim detection with evidence-based scoring
 UNIT_CONVERSIONS_DB = DATA_DIR / "unit_conversions.json"  # Nutrient + form specific unit conversions for dosage normalization
+PRODUCT_LABEL_CORRECTIONS = DATA_DIR / "curated_overrides" / "product_label_corrections.json"  # Reviewer-signed per-product label-typo corrections (RC-5)
 
 # Output subdirectories
 OUTPUT_CLEANED = OUTPUT_DIR / "cleaned"
