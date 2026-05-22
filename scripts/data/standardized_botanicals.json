@@ -5085,22 +5085,42 @@
       "cui": "C0996829"
     },
     {
-      "standard_name": "Nettle",
+      "standard_name": "Nettle (Urtica dioica)",
       "aliases": [
         "urtica dioica",
         "stinging nettle",
-        "nettle root extract",
-        "nettle leaf extract"
+        "Urtica dioica",
+        "nettle root extract standardized to 1% beta-sitosterol",
+        "nettle root extract standardized to beta-sitosterol",
+        "nettle leaf extract standardized to silica",
+        "urtica dioica root extract standardized to lignans",
+        "urtica dioica root extract standardized to scopoletin"
       ],
       "markers": [
         "silica",
         "beta-sitosterol",
         "scopoletin"
       ],
+      "marker_compounds": [
+        "beta-sitosterol",
+        "scopoletin",
+        "lignans (root)",
+        "silica (leaf)",
+        "formic acid (leaf)"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Nettle (Urtica dioica, UNII 710FLW4U46) bonus-eligibility splits by plant part: nettle ROOT is bonus-eligible when the label declares beta-sitosterol % (typical ~1%), scopoletin %, or a lignans claim — used for BPH / prostate. Nettle LEAF is bonus-eligible when the label declares silica % or a formic-acid claim — used for allergy / joint support. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Nettle' / 'Urtica dioica' identity matches but defers to meets_threshold. Part-specific identity (without marker claim) routes to botanical_ingredients.nettle_root (UNII J8HE8A6E5T) or botanical_ingredients.nettle_leaf (UNII 232L6DS3Y4) for plain identity matching — those entries do NOT trigger the bonus.",
+      "sources": [
+        "NCCIH Nettle overview: https://www.nccih.nih.gov/health/stinging-nettle",
+        "Schneider & Rubben 2004 long-term nettle root for BPH (PMID 15211420) — beta-sitosterol pathway",
+        "Roschek et al. 2009 randomized double-blind trial of nettle leaf for allergic rhinitis (PMID 19140159) — leaf pathway",
+        "ESCOP Nettle Root / Nettle Leaf monographs (separate plant-part standardization criteria)"
+      ],
       "priority": "medium",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "nettle",
-      "notes": "Joint and prostate support herb. Root standardized for 1% beta-sitosterol; leaf for silica.",
+      "notes": "Nettle (Urtica dioica, Urticaceae). Species-level UNII 710FLW4U46. Two clinically distinct plant parts with different markers and uses: ROOT for BPH/prostate (beta-sitosterol, scopoletin, lignans); LEAF for allergy/joint (silica, formic acid, chlorophyll). SB-7 root-vs-leaf split 2026-05-22: removed part-specific aliases ('nettle root extract', 'nettle leaf extract' — those identify the plant part, not a standardization claim — moved to existing botanical_ingredients.nettle_root and botanical_ingredients.nettle_leaf canonicals which do NOT trigger A5b). Added v6 contract fields acknowledging dual-marker pathway (root markers + leaf markers); added marker-explicit alias phrasings for BOTH pathways so labels with explicit standardization claims (beta-sitosterol %, silica %) match directly. Species-level aliases ('Urtica dioica', 'stinging nettle') retained for runtime matching gated by meets_threshold.",
       "category": "herb",
       "min_threshold": 1,
       "external_ids": {
