@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 487,
+    "total_entries": 488,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1752,6 +1752,31 @@
       }
     },
     {
+      "id": "boswellia_carterii",
+      "standard_name": "Boswellia carterii",
+      "latin_name": "Boswellia carterii",
+      "aliases": [
+        "boswellia carterii",
+        "Boswellia carterii",
+        "frankincense extract",
+        "frankincense",
+        "Somali frankincense",
+        "Boswellia carterii resin"
+      ],
+      "category": "resin",
+      "notes": "Boswellia carterii (Burseraceae) oleo-gum resin \u2014 Somali frankincense. UNII R9XLF1R1WM. Distinct species from Boswellia serrata (Indian frankincense, UNII 4PW41QCO2M). B. carterii has a different boswellic-acid profile (lower KBA/AKBA, higher incensole acetate and \u03b1-pinene) and a longer history in aromatic / topical use than oral supplementation. Created 2026-05-22 via SB-4 \u00a78.5 cleanup to host the 'frankincense extract' alias that was previously misplaced in standardized_botanicals.boswellia (which is species-precise to B. serrata). Identity only \u2014 no A5b bonus pathway. Most supplement labels saying 'Frankincense extract' in oral-supplement context are B. serrata; products carrying the explicit 'Boswellia carterii' Latin or 'Somali frankincense' wording should route here.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "R9XLF1R1WM"
+      },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false,
+        "bonus_eligible_companion": "standardized_botanicals.boswellia (B. serrata only \u2014 bonus pathway lives there)"
+      }
+    },
+    {
       "id": "brassaiopsis_glomerulata",
       "standard_name": "Brassaiopsis glomerulata",
       "latin_name": "Brassaiopsis glomerulata",
@@ -3457,7 +3482,7 @@
     {
       "id": "coffee_bean_plain",
       "standard_name": "Coffee Bean (plain identity)",
-      "latin_name": "Coffea spp. (arabica / canephora robusta — seed)",
+      "latin_name": "Coffea spp. (arabica / canephora robusta \u2014 seed)",
       "aliases": [
         "Coffee Bean Extract",
         "coffee bean extract",
@@ -3472,7 +3497,7 @@
         "coffee powder"
       ],
       "category": "seed",
-      "notes": "Plain coffee bean / seed identity for unstandardized labels that do not match standardized_botanicals.green_coffee_bean's explicit aliases. Created 2026-05-22 alongside the v6 bonus-eligibility contract on standardized_botanicals — provides a fallback identity home for labels surfacing in the 2026-05-22 unmapped scan ('Coffea robusta Seed Extract' x5, 'Coffee Bean Extract' x5, 'Coffee, Powder' x3, etc., from GNC and Nature Made). NO A5b bonus from this entry — the bonus pathway lives in standardized_botanicals.green_coffee_bean, gated at runtime by the enricher's meets_threshold check. UNII varies by species and preparation (Coffea arabica seed UNII vs robusta seed UNII vs generic coffee bean extract UNII); no single target_unii assigned here.",
+      "notes": "Plain coffee bean / seed identity for unstandardized labels that do not match standardized_botanicals.green_coffee_bean's explicit aliases. Created 2026-05-22 alongside the v6 bonus-eligibility contract on standardized_botanicals \u2014 provides a fallback identity home for labels surfacing in the 2026-05-22 unmapped scan ('Coffea robusta Seed Extract' x5, 'Coffee Bean Extract' x5, 'Coffee, Powder' x3, etc., from GNC and Nature Made). NO A5b bonus from this entry \u2014 the bonus pathway lives in standardized_botanicals.green_coffee_bean, gated at runtime by the enricher's meets_threshold check. UNII varies by species and preparation (Coffea arabica seed UNII vs robusta seed UNII vs generic coffee bean extract UNII); no single target_unii assigned here.",
       "last_updated": "2026-05-22",
       "external_ids": {},
       "functional_roles": [],
@@ -7289,7 +7314,7 @@
         "ecklonia radiata extract"
       ],
       "category": "seaweed",
-      "notes": "Ecklonia radiata (Lessoniaceae) thallus — Southern Hemisphere brown seaweed (Australia, New Zealand). UNII QVY0X8DRIA. Contains phlorotannins (including dieckol) and fucoidans. Distinct species from Ecklonia kurome and from Ascophyllum/Laminaria. Created 2026-05-22 via SB-3d to host the alias migrated out of kelp_powder.",
+      "notes": "Ecklonia radiata (Lessoniaceae) thallus \u2014 Southern Hemisphere brown seaweed (Australia, New Zealand). UNII QVY0X8DRIA. Contains phlorotannins (including dieckol) and fucoidans. Distinct species from Ecklonia kurome and from Ascophyllum/Laminaria. Created 2026-05-22 via SB-3d to host the alias migrated out of kelp_powder.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "QVY0X8DRIA"
@@ -7309,7 +7334,7 @@
         "ecklonia kurome extract"
       ],
       "category": "seaweed",
-      "notes": "Ecklonia kurome (Lessoniaceae) thallus — Northwest Pacific brown seaweed (Japan, Korea). UNII 802YF989GT. Distinct species from Ecklonia radiata (different geography and phytochemistry). Created 2026-05-22 via SB-3d.",
+      "notes": "Ecklonia kurome (Lessoniaceae) thallus \u2014 Northwest Pacific brown seaweed (Japan, Korea). UNII 802YF989GT. Distinct species from Ecklonia radiata (different geography and phytochemistry). Created 2026-05-22 via SB-3d.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "802YF989GT"
@@ -7331,7 +7356,7 @@
         "oarweed"
       ],
       "category": "seaweed",
-      "notes": "Laminaria digitata (Laminariaceae) thallus — North Atlantic brown kelp (oarweed). UNII 15E7C67EE8. Distinct species from Ascophyllum nodosum (UNII 168S4EO8YJ) and from Saccharina latissima (UNII 68CMP2MB55). High-iodine source. Created 2026-05-22 via SB-3d to host aliases migrated out of the previously over-broad kelp_powder entry.",
+      "notes": "Laminaria digitata (Laminariaceae) thallus \u2014 North Atlantic brown kelp (oarweed). UNII 15E7C67EE8. Distinct species from Ascophyllum nodosum (UNII 168S4EO8YJ) and from Saccharina latissima (UNII 68CMP2MB55). High-iodine source. Created 2026-05-22 via SB-3d to host aliases migrated out of the previously over-broad kelp_powder entry.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "15E7C67EE8"
@@ -7355,7 +7380,7 @@
         "sweet kelp"
       ],
       "category": "seaweed",
-      "notes": "Saccharina latissima (Laminariaceae) thallus — sugar kelp; previously classified as Laminaria saccharina (the older name commonly appears on labels). UNII 68CMP2MB55. Distinct species from Saccharina japonica (UNII WE98HW412B, the kombu entry) and from Laminaria digitata (UNII 15E7C67EE8). Created 2026-05-22 via SB-3d to host aliases migrated out of kelp_powder. Both 'Saccharina latissima' (modern accepted name) and 'Laminaria saccharina' (older name still common on labels) are aliased here so identity matching works for both.",
+      "notes": "Saccharina latissima (Laminariaceae) thallus \u2014 sugar kelp; previously classified as Laminaria saccharina (the older name commonly appears on labels). UNII 68CMP2MB55. Distinct species from Saccharina japonica (UNII WE98HW412B, the kombu entry) and from Laminaria digitata (UNII 15E7C67EE8). Created 2026-05-22 via SB-3d to host aliases migrated out of kelp_powder. Both 'Saccharina latissima' (modern accepted name) and 'Laminaria saccharina' (older name still common on labels) are aliased here so identity matching works for both.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "68CMP2MB55"
