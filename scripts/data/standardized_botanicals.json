@@ -471,12 +471,25 @@
         "astaxanthin"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "astazine",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "31T0FF0472"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "astaxanthin",
+        "carotenoid esters"
+      ],
+      "bonus_rationale": "AstaZine\u00ae (BGG / Algatech) is a clinically-studied Haematococcus pluvialis-derived natural astaxanthin extract standardized to 5%+ astaxanthin. Companion to standardized_botanicals.astaxanthin_haematococcus_pluvialis which owns the broader algal astaxanthin pathway. branded_extract basis: bonus is granted when the label names the AstaZine\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21962237/",
+        "https://www.bggworld.com/astazine/"
+      ]
     },
     {
       "standard_name": "Astragalus",
@@ -790,12 +803,26 @@
         "anthocyanins"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "bil_max",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "standardized",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "3CCB416HVP"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "anthocyanins (25%+)",
+        "anthocyanidins",
+        "polyphenols"
+      ],
+      "bonus_rationale": "Bil-Max\u00ae (Sabinsa) is a clinically-studied bilberry (Vaccinium myrtillus) extract standardized to 25%+ anthocyanins (high-grade anthocyanidins). Companion to standardized_botanicals.bilberry (v6-annotated in SB-5) which already owns the bilberry pathway. branded_extract basis: bonus is granted when the label names the Bil-Max\u00ae brand specifically. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/15642341/",
+        "https://www.sabinsa.com/"
+      ]
     },
     {
       "standard_name": "Bilberry (Vaccinium myrtillus)",
@@ -1050,12 +1077,26 @@
         "anthocyanins"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "blue_max",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "standardized",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "DVH063L9QI"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "anthocyanins (10%+)",
+        "polyphenols",
+        "blueberry-specific anthocyanidins"
+      ],
+      "bonus_rationale": "Blue-Max\u00ae (Sabinsa) is a clinically-studied blueberry (Vaccinium corymbosum) extract standardized to 10%+ anthocyanin content. branded_extract basis: bonus is granted when the label names the Blue-Max\u00ae brand specifically. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/22376060/",
+        "https://www.sabinsa.com/"
+      ]
     },
     {
       "standard_name": "Blueberry",
@@ -1479,19 +1520,31 @@
         "chromium picolinate"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "chromax",
-      "notes": "Chromax \u2014 chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose).",
+      "notes": "Chromax \u2014 chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose). [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral_chelate",
       "external_ids": {
         "cas": "14639-25-9",
-        "pubchem_cid": 151932
+        "pubchem_cid": 151932,
+        "unii": "S71T8B8Z6P"
       },
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "chromium"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "chromium picolinate (12.43% elemental Cr)",
+        "chromium"
+      ],
+      "bonus_rationale": "Chromax\u00ae (Nutrition 21) is the original clinically-studied chromium picolinate preparation (12.43% elemental chromium by weight). Extensive clinical literature on glycemic control, insulin sensitivity, and lean-body-mass support. branded_extract basis: bonus is granted when the label names the Chromax\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/16823477/",
+        "https://www.nccih.nih.gov/health/chromium"
+      ]
     },
     {
       "standard_name": "Cinnamon",
@@ -2614,16 +2667,29 @@
         "calcium fructoborate"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "fruitex_b_calcium_fructoborate",
-      "notes": "FruiteX-B \u2014 calcium fructoborate. Provides 3 mg elemental boron per clinical dose.",
+      "notes": "FruiteX-B \u2014 calcium fructoborate. Provides 3 mg elemental boron per clinical dose. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral_complex",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "7EW2EZ38LS"
+      },
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "boron"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "calcium fructoborate (CFB)",
+        "boron"
+      ],
+      "bonus_rationale": "FruiteX-B\u00ae (FutureCeuticals / VDF) is a calcium fructoborate (CFB) compound naturally occurring in fruits, with bioavailable boron + fructose + calcium in a defined molecular form. Clinical literature on joint comfort, cardiovascular endpoints, and bone-mineral support. branded_extract basis: bonus is granted when the label names the FruiteX-B\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21669589/",
+        "https://www.futureceuticals.com/"
+      ]
     },
     {
       "standard_name": "Gentian",
@@ -3956,16 +4022,28 @@
         "melatonin"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "microactive_melatonin",
-      "notes": "MicroActive Melatonin \u2014 microencapsulated sustained-release melatonin. Dosed by mg/serving.",
+      "notes": "MicroActive Melatonin \u2014 microencapsulated sustained-release melatonin. Dosed by mg/serving. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "hormone_analog",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "JL5DK93RCL"
+      },
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "melatonin"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "melatonin (sustained-release matrix)"
+      ],
+      "bonus_rationale": "MicroActive\u00ae Melatonin (BioActives LLC) is a sustained-release melatonin preparation using the proprietary MicroActive\u00ae delivery matrix for prolonged plasma exposure (7+ hours vs ~3 hours for standard immediate-release). Clinical literature on sleep onset and maintenance endpoints. branded_extract basis: bonus is granted when the label names the MicroActive\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/27535533/",
+        "https://www.bioactives.com/"
+      ]
     },
     {
       "standard_name": "Milk Thistle",
@@ -5671,16 +5749,29 @@
         "ferric pyrophosphate"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "sunactive_iron",
-      "notes": "SunActive Iron \u2014 micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron.",
+      "notes": "SunActive Iron \u2014 micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "FZ7NYF5N8L"
+      },
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "iron"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "iron (ferric pyrophosphate, micronized)",
+        "elemental iron"
+      ],
+      "bonus_rationale": "SunActive\u00ae Fe (Taiyo Kagaku) is a micronized, microencapsulated ferric pyrophosphate preparation with improved tolerability and absorption vs traditional iron salts. Clinical literature on iron-deficiency anemia and tolerability endpoints. branded_extract basis: bonus is granted when the label names the SunActive\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/19674817/",
+        "https://www.taiyokagaku.com/en/"
+      ]
     },
     {
       "standard_name": "Tart Cherry",
@@ -5715,16 +5806,28 @@
         "orthosilicic acid"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "thermosil",
-      "notes": "Thermosil \u2014 silicon/silica complex. Limited public standardization data. Requires verification.",
+      "notes": "Thermosil \u2014 silicon/silica complex. Limited public standardization data. Requires verification. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "mineral",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "623B93YABH"
+      },
       "data_quality": "requires_verification",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "silicon"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "silicon",
+        "orthosilicic acid (bioavailable silica)"
+      ],
+      "bonus_rationale": "Thermosil is a branded silicon/silica complex marketed for bone and connective-tissue support. Standardized to bioavailable orthosilicic acid content. branded_extract basis: bonus is granted when the label names the Thermosil brand. Runtime gate: meets_threshold + has_standardized_botanical. [Note: limited public clinical literature \u2014 verification advisory; may downgrade to plain identity in future review.]",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/18046594/"
+      ]
     },
     {
       "standard_name": "Thyme",
@@ -6002,16 +6105,27 @@
         "UC-II"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "uniflex",
-      "notes": "Uniflex (UC-II) \u2014 undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization.",
+      "notes": "Uniflex (UC-II) \u2014 undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization. [PB-3 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "collagen"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "undenatured type II collagen (UC-II)",
+        "native-structure type II collagen"
+      ],
+      "bonus_rationale": "UC-II\u00ae / Uniflex (InterHealth Nutraceuticals, now Lonza) is a clinically-studied undenatured type II collagen from chicken sternum cartilage. Identity is by native molecular structure (undenatured collagen helix), not by % standardization \u2014 clinical dose is fixed at 40 mg. Clinical literature on joint comfort vs glucosamine+chondroitin comparator. branded_extract basis: bonus is granted when the label names UC-II\u00ae or Uniflex brand. No single substance UNII (collagen is structurally-diverse class). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/19185917/",
+        "https://www.lonza.com/products/uc-ii"
+      ]
     },
     {
       "standard_name": "Uva Ursi",
