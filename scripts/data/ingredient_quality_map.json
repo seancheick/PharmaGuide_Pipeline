@@ -12630,7 +12630,11 @@
       "research_status": "validated"
     },
     "aliases": [
-      "full spectrum curcumin"
+      "curcumin",
+      "Curcumin",
+      "curcumin extract",
+      "full spectrum curcumin",
+      "C0010467"
     ],
     "external_ids": {
       "unii": "IT942ZTH98"
@@ -20969,12 +20973,11 @@
         "natural": false,
         "score": 7,
         "absorption": "low (curcumin class-poor baseline ~1-3%)",
-        "notes": "Form not specified on the label. Turmeric/curcumin products range from raw powder (~3% curcuminoids, very poor absorption) to advanced delivery systems (liposomal, phytosome, piperine-enhanced) that can increase bioavailability 20\u201350x. Form choice dramatically affects clinical benefit. Scored conservatively. B28 audit 2026-04-25: curcumin class-poor (B8).",
+        "notes": "Form not specified on the label. Turmeric (the rhizome \u2014 UNII 856YO1Z64F, Curcuma longa) products range from raw powder (~3% curcuminoids, very poor absorption) to advanced delivery systems (liposomal, phytosome, piperine-enhanced) that can increase bioavailability 20\u201350x. Form choice dramatically affects clinical benefit. Scored conservatively. B28 audit 2026-04-25: curcumin class-poor (B8). \u00a78.5 fix 2026-05-22: removed bare 'curcumin' alias (UNII IT942ZTH98) \u2014 that alias intercepted bare 'Curcumin' label text and prevented the Curcumin parent (a different substance) from matching. Turmeric \u2260 Curcumin; the rhizome and the isolated compound are distinct identities.",
         "aliases": [
           "turmeric",
           "tumeric root extract",
           "turmacin",
-          "curcumin",
           "organic turmeric",
           "organic turmeric blend",
           "turmeric gelcap",
@@ -37481,7 +37484,7 @@
       "vitamins": 17
     },
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-15",
+    "last_updated": "2026-05-22",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -41053,6 +41056,7 @@
           "chasteberry",
           "vitex",
           "vitex agnus-castus",
+          "vitex chasteberry",
           "chaste tree",
           "chaste tree berry",
           "monk's pepper",

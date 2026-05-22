@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-05-14",
+    "last_updated": "2026-05-22",
     "total_entries": 482,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -13951,11 +13951,13 @@
         "Saccharina japonica",
         "dashi kombu",
         "kelp kombu",
-        "dried kombu"
+        "dried kombu",
+        "laminaria japonica aresch extract",
+        "Laminaria japonica Aresch extract"
       ],
       "category": "seaweed",
-      "notes": "Laminaria japonica / Saccharina japonica \u2014 edible brown seaweed. Richest natural iodine source.",
-      "last_updated": "2026-04-20",
+      "notes": "Laminaria japonica / Saccharina japonica \u2014 edible brown seaweed. Richest natural iodine source. 'Aresch' (or 'Areschoug') is the botanical authority suffix for Laminaria japonica Aresch., the original taxonomic citation; same species.",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "WE98HW412B",
         "cui": "C0696815"

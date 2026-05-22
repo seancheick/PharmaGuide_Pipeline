@@ -3,11 +3,11 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-04-21",
-    "total_entries": 42,
+    "last_updated": "2026-05-22",
+    "total_entries": 44,
     "data_source": null,
-    "version": "2.2.5",
-    "signoff_status_note": "42/42 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. All 42 PMIDs API-verified. Zero hallucinated citations.",
+    "version": "2.2.6",
+    "signoff_status_note": "42/44 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). All 44 PMIDs API-verified. Zero hallucinated citations.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
   },
@@ -2498,6 +2498,147 @@
         "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
+      }
+    },
+    {
+      "id": "STRAIN_PLANTARUM_LP01",
+      "standard_name": "Lactiplantibacillus plantarum LP01",
+      "aliases": [
+        "L. plantarum LP01",
+        "L. plantarum Lp-01",
+        "Lactobacillus plantarum LP01",
+        "Lactobacillus plantarum Lp-01",
+        "Lactiplantibacillus plantarum Lp-01",
+        "LP01",
+        "LP-01",
+        "Lp-01",
+        "LMG P-21021"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "vaginal health",
+        "urogenital health",
+        "GI transit",
+        "immune support",
+        "mood support"
+      ],
+      "notable_studies": "Probiotical S.p.A. (Italy) strain. 3 published RCTs in distinct indications: bacterial vaginosis vaginal-tablet pilot (Vicariotto 2014), tube-fed elderly nutritional-status RCT (IntegPRO, Orlandoni 2021, co-formulated with BS01), and subthreshold-depression RCT (Moschonis 2026, online 2024).",
+      "cfu_thresholds": {
+        "indication_primary": "vaginal/urogenital health and adjunctive GI support",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 10000000000
+          },
+          "good": {
+            "lower_inclusive": 10000000000,
+            "upper_exclusive": 50000000000
+          },
+          "excellent": {
+            "lower_inclusive": 50000000000
+          }
+        },
+        "evidence": {
+          "type": "strain_specific_clinical_evidence",
+          "source_short": "J Clin Gastroenterol — Vicariotto 2014 BV pilot RCT (vaginal tablets) names L. plantarum LP01 (LMG P-21021); reinforced by IntegPRO (Orlandoni 2021) and Moschonis 2026.",
+          "pmid": "25291116",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25291116/",
+          "verified_date": "2026-05-22",
+          "verified_by": "agent:claude-code (general-purpose research)",
+          "additional_pmids": [
+            "33513820",
+            "39468832"
+          ],
+          "evidence_strength": "moderate",
+          "clinical_support_level": "pending_clinician_review",
+          "clinical_validation": {
+            "q1_strain_explicit": "YES",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "PARTIAL",
+            "q4_dose_sample": "Vicariotto vaginal-tablet pilot (n small); strain identity confirmed by LMG P-21021 accession in abstract.",
+            "score_yes_count": 3,
+            "validated_by": "agent:claude-code",
+            "validated_date": "2026-05-22",
+            "framework": "4-question clinical validation (strain-explicit / outcome-relevant / human-clinical / dose-mentioned)"
+          }
+        },
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain-specific RCTs verified via PubMed content (abstracts name 'L. plantarum LP01 (LMG P-21021)' verbatim). DEFER FINAL SCORING until Dr Pham reviews — recommend retaining 'moderate' evidence_strength until clinician confirms whether BV pilot + IntegPRO + depression RCT meet 'strong' threshold for this scorer's E1.3.2 tier rules. Probiotical's own product page cites PMID 29799760 for BS01 — that PMID resolves to a Nano Letters physics paper and must NOT be propagated to either LP01 or BS01 entries.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-05-22 as Phase 2 of the 2026-05-22 unmapped-resolution batch (Lp-01 surfaced in Life Extension probiotic products with the strain code on label)."
+      }
+    },
+    {
+      "id": "STRAIN_LACTIS_BS01",
+      "standard_name": "Bifidobacterium animalis subsp. lactis BS01",
+      "aliases": [
+        "B. lactis BS01",
+        "B. lactis BS-01",
+        "B. lactis BS-1",
+        "Bifidobacterium animalis lactis BS-01",
+        "Bifidobacterium animalis lactis BS01",
+        "Bifidobacterium animalis lactis BS-1",
+        "Bifidobacterium animalis subsp. lactis BS01",
+        "BS01",
+        "BS-01",
+        "BS-1",
+        "LMG P-21384"
+      ],
+      "evidence_level": "high",
+      "key_benefits": [
+        "bowel transit",
+        "immune support",
+        "neuro-immune support"
+      ],
+      "notable_studies": "Probiotical S.p.A. (Italy) strain. Strain-specific RCTs: evacuation-disorders / hard-stools double-blind placebo-controlled trial (Del Piano 2010), tube-fed elderly nutritional-status RCT (IntegPRO, Orlandoni 2021, co-formulated with LP01).",
+      "cfu_thresholds": {
+        "indication_primary": "occasional constipation / bowel transit support",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 10000000000
+          },
+          "good": {
+            "lower_inclusive": 10000000000,
+            "upper_exclusive": 50000000000
+          },
+          "excellent": {
+            "lower_inclusive": 50000000000
+          }
+        },
+        "evidence": {
+          "type": "strain_specific_clinical_evidence",
+          "source_short": "J Clin Gastroenterol — Del Piano 2010 evacuation-disorders RCT names 'Bifidobacterium animalis subspecies lactis BS01 (LMG P-21384)' verbatim with dose + 30-day protocol; reinforced by IntegPRO (Orlandoni 2021).",
+          "pmid": "20697291",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20697291/",
+          "verified_date": "2026-05-22",
+          "verified_by": "agent:claude-code (general-purpose research)",
+          "additional_pmids": [
+            "33513820"
+          ],
+          "evidence_strength": "moderate",
+          "clinical_support_level": "pending_clinician_review",
+          "clinical_validation": {
+            "q1_strain_explicit": "YES",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "YES",
+            "q4_dose_sample": "Del Piano 2010 specifies dose + 30-day daily intake; strain identity confirmed by LMG P-21384 accession in abstract.",
+            "score_yes_count": 4,
+            "validated_by": "agent:claude-code",
+            "validated_date": "2026-05-22",
+            "framework": "4-question clinical validation (strain-explicit / outcome-relevant / human-clinical / dose-mentioned)"
+          }
+        },
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain-specific RCTs verified via PubMed content (abstracts name BS01 with LMG P-21384 accession verbatim). DEFER FINAL SCORING until Dr Pham reviews — recommend retaining 'moderate' evidence_strength until clinician confirms whether Del Piano + IntegPRO meet 'strong' threshold for this scorer's E1.3.2 tier rules. Note: PMID 29799760 on Probiotical's BS01 product page is a citation error (resolves to a Nano Letters physics paper) and must NOT be propagated.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-05-22 as Phase 2 of the 2026-05-22 unmapped-resolution batch (BS-01 / BS01 / BS-1 / 'B. lactis BS01' variants surfaced in Life Extension probiotic products)."
       }
     }
   ],
