@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 483,
+    "total_entries": 487,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -7240,26 +7240,20 @@
       "standard_name": "Kelp Powder",
       "latin_name": "Ascophyllum nodosum",
       "aliases": [
-        "laminaria powder",
         "ascophyllum nodosum powder",
         "brown algae",
-        "laminaria digitata",
         "Kelp Leaf, Stem Extract",
         "Kelp",
-        "ecklonia radiata",
-        "ecklonia kurome",
         "icelandic kelp",
         "kelp extract",
         "organic kelp",
-        "Laminaria saccharina",
-        "Laminaria saccharina, Powder",
         "kelp powder",
         "norwegian kelp",
         "ascophyllum nodosum",
         "rockweed"
       ],
       "category": "seaweed",
-      "notes": "Ascophyllum nodosum (Fucaceae) thallus \u2014 Atlantic rockweed / Norwegian kelp. UNII 168S4EO8YJ. Brown seaweed naturally rich in iodine (varies widely; verify per-product testing) plus phlorotannins, fucoidan, and alginate polysaccharides. SB-3c \u00a77.5/\u00a78.5 cleanup 2026-05-22: realigned latin_name from 'Laminaria digitata' (a different species, UNII 15E7C67EE8) to 'Ascophyllum nodosum' to match this entry's UNII. Removed 3 misplaced aliases (bladderwrack powder \u2192 standardized_botanicals.bladderwrack; brown kelp undaria pinnatifida powder duplicate \u2192 wakame already owns it; alaria esculenta duplicate \u2192 alaria_esculenta entry already owns it). Remaining aliases that belong to other species ('laminaria powder', 'laminaria digitata', 'Laminaria saccharina', 'Laminaria saccharina, Powder', 'ecklonia radiata', 'ecklonia kurome', 'brown algae') are deferred to SB-3d, which will create new canonical entries for Laminaria digitata, Saccharina latissima, and Ecklonia spp.",
+      "notes": "Ascophyllum nodosum (Fucaceae) thallus \u2014 Atlantic rockweed / Norwegian kelp. UNII 168S4EO8YJ. Brown seaweed naturally rich in iodine (varies widely; verify per-product testing) plus phlorotannins, fucoidan, and alginate polysaccharides. SB-3c \u00a77.5/\u00a78.5 cleanup 2026-05-22: realigned latin_name from 'Laminaria digitata' (different species) to 'Ascophyllum nodosum' to match UNII. SB-3d 2026-05-22: removed remaining species-mismatched aliases ('laminaria powder', 'laminaria digitata' \u2192 new laminaria_digitata canonical; 'Laminaria saccharina', 'Laminaria saccharina, Powder' \u2192 new saccharina_latissima canonical; 'ecklonia radiata' \u2192 new ecklonia_radiata canonical; 'ecklonia kurome' \u2192 new ecklonia_kurome canonical). Entry now scopes cleanly to Ascophyllum nodosum identity plus generic-kelp registry aliases.",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "168S4EO8YJ"
@@ -7280,6 +7274,92 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['ecklonia radiata', 'ecklonia kurome', 'alaria esculenta']"
       ],
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
+    },
+    {
+      "id": "ecklonia_radiata",
+      "standard_name": "Ecklonia radiata",
+      "latin_name": "Ecklonia radiata",
+      "aliases": [
+        "ecklonia radiata",
+        "Ecklonia radiata",
+        "ecklonia radiata extract"
+      ],
+      "category": "seaweed",
+      "notes": "Ecklonia radiata (Lessoniaceae) thallus — Southern Hemisphere brown seaweed (Australia, New Zealand). UNII QVY0X8DRIA. Contains phlorotannins (including dieckol) and fucoidans. Distinct species from Ecklonia kurome and from Ascophyllum/Laminaria. Created 2026-05-22 via SB-3d to host the alias migrated out of kelp_powder.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "QVY0X8DRIA"
+      },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
+    },
+    {
+      "id": "ecklonia_kurome",
+      "standard_name": "Ecklonia kurome",
+      "latin_name": "Ecklonia kurome",
+      "aliases": [
+        "ecklonia kurome",
+        "Ecklonia kurome",
+        "ecklonia kurome extract"
+      ],
+      "category": "seaweed",
+      "notes": "Ecklonia kurome (Lessoniaceae) thallus — Northwest Pacific brown seaweed (Japan, Korea). UNII 802YF989GT. Distinct species from Ecklonia radiata (different geography and phytochemistry). Created 2026-05-22 via SB-3d.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "802YF989GT"
+      },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
+    },
+    {
+      "id": "laminaria_digitata",
+      "standard_name": "Laminaria digitata",
+      "latin_name": "Laminaria digitata",
+      "aliases": [
+        "laminaria digitata",
+        "Laminaria digitata",
+        "laminaria powder",
+        "Laminaria digitata extract",
+        "oarweed"
+      ],
+      "category": "seaweed",
+      "notes": "Laminaria digitata (Laminariaceae) thallus — North Atlantic brown kelp (oarweed). UNII 15E7C67EE8. Distinct species from Ascophyllum nodosum (UNII 168S4EO8YJ) and from Saccharina latissima (UNII 68CMP2MB55). High-iodine source. Created 2026-05-22 via SB-3d to host aliases migrated out of the previously over-broad kelp_powder entry.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "15E7C67EE8"
+      },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
+    },
+    {
+      "id": "saccharina_latissima",
+      "standard_name": "Saccharina latissima",
+      "latin_name": "Saccharina latissima",
+      "aliases": [
+        "saccharina latissima",
+        "Saccharina latissima",
+        "Laminaria saccharina",
+        "laminaria saccharina",
+        "Laminaria saccharina, Powder",
+        "sugar kelp",
+        "sweet kelp"
+      ],
+      "category": "seaweed",
+      "notes": "Saccharina latissima (Laminariaceae) thallus — sugar kelp; previously classified as Laminaria saccharina (the older name commonly appears on labels). UNII 68CMP2MB55. Distinct species from Saccharina japonica (UNII WE98HW412B, the kombu entry) and from Laminaria digitata (UNII 15E7C67EE8). Created 2026-05-22 via SB-3d to host aliases migrated out of kelp_powder. Both 'Saccharina latissima' (modern accepted name) and 'Laminaria saccharina' (older name still common on labels) are aliased here so identity matching works for both.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "68CMP2MB55"
+      },
       "functional_roles": [],
       "attributes": {
         "source_origin": "algal"
