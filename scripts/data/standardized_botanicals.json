@@ -425,9 +425,9 @@
       ],
       "min_threshold": 3,
       "priority": "high",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-05-22",
       "id": "astaxanthin_haematococcus_pluvialis",
-      "notes": "Botanical ingredient standardized for astaxanthin \u2265 3%, total carotenoids. Commonly used in dietary supplements.",
+      "notes": "Botanical ingredient standardized for astaxanthin \u2265 3%, total carotenoids. Commonly used in dietary supplements. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
       "external_ids": {
         "unii": "31T0FF0472",
@@ -446,7 +446,20 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0052565"
+      "cui": "C0052565",
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "astaxanthin (free + esterified)",
+        "carotenoid esters",
+        "haematococcus-derived astaxanthin"
+      ],
+      "bonus_rationale": "Astaxanthin sourced from Haematococcus pluvialis is the commercial natural astaxanthin pathway, with branded preparations from Cyanotech (BioAstin\u00ae), AstaReal AB (AstaReal\u00ae), and Algatech (AstaPure / Zanthin variants). Standardized to defined astaxanthin percentage (typically 1-5% in commercial extracts; 10%+ in concentrates). Clinical literature on oxidative-stress, skin, and exercise endpoints. branded_extract basis: bonus is granted when the label names BioAstin / AstaReal / AstaPure / Zanthin brand variants. Companion plain identity in botanical_ingredients.astaxanthin (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21962237/",
+        "https://www.nccih.nih.gov/health/astaxanthin",
+        "https://www.cyanotech.com/bioastin/"
+      ]
     },
     {
       "standard_name": "AstaZine",
@@ -2320,13 +2333,27 @@
         "polyphenols"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "eps_7630",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "4FY2944729"
+      },
       "cui": "C1310768",
-      "branded_form": true
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "umckalin",
+        "coumarins",
+        "gallotannins (root-specific)"
+      ],
+      "bonus_rationale": "EPs\u00ae 7630 (Dr. Willmar Schwabe Pharmaceuticals) is a clinically-studied Pelargonium sidoides root extract standardized to a defined fingerprint of coumarins (incl. umckalin) and gallotannins. Approved as an OTC herbal medicinal product in Germany for acute bronchitis (Umckaloabo\u00ae). Extensive RCT literature on upper respiratory infections. branded_extract basis: bonus is granted when the label names EPs\u00ae 7630 / Umckaloabo\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/24199972/",
+        "https://www.nccih.nih.gov/health/pelargonium"
+      ]
     },
     {
       "standard_name": "Eucalyptus",
@@ -2556,12 +2583,26 @@
         "proanthocyanidins"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "flowens",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "standardized",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "0MVO31Q3QS"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "proanthocyanidins (PACs)",
+        "phenolic acids",
+        "anthocyanins"
+      ],
+      "bonus_rationale": "Flowens\u00ae (Frutarom / IFF) is a clinically-studied whole cranberry fruit powder standardized to 1.5%+ proanthocyanidins (PACs). Clinical literature on lower urinary-tract symptom (LUTS) improvement in men. branded_extract basis: bonus is granted when the label names the Flowens\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/27530809/",
+        "https://www.nccih.nih.gov/health/cranberry"
+      ]
     },
     {
       "standard_name": "FruiteX-B Calcium Fructoborate",
@@ -3635,16 +3676,29 @@
         "DHA"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "life_s_dha",
-      "notes": "Life's DHA \u2014 algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %.",
+      "notes": "Life's DHA \u2014 algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "algal_oil",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "QGK4EZ8JB9"
+      },
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
         "iqm_parent_id": "dha"
-      }
+      },
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "docosahexaenoic acid (DHA)",
+        "algal omega-3"
+      ],
+      "bonus_rationale": "life'sDHA\u00ae (DSM Nutritional Products, formerly Martek Biosciences) is the original commercial vegetarian docosahexaenoic acid (DHA) extract from the algae Crypthecodinium cohnii. Used in infant formula and clinical-grade vegetarian omega-3 supplements. branded_extract basis: bonus is granted when the label names the life'sDHA\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/18689548/",
+        "https://www.dsm.com/human-nutrition/en/products/life-s-dha.html"
+      ]
     },
     {
       "standard_name": "Linden Flower",
@@ -4154,11 +4208,25 @@
       ],
       "category": "fruit",
       "priority": "high",
-      "notes": "Patented coffee fruit extract shown to increase BDNF (brain-derived neurotrophic factor).",
-      "last_updated": "2026-01-05",
-      "external_ids": {},
+      "notes": "Patented coffee fruit extract shown to increase BDNF (brain-derived neurotrophic factor). [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "HOX6BEK27Q"
+      },
       "cui": "C5445257",
-      "branded_form": true
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "chlorogenic acids",
+        "polyphenols (whole coffee fruit)",
+        "BDNF-stimulating fraction"
+      ],
+      "bonus_rationale": "NeuroFactor\u00ae (Futureceuticals) is a clinically-studied whole coffee-fruit extract (Coffea arabica fruit, NOT bean) standardized to a defined polyphenol/chlorogenic-acid profile. Clinical literature reports rapid (1-hour) brain-derived neurotrophic factor (BDNF) elevation in healthy adults. branded_extract basis: bonus is granted when the label names the NeuroFactor\u00ae brand. Companion identity in botanical_ingredients.coffee_fruit and the CoffeeBerry\u00ae bonus entry standardized_botanicals.coffeeberry. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/24013626/",
+        "https://www.futureceuticals.com/neurofactor"
+      ]
     },
     {
       "standard_name": "Olive Fruit",
@@ -5240,12 +5308,25 @@
         "phosphatidylserine"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "sharp_ps_green",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "standardized",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "394XK0IH40"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "phosphatidylserine (PS)",
+        "soy-derived phospholipid"
+      ],
+      "bonus_rationale": "Sharp-PS\u00ae Green (Lipogen) is a soy-derived phosphatidylserine preparation manufactured without hexane (Green process), standardized to 20%+ PS content. Clinical literature on cognitive performance, memory, and exercise stress endpoints. branded_extract basis: bonus is granted when the label names the Sharp-PS\u00ae Green brand. Companion plain identity in botanical_ingredients.phosphatidylserine (no bonus). Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/24345046/",
+        "https://www.lipogen.com/"
+      ]
     },
     {
       "standard_name": "Shatavari",
@@ -5406,11 +5487,24 @@
       ],
       "category": "tuber",
       "priority": "medium",
-      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release.",
-      "last_updated": "2026-01-05",
-      "external_ids": {},
+      "notes": "Patented potato protein extract that promotes satiety by triggering CCK release. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "2A8I57T4MX"
+      },
       "cui": "C1414370",
-      "branded_form": true
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "PI2 (proteinase inhibitor II)",
+        "potato protein fraction"
+      ],
+      "bonus_rationale": "Slendesta\u00ae (Kemin Industries) is a potato protein extract (Solanum tuberosum) standardized to the PI2 (proteinase inhibitor II) bioactive fraction. Clinical literature on satiety / cholecystokinin elevation / appetite endpoints. branded_extract basis: bonus is granted when the label names the Slendesta\u00ae brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/22647284/",
+        "https://www.kemin.com/na/en-us/markets/human/products/slendesta"
+      ]
     },
     {
       "standard_name": "Slimbione",
@@ -5876,12 +5970,27 @@
         "curcuminoids"
       ],
       "priority": "medium",
-      "last_updated": "2026-01-05",
+      "last_updated": "2026-05-22",
       "id": "turmipure_gold",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Brand/standardized extract added from unmapped list; markers unknown. [PB-2 2026-05-22] Promoted to v6 contract (branded_extract basis).",
       "category": "herb",
-      "external_ids": {},
-      "branded_form": true
+      "external_ids": {
+        "unii": "IT942ZTH98"
+      },
+      "branded_form": true,
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin",
+        "curcuminoids (total)"
+      ],
+      "bonus_rationale": "TurmiPure\u00ae Gold (Naturex / Givaudan) is a water-dispersible curcumin extract delivering enhanced bioavailability vs unformulated turmeric powder (~85x by AUC). Standardized to curcuminoid content with proprietary delivery system. branded_extract basis: bonus is granted when the label names the TurmiPure\u00ae Gold brand. Runtime gate: meets_threshold + has_standardized_botanical.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/31935893/",
+        "https://www.givaudan.com/taste-wellbeing"
+      ]
     },
     {
       "standard_name": "Uniflex",
