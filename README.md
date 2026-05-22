@@ -114,19 +114,28 @@ pip install -r requirements-dev.txt
 ### Run the Pipeline
 
 ```bash
-# Full pipeline (Clean -> Enrich -> Score)
-python3 scripts/run_pipeline.py <dataset_dir>
+# Full-corpus or targeted operational run (Clean -> Enrich -> Score -> snapshot -> release)
+bash batch_run_all_datasets.sh
+bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score
+bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
+
+# Rebuild the catalog/dashboard snapshot from existing brand outputs
+bash scripts/rebuild_dashboard_snapshot.sh
+
+# Release-stage work: catalog staging, product images, interaction DB, Supabase, Flutter bundle
+bash scripts/release_full.sh
+
+# Single-brand/stage iteration only
+python3 scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand> --stages clean,enrich,score
 
 # Individual stages
 python3 scripts/clean_dsld_data.py <input> <output>
 python3 scripts/enrich_supplements_v3.py <cleaned_input> <output>
 python3 scripts/score_supplements.py <enriched_input> <output>
 
-# Build Flutter-ready export
-python3 scripts/build_final_db.py <scored_input> <output>
-
-# Sync to Supabase
-python3 scripts/sync_to_supabase.py <build_output_dir>
+# Manual/internal export tools; normal shipping goes through rebuild_dashboard_snapshot.sh + release_full.sh
+python3 scripts/build_final_db.py --enriched-dir <enriched_dir> --scored-dir <scored_dir> --output-dir <output_dir>
+python3 scripts/sync_to_supabase.py scripts/dist --dry-run
 ```
 
 ### Run Tests
@@ -148,7 +157,9 @@ python3 -m pytest scripts/tests/ -k "banned"
 
 ```
 scripts/
-  run_pipeline.py              # Orchestrator: Clean -> Enrich -> Score
+  run_pipeline.py              # Single-brand/stage runner: Clean -> Enrich -> Score
+  audit_source_of_truth_contract.py # Strict source-of-truth and release gates
+  contracts/source_of_truth_matrix.json # Owner map for clinical/data concepts
   clean_dsld_data.py           # Stage 1: normalize raw DSLD JSON
   enrich_supplements_v3.py     # Stage 2: ingredient matching & enrichment (12K lines)
   score_supplements.py         # Stage 3: arithmetic scoring engine (3.3K lines)

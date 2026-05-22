@@ -487,9 +487,9 @@ class TestSubstringCollisionGuards:
         """'night' as a standalone word should still match."""
         assert self._classify("Good Night Melatonin") == "sleep_support"
 
-    def test_pm_standalone_is_sleep(self):
-        """'pm' as a standalone word should still match."""
-        assert self._classify("PM Calm Support") == "sleep_support"
+    def test_pm_standalone_without_sleep_evidence_is_not_sleep(self):
+        """'pm' alone is not clinical sleep evidence."""
+        assert self._classify("PM Calm Support") != "sleep_support"
 
     # --- Beauty tokens: "hair" must not match substrings ---
 

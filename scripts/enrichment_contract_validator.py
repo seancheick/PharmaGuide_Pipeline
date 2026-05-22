@@ -139,6 +139,38 @@ class EnrichmentContractValidator:
         "inactiveIngredients",
     })
 
+    CLEANER_ALLOWED_SOURCE_SECTIONS = frozenset({
+        "active",
+        "inactive",
+        "nutrition",
+        "label",
+        "unknown",
+    })
+
+    CLEANER_NON_SCORABLE_ROLES = frozenset({
+        "blend_header_total",
+        "nested_display_only",
+        "composition_leaf",
+        "source_descriptor",
+        "nutrition_rollup",
+        "excipient",
+        "inactive",
+        "label_header",
+        "review_required",
+    })
+
+    CLEANER_SCORABLE_ROLES = frozenset({
+        "active_scorable",
+        "active_misfiled_in_inactive",
+    })
+
+    VALID_IQD_DOSE_CLASSES = frozenset({
+        "therapeutic_mass",
+        "enzyme_activity",
+        "probiotic_cfu",
+        "percent_dv_only",
+    })
+
     def __init__(self, strict_mode: bool = False):
         """
         Initialize validator.
@@ -738,6 +770,8 @@ class EnrichmentContractValidator:
                 ing, product_id, "inactiveIngredients", i
             ))
 
+        violations.extend(self._validate_cleaner_iqd_contract(product, product_id))
+
         # F.3: Check canonical_id monotonicity in match_ledger entries
         # NOTE: Monotonicity only applies to core scoring domains (ingredients,
         # additives, allergens). Bonus/optional domains (manufacturer, delivery,
@@ -774,6 +808,260 @@ class EnrichmentContractValidator:
                     ))
 
         return violations
+
+    def _validate_cleaner_iqd_contract(
+        self, product: Dict, product_id: str
+    ) -> List[ContractViolation]:
+        """Validate cleaner-owned row role and IQD scorable eligibility."""
+        violations = []
+        iqd = product.get("ingredient_quality_data") or {}
+        if not isinstance(iqd, dict):
+            return violations
+
+        all_rows = iqd.get("ingredients") or []
+        if isinstance(all_rows, list):
+            for i, row in enumerate(all_rows):
+                if not isinstance(row, dict):
+                    continue
+                violations.extend(
+                    self._check_cleaner_contract_fields(
+                        row, product_id, f"ingredient_quality_data.ingredients[{i}]"
+                    )
+                )
+
+        scorable_rows = iqd.get("ingredients_scorable") or []
+        if not isinstance(scorable_rows, list):
+            return violations
+
+        for i, row in enumerate(scorable_rows):
+            if not isinstance(row, dict):
+                continue
+            field_path = f"ingredient_quality_data.ingredients_scorable[{i}]"
+            violations.extend(
+                self._check_cleaner_contract_fields(row, product_id, field_path)
+            )
+
+            role = self._norm_contract_value(row.get("cleaner_row_role"))
+            source_section = self._norm_contract_value(row.get("source_section"))
+            eligible = row.get("score_eligible_by_cleaner")
+            role_classification = self._norm_contract_value(row.get("role_classification"))
+
+            if eligible is not True:
+                violations.append(ContractViolation(
+                    rule="F.4",
+                    rule_name="Cleaner IQD Contract - scorable eligibility",
+                    severity="error",
+                    message="IQD scorable row is not cleaner-eligible",
+                    product_id=product_id,
+                    field_path=f"{field_path}.score_eligible_by_cleaner",
+                    expected=True,
+                    actual=eligible,
+                    evidence={
+                        "name": row.get("name"),
+                        "cleaner_row_role": row.get("cleaner_row_role"),
+                    },
+                ))
+
+            if role in self.CLEANER_NON_SCORABLE_ROLES:
+                violations.append(ContractViolation(
+                    rule="F.5",
+                    rule_name="Cleaner IQD Contract - non-scorable role excluded",
+                    severity="error",
+                    message=f"Non-scorable cleaner role '{role}' appears in IQD scorable rows",
+                    product_id=product_id,
+                    field_path=f"{field_path}.cleaner_row_role",
+                    expected=f"one of {sorted(self.CLEANER_SCORABLE_ROLES)}",
+                    actual=role,
+                    evidence={"name": row.get("name")},
+                ))
+
+            if source_section == "inactive" and role != "active_misfiled_in_inactive":
+                violations.append(ContractViolation(
+                    rule="F.6",
+                    rule_name="Cleaner IQD Contract - inactive promotion gate",
+                    severity="error",
+                    message="Inactive-source row appears in IQD scorable rows without cleaner promotion role",
+                    product_id=product_id,
+                    field_path=f"{field_path}.source_section",
+                    expected="active source or cleaner_row_role=active_misfiled_in_inactive",
+                    actual=source_section,
+                    evidence={
+                        "name": row.get("name"),
+                        "cleaner_row_role": row.get("cleaner_row_role"),
+                    },
+                ))
+
+            if row.get("recognized_non_scorable") or role_classification == "recognized_non_scorable":
+                violations.append(ContractViolation(
+                    rule="F.10",
+                    rule_name="Enrichment IQD Contract - recognized rows excluded from scorable",
+                    severity="error",
+                    message="Recognized-but-non-scorable row appears in ingredients_scorable",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected="ingredients_recognized_non_scorable or ingredients_skipped",
+                    actual=role_classification or row.get("recognized_non_scorable"),
+                    evidence={"name": row.get("name")},
+                ))
+
+            if row.get("scoreable_identity") is not True:
+                violations.append(ContractViolation(
+                    rule="F.11",
+                    rule_name="Enrichment IQD Contract - scoreable identity required",
+                    severity="error",
+                    message="IQD scorable row lacks scoreable_identity=true",
+                    product_id=product_id,
+                    field_path=f"{field_path}.scoreable_identity",
+                    expected=True,
+                    actual=row.get("scoreable_identity"),
+                    evidence={"name": row.get("name")},
+                ))
+
+            if role_classification != "active_scorable":
+                violations.append(ContractViolation(
+                    rule="F.12",
+                    rule_name="Enrichment IQD Contract - active_scorable role required",
+                    severity="error",
+                    message="IQD scorable row is not classified active_scorable",
+                    product_id=product_id,
+                    field_path=f"{field_path}.role_classification",
+                    expected="active_scorable",
+                    actual=row.get("role_classification"),
+                    evidence={"name": row.get("name")},
+                ))
+
+            if not self._has_iqd_dose_evidence(row):
+                violations.append(ContractViolation(
+                    rule="F.13",
+                    rule_name="Enrichment IQD Contract - dose evidence required",
+                    severity="error",
+                    message="IQD scorable row lacks usable dose evidence",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected=f"dose_class in {sorted(self.VALID_IQD_DOSE_CLASSES)} or positive quantity/activity",
+                    actual={
+                        "dose_class": row.get("dose_class"),
+                        "quantity": row.get("quantity"),
+                        "unit": row.get("unit"),
+                    },
+                    evidence={"name": row.get("name")},
+                ))
+
+            if self._is_fallback_derived_row(row) and (
+                not row.get("fallback_class") or not row.get("fallback_reason")
+            ):
+                violations.append(ContractViolation(
+                    rule="F.14",
+                    rule_name="Enrichment IQD Contract - fallback diagnostics required",
+                    severity="error",
+                    message="Fallback-derived IQD decision lacks fallback_class/fallback_reason",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected=["fallback_class", "fallback_reason"],
+                    actual={
+                        "fallback_class": row.get("fallback_class"),
+                        "fallback_reason": row.get("fallback_reason"),
+                    },
+                    evidence={"name": row.get("name")},
+                ))
+
+        return violations
+
+    def _check_cleaner_contract_fields(
+        self, row: Dict, product_id: str, field_path: str
+    ) -> List[ContractViolation]:
+        violations = []
+        required_fields = (
+            "raw_source_path",
+            "source_section",
+            "cleaner_row_role",
+            "score_eligible_by_cleaner",
+        )
+        missing = [
+            field
+            for field in required_fields
+            if field not in row or row.get(field) in (None, "")
+        ]
+        if missing:
+            violations.append(ContractViolation(
+                rule="F.7",
+                rule_name="Cleaner IQD Contract - required provenance",
+                severity="error",
+                message=f"IQD row missing cleaner provenance fields: {missing}",
+                product_id=product_id,
+                field_path=field_path,
+                expected=list(required_fields),
+                actual={field: row.get(field) for field in required_fields},
+                evidence={"name": row.get("name")},
+            ))
+            return violations
+
+        source_section = self._norm_contract_value(row.get("source_section"))
+        if source_section not in self.CLEANER_ALLOWED_SOURCE_SECTIONS:
+            violations.append(ContractViolation(
+                rule="F.8",
+                rule_name="Cleaner IQD Contract - source_section enum",
+                severity="error",
+                message=f"Invalid cleaner source_section '{source_section}'",
+                product_id=product_id,
+                field_path=f"{field_path}.source_section",
+                expected=sorted(self.CLEANER_ALLOWED_SOURCE_SECTIONS),
+                actual=row.get("source_section"),
+                evidence={"name": row.get("name")},
+            ))
+
+        role = self._norm_contract_value(row.get("cleaner_row_role"))
+        allowed_roles = self.CLEANER_NON_SCORABLE_ROLES | self.CLEANER_SCORABLE_ROLES
+        if role not in allowed_roles:
+            violations.append(ContractViolation(
+                rule="F.9",
+                rule_name="Cleaner IQD Contract - cleaner_row_role enum",
+                severity="error",
+                message=f"Invalid cleaner_row_role '{role}'",
+                product_id=product_id,
+                field_path=f"{field_path}.cleaner_row_role",
+                expected=sorted(allowed_roles),
+                actual=row.get("cleaner_row_role"),
+                evidence={"name": row.get("name")},
+            ))
+
+        return violations
+
+    @staticmethod
+    def _norm_contract_value(value: Any) -> str:
+        return str(value or "").strip().lower()
+
+    def _has_iqd_dose_evidence(self, row: Dict) -> bool:
+        dose_class = self._norm_contract_value(row.get("dose_class"))
+        if dose_class in self.VALID_IQD_DOSE_CLASSES:
+            return True
+        if row.get("activity_quantity") not in (None, "") and row.get("activity_unit"):
+            return True
+        if row.get("has_dose") is True:
+            return True
+        quantity = row.get("quantity")
+        unit = self._norm_contract_value(row.get("unit"))
+        if not unit:
+            return False
+        try:
+            return float(str(quantity).replace(",", "")) > 0
+        except (TypeError, ValueError):
+            return False
+
+    def _is_fallback_derived_row(self, row: Dict) -> bool:
+        reason = self._norm_contract_value(row.get("identity_decision_reason"))
+        return bool(
+            row.get("fallback_class")
+            or row.get("fallback_reason")
+            or row.get("recognized_non_scorable")
+            or reason in {
+                "form_unmapped_fallback",
+                "proprietary_blend_member",
+                "source_descriptor_child_row",
+                "recognized_non_scorable",
+                "no_dose_evidence",
+            }
+        )
 
     def _check_ingredient_provenance(
         self, ing: Dict, product_id: str, array_name: str, index: int

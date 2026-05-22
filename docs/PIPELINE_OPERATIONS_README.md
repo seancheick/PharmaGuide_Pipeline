@@ -89,24 +89,25 @@ Each stage has different owners, different tooling, different failure modes. Und
 
 ### Stage 4 — BUILD (pipeline assembles final DB)
 
-**What happens:** once merged to main, CI runs the full pipeline on the new state: clean → enrich → score → build_final_db. Output is a SQLite file + detail blobs + manifest.
+**What happens:** once merged to main, CI or local ops runs the full pipeline on the new state: clean → enrich → score → snapshot/release gates. Output is a SQLite file + detail blobs + manifest.
 
 **Who owns it:** automated (CI) via `.github/workflows/build-db.yml` (Phase 1).
 
 **Local canonical command (any N brands):**
 
 ```bash
-# From repo root — runs Phase 1 (per-brand clean→enrich→score × N) and
-# Phase 2 (final-DB build + dashboard snapshot staging) in one command.
+# From repo root — runs targeted or full-corpus work, then strict snapshot/release gates.
 bash batch_run_all_datasets.sh
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
 ```
 
 **Important ordering clarification** — the dashboard snapshot rebuild **IS the final-DB build step**, not a separate action that happens afterward. The flow is:
 
 ```
 Phase 1 (per-brand × N):  clean → enrich → score
-Phase 2 (catalog-wide):   build_final_db → release_catalog_artifact → dashboard artifacts copied
+Phase 2 (catalog-wide):   build_final_db → release_catalog_artifact → strict source-of-truth gates
                                     └── all three run inside rebuild_dashboard_snapshot.sh
+Phase 3 (release):        release_full.sh → images → interaction DB → Supabase → Flutter parity
 ```
 
 End-state: `scripts/dist/` contains `pharmaguide_core.db` (Flutter catalog) + `detail_blobs/` (dashboard-only) + manifest + audit report — all ready to sync.
@@ -119,9 +120,11 @@ For the full technical command reference, options, and runtime expectations, see
 
 - `batch_run_all_datasets.sh` — canonical Phase 1 + Phase 2 driver (N brands, sequential, smallest first)
 - `scripts/rebuild_dashboard_snapshot.sh` — Phase 2 standalone (manual reruns, idempotent)
-- `scripts/run_pipeline.py` — single-brand orchestrator (used internally by the batch driver)
-- `scripts/build_final_db.py` — catalog-wide build (runs inside Phase 2)
+- `scripts/release_full.sh` — Phase 3 release-stage owner
+- `scripts/run_pipeline.py` — single-brand/stage runner (used internally by the batch driver)
+- `scripts/build_final_db.py` — internal/manual catalog build (runs inside Phase 2)
 - `scripts/release_catalog_artifact.py` — validates + stages `scripts/dist/` atomically
+- `scripts/audit_source_of_truth_contract.py` — strict cleaner/source-of-truth, export, interaction, freshness, and Flutter parity gates
 - Cloud storage bucket (for raw data input + build artifact caching)
 
 - python3 scripts/extract_product_images.py --db-path scripts/dist/pharmaguide_core.db --output-dir scripts/dist/product_images
@@ -537,13 +540,9 @@ The script runs four steps under one shell:
 **Order vs the catalog rebuild:** they're independent but should ship together. Standard release flow:
 
 ```
-1. python3 scripts/run_pipeline.py <dataset>     # Stage 1-3: clean→enrich→score
-2. python3 scripts/build_final_db.py <input>     # build pharmaguide_core.db
-3. python3 scripts/release_catalog_artifact.py   # stage catalog to dist/
-4. bash scripts/rebuild_interaction_db.sh        # build + stage interaction DB (uses same pipeline_version)
-5. python3 scripts/sync_to_supabase.py dist/ --dry-run  # preview
-6. python3 scripts/sync_to_supabase.py dist/     # commit Supabase sync
-7. cd "/Users/seancheick/PharmaGuide ai" && ./scripts/import_catalog_artifact.sh /Users/seancheick/Downloads/dsld_clean/scripts/dist
+1. bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
+2. bash scripts/rebuild_dashboard_snapshot.sh    # if batch was run with SKIP_SNAPSHOT=1
+3. bash scripts/release_full.sh                  # images + interaction DB + Supabase + Flutter parity
 ```
 
 ---

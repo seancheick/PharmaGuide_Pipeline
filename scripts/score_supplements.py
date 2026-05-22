@@ -858,6 +858,26 @@ class SupplementScorer:
                 ingredients = fallback
         return ingredients
 
+    def _iqd_contract_diagnostics(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        iqd = product.get("ingredient_quality_data", {})
+        scorable = safe_list(iqd.get("ingredients_scorable"))
+        fallback = safe_list(iqd.get("ingredients"))
+        fallback_used = bool(not scorable and fallback and any(
+            (ing.get("mapped") or ing.get("canonical_id")) and not ing.get("is_filler")
+            for ing in fallback
+            if isinstance(ing, dict)
+        ))
+        return {
+            "scoring_ingredients_source": (
+                "ingredient_quality_data.ingredients_fallback"
+                if fallback_used
+                else "ingredient_quality_data.ingredients_scorable"
+            ),
+            "iqd_ingredients_fallback_used": fallback_used,
+            "ingredients_scorable_count": len(scorable),
+            "ingredients_legacy_count": len(fallback),
+        }
+
     def _compute_bioavailability_score(self, product: Dict[str, Any], supp_type: str) -> float:
         ingredients = self._get_active_ingredients(product)
         if not ingredients:
@@ -4362,6 +4382,7 @@ class SupplementScorer:
         else:
             safety_verdict = verdict
 
+        iqd_contract_diagnostics = self._iqd_contract_diagnostics(product)
         output = {
             "dsld_id": product_id,
             "product_name": product_name,
@@ -4427,7 +4448,9 @@ class SupplementScorer:
                 "mapped_coverage": round(mapped_coverage, 4),
                 "reason": reason,
                 "blocking_reason": blocking_reason,
+                "iqd_contract_diagnostics": iqd_contract_diagnostics,
             },
+            "iqd_contract_diagnostics": iqd_contract_diagnostics,
             "section_scores": {
                 "A_ingredient_quality": {
                     "score": breakdown.get("A", {}).get("score"),

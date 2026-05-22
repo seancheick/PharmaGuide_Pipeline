@@ -3620,6 +3620,19 @@ class EnhancedDSLDNormalizer:
             return q, raw_ingredient.get("unit", "") or ""
         return None, ""
 
+    def _stamp_raw_source_paths(self, rows: List[Dict], base_path: str, depth: int = 0) -> None:
+        if not isinstance(rows, list):
+            return
+        for idx, row in enumerate(rows):
+            if not isinstance(row, dict):
+                continue
+            path = f"{base_path}[{idx}]"
+            row.setdefault("raw_source_path", path)
+            row.setdefault("_raw_nested_depth", depth)
+            nested = row.get("nestedRows")
+            if isinstance(nested, list):
+                self._stamp_raw_source_paths(nested, f"{path}.nestedRows", depth + 1)
+
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
         MAX_FLATTEN_DEPTH = 5
@@ -3651,6 +3664,9 @@ class EnhancedDSLDNormalizer:
                 logger.debug(
                     "Flattening DSLD-group blend container without parent: %s", name
                 )
+                flattened_parent = dict(ing)
+                flattened_parent["_nested_rows_flattened"] = True
+                flattened.append(flattened_parent)
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="activeIngredients",
@@ -3721,7 +3737,7 @@ class EnhancedDSLDNormalizer:
                         flattened.append(nested_ing)
                 continue
 
-            if self._is_structural_active_blend_leaf(ing):
+            if self._is_structural_active_blend_leaf(ing) and not self._is_dsld_active_blend_total_row(ing):
                 logger.debug(f"Skipping structural active blend leaf: {name}")
                 self._queue_display_ingredient(
                     raw_source_text=name,
@@ -3921,6 +3937,7 @@ class EnhancedDSLDNormalizer:
             
             # Flatten and process ingredients with enhanced mapping
             raw_ingredients = raw_data.get("ingredientRows", []) or []
+            self._stamp_raw_source_paths(raw_ingredients, "ingredientRows")
             flattened_ingredients = self._flatten_nested_ingredients(raw_ingredients)
 
             # Extract nutritional info BEFORE filtering out nutrition facts
@@ -3934,6 +3951,7 @@ class EnhancedDSLDNormalizer:
             # Handle None values from DSLD data
             if other_ingredients_raw is None:
                 other_ingredients_raw = []
+            self._stamp_raw_source_paths(other_ingredients_raw, "otheringredients.ingredients")
 
             # Sprint E1.2.5 — count RAW actives by walking ingredientRows
             # recursively (including nested blend members). Excludes DSLD
@@ -4566,7 +4584,7 @@ class EnhancedDSLDNormalizer:
                             processed.append(processed_form)
                 continue
 
-            if is_active and self._is_structural_active_blend_leaf(ing):
+            if is_active and self._is_structural_active_blend_leaf(ing) and not self._is_dsld_active_blend_total_row(ing):
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="activeIngredients",
@@ -4738,7 +4756,9 @@ class EnhancedDSLDNormalizer:
 
         # SKIP ENFORCEMENT: Check skip list FIRST before any processing
         # Applies processing precedence: skip > empty > header > nutrition > normal
-        if self._should_skip_ingredient(name):
+        if self._should_skip_ingredient(name) and not (
+            is_active and self._is_dsld_active_blend_total_row(ing)
+        ):
             logger.debug(f"Skipping ingredient from skip list: {name}")
             if not self._is_nutrition_fact(
                 name,
@@ -4812,7 +4832,7 @@ class EnhancedDSLDNormalizer:
             logger.debug(f"Skipping label header: {name} (forms will be extracted separately)")
             return None
 
-        if is_active and self._is_structural_active_blend_leaf(ing):
+        if is_active and self._is_structural_active_blend_leaf(ing) and not self._is_dsld_active_blend_total_row(ing):
             self._queue_display_ingredient(
                 raw_source_text=raw_name,
                 source_section="activeIngredients",
@@ -5012,6 +5032,9 @@ class EnhancedDSLDNormalizer:
             quantity_data["unit"] = ing.get("unit")
             
         quantity, unit, daily_value, quantity_variants = self._process_quantity(quantity_data)
+        is_structural_active_blend_total = (
+            is_active and self._is_dsld_active_blend_total_row(ing)
+        )
 
         # Check if proprietary - based on quantity OR if name contains blend indicators
         is_proprietary = unit == "NP" or self._is_proprietary_blend_name(name)
@@ -5197,6 +5220,54 @@ class EnhancedDSLDNormalizer:
         if raw_category in {"vitamin", "mineral"}:
             label_nutrient_context = norm_module.normalize_text(raw_name or name)
 
+        unit_norm_for_contract = str(unit or "").strip().lower()
+        nested_without_individual_dose = (
+            is_active
+            and bool(ing.get("isNestedIngredient"))
+            and bool(ing.get("parentBlend"))
+            and (
+                quantity is None
+                or not isinstance(quantity, (int, float))
+                or quantity <= 0
+                or unit_norm_for_contract in {"", "np", "not provided", "unknown", "n/a", "na"}
+            )
+        )
+        if is_structural_active_blend_total:
+            cleaner_row_role = "blend_header_total"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "blend_header_total"
+            dose_class = "blend_total_weight"
+        elif nested_without_individual_dose:
+            cleaner_row_role = (
+                "composition_leaf"
+                if self._is_chemical_decomposition_leaf(ing)
+                else "nested_display_only"
+            )
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = cleaner_row_role
+            dose_class = "zero_or_np"
+        elif is_active:
+            cleaner_row_role = "active_scorable"
+            score_eligible_by_cleaner = True
+            score_exclusion_reason = None
+            dose_class = "enzyme_activity" if unit_norm_for_contract in {"spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu"} else "therapeutic_mass"
+        else:
+            cleaner_row_role = "inactive"
+            score_eligible_by_cleaner = False
+            score_exclusion_reason = "inactive"
+            dose_class = "none"
+        raw_taxonomy = {
+            "category": ing.get("category"),
+            "ingredientGroup": ing.get("ingredientGroup"),
+            "ingredientId": ing.get("ingredientId"),
+            "uniiCode": ing.get("uniiCode"),
+            "forms": forms_structured if forms_structured else [],
+            "parentBlend": ing.get("parentBlend"),
+            "isNestedIngredient": bool(ing.get("isNestedIngredient", False)),
+            "nested_depth": ing.get("_raw_nested_depth", 0),
+            "quantityVariants": quantity_variants if quantity_variants else [],
+        }
+
         # Build base ingredient structure
         result = {
             # Original DSLD identifiers (PRESERVE)
@@ -5223,10 +5294,15 @@ class EnhancedDSLDNormalizer:
             "cleaner_match_method": ing.get("_sprint1_match_method"),
             # LABEL NUTRIENT CONTEXT (Phase 1c)
             "label_nutrient_context": label_nutrient_context,
-            # raw_source_path: Source section (active/inactive), enrichment adds full path
-            "raw_source_path": "activeIngredients" if is_active else "inactiveIngredients",
+            "source_section": "active" if is_active else "inactive",
+            "raw_source_path": ing.get("raw_source_path") or ("activeIngredients" if is_active else "inactiveIngredients"),
             # normalized_key: Stable key for dedup/tracking, computed ONCE
             "normalized_key": norm_module.make_normalized_key(name),
+            "cleaner_row_role": cleaner_row_role,
+            "score_eligible_by_cleaner": score_eligible_by_cleaner,
+            "score_exclusion_reason": score_exclusion_reason,
+            "dose_class": dose_class,
+            "raw_taxonomy": raw_taxonomy,
 
             # Basic ingredient info
             "name": branded_token if branded_token else name,  # Use branded token as primary name if extracted
@@ -5261,7 +5337,7 @@ class EnhancedDSLDNormalizer:
             "parentBlendUnit": ing.get("parentBlendUnit", None),
 
             # Hierarchy classification for scoring (source/summary/component)
-            "hierarchyType": self._classify_hierarchy_type(name)
+            "hierarchyType": "blend_header" if is_structural_active_blend_total else self._classify_hierarchy_type(name)
         }
 
         # Add additive metadata flag (for enrichment phase to use)
@@ -5586,10 +5662,25 @@ class EnhancedDSLDNormalizer:
             # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
             # raw_source_text: Exact substring from DSLD, set once, never modified
             "raw_source_text": name,
-            # raw_source_path: Source section (inactive for other ingredients)
-            "raw_source_path": "inactiveIngredients",
+            "source_section": "inactive",
+            "raw_source_path": ingredient_data.get("raw_source_path", "inactiveIngredients"),
             # normalized_key: Stable key for dedup/tracking, computed ONCE
             "normalized_key": norm_module.make_normalized_key(name),
+            "cleaner_row_role": "inactive",
+            "score_eligible_by_cleaner": False,
+            "score_exclusion_reason": "inactive",
+            "dose_class": "none",
+            "raw_taxonomy": {
+                "category": ingredient_data.get("category"),
+                "ingredientGroup": ingredient_data.get("ingredientGroup"),
+                "ingredientId": ingredient_data.get("ingredientId"),
+                "uniiCode": ingredient_data.get("uniiCode"),
+                "forms": forms_structured if forms_structured else [],
+                "parentBlend": ingredient_data.get("parentBlend"),
+                "isNestedIngredient": bool(ingredient_data.get("isNestedIngredient", False)),
+                "nested_depth": ingredient_data.get("_raw_nested_depth", 0),
+                "quantityVariants": [],
+            },
             # CANONICAL IDENTITY (Phase 1b)
             "canonical_id": canonical_id,
             "canonical_source_db": canonical_source_db,
@@ -5791,10 +5882,25 @@ class EnhancedDSLDNormalizer:
                 # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
                 # raw_source_text: Exact substring from DSLD, set once, never modified
                 "raw_source_text": name,
-                # raw_source_path: Source section (inactive for other ingredients)
-                "raw_source_path": "inactiveIngredients",
+                "source_section": "inactive",
+                "raw_source_path": ing.get("raw_source_path", "inactiveIngredients"),
                 # normalized_key: Stable key for dedup/tracking, computed ONCE
                 "normalized_key": norm_module.make_normalized_key(name),
+                "cleaner_row_role": "inactive",
+                "score_eligible_by_cleaner": False,
+                "score_exclusion_reason": "inactive",
+                "dose_class": "none",
+                "raw_taxonomy": {
+                    "category": ing.get("category"),
+                    "ingredientGroup": ing.get("ingredientGroup"),
+                    "ingredientId": ing.get("ingredientId"),
+                    "uniiCode": ing.get("uniiCode"),
+                    "forms": forms_structured if forms_structured else [],
+                    "parentBlend": ing.get("parentBlend"),
+                    "isNestedIngredient": bool(ing.get("isNestedIngredient", False)),
+                    "nested_depth": ing.get("_raw_nested_depth", 0),
+                    "quantityVariants": [],
+                },
                 # CANONICAL IDENTITY (Phase 1b)
                 "canonical_id": canonical_id_f,
                 "canonical_source_db": canonical_source_db_f,
@@ -5930,7 +6036,33 @@ class EnhancedDSLDNormalizer:
                         "_transparency": "standard",
                     })
 
+        for row in expanded:
+            self._stamp_expanded_form_cleaner_contract(row, source_path)
+
         return expanded
+
+    def _stamp_expanded_form_cleaner_contract(self, row: Dict[str, Any], source_path: str) -> None:
+        """Stamp cleaner-owned row contract on rows expanded from label/header forms."""
+        source_section = "inactive" if source_path == "inactiveIngredients" else "active"
+        row.setdefault("source_section", source_section)
+        row.setdefault("cleaner_row_role", "inactive" if source_section == "inactive" else "active_scorable")
+        row.setdefault("score_eligible_by_cleaner", source_section == "active")
+        row.setdefault("score_exclusion_reason", None if source_section == "active" else "inactive")
+        row.setdefault("dose_class", "therapeutic_mass" if source_section == "active" else "none")
+        row.setdefault(
+            "raw_taxonomy",
+            {
+                "category": row.get("category"),
+                "ingredientGroup": row.get("ingredientGroup"),
+                "ingredientId": row.get("ingredientId"),
+                "uniiCode": row.get("uniiCode"),
+                "forms": row.get("forms") or [],
+                "parentBlend": row.get("parentBlend"),
+                "isNestedIngredient": bool(row.get("isNestedIngredient", False)),
+                "nested_depth": row.get("_raw_nested_depth", 0),
+                "quantityVariants": row.get("quantityVariants") or [],
+            },
+        )
 
     def _expand_compound_inactive_form_name(self, form_name: str, source_path: str) -> List[str]:
         """Split exact known concatenated inactive form labels into their real child ingredients."""
@@ -7650,6 +7782,22 @@ class EnhancedDSLDNormalizer:
             return False
         processed_name = self.matcher.preprocess_text(name)
         return processed_name in STRUCTURAL_ACTIVE_BLEND_LEAF_NAMES
+
+    def _is_dsld_active_blend_total_row(self, ing: Dict[str, Any]) -> bool:
+        """Identify DSLD blend rows whose quantity is a blend total."""
+        raw_category = (ing.get("raw_category") or ing.get("category") or "").lower()
+        ingredient_group = (ing.get("ingredientGroup") or "").lower()
+        has_blend_signal = (
+            raw_category == "blend"
+            or "blend" in ingredient_group
+            or self._is_proprietary_blend_name(ing.get("name", ""))
+        )
+        if not has_blend_signal:
+            return False
+        quantity, unit = self._extract_primary_mass_unit(ing)
+        if quantity is None or str(unit or "").strip().upper() == "NP":
+            return False
+        return True
 
     def _is_structural_active_form_display_only(self, ing: Dict[str, Any]) -> bool:
         """Identify exact active parent rows whose forms are delivery descriptors, not scored actives."""

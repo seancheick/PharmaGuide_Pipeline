@@ -1,17 +1,18 @@
 # PIPELINE_ARCHITECTURE.md
 
-> Last updated: 2026-05-12 | Export schema: v1.6.1 (91 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`.
+> Last updated: 2026-05-22 | Export schema: v1.6.1 (91 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`; concept ownership source of truth: `scripts/contracts/source_of_truth_matrix.json`.
 
 ## Overview
 
-PharmaGuide runs a 4-stage pipeline (3 compute stages + 1 export stage):
+PharmaGuide runs a cleaner-first pipeline with 3 compute stages plus snapshot/release stages:
 
 1. `clean_dsld_data.py` (Clean)
 2. `enrich_supplements_v3.py` (Enrich)
 3. `score_supplements.py` (Score)
-4. `build_final_db.py` (Build Final DB) → `sync_to_supabase.py` (ship)
+4. `rebuild_dashboard_snapshot.sh` (Build Final DB + stage catalog snapshot)
+5. `release_full.sh` (catalog staging, product images, interaction DB, Supabase, Flutter bundle)
 
-Orchestration is handled by `run_pipeline.py` for stages 1–3, and by `build_all_final_dbs.py` / `assemble_final_db_release.py` for stage 4.
+Operational orchestration is handled by `batch_run_all_datasets.sh` for full-corpus or targeted brand runs. `run_pipeline.py` remains a single-brand/stage runner for local iteration, while `build_final_db.py` is an internal/manual builder called by snapshot/release flows rather than the normal ship path.
 
 ```text
 raw_data/*.json
@@ -22,6 +23,7 @@ output_*_enriched/enriched/*.json
   -> [COVERAGE GATE] coverage_gate.py (optional, can block scoring)
   -> [SCORE] score_supplements.py
 output_*_scored/scored/*.json
+  -> [SNAPSHOT] rebuild_dashboard_snapshot.sh
   -> [BUILD FINAL DB] build_final_db.py
 final_db_output/
   ├── pharmaguide_core.db        (SQLite, 91-col products_core)
@@ -29,12 +31,20 @@ final_db_output/
   ├── detail_index.json
   ├── export_manifest.json       (schema_version="1.6.0")
   └── export_audit_report.json
+  -> [STRICT GATES] audit_source_of_truth_contract.py
+  -> [RELEASE] release_full.sh
   -> [SUPABASE SYNC] sync_to_supabase.py
 Supabase Storage: pharmaguide/v{version}/pharmaguide_core.db
                   pharmaguide/shared/details/sha256/{hash}.json
 Supabase Postgres: export_manifest row inserted via rotate_manifest RPC
   -> [FLUTTER APP] downloads SQLite + queries locally via Drift
 ```
+
+### Source-of-truth principle (2026-05)
+
+Raw DSLD row classification is owned by the cleaner. `enhanced_normalizer.py` must emit `source_section`, `raw_source_path`, `cleaner_row_role`, `score_eligible_by_cleaner`, `score_exclusion_reason`, `dose_class`, and `raw_taxonomy`. Enrich, taxonomy, score, export, and Flutter consume these fields; they must not rediscover clinical row role from names or display labels.
+
+The ownership map lives in `scripts/contracts/source_of_truth_matrix.json` and is validated by `scripts/audit_source_of_truth_contract.py`. Snapshot/release strict mode gates matrix completeness, cleaner/IQD row eligibility, clinical drift checks, export manifest contract fields, artifact freshness, interaction DB parity, and Flutter bundle parity.
 
 ### Silent-failure audit principle (2026-04 → 2026-05)
 
@@ -290,18 +300,27 @@ New scripts added to `scripts/` beyond the core pipeline stages:
 | `release_interaction_artifact.py` | Assembles interaction rule artifacts for release |
 | `assemble_final_db_release.py` | Packages final DB release artifacts |
 | `build_all_final_dbs.py` | Runs `build_final_db.py` across multiple dataset directories |
+| `audit_source_of_truth_contract.py` | Validates cleaner-first source-of-truth and release gates |
 
 ## CLI Quick Reference
 
 ```bash
-# Full pipeline
-python run_pipeline.py
+# Full-corpus or targeted operational pipeline
+bash batch_run_all_datasets.sh
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
+
+# Snapshot and release stages
+bash scripts/rebuild_dashboard_snapshot.sh
+bash scripts/release_full.sh
+
+# Single-brand/stage local iteration
+python scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand>
 
 # Run enrichment + scoring only
-python run_pipeline.py --stages enrich,score
+python scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand> --stages enrich,score
 
 # Score-only run (requires existing enriched outputs)
-python run_pipeline.py --stages score
+python scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand> --stages score
 
 # Skip coverage gate
 python run_pipeline.py --skip-coverage-gate
