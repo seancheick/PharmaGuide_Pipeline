@@ -138,6 +138,15 @@ def _base_scored(**overrides):
             "scoring_version": "3.1.0",
             "output_schema_version": "5.0.0",
             "scored_date": "2026-03-17T00:00:00Z",
+            "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+            "strict_scoring_contract": {"passed": True, "findings": []},
+        },
+        "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+        "strict_scoring_contract": {"passed": True, "findings": []},
+        "iqd_contract_diagnostics": {
+            "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
+            "iqd_ingredients_fallback_used": False,
+            "scoring_fallbacks_used": [],
         },
         "breakdown": {
             "A": {"score": 15.0, "max": 25.0},
@@ -244,6 +253,27 @@ class TestExportContractValidator:
         del s["scoring_metadata"]
         issues = validate_export_contract(_base_enriched(), s)
         assert any("scoring_metadata" in i for i in issues)
+
+    def test_missing_strict_scoring_contract_flagged(self):
+        s = _base_scored()
+        del s["strict_scoring_contract"]
+        del s["scoring_metadata"]["strict_scoring_contract"]
+        issues = validate_export_contract(_base_enriched(), s)
+        assert any("strict_scoring_contract" in i for i in issues)
+
+    def test_iqd_ingredients_scoring_fallback_flagged(self):
+        s = _base_scored(
+            scoring_ingredients_source="ingredient_quality_data.ingredients",
+            iqd_contract_diagnostics={
+                "scoring_ingredients_source": "ingredient_quality_data.ingredients",
+                "iqd_ingredients_fallback_used": True,
+                "scoring_fallbacks_used": [
+                    {"fallback_class": "old_batch_compatibility", "fallback_reason": "legacy"}
+                ],
+            },
+        )
+        issues = validate_export_contract(_base_enriched(), s)
+        assert any("IQD ingredients fallback" in i or "ingredients fallback" in i for i in issues)
 
     def test_optional_form_fields_do_not_trigger_issues(self):
         e = _base_enriched()

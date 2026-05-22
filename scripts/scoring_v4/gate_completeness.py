@@ -21,6 +21,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence
 
+from scoring_input_contract import get_scoring_ingredients
 
 MAPPED_COVERAGE_MIN = 0.85
 MULTI_DOSE_COVERAGE_MIN = 0.60
@@ -64,15 +65,7 @@ def _as_float(value: Any, default: Optional[float] = 0.0) -> Optional[float]:
 
 
 def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    candidates: Sequence[Any] = (
-        _safe_list(iqd.get("ingredients_scorable"))
-        or _safe_list(iqd.get("ingredients"))
-        or _safe_list(product.get("activeIngredients"))
-        or _safe_list(product.get("active_ingredients"))
-    )
-    rows = [i for i in candidates if isinstance(i, dict)]
-    return [i for i in rows if not i.get("is_filler")]
+    return list(get_scoring_ingredients(product or {}, strict=True).rows)
 
 
 def _has_active_identity(ingredient: Dict[str, Any]) -> bool:
@@ -113,28 +106,10 @@ def _has_dose_with_unit(ingredient: Dict[str, Any]) -> bool:
 
 
 def _mapped_coverage(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> float:
-    explicit = _as_float(product.get("mapped_coverage"), None)
-    if explicit is not None:
-        return max(0.0, min(1.0, explicit))
-
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    total_active = int(_as_float(iqd.get("total_active"), 0) or 0)
-    unmapped_present = "unmapped_scorable_count" in iqd or "unmapped_count" in iqd
-    unmapped = int(
-        _as_float(
-            iqd.get("unmapped_scorable_count", iqd.get("unmapped_count")),
-            0,
-        )
-        or 0
-    )
-    if total_active > 0 and unmapped_present and unmapped >= 0:
-        mapped = max(0, total_active - unmapped)
-        return round(mapped / total_active, 4)
-
-    if not ingredients:
-        return 0.0
-    mapped_count = sum(1 for i in ingredients if _has_active_identity(i))
-    return round(mapped_count / len(ingredients), 4)
+    scoring_input = get_scoring_ingredients(product or {}, strict=True)
+    if scoring_input.mapped_coverage is not None:
+        return round(scoring_input.mapped_coverage, 4)
+    return 0.0
 
 
 def _form_factor(product: Dict[str, Any]) -> str:

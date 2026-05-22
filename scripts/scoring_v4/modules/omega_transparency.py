@@ -44,6 +44,7 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List
 
+from scoring_v4.modules.generic_helpers import get_active_ingredients
 from scoring_v4.modules.generic_transparency import (
     _derive_claim_validations,
     _score_b2_allergen_penalty,
@@ -104,14 +105,7 @@ def _epa_or_dha_disclosed(product: Dict[str, Any]) -> bool:
     valid unit. Mirrors the omega completeness-gate logic — single
     'is this product actually disclosing EPA/DHA?' check across the
     module."""
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    rows = (
-        _safe_list(iqd.get("ingredients_scorable"))
-        or _safe_list(iqd.get("ingredients"))
-        or _safe_list(product.get("activeIngredients"))
-        or _safe_list(product.get("active_ingredients"))
-    )
-    for ing in rows:
+    for ing in get_active_ingredients(product):
         if not isinstance(ing, dict):
             continue
         canon = _norm(ing.get("canonical_id"))

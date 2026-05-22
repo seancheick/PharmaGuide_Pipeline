@@ -4,7 +4,6 @@ Priority order (post-taxonomy refactor, 2026-05-20):
 
   1. probiotic              → probiotic
      - taxonomy primary_type == "probiotic"
-     - OR legacy supp_type == "probiotic" (backward compat)
   2. prenatal name keyword  → multi_or_prenatal
      - overrides multi / omega routing for products like Prenatal DHA,
        Prenatal Gummies. Does NOT override probiotic — prenatal-probiotic
@@ -14,20 +13,14 @@ Priority order (post-taxonomy refactor, 2026-05-20):
   4. omega_3                → omega
      - taxonomy primary_type == "omega_3"
      - OR EPA/DHA canonical in ingredient panel (positive quantity)
-     - OR omega name keyword (fish oil, omega-3, krill, cod liver, etc.)
-     - OR standalone EPA/DHA word-boundary match (excludes DHEA)
-  5. legacy multivitamin fallback → multi_or_prenatal
-     - only when taxonomy is absent (old enriched batches pre-2026-05-20):
-       legacy supp_type == "multivitamin" or primary_category == "multivitamin"
-  6. fall through           → generic
+  5. fall through           → generic
 
 The taxonomy primary_type field comes from scripts/supplement_taxonomy.py
 (introduced 2026-05-20) and uses canonical-ID-based panel composition
 analysis. It replaces the legacy supp_type heuristic which over-classified
 single-issue targeted products (Collagen Love, Mighty Night sleep aid,
 Vitafusion Omega-3 EPA/DHA, etc.) as multivitamin. The router prefers
-taxonomy when present and falls back to legacy signals only for old
-enriched batches that haven't been re-run through the new pipeline.
+taxonomy and scoring input contracts only.
 
 §13 architecture lock — this router does not import from score_supplements.py.
 
@@ -41,6 +34,8 @@ from __future__ import annotations
 
 import re
 from typing import Any, Dict
+
+from scoring_input_contract import get_scoring_ingredients
 
 VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega")
 
@@ -76,10 +71,6 @@ _OMEGA_NAME_KEYWORDS = (
 _OMEGA_STANDALONE_RE = re.compile(r"\b(EPA|DHA)\b", re.IGNORECASE)
 _OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\b", re.IGNORECASE)
 
-# Per scripts/data/omega_rubric.json router.primary_category_match. The
-# enricher emits these as primary_category values for fish-oil-class rows.
-_OMEGA_PRIMARY_CATEGORIES = {"omega-3", "omega_3", "omega3", "fish_oil"}
-
 # Per scripts/data/omega_rubric.json router.ingredient_panel_canonicals.
 # Strongest routing signal — operates on the enricher's canonicalized
 # identity rather than label text. A product whose ingredient panel has
@@ -96,17 +87,7 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
 def _has_omega_ingredient(product: Dict[str, Any]) -> bool:
     """Return True when ingredient_quality_data contains any EPA/DHA
     canonical with a positive quantity. Strongest router signal."""
-    iqd = (product or {}).get("ingredient_quality_data")
-    if not isinstance(iqd, dict):
-        return False
-    candidates = (
-        iqd.get("ingredients_scorable")
-        or iqd.get("ingredients")
-        or []
-    )
-    if not isinstance(candidates, list):
-        return False
-    for ing in candidates:
+    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(ing, dict):
             continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
@@ -130,13 +111,7 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     """
     if _has_omega_ingredient(product):
         return False
-    iqd = (product or {}).get("ingredient_quality_data")
-    if not isinstance(iqd, dict):
-        return False
-    candidates = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
-    if not isinstance(candidates, list):
-        return False
-    for ing in candidates:
+    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(ing, dict):
             continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
@@ -148,17 +123,11 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
 def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     """Detect omega-class routing signals.
 
-    Independent triggers — any one routes to omega (most-specific first):
+    Strict triggers — scoring consumes taxonomy/ingredient contracts only:
       1. ingredient_quality_data has canonical_id ∈ {epa, dha, epa_dha}
          with positive quantity (strongest signal — enricher already
          canonicalized the identity)
-      2. primary_category in _OMEGA_PRIMARY_CATEGORIES
-      3. product name contains an unambiguous omega keyword
-      4. product name has standalone EPA or DHA (word-boundary regex,
-         excludes DHEA and other false positives)
-
-    The function takes the raw mixed-case name_text so the standalone
-    EPA/DHA regex can use IGNORECASE without losing word boundaries.
+      2. taxonomy primary_type routes to omega before this helper is called
 
     HISTORICAL — a 5th trigger (category_breakdown.fatty_acid plurality)
     was removed 2026-05-20 after a real-catalog audit caught ~250 false
@@ -178,23 +147,11 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     if _has_omega_ingredient(product):
         return True
 
-    primary_category = str((product or {}).get("primary_category") or "").strip().lower()
-    if primary_category in _OMEGA_PRIMARY_CATEGORIES:
-        return True
-
     # ALA / GLA / CLA / 3-6-9 products may use omega marketing language,
     # but they do not belong in the EPA/DHA omega module unless EPA/DHA is
     # actually disclosed in the panel.
     if _OMEGA_369_RE.search(name_text) or _has_non_epa_dha_fatty_acid_panel(product):
         return False
-
-    name_text_lower = name_text.lower()
-    if any(kw in name_text_lower for kw in _OMEGA_NAME_KEYWORDS):
-        return True
-
-    # Standalone EPA / DHA — word boundary regex, excludes DHEA.
-    if _OMEGA_STANDALONE_RE.search(name_text):
-        return True
 
     return False
 
@@ -251,38 +208,24 @@ def _read_primary_type(product: Dict[str, Any]) -> str:
     return ""
 
 
-def _read_legacy_supp_type(product: Dict[str, Any]) -> str:
-    """Return the legacy supplement_type.type heuristic (pre-taxonomy enrichers)."""
-    st_payload = (product or {}).get("supplement_type")
-    if isinstance(st_payload, dict):
-        value = st_payload.get("type") or ""
-    elif isinstance(st_payload, str):
-        value = st_payload  # legacy shape (rare)
-    else:
-        value = ""
-    return str(value).strip().lower()
-
-
 def class_for_product(product: Dict[str, Any]) -> str:
     """Return one of VALID_CLASSES given an enriched product blob.
 
-    Reads `primary_type` from the new supplement taxonomy as the canonical
-    signal. Falls back to legacy `supplement_type.type` / `primary_category`
-    only when taxonomy is absent (old enriched batches pre-2026-05-20).
+    Reads `primary_type` from the supplement taxonomy as the canonical
+    signal. Scoring treats product names and legacy categories as display
+    context, not clinical routing inputs.
 
     Never raises on malformed input. Never returns None or a value outside
     VALID_CLASSES. Missing or unknown signals fall through to `generic`.
     """
     primary_type = _read_primary_type(product)
-    legacy_supp_type = _read_legacy_supp_type(product)
     name_text = " ".join(
         str((product or {}).get(k) or "")
         for k in ("product_name", "fullName", "brand_name", "bundleName")
     )
 
-    # Priority 1: probiotic. Wins absolutely — strain panel inspection is
-    # the strongest signal. Either taxonomy or legacy supp_type routes here.
-    if primary_type == "probiotic" or legacy_supp_type == "probiotic":
+    # Priority 1: probiotic. Taxonomy is the scoring contract.
+    if primary_type == "probiotic":
         return "probiotic"
 
     # Priority 2: prenatal name keyword. Overrides multi / omega routing
@@ -314,7 +257,7 @@ def class_for_product(product: Dict[str, Any]) -> str:
         # Unknown taxonomy type: fall through to legacy omega / multi fallback
         # rather than crashing.
 
-    # Priority 4: omega panel-canonical / name-keyword detection.
+    # Priority 4: omega panel-canonical detection.
     # The panel-canonical (canonical_id ∈ {epa,dha,epa_dha} with positive
     # quantity) is the strongest omega signal — it operates on the
     # enricher's canonicalized identity. Name-keyword and standalone
@@ -322,18 +265,5 @@ def class_for_product(product: Dict[str, Any]) -> str:
     if _is_omega_class(product, name_text):
         return "omega"
 
-    # Priority 5: legacy multivitamin fallback. Only fires when the
-    # taxonomy didn't classify the product (old enriched batch) — we
-    # explicitly do NOT trust legacy supp_type=multivitamin when the
-    # taxonomy is present, because that signal over-classified targeted
-    # products (Collagen Love, Mighty Night, Vitafusion Omega-3 EPA/DHA)
-    # as multivitamin (Bug C, 2026-05-20).
-    if not primary_type:
-        if legacy_supp_type == "multivitamin":
-            return "multi_or_prenatal"
-        primary_category = str((product or {}).get("primary_category") or "").strip().lower()
-        if primary_category == "multivitamin":
-            return "multi_or_prenatal"
-
-    # Priority 6: generic catch-all.
+    # Priority 5: generic catch-all.
     return "generic"

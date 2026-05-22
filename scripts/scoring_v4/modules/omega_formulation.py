@@ -39,6 +39,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from scoring_v4.modules.generic_helpers import get_active_ingredients
+
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
@@ -131,14 +133,7 @@ def _gather_text_surfaces(product: Dict[str, Any]) -> List[str]:
         if v:
             parts.append(str(v))
 
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    candidates = (
-        _safe_list(iqd.get("ingredients_scorable"))
-        or _safe_list(iqd.get("ingredients"))
-        or _safe_list(product.get("activeIngredients"))
-        or _safe_list(product.get("active_ingredients"))
-    )
-    for ing in candidates:
+    for ing in get_active_ingredients(product):
         if not isinstance(ing, dict):
             continue
         for ing_key in ("name", "standard_name", "ingredient_name", "standardName"):
@@ -190,12 +185,7 @@ def _has_omega_signal(product: Dict[str, Any]) -> bool:
     the omega-class undefined-form credit."""
     if _source_disclosed(product):
         return True
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    candidates = (
-        _safe_list(iqd.get("ingredients_scorable"))
-        or _safe_list(iqd.get("ingredients"))
-    )
-    for ing in candidates:
+    for ing in get_active_ingredients(product):
         if not isinstance(ing, dict):
             continue
         canon = str(ing.get("canonical_id") or "").strip().lower()

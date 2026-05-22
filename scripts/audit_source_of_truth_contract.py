@@ -63,6 +63,18 @@ REQUIRED_CONCEPTS = {
     "inactive_safety_classification",
     "interaction_rules",
     "interaction_db",
+    "scoring_input_contract",
+    "mapping_coverage_contract",
+    "section_a_ingredient_quality_score",
+    "section_b_safety_purity_score",
+    "section_c_evidence_score",
+    "section_d_brand_trust_score",
+    "verdict_contract",
+    "score_diagnostics_contract",
+    "scoring_fallback_policy",
+    "legacy_scoring_compat_outputs",
+    "product_level_scoring_evidence",
+    "nutrition_only_scoring_class",
     "score_verdict",
     "final_db_export",
     "flutter_bundled_assets",
@@ -204,6 +216,12 @@ def enriched_files_from_products_dir(products_dir: Path) -> list[Path]:
     return sorted(products_dir.glob("*_enriched/enriched/*.json"))
 
 
+def scored_files_from_products_dir(products_dir: Path) -> list[Path]:
+    if not products_dir.exists():
+        return []
+    return sorted(products_dir.glob("*_scored/scored/*.json"))
+
+
 def collect_product_files(args: argparse.Namespace, *, prefer_enriched: bool = True) -> list[Path]:
     files: list[Path] = []
     for value in getattr(args, "enriched_file", []) or []:
@@ -215,7 +233,12 @@ def collect_product_files(args: argparse.Namespace, *, prefer_enriched: bool = T
     products_dir = getattr(args, "products_dir", None)
     if products_dir:
         root = repo_path(products_dir)
-        files.extend(enriched_files_from_products_dir(root) if prefer_enriched else iter_json_files([root]))
+        if prefer_enriched:
+            files.extend(enriched_files_from_products_dir(root))
+        elif getattr(args, "prefer_scored", False):
+            files.extend(scored_files_from_products_dir(root))
+        else:
+            files.extend(iter_json_files([root]))
     dist_dir = getattr(args, "dist_dir", None)
     if dist_dir and not files:
         dist_path = repo_path(dist_dir)
@@ -543,6 +566,119 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                     scoring_diag = scoring_meta.get("iqd_contract_diagnostics")
             if isinstance(scoring_diag, dict) and scoring_diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("ENRICHMENT_SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed IQD ingredients fallback", str(file_path)))
+    return findings
+
+
+def _safe_dict(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
+def _scoring_diag(product: dict[str, Any]) -> dict[str, Any]:
+    diag = product.get("iqd_contract_diagnostics")
+    if isinstance(diag, dict):
+        return diag
+    meta = product.get("scoring_metadata")
+    if isinstance(meta, dict):
+        diag = meta.get("iqd_contract_diagnostics")
+        if isinstance(diag, dict):
+            return diag
+    return {}
+
+
+def audit_scoring(args: argparse.Namespace) -> list[Finding]:
+    files = collect_product_files(args, prefer_enriched=False)
+    findings: list[Finding] = []
+    if not files:
+        return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
+
+    allowed_sources = {
+        "ingredient_quality_data.ingredients_scorable",
+        "ingredient_quality_data.ingredients_scorable+product_scoring_evidence",
+    }
+    for file_path in files:
+        try:
+            products = as_products(load_json(file_path))
+        except Exception as exc:
+            findings.append(Finding("SCORING_JSON_ERROR", f"cannot read scored product JSON: {exc}", str(file_path)))
+            continue
+        for product in products:
+            pid = product_identity(product)
+            verdict = str(product.get("verdict") or "").upper()
+            diag = _scoring_diag(product)
+            source = (
+                product.get("scoring_ingredients_source")
+                or diag.get("scoring_ingredients_source")
+                or _safe_dict(product.get("scoring_metadata")).get("scoring_ingredients_source")
+            )
+            if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE", "NUTRITION_ONLY"}:
+                findings.append(Finding("SCORING_SOURCE_FORBIDDEN", f"{pid}: scoring source {source!r} is not strict scorable input", str(file_path)))
+            if diag.get("iqd_ingredients_fallback_used") is True:
+                findings.append(Finding("SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed ingredient_quality_data.ingredients fallback", str(file_path)))
+
+            fallback_rows = product.get("scoring_fallbacks_used") or diag.get("scoring_fallbacks_used") or []
+            for fallback in fallback_rows:
+                if not isinstance(fallback, dict):
+                    continue
+                if fallback.get("fallback_class") == "dev_only_missing_vocab":
+                    findings.append(Finding("SCORING_DEV_FALLBACK", f"{pid}: dev_only_missing_vocab fallback used in scoring", str(file_path)))
+                if not fallback.get("fallback_class") or not fallback.get("fallback_reason"):
+                    findings.append(Finding("SCORING_FALLBACK_DIAGNOSTICS_MISSING", f"{pid}: scoring fallback lacks class/reason", str(file_path)))
+
+            strict_contract = product.get("strict_scoring_contract")
+            if not isinstance(strict_contract, dict):
+                strict_contract = _safe_dict(_safe_dict(product.get("scoring_metadata")).get("strict_scoring_contract"))
+            if not strict_contract:
+                findings.append(Finding("SCORING_STRICT_CONTRACT_MISSING", f"{pid}: missing strict_scoring_contract diagnostics", str(file_path)))
+
+            coverage = mapped_coverage_value(product)
+            if verdict == "SAFE" and coverage is not None and coverage < 0.3:
+                findings.append(Finding("SCORING_SAFE_LOW_COVERAGE", f"{pid}: SAFE with mapped_coverage={coverage}", str(file_path)))
+            if verdict == "NUTRITION_ONLY":
+                if product.get("scoring_status") != "not_applicable":
+                    findings.append(Finding("SCORING_NUTRITION_STATUS", f"{pid}: NUTRITION_ONLY must use scoring_status=not_applicable", str(file_path)))
+                if product.get("score_basis") != "nutrition_only_food_shape":
+                    findings.append(Finding("SCORING_NUTRITION_BASIS", f"{pid}: NUTRITION_ONLY must use score_basis=nutrition_only_food_shape", str(file_path)))
+                if product.get("quality_score") is not None or product.get("score_80") is not None or product.get("score_100_equivalent") is not None:
+                    findings.append(Finding("SCORING_NUTRITION_SCORE_NULL", f"{pid}: NUTRITION_ONLY must have null score fields", str(file_path)))
+                if product.get("mapped_coverage_applicable") is not False:
+                    findings.append(Finding("SCORING_NUTRITION_COVERAGE_APPLICABILITY", f"{pid}: NUTRITION_ONLY must set mapped_coverage_applicable=false", str(file_path)))
+    return findings
+
+
+STATIC_FORBIDDEN_PATTERNS = [
+    ("V4_IQD_INGREDIENTS_FALLBACK", re.compile(r"iqd\.get\([\"']ingredients[\"']\)")),
+    ("V4_RAW_ACTIVE_FALLBACK", re.compile(r"product\.get\([\"'](?:activeIngredients|active_ingredients)[\"']\)")),
+    ("V4_PRIMARY_CATEGORY_ROUTING", re.compile(r"\.get\([\"']primary_category[\"']\)")),
+]
+
+
+def audit_scoring_static(args: argparse.Namespace) -> list[Finding]:
+    findings: list[Finding] = []
+    files: list[Path] = []
+    for value in getattr(args, "path", None) or ["scripts/scoring_v4"]:
+        root = repo_path(value)
+        if root.is_file() and root.suffix == ".py":
+            files.append(root)
+        elif root.is_dir():
+            files.extend(sorted(root.rglob("*.py")))
+    for file_path in files:
+        if file_path.name in {"generic_helpers.py"}:
+            continue
+        try:
+            lines = file_path.read_text(encoding="utf-8").splitlines()
+        except Exception as exc:
+            findings.append(Finding("SCORING_STATIC_READ_ERROR", f"cannot read {file_path}: {exc}", str(file_path)))
+            continue
+        for line_no, line in enumerate(lines, start=1):
+            if "scoring-contract-legacy-compat" in line or "display/search" in line:
+                continue
+            for code, pattern in STATIC_FORBIDDEN_PATTERNS:
+                if pattern.search(line):
+                    try:
+                        rel = file_path.relative_to(REPO_ROOT)
+                    except ValueError:
+                        rel = file_path
+                    findings.append(Finding(code, f"{rel}:{line_no} reads forbidden scoring fallback field", str(file_path)))
     return findings
 
 
@@ -912,6 +1048,7 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
             "source_of_truth_matrix",
             "cleaner_contract",
             "enrichment_contract",
+            "scoring_contract",
             "export_contract",
             "clinical_drift",
             "interaction_db_parity",
@@ -929,7 +1066,7 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
 
 def run_all(args: argparse.Namespace) -> list[Finding]:
     findings: list[Finding] = []
-    for func in (audit_matrix, audit_cleaner, audit_enrichment, audit_clinical, audit_export, audit_interaction, audit_freshness):
+    for func in (audit_matrix, audit_cleaner, audit_enrichment, audit_scoring, audit_scoring_static, audit_clinical, audit_export, audit_interaction, audit_freshness):
         findings.extend(func(args))
     if getattr(args, "flutter_repo", None):
         findings.extend(audit_flutter(args))
@@ -975,6 +1112,21 @@ def build_parser() -> argparse.ArgumentParser:
     enrichment.add_argument("--product-file", action="append", default=[])
     enrichment.add_argument("--dist-dir", default=None)
     enrichment.set_defaults(func=audit_enrichment)
+
+    scoring = subparsers.add_parser("scoring", help="validate scored artifact scoring contract")
+    add_common(scoring)
+    scoring.add_argument("--products-dir", default=None)
+    scoring.add_argument("--scored-dir", dest="enriched_dir", action="append", default=[])
+    scoring.add_argument("--scored-file", dest="product_file", action="append", default=[])
+    scoring.add_argument("--product-file", action="append", default=[])
+    scoring.add_argument("--dist-dir", default=None)
+    scoring.set_defaults(prefer_scored=True)
+    scoring.set_defaults(func=audit_scoring)
+
+    scoring_static = subparsers.add_parser("scoring-static", help="validate strict scoring modules do not read forbidden fallback fields")
+    add_common(scoring_static)
+    scoring_static.add_argument("--path", action="append", default=[])
+    scoring_static.set_defaults(func=audit_scoring_static)
 
     export = subparsers.add_parser("export", help="validate final catalog export")
     add_common(export)

@@ -726,6 +726,31 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         issues.append("missing scored.section_scores")
     if "scoring_metadata" not in scored:
         issues.append("missing scored.scoring_metadata")
+    scoring_diag = safe_dict(scored.get("iqd_contract_diagnostics"))
+    scoring_meta = safe_dict(scored.get("scoring_metadata"))
+    if not scoring_diag:
+        scoring_diag = safe_dict(scoring_meta.get("iqd_contract_diagnostics"))
+    strict_scoring_contract = safe_dict(
+        scored.get("strict_scoring_contract")
+        or scoring_meta.get("strict_scoring_contract")
+    )
+    if not strict_scoring_contract:
+        issues.append("missing scored.strict_scoring_contract")
+    source = (
+        scored.get("scoring_ingredients_source")
+        or scoring_diag.get("scoring_ingredients_source")
+        or scoring_meta.get("scoring_ingredients_source")
+    )
+    if source == "ingredient_quality_data.ingredients":
+        issues.append(
+            "review_queue: export cannot ship score derived from legacy "
+            "ingredient_quality_data.ingredients fallback."
+        )
+    if scoring_diag.get("iqd_ingredients_fallback_used") is True:
+        issues.append(
+            "review_queue: export cannot ship score with IQD ingredients "
+            "fallback reliance."
+        )
 
     # ── Batch 3 data integrity gate ────────────────────────────────────
     verdict = safe_str(scored.get("verdict")).upper()

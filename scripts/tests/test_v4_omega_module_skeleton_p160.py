@@ -202,14 +202,14 @@ def test_router_dispatches_fish_oil_primary_category_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"primary_category": "fish_oil", "product_name": "Fish Oil 1000 mg"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_dispatches_omega3_primary_category_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"primary_category": "omega-3", "product_name": "EPA+DHA"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_dispatches_fish_oil_name_keyword_to_omega() -> None:
@@ -217,28 +217,28 @@ def test_router_dispatches_fish_oil_name_keyword_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"product_name": "Maximum Fish Oil Triple Strength"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_dispatches_krill_name_keyword_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"product_name": "Antarctic Krill Oil 500 mg"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_dispatches_algae_name_keyword_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"product_name": "Vegan Algae Oil EPA DHA"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_dispatches_cod_liver_name_keyword_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"product_name": "Norwegian Cod Liver Oil"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_does_not_route_fatty_acid_plurality_alone_to_omega() -> None:
@@ -429,7 +429,7 @@ def test_router_dispatches_standalone_epa_name_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"product_name": "Pure EPA 500 mg Softgels"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_dispatches_standalone_dha_name_to_omega() -> None:
@@ -438,7 +438,7 @@ def test_router_dispatches_standalone_dha_name_to_omega() -> None:
     from scoring_v4.router import class_for_product
 
     product = {"product_name": "Vegetarian DHA 300 mg"}
-    assert class_for_product(product) == "omega"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_does_not_match_dhea_as_omega() -> None:
@@ -769,8 +769,8 @@ def test_shadow_does_not_wire_omega_module_when_completeness_fails() -> None:
     }
     out = score_product_v4_shadow(incomplete)
 
-    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert "module" not in out["shadow_score_v4_breakdown"]
+    assert out["shadow_score_v4_verdict"] == "POOR"
+    assert out["shadow_score_v4_breakdown"]["module"]["module"] == "generic"
 
 
 def test_shadow_does_not_route_generic_product_to_omega_module() -> None:
