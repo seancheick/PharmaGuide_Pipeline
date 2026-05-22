@@ -3259,7 +3259,7 @@
       "threshold_source": "2% gentiopicroside \u2014 European Pharmacopoeia"
     },
     {
-      "standard_name": "Ginger Extract",
+      "standard_name": "Ginger (Zingiber officinale)",
       "aliases": [
         "zingiber officinale",
         "ginger root extract",
@@ -3270,20 +3270,44 @@
         "ginger standardized extract",
         "zingiber",
         "ginger powder",
-        "ginger rhizome"
+        "ginger rhizome",
+        "ginger extract standardized to 5% gingerols",
+        "ginger extract standardized to 10% gingerols",
+        "ginger extract standardized to 20% gingerols",
+        "ginger extract standardized to 5% total gingerols and shogaols",
+        "GingerForce",
+        "Gingever",
+        "Bioactive Ginger Extract"
       ],
       "markers": [
         "gingerols",
         "shogaols",
         "6-gingerol"
       ],
+      "marker_compounds": [
+        "gingerols",
+        "shogaols",
+        "6-gingerol",
+        "8-gingerol",
+        "10-gingerol",
+        "6-shogaol"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Ginger (Zingiber officinale, UNII C5529G5JPQ) is bonus-eligible when the product label declares a measurable gingerols / shogaols / total-pungent-compounds % (typical 5-20% gingerols, with shogaols as the secondary marker formed during drying / heating). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Ginger' identity matches but defers to meets_threshold. Marker-compound UNIIs in alias list (V2ZD052TS1 'total gingerols and shogaols', SAS9Z1SVUK 'standardized ginger gingerols', 925QK2Z900 '6-gingerol') describe what the entry is standardized TO — they are NOT cross-species §8.5 misplacement. Same-species preparation pattern documented in SB-4 / SB-5.",
+      "sources": [
+        "NCCIH Ginger overview: https://www.nccih.nih.gov/health/ginger",
+        "NIH ODS Ginger fact sheet: https://ods.od.nih.gov/factsheets/list-all/",
+        "Marx et al. 2017 systematic review on ginger for chemotherapy-induced nausea (PMID 28200047)",
+        "USP-NF Ginger monograph (Zingiber officinale rhizome, identification + standardization to gingerols by HPLC)"
+      ],
       "priority": "high",
       "standardization": "5% total gingerols",
       "category": "root",
       "min_threshold": 5,
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "ginger_extract",
-      "notes": "Digestive and anti-nausea herb standardized for 5% gingerols. Higher concentrations (up to 20%) available.",
+      "notes": "Ginger (Zingiber officinale, Zingiberaceae) rhizome. UNII C5529G5JPQ. Digestive, antiemetic and anti-inflammatory botanical standardized for gingerols (typically 5%, ranging 5-20% in concentrated extracts) plus shogaols (formed during drying/heating). SB-6 §8.5 / v6 annotation 2026-05-22: refined standard_name to include species; added v6 contract fields (bonus_eligible, standardization_basis, marker_compounds, bonus_rationale, sources); added marker-explicit alias phrasings for direct matching. The audit's reported '5 distinct UNIIs in aliases' resolved to marker-compound UNIIs (V2ZD052TS1, SAS9Z1SVUK, 925QK2Z900) and generic registry term (UL302SFN7L), all describing the same species (Z. officinale, UNII C5529G5JPQ) — not cross-species misplacement.",
       "external_ids": {
         "unii": "C5529G5JPQ"
       },
