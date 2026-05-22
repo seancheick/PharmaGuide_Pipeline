@@ -1293,16 +1293,37 @@
         "bladderwrack extract",
         "fucus",
         "fucus vesiculosus",
-        "sea wrack"
+        "sea wrack",
+        "bladderwrack",
+        "Bladderwrack",
+        "bladder wrack",
+        "Bladder Wrack",
+        "Fucus vesiculosus extract",
+        "bladder wrack extract",
+        "bladderwrack whole plant extract",
+        "Bladderwrack Whole Plant Extract",
+        "Fucus vesiculosus whole plant"
       ],
       "markers": [
         "fucoidan",
         "iodine"
       ],
+      "marker_compounds": [
+        "fucoidan",
+        "iodine"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Bladderwrack (Fucus vesiculosus) is bonus-eligible when the product label declares a measurable fucoidan or iodine % (e.g., 'standardized to 1% fucoidan' or a specified mcg/iodine claim). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Bladderwrack' identity without marker evidence still matches this entry for IDENTITY purposes but does NOT trigger A5b unless meets_threshold passes. Distinct species from generic brown kelp (Laminaria, UNII 4R2124HE76) and Ascophyllum nodosum rockweed (UNII 168S4EO8YJ).",
+      "sources": [
+        "NIH ODS Iodine factsheet (Fucus vesiculosus listed as natural iodine source): https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/",
+        "NCCIH Bladderwrack overview: https://www.nccih.nih.gov/health/seaweed",
+        "EFSA Scientific Opinion on the safety of fucoidan as a novel food (EFSA Panel on Nutrition 2017): https://www.efsa.europa.eu/en/efsajournal/pub/4814"
+      ],
       "priority": "medium",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-05-22",
       "id": "bladderwrack",
-      "notes": "Botanical ingredient standardized for fucoidan, iodine. Commonly used in dietary supplements.",
+      "notes": "Bladderwrack (Fucus vesiculosus). UNII 535G2ABX9M. Standardization markers: fucoidan (sulfated polysaccharide) and iodine (natural source, varies 100-1000 mcg/g dry weight). SB-3a §7.5/§8.5 cleanup 2026-05-22: alias family migrated here from IQM brown_kelp ('Bladder Wrack', 'Bladderwrack', 'Fucus vesiculosus', 'Fucus vesiculosus extract', 'bladder wrack extract', 'bladderwrack extract'). 'Bladderwrack Whole Plant Extract' added to cover Ora pid=259887 (Phase 1 Item 3 — that label was previously misrouting to brown_kelp generic-kelp pathway). Bonus pathway: marker_percent only when the label declares the standardization; plain 'Bladderwrack' identity matches but defers to meets_threshold gate.",
       "category": "herb",
       "external_ids": {
         "unii": "535G2ABX9M"
