@@ -53,4 +53,9 @@ def test_botanical_total_count_unchanged(botanicals):
     # were previously routing through standardized_botanicals.green_coffee_bean
     # without marker evidence. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md
     # and commit eff29b3d.
-    assert len(botanicals) == 483
+    # 487 after 2026-05-22 SB-3d brown-algae §7.5/§8.5 cleanup: split four
+    # species out of the previously over-broad kelp_powder entry —
+    # ecklonia_radiata (UNII QVY0X8DRIA), ecklonia_kurome (UNII 802YF989GT),
+    # laminaria_digitata (UNII 15E7C67EE8), saccharina_latissima
+    # (UNII 68CMP2MB55, formerly Laminaria saccharina). +4 entries.
+    assert len(botanicals) == 487
