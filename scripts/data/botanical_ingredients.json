@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 483,
+    "total_entries": 484,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1749,6 +1749,31 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "boswellia_carterii",
+      "standard_name": "Boswellia carterii",
+      "latin_name": "Boswellia carterii",
+      "aliases": [
+        "boswellia carterii",
+        "Boswellia carterii",
+        "frankincense extract",
+        "frankincense",
+        "Somali frankincense",
+        "Boswellia carterii resin"
+      ],
+      "category": "resin",
+      "notes": "Boswellia carterii (Burseraceae) oleo-gum resin — Somali frankincense. UNII R9XLF1R1WM. Distinct species from Boswellia serrata (Indian frankincense, UNII 4PW41QCO2M). B. carterii has a different boswellic-acid profile (lower KBA/AKBA, higher incensole acetate and α-pinene) and a longer history in aromatic / topical use than oral supplementation. Created 2026-05-22 via SB-4 §8.5 cleanup to host the 'frankincense extract' alias that was previously misplaced in standardized_botanicals.boswellia (which is species-precise to B. serrata). Identity only — no A5b bonus pathway. Most supplement labels saying 'Frankincense extract' in oral-supplement context are B. serrata; products carrying the explicit 'Boswellia carterii' Latin or 'Somali frankincense' wording should route here.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "R9XLF1R1WM"
+      },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false,
+        "bonus_eligible_companion": "standardized_botanicals.boswellia (B. serrata only — bonus pathway lives there)"
       }
     },
     {

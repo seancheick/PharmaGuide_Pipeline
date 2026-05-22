@@ -1429,12 +1429,11 @@
       "cui": "C1027331"
     },
     {
-      "standard_name": "Boswellia",
+      "standard_name": "Boswellia serrata",
       "aliases": [
         "boswellia serrata",
         "indian frankincense",
         "boswellia extract",
-        "frankincense extract",
         "boswellin",
         "boswellia resin",
         "indian frankincense resin",
@@ -1444,17 +1443,37 @@
         "joint shield",
         "joint shield 5-loxin",
         "boswellia serrata extract",
-        "Joint Shield 5-Loxin Advanced Bosclear Boswellia serrata extract"
+        "Joint Shield 5-Loxin Advanced Bosclear Boswellia serrata extract",
+        "boswellia serrata extract standardized to 65% boswellic acids",
+        "boswellia serrata extract standardized to 70% boswellic acids",
+        "boswellia extract standardized to boswellic acids",
+        "AKBA standardized boswellia extract",
+        "AprèsFlex"
       ],
       "markers": [
         "boswellic acids",
         "AKBA"
       ],
+      "marker_compounds": [
+        "boswellic acids",
+        "AKBA (3-acetyl-11-keto-beta-boswellic acid)",
+        "alpha-boswellic acid",
+        "beta-boswellic acid"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Boswellia serrata (UNII 4PW41QCO2M) is bonus-eligible when the product label declares a measurable boswellic-acid % (typically 65-70% total boswellic acids) OR a named branded standardized extract with documented marker profile: 5-Loxin / 5-Loxin Advanced (Sabinsa, ≥30% AKBA), Boswellin (Sabinsa, 65% boswellic acids), Bosclear, AprèsFlex (Laila Nutraceuticals, ≥20% AKBA). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Boswellia' identity without marker evidence still matches this entry but does NOT trigger A5b unless meets_threshold passes. Distinct species from Boswellia carterii (Somali frankincense, UNII R9XLF1R1WM) — that identity lives in botanical_ingredients.boswellia_carterii.",
+      "sources": [
+        "NCCIH Boswellia overview: https://www.nccih.nih.gov/health/boswellia",
+        "Abdel-Tawab et al. 2011 systematic review on boswellic acid pharmacology (PMID 21679876)",
+        "Sabinsa 5-Loxin / Boswellin product monographs (branded standardized extracts)",
+        "Sengupta et al. 2008 osteoarthritis RCT on 5-Loxin (PMID 18667066) — AKBA-standardized B. serrata"
+      ],
       "min_threshold": 65,
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "boswellia",
-      "notes": "Anti-inflammatory herb standardized for 65% boswellic acids (AKBA is key marker). Some extracts go to 70%.",
+      "notes": "Boswellia serrata (Burseraceae) gum resin. UNII 4PW41QCO2M. Anti-inflammatory herb. Standardization markers: total boswellic acids (typically 65-70%) plus AKBA (3-acetyl-11-keto-beta-boswellic acid) as the most active sub-marker (5-30% in branded extracts). SB-4 §8.5 cleanup 2026-05-22: refined standard_name from 'Boswellia' to species-precise 'Boswellia serrata'. Removed 'frankincense extract' alias (UNII R9XLF1R1WM = B. carterii, a different species) — that identity now lives in botanical_ingredients.boswellia_carterii. Added v6 contract fields per the bonus-eligibility governance landed in eff29b3d on main; added marker-explicit alias phrasings for direct matching of labels carrying the standardization claim. Branded extracts (5-Loxin, Joint Shield, Boswellin, Bosclear, AprèsFlex) retained — their formulation UNIIs differ from the species UNII but the species identity is B. serrata with documented marker profiles.",
       "category": "herb",
       "external_ids": {
         "unii": "4PW41QCO2M"

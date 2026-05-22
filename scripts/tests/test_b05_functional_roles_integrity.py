@@ -53,4 +53,9 @@ def test_botanical_total_count_unchanged(botanicals):
     # were previously routing through standardized_botanicals.green_coffee_bean
     # without marker evidence. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md
     # and commit eff29b3d.
-    assert len(botanicals) == 483
+    # 484 after 2026-05-22 SB-4 boswellia §8.5 cleanup: boswellia_carterii added
+    # — Somali frankincense (UNII R9XLF1R1WM), distinct species from B. serrata
+    # (UNII 4PW41QCO2M) that owns the bonus pathway in
+    # standardized_botanicals.boswellia. Migrated 'frankincense extract' alias
+    # out of the species-precise B. serrata entry into this plain identity home.
+    assert len(botanicals) == 484
