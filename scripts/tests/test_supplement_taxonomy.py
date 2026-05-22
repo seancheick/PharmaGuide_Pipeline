@@ -528,3 +528,36 @@ class TestSubstringCollisionGuards:
     def test_digestive_fiber_is_fiber(self):
         """Actual fiber product must still match."""
         assert self._classify("Digestive Fiber Supplement") == "fiber_digestive"
+
+    # --- Secondary type: negation awareness + multivitamin guard ---
+
+    def test_no_iron_multivitamin_secondary_is_none(self):
+        """'No Iron' multivitamins must not get secondary_type='iron'."""
+        p = {
+            "product_name": "One Daily Multi-Vitamin No Iron",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "A", "canonical_id": "vitamin_a", "category": "vitamins", "quantity": 5000, "unit": "IU"},
+                {"name": "C", "canonical_id": "vitamin_c", "category": "vitamins", "quantity": 60, "unit": "mg"},
+                {"name": "D", "canonical_id": "vitamin_d", "category": "vitamins", "quantity": 400, "unit": "IU"},
+                {"name": "B6", "canonical_id": "vitamin_b6", "category": "vitamins", "quantity": 10, "unit": "mg"},
+                {"name": "Folate", "canonical_id": "folate", "category": "vitamins", "quantity": 400, "unit": "mcg"},
+                {"name": "Ca", "canonical_id": "calcium", "category": "minerals", "quantity": 200, "unit": "mg"},
+                {"name": "Mg", "canonical_id": "magnesium", "category": "minerals", "quantity": 100, "unit": "mg"},
+                {"name": "Zn", "canonical_id": "zinc", "category": "minerals", "quantity": 15, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] == "multivitamin"
+        assert result["secondary_type"] is None
+
+    def test_negated_iron_not_secondary(self):
+        """'no iron' / 'without iron' / 'iron-free' must not set secondary_type='iron'."""
+        for name in ["No Iron Formula", "Without Iron Daily", "Iron-Free Prenatal"]:
+            p = {
+                "product_name": name,
+                "ingredient_quality_data": {"ingredients": [
+                    {"name": "X", "canonical_id": "maca", "category": "herbs", "quantity": 500, "unit": "mg"},
+                ]},
+            }
+            result = classify_supplement(p)
+            assert result["secondary_type"] != "iron", f"{name} got secondary_type=iron"

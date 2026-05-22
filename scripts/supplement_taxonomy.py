@@ -736,36 +736,55 @@ def _infer_secondary_type(
         if cid in _SECONDARY_TYPE_MAP:
             return _SECONDARY_TYPE_MAP[cid]
 
-    # For multi-ingredient, check name signals
-    name_secondary_map = {
-        "zinc": "zinc",
-        "magnesium": "magnesium",
-        "vitamin d": "vitamin_d",
-        "vitamin c": "vitamin_c",
-        "biotin": "biotin",
-        "ashwagandha": "ashwagandha",
-        "turmeric": "turmeric_curcumin",
-        "curcumin": "turmeric_curcumin",
-        "berberine": "berberine",
-        "elderberry": "elderberry",
-        "melatonin": "melatonin",
-        "collagen": "collagen",
-        "glucosamine": "glucosamine",
-        "quercetin": "quercetin",
-        "coq10": "coq10",
-        "iron": "iron",
-        "calcium": "calcium",
-        "selenium": "selenium",
-        "creatine": "creatine",
-    }
-    for token, stype in name_secondary_map.items():
-        if token in product_name:
-            return stype
+    # For multi-ingredient, check name signals.
+    # Skip for broad multivitamins — secondary_type should reflect the
+    # product's differentiator, not an arbitrary ingredient in the name.
+    if primary_type not in {"multivitamin"}:
+        name_secondary_map = {
+            "zinc": "zinc",
+            "magnesium": "magnesium",
+            "vitamin d": "vitamin_d",
+            "vitamin c": "vitamin_c",
+            "biotin": "biotin",
+            "ashwagandha": "ashwagandha",
+            "turmeric": "turmeric_curcumin",
+            "curcumin": "turmeric_curcumin",
+            "berberine": "berberine",
+            "elderberry": "elderberry",
+            "melatonin": "melatonin",
+            "collagen": "collagen",
+            "glucosamine": "glucosamine",
+            "quercetin": "quercetin",
+            "coq10": "coq10",
+            "iron": "iron",
+            "calcium": "calcium",
+            "selenium": "selenium",
+            "creatine": "creatine",
+        }
+        # Negation-aware: skip tokens preceded by "no ", "without ", or followed by "-free"
+        _NEGATION_PREFIXES = ("no ", "without ", "zero ", "free of ")
+        for token, stype in name_secondary_map.items():
+            if token not in product_name:
+                continue
+            # Check for negation context
+            idx = product_name.find(token)
+            negated = False
+            for neg in _NEGATION_PREFIXES:
+                if idx >= len(neg) and product_name[idx - len(neg):idx] == neg:
+                    negated = True
+                    break
+            if product_name[idx + len(token):idx + len(token) + 5].startswith("-free"):
+                negated = True
+            if not negated:
+                return stype
 
-    # For multi-ingredient, use first canonical ID if it maps
-    for cid in canonical_ids:
-        if cid in _SECONDARY_TYPE_MAP:
-            return _SECONDARY_TYPE_MAP[cid]
+    # For multi-ingredient (non-multivitamin), use first canonical ID if it maps.
+    # Multivitamins have too many ingredients — picking the first mapped one
+    # would be arbitrary and misleading.
+    if primary_type not in {"multivitamin"}:
+        for cid in canonical_ids:
+            if cid in _SECONDARY_TYPE_MAP:
+                return _SECONDARY_TYPE_MAP[cid]
 
     return None
 
