@@ -37,7 +37,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 239,
+    "total_entries": 240,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -6311,32 +6311,90 @@
       "cui": "C1081320"
     },
     {
-      "standard_name": "Sea Buckthorn",
+      "standard_name": "Sea Buckthorn Fruit Oil (Hippophae rhamnoides fruit oil)",
       "aliases": [
-        "hippophae rhamnoides",
-        "sea buckthorn berry",
-        "sea buckthorn oil",
-        "seaberry",
-        "sea buckthorn extract",
+        "hippophae rhamnoides fruit oil",
+        "sea buckthorn fruit oil",
         "seabuckthorn fruit oil",
-        "seabuckthorn oil",
-        "sea buckthorn fruit oil"
+        "sea buckthorn berry oil",
+        "sea buckthorn pulp oil",
+        "sea buckthorn fruit oil standardized to omega-7 palmitoleic acid",
+        "Hippophae rhamnoides fruit oil standardized to palmitoleic acid"
       ],
       "markers": [
-        "omega-7",
         "palmitoleic acid",
+        "omega-7",
+        "oleic acid",
         "carotenoids",
         "vitamin E"
       ],
       "priority": "medium",
       "category": "seed_fruit",
       "id": "sea_buckthorn",
-      "notes": "Berry rich in omega-7 fatty acids and antioxidants. Used for skin health and mucous membrane support.",
-      "last_updated": "2026-01-05",
-      "external_ids": {},
+      "notes": "Mesocarp/pulp oil of Hippophae rhamnoides fruit \u2014 fatty-acid profile dominated by palmitoleic acid (omega-7) and oleic acid (omega-9), plus carotenoids and tocopherols. UNII TA4JCF9S1J = HIPPOPHAE RHAMNOIDES FRUIT OIL (verified via scripts/data/fda_unii_cache.json). Part-ambiguous mentions ('sea buckthorn oil', 'seabuckthorn oil', 'sea buckthorn extract', 'seaberry') were removed from this entry per \u00a78.5 \u2014 they may refer to seed oil, which has materially different chemistry and lives under sea_buckthorn_seed_oil (UNII T53SBG6741). Plain juice/powder identity continues to live in botanical_ingredients.sea_buckthorn.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "TA4JCF9S1J"
+      },
       "cui": "C1013835",
       "min_threshold": 3,
-      "threshold_source": "3% omega-7 palmitoleic acid \u2014 berry/seed oil standard"
+      "threshold_source": "3% omega-7 palmitoleic acid \u2014 fruit oil standard",
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "marker_compounds": [
+        "palmitoleic acid (omega-7)",
+        "oleic acid (omega-9)",
+        "carotenoids (beta-carotene, zeaxanthin)",
+        "vitamin E (tocopherols + tocotrienols)"
+      ],
+      "bonus_rationale": "Hippophae rhamnoides fruit oil is commercially standardized to palmitoleic acid (omega-7) content (typically 3%+ for premium grades, with high-grade Siberian/Tibetan extracts at 30%+). Clinical literature on dry-eye, mucous-membrane, and cardiometabolic endpoints uses fruit-oil standardization. The marker_percent basis applies: bonus is granted only when the label proves measurable palmitoleic-acid/omega-7 percentage or quantified constituent standardization. The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text percentage detection at runtime.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/20429767/",
+        "https://pubmed.ncbi.nlm.nih.gov/24787677/",
+        "https://www.nccih.nih.gov/health/sea-buckthorn"
+      ]
+    },
+    {
+      "standard_name": "Sea Buckthorn Seed Oil (Hippophae rhamnoides seed oil)",
+      "aliases": [
+        "hippophae rhamnoides seed oil",
+        "sea buckthorn seed oil",
+        "seabuckthorn seed oil",
+        "sea buckthorn kernel oil",
+        "sea buckthorn seed oil standardized to alpha-linolenic acid",
+        "Hippophae rhamnoides seed oil standardized to linoleic and linolenic acids"
+      ],
+      "markers": [
+        "alpha-linolenic acid",
+        "linoleic acid",
+        "gamma-tocopherol",
+        "plant sterols"
+      ],
+      "priority": "medium",
+      "category": "seed_fruit",
+      "id": "sea_buckthorn_seed_oil",
+      "notes": "Seed/kernel oil of Hippophae rhamnoides \u2014 fatty-acid profile dominated by alpha-linolenic acid (omega-3) and linoleic acid (omega-6); NOT the palmitoleic-rich fruit oil. UNII T53SBG6741 = HIPPOPHAE RHAMNOIDES SEED OIL (verified via scripts/data/fda_unii_cache.json). Companion to sea_buckthorn (fruit oil, UNII TA4JCF9S1J). Part-ambiguous label text ('sea buckthorn oil') without seed-vs-fruit disambiguation maps to plain identity in botanical_ingredients.sea_buckthorn (no bonus).",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "T53SBG6741"
+      },
+      "cui": "C1013835",
+      "min_threshold": 30,
+      "threshold_source": "30%+ combined alpha-linolenic + linoleic acid \u2014 seed oil standard",
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "marker_compounds": [
+        "alpha-linolenic acid (omega-3)",
+        "linoleic acid (omega-6)",
+        "gamma-tocopherol",
+        "plant sterols (beta-sitosterol)"
+      ],
+      "bonus_rationale": "Hippophae rhamnoides seed oil is standardized to its essential-fatty-acid profile (combined alpha-linolenic + linoleic acids typically 60%+ of total fatty acids) and gamma-tocopherol content. Clinical literature on inflammatory and dermatological endpoints uses seed-oil-specific standardization. The marker_percent basis applies: bonus is granted only when the label proves measurable EFA percentage or quantified constituent standardization. The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text percentage detection at runtime.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/19883366/",
+        "https://pubmed.ncbi.nlm.nih.gov/18689548/",
+        "https://www.nccih.nih.gov/health/sea-buckthorn"
+      ]
     },
     {
       "standard_name": "Setria",
