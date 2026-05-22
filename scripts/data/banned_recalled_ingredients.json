@@ -16787,12 +16787,17 @@
         "talcum powder",
         "cosmetic talc",
         "magnesium silicate",
+        "magnesium silicate hydroxide",
+        "Magnesium Silicate Hydroxide",
+        "silicate hydroxide",
+        "Silicate Hydroxide",
         "ci 77718",
         "c.i. 77718",
         "talc (e553b)",
         "e553b",
         "french chalk",
-        "hydrous magnesium silicate"
+        "hydrous magnesium silicate",
+        "hydrated magnesium silicate"
       ],
       "reason": "Talc used in cosmetics and other consumer products can be contaminated with asbestos, a known human carcinogen (IARC Group 1). FDA's 2019 sampling of talc-containing cosmetics found asbestos in 9 of 52 products, triggering public safety alerts and voluntary recalls coordinated with the agency. Separately, IARC has reclassified talc itself as 'probably carcinogenic to humans' (Group 2A, upgraded from 2B) when not containing asbestos, further elevating concern. The primary supplement-relevant hazard is contaminant risk — asbestos and other impurities — rather than pure pharmaceutical-grade talc per se. Many supplement manufacturers do not conduct adequate asbestos-free certificate-of-analysis testing.",
       "status": "high_risk",
