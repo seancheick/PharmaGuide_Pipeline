@@ -6959,13 +6959,18 @@
       "cui": "C0330897"
     },
     {
-      "standard_name": "Turkey Tail",
+      "standard_name": "Turkey Tail (Trametes versicolor)",
       "aliases": [
         "trametes versicolor",
         "turkey tail mushroom",
         "coriolus versicolor",
         "PSK",
-        "PSP"
+        "PSP",
+        "polysaccharopeptide",
+        "krestin",
+        "yun zhi",
+        "turkey tail extract standardized to 30% polysaccharides",
+        "Trametes versicolor extract standardized to polysaccharide krestin (PSK)"
       ],
       "markers": [
         "polysaccharides",
@@ -6974,13 +6979,30 @@
         "beta-glucans"
       ],
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "turkey_tail",
-      "notes": "Immune support mushroom standardized for 30%+ polysaccharides (PSK, PSP).",
+      "notes": "Immune support mushroom standardized for 30%+ polysaccharides (PSK, PSP). UNII 2YD82VN5CM = TRAMETES VERSICOLOR WHOLE (verified via scripts/data/fda_unii_cache.json). Strain-specific UNII 26BE3YVD39 (CM-101) and fruiting-body UNII 4C900477MT are preparation variants. The 'PSK' and 'PSP' abbreviations collide with unrelated protein UNIIs (XY526V7HUL, LQ0G3D3X8F) in the FDA registry — those are NOT polysaccharide fractions; PSK/PSP here refer to the Trametes versicolor polysaccharide fractions (krestin, polysaccharide peptide / Yun zhi).",
       "category": "mushroom",
       "min_threshold": 30,
-      "external_ids": {},
-      "cui": "C0319805"
+      "external_ids": {
+        "unii": "2YD82VN5CM"
+      },
+      "cui": "C0319805",
+      "bonus_eligible": true,
+      "standardization_basis": "mushroom_fraction",
+      "marker_compounds": [
+        "polysaccharides",
+        "beta-glucans",
+        "PSK (polysaccharide krestin / krestin)",
+        "PSP (polysaccharide peptide / Yun zhi)",
+        "polysaccharopeptide"
+      ],
+      "bonus_rationale": "Trametes versicolor extracts are clinically and commercially standardized to polysaccharide-fraction content (typically 30%+ polysaccharides; isolated fractions PSK and PSP have decades of oncology-adjunct evidence in Japan and China). The mushroom_fraction basis applies: bonus is granted only when the label proves measurable polysaccharide/PSK/PSP percentage, branded fraction (Krestin/Yun zhi), or quantified constituent standardization. The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text percentage detection at runtime.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/22972503/",
+        "https://www.cancer.gov/about-cancer/treatment/cam/hp/mushrooms-pdq",
+        "https://www.nccih.nih.gov/health/mushrooms-medicinal"
+      ]
     },
     {
       "standard_name": "Turmeric",
