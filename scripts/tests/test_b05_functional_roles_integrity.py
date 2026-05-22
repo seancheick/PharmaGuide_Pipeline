@@ -63,4 +63,9 @@ def test_botanical_total_count_unchanged(botanicals):
     # (UNII 4PW41QCO2M) that owns the bonus pathway in
     # standardized_botanicals.boswellia. Migrated 'frankincense extract' alias
     # out of the species-precise B. serrata entry into this plain identity home.
-    assert len(botanicals) == 488
+    # 486 after merge-time dedup: ecklonia_radiata and ecklonia_kurome were
+    # added as stubs (no UNII) in 2026-04 Sprint D2 (commit c0e1450f) and
+    # then re-added as proper canonicals with UNIIs in SB-3d. The merge
+    # of sb/3d into main retained both copies. The stub copies were dropped
+    # in favor of the SB-3d UNII-bearing canonicals. Net: -2 entries.
+    assert len(botanicals) == 486

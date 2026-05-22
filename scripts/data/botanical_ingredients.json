@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 488,
+    "total_entries": 486,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -14459,53 +14459,6 @@
       "external_ids": {},
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Phaseolus lunatus at supplement-ingredient level; track governed-null per protocol.",
-      "functional_roles": [],
-      "attributes": {
-        "source_origin": "plant"
-      }
-    },
-    {
-      "id": "ecklonia_radiata",
-      "standard_name": "Ecklonia radiata",
-      "genus": "Ecklonia",
-      "species": "radiata",
-      "family": "Lessoniaceae",
-      "plant_part": "whole",
-      "aliases": [
-        "ecklonia radiata",
-        "ecklonia radiata extract",
-        "organic ecklonia radiata"
-      ],
-      "category": "botanical",
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed single UMLS concept for Ecklonia radiata; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Ecklonia radiata \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
-      "added_by": "sprint_d2.5",
-      "last_updated": "2026-04-20",
-      "external_ids": {},
-      "functional_roles": [],
-      "attributes": {
-        "source_origin": "plant"
-      }
-    },
-    {
-      "id": "ecklonia_kurome",
-      "standard_name": "Ecklonia kurome",
-      "genus": "Ecklonia",
-      "species": "kurome",
-      "family": "Lessoniaceae",
-      "plant_part": "whole",
-      "aliases": [
-        "ecklonia kurome",
-        "ecklonia kurome extract"
-      ],
-      "category": "botanical",
-      "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed single UMLS concept for Ecklonia kurome; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Ecklonia kurome \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
-      "added_by": "sprint_d2.5",
-      "last_updated": "2026-04-20",
-      "external_ids": {},
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

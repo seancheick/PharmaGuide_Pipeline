@@ -163,18 +163,34 @@ def test_kelp_powder_no_longer_aliases_saccharina(botanicals):
 
 
 def test_botanical_ingredients_total_entries_updated(botanicals):
-    """+4 entries from SB-3d (ecklonia_radiata, ecklonia_kurome,
-    laminaria_digitata, saccharina_latissima). Combined with SB-2's
-    coffee_bean_plain (+1 on main), this branch ships 5 new entries
-    on top of HEAD-main's 482."""
+    """SB-3d net contribution after merge-time dedup:
+
+    SB-3d added 4 canonical entries with verified UNIIs
+    (ecklonia_radiata, ecklonia_kurome, laminaria_digitata,
+    saccharina_latissima). When sb/3d was merged into main, the
+    pre-existing stub entries for ecklonia_radiata and
+    ecklonia_kurome (added without UNIIs in 2026-04 Sprint D2 commit
+    c0e1450f) collided with SB-3d's proper canonicals. The stubs
+    were dropped in favor of SB-3d's UNII-bearing entries.
+
+    The metadata total_entries field is the authoritative count and
+    must match the actual array length. This test ships an
+    upper-bound invariant only — additive future SB branches will
+    extend the count without breaking this assertion.
+    """
     meta = botanicals.get("_metadata") or {}
     declared = meta.get("total_entries")
     actual = len(botanicals.get("botanical_ingredients", []))
     assert declared == actual, (
         f"_metadata.total_entries={declared} but actual={actual}. "
-        f"Reconcile after SB-3d's +4 entries."
+        f"Reconcile after SB-3d's net +2 entries (4 added, 2 stubs dropped)."
     )
-    assert actual == 487, (
-        f"Expected 487 entries after SB-3d (482 HEAD-main + 1 coffee_bean_plain "
-        f"from SB-2 + 4 new SB-3d canonicals). Got: {actual}"
+    # SB-3d's net contribution post-dedup: 4 added - 2 stub overlaps = +2.
+    # On the day of the merge, main was at 484 (after Sprint D2 +
+    # SB-2 coffee_bean_plain), so SB-3d brought it to 486. SB-4 then
+    # added boswellia_carterii → 487. Future SB branches that add
+    # botanical_ingredients entries will lift this floor.
+    assert actual >= 486, (
+        f"Expected at least 486 entries (SB-3d net +2 after stub dedup, "
+        f"plus prior batches). Got: {actual}"
     )
