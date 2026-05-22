@@ -40,10 +40,10 @@
       "fda_canonical_name": "MARITIME PINE",
       "entries": [
         {"file": "ingredient_quality_map.json", "entry_id": "pine_bark_extract"},
-        {"file": "standardized_botanicals.json", "entry_id": "pine_bark_extract"},
+        {"file": "botanical_ingredients.json", "entry_id": "pine_bark_extract"},
         {"file": "standardized_botanicals.json", "entry_id": "pycnogenol"}
       ],
-      "rationale": "All maritime pine (Pinus pinaster) bark extract. Pycnogenol is the Horphag-branded standardized form. IQM wins for active scoring.",
+      "rationale": "All maritime pine (Pinus pinaster) bark extract. Pycnogenol is the Horphag-branded standardized form. IQM wins for active scoring. 2026-05-22: pine_bark_extract relocated from standardized_botanicals to botanical_ingredients (plain identity, no bonus) per MO-3; std-side pycnogenol retains the branded bonus pathway.",
       "added_by": "unii_triage_2026_05_14"
     },
     {
