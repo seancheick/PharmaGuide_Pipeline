@@ -628,8 +628,6 @@ class MatchLedgerBuilder:
                 # Legacy (use scorable_coverage for gates)
                 "coverage_percent": scorable_coverage,
                 "entries": domain_entries,
-                # Backward-compatible alias for older downstream readers.
-                "records": domain_entries,
             }
 
         # Calculate overall summary

@@ -539,6 +539,11 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             primary_type = "joint_support"
             confidence = 0.9
             reasons.append(f"single joint-support ingredient: {cid}")
+        elif cid in _COLLAGEN_IDS:
+            # Collagen before protein — collagen is a specific protein subset
+            primary_type = "collagen"
+            confidence = 0.9
+            reasons.append(f"collagen: {cid}")
         elif cid in _PROTEIN_IDS or cat == "protein":
             primary_type = "protein_powder"
             confidence = 0.9
@@ -559,10 +564,6 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             primary_type = "herbal_botanical"
             confidence = 0.9
             reasons.append(f"single herbal/botanical: {cid or cat}")
-        elif cid in _COLLAGEN_IDS:
-            primary_type = "collagen"
-            confidence = 0.9
-            reasons.append(f"collagen: {cid}")
         else:
             primary_type = "general_supplement"
             confidence = 0.5
