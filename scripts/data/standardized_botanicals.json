@@ -2264,15 +2264,22 @@
       "cui": "C1382883"
     },
     {
-      "standard_name": "Cordyceps",
+      "standard_name": "Cordyceps sinensis",
       "aliases": [
         "cordyceps extract",
-        "cordyceps militaris",
         "cordyceps mushroom extract",
         "cordyceps sinensis",
+        "Cordyceps sinensis",
+        "ophiocordyceps sinensis",
+        "Ophiocordyceps sinensis",
         "cs-4",
+        "CS-4",
         "cordyceps mycelium",
-        "caterpillar fungus"
+        "caterpillar fungus",
+        "cordyceps sinensis extract standardized to 40% polysaccharides",
+        "cordyceps sinensis extract standardized to beta-glucans",
+        "cordyceps sinensis extract standardized to adenosine",
+        "Cordyceps sinensis CS-4 fermented mycelium"
       ],
       "markers": [
         "cordycepin",
@@ -2280,14 +2287,75 @@
         "polysaccharides",
         "beta-glucans"
       ],
+      "marker_compounds": [
+        "polysaccharides",
+        "beta-glucans",
+        "adenosine",
+        "cordycepic acid (D-mannitol)",
+        "cordycepin (low in C. sinensis vs C. militaris)"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "mushroom_fraction",
+      "bonus_rationale": "Cordyceps sinensis (Ophiocordyceps sinensis, UNII 8Q1GYP08KU) is bonus-eligible when the product label declares polysaccharides % (typical 40%+ — the historical Chinese pharmacopeial standard), beta-glucans %, adenosine %, or names the CS-4 fermented-mycelium variant (Paecilomyces hepiali Cs-4, UNII 821RF3P03C — used in most clinical trials due to wild C. sinensis being unsustainable). Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Cordyceps' identity matches but defers to meets_threshold. Bonus pathway is species-specific to C. sinensis — Cordyceps militaris (UNII J617U5X7NN) is a different species with a cordycepin-focused marker profile and lives in standardized_botanicals.cordyceps_militaris.",
+      "sources": [
+        "NCCIH Cordyceps overview: https://www.nccih.nih.gov/health/cordyceps",
+        "Holliday & Cleaver 2008 review on Cordyceps sinensis / CS-4 pharmacology (PMID 18197785)",
+        "Chen et al. 2010 RCT on CS-4 fermented mycelium for exercise performance (PMID 20578760)",
+        "Chinese Pharmacopoeia 2020 Cordyceps sinensis monograph (40% polysaccharides minimum spec)"
+      ],
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "cordyceps",
-      "notes": "Performance mushroom standardized for cordycepin (0.1%+) or polysaccharides (40%+).",
+      "notes": "Cordyceps sinensis / Ophiocordyceps sinensis (Ophiocordycipitaceae). UNII 8Q1GYP08KU. Performance / adaptogenic mushroom. Standardization markers: polysaccharides (40%+ Chinese-pharmacopeial standard) plus adenosine. Note that cordycepin (3'-deoxyadenosine, UNII GZ8VF4M2J8) is LOW in C. sinensis — high-cordycepin products are typically C. militaris. SB-10 §8.5 species split 2026-05-22: closed the missing-UNII gap (set external_ids.unii=8Q1GYP08KU); refined standard_name to 'Cordyceps sinensis'; removed 'cordyceps militaris' alias (different species, UNII J617U5X7NN, now lives in companion standardized_botanicals.cordyceps_militaris entry); added v6 contract fields + marker-explicit alias phrasings + CS-4 fermented-mycelium alias variants.",
+      "category": "mushroom",
+      "min_threshold": 40,
+      "external_ids": {
+        "unii": "8Q1GYP08KU"
+      },
+      "cui": "C1011843"
+    },
+    {
+      "standard_name": "Cordyceps militaris",
+      "aliases": [
+        "cordyceps militaris",
+        "Cordyceps militaris",
+        "c. militaris",
+        "C. militaris",
+        "cordyceps militaris extract",
+        "Cordyceps militaris extract",
+        "cordyceps militaris extract standardized to 0.1% cordycepin",
+        "cordyceps militaris extract standardized to 0.3% cordycepin",
+        "cordyceps militaris extract standardized to cordycepin",
+        "cordyceps militaris fruiting body extract"
+      ],
+      "markers": [
+        "cordycepin",
+        "beta-glucans",
+        "adenosine"
+      ],
+      "marker_compounds": [
+        "cordycepin (3'-deoxyadenosine)",
+        "beta-glucans",
+        "adenosine",
+        "polysaccharides"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Cordyceps militaris (UNII J617U5X7NN) is bonus-eligible when the product label declares a measurable cordycepin % (typical 0.1-0.3%) — cordycepin is C. militaris's signature bioactive and the source of most ergogenic-supplement clinical interest. Beta-glucans % is the secondary marker pathway. Distinct species from Cordyceps sinensis (UNII 8Q1GYP08KU), which is polysaccharide-focused; C. militaris is commercially cultivable and contains higher cordycepin than wild C. sinensis. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate. Plain 'Cordyceps militaris' identity matches but defers to meets_threshold.",
+      "sources": [
+        "Hirsch et al. 2017 RCT on Cordyceps militaris fruiting body for high-intensity exercise (PMID 28012484)",
+        "Tuli et al. 2014 review on cordycepin pharmacology and bioavailability (PMID 23538328)",
+        "PerformanceMushrooms / Real Mushrooms C. militaris monograph (fruiting-body extract standardized to cordycepin)"
+      ],
+      "priority": "high",
+      "last_updated": "2026-05-22",
+      "id": "cordyceps_militaris",
+      "notes": "Cordyceps militaris (Cordycipitaceae). UNII J617U5X7NN. Commercially cultivable performance mushroom with high cordycepin content compared to wild C. sinensis. Created 2026-05-22 via SB-10 §8.5 cleanup to host the 'cordyceps militaris' alias that previously co-existed with C. sinensis under one entry. Distinct standardization basis (cordycepin %) vs companion standardized_botanicals.cordyceps entry (polysaccharides %, beta-glucans).",
       "category": "mushroom",
       "min_threshold": 0.1,
-      "external_ids": {},
-      "cui": "C1011843"
+      "external_ids": {
+        "unii": "J617U5X7NN"
+      }
     },
     {
       "standard_name": "Cran-Max",
