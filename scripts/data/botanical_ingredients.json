@@ -156,8 +156,7 @@
       "cui": "C1033652",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -199,8 +198,7 @@
       "cui": "C1669961",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -379,8 +377,7 @@
       "rxcui": "259473",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -810,8 +807,7 @@
       "rxcui": "18451",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "algal",
-        "bonus_eligible": false
+        "source_origin": "algal"
       }
     },
     {
@@ -979,8 +975,7 @@
       "cui": "C1084996",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -1037,8 +1032,7 @@
       "cui": "C0004755",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -1152,8 +1146,7 @@
       "rxcui": "253157",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "animal",
-        "bonus_eligible": false
+        "source_origin": "animal"
       }
     },
     {
@@ -1421,8 +1414,7 @@
       "rxcui": "259511",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -1553,8 +1545,7 @@
       "cui": "C2800341",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -1627,8 +1618,7 @@
       "cui": "C0946894",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -1708,8 +1698,7 @@
       "cui": "C2740597",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -1836,8 +1825,7 @@
       "rxcui": "1310848",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "algal",
-        "bonus_eligible": false
+        "source_origin": "algal"
       }
     },
     {
@@ -2058,9 +2046,7 @@
       },
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false,
-        "bonus_eligible_companion": "standardized_botanicals.boswellia (B. serrata only \u2014 bonus pathway lives there)"
+        "source_origin": "plant"
       }
     },
     {
@@ -2560,8 +2546,7 @@
       "cui": "C2293178",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -2649,8 +2634,7 @@
       "cui": "C0331053",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -3105,8 +3089,7 @@
       "cui": "C0331586",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -3583,8 +3566,7 @@
       "rxcui": "285245",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -3665,8 +3647,7 @@
       "cui": "C1038769",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -3922,9 +3903,7 @@
       },
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false,
-        "bonus_eligible_companion": "standardized_botanicals.green_coffee_bean (marker-percent / Svetol-branded bonus pathway)"
+        "source_origin": "plant"
       }
     },
     {
@@ -4480,8 +4459,7 @@
       "rxcui": "6633",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "synthetic_or_natural",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -4504,8 +4482,7 @@
       "rxcui": "1591919",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -4992,8 +4969,7 @@
       "rxcui": "317808",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -5478,8 +5454,7 @@
       "cui": "C0023753",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -5677,8 +5652,7 @@
       "cui": "C1086344",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "algal",
-        "bonus_eligible": false
+        "source_origin": "algal"
       }
     },
     {
@@ -6314,8 +6288,7 @@
       "rxcui": "1306130",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -7208,8 +7181,7 @@
       "cui": "C0331745",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -7304,8 +7276,7 @@
       "rxcui": "2267703",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "synthetic_or_natural",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -7484,8 +7455,7 @@
       "cui": "C0021936",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8012,8 +7982,7 @@
       "rxcui": "38022",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "synthetic_or_natural",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8057,8 +8026,7 @@
       "rxcui": "1307716",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8084,8 +8052,7 @@
       "cui": "C1001731",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "fungal",
-        "bonus_eligible": false
+        "source_origin": "fungal"
       }
     },
     {
@@ -8106,8 +8073,7 @@
       "cui": "C1254223",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8129,8 +8095,7 @@
       "cui": "C1136294",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8152,8 +8117,7 @@
       "cui": "C0996829",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8175,8 +8139,7 @@
       "rxcui": "1370469",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8191,8 +8154,7 @@
       "external_ids": {},
       "functional_roles": [],
       "attributes": {
-        "source_origin": "blend",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8216,8 +8178,7 @@
       "rxcui": "89959",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "synthetic_or_natural",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8239,8 +8200,7 @@
       "rxcui": "1368708",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8262,8 +8222,7 @@
       "cui": "C0997031",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -8284,8 +8243,7 @@
       "cui": "C1030673",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -11961,8 +11919,7 @@
       "cui": "C0376238",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -12405,8 +12362,7 @@
       "cui": "C0066936",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "mineral",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -12498,8 +12454,7 @@
       "cui": "C0330532",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -12617,8 +12572,7 @@
       "cui": "C4076257",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
@@ -12641,8 +12595,7 @@
       "rxcui": "901317",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant",
-        "bonus_eligible": false
+        "source_origin": "plant"
       }
     },
     {
