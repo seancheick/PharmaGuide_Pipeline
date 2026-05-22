@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 521,
+    "total_entries": 529,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1015,6 +1015,28 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "barley_grass",
+      "standard_name": "Barley Grass",
+      "latin_name": "Hordeum vulgare (young grass)",
+      "aliases": [
+        "hordeum vulgare",
+        "barley grass powder",
+        "barley grass extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for chlorophyll. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "86507VZR9K"
+      },
+      "cui": "C0004755",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -3540,6 +3562,30 @@
       }
     },
     {
+      "id": "cinnamon",
+      "standard_name": "Cinnamon",
+      "latin_name": "Cinnamomum spp. (generic)",
+      "aliases": [
+        "cinnamomum verum",
+        "ceylon cinnamon",
+        "cinnamomum cassia",
+        "cinnamon bark extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  Generic Cinnamomum identity (separate from bot.cinnamon_bark which is C. cassia bark UNII WS4CQ062KM, and bot.ceylon_cinnamon which is C. verum). Products mentioning unspecified 'cinnamon' route here; products with species specifications route to the species-precise entries.Botanical ingredient standardized for polyphenols, cinnamaldehyde. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "5S29HWU6QB"
+      },
+      "cui": "C0939899",
+      "rxcui": "285245",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "cinnamon_bark",
       "standard_name": "Cinnamon Bark",
       "latin_name": "Cinnamomum cassia",
@@ -3595,6 +3641,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "cistanche",
+      "standard_name": "Cistanche",
+      "latin_name": "Cistanche tubulosa",
+      "aliases": [
+        "cistanche tubulosa",
+        "cistanche deserticola",
+        "rou cong rong",
+        "desert hyacinth",
+        "cistanche extract"
+      ],
+      "category": "adaptogen",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  C. tubulosa-specific UNII set. C. deserticola (different species, UNII LM25W02G91 WHOLE) intentionally NOT promoted on this entry \u2014 species-split deferred to future batch if/when products surface specifically labeling C. deserticola.Traditional Chinese medicine herb used for energy and vitality. Standardized for echinacoside content.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "863KM6AO0R"
+      },
+      "cui": "C1038769",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -5384,6 +5454,29 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "flaxseed",
+      "standard_name": "Flaxseed",
+      "latin_name": "Linum usitatissimum",
+      "aliases": [
+        "linum usitatissimum",
+        "flaxseed oil",
+        "flaxseed extract",
+        "ground flaxseed"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for lignans, alpha-linolenic acid. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "310OJT00CG"
+      },
+      "cui": "C0023753",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7943,6 +8036,29 @@
       }
     },
     {
+      "id": "linden_flower",
+      "standard_name": "Linden Flower",
+      "latin_name": "Tilia cordata (flower)",
+      "aliases": [
+        "tilia cordata",
+        "tilia platyphyllos",
+        "linden flower extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  Tilia cordata flower-specific identity (UNII CFN6G1F6YK). Separate from bot.linden which is the broader genus-level identity.Botanical ingredient standardized for flavonoids, volatile oils. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "CFN6G1F6YK"
+      },
+      "cui": "C0771627",
+      "rxcui": "1307716",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "lion_s_mane",
       "standard_name": "Lion's Mane",
       "latin_name": "Hericium erinaceus",
@@ -8057,6 +8173,22 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "organic_gold_standard_potentiating_nutrients",
+      "standard_name": "Organic Gold Standard Potentiating Nutrients",
+      "aliases": [
+        "Organic Gold Standard Potentiating Nutrients"
+      ],
+      "category": "proprietary_blend",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  Proprietary BLEND, NOT a single-ingredient brand. Std entry's own notes say 'Insufficient public data for standardization markers'. Moved to bot as display-only identity catch-all. category=proprietary_blend. Will not earn the A5b bonus by design \u2014 individual brand entries should be created if/when the underlying blend composition is documented.Proprietary blend \u2014 not a single-ingredient brand. Insufficient public data for standardization markers.",
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "blend",
         "bonus_eligible": false
       }
     },
@@ -12249,6 +12381,32 @@
       }
     },
     {
+      "id": "shilajit",
+      "standard_name": "Shilajit",
+      "aliases": [
+        "shilajit extract",
+        "mumijo",
+        "mineral pitch",
+        "asphaltum punjabinum",
+        "primavie",
+        "asphaltum punjabianum",
+        "asphaltum"
+      ],
+      "category": "mineral_exudate",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway.  Mineral exudate (fulvic/humic acid complex from Himalayan rocks); not a botanical species. No FDA UNII (mineral mixture, not a discrete substance). category=mineral_exudate. Plain identity only.Himalayan mineral resin standardized for fulvic acid (50%+). Used in Ayurveda for energy and rejuvenation.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "cas": "479-66-3",
+        "pubchem_cid": 5359407
+      },
+      "cui": "C0066936",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "mineral",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "sichuan_lovage",
       "standard_name": "Sichuan Lovage",
       "latin_name": "Ligusticum chuanxiong",
@@ -12433,6 +12591,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "soy_isoflavones",
+      "standard_name": "Soy Isoflavones",
+      "latin_name": "Glycine max (isoflavone fraction)",
+      "aliases": [
+        "glycine max",
+        "soy extract",
+        "soy isoflavone extract"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for isoflavones, genistein. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "71B37NR06D",
+        "cas": "331752-69-3",
+        "pubchem_cid": 70267806
+      },
+      "cui": "C4076257",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {

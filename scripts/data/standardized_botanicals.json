@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 185,
+    "total_entries": 177,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -587,37 +587,6 @@
         "metabolites": []
       },
       "cui": "C1059156"
-    },
-    {
-      "standard_name": "Barley Grass",
-      "aliases": [
-        "hordeum vulgare",
-        "barley grass powder",
-        "barley grass extract"
-      ],
-      "markers": [
-        "chlorophyll"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "barley_grass",
-      "notes": "Botanical ingredient standardized for chlorophyll. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "86507VZR9K"
-      },
-      "gsrs": {
-        "substance_name": "HORDEUM VULGARE TOP",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0004755"
     },
     {
       "standard_name": "Beetroot",
@@ -1547,41 +1516,6 @@
       ]
     },
     {
-      "standard_name": "Cinnamon",
-      "aliases": [
-        "cinnamomum verum",
-        "ceylon cinnamon",
-        "cinnamomum cassia",
-        "cinnamon bark extract"
-      ],
-      "markers": [
-        "polyphenols",
-        "cinnamaldehyde"
-      ],
-      "min_threshold": 10,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "cinnamon",
-      "notes": "Botanical ingredient standardized for polyphenols, cinnamaldehyde. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "5S29HWU6QB"
-      },
-      "rxcui": "285245",
-      "gsrs": {
-        "substance_name": "CINNAMON",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 1035,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Cinnamon | 1578 (Number of products:1035)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0939899"
-    },
-    {
       "standard_name": "Cinnamon Bark Essential Oil",
       "aliases": [
         "cinnamon bark essential oil",
@@ -1651,29 +1585,6 @@
       "cui": "C1078516",
       "min_threshold": 2.5,
       "threshold_source": "2.5% ketosteroids \u2014 3-Keto-beta-sitosterol standard"
-    },
-    {
-      "standard_name": "Cistanche",
-      "aliases": [
-        "cistanche tubulosa",
-        "cistanche deserticola",
-        "rou cong rong",
-        "desert hyacinth",
-        "cistanche extract"
-      ],
-      "markers": [
-        "echinacoside",
-        "acteoside",
-        "phenylethanoid glycosides"
-      ],
-      "priority": "medium",
-      "min_threshold": 10,
-      "category": "adaptogen",
-      "id": "cistanche",
-      "notes": "Traditional Chinese medicine herb used for energy and vitality. Standardized for echinacoside content.",
-      "last_updated": "2026-01-05",
-      "external_ids": {},
-      "cui": "C1038769"
     },
     {
       "standard_name": "Citrus Bergamot Extract",
@@ -2560,27 +2471,6 @@
         "metabolites": []
       },
       "cui": "C0697198"
-    },
-    {
-      "standard_name": "Flaxseed",
-      "aliases": [
-        "linum usitatissimum",
-        "flaxseed oil",
-        "flaxseed extract",
-        "ground flaxseed"
-      ],
-      "markers": [
-        "lignans",
-        "alpha-linolenic acid"
-      ],
-      "priority": "high",
-      "min_threshold": 40,
-      "last_updated": "2025-11-17",
-      "id": "flaxseed",
-      "notes": "Botanical ingredient standardized for lignans, alpha-linolenic acid. Commonly used in dietary supplements.",
-      "category": "seed_fruit",
-      "external_ids": {},
-      "cui": "C0023753"
     },
     {
       "standard_name": "FloraGLO",
@@ -3767,39 +3657,6 @@
       ]
     },
     {
-      "standard_name": "Linden Flower",
-      "aliases": [
-        "tilia cordata",
-        "tilia platyphyllos",
-        "linden flower extract"
-      ],
-      "markers": [
-        "flavonoids",
-        "volatile oils"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "linden_flower",
-      "notes": "Botanical ingredient standardized for flavonoids, volatile oils. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "CFN6G1F6YK"
-      },
-      "rxcui": "1307716",
-      "gsrs": {
-        "substance_name": "TILIA CORDATA FLOWER",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0771627"
-    },
-    {
       "standard_name": "Lutemax 2020",
       "aliases": [
         "Lutemax 2020",
@@ -4399,23 +4256,6 @@
         "https://pubmed.ncbi.nlm.nih.gov/15050362/",
         "https://pubmed.ncbi.nlm.nih.gov/16219800/"
       ]
-    },
-    {
-      "standard_name": "Organic Gold Standard Potentiating Nutrients",
-      "aliases": [
-        "Organic Gold Standard Potentiating Nutrients"
-      ],
-      "markers": [],
-      "priority": "medium",
-      "last_updated": "2026-01-05",
-      "id": "organic_gold_standard_potentiating_nutrients",
-      "notes": "Proprietary blend \u2014 not a single-ingredient brand. Insufficient public data for standardization markers.",
-      "category": "blend",
-      "external_ids": {},
-      "data_quality": "stub",
-      "attributes": {
-        "no_iqm_parent_reason": "Proprietary blend \u2014 no clean parent target; defer per-entry analysis"
-      }
     },
     {
       "standard_name": "Pacran",
@@ -5475,34 +5315,6 @@
       "cui": "C0752328"
     },
     {
-      "standard_name": "Shilajit",
-      "aliases": [
-        "shilajit extract",
-        "mumijo",
-        "mineral pitch",
-        "asphaltum punjabinum",
-        "primavie",
-        "asphaltum punjabianum",
-        "asphaltum"
-      ],
-      "markers": [
-        "fulvic acid",
-        "dibenzo-alpha-pyrones",
-        "humic acid"
-      ],
-      "priority": "high",
-      "min_threshold": 50,
-      "category": "adaptogen",
-      "id": "shilajit",
-      "notes": "Himalayan mineral resin standardized for fulvic acid (50%+). Used in Ayurveda for energy and rejuvenation.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "cas": "479-66-3",
-        "pubchem_cid": 5359407
-      },
-      "cui": "C0066936"
-    },
-    {
       "standard_name": "Shogaols",
       "aliases": [
         "shogaols",
@@ -5601,43 +5413,6 @@
       "external_ids": {},
       "data_quality": "complete",
       "branded_form": true
-    },
-    {
-      "standard_name": "Soy Isoflavones",
-      "aliases": [
-        "glycine max",
-        "soy extract",
-        "soy isoflavone extract"
-      ],
-      "markers": [
-        "isoflavones",
-        "genistein",
-        "daidzein",
-        "glycitein"
-      ],
-      "min_threshold": 40,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "soy_isoflavones",
-      "notes": "Botanical ingredient standardized for isoflavones, genistein. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "71B37NR06D",
-        "cas": "331752-69-3",
-        "pubchem_cid": 70267806
-      },
-      "gsrs": {
-        "substance_name": "SOY ISOFLAVONES",
-        "substance_class": "mixture",
-        "cfr_sections": [],
-        "dsld_count": 28,
-        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Soy Isoflavones | 1744 (Number of products:28)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C4076257"
     },
     {
       "standard_name": "Spirulina",

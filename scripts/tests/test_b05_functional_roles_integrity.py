@@ -97,4 +97,12 @@ def test_botanical_total_count_unchanged(botanicals):
     # akarkara (E3L74Y262L), horsetail (1L0VKZ185E), muira_puama
     # (G582QI158H), rosehip (P5R39F12N2), lion_s_mane (Y62T8P9AAP —
     # fungal), camu_camu (EAG5BC91EK — 15 aliases).
-    assert len(botanicals) == 521
+    # 529 after 2026-05-22 MO-6 final batch: 8 special-case relocations
+    # closing the 89-entry NO-marker queue. Moved: barley_grass
+    # (86507VZR9K), cinnamon (5S29HWU6QB), flaxseed (310OJT00CG — NEW),
+    # linden_flower (CFN6G1F6YK), shilajit (no UNII — mineral exudate),
+    # soy_isoflavones (71B37NR06D), cistanche (863KM6AO0R — NEW; C.
+    # deserticola deferred to species-split batch), and
+    # organic_gold_standard_potentiating_nutrients (proprietary blend
+    # display-only catch-all).
+    assert len(botanicals) == 529
