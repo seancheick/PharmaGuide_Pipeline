@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 206,
+    "total_entries": 199,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -1424,26 +1424,6 @@
       "cui": "C0939876"
     },
     {
-      "standard_name": "Catuaba",
-      "aliases": [
-        "catuaba bark",
-        "catuaba bark extract",
-        "erythroxylum catuaba",
-        "trichilia catigua"
-      ],
-      "markers": [
-        "flavonoids",
-        "alkaloids"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "catuaba",
-      "notes": "Botanical ingredient standardized for flavonoids, alkaloids. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C0874042"
-    },
-    {
       "standard_name": "Celery",
       "aliases": [
         "apium graveolens",
@@ -1991,44 +1971,6 @@
       "category": "fruit",
       "external_ids": {},
       "branded_form": true
-    },
-    {
-      "standard_name": "Cranberry",
-      "aliases": [
-        "vaccinium macrocarpon",
-        "cranberry extract",
-        "cranberry fruit extract",
-        "american cranberry",
-        "cranberry juice concentrate",
-        "urophenol"
-      ],
-      "markers": [
-        "PACs",
-        "proanthocyanidins",
-        "A-type proanthocyanidins"
-      ],
-      "min_threshold": 36,
-      "priority": "high",
-      "last_updated": "2026-01-15",
-      "id": "cranberry",
-      "notes": "UTI prevention berry standardized for 36mg PACs per dose (A-type proanthocyanidins).",
-      "category": "seed_fruit",
-      "external_ids": {
-        "unii": "0MVO31Q3QS"
-      },
-      "rxcui": "125933",
-      "gsrs": {
-        "substance_name": "CRANBERRY",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 1736,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|cranberry | 47 (Number of products:1736)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C2740793"
     },
     {
       "standard_name": "CranRx",
@@ -3141,37 +3083,6 @@
       "cui": "C3256816"
     },
     {
-      "standard_name": "Graviola",
-      "aliases": [
-        "annona muricata",
-        "soursop",
-        "soursop extract"
-      ],
-      "markers": [
-        "acetogenins"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "graviola",
-      "notes": "Botanical ingredient standardized for acetogenins. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "AN924793RM"
-      },
-      "gsrs": {
-        "substance_name": "ANNONA MURICATA WHOLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C1000635"
-    },
-    {
       "standard_name": "Green Coffee Bean",
       "aliases": [
         "coffea canephora robusta",
@@ -4133,40 +4044,6 @@
       "cui": "C1145747"
     },
     {
-      "standard_name": "Marshmallow Root",
-      "aliases": [
-        "althaea",
-        "althaea officinalis",
-        "marsh mallow",
-        "marshmallow root extract"
-      ],
-      "markers": [
-        "mucilage",
-        "polysaccharides"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "marshmallow_root",
-      "notes": "Botanical ingredient standardized for mucilage, polysaccharides. Commonly used in dietary supplements.",
-      "category": "herb_root_bark",
-      "external_ids": {
-        "unii": "TRW2FUF47H"
-      },
-      "rxcui": "1306165",
-      "gsrs": {
-        "substance_name": "ALTHAEA OFFICINALIS ROOT",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0873109"
-    },
-    {
       "standard_name": "MicroActive Melatonin",
       "aliases": [
         "MicroActive Melatonin"
@@ -4376,28 +4253,6 @@
       "cui": "C0330540",
       "min_threshold": 1,
       "threshold_source": "1% DNJ \u2014 standard white mulberry extract"
-    },
-    {
-      "standard_name": "Mullein",
-      "aliases": [
-        "common mullein",
-        "mullein extract",
-        "mullein leaf extract",
-        "standardized mullein",
-        "verbascum thapsus"
-      ],
-      "markers": [
-        "verbascoside"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "mullein",
-      "notes": "Botanical ingredient standardized for verbascoside. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "C9TD27U172"
-      },
-      "cui": "C0885014"
     },
     {
       "standard_name": "Nettle (Urtica dioica)",
@@ -5416,30 +5271,6 @@
       "cui": "C0696940",
       "min_threshold": 5,
       "threshold_source": "5% salvianolic acid B \u2014 Chinese Pharmacopoeia"
-    },
-    {
-      "standard_name": "Sarsaparilla",
-      "aliases": [
-        "sarsaparilla extract",
-        "sarsaparilla root extract",
-        "smilax extract",
-        "smilax officinalis",
-        "smilax ornata"
-      ],
-      "markers": [
-        "saponins",
-        "steroidal saponins",
-        "steroidal_saponins"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "sarsaparilla",
-      "notes": "Botanical ingredient standardized for saponins, steroidal saponins. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "2H1576D5WG"
-      },
-      "cui": "C1014795"
     },
     {
       "standard_name": "Saw Palmetto",
@@ -6555,27 +6386,6 @@
       "min_threshold": 1,
       "external_ids": {},
       "cui": "C3256110"
-    },
-    {
-      "standard_name": "Yucca",
-      "aliases": [
-        "mojave yucca",
-        "yucca extract",
-        "yucca root",
-        "yucca schidigera"
-      ],
-      "markers": [
-        "saponins"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "yucca",
-      "notes": "Botanical ingredient standardized for saponins. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "08A0YG3VIC"
-      },
-      "cui": "C0872917"
     }
   ]
 }

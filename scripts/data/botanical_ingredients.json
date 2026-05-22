@@ -2820,8 +2820,8 @@
         "trichilia catigua"
       ],
       "category": "herb",
-      "notes": "Trichilia catigua (Meliaceae) bark. Brazilian traditional aphrodisiac and nervine tonic. Note: 'catuaba' refers to multiple unrelated species (Erythroxylum, Anemopaegma). This entry covers Trichilia catigua bark.",
-      "last_updated": "2026-03-01",
+      "notes": "Trichilia catigua (Meliaceae) bark. Brazilian traditional aphrodisiac and nervine tonic. Note: 'catuaba' refers to multiple unrelated species (Erythroxylum, Anemopaegma). This entry covers Trichilia catigua bark. [DM-2 2026-05-22] Deleted std-side duplicate (no new aliases to merge).",
+      "last_updated": "2026-05-22",
       "external_ids": {},
       "cui": "C0874042",
       "functional_roles": [],
@@ -4088,11 +4088,15 @@
         "Flowens Cranberry fruit solids",
         "Cranberry Whole Fruit Concentrate",
         "whole cranberry fruit concentrate",
-        "Vaccinium macrocarpon"
+        "Vaccinium macrocarpon",
+        "cranberry extract",
+        "cranberry fruit extract",
+        "american cranberry",
+        "cranberry juice concentrate"
       ],
       "category": "fruit",
-      "notes": "Vaccinium macrocarpon (Ericaceae) fruit. Contains type-A proanthocyanidins (PACs) with anti-adhesion activity against E. coli uropathogenic strains. RCT evidence for UTI prevention (PMID 23440782).",
-      "last_updated": "2026-03-01",
+      "notes": "Vaccinium macrocarpon (Ericaceae) fruit. Contains type-A proanthocyanidins (PACs) with anti-adhesion activity against E. coli uropathogenic strains. RCT evidence for UTI prevention (PMID 23440782). [DM-2 2026-05-22] Merged 4 alias(es): ['cranberry extract', 'cranberry fruit extract', 'american cranberry', 'cranberry juice concentrate']. Dropped (filtered): ['urophenol'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "0MVO31Q3QS"
       },
@@ -6160,11 +6164,12 @@
         "graviola extract",
         "soursop",
         "annona muricata",
-        "guanabana"
+        "guanabana",
+        "soursop extract"
       ],
       "category": "leaf",
-      "notes": "Annona muricata (Annonaceae) leaf. Soursop/graviola containing annonaceous acetogenins. Neurotoxicity concern from annonacin (atypical parkinsonism, PMID 15269786). Traditional tropical remedy.",
-      "last_updated": "2026-03-01",
+      "notes": "Annona muricata (Annonaceae) leaf. Soursop/graviola containing annonaceous acetogenins. Neurotoxicity concern from annonacin (atypical parkinsonism, PMID 15269786). Traditional tropical remedy. [DM-2 2026-05-22] Merged 1 alias(es): ['soursop extract']. UNII choice: kept bot's 5EI0SM9VVE (ANNONA MURICATA FRUIT) over std's AN924793RM (ANNONA MURICATA WHOLE) \u2014 'graviola' specifically refers to the fruit/soursop.",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "5EI0SM9VVE"
       },
@@ -8826,11 +8831,14 @@
         "marshmallow",
         "wild crafted marshmallow",
         "Marshmallow extract",
-        "Althaea officinalis"
+        "Althaea officinalis",
+        "althaea",
+        "marsh mallow",
+        "marshmallow root extract"
       ],
       "category": "root",
-      "notes": "Althaea officinalis (Malvaceae) root. Contains mucilage polysaccharides (up to 35% dry weight). European HMPC-approved for dry cough and mild GI inflammation. Traditional demulcent herb.",
-      "last_updated": "2026-03-01",
+      "notes": "Althaea officinalis (Malvaceae) root. Contains mucilage polysaccharides (up to 35% dry weight). European HMPC-approved for dry cough and mild GI inflammation. Traditional demulcent herb. [DM-2 2026-05-22] Merged 3 alias(es): ['althaea', 'marsh mallow', 'marshmallow root extract'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "TRW2FUF47H"
       },
@@ -9271,11 +9279,14 @@
         "common mullein",
         "mullein leaf",
         "mullein flower",
-        "wild crafted mullein"
+        "wild crafted mullein",
+        "mullein extract",
+        "mullein leaf extract",
+        "standardized mullein"
       ],
       "category": "leaf",
-      "notes": "Verbascum thapsus (Scrophulariaceae) leaf. Contains mucilage, saponins (verbascosaponin), and iridoids. Traditional respiratory demulcent and expectorant. European HMPC-approved for cough.",
-      "last_updated": "2026-03-01",
+      "notes": "Verbascum thapsus (Scrophulariaceae) leaf. Contains mucilage, saponins (verbascosaponin), and iridoids. Traditional respiratory demulcent and expectorant. European HMPC-approved for cough. [DM-2 2026-05-22] Merged 3 alias(es): ['mullein extract', 'mullein leaf extract', 'standardized mullein'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "C9TD27U172"
       },
@@ -11714,11 +11725,14 @@
         "sarsaparilla",
         "sarsaparilla root",
         "sarsaparilla root extract",
-        "jamaican sarsaparilla"
+        "jamaican sarsaparilla",
+        "sarsaparilla extract",
+        "smilax extract",
+        "smilax officinalis"
       ],
       "category": "root",
-      "notes": "Smilax ornata (Smilacaceae) root \u2014 Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species \u2014 S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01.",
-      "last_updated": "2026-05-01",
+      "notes": "Smilax ornata (Smilacaceae) root \u2014 Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species \u2014 S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01. [DM-2 2026-05-22] Merged 3 alias(es): ['sarsaparilla extract', 'smilax extract', 'smilax officinalis'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "2H1576D5WG"
       },
@@ -14170,11 +14184,13 @@
         "yucca extract",
         "mojave yucca root extract",
         "yucca 4:1 extract",
-        "Yucca schidigera"
+        "Yucca schidigera",
+        "mojave yucca",
+        "yucca root"
       ],
       "category": "root",
-      "notes": "Yucca schidigera (Asparagaceae) root/stem. Mojave yucca containing steroidal saponins (sarsasapogenin, smilagenin). Traditional anti-arthritic and anti-inflammatory. Used in pet supplements too.",
-      "last_updated": "2026-03-01",
+      "notes": "Yucca schidigera (Asparagaceae) root/stem. Mojave yucca containing steroidal saponins (sarsasapogenin, smilagenin). Traditional anti-arthritic and anti-inflammatory. Used in pet supplements too. [DM-2 2026-05-22] Merged 2 alias(es): ['mojave yucca', 'yucca root'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "08A0YG3VIC"
       },
