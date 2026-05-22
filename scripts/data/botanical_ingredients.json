@@ -7238,19 +7238,16 @@
     {
       "id": "kelp_powder",
       "standard_name": "Kelp Powder",
-      "latin_name": "Laminaria digitata",
+      "latin_name": "Ascophyllum nodosum",
       "aliases": [
         "laminaria powder",
         "ascophyllum nodosum powder",
-        "bladderwrack powder",
         "brown algae",
         "laminaria digitata",
         "Kelp Leaf, Stem Extract",
-        "brown kelp undaria pinnatifida powder",
         "Kelp",
         "ecklonia radiata",
         "ecklonia kurome",
-        "alaria esculenta",
         "icelandic kelp",
         "kelp extract",
         "organic kelp",
@@ -7262,8 +7259,8 @@
         "rockweed"
       ],
       "category": "seaweed",
-      "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 \u00b5g/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
-      "last_updated": "2026-04-20",
+      "notes": "Ascophyllum nodosum (Fucaceae) thallus \u2014 Atlantic rockweed / Norwegian kelp. UNII 168S4EO8YJ. Brown seaweed naturally rich in iodine (varies widely; verify per-product testing) plus phlorotannins, fucoidan, and alginate polysaccharides. SB-3c \u00a77.5/\u00a78.5 cleanup 2026-05-22: realigned latin_name from 'Laminaria digitata' (a different species, UNII 15E7C67EE8) to 'Ascophyllum nodosum' to match this entry's UNII. Removed 3 misplaced aliases (bladderwrack powder \u2192 standardized_botanicals.bladderwrack; brown kelp undaria pinnatifida powder duplicate \u2192 wakame already owns it; alaria esculenta duplicate \u2192 alaria_esculenta entry already owns it). Remaining aliases that belong to other species ('laminaria powder', 'laminaria digitata', 'Laminaria saccharina', 'Laminaria saccharina, Powder', 'ecklonia radiata', 'ecklonia kurome', 'brown algae') are deferred to SB-3d, which will create new canonical entries for Laminaria digitata, Saccharina latissima, and Ecklonia spp.",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "168S4EO8YJ"
       },
