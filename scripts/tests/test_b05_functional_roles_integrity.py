@@ -48,4 +48,9 @@ def test_botanical_total_count_unchanged(botanicals):
     # 482 after Phase 8: marigold (Tagetes erecta) added — source botanical for
     # lutein marker contribution. Previously implicit via IQM marigold aliases
     # under lutein.forms[]; now an explicit botanical canonical per policy.
-    assert len(botanicals) == 482
+    # 483 after 2026-05-22 standardized_botanicals v6 cleanup: coffee_bean_plain
+    # added — plain coffee bean / seed identity for unstandardized labels that
+    # were previously routing through standardized_botanicals.green_coffee_bean
+    # without marker evidence. See scripts/audits/standardized_botanicals_eligibility_20260522/REPORT.md
+    # and commit eff29b3d.
+    assert len(botanicals) == 483
