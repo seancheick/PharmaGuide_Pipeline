@@ -230,56 +230,64 @@
     {
       "term_normalized": "d-mannose",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "d mannose",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "mannose",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "d-mannose powder",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "d mannose powder",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "mannose powder",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "pure d-mannose",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     },
     {
       "term_normalized": "pure d mannose",
       "db_pairs": [
-        "harmful:iqm"
+        "harmful:iqm",
+        "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     }

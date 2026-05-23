@@ -123,6 +123,27 @@ def _collect_allowlisted_harmful_iqm_terms() -> set[str]:
     return allowed
 
 
+def _collect_allowlisted_harmful_botanical_terms() -> set[str]:
+    """Mirror of _collect_allowlisted_harmful_iqm_terms for the
+    harmful_additives ↔ botanical_ingredients overlap axis. Added 2026-05-23
+    after MO-2 moved d_mannose from standardized_botanicals to
+    botanical_ingredients, creating a legitimate dual-use overlap (UTI active
+    in botanical_ingredients; bulking sweetener in harmful_additives). The
+    enricher's active-source penalty suppression resolves the conflict at
+    runtime per cross_db_overlap_allowlist._metadata.routing_policy."""
+    allow = _load_json("cross_db_overlap_allowlist.json").get("allowed_overlaps", [])
+    allowed = set()
+    for row in allow:
+        if not isinstance(row, dict):
+            continue
+        pairs = row.get("db_pairs") or []
+        if "harmful:botanical" in pairs:
+            term = _norm(str(row.get("term_normalized", "")))
+            if term:
+                allowed.add(term)
+    return allowed
+
+
 def test_banned_terms_do_not_overlap_scoring_or_identity_maps():
     banned_db = _load_json("banned_recalled_ingredients.json")
     # Legacy corpus layout support: this test originally targeted the
@@ -168,7 +189,14 @@ def test_harmful_iqm_overlap_is_explicitly_allowlisted():
     harmful_iqm_overlap = harmful_terms & iqm_terms
     unknown = harmful_iqm_overlap - allowlisted
 
-    assert not (harmful_terms & botanical_terms), "Harmful additives overlap botanical map terms."
+    harmful_botanical_overlap = harmful_terms & botanical_terms
+    botanical_allowlisted = _collect_allowlisted_harmful_botanical_terms()
+    unknown_botanical = harmful_botanical_overlap - botanical_allowlisted
+
+    assert not unknown_botanical, (
+        "New harmful↔botanical overlap terms found without explicit allowlist review: "
+        f"{sorted(unknown_botanical)}"
+    )
     assert not unknown, (
         "New harmful↔IQM overlap terms found without explicit allowlist review: "
         f"{sorted(unknown)}"

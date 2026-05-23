@@ -225,13 +225,24 @@ def test_b5_multivitamin_opaque_amplified_to_13x(scorer: SupplementScorer) -> No
     assert penalty == pytest.approx(_v3_penalty_for_opaque() * 1.3, rel=1e-6)
 
 
-def test_b5_prenatal_by_name_uses_multi_class(scorer: SupplementScorer) -> None:
-    """A product named 'Prenatal …' that classifies as `specialty` (small
-    active count) still routes to multi_or_prenatal — the safety/dose-
-    expectation profile matches a multivitamin, not a single-target spec."""
+def test_b5_prenatal_multivit_with_panel_uses_multi_class(scorer: SupplementScorer) -> None:
+    """A genuine prenatal multivitamin (primary_category='multivitamin')
+    routes to multi_or_prenatal (1.3x) — the safety/dose-expectation
+    profile of a vitamin/mineral panel justifies the tier.
+
+    Updated 2026-05-23: the legacy "prenatal name keyword alone routes
+    multi" override (former Priority 5 of _b5_class_for_product) was
+    retired because it mis-classified single-active prenatal omegas and
+    probiotic-marketed-as-prenatal products. To trigger multi_or_prenatal,
+    the product now needs a real multi-vitamin signal — primary_type=
+    multivitamin (Priority 4) or primary_category=multivitamin (Priority 6
+    legacy fallback). See test_b5_prenatal_dha_omega_routes_generic_not_multi
+    for the inverse case.
+    """
     product = _product(
         blends=[_opaque_blend()],
         supp_type="specialty",
+        primary_category="multivitamin",
         product_name="Prenatal Multivitamin DHA",
     )
     flags: List[str] = []
@@ -409,10 +420,18 @@ def test_class_router_multivitamin(scorer: SupplementScorer) -> None:
     assert scorer._b5_class_for_product(_product([], supp_type="multivitamin")) == "multi_or_prenatal"
 
 
-def test_class_router_prenatal_name_override(scorer: SupplementScorer) -> None:
+def test_class_router_prenatal_name_alone_does_not_override(scorer: SupplementScorer) -> None:
+    """Locked 2026-05-23: a "Prenatal Care DHA"-style product with no
+    multi-vitamin panel (supp_type=specialty, no primary_category=
+    multivitamin) routes to `generic`, NOT `multi_or_prenatal`. The legacy
+    prenatal-name-keyword override (former Priority 5 of
+    _b5_class_for_product) was retired because it mis-rated single-active
+    prenatal omegas and probiotic-marketed-as-prenatal products. Genuine
+    prenatal multivitamins still route correctly via primary_type or
+    primary_category."""
     assert scorer._b5_class_for_product(
         _product([], supp_type="specialty", product_name="Prenatal Care DHA")
-    ) == "multi_or_prenatal"
+    ) == "generic"
 
 
 def test_class_router_sports_pre_workout(scorer: SupplementScorer) -> None:

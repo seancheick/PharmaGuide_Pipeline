@@ -111,11 +111,22 @@ def test_probiotic_taxonomy_beats_prenatal_name(scorer):
     assert scorer._b5_class_for_product(product) == "probiotic"
 
 
-def test_prenatal_name_overrides_omega_3_taxonomy(scorer):
-    """Prenatal DHA: taxonomy classifies as omega_3 but the prenatal use
-    case has stricter opacity expectations than fish oil — route to multi."""
+def test_prenatal_dha_keeps_omega_3_b5_class(scorer):
+    """Prenatal DHA: structurally a single-active omega-3 product, not a
+    multi-vitamin panel. Even though the name carries "Prenatal", the
+    product has no vitamin/mineral panel — B5 should route to `generic`
+    (the omega opacity tier), not `multi_or_prenatal`.
+
+    Policy change 2026-05-23: the prior expectation that any "Prenatal"
+    keyword override the omega taxonomy into multi_or_prenatal was retired.
+    It mis-rated single-active prenatal omegas and probiotic-marketed-as-
+    prenatal products. Real prenatal multivitamins carry
+    primary_type="multivitamin" and still route correctly via Priority 4.
+    Locked alongside test_v4_canary_coverage canary 74124 (Nordic Prenatal
+    DHA → generic).
+    """
     product = _product(primary_type="omega_3", product_name="Prenatal DHA Gummies")
-    assert scorer._b5_class_for_product(product) == "multi_or_prenatal"
+    assert scorer._b5_class_for_product(product) == "generic"
 
 
 # --- Old-batch fallback (no taxonomy field at all) ---

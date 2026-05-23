@@ -2364,10 +2364,19 @@ class SupplementScorer:
         re.IGNORECASE,
     )
     _B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES = {
+        # DB canonical (underscore form): what build_final_db stores in
+        # products_core.primary_category — must take precedence so the
+        # override fires for shipped products. Added 2026-05-23.
+        "omega_3",
+        "protein_powder",
+        "collagen",
+        "joint_support",
+        "fiber_digestive",
+        # Legacy / display forms (hyphen + space): kept for backcompat with
+        # older enriched batches that haven't been re-built yet.
         "omega-3",
         "omega 3",
         "protein",
-        "collagen",
         "enzyme",
         "enzymes",
     }
@@ -2429,8 +2438,17 @@ class SupplementScorer:
 
         primary_category = str(product.get("primary_category") or "").strip().lower()
 
-        # Priority 3: legacy GENERIC_OVERRIDE safety net. Kept active so
-        # any future taxonomy mis-classification still routes correctly.
+        # Priority 3: GENERIC_OVERRIDE safety net. Routes products with a
+        # narrow primary identity (omega / protein / collagen / joint /
+        # enzyme / fiber) to the 1.0x generic opacity tier.
+        #
+        # The `not _B5_PRENATAL_KEYWORDS` suppression on the keyword path
+        # is INTENTIONAL: a genuine "Prenatal Multivitamin DHA" should
+        # match Priority 6 (primary_category=multivitamin) below, not be
+        # short-circuited to generic by the DHA keyword. Single-active
+        # "Prenatal DHA"-style products instead match via the
+        # primary_category set ('omega_3', etc., now in DB format) — that
+        # branch is NOT suppressed by the prenatal keyword.
         if (
             primary_category in self._B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES
             or (
@@ -2444,9 +2462,16 @@ class SupplementScorer:
         if primary_type in ("multivitamin", "b_complex"):
             return "multi_or_prenatal"
 
-        # Priority 5: prenatal name keyword -> multi.
-        if self._B5_PRENATAL_KEYWORDS.search(name_text):
-            return "multi_or_prenatal"
+        # Priority 5 (RETIRED 2026-05-23): the prenatal-keyword-only
+        # override ("if name has 'prenatal' → multi_or_prenatal") was
+        # retired by product policy. It mis-routed probiotic-marketed-as-
+        # prenatal (274081 Garden Once Daily Prenatal, has product-level
+        # CFU evidence and no multi panel) and single-active prenatal
+        # omegas (74124 Nordic Prenatal DHA, where B5 has no blends).
+        # Genuine prenatal multivitamins carry primary_category=
+        # multivitamin and are still caught by Priority 6 below.
+        # Locked by test_v4_canary_coverage::test_canary_expected_b5_class_matches_router
+        # and test_v3_b5_class_taxonomy_migration::test_prenatal_dha_keeps_omega_3_b5_class.
 
         # Priority 6: legacy fallback for old batches without taxonomy.
         if supp_type in self._MULTI_TYPES:
