@@ -635,6 +635,116 @@ class SupplementScorer:
         ):
             return "excipient_only_no_active"
 
+        # ── Step 3b: expanded reporting-only vocab ─────────────────────────
+        # No scoring change; the verdict is still NOT_SCORED. These reasons
+        # refine the 440-product residual that previously fell into
+        # 'strict_contract_all_candidates_rejected'. Precedence rationale
+        # documented in test_not_scored_truthful_diagnostics.py
+        # TestStep3bExpandedReasonVocab.
+
+        # 3b.1 — standardized botanical anchor (product-level, highest signal).
+        # Wave-6 "Standardized Botanical Anchor" scoring slice target.
+        formulation = product.get("formulation_data") or {}
+        std_bots = formulation.get("standardized_botanicals") or []
+        if any(
+            isinstance(sb, dict) and sb.get("meets_threshold") is True
+            for sb in std_bots
+        ):
+            return "standardized_botanical_no_scorable_anchor"
+
+        # 3b.2 — source DB explicitly marked the row as needing IQM relocation.
+        # Small-IQM-batch candidate.
+        if any(
+            row.get("recognition_reason") == "active_pending_relocation"
+            for row in rows
+        ):
+            return "active_pending_relocation_iqm_gap"
+
+        # 3b.3 — Tocotrienols 50 mg / 203189 pattern. Product name carries the
+        # dose, label row has unit=NP.
+        if any(
+            row.get("skip_reason") == "blend_header_without_dosage"
+            or "blend_header_without_dosage" in text
+            for row, text in zip(rows, row_texts)
+        ):
+            return "blend_dose_in_product_name_only"
+
+        # 3b.4 — Glucomannan / Fiber Fusion / Whey Protein: every row is a
+        # macro/nutrition-fact rollup. Legitimately fail-closed for bioactive
+        # scoring.
+        if all(
+            ("excluded_nutrition_fact" in text)
+            or ("nutrition_fact" in text)
+            for text in row_texts
+        ):
+            return "macro_only_product"
+
+        # 3b.5 / 3b.6 — blend header with vs without identity.
+        # A header carrying a real canonical_id / standard_name (e.g.
+        # "Turmeric") is a Bucket-A scoring-slice target. A generic
+        # "Proprietary Blend" header without identity is genuinely opaque.
+        GENERIC_BLEND_NAMES = {
+            "",
+            "proprietary blend",
+            "blend",
+            "complex",
+            "matrix",
+            "formula",
+            "proprietary",
+        }
+
+        def _is_header(row: Dict[str, Any], text: str) -> bool:
+            return (
+                bool(row.get("is_blend_header"))
+                or bool(row.get("blend_total_weight_only"))
+                or "blend_header_total" in text
+            )
+
+        if any(_is_header(r, t) for r, t in zip(rows, row_texts)):
+            for row, text in zip(rows, row_texts):
+                if not _is_header(row, text):
+                    continue
+                canon = norm_text(row.get("canonical_id") or "")
+                std = norm_text(row.get("standard_name") or "")
+                if canon:
+                    return "blend_header_primary_active_not_scored"
+                if std and std not in GENERIC_BLEND_NAMES:
+                    return "blend_header_primary_active_not_scored"
+            return "blend_total_no_scorable_identity"
+
+        # 3b.7 — every row is recognized as a plant by part (root/leaf/herb/…)
+        # via botanical_ingredients or standardized_botanicals, without IQM
+        # rule and without meets_threshold (the anchor case is handled above).
+        # Wave-6 plain-botanical scoring-design candidate.
+        def _is_botanical(row: Dict[str, Any]) -> bool:
+            src = norm_text(row.get("recognition_source") or "")
+            db = norm_text(row.get("canonical_source_db") or "")
+            return (
+                "botanical_ingredients" in src
+                or "standardized_botanicals" in src
+                or "botanical_ingredients" in db
+                or "standardized_botanicals" in db
+            )
+
+        if all(_is_botanical(row) for row in rows):
+            return "plain_botanical_no_iqm_rule"
+
+        # 3b.8 — gummy multivit pattern. Every row has no usable dose
+        # (qty <= 0 or unit in {NP, unspecified, n/a, none, ""}).
+        NON_DOSE_UNITS = {"", "np", "n/a", "na", "none", "0", "unspecified"}
+
+        def _row_has_no_dose(row: Dict[str, Any]) -> bool:
+            q = row.get("quantity")
+            try:
+                qf = float(q) if q is not None else 0
+            except (TypeError, ValueError):
+                qf = 0
+            unit_norm = norm_text(row.get("unit") or row.get("unit_normalized") or "")
+            return qf <= 0 or unit_norm in NON_DOSE_UNITS
+
+        if all(_row_has_no_dose(row) for row in rows):
+            return "label_dose_not_declared"
+
         return None
 
     def _mapping_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:

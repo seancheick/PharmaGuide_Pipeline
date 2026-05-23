@@ -266,6 +266,14 @@ class TestSpecificNotScoredReasonVocab:
         assert result["not_scorable_reason"] == "carrier_oil_only"
 
     def test_nutrition_fact_only_is_not_mislabeled_as_carrier_oil(self, scorer):
+        """Negative guard against the carrier_oil_only over-classification.
+
+        Note: after step 3b shipped, a single Dietary Fiber row IS legitimately
+        macro_only_product (the macro-only-product rule subsumes this case).
+        The point of this test is to verify the row never gets mislabeled as
+        carrier_oil_only just because it sits in the same area of the
+        diagnostic precedence tree.
+        """
         product = _make_rejected_with_rows(
             _rejected_row(
                 name="Dietary Fiber",
@@ -283,7 +291,8 @@ class TestSpecificNotScoredReasonVocab:
         result = scorer.score_product(product)
 
         assert result["verdict"] == "NOT_SCORED"
-        assert result["not_scorable_reason"] == "strict_contract_all_candidates_rejected"
+        assert result["not_scorable_reason"] != "carrier_oil_only"
+        assert result["not_scorable_reason"] == "macro_only_product"
 
     def test_safety_flagged_substance_gets_specific_reason_if_mapping_gate_reaches_it(
         self, scorer
@@ -391,3 +400,284 @@ class TestSpecificNotScoredReasonVocab:
             result["not_scorable_reason"]
             == "blend_header_primary_with_absorption_enhancer_only"
         )
+
+
+# ---------------------------------------------------------------------------
+# Step 3b — expanded reporting-only vocab.
+#
+# Refines the 440-product residual in the step-1 catch-all
+# 'strict_contract_all_candidates_rejected' into per-pattern diagnostic
+# strings so downstream gates and the Flutter app can distinguish a real
+# scoring-anchor gap from a genuinely-correct fail-closed. No scoring
+# change; verdict and score remain NOT_SCORED / None for every case below.
+#
+# Deterministic precedence (after the step-3a checks already in place):
+#   1. standardized_botanical_no_scorable_anchor  (highest signal — product-level)
+#   2. active_pending_relocation_iqm_gap
+#   3. blend_dose_in_product_name_only            (specific row reason)
+#   4. macro_only_product
+#   5. blend_header_primary_active_not_scored     (header has identity)
+#   6. blend_total_no_scorable_identity           (header lacks identity)
+#   7. plain_botanical_no_iqm_rule
+#   8. label_dose_not_declared
+#   → falls through to 'strict_contract_all_candidates_rejected'
+# ---------------------------------------------------------------------------
+
+
+class TestStep3bExpandedReasonVocab:
+    def test_standardized_botanical_anchor_takes_precedence_when_meets_threshold(
+        self, scorer
+    ):
+        """Product with empty scorable but validated meets_threshold standardized
+        botanical evidence — even if the rejected rows look like plain blend
+        headers or plain botanicals, the anchor signal wins because it's the
+        most informative diagnostic and unlocks the Wave-6 scoring slice."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Curcumin C3 Complex",
+                standard_name="Turmeric",
+                recognized_non_scorable=False,
+                skip_reason="blend_header_total_weight_only",
+                score_exclusion_reason="blend_header_total",
+                recognition_source=None,
+                recognition_reason=None,
+                is_blend_header=True,
+                blend_total_weight_only=True,
+            ),
+        )
+        product["formulation_data"]["standardized_botanicals"] = [
+            {
+                "name": "Curcumin C3 Complex",
+                "standard_name": "Turmeric",
+                "meets_threshold": True,
+            }
+        ]
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "standardized_botanical_no_scorable_anchor"
+
+    def test_active_pending_relocation_marker_emits_iqm_gap_reason(self, scorer):
+        """Source DB explicitly flags this ingredient as needing IQM relocation.
+        Bucket-B audit candidate for the small IQM batch slice."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Cayenne Pepper",
+                standard_name="Chili Pepper",
+                recognition_source="other_ingredients",
+                recognition_reason="active_pending_relocation",
+                canonical_source_db="botanical_ingredients",
+            )
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "active_pending_relocation_iqm_gap"
+
+    def test_blend_header_without_dosage_emits_product_name_only_reason(self, scorer):
+        """Tocotrienols 50 mg / 203189 pattern — product name carries the dose
+        but the label row has unit=NP."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Tocotrienol-Tocopherol Complex",
+                standard_name="Vitamin E",
+                quantity=0.0,
+                unit="NP",
+                recognized_non_scorable=False,
+                skip_reason="blend_header_without_dosage",
+                score_exclusion_reason="blend_header_without_dosage",
+                recognition_source=None,
+                recognition_reason=None,
+                is_blend_header=True,
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "blend_dose_in_product_name_only"
+
+    def test_all_macro_rows_emit_macro_only_product(self, scorer):
+        """Glucomannan / Fiber Fusion pattern — every row is a macro/nutrition fact."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Dietary Fiber",
+                standard_name="Fiber",
+                quantity=4.0,
+                unit="Gram(s)",
+                recognized_non_scorable=False,
+                skip_reason="excluded_nutrition_fact",
+                score_exclusion_reason="excluded_nutrition_fact",
+                recognition_source=None,
+                recognition_reason=None,
+            ),
+            _rejected_row(
+                name="Total Carbohydrate",
+                standard_name="Carbohydrate",
+                quantity=4.0,
+                unit="Gram(s)",
+                recognized_non_scorable=False,
+                skip_reason="excluded_nutrition_fact",
+                score_exclusion_reason="excluded_nutrition_fact",
+                recognition_source=None,
+                recognition_reason=None,
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "macro_only_product"
+
+    def test_blend_header_with_identity_emits_primary_active_not_scored(self, scorer):
+        """Turmeric Complex 500 mg without piperine — blend header has real
+        identity (canonical_id=turmeric, standard_name=Turmeric) but the
+        scorer can't credit per-ingredient dose. Bucket-A scoring slice target."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Turmeric Curcumin Complex",
+                standard_name="Turmeric",
+                canonical_id="turmeric",
+                canonical_source_db="botanical_ingredients",
+                recognized_non_scorable=False,
+                skip_reason="blend_header_total_weight_only",
+                score_exclusion_reason="blend_header_total",
+                recognition_source=None,
+                recognition_reason=None,
+                is_blend_header=True,
+                blend_total_weight_only=True,
+            ),
+            _rejected_row(
+                name="Turmeric Root",
+                standard_name="Turmeric",
+                canonical_id="turmeric",
+                quantity=0.0,
+                unit="NP",
+                recognized_non_scorable=False,
+                skip_reason="nested_under_non_therapeutic_parent",
+                score_exclusion_reason="nested_display_only",
+                recognition_source=None,
+                recognition_reason=None,
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "blend_header_primary_active_not_scored"
+
+    def test_blend_header_without_identity_emits_no_scorable_identity(self, scorer):
+        """Generic 'Proprietary Blend' header with no canonical_id — we don't
+        even know what's in it. Distinct from blend_header_primary_active_not_scored
+        because the diagnostic is much more pessimistic."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Proprietary Blend",
+                standard_name="Proprietary Blend",
+                canonical_id=None,
+                canonical_source_db=None,
+                recognized_non_scorable=False,
+                skip_reason="blend_header_total_weight_only",
+                score_exclusion_reason="blend_header_total",
+                recognition_source=None,
+                recognition_reason=None,
+                is_blend_header=True,
+                blend_total_weight_only=True,
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "blend_total_no_scorable_identity"
+
+    def test_plain_botanical_recognition_emits_no_iqm_rule_reason(self, scorer):
+        """Marshmallow Root / Cissus / Burdock pattern — recognized as a real
+        plant by part, but no IQM rule to score it and no standardized-extract
+        evidence. Wave-6 scoring-design candidate (Standardized Botanical Anchor
+        is for the meets_threshold subset; this is the plain-herb residual)."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Marshmallow",
+                standard_name="Marshmallow Root",
+                canonical_id="marshmallow_root",
+                quantity=1000.0,
+                unit="mg",
+                recognition_source="botanical_ingredients",
+                recognition_reason="root",
+                canonical_source_db="botanical_ingredients",
+            )
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "plain_botanical_no_iqm_rule"
+
+    def test_all_no_dose_rows_emit_label_dose_not_declared(self, scorer):
+        """Children's Chewable Vitamin pattern — every row is a recognized
+        nutrient but the label has unit=NP. Cannot score what isn't dosed."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Vitamin A",
+                standard_name="Vitamin A",
+                quantity=0.0,
+                unit="NP",
+                recognition_source="iqd_contract",
+                recognition_reason="no_dose_evidence",
+                canonical_source_db="ingredient_quality_map",
+            ),
+            _rejected_row(
+                name="Vitamin C",
+                standard_name="Vitamin C",
+                quantity=0.0,
+                unit="NP",
+                recognition_source="iqd_contract",
+                recognition_reason="no_dose_evidence",
+                canonical_source_db="ingredient_quality_map",
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "label_dose_not_declared"
+
+    def test_anchor_supersedes_other_specific_reasons(self, scorer):
+        """Sanity check: meets_threshold standardized botanical wins even when
+        the product also looks like a pending-relocation candidate."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Cayenne Pepper",
+                standard_name="Chili Pepper",
+                recognition_source="other_ingredients",
+                recognition_reason="active_pending_relocation",
+                canonical_source_db="botanical_ingredients",
+            )
+        )
+        product["formulation_data"]["standardized_botanicals"] = [
+            {
+                "name": "Cayenne Standardized",
+                "standard_name": "Cayenne",
+                "meets_threshold": True,
+            }
+        ]
+        result = scorer.score_product(product)
+
+        assert result["not_scorable_reason"] == "standardized_botanical_no_scorable_anchor"
+
+    def test_truly_unknown_pattern_keeps_generic_fallback(self, scorer):
+        """Products whose row reasons don't match any specific pattern should
+        keep the step-1 catch-all so we can investigate them. Negative case
+        guards against over-broad classification."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Mystery Compound XYZ",
+                standard_name="Unknown",
+                quantity=500.0,
+                unit="mg",
+                recognized_non_scorable=False,
+                skip_reason="no_quality_map_match",
+                score_exclusion_reason="no_quality_map_match",
+                recognition_source=None,
+                recognition_reason=None,
+                canonical_source_db="unmapped",
+            )
+        )
+        result = scorer.score_product(product)
+
+        assert result["not_scorable_reason"] == "strict_contract_all_candidates_rejected"
