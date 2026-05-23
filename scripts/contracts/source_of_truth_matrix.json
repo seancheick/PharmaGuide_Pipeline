@@ -478,7 +478,7 @@
       "owner": "scripts/release_full.sh",
       "first_created_stage": "exported",
       "field_kind": "exported",
-      "source_data_files": ["scripts/dist/export_manifest.json", "scripts/dist/interaction_db_manifest.json"],
+      "source_data_files": ["scripts/dist/export_manifest.json", "scripts/release_full.sh"],
       "consumers": ["Flutter app"],
       "forbidden_recomputation": ["Flutter cannot remap severity, taxonomy, ingredient identity, score, or clinical safety meaning"],
       "fallback_class": "flutter_backward_compat",

@@ -588,3 +588,31 @@ def test_export_contract_requires_stamped_manifest_when_requested(tmp_path):
     codes = {finding.code for finding in audit.audit_export(args)}
 
     assert "EXPORT_MANIFEST_CONTRACT_FIELD" in codes
+
+
+def test_stamp_manifest_accepts_working_build_checksum_field(tmp_path):
+    dist = tmp_path / "final_db_output"
+    dist.mkdir()
+    db_path = dist / "pharmaguide_core.db"
+    db_path.write_bytes(b"catalog")
+    write_json(
+        dist / "export_manifest.json",
+        {
+            "schema_version": "1.0.0",
+            "product_count": 1,
+            "checksum": f"sha256:{sha256(db_path)}",
+        },
+    )
+
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        matrix=str(MATRIX_PATH),
+        strict_release=True,
+        require_stamped_manifest=False,
+    )
+
+    assert audit.stamp_manifest(args) == []
+    manifest = json.loads((dist / "export_manifest.json").read_text())
+    assert manifest["checksum_sha256"] == sha256(db_path)
+    assert manifest["pipeline_contract_version"] == "cleaner_first_source_of_truth_v1"
+    assert manifest["strict_gate_summary"]["strict_mode"] is True

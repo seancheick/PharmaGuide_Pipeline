@@ -183,6 +183,15 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=False) + "\n", encoding="utf-8")
 
 
+def strip_sha256_prefix(value: Any) -> str | None:
+    if value is None or not isinstance(value, str):
+        return None
+    value = value.strip()
+    if value.lower().startswith("sha256:"):
+        return value.split(":", 1)[1].strip()
+    return value
+
+
 def numeric_value(value: Any, default: float = 0.0) -> float:
     try:
         return float(value)
@@ -1199,10 +1208,17 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
     manifest_path = dist_dir / "export_manifest.json"
     interaction_manifest_path = dist_dir / "interaction_db_manifest.json"
     matrix_path = repo_path(args.matrix)
+    manifest = load_json(manifest_path)
+    db_path = dist_dir / "pharmaguide_core.db"
+    if db_path.exists() and not manifest.get("checksum_sha256"):
+        manifest["checksum_sha256"] = strip_sha256_prefix(manifest.get("checksum")) or sha256_file(db_path)
+        if not manifest.get("checksum"):
+            manifest["checksum"] = f"sha256:{manifest['checksum_sha256']}"
+        write_json(manifest_path, manifest)
+
     findings = audit_export(args)
     if findings:
         return findings
-    manifest = load_json(manifest_path)
     matrix = load_json(matrix_path) if matrix_path.exists() else {}
     interaction_manifest = load_json(interaction_manifest_path) if interaction_manifest_path.exists() else {}
     manifest["pipeline_contract_version"] = "cleaner_first_source_of_truth_v1"
