@@ -114,6 +114,14 @@
       "natural_source": 1,
       "_natural_source_note": "v3.6.0: natural-source signal moved here from A1 (was +3 in A1 inflating the form/absorption score with sourcing). Now +1 in A5 where it conceptually belongs alongside organic, standardized, non-GMO. Detection: majority of active scorable ingredients have natural=true. Tiebreaker, not tier."
     },
+    "standardized_botanical_anchor": {
+      "_description": "Track A.1 (2026-05-23). Cap + verdict ceiling for products that satisfy the strict standardized-botanical-anchor eligibility check in score_supplements.SupplementScorer._has_standardized_botanical_anchor. Spec: reports/not_scored_triage/track_A1_standardized_botanical_anchor_spec.md.",
+      "_eligibility": "ingredients_scorable empty + formulation_data.standardized_botanicals has meets_threshold=True + active panel has a real dosed row whose identity exact-matches the standardized botanical (no token intersection).",
+      "_no_invented_a1": "A1 stays 0.0 — no IQM bio_score invented for these products. A5b credits the standardized signal, B/C/D read product-level fields.",
+      "display_cap": 60.0,
+      "verdict_ceiling": "CAUTION",
+      "_verdict_ceiling_note": "Anchor products are never SAFE. Enforced in _derive_verdict: if quality_score >= poor_threshold and FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags, return CAUTION instead of SAFE. POOR still allowed when below poor_threshold."
+    },
     "A6_single_ingredient_efficiency": {
       "max": 3,
       "single_types": [

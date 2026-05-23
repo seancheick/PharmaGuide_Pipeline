@@ -68,6 +68,15 @@ except ImportError:
 # product, no bioactive scoring — banned/harmful flags still apply".
 SCORE_BASIS_NUTRITION_ONLY = "nutrition_only_food_shape"
 
+# Track A.1 — Standardized Botanical Anchor (spec:
+# reports/not_scored_triage/track_A1_standardized_botanical_anchor_spec.md).
+# Products with empty ingredients_scorable but a dosed row that identity-matches
+# a meets_threshold=True standardized botanical get a conservative capped
+# scoring path with a verdict ceiling (never SAFE).
+SCORE_BASIS_BOTANICAL_ANCHOR = "standardized_botanical_anchor"
+FLAG_STANDARDIZED_BOTANICAL_ANCHOR = "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR"
+ANCHOR_NON_DOSE_UNITS = {"", "np", "n/a", "na", "none", "unspecified", "0"}
+
 _OPAQUE_OMEGA3_BLEND_PATTERN = re.compile(
     r"(?:\bomega|\bfish\s*oil\b|\bkrill\b|\bmarine\s*lipid\b|\bepa\b|\bdha\b|\bn-?3\b|\bfatty\s*acid\b)s?",
     re.IGNORECASE,
@@ -542,6 +551,86 @@ class SupplementScorer:
             "unmapped_actives_banned_exact_alias": banned_exact_alias_unmapped,
         }
 
+    def _has_standardized_botanical_anchor(self, product: Dict[str, Any]) -> bool:
+        """Track A.1 strict eligibility check.
+
+        Returns True iff:
+          1. ingredient_quality_data.ingredients_scorable is empty
+          2. formulation_data.standardized_botanicals has at least one
+             meets_threshold=True entry
+          3. At least one row in the active panel carries a real dose
+             (quantity > 0, unit not in ANCHOR_NON_DOSE_UNITS) AND
+             identity-matches a meets_threshold botanical via one of:
+               a. row.canonical_source_db == "standardized_botanicals", OR
+               b. row.canonical_id exactly matches a non-empty anchor canonical_id, OR
+               c. row.standard_name exactly matches a non-empty anchor std_name, OR
+               d. row.name exactly matches a non-empty anchor name
+
+        Strict equality (after norm_text) — NOT token intersection — so shared
+        generic words ("extract", "root", "complex", "blend", "oil") do not
+        produce false positives. See test
+        test_anchor_identity_match_is_strict_not_token_intersection.
+
+        Spec: reports/not_scored_triage/track_A1_standardized_botanical_anchor_spec.md
+        """
+        iqd = product.get("ingredient_quality_data") or {}
+        if iqd.get("ingredients_scorable"):
+            return False
+
+        formulation = product.get("formulation_data") or {}
+        std_bots = formulation.get("standardized_botanicals") or []
+
+        anchor_names: set[str] = set()
+        anchor_std_names: set[str] = set()
+        anchor_canon_ids: set[str] = set()
+        for sb in std_bots:
+            if not isinstance(sb, dict) or sb.get("meets_threshold") is not True:
+                continue
+            n = norm_text(sb.get("name") or "")
+            if n:
+                anchor_names.add(n)
+            s = norm_text(sb.get("standard_name") or "")
+            if s:
+                anchor_std_names.add(s)
+            c = norm_text(sb.get("canonical_id") or "")
+            if c:
+                anchor_canon_ids.add(c)
+        if not (anchor_names or anchor_std_names or anchor_canon_ids):
+            return False
+
+        active_rows = (
+            safe_list(iqd.get("ingredients_skipped"))
+            + safe_list(iqd.get("ingredients"))
+            + safe_list(iqd.get("ingredients_recognized_non_scorable"))
+        )
+        for row in active_rows:
+            if not isinstance(row, dict):
+                continue
+            q = row.get("quantity")
+            try:
+                qf = float(q) if q is not None else 0.0
+            except (TypeError, ValueError):
+                qf = 0.0
+            if qf <= 0:
+                continue
+            unit_norm = norm_text(row.get("unit") or "")
+            if unit_norm in ANCHOR_NON_DOSE_UNITS:
+                continue
+            # identity match — strict exact, no token intersection
+            if norm_text(row.get("canonical_source_db") or "") == "standardized_botanicals":
+                return True
+            row_canon = norm_text(row.get("canonical_id") or "")
+            if row_canon and row_canon in anchor_canon_ids:
+                return True
+            row_std = norm_text(row.get("standard_name") or "")
+            if row_std and row_std in anchor_std_names:
+                return True
+            row_name = norm_text(row.get("name") or "")
+            if row_name and row_name in anchor_names:
+                return True
+
+        return False
+
     def _not_scorable_evidence_rows(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Return de-duplicated rows that explain a zero-strict-scorable product."""
         iqd = product.get("ingredient_quality_data") or {}
@@ -763,6 +852,28 @@ class SupplementScorer:
         active_total = scoring_input.mapped_count + unmapped_count_excluding_banned
 
         if active_total <= 0:
+            # Track A.1 — Standardized Botanical Anchor short-circuit.
+            # Before tripping the gate, check whether this product qualifies
+            # for the conservative anchor scoring path. If so: return
+            # stop=False, letting the sections run (A1/A2/A6 naturally compute
+            # 0 with empty ingredients_scorable; A5b credits the standardized
+            # botanical; B/C/D read product-level signals). The cap and verdict
+            # ceiling are applied downstream in score_product / _derive_verdict.
+            if self._has_standardized_botanical_anchor(product):
+                return {
+                    "stop": False,
+                    "reason": None,
+                    "not_scorable_reason": None,
+                    "mapped_coverage": scoring_input.mapped_coverage or 0.0,
+                    "unmapped_actives": [],
+                    "unmapped_actives_total": 0,
+                    "unmapped_actives_excluding_banned_exact_alias": 0,
+                    "unmapped_actives_banned_exact_alias": [],
+                    "flags": [FLAG_STANDARDIZED_BOTANICAL_ANCHOR],
+                    "scoring_input_contract": scoring_input.diagnostics(),
+                    "standardized_botanical_anchor": True,
+                }
+
             # Distinguish "no actives at all" (DSLD authoring gap) from "enricher
             # saw actives but the strict scoring contract rejected them all"
             # (the dominant 460-of-470 corpus pattern as of 2026-05-23). The
@@ -4497,6 +4608,12 @@ class SupplementScorer:
             poor_threshold = 32.0
         if quality_score is not None and quality_score < poor_threshold:
             return "POOR"
+        # Track A.1 verdict ceiling — anchor products are never SAFE.
+        # If the math would otherwise verdict SAFE, force CAUTION so the
+        # downstream UI/user is signaled that this score came from a
+        # limited-evidence (standardized-botanical-only) path.
+        if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
+            return "CAUTION"
         return "SAFE"
 
     @staticmethod
@@ -4564,7 +4681,14 @@ class SupplementScorer:
             score_basis = SCORE_BASIS_NUTRITION_ONLY
         else:
             scoring_status = SCORING_STATUS_SCORED
-            score_basis = SCORE_BASIS_BIOACTIVES
+            # Track A.1 — anchor-scored products get the dedicated score_basis
+            # so downstream consumers (build_final_db, Flutter UI, audits) can
+            # distinguish "scored with full IQM evidence" from "scored
+            # conservatively via standardized-botanical anchor path".
+            if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
+                score_basis = SCORE_BASIS_BOTANICAL_ANCHOR
+            else:
+                score_basis = SCORE_BASIS_BIOACTIVES
 
         # Backward-compatible safety_verdict for downstream scripts.
         if verdict == "POOR":
@@ -4891,6 +5015,21 @@ class SupplementScorer:
                 flags.append("MANUFACTURER_VIOLATION")
             quality_raw += violation_penalty
             quality_score = clamp(0.0, 80.0, quality_raw)
+
+            # Track A.1 — defensive cap for anchor-scored products. Live-corpus
+            # simulation shows natural anchor scores land 22-53/100, so the cap
+            # is mostly a safety net against unusual high-B + high-C + high-D
+            # combinations. Default display_cap = 60.0 (= 48.0 quality_score).
+            if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
+                anchor_cfg = (
+                    self.config.get("section_A_ingredient_quality", {})
+                    .get("standardized_botanical_anchor", {})
+                    or {}
+                )
+                display_cap = as_float(anchor_cfg.get("display_cap"), 60.0) or 60.0
+                quality_cap = (display_cap / 100.0) * 80.0
+                if quality_score > quality_cap:
+                    quality_score = quality_cap
 
             verdict = self._derive_verdict(b0, mapping_gate, flags, quality_score, product)
             blocking_reason = self._derive_blocking_reason_from_scoring_gate(verdict, b0, flags)

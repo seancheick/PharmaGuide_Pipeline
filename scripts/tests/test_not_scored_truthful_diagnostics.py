@@ -425,37 +425,61 @@ class TestSpecificNotScoredReasonVocab:
 
 
 class TestStep3bExpandedReasonVocab:
-    def test_standardized_botanical_anchor_takes_precedence_when_meets_threshold(
+    def test_standardized_botanical_no_scorable_anchor_fires_when_not_track_a1_eligible(
         self, scorer
     ):
-        """Product with empty scorable but validated meets_threshold standardized
-        botanical evidence — even if the rejected rows look like plain blend
-        headers or plain botanicals, the anchor signal wins because it's the
-        most informative diagnostic and unlocks the Wave-6 scoring slice."""
+        """Step-3b diagnostic reason for products with meets_threshold=True but
+        WITHOUT a real anchor row that satisfies Track A.1 strict identity match.
+
+        Doctor's Best Digestive Enzymes pattern: Bromelain has meets_threshold=True
+        via marker_word_match, but the actual Bromelain row is qty=0 NP nested in
+        an undosed enzyme blend. Track A.1 correctly excludes this (no real anchor
+        dose). The step-3b diagnostic still fires for downstream consumers.
+
+        Used to test 'anchor reason takes precedence over other step-3b reasons'
+        with a Curcumin C3 fixture, but that fixture is now Track-A.1-eligible
+        and gets actually scored — see TestTrackA1StandardizedBotanicalAnchorSlice.
+        """
         product = _make_rejected_with_rows(
             _rejected_row(
-                name="Curcumin C3 Complex",
-                standard_name="Turmeric",
+                name="Digestive Enzyme Blend",
+                standard_name="Digestive Enzyme Blends",
+                quantity=0.0,
+                unit="NP",
                 recognized_non_scorable=False,
-                skip_reason="blend_header_total_weight_only",
-                score_exclusion_reason="blend_header_total",
+                skip_reason="recognized_non_scorable",
+                score_exclusion_reason="recognized_non_scorable",
                 recognition_source=None,
                 recognition_reason=None,
-                is_blend_header=True,
-                blend_total_weight_only=True,
+                canonical_source_db="proprietary_blends",
+            ),
+            _rejected_row(
+                name="Bromelain",
+                standard_name="Digestive Enzymes",
+                canonical_id="digestive_enzymes",
+                quantity=0.0,
+                unit="NP",
+                recognized_non_scorable=False,
+                skip_reason="nested_under_non_therapeutic_parent",
+                score_exclusion_reason="nested_display_only",
+                recognition_source=None,
+                recognition_reason=None,
+                canonical_source_db="ingredient_quality_map",
             ),
         )
         product["formulation_data"]["standardized_botanicals"] = [
             {
-                "name": "Curcumin C3 Complex",
-                "standard_name": "Turmeric",
+                "name": "Bromelain",
+                "standard_name": "Bromelain",
                 "meets_threshold": True,
+                "evidence_source": "marker_word_match",
             }
         ]
         result = scorer.score_product(product)
 
         assert result["verdict"] == "NOT_SCORED"
         assert result["not_scorable_reason"] == "standardized_botanical_no_scorable_anchor"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
 
     def test_active_pending_relocation_marker_emits_iqm_gap_reason(self, scorer):
         """Source DB explicitly flags this ingredient as needing IQM relocation.
@@ -681,3 +705,332 @@ class TestStep3bExpandedReasonVocab:
         result = scorer.score_product(product)
 
         assert result["not_scorable_reason"] == "strict_contract_all_candidates_rejected"
+
+
+# ---------------------------------------------------------------------------
+# Track A.1 — Standardized Botanical Anchor scoring slice.
+#
+# Spec: reports/not_scored_triage/track_A1_standardized_botanical_anchor_spec.md
+#
+# This is a SCORING change, not reporting. When a product has no IQM
+# ingredients_scorable but at least one formulation_data.standardized_botanicals[]
+# row with meets_threshold=True AND a real dosed row whose identity matches
+# (strict — exact normalized match or canonical_source_db=standardized_botanicals;
+# NO token intersection), let the sections compute and emit a conservative
+# capped score with a verdict ceiling.
+#
+# Constants:
+#   display cap        = 60.0/100 (= 48.0/80 quality_score)
+#   verdict ceiling    = CAUTION (anchor products are never SAFE)
+#   poor threshold     = 32.0/80 (unchanged from v3 config)
+#   flag               = SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR
+#   score_basis        = "standardized_botanical_anchor"
+# ---------------------------------------------------------------------------
+
+
+def _make_anchor_eligible(
+    *,
+    std_bot_name: str = "EpiCor",
+    std_bot_std_name: str = "EpiCor",
+    row_name: str = "EpiCor",
+    row_std_name: str = "EpiCor",
+    row_canonical_id: str = "epicor",
+    row_canonical_source_db: str = "standardized_botanicals",
+    row_quantity: float = 500.0,
+    row_unit: str = "mg",
+    extra_rows=(),
+):
+    """Builder for a product that satisfies the strict anchor eligibility rule.
+
+    Defaults model the EpiCor 500 mg canary: single dosed row whose identity
+    matches a meets_threshold standardized botanical via
+    canonical_source_db=standardized_botanicals AND exact name/std_name.
+    """
+    product = _make_strict_contract_rejected()
+    iqd = product["ingredient_quality_data"]
+    iqd["total_active"] = 1 + len(extra_rows)
+    rows = [
+        _rejected_row(
+            name=row_name,
+            standard_name=row_std_name,
+            canonical_id=row_canonical_id,
+            canonical_source_db=row_canonical_source_db,
+            quantity=row_quantity,
+            unit=row_unit,
+            recognized_non_scorable=False,
+            skip_reason="recognized_non_scorable",
+            score_exclusion_reason="recognized_non_scorable",
+            recognition_source="standardized_botanicals",
+            recognition_reason="botanical_identity",
+        )
+    ] + [dict(r) for r in extra_rows]
+    iqd["skipped_non_scorable_count"] = len(rows)
+    iqd["ingredients_skipped"] = rows
+    iqd["ingredients_recognized_non_scorable"] = []
+    product["formulation_data"]["standardized_botanicals"] = [
+        {
+            "name": std_bot_name,
+            "standard_name": std_bot_std_name,
+            "meets_threshold": True,
+            "evidence_source": "branded_form",
+        }
+    ]
+    return product
+
+
+class TestTrackA1StandardizedBotanicalAnchorSlice:
+    # --- positive eligibility ---
+
+    def test_anchor_via_canonical_source_db_standardized_botanicals(self, scorer):
+        """EpiCor-style row: src_db is standardized_botanicals + real dose.
+        Anchor activates regardless of std_name/canonical_id matching."""
+        product = _make_anchor_eligible()
+        result = scorer.score_product(product)
+
+        assert result["verdict"] != "NOT_SCORED"
+        assert result["scoring_status"] == "scored"
+        assert result["score_basis"] == "standardized_botanical_anchor"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" in result["flags"]
+        assert result["not_scorable_reason"] is None
+        assert result["section_scores"]["A_ingredient_quality"]["score"] is not None
+
+    def test_anchor_via_exact_std_name_match(self, scorer):
+        """Curcumin C3 pattern: row src_db is ingredient_quality_map (not
+        standardized_botanicals), but exact std_name match wins anchor."""
+        product = _make_anchor_eligible(
+            std_bot_name="Curcumin C3 Complex",
+            std_bot_std_name="Curcumin",
+            row_name="Curcumin C3 Complex",
+            row_std_name="Curcumin",
+            row_canonical_id="curcumin",
+            row_canonical_source_db="ingredient_quality_map",
+            row_quantity=1000.0,
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] != "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" in result["flags"]
+
+    # --- negative eligibility (regression guards) ---
+
+    def test_anchor_does_not_trigger_when_nested_undosed_blend(self, scorer):
+        """Doctor's Best Digestive Enzymes pattern. Bromelain has
+        meets_threshold=True but the actual row is qty=0 NP — no real anchor
+        dose exists. Must stay NOT_SCORED."""
+        product = _make_strict_contract_rejected()
+        iqd = product["ingredient_quality_data"]
+        iqd["total_active"] = 2
+        iqd["ingredients_skipped"] = [
+            _rejected_row(
+                name="Digestive Enzyme Blend",
+                standard_name="Digestive Enzyme Blends",
+                quantity=0.0,
+                unit="NP",
+                skip_reason="recognized_non_scorable",
+                canonical_source_db="proprietary_blends",
+            ),
+            _rejected_row(
+                name="Bromelain",
+                standard_name="Digestive Enzymes",
+                canonical_id="digestive_enzymes",
+                quantity=0.0,
+                unit="NP",
+                skip_reason="nested_under_non_therapeutic_parent",
+                canonical_source_db="ingredient_quality_map",
+            ),
+        ]
+        product["formulation_data"]["standardized_botanicals"] = [
+            {
+                "name": "Bromelain",
+                "standard_name": "Bromelain",
+                "meets_threshold": True,
+                "evidence_source": "marker_word_match",
+            }
+        ]
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    def test_anchor_does_not_trigger_when_dose_belongs_to_unrelated_blend(self, scorer):
+        """Green Coffee Bean 62034 pattern. Standardized botanical exists, but
+        the dosed row is a generic Proprietary Blend (not the standardized
+        active). Strict identity match prevents the unrelated blend mass from
+        anchoring the standardized botanical."""
+        product = _make_strict_contract_rejected()
+        iqd = product["ingredient_quality_data"]
+        iqd["total_active"] = 2
+        iqd["ingredients_skipped"] = [
+            _rejected_row(
+                name="Proprietary Blend",
+                standard_name="General Proprietary Blends",
+                canonical_id="BLEND_GENERAL",
+                quantity=1500.0,
+                unit="mg",
+                skip_reason="recognized_non_scorable",
+                canonical_source_db="proprietary_blends",
+                is_blend_header=True,
+            ),
+            _rejected_row(
+                name="Green Coffee bean extract",
+                standard_name="Chlorogenic Acids",
+                canonical_id="chlorogenic_acids",
+                quantity=0.0,
+                unit="NP",
+                skip_reason="nested_under_non_therapeutic_parent",
+                canonical_source_db="ingredient_quality_map",
+            ),
+        ]
+        product["formulation_data"]["standardized_botanicals"] = [
+            {
+                "name": "Green Coffee bean extract",
+                "standard_name": "Green Coffee Bean",
+                "meets_threshold": True,
+                "evidence_source": "percentage_local",
+            }
+        ]
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    def test_anchor_does_not_trigger_when_no_meets_threshold(self, scorer):
+        """Standardized botanical present but meets_threshold=False — anchor
+        should not activate. Product stays NOT_SCORED with the step-3b
+        diagnostic instead."""
+        product = _make_anchor_eligible()
+        product["formulation_data"]["standardized_botanicals"][0]["meets_threshold"] = False
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    def test_anchor_does_not_trigger_without_standardized_botanicals(self, scorer):
+        product = _make_anchor_eligible()
+        product["formulation_data"]["standardized_botanicals"] = []
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    def test_anchor_does_not_trigger_when_dose_unit_is_NP(self, scorer):
+        """Evening Primrose Oil pattern: identity matches but unit is
+        'unspecified' / NP. Dose check rejects."""
+        product = _make_anchor_eligible(row_quantity=0.0, row_unit="unspecified")
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    def test_anchor_identity_match_is_strict_not_token_intersection(self, scorer):
+        """Guard against the bug where shared generic words (extract, root,
+        complex, oil) would falsely match. Row 'Marshmallow Extract' must NOT
+        anchor a 'Bromelain Extract' standardized botanical just because
+        both contain 'Extract'."""
+        product = _make_anchor_eligible(
+            std_bot_name="Bromelain Extract",
+            std_bot_std_name="Bromelain",
+            row_name="Marshmallow Extract",
+            row_std_name="Marshmallow Root",
+            row_canonical_id="marshmallow_root",
+            row_canonical_source_db="botanical_ingredients",  # NOT standardized_botanicals
+            row_quantity=1000.0,
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    # --- architectural locks ---
+
+    def test_anchor_a1_remains_zero_no_invented_bio_score(self, scorer):
+        """The whole point: do NOT invent an IQM A1 bio_score for anchor
+        products. A1 must compute to 0.0 because ingredients_scorable is empty."""
+        product = _make_anchor_eligible()
+        result = scorer.score_product(product)
+
+        assert result["section_scores"]["A_ingredient_quality"]["score"] is not None
+        # the actual A1 value lives in breakdown
+        assert result["breakdown"]["A"]["A1"] == 0.0
+
+    def test_b0_safety_block_still_wins_over_anchor(self, scorer):
+        """Safety gate at B0 must still trip for anchor-eligible products
+        carrying banned ingredients. The anchor path only activates AFTER
+        B0 passes."""
+        product = _make_anchor_eligible()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "ingredient": "Ephedra",
+                    "match_type": "exact",
+                    "status": "banned",
+                    "severity_level": "critical",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+
+        assert result["verdict"] in {"BLOCKED", "UNSAFE"}
+        # anchor flag must NOT be emitted when safety gate trips
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" not in result["flags"]
+
+    # --- verdict ceiling ---
+
+    def test_anchor_ceiling_forces_caution_when_otherwise_safe(self, scorer):
+        """Anchor product whose raw quality_score >= poor_threshold (32) but
+        without safety flags would normally verdict SAFE. Ceiling forces
+        CAUTION. Locks the 'never SAFE' invariant."""
+        product = _make_anchor_eligible()
+        # ensure section B gives a high score (no harmful_additives etc) → push above poor_threshold
+        # _make_strict_contract_rejected() already has empty contaminant_data;
+        # the EpiCor-style fixture's B alone clears poor_threshold.
+        result = scorer.score_product(product)
+
+        assert result["score_80"] is not None
+        if result["score_80"] >= 32.0:
+            assert result["verdict"] == "CAUTION", (
+                f"Anchor product with quality_score={result['score_80']} >= 32 "
+                f"must be CAUTION, not {result['verdict']}"
+            )
+
+    def test_anchor_poor_remains_poor_below_threshold(self, scorer):
+        """Cran-Max pattern: low B + low D → quality_score 18/80 < 32 → POOR.
+        Ceiling does NOT upgrade POOR to CAUTION; only blocks SAFE."""
+        product = _make_anchor_eligible()
+        # zero out B/C/D signals so the math lands below poor_threshold
+        product["contaminant_data"] = {
+            "banned_substances": {"found": False, "substances": []},
+            "harmful_additives": {"found": True, "additives": [
+                {"name": "Artificial Color", "severity": "critical"},
+                {"name": "Sucralose", "severity": "moderate"},
+            ]},
+            "allergens": {"found": False, "allergens": []},
+        }
+        result = scorer.score_product(product)
+
+        if result["score_80"] is not None and result["score_80"] < 32.0:
+            assert result["verdict"] == "POOR"
+
+    # --- score cap ---
+
+    def test_anchor_score_capped_at_display_60(self, scorer):
+        """Defensive cap at 60.0/100. Even if a product hits the absolute
+        ceiling of B+C+D+A5b, display must not exceed 60."""
+        product = _make_anchor_eligible()
+        # synthesize maximum-possible product-level signals
+        product["delivery_tier"] = 1  # +3 A3
+        product["absorption_enhancer_paired"] = True  # +3 A4
+        product["formulation_data"]["organic"] = {"usda_verified": True}  # +1 A5a
+        product["formulation_data"]["synergy_clusters"] = []  # 0 A5c
+        product["manufacturer_data"]["top_manufacturer"] = {"found": True, "score_bonus": 5}
+        product["evidence_data"] = {"clinical_matches": [
+            {"study_id": "PMID12345", "ingredient": "EpiCor", "strength": "RCT"},
+        ] * 5, "match_count": 5}
+        result = scorer.score_product(product)
+
+        if "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" in result["flags"]:
+            assert result["score_100_equivalent"] is not None
+            assert result["score_100_equivalent"] <= 60.0, (
+                f"Anchor product display={result['score_100_equivalent']} exceeds cap 60.0"
+            )
