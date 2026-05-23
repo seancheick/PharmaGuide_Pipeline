@@ -156,7 +156,8 @@
       "cui": "C1033652",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -198,7 +199,8 @@
       "cui": "C1669961",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -1033,7 +1035,8 @@
       "cui": "C0004755",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -1827,7 +1830,8 @@
       "rxcui": "1310848",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "algal"
+        "source_origin": "algal",
+        "bonus_eligible": false
       }
     },
     {
@@ -2548,7 +2552,8 @@
       "cui": "C2293178",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -3091,7 +3096,8 @@
       "cui": "C0331586",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -3568,7 +3574,8 @@
       "rxcui": "285245",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -3649,7 +3656,8 @@
       "cui": "C1038769",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -3905,7 +3913,8 @@
       },
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -4461,7 +4470,8 @@
       "rxcui": "6633",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -4484,7 +4494,8 @@
       "rxcui": "1591919",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -4971,7 +4982,8 @@
       "rxcui": "317808",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -5456,7 +5468,8 @@
       "cui": "C0023753",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -5654,7 +5667,8 @@
       "cui": "C1086344",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "algal"
+        "source_origin": "algal",
+        "bonus_eligible": false
       }
     },
     {
@@ -6290,7 +6304,8 @@
       "rxcui": "1306130",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7183,7 +7198,8 @@
       "cui": "C0331745",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7278,7 +7294,8 @@
       "rxcui": "2267703",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7457,7 +7474,8 @@
       "cui": "C0021936",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7984,7 +8002,8 @@
       "rxcui": "38022",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8028,7 +8047,8 @@
       "rxcui": "1307716",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8054,7 +8074,8 @@
       "cui": "C1001731",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "fungal"
+        "source_origin": "fungal",
+        "bonus_eligible": false
       }
     },
     {
@@ -8098,7 +8119,8 @@
       "cui": "C1136294",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8120,7 +8142,8 @@
       "cui": "C0996829",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8142,7 +8165,8 @@
       "rxcui": "1370469",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8157,7 +8181,8 @@
       "external_ids": {},
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8181,7 +8206,8 @@
       "rxcui": "89959",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8203,7 +8229,8 @@
       "rxcui": "1368708",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -8247,7 +8274,8 @@
       "cui": "C1030673",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -12367,7 +12395,8 @@
       "cui": "C0066936",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -12578,7 +12607,8 @@
       "cui": "C4076257",
       "functional_roles": [],
       "attributes": {
-        "source_origin": "plant"
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {

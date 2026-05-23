@@ -118,7 +118,8 @@ def gnc_match_methods():
         for p in products:
             ml = p.get("match_ledger", {}) or {}
             ing_domain = ml.get("domains", {}).get("ingredients", {}) or {}
-            records = ing_domain.get("records", []) or []
+            # match_ledger emits per-ingredient rows under `entries`, not `records`
+            records = ing_domain.get("entries", []) or []
             for rec in records:
                 m = rec.get("match_method")
                 if m:
@@ -169,7 +170,7 @@ def test_gnc_ledger_does_not_misattribute_unii_as_exact(gnc_match_methods):
         for p in products:
             ml = p.get("match_ledger", {}) or {}
             ing_domain = ml.get("domains", {}).get("ingredients", {}) or {}
-            records = ing_domain.get("records", []) or []
+            records = ing_domain.get("entries", []) or []
             for rec in records:
                 rst = rec.get("raw_source_text", "") or ""
                 if "amylopectin" in rst.lower():

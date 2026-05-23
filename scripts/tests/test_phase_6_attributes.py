@@ -29,6 +29,11 @@ KNOWN_ATTRIBUTE_KEYS = {
     "colorant_source",
     "caramel_class",
     "e171_eu_concern",
+    # MO-2/3/5/6 moved-out entries (and selected plain-identity entries like
+    # coffee_bean_plain) explicitly carry `bonus_eligible: false` so the
+    # enricher knows these botanicals never earn an A5b bonus. The shape is
+    # asserted by tests in test_mo[2-6]_*.py and test_rc1_coffee_routing.py.
+    "bonus_eligible",
 }
 
 

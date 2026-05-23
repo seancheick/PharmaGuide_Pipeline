@@ -688,6 +688,12 @@ def make_scored(verdict="SAFE"):
             "output_schema_version": "5.0.0",
             "scored_date": "2026-03-17T18:00:00Z",
         },
+        "strict_scoring_contract": {
+            "passed": True,
+            "findings": [],
+            "zero_scorable_reason": None,
+            "mapped_coverage_applicable": True,
+        },
         "breakdown": {
             "A": {"score": 20.0, "max": 25.0, "A1": 5.0},
             "B": {"score": 18.0, "max": 30.0, "B0": 0.0},
