@@ -186,12 +186,22 @@ def test_quatrefolic_nested_composition_rows_do_not_enter_scorable_iqd():
 
 
 def test_generic_supplemental_chromium_does_not_match_hexavalent_chromium():
-    hits = SupplementEnricherV3()._check_banned_substances(
-        [{"name": "Chromium", "standardName": "Chromium", "canonical_id": "chromium"}]
-    )
-    assert "HM_CHROMIUM_HEXAVALENT" not in {
-        row.get("banned_id") for row in hits.get("substances", [])
-    }
+    enricher = SupplementEnricherV3()
+    supplemental_forms = [
+        ("Chromium", "Chromium"),
+        ("Chromium Picolinate", "Chromium"),
+        ("Chromium Chloride", "Chromium"),
+        ("Chromium Polynicotinate", "Chromium"),
+        ("Chromium Yeast", "Chromium"),
+        ("Chromium 6 mcg", "Chromium"),
+    ]
+    for name, standard_name in supplemental_forms:
+        hits = enricher._check_banned_substances(
+            [{"name": name, "standardName": standard_name, "canonical_id": "chromium"}]
+        )
+        assert "HM_CHROMIUM_HEXAVALENT" not in {
+            row.get("banned_id") for row in hits.get("substances", [])
+        }, f"{name!r} should not match hexavalent chromium"
 
 
 def test_generic_chromium_with_bad_standard_name_does_not_match_hexavalent_chromium():
@@ -212,12 +222,21 @@ def test_generic_chromium_with_bad_standard_name_does_not_match_hexavalent_chrom
 
 
 def test_explicit_hexavalent_chromium_still_matches_contaminant_gate():
-    hits = SupplementEnricherV3()._check_banned_substances(
-        [{"name": "Hexavalent Chromium", "standardName": "Chromium VI"}]
-    )
-    assert "HM_CHROMIUM_HEXAVALENT" in {
-        row.get("banned_id") for row in hits.get("substances", [])
-    }
+    enricher = SupplementEnricherV3()
+    explicit_forms = [
+        ("Hexavalent Chromium", "Chromium VI"),
+        ("Chromium-6", "Hexavalent Chromium"),
+        ("Chromium(6+)", "Chromium VI"),
+        ("Sodium Dichromate", "Dichromate"),
+        ("Potassium Chromate", "Chromate"),
+    ]
+    for name, standard_name in explicit_forms:
+        hits = enricher._check_banned_substances(
+            [{"name": name, "standardName": standard_name}]
+        )
+        assert "HM_CHROMIUM_HEXAVALENT" in {
+            row.get("banned_id") for row in hits.get("substances", [])
+        }, f"{name!r} should match hexavalent chromium"
 
 
 def test_taxonomy_uses_scorable_rows_not_product_name_only_signals():

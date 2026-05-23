@@ -8277,7 +8277,8 @@ class SupplementEnricherV3:
             return False
         return bool(
             re.search(r"\bhexavalent\s+chromium\b", text)
-            or re.search(r"\bchromium\s*(?:\(?vi\)?|\(?6\+?\)?)\b", text)
+            or re.search(r"\bchromium\s*(?:\(?vi\)?|\(?6\+\)?)(?=$|[^a-z0-9])", text)
+            or re.search(r"\bchromium\s*[-]\s*6\b", text)
             or re.search(r"\bcr\s*[\(\- ]?vi[\)]?\b", text)
             or re.search(r"\bchromate\b", text)
             or re.search(r"\bdichromate\b", text)
