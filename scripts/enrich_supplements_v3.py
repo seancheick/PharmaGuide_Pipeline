@@ -2619,11 +2619,14 @@ class SupplementEnricherV3:
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
             hierarchy_type = ingredient.get('hierarchyType')
+            pre_context_match_reason = self._product_context_iqm_match_reason(ingredient, ing_name, std_name)
 
             skip_reason = (
                 self._cleaner_skip_reason(ingredient)
                 or self._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
             )
+            if pre_context_match_reason:
+                skip_reason = None
 
             if skip_reason:
                 # Track skip reason breakdown
@@ -2746,11 +2749,25 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
                 branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
             )
+            context_match_reason = pre_context_match_reason
+            if context_match_reason == "kelp_fucoidan_marker_context":
+                context_match = self._match_quality_map(
+                    "Fucoidan extract",
+                    "Fucoidan",
+                    quality_map,
+                    cleaned_forms=ingredient_forms,
+                )
+                if context_match:
+                    match_result = context_match
             if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
                 match_result = None
+                context_match_reason = None
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
             )
+            if context_match_reason and match_result:
+                quality_entry["identity_decision_reason"] = "product_label_marker_context_match"
+                self._tag_fallback_decision(quality_entry, "clinical_fail_safe", context_match_reason)
             self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
             self._preserve_cleaner_botanical_canonical(ingredient, quality_entry)
             is_quality_match = bool(
@@ -3183,6 +3200,42 @@ class SupplementEnricherV3:
             "demoted_absorption_enhancers": demoted_enhancers,
         }
 
+    def _product_context_iqm_match_reason(self, ingredient: Dict, ing_name: str, std_name: str) -> Optional[str]:
+        """Narrow product-label marker disambiguation for generic source rows."""
+        cleaner_cid = str(ingredient.get("canonical_id") or "").lower()
+        cleaner_src = str(ingredient.get("canonical_source_db") or "").lower()
+        raw_taxonomy = ingredient.get("raw_taxonomy") if isinstance(ingredient.get("raw_taxonomy"), dict) else {}
+        forms = ingredient.get("forms") or raw_taxonomy.get("forms") or []
+        forms_text = " ".join(
+            str(form.get(key) or "")
+            for form in forms
+            if isinstance(form, dict)
+            for key in ("name", "prefix", "percent", "ingredientGroup")
+        )
+        source_text = " ".join(
+            str(value or "")
+            for value in (
+                ing_name,
+                std_name,
+                ingredient.get("raw_source_text"),
+                ingredient.get("ingredientGroup"),
+                raw_taxonomy.get("ingredientGroup"),
+                ingredient.get("notes"),
+                forms_text,
+            )
+        ).lower()
+        product_text = str(ingredient.get("_product_activity_text") or "").lower()
+        full_text = f"{source_text} {product_text}"
+        is_kelp_source = (
+            cleaner_src == "botanical_ingredients"
+            and cleaner_cid in {"kelp_powder", "kombu", "wakame", "laminaria_digitata", "saccharina_latissima"}
+        ) or any(term in source_text for term in ("kelp", "laminaria", "seaweed", "kombu", "wakame"))
+        has_fucoidan_label_claim = "fucoidan" in product_text
+        has_marker_percent = bool(re.search(r"\b70\s*%", full_text)) or "standardized to 70" in full_text
+        if is_kelp_source and has_fucoidan_label_claim and has_marker_percent:
+            return "kelp_fucoidan_marker_context"
+        return None
+
     # -------------------------------------------------------------------------
     # Sprint E1.23 — Absorption-enhancer sub-threshold demotion
     # -------------------------------------------------------------------------
@@ -3453,8 +3506,18 @@ class SupplementEnricherV3:
     def _iqd_row_has_dose_evidence(self, row: Dict) -> bool:
         """Return True when an IQD row has usable dose evidence for scoring."""
         dose_class = str(row.get("dose_class") or "").strip()
-        if dose_class in self._IQD_DOSE_EVIDENCE_CLASSES:
+        if dose_class in {"enzyme_activity", "probiotic_cfu"}:
             return True
+        if dose_class == "percent_dv_only":
+            try:
+                return float(str(
+                    row.get("percent_daily_value")
+                    or row.get("daily_value_percent")
+                    or row.get("percent_dv")
+                    or 0
+                ).replace(",", "")) > 0
+            except (TypeError, ValueError):
+                return False
         if row.get("activity_quantity") not in (None, "") and row.get("activity_unit"):
             try:
                 return float(str(row.get("activity_quantity")).replace(",", "")) > 0
@@ -11878,7 +11941,7 @@ class SupplementEnricherV3:
         strict_rows = [row for row in (iqd.get("ingredients_scorable") or []) if isinstance(row, dict)]
         probiotic_blends = [row for row in (probiotic_data.get("probiotic_blends") or []) if isinstance(row, dict)]
         has_probiotic_row_identity = bool(probiotic_blends) and int(probiotic_data.get("total_strain_count") or 0) > 0
-        has_non_probiotic_strict_active = False
+        has_non_probiotic_strict_active = self._has_non_probiotic_active_for_cfu_evidence(enriched)
         for row in strict_rows:
             row_text = " ".join(str(row.get(key) or "") for key in ("canonical_id", "name", "standard_name")).lower()
             if any(term in row_text for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus")):
@@ -11941,6 +12004,42 @@ class SupplementEnricherV3:
             })
         evidence.append(base)
         return evidence
+
+    @staticmethod
+    def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
+        text = " ".join(
+            str(row.get(key) or "").lower()
+            for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")
+        )
+        return any(
+            term in text
+            for term in (
+                "probiotic", "lactobacillus", "bifidobacterium", "streptococcus",
+                "saccharomyces", "bacillus", "limosilactobacillus", "cfu",
+            )
+        )
+
+    def _has_non_probiotic_active_for_cfu_evidence(self, product: Dict[str, Any]) -> bool:
+        """Detect cleaner-eligible non-probiotic actives that make CFU evidence accessory."""
+        for row in product.get("activeIngredients") or []:
+            if not isinstance(row, dict):
+                continue
+            if row.get("score_eligible_by_cleaner") is not True:
+                continue
+            cleaner_role = str(row.get("cleaner_row_role") or "").strip()
+            if cleaner_role and cleaner_role != "active_scorable":
+                continue
+            if self._has_probiotic_identity_text(row):
+                continue
+            cid = str(row.get("canonical_id") or "").strip()
+            unit = self._normalize_unit_for_signal(row.get("unit"))
+            try:
+                has_positive_dose = float(str(row.get("quantity")).replace(",", "")) > 0 and unit not in PSEUDO_UNITS_INVALID
+            except (TypeError, ValueError):
+                has_positive_dose = False
+            if cid or has_positive_dose:
+                return True
+        return False
 
     # CFU-equivalent unit patterns — must match the ENTIRE unit string
     # (re.fullmatch). Earlier version used re.search with generic patterns

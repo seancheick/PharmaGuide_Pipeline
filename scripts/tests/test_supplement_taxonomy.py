@@ -439,10 +439,11 @@ def test_product_level_probiotic_metadata_does_not_hijack_non_probiotic_scorable
 def test_real_cfu_probiotic_with_no_scorable_strain_rows_is_still_probiotic():
     """A product-level CFU total is valid probiotic dose evidence for taxonomy."""
     product = {
-        "product_name": "Digestive Probiotic 20 Billion",
+        "product_name": "Daily Digestive Microbiome 20 Billion",
         "probiotic_data": {
             "is_probiotic_product": True,
             "total_cfu": 20000000000,
+            "total_strain_count": 2,
         },
         "ingredient_quality_data": {
             "ingredients_scorable": [],
@@ -460,6 +461,62 @@ def test_real_cfu_probiotic_with_no_scorable_strain_rows_is_still_probiotic():
     }
     result = classify_supplement(product)
     assert result["primary_type"] == "probiotic"
+    assert "probiotic row identity + product-level CFU evidence" in result["classification_reasons"]
+
+
+def test_product_level_cfu_does_not_hijack_non_probiotic_cleaner_active_without_iqd_rows():
+    """Accessory CFU metadata must not override a cleaner-eligible CBD active."""
+    product = {
+        "product_name": "CBD Immune Support",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 5000000000,
+            "total_strain_count": 1,
+        },
+        "activeIngredients": [
+            {
+                "name": "Cannabidiol",
+                "canonical_id": "cbd_cannabidiol",
+                "quantity": 25,
+                "unit": "mg",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            }
+        ],
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Probiotic Base",
+                    "category": "probiotics",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "score_eligible_by_cleaner": False,
+                    "cleaner_row_role": "nested_display_only",
+                }
+            ],
+        },
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "probiotic"
+
+
+def test_minority_probiotic_row_does_not_hijack_collagen_mct_product():
+    product = {
+        "product_name": "Grass Fed Collagen Coconut MCT Chocolate",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 500000000,
+            "total_strain_count": 1,
+        },
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Collagen", "canonical_id": "collagen", "category": "proteins", "quantity": 10, "unit": "g", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "MCT Oil", "canonical_id": "mct_oil", "category": "fatty_acids", "quantity": 3, "unit": "g", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Bacillus subtilis", "canonical_id": "bacillus_subtilis", "category": "probiotics", "quantity": 5, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "probiotic"
 
 
 def test_prenatal_with_b_vitamins_and_dha_is_not_b_complex():

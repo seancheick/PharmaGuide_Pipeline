@@ -314,6 +314,68 @@ def test_enrichment_contract_rejects_old_batch_cleaner_contract_defaults(tmp_pat
     assert "ENRICHMENT_CLEANER_CONTRACT_FALLBACK_USED" in codes
 
 
+def test_enrichment_contract_rejects_zero_np_therapeutic_mass_as_scorable(tmp_path):
+    product_file = tmp_path / "product.json"
+    base_row = {
+        "name": "Saffron Extract",
+        "source_section": "active",
+        "raw_source_path": "ingredientRows[0]",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "score_exclusion_reason": None,
+        "dose_class": "therapeutic_mass",
+        "raw_taxonomy": {},
+        "canonical_id": "saffron",
+        "canonical_source_db": "ingredient_quality_map",
+        "normalized_key": "saffron_extract",
+        "match_tier": "exact",
+        "matched_alias": "saffron",
+        "matched_target": "Saffron",
+        "identity_confidence": 1.0,
+        "identity_decision_reason": "quality_map_match",
+        "mapped": True,
+        "mapped_identity": True,
+        "scoreable_identity": True,
+        "role_classification": "active_scorable",
+        "recognition_source": None,
+        "recognition_type": None,
+        "recognition_reason": None,
+        "form_id": None,
+        "form_source": None,
+        "form_unmapped": False,
+        "delivers_markers": [],
+        "quantity": "0.0",
+        "unit": "NP",
+    }
+    write_json(
+        product_file,
+        [
+            {
+                "id": "zero-np-dose-canary",
+                "ingredient_quality_data": {
+                    "ingredients": [base_row],
+                    "ingredients_scorable": [base_row],
+                    "ingredients_recognized_non_scorable": [],
+                    "ingredients_skipped": [],
+                },
+            }
+        ],
+    )
+
+    args = argparse.Namespace(
+        enriched_file=[],
+        enriched_dir=[],
+        product_file=[str(product_file)],
+        products_dir=None,
+        dist_dir=None,
+    )
+    cleaner_codes = {finding.code for finding in audit.audit_cleaner(args)}
+    enrichment_codes = {finding.code for finding in audit.audit_enrichment(args)}
+
+    assert "IQD_SCORABLE_MISSING_DOSE_EVIDENCE" in cleaner_codes
+    assert "ENRICHMENT_SCORABLE_MISSING_DOSE" in enrichment_codes
+
+
 def test_enrichment_contract_validates_product_scoring_evidence(tmp_path):
     product_file = tmp_path / "product.json"
     write_json(

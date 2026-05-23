@@ -293,6 +293,44 @@ def _is_non_quantified(row: dict[str, Any]) -> bool:
     return False
 
 
+def _row_has_probiotic_identity(row: dict[str, Any]) -> bool:
+    category = canonical_category(row.get("category"))
+    if category in {"probiotic", "bacteria"}:
+        return True
+    text = _normalize_text(
+        " ".join(
+            str(row.get(key) or "")
+            for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text")
+        )
+    )
+    return any(term in text for term in PROBIOTIC_TERMS)
+
+
+def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
+    """Return True when a cleaner-eligible non-probiotic active should block CFU-only routing."""
+    for row in _safe_list(product.get("activeIngredients")):
+        if not isinstance(row, dict):
+            continue
+        if row.get("score_eligible_by_cleaner") is not True:
+            continue
+        cleaner_role = _normalize_text(row.get("cleaner_row_role"))
+        if cleaner_role and cleaner_role != "active_scorable":
+            continue
+        if _row_has_probiotic_identity(row):
+            continue
+        cid = _normalize_text(row.get("canonical_id"))
+        qty = row.get("quantity", row.get("amount", row.get("qty")))
+        unit = _normalize_text(row.get("unit", row.get("quantityUnit", "")))
+        has_positive_dose = False
+        try:
+            has_positive_dose = float(str(qty).replace(",", "")) > 0 and unit not in _NP_UNITS
+        except (TypeError, ValueError):
+            has_positive_dose = False
+        if cid or has_positive_dose:
+            return True
+    return False
+
+
 _ALL_FUNCTIONAL_TOKENS = (
     _SLEEP_NAME_TOKENS | _IMMUNE_NAME_TOKENS | _JOINT_NAME_TOKENS
     | _BEAUTY_NAME_TOKENS | _FIBER_NAME_TOKENS
@@ -556,15 +594,24 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         bool(probiotic_data.get("is_probiotic_product"))
         and bool(probiotic_data.get("total_cfu"))
     )
+    probiotic_row_identity = int(probiotic_data.get("total_strain_count") or 0) > 0
+    probiotic_cfu_identity_ok = (
+        probiotic_flag
+        and probiotic_row_identity
+        and not _has_non_probiotic_eligible_active(product)
+    )
     if (
         active_count == 0
-        and probiotic_name_signal
-        and (non_quantified_probiotic_count > 0 or probiotic_flag)
+        and (probiotic_name_signal or probiotic_row_identity)
+        and (non_quantified_probiotic_count > 0 or probiotic_cfu_identity_ok)
     ):
         primary_type = "probiotic"
-        confidence = 0.8 if probiotic_flag else 0.65
-        if probiotic_flag:
-            reasons.append("probiotic name + product-level CFU evidence")
+        confidence = 0.8 if probiotic_cfu_identity_ok else 0.65
+        if probiotic_cfu_identity_ok:
+            if probiotic_name_signal:
+                reasons.append("probiotic name + product-level CFU evidence")
+            else:
+                reasons.append("probiotic row identity + product-level CFU evidence")
         else:
             reasons.append(
                 f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
@@ -575,7 +622,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     ):
         probiotic_majority = probiotic_count >= max(1, ceil(active_count * 0.5))
         if active_count == 1 or probiotic_majority or (
-            (probiotic_name_signal or probiotic_flag)
+            probiotic_name_signal
             and probiotic_count >= max(1, ceil(active_count * 0.25))
         ):
             primary_type = "probiotic"

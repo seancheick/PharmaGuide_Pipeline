@@ -100,7 +100,7 @@ SCORABLE_BLOCKED_ROLES = {
 }
 
 ACTIVITY_UNITS = {"SPU", "HUT", "FCC", "SU", "DU", "ALU", "FIP", "SAPU", "CU", "FU"}
-VALID_IQD_DOSE_CLASSES = {"therapeutic_mass", "enzyme_activity", "probiotic_cfu", "percent_dv_only"}
+VALID_NON_MASS_DOSE_CLASSES = {"enzyme_activity", "probiotic_cfu"}
 REQUIRED_ENRICHMENT_ROW_FIELDS = {
     "source_section",
     "raw_source_path",
@@ -197,6 +197,21 @@ def numeric_value(value: Any, default: float = 0.0) -> float:
         return float(value)
     except (TypeError, ValueError):
         return default
+
+
+def positive_number_in_text(value: Any) -> bool:
+    """Return True only for a positive numeric token, not any digit-like text."""
+    if isinstance(value, (int, float)):
+        return value > 0
+    if not isinstance(value, str):
+        return False
+    match = re.search(r"[-+]?\d[\d,]*(?:\.\d+)?", value)
+    if not match:
+        return False
+    try:
+        return float(match.group(0).replace(",", "")) > 0
+    except ValueError:
+        return False
 
 
 def sha256_file(path: Path) -> str:
@@ -369,13 +384,17 @@ def canonical_id(row: dict[str, Any]) -> str:
 
 def has_dose_evidence(row: dict[str, Any]) -> bool:
     dose_class = str(row.get("dose_class") or "").strip()
-    if dose_class in VALID_IQD_DOSE_CLASSES:
+    if dose_class in VALID_NON_MASS_DOSE_CLASSES:
         return True
+    if dose_class == "percent_dv_only":
+        return numeric_value(
+            row.get("percent_daily_value")
+            or row.get("daily_value_percent")
+            or row.get("percent_dv")
+        ) > 0
     for key in ("quantity", "amount", "dose_amount", "value", "activity_value"):
         value = row.get(key)
-        if isinstance(value, (int, float)) and value > 0:
-            return True
-        if isinstance(value, str) and re.search(r"\d", value):
+        if positive_number_in_text(value):
             return True
     text = " ".join(str(row.get(key) or "") for key in ("quantity_text", "amount_text", "unit", "units"))
     return any(re.search(rf"\b{re.escape(unit)}\b", text, re.I) for unit in ACTIVITY_UNITS)
@@ -617,15 +636,7 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                         findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_FIELD_MISSING", f"{pid}: scoreable product evidence missing {missing}", str(file_path)))
                     if evidence.get("evidence_type") == "probiotic_cfu":
                         taxonomy_primary_type = str(_safe_dict(product.get("supplement_taxonomy")).get("primary_type") or "").lower()
-                        row_identity_reason = evidence.get("reason") == "product_level_cfu_with_probiotic_row_identity"
-                        strict_rows = _safe_dict(product.get("ingredient_quality_data")).get("ingredients_scorable") or []
-                        has_non_probiotic_strict_active = any(
-                            isinstance(row, dict)
-                            and not any(term in " ".join(str(row.get(key) or "").lower() for key in ("canonical_id", "name", "standard_name")) for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus"))
-                            and str(row.get("dose_class") or "").lower() != "probiotic_cfu"
-                            for row in strict_rows
-                        )
-                        if taxonomy_primary_type != "probiotic" and (not row_identity_reason or has_non_probiotic_strict_active):
+                        if taxonomy_primary_type != "probiotic":
                             findings.append(Finding("ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE", f"{pid}: scoreable probiotic_cfu evidence on non-probiotic taxonomy {taxonomy_primary_type!r}", str(file_path)))
                 elif evidence.get("evidence_type") == "probiotic_cfu" and not evidence.get("rejection_reason"):
                     findings.append(Finding("ENRICHMENT_PRODUCT_CFU_REJECTION_REASON_MISSING", f"{pid}: rejected probiotic_cfu evidence lacks rejection_reason", str(file_path)))

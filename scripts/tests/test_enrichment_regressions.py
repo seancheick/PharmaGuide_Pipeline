@@ -2373,6 +2373,78 @@ class TestProbioticDataStructureRegressionLock:
         assert evidence[0]['scoreable'] is False
         assert evidence[0]['rejection_reason'] == 'non_probiotic_strict_active_present'
 
+    def test_product_level_cfu_rejected_when_cleaner_active_is_non_probiotic(self, enricher):
+        """CFU metadata attached to a CBD/quercetin-style product stays diagnostic only."""
+        evidence = enricher._collect_product_scoring_evidence({
+            'activeIngredients': [
+                {
+                    'name': 'Cannabidiol',
+                    'canonical_id': 'cbd_cannabidiol',
+                    'quantity': 25,
+                    'unit': 'mg',
+                    'score_eligible_by_cleaner': True,
+                    'cleaner_row_role': 'active_scorable',
+                }
+            ],
+            'probiotic_data': {
+                'is_probiotic_product': True,
+                'has_cfu': True,
+                'total_cfu': 5_000_000_000,
+                'total_strain_count': 1,
+                'probiotic_blends': [
+                    {'name': 'Probiotic Base', 'raw_source_path': 'ingredientRows[1]'}
+                ],
+                'cfu_source': 'statements',
+                'cfu_raw_source_path': 'statements[0]',
+                'cfu_evidence_scope': 'product_level',
+                'cfu_linked_rows': ['statements[0]'],
+            },
+            'supplement_taxonomy': {'primary_type': 'general_supplement'},
+            'ingredient_quality_data': {'ingredients_scorable': []},
+        })
+
+        assert evidence[0]['scoreable'] is False
+        assert evidence[0]['rejection_reason'] == 'non_probiotic_strict_active_present'
+
+    def test_fucoidan_marker_label_context_overrides_generic_kelp_source(self, enricher):
+        product = {
+            'id': 'test_fucoidan_marker_context',
+            'product_name': 'Fucoidan 70% 300 mg',
+            'fullName': 'Fucoidan 70% 300 mg',
+            'activeIngredients': [
+                {
+                    'name': 'Kelp Extract',
+                    'standardName': 'Seaweed Extract',
+                    'raw_source_text': 'Kelp Extract',
+                    'canonical_id': 'kelp_powder',
+                    'canonical_source_db': 'botanical_ingredients',
+                    'source_section': 'active',
+                    'raw_source_path': 'ingredientRows[0]',
+                    'cleaner_row_role': 'active_scorable',
+                    'score_eligible_by_cleaner': True,
+                    'dose_class': 'therapeutic_mass',
+                    'raw_taxonomy': {
+                        'category': 'botanical',
+                        'ingredientGroup': 'Kelp',
+                        'forms': [{'name': 'Laminaria japonica Extract'}],
+                    },
+                    'quantity': 600,
+                    'unit': 'mg',
+                    'notes': 'standardized to 70%',
+                    'forms': [{'name': 'Laminaria japonica Extract'}],
+                }
+            ],
+            'inactiveIngredients': [],
+        }
+
+        iqd = enricher._collect_ingredient_quality_data(product)
+        scorable = iqd['ingredients_scorable']
+
+        assert len(scorable) == 1
+        assert scorable[0]['canonical_id'] == 'fucoidan'
+        assert scorable[0]['role_classification'] == 'active_scorable'
+        assert scorable[0]['fallback_reason'] == 'kelp_fucoidan_marker_context'
+
     def test_probiotic_data_clinical_strain_lookup_matches_db(self, enricher):
         """Lactobacillus gasseri and Bifidobacterium longum should match the
         clinically_relevant_strains.json database. This locks the strain match
