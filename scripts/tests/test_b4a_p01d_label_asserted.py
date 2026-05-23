@@ -42,9 +42,13 @@ def scorer() -> SupplementScorer:
 
 
 def _make_product(verified_cert_programs=None, ingredients=None):
-    # _get_active_ingredients reads from ingredient_quality_data.ingredients_scorable.
-    # We mirror it into ingredients_scorable so the omega-gate detection works.
-    ings = ingredients or []
+    # _get_active_ingredients reads from ingredient_quality_data.ingredients_scorable
+    # and rejects rows missing the cleaner contract fields (see
+    # scripts/scoring_input_contract.py:_evaluate_row). We enrich each provided
+    # ingredient with a minimal-but-valid contract envelope so the omega-gate
+    # detection in _compute_certifications_bonus can see them.
+    raw_ings = ingredients or []
+    contract_ings = [_with_scorable_contract(i, idx) for idx, i in enumerate(raw_ings)]
     return {
         "verified_cert_programs": verified_cert_programs or [],
         "certification_data": {
@@ -55,9 +59,32 @@ def _make_product(verified_cert_programs=None, ingredients=None):
         "gmp_level": None,
         "has_coa": False,
         "has_batch_lookup": False,
-        "ingredients": ings,
-        "ingredient_quality_data": {"ingredients_scorable": ings},
+        "ingredients": raw_ings,
+        "ingredient_quality_data": {"ingredients_scorable": contract_ings},
     }
+
+
+def _with_scorable_contract(ingredient: dict, idx: int) -> dict:
+    """Decorate a test ingredient dict with the cleaner-emitted contract
+    fields the strict scoring input requires. Test inputs only specify
+    `name` (and optionally `standard_name`); the rest is canonical scaffolding."""
+    enriched = dict(ingredient)
+    enriched.setdefault("canonical_id", _slug(enriched.get("name", "")))
+    enriched.setdefault("quantity", 500)
+    enriched.setdefault("unit", "mg")
+    enriched.setdefault("source_section", "active")
+    enriched.setdefault("raw_source_path", f"ingredientRows[{idx}]")
+    enriched.setdefault("cleaner_row_role", "active_scorable")
+    enriched.setdefault("score_eligible_by_cleaner", True)
+    enriched.setdefault("dose_class", "therapeutic_mass")
+    enriched.setdefault("role_classification", "active_scorable")
+    enriched.setdefault("scoreable_identity", True)
+    enriched.setdefault("mapped", True)
+    return enriched
+
+
+def _slug(name: str) -> str:
+    return (name or "").strip().lower().replace(" ", "_") or "unspecified"
 
 
 def _label(program: str, source: str = "product_label"):
