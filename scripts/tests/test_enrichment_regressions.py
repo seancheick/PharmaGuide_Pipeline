@@ -1157,8 +1157,8 @@ class TestStandardizedBotanicalAliasRegression:
     def enricher(self):
         return SupplementEnricherV3()
 
-    def test_saffr_activ_maps_to_saffron_standardized_entry(self, enricher):
-        """Branded Saffr'Activ labels should map to saffron and qualify when marker threshold is present."""
+    def test_saffr_activ_maps_to_saffron_identity_without_standardized_bonus(self, enricher):
+        """Saffr'Activ should resolve as saffron identity without an A5b standardized bonus."""
         product = {
             "activeIngredients": [
                 {
@@ -1172,11 +1172,16 @@ class TestStandardizedBotanicalAliasRegression:
         }
 
         standardized_hits = enricher._collect_standardized_botanicals(product)
-        assert standardized_hits, "Expected standardized saffron hit for Saffr'Activ label"
+        assert standardized_hits == []
 
-        first = standardized_hits[0]
-        assert first.get("botanical_id") == "saffron"
-        assert first.get("meets_threshold") is True
+        quality_map = enricher.databases.get("ingredient_quality_map", {})
+        identity = enricher._match_quality_map(
+            product["activeIngredients"][0]["name"],
+            product["activeIngredients"][0]["standardName"],
+            quality_map,
+        )
+        assert identity is not None
+        assert identity.get("canonical_id") == "saffron"
 
     def test_citrus_bergamot_standardized_profile_qualifies(self, enricher):
         """Bergamot polyphenolic profile labels should qualify as standardized botanical evidence."""
