@@ -23952,7 +23952,8 @@
         "PANMOL B COMPLEX",
         "panmol b complex"
       ],
-      "category": "vitamin_complex_branded",
+      "category": "label_descriptor",
+      "is_label_descriptor": true,
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -23977,7 +23978,8 @@
         "organic Aloe PolyMax",
         "organic aloe polymax"
       ],
-      "category": "botanical_branded",
+      "category": "label_descriptor",
+      "is_label_descriptor": true,
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -24000,7 +24002,7 @@
         "PureAlgaeOmega3",
         "purealgaeomega3"
       ],
-      "category": "carrier_oil_branded",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -24025,7 +24027,7 @@
         "PurePlantOmega3",
         "pureplantomega3"
       ],
-      "category": "carrier_oil_branded",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -24049,7 +24051,8 @@
         "concentrated seawater mineral complex",
         "seawater mineral complex"
       ],
-      "category": "mineral_complex",
+      "category": "label_descriptor",
+      "is_label_descriptor": true,
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
