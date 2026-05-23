@@ -135,3 +135,53 @@ def test_isoflavones_no_generic_isoflavone_alias_added(iqm):
         "Generic 'isoflavone' (singular) alias added — this broadens coverage "
         "beyond soy and is out of scope for this slice."
     )
+
+
+# ---------------------------------------------------------------------------
+# Commit #3: rna_dna full-name alias
+# ---------------------------------------------------------------------------
+
+
+def test_rna_dna_nucleic_acid_complex_form_includes_ribonucleic_acid_alias(iqm):
+    """Life Extension RNA Capsules 500 mg (231631) row.name='Ribonucleic Acid'
+    is the unabbreviated full chemical name for RNA. The existing
+    'nucleic acid complex' form already includes 'rna' (abbreviation) as an
+    alias; this adds the spelled-out variant. Form choice: the most
+    conservative bio_score=4 form (oral RNA is degraded — per existing
+    notes — so the low score is intentional)."""
+    assert "rna_dna" in iqm, "rna_dna parent missing from IQM"
+    forms = iqm["rna_dna"].get("forms", {})
+    assert "nucleic acid complex" in forms
+    aliases_lower = [a.lower() for a in forms["nucleic acid complex"].get("aliases", [])]
+    assert "ribonucleic acid" in aliases_lower, (
+        "alias 'Ribonucleic Acid' missing from rna_dna."
+        "forms['nucleic acid complex'].aliases. "
+        "Life Extension RNA Capsules (231631) will stay NOT_SCORED."
+    )
+
+
+def test_rna_dna_nucleic_acid_complex_bio_score_pinned(iqm):
+    """Pin the very conservative bio_score = 4. Per the existing notes, oral
+    RNA/DNA is completely degraded by pancreatic nucleases — the body
+    synthesizes nucleotides de novo. Low bio_score is intentional and must
+    NOT be raised by an alias addition."""
+    form = iqm["rna_dna"]["forms"]["nucleic acid complex"]
+    assert form["bio_score"] == 4, (
+        f"nucleic acid complex bio_score changed from 4 to {form['bio_score']} — "
+        f"alias-add must not modify the conservative bio_score for oral RNA."
+    )
+
+
+def test_rna_dna_no_new_clinical_claims_added(iqm):
+    """Negative-scope guard: per dev review v2, alias-add must NOT add any
+    new clinical claim. The form's existing 'notes' field must remain
+    unchanged (Batch 21 audit text from 2026-04-25). Validate it still
+    contains the canonical 'completely degraded' phrasing that justifies
+    the conservative score."""
+    form = iqm["rna_dna"]["forms"]["nucleic acid complex"]
+    notes = form.get("notes", "")
+    assert "completely degraded" in notes.lower() or "degraded by pancreatic" in notes.lower(), (
+        "rna_dna nucleic acid complex notes lost the pancreatic-degradation "
+        "rationale — alias-add must not modify the form notes / clinical "
+        "rationale."
+    )

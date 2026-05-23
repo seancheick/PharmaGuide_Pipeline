@@ -23808,7 +23808,8 @@
           "dna supplement",
           "nucleic acids supplement",
           "rna/dna complex supplement",
-          "cellular nucleic acids supplement"
+          "cellular nucleic acids supplement",
+          "Ribonucleic Acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
