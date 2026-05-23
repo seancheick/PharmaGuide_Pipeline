@@ -1201,7 +1201,13 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Motherwort Aerial Parts Extract", "Motherwort"),
         ("Mojave Yucca root extract", "Yucca"),
         ("Mate leaf extract", "Yerba Mate"),
-        ("Laminaria digitata", "Kelp"),
+        # Laminaria digitata is the species-level botanical identity (one of
+        # several "Kelp" species). The Fucoidan/Kelp resolver work (2026-05-22)
+        # deliberately keeps it distinct from the generic "Kelp"/"Brown Kelp"
+        # IQM parents so products labelled with the latin species name retain
+        # that fidelity in the blob. Match on "Laminaria" to lock the
+        # species-level mapping rather than aliasing into Kelp.
+        ("Laminaria digitata", "Laminaria"),
         ("Ivy Leaf Extract", "Ivy"),
         ("Linden", "Linden"),
         ("Neumentix", "Spearmint"),
