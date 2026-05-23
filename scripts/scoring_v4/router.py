@@ -75,10 +75,9 @@ _OMEGA_STANDALONE_RE = re.compile(r"\b(EPA|DHA)\b", re.IGNORECASE)
 _OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\b", re.IGNORECASE)
 
 # Per scripts/data/omega_rubric.json router.ingredient_panel_canonicals.
-# Strongest routing signal — operates on the enricher's canonicalized
-# identity rather than label text. A product whose ingredient panel has
-# any EPA/DHA canonical with positive quantity is omega regardless of
-# what the name says.
+# Strong omega signal — operates on the enricher's canonicalized identity
+# rather than label text. It is not enough by itself when EPA/DHA is only an
+# incidental row in a broad mixed formula; see _has_primary_omega_panel().
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
 _B_VITAMIN_CANONICALS = {
     "vitamin_b1_thiamine",
@@ -97,22 +96,72 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
 }
 
 
+def _scoring_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
+    return [
+        row for row in get_scoring_ingredients(product or {}, strict=True).rows
+        if isinstance(row, dict)
+    ]
+
+
+def _positive_quantity(row: Dict[str, Any]) -> bool:
+    for key in ("quantity", "amount", "dose", "dosage"):
+        value = row.get(key)
+        try:
+            if value is not None and float(value) > 0:
+                return True
+        except (TypeError, ValueError):
+            continue
+    return False
+
+
+def _omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
+    """Return (positive EPA/DHA rows, positive scorable rows).
+
+    The second count is intentionally based on positive scorable rows, not raw
+    label rows, so excipients / nested display-only rows do not dilute the
+    primary-product check.
+    """
+    omega_rows = 0
+    total_rows = 0
+    for ing in _scoring_rows(product):
+        canonical = str(ing.get("canonical_id") or "").strip().lower()
+        if not canonical or not _positive_quantity(ing):
+            continue
+        total_rows += 1
+        if canonical in _OMEGA_INGREDIENT_CANONICALS:
+            omega_rows += 1
+    return omega_rows, total_rows
+
+
+def _has_primary_omega_panel(product: Dict[str, Any]) -> bool:
+    """True when EPA/DHA is the product's primary panel identity.
+
+    Any EPA/DHA row used to route omega. Real-catalog review found mixed
+    products with incidental DHA (for example broad antioxidant/amino formulas)
+    being forced into the omega module. Require EPA/DHA to be all or at least
+    half of positive scorable rows unless explicit omega name intent exists.
+    """
+    omega_rows, total_rows = _omega_panel_counts(product)
+    if omega_rows <= 0 or total_rows <= 0:
+        return False
+    return omega_rows == total_rows or (omega_rows / total_rows) >= 0.5
+
+
 def _has_omega_ingredient(product: Dict[str, Any]) -> bool:
-    """Return True when ingredient_quality_data contains any EPA/DHA
-    canonical with a positive quantity. Strongest router signal."""
+    """Return True when EPA/DHA is a primary panel signal, not incidental."""
+    return _has_primary_omega_panel(product)
+
+
+def _has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
+    """Return True for any positive EPA/DHA row, even if incidental."""
     for ing in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(ing, dict):
             continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
         if canonical not in _OMEGA_INGREDIENT_CANONICALS:
             continue
-        for key in ("quantity", "amount", "dose", "dosage"):
-            value = ing.get(key)
-            try:
-                if value is not None and float(value) > 0:
-                    return True
-            except (TypeError, ValueError):
-                continue
+        if _positive_quantity(ing):
+            return True
     return False
 
 
@@ -122,7 +171,7 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     These are fatty-acid supplements, but not EPA/DHA omega-module products.
     They must not route via name-only "omega" marketing.
     """
-    if _has_omega_ingredient(product):
+    if _has_any_epa_dha_row(product):
         return False
     for ing in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(ing, dict):
@@ -197,7 +246,7 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     generic (where ALA gets the IOM AI when the rda_optimal_uls fix
     lands), not omega.
     """
-    # 1. Strongest signal: enricher canonicalized an EPA/DHA ingredient.
+    # 1. Strongest signal: EPA/DHA is a primary panel identity.
     if _has_omega_ingredient(product):
         return True
 
@@ -334,7 +383,7 @@ def class_for_product(product: Dict[str, Any]) -> str:
                 return "generic"
             return "multi_or_prenatal"
         if module == "omega":
-            return "omega"
+            return "omega" if _is_omega_class(product, name_text) else "generic"
         if module == "generic":
             # Taxonomy is authoritative for generic classes, but the
             # physical panel fact of disclosed EPA/DHA still wins. Explicit

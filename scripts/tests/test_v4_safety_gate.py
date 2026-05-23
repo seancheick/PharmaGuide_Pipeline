@@ -266,6 +266,45 @@ def test_top_level_has_recalled_ingredient_flag_returns_unsafe() -> None:
     assert result.verdict == "UNSAFE"
 
 
+@pytest.mark.parametrize(
+    ("inactive_name", "expected_name"),
+    [
+        ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
+        ("FD&C Red #3", "FD&C Red No. 3"),
+    ],
+)
+def test_inactive_banned_resolver_hits_return_blocked(
+    inactive_name: str,
+    expected_name: str,
+) -> None:
+    """v4 must honor the canonical inactive resolver path used by v3/final DB.
+
+    Real release audit caught v3 BLOCKED products becoming v4 SAFE because
+    contaminant_data.banned_substances was empty while the banned inactive
+    lived in inactiveIngredients. The v4 safety gate must read that canonical
+    resolver signal directly instead of relying only on contaminant_data.
+    """
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "contaminant_data": {
+            "banned_substances": {"found": False, "substances": []}
+        },
+        "inactiveIngredients": [
+            {
+                "name": inactive_name,
+                "raw_source_text": inactive_name,
+                "standardName": inactive_name,
+            }
+        ],
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict == "BLOCKED"
+    assert result.short_circuits_scoring is True
+    assert result.blocking_reason == "banned_ingredient"
+    assert expected_name in (result.matched_substance or "")
+
+
 # --- Robustness -----------------------------------------------------------
 
 

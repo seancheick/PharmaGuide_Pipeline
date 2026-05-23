@@ -25,7 +25,13 @@ shared with v3, but the verdict logic here is independent.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import lru_cache
 from typing import Any, Dict, List, Optional
+
+from inactive_ingredient_resolver import (
+    InactiveIngredientResolver,
+    SOURCE_BANNED_RECALLED,
+)
 
 
 # Verdict precedence — index = severity rank.
@@ -118,6 +124,67 @@ def _substance_name(s: Dict[str, Any]) -> str:
     )
 
 
+@lru_cache(maxsize=1)
+def _inactive_resolver() -> InactiveIngredientResolver:
+    return InactiveIngredientResolver()
+
+
+def _ingredient_name_terms(ingredient: Dict[str, Any]) -> tuple[str, Optional[str]]:
+    raw_name = (
+        ingredient.get("name")
+        or ingredient.get("raw_source_text")
+        or ingredient.get("standardName")
+        or ingredient.get("standard_name")
+    )
+    standard_name = ingredient.get("standardName") or ingredient.get("standard_name")
+    return str(raw_name or ""), str(standard_name) if standard_name else None
+
+
+def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Return banned_recalled resolver hits from active + inactive rows.
+
+    v3/final DB already use the unified inactive resolver to close the gap
+    where banned inactives (for example BVO or FD&C Red No. 3) are absent from
+    contaminant_data.banned_substances. v4 owns its verdict policy, but it must
+    consume the same canonical safety identity source.
+    """
+    try:
+        resolver = _inactive_resolver()
+    except Exception:
+        return []
+
+    hits: List[Dict[str, Any]] = []
+    for source_key, role in (
+        ("activeIngredients", "active"),
+        ("inactiveIngredients", "inactive"),
+    ):
+        for ingredient in _safe_list((product or {}).get(source_key)):
+            if not isinstance(ingredient, dict):
+                continue
+            raw_name, standard_name = _ingredient_name_terms(ingredient)
+            if not raw_name:
+                continue
+            try:
+                resolution = resolver.resolve(
+                    raw_name=raw_name,
+                    standard_name=standard_name,
+                )
+            except Exception:
+                continue
+            if resolution.matched_source != SOURCE_BANNED_RECALLED:
+                continue
+            if not (resolution.is_safety_concern or resolution.is_banned):
+                continue
+            hits.append({
+                "name": resolution.display_label or raw_name,
+                "status": resolution.regulatory_status,
+                "inactive_policy": resolution.inactive_policy,
+                "role": role,
+                "matched_rule_id": resolution.matched_rule_id,
+            })
+    return hits
+
+
 def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
@@ -131,6 +198,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     result = SafetyResult()
 
     substances = _extract_substances(product)
+    seen_hits: set[tuple[str, str]] = set()
     for s in substances:
         match_type = _norm(s.get("match_type") or s.get("match_method"))
         # Non-exact/alias hits don't auto-trigger a verdict change — they
@@ -142,6 +210,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
 
         status = _norm(s.get("status") or s.get("recall_status"))
         name = _substance_name(s)
+        seen_hits.add((_norm(name), status))
 
         if status == "banned":
             new_verdict = "BLOCKED"
@@ -168,6 +237,46 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
             sig = f"B0_STATUS_{status.upper()}"
             if sig not in result.safety_signals:
                 result.safety_signals.append(sig)
+
+    for hit in _iter_resolver_safety_hits(product):
+        status = _norm(hit.get("status"))
+        name = str(hit.get("name") or "unknown")
+        key = (_norm(name), status)
+        if key in seen_hits:
+            continue
+        seen_hits.add(key)
+
+        role = _norm(hit.get("role"))
+        inactive_policy = _norm(hit.get("inactive_policy"))
+
+        if status == "banned":
+            new_verdict = "BLOCKED"
+            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
+                result.verdict = new_verdict
+                result.blocking_reason = "banned_ingredient"
+                result.matched_substance = name
+        elif status == "recalled":
+            new_verdict = "UNSAFE"
+            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
+                result.verdict = new_verdict
+                result.blocking_reason = "recalled_ingredient"
+                result.matched_substance = name
+        elif status == "high_risk":
+            if role == "inactive" and inactive_policy == "excipient_acceptable":
+                if "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY" not in result.safety_signals:
+                    result.safety_signals.append("B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY")
+                continue
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            if "B0_HIGH_RISK_SUBSTANCE" not in result.safety_signals:
+                result.safety_signals.append("B0_HIGH_RISK_SUBSTANCE")
+        elif status == "watchlist":
+            if role == "inactive" and inactive_policy == "excipient_acceptable":
+                if "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY" not in result.safety_signals:
+                    result.safety_signals.append("B0_WATCHLIST_EXCIPIENT_WARNING_ONLY")
+                continue
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            if "B0_WATCHLIST_SUBSTANCE" not in result.safety_signals:
+                result.safety_signals.append("B0_WATCHLIST_SUBSTANCE")
 
     # Top-level enricher flags — defense in depth. If contaminant_data
     # was somehow empty but the enricher set the boolean (older blob

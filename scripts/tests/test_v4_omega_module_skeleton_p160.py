@@ -497,6 +497,75 @@ def test_router_dispatches_ingredient_panel_dha_to_omega() -> None:
     assert class_for_product(product) == "omega"
 
 
+def test_router_does_not_route_mixed_formula_with_incidental_dha_to_omega() -> None:
+    """A broad mixed formula with one DHA row is not an omega product.
+
+    Real catalog regression: Thorne SynaQuell had 13 actives and one DHA
+    row, was taxonomy-tagged omega_3, then v4 routed it into the omega module.
+    The omega module should be reserved for primary EPA/DHA products, not
+    every formula containing incidental DHA.
+    """
+    from scoring_v4.router import class_for_product
+
+    product = {
+        "product_name": "SynaQuell",
+        "primary_type": "omega_3",
+        "supplement_taxonomy": {"primary_type": "omega_3"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"name": "Riboflavin", "canonical_id": "vitamin_b2_riboflavin", "quantity": 25, "unit": "mg"},
+                {"name": "Magnesium", "canonical_id": "magnesium", "quantity": 59, "unit": "mg"},
+                {"name": "L-Leucine", "canonical_id": "l_leucine", "quantity": 1250, "unit": "mg"},
+                {"name": "L-Isoleucine", "canonical_id": "l_isoleucine", "quantity": 625, "unit": "mg"},
+                {"name": "L-Valine", "canonical_id": "l_valine", "quantity": 625, "unit": "mg"},
+                {"name": "Glutathione", "canonical_id": "glutathione", "quantity": 250, "unit": "mg"},
+                {"name": "Curcumin", "canonical_id": "curcumin", "quantity": 125, "unit": "mg"},
+                {"name": "DHA", "canonical_id": "dha", "quantity": 125, "unit": "mg"},
+                {"name": "Resveratrol", "canonical_id": "resveratrol", "quantity": 125, "unit": "mg"},
+                {"name": "CoQ10", "canonical_id": "coq10", "quantity": 50, "unit": "mg"},
+            ],
+        },
+    }
+    assert class_for_product(product) == "generic"
+
+
+def test_router_does_not_route_theanine_caffeine_with_incidental_dha_to_omega() -> None:
+    """DHA can appear in non-omega functional stacks; that alone is not enough."""
+    from scoring_v4.router import class_for_product
+
+    product = {
+        "product_name": "L-Theanine + Caffeine",
+        "primary_type": "omega_3",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"name": "DHA", "canonical_id": "dha", "quantity": 450, "unit": "mg"},
+                {"name": "L-Theanine", "canonical_id": "l_theanine", "quantity": 200, "unit": "mg"},
+                {"name": "Caffeine", "canonical_id": "caffeine", "quantity": 100, "unit": "mg"},
+            ],
+        },
+    }
+    assert class_for_product(product) == "generic"
+
+
+def test_router_keeps_fish_oil_with_vitamin_d_as_omega() -> None:
+    """A fish-oil product with vitamin D remains omega: EPA/DHA is primary."""
+    from scoring_v4.router import class_for_product
+
+    product = {
+        "product_name": "Fish Oil With Vitamin D3",
+        "primary_type": "omega_3",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"name": "Vitamin D", "canonical_id": "vitamin_d", "quantity": 25, "unit": "mcg"},
+                {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 755, "unit": "mg"},
+                {"name": "EPA", "canonical_id": "epa", "quantity": 33, "unit": "mg"},
+                {"name": "DHA", "canonical_id": "dha", "quantity": 166, "unit": "mg"},
+            ],
+        },
+    }
+    assert class_for_product(product) == "omega"
+
+
 def test_router_does_not_route_dhea_canonical_to_omega() -> None:
     """A hormone product with canonical_id=dhea must NOT route to omega.
     Ingredient-panel detection only triggers on EPA/DHA/EPA_DHA canonicals,
