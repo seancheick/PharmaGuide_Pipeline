@@ -51,6 +51,7 @@ EXPECTED_DIMENSION_CAPS = {
 COMPLETE_PROBIOTIC_PRODUCT = {
     "status": "active",
     "form_factor": "capsule",
+    "supplement_taxonomy": {"primary_type": "probiotic"},
     "supplement_type": {"type": "probiotic"},
     "ingredient_quality_data": {
         "total_active": 1,
@@ -247,6 +248,7 @@ def test_shadow_does_not_wire_probiotic_module_when_completeness_fails() -> None
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     incomplete = {
+        "supplement_taxonomy": {"primary_type": "probiotic"},
         "supplement_type": {"type": "probiotic"},
         "ingredient_quality_data": {
             "total_active": 0,
@@ -266,6 +268,7 @@ def test_shadow_does_not_route_generic_product_to_probiotic_module() -> None:
 
     generic = {
         "status": "active", "form_factor": "capsule",
+        "supplement_taxonomy": {"primary_type": "single_mineral"},
         "supplement_type": {"type": "single_nutrient"},
         "ingredient_quality_data": {
             "total_active": 1,

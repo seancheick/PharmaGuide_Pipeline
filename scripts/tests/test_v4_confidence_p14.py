@@ -190,7 +190,12 @@ def test_claimed_cert_without_registry_match_lowers_verification_confidence() ->
 def test_mapped_coverage_between_gate_and_perfect_is_moderate_identity_confidence() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
-    out = score_product_v4_shadow(_product(mapped_coverage=0.9))
+    rows = [_ingredient(name=f"Nutrient {i}", canonical_id=f"nutrient_{i}") for i in range(9)]
+    rows.append(_ingredient(name="Unmapped", canonical_id=""))
+    product = _product(mapped_coverage=0.9)
+    product["ingredient_quality_data"]["ingredients_scorable"] = rows
+    product["ingredient_quality_data"]["ingredients"] = rows
+    out = score_product_v4_shadow(product)
     confidence = out["shadow_score_v4_breakdown"]["confidence"]
 
     assert confidence["identity"]["level"] == "moderate"

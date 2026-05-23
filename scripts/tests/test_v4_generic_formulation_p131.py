@@ -787,7 +787,7 @@ def test_enzyme_recognition_named_single_ingredient_gets_half_point() -> None:
         _product(
             supp_type="single_nutrient",
             ingredients=[
-                _ingredient(name="Protease", canonical_id="protease", bio_score=10, quantity=None, unit=None)
+                _ingredient(name="Protease", canonical_id="protease", bio_score=10, quantity=100, unit="HUT")
             ],
         )
     )

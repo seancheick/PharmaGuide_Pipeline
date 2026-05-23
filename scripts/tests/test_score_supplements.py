@@ -284,8 +284,8 @@ class TestV30Scoring:
         result = scorer._get_active_ingredients(product)
         assert result == []
 
-    def test_fallback_with_mapped_actives_works(self, scorer):
-        """When ingredients_scorable is empty but ingredients has mapped actives, fallback works."""
+    def test_no_fallback_to_legacy_iqd_ingredients_for_scoring(self, scorer):
+        """Scoring uses ingredients_scorable only; legacy ingredients are display/compat."""
         product = make_base_product()
         product["ingredient_quality_data"]["ingredients_scorable"] = []
         product["ingredient_quality_data"]["ingredients"] = [
@@ -293,13 +293,17 @@ class TestV30Scoring:
             {"name": "Silicon Dioxide", "mapped": False, "is_filler": True, "score": 0},
         ]
         result = scorer._get_active_ingredients(product)
-        assert len(result) == 2  # Returns full list including filler
+        assert result == []
+        diagnostics = scorer._iqd_contract_diagnostics(product)
+        assert diagnostics["iqd_ingredients_fallback_used"] is False
+        assert diagnostics["strict_contract_passed"] is True
 
     def test_mapping_gate_not_scored_when_full_mapping_required(self, scorer):
         product = make_base_product()
         product["ingredient_quality_data"]["unmapped_count"] = 1
-        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
-        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Unknown Active"
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["canonical_id"] = ""
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["name"] = "Unknown Active"
         scorer.feature_gates["require_full_mapping"] = True
 
         result = scorer.score_product(product)
@@ -347,8 +351,9 @@ class TestV30Scoring:
     def test_mapping_kpis_exclude_banned_exact_alias_unmapped(self, scorer):
         product = make_base_product()
         product["ingredient_quality_data"]["unmapped_count"] = 1
-        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
-        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Anatabine"
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["canonical_id"] = ""
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["name"] = "Anatabine"
         product["contaminant_data"]["banned_substances"] = {
             "found": True,
             "substances": [
@@ -370,8 +375,9 @@ class TestV30Scoring:
     def test_unmatched_banned_exact_alias_forces_unsafe(self, scorer):
         product = make_base_product()
         product["ingredient_quality_data"]["unmapped_count"] = 1
-        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
-        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Anatabine"
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["canonical_id"] = ""
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["name"] = "Anatabine"
         product["contaminant_data"]["banned_substances"] = {
             "found": True,
             "substances": [
@@ -663,9 +669,9 @@ class TestV30Scoring:
         product["product_name"] = "Restore"
         product["fullName"] = "Thorne Performance Restore"
         product["ingredient_quality_data"]["ingredients"] = [
-            {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "mapped": True},
-            {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "mapped": True},
-            {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "mapped": True},
+            {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "mapped": True, "quantity": 2.5, "unit": "billion CFU", "dose_class": "probiotic_cfu"},
+            {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "mapped": True, "quantity": 1.25, "unit": "billion CFU", "dose_class": "probiotic_cfu"},
+            {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "mapped": True, "quantity": 1.25, "unit": "billion CFU", "dose_class": "probiotic_cfu"},
         ]
         product["ingredient_quality_data"]["ingredients_scorable"] = deepcopy(
             product["ingredient_quality_data"]["ingredients"]
@@ -957,11 +963,14 @@ class TestNutritionOnlyVerdict:
     def _make_unmapped_whey(self):
         product = make_base_product()
         product["product_name"] = "100% Whey Vanilla Cream"
+        product["product_scoring_class"] = "nutrition_only"
+        product["nutrition_only_reason"] = "protein_powder_meal_replacement_food_shape"
         # Force a single unmapped active to trip require_full_mapping
         product["ingredient_quality_data"]["unmapped_count"] = 1
         product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
         product["ingredient_quality_data"]["ingredients"][1]["name"] = "Whey Protein Concentrate"
         product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["canonical_id"] = ""
         product["ingredient_quality_data"]["ingredients_scorable"][1]["name"] = "Whey Protein Concentrate"
         return product
 
@@ -984,7 +993,7 @@ class TestNutritionOnlyVerdict:
         "Casein Protein Powder",
         "Meal Replacement Vanilla",
     ])
-    def test_food_shape_keywords_route_to_nutrition_only(self, scorer, product_name):
+    def test_explicit_nutrition_only_contract_routes_to_nutrition_only(self, scorer, product_name):
         product = self._make_unmapped_whey()
         product["product_name"] = product_name
         scorer.feature_gates["require_full_mapping"] = True
@@ -1003,6 +1012,7 @@ class TestNutritionOnlyVerdict:
         product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
         product["ingredient_quality_data"]["ingredients"][1]["name"] = "Mystery Compound"
         product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["canonical_id"] = ""
         scorer.feature_gates["require_full_mapping"] = True
 
         result = scorer.score_product(product)
@@ -3106,7 +3116,7 @@ class TestSectionEDoseAdequacy:
         """Product without EPA/DHA returns has_explicit_dose=False."""
         prod = {
             "dsld_id": "X", "product_name": "Vitamin C",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 {"canonical_id": "vitamin_c", "quantity": 500, "unit_normalized": "mg",
                  "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
             ]},
@@ -3155,7 +3165,7 @@ class TestSectionEDoseAdequacy:
         """No serving_basis → assumes 1 serving/day."""
         prod = {
             "dsld_id": "X", "product_name": "Test",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 {"canonical_id": "epa", "quantity": 400, "unit_normalized": "mg",
                  "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
             ]},
@@ -3168,7 +3178,7 @@ class TestSectionEDoseAdequacy:
         """EPA/DHA inside a proprietary blend header should be skipped."""
         prod = {
             "dsld_id": "X", "product_name": "Test",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 {"canonical_id": "epa", "quantity": 500, "unit_normalized": "mg",
                  "is_proprietary_blend": True, "is_blend_header": False, "is_parent_total": False},
             ]},
@@ -3181,7 +3191,7 @@ class TestSectionEDoseAdequacy:
         """EPA parent-total row is skipped; child rows would still count."""
         prod = {
             "dsld_id": "X", "product_name": "Test",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 # Parent total — should be skipped
                 {"canonical_id": "epa", "quantity": 1000, "unit_normalized": "mg",
                  "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": True},
@@ -3199,7 +3209,7 @@ class TestSectionEDoseAdequacy:
         """canonical_id='epa_dha' splits evenly between EPA and DHA (no double-counting)."""
         prod = {
             "dsld_id": "X", "product_name": "Test",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 {"canonical_id": "epa_dha", "quantity": 600, "unit_normalized": "mg",
                  "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
             ]},
@@ -3261,7 +3271,7 @@ class TestSectionEDoseAdequacy:
         """Non-omega product: max=0.0 and applicable=False."""
         prod = {
             "dsld_id": "X", "product_name": "Vitamin D",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 {"canonical_id": "vitamin_d3", "quantity": 5000, "unit_normalized": "iu",
                  "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
             ]},
@@ -3328,7 +3338,7 @@ class TestSectionEDoseAdequacy:
         """Falls back to dosage_normalization.serving_basis when serving_basis absent."""
         prod = {
             "dsld_id": "X", "product_name": "Test",
-            "ingredient_quality_data": {"ingredients": [
+            "ingredient_quality_data": {"ingredients_scorable": [
                 {"canonical_id": "epa", "quantity": 300, "unit_normalized": "mg",
                  "is_proprietary_blend": False, "is_blend_header": False, "is_parent_total": False},
             ]},

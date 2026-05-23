@@ -2,9 +2,11 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import shutil
 import sqlite3
 import sys
+import time
 from pathlib import Path
 
 
@@ -312,6 +314,64 @@ def test_enrichment_contract_rejects_old_batch_cleaner_contract_defaults(tmp_pat
     assert "ENRICHMENT_CLEANER_CONTRACT_FALLBACK_USED" in codes
 
 
+def test_enrichment_contract_validates_product_scoring_evidence(tmp_path):
+    product_file = tmp_path / "product.json"
+    write_json(
+        product_file,
+        [
+            {
+                "id": "cfu-false-positive",
+                "supplement_taxonomy": {"primary_type": "mineral"},
+                "probiotic_data": {"total_cfu": 10_000_000_000},
+                "product_scoring_evidence": [
+                    {
+                        "evidence_type": "probiotic_cfu",
+                        "scoreable": True,
+                        "scoreable_identity": True,
+                        "score_eligible_by_cleaner": True,
+                        "dose_class": "probiotic_cfu",
+                        "dose_value": 10_000_000_000,
+                        "dose_unit": "CFU",
+                        "source": "statements",
+                        "raw_source_path": "statements[0]",
+                        "evidence_scope": "product_level",
+                        "linked_rows": ["statements[0]"],
+                        "confidence": "high",
+                        "reason": "product_level_cfu_with_probiotic_identity",
+                    }
+                ],
+                "ingredient_quality_data": {
+                    "ingredients_scorable": [],
+                    "ingredients_recognized_non_scorable": [],
+                    "ingredients_skipped": [],
+                },
+            },
+            {
+                "id": "cfu-missing-diagnostic",
+                "supplement_taxonomy": {"primary_type": "probiotic"},
+                "probiotic_data": {"total_cfu": 20_000_000_000},
+                "ingredient_quality_data": {
+                    "ingredients_scorable": [],
+                    "ingredients_recognized_non_scorable": [],
+                    "ingredients_skipped": [],
+                },
+            },
+        ],
+    )
+
+    args = argparse.Namespace(
+        enriched_file=[],
+        enriched_dir=[],
+        product_file=[str(product_file)],
+        products_dir=None,
+        dist_dir=None,
+    )
+    codes = {finding.code for finding in audit.audit_enrichment(args)}
+
+    assert "ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE" in codes
+    assert "ENRICHMENT_PRODUCT_CFU_EVIDENCE_MISSING" in codes
+
+
 def test_clinical_drift_gates_catch_known_failure_shapes(tmp_path):
     product_file = tmp_path / "products.json"
     write_json(
@@ -379,6 +439,38 @@ def test_clinical_drift_gates_catch_known_failure_shapes(tmp_path):
     assert "FORM_FACTOR_CANONICAL_NOT_SOFTGEL" in codes
 
 
+def test_clinical_omega_gate_accepts_taxonomy_scorable_id_evidence(tmp_path):
+    product_file = tmp_path / "products.json"
+    write_json(
+        product_file,
+        [
+            {
+                "id": "scored-omega-without-iqd-rows",
+                "name": "High Concentrate EPA",
+                "supplement_taxonomy": {
+                    "primary_type": "omega_3",
+                    "percentile_category": "fish_oil",
+                    "classification_input_source": "ingredient_quality_data.ingredients_scorable",
+                    "classification_reasons": ["omega-3: ids=['epa'], name_match=False"],
+                    "category_breakdown": {"fatty_acid": 1},
+                },
+                "ingredient_quality_data": {"ingredients_scorable": []},
+            }
+        ],
+    )
+
+    args = argparse.Namespace(
+        enriched_file=[],
+        enriched_dir=[],
+        product_file=[str(product_file)],
+        products_dir=None,
+        dist_dir=None,
+    )
+    codes = {finding.code for finding in audit.audit_clinical(args)}
+
+    assert "PRODUCT_NAME_ONLY_OMEGA3" not in codes
+
+
 def test_shadow_diff_requires_approval_for_taxonomy_verdict_safety_or_coverage_shift(tmp_path):
     old_dir = tmp_path / "old"
     new_dir = tmp_path / "new"
@@ -425,6 +517,23 @@ def test_shadow_diff_requires_approval_for_taxonomy_verdict_safety_or_coverage_s
 
     args.manual_approval = True
     assert audit.audit_shadow_diff(args) == []
+
+
+def test_artifact_lineage_rejects_scored_file_older_than_matching_enriched(tmp_path):
+    enriched_dir = tmp_path / "enriched"
+    scored_dir = tmp_path / "scored"
+    enriched = enriched_dir / "enriched_cleaned_batch_1.json"
+    scored = scored_dir / "scored_cleaned_batch_1.json"
+    write_json(enriched, [{"id": "p1"}])
+    write_json(scored, [{"id": "p1"}])
+    now = time.time()
+    os.utime(scored, (now - 60, now - 60))
+    os.utime(enriched, (now, now))
+
+    args = argparse.Namespace(enriched_dir=str(enriched_dir), scored_dir=str(scored_dir))
+
+    codes = {finding.code for finding in audit.audit_artifact_lineage(args)}
+    assert "ARTIFACT_LINEAGE_SCORED_STALE" in codes
 
 
 def test_interaction_and_flutter_parity_gates_accept_matching_artifacts(tmp_path):

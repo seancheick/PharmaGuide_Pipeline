@@ -136,6 +136,17 @@ def _dimension_score(breakdown: dict, dimension: str):
     return breakdown["dimensions"][dimension]["score"]
 
 
+def _require_strict_v4_contract(product: dict, label: str) -> None:
+    from scoring_input_contract import get_scoring_ingredients
+
+    scoring_input = get_scoring_ingredients(product, strict=True)
+    if not scoring_input.rows:
+        pytest.skip(
+            f"{label} enriched artifact lacks strict v4 scoring inputs "
+            f"({scoring_input.zero_scorable_reason}); rerun enrichment before using as canary"
+        )
+
+
 @pytest.mark.parametrize("dsld_id,expected", list(GENERIC_CANARIES.items()))
 def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: dict) -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
@@ -145,6 +156,7 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
     product = _load_canaries().get(dsld_id)
     if not product:
         pytest.skip(f"generic canary {dsld_id} not found: {expected['label']}")
+    _require_strict_v4_contract(product, expected["label"])
 
     assert class_for_product(product) == "generic"
     gate = evaluate_completeness_gate(product, "generic")
@@ -177,6 +189,7 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
     product = _load_canaries().get(dsld_id)
     if not product:
         pytest.skip(f"probiotic canary {dsld_id} not found: {expected['label']}")
+    _require_strict_v4_contract(product, expected["label"])
 
     assert class_for_product(product) == "probiotic"
     gate = evaluate_completeness_gate(product, "probiotic")

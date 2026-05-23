@@ -36,7 +36,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from constants import LOG_DATE_FORMAT, LOG_FORMAT
 from audit_evidence_utils import derive_non_gmo_audit
 from inactive_ingredient_resolver import InactiveIngredientResolver
-from supplement_taxonomy import classify_supplement
+from scoring_input_contract import (
+    get_scoring_ingredients,
+    is_nutrition_only_product,
+)
 
 try:
     from match_ledger import (
@@ -480,11 +483,9 @@ class SupplementScorer:
     def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
         """Resolve supplement type for scoring — always returns taxonomy primary_type.
 
-        No fallback to legacy supplement_type.type vocab. The taxonomy
-        primary_type drives both scoring behavior (via _SINGLE_TYPES,
-        _MULTI_TYPES, _PROBIOTIC_TYPES) and the exported supp_type field.
-        general_supplement is valid — it triggers no special bonuses, same
-        as the old targeted/specialty types.
+        Current enriched products should provide supplement_taxonomy. Legacy
+        supplement_type fallback is retained only for old batches and is
+        surfaced through scoring diagnostics/audits.
         """
         taxonomy = product.get("supplement_taxonomy") or {}
         primary_type = norm_text(taxonomy.get("primary_type"))
@@ -499,25 +500,11 @@ class SupplementScorer:
             return norm_text(st.get("type")) or "unknown"
         return "unknown"
 
+    def _scoring_input(self, product: Dict[str, Any]):
+        return get_scoring_ingredients(product, strict=True, allow_legacy_fallback=False)
+
     def _unmapped_active_names(self, product: Dict[str, Any]) -> List[str]:
-        ingredients = safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))
-
-        def _is_unmapped_gate_candidate(ing: Dict[str, Any]) -> bool:
-            # Blend containers/headers are opacity signals handled by B5, not mapping blockers.
-            if bool(ing.get("is_proprietary_blend")):
-                return False
-            if bool(ing.get("is_blend_header")) or bool(ing.get("blend_total_weight_only")):
-                return False
-            role = norm_text(ing.get("role_classification"))
-            if role in {"recognized_non_scorable", "inactive_non_scorable"}:
-                return False
-            return True
-
-        return [
-            ing.get("name") or ing.get("standard_name") or ing.get("raw_source_text") or "unknown"
-            for ing in ingredients
-            if _is_unmapped_gate_candidate(ing) and not bool(ing.get("mapped", False))
-        ]
+        return self._scoring_input(product).unmapped_actives
 
     def _banned_exact_alias_name_keys(self, product: Dict[str, Any]) -> set[str]:
         names: set[str] = set()
@@ -556,16 +543,11 @@ class SupplementScorer:
         }
 
     def _mapping_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
-        iqd = product.get("ingredient_quality_data", {})
-        ingredients = safe_list(iqd.get("ingredients"))
+        scoring_input = self._scoring_input(product)
         kpis = self._split_unmapped_kpis(product)
         unmapped_all_candidates = kpis["unmapped_actives_all"]
         unmapped_excluding_candidates = kpis["unmapped_actives_excluding_banned_exact_alias"]
         unmapped_banned_exact_alias_candidates = kpis["unmapped_actives_banned_exact_alias"]
-
-        active_total = int(as_float(iqd.get("total_active"), 0) or 0)
-        if active_total <= 0:
-            active_total = len(ingredients)
 
         # Derive mapping-gate counts from gate-eligible ingredient rows, not legacy enrichment counters.
         # This prevents structural blend containers from silently blocking scoring.
@@ -573,23 +555,27 @@ class SupplementScorer:
         unmapped_excluding_banned = list(unmapped_excluding_candidates)
         unmapped_count_raw = len(unmapped_all_candidates)
         unmapped_count_excluding_banned = len(unmapped_excluding_banned)
+        active_total = scoring_input.mapped_count + unmapped_count_excluding_banned
 
         if active_total <= 0:
             return {
                 "stop": True,
                 "reason": "NO_ACTIVES_DETECTED",
-                "mapped_coverage": 0.0,
+                "mapped_coverage": scoring_input.mapped_coverage or 0.0,
                 "unmapped_actives": [],
                 "unmapped_actives_total": 0,
                 "unmapped_actives_excluding_banned_exact_alias": 0,
                 "unmapped_actives_banned_exact_alias": [],
-                "flags": ["NO_ACTIVES_DETECTED"],
+                "flags": ["NO_ACTIVES_DETECTED", "SCORING_INPUT_CONTRACT_GAP"],
+                "scoring_input_contract": scoring_input.diagnostics(),
             }
 
-        active_mapped = max(0, active_total - unmapped_count_excluding_banned)
+        active_mapped = scoring_input.mapped_count
         mapped_coverage = active_mapped / active_total if active_total else 0.0
 
         flags: List[str] = []
+        if not scoring_input.strict_contract_passed:
+            flags.append("SCORING_INPUT_CONTRACT_GAP")
         match_ledger = product.get("match_ledger", {})
         ledger_entries = safe_list(match_ledger.get("domains", {}).get("ingredients", {}).get("entries"))
         has_unmapped_inactive = any(
@@ -613,6 +599,7 @@ class SupplementScorer:
                 "unmapped_actives_excluding_banned_exact_alias": unmapped_count_excluding_banned,
                 "unmapped_actives_banned_exact_alias": unmapped_banned_exact_alias,
                 "flags": flags,
+                "scoring_input_contract": scoring_input.diagnostics(),
             }
 
         return {
@@ -624,6 +611,7 @@ class SupplementScorer:
             "unmapped_actives_excluding_banned_exact_alias": unmapped_count_excluding_banned,
             "unmapped_actives_banned_exact_alias": unmapped_banned_exact_alias,
             "flags": flags,
+            "scoring_input_contract": scoring_input.diagnostics(),
         }
 
     # ---------------------------------------------------------------------
@@ -848,35 +836,14 @@ class SupplementScorer:
     # ---------------------------------------------------------------------
 
     def _get_active_ingredients(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
-        iqd = product.get("ingredient_quality_data", {})
-        ingredients = safe_list(iqd.get("ingredients_scorable"))
-        if not ingredients:
-            # Only fall back if the full list contains genuine mapped actives,
-            # not just fillers/excipients that enrichment couldn't classify.
-            fallback = safe_list(iqd.get("ingredients"))
-            if any((ing.get("mapped") or ing.get("canonical_id")) and not ing.get("is_filler") for ing in fallback):
-                ingredients = fallback
-        return ingredients
+        return self._scoring_input(product).rows
 
     def _iqd_contract_diagnostics(self, product: Dict[str, Any]) -> Dict[str, Any]:
-        iqd = product.get("ingredient_quality_data", {})
-        scorable = safe_list(iqd.get("ingredients_scorable"))
-        fallback = safe_list(iqd.get("ingredients"))
-        fallback_used = bool(not scorable and fallback and any(
-            (ing.get("mapped") or ing.get("canonical_id")) and not ing.get("is_filler")
-            for ing in fallback
-            if isinstance(ing, dict)
-        ))
-        return {
-            "scoring_ingredients_source": (
-                "ingredient_quality_data.ingredients_fallback"
-                if fallback_used
-                else "ingredient_quality_data.ingredients_scorable"
-            ),
-            "iqd_ingredients_fallback_used": fallback_used,
-            "ingredients_scorable_count": len(scorable),
-            "ingredients_legacy_count": len(fallback),
-        }
+        diagnostics = self._scoring_input(product).diagnostics()
+        diagnostics["ingredients_legacy_count"] = len(
+            safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))
+        )
+        return diagnostics
 
     def _compute_bioavailability_score(self, product: Dict[str, Any], supp_type: str) -> float:
         ingredients = self._get_active_ingredients(product)
@@ -2272,6 +2239,11 @@ class SupplementScorer:
         return total
 
     def _has_usable_individual_dose(self, ingredient: Dict[str, Any]) -> bool:
+        if ingredient.get("scoring_input_kind") == "product_level_evidence":
+            # Product-level contracts feed only sections that explicitly
+            # support that evidence type. They are not ingredient form-quality
+            # rows and should not receive generic A1/A6 credit.
+            return False
         qty = as_float(ingredient.get("quantity"), None)
         if qty is None or qty <= 0:
             return False
@@ -4280,15 +4252,9 @@ class SupplementScorer:
             return "BLOCKED"
         if b0.get("unsafe"):
             return "UNSAFE"
+        if product is not None and is_nutrition_only_product(product):
+            return "NUTRITION_ONLY"
         if mapping_gate.get("stop"):
-            # Bucket C divert: food-shape products (whey/protein) where
-            # DSLD upstream doesn't encode the active. Surface NUTRITION_ONLY
-            # so the UI can render "food product — flags still apply" rather
-            # than NOT_SCORED ("real supplement, mapping failed"). Real
-            # capsule/tablet supplements with mapping bugs stay NOT_SCORED
-            # so the gap remains visible in audit reports.
-            if product is not None and self._is_food_shape_product(product):
-                return "NUTRITION_ONLY"
             return "NOT_SCORED"
         if "BANNED_MATCH_REVIEW_NEEDED" in flags:
             return "CAUTION"
@@ -4383,6 +4349,21 @@ class SupplementScorer:
             safety_verdict = verdict
 
         iqd_contract_diagnostics = self._iqd_contract_diagnostics(product)
+        mapped_coverage_applicable = verdict != "NUTRITION_ONLY"
+        mapped_coverage_output = None if not mapped_coverage_applicable else round(mapped_coverage, 4)
+        strict_scoring_contract = iqd_contract_diagnostics.get("strict_scoring_contract") or {
+            "passed": iqd_contract_diagnostics.get("strict_contract_passed", False),
+            "findings": iqd_contract_diagnostics.get("contract_findings", []),
+            "zero_scorable_reason": iqd_contract_diagnostics.get("zero_scorable_reason"),
+            "mapped_coverage_applicable": mapped_coverage_applicable,
+        }
+        if verdict == "NUTRITION_ONLY":
+            strict_scoring_contract = {
+                **strict_scoring_contract,
+                "passed": True,
+                "reason": "nutrition_only_product_no_bioactive_scoring",
+                "mapped_coverage_applicable": False,
+            }
         output = {
             "dsld_id": product_id,
             "product_name": product_name,
@@ -4431,7 +4412,8 @@ class SupplementScorer:
             "unmapped_actives_excluding_banned_exact_alias": int(
                 unmapped_actives_excluding_banned_exact_alias
             ),
-            "mapped_coverage": round(mapped_coverage, 4),
+            "mapped_coverage": mapped_coverage_output,
+            "mapped_coverage_applicable": mapped_coverage_applicable,
             "scoring_metadata": {
                 "scoring_version": self.VERSION,
                 "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
@@ -4445,12 +4427,19 @@ class SupplementScorer:
                 "unmapped_actives_excluding_banned_exact_alias": int(
                     unmapped_actives_excluding_banned_exact_alias
                 ),
-                "mapped_coverage": round(mapped_coverage, 4),
+                "mapped_coverage": mapped_coverage_output,
+                "mapped_coverage_applicable": mapped_coverage_applicable,
                 "reason": reason,
                 "blocking_reason": blocking_reason,
                 "iqd_contract_diagnostics": iqd_contract_diagnostics,
+                "scoring_ingredients_source": iqd_contract_diagnostics.get("scoring_ingredients_source"),
+                "scoring_fallbacks_used": iqd_contract_diagnostics.get("scoring_fallbacks_used", []),
+                "strict_scoring_contract": strict_scoring_contract,
             },
             "iqd_contract_diagnostics": iqd_contract_diagnostics,
+            "scoring_ingredients_source": iqd_contract_diagnostics.get("scoring_ingredients_source"),
+            "scoring_fallbacks_used": iqd_contract_diagnostics.get("scoring_fallbacks_used", []),
+            "strict_scoring_contract": strict_scoring_contract,
             "section_scores": {
                 "A_ingredient_quality": {
                     "score": breakdown.get("A", {}).get("score"),

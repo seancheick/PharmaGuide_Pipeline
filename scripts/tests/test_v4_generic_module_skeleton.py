@@ -279,6 +279,7 @@ def test_shadow_does_not_wire_generic_module_for_probiotic_route() -> None:
     probiotic = {
         "status": "active",
         "form_factor": "capsule",
+        "supplement_taxonomy": {"primary_type": "probiotic"},
         "supplement_type": {"type": "probiotic"},
         "ingredient_quality_data": {
             "total_active": 1,

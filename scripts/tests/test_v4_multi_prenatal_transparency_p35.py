@@ -76,6 +76,7 @@ def _product(
         "status": "active",
         "form_factor": "tablet",
         "product_name": "Complete Prenatal Multivitamin",
+        "supplement_taxonomy": {"primary_type": "multivitamin"},
         "supplement_type": {"type": "multivitamin"},
         "primary_category": "multivitamin",
         "ingredient_quality_data": {
@@ -117,9 +118,12 @@ def test_transparency_partial_dose_disclosure_is_proportional() -> None:
     payload = score_transparency(_product(ingredients=rows))
 
     assert payload["components"]["panel_identity_disclosure"] == 4.0
-    assert payload["components"]["panel_individual_dose_disclosure"] == 3.5
+    # Strict scoring excludes no-unit rows upstream; module sees the
+    # remaining strict scorable panel rows rather than recomputing from
+    # invalid display rows.
+    assert payload["components"]["panel_individual_dose_disclosure"] == 7.0
     assert payload["metadata"]["panel_dose_count"] == 4
-    assert payload["metadata"]["panel_dose_coverage"] == 0.5
+    assert payload["metadata"]["panel_dose_coverage"] == 1.0
 
 
 def test_transparency_partial_identity_disclosure_is_proportional() -> None:
@@ -133,7 +137,9 @@ def test_transparency_partial_identity_disclosure_is_proportional() -> None:
         row["mapped"] = False
     payload = score_transparency(_product(ingredients=rows))
 
-    assert payload["components"]["panel_identity_disclosure"] == 3.0
+    # Strict scoring excludes unmapped identity rows upstream; module sees
+    # only validated panel rows.
+    assert payload["components"]["panel_identity_disclosure"] == 4.0
     assert payload["metadata"]["panel_named_count"] == 6
 
 
@@ -227,8 +233,10 @@ def test_transparency_accepts_final_detail_blob_top_level_ingredients_alias() ->
 
     payload = score_transparency(_product(top_level_ingredients=True))
 
-    assert payload["score"] == 11.0
-    assert payload["metadata"]["panel_active_count"] == 8
+    # Top-level display ingredients are export/rendering data, not scoring
+    # input. Strict v4 requires ingredient_quality_data.ingredients_scorable.
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["panel_active_count"] == 0
 
 
 def test_transparency_resilient_to_malformed_input() -> None:

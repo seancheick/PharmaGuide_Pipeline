@@ -15,6 +15,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+from scoring_input_contract import get_scoring_ingredients
+
 
 _DOSE_UNIT_WHITELIST = frozenset(
     {
@@ -64,23 +66,11 @@ def _safe_dict(value: Any) -> Dict[str, Any]:
 def get_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Return the active (scorable) ingredient list from an enriched product.
 
-    Mirrors v3's `_get_active_ingredients` behavior: prefer
-    `ingredient_quality_data.ingredients_scorable`, fall back to the full
-    `ingredients` list when scorable is empty but the full list has at
-    least one mapped non-filler entry. Returns [] on malformed input.
+    Version-neutral scoring contract: consume only validated
+    ingredient_quality_data.ingredients_scorable rows. Legacy fallback is
+    handled by the adapter only when explicitly requested elsewhere.
     """
-    iqd = _safe_dict((product or {}).get("ingredient_quality_data"))
-    rows = _safe_list(iqd.get("ingredients_scorable"))
-    if not rows:
-        fallback = _safe_list(iqd.get("ingredients"))
-        if any(
-            isinstance(i, dict)
-            and (i.get("mapped") or i.get("canonical_id"))
-            and not i.get("is_filler")
-            for i in fallback
-        ):
-            rows = fallback
-    return [i for i in rows if isinstance(i, dict)]
+    return list(get_scoring_ingredients(product or {}, strict=True).rows)
 
 
 def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:

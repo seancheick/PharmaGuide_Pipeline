@@ -12,6 +12,7 @@ import re
 from typing import Any, Dict, Iterable, List, Optional
 
 from scoring_v4.modules.generic_helpers import (
+    get_active_ingredients,
     has_usable_individual_dose,
     _as_float,
     _norm_text,
@@ -134,15 +135,7 @@ def _is_prenatal(product: Dict[str, Any]) -> bool:
 
 
 def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    rows = _safe_list(iqd.get("ingredients_scorable")) or _safe_list(iqd.get("ingredients"))
-    if not rows:
-        rows = (
-            _safe_list(product.get("ingredients"))
-            or _safe_list(product.get("activeIngredients"))
-            or _safe_list(product.get("active_ingredients"))
-        )
-    return [row for row in rows if isinstance(row, dict)]
+    return get_active_ingredients(product)
 
 
 def _coverage_unit_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> Optional[float]:

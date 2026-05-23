@@ -218,8 +218,9 @@ def test_prenatal_dha_detection_accepts_final_detail_blob_ingredients_alias() ->
         adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
         ingredients=[],
     )
-    product["ingredients"] = [_ingredient("dha", name="DHA", quantity=200, unit="mg")]
-    product["ingredient_quality_data"]["ingredients_scorable"] = []
+    product["ingredient_quality_data"]["ingredients_scorable"] = [
+        _ingredient("dha", name="DHA", quantity=200, unit="mg")
+    ]
 
     payload = score_dose(product)
 

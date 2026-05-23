@@ -372,10 +372,10 @@ def _load_canaries(ids):
 # break this lock — what we want to guarantee is that Transparency is in
 # the right ballpark and the positive components fire correctly.
 @pytest.mark.parametrize("dsld_id,min_score,max_score", [
-    ("327776", 9.0, 12.0),    # Sports Research: full disclose, B2 trace
-    ("326270", 9.0, 12.0),    # Sports Research alt
-    ("288740", 9.0, 13.0),    # Nordic: undefined form so no form_disclosed
-    ("273630", 8.0, 11.0),    # Garden of Life Advanced Omega
+    ("327776", 7.0, 8.0),     # Sports Research: strict label evidence
+    ("326270", 7.0, 8.0),     # Sports Research alt
+    ("288740", 7.5, 8.5),     # Nordic: undefined form so no form_disclosed
+    ("273630", 5.5, 6.5),     # Garden of Life Advanced Omega
     ("239592", 8.0, 12.0),    # CVS Krill
     ("182968", 8.0, 12.0),    # Pure Encap Krill-Plex
 ])

@@ -2290,6 +2290,84 @@ class TestProbioticDataStructureRegressionLock:
         for key in ('clinical_strain_count', 'prebiotic_present', 'has_survivability_coating'):
             assert key in pd, f"probiotic_data missing scorer-critical key '{key}'"
 
+    def test_product_level_cfu_evidence_requires_identity_and_provenance(self, enricher):
+        product = {
+            'id': 'test_product_cfu_evidence',
+            'product_name': 'Digestive Probiotic 20 Billion',
+            'fullName': 'Digestive Probiotic 20 Billion',
+            'bundleName': '',
+            'statements': [{'notes': 'Contains 20 billion CFU per serving.'}],
+            'activeIngredients': [
+                {
+                    'name': 'Probiotic Blend',
+                    'standardName': 'Probiotic Blend',
+                    'category': 'probiotic',
+                    'quantity': 0,
+                    'unit': 'NP',
+                    'raw_source_path': 'activeIngredients[0]',
+                    'nestedIngredients': [{'name': 'Lactobacillus acidophilus'}],
+                    'harvestMethod': '',
+                    'notes': '',
+                }
+            ],
+            'inactiveIngredients': [],
+        }
+        pd = enricher._collect_probiotic_data(product)
+        evidence = enricher._collect_product_scoring_evidence({
+            'probiotic_data': pd,
+            'supplement_taxonomy': {'primary_type': 'probiotic'},
+        })
+
+        assert evidence[0]['scoreable'] is True
+        assert evidence[0]['evidence_type'] == 'probiotic_cfu'
+        assert evidence[0]['dose_value'] == pytest.approx(20_000_000_000)
+        assert evidence[0]['raw_source_path'] == 'statements[0]'
+        assert evidence[0]['linked_rows'] == ['statements[0]']
+
+    def test_product_level_cfu_accepts_probiotic_row_identity_when_taxonomy_lags(self, enricher):
+        evidence = enricher._collect_product_scoring_evidence({
+            'probiotic_data': {
+                'is_probiotic_product': True,
+                'has_cfu': True,
+                'total_cfu': 50_000_000_000,
+                'total_strain_count': 3,
+                'probiotic_blends': [
+                    {'name': 'RAW Probiotic Blend', 'raw_source_path': 'ingredientRows[0]'}
+                ],
+                'cfu_source': 'statements',
+                'cfu_raw_source_path': 'statements[0]',
+                'cfu_evidence_scope': 'product_level',
+                'cfu_linked_rows': ['statements[0]'],
+            },
+            'supplement_taxonomy': {'primary_type': 'general_supplement'},
+            'ingredient_quality_data': {'ingredients_scorable': []},
+        })
+
+        assert evidence[0]['scoreable'] is True
+        assert evidence[0]['reason'] == 'product_level_cfu_with_probiotic_row_identity'
+
+    def test_product_level_cfu_metadata_rejected_when_identity_is_not_probiotic(self, enricher):
+        evidence = enricher._collect_product_scoring_evidence({
+            'probiotic_data': {
+                'is_probiotic_product': True,
+                'has_cfu': True,
+                'total_cfu': 5_000_000_000,
+                'cfu_source': 'statements',
+                'cfu_raw_source_path': 'statements[0]',
+                'cfu_evidence_scope': 'product_level',
+                'cfu_linked_rows': ['statements[0]'],
+            },
+            'supplement_taxonomy': {'primary_type': 'mineral'},
+            'ingredient_quality_data': {
+                'ingredients_scorable': [
+                    {'canonical_id': 'zinc', 'role_classification': 'active_scorable'}
+                ]
+            },
+        })
+
+        assert evidence[0]['scoreable'] is False
+        assert evidence[0]['rejection_reason'] == 'non_probiotic_strict_active_present'
+
     def test_probiotic_data_clinical_strain_lookup_matches_db(self, enricher):
         """Lactobacillus gasseri and Bifidobacterium longum should match the
         clinically_relevant_strains.json database. This locks the strain match

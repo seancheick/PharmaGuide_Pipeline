@@ -21,6 +21,7 @@ from typing import Any, Dict, Iterable, List
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     canonical_key,
+    get_active_ingredients,
     has_usable_individual_dose,
     is_scorable,
     _as_float,
@@ -136,23 +137,7 @@ def _form_factor_text(product: Dict[str, Any]) -> str:
 
 
 def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    """Return active rows from enriched blobs or final detail blobs.
-
-    The shadow scorer calls modules with enriched products, where rows live
-    under `ingredient_quality_data.ingredients_scorable`. Canary tooling and
-    final-db audits often pass detail blobs, where the same active rows are
-    exposed as top-level `ingredients`. Support both without changing the
-    shared generic helper contract.
-    """
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    rows = _safe_list(iqd.get("ingredients_scorable")) or _safe_list(iqd.get("ingredients"))
-    if not rows:
-        rows = (
-            _safe_list(product.get("ingredients"))
-            or _safe_list(product.get("activeIngredients"))
-            or _safe_list(product.get("active_ingredients"))
-        )
-    return [row for row in rows if isinstance(row, dict)]
+    return get_active_ingredients(product)
 
 
 def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:

@@ -41,6 +41,8 @@ import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+from scoring_v4.modules.generic_helpers import get_active_ingredients
+
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
@@ -107,14 +109,7 @@ def _to_mg(quantity: Any, unit: Any) -> Optional[float]:
 
 
 def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    candidates = (
-        _safe_list(iqd.get("ingredients_scorable"))
-        or _safe_list(iqd.get("ingredients"))
-        or _safe_list(product.get("activeIngredients"))
-        or _safe_list(product.get("active_ingredients"))
-    )
-    return [i for i in candidates if isinstance(i, dict)]
+    return get_active_ingredients(product)
 
 
 def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, float]:

@@ -64,6 +64,7 @@ def _omega_product(
         "status": "active",
         "form_factor": "softgel",
         "product_name": "Test Omega",
+        "supplement_taxonomy": {"primary_type": "omega_3"},
         "supplement_type": {"type": "specialty"},
         "servingSizes": [{
             "minDailyServings": daily_servings[0],

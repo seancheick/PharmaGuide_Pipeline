@@ -100,12 +100,21 @@ def _product(
     top_level: dict | None = None,
 ) -> dict:
     rows = [_ingredient()]
+    primary_type_by_supp_type = {
+        "probiotic": "probiotic",
+        "multivitamin": "multivitamin",
+        "single_nutrient": "single_mineral",
+        "specialty": "general_supplement",
+    }
     product = {
         "status": "active",
         "form_factor": "capsule",
         "product_name": product_name,
         "fullName": product_name,
         "brand_name": "Example Brand",
+        "supplement_taxonomy": {
+            "primary_type": primary_type_by_supp_type.get(supp_type or "", "general_supplement")
+        },
         "supplement_type": {"type": supp_type} if supp_type is not None else {},
         "primary_category": primary_category or "",
         "ingredient_quality_data": {

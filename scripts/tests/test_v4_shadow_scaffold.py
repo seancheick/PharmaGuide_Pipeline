@@ -3,9 +3,10 @@
 Locks the contract for the first slice of v4 shadow scoring:
 
   1. `scoring_v4.router.class_for_product(product) -> str` returns one of
-     {"generic", "probiotic", "multi_or_prenatal"}.  Decides which module
-     processes the product. Uses supp_type + primary_category +
-     product-name signals, in priority order.
+     {"generic", "probiotic", "multi_or_prenatal", "omega"}.  Decides
+     which module processes the product. Uses the canonical taxonomy /
+     scoring-input contract, with product-name signals limited to guarded
+     prenatal context.
   2. `score_supplements_v4_shadow.score_product_v4_shadow(enriched)` returns
      the shadow column dict with the schema locked in §14 of
      SCORING_V4_PROPOSAL.md:
@@ -37,16 +38,16 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # --- Router contract ------------------------------------------------------
 
 
-def test_router_probiotic_supp_type() -> None:
-    """supp_type=probiotic — strongest signal, beats everything."""
+def test_router_probiotic_taxonomy() -> None:
+    """taxonomy primary_type=probiotic — strongest signal, beats everything."""
     from scoring_v4.router import class_for_product
-    product = {"supplement_type": {"type": "probiotic"}}
+    product = {"supplement_taxonomy": {"primary_type": "probiotic"}}
     assert class_for_product(product) == "probiotic"
 
 
-def test_router_multivitamin_supp_type() -> None:
+def test_router_multivitamin_taxonomy() -> None:
     from scoring_v4.router import class_for_product
-    product = {"supplement_type": {"type": "multivitamin"}}
+    product = {"supplement_taxonomy": {"primary_type": "multivitamin"}}
     assert class_for_product(product) == "multi_or_prenatal"
 
 
@@ -58,19 +59,20 @@ def test_router_prenatal_keyword_routes_to_multi() -> None:
     surface (B5 multiplier vs v4 module routing)."""
     from scoring_v4.router import class_for_product
     product = {
-        "supplement_type": {"type": "specialty"},
+        "supplement_taxonomy": {"primary_type": "general_supplement"},
         "product_name": "Prenatal Care DHA",
     }
     assert class_for_product(product) == "multi_or_prenatal"
 
 
-def test_router_specialty_with_multivit_primary_category_falls_back() -> None:
-    """GoL Men's Multi style: supp_type=specialty + primary_category=
-    multivitamin → multi_or_prenatal."""
+def test_router_multivitamin_taxonomy_wins_over_legacy_noise() -> None:
+    """GoL Men's Multi style: taxonomy multivitamin routes to multi even
+    when legacy fields are noisy."""
     from scoring_v4.router import class_for_product
     product = {
         "supplement_type": {"type": "specialty"},
         "primary_category": "multivitamin",
+        "supplement_taxonomy": {"primary_type": "multivitamin"},
         "product_name": "Men's Multi Organic Berry",
     }
     assert class_for_product(product) == "multi_or_prenatal"
@@ -81,10 +83,7 @@ def test_router_probiotic_supp_type_beats_prenatal_keyword() -> None:
     wins over a 'Prenatal' name keyword (the type classifier already
     inspected the ingredient panel — trust it)."""
     from scoring_v4.router import class_for_product
-    product = {
-        "supplement_type": {"type": "probiotic"},
-        "product_name": "Prenatal Probiotic",
-    }
+    product = {"supplement_taxonomy": {"primary_type": "probiotic"}, "product_name": "Prenatal Probiotic"}
     assert class_for_product(product) == "probiotic"
 
 
@@ -93,7 +92,7 @@ def test_router_generic_default() -> None:
     botanical, specialty, etc. all flow through the generic module."""
     from scoring_v4.router import class_for_product
     product = {
-        "supplement_type": {"type": "single_nutrient"},
+        "supplement_taxonomy": {"primary_type": "single_vitamin"},
         "product_name": "Vitamin C 1000mg",
     }
     assert class_for_product(product) == "generic"
@@ -103,9 +102,9 @@ def test_router_unknown_supp_type_defaults_to_generic() -> None:
     """Missing or unrecognized supp_type → generic. Conservative default."""
     from scoring_v4.router import class_for_product
     assert class_for_product({}) == "generic"
-    assert class_for_product({"supplement_type": {}}) == "generic"
-    assert class_for_product({"supplement_type": {"type": ""}}) == "generic"
-    assert class_for_product({"supplement_type": {"type": "weird_new_type"}}) == "generic"
+    assert class_for_product({"supplement_taxonomy": {}}) == "generic"
+    assert class_for_product({"supplement_taxonomy": {"primary_type": ""}}) == "generic"
+    assert class_for_product({"supplement_taxonomy": {"primary_type": "weird_new_type"}}) == "generic"
 
 
 def test_router_omega_routes_to_omega_after_p1_6_decision() -> None:
@@ -113,8 +112,7 @@ def test_router_omega_routes_to_omega_after_p1_6_decision() -> None:
     dedicated omega module instead of generic."""
     from scoring_v4.router import class_for_product
     product = {
-        "supplement_type": {"type": "targeted"},
-        "primary_category": "omega-3",
+        "supplement_taxonomy": {"primary_type": "omega_3"},
         "product_name": "Fish Oil 1000mg",
     }
     assert class_for_product(product) == "omega"
@@ -126,11 +124,11 @@ def test_router_valid_classes_only() -> None:
     from scoring_v4.router import class_for_product, VALID_CLASSES
     samples = [
         {},
-        {"supplement_type": {"type": "probiotic"}},
-        {"supplement_type": {"type": "multivitamin"}},
-        {"supplement_type": {"type": "specialty"}, "product_name": "Prenatal"},
-        {"supplement_type": None},
-        {"supplement_type": "single_nutrient"},  # legacy string form
+        {"supplement_taxonomy": {"primary_type": "probiotic"}},
+        {"supplement_taxonomy": {"primary_type": "multivitamin"}},
+        {"supplement_taxonomy": {"primary_type": "general_supplement"}, "product_name": "Prenatal"},
+        {"supplement_taxonomy": None},
+        {"primary_type": "single_vitamin"},
     ]
     for s in samples:
         result = class_for_product(s)
@@ -153,7 +151,7 @@ REQUIRED_SHADOW_KEYS = {
 COMPLETE_GENERIC_PRODUCT = {
     "status": "active",
     "form_factor": "capsule",
-    "supplement_type": {"type": "single_nutrient"},
+    "supplement_taxonomy": {"primary_type": "single_mineral"},
     "ingredient_quality_data": {
         "total_active": 1,
         "ingredients_scorable": [
@@ -186,10 +184,10 @@ def test_shadow_entry_point_module_matches_router() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
     from scoring_v4.router import class_for_product
     cases = [
-        {"supplement_type": {"type": "probiotic"}},
-        {"supplement_type": {"type": "multivitamin"}},
-        {"supplement_type": {"type": "single_nutrient"}},
-        {"supplement_type": {"type": "specialty"}, "product_name": "Prenatal DHA"},
+        {"supplement_taxonomy": {"primary_type": "probiotic"}},
+        {"supplement_taxonomy": {"primary_type": "multivitamin"}},
+        {"supplement_taxonomy": {"primary_type": "single_vitamin"}},
+        {"supplement_taxonomy": {"primary_type": "general_supplement"}, "product_name": "Prenatal DHA"},
     ]
     for p in cases:
         expected = class_for_product(p)

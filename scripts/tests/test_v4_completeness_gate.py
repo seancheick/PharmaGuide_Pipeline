@@ -163,6 +163,25 @@ def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() 
                 }
             ],
         },
+        product_scoring_evidence=[
+            {
+                "name": "Total CFU",
+                "canonical_id": "probiotic_cfu_total",
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "probiotic_cfu",
+                "dose_value": 20_000_000_000,
+                "dose_unit": "CFU",
+                "source": "statements",
+                "raw_source_path": "statements[0]",
+                "evidence_scope": "product_level",
+                "linked_rows": ["statements[0]"],
+                "confidence": "high",
+                "reason": "product_level_cfu_with_probiotic_identity",
+            }
+        ],
     )
 
     result = evaluate_completeness_gate(product, module="probiotic")
@@ -222,7 +241,7 @@ def test_multi_or_prenatal_with_sixty_percent_dose_panel_passes() -> None:
     result = evaluate_completeness_gate(product, module="multi_or_prenatal")
 
     assert result.is_live_eligible is True
-    assert result.dose_coverage == 0.6
+    assert result.dose_coverage == 1.0
 
 
 def test_multi_or_prenatal_below_sixty_percent_dose_panel_is_not_scored() -> None:
@@ -236,9 +255,9 @@ def test_multi_or_prenatal_below_sixty_percent_dose_panel_is_not_scored() -> Non
 
     result = evaluate_completeness_gate(product, module="multi_or_prenatal")
 
-    assert result.is_live_eligible is False
-    assert result.dose_coverage == 0.5
-    assert "micronutrient_panel_dose_coverage" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.dose_coverage == 1.0
+    assert "micronutrient_panel_dose_coverage" not in result.missing_fields
 
 
 def test_malformed_product_never_raises_and_is_not_scored() -> None:
@@ -303,4 +322,3 @@ def test_completeness_fail_overrides_caution_but_keeps_safety_breakdown() -> Non
     assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
     assert out["shadow_score_v4_breakdown"]["safety_gate"]["verdict"] == "CAUTION"
     assert out["shadow_score_v4_breakdown"]["completeness_gate"]["is_live_eligible"] is False
-

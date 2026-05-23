@@ -14,6 +14,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterable, List, Tuple
 
+from scoring_input_contract import get_scoring_ingredients
+
 
 LEVEL_ORDER = {"high": 3, "moderate": 2, "low": 1}
 SCORE_UNCERTAINTY_PTS = {"high": 1, "moderate": 3, "low": 7}
@@ -296,14 +298,7 @@ def _verified_cert_entries(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _ingredient_identity_confidences(product: Dict[str, Any]) -> Iterable[float]:
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    rows = (
-        _safe_list(iqd.get("ingredients_scorable"))
-        or _safe_list(iqd.get("ingredients"))
-        or _safe_list(product.get("activeIngredients"))
-        or _safe_list(product.get("active_ingredients"))
-    )
-    for row in rows:
+    for row in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(row, dict):
             continue
         for key in ("identity_confidence", "match_confidence", "canonical_confidence"):

@@ -151,7 +151,7 @@ def test_form_tier_tg_via_ingredient_row_name() -> None:
     product = _epa_dha_product(
         name="Sports Research Omega-3 Fish Oil",
         extra_ingredients=[
-            {"name": "Triglycerides", "canonical_id": "dha", "bio_score": 11.0}
+            {"name": "Triglycerides", "canonical_id": "dha", "quantity": 1, "unit": "mg", "bio_score": 11.0}
         ],
     )
     payload = score_formulation(product)
@@ -460,8 +460,8 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
             "ingredients_scorable": [
                 {"name": "Fish Oil Concentrate", "canonical_id": "fish_oil",
                  "quantity": 1250, "unit": "mg", "bio_score": 10.0},
-                {"name": "Triglycerides", "canonical_id": "dha",
-                 "bio_score": 11.0},
+                    {"name": "Triglycerides", "canonical_id": "dha",
+                     "quantity": 1, "unit": "mg", "bio_score": 11.0},
                 {"name": "Eicosapentaenoic Acid", "canonical_id": "epa",
                  "quantity": 690, "unit": "mg", "bio_score": 10.0},
                 {"name": "Docosahexaenoic Acid", "canonical_id": "dha",
@@ -508,7 +508,7 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
                  "quantity": 650, "unit": "mg"},
                 {"name": "Docosahexaenoic Acid", "canonical_id": "dha",
                  "quantity": 450, "unit": "mg"},
-                {"name": "purified deep sea Fish Oil", "canonical_id": "fish_oil"},
+                    {"name": "purified deep sea Fish Oil", "canonical_id": "fish_oil", "quantity": 1100, "unit": "mg"},
             ],
         },
         "certification_data": {

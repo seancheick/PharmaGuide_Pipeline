@@ -13,6 +13,7 @@ import hashlib
 import json
 import re
 import sqlite3
+import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -63,6 +64,18 @@ REQUIRED_CONCEPTS = {
     "inactive_safety_classification",
     "interaction_rules",
     "interaction_db",
+    "scoring_input_contract",
+    "mapping_coverage_contract",
+    "section_a_ingredient_quality_score",
+    "section_b_safety_purity_score",
+    "section_c_evidence_score",
+    "section_d_brand_trust_score",
+    "verdict_contract",
+    "score_diagnostics_contract",
+    "scoring_fallback_policy",
+    "legacy_scoring_compat_outputs",
+    "product_level_scoring_evidence",
+    "nutrition_only_scoring_class",
     "score_verdict",
     "final_db_export",
     "flutter_bundled_assets",
@@ -170,6 +183,13 @@ def write_json(path: Path, payload: Any) -> None:
     path.write_text(json.dumps(payload, indent=2, sort_keys=False) + "\n", encoding="utf-8")
 
 
+def numeric_value(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as fh:
@@ -204,6 +224,12 @@ def enriched_files_from_products_dir(products_dir: Path) -> list[Path]:
     return sorted(products_dir.glob("*_enriched/enriched/*.json"))
 
 
+def scored_files_from_products_dir(products_dir: Path) -> list[Path]:
+    if not products_dir.exists():
+        return []
+    return sorted(products_dir.glob("*_scored/scored/*.json"))
+
+
 def collect_product_files(args: argparse.Namespace, *, prefer_enriched: bool = True) -> list[Path]:
     files: list[Path] = []
     for value in getattr(args, "enriched_file", []) or []:
@@ -215,7 +241,12 @@ def collect_product_files(args: argparse.Namespace, *, prefer_enriched: bool = T
     products_dir = getattr(args, "products_dir", None)
     if products_dir:
         root = repo_path(products_dir)
-        files.extend(enriched_files_from_products_dir(root) if prefer_enriched else iter_json_files([root]))
+        if prefer_enriched:
+            files.extend(enriched_files_from_products_dir(root))
+        elif getattr(args, "prefer_scored", False):
+            files.extend(scored_files_from_products_dir(root))
+        else:
+            files.extend(iter_json_files([root]))
     dist_dir = getattr(args, "dist_dir", None)
     if dist_dir and not files:
         dist_path = repo_path(dist_dir)
@@ -543,6 +574,176 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                     scoring_diag = scoring_meta.get("iqd_contract_diagnostics")
             if isinstance(scoring_diag, dict) and scoring_diag.get("iqd_ingredients_fallback_used") is True:
                 findings.append(Finding("ENRICHMENT_SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed IQD ingredients fallback", str(file_path)))
+
+            product_evidence = product.get("product_scoring_evidence") or []
+            if isinstance(product_evidence, dict):
+                product_evidence = product_evidence.get("items") or product_evidence.get("evidence") or [product_evidence]
+            if not isinstance(product_evidence, list):
+                findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_SHAPE", f"{pid}: product_scoring_evidence must be a list/object", str(file_path)))
+                product_evidence = []
+            for idx, evidence in enumerate(product_evidence):
+                if not isinstance(evidence, dict):
+                    findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_SHAPE", f"{pid}: product evidence #{idx} is not an object", str(file_path)))
+                    continue
+                if evidence.get("scoreable") is True:
+                    missing = [
+                        field
+                        for field in (
+                            "evidence_type",
+                            "scoreable_identity",
+                            "score_eligible_by_cleaner",
+                            "dose_class",
+                            "dose_value",
+                            "dose_unit",
+                            "source",
+                            "raw_source_path",
+                            "evidence_scope",
+                            "linked_rows",
+                            "confidence",
+                            "reason",
+                        )
+                        if evidence.get(field) in (None, "", [])
+                    ]
+                    if missing:
+                        findings.append(Finding("ENRICHMENT_PRODUCT_EVIDENCE_FIELD_MISSING", f"{pid}: scoreable product evidence missing {missing}", str(file_path)))
+                    if evidence.get("evidence_type") == "probiotic_cfu":
+                        taxonomy_primary_type = str(_safe_dict(product.get("supplement_taxonomy")).get("primary_type") or "").lower()
+                        row_identity_reason = evidence.get("reason") == "product_level_cfu_with_probiotic_row_identity"
+                        strict_rows = _safe_dict(product.get("ingredient_quality_data")).get("ingredients_scorable") or []
+                        has_non_probiotic_strict_active = any(
+                            isinstance(row, dict)
+                            and not any(term in " ".join(str(row.get(key) or "").lower() for key in ("canonical_id", "name", "standard_name")) for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus"))
+                            and str(row.get("dose_class") or "").lower() != "probiotic_cfu"
+                            for row in strict_rows
+                        )
+                        if taxonomy_primary_type != "probiotic" and (not row_identity_reason or has_non_probiotic_strict_active):
+                            findings.append(Finding("ENRICHMENT_PRODUCT_CFU_FALSE_POSITIVE", f"{pid}: scoreable probiotic_cfu evidence on non-probiotic taxonomy {taxonomy_primary_type!r}", str(file_path)))
+                elif evidence.get("evidence_type") == "probiotic_cfu" and not evidence.get("rejection_reason"):
+                    findings.append(Finding("ENRICHMENT_PRODUCT_CFU_REJECTION_REASON_MISSING", f"{pid}: rejected probiotic_cfu evidence lacks rejection_reason", str(file_path)))
+
+            probiotic_data = _safe_dict(product.get("probiotic_data"))
+            total_cfu = numeric_value(probiotic_data.get("total_cfu"))
+            if total_cfu > 0 and not any(isinstance(e, dict) and e.get("evidence_type") == "probiotic_cfu" for e in product_evidence):
+                findings.append(Finding("ENRICHMENT_PRODUCT_CFU_EVIDENCE_MISSING", f"{pid}: probiotic_data.total_cfu has no probiotic_cfu product_scoring_evidence diagnostic", str(file_path)))
+    return findings
+
+
+def _safe_dict(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
+def _scoring_diag(product: dict[str, Any]) -> dict[str, Any]:
+    diag = product.get("iqd_contract_diagnostics")
+    if isinstance(diag, dict):
+        return diag
+    meta = product.get("scoring_metadata")
+    if isinstance(meta, dict):
+        diag = meta.get("iqd_contract_diagnostics")
+        if isinstance(diag, dict):
+            return diag
+    return {}
+
+
+def audit_scoring(args: argparse.Namespace) -> list[Finding]:
+    files = collect_product_files(args, prefer_enriched=False)
+    findings: list[Finding] = []
+    if not files:
+        return [Finding("SCORING_NO_INPUT", "no scored product files found for scoring contract audit")]
+
+    allowed_sources = {
+        "ingredient_quality_data.ingredients_scorable",
+        "ingredient_quality_data.ingredients_scorable+product_scoring_evidence",
+    }
+    for file_path in files:
+        try:
+            products = as_products(load_json(file_path))
+        except Exception as exc:
+            findings.append(Finding("SCORING_JSON_ERROR", f"cannot read scored product JSON: {exc}", str(file_path)))
+            continue
+        for product in products:
+            pid = product_identity(product)
+            verdict = str(product.get("verdict") or "").upper()
+            diag = _scoring_diag(product)
+            source = (
+                product.get("scoring_ingredients_source")
+                or diag.get("scoring_ingredients_source")
+                or _safe_dict(product.get("scoring_metadata")).get("scoring_ingredients_source")
+            )
+            if source not in allowed_sources and verdict not in {"BLOCKED", "UNSAFE", "NUTRITION_ONLY"}:
+                findings.append(Finding("SCORING_SOURCE_FORBIDDEN", f"{pid}: scoring source {source!r} is not strict scorable input", str(file_path)))
+            if diag.get("iqd_ingredients_fallback_used") is True:
+                findings.append(Finding("SCORING_USED_IQD_FALLBACK", f"{pid}: scoring consumed ingredient_quality_data.ingredients fallback", str(file_path)))
+
+            fallback_rows = product.get("scoring_fallbacks_used") or diag.get("scoring_fallbacks_used") or []
+            for fallback in fallback_rows:
+                if not isinstance(fallback, dict):
+                    continue
+                if fallback.get("fallback_class") == "dev_only_missing_vocab":
+                    findings.append(Finding("SCORING_DEV_FALLBACK", f"{pid}: dev_only_missing_vocab fallback used in scoring", str(file_path)))
+                if not fallback.get("fallback_class") or not fallback.get("fallback_reason"):
+                    findings.append(Finding("SCORING_FALLBACK_DIAGNOSTICS_MISSING", f"{pid}: scoring fallback lacks class/reason", str(file_path)))
+
+            strict_contract = product.get("strict_scoring_contract")
+            if not isinstance(strict_contract, dict):
+                strict_contract = _safe_dict(_safe_dict(product.get("scoring_metadata")).get("strict_scoring_contract"))
+            if not strict_contract:
+                findings.append(Finding("SCORING_STRICT_CONTRACT_MISSING", f"{pid}: missing strict_scoring_contract diagnostics", str(file_path)))
+            elif strict_contract.get("passed") is not True:
+                findings.append(Finding(
+                    "SCORING_STRICT_CONTRACT_FAILED",
+                    f"{pid}: strict scoring contract did not pass: {strict_contract.get('findings') or strict_contract.get('reason')}",
+                    str(file_path),
+                ))
+
+            coverage = mapped_coverage_value(product)
+            if verdict == "SAFE" and coverage is not None and coverage < 0.3:
+                findings.append(Finding("SCORING_SAFE_LOW_COVERAGE", f"{pid}: SAFE with mapped_coverage={coverage}", str(file_path)))
+            if verdict == "NUTRITION_ONLY":
+                if product.get("scoring_status") != "not_applicable":
+                    findings.append(Finding("SCORING_NUTRITION_STATUS", f"{pid}: NUTRITION_ONLY must use scoring_status=not_applicable", str(file_path)))
+                if product.get("score_basis") != "nutrition_only_food_shape":
+                    findings.append(Finding("SCORING_NUTRITION_BASIS", f"{pid}: NUTRITION_ONLY must use score_basis=nutrition_only_food_shape", str(file_path)))
+                if product.get("quality_score") is not None or product.get("score_80") is not None or product.get("score_100_equivalent") is not None:
+                    findings.append(Finding("SCORING_NUTRITION_SCORE_NULL", f"{pid}: NUTRITION_ONLY must have null score fields", str(file_path)))
+                if product.get("mapped_coverage_applicable") is not False:
+                    findings.append(Finding("SCORING_NUTRITION_COVERAGE_APPLICABILITY", f"{pid}: NUTRITION_ONLY must set mapped_coverage_applicable=false", str(file_path)))
+    return findings
+
+
+STATIC_FORBIDDEN_PATTERNS = [
+    ("V4_IQD_INGREDIENTS_FALLBACK", re.compile(r"iqd\.get\([\"']ingredients[\"']\)")),
+    ("V4_RAW_ACTIVE_FALLBACK", re.compile(r"product\.get\([\"'](?:activeIngredients|active_ingredients)[\"']\)")),
+    ("V4_PRIMARY_CATEGORY_ROUTING", re.compile(r"\.get\([\"']primary_category[\"']\)")),
+]
+
+
+def audit_scoring_static(args: argparse.Namespace) -> list[Finding]:
+    findings: list[Finding] = []
+    files: list[Path] = []
+    for value in getattr(args, "path", None) or ["scripts/scoring_v4"]:
+        root = repo_path(value)
+        if root.is_file() and root.suffix == ".py":
+            files.append(root)
+        elif root.is_dir():
+            files.extend(sorted(root.rglob("*.py")))
+    for file_path in files:
+        if file_path.name in {"generic_helpers.py"}:
+            continue
+        try:
+            lines = file_path.read_text(encoding="utf-8").splitlines()
+        except Exception as exc:
+            findings.append(Finding("SCORING_STATIC_READ_ERROR", f"cannot read {file_path}: {exc}", str(file_path)))
+            continue
+        for line_no, line in enumerate(lines, start=1):
+            if "scoring-contract-legacy-compat" in line or "display/search" in line:
+                continue
+            for code, pattern in STATIC_FORBIDDEN_PATTERNS:
+                if pattern.search(line):
+                    try:
+                        rel = file_path.relative_to(REPO_ROOT)
+                    except ValueError:
+                        rel = file_path
+                    findings.append(Finding(code, f"{rel}:{line_no} reads forbidden scoring fallback field", str(file_path)))
     return findings
 
 
@@ -580,6 +781,32 @@ def safety_text(product: dict[str, Any]) -> str:
     return " ".join(pieces)
 
 
+def taxonomy_has_omega_scorable_evidence(product: dict[str, Any]) -> bool:
+    """Return true when taxonomy preserved explicit omega ingredient evidence.
+
+    Scored artifacts do not always carry full IQD rows. In that shape, the
+    clinical drift gate should still accept taxonomy that declares strict
+    scorable input plus EPA/DHA/fish-oil evidence in its structured reasons.
+    """
+    taxonomy = product.get("supplement_taxonomy")
+    if not isinstance(taxonomy, dict):
+        return False
+    if taxonomy.get("classification_input_source") != "ingredient_quality_data.ingredients_scorable":
+        return False
+    breakdown = taxonomy.get("category_breakdown")
+    if isinstance(breakdown, dict) and numeric_value(breakdown.get("fatty_acid"), 0.0) > 0:
+        return True
+    reasons = taxonomy.get("classification_reasons")
+    if not isinstance(reasons, list):
+        return False
+    reason_text = " ".join(str(item) for item in reasons).lower()
+    return (
+        "omega-3:" in reason_text
+        and "ids=" in reason_text
+        and any(hint in reason_text for hint in OMEGA_CANONICAL_HINTS)
+    )
+
+
 def audit_clinical(args: argparse.Namespace) -> list[Finding]:
     files = collect_product_files(args)
     findings: list[Finding] = []
@@ -609,7 +836,8 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                 findings.append(Finding("GENERIC_CHROMIUM_CRVI", f"{pid}: generic chromium appears to match Cr(VI) safety rule", str(file_path)))
 
             primary = taxonomy_primary(product).lower()
-            if primary == "omega_3" and not any(any(hint in cid for hint in OMEGA_CANONICAL_HINTS) for cid in row_ids):
+            has_omega_row = any(any(hint in cid for hint in OMEGA_CANONICAL_HINTS) for cid in row_ids)
+            if primary == "omega_3" and not (has_omega_row or taxonomy_has_omega_scorable_evidence(product)):
                 findings.append(Finding("PRODUCT_NAME_ONLY_OMEGA3", f"{pid}: omega_3 taxonomy lacks scorable omega canonical evidence", str(file_path)))
 
             if primary == "sleep_support":
@@ -787,6 +1015,29 @@ def newest_mtime(paths: Iterable[Path]) -> float | None:
     return max(mtimes) if mtimes else None
 
 
+def audit_artifact_lineage(args: argparse.Namespace) -> list[Finding]:
+    enriched_dir = repo_path(args.enriched_dir)
+    scored_dir = repo_path(args.scored_dir)
+    if not enriched_dir.exists():
+        return [Finding("ARTIFACT_LINEAGE_ENRICHED_MISSING", f"missing enriched dir {enriched_dir}", str(enriched_dir))]
+    if not scored_dir.exists():
+        return [Finding("ARTIFACT_LINEAGE_SCORED_MISSING", f"missing scored dir {scored_dir}", str(scored_dir))]
+    findings: list[Finding] = []
+    enriched_by_name = {path.name.replace("enriched_", "", 1): path for path in iter_json_files([enriched_dir])}
+    scored_files = list(iter_json_files([scored_dir]))
+    if not scored_files:
+        return [Finding("ARTIFACT_LINEAGE_SCORED_EMPTY", f"no scored JSON artifacts under {scored_dir}", str(scored_dir))]
+    for scored_path in scored_files:
+        key = scored_path.name.replace("scored_", "", 1)
+        enriched_path = enriched_by_name.get(key)
+        if not enriched_path:
+            findings.append(Finding("ARTIFACT_LINEAGE_MATCH_MISSING", f"{scored_path.name}: no matching enriched artifact", str(scored_path)))
+            continue
+        if scored_path.stat().st_mtime < enriched_path.stat().st_mtime:
+            findings.append(Finding("ARTIFACT_LINEAGE_SCORED_STALE", f"{scored_path.name}: scored artifact older than matching enriched artifact", str(scored_path)))
+    return findings
+
+
 def audit_flutter(args: argparse.Namespace) -> list[Finding]:
     dist_dir = repo_path(args.dist_dir)
     flutter_assets = repo_path(args.flutter_repo) / "assets" / "db"
@@ -863,22 +1114,72 @@ def audit_shadow_diff(args: argparse.Namespace) -> list[Finding]:
     safety_shifts = 0
     coverage_drops = 0
     max_drop = 0.0
+    review_rows: list[dict[str, Any]] = []
     for pid in shared_ids:
         old = old_products[pid]
         new = new_products[pid]
-        if taxonomy_primary(old) != taxonomy_primary(new):
+        old_verdict = str(old.get("verdict") or old.get("safety_verdict") or "")
+        new_verdict = str(new.get("verdict") or new.get("safety_verdict") or "")
+        old_taxonomy = taxonomy_primary(old)
+        new_taxonomy = taxonomy_primary(new)
+        material_blocked_coverage_only = old_verdict == new_verdict == "BLOCKED" and safety_text(old) == safety_text(new)
+        shifted = False
+        if old_taxonomy != new_taxonomy:
             taxonomy_shifts += 1
-        if str(old.get("verdict") or old.get("safety_verdict") or "") != str(new.get("verdict") or new.get("safety_verdict") or ""):
+            shifted = True
+        if old_verdict != new_verdict:
             verdict_shifts += 1
+            shifted = True
         if safety_text(old) != safety_text(new):
             safety_shifts += 1
+            shifted = True
         old_cov = mapped_coverage_value(old)
         new_cov = mapped_coverage_value(new)
         if old_cov is not None and new_cov is not None:
             drop = old_cov - new_cov
-            if drop > args.max_mapped_coverage_drop:
+            if drop > args.max_mapped_coverage_drop and not material_blocked_coverage_only:
                 coverage_drops += 1
                 max_drop = max(max_drop, drop)
+                shifted = True
+        if shifted:
+            review_rows.append({
+                "product_id": pid,
+                "product_name": new.get("product_name") or new.get("fullName") or old.get("product_name") or old.get("fullName"),
+                "old_verdict": old_verdict,
+                "new_verdict": new_verdict,
+                "old_score": old.get("score_100_equivalent") or old.get("score_display_100_equivalent"),
+                "new_score": new.get("score_100_equivalent") or new.get("score_display_100_equivalent"),
+                "old_taxonomy": old_taxonomy,
+                "new_taxonomy": new_taxonomy,
+                "old_mapped_coverage": old_cov,
+                "new_mapped_coverage": new_cov,
+                "shift_reason": "pending_review",
+                "approval_status": "pending",
+                "reviewer_note": "",
+            })
+
+    review_output = getattr(args, "review_output", None)
+    if review_output:
+        try:
+            git_commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, text=True).strip()
+        except Exception:
+            git_commit = None
+        output_path = repo_path(review_output)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        write_json(output_path, {
+            "git_commit": git_commit,
+            "command": getattr(args, "command_text", None),
+            "old_dir": str(repo_path(args.old_dir)),
+            "new_dir": str(repo_path(args.new_dir)),
+            "old_dir_mtime": newest_mtime(old_files),
+            "new_dir_mtime": newest_mtime(new_files),
+            "shared_product_count": len(shared_ids),
+            "taxonomy_shifts": taxonomy_shifts,
+            "verdict_shifts": verdict_shifts,
+            "safety_shifts": safety_shifts,
+            "coverage_drops": coverage_drops,
+            "rows": review_rows,
+        })
 
     if getattr(args, "manual_approval", False):
         return []
@@ -912,6 +1213,7 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
             "source_of_truth_matrix",
             "cleaner_contract",
             "enrichment_contract",
+            "scoring_contract",
             "export_contract",
             "clinical_drift",
             "interaction_db_parity",
@@ -929,7 +1231,7 @@ def stamp_manifest(args: argparse.Namespace) -> list[Finding]:
 
 def run_all(args: argparse.Namespace) -> list[Finding]:
     findings: list[Finding] = []
-    for func in (audit_matrix, audit_cleaner, audit_enrichment, audit_clinical, audit_export, audit_interaction, audit_freshness):
+    for func in (audit_matrix, audit_cleaner, audit_enrichment, audit_scoring, audit_scoring_static, audit_clinical, audit_export, audit_interaction, audit_freshness):
         findings.extend(func(args))
     if getattr(args, "flutter_repo", None):
         findings.extend(audit_flutter(args))
@@ -976,6 +1278,21 @@ def build_parser() -> argparse.ArgumentParser:
     enrichment.add_argument("--dist-dir", default=None)
     enrichment.set_defaults(func=audit_enrichment)
 
+    scoring = subparsers.add_parser("scoring", help="validate scored artifact scoring contract")
+    add_common(scoring)
+    scoring.add_argument("--products-dir", default=None)
+    scoring.add_argument("--scored-dir", dest="enriched_dir", action="append", default=[])
+    scoring.add_argument("--scored-file", dest="product_file", action="append", default=[])
+    scoring.add_argument("--product-file", action="append", default=[])
+    scoring.add_argument("--dist-dir", default=None)
+    scoring.set_defaults(prefer_scored=True)
+    scoring.set_defaults(func=audit_scoring)
+
+    scoring_static = subparsers.add_parser("scoring-static", help="validate strict scoring modules do not read forbidden fallback fields")
+    add_common(scoring_static)
+    scoring_static.add_argument("--path", action="append", default=[])
+    scoring_static.set_defaults(func=audit_scoring_static)
+
     export = subparsers.add_parser("export", help="validate final catalog export")
     add_common(export)
     export.add_argument("--dist-dir", default="scripts/dist")
@@ -1004,6 +1321,12 @@ def build_parser() -> argparse.ArgumentParser:
     freshness.add_argument("--skip-interaction-inputs", action="store_true")
     freshness.set_defaults(func=audit_freshness)
 
+    lineage = subparsers.add_parser("artifact-lineage", help="validate enriched/scored artifact lineage for shadow review")
+    add_common(lineage)
+    lineage.add_argument("--enriched-dir", required=True)
+    lineage.add_argument("--scored-dir", required=True)
+    lineage.set_defaults(func=audit_artifact_lineage)
+
     flutter = subparsers.add_parser("flutter", help="validate Flutter bundled DB parity")
     add_common(flutter)
     flutter.add_argument("--dist-dir", default="scripts/dist")
@@ -1019,6 +1342,8 @@ def build_parser() -> argparse.ArgumentParser:
     shadow.add_argument("--max-safety-shifts", type=int, default=0)
     shadow.add_argument("--max-mapped-coverage-drop", type=float, default=0.0)
     shadow.add_argument("--manual-approval", action="store_true")
+    shadow.add_argument("--review-output", default=None)
+    shadow.add_argument("--command-text", default=None)
     shadow.set_defaults(func=audit_shadow_diff)
 
     stamp = subparsers.add_parser("stamp-manifest", help="stamp export manifest with contract release metadata")

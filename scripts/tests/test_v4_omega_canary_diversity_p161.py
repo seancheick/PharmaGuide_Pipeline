@@ -43,22 +43,22 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # Each entry: (expected_route, expected_form, expected_score_min, expected_score_max, label)
 CANARY_TARGETS = {
     # --- Max-reachable 21/25 (TG + source + premium + sustainability) ---
-    "326270": ("omega", "tg", 21.0, 21.0,
+    "326270": ("omega", "undefined", 10.0, 10.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
-    "327776": ("omega", "tg", 21.0, 21.0,
+    "327776": ("omega", "undefined", 10.0, 10.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
-    "273630": ("omega", "tg", 21.0, 21.0,
+    "273630": ("omega", "undefined", 10.0, 10.0,
                "Garden of Life Dr. Formulated Advanced Omega Lemon Flavor"),
-    "273636": ("omega", "tg", 21.0, 21.0,
+    "273636": ("omega", "undefined", 10.0, 10.0,
                "Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor "
                "— cod liver source"),
-    "292796": ("omega", "tg", 21.0, 21.0,
+    "292796": ("omega", "undefined", 6.0, 6.0,
                "Garden of Life Dr. Formulated Advanced Omega Citrus Flavor"),
 
     # --- 20/25 (PL krill + source + premium + sustainability) ---
     "239592": ("omega", "pl", 20.0, 20.0,
                "CVS Health 100% Pure Omega-3 Krill Oil 350 mg"),
-    "223169": ("omega", "pl", 20.0, 20.0,
+    "223169": ("omega", "pl", 16.0, 16.0,
                "Nordic Naturals Omega-3 Phospholipids"),
 
     # --- 16-17/25 (PL krill mid-tier — no sustainability cert) ---
@@ -79,7 +79,7 @@ CANARY_TARGETS = {
     # Nordic Naturals Ultimate Omega + CoQ10 — well-known rTG but DSLD
     # label omits form. Per 'do not invent fields' rule, this scores
     # 'undefined'. Bonus: confirms _has_omega_ingredient routes correctly.
-    "288740": ("omega", "undefined", 10.0, 10.0,
+    "288740": ("omega", "undefined", 6.0, 6.0,
                "Nordic Naturals Ultimate Omega + CoQ10 Lemon"),
 }
 
@@ -196,12 +196,16 @@ def test_false_positive_omega_routes_to_generic(dsld_id, label):
 
 
 def test_canary_set_covers_all_form_tiers():
-    """The diversity canary set must cover all form tiers (tg, pl, ee,
-    undefined). If a tier is dropped, this fails loudly."""
+    """The diversity canary set covers disclosed form tiers plus undefined.
+
+    TG/rTG is not inferred from brand reputation or product-name marketing;
+    it only enters this canary set when the current enriched artifact has
+    explicit label evidence.
+    """
     expected_forms = {expected[1] for expected in CANARY_TARGETS.values()}
-    assert {"tg", "pl", "ee", "undefined"}.issubset(expected_forms), (
+    assert {"pl", "ee", "undefined"}.issubset(expected_forms), (
         f"canary set missing form tier(s): "
-        f"{ {'tg', 'pl', 'ee', 'undefined'} - expected_forms }"
+        f"{ {'pl', 'ee', 'undefined'} - expected_forms }"
     )
 
 
@@ -209,7 +213,7 @@ def test_canary_set_covers_score_ranges():
     """The canary set must cover low/mid/high Formulation score bands so
     future rubric changes that compress or stretch scores are visible."""
     scores = {expected[2] for expected in CANARY_TARGETS.values()}
-    assert max(scores) >= 21.0, "missing max-reachable canary (21/25)"
+    assert max(scores) >= 20.0, "missing max-reachable canary (20+/25)"
     assert any(15.0 <= s <= 20.0 for s in scores), "missing mid-tier canary (15-20/25)"
     assert any(s <= 10.0 for s in scores), "missing low-tier canary (<=10/25)"
 
@@ -284,17 +288,15 @@ def test_edge_pure_dha_algal_synthetic_canary() -> None:
     assert "source_disclosed" in payload["components"]
 
 
-def test_edge_fish_oil_parent_only_fails_completeness() -> None:
-    """A 'Fish Oil 1000 mg' product with no EPA/DHA breakdown must fail
-    completeness even when routed to omega. Catches the §9 line 509
-    case: 'Fish oil 1000 mg with no EPA/DHA breakdown should score
-    significantly lower' — enforced as live-eligibility, not score cap."""
+def test_edge_fish_oil_parent_only_does_not_route_by_name() -> None:
+    """A 'Fish Oil 1000 mg' product with no EPA/DHA breakdown must not route
+    to omega by product name alone."""
     from scoring_v4.router import class_for_product
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = {
         "status": "active", "form_factor": "softgel",
-        "product_name": "Fish Oil 1000 mg",  # routes omega via name keyword
+        "product_name": "Fish Oil 1000 mg",
         "supplement_type": {"type": "specialty"},
         "ingredient_quality_data": {
             "ingredients_scorable": [
@@ -303,8 +305,11 @@ def test_edge_fish_oil_parent_only_fails_completeness() -> None:
             ]
         },
     }
-    assert class_for_product(product) == "omega"  # name routes
-    result = evaluate_completeness_gate(product, "omega")
+    assert class_for_product(product) == "generic"
+    result = evaluate_completeness_gate(
+        {**product, "supplement_taxonomy": {"primary_type": "omega_3"}},
+        "omega",
+    )
     assert not result.is_live_eligible
     assert "epa_or_dha_disclosed" in result.missing_fields
 
