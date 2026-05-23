@@ -558,15 +558,38 @@ class SupplementScorer:
         active_total = scoring_input.mapped_count + unmapped_count_excluding_banned
 
         if active_total <= 0:
+            # Distinguish "no actives at all" (DSLD authoring gap) from "enricher
+            # saw actives but the strict scoring contract rejected them all"
+            # (the dominant 460-of-470 corpus pattern as of 2026-05-23). The
+            # legacy NO_ACTIVES_DETECTED flag conflated the two and lied to
+            # downstream gates. See reports/not_scored_triage/SUMMARY.md.
+            iqd = product.get("ingredient_quality_data") or {}
+            # Safe coercion: a diagnostic path must never crash a scoring run
+            # on a malformed total_active. Any non-numeric / negative value
+            # degrades to 0 → emit the safer NO_ACTIVES_DETECTED label.
+            raw_total_active = iqd.get("total_active")
+            try:
+                enriched_active_count = int(float(raw_total_active))
+            except (TypeError, ValueError):
+                enriched_active_count = 0
+            if enriched_active_count < 0:
+                enriched_active_count = 0
+            if enriched_active_count > 0:
+                reason = "NO_STRICT_SCORING_CANDIDATES"
+                not_scorable_reason = "strict_contract_all_candidates_rejected"
+            else:
+                reason = "NO_ACTIVES_DETECTED"
+                not_scorable_reason = "no_actives_detected"
             return {
                 "stop": True,
-                "reason": "NO_ACTIVES_DETECTED",
+                "reason": reason,
+                "not_scorable_reason": not_scorable_reason,
                 "mapped_coverage": scoring_input.mapped_coverage or 0.0,
                 "unmapped_actives": [],
                 "unmapped_actives_total": 0,
                 "unmapped_actives_excluding_banned_exact_alias": 0,
                 "unmapped_actives_banned_exact_alias": [],
-                "flags": ["NO_ACTIVES_DETECTED", "SCORING_INPUT_CONTRACT_GAP"],
+                "flags": [reason, "SCORING_INPUT_CONTRACT_GAP"],
                 "scoring_input_contract": scoring_input.diagnostics(),
             }
 
@@ -4301,6 +4324,7 @@ class SupplementScorer:
         mapped_coverage: float,
         reason: Optional[str] = None,
         blocking_reason: Optional[str] = None,
+        not_scorable_reason: Optional[str] = None,
     ) -> Dict[str, Any]:
         product_id = product.get("dsld_id", "unknown")
         product_name = product.get("product_name", "Unknown Product")
@@ -4397,6 +4421,11 @@ class SupplementScorer:
             "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
             "scoring_status": scoring_status,
             "score_basis": score_basis,
+            # Nullable diagnostic. Always emitted on the scored output for shape
+            # consistency with sibling fields (blocking_reason, category_percentile);
+            # None means "this product was scored" or "no diagnostic applies".
+            # build_final_db decides whether to forward to the Flutter export.
+            "not_scorable_reason": not_scorable_reason,
             "evaluation_stage": "safety" if verdict in {"BLOCKED", "UNSAFE"} else "scoring",
             "breakdown": breakdown,
             "flags": sorted(set(flags)),
@@ -4616,6 +4645,7 @@ class SupplementScorer:
                     ),
                     mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
                     reason=mapping_gate.get("reason"),
+                    not_scorable_reason=mapping_gate.get("not_scorable_reason"),
                 )
 
             # Step 4: sections
