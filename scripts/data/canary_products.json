@@ -78,8 +78,8 @@
       "notes": "5000 IU = 125% RDA, 50% UL. Tests B7 over-UL gate at moderate-risk threshold (should not penalize until 150%)."
     },
     {
-      "dsld_id": "15761",
-      "brand_name": "Thorne Research",
+      "dsld_id": "298053",
+      "brand_name": "Thorne",
       "product_name": "Vitamin K2",
       "primary_class": "single_nutrient",
       "subclass": "vitamin_k2",
@@ -94,9 +94,9 @@
       "notes": "MK-4 (Thorne's) and MK-7 have different bioavailability profiles. Tests form-aware A1 mapping. Low v3 score worth investigating (Thorne brand-trust should help)."
     },
     {
-      "dsld_id": "1437",
-      "brand_name": "GNC",
-      "product_name": "NAC 600",
+      "dsld_id": "219203",
+      "brand_name": "Solgar",
+      "product_name": "NAC 600 mg",
       "primary_class": "single_nutrient",
       "subclass": "nac",
       "expected_b5_class": "generic",
@@ -173,8 +173,8 @@
       "notes": "Same classifier gap as 173888."
     },
     {
-      "dsld_id": "178559",
-      "brand_name": "Spring Valley",
+      "dsld_id": "178520",
+      "brand_name": "Equate",
       "product_name": "Children's Multivitamin Gummies",
       "primary_class": "multivitamin",
       "subclass": "kids_gummy",
@@ -189,8 +189,8 @@
       "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves."
     },
     {
-      "dsld_id": "15906",
-      "brand_name": "Thorne Research",
+      "dsld_id": "328830",
+      "brand_name": "Thorne",
       "product_name": "Basic Prenatal",
       "primary_class": "prenatal_multi",
       "subclass": "standard_prenatal",
@@ -238,9 +238,9 @@
       "notes": "Friend of the Sea / GOED / IFOS all claimed via Nordic brand injection — none of them reach B4a (manufacturer-only). Router routes to multi_or_prenatal via 'Prenatal' keyword (consumer-targeting); no blends so B5 itself is 0 either way. Future P0.3 marine-source dimension may credit FoS/GOED/IFOS there."
     },
     {
-      "dsld_id": "1643",
+      "dsld_id": "1650",
       "brand_name": "GNC Probiotics",
-      "product_name": "Ultra Probiotic Complex 50 Billion CFUs",
+      "product_name": "Ultra Probiotic Rescue & Refresh Kit 150 Billion CFUs",
       "primary_class": "probiotic",
       "subclass": "high_cfu_blend",
       "expected_b5_class": "probiotic",
@@ -333,9 +333,9 @@
       "notes": "Sensoril clinical trials at 125-250mg (LOWER mg per trial than KSM-66 → 125mg is appropriate). Tests v4 branded-extract-specific dose math; current 49.7 may under-credit Sensoril vs KSM-66 due to mg-based comparison."
     },
     {
-      "dsld_id": "16095",
-      "brand_name": "Thorne Research",
-      "product_name": "Meriva-SR Curcumin Phytosome",
+      "dsld_id": "302651",
+      "brand_name": "Doctor's Best",
+      "product_name": "Curcumin Phytosome with Meriva",
       "primary_class": "herbal_branded_extract",
       "subclass": "curcumin_meriva_phytosome",
       "expected_b5_class": "generic",
@@ -461,7 +461,7 @@
       "notes": "Creatine monohydrate at 3g is sub-optimal (clinical dose 5g). Tests v4 dose curve on under-dosed actives."
     },
     {
-      "dsld_id": "211334",
+      "dsld_id": "229913",
       "brand_name": "GNC Beyond Raw",
       "product_name": "Precision BCAA Gummy Worm",
       "primary_class": "sports_transparent",
@@ -477,9 +477,9 @@
       "notes": "BCAA delivered as gummies is unusual. supp_type=multivitamin (because of vitamin co-pack); name has 'BCAA' → router correctly catches sports_active via keyword."
     },
     {
-      "dsld_id": "184411",
+      "dsld_id": "184421",
       "brand_name": "Pure Encapsulations",
-      "product_name": "Digestive Enzymes Ultra",
+      "product_name": "Digestive Enzymes Ultra with Betaine HCl",
       "primary_class": "specialty",
       "subclass": "digestive_enzymes",
       "expected_b5_class": "generic",
@@ -526,9 +526,9 @@
       "notes": "supp_type=multivitamin (many ingredients, diverse categories) → routes to multi_or_prenatal 1.3x. Greens products often hide per-ingredient dose; debatable whether multi_or_prenatal or generic is the right class — flag for v4 review."
     },
     {
-      "dsld_id": "16012",
-      "brand_name": "Thorne Research",
-      "product_name": "Vinpocetine",
+      "dsld_id": "294063",
+      "brand_name": "Pure Encapsulations",
+      "product_name": "Vinpocetine 20 mg",
       "primary_class": "blocked_verdict",
       "subclass": "blocked_vinpocetine",
       "expected_b5_class": "generic",
@@ -542,9 +542,9 @@
       "notes": "Vinpocetine has been targeted by FDA enforcement as not a legal supplement. BLOCKED verdict short-circuits scoring → v4 must respect this gate."
     },
     {
-      "dsld_id": "16072",
-      "brand_name": "Thorne Research",
-      "product_name": "Memoractiv",
+      "dsld_id": "232923",
+      "brand_name": "Life Extension",
+      "product_name": "Cognitex Elite Pregnenolone",
       "primary_class": "blocked_verdict",
       "subclass": "blocked_blend_contains_vinpocetine",
       "expected_b5_class": "generic",
