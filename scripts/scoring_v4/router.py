@@ -4,6 +4,8 @@ Priority order (post-taxonomy refactor, 2026-05-20):
 
   1. probiotic              → probiotic
      - taxonomy primary_type == "probiotic"
+     - OR probiotic_data has product-level CFU + named strain identity
+     - OR probiotic_data has named strain identity + explicit probiotic name
   2. prenatal name keyword  → multi_or_prenatal
      - overrides multi / omega routing for products like Prenatal DHA,
        Prenatal Gummies. Does NOT override probiotic — prenatal-probiotic
@@ -43,6 +45,7 @@ _PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
     re.IGNORECASE,
 )
+_PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\b", re.IGNORECASE)
 
 # Per scripts/data/omega_rubric.json router.name_keywords. Lowercased
 # substring matches against the joined product/brand/bundle name text.
@@ -77,6 +80,16 @@ _OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\
 # any EPA/DHA canonical with positive quantity is omega regardless of
 # what the name says.
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
+_B_VITAMIN_CANONICALS = {
+    "vitamin_b1_thiamine",
+    "vitamin_b2_riboflavin",
+    "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid",
+    "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin",
+    "vitamin_b9_folate",
+    "vitamin_b12_cobalamin",
+}
 _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
     "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
@@ -120,6 +133,47 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     return False
 
 
+def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
+    payload = (product or {}).get("probiotic_data") or (product or {}).get("probiotic_detail") or {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _positive_number(value: Any) -> bool:
+    try:
+        return value is not None and float(value) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
+    """Return True for products with real probiotic identity evidence.
+
+    This deliberately does not read legacy `supplement_type`. The taxonomy
+    owns product class, but fresh artifacts can still have an over-specific
+    primary_type (for example beauty_hair_skin_nails) while the probiotic
+    enricher extracted named strains. Route probiotic when the product has
+    enough probiotic_data to let the probiotic completeness gate decide:
+
+      - named strains plus product-level CFU evidence, or
+      - named strains plus explicit probiotic/synbiotic wording.
+
+    The CFU/name guard prevents whole-food or botanical products with incidental
+    non-quantified probiotic strain rows from being promoted to probiotic.
+    """
+    data = _probiotic_payload(product)
+    if not data:
+        return False
+
+    is_product = bool(data.get("is_probiotic_product") or data.get("is_probiotic"))
+    strain_count = int(data.get("total_strain_count") or 0)
+    has_cfu = bool(data.get("has_cfu")) or _positive_number(data.get("total_cfu")) or _positive_number(
+        data.get("total_billion_count")
+    )
+    name_signal = bool(_PROBIOTIC_NAME_RE.search(name_text or ""))
+
+    return is_product and strain_count > 0 and (has_cfu or name_signal)
+
+
 def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     """Detect omega-class routing signals.
 
@@ -153,7 +207,37 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     if _OMEGA_369_RE.search(name_text) or _has_non_epa_dha_fatty_acid_panel(product):
         return False
 
-    return False
+    lowered = (name_text or "").lower()
+    if any(token in lowered for token in _OMEGA_NAME_KEYWORDS):
+        return True
+    return bool(_OMEGA_STANDALONE_RE.search(name_text or ""))
+
+
+def _is_b_complex_route_eligible(product: Dict[str, Any], name_text: str) -> bool:
+    """Return True for true B-complex panels, not targeted beauty/energy SKUs.
+
+    Taxonomy can classify products with three B vitamins plus functional
+    actives as b_complex. Those should remain generic unless the label
+    explicitly says B-complex or the panel has a broad B-vitamin spread.
+    """
+    lowered = (name_text or "").lower()
+    if "b-complex" in lowered or "b complex" in lowered:
+        return True
+
+    b_vitamins: set[str] = set()
+    non_b_scorable = 0
+    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
+        if not isinstance(ing, dict):
+            continue
+        canonical = str(ing.get("canonical_id") or "").strip().lower()
+        if not canonical:
+            continue
+        if canonical in _B_VITAMIN_CANONICALS:
+            b_vitamins.add(canonical)
+        else:
+            non_b_scorable += 1
+
+    return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
 
 
 # Taxonomy primary_type → v4 module mapping. The taxonomy emits 20 types
@@ -224,8 +308,10 @@ def class_for_product(product: Dict[str, Any]) -> str:
         for k in ("product_name", "fullName", "brand_name", "bundleName")
     )
 
-    # Priority 1: probiotic. Taxonomy is the scoring contract.
-    if primary_type == "probiotic":
+    # Priority 1: probiotic. Taxonomy is the scoring contract, with a
+    # probiotic_data fallback for artifacts where taxonomy under-classifies a
+    # real probiotic panel. This still avoids legacy supplement_type routing.
+    if primary_type == "probiotic" or _is_probiotic_class(product, name_text):
         return "probiotic"
 
     # Priority 2: prenatal name keyword. Overrides multi / omega routing
@@ -244,16 +330,20 @@ def class_for_product(product: Dict[str, Any]) -> str:
     if primary_type:
         module = _TAXONOMY_TO_MODULE.get(primary_type)
         if module == "multi_or_prenatal":
+            if primary_type == "b_complex" and not _is_b_complex_route_eligible(product, name_text):
+                return "generic"
             return "multi_or_prenatal"
         if module == "omega":
             return "omega"
         if module == "generic":
             # Taxonomy is authoritative for generic classes, but the
-            # physical panel fact of disclosed EPA/DHA still wins. Do not let
-            # name-only omega marketing override taxonomy here — ALA / 3-6-9 /
-            # fatty-acid blends are intentionally generic unless EPA/DHA is
-            # actually disclosed.
-            return "omega" if _has_omega_ingredient(product) else "generic"
+            # physical panel fact of disclosed EPA/DHA still wins. Explicit
+            # EPA/DHA or fish-oil label identity also routes omega so the
+            # omega completeness gate can block parent-mass / undisclosed
+            # EPA-DHA products instead of letting generic score unrelated
+            # vitamins. ALA / 3-6-9 / fatty-acid blends are still guarded in
+            # _is_omega_class unless EPA/DHA is actually disclosed.
+            return "omega" if _is_omega_class(product, name_text) else "generic"
         # Unknown taxonomy type: fall through to legacy omega / multi fallback
         # rather than crashing.
 

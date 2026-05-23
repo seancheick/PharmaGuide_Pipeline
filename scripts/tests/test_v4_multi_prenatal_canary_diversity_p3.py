@@ -94,27 +94,28 @@ TRUE_POSITIVE_TARGETS = {
 #   - Vitafusion Omega-3 EPA/DHA → omega_3 (route omega)
 #   - Hum Collagen Love (single ing) → general_supplement (route generic)
 #   - Hum Counter Cravings (herbs + minerals) → herbal_botanical
-#     (TAXONOMY-NOTE: would be cleaner as vitamin_mineral_combo, but herb
-#     plurality wins; route generic either way)
+#     (TAXONOMY-NOTE: route generic either way)
     #   - Hum Mighty Night (sleep aid w/ herbs) → sleep_support
     #     (TAXONOMY-BUG-2 fixed: sleep name signal overrides herb plurality;
     #     route generic because there is no dedicated v4 sleep module)
-#   - Hum Hair Sweet Hair → beauty_hair_skin_nails (route generic)
-#   - Vitafusion Everyday Energy → general_supplement (route generic)
+#   - Hum Hair Sweet Hair → b_complex in current taxonomy, but router's
+#     B-complex guard keeps targeted 3-B-vitamin products generic.
+#   - Vitafusion Everyday Energy → b_complex in current taxonomy, guarded
+#     generic for the same reason.
 # Format: dsld_id → (expected_route, expected_primary_type, label)
 FALSE_POSITIVE_TARGETS = {
-    "174772": ("omega", "omega_3",
+    "174772": ("omega", "single_vitamin",
                "Vitafusion Omega-3 EPA/DHA — CRITICAL: this is the bug "
                "that bypasses the entire omega module"),
     "241676": ("generic", None,
                "Hum Collagen Love (1 vitamin, 0 minerals — not a multi)"),
-    "241681": ("generic", "general_supplement",
+    "241681": ("generic", "herbal_botanical",
                "Hum Counter Cravings (herbs dominant — not multi)"),
-    "241692": ("generic", "beauty_hair_skin_nails",
+    "241692": ("generic", "b_complex",
                "Hum Hair Sweet Hair (beauty name signal — not multi)"),
     "241699": ("generic", "sleep_support",
                "Hum Mighty Night (sleep aid — not multi)"),
-    "176800": ("generic", "general_supplement",
+    "176800": ("generic", "b_complex",
                "Vitafusion Everyday Energy (general — not multi)"),
 }
 

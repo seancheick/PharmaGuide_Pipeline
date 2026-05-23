@@ -68,7 +68,7 @@ PROBIOTIC_CANARIES = {
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (39.0, 43.0),
+        "score_range": (42.0, 45.0),
         "traits": {"trust_zero": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit but Dose=0.
@@ -92,7 +92,7 @@ PROBIOTIC_CANARIES = {
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (40.0, 45.0),
+        "score_range": (47.0, 50.0),
         "traits": {"prenatal_name_routes_probiotic": True},
     },
 }

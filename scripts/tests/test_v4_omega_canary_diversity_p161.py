@@ -288,9 +288,9 @@ def test_edge_pure_dha_algal_synthetic_canary() -> None:
     assert "source_disclosed" in payload["components"]
 
 
-def test_edge_fish_oil_parent_only_does_not_route_by_name() -> None:
-    """A 'Fish Oil 1000 mg' product with no EPA/DHA breakdown must not route
-    to omega by product name alone."""
+def test_edge_fish_oil_parent_only_routes_omega_but_fails_completeness() -> None:
+    """A 'Fish Oil 1000 mg' product routes to omega identity, then fails the
+    omega completeness gate because EPA/DHA is not disclosed."""
     from scoring_v4.router import class_for_product
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
@@ -305,7 +305,7 @@ def test_edge_fish_oil_parent_only_does_not_route_by_name() -> None:
             ]
         },
     }
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "omega"
     result = evaluate_completeness_gate(
         {**product, "supplement_taxonomy": {"primary_type": "omega_3"}},
         "omega",
