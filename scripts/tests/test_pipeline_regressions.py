@@ -1381,7 +1381,7 @@ class TestBatch9StructuralAndBrandedWrappers:
         assert container_name not in active_names
         for child_name in child_names:
             assert child_name in active_names
-        assert display_by_raw[container_name]["display_type"] == "structural_container"
+        assert display_by_raw[container_name]["display_type"] == "summary_wrapper"
         assert display_by_raw[container_name]["score_included"] is False
 
     @pytest.mark.parametrize(
