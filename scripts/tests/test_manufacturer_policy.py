@@ -77,6 +77,7 @@ class TestManufacturerPolicyScoring:
                 "blends": []
             },
             "ingredient_quality_data": {
+                # Legacy field — preserved for backcompat fixtures only.
                 "ingredients": [
                     {
                         "name": "Vitamin C",
@@ -85,7 +86,29 @@ class TestManufacturerPolicyScoring:
                         "form_detected": "ascorbic_acid",
                         "mapped": True
                     }
-                ]
+                ],
+                # Strict scoring contract input — same row, enriched with the
+                # cleaner-emitted fields scoring_input_contract._evaluate_row
+                # requires. Without this the scorer drops the row and
+                # returns score_80=None (see Wave 4 ledger entry).
+                "ingredients_scorable": [
+                    {
+                        "name": "Vitamin C",
+                        "canonical_id": "vitamin_c_ascorbic_acid",
+                        "quality_score": 5,
+                        "form_detected": "ascorbic_acid",
+                        "mapped": True,
+                        "quantity": 500,
+                        "unit": "mg",
+                        "source_section": "active",
+                        "raw_source_path": "ingredientRows[0]",
+                        "cleaner_row_role": "active_scorable",
+                        "score_eligible_by_cleaner": True,
+                        "dose_class": "therapeutic_mass",
+                        "role_classification": "active_scorable",
+                        "scoreable_identity": True,
+                    }
+                ],
             },
             "match_ledger": {
                 "schema_version": "1.1.0",
