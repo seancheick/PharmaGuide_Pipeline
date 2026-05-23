@@ -111,7 +111,12 @@ def test_summarize_passes_omega_when_rank_order_is_within_one() -> None:
 
     summary = summarize_records(rows)
 
-    assert summary["omega"]["decision"] == "generic_ok_for_now"
+    # Renamed 2026-05-23 from the P1.5-era `generic_ok_for_now`. After P1.6
+    # shipped the omega module (S1211), the no-drift decision now names what
+    # it actually tracks — drift vs the shipped omega module baseline, not
+    # tolerance against a generic-tier fallback. See
+    # scripts/api_audit/v4_shadow_canary_report.py docstring.
+    assert summary["omega"]["decision"] == "omega_module_no_drift"
     assert summary["calibration_counts"] == {"affine_p15": 2}
 
 

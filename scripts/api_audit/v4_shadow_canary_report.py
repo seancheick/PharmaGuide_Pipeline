@@ -5,9 +5,19 @@ Audit-only tool. It runs the v4 shadow scorer against the curated canary
 set, compares v4 rank order to the v3 shipped-score baseline inside each
 primary class, and emits an omega decision signal:
 
-    generic_ok_for_now        — omega rank order within +/- 1
-    review_omega_module       — omega rank order drift exceeds +/- 1
-    insufficient_omega_data   — fewer than 2 omega canaries scored
+    omega_module_no_drift     — omega module shipped (P1.6); rank order
+                                within +/- 1 vs the v3 shipped baseline.
+    review_omega_module       — omega rank order drift exceeds +/- 1.
+    insufficient_omega_data   — fewer than 2 omega canaries scored.
+
+Historical note: the omega_module_no_drift label was renamed from the
+P1.5-era `generic_ok_for_now` on 2026-05-23. The P1.5 label was a
+placeholder asserting "the omega module isn't shipped yet, but the
+generic-tier fallback's rank order is within tolerance." Since
+P1.6 shipped the omega module as a first-class scorer, the label now
+correctly names what it tracks: drift vs the shipped omega module
+baseline, NOT a generic fallback. Frozen P1.5 report snapshots under
+api_audit/reports/* retain the old string as a point-in-time artifact.
 
 The tool does not tune or mutate scores.
 """
@@ -254,7 +264,11 @@ def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     elif omega_review_reasons:
         omega_decision = "review_omega_module"
     else:
-        omega_decision = "generic_ok_for_now"
+        # Renamed 2026-05-23 from the P1.5-era `generic_ok_for_now`. The
+        # omega module shipped in P1.6 (S1211); this decision now means
+        # "shipped-omega-module rank order within +/- 1 vs v3 baseline",
+        # not "generic-tier fallback within tolerance".
+        omega_decision = "omega_module_no_drift"
 
     return {
         "total_canaries": len(rows),
