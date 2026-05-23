@@ -106,7 +106,7 @@
       ],
       "v3_shipped_score": 47.1,
       "v3_shipped_verdict": "SAFE",
-      "notes": "NAC had FDA enforcement uncertainty; current rules permit. Tests B0/B1 regulatory neutrality."
+      "notes": "NAC had FDA enforcement uncertainty; current rules permit. Tests B0/B1 regulatory neutrality. Tracks the NAC single-active archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 1437 GNC NAC 600."
     },
     {
       "dsld_id": "294020",
@@ -186,7 +186,7 @@
       ],
       "v3_shipped_score": 55.1,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves."
+      "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves. Tracks the children\u2019s multivitamin gummy archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 178559 Spring Valley Children\u2019s Multivitamin Gummies."
     },
     {
       "dsld_id": "328830",
@@ -346,7 +346,7 @@
       ],
       "v3_shipped_score": 67.3,
       "v3_shipped_verdict": "SAFE",
-      "notes": "Meriva = phytosome form, ~29x more bioavailable than unformulated curcumin. Tests v4 form-aware bioavailability multiplier."
+      "notes": "Meriva = phytosome form, ~29x more bioavailable than unformulated curcumin. Tests v4 form-aware bioavailability multiplier. Tracks the Meriva curcumin phytosome bioavailability archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 16095 Thorne Meriva-SR Curcumin Phytosome."
     },
     {
       "dsld_id": "255449",
@@ -539,7 +539,7 @@
       ],
       "v3_shipped_score": null,
       "v3_shipped_verdict": "BLOCKED",
-      "notes": "Vinpocetine has been targeted by FDA enforcement as not a legal supplement. BLOCKED verdict short-circuits scoring → v4 must respect this gate."
+      "notes": "Vinpocetine has been targeted by FDA enforcement as not a legal supplement. BLOCKED verdict short-circuits scoring → v4 must respect this gate. Tracks the vinpocetine BLOCKED single-active archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 16012 Thorne Vinpocetine."
     },
     {
       "dsld_id": "232923",
@@ -555,7 +555,7 @@
       ],
       "v3_shipped_score": null,
       "v3_shipped_verdict": "BLOCKED",
-      "notes": "Multi-active blend whose B0/B1 gate fires on vinpocetine. Tests banned-ingredient detection inside complex formulas."
+      "notes": "Tracks the 'cognitive blend with vinpocetine / blocked-risk' archetype, NOT product continuity for any single brand. Replaced historical canary 16072 (Thorne Memoractiv) on 2026-05-23 because the current Thorne Memoractiv reformulated out of vinpocetine and no longer carries the BLOCKED verdict. Life Extension Cognitex Elite Pregnenolone is the current shipped multi-active cognitive blend whose B0/B1 gate fires on vinpocetine — same archetype, same edge cases. Historical anchors (rotated out as catalog evolved): 16072 Thorne Memoractiv (pre-2026-05 BLOCKED, current SAFE)."
     },
     {
       "dsld_id": "211448",
