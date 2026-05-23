@@ -22,6 +22,15 @@ def test_release_shell_scripts_use_shared_python_runtime():
         assert "python3 " not in text, f"{script} must use $PG_PYTHON, not direct python3"
 
 
+def test_release_full_syncs_dist_catalog_back_to_final_db_before_freshness_gate():
+    text = (REPO_ROOT / "scripts" / "release_full.sh").read_text()
+
+    assert "sync_final_db_output_catalog_from_dist" in text
+    assert text.index("sync_final_db_output_catalog_from_dist") < text.index(
+        'run_strict_gate "artifact freshness"'
+    )
+
+
 def test_python_runtime_helper_rejects_pre_313():
     helper = (REPO_ROOT / "scripts" / "python_env.sh").read_text()
 

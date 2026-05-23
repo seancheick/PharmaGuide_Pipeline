@@ -247,6 +247,19 @@ run_strict_gate "source-of-truth matrix" \
 DIST_CATALOG="$DIST_DIR/pharmaguide_core.db"
 FINAL_CATALOG="$FINAL_DB_DIR/pharmaguide_core.db"
 
+sync_final_db_output_catalog_from_dist() {
+  [[ -f "$DIST_CATALOG" ]] || return 0
+  [[ -f "$DIST_DIR/export_manifest.json" ]] || return 0
+
+  mkdir -p "$FINAL_DB_DIR"
+  cp -p "$DIST_CATALOG" "$FINAL_CATALOG"
+  cp -p "$DIST_DIR/export_manifest.json" "$FINAL_DB_DIR/export_manifest.json"
+  if [[ -f "$DIST_DIR/detail_index.json" ]]; then
+    cp -p "$DIST_DIR/detail_index.json" "$FINAL_DB_DIR/detail_index.json"
+  fi
+  ok "final_db_output catalog mirror synced from dist/"
+}
+
 step1_needs_run() {
   (( FORCE == 1 )) && return 0
   # If we have NO catalog anywhere → must assemble
@@ -377,6 +390,11 @@ if (( SKIP_PRODUCT_IMAGES == 0 )); then
 else
   skip "Step 3/7: DSLD product image extraction skipped (--skip-product-images)"
 fi
+
+# Step 3 mutates the staged dist catalog in place when it backfills
+# image_thumbnail_url and refreshes export_manifest.json. Mirror that canonical
+# catalog back to final_db_output before freshness compares the two manifests.
+sync_final_db_output_catalog_from_dist
 
 # ---------------------------------------------------------------------------
 # Step 4: Rebuild interaction DB (delegates verify → build → stage)
