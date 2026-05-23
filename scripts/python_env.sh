@@ -32,6 +32,13 @@ pg_python_candidate() {
     fi
   fi
 
+  for candidate in /usr/local/bin/python3 /opt/homebrew/bin/python3; do
+    if [[ -x "$candidate" ]]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done
+
   if command -v python3 >/dev/null 2>&1; then
     command -v python3
     return 0
