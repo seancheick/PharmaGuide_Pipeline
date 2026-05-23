@@ -90,3 +90,48 @@ def test_citrus_bergamot_unspecified_form_bio_score_pinned(iqm):
         f"bergamot (unspecified) bio_score changed from 12 to {form['bio_score']} — "
         f"alias-add must not modify bio_score."
     )
+
+
+# ---------------------------------------------------------------------------
+# Commit #2: isoflavones soy-specific alias
+# ---------------------------------------------------------------------------
+
+
+def test_isoflavones_unspecified_form_includes_total_soy_isoflavones_alias(iqm):
+    """Solgar Super Concentrated Isoflavones (201361) row.std_name is
+    'total Soy Isoflavones' — must alias to the existing isoflavones parent.
+    Per dev review: ONLY this exact label string. Do NOT broaden beyond
+    soy/isoflavone terms (no generic 'isoflavone' alias added)."""
+    assert "isoflavones" in iqm, "isoflavones parent missing from IQM"
+    forms = iqm["isoflavones"].get("forms", {})
+    assert "isoflavones (unspecified)" in forms
+    aliases_lower = [a.lower() for a in forms["isoflavones (unspecified)"].get("aliases", [])]
+    assert "total soy isoflavones" in aliases_lower, (
+        "alias 'total Soy Isoflavones' missing from isoflavones."
+        "forms['isoflavones (unspecified)'].aliases. "
+        "Solgar Super Concentrated Isoflavones (201361) will stay NOT_SCORED."
+    )
+
+
+def test_isoflavones_unspecified_form_bio_score_pinned(iqm):
+    """Pin the conservative bio_score = 8 on the unspecified isoflavones form.
+    Isoflavones (unspecified) is intentionally low — class-level signal without
+    specific genistein/daidzein standardization."""
+    form = iqm["isoflavones"]["forms"]["isoflavones (unspecified)"]
+    assert form["bio_score"] == 8, (
+        f"isoflavones (unspecified) bio_score changed from 8 to {form['bio_score']} — "
+        f"alias-add must not modify bio_score."
+    )
+
+
+def test_isoflavones_no_generic_isoflavone_alias_added(iqm):
+    """Negative-scope guard: per dev review v2, the alias-add must NOT include
+    a generic 'isoflavone' (singular) or any non-soy-specific term that would
+    expand semantic coverage. Existing aliases are all soy-specific."""
+    form = iqm["isoflavones"]["forms"]["isoflavones (unspecified)"]
+    aliases_lower = {a.lower() for a in form.get("aliases", [])}
+    # forbidden expansions
+    assert "isoflavone" not in aliases_lower, (
+        "Generic 'isoflavone' (singular) alias added — this broadens coverage "
+        "beyond soy and is out of scope for this slice."
+    )
