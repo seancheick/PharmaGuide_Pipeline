@@ -265,7 +265,27 @@ class TestSpecificNotScoredReasonVocab:
         assert result["score_80"] is None
         assert result["not_scorable_reason"] == "carrier_oil_only"
 
-    def test_safety_blocked_substance_gets_specific_reason_if_mapping_gate_reaches_it(
+    def test_nutrition_fact_only_is_not_mislabeled_as_carrier_oil(self, scorer):
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Dietary Fiber",
+                standard_name="Fiber",
+                recognized_non_scorable=False,
+                role_classification="inactive_non_scorable",
+                skip_reason="excluded_nutrition_fact",
+                score_exclusion_reason="excluded_nutrition_fact",
+                recognition_source=None,
+                recognition_reason=None,
+                canonical_source_db="ingredient_quality_map",
+            )
+        )
+
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "strict_contract_all_candidates_rejected"
+
+    def test_safety_flagged_substance_gets_specific_reason_if_mapping_gate_reaches_it(
         self, scorer
     ):
         product = _make_rejected_with_rows(
@@ -281,7 +301,7 @@ class TestSpecificNotScoredReasonVocab:
         result = scorer.score_product(product)
 
         assert result["verdict"] == "NOT_SCORED"
-        assert result["not_scorable_reason"] == "safety_blocked_substance"
+        assert result["not_scorable_reason"] == "safety_flagged_substance_only"
 
     def test_excipient_only_gets_specific_reason(self, scorer):
         product = _make_rejected_with_rows(
@@ -298,6 +318,26 @@ class TestSpecificNotScoredReasonVocab:
 
         assert result["verdict"] == "NOT_SCORED"
         assert result["not_scorable_reason"] == "excipient_only_no_active"
+
+    def test_allergen_source_alone_is_not_mislabeled_as_excipient_only(self, scorer):
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Wheat Germ Oil",
+                standard_name="Wheat",
+                recognized_non_scorable=False,
+                role_classification="inactive_non_scorable",
+                skip_reason="no_quality_map_match",
+                score_exclusion_reason="no_quality_map_match",
+                recognition_source=None,
+                recognition_reason=None,
+                canonical_source_db="allergens",
+            )
+        )
+
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "strict_contract_all_candidates_rejected"
 
     def test_subthreshold_absorption_enhancer_only_gets_specific_reason(self, scorer):
         product = _make_rejected_with_rows(

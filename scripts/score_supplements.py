@@ -542,6 +542,101 @@ class SupplementScorer:
             "unmapped_actives_banned_exact_alias": banned_exact_alias_unmapped,
         }
 
+    def _not_scorable_evidence_rows(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Return de-duplicated rows that explain a zero-strict-scorable product."""
+        iqd = product.get("ingredient_quality_data") or {}
+        rows: List[Dict[str, Any]] = []
+        seen: set[Tuple[Any, ...]] = set()
+        for bucket_name in ("ingredients_skipped", "ingredients_recognized_non_scorable"):
+            for row in safe_list(iqd.get(bucket_name)):
+                if not isinstance(row, dict):
+                    continue
+                key = (
+                    row.get("name"),
+                    row.get("standard_name"),
+                    row.get("canonical_id"),
+                    row.get("quantity"),
+                    row.get("unit"),
+                    row.get("skip_reason"),
+                    row.get("recognition_reason"),
+                )
+                if key in seen:
+                    continue
+                seen.add(key)
+                rows.append(row)
+        return rows
+
+    def _specific_not_scorable_reason(self, product: Dict[str, Any]) -> Optional[str]:
+        """Classify known fail-closed NOT_SCORED shapes without changing scoring.
+
+        This only names patterns already evidenced by explicit enrichment fields.
+        Ambiguous botanical or blend scoring-anchor gaps keep the generic strict
+        contract reason until their own scoring-design slices land.
+        """
+        rows = self._not_scorable_evidence_rows(product)
+        if not rows:
+            return None
+
+        def haystack(row: Dict[str, Any]) -> str:
+            fields = (
+                row.get("skip_reason"),
+                row.get("score_exclusion_reason"),
+                row.get("recognition_source"),
+                row.get("recognition_reason"),
+                row.get("recognition_type"),
+                row.get("demotion_reason"),
+                row.get("canonical_source_db"),
+                row.get("category"),
+                row.get("name"),
+                row.get("standard_name"),
+            )
+            return " ".join(norm_text(v) for v in fields if v is not None)
+
+        row_texts = [haystack(row) for row in rows]
+
+        has_blend_header = any(
+            "blend_header_total" in text
+            or "blend_header_total_weight_only" in text
+            or bool(row.get("is_blend_header"))
+            or bool(row.get("blend_total_weight_only"))
+            for row, text in zip(rows, row_texts)
+        )
+        has_absorption_enhancer = any(
+            "absorption_enhancer_sub_threshold" in text
+            for text in row_texts
+        )
+        if has_blend_header and has_absorption_enhancer:
+            return "blend_header_primary_with_absorption_enhancer_only"
+
+        if all("absorption_enhancer_sub_threshold" in text for text in row_texts):
+            return "absorption_enhancer_sub_threshold_only"
+
+        has_carrier_oil = any("carrier_oil" in text for text in row_texts)
+        if has_carrier_oil and all(
+            ("carrier_oil" in text)
+            or ("excluded_nutrition_fact" in text)
+            or ("nutrition_fact" in text)
+            for text in row_texts
+        ):
+            return "carrier_oil_only"
+
+        if all(
+            ("banned" in text)
+            or ("banned_recalled" in text)
+            or ("recalled" in text)
+            for text in row_texts
+        ):
+            return "safety_flagged_substance_only"
+
+        if all(
+            ("excipient" in text)
+            or ("known_excipient" in text)
+            for text in row_texts
+        ):
+            return "excipient_only_no_active"
+
+        return None
+
     def _mapping_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
         scoring_input = self._scoring_input(product)
         kpis = self._split_unmapped_kpis(product)
@@ -576,7 +671,10 @@ class SupplementScorer:
                 enriched_active_count = 0
             if enriched_active_count > 0:
                 reason = "NO_STRICT_SCORING_CANDIDATES"
-                not_scorable_reason = "strict_contract_all_candidates_rejected"
+                not_scorable_reason = (
+                    self._specific_not_scorable_reason(product)
+                    or "strict_contract_all_candidates_rejected"
+                )
             else:
                 reason = "NO_ACTIVES_DETECTED"
                 not_scorable_reason = "no_actives_detected"
