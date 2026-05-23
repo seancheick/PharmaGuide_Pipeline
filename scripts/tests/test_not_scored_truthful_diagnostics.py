@@ -793,6 +793,14 @@ class TestTrackA1StandardizedBotanicalAnchorSlice:
         assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" in result["flags"]
         assert result["not_scorable_reason"] is None
         assert result["section_scores"]["A_ingredient_quality"]["score"] is not None
+        assert (
+            "scored_via_standardized_botanical_anchor_path"
+            in result["strict_scoring_contract"]["findings"]
+        )
+        assert (
+            result["scoring_metadata"]["strict_scoring_contract"]
+            == result["strict_scoring_contract"]
+        )
 
     def test_anchor_via_exact_std_name_match(self, scorer):
         """Curcumin C3 pattern: row src_db is ingredient_quality_map (not

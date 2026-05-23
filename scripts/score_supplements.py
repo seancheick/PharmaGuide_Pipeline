@@ -4710,6 +4710,14 @@ class SupplementScorer:
             "zero_scorable_reason": iqd_contract_diagnostics.get("zero_scorable_reason"),
             "mapped_coverage_applicable": mapped_coverage_applicable,
         }
+        if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
+            findings = list(safe_list(strict_scoring_contract.get("findings")))
+            if "scored_via_standardized_botanical_anchor_path" not in findings:
+                findings.append("scored_via_standardized_botanical_anchor_path")
+            strict_scoring_contract = {
+                **strict_scoring_contract,
+                "findings": findings,
+            }
         if verdict == "NUTRITION_ONLY":
             strict_scoring_contract = {
                 **strict_scoring_contract,
