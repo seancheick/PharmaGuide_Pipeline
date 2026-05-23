@@ -143,12 +143,18 @@ class TestHarmfulAdditiveInactivePromotion:
         label_name = iqm_key.replace("_", " ").title()
 
         # _should_promote_to_scorable uses internal field names (name, not ingredientName)
+        # Per enrich_supplements_v3.py:4071-4075, promotion requires the cleaner
+        # to have flagged this row as a misfiled active (cleaner_row_role +
+        # score_eligible_by_cleaner). Without these fields the guard short-circuits
+        # and returns None regardless of IQM membership.
         ingredient = {
             "name": label_name,
             "ingredientName": label_name,
             "standardName": label_name,
             "quantity": "500",
             "unit": "mg",
+            "cleaner_row_role": "active_misfiled_in_inactive",
+            "score_eligible_by_cleaner": True,
         }
 
         quality_map = iqm
@@ -350,12 +356,16 @@ class TestExcipientSubstringFalsePositive:
     def test_hydroxycitric_acid_not_blocked_from_promotion(self, enricher, iqm):
         """Hydroxycitric acid must be promotable from inactive ingredients."""
         botanicals_db = _load_json("standardized_botanicals.json")
+        # Promotion requires the cleaner-emitted contract fields; see
+        # enrich_supplements_v3.py:4071-4075 for the guard.
         ingredient = {
             "name": "Garcinia Cambogia",
             "ingredientName": "Garcinia Cambogia",
             "standardName": "Garcinia Cambogia",
             "quantity": "500",
             "unit": "mg",
+            "cleaner_row_role": "active_misfiled_in_inactive",
+            "score_eligible_by_cleaner": True,
         }
         result = enricher._should_promote_to_scorable(
             ingredient, iqm, botanicals_db, current_scorable_count=0
