@@ -46,3 +46,30 @@ class TestEnrichmentTextCache:
         assert text1 == text2
         assert lower1 == lower2
         assert lower1 == text1.lower()
+
+    def test_token_bounded_regex_cache_preserves_boundaries(self, enricher):
+        """Compiled token cache must keep whole-token matching semantics."""
+        matched, variant = enricher._token_bounded_match(
+            "contains chromium picolinate",
+            "chromium",
+            [],
+        )
+        assert matched is True
+        assert variant == "chromium"
+
+        substring_match, _ = enricher._token_bounded_match(
+            "contains polychromiumx",
+            "chromium",
+            [],
+        )
+        assert substring_match is False
+        assert "chromium" in enricher._token_bounded_pattern_cache
+
+    def test_hyphen_space_regex_cache_reuses_equivalent_pattern(self, enricher):
+        """Hyphen/space tolerant patterns should be cached without changing matches."""
+        first = enricher._hyphen_space_token_pattern("FD C Red")
+        second = enricher._hyphen_space_token_pattern("FD C Red")
+
+        assert first is second
+        assert first is not None
+        assert first.search("fd-c-red")

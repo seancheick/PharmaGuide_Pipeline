@@ -591,6 +591,15 @@ class SupplementEnricherV3:
         self._product_text_cache_enabled = False
         self._product_text_cache: Dict[int, str] = {}
         self._product_text_lower_cache: Dict[int, str] = {}
+        # Compiled-regex caches for high-volume banned/contaminant matching.
+        # These preserve the exact same patterns while avoiding per-ingredient
+        # recompilation on large labels with many active/nested rows.
+        self._regex_pattern_cache: Dict[str, re.Pattern] = {}
+        self._token_bounded_pattern_cache: Dict[str, re.Pattern] = {}
+        self._hyphen_space_pattern_cache: Dict[str, re.Pattern] = {}
+        self._color_context_pattern = re.compile(
+            r"(?<![a-z0-9])(dye|color|colour|fd\s*&\s*c|fdc|lake|pigment)(?![a-z0-9])"
+        )
         # Per-quality-map cache: normalized context term -> preferred parent key.
         self._quality_parent_context_index_cache: Dict[int, Dict[str, str]] = {}
         self.databases = {}
@@ -1948,6 +1957,33 @@ class SupplementEnricherV3:
 
         return None
 
+    _REGEX_CACHE_LIMIT = 50000
+
+    def _cached_compile_regex(self, pattern: str) -> re.Pattern:
+        """Compile a regex once per enricher instance."""
+        cached = self._regex_pattern_cache.get(pattern)
+        if cached is not None:
+            return cached
+        if len(self._regex_pattern_cache) >= self._REGEX_CACHE_LIMIT:
+            self._regex_pattern_cache.clear()
+        compiled = re.compile(pattern)
+        self._regex_pattern_cache[pattern] = compiled
+        return compiled
+
+    def _cached_token_bounded_pattern(self, normalized_text: str) -> Optional[re.Pattern]:
+        """Return cached whole-token regex for already-normalized text."""
+        if not normalized_text:
+            return None
+        cached = self._token_bounded_pattern_cache.get(normalized_text)
+        if cached is not None:
+            return cached
+        if len(self._token_bounded_pattern_cache) >= self._REGEX_CACHE_LIMIT:
+            self._token_bounded_pattern_cache.clear()
+        pattern = r'(?<![a-z0-9])' + re.escape(normalized_text) + r'(?![a-z0-9])'
+        compiled = re.compile(pattern)
+        self._token_bounded_pattern_cache[normalized_text] = compiled
+        return compiled
+
     def _token_bounded_match(
         self, ingredient_name: str, target_name: str, aliases: List[str]
     ) -> Tuple[bool, Optional[str]]:
@@ -1969,8 +2005,8 @@ class SupplementEnricherV3:
                 continue
             if ing_norm == cand_norm:
                 return True, candidate
-            pattern = r'(?<![a-z0-9])' + re.escape(cand_norm) + r'(?![a-z0-9])'
-            if re.search(pattern, ing_norm):
+            pattern = self._cached_token_bounded_pattern(cand_norm)
+            if pattern and pattern.search(ing_norm):
                 return True, candidate
 
         return False, None
@@ -2055,9 +2091,7 @@ class SupplementEnricherV3:
             return True
 
         # Otherwise require explicit color context in label ingredient text.
-        return bool(
-            re.search(r"(?<![a-z0-9])(dye|color|colour|fd\s*&\s*c|fdc|lake|pigment)(?![a-z0-9])", ingredient_norm)
-        )
+        return bool(self._color_context_pattern.search(ingredient_norm))
 
     def _hyphen_space_token_pattern(self, variant: str) -> Optional[re.Pattern]:
         """Build a token-bounded regex that tolerates hyphens/spaces between tokens."""
@@ -2067,8 +2101,15 @@ class SupplementEnricherV3:
         tokens = [t for t in re.split(r'[\s-]+', norm) if t]
         if not tokens:
             return None
+        cached = self._hyphen_space_pattern_cache.get(norm)
+        if cached is not None:
+            return cached
+        if len(self._hyphen_space_pattern_cache) >= self._REGEX_CACHE_LIMIT:
+            self._hyphen_space_pattern_cache.clear()
         pattern = r'(?<![a-z0-9])' + r'[-\s]+'.join(map(re.escape, tokens)) + r'(?![a-z0-9])'
-        return re.compile(pattern)
+        compiled = re.compile(pattern)
+        self._hyphen_space_pattern_cache[norm] = compiled
+        return compiled
 
     def _allowlist_match(self, ingredient_name: str, allowlist_entries: List[Dict]) -> Optional[Dict]:
         """Match against explicit banned allowlist rules with bounded policies."""
@@ -2095,7 +2136,7 @@ class SupplementEnricherV3:
                         }
             elif policy == "token_bounded_regex":
                 for pattern in variants_regex:
-                    if re.search(pattern, ing_norm):
+                    if self._cached_compile_regex(pattern).search(ing_norm):
                         return {
                             "match_method": f"allowlist_{policy}",
                             "matched_variant": pattern,
@@ -2129,7 +2170,7 @@ class SupplementEnricherV3:
 
             if pattern:
                 try:
-                    matched = re.search(pattern, ing_norm)
+                    matched = self._cached_compile_regex(pattern).search(ing_norm)
                 except re.error as exc:
                     self.logger.warning(
                         "Skipping malformed banned denylist regex '%s' for denylist_id=%s: %s",
