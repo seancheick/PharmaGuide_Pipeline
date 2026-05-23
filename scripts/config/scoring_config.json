@@ -122,6 +122,15 @@
       "verdict_ceiling": "CAUTION",
       "_verdict_ceiling_note": "Anchor products are never SAFE. Enforced in _derive_verdict: if quality_score >= poor_threshold and FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags, return CAUTION instead of SAFE. POOR still allowed when below poor_threshold."
     },
+    "blend_header_anchor": {
+      "_description": "Track A.2a (2026-05-23). Cap + verdict ceiling for products that satisfy the strict blend-header-anchor eligibility check in score_supplements.SupplementScorer._has_blend_header_anchor. Spec: reports/not_scored_triage/track_A2_blend_header_anchor_spec.md. NARROW v2 with explicit canonical_id denylist.",
+      "_eligibility": "ingredients_scorable empty + Track A.1 did NOT fire + at least one blend_header row with real dose, canonical_id non-empty, NOT BLEND_/PII_ prefixed, NOT in {digestive_enzymes, prebiotics, probiotics, whey_protein, collagen}, canonical_source_db in {ingredient_quality_map, botanical_ingredients}.",
+      "_no_invented_a1": "A1 stays 0.0 via existing blend-skip in _compute_bioavailability_score. B5 opacity penalty preserved via _compute_proprietary_blend_penalty. Score driven only by A5/B/C/D product-level signals.",
+      "_class_level_excluded": "Class-level canonicals (digestive_enzymes, prebiotics, probiotics, whey_protein, collagen) are explicitly denylisted because each needs dedicated scoring logic (enzyme activity / CFU / fiber / sports protein modules). They are a separate future A.2b slice.",
+      "display_cap": 60.0,
+      "verdict_ceiling": "CAUTION",
+      "_verdict_ceiling_note": "Anchor products are never SAFE. Same ceiling as standardized_botanical_anchor."
+    },
     "A6_single_ingredient_efficiency": {
       "max": 3,
       "single_types": [

@@ -552,15 +552,24 @@ class TestStep3bExpandedReasonVocab:
         assert result["not_scorable_reason"] == "macro_only_product"
 
     def test_blend_header_with_identity_emits_primary_active_not_scored(self, scorer):
-        """Turmeric Complex 500 mg without piperine — blend header has real
-        identity (canonical_id=turmeric, standard_name=Turmeric) but the
-        scorer can't credit per-ingredient dose. Bucket-A scoring slice target."""
+        """Bone, Flesh & Cartilage 440 mg pattern — named blend header
+        (standard_name="Bone, Flesh & Cartilage Blend") with NO canonical_id.
+        Step-3b classifies this as blend_header_primary_active_not_scored.
+
+        Note: blend headers WITH valid canonical_id (e.g., Turmeric Complex
+        with canonical_id="turmeric") are now promoted by Track A.2a — see
+        TestTrackA2BlendHeaderAnchorSlice. This step-3b reason still fires
+        for the 133 Bucket A products that A.2a held back (91 with
+        canonical_id=None, 17 BLEND_* canonicals, 20 denylisted class-level
+        canonicals, etc.)."""
         product = _make_rejected_with_rows(
             _rejected_row(
-                name="Turmeric Curcumin Complex",
-                standard_name="Turmeric",
-                canonical_id="turmeric",
-                canonical_source_db="botanical_ingredients",
+                name="Bone, Flesh & Cartilage Blend",
+                standard_name="Bone, Flesh & Cartilage Blend",
+                canonical_id=None,
+                canonical_source_db=None,
+                quantity=880.0,
+                unit="mg",
                 recognized_non_scorable=False,
                 skip_reason="blend_header_total_weight_only",
                 score_exclusion_reason="blend_header_total",
@@ -570,9 +579,9 @@ class TestStep3bExpandedReasonVocab:
                 blend_total_weight_only=True,
             ),
             _rejected_row(
-                name="Turmeric Root",
-                standard_name="Turmeric",
-                canonical_id="turmeric",
+                name="Bone",
+                standard_name="Bone",
+                canonical_id=None,
                 quantity=0.0,
                 unit="NP",
                 recognized_non_scorable=False,
@@ -1041,4 +1050,278 @@ class TestTrackA1StandardizedBotanicalAnchorSlice:
             assert result["score_100_equivalent"] is not None
             assert result["score_100_equivalent"] <= 60.0, (
                 f"Anchor product display={result['score_100_equivalent']} exceeds cap 60.0"
+            )
+
+
+# ---------------------------------------------------------------------------
+# Track A.2a — Bucket A blend-header anchor scoring slice (narrow).
+#
+# Spec: reports/not_scored_triage/track_A2_blend_header_anchor_spec.md
+#
+# Eligibility (must satisfy ALL):
+#   1. ingredients_scorable empty
+#   2. Track A.1 (standardized_botanical anchor) does NOT fire
+#   3. At least one blend_header row with:
+#        - quantity > 0, unit not in ANCHOR_NON_DOSE_UNITS
+#        - canonical_id non-empty
+#        - canonical_id NOT starting with BLEND_ or PII_
+#        - canonical_id NOT in {digestive_enzymes, prebiotics, probiotics,
+#                                whey_protein, collagen}
+#        - canonical_source_db in {ingredient_quality_map, botanical_ingredients}
+#
+# Constants:
+#   display cap        = 60.0/100 (= 48.0/80 quality)
+#   verdict ceiling    = CAUTION (anchor products are never SAFE)
+#   flag               = SCORED_VIA_BLEND_HEADER_ANCHOR
+#   score_basis        = "blend_header_anchor"
+# ---------------------------------------------------------------------------
+
+
+def _make_blend_header_anchor_eligible(
+    *,
+    header_name: str = "Creatine Monohydrate Blend",
+    header_std_name: str = "Creatine Monohydrate",
+    header_canonical_id: str = "creatine_monohydrate",
+    header_canonical_source_db: str = "ingredient_quality_map",
+    header_quantity: float = 5.0,
+    header_unit: str = "Gram(s)",
+):
+    """Builder for a Bucket A blend-header anchor candidate.
+
+    Defaults model the GNC Creatine Advance XR canary: blend header carries
+    canonical_id=creatine_monohydrate, real 5g dose, src_db=IQM.
+    """
+    product = _make_strict_contract_rejected()
+    iqd = product["ingredient_quality_data"]
+    iqd["total_active"] = 1
+    iqd["ingredients_skipped"] = [
+        _rejected_row(
+            name=header_name,
+            standard_name=header_std_name,
+            canonical_id=header_canonical_id,
+            canonical_source_db=header_canonical_source_db,
+            quantity=header_quantity,
+            unit=header_unit,
+            recognized_non_scorable=False,
+            skip_reason="blend_header_total_weight_only",
+            score_exclusion_reason="blend_header_total",
+            recognition_source=None,
+            recognition_reason=None,
+            is_blend_header=True,
+            blend_total_weight_only=True,
+            is_proprietary_blend=True,  # preserves B5 opacity penalty path
+        )
+    ]
+    iqd["skipped_non_scorable_count"] = 1
+    iqd["ingredients_recognized_non_scorable"] = []
+    # IMPORTANT: must NOT have meets_threshold standardized botanical, or A.1
+    # would win precedence (which is correct, but breaks the A.2a path test).
+    product["formulation_data"]["standardized_botanicals"] = []
+    return product
+
+
+class TestTrackA2BlendHeaderAnchorSlice:
+    # --- positive eligibility ---
+
+    def test_blend_header_anchor_eligible_for_single_compound_canonical(self, scorer):
+        """Creatine pattern: blend header has canonical_id=creatine_monohydrate,
+        real dose 5g, src_db=IQM."""
+        product = _make_blend_header_anchor_eligible()
+        result = scorer.score_product(product)
+
+        assert result["verdict"] != "NOT_SCORED"
+        assert result["scoring_status"] == "scored"
+        assert result["score_basis"] == "blend_header_anchor"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" in result["flags"]
+        assert result["not_scorable_reason"] is None
+        # contract finding present
+        findings = result["strict_scoring_contract"]["findings"]
+        assert "scored_via_blend_header_anchor_path" in findings
+
+    def test_blend_header_anchor_eligible_for_botanical_canonical(self, scorer):
+        """Echinacea pattern: header canonical_id=echinacea, src_db=botanical_ingredients."""
+        product = _make_blend_header_anchor_eligible(
+            header_name="Echinacea Root Blend",
+            header_std_name="Echinacea",
+            header_canonical_id="echinacea",
+            header_canonical_source_db="botanical_ingredients",
+            header_quantity=900.0,
+            header_unit="mg",
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] != "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" in result["flags"]
+
+    # --- negative eligibility — DENYLIST enforcement ---
+
+    @pytest.mark.parametrize(
+        "denylisted_canon",
+        ["digestive_enzymes", "prebiotics", "probiotics", "whey_protein", "collagen"],
+    )
+    def test_blend_header_anchor_rejects_denylisted_canonical(self, scorer, denylisted_canon):
+        """Class-level canonicals are explicitly denylisted because each needs
+        its own dedicated scoring slice (enzyme activity / CFU / fiber / protein).
+        They must stay NOT_SCORED under Track A.2a — separate A.2b territory."""
+        product = _make_blend_header_anchor_eligible(
+            header_canonical_id=denylisted_canon,
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    @pytest.mark.parametrize(
+        "blend_canon",
+        ["BLEND_GENERAL", "BLEND_SUPERFOOD", "BLEND_ENZYME", "BLEND_METABOLAID"],
+    )
+    def test_blend_header_anchor_rejects_BLEND_prefix(self, scorer, blend_canon):
+        """BLEND_* prefixed canonicals are generic-blend taxonomy by definition.
+        They ARE the opacity case and must stay NOT_SCORED."""
+        product = _make_blend_header_anchor_eligible(header_canonical_id=blend_canon)
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    @pytest.mark.parametrize(
+        "pii_canon",
+        ["PII_HERBAL_EXTRACT_GENERIC", "PII_SEDITOL_BRANDED_BLEND", "PII_XYLANASE"],
+    )
+    def test_blend_header_anchor_rejects_PII_prefix(self, scorer, pii_canon):
+        """PII_* prefixed canonicals are broad generic IDs. Must stay NOT_SCORED."""
+        product = _make_blend_header_anchor_eligible(header_canonical_id=pii_canon)
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    def test_blend_header_anchor_rejects_when_canonical_id_is_none(self, scorer):
+        """91 of 187 Bucket A products have header canonical_id=None.
+        Named blend with no IQM identity is too uncertain — must stay NOT_SCORED."""
+        product = _make_blend_header_anchor_eligible(header_canonical_id="")
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    def test_blend_header_anchor_rejects_when_src_db_is_proprietary_blends(self, scorer):
+        """canonical_source_db=proprietary_blends means it's just a generic
+        blend taxonomy entry, not a real IQM/botanical identity."""
+        product = _make_blend_header_anchor_eligible(
+            header_canonical_source_db="proprietary_blends",
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    def test_blend_header_anchor_rejects_when_src_db_is_other_ingredients(self, scorer):
+        product = _make_blend_header_anchor_eligible(
+            header_canonical_source_db="other_ingredients",
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    def test_blend_header_anchor_rejects_when_dose_is_NP_or_zero(self, scorer):
+        product = _make_blend_header_anchor_eligible(
+            header_quantity=0.0, header_unit="NP",
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    # --- architectural locks ---
+
+    def test_blend_header_anchor_a1_stays_zero(self, scorer):
+        """Critical: A1 must remain 0.0 for these products. The existing
+        proprietary-blend skip in _compute_bioavailability_score preserves
+        blend opacity — anchor scoring does NOT pollute A1."""
+        product = _make_blend_header_anchor_eligible()
+        result = scorer.score_product(product)
+
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" in result["flags"]
+        assert result["breakdown"]["A"]["A1"] == 0.0
+
+    def test_b0_safety_block_wins_over_blend_header_anchor(self, scorer):
+        """Safety gate B0 must still trip for anchor-eligible products carrying
+        banned ingredients. Anchor flag must NOT be emitted under B0 BLOCKED."""
+        product = _make_blend_header_anchor_eligible()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "ingredient": "Ephedra",
+                    "match_type": "exact",
+                    "status": "banned",
+                    "severity_level": "critical",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+
+        assert result["verdict"] in {"BLOCKED", "UNSAFE"}
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+
+    # --- precedence ---
+
+    def test_track_a1_anchor_wins_over_bucket_a(self, scorer):
+        """Both signals present: A.1 takes precedence (standardized botanical
+        signal is more informative than blend-header identity alone)."""
+        product = _make_blend_header_anchor_eligible(
+            header_canonical_id="curcumin",
+            header_canonical_source_db="ingredient_quality_map",
+        )
+        # add meets_threshold standardized botanical that A.1 would match
+        product["formulation_data"]["standardized_botanicals"] = [
+            {
+                "name": "Creatine Monohydrate Blend",
+                "standard_name": "Creatine Monohydrate",
+                "meets_threshold": True,
+                "evidence_source": "branded_form",
+            }
+        ]
+        result = scorer.score_product(product)
+
+        assert "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR" in result["flags"]
+        assert "SCORED_VIA_BLEND_HEADER_ANCHOR" not in result["flags"]
+        assert result["score_basis"] == "standardized_botanical_anchor"
+
+    # --- cap + ceiling ---
+
+    def test_blend_header_anchor_score_capped_at_display_60(self, scorer):
+        """Defensive cap at 60.0/100 — same as Track A.1."""
+        product = _make_blend_header_anchor_eligible()
+        # synthesize maximum-possible product-level signals
+        product["delivery_tier"] = 1
+        product["absorption_enhancer_paired"] = True
+        product["formulation_data"]["organic"] = {"usda_verified": True}
+        product["manufacturer_data"]["top_manufacturer"] = {"found": True, "score_bonus": 5}
+        product["evidence_data"] = {
+            "clinical_matches": [
+                {"study_id": "PMID12345", "ingredient": "Creatine", "strength": "RCT"}
+            ] * 5,
+            "match_count": 5,
+        }
+        result = scorer.score_product(product)
+
+        if "SCORED_VIA_BLEND_HEADER_ANCHOR" in result["flags"]:
+            assert result["score_100_equivalent"] is not None
+            assert result["score_100_equivalent"] <= 60.0, (
+                f"Bucket A anchor display={result['score_100_equivalent']} exceeds cap 60.0"
+            )
+
+    def test_blend_header_anchor_ceiling_forces_caution_when_otherwise_safe(self, scorer):
+        """Anchor products are never SAFE. If math would verdict SAFE, force CAUTION."""
+        product = _make_blend_header_anchor_eligible()
+        result = scorer.score_product(product)
+
+        assert result["score_80"] is not None
+        if result["score_80"] >= 32.0:
+            assert result["verdict"] == "CAUTION", (
+                f"Bucket A anchor quality_score={result['score_80']} >= 32 "
+                f"must be CAUTION, not {result['verdict']}"
             )

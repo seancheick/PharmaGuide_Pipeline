@@ -77,6 +77,28 @@ SCORE_BASIS_BOTANICAL_ANCHOR = "standardized_botanical_anchor"
 FLAG_STANDARDIZED_BOTANICAL_ANCHOR = "SCORED_VIA_STANDARDIZED_BOTANICAL_ANCHOR"
 ANCHOR_NON_DOSE_UNITS = {"", "np", "n/a", "na", "none", "unspecified", "0"}
 
+# Track A.2a — Bucket A blend-header anchor (spec:
+# reports/not_scored_triage/track_A2_blend_header_anchor_spec.md).
+# Narrow eligibility: products with empty ingredients_scorable, NOT
+# Track-A.1-eligible, but with a dosed blend_header row whose canonical_id
+# is a real single-compound or named-curated IQM/botanical entry (not generic
+# BLEND_*/PII_* and not in the class-level denylist). Class-level scoring
+# (digestive_enzymes, prebiotics, probiotics, whey_protein, collagen) is a
+# separate future A.2b slice and is excluded here.
+SCORE_BASIS_BLEND_HEADER_ANCHOR = "blend_header_anchor"
+FLAG_BLEND_HEADER_ANCHOR = "SCORED_VIA_BLEND_HEADER_ANCHOR"
+BLEND_HEADER_ANCHOR_CANONICAL_DENYLIST = frozenset({
+    "digestive_enzymes",
+    "prebiotics",
+    "probiotics",
+    "whey_protein",
+    "collagen",
+})
+BLEND_HEADER_ANCHOR_ALLOWED_DBS = frozenset({
+    "ingredient_quality_map",
+    "botanical_ingredients",
+})
+
 _OPAQUE_OMEGA3_BLEND_PATTERN = re.compile(
     r"(?:\bomega|\bfish\s*oil\b|\bkrill\b|\bmarine\s*lipid\b|\bepa\b|\bdha\b|\bn-?3\b|\bfatty\s*acid\b)s?",
     re.IGNORECASE,
@@ -631,6 +653,73 @@ class SupplementScorer:
 
         return False
 
+    def _has_blend_header_anchor(self, product: Dict[str, Any]) -> bool:
+        """Track A.2a strict eligibility check.
+
+        Returns True iff:
+          1. ingredient_quality_data.ingredients_scorable is empty
+          2. Track A.1 standardized-botanical-anchor does NOT fire (A.1 wins)
+          3. At least one blend_header row in ingredients_skipped satisfies:
+              * is_blend_header / blend_total_weight_only / score_exclusion_reason=='blend_header_total'
+              * quantity > 0, unit not in ANCHOR_NON_DOSE_UNITS
+              * canonical_id non-empty AND
+                - NOT starting with 'BLEND_' or 'PII_' (case-insensitive), AND
+                - NOT in BLEND_HEADER_ANCHOR_CANONICAL_DENYLIST
+                  (class-level: digestive_enzymes, prebiotics, probiotics,
+                  whey_protein, collagen — these need dedicated future slices)
+              * canonical_source_db in BLEND_HEADER_ANCHOR_ALLOWED_DBS
+                (ingredient_quality_map or botanical_ingredients only;
+                excludes proprietary_blends, other_ingredients,
+                standardized_botanicals)
+
+        Spec: reports/not_scored_triage/track_A2_blend_header_anchor_spec.md
+        """
+        iqd = product.get("ingredient_quality_data") or {}
+        if iqd.get("ingredients_scorable"):
+            return False
+        # Track A.1 precedence — if the standardized-botanical anchor would
+        # fire, that path wins and this one stands down.
+        if self._has_standardized_botanical_anchor(product):
+            return False
+
+        for row in safe_list(iqd.get("ingredients_skipped")):
+            if not isinstance(row, dict):
+                continue
+            # must be a blend header
+            is_header = (
+                bool(row.get("is_blend_header"))
+                or bool(row.get("blend_total_weight_only"))
+                or row.get("score_exclusion_reason") == "blend_header_total"
+            )
+            if not is_header:
+                continue
+            # dose check
+            q = row.get("quantity")
+            try:
+                qf = float(q) if q is not None else 0.0
+            except (TypeError, ValueError):
+                qf = 0.0
+            if qf <= 0:
+                continue
+            if norm_text(row.get("unit") or "") in ANCHOR_NON_DOSE_UNITS:
+                continue
+            # canonical_id checks (strict)
+            cid_raw = (row.get("canonical_id") or "").strip()
+            if not cid_raw:
+                continue
+            cid_lower = cid_raw.lower()
+            if cid_lower.startswith("blend_") or cid_lower.startswith("pii_"):
+                continue
+            if cid_lower in BLEND_HEADER_ANCHOR_CANONICAL_DENYLIST:
+                continue
+            # source DB allowlist
+            src_db = norm_text(row.get("canonical_source_db") or "")
+            if src_db not in BLEND_HEADER_ANCHOR_ALLOWED_DBS:
+                continue
+            return True
+
+        return False
+
     def _not_scorable_evidence_rows(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Return de-duplicated rows that explain a zero-strict-scorable product."""
         iqd = product.get("ingredient_quality_data") or {}
@@ -872,6 +961,25 @@ class SupplementScorer:
                     "flags": [FLAG_STANDARDIZED_BOTANICAL_ANCHOR],
                     "scoring_input_contract": scoring_input.diagnostics(),
                     "standardized_botanical_anchor": True,
+                }
+
+            # Track A.2a — Bucket A blend-header anchor (narrow). Lower
+            # precedence than A.1: only fires if A.1 didn't. Same conservative
+            # pattern (let sections compute → A1 stays 0 via blend-skip → cap
+            # at 60/100 → verdict ceiling CAUTION).
+            if self._has_blend_header_anchor(product):
+                return {
+                    "stop": False,
+                    "reason": None,
+                    "not_scorable_reason": None,
+                    "mapped_coverage": scoring_input.mapped_coverage or 0.0,
+                    "unmapped_actives": [],
+                    "unmapped_actives_total": 0,
+                    "unmapped_actives_excluding_banned_exact_alias": 0,
+                    "unmapped_actives_banned_exact_alias": [],
+                    "flags": [FLAG_BLEND_HEADER_ANCHOR],
+                    "scoring_input_contract": scoring_input.diagnostics(),
+                    "blend_header_anchor": True,
                 }
 
             # Distinguish "no actives at all" (DSLD authoring gap) from "enricher
@@ -4608,11 +4716,14 @@ class SupplementScorer:
             poor_threshold = 32.0
         if quality_score is not None and quality_score < poor_threshold:
             return "POOR"
-        # Track A.1 verdict ceiling — anchor products are never SAFE.
+        # Track A.1 / A.2a verdict ceiling — anchor products are never SAFE.
         # If the math would otherwise verdict SAFE, force CAUTION so the
         # downstream UI/user is signaled that this score came from a
-        # limited-evidence (standardized-botanical-only) path.
-        if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
+        # limited-evidence (standardized-botanical or blend-header anchor) path.
+        if (
+            FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags
+            or FLAG_BLEND_HEADER_ANCHOR in flags
+        ):
             return "CAUTION"
         return "SAFE"
 
@@ -4681,12 +4792,18 @@ class SupplementScorer:
             score_basis = SCORE_BASIS_NUTRITION_ONLY
         else:
             scoring_status = SCORING_STATUS_SCORED
-            # Track A.1 — anchor-scored products get the dedicated score_basis
-            # so downstream consumers (build_final_db, Flutter UI, audits) can
-            # distinguish "scored with full IQM evidence" from "scored
-            # conservatively via standardized-botanical anchor path".
+            # Track A.1 / A.2a — anchor-scored products get a dedicated
+            # score_basis so downstream consumers (build_final_db, Flutter UI,
+            # audits) can distinguish full-IQM-evidence scores from
+            # conservative anchor-path scores. The two anchor paths are kept
+            # distinct because they signal different evidence shapes:
+            # standardized-botanical anchor implies validated marker evidence;
+            # blend-header anchor only implies a real canonical_id at the
+            # blend total dose.
             if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
                 score_basis = SCORE_BASIS_BOTANICAL_ANCHOR
+            elif FLAG_BLEND_HEADER_ANCHOR in flags:
+                score_basis = SCORE_BASIS_BLEND_HEADER_ANCHOR
             else:
                 score_basis = SCORE_BASIS_BIOACTIVES
 
@@ -4714,6 +4831,14 @@ class SupplementScorer:
             findings = list(safe_list(strict_scoring_contract.get("findings")))
             if "scored_via_standardized_botanical_anchor_path" not in findings:
                 findings.append("scored_via_standardized_botanical_anchor_path")
+            strict_scoring_contract = {
+                **strict_scoring_contract,
+                "findings": findings,
+            }
+        if FLAG_BLEND_HEADER_ANCHOR in flags:
+            findings = list(safe_list(strict_scoring_contract.get("findings")))
+            if "scored_via_blend_header_anchor_path" not in findings:
+                findings.append("scored_via_blend_header_anchor_path")
             strict_scoring_contract = {
                 **strict_scoring_contract,
                 "findings": findings,
@@ -5024,14 +5149,23 @@ class SupplementScorer:
             quality_raw += violation_penalty
             quality_score = clamp(0.0, 80.0, quality_raw)
 
-            # Track A.1 — defensive cap for anchor-scored products. Live-corpus
-            # simulation shows natural anchor scores land 22-53/100, so the cap
-            # is mostly a safety net against unusual high-B + high-C + high-D
-            # combinations. Default display_cap = 60.0 (= 48.0 quality_score).
-            if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags:
+            # Track A.1 / A.2a — defensive cap for anchor-scored products.
+            # Live-corpus simulation shows natural anchor scores land 22-53/100,
+            # so the cap is mostly a safety net against unusual high-B + high-C
+            # + high-D combinations. Default display_cap = 60.0 (= 48.0/80).
+            # Both anchor paths share the same cap value.
+            if (
+                FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags
+                or FLAG_BLEND_HEADER_ANCHOR in flags
+            ):
+                anchor_cfg_key = (
+                    "standardized_botanical_anchor"
+                    if FLAG_STANDARDIZED_BOTANICAL_ANCHOR in flags
+                    else "blend_header_anchor"
+                )
                 anchor_cfg = (
                     self.config.get("section_A_ingredient_quality", {})
-                    .get("standardized_botanical_anchor", {})
+                    .get(anchor_cfg_key, {})
                     or {}
                 )
                 display_cap = as_float(anchor_cfg.get("display_cap"), 60.0) or 60.0
