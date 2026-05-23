@@ -215,8 +215,8 @@
     },
     "omega3_dose_bonus": {
       "fish_oil_parent_mass_fallback": {
-        "_description": "Disabled by product policy: do not infer EPA+DHA from total fish-oil / krill-oil parent mass. EPA/DHA dose bonuses require explicit EPA, DHA, or combined EPA+DHA label amounts.",
-        "_historical_fraction_rationale": "Retained only for explicit backcompat experiments. The former 0.5 fallback was the midpoint between standard-grade fish oil (~30% EPA+DHA) and concentrated forms (~80%), but it is no longer used in shipped scoring.",
+        "_description": "RETIRED 2026-05-23. The fish-oil / krill-oil parent-mass fallback (Sprint E1.3.3) was removed from score_supplements._compute_epa_dha_per_day by product policy. EPA/DHA dose bonuses require explicit EPA, DHA, or combined EPA+DHA label amounts. A 'Fish Oil 1000 mg' label is not equivalent to 'EPA+DHA 1000 mg' and must never be inferred as such. This key is preserved as a stale-config no-op: any value at runtime is ignored. The test_legacy_fallback_cannot_be_re_enabled_via_stale_config regression locks this behavior.",
+        "_status": "retired",
         "enabled": false,
         "epa_dha_fraction_of_parent": 0.5,
         "eligible_parent_blends": ["fish oil", "krill oil"]

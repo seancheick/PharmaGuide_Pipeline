@@ -87,32 +87,48 @@ def test_fish_oil_fallback_does_not_tag_inferred_source_by_default(scorer) -> No
     assert dose.get("omega3_dose_source") != "inferred_from_parent_mass"
 
 
+def _explicit_epa_dha_row(name: str, canonical_id: str, quantity: float) -> dict:
+    """Build a strict-contract-compliant scorable row for an EPA/DHA active.
+
+    Mirrors the shape produced by the cleaner + enricher when an EPA or DHA
+    ingredient carries an explicit per-serving dose. See
+    scripts/scoring_input_contract.py:_evaluate_row for the required field
+    set.
+    """
+    return {
+        "name": name,
+        "canonical_id": canonical_id,
+        "quantity": quantity,
+        "unit": "mg",
+        "source_section": "active",
+        "raw_source_path": f"ingredientRows[{canonical_id}]",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "role_classification": "active_scorable",
+        "scoreable_identity": True,
+        "mapped": True,
+    }
+
+
 def test_fallback_does_not_fire_when_epa_dha_have_real_doses(scorer) -> None:
-    """When EPA/DHA have individual doses, the fallback must not
-    override — real values win."""
+    """When EPA/DHA have individual doses, the explicit values are summed
+    and there is no parent-mass inference (which is retired).
+    """
     product = {
         "ingredient_quality_data": {
-            "ingredients": [
-                {
-                    "name": "EPA", "canonical_id": "epa",
-                    "quantity": 360, "unit": "mg",
-                    "parent_blend": "Fish Oil",
-                    "parent_blend_mass_mg": 1200.0,
-                },
-                {
-                    "name": "DHA", "canonical_id": "dha",
-                    "quantity": 240, "unit": "mg",
-                    "parent_blend": "Fish Oil",
-                    "parent_blend_mass_mg": 1200.0,
-                },
+            "ingredients_scorable": [
+                _explicit_epa_dha_row("EPA", "epa", 360),
+                _explicit_epa_dha_row("DHA", "dha", 240),
             ],
         },
         "serving_basis": {"min_servings_per_day": 1, "max_servings_per_day": 1},
     }
     dose = scorer._compute_epa_dha_per_day(product)
     assert dose["epa_dha_mg_per_unit"] == pytest.approx(600.0)
-    # Real doses, not inferred
+    # Real doses, never inferred from parent mass (retired path).
     assert dose.get("omega3_dose_source") != "inferred_from_parent_mass"
+    assert "omega3_dose_source" not in dose
 
 
 def test_fallback_ignores_non_fish_oil_parents(scorer) -> None:
@@ -159,12 +175,24 @@ def test_no_fallback_when_parent_mass_absent(scorer) -> None:
 # Config-gated
 # ---------------------------------------------------------------------------
 
-def test_legacy_fallback_can_only_be_enabled_explicitly_for_backcompat(scorer) -> None:
+def test_legacy_fallback_cannot_be_re_enabled_via_stale_config(scorer) -> None:
+    """Retired-policy regression test.
+
+    The parent-mass fallback (`fish_oil_parent_mass_fallback`) is retired:
+    parent fish-oil / krill-oil mass must never be used to infer EPA+DHA.
+    Even if a stale config file at deploy time still carries `enabled: True`,
+    the scorer must NOT produce a dose and must NOT tag the result as
+    `omega3_dose_source: inferred_from_parent_mass`.
+
+    Rationale: a label that reads "Fish Oil 1000 mg" is not equivalent to
+    "EPA + DHA 1000 mg". Inferring EPA+DHA from total oil mass overstates
+    the disclosed clinical evidence. See
+    `scripts/config/scoring_config.json` → `omega3_dose_bonus.fish_oil_parent_mass_fallback._description`.
+    """
     product = _fish_oil_product_with_np_epa_dha()
     original_cfg = scorer.config.get("section_A_ingredient_quality", {}).get(
         "omega3_dose_bonus", {}
     ).get("fish_oil_parent_mass_fallback")
-    # Monkey-patch via scorer.config
     o3 = scorer.config.setdefault("section_A_ingredient_quality", {}).setdefault(
         "omega3_dose_bonus", {}
     )
@@ -175,10 +203,15 @@ def test_legacy_fallback_can_only_be_enabled_explicitly_for_backcompat(scorer) -
     }
     try:
         dose = scorer._compute_epa_dha_per_day(product)
-        assert dose["has_explicit_dose"] is True
-        assert dose["epa_dha_mg_per_unit"] == pytest.approx(600.0)
-        assert dose["per_day_mid"] == pytest.approx(1200.0)
-        assert dose.get("omega3_dose_source") == "inferred_from_parent_mass"
+        # Stale config must be a no-op: zero inferred dose, no inference tag.
+        assert dose["has_explicit_dose"] is False, (
+            f"Stale fish_oil_parent_mass_fallback config must NOT cause "
+            f"parent-mass inference. dose={dose}"
+        )
+        assert dose["epa_dha_mg_per_unit"] == pytest.approx(0.0)
+        assert dose["per_day_mid"] is None
+        assert dose.get("omega3_dose_source") != "inferred_from_parent_mass"
+        assert "omega3_dose_source" not in dose
     finally:
         if original_cfg is None:
             del o3["fish_oil_parent_mass_fallback"]
