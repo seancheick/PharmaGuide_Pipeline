@@ -43,6 +43,7 @@ COMPLETE_MULTI_PRODUCT = {
     "status": "active",
     "form_factor": "tablet",
     "product_name": "Complete Multivitamin 2 per Day",
+    "supplement_taxonomy": {"primary_type": "multivitamin"},
     "supplement_type": {"type": "multivitamin"},
     "primary_category": "multivitamin",
     "ingredient_quality_data": {
@@ -113,6 +114,7 @@ COMPLETE_PRENATAL_DHA_PRODUCT = {
     "status": "active",
     "form_factor": "softgel",
     "product_name": "Prenatal DHA 200 mg",
+    "supplement_taxonomy": {"primary_type": "omega_3"},
     "supplement_type": {"type": "targeted"},
     "ingredient_quality_data": {
         "total_active": 1,

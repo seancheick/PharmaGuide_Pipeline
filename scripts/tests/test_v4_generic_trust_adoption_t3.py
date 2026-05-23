@@ -33,7 +33,7 @@ def test_taxonomy_omega_3_is_omega_like():
     product = {
         "primary_type": "omega_3",
         "supplement_type": {"type": "specialty"},  # legacy noise — ignored
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"},
         ]},
     }
@@ -44,7 +44,7 @@ def test_taxonomy_omega_3_nested_path_works():
     """Reads `supplement_taxonomy.primary_type` as fallback path."""
     product = {
         "supplement_taxonomy": {"primary_type": "omega_3"},
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "EPA", "canonical_id": "epa", "quantity": 500, "unit": "mg"},
         ]},
     }
@@ -57,7 +57,7 @@ def test_taxonomy_herbal_botanical_is_not_omega_like():
     product = {
         "primary_type": "herbal_botanical",
         "supplement_type": {"type": "specialty"},  # legacy — would have over-fired
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Ashwagandha", "canonical_id": "ashwagandha", "quantity": 600, "unit": "mg"},
         ]},
     }
@@ -70,7 +70,7 @@ def test_taxonomy_beauty_is_not_omega_like_despite_specialty():
     product = {
         "primary_type": "beauty_hair_skin_nails",
         "supplement_type": {"type": "specialty"},
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Biotin", "canonical_id": "biotin", "quantity": 5000, "unit": "mcg"},
         ]},
     }
@@ -82,7 +82,7 @@ def test_taxonomy_collagen_is_not_omega_like_despite_specialty():
     product = {
         "primary_type": "general_supplement",
         "supplement_type": {"type": "specialty"},
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Collagen Peptides", "canonical_id": "collagen", "quantity": 5000, "unit": "mg"},
         ]},
     }
@@ -91,12 +91,10 @@ def test_taxonomy_collagen_is_not_omega_like_despite_specialty():
 
 # --- Old-batch fallback (no taxonomy) cases ---
 
-def test_old_batch_fish_oil_text_is_omega_like():
-    """Old batches without taxonomy still detected via ingredient text."""
+def test_contract_fish_oil_text_is_omega_like():
+    """Current contract detects omega physical facts via scorable rows."""
     product = {
-        # no primary_type, no supplement_taxonomy
-        "supplement_type": {"type": "specialty"},
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Fish Oil Concentrate", "canonical_id": "fish_oil", "quantity": 1200, "unit": "mg"},
             {"name": "EPA", "canonical_id": "epa", "quantity": 650, "unit": "mg"},
             {"name": "DHA", "canonical_id": "dha", "quantity": 450, "unit": "mg"},
@@ -105,11 +103,10 @@ def test_old_batch_fish_oil_text_is_omega_like():
     assert _is_omega_like(product) is True
 
 
-def test_old_batch_krill_text_is_omega_like():
-    """Krill products detected via ingredient text fallback."""
+def test_contract_krill_text_is_omega_like():
+    """Krill products are detected via scorable ingredient identity."""
     product = {
-        "supplement_type": {"type": "specialty"},
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Krill Oil", "canonical_id": "krill_oil", "quantity": 500, "unit": "mg"},
         ]},
     }
@@ -122,7 +119,7 @@ def test_old_batch_specialty_without_omega_text_is_NOT_omega_like():
     in the canonical ingredient panel."""
     product = {
         "supplement_type": {"type": "specialty"},
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Quercetin", "canonical_id": "quercetin", "quantity": 500, "unit": "mg"},
         ]},
     }
@@ -146,7 +143,7 @@ def test_none_product_is_not_omega_like():
 def test_marine_keyword_in_ingredient_is_omega_like():
     """Marine source DHA is omega-like because DHA is explicit."""
     product = {
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Marine DHA from algae", "canonical_id": "dha", "quantity": 300, "unit": "mg"},
         ]},
     }
@@ -161,7 +158,7 @@ def test_marine_collagen_without_epa_dha_is_not_omega_like():
     """
     product = {
         "primary_type": "collagen",
-        "ingredient_quality_data": {"ingredients": [
+        "ingredient_quality_data": {"ingredients_scorable": [
             {"name": "Marine Collagen Peptides", "canonical_id": "collagen", "quantity": 5000, "unit": "mg"},
         ]},
     }

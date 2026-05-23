@@ -58,6 +58,7 @@ def _probiotic(
     product = {
         "status": "active",
         "form_factor": "capsule",
+        "supplement_taxonomy": {"primary_type": "probiotic"},
         "supplement_type": {"type": "probiotic"},
         "ingredient_quality_data": {
             "total_active": strain_count or 1,

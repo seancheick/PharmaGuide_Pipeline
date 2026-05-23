@@ -42,13 +42,13 @@ def test_probiotic_taxonomy_returns_probiotic():
     assert _b5_class_for_product(product) == "probiotic"
 
 
-def test_probiotic_legacy_supp_type_returns_probiotic():
-    """Old batch without taxonomy — legacy supp_type=probiotic still works."""
+def test_probiotic_legacy_supp_type_is_not_routing_contract():
+    """Legacy supp_type alone must not restore downstream classification."""
     product = {
         "supplement_type": {"type": "probiotic"},
         "product_name": "Daily Probiotic",
     }
-    assert _b5_class_for_product(product) == "probiotic"
+    assert _b5_class_for_product(product) == "generic"
 
 
 # --- Multi / prenatal ---
@@ -172,14 +172,13 @@ def test_empty_product_returns_generic():
     assert _b5_class_for_product({}) == "generic"
 
 
-def test_old_batch_legacy_multivit_returns_multi():
-    """Old enriched batch without taxonomy — router's legacy fallback
-    catches supp_type=multivitamin → multi_or_prenatal opacity."""
+def test_old_batch_legacy_multivit_does_not_recompute_multi():
+    """Legacy supp_type alone must not route B5 opacity as multivitamin."""
     product = {
         "supplement_type": {"type": "multivitamin"},
         "product_name": "Daily Multi",
     }
-    assert _b5_class_for_product(product) == "multi_or_prenatal"
+    assert _b5_class_for_product(product) == "generic"
 
 
 def test_old_batch_supp_type_specialty_returns_generic():

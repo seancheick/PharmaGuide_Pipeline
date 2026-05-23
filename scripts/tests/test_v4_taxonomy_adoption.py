@@ -55,7 +55,6 @@ EXPECTED_HITS_PER_FILE = {
     "scripts/build_final_db.py": 15,
     "scripts/scoring_v4/confidence.py": 1,
     "scripts/scoring_v4/modules/generic_helpers.py": 1,
-    "scripts/scoring_v4/router.py": 5,
 }
 
 
@@ -117,19 +116,16 @@ def test_sp2_inventory_doc_exists():
     )
 
 
-def test_sp2_router_uses_taxonomy_first():
-    """The router must read primary_type before falling back to legacy."""
+def test_sp2_router_uses_taxonomy_contract_only():
+    """The router must read primary_type and must not fall back to legacy."""
     import pathlib
     router = pathlib.Path(__file__).resolve().parents[1] / "scoring_v4" / "router.py"
     src = router.read_text()
     primary_type_idx = src.find("_read_primary_type(product)")
-    legacy_idx = src.find("_read_legacy_supp_type(product)")
     assert primary_type_idx != -1, "Router must call _read_primary_type"
-    assert legacy_idx != -1, "Router must call _read_legacy_supp_type (as fallback)"
-    assert primary_type_idx < legacy_idx, (
-        "Router must read taxonomy primary_type BEFORE legacy supp_type. "
-        "The current ordering allows legacy fields to override taxonomy."
-    )
+    assert "_read_legacy_supp_type(product)" not in src
+    assert 'get("supplement_type")' not in src
+    assert 'get("primary_category")' not in src
 
 
 def test_sp2_shadow_scorer_delegates_to_router():

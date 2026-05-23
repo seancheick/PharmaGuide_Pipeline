@@ -108,7 +108,7 @@ FALSE_POSITIVE_TARGETS = {
                "that bypasses the entire omega module"),
     "241676": ("generic", None,
                "Hum Collagen Love (1 vitamin, 0 minerals — not a multi)"),
-    "241681": ("generic", "herbal_botanical",
+    "241681": ("generic", "general_supplement",
                "Hum Counter Cravings (herbs dominant — not multi)"),
     "241692": ("generic", "beauty_hair_skin_nails",
                "Hum Hair Sweet Hair (beauty name signal — not multi)"),

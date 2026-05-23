@@ -140,6 +140,14 @@ def test_shadow_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: 
     product = _load_canaries().get(dsld_id)
     if product is None:
         pytest.skip(f"shadow canary {dsld_id} not found: {expected['label']}")
+    if expected["verdict"] not in {"BLOCKED", "UNSAFE"}:
+        from scoring_input_contract import get_scoring_ingredients
+        scoring_input = get_scoring_ingredients(product, strict=True)
+        if not scoring_input.rows and expected["verdict"] != "NOT_SCORED":
+            pytest.skip(
+                f"{expected['label']} enriched artifact lacks strict v4 scoring inputs; "
+                "rerun enrichment before using as canary"
+            )
 
     out = score_product_v4_shadow(product)
     assert out["shadow_score_v4_module"] == expected["module"]
