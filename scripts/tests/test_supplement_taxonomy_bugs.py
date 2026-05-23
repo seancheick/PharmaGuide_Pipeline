@@ -517,6 +517,169 @@ def test_BUG_14_sodium_chloride_are_mineral_canonicals():
 
 
 # ============================================================================
+# BUG-15: Collagen-with-1-strain misclassifies as probiotic
+# ============================================================================
+
+def _collagen_plus_one_strain_product(product_name: str, second_active_cid: str,
+                                       second_active_name: str, strain_cid: str,
+                                       strain_name: str) -> dict:
+    """Shape mirroring Garden collagen+strain products (222902, 274304,
+    327397-9, 321351). Two quantified actives: collagen/MCT/curcumin +
+    a single probiotic strain."""
+    return {
+        "product_name": product_name,
+        "fullName": product_name,
+        "ingredient_quality_data": {"ingredients": [
+            {"name": second_active_name, "canonical_id": second_active_cid,
+             "category": "protein" if "collagen" in second_active_cid else "fat",
+             "quantity": 10, "unit": "g"},
+            {"name": strain_name, "canonical_id": strain_cid,
+             "category": "probiotics", "quantity": 1.0, "unit": "Billion CFU"},
+        ]},
+    }
+
+
+def test_BUG_15_collagen_plus_one_strain_is_not_probiotic():
+    """Before 2026-05-23: probiotic_majority threshold was
+    `ceil(active_count * 0.5)`, so a collagen product with 2 actives where
+    1 is a probiotic strain (1 ≥ ceil(2*0.5)=1) routed to probiotic.
+
+    Affected real Garden products (verified 2026-05-23):
+      222902 Grass Fed Collagen CBD Unflavored — collagen + bacillus_subtilis
+      274304 Grass Fed Collagen Peptides Unflavored — collagen + lactobacillus_plantarum
+      321351 Multi-Sourced Collagen Turmeric — curcumin + lactobacillus_plantarum
+      327397 Grass Fed Collagen Peptides Unflavored — collagen + bacillus_coagulans
+      327398 Grass Fed Collagen Protein Fair Trade Chocolate — mct_oil + bacillus_coagulans
+      327399 Grass Fed Collagen Protein Vanilla Flavor — mct_oil + bacillus_coagulans
+
+    Fix: require probiotic_count ≥ 2 AND ≥ 50% share for the probiotic route.
+    Single-active products where that one active IS a strain still route
+    correctly via the sole_active_is_strain branch.
+    """
+    for product_name, second_cid, second_name, strain_cid, strain_name in [
+        ("Grass Fed Collagen CBD Unflavored", "collagen", "Collagen", "bacillus_subtilis", "Bacillus subtilis"),
+        ("Grass Fed Collagen Peptides Unflavored", "collagen", "Collagen", "lactobacillus_plantarum", "Lactobacillus plantarum"),
+        ("Multi-Sourced Collagen Turmeric", "curcumin", "Curcumin", "lactobacillus_plantarum", "Lactobacillus plantarum"),
+        ("Grass Fed Collagen Protein Fair Trade Chocolate", "mct_oil", "MCT Oil", "bacillus_coagulans", "Bacillus coagulans"),
+    ]:
+        product = _collagen_plus_one_strain_product(
+            product_name, second_cid, second_name, strain_cid, strain_name
+        )
+        result = classify_supplement(product)
+        assert result["primary_type"] != "probiotic", (
+            f"{product_name!r}: 1-of-2 strain product must NOT route to probiotic "
+            f"(got primary_type={result.get('primary_type')!r}, "
+            f"reasons={result.get('classification_reasons')!r})"
+        )
+
+
+def test_BUG_15_single_strain_product_still_routes_probiotic():
+    """Inverse guard: a product whose ONLY active is a probiotic strain
+    must still route to probiotic via the sole_active_is_strain branch."""
+    product = {
+        "product_name": "Lactobacillus Plantarum 10 Billion CFU",
+        "fullName": "Lactobacillus Plantarum 10 Billion CFU",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Lactobacillus plantarum", "canonical_id": "lactobacillus_plantarum",
+             "category": "probiotics", "quantity": 10.0, "unit": "Billion CFU"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "probiotic"
+
+
+def test_BUG_15_real_probiotic_panel_still_routes_probiotic():
+    """Inverse guard: a real probiotic product with multiple strains
+    (≥ 2 strains, ≥ 50% share) must still route to probiotic. Without
+    this guard, the tightening could over-correct and miss real probiotics.
+    """
+    product = {
+        "product_name": "Ultra Probiotic Complex 50 Billion CFUs",
+        "fullName": "Ultra Probiotic Complex 50 Billion CFUs",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Lactobacillus acidophilus", "canonical_id": "lactobacillus_acidophilus",
+             "category": "probiotics", "quantity": 20.0, "unit": "Billion CFU"},
+            {"name": "Bifidobacterium lactis", "canonical_id": "bifidobacterium_lactis",
+             "category": "probiotics", "quantity": 20.0, "unit": "Billion CFU"},
+            {"name": "Lactobacillus plantarum", "canonical_id": "lactobacillus_plantarum",
+             "category": "probiotics", "quantity": 10.0, "unit": "Billion CFU"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "probiotic"
+
+
+# ============================================================================
+# BUG-16: MCT Oil with incidental DHA misclassifies as omega_3
+# ============================================================================
+
+def test_BUG_16_mct_oil_with_incidental_dha_is_not_omega_3():
+    """Before 2026-05-23: the omega-3 branch fired on any product with an
+    `dha`/`epa`/`epa_dha` canonical_id, regardless of name or DSLD
+    productType context. A "MCT Oil Unflavored" product with one small DHA
+    row got primary_type=omega_3.
+
+    Affected real Garden product (verified 2026-05-23):
+      327403 MCT Oil Unflavored — 1 DHA row, name has no omega keyword,
+      DSLD productType="fat/fatty acid"
+
+    Fix: when active_count==1, the name doesn't mention any omega keyword
+    (omega / fish oil / krill / cod liver), AND the DSLD productType is
+    the generic "fat/fatty acid" carrier-oil bucket, the omega branch
+    falls through — the product is a carrier oil with incidental omega,
+    not an omega-3 product.
+    """
+    product = {
+        "product_name": "MCT Oil Unflavored",
+        "fullName": "MCT Oil Unflavored",
+        "productType": {"langualCodeDescription": "fat/fatty acid"},
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "DHA", "canonical_id": "dha", "category": "fat",
+             "quantity": 100, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "omega_3", (
+        f"MCT Oil with incidental DHA must NOT route to omega_3 "
+        f"(got primary_type={result.get('primary_type')!r}, "
+        f"reasons={result.get('classification_reasons')!r})"
+    )
+
+
+def test_BUG_16_real_fish_oil_still_routes_omega_3():
+    """Inverse guard: a real fish-oil product with omega keyword in the
+    name must still route to omega_3 even when the DSLD productType is
+    'fat/fatty acid'. Locks the guard against over-correction."""
+    product = {
+        "product_name": "Fish Oil Omega-3 1000 mg",
+        "fullName": "Fish Oil Omega-3 1000 mg",
+        "productType": {"langualCodeDescription": "fat/fatty acid"},
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "EPA", "canonical_id": "epa", "category": "fat",
+             "quantity": 500, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "omega_3"
+
+
+def test_BUG_16_multi_omega_row_product_still_routes_omega_3():
+    """Inverse guard: a multi-row EPA+DHA product (active_count > 1)
+    still routes to omega_3 regardless of name keyword or productType."""
+    product = {
+        "product_name": "Algal Omega",  # No fish/krill keyword
+        "fullName": "Algal Omega",
+        "productType": {"langualCodeDescription": "fat/fatty acid"},
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "EPA", "canonical_id": "epa", "category": "fat", "quantity": 250, "unit": "mg"},
+            {"name": "DHA", "canonical_id": "dha", "category": "fat", "quantity": 500, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "omega_3"
+
+
+# ============================================================================
 # Coverage assertion: every PRIMARY_TYPE must have at least one regression test
 # ============================================================================
 

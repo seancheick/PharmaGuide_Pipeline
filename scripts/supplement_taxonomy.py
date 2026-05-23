@@ -620,11 +620,19 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         probiotic_count > 0
         or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0))
     ):
-        probiotic_majority = probiotic_count >= max(1, ceil(active_count * 0.5))
-        if active_count == 1 or probiotic_majority or (
-            probiotic_name_signal
-            and probiotic_count >= max(1, ceil(active_count * 0.25))
-        ):
+        # Tightened 2026-05-23: require a real probiotic-majority panel, not
+        # just one strain alongside a non-probiotic active. The previous
+        # threshold (ceil(active_count*0.5)) routed collagen + 1-strain
+        # products (Garden 222902, 274304, 327397-9, 321351) to probiotic
+        # because 1 ≥ ceil(2*0.5)=1. Now requires probiotic_count ≥ 2 AND
+        # ≥ 50% share. Single-active products where the only active IS a
+        # strain still route correctly (sole_active_is_strain branch).
+        probiotic_majority = (
+            probiotic_count >= 2
+            and probiotic_count >= ceil(active_count * 0.5)
+        )
+        sole_active_is_strain = (active_count == 1 and probiotic_count == 1)
+        if probiotic_majority or sole_active_is_strain:
             primary_type = "probiotic"
             confidence = 0.9 if probiotic_majority else 0.7
             reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
@@ -680,8 +688,23 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # ALA-only products are not routed here even when the label says omega-3:
     # ALA uses IOM AI semantics, while the omega scoring module uses EPA/DHA
     # dose bands.
-    # Word-boundary check for short tokens (dha, epa) to avoid "ashwagan-dha" false positives
-    elif omega_ids and not ala_only_signal:
+    # Word-boundary check for short tokens (dha, epa) to avoid "ashwagan-dha" false positives.
+    #
+    # Tightened 2026-05-23: a product with only 1 EPA/DHA row, no omega
+    # keyword in name, AND DSLD productType="fat/fatty acid" is treated as
+    # a carrier-oil-with-incidental-omega (e.g., 327403 MCT Oil Unflavored
+    # listing a small DHA row) — NOT an omega-3 product. Falls through to
+    # the next elif so it lands in a more honest bucket (general_supplement
+    # today; greens/carrier_oil overlay in Wave 6).
+    elif (
+        omega_ids
+        and not ala_only_signal
+        and not (
+            active_count == 1
+            and dsld_product_type == "fat/fatty acid"
+            and not any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
+        )
+    ):
         omega_signal = len(omega_ids)
         name_signal = any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
         primary_type = "omega_3"
