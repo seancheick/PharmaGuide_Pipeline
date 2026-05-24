@@ -62972,8 +62972,7 @@
           "cayenne pepper powder",
           "cayenne pepper fruit powder",
           "cayenne extract",
-          "cayenne pepper extract",
-          "red pepper"
+          "cayenne pepper extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -62994,7 +62993,8 @@
         "habanero",
         "ghost pepper",
         "paprika",
-        "bell pepper"
+        "bell pepper",
+        "red pepper"
       ],
       "parent_id": null,
       "confidence": "high"

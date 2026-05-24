@@ -223,7 +223,7 @@ def test_cayenne_pepper_unspecified_form_aliases_include_label_variants(iqm, exp
     form = iqm["cayenne_pepper"]["forms"]["cayenne pepper (unspecified)"]
     aliases_lower = [a.lower() for a in form.get("aliases", [])]
     assert expected_alias.lower() in aliases_lower, (
-        f"alias {expected_alias!r} missing from cayenne_pepper.bergamot (unspecified) — "
+        f"alias {expected_alias!r} missing from cayenne_pepper.forms['cayenne pepper (unspecified)'] — "
         f"7 Cayenne products would not match."
     )
 
@@ -257,6 +257,10 @@ def test_cayenne_pepper_bio_score_is_six_not_capsaicin_seven(iqm):
         "paprika",
         "bell pepper",
         "tabasco",
+        # 'red pepper' — bare term ambiguous across generic Capsicum, paprika,
+        # food-form pepper. Removed from cayenne aliases per dev review;
+        # must NOT be re-added without explicit cayenne-context gating.
+        "red pepper",
     ],
 )
 def test_cayenne_pepper_aliases_do_not_include_generic_chili_pepper_terms(iqm, forbidden_alias):
@@ -299,10 +303,11 @@ def test_cayenne_pepper_notes_include_required_safety_and_evidence_markers(iqm):
 def test_cayenne_pepper_match_rules_exclusions_block_other_capsicum_species(iqm):
     exclusions = iqm["cayenne_pepper"].get("match_rules", {}).get("exclusions", [])
     exclusions_lower = [e.lower() for e in exclusions]
-    for required in ["chili pepper", "jalapeño", "habanero", "paprika"]:
+    for required in ["chili pepper", "jalapeño", "habanero", "paprika", "red pepper"]:
         assert required in exclusions_lower, (
             f"match_rules.exclusions must include {required!r} — "
-            f"belt-and-suspenders against false-matching other Capsicum species."
+            f"belt-and-suspenders against false-matching other Capsicum species "
+            f"or generic-pepper food-form terms."
         )
 
 
