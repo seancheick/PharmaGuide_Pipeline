@@ -63152,5 +63152,87 @@
     "external_ids": {
       "unii": "ZP9XFG71A7"
     }
+  },
+  "horse_chestnut_seed": {
+    "standard_name": "Horse Chestnut Seed",
+    "category": "herbs",
+    "cui": "C0001443",
+    "forms": {
+      "horse chestnut seed (unspecified)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate \u2014 saponin glycosides (aescin) absorption",
+        "notes": "Aesculus hippocastanum (Sapindaceae) seed extract. Contains aescin (escin) triterpene saponin mixture as the active. PRIMARY ANCHOR: EMA HMPC Final EU herbal monograph (Rev. 1, 23/04/2020) \u2014 WELL-ESTABLISHED USE for chronic venous insufficiency (CVI): 'swollen legs, varicose veins, a feeling of heaviness' [primary_regulatory] (https://www.ema.europa.eu/en/medicines/herbal/hippocastani-semen). SECONDARY EVIDENCE: Pittler & Ernst 2012 Cochrane systematic review (PMID 23152216) \u2014 'The evidence presented suggests that HCSE is an efficacious and safe short-term treatment for CVI. However, several caveats exist and larger, definitive RCTs are required' [clinical_review]. NCCIH endorses 2012 review of 17 studies for CVI symptom improvement [authoritative_public_health] (https://www.nccih.nih.gov/health/horse-chestnut). CRITICAL SAFETY: raw horse chestnut seed is TOXIC due to esculin/aesculin coumarin glycoside content \u2014 only standardized extracts with esculin REMOVED are safe for oral supplementation (per NCCIH 'likely safe for short-term use up to 12 weeks' applies ONLY to esculin-removed standardized extracts) [primary_regulatory via NCCIH + EMA]. Documented warfarin/aspirin/anticoagulant interaction \u2014 aescin antithrombotic + residual aesculetin may increase bleeding risk (MSKCC Integrative Medicine monograph) [case_report \u2014 documented interaction, not theoretical]. Pregnancy/lactation: NCCIH 'little is known' [tertiary_not_used_for_scoring]. Conservative scoring on unspecified form because aescin standardization (16-28%) not declared. Distinct from isolated aescin IQM parent (CUI C0014838, bio_score=5) which scores the purified compound.",
+        "aliases": [
+          "horse chestnut",
+          "horse chestnut seed",
+          "horse chestnut seed extract",
+          "horse chestnut extract",
+          "Aesculus hippocastanum",
+          "hippocastani semen"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "moderate"
+        }
+      },
+      "horse chestnut standardized (aescin marker)": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "moderate-good \u2014 standardized aescin content per HMPC clinical evidence base",
+        "notes": "Horse chestnut seed extract standardized for aescin (triterpene saponin) content. Superseded EMA HMPC 2009 monograph specified 16-28% triterpene glycosides calculated as aescin (the form clinical RCTs in Cochrane review PMID 23152216 actually studied); current Rev. 1 (23/04/2020) specifies 6.5-10% triterpene glycosides as protoaescigenin. Daily dose 100 mg aescin (~240-290 mg standardized extract). EMA HMPC well-established use status [primary_regulatory] applies. Bio_score uplift from unspecified (8) to standardized (10) reflects the standardization-validated aescin dose that the clinical evidence base actually studied, NOT a stronger efficacy claim \u2014 Cochrane review still caveats 'larger, definitive RCTs are required' [clinical_review]. Safety profile per unspecified form: esculin-removed standardized extracts only; warfarin/anticoagulant interaction documented (MSKCC).",
+        "aliases": [
+          "horse chestnut standardized extract",
+          "standardized Horse Chestnut extract",
+          "horse chestnut extract standardized",
+          "horse chestnut 16% aescin",
+          "horse chestnut 20% aescin",
+          "horse chestnut 18% aescin",
+          "Venostat"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.25,
+          "range_low": 0.15,
+          "range_high": 0.45,
+          "quality": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "sweet chestnut",
+        "spanish chestnut",
+        "castanea",
+        "Castanea sativa",
+        "water chestnut",
+        "Eleocharis dulcis",
+        "buckeye"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-24",
+      "research_status": "validated"
+    },
+    "aliases": [
+      "C0001443"
+    ],
+    "external_ids": {
+      "unii": "3C18L6RJAZ",
+      "rxcui": "260020"
+    }
   }
 }

@@ -586,3 +586,146 @@ def test_diamine_oxidase_bio_score_preserved(iqm):
     """Existing entry bio_score must not change — this is alias-only."""
     form = iqm["diamine_oxidase"]["forms"]["diamine oxidase (unspecified)"]
     assert form["bio_score"] == 5
+
+
+# ---------------------------------------------------------------------------
+# Batch 3 commit A: horse_chestnut_seed new IQM parent
+# Distinct from existing `aescin` parent (which scores isolated compound).
+# PRIMARY anchor: EMA HMPC Rev. 1 (23/04/2020) well-established use for CVI +
+# Cochrane PMID 23152216 (Pittler & Ernst 2012) + NCCIH endorsement.
+# CRITICAL safety: raw seed is toxic (esculin/aesculin); standardized extracts
+# must be esculin-removed.
+# ---------------------------------------------------------------------------
+
+
+def test_horse_chestnut_seed_iqm_parent_exists(iqm):
+    assert "horse_chestnut_seed" in iqm
+    entry = iqm["horse_chestnut_seed"]
+    assert entry.get("standard_name") == "Horse Chestnut Seed"
+    assert entry.get("cui") == "C0001443"
+
+
+def test_horse_chestnut_seed_external_ids_inherited_from_botanical_db(iqm):
+    ids = iqm["horse_chestnut_seed"].get("external_ids", {})
+    assert ids.get("unii") == "3C18L6RJAZ"
+    assert ids.get("rxcui") == "260020"
+
+
+def test_horse_chestnut_seed_distinct_from_aescin_parent(iqm):
+    """Distinct parent — different identity (whole-seed extract vs isolated
+    compound). aescin parent (CUI C0014838, bio_score=5) is NOT touched."""
+    assert "horse_chestnut_seed" in iqm
+    assert "aescin" in iqm
+    assert iqm["horse_chestnut_seed"].get("cui") == "C0001443"
+    assert iqm["aescin"].get("cui") == "C0014838"
+    assert iqm["aescin"]["forms"]["aescin (unspecified)"]["bio_score"] == 5
+
+
+def test_horse_chestnut_seed_two_forms_unspecified_and_standardized(iqm):
+    forms = iqm["horse_chestnut_seed"].get("forms", {})
+    assert "horse chestnut seed (unspecified)" in forms
+    assert "horse chestnut standardized (aescin marker)" in forms
+
+
+def test_horse_chestnut_seed_unspecified_bio_score_is_eight(iqm):
+    form = iqm["horse_chestnut_seed"]["forms"]["horse chestnut seed (unspecified)"]
+    assert form["bio_score"] == 8
+
+
+def test_horse_chestnut_seed_standardized_bio_score_is_ten(iqm):
+    """Standardized aescin form bio_score=10 — matches the form clinical
+    RCTs actually study (16-28% aescin per superseded HMPC; 100 mg aescin
+    daily dose per current monograph)."""
+    form = iqm["horse_chestnut_seed"]["forms"]["horse chestnut standardized (aescin marker)"]
+    assert form["bio_score"] == 10
+
+
+@pytest.mark.parametrize(
+    "expected_alias",
+    [
+        "horse chestnut",
+        "horse chestnut seed",
+        "horse chestnut seed extract",
+        "Aesculus hippocastanum",
+        "standardized Horse Chestnut extract",
+    ],
+)
+def test_horse_chestnut_seed_aliases_include_label_variants(iqm, expected_alias):
+    """Aliases distributed across forms — assert each is present in AT LEAST
+    one form's alias list."""
+    entry = iqm["horse_chestnut_seed"]
+    found = False
+    for fname, fdata in entry.get("forms", {}).items():
+        aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        if expected_alias.lower() in aliases_lower:
+            found = True
+            break
+    assert found, (
+        f"alias {expected_alias!r} missing from any horse_chestnut_seed form — "
+        f"Solgar 216723 Horse Chestnut Seed Extract 250mg would stay NOT_SCORED."
+    )
+
+
+@pytest.mark.parametrize(
+    "forbidden_alias",
+    [
+        "sweet chestnut",
+        "spanish chestnut",
+        "castanea",
+        "Castanea sativa",
+        "water chestnut",
+        "Eleocharis dulcis",
+        "buckeye",
+        # Note: bare "chestnut" exclusion REMOVED. The matcher uses
+        # substring-style exclusion checking, so a bare "chestnut" entry
+        # would also reject ALL "horse chestnut" aliases (they contain
+        # the substring "chestnut"). The explicit "sweet chestnut" /
+        # "water chestnut" / etc. entries above are sufficient guard
+        # against the actual lookalike species. Verified runtime:
+        # _match_quality_map("chestnut") → None (matches no parent).
+    ],
+)
+def test_horse_chestnut_seed_excludes_unrelated_chestnut_species(iqm, forbidden_alias):
+    """Distinct from edible sweet chestnut (Castanea sativa, Fagaceae),
+    water chestnut (Eleocharis dulcis, Cyperaceae), and California buckeye
+    (Aesculus californica, same genus distinct species). Per subagent
+    verification with Wikipedia + Native Plant Trust + Missouri Botanical
+    Garden."""
+    entry = iqm["horse_chestnut_seed"]
+    top_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_alias.lower() not in top_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        assert forbidden_alias.lower() not in aliases_lower, (
+            f"forbidden alias {forbidden_alias!r} in horse_chestnut_seed.{fname} — "
+            f"would false-match unrelated chestnut species."
+        )
+
+
+def test_horse_chestnut_seed_notes_include_verified_evidence_and_safety_markers(iqm):
+    """Notes must include:
+    - PMID 23152216 (CORRECTED Cochrane — NOT ghost PMID 22592684)
+    - EMA HMPC reference
+    - Raw-seed esculin/aesculin toxicity warning (standardized-extract caveat)
+    - Warfarin/anticoagulant interaction (documented per MSKCC, not theoretical)
+    - source-quality tags per dev review
+    """
+    form = iqm["horse_chestnut_seed"]["forms"]["horse chestnut seed (unspecified)"]
+    notes = form.get("notes", "")
+    notes_lower = notes.lower()
+    assert "23152216" in notes, "Verified Cochrane PMID 23152216 missing"
+    assert "22592684" not in notes, "GHOST PMID 22592684 must NEVER appear"
+    assert "hmpc" in notes_lower, "EMA HMPC reference missing"
+    assert "esculin" in notes_lower or "aesculin" in notes_lower, (
+        "Raw-seed esculin/aesculin toxicity warning required — standardized "
+        "extracts must have the toxic coumarin glycoside removed."
+    )
+    assert "warfarin" in notes_lower or "anticoagulant" in notes_lower or "bleeding" in notes_lower, (
+        "Documented warfarin/anticoagulant interaction warning required (MSKCC)."
+    )
+    assert "primary_regulatory" in notes, (
+        "EMA HMPC must be tagged primary_regulatory."
+    )
+    assert "authoritative_public_health" in notes, (
+        "NCCIH must be tagged authoritative_public_health (not primary_regulatory)."
+    )
