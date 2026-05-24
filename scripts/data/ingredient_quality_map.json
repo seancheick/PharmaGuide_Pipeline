@@ -63294,5 +63294,66 @@
       "C1446590"
     ],
     "external_ids": {}
+  },
+  "garcinia_indica": {
+    "standard_name": "Garcinia indica",
+    "category": "herbs",
+    "cui": "C3460451",
+    "forms": {
+      "garcinia indica (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "low \u2014 garcinol oral absorption variable, no validated PK at supplement doses",
+        "notes": "Garcinia indica (Clusiaceae) fruit rind extract \u2014 kokum. DISTINCT from Garcinia cambogia (now Garcinia gummi-gutta) IQM parent: same genus but different species, different chemistry, different safety profile. Active constituents: garcinol (Livinol branded extract standardized to 20% garcinol) + hydroxycitric acid (HCA) at LOWER levels than G. cambogia. EVIDENCE BASE THIN: Ullah 2021 narrative review (PMC8708457, https://pmc.ncbi.nlm.nih.gov/articles/PMC8708457/) explicitly states 'further study at the clinical level is needed to establish the efficacy and safety of G. indica in humans' [clinical_review \u2014 no human RCT data]. No Cochrane review. NO dedicated NCCIH page for G. indica (NCCIH only covers G. cambogia at https://www.nccih.nih.gov/health/garcinia-cambogia). CRITICAL SAFETY: HCA-shared-mechanism caveat with G. cambogia \u2014 G. cambogia has documented hepatotoxicity (FDA 2009 Hydroxycut recall of 14 products, 34 case reports, 1 death, 9 liver transplants; HLA-B*35:01-mediated immune reaction proposed); Ullah 2021 verbatim: 'Although no research results have been reported on the direct association between G. indica and acute liver injury, more scientific and clinical investigations on the effect of G. indica on liver health [are needed] since G. indica also contain[s] HCA' [clinical_review \u2014 absence of evidence \u2260 evidence of absence]. Conservative scoring (bio_score=5) reflects no human RCT + shared HCA mechanism with FDA-warned species. Pregnancy/lactation/drug interactions: no data.",
+        "aliases": [
+          "garcinia indica",
+          "garcinia indica extract",
+          "kokum",
+          "kokum extract",
+          "kokum fruit rind extract",
+          "Garcinia indica fruit rind extract",
+          "Livinol",
+          "Livinol Kokum extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.15,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "garcinia cambogia",
+        "Garcinia gummi-gutta",
+        "garcinia mangostana",
+        "mangosteen",
+        "Garcinia atroviridis",
+        "asam gelugor",
+        "hydroxycitric acid"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.85,
+      "missing_fields": [
+        "unii",
+        "rxcui"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-24",
+      "research_status": "validated"
+    },
+    "aliases": [
+      "C3460451"
+    ],
+    "external_ids": {}
   }
 }

@@ -941,3 +941,162 @@ def test_collagen_undenatured_form_does_NOT_include_biocell_aliases(iqm):
             f"undenatured form aliases — BioCell is HYDROLYZED chemistry, "
             f"not undenatured. Misclassification would invert the bio_score."
         )
+
+
+# ---------------------------------------------------------------------------
+# Batch 3 commit D: garcinia_indica new IQM parent — Livinol/kokum
+# Distinct from existing garcinia_cambogia parent (DIFFERENT species).
+# Conservative bio_score=5 — no human RCTs, HCA-shared-mechanism caveat
+# with G. cambogia (FDA-warned hepatotoxicity).
+# ---------------------------------------------------------------------------
+
+
+def test_garcinia_indica_iqm_parent_exists(iqm):
+    assert "garcinia_indica" in iqm
+    entry = iqm["garcinia_indica"]
+    assert entry.get("standard_name") == "Garcinia indica"
+    assert entry.get("cui") == "C3460451"
+
+
+def test_garcinia_indica_distinct_from_garcinia_cambogia(iqm):
+    """DIFFERENT species. G. indica = kokum (Clusiaceae, lower HCA, garcinol-
+    standardized in Livinol). G. cambogia (now G. gummi-gutta) = HCA-rich,
+    FDA-warned hepatotoxicity. Each parent has its own CUI + bio_score."""
+    assert iqm["garcinia_indica"]["cui"] == "C3460451"
+    assert iqm["garcinia_cambogia"]["cui"] == "C0993598"
+    # ensure G. cambogia parent untouched by this batch
+    g_cam_forms = list(iqm["garcinia_cambogia"]["forms"].keys())
+    assert "garcinia cambogia (unspecified)" in g_cam_forms
+
+
+def test_garcinia_indica_bio_score_is_five(iqm):
+    """Conservative bio_score=5. Parity with bee_pollen / purple_corn —
+    Ullah 2021 (PMID 34959738) explicitly says 'no research results have
+    been reported on the direct association between G. indica and acute
+    liver injury, more scientific and clinical investigations on the effect
+    of G. indica on liver health [are needed]'. No human RCTs."""
+    form = iqm["garcinia_indica"]["forms"]["garcinia indica (unspecified)"]
+    assert form["bio_score"] == 5
+
+
+@pytest.mark.parametrize(
+    "expected_alias",
+    [
+        "garcinia indica",
+        "garcinia indica extract",
+        "kokum",
+        "kokum extract",
+        "Livinol",
+    ],
+)
+def test_garcinia_indica_aliases_include_label_variants(iqm, expected_alias):
+    entry = iqm["garcinia_indica"]
+    found = False
+    for fname, fdata in entry.get("forms", {}).items():
+        aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        if expected_alias.lower() in aliases_lower:
+            found = True
+            break
+    assert found
+
+
+def test_garcinia_indica_does_NOT_include_bare_garcinia_alias(iqm):
+    """CRITICAL per dev review + subagent research: bare 'Garcinia' alone
+    is too broad — ambiguous across G. cambogia (HCA, FDA hepatotoxicity),
+    G. mangostana (mangosteen, xanthones), G. atroviridis (asam gelugor),
+    G. indica (kokum, garcinol). Must NEVER alias bare 'Garcinia' to any
+    single parent."""
+    entry = iqm["garcinia_indica"]
+    for fname, fdata in entry.get("forms", {}).items():
+        aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        assert "garcinia" not in aliases_lower, (
+            f"OVER-BROAD: bare 'Garcinia' alias on garcinia_indica.{fname} — "
+            f"would false-match cambogia / mangosteen / asam gelugor / etc."
+        )
+
+
+@pytest.mark.parametrize(
+    "forbidden_alias",
+    [
+        "garcinia cambogia",
+        "Garcinia gummi-gutta",
+        "garcinia mangostana",
+        "mangosteen",
+        "Garcinia atroviridis",
+        "asam gelugor",
+        "hydroxycitric acid",
+    ],
+)
+def test_garcinia_indica_excludes_other_garcinia_species(iqm, forbidden_alias):
+    """G. indica is botanically distinct from other supplement-relevant
+    Garcinia species. Each has different chemistry, indications, and
+    safety profile."""
+    entry = iqm["garcinia_indica"]
+    top_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_alias.lower() not in top_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        assert forbidden_alias.lower() not in [
+            a.lower() for a in fdata.get("aliases", [])
+        ]
+
+
+def test_garcinia_indica_exclusions_not_substring_of_any_alias(iqm):
+    """SUBSTRING-EXCLUSION GUARD per horse chestnut lesson 7ea41d2a.
+    The matcher's exclusion check is substring-based. Bare 'Garcinia'
+    must NOT be in exclusions either — it would reject ALL 'garcinia
+    indica' aliases via substring match. Verified at runtime that the
+    explicit species names ('Garcinia cambogia', 'Garcinia mangostana',
+    etc.) are not substrings of any G. indica alias."""
+    entry = iqm["garcinia_indica"]
+    exclusions_lower = [e.lower() for e in entry.get("match_rules", {}).get("exclusions", [])]
+    # bare 'garcinia' must NOT be in exclusions (would reject 'garcinia indica')
+    assert "garcinia" not in exclusions_lower, (
+        "SUBSTRING TRAP: bare 'Garcinia' exclusion would reject all "
+        "'garcinia indica' aliases. Use only species-qualified exclusions."
+    )
+    # all other exclusions must not be substrings of any alias
+    all_aliases = list(entry.get("aliases", []))
+    for fname, fdata in entry.get("forms", {}).items():
+        all_aliases.extend(fdata.get("aliases", []))
+    all_aliases_lower = [a.lower() for a in all_aliases]
+    for excl in exclusions_lower:
+        for alias in all_aliases_lower:
+            assert excl not in alias, (
+                f"SUBSTRING COLLISION: exclusion {excl!r} substring of "
+                f"alias {alias!r} — matcher would reject this alias."
+            )
+
+
+def test_garcinia_indica_notes_include_required_safety_caveats(iqm):
+    """Notes MUST include:
+    - Ullah 2021 by author + year + PMC8708457 (verified PMC ID — NOT a
+      bare PMID, per critical_no_hallucinated_citations + horse-chestnut
+      ghost-PMID lesson; PMC IDs are harder to fabricate via URL pattern)
+    - HCA-shared-mechanism caveat with G. cambogia (FDA hepatotoxicity)
+    - Explicit 'no human RCT' acknowledgment
+    - No NCCIH claim (G. indica is NOT covered by NCCIH per subagent)
+    """
+    form = iqm["garcinia_indica"]["forms"]["garcinia indica (unspecified)"]
+    notes = form.get("notes", "")
+    notes_lower = notes.lower()
+    assert "ullah" in notes_lower and "2021" in notes_lower, (
+        "Notes must cite Ullah 2021 by author + year (primary evidence anchor)."
+    )
+    assert "pmc8708457" in notes_lower, (
+        "Notes must cite the verified PMC ID PMC8708457 (Ullah 2021). "
+        "Bare PMID NOT required — per horse-chestnut ghost-PMID lesson, "
+        "use the verified URL pattern (PMC ID) rather than a fabricable "
+        "PubMed integer."
+    )
+    assert "garcinia cambogia" in notes_lower or "g. cambogia" in notes_lower, (
+        "HCA-shared-mechanism caveat with G. cambogia missing"
+    )
+    assert "hepatotoxicity" in notes_lower or "liver injury" in notes_lower, (
+        "FDA hepatotoxicity warning context (shared HCA mechanism) missing"
+    )
+    assert "no human" in notes_lower or "no clinical" in notes_lower or "no rct" in notes_lower, (
+        "Must explicitly acknowledge no human RCT data for G. indica"
+    )
+    assert "garcinol" in notes_lower, (
+        "Livinol standardization marker (20% garcinol) must be referenced"
+    )
