@@ -1,0 +1,91 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "description": "Reviewer-signed per-product canonical_id + IQM form overrides for DSLD rows where the row text alone is ambiguous but the surrounding product-name context disambiguates the right IQM/other_ingredients parent and form.",
+    "purpose": "Per-product canonical_id rerouting with provenance. Each entry rewrites a single (dsld_id, raw_ingredient_text) pair to a corrected canonical_id + explicit IQM form choice. The override is scoped to the specific dsld_id - global aliasing of the row text is explicitly NOT supported because it would false-match the same text on unrelated products.",
+    "scope": "Fires only for an exact (dsld_id, raw_ingredient_text) tuple match (case-insensitive, whitespace-stripped). product_name_must_contain_any is an additional safety guard: even if the (dsld_id, raw_text) tuple matches, the override only applies if product_name actually contains one of the listed substrings - defends against a DSLD ID being reassigned to a different product post-shipment.",
+    "review_policy": "Every entry must carry: id, dsld_id, brand, product_name, product_name_must_contain_any, raw_ingredient_text, set_canonical_id, set_canonical_source_db, EITHER set_preferred_iqm_form (exact form key) OR set_match_text_for_iqm (string injected as IQM match input), rationale, evidence_pmid_or_url (PubMed-verified PMID required for any new citation - run scripts/api_audit/verify_pubmed_references.py before commit), reviewer (must be a named team or individual, never a placeholder like \"(pending)\", \"TODO\", \"TBD\"), clinical_review_status (e.g., \"identity_routing_reviewed\"), review_scope (e.g., \"context_identity_routing_only\"), review_date.",
+    "verification_policy": "After commit, the live corpus rerun MUST confirm: (a) each listed dsld_id now emits the override canonical_id AND override form; (b) bio_score on the scored row matches the chosen IQM form (not the unspecified fallback); (c) the override fires for that dsld_id only; (d) scoring moves from NOT_SCORED to a scored verdict.",
+    "fail_safe_policy": "If set_preferred_iqm_form does not resolve under set_canonical_id in ingredient_quality_map.json, the enricher must NOT silently succeed with the unspecified form. Either error out or fall back to normal matching with a clear log warning. The test_set_preferred_iqm_form_resolves_in_iqm pytest guard runs at commit time to catch typos before they ship.",
+    "last_updated": "2026-05-24",
+    "total_entries": 4,
+    "loaded_by": "scripts/enhanced_normalizer.py via _load_context_canonical_overrides (cached on first product); consumed by scripts/enrich_supplements_v3.py before _match_quality_map / _match_multi_form pipeline."
+  },
+  "overrides": {
+    "265081": {
+      "id": "jarrow_265081_biocell_hydrolyzed",
+      "brand": "Jarrow_Formulas",
+      "product_name": "Type II Bioavailable Collagen Complex",
+      "product_name_must_contain_any": [
+        "Type II Bioavailable",
+        "BioCell"
+      ],
+      "raw_ingredient_text": "Chicken Sternum Collagen extract",
+      "set_canonical_id": "collagen",
+      "set_canonical_source_db": "ingredient_quality_map",
+      "set_preferred_iqm_form": "hydrolyzed collagen peptides",
+      "rationale": "Jarrow Type II Bioavailable Collagen Complex is BioCell hydrolyzed chicken sternal cartilage extract (MW ~5,500 Da; BioCell Tech patents US 6,780,841 / US 8,563,045). The row text 'Chicken Sternum Collagen extract' alone is ambiguous (could be undenatured UC-II at MW ~600,000 Da). Product name 'Type II Bioavailable' is the BioCell brand framing - UC-II would say 'Undenatured Type II'. Force the hydrolyzed form because the matcher cannot infer it from row text alone.",
+      "evidence_pmid_or_url": "https://www.biocelltechnology.com (BioCell Collagen manufacturer; brand provenance for hydrolyzed chicken sternal cartilage MW ~5,500 Da)",
+      "reviewer": "PharmaGuide Clinician Team",
+      "review_date": "2026-05-24",
+      "clinical_review_status": "identity_routing_reviewed",
+      "review_scope": "context_identity_routing_only"
+    },
+    "317962": {
+      "id": "pure_encap_317962_dao_enzyme",
+      "brand": "Pure_Encapsulations",
+      "product_name": "DAO Enzyme",
+      "product_name_must_contain_any": [
+        "DAO Enzyme",
+        "DAO",
+        "Diamine Oxidase"
+      ],
+      "raw_ingredient_text": "Porcine Kidney Extract",
+      "set_canonical_id": "diamine_oxidase",
+      "set_canonical_source_db": "ingredient_quality_map",
+      "set_preferred_iqm_form": "diamine oxidase (unspecified)",
+      "rationale": "Pure Encapsulations DAO Enzyme uses purified porcine kidney protein extract as the source of histamine-degrading DAO enzyme activity (10,000 HDU per 4.2 mg dose - industry canonical). The row text 'Porcine Kidney Extract' alone is ambiguous (used in legitimate kidney glandulars for adrenal/urinary support, not DAO activity). Product name 'DAO Enzyme' + the 4.2 mg dose disambiguate to diamine_oxidase IQM parent. Single-form parent; form selection is low-risk.",
+      "evidence_pmid_or_url": "PMID 31807350 (Diamine oxidase supplementation improves symptoms in patients with histamine intolerance - content-verified via PubMed API 2026-05-24)",
+      "reviewer": "PharmaGuide Clinician Team",
+      "review_date": "2026-05-24",
+      "clinical_review_status": "identity_routing_reviewed",
+      "review_scope": "context_identity_routing_only"
+    },
+    "259304": {
+      "id": "natures_way_259304_barley_grass",
+      "brand": "Natures_Way",
+      "product_name": "Barley Grass",
+      "product_name_must_contain_any": [
+        "Barley Grass"
+      ],
+      "raw_ingredient_text": "Barley",
+      "set_canonical_id": "barley_grass",
+      "set_canonical_source_db": "ingredient_quality_map",
+      "set_preferred_iqm_form": "barley grass (unspecified)",
+      "rationale": "Natures Way Barley Grass / Barley Grass Powder uses dehydrated young barley grass (Hordeum vulgare leaf) - the bio_score, chlorophyll/SOD content, and nutritional profile of the grass differ from malt barley, barley seed flour, or beta-glucan extracts (from barley seed). The row text 'Barley' alone is ambiguous; the product name 'Barley Grass' is the safe disambiguator. Single-form parent; explicit form choice for consistency with other overrides.",
+      "evidence_pmid_or_url": "barley_grass IQM parent already exists; no new PMID required",
+      "reviewer": "PharmaGuide Clinician Team",
+      "review_date": "2026-05-24",
+      "clinical_review_status": "identity_routing_reviewed",
+      "review_scope": "context_identity_routing_only"
+    },
+    "259306": {
+      "id": "natures_way_259306_barley_grass_powder",
+      "brand": "Natures_Way",
+      "product_name": "Barley Grass Powder",
+      "product_name_must_contain_any": [
+        "Barley Grass"
+      ],
+      "raw_ingredient_text": "Barley",
+      "set_canonical_id": "barley_grass",
+      "set_canonical_source_db": "ingredient_quality_map",
+      "set_preferred_iqm_form": "barley grass (unspecified)",
+      "rationale": "See 259304 - same Natures Way product line, powder format.",
+      "evidence_pmid_or_url": "barley_grass IQM parent already exists; no new PMID required",
+      "reviewer": "PharmaGuide Clinician Team",
+      "review_date": "2026-05-24",
+      "clinical_review_status": "identity_routing_reviewed",
+      "review_scope": "context_identity_routing_only"
+    }
+  }
+}

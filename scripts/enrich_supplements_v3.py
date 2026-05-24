@@ -1359,6 +1359,93 @@ class SupplementEnricherV3:
         blocked_markers = BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST.get(source_id)
         return bool(blocked_markers and resolved_id in blocked_markers)
 
+    def _apply_context_canonical_override_match(
+        self,
+        ingredient: Dict,
+        quality_map: Dict,
+    ) -> Optional[Dict]:
+        """Return a synthetic IQM match_result honoring a cleaner-stamped
+        context override, or None.
+
+        Consumed BEFORE _match_quality_map for any row that
+        ``EnhancedDSLDNormalizer._apply_context_canonical_override`` stamped
+        with ``context_override_applied=True``. When all of:
+          - ``context_override_applied`` is True
+          - ``cleaner_canonical_id_override`` is set
+          - ``cleaner_preferred_iqm_form_override`` is set
+          - the parent + form exist under that parent in quality_map
+        are satisfied, we build a match_result mirroring the canonical
+        shape returned by _match_quality_map's form-match path and return
+        it. The match_tier is tagged ``curated_context_override`` so
+        downstream audits can identify these decisions.
+
+        FAIL-SAFE: if the override declares a form key that does NOT
+        resolve under the parent (typo / IQM drift / parent renamed),
+        we return None — the caller will fall through to normal
+        _match_quality_map matching. We log a WARNING so the rerun
+        verification catches the divergence. We do NOT silently swap
+        in an unspecified form, because the whole point of the override
+        is to force a specific form choice.
+
+        Spec: reports/not_scored_triage/cleaner_side_context_routing_spec.md
+        """
+        if not isinstance(ingredient, dict):
+            return None
+        if not ingredient.get("context_override_applied"):
+            return None
+        parent_id = ingredient.get("cleaner_canonical_id_override")
+        form_name = ingredient.get("cleaner_preferred_iqm_form_override")
+        override_id = ingredient.get("context_override_id") or "?"
+        if not parent_id or not form_name:
+            # Override is parent-only (no explicit form). Let normal
+            # matching run — the cleaner_canonical_id (now overwritten by
+            # the applier) constrains the parent via Phase 3 authority.
+            return None
+        parent = quality_map.get(parent_id)
+        # Use module-level logger if self.logger is unavailable (defensive —
+        # the helper may be exercised in unit tests that bypass __init__).
+        _log = getattr(self, "logger", None) or logging.getLogger(__name__)
+        if not parent or not isinstance(parent, dict):
+            _log.warning(
+                "context_canonical_override %s set_canonical_id=%r not found in "
+                "quality_map. Falling back to normal matching.",
+                override_id, parent_id,
+            )
+            return None
+        forms = parent.get("forms", {}) or {}
+        form_data = forms.get(form_name)
+        if not form_data or not isinstance(form_data, dict):
+            _log.warning(
+                "context_canonical_override %s set_preferred_iqm_form=%r not "
+                "found under parent %r. Falling back to normal matching "
+                "(NOT silently using unspecified form).",
+                override_id, form_name, parent_id,
+            )
+            return None
+
+        # Build the canonical match_result shape mirroring
+        # _match_quality_map's form-level return at scripts/enrich_supplements_v3.py:6447
+        bio_score = form_data.get("bio_score")
+        natural = form_data.get("natural", False)
+        # v3.6.0: score == bio_score (no natural+3 bake-in)
+        score = bio_score
+        return {
+            "canonical_id": parent_id,
+            "form_id": form_name,
+            "standard_name": parent.get("standard_name", parent_id),
+            "form_name": form_name,
+            "bio_score": bio_score,
+            "natural": natural,
+            "score": score,
+            "absorption": form_data.get("absorption"),
+            "notes": form_data.get("notes"),
+            "dosage_importance": form_data.get("dosage_importance", 1.0),
+            "category": parent.get("category", "other"),
+            "match_tier": "curated_context_override",
+            "context_override_id": override_id,
+            "context_override_applied": True,
+        }
+
     @staticmethod
     def _preserve_cleaner_safety_canonical(ingredient: Dict, quality_entry: Dict) -> None:
         """Attach safety canonical provenance without suppressing IQM scoring.
@@ -2745,10 +2832,24 @@ class SupplementEnricherV3:
                 if ingredient.get('canonical_source_db') == 'ingredient_quality_map'
                 else None
             )
-            match_result = self._match_quality_map(
-                ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
-                branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
+            # 2026-05-24: BEFORE normal IQM matching, check for a
+            # reviewer-signed cleaner-stamped context override. If present
+            # AND the (parent + preferred form) resolve in quality_map, use
+            # the synthetic match_result that forces the exact form choice
+            # (the form text in the row itself cannot disambiguate, e.g.
+            # BioCell hydrolyzed vs UC-II undenatured for the row
+            # "Chicken Sternum Collagen extract"). Fail-safe on form-key
+            # miss falls through to normal matching with a logged warning;
+            # never silently scores with the unspecified form. Spec:
+            # reports/not_scored_triage/cleaner_side_context_routing_spec.md
+            match_result = self._apply_context_canonical_override_match(
+                ingredient, quality_map
             )
+            if match_result is None:
+                match_result = self._match_quality_map(
+                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
+                    branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
+                )
             context_match_reason = pre_context_match_reason
             if context_match_reason == "kelp_fucoidan_marker_context":
                 context_match = self._match_quality_map(
@@ -2768,6 +2869,26 @@ class SupplementEnricherV3:
             if context_match_reason and match_result:
                 quality_entry["identity_decision_reason"] = "product_label_marker_context_match"
                 self._tag_fallback_decision(quality_entry, "clinical_fail_safe", context_match_reason)
+            # 2026-05-24: when the match came from a curated context override
+            # (BioCell hydrolyzed / DAO / barley_grass disambiguation), tag
+            # the quality_entry with the override-specific identity reason
+            # AND the override id so downstream audits can reconcile every
+            # fire against the JSON file. The override id is the slug from
+            # product_context_canonical_overrides.json.
+            if (
+                isinstance(match_result, dict)
+                and match_result.get("context_override_applied") is True
+            ):
+                quality_entry["identity_decision_reason"] = (
+                    "curated_context_canonical_override"
+                )
+                quality_entry["context_override_id"] = match_result.get(
+                    "context_override_id"
+                )
+                quality_entry["context_override_applied"] = True
+                quality_entry["cleaner_canonical_id_pre_override"] = (
+                    ingredient.get("cleaner_canonical_id_pre_override")
+                )
             self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
             self._preserve_cleaner_botanical_canonical(ingredient, quality_entry)
             is_quality_match = bool(

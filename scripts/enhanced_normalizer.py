@@ -72,6 +72,7 @@ from constants import (
     BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE,
     SOURCE_WRAPPER_NAMES,
     PRODUCT_LABEL_CORRECTIONS,
+    PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
 )
 
 # Import the UnmappedIngredientTracker
@@ -898,6 +899,26 @@ class EnhancedDSLDNormalizer:
             logger.warning(
                 "RC-5: failed to load product_label_corrections.json (%s). "
                 "Continuing without label corrections.",
+                _e,
+            )
+
+        # 2026-05-24: reviewer-signed per-product canonical_id + IQM form
+        # overrides. Keyed by str(dsld_id) → override entry. Loaded once,
+        # consumed by enrich_supplements_v3.py BEFORE _match_multi_form so
+        # the matcher cannot fall back to an unspecified form. Missing-file
+        # is allowed (cleanly empty dict). Spec: reports/not_scored_triage/
+        # cleaner_side_context_routing_spec.md
+        self._context_canonical_overrides_by_dsld_id: Dict[str, Dict[str, Any]] = {}
+        try:
+            ctx_doc = self._load_json(PRODUCT_CONTEXT_CANONICAL_OVERRIDES)
+            if isinstance(ctx_doc, dict):
+                self._context_canonical_overrides_by_dsld_id = (
+                    ctx_doc.get("overrides") or {}
+                )
+        except Exception as _e:  # pragma: no cover - defensive
+            logger.warning(
+                "Failed to load product_context_canonical_overrides.json (%s). "
+                "Continuing without context routing overrides.",
                 _e,
             )
 
@@ -3984,6 +4005,121 @@ class EnhancedDSLDNormalizer:
             rewrite(r)
         return ingredient_rows
 
+    def _load_context_canonical_overrides(self) -> Dict[str, Dict[str, Any]]:
+        """Public accessor for the reviewer-signed per-product canonical_id
+        overrides loaded from product_context_canonical_overrides.json at
+        init time. Returns the cached dict (str(dsld_id) → override entry).
+
+        Used by tests and by audit tooling to introspect overrides without
+        re-reading the file. Mutation of the returned dict is NOT supported —
+        callers must treat it as read-only. Spec:
+        reports/not_scored_triage/cleaner_side_context_routing_spec.md
+        """
+        return self._context_canonical_overrides_by_dsld_id
+
+    def _apply_context_canonical_override(
+        self,
+        product_id: Any,
+        product_name: Any,
+        row: Dict[str, Any],
+    ) -> Dict[str, Any]:
+        """Stamp curated canonical_id + IQM form override fields onto a row
+        when ALL THREE conditions match:
+
+        1. ``str(product_id)`` is in the override dict.
+        2. ``row['name']`` (or ``row['raw_source_text']``) equals the
+           override's ``raw_ingredient_text`` (case-insensitive, stripped).
+        3. ``product_name`` contains at least one substring listed in
+           ``product_name_must_contain_any`` (case-insensitive).
+
+        The original ``canonical_id`` / ``canonical_source_db`` are preserved
+        on the row as ``cleaner_canonical_id_pre_override`` /
+        ``cleaner_canonical_source_db_pre_override`` for audit.
+
+        The override fields stamped onto the row (consumed by
+        ``enrich_supplements_v3.py`` BEFORE ``_match_multi_form``):
+
+          - ``cleaner_canonical_id_override``
+          - ``cleaner_canonical_source_db_override``
+          - ``cleaner_preferred_iqm_form_override`` (optional)
+          - ``cleaner_match_text_for_iqm_override`` (optional)
+          - ``context_override_applied = True``
+          - ``context_override_id`` (override slug)
+
+        Fail-safe: if no override matches, the row is returned unchanged.
+        The applier never silently swaps an unrelated field; if the override
+        declares neither ``set_preferred_iqm_form`` nor ``set_match_text_for_iqm``,
+        the enricher will simply use the new ``canonical_id`` as parent
+        authority and run normal form matching (no override-induced form
+        choice).
+        """
+        if not isinstance(row, dict):
+            return row
+        entry = self._context_canonical_overrides_by_dsld_id.get(str(product_id))
+        if not entry:
+            return row
+
+        # Row text match (case-insensitive, stripped)
+        target_text = (entry.get("raw_ingredient_text") or "").strip().lower()
+        if not target_text:
+            return row
+        row_text = (row.get("name") or row.get("raw_source_text") or "")
+        if not isinstance(row_text, str):
+            return row
+        if row_text.strip().lower() != target_text:
+            return row
+
+        # Product-name guard (case-insensitive substring match against any)
+        guards = entry.get("product_name_must_contain_any") or []
+        if not isinstance(guards, list) or not guards:
+            # Defensive: schema requires a non-empty guard list; an entry
+            # without one is malformed — refuse to fire.
+            logger.warning(
+                "context_canonical_override %s lacks product_name_must_contain_any "
+                "guard; refusing to apply (defensive fail-safe).",
+                entry.get("id", "?"),
+            )
+            return row
+        pname = product_name if isinstance(product_name, str) else ""
+        pname_lower = pname.lower()
+        if not any(
+            isinstance(g, str) and g.strip().lower() in pname_lower
+            for g in guards
+        ):
+            return row
+
+        # All three conditions matched. Stamp override fields onto the row
+        # AND overwrite the row's canonical_id / canonical_source_db so the
+        # enricher's Phase 3 authority (cleaner_canonical_id) sees the new
+        # identity. The pre-override values are preserved in the
+        # *_pre_override audit fields.
+        row["cleaner_canonical_id_pre_override"] = row.get("canonical_id")
+        row["cleaner_canonical_source_db_pre_override"] = row.get("canonical_source_db")
+        row["canonical_id"] = entry.get("set_canonical_id")
+        row["canonical_source_db"] = entry.get("set_canonical_source_db")
+        row["cleaner_canonical_id_override"] = entry.get("set_canonical_id")
+        row["cleaner_canonical_source_db_override"] = entry.get(
+            "set_canonical_source_db"
+        )
+        if entry.get("set_preferred_iqm_form"):
+            row["cleaner_preferred_iqm_form_override"] = entry["set_preferred_iqm_form"]
+        if entry.get("set_match_text_for_iqm"):
+            row["cleaner_match_text_for_iqm_override"] = entry["set_match_text_for_iqm"]
+        row["context_override_applied"] = True
+        row["context_override_id"] = entry.get("id")
+        row["cleaner_match_method"] = "curated_context_override"
+
+        logger.info(
+            "context_canonical_override applied: pid=%s row='%s' → canonical_id=%s "
+            "form=%s (override_id=%s)",
+            product_id,
+            target_text,
+            entry.get("set_canonical_id"),
+            entry.get("set_preferred_iqm_form") or entry.get("set_match_text_for_iqm") or "(parent-only)",
+            entry.get("id"),
+        )
+        return row
+
     def normalize_product(self, raw_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Enhanced product normalization with improved ingredient mapping
@@ -4049,6 +4185,24 @@ class EnhancedDSLDNormalizer:
             nutritional_info = self._extract_nutritional_info(flattened_ingredients + other_ingredients_raw)
 
             active_ingredients = self._process_ingredients_enhanced(flattened_ingredients, is_active=True)
+
+            # 2026-05-24: apply reviewer-signed per-product canonical_id +
+            # IQM form overrides AFTER initial cleaner canonical resolution
+            # but BEFORE result emit. Each override is scoped to
+            # (dsld_id, raw_ingredient_text) AND guarded by
+            # product_name_must_contain_any. The applier overwrites the row's
+            # canonical_id / canonical_source_db so the enricher's Phase 3
+            # authority sees the new identity, and stamps additional override
+            # fields (cleaner_preferred_iqm_form_override, context_override_id,
+            # etc.) that enrich_supplements_v3.py consumes before
+            # _match_multi_form to force the exact IQM form. Spec:
+            # reports/not_scored_triage/cleaner_side_context_routing_spec.md
+            if product_id and self._context_canonical_overrides_by_dsld_id:
+                _product_fullname = raw_data.get("fullName", "") or ""
+                for _row in active_ingredients:
+                    self._apply_context_canonical_override(
+                        product_id, _product_fullname, _row
+                    )
 
             # Sprint E1.2.4 (revised 2026-05-13) — count of REAL raw inactives
             # the cleaner is expected to surface in the blob. Computed AFTER
