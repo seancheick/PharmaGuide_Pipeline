@@ -185,3 +185,122 @@ def test_rna_dna_no_new_clinical_claims_added(iqm):
         "rationale — alias-add must not modify the form notes / clinical "
         "rationale."
     )
+
+
+# ---------------------------------------------------------------------------
+# Commit #4 (Batch 2): cayenne_pepper new IQM parent
+# Spec: reports/not_scored_triage/track_BEF_parent_cayenne_pepper_spec.md
+# Distinct from existing capsaicin parent. Conservative bio_score=6.
+# ---------------------------------------------------------------------------
+
+
+def test_cayenne_pepper_iqm_parent_exists(iqm):
+    assert "cayenne_pepper" in iqm, "cayenne_pepper new IQM parent missing"
+    entry = iqm["cayenne_pepper"]
+    assert entry.get("standard_name") == "Cayenne Pepper"
+    assert entry.get("cui") == "C0006909"
+
+
+def test_cayenne_pepper_external_ids_inherited_from_botanical_db(iqm):
+    """UNII + RxCUI come from already-verified botanical_ingredients.cayenne_pepper."""
+    ids = iqm["cayenne_pepper"].get("external_ids", {})
+    assert ids.get("unii") == "6M47G7C4SY"
+    assert ids.get("rxcui") == "1006340"
+
+
+@pytest.mark.parametrize(
+    "expected_alias",
+    [
+        "cayenne",
+        "cayenne pepper",
+        "Capsicum annuum",
+        "cayenne fruit",
+        "cayenne pepper powder",
+        "cayenne pepper fruit powder",
+    ],
+)
+def test_cayenne_pepper_unspecified_form_aliases_include_label_variants(iqm, expected_alias):
+    form = iqm["cayenne_pepper"]["forms"]["cayenne pepper (unspecified)"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    assert expected_alias.lower() in aliases_lower, (
+        f"alias {expected_alias!r} missing from cayenne_pepper.bergamot (unspecified) — "
+        f"7 Cayenne products would not match."
+    )
+
+
+def test_cayenne_pepper_bio_score_is_six_not_capsaicin_seven(iqm):
+    """Cayenne_pepper bio_score=6 is intentionally ONE BELOW the existing
+    capsaicin (unspecified) bio_score=7. Whole-fruit supplementation provides
+    ~0.5-5 mg capsaicin per 450-500 mg dose, at the low end of the 2-10 mg/day
+    capsaicinoid range. Conservative scoring is the safety floor."""
+    form = iqm["cayenne_pepper"]["forms"]["cayenne pepper (unspecified)"]
+    assert form["bio_score"] == 6, (
+        f"cayenne_pepper bio_score changed from 6 to {form['bio_score']} — "
+        f"must remain conservative (one below capsaicin's 7)."
+    )
+    # cross-check: ensure capsaicin parent is unchanged at 7
+    cap = iqm["capsaicin"]["forms"]["capsaicin (unspecified)"]
+    assert cap["bio_score"] == 7, (
+        f"capsaicin (unspecified) bio_score drifted to {cap['bio_score']}; "
+        f"Cayenne batch must not touch the existing capsaicin parent."
+    )
+
+
+@pytest.mark.parametrize(
+    "forbidden_alias",
+    [
+        "chili pepper",
+        "hot pepper",
+        "jalapeño",
+        "habanero",
+        "ghost pepper",
+        "paprika",
+        "bell pepper",
+        "tabasco",
+    ],
+)
+def test_cayenne_pepper_aliases_do_not_include_generic_chili_pepper_terms(iqm, forbidden_alias):
+    """Per dev review + research subagent finding: 'chili pepper' is a class
+    name spanning 5 Capsicum species with different capsaicinoid densities.
+    Paprika is C. annuum but 30-500× milder than cayenne. These terms must
+    NOT be aliases on cayenne_pepper or any of its forms."""
+    entry = iqm["cayenne_pepper"]
+    top_aliases_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_alias.lower() not in top_aliases_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        form_aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        assert forbidden_alias.lower() not in form_aliases_lower, (
+            f"forbidden alias {forbidden_alias!r} found in cayenne_pepper.{fname}.aliases — "
+            f"would false-match other Capsicum species with different capsaicinoid profiles."
+        )
+
+
+def test_cayenne_pepper_notes_include_required_safety_and_evidence_markers(iqm):
+    """Per spec: notes must reference (a) FDA GRAS 182.10 as identity/safety
+    context, (b) NIH ODS Weight Loss factsheet GI distress claim, (c) explicit
+    'antiplatelet ... THEORETICAL' framing for warfarin/aspirin interaction
+    (NOT documented), (d) explicit 'NCCIH does NOT' statement to prevent
+    future drift back to false NCCIH citation."""
+    form = iqm["cayenne_pepper"]["forms"]["cayenne pepper (unspecified)"]
+    notes = form.get("notes", "").lower()
+    assert "182.10" in notes, "FDA GRAS 21 CFR 182.10 reference missing from notes"
+    assert "weight loss" in notes or "nih ods" in notes, "NIH ODS WeightLoss factsheet attribution missing"
+    assert "theoretical" in notes and "antiplatelet" in notes, (
+        "Antiplatelet interaction must be explicitly framed as THEORETICAL "
+        "(per Tan 2021 BJCP review). Not documented clinically."
+    )
+    assert "nccih does not" in notes, (
+        "Notes must explicitly state NCCIH does NOT maintain a cayenne-specific "
+        "oral-supplement monograph (only chronic-pain digest, topical context). "
+        "Prevents future drift back to false NCCIH citation."
+    )
+
+
+def test_cayenne_pepper_match_rules_exclusions_block_other_capsicum_species(iqm):
+    exclusions = iqm["cayenne_pepper"].get("match_rules", {}).get("exclusions", [])
+    exclusions_lower = [e.lower() for e in exclusions]
+    for required in ["chili pepper", "jalapeño", "habanero", "paprika"]:
+        assert required in exclusions_lower, (
+            f"match_rules.exclusions must include {required!r} — "
+            f"belt-and-suspenders against false-matching other Capsicum species."
+        )

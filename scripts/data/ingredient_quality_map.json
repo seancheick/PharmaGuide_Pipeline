@@ -62947,5 +62947,70 @@
     "external_ids": {},
     "rxcui_note": "Pediococcus pentosaceus NCBI taxid 1255; no specific RxNorm concept",
     "aliases": []
+  },
+  "cayenne_pepper": {
+    "standard_name": "Cayenne Pepper",
+    "category": "herbs",
+    "cui": "C0006909",
+    "forms": {
+      "cayenne pepper (unspecified)": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low \u2014 variable per-mg capsaicin content (0.1-1% by mass)",
+        "notes": "Capsicum annuum (Solanaceae) whole-fruit powder. Contains capsaicin (8-methyl-N-vanillyl-6-nonenamide) at 0.1-1% by mass \u2014 a 450-500 mg cayenne supplement provides ~0.5-5 mg capsaicin. FDA GRAS spice/seasoning under 21 CFR 182.10 [primary_regulatory \u2014 identity/safety context only, NOT clinical-efficacy evidence]. Capsicum/capsaicinoid context (NOT cayenne-specific): NIH ODS Weight Loss factsheet notes 'Supplementation with 4 mg/day capsaicinoids can cause gastrointestinal distress'; capsaicinoid dose range across studies 0.2-33 mg/day [clinical_review, capsicum-class context]. Sci Rep 2020 Capsicum annuum meta-analysis (11 RCTs, n=609) showed significant LDL-C reduction (SMD -0.39); only 3/11 trials used pepper powder/juice at ~1.25 g/day \u2014 whole-cayenne 450-500 mg dose is NOT directly evaluated in high-quality RCTs [clinical_review, limited applicability]. Safety: GI irritation at supplement doses (NIH ODS); antiplatelet activity is THEORETICAL \u2014 preclinical platelet inhibition (PMID 6528310, 1786800) but clinical significance of warfarin/aspirin interaction is unknown/limited per Tan 2021 BJCP systematic review of herb-warfarin interactions [tertiary_not_used_for_scoring for clinical magnitude; case_report for mechanism]. Conservative scoring reflects limited whole-cayenne-oral RCT base. NCCIH does NOT maintain a cayenne-specific oral-supplement monograph (only chronic-pain digest addressing TOPICAL capsicum). Distinct from capsaicin IQM parent which scores standardized capsaicinoid extracts (Capsimax, etc.).",
+        "aliases": [
+          "cayenne",
+          "cayenne pepper",
+          "Capsicum annuum",
+          "capsicum annuum var. annuum",
+          "cayenne fruit",
+          "cayenne fruit powder",
+          "cayenne pepper powder",
+          "cayenne pepper fruit powder",
+          "cayenne extract",
+          "cayenne pepper extract",
+          "red pepper"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "chili pepper",
+        "hot pepper",
+        "jalape\u00f1o",
+        "habanero",
+        "ghost pepper",
+        "paprika",
+        "bell pepper"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-23",
+      "research_status": "validated"
+    },
+    "aliases": [
+      "C0006909"
+    ],
+    "external_ids": {
+      "unii": "6M47G7C4SY",
+      "rxcui": "1006340"
+    },
+    "rxcui_note": "GSRS verified \u2014 Capsicum annuum, structurallyDiverse. 21 CFR 310.536 is regulatory context only (OTC nailbiting-deterrent rule with inadequate-evidence finding for that drug use); NOT a supplement-effectiveness citation."
   }
 }
