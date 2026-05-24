@@ -629,21 +629,89 @@ def test_enricher_returns_none_when_override_is_parent_only(enricher_with_iqm, i
 
 
 # ---------------------------------------------------------------------------
-# Tier 3: live corpus verification (pass only after brand rerun in commit 2)
+# Tier 3: live raw DSLD JSON → cleaner → enricher integration tests.
+# Loads the actual raw DSLD product JSONs from the local staging dataset
+# and runs them through the real cleaner + enricher. Skips when the
+# staging dataset is not mounted (CI environments without /Users/...).
+# Verified locally 2026-05-24 via /tmp/verify_context_routing_live.py;
+# these tests lock the same behavior in pytest CI when the dataset is
+# available.
 # ---------------------------------------------------------------------------
 
 
-def test_live_corpus_265081_now_emits_collagen_canonical_id():
-    """After Jarrow rerun, DSLD 265081 IQD row must emit
-    canonical_id='collagen' + matched_form='hydrolyzed collagen peptides'
-    + context_override_id='jarrow_265081_biocell_hydrolyzed'."""
-    pytest.skip("requires brand rerun in commit 2")
+RAW_DSLD_STAGING_ROOT = Path("/Users/seancheick/Documents/DataSetDsld/staging/brands")
 
 
-def test_live_corpus_317962_now_emits_diamine_oxidase_canonical_id():
-    pytest.skip("requires brand rerun in commit 2")
+def _load_raw_dsld(brand: str, dsld_id: str):
+    """Load raw DSLD JSON for a specific (brand, dsld_id). Returns None if
+    the staging dataset is not mounted (CI / fresh checkout)."""
+    if not RAW_DSLD_STAGING_ROOT.exists():
+        return None
+    p = RAW_DSLD_STAGING_ROOT / brand / f"{dsld_id}.json"
+    if not p.exists():
+        return None
+    return json.loads(p.read_text())
 
 
-@pytest.mark.parametrize("dsld_id", ["259304", "259306"])
-def test_live_corpus_barley_grass_now_emits_barley_grass_canonical_id(dsld_id):
-    pytest.skip("requires brand rerun in commit 2")
+@pytest.mark.parametrize("brand,dsld_id,row_name,override_id,canonical,form,bio_score", [
+    ("Jarrow_Formulas",     "265081", "Chicken Sternum Collagen extract",
+     "jarrow_265081_biocell_hydrolyzed",       "collagen",        "hydrolyzed collagen peptides", 11),
+    ("Pure_Encapsulations", "317962", "Porcine Kidney Extract",
+     "pure_encap_317962_dao_enzyme",            "diamine_oxidase", "diamine oxidase (unspecified)", 5),
+    ("Natures_Way",         "259304", "Barley",
+     "natures_way_259304_barley_grass",         "barley_grass",    "barley grass (unspecified)",    5),
+    ("Natures_Way",         "259306", "Barley",
+     "natures_way_259306_barley_grass_powder",  "barley_grass",    "barley grass (unspecified)",    5),
+])
+def test_live_raw_dsld_through_cleaner_and_enricher(
+    normalizer, enricher_with_iqm, iqm,
+    brand, dsld_id, row_name, override_id, canonical, form, bio_score,
+):
+    """End-to-end behavioral test: load actual raw DSLD JSON, run through
+    cleaner.normalize_product, find the target row, verify the cleaner
+    stamped the override; then feed to enricher's
+    _apply_context_canonical_override_match and verify the synthetic
+    match_result emits the expected canonical_id + form + bio_score +
+    override_id. Skip when the staging dataset is not mounted."""
+    raw = _load_raw_dsld(brand, dsld_id)
+    if raw is None:
+        pytest.skip(
+            f"raw DSLD staging dataset not mounted at {RAW_DSLD_STAGING_ROOT} "
+            f"or {brand}/{dsld_id}.json missing"
+        )
+
+    cleaned = normalizer.normalize_product(raw)
+
+    # Locate the target active-ingredient row
+    target_row = None
+    for r in cleaned.get("activeIngredients") or []:
+        if (r.get("name") or "").strip().lower() == row_name.strip().lower():
+            target_row = r
+            break
+    assert target_row is not None, (
+        f"DSLD {dsld_id}: no active row named {row_name!r}. "
+        f"Active row names: {[r.get('name') for r in (cleaned.get('activeIngredients') or [])]}"
+    )
+
+    # Cleaner stamps
+    assert target_row.get("context_override_applied") is True, (
+        f"DSLD {dsld_id}: cleaner did NOT stamp context_override_applied"
+    )
+    assert target_row.get("context_override_id") == override_id
+    assert target_row.get("cleaner_canonical_id_override") == canonical
+    assert target_row.get("cleaner_preferred_iqm_form_override") == form
+    # Applier overwrites the row's canonical_id so Phase 3 authority sees it
+    assert target_row.get("canonical_id") == canonical
+
+    # Enricher consumption
+    match_result = enricher_with_iqm._apply_context_canonical_override_match(
+        target_row, iqm
+    )
+    assert match_result is not None, (
+        f"DSLD {dsld_id}: enricher helper returned None despite stamped override"
+    )
+    assert match_result["canonical_id"] == canonical
+    assert match_result["form_id"] == form
+    assert match_result["bio_score"] == bio_score
+    assert match_result["match_tier"] == "curated_context_override"
+    assert match_result["context_override_id"] == override_id
