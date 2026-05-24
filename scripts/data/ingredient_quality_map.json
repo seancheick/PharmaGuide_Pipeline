@@ -63067,5 +63067,87 @@
       "unii": "3729L8MA2C",
       "rxcui": "253157"
     }
+  },
+  "english_ivy": {
+    "standard_name": "English Ivy",
+    "category": "herbs",
+    "cui": "C0949841",
+    "forms": {
+      "english ivy leaf extract (unspecified)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate \u2014 saponin glycosides hydrolyzed in vivo to alpha-hederin",
+        "notes": "Hedera helix (Araliaceae) leaf extract. Contains saponin glycosides (hederacosides B, C, D, E, F) which hydrolyze in vivo to alpha-hederin, the active expectorant. PRIMARY ANCHOR: EMA HMPC Final European Union herbal monograph (EMA/HMPC/289430/2009 Rev. 2, 13/08/2018) \u2014 WELL-ESTABLISHED USE for ivy leaf preparations 'as an expectorant ... for productive (chesty) coughs' in 'adults, adolescents and children from the age of 2 years' [primary_regulatory] (https://www.ema.europa.eu/en/medicines/herbal/hederae-helicis-folium). SECONDARY EVIDENCE: Holzinger 2021 updated systematic review (PMID 33523253) \u2014 'Ivy leaf preparations are safe for use in cough due to acute URTIs and bronchitis. However, effects are minimal at best and of uncertain clinical importance' [clinical_review \u2014 important caveat: HMPC status reflects regulatory tradition; clinical effect magnitude is modest]. Typical adult dose 30-100 mg standardized extract 2-3x daily. Conservative scoring on unspecified form because standardization marker (hederacoside C % or alpha-hederin %) not declared. Safety: well-tolerated in HMPC review; rare GI upset; possible mild allergic skin reactions to Hedera helix in sensitized individuals [primary_regulatory via HMPC].",
+        "aliases": [
+          "english ivy",
+          "english ivy leaf",
+          "english ivy leaf extract",
+          "english ivy extract",
+          "ivy leaf extract",
+          "Hedera helix",
+          "hedera helix leaf extract",
+          "ivy extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.25,
+          "range_low": 0.15,
+          "range_high": 0.4,
+          "quality": "moderate"
+        }
+      },
+      "english ivy standardized (hederacoside C marker)": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "moderate-good \u2014 standardization-validated saponin content",
+        "notes": "Hedera helix leaf extract standardized for hederacoside C content (the precursor saponin that hydrolyzes in vivo to alpha-hederin, the active expectorant). Standardization provides validated per-mg saponin dose. EMA HMPC well-established-use status [primary_regulatory] applies; standardized commercial extracts (Prospan EA 575, etc.) are what the clinical evidence base actually studies. Holzinger 2021 (PMID 33523253) 'effects minimal at best' caveat still applies \u2014 bio_score uplift from unspecified (8) to standardized (10) reflects the standardization-validated dose, NOT a stronger efficacy claim [clinical_review]. DOUBLE-SCORE GUARD: hederacoside C in this form acts as a STANDARDIZATION MARKER for the parent extract, not a separately-scored active. Hederacoside C is NOT included in any alias list \u2014 the enricher-side fix (route hederacoside C row as standardization marker and promote parent ivy row to this standardized form) is a deferred separate slice.",
+        "aliases": [
+          "english ivy standardized extract",
+          "english ivy extract standardized",
+          "ivy leaf extract 5% hederacoside",
+          "ivy leaf extract 10% hederacoside"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.45,
+          "quality": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "ground ivy",
+        "Glechoma hederacea",
+        "poison ivy",
+        "Toxicodendron",
+        "boston ivy",
+        "Parthenocissus",
+        "Hedera hibernica"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 0.95,
+      "missing_fields": [
+        "rxcui"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-23",
+      "research_status": "validated"
+    },
+    "aliases": [
+      "C0949841"
+    ],
+    "external_ids": {
+      "unii": "ZP9XFG71A7"
+    }
   }
 }

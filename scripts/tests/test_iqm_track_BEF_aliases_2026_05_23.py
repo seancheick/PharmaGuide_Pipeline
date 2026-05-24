@@ -394,3 +394,130 @@ def test_bee_pollen_notes_include_required_evidence_and_safety_markers(iqm):
         "Pregnancy claim must be tagged tertiary_not_used_for_scoring (no "
         "authoritative monograph)."
     )
+
+
+# ---------------------------------------------------------------------------
+# Commit #6 (Batch 2): english_ivy new IQM parent
+# Spec: reports/not_scored_triage/track_BEF_parent_english_ivy_spec.md
+# Strongest evidence anchor in Batch 2: EMA HMPC Rev. 2 well-established use.
+# Two forms: unspecified (bio_score=8) + standardized hederacoside-C marker (10).
+# CRITICAL double-score guard: Hederacoside C must NOT be aliased as a separate
+# scorable active.
+# ---------------------------------------------------------------------------
+
+
+def test_english_ivy_iqm_parent_exists(iqm):
+    assert "english_ivy" in iqm
+    entry = iqm["english_ivy"]
+    assert entry.get("standard_name") == "English Ivy"
+    assert entry.get("cui") == "C0949841"
+
+
+def test_english_ivy_external_ids_include_verified_unii(iqm):
+    """FDA UNII ZP9XFG71A7 verified via precision.fda.gov ('HEDERA HELIX TOP').
+    Was missing from botanical_ingredients; added here per subagent finding."""
+    ids = iqm["english_ivy"].get("external_ids", {})
+    assert ids.get("unii") == "ZP9XFG71A7"
+
+
+@pytest.mark.parametrize(
+    "expected_alias",
+    [
+        "english ivy",
+        "english ivy leaf extract",
+        "ivy leaf extract",
+        "Hedera helix",
+        "hedera helix leaf extract",
+    ],
+)
+def test_english_ivy_unspecified_form_aliases_include_label_variants(iqm, expected_alias):
+    form = iqm["english_ivy"]["forms"]["english ivy leaf extract (unspecified)"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    assert expected_alias.lower() in aliases_lower
+
+
+def test_english_ivy_unspecified_bio_score_is_eight(iqm):
+    form = iqm["english_ivy"]["forms"]["english ivy leaf extract (unspecified)"]
+    assert form["bio_score"] == 8
+
+
+def test_english_ivy_standardized_form_exists_and_bio_score_is_ten(iqm):
+    forms = iqm["english_ivy"].get("forms", {})
+    assert "english ivy standardized (hederacoside C marker)" in forms
+    form = forms["english ivy standardized (hederacoside C marker)"]
+    assert form["bio_score"] == 10
+
+
+def test_english_ivy_DOUBLE_SCORE_GUARD_no_bare_hederacoside_c_alias(iqm):
+    """CRITICAL per dev review: Hederacoside C must NOT be a standalone alias
+    on any form. It is the standardization MARKER for the parent ivy extract,
+    not a separately-scorable active. Adding it as an alias would cause
+    products like Natures_Way 327886 Bronchial Soothe (which declares both
+    English Ivy Leaf Extract 86mg AND Hederacoside C 9.4mg) to be DOUBLE-SCORED.
+
+    The enricher-side fix (route hederacoside C row as standardization marker
+    and promote parent ivy row to the standardized form) is a separate
+    deferred slice. Until that ships, the safe interim is: hederacoside C
+    row stays unmatched (NOT_SCORED) so it doesn't add a second score.
+    """
+    entry = iqm["english_ivy"]
+    forbidden = ["hederacoside c", "hederacoside C", "Hederacoside C", "hederacoside-c"]
+    for fname, fdata in entry.get("forms", {}).items():
+        aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        for bad in forbidden:
+            assert bad.lower() not in aliases_lower, (
+                f"DOUBLE-SCORE GUARD VIOLATED: '{bad}' found in "
+                f"english_ivy.{fname}.aliases. Hederacoside C must remain a "
+                f"standardization marker only, not a separately-scored active. "
+                f"See spec § 'Double-score guard'."
+            )
+
+
+@pytest.mark.parametrize(
+    "forbidden_alias",
+    [
+        "ground ivy",
+        "Glechoma hederacea",
+        "poison ivy",
+        "Toxicodendron",
+        "boston ivy",
+        "Parthenocissus",
+        "Hedera hibernica",
+    ],
+)
+def test_english_ivy_does_not_match_lookalike_species(iqm, forbidden_alias):
+    """Hedera helix is botanically distinct from common look-alikes:
+    Ground Ivy (Glechoma, Lamiaceae), Poison Ivy (Toxicodendron,
+    Anacardiaceae), Boston Ivy (Parthenocissus, Vitaceae), Hedera hibernica
+    (close relative, same genus). Verified via Kew + Missouri Botanical
+    Garden + BSBI per subagent research."""
+    entry = iqm["english_ivy"]
+    top_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_alias.lower() not in top_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        assert forbidden_alias.lower() not in [
+            a.lower() for a in fdata.get("aliases", [])
+        ]
+
+
+def test_english_ivy_unspecified_notes_include_HMPC_and_minimal_caveat(iqm):
+    """Notes MUST include the primary anchor (EMA HMPC Rev. 2 well-established
+    use) AND the important caveat from Holzinger 2021 PMID 33523253 'effects
+    minimal at best and of uncertain clinical importance'. Both required to
+    keep the IQM honest about the evidence ceiling."""
+    form = iqm["english_ivy"]["forms"]["english ivy leaf extract (unspecified)"]
+    notes = form.get("notes", "")
+    notes_lower = notes.lower()
+    assert "hmpc" in notes_lower or "hmpc/289430" in notes_lower, (
+        "EMA HMPC monograph reference missing from notes."
+    )
+    assert "well-established" in notes_lower, (
+        "HMPC 'well-established use' qualifier missing — required by spec."
+    )
+    assert "33523253" in notes or "minimal at best" in notes_lower, (
+        "Holzinger 2021 PMID 33523253 'effects minimal at best' caveat missing — "
+        "required to qualify the regulatory anchor."
+    )
+    assert "primary_regulatory" in notes, (
+        "EMA HMPC must be tagged primary_regulatory."
+    )
