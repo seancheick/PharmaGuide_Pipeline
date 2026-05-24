@@ -304,3 +304,93 @@ def test_cayenne_pepper_match_rules_exclusions_block_other_capsicum_species(iqm)
             f"match_rules.exclusions must include {required!r} — "
             f"belt-and-suspenders against false-matching other Capsicum species."
         )
+
+
+# ---------------------------------------------------------------------------
+# Commit #5 (Batch 2): bee_pollen new IQM parent
+# Spec: reports/not_scored_triage/track_BEF_parent_bee_pollen_spec.md
+# Conservative bio_score=5 — umbrella review PMID 31435975 explicitly concluded
+# "Evidence regarding bee pollen is too limited to draw any conclusion on its
+# clinical efficacy." Critical safety: NCCIH-documented pollen-allergy /
+# anaphylaxis risk (case_report PMC4509665); single warfarin case (PMID 21098375).
+# ---------------------------------------------------------------------------
+
+
+def test_bee_pollen_iqm_parent_exists(iqm):
+    assert "bee_pollen" in iqm
+    entry = iqm["bee_pollen"]
+    assert entry.get("standard_name") == "Bee Pollen"
+    assert entry.get("cui") == "C0795585"
+
+
+def test_bee_pollen_external_ids_inherited_from_botanical_db(iqm):
+    ids = iqm["bee_pollen"].get("external_ids", {})
+    assert ids.get("unii") == "3729L8MA2C"
+    assert ids.get("rxcui") == "253157"
+
+
+@pytest.mark.parametrize(
+    "expected_alias",
+    ["bee pollen", "bee pollen extract", "bee pollen granules", "pollen granules"],
+)
+def test_bee_pollen_unspecified_form_aliases_include_label_variants(iqm, expected_alias):
+    form = iqm["bee_pollen"]["forms"]["bee pollen (unspecified)"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    assert expected_alias.lower() in aliases_lower
+
+
+def test_bee_pollen_bio_score_is_five(iqm):
+    """Bio_score=5 per PMID 31435975 umbrella-review conclusion: 'Evidence
+    regarding bee pollen is too limited to draw any conclusion on its
+    clinical efficacy.' Lower than cayenne (6, documented mechanism)
+    because bee pollen has no comparable single-compound mechanism."""
+    form = iqm["bee_pollen"]["forms"]["bee pollen (unspecified)"]
+    assert form["bio_score"] == 5
+
+
+@pytest.mark.parametrize(
+    "forbidden_alias",
+    ["propolis", "royal jelly", "honey", "beeswax", "bee venom"],
+)
+def test_bee_pollen_aliases_do_not_include_other_bee_products(iqm, forbidden_alias):
+    """Propolis (hive resin), royal jelly (worker-bee gland secretion), honey
+    (nectar sweetener), beeswax (structural wax) are distinct bee products
+    with different chemistries and uses. Must NOT match bee_pollen parent."""
+    entry = iqm["bee_pollen"]
+    top_aliases_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_alias.lower() not in top_aliases_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        assert forbidden_alias.lower() not in [
+            a.lower() for a in fdata.get("aliases", [])
+        ]
+
+
+def test_bee_pollen_notes_include_required_evidence_and_safety_markers(iqm):
+    """Notes MUST include the verified source-quality-tagged claims:
+    - PMID 31435975 'evidence too limited' as primary score-rationale anchor
+    - NCCIH allergy URL (authoritative_public_health, NOT primary_regulatory)
+    - Warfarin framed as SINGLE case-report signal (PMID 21098375), not
+      established broad interaction
+    - Pregnancy explicitly flagged tertiary_not_used_for_scoring (no
+      authoritative monograph)
+    """
+    form = iqm["bee_pollen"]["forms"]["bee pollen (unspecified)"]
+    notes = form.get("notes", "")
+    notes_lower = notes.lower()
+    assert "31435975" in notes, "Umbrella-review primary efficacy anchor missing"
+    assert "too limited" in notes_lower, "PMID 31435975 verbatim 'too limited' quote missing"
+    assert "nccih.nih.gov" in notes_lower or "seasonal-allergies" in notes_lower, (
+        "NCCIH Seasonal Allergies URL missing"
+    )
+    assert "authoritative_public_health" in notes, (
+        "NCCIH allergy citation must be tagged authoritative_public_health, "
+        "not primary_regulatory (per dev review)."
+    )
+    assert "21098375" in notes, "PMID 21098375 warfarin single-case-report citation missing"
+    assert "single" in notes_lower and "case report" in notes_lower, (
+        "Warfarin claim must be framed as SINGLE case report, not established interaction."
+    )
+    assert "tertiary_not_used_for_scoring" in notes, (
+        "Pregnancy claim must be tagged tertiary_not_used_for_scoring (no "
+        "authoritative monograph)."
+    )

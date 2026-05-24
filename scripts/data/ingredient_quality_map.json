@@ -63012,5 +63012,60 @@
       "rxcui": "1006340"
     },
     "rxcui_note": "GSRS verified \u2014 Capsicum annuum, structurallyDiverse. 21 CFR 310.536 is regulatory context only (OTC nailbiting-deterrent rule with inadequate-evidence finding for that drug use); NOT a supplement-effectiveness citation."
+  },
+  "bee_pollen": {
+    "standard_name": "Bee Pollen",
+    "category": "other",
+    "cui": "C0795585",
+    "forms": {
+      "bee pollen (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "low \u2014 variable composition, no standardized marker",
+        "notes": "Pollen collected by Apis mellifera. Composition varies significantly by floral source, geography, and season \u2014 typical content: proteins (10-40%), free amino acids, B-vitamins, flavonoids, phenolics, carotenoids, fatty acids. No single therapeutic standardization marker. Primary efficacy anchor: Antonelli et al. 2019 umbrella review (PMID 31435975) of 5 systematic reviews concluded 'Evidence regarding bee pollen is too limited to draw any conclusion on its clinical efficacy' [clinical_review]. No Cochrane review. No EFSA or NIH ODS factsheet specific to oral bee pollen. SAFETY: (a) Anaphylaxis risk in bee-product- or pollen-allergic individuals \u2014 NCCIH Seasonal Allergies page (https://www.nccih.nih.gov/health/seasonal-allergies-at-a-glance) states 'people with pollen allergies may have allergic reactions to bee products, such as bee pollen, honey, royal jelly, and propolis' [authoritative_public_health]; 10+ documented systemic-reaction case reports including cross-sensitization with Compositae family (ragweed, dandelion, mugwort) per PMC4509665 case report and literature review [case_report]. (b) Warfarin: SINGLE published case report PMID 21098375 (71-year-old male, INR 7.1 vs therapeutic 2.0-3.0 after one month on bee pollen, 'probable' per Drug Interaction Probability Scale) [case_report \u2014 signal only, NOT established broad interaction]. (c) Pregnancy: theoretical uterine-stimulation concern cited by tertiary consumer sources (WebMD/Healthline); no authoritative NIH/EMA/FDA monograph confirms contraindication [tertiary_not_used_for_scoring]. Conservative scoring (bio_score=5) reflects 'evidence too limited' primary anchor + serious allergy safety signal.",
+        "aliases": [
+          "bee pollen",
+          "bee pollen extract",
+          "bee pollen granules",
+          "pollen granules"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "propolis",
+        "royal jelly",
+        "honey",
+        "beeswax",
+        "bee venom"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-23",
+      "research_status": "validated"
+    },
+    "aliases": [
+      "C0795585"
+    ],
+    "external_ids": {
+      "unii": "3729L8MA2C",
+      "rxcui": "253157"
+    }
   }
 }
