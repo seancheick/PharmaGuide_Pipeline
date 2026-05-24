@@ -734,7 +734,16 @@ def test_horse_chestnut_seed_notes_include_verified_evidence_and_safety_markers(
 # ---------------------------------------------------------------------------
 # Batch 3 commit B: purple_corn_extract new IQM parent
 # Conservative bio_score=5 (parity with bee_pollen). Single small RCT
-# (Finkel 2013 PMID 28394146 n=30 @ 300mg). No NCCIH/NIH ODS factsheet.
+# (Finkel 2013, n=30 @ 300mg, SAGE Journals DOI 10.1177/2156587213482942).
+# NO PubMed PMID is cited or available — the subagent verified the DOI only.
+# Per critical_no_hallucinated_citations: do NOT introduce a PMID for this
+# entry without first running scripts/api_audit/verify_pubmed_references.py
+# against PubMed and confirming the title is about purple corn / anthocyanins.
+# (A prior draft referenced PMID 28394146 — that PMID actually points to
+# "Solace in solidarity: Disability friendship networks buffer well-being"
+# in Rehabilitation Psychology, fully unrelated. Verified ghost. Do not
+# resurrect.)
+# No NCCIH / NIH ODS / EFSA monograph for purple corn extract.
 # Per dev review: do NOT alias bare "Zea mays" — too broad (sweet corn,
 # corn starch, corn silk all are Zea mays).
 # ---------------------------------------------------------------------------
