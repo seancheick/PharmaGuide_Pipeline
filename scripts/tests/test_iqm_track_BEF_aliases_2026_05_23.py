@@ -837,3 +837,107 @@ def test_purple_corn_extract_notes_include_required_evidence_markers(iqm):
     assert "thin" in notes_lower or "limited" in notes_lower or "too limited" in notes_lower, (
         "Notes must explicitly qualify the evidence base as thin/limited."
     )
+
+
+# ---------------------------------------------------------------------------
+# Batch 3 commit C: BioCell hydrolyzed collagen — narrow alias add to existing
+# collagen.forms[hydrolyzed collagen peptides] (bio_score=11). Critical
+# negative-scope guards against UC-II misclassification.
+#
+# Subagent a828775bc5ce58a11 verified Jarrow 265081 "Type II Bioavailable
+# Collagen Complex" is BioCell hydrolyzed chicken sternal cartilage extract
+# (MW ~5,500 Da; BioCell Tech patents US 6,780,841 / US 8,563,045), NOT
+# UC-II/undenatured (InterHealth, 40 mg/day immune-tolerance pathway).
+#
+# Per dev review: do NOT add a bare "Chicken Sternum Collagen extract"
+# global alias — risks false-match on Korean/Chinese UC-II OEMs using same
+# phrase. The matcher does not support brand/context-gated aliases, so the
+# Jarrow 265081 product-specific fix is DEFERRED to a separate cleaner-side
+# product-context routing slice. Until that ships, Jarrow 265081 stays
+# NOT_SCORED — the safer outcome than risking UC-II misclassification.
+# ---------------------------------------------------------------------------
+
+
+def test_collagen_hydrolyzed_form_includes_existing_biocell_branded_aliases(iqm):
+    """Sanity check that the existing BioCell-branded aliases on the
+    hydrolyzed form are preserved (they were added in prior commits)."""
+    form = iqm["collagen"]["forms"]["hydrolyzed collagen peptides"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    for expected in [
+        "biocell collagen",
+        "biocell collagen ii",
+        "biocell collagen type ii",
+        "biocell collagen proprietary sternal cartilage extract",
+    ]:
+        assert expected in aliases_lower, (
+            f"existing BioCell alias {expected!r} missing — must be preserved"
+        )
+
+
+def test_collagen_hydrolyzed_form_includes_pmid_verbatim_biocell_alias(iqm):
+    """New BioCell-prefixed alias matching PMID 22486722 / 22956862
+    verbatim title 'hydrolyzed chicken sternal cartilage extract'.
+    BioCell-prefixed only — never bare."""
+    form = iqm["collagen"]["forms"]["hydrolyzed collagen peptides"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    assert "biocell hydrolyzed chicken sternal cartilage extract" in aliases_lower
+
+
+def test_collagen_hydrolyzed_bio_score_pin(iqm):
+    """bio_score=11 preserved (existing — was set by prior batches with
+    Crowley 2009 + Lugo 2016 PMIDs already content-verified)."""
+    form = iqm["collagen"]["forms"]["hydrolyzed collagen peptides"]
+    assert form["bio_score"] == 11
+
+
+def test_collagen_undenatured_bio_score_pin(iqm):
+    form = iqm["collagen"]["forms"]["undenatured collagen"]
+    assert form["bio_score"] == 9
+
+
+@pytest.mark.parametrize(
+    "form_name",
+    ["hydrolyzed collagen peptides", "undenatured collagen"],
+)
+def test_collagen_forms_do_NOT_include_bare_chicken_sternum_collagen_extract(
+    iqm, form_name
+):
+    """CRITICAL DOUBLE-SAFETY GUARD: bare 'Chicken Sternum Collagen extract'
+    must NEVER be an alias on either form. Per subagent verification:
+    - Jarrow 265081 product (BioCell hydrolyzed) uses this exact row text
+    - Korean/Chinese OEMs use the SAME phrase for UC-II / undenatured material
+    Without brand/context gating (matcher does not support it), adding this
+    bare phrase to either form would mislabel one OEM class as the other.
+    The Jarrow product-specific fix is deferred to cleaner-side context
+    routing — not this IQM slice."""
+    form = iqm["collagen"]["forms"][form_name]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    forbidden = "chicken sternum collagen extract"
+    assert forbidden not in aliases_lower, (
+        f"DOUBLE-SAFETY GUARD VIOLATED: bare {forbidden!r} found in "
+        f"collagen.forms[{form_name!r}].aliases. Without brand/context "
+        f"gating, this risks misclassifying UC-II OEM products as "
+        f"hydrolyzed (or vice versa). Add only BioCell-prefixed variants. "
+        f"See spec § 'Critical negative-scope guards' + commit 7557b4c9 "
+        f"BioCell context note."
+    )
+
+
+def test_collagen_undenatured_form_does_NOT_include_biocell_aliases(iqm):
+    """Belt-and-suspenders: BioCell aliases must NEVER appear on the
+    undenatured form. BioCell is by definition hydrolyzed (MW ~5,500 Da
+    per BioCell Tech patent US 8,563,045) — opposite chemistry from
+    UC-II's native triple-helix."""
+    form = iqm["collagen"]["forms"]["undenatured collagen"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    for biocell_term in [
+        "biocell",
+        "biocell collagen",
+        "biocell collagen ii",
+        "biocell hydrolyzed chicken sternal cartilage extract",
+    ]:
+        assert biocell_term not in aliases_lower, (
+            f"BIOCELL ON UNDENATURED FORM: {biocell_term!r} found in "
+            f"undenatured form aliases — BioCell is HYDROLYZED chemistry, "
+            f"not undenatured. Misclassification would invert the bio_score."
+        )
