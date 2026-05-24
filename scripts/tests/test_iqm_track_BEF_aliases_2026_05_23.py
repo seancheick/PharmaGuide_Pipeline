@@ -729,3 +729,111 @@ def test_horse_chestnut_seed_notes_include_verified_evidence_and_safety_markers(
     assert "authoritative_public_health" in notes, (
         "NCCIH must be tagged authoritative_public_health (not primary_regulatory)."
     )
+
+
+# ---------------------------------------------------------------------------
+# Batch 3 commit B: purple_corn_extract new IQM parent
+# Conservative bio_score=5 (parity with bee_pollen). Single small RCT
+# (Finkel 2013 PMID 28394146 n=30 @ 300mg). No NCCIH/NIH ODS factsheet.
+# Per dev review: do NOT alias bare "Zea mays" — too broad (sweet corn,
+# corn starch, corn silk all are Zea mays).
+# ---------------------------------------------------------------------------
+
+
+def test_purple_corn_extract_iqm_parent_exists(iqm):
+    assert "purple_corn_extract" in iqm
+    entry = iqm["purple_corn_extract"]
+    assert entry.get("standard_name") == "Purple Corn Extract"
+    assert entry.get("cui") == "C1446590"
+
+
+@pytest.mark.parametrize(
+    "expected_alias",
+    [
+        "purple corn",
+        "purple corn extract",
+        "purple corn cob extract",
+        "South American Purple Corn",
+    ],
+)
+def test_purple_corn_extract_aliases_include_label_variants(iqm, expected_alias):
+    form = iqm["purple_corn_extract"]["forms"]["purple corn extract (unspecified)"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    assert expected_alias.lower() in aliases_lower
+
+
+def test_purple_corn_extract_bio_score_is_five(iqm):
+    """Conservative bio_score=5. Parity with bee_pollen — only one small RCT
+    (Finkel 2013 n=30 at 300mg, not the 550mg Solgar dose). No Cochrane
+    review, no NCCIH/NIH ODS/EFSA monograph. Anthocyanin class-level evidence
+    primarily for bilberry/elderberry/cranberry, NOT purple corn."""
+    form = iqm["purple_corn_extract"]["forms"]["purple corn extract (unspecified)"]
+    assert form["bio_score"] == 5
+
+
+def test_purple_corn_extract_does_NOT_include_bare_zea_mays_alias(iqm):
+    """CRITICAL per dev review + subagent research: bare 'Zea mays' alias is
+    too broad — would false-positive on sweet corn powders, corn-derived
+    excipients (corn starch, maltodextrin), corn silk products, yellow corn
+    flour. Must require cultivar/color qualifier."""
+    entry = iqm["purple_corn_extract"]
+    for fname, fdata in entry.get("forms", {}).items():
+        aliases_lower = [a.lower() for a in fdata.get("aliases", [])]
+        assert "zea mays" not in aliases_lower, (
+            f"OVER-BROAD ALIAS: bare 'Zea mays' in purple_corn_extract.{fname} "
+            f"would false-match sweet corn, corn starch, corn silk, yellow corn."
+        )
+
+
+@pytest.mark.parametrize(
+    "forbidden_alias",
+    ["sweet corn", "yellow corn", "corn silk", "corn starch", "field corn"],
+)
+def test_purple_corn_extract_excludes_other_zea_mays_uses(iqm, forbidden_alias):
+    entry = iqm["purple_corn_extract"]
+    top_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_alias.lower() not in top_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        assert forbidden_alias.lower() not in [
+            a.lower() for a in fdata.get("aliases", [])
+        ]
+
+
+def test_purple_corn_extract_exclusions_not_substring_of_any_alias(iqm):
+    """SUBSTRING-EXCLUSION GUARD (per horse chestnut lesson 7ea41d2a):
+    match_rules.exclusions are substring-matched against row text. If any
+    exclusion is a substring of a valid alias, the alias is silently rejected.
+    This test runs before commit to catch the issue early."""
+    entry = iqm["purple_corn_extract"]
+    exclusions_lower = [e.lower() for e in entry.get("match_rules", {}).get("exclusions", [])]
+    all_aliases_lower = list(entry.get("aliases", []))
+    for fname, fdata in entry.get("forms", {}).items():
+        all_aliases_lower.extend(fdata.get("aliases", []))
+    all_aliases_lower = [a.lower() for a in all_aliases_lower]
+    for excl in exclusions_lower:
+        for alias in all_aliases_lower:
+            assert excl not in alias, (
+                f"SUBSTRING COLLISION: exclusion {excl!r} is contained in "
+                f"alias {alias!r} — matcher would silently reject this alias. "
+                f"Either remove the exclusion or change the alias."
+            )
+
+
+def test_purple_corn_extract_notes_include_required_evidence_markers(iqm):
+    """Notes must reflect the THIN evidence base. Per critical_no_hallucinated_
+    citations: the subagent verified the SAGE Journals DOI for Finkel 2013
+    (10.1177/2156587213482942) but NOT a PubMed PMID. Use the verified DOI
+    only — do not fabricate a PMID."""
+    form = iqm["purple_corn_extract"]["forms"]["purple corn extract (unspecified)"]
+    notes = form.get("notes", "")
+    notes_lower = notes.lower()
+    assert "finkel" in notes_lower and "2013" in notes_lower, (
+        "Notes must cite Finkel 2013 by author + year (single available "
+        "purple-corn human RCT at supplement dose)."
+    )
+    assert "10.1177/2156587213482942" in notes, (
+        "Notes must cite the verified Finkel 2013 DOI (no PMID fabrication)."
+    )
+    assert "thin" in notes_lower or "limited" in notes_lower or "too limited" in notes_lower, (
+        "Notes must explicitly qualify the evidence base as thin/limited."
+    )

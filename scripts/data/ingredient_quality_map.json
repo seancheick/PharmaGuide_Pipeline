@@ -63234,5 +63234,64 @@
       "unii": "3C18L6RJAZ",
       "rxcui": "260020"
     }
+  },
+  "purple_corn_extract": {
+    "standard_name": "Purple Corn Extract",
+    "category": "other",
+    "cui": "C1446590",
+    "forms": {
+      "purple corn extract (unspecified)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "low \u2014 anthocyanin (cyanidin-3-glucoside) absorption is poor; thin evidence base",
+        "notes": "Zea mays var. purple (Poaceae) cob extract. Peruvian/Andean origin. Active constituents: cyanidin-3-glucoside (C3G) anthocyanin plus other polyphenols. EVIDENCE IS THIN: single small RCT (Finkel 2013, J. Evidence-Based Complementary & Alternative Medicine, DOI 10.1177/2156587213482942) \u2014 double-blind placebo-controlled crossover n=30 Peruvian adults, 300 mg purple corn extract (18 mg anthocyanin) daily \u00d7 3 weeks, SBP 139\u2192130.7 mm Hg [clinical_review \u2014 single small RCT at HALF the Solgar 550 mg dose; cannot extrapolate]. No Cochrane review. NO authoritative NCCIH page for purple corn or anthocyanin supplements. NO NIH ODS factsheet for purple corn (ODS only defines anthocyanin class). NO FDA color additive listing for purple corn under 21 CFR \u00a773 (the only Zea mays color listed is \u00a773.315 yellow corn endosperm oil, restricted to chicken feed). NO EFSA opinion. SAFETY: 'No individual reported any adverse effects from taking the purple corn extract capsule' (Finkel 2013); class-level anthocyanin safety acceptable [clinical_review]. Pregnancy/pediatric: no dedicated extract-dose data. Conservative scoring (bio_score=5) reflects thin evidence base \u2014 anthocyanin RCT bulk is bilberry/elderberry/cranberry, NOT purple corn. DISTINCT from existing anthocyanins IQM parent (compound class) \u2014 purple corn extract is NOT aliased to anthocyanins because the Solgar label does not declare anthocyanin standardization.",
+        "aliases": [
+          "purple corn",
+          "purple corn extract",
+          "purple corn cob extract",
+          "purple corn zea mays l cob extract",
+          "South American Purple Corn",
+          "Zea mays var. purple",
+          "ma\u00edz morado"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.12,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "sweet corn",
+        "yellow corn",
+        "corn silk",
+        "corn starch",
+        "field corn",
+        "maize starch"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "other",
+    "data_quality": {
+      "completeness": 0.85,
+      "missing_fields": [
+        "unii",
+        "rxcui"
+      ],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-24",
+      "research_status": "validated"
+    },
+    "aliases": [
+      "C1446590"
+    ],
+    "external_ids": {}
   }
 }
