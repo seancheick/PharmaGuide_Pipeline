@@ -521,3 +521,63 @@ def test_english_ivy_unspecified_notes_include_HMPC_and_minimal_caveat(iqm):
     assert "primary_regulatory" in notes, (
         "EMA HMPC must be tagged primary_regulatory."
     )
+
+
+# ---------------------------------------------------------------------------
+# Commit #7 (Batch 2): diamine_oxidase HDU-specific alias add (EXISTING parent)
+# Spec: reports/not_scored_triage/track_BEF_parent_diamine_oxidase_spec.md
+# Narrow scope: add unambiguous HDU-dose aliases only. Do NOT add generic
+# "Porcine Kidney Extract" / "Kidney Tissue" (would false-match glandular
+# products). Expected immediate product delta: 0. Pure Encapsulations DSLD
+# 317962 deferred to cleaner-side context-routing slice.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.parametrize(
+    "expected_hdu_alias",
+    ["DAO 10000 HDU", "DAO 10,000 HDU", "10000 HDU DAO"],
+)
+def test_diamine_oxidase_includes_HDU_specific_aliases(iqm, expected_hdu_alias):
+    """HDU (Histamine Degrading Units) is the standard activity unit for DAO
+    supplements (10,000 HDU is the conventional adult dose). HDU-tagged
+    aliases are unambiguous DAO-product identifiers."""
+    form = iqm["diamine_oxidase"]["forms"]["diamine oxidase (unspecified)"]
+    aliases_lower = [a.lower() for a in form.get("aliases", [])]
+    assert expected_hdu_alias.lower() in aliases_lower
+
+
+@pytest.mark.parametrize(
+    "forbidden_generic",
+    [
+        "porcine kidney extract",
+        "porcine kidney",
+        "kidney extract",
+        "kidney tissue",
+        "kidney glandular",
+        "porcine kidney glandular",
+    ],
+)
+def test_diamine_oxidase_does_NOT_include_generic_kidney_aliases(iqm, forbidden_generic):
+    """CRITICAL: must NEVER include generic porcine-kidney aliases. Those
+    would false-match generic kidney glandular products (sold for
+    adrenal/urinary support without DAO activity) like Natures_Way 333753
+    Kidney Bladder Blend. Per dev review: 'do not map to generic
+    organ_extracts. Existing diamine_oxidase is the right parent for DAO
+    Enzyme context.' Generic kidney = different product class."""
+    entry = iqm["diamine_oxidase"]
+    top_lower = [a.lower() for a in entry.get("aliases", [])]
+    assert forbidden_generic.lower() not in top_lower
+    for fname, fdata in entry.get("forms", {}).items():
+        assert forbidden_generic.lower() not in [
+            a.lower() for a in fdata.get("aliases", [])
+        ], (
+            f"FORBIDDEN GENERIC ALIAS: {forbidden_generic!r} found in "
+            f"diamine_oxidase.{fname}.aliases — would false-match generic "
+            f"kidney glandular products. See spec § 'What this slice does NOT do'."
+        )
+
+
+def test_diamine_oxidase_bio_score_preserved(iqm):
+    """Existing entry bio_score must not change — this is alias-only."""
+    form = iqm["diamine_oxidase"]["forms"]["diamine oxidase (unspecified)"]
+    assert form["bio_score"] == 5
