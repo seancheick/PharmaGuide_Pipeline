@@ -48,6 +48,10 @@ def iqm():
     ('chasteberry', 'vitex standardized extract',             7),
     ('pqq', 'microactive PQQ',                                7),
     ('pqq', 'lifepqq',                                        7),
+    # C3 extension 2026-05-25 — generic standardized boswellia aligned to
+    # branded floor (no-human-PK Class Finding applies to ALL boswellic
+    # acid forms; generic cannot exceed branded under same evidence).
+    ('boswellia', 'boswellia standardized extract',           7),
     # C4 — Brown rice chelate
     ('chromium', 'chromium brown rice chelate',               6),
     ('manganese', 'manganese brown rice chelate',             6),
