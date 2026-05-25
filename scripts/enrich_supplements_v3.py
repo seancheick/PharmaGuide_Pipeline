@@ -90,6 +90,7 @@ from constants import (
     PROMOTE_REASON_HAS_DOSE,
     PROMOTE_REASON_PRODUCT_TYPE_RESCUE,
     PROMOTE_REASON_ABSORPTION_ENHANCER,
+    BRANDED_INGREDIENT_TOKENS,
 )
 from supplement_type_utils import infer_supplement_type
 from supplement_taxonomy import classify_supplement
@@ -1992,6 +1993,60 @@ class SupplementEnricherV3:
 
         return None
 
+    def _product_context_branded_token_for_ingredient(
+        self,
+        product_text: str,
+        ingredient: Dict,
+        ing_name: str,
+        std_name: str,
+    ) -> Optional[str]:
+        """Return a product-name branded token that safely applies to a row.
+
+        Some DSLD rows put the branded extract in the product name rather than
+        the active-ingredient row. Doctor's Best 82300 is the canonical shape:
+        product name says "Ashwagandha With Sensoril" while the active row says
+        only "Ashwagandha root and leaf extract" plus 10% withanolide
+        glycosides. Do not apply product-level tokens globally; require the row
+        identity to be compatible with the branded ingredient family.
+        """
+        if not product_text:
+            return None
+
+        canonical_id = str(ingredient.get("canonical_id") or "").strip().lower()
+        row_text = " ".join(
+            str(value or "")
+            for value in (
+                ing_name,
+                std_name,
+                ingredient.get("raw_source_text"),
+                ingredient.get("standard_name"),
+            )
+        ).lower()
+        is_ashwagandha_row = (
+            canonical_id == "ashwagandha"
+            or "ashwagandha" in row_text
+            or "withania" in row_text
+        )
+        if not is_ashwagandha_row:
+            return None
+
+        allowed_tokens = {"KSM-66", "Sensoril", "Shoden"}
+        product_text_lower = product_text.lower()
+        product_text_key = norm_module.make_normalized_key(product_text)
+        for raw_token, canonical_token in BRANDED_INGREDIENT_TOKENS.items():
+            if canonical_token not in allowed_tokens:
+                continue
+            token_lower = raw_token.lower()
+            token_key = norm_module.make_normalized_key(raw_token)
+            token_found = bool(
+                re.search(r"(?<![a-z0-9])" + re.escape(token_lower) + r"(?![a-z0-9])", product_text_lower)
+                or (token_key and token_key in product_text_key)
+            )
+            if token_found:
+                return canonical_token
+
+        return None
+
     def _check_additive_match(
         self,
         ing_name: str,
@@ -2703,6 +2758,13 @@ class SupplementEnricherV3:
             else:
                 ing_name = _raw or _raw_source
             std_name = ingredient.get('standardName', '') or ing_name
+            if not _bte:
+                _bte = self._product_context_branded_token_for_ingredient(
+                    ingredient.get("_product_activity_text", ""),
+                    ingredient,
+                    ing_name,
+                    std_name,
+                ) or ""
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
             hierarchy_type = ingredient.get('hierarchyType')
@@ -3066,6 +3128,13 @@ class SupplementEnricherV3:
             else:
                 ing_name = _raw or _raw_source
             std_name = ingredient.get('standardName', '') or ing_name
+            if not _bte:
+                _bte = self._product_context_branded_token_for_ingredient(
+                    product_activity_text,
+                    ingredient,
+                    ing_name,
+                    std_name,
+                ) or ""
             quantity = ingredient.get('quantity', 0)
             unit = ingredient.get('unit', '')
             hierarchy_type = ingredient.get('hierarchyType')
@@ -11018,6 +11087,7 @@ class SupplementEnricherV3:
 
         active_ingredients = product.get('activeIngredients', [])
         matches = []
+        product_text = self._get_all_product_text(product)
 
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
@@ -11027,6 +11097,14 @@ class SupplementEnricherV3:
                 std_name,
                 ingredient.get("raw_source_text", ""),
             ]
+            branded_token = ingredient.get("branded_token_extracted") or self._product_context_branded_token_for_ingredient(
+                product_text,
+                ingredient,
+                ing_name,
+                std_name,
+            )
+            if branded_token:
+                candidate_names.append(branded_token)
             seen_study_ids = set()
 
             for study in studies:
