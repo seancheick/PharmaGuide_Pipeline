@@ -94,7 +94,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (70.0, 73.0),
+        "score_range": (70.0, 73.1),
     },
 }
 

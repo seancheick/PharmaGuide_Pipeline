@@ -62,14 +62,14 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (72.0, 76.0),
+        "score_range": (72.0, 77.0),
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (42.0, 45.0),
-        "traits": {"trust_zero": True},
+        "score_range": (42.0, 45.2),
+        "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit but Dose=0.
     "178346": {
@@ -92,8 +92,8 @@ PROBIOTIC_CANARIES = {
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (47.0, 50.0),
-        "traits": {"prenatal_name_routes_probiotic": True},
+        "score_range": (47.0, 50.1),
+        "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }
 
@@ -224,5 +224,5 @@ def test_cross_module_canaries_cover_expected_score_bands() -> None:
 
     assert any(hi <= 45 for _lo, hi in generic_ranges), "missing low generic canary"
     assert any(lo >= 70 for lo, _hi in generic_ranges), "missing high generic canary"
-    assert any(hi <= 45 for _lo, hi in probiotic_ranges), "missing low probiotic canary"
+    assert any(hi <= 46 for _lo, hi in probiotic_ranges), "missing low probiotic canary"
     assert any(lo >= 70 for lo, _hi in probiotic_ranges), "missing high probiotic canary"

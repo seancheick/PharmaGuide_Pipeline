@@ -359,8 +359,12 @@ def class_for_product(product: Dict[str, Any]) -> str:
 
     # Priority 1: probiotic. Taxonomy is the scoring contract, with a
     # probiotic_data fallback for artifacts where taxonomy under-classifies a
-    # real probiotic panel. This still avoids legacy supplement_type routing.
-    if primary_type == "probiotic" or _is_probiotic_class(product, name_text):
+    # real probiotic panel. Explicit greens taxonomy is not under-classified:
+    # greens/superfood products can carry probiotic strains without becoming
+    # probiotic-module products.
+    if primary_type == "probiotic" or (
+        primary_type != "greens_powder" and _is_probiotic_class(product, name_text)
+    ):
         return "probiotic"
 
     # Priority 2: prenatal name keyword. Overrides multi / omega routing
