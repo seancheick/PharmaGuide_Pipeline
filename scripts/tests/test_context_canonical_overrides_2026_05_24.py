@@ -715,3 +715,193 @@ def test_live_raw_dsld_through_cleaner_and_enricher(
     assert match_result["bio_score"] == bio_score
     assert match_result["match_tier"] == "curated_context_override"
     assert match_result["context_override_id"] == override_id
+
+
+# ---------------------------------------------------------------------------
+# Tier 3.5: skip-path regression. Reproduces the actual full-rerun bug
+# where DSLD 317962 DAO Enzyme landed in ingredients_skipped because
+# _should_skip_from_scoring matched "Porcine Kidney Extract" against
+# PII_KIDNEY_TISSUE (category="active_pending_relocation") by NAME and
+# returned SKIP_REASON_RECOGNIZED_NON_SCORABLE — completely ignoring the
+# cleaner-stamped context_override_applied flag. Tests below lock the
+# fix: when context_override_applied=True, the skip-decision functions
+# must return None so the override-consumption helper at line 2748+ can
+# actually run.
+#
+# Without these tests, the original Tier 2.5/3 tests passed because they
+# called the helper directly, never going through _should_skip_from_scoring.
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture(scope="module")
+def botanicals_db():
+    """Load botanical_ingredients.json for _should_skip_from_scoring."""
+    bot_path = REPO_ROOT / "data" / "botanical_ingredients.json"
+    return json.loads(bot_path.read_text())
+
+
+def test_should_skip_from_scoring_bypasses_when_override_applied(
+    enricher_with_iqm, iqm, botanicals_db
+):
+    """REGRESSION: synthesize the exact row shape the cleaner emits for
+    DSLD 317962 DAO Enzyme post-override. _should_skip_from_scoring must
+    return None (scorable). Without the bypass it returns
+    SKIP_REASON_RECOGNIZED_NON_SCORABLE because 'Porcine Kidney Extract'
+    matches PII_KIDNEY_TISSUE.category='active_pending_relocation'."""
+    row_with_override = {
+        "name": "Porcine Kidney Extract",
+        "standardName": "Kidney Tissue",
+        "canonical_id": "diamine_oxidase",  # override applied
+        "canonical_source_db": "ingredient_quality_map",
+        "context_override_applied": True,
+        "context_override_id": "pure_encap_317962_dao_enzyme",
+        "cleaner_canonical_id_override": "diamine_oxidase",
+        "cleaner_preferred_iqm_form_override": "diamine oxidase (unspecified)",
+        "score_eligible_by_cleaner": True,
+        "cleaner_row_role": "active_scorable",
+        "quantity": 4.2,
+        "unit": "mg",
+    }
+    # Use the actual loaded DBs (iqm fixture + botanicals_db)
+    quality_map = enricher_with_iqm.databases.get("ingredient_quality_map", {})
+    skip_reason = enricher_with_iqm._should_skip_from_scoring(
+        row_with_override, quality_map, botanicals_db
+    )
+    assert skip_reason is None, (
+        f"_should_skip_from_scoring returned {skip_reason!r} for a row with "
+        f"context_override_applied=True. The bypass at the top of the function "
+        f"is missing or broken — row will be shunted to ingredients_skipped "
+        f"and never reach the override-consumption helper."
+    )
+
+
+def test_should_skip_from_scoring_still_skips_when_no_override(
+    enricher_with_iqm, iqm, botanicals_db
+):
+    """NEGATIVE: the same row WITHOUT the override stamp must still be
+    skipped (proves the bypass is scoped to overridden rows only, doesn't
+    accidentally let unrelated Porcine Kidney Extract rows through)."""
+    row_without_override = {
+        "name": "Porcine Kidney Extract",
+        "standardName": "Kidney Tissue",
+        "canonical_id": "PII_KIDNEY_TISSUE",
+        "canonical_source_db": "other_ingredients",
+        # NO context_override_applied
+        "score_eligible_by_cleaner": True,
+        "cleaner_row_role": "active_scorable",
+        "quantity": 100.0,
+        "unit": "mg",
+    }
+    quality_map = enricher_with_iqm.databases.get("ingredient_quality_map", {})
+    skip_reason = enricher_with_iqm._should_skip_from_scoring(
+        row_without_override, quality_map, botanicals_db
+    )
+    assert skip_reason is not None, (
+        "A bare 'Porcine Kidney Extract' row (no override) must still be "
+        "skipped via the PII_KIDNEY_TISSUE recognition path. If this passes "
+        "with skip_reason=None, the bypass is too broad — it lets all "
+        "kidney-glandular rows through, which would falsely promote them "
+        "to score as DAO enzyme."
+    )
+
+
+@pytest.mark.parametrize("dsld_id,row_name,override_id,canonical,form,bio_score", [
+    ("265081", "Chicken Sternum Collagen extract", "jarrow_265081_biocell_hydrolyzed",      "collagen",        "hydrolyzed collagen peptides", 11),
+    ("317962", "Porcine Kidney Extract",           "pure_encap_317962_dao_enzyme",          "diamine_oxidase", "diamine oxidase (unspecified)", 5),
+    ("259304", "Barley",                           "natures_way_259304_barley_grass",        "barley_grass",    "barley grass (unspecified)",    5),
+    ("259306", "Barley",                           "natures_way_259306_barley_grass_powder", "barley_grass",    "barley grass (unspecified)",    5),
+])
+def test_skip_path_bypassed_for_all_4_overridden_rows(
+    enricher_with_iqm, iqm, botanicals_db,
+    dsld_id, row_name, override_id, canonical, form, bio_score,
+):
+    """Parametrized regression: all 4 reviewer-signed overrides must pass
+    _should_skip_from_scoring (return None) so they actually reach the
+    enricher's match path. Locks the call-site bypass and the in-function
+    bypass simultaneously."""
+    row = {
+        "name": row_name,
+        "standardName": row_name,
+        "canonical_id": canonical,
+        "canonical_source_db": "ingredient_quality_map",
+        "context_override_applied": True,
+        "context_override_id": override_id,
+        "cleaner_canonical_id_override": canonical,
+        "cleaner_preferred_iqm_form_override": form,
+        "score_eligible_by_cleaner": True,
+        "cleaner_row_role": "active_scorable",
+        "quantity": 100.0,
+        "unit": "mg",
+    }
+    quality_map = enricher_with_iqm.databases.get("ingredient_quality_map", {})
+    skip_reason = enricher_with_iqm._should_skip_from_scoring(
+        row, quality_map, botanicals_db
+    )
+    assert skip_reason is None, (
+        f"DSLD {dsld_id} ({override_id}): _should_skip_from_scoring returned "
+        f"{skip_reason!r}. Override row would be shunted to ingredients_skipped."
+    )
+
+
+def test_live_dsld_317962_reaches_ingredients_scorable_not_skipped(
+    normalizer, enricher_with_iqm, iqm, botanicals_db
+):
+    """END-TO-END REGRESSION: load the actual Pure Encapsulations 317962
+    DAO Enzyme raw JSON, run through cleaner + the enricher's full
+    per-product code path, assert the DAO row appears in the
+    ingredient_quality_data.ingredients_scorable list (not _skipped) AND
+    carries the override-tagged identity_decision_reason.
+
+    This is the test the user said was missing — it exercises the actual
+    skip-then-promote path, not just the helper in isolation."""
+    raw = _load_raw_dsld("Pure_Encapsulations", "317962")
+    if raw is None:
+        pytest.skip(
+            f"raw DSLD staging dataset not mounted at {RAW_DSLD_STAGING_ROOT}"
+        )
+
+    cleaned = normalizer.normalize_product(raw)
+
+    # Run the cleaned product through enricher.enrich_product (the real
+    # entry point). enrich_product returns (enriched_product, issues_list).
+    enriched, _issues = enricher_with_iqm.enrich_product(cleaned)
+    iqd = enriched.get("ingredient_quality_data") or {}
+    scorable = iqd.get("ingredients_scorable") or []
+    skipped = iqd.get("ingredients_skipped") or []
+
+    # Locate the DAO row in scorable (NOT in skipped)
+    dao_in_scorable = None
+    for ing in scorable:
+        if (ing.get("name") or "").strip().lower() == "porcine kidney extract":
+            dao_in_scorable = ing
+            break
+
+    dao_in_skipped = None
+    for ing in skipped:
+        if (ing.get("name") or "").strip().lower() == "porcine kidney extract":
+            dao_in_skipped = ing
+            break
+
+    assert dao_in_scorable is not None, (
+        f"DAO row 'Porcine Kidney Extract' should be in ingredients_scorable. "
+        f"Found in skipped: {bool(dao_in_skipped)}. "
+        f"Scorable names: {[i.get('name') for i in scorable]}"
+    )
+    assert dao_in_skipped is None, (
+        f"DAO row 'Porcine Kidney Extract' must NOT be in ingredients_skipped "
+        f"once the context override fires. Skip reason was: "
+        f"{(dao_in_skipped or {}).get('skip_reason')}"
+    )
+
+    # Verify the scorable row carries override tagging
+    assert dao_in_scorable.get("canonical_id") == "diamine_oxidase"
+    assert dao_in_scorable.get("matched_form") == "diamine oxidase (unspecified)"
+    assert dao_in_scorable.get("bio_score") == 5
+    assert (
+        dao_in_scorable.get("identity_decision_reason")
+        == "curated_context_canonical_override"
+    )
+    assert (
+        dao_in_scorable.get("context_override_id")
+        == "pure_encap_317962_dao_enzyme"
+    )

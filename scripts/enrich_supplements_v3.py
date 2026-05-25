@@ -2714,6 +2714,13 @@ class SupplementEnricherV3:
             )
             if pre_context_match_reason:
                 skip_reason = None
+            # 2026-05-24: defense-in-depth. _should_skip_from_scoring already
+            # short-circuits on context_override_applied at its top, but if
+            # _cleaner_skip_reason or any future skip predicate fires for an
+            # overridden row, the call-site bypass keeps the row on the
+            # scoring path so the override consumer at line 2748+ can run.
+            if ingredient.get("context_override_applied") is True:
+                skip_reason = None
 
             if skip_reason:
                 # Track skip reason breakdown
@@ -3902,9 +3909,27 @@ class SupplementEnricherV3:
         Override (keep scorable):
         - Exists in quality_map or botanicals_db
         - Has potency markers
+        - Reviewer-signed curated context override stamped by the cleaner
+          (context_override_applied=True). These overrides are an explicit
+          per-product decision that this row should score as the override
+          IQM identity regardless of name-based recognition. Bypasses ALL
+          subsequent skip checks. Spec: reports/not_scored_triage/
+          cleaner_side_context_routing_spec.md
 
         Returns skip_reason string if should skip, None if scorable.
         """
+        # 2026-05-24: curated context-routing override is the highest-priority
+        # scorability signal — it carries a PharmaGuide Clinician Team sign-off
+        # tying a specific (dsld_id, raw_ingredient_text, product_name) tuple
+        # to a specific IQM parent + form. Without this bypass, rows like
+        # Pure Encapsulations 317962 "Porcine Kidney Extract" get caught by
+        # _is_recognized_non_scorable matching PII_KIDNEY_TISSUE
+        # (category="active_pending_relocation") and shunted to
+        # ingredients_skipped before the curated override is consumed. The
+        # check must run BEFORE any of the Z/A/B groups so the override is
+        # never silently overridden by structural / additive / blend skips.
+        if ingredient.get("context_override_applied") is True:
+            return None
         ing_name = ingredient.get('name', '')
         std_name = ingredient.get('standardName', '') or ing_name
         name_lower = ing_name.lower().strip()
