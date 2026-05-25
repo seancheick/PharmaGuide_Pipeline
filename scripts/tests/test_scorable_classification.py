@@ -1582,6 +1582,112 @@ class TestParentTotalFlagging:
         by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
         assert by_name["Vitamin A"]["is_parent_total"] is False
 
+    def test_collect_marks_parent_total_for_exact_duplicate_nested_restatement(self, enricher, monkeypatch):
+        """DSLD sometimes repeats the exact same nutrient amount as a nested
+        child under a proprietary blend label (for example Doctor's Best
+        271087: Vitamin C 500 mg top-level and Vitamin C 500 mg nested under
+        Polyphenol-C Proprietary Blend). This is a label restatement, not two
+        separate vitamin C sources. Mark the top-level total so A1 scores the
+        specific child only.
+        """
+
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
+            return {
+                "standard_name": "Vitamin C",
+                "canonical_id": "vitamin_c",
+                "form_id": "ascorbic acid",
+                "form_name": "ascorbic acid",
+                "match_tier": "exact",
+                "bio_score": 13,
+                "score": 13,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "vitamins",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-exact-duplicate",
+            "fullName": "Polyphenol-C Complex 500 mg",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin C",
+                    "standardName": "Vitamin C",
+                    "quantity": 500,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Vitamin C",
+                    "standardName": "Vitamin C",
+                    "quantity": 500,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Polyphenol-C Proprietary Blend",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        rows = result["ingredients_scorable"]
+        top = [ing for ing in rows if not ing["is_nested_ingredient"]]
+        child = [ing for ing in rows if ing["is_nested_ingredient"]]
+        assert len(top) == 1 and len(child) == 1
+        assert top[0]["is_parent_total"] is True
+        assert child[0]["is_parent_total"] is False
+
+    def test_collect_does_not_mark_parent_total_for_distinct_caffeine_sources(self, enricher, monkeypatch):
+        """Same-canonical nested rows can be real additional sources. Caffeine
+        anhydrous plus caffeine naturally present in green coffee/tea extract
+        should both remain scorable even when canonical_id is the same.
+        """
+
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
+            return {
+                "standard_name": "Caffeine",
+                "canonical_id": "caffeine",
+                "form_id": "caffeine anhydrous",
+                "form_name": "caffeine anhydrous",
+                "match_tier": "exact",
+                "bio_score": 13,
+                "score": 13,
+                "natural": False,
+                "dosage_importance": 1.0,
+                "category": "other",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-caffeine-multisource",
+            "fullName": "Preworkout With Caffeine And Coffee Bean",
+            "activeIngredients": [
+                {
+                    "name": "Caffeine Anhydrous",
+                    "standardName": "Caffeine Anhydrous",
+                    "quantity": 150,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Caffeine",
+                    "standardName": "Caffeine",
+                    "quantity": 50,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Coffee Bean Extract",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        rows = result["ingredients_scorable"]
+        assert len(rows) == 2
+        assert all(ing["is_parent_total"] is False for ing in rows)
+
     def test_collect_does_not_flag_when_no_nested_children(self, enricher, monkeypatch):
         def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
             return {

@@ -5697,6 +5697,47 @@ class SupplementEnricherV3:
             if not children_have_dose:
                 continue
 
+            # Some DSLD labels repeat the exact same dosed row as a nested
+            # child under a proprietary-blend wrapper even when the wrapper
+            # name does not match the top-level nutrient name. Example:
+            # "Vitamin C 500 mg" plus nested "Vitamin C 500 mg" under
+            # "Polyphenol-C Proprietary Blend". This is a label restatement,
+            # not two separate active sources. Keep this deliberately narrower
+            # than canonical-id grouping: same normalized row name, same unit,
+            # and same numeric quantity are all required so legitimate
+            # multi-source cases like caffeine anhydrous + coffee-bean caffeine
+            # continue to score as separate sources.
+            for parent in group:
+                if bool(parent.get("is_nested_ingredient", False)):
+                    continue
+                parent_name = self._normalize_text(parent.get("name", "") or "")
+                if not parent_name:
+                    continue
+                parent_unit = (parent.get("unit_normalized") or parent.get("unit") or "").strip().lower()
+                try:
+                    parent_qty = float(parent.get("quantity") or 0)
+                except (TypeError, ValueError):
+                    parent_qty = 0.0
+                if parent_qty <= 0 or not parent_unit:
+                    continue
+                for child in group:
+                    if not bool(child.get("is_nested_ingredient", False)):
+                        continue
+                    child_name = self._normalize_text(child.get("name", "") or "")
+                    child_unit = (child.get("unit_normalized") or child.get("unit") or "").strip().lower()
+                    try:
+                        child_qty = float(child.get("quantity") or 0)
+                    except (TypeError, ValueError):
+                        child_qty = 0.0
+                    if (
+                        child_name == parent_name
+                        and child_unit == parent_unit
+                        and child_qty > 0
+                        and abs(child_qty - parent_qty) < 1e-9
+                    ):
+                        parent["is_parent_total"] = True
+                        break
+
             for ing in group:
                 if bool(ing.get("is_nested_ingredient", False)):
                     continue
