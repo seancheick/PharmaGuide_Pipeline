@@ -2874,10 +2874,11 @@ class SupplementScorer:
         supp_type = str(supp_type).strip().lower()
 
         # Priority 1: probiotic (taxonomy first, legacy fallback, then
-        # product-level probiotic evidence). The product-level path protects
-        # probiotic-dominant products whose taxonomy falls back to
-        # general_supplement because only the prebiotic carrier row is
-        # scorable after strict-contract filtering.
+        # product-level probiotic evidence). The product-level path is a
+        # narrow rescue for probiotic-dominant products whose taxonomy falls
+        # back to general_supplement because only the prebiotic carrier row is
+        # scorable after strict-contract filtering; it must not override a
+        # strong non-probiotic taxonomy class such as greens_powder.
         if (
             primary_type == "probiotic"
             or supp_type in self._PROBIOTIC_TYPES
@@ -2962,11 +2963,15 @@ class SupplementScorer:
         ) or product.get("supp_type") or ""
         supp_type = str(supp_type).strip().lower()
         primary_category = str(product.get("primary_category") or "").strip().lower()
+        if primary_type and primary_type not in ("general_supplement", "probiotic"):
+            return False
         if (
             primary_type in ("multivitamin", "b_complex")
             or supp_type in cls._MULTI_TYPES
             or primary_category == "multivitamin"
         ):
+            return False
+        if primary_category and primary_category not in ("general_supplement", "probiotic"):
             return False
 
         pdata = product.get("probiotic_data") or product.get("probiotic_detail")

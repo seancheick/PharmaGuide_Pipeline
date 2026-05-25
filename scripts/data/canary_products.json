@@ -154,7 +154,7 @@
       ],
       "v3_shipped_score": 68.7,
       "v3_shipped_verdict": "CAUTION",
-      "notes": "Enricher's _classify_supplement_type returns 'specialty' even though primary_category is 'multivitamin'. Current B5 router uses supp_type → routes to 'generic' (WRONG). Follow-up: extend router to fall back to primary_category when supp_type=specialty."
+      "notes": "Primary category is multivitamin even if older supplemental type signals drift. B5 must route to multi_or_prenatal so vitamin/mineral panel opacity uses the stricter multiplier."
     },
     {
       "dsld_id": "173918",
@@ -515,15 +515,15 @@
       "product_name": "Raw Organic Perfect Food Green Superfood Chocolate",
       "primary_class": "greens_superfood",
       "subclass": "greens_blend",
-      "expected_b5_class": "multi_or_prenatal",
+      "expected_b5_class": "generic",
       "expected_dose_route_v4": "blend_per_component_or_not_scored",
       "edge_cases": [
         "large_ingredient_stack",
-        "router_disagreement_uses_multivitamin"
+        "greens_taxonomy_with_probiotic_rows"
       ],
       "v3_shipped_score": 69.6,
       "v3_shipped_verdict": "SAFE",
-      "notes": "supp_type=multivitamin (many ingredients, diverse categories) → routes to multi_or_prenatal 1.3x. Greens products often hide per-ingredient dose; debatable whether multi_or_prenatal or generic is the right class — flag for v4 review."
+      "notes": "After the greens taxonomy refresh this product routes as greens_powder, not multivitamin and not probiotic. It contains probiotic rows, but those must not trigger the lighter probiotic B5 multiplier; use generic opacity unless a dedicated greens B5 class is introduced."
     },
     {
       "dsld_id": "294063",

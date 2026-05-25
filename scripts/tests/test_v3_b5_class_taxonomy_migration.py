@@ -15,7 +15,8 @@ Locks the following behaviors:
   - Taxonomy primary_type=collagen / joint_support / etc → generic
   - Prenatal name keyword overrides taxonomy=omega_3 (prenatal DHA case)
   - Sports keyword still beats multi mapping
-  - Probiotic ALWAYS wins
+  - Probiotic wins only for explicit probiotic taxonomy/legacy type, or for
+    underclassified general_supplement rows with shipped probiotic flags
   - Old-batch fallback (no taxonomy) preserves the v3 legacy paths
     including GENERIC_OVERRIDE for collagen/enzyme/joint/omega keywords
 """
@@ -188,6 +189,22 @@ def test_probiotic_content_does_not_override_explicit_multivitamin_signal(scorer
     product["is_probiotic"] = 1
     product["contains_probiotics"] = 1
     assert scorer._b5_class_for_product(product) == "multi_or_prenatal"
+
+
+def test_probiotic_content_does_not_override_explicit_greens_taxonomy(scorer):
+    """Greens powders can include probiotic rows, but B5 should not apply the
+    lighter probiotic opacity multiplier unless the product itself is a
+    probiotic. This locks DSLD 204739 after the greens taxonomy refresh."""
+    product = _product(
+        primary_type="greens_powder",
+        supp_type="greens_powder",
+        primary_category="greens_powder",
+        product_name="Raw Organic Perfect Food Green Superfood Chocolate",
+        brand_name="Garden of Life",
+    )
+    product["is_probiotic"] = 1
+    product["contains_probiotics"] = 1
+    assert scorer._b5_class_for_product(product) == "generic"
 
 
 def test_old_batch_primary_category_multivit_fallback(scorer):
