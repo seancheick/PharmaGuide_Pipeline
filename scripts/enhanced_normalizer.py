@@ -2644,6 +2644,40 @@ class EnhancedDSLDNormalizer:
         # of re-deriving it from ingredient text / forms[0].
         # See refactor plan Phase 1b.
         self._build_canonical_id_reverse_index()
+        # 2026-05-25: Precompute the set of IQM branded form names + aliases
+        # (excluding "(unspecified)" generic catch-all forms) so that the
+        # structural blend-total classifier can distinguish standardized
+        # branded extracts (e.g., "Curcumin C3 Complex") from real blend
+        # headers when the only signal is the weak `_is_proprietary_blend_name`
+        # substring match. O(1) lookup; built once per normalizer instance.
+        self._build_iqm_branded_form_names()
+
+    def _build_iqm_branded_form_names(self) -> None:
+        """Populate self._iqm_branded_form_names with lowercased IQM form
+        names and form aliases. Generic '(unspecified)' forms are excluded
+        because they are catch-all parent fallbacks, not branded actives."""
+        names: set = set()
+        for parent_key, parent_val in (self.ingredient_map or {}).items():
+            if parent_key.startswith("_") or not isinstance(parent_val, dict):
+                continue
+            forms = parent_val.get("forms") or {}
+            if not isinstance(forms, dict):
+                continue
+            for form_name, form_data in forms.items():
+                if not isinstance(form_name, str):
+                    continue
+                fn_lower = form_name.lower().strip()
+                if not fn_lower or "(unspecified)" in fn_lower:
+                    continue
+                names.add(fn_lower)
+                if not isinstance(form_data, dict):
+                    continue
+                for alias in form_data.get("aliases", []) or []:
+                    if isinstance(alias, str):
+                        al = alias.lower().strip()
+                        if al:
+                            names.add(al)
+        self._iqm_branded_form_names: frozenset = frozenset(names)
 
     def _build_canonical_id_reverse_index(self) -> None:
         """
@@ -8019,16 +8053,38 @@ class EnhancedDSLDNormalizer:
         """Identify DSLD blend rows whose quantity is a blend total."""
         raw_category = (ing.get("raw_category") or ing.get("category") or "").lower()
         ingredient_group = (ing.get("ingredientGroup") or "").lower()
-        has_blend_signal = (
+        strong_blend_signal = (
             raw_category == "blend"
             or "blend" in ingredient_group
-            or self._is_proprietary_blend_name(ing.get("name", ""))
         )
-        if not has_blend_signal:
+        weak_blend_signal = self._is_proprietary_blend_name(ing.get("name", ""))
+        if not (strong_blend_signal or weak_blend_signal):
             return False
         quantity, unit = self._extract_primary_mass_unit(ing)
         if quantity is None or str(unit or "").strip().upper() == "NP":
             return False
+        # 2026-05-25: When the ONLY signal is the WEAK substring-based
+        # `_is_proprietary_blend_name` match (no DSLD category='blend', no
+        # 'blend' in ingredientGroup), and the row name (or standardName)
+        # matches a known IQM branded form, the row is a STANDARDIZED EXTRACT
+        # (e.g., Sabinsa "Curcumin C3 Complex", "Polysaccharide-Iron Complex",
+        # "Crominex 3+ Chromium Complex"), not a structural blend header. The
+        # PROPRIETARY_BLEND_INDICATORS list includes generic single-word tokens
+        # ("complex", "matrix", "formula", "system") that otherwise falsely
+        # classify these branded single-active ingredients as blend totals,
+        # silently dropping them to 0 scorable rows. The narrow guard preserves
+        # all strong-signal cases (RC-4 Natures_Bounty Chondroitin Sulfate
+        # Complex sub-blend is not in IQM forms → still classified as
+        # blend_total; real proprietary blends with category='blend' or 'blend'
+        # in ingredientGroup are untouched).
+        if not strong_blend_signal and weak_blend_signal:
+            name_lower = (ing.get("name") or "").lower().strip()
+            std_lower = (ing.get("standardName") or "").lower().strip()
+            iqm_forms = getattr(self, "_iqm_branded_form_names", frozenset())
+            if (name_lower and name_lower in iqm_forms) or (
+                std_lower and std_lower in iqm_forms
+            ):
+                return False
         return True
 
     def _is_structural_active_form_display_only(self, ing: Dict[str, Any]) -> bool:

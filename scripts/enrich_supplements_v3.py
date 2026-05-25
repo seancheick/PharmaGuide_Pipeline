@@ -3288,6 +3288,18 @@ class SupplementEnricherV3:
                 )
 
         # =================================================================
+        # CURCUMIN C3 COMPLEX + BIOPERINE PAIRING UPGRADE
+        # =================================================================
+        # The IQM form matcher picks the FIRST form-name match by string
+        # equality, so C3 Complex + Bioperine products land on
+        # 'curcumin c3 complex' (bio_score=6) instead of the clinically
+        # accurate 'curcumin c3 complex with bioperine' (bio_score=7).
+        # When the product also contains a piperine/Bioperine row (active
+        # scorable or recognized non-scorable absorption enhancer), upgrade
+        # the curcumin row to the with-bioperine variant.
+        self._apply_curcumin_c3_bioperine_pairing_upgrade(all_quality_data)
+
+        # =================================================================
         # BLEND-ONLY PRODUCT DETECTION
         # =================================================================
         total_scorable = len(ingredients_scorable)
@@ -3551,6 +3563,89 @@ class SupplementEnricherV3:
         # all_quality_data shares row refs with ingredients_scorable (same dicts)
         # so mutations above propagate. Return the updated structures.
         return filtered_scorable, all_quality_data, demoted
+
+    # -------------------------------------------------------------------------
+    # Curcumin C3 Complex + Bioperine pairing upgrade (Wave 6.Z, 2026-05-25)
+    # -------------------------------------------------------------------------
+    def _apply_curcumin_c3_bioperine_pairing_upgrade(
+        self,
+        all_quality_data: List[Dict],
+    ) -> int:
+        """Upgrade `curcumin c3 complex` matches to the with-bioperine variant
+        when the product also discloses a piperine/Bioperine row.
+
+        IQM has two adjacent forms under parent `curcumin`:
+          - `curcumin c3 complex with bioperine` (bio_score=7)
+          - `curcumin c3 complex`                (bio_score=6)
+
+        The matcher selects the FIRST form-name match by string equality so
+        C3 Complex + Bioperine products land on the unpaired form. This
+        post-pass detects the pairing — any row with canonical_id='piperine'
+        in the same product (scorable or absorption-enhancer demoted) —
+        and rewrites matched_form/form_id/bio_score/score and the IQM-derived
+        absorption/notes fields to the with-bioperine variant.
+
+        Returns the number of rows upgraded (0 if no pairing signal or no
+        C3 Complex match in this product).
+        """
+        TARGET_FORM_KEY = "curcumin c3 complex with bioperine"
+        SOURCE_FORM_KEY = "curcumin c3 complex"
+
+        has_piperine = any(
+            isinstance(r, dict)
+            and str(r.get("canonical_id") or "").strip().lower() == "piperine"
+            for r in all_quality_data
+        )
+        if not has_piperine:
+            return 0
+
+        # Look up the upgrade target from IQM at runtime so this pass mirrors
+        # whatever the data file currently asserts (notes, absorption_structured).
+        iqm = self.databases.get("ingredient_quality_map") or {}
+        curcumin_entry = iqm.get("curcumin") if isinstance(iqm, dict) else None
+        forms = (
+            curcumin_entry.get("forms")
+            if isinstance(curcumin_entry, dict)
+            else None
+        )
+        target_form = forms.get(TARGET_FORM_KEY) if isinstance(forms, dict) else None
+        if not isinstance(target_form, dict):
+            # Data shape unexpected; do not upgrade silently.
+            return 0
+
+        new_bio_score = target_form.get("bio_score", 7)
+        new_absorption = target_form.get("absorption")
+        new_notes = target_form.get("notes")
+        new_absorption_structured = target_form.get("absorption_structured")
+        new_dosage_importance = target_form.get("dosage_importance")
+
+        upgraded = 0
+        for row in all_quality_data:
+            if not isinstance(row, dict):
+                continue
+            if str(row.get("canonical_id") or "").strip().lower() != "curcumin":
+                continue
+            current_form = str(row.get("form_id") or row.get("matched_form") or "").strip().lower()
+            if current_form != SOURCE_FORM_KEY:
+                continue
+
+            row["matched_form"] = TARGET_FORM_KEY
+            row["form_id"] = TARGET_FORM_KEY
+            row["bio_score"] = new_bio_score
+            # v3.6.0 sourcing-neutral contract: score mirrors bio_score.
+            row["score"] = new_bio_score
+            if new_absorption is not None:
+                row["absorption"] = new_absorption
+            if new_notes is not None:
+                row["notes"] = new_notes
+            if new_absorption_structured is not None:
+                row["absorption_structured"] = new_absorption_structured
+            if new_dosage_importance is not None:
+                row["dosage_importance"] = new_dosage_importance
+            row["pairing_upgrade_applied"] = "curcumin_c3_with_bioperine"
+            upgraded += 1
+
+        return upgraded
 
     def _has_valid_therapeutic_dose(self, ingredient: Dict) -> Tuple[bool, bool]:
         """
