@@ -57,15 +57,62 @@ _DR_PHAM_PEER_MIN_EXEMPTIONS = {
     'lactobacillus_rhamnosus',
 }
 
+# Standardization-marker peer-min exemptions (2026-05-25).
+#
+# The peer-min policy (Batch 5 recalibration, 2026-04-29) assumes the
+# higher-scoring peer form is "the cheapest specific form a label could
+# plausibly contain" — a cheap-plausible baseline. That assumption holds
+# for generic-extract peers but BREAKS when the higher peer is a
+# *standardization-marker* form (saponin, aescin, hederacoside C, ginkgolide,
+# etc.) carrying a clinical premium that the unspecified form intentionally
+# does not — because no marker is guaranteed in unspecified material.
+#
+# Raising the unspecified score to match a marker-locked peer would erase
+# a clinically meaningful distinction. The right answer is exemption + a
+# lock on the intended spread (see test_standardization_marker_spread_locked
+# below) — NOT scoring inflation in the IQM data.
+#
+# Each exemption MUST be paired with an entry in
+# _STANDARDIZATION_MARKER_LOCKED_SPREAD so the gap cannot silently drift.
+_STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS = {
+    'english_ivy',           # hederacoside C marker (Hedera helix saponin)
+    'horse_chestnut_seed',   # aescin marker (Aesculus hippocastanum triterpene)
+}
+
+# Locked spread for standardization-marker exemptions. (unspec_score,
+# standardized_score) pairs the intended gap so any future score change
+# requires updating both the exemption and this lock together.
+_STANDARDIZATION_MARKER_LOCKED_SPREAD = {
+    'english_ivy': {
+        'unspec_form':       'english ivy leaf extract (unspecified)',
+        'unspec_bio':        8,
+        'unspec_score':      11,
+        'marker_form':       'english ivy standardized (hederacoside C marker)',
+        'marker_bio':        10,
+        'marker_score':      13,
+    },
+    'horse_chestnut_seed': {
+        'unspec_form':       'horse chestnut seed (unspecified)',
+        'unspec_bio':        8,
+        'unspec_score':      11,
+        'marker_form':       'horse chestnut standardized (aescin marker)',
+        'marker_bio':        10,
+        'marker_score':      13,
+    },
+}
+
 
 def test_no_unspec_form_scores_below_peer_min(iqm):
     """Every '(unspecified)' form must score ≥ parent's peer min,
-    EXCEPT for clinician-locked overrides (Dr Pham probiotic sign-off)."""
+    EXCEPT for clinician-locked overrides (Dr Pham probiotic sign-off) and
+    standardization-marker exemptions (see exemption set above)."""
     violations = []
     for parent_key, v in iqm.items():
         if parent_key.startswith('_') or not isinstance(v, dict):
             continue
         if parent_key in _DR_PHAM_PEER_MIN_EXEMPTIONS:
+            continue
+        if parent_key in _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS:
             continue
         forms = v.get('forms', {})
         if not isinstance(forms, dict):
@@ -120,6 +167,56 @@ def test_recalibrated_high_impact_entries(iqm):
         assert isinstance(s, (int, float)) and s >= min_score, (
             f"{parent} unspec must score ≥{min_score} (peer-min); got {s}"
         )
+
+
+def test_standardization_marker_spread_locked(iqm):
+    """Lock the intended (unspec, standardized-marker) spread for parents
+    exempted from peer-min. Required to prevent silent drift — any future
+    score change to one side without the other will fail this test, forcing
+    explicit review of the standardization premium.
+
+    The exemption set and this lock must be kept in sync: every entry in
+    _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS must have a matching entry
+    here.
+    """
+    # Sync invariant first — fail loudly if a parent is exempted but not locked.
+    unlocked = (
+        _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS
+        - _STANDARDIZATION_MARKER_LOCKED_SPREAD.keys()
+    )
+    assert not unlocked, (
+        f'Standardization-marker parents exempted from peer-min but not '
+        f'locked in _STANDARDIZATION_MARKER_LOCKED_SPREAD: {unlocked}. '
+        f'Every exemption must pair with an intended-spread lock.'
+    )
+
+    mismatches = []
+    for parent_key, spec in _STANDARDIZATION_MARKER_LOCKED_SPREAD.items():
+        forms = iqm.get(parent_key, {}).get('forms', {})
+        if not forms:
+            mismatches.append(f'{parent_key}: missing from IQM')
+            continue
+        for side in ('unspec', 'marker'):
+            form_key = spec[f'{side}_form']
+            form = forms.get(form_key)
+            if not isinstance(form, dict):
+                mismatches.append(f'{parent_key}/{form_key}: missing form')
+                continue
+            bio = form.get('bio_score')
+            score = form.get('score')
+            exp_bio = spec[f'{side}_bio']
+            exp_score = spec[f'{side}_score']
+            if bio != exp_bio or score != exp_score:
+                mismatches.append(
+                    f'{parent_key}/{form_key}: bio={bio}/score={score} '
+                    f'(expected bio={exp_bio}/score={exp_score})'
+                )
+    assert not mismatches, (
+        'Standardization-marker spread drifted from locked values. Either '
+        'the IQM was edited without updating _STANDARDIZATION_MARKER_LOCKED_'
+        'SPREAD, or the lock needs deliberate revision after clinical '
+        'review:\n  ' + '\n  '.join(mismatches)
+    )
 
 
 def test_schema_formula_still_holds_after_recalibration(iqm):
