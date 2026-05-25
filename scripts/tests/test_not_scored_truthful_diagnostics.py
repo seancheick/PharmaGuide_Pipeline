@@ -1065,8 +1065,8 @@ class TestTrackA1StandardizedBotanicalAnchorSlice:
 #        - quantity > 0, unit not in ANCHOR_NON_DOSE_UNITS
 #        - canonical_id non-empty
 #        - canonical_id NOT starting with BLEND_ or PII_
-#        - canonical_id NOT in {digestive_enzymes, prebiotics, probiotics,
-#                                whey_protein, collagen}
+#        - canonical_id NOT in {prebiotics, probiotics, whey_protein, collagen}
+#          (digestive_enzymes landed in Wave 6.Z A.2b with a child-dose guard)
 #        - canonical_source_db in {ingredient_quality_map, botanical_ingredients}
 #
 # Constants:
@@ -1157,12 +1157,15 @@ class TestTrackA2BlendHeaderAnchorSlice:
 
     @pytest.mark.parametrize(
         "denylisted_canon",
-        ["digestive_enzymes", "prebiotics", "probiotics", "whey_protein", "collagen"],
+        # digestive_enzymes was removed from this list when Wave 6.Z A.2b
+        # landed (see scripts/tests/test_blend_header_anchor_digestive_enzymes_v1_2026_05_25.py).
+        # The remaining four cids still need dedicated slices.
+        ["prebiotics", "probiotics", "whey_protein", "collagen"],
     )
     def test_blend_header_anchor_rejects_denylisted_canonical(self, scorer, denylisted_canon):
-        """Class-level canonicals are explicitly denylisted because each needs
-        its own dedicated scoring slice (enzyme activity / CFU / fiber / protein).
-        They must stay NOT_SCORED under Track A.2a — separate A.2b territory."""
+        """Class-level canonicals still denylisted because each needs its
+        own dedicated scoring slice (CFU provenance / fiber / protein).
+        They must stay NOT_SCORED under Track A.2a."""
         product = _make_blend_header_anchor_eligible(
             header_canonical_id=denylisted_canon,
         )

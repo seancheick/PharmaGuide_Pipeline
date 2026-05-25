@@ -83,12 +83,15 @@ ANCHOR_NON_DOSE_UNITS = {"", "np", "n/a", "na", "none", "unspecified", "0"}
 # Track-A.1-eligible, but with a dosed blend_header row whose canonical_id
 # is a real single-compound or named-curated IQM/botanical entry (not generic
 # BLEND_*/PII_* and not in the class-level denylist). Class-level scoring
-# (digestive_enzymes, prebiotics, probiotics, whey_protein, collagen) is a
-# separate future A.2b slice and is excluded here.
+# for the remaining reserved cids (prebiotics, probiotics, whey_protein,
+# collagen) still needs dedicated slices (CFU provenance, fiber/protein
+# rubric) and is excluded here. Wave 6.Z A.2b landed digestive_enzymes
+# via the same anchor path plus a nested-child usable-dose guard
+# (see _has_blend_header_anchor below + spec at
+# reports/blend_header_subtype_inventory.md).
 SCORE_BASIS_BLEND_HEADER_ANCHOR = "blend_header_anchor"
 FLAG_BLEND_HEADER_ANCHOR = "SCORED_VIA_BLEND_HEADER_ANCHOR"
 BLEND_HEADER_ANCHOR_CANONICAL_DENYLIST = frozenset({
-    "digestive_enzymes",
     "prebiotics",
     "probiotics",
     "whey_protein",
@@ -680,6 +683,40 @@ class SupplementScorer:
         # Track A.1 precedence — if the standardized-botanical anchor would
         # fire, that path wins and this one stands down.
         if self._has_standardized_botanical_anchor(product):
+            return False
+
+        # Wave 6.Z A.2b child-dose guard — if any non-header skipped row
+        # carries a usable individual dose (quantity > 0 with a real mass
+        # unit), the blend has disclosed children. Score the children, not
+        # the header — otherwise we double-count or invent precision.
+        #
+        # This is conservative (product-wide, no parentBlend linkage check)
+        # because the contract we care about is simpler and safer: if the
+        # product has no strict scorable rows yet does have any dosed
+        # non-header skipped component, the header should not get anchor
+        # credit. None of the 10 corpus A.2b candidates today match this
+        # shape (all nested children are display-only qty=0/NP), but the
+        # guard is required to keep every future blend-header anchor slice
+        # safe at 100K+ products.
+        for row in safe_list(iqd.get("ingredients_skipped")):
+            if not isinstance(row, dict):
+                continue
+            is_header = (
+                bool(row.get("is_blend_header"))
+                or bool(row.get("blend_total_weight_only"))
+                or row.get("score_exclusion_reason") == "blend_header_total"
+            )
+            if is_header:
+                continue
+            q = row.get("quantity")
+            try:
+                qf = float(q) if q is not None else 0.0
+            except (TypeError, ValueError):
+                qf = 0.0
+            if qf <= 0:
+                continue
+            if norm_text(row.get("unit") or "") in ANCHOR_NON_DOSE_UNITS:
+                continue
             return False
 
         for row in safe_list(iqd.get("ingredients_skipped")):
