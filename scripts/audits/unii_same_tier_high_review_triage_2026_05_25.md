@@ -9,23 +9,24 @@ Source report:
 
 ## Scope
 
-This is a report-only triage of the `41` `high_review` groups from the UNII
-same-tier scanner. No reference data was changed.
+This started as a report-only triage of the `41` `high_review` groups from the
+UNII same-tier scanner. After the P0-1 cleanup for `88XHZ13131`, the current
+scanner output has `40` `high_review` groups.
 
 The scanner already separates runtime-equivalent warning groups into:
 
-- `152` info-level IQM parent/form self-duplicates
-- `16` ordinary review groups
-- `41` high-review groups
+- `153` info-level IQM parent/form self-duplicates
+- `15` ordinary review groups
+- `40` high-review groups
 
-This file classifies the `41` high-review groups into data-model buckets so the
+This file classifies the remaining high-review groups into data-model buckets so the
 next pass can make small, defensible fixes instead of broad UNII rewrites.
 
 ## Triage Summary
 
 | Bucket | Count | Risk | Recommended next action |
 |---|---:|---|---|
-| Policy / safety-tier overlay carrying a compound UNII | 1 | High | Fix first; umbrella policy entries should not masquerade as one compound unless intentionally exact. |
+| Policy / safety-tier overlay carrying a compound UNII | 0 | Resolved | `88XHZ13131` was fixed in the P0-1 cleanup. |
 | Safety/allergen inherited synonym groups | 3 | Low-medium | Likely exonerate/suppress after confirming names are same allergen source. |
 | IQM cross-parent structural duplicates | 2 | High | Fix or explicitly exonerate; these can alter active parent routing. |
 | Botanical / standardized same-source variants | 24 | Medium | Build a structured exoneration relationship (`base_botanical`, `standardized_extract`, `branded_extract`) before suppressing runtime warnings. |
@@ -34,8 +35,7 @@ next pass can make small, defensible fixes instead of broad UNII rewrites.
 
 ## Fix Order
 
-1. **P0: Policy/safety + IQM structural duplicates**
-   - `88XHZ13131` synthetic food acids vs fumaric acid
+1. **P0: IQM structural duplicates**
    - `6DU9Y533FA` vanadium / vanadyl sulfate cross-parent
    - `L11K75P92J` calcium / dicalcium phosphate cross-parent
 
@@ -52,28 +52,25 @@ next pass can make small, defensible fixes instead of broad UNII rewrites.
 
 ## P0 Findings
 
-### `88XHZ13131` — policy watchlist vs compound
+### `88XHZ13131` — policy watchlist vs compound (resolved)
 
 Records:
 
 - `banned_recalled_ingredients.json` → `BANNED_ADD_SYNTHETIC_FOOD_ACIDS` (`Policy Watchlist: Synthetic Food Acids`)
 - `other_ingredients.json` → `OI_FUMARIC_ACID` (`Fumaric Acid`)
 
-Assessment:
+Resolution:
 
-- This is the highest-risk modeling smell in the set.
-- A policy umbrella entry should not carry a single compound UNII unless the
-  policy is intentionally scoped to that exact compound.
-- Runtime first-write at tier 1 means the UNII can resolve to the policy label
-  instead of the concrete compound.
+- Removed exact Fumaric acid UNII ownership from
+  `BANNED_ADD_SYNTHETIC_FOOD_ACIDS`.
+- Added a `unii_note` documenting that the disabled policy entry is a
+  multi-compound umbrella with no exact UNII.
+- Hardened the normalizer so `match_mode in {"disabled", "historical"}`
+  banned/watchlist entries do not populate `_fast_exact_lookup`.
+- Regenerated the scanner report; `88XHZ13131` no longer appears as a
+  same-tier conflict.
 
-Recommended next action:
-
-- Inspect `BANNED_ADD_SYNTHETIC_FOOD_ACIDS` and decide whether it is a broad
-  policy umbrella or an exact fumaric-acid entry.
-- If broad, remove or replace the UNII with a note explaining why the umbrella
-  has no exact UNII.
-- If exact, rename/scope the policy entry so it is not a misleading category.
+No further action for this UNII unless future audits show a regression.
 
 ### `6DU9Y533FA` — vanadium / vanadyl sulfate cross-parent
 
@@ -218,11 +215,10 @@ Recommended next action:
 
 ## Proposed Next Slice
 
-**Slice 1: P0 data-model cleanup plan, no data edit yet.**
+**Slice 1: Remaining P0 data-model cleanup plan.**
 
 Inputs:
 
-- `88XHZ13131`
 - `6DU9Y533FA`
 - `L11K75P92J`
 

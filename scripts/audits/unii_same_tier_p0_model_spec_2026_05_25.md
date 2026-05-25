@@ -40,15 +40,19 @@ EnhancedDSLDNormalizer()._unii_to_payload_lookup["6DU9Y533FA"]
 EnhancedDSLDNormalizer()._unii_to_payload_lookup["L11K75P92J"]
 ```
 
-Current runtime first-write results:
+Original runtime first-write results before the P0-1 cleanup:
 
-| UNII | Current runtime payload | Why this matters |
+| UNII | Original runtime payload | Why this matters |
 |---|---|---|
-| `88XHZ13131` | `Policy Watchlist: Synthetic Food Acids` tier 1 | Concrete fumaric-acid UNII resolves to a broad policy umbrella. |
+| `88XHZ13131` | `Policy Watchlist: Synthetic Food Acids` tier 1 | Concrete fumaric-acid UNII resolved to a broad policy umbrella. |
 | `6DU9Y533FA` | `Vanadyl Sulfate` tier 4 | Same identity exists as both a standalone IQM parent and a form under `vanadium`. |
 | `L11K75P92J` | `Calcium` tier 4 | Dicalcium phosphate UNII resolves to calcium parent/form path, while standalone and inactive-filler entries also exist. |
 
 ## P0-1: `88XHZ13131` synthetic-food-acid policy vs fumaric acid
+
+Status: resolved in the P0-1 cleanup. The policy entry no longer carries the
+exact fumaric-acid UNII, and disabled/historical banned/watchlist entries no
+longer populate `_fast_exact_lookup`.
 
 Records:
 
@@ -68,29 +72,28 @@ Records:
 - Despite `match_mode: "disabled"`, `EnhancedDSLDNormalizer._build_fast_lookups_impl`
   still indexes the policy standard name and aliases into `_fast_exact_lookup`.
 - Because the policy aliases include exact compounds (`fumaric acid`, `e297`,
-  `adipic acid`, `e355`, `synthetic citric acid`), `OI_FUMARIC_ACID` inherits
-  the tier-1 policy payload during UNII index construction.
+  `adipic acid`, `e355`, `synthetic citric acid`), `OI_FUMARIC_ACID` originally
+  inherited the tier-1 policy payload during UNII index construction.
 
 ### Model Decision
 
 `BANNED_ADD_SYNTHETIC_FOOD_ACIDS` must not own an exact compound UNII. The UNII
 belongs to `OI_FUMARIC_ACID`.
 
-### Recommended Fix
+### Applied Fix
 
-This is a two-part root fix:
+This was a two-part root fix:
 
 1. **Data cleanup**
-   - Remove `external_ids.unii = "88XHZ13131"` from
+   - Removed `external_ids.unii = "88XHZ13131"` from
      `BANNED_ADD_SYNTHETIC_FOOD_ACIDS`.
-   - Add a reviewer note explaining that the policy entry is a multi-compound
+   - Added a reviewer note explaining that the policy entry is a multi-compound
      umbrella with no exact UNII.
 
 2. **Runtime-contract hardening**
-   - Make `_build_fast_lookups_impl` honor `match_mode in {"disabled",
-     "historical"}` for banned/watchlist entries, or explicitly document and
-     test any exception.
-   - Without this runtime fix, removing the policy UNII alone is insufficient:
+   - Made `_build_fast_lookups_impl` honor `match_mode in {"disabled",
+     "historical"}` for banned/watchlist entries.
+   - Without this runtime fix, removing the policy UNII alone would have been insufficient:
      the `fumaric acid` alias still causes the other-ingredient record to
      inherit the tier-1 policy payload.
 
@@ -99,7 +102,7 @@ This is a two-part root fix:
 - `BANNED_ADD_SYNTHETIC_FOOD_ACIDS` has no exact UNII.
 - `_fast_exact_lookup["fumaric acid"]` does not resolve to the disabled policy
   watchlist entry.
-- UNII `88XHZ13131` resolves to `Fumaric Acid` as an other ingredient, not the
+- UNII `88XHZ13131` resolves to a concrete `Fumaric Acid` record, not the
   synthetic-food-acid policy umbrella.
 - Existing enrichment safety checks still skip disabled/historical policy
   entries.
@@ -213,7 +216,7 @@ Two defensible options:
 Do not batch these into one data edit. Recommended sequence:
 
 1. `P0-1` runtime-contract + data cleanup for disabled policy watchlist entries.
-   This removes the highest-risk safety-tier false ownership.
+   Complete.
 2. `P0-2` vanadyl model decision + score reconciliation. This needs clinical
    review because current forms disagree materially on bio_score.
 3. `P0-3` dicalcium context-routing decision. This is an identity/context

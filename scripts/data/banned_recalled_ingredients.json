@@ -2380,9 +2380,7 @@
       "match_mode": "disabled",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {
-        "unii": "88XHZ13131"
-      },
+      "unii_note": "No exact UNII: policy watchlist spans multiple food acids. GSRS UNII 88XHZ13131 is exact Fumaric acid and belongs to OI_FUMARIC_ACID, not this umbrella class.",
       "ban_context": "watchlist",
       "safety_warning": "Synthetic food acids on a regulatory watchlist — presence in a supplement is associated with labeling and tolerability concerns. Avoid products that list these as ingredients.",
       "safety_warning_one_liner": "Watchlist food acids in supplements. Avoid.",

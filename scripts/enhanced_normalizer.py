@@ -1403,6 +1403,9 @@ class EnhancedDSLDNormalizer:
                 if any(isinstance(item, dict) and 'standard_name' in item for item in value):
                     banned_ingredients = value
                     for banned in banned_ingredients:
+                        match_mode = str(banned.get("match_mode") or "active").strip().lower()
+                        if match_mode in {"disabled", "historical"}:
+                            continue
                         standard_name = banned.get("standard_name", "")
                         if standard_name:
                             processed_standard = self.matcher.preprocess_text(standard_name)

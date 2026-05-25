@@ -1,6 +1,6 @@
 # UNII Same-Tier Conflict Audit
 
-Generated: 2026-05-25T19:45:31+00:00
+Generated: 2026-05-25T20:52:05+00:00
 
 ## Scope
 
@@ -12,39 +12,32 @@ No reference data was changed by this audit.
 
 ## Summary
 
-- UNII-bearing records scanned: **1496**
-- Same-tier UNII groups: **209**
+- UNII-bearing records scanned: **1495**
+- Same-tier UNII groups: **208**
 
 | Severity | Groups |
 |---|---:|
-| high_review | 41 |
-| review | 16 |
-| info | 152 |
+| high_review | 40 |
+| review | 15 |
+| info | 153 |
 
 | Tier | Groups |
 |---|---:|
 | allergens | 4 |
-| banned_recalled | 3 |
+| banned_recalled | 1 |
 | botanical_ingredients | 3 |
 | harmful_additives | 3 |
-| ingredient_quality_map | 189 |
+| ingredient_quality_map | 190 |
 | standardized_botanicals | 7 |
 
 | Classification | Groups |
 |---|---:|
 | iqm_cross_parent_same_unii | 2 |
-| iqm_same_parent_parent_form | 152 |
-| same_tier_different_names | 39 |
-| same_tier_duplicate_name | 16 |
+| iqm_same_parent_parent_form | 153 |
+| same_tier_different_names | 38 |
+| same_tier_duplicate_name | 15 |
 
 ## High-Review Groups
-
-### `88XHZ13131` — tier 1 `banned_recalled` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `banned_recalled_ingredients.json` → `BANNED_ADD_SYNTHETIC_FOOD_ACIDS` (banned; Policy Watchlist: Synthetic Food Acids)
-- `other_ingredients.json` → `OI_FUMARIC_ACID` (other_ingredient; Fumaric Acid)
 
 ### `3C3Y389JBU` — tier 2 `allergens` (same_tier_different_names, high_review)
 
@@ -337,14 +330,6 @@ No reference data was changed by this audit.
 
 ## Review Groups
 
-### `2968PHW8QP` — tier 1 `banned_recalled` (same_tier_duplicate_name, review)
-
-- Action: `review_duplicate_or_alias_model`
-- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
-- `ingredient_quality_map.json` → `citric_acid.forms[citric acid]` (iqm_form; citric acid, parent=`citric_acid`)
-- `ingredient_quality_map.json` → `citric_acid` (iqm_parent; Citric Acid, parent=`citric_acid`)
-- `other_ingredients.json` → `NHA_CITRIC_ACID` (other_ingredient; Citric Acid)
-
 ### `8W94T9026R` — tier 1 `banned_recalled` (same_tier_duplicate_name, review)
 
 - Action: `review_duplicate_or_alias_model`
@@ -564,6 +549,14 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `lactobacillus_brevis.forms[lactobacillus brevis (unspecified)]` (iqm_form; lactobacillus brevis (unspecified), parent=`lactobacillus_brevis`)
 - `ingredient_quality_map.json` → `lactobacillus_brevis` (iqm_parent; Lactobacillus Brevis, parent=`lactobacillus_brevis`)
+
+### `2968PHW8QP` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
+
+- Action: `suppress_runtime_warning_candidate`
+- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
+- `ingredient_quality_map.json` → `citric_acid.forms[citric acid]` (iqm_form; citric acid, parent=`citric_acid`)
+- `ingredient_quality_map.json` → `citric_acid` (iqm_parent; Citric Acid, parent=`citric_acid`)
+- `other_ingredients.json` → `NHA_CITRIC_ACID` (other_ingredient; Citric Acid)
 
 ### `2G86QN327L` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 

@@ -1,89 +1,12 @@
 {
   "classification_counts": {
     "iqm_cross_parent_same_unii": 2,
-    "iqm_same_parent_parent_form": 152,
-    "same_tier_different_names": 39,
-    "same_tier_duplicate_name": 16
+    "iqm_same_parent_parent_form": 153,
+    "same_tier_different_names": 38,
+    "same_tier_duplicate_name": 15
   },
-  "generated_at": "2026-05-25T19:45:31+00:00",
+  "generated_at": "2026-05-25T20:52:05+00:00",
   "groups": [
-    {
-      "action": "review_duplicate_or_alias_model",
-      "classification": "same_tier_duplicate_name",
-      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
-      "records": [
-        {
-          "entry_id": "citric_acid.forms[citric acid]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "citric_acid",
-          "parent_standard_name": "Citric Acid",
-          "source": "iqm_form",
-          "standard_name": "citric acid",
-          "tier": 1,
-          "tier_name": "banned_recalled",
-          "unii": "2968PHW8QP"
-        },
-        {
-          "entry_id": "citric_acid",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "citric_acid",
-          "parent_standard_name": "Citric Acid",
-          "source": "iqm_parent",
-          "standard_name": "Citric Acid",
-          "tier": 1,
-          "tier_name": "banned_recalled",
-          "unii": "2968PHW8QP"
-        },
-        {
-          "entry_id": "NHA_CITRIC_ACID",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Citric Acid",
-          "tier": 1,
-          "tier_name": "banned_recalled",
-          "unii": "2968PHW8QP"
-        }
-      ],
-      "severity": "review",
-      "tier": 1,
-      "tier_name": "banned_recalled",
-      "unii": "2968PHW8QP"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
-          "file": "banned_recalled_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "banned",
-          "standard_name": "Policy Watchlist: Synthetic Food Acids",
-          "tier": 1,
-          "tier_name": "banned_recalled",
-          "unii": "88XHZ13131"
-        },
-        {
-          "entry_id": "OI_FUMARIC_ACID",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Fumaric Acid",
-          "tier": 1,
-          "tier_name": "banned_recalled",
-          "unii": "88XHZ13131"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 1,
-      "tier_name": "banned_recalled",
-      "unii": "88XHZ13131"
-    },
     {
       "action": "review_duplicate_or_alias_model",
       "classification": "same_tier_duplicate_name",
@@ -1084,6 +1007,50 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "268IL53Q7O"
+    },
+    {
+      "action": "suppress_runtime_warning_candidate",
+      "classification": "iqm_same_parent_parent_form",
+      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
+      "records": [
+        {
+          "entry_id": "citric_acid.forms[citric acid]",
+          "file": "ingredient_quality_map.json",
+          "parent_id": "citric_acid",
+          "parent_standard_name": "Citric Acid",
+          "source": "iqm_form",
+          "standard_name": "citric acid",
+          "tier": 4,
+          "tier_name": "ingredient_quality_map",
+          "unii": "2968PHW8QP"
+        },
+        {
+          "entry_id": "citric_acid",
+          "file": "ingredient_quality_map.json",
+          "parent_id": "citric_acid",
+          "parent_standard_name": "Citric Acid",
+          "source": "iqm_parent",
+          "standard_name": "Citric Acid",
+          "tier": 4,
+          "tier_name": "ingredient_quality_map",
+          "unii": "2968PHW8QP"
+        },
+        {
+          "entry_id": "NHA_CITRIC_ACID",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Citric Acid",
+          "tier": 4,
+          "tier_name": "ingredient_quality_map",
+          "unii": "2968PHW8QP"
+        }
+      ],
+      "severity": "info",
+      "tier": 4,
+      "tier_name": "ingredient_quality_map",
+      "unii": "2968PHW8QP"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -7697,19 +7664,19 @@
       "unii": "JC71GJ1F3L"
     }
   ],
-  "record_count": 1496,
-  "same_tier_group_count": 209,
+  "record_count": 1495,
+  "same_tier_group_count": 208,
   "severity_counts": {
-    "high_review": 41,
-    "info": 152,
-    "review": 16
+    "high_review": 40,
+    "info": 153,
+    "review": 15
   },
   "tier_counts": {
     "allergens": 4,
-    "banned_recalled": 3,
+    "banned_recalled": 1,
     "botanical_ingredients": 3,
     "harmful_additives": 3,
-    "ingredient_quality_map": 189,
+    "ingredient_quality_map": 190,
     "standardized_botanicals": 7
   }
 }
