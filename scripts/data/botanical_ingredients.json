@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-05-22",
+    "last_updated": "2026-05-25",
     "total_entries": 529,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -9477,7 +9477,7 @@
         "Mucuna pruriens"
       ],
       "category": "seed",
-      "notes": "Mucuna pruriens (Fabaceae) seed. Contains L-DOPA (3-6% in seeds), the direct dopamine precursor. Ayurvedic Kapikacchu for male fertility and Parkinson's symptoms (PMID 14737007). Botanical seed form.",
+      "notes": "Mucuna pruriens (Fabaceae) seed. Contains L-DOPA (3-6% in seeds), the direct dopamine precursor. Ayurvedic Kapikacchu for male fertility and Parkinson's symptoms (PMID 28679598 - Cilia et al. 2017 Neurology double-blind RCT). Botanical seed form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "2JN37DC03A"
@@ -11971,7 +11971,7 @@
         "Salvia officinalis"
       ],
       "category": "leaf",
-      "notes": "Salvia officinalis (Lamiaceae) leaf. Contains carnosic acid, rosmarinic acid, and thujone. RCT evidence for cognitive function and menopausal hot flashes (PMID 16988880). Botanical leaf form.",
+      "notes": "Salvia officinalis (Lamiaceae) leaf. Contains carnosic acid, rosmarinic acid, and thujone. Systematic review evidence for cognitive function (PMID 24836739 - Lopresti 2014 CNS Neurosci Ther); menopausal hot flash evidence supported by separate SR (PMID 37489230 - Mahmoudi 2023). Botanical leaf form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "065C5D077J"
