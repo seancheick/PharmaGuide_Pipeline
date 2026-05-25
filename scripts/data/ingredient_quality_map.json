@@ -33634,9 +33634,8 @@
       "dicalcium phosphate",
       "C1451733"
     ],
-    "external_ids": {
-      "unii": "L11K75P92J"
-    },
+    "external_ids": {},
+    "unii_note": "No parent-level exact UNII: GSRS UNII L11K75P92J is dicalcium phosphate and is owned by calcium.forms[dicalcium phosphate] for active mineral-source context. Inactive filler context is represented by other_ingredients PII_DICALCIUM_PHOSPHATE.",
     "gsrs": {
       "substance_name": "Anhydrous dibasic calcium phosphate",
       "substance_class": "chemical",

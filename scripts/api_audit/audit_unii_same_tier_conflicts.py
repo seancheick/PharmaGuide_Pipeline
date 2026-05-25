@@ -207,6 +207,8 @@ def _iter_list_records(
     source: str,
     preprocess_text,
     fast_exact_lookup: dict[str, dict[str, Any]],
+    *,
+    use_effective_priority: bool = True,
 ) -> Iterable[UniiRecord]:
     path = repo_root / "scripts/data" / file_name
     blob = _load_json(path)
@@ -221,7 +223,10 @@ def _iter_list_records(
             continue
         entry_id = entry.get("id") or entry.get("standard_name") or "<unnamed>"
         standard_name = entry.get("standard_name") or entry_id
-        priority = _effective_priority(str(standard_name), tier, preprocess_text, fast_exact_lookup)
+        if use_effective_priority:
+            priority = _effective_priority(str(standard_name), tier, preprocess_text, fast_exact_lookup)
+        else:
+            priority = tier
         yield UniiRecord(
             tier=priority,
             tier_name=TIER_NAMES.get(priority, f"tier_{priority}"),
@@ -269,6 +274,7 @@ def collect_unii_records(repo_root: Path) -> list[UniiRecord]:
             source="other_ingredient",
             preprocess_text=preprocess_text,
             fast_exact_lookup=fast_exact_lookup,
+            use_effective_priority=False,
         )
     )
     return records
@@ -353,9 +359,10 @@ def render_markdown(records: list[UniiRecord], groups: list[SameTierGroup]) -> s
         "intentionally excluded because runtime priority order resolves them.",
         "",
         "Tier labels below are **effective runtime priorities** from the "
-        "normalizer's fast exact lookup. A record from `other_ingredients.json` "
-        "can therefore appear in a higher tier when its exact name is already "
-        "claimed by a banned, allergen, harmful-additive, or IQM payload.",
+        "normalizer's fast exact lookup for active/safety sources. "
+        "`other_ingredients.json` UNII records intentionally remain in the "
+        "low-priority other-ingredient tier because inactive/excipient UNII "
+        "recognition is handled by a separate context-aware enricher index.",
         "",
         "No reference data was changed by this audit.",
         "",

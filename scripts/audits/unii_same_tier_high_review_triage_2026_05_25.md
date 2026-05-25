@@ -10,15 +10,18 @@ Source report:
 ## Scope
 
 This started as a report-only triage of the `41` `high_review` groups from the
-UNII same-tier scanner. After the P0-1 cleanup for `88XHZ13131` and the P0-2
-cleanup for `6DU9Y533FA`, the current scanner output has `39` `high_review`
-groups.
+UNII same-tier scanner. After the P0-1, P0-2, and P0-3 cleanups, the current
+scanner output has `40` `high_review` groups. The count is not directly
+comparable to the original triage because P0-3 fixed runtime priority modeling:
+`other_ingredients.json` UNII records now remain in the low-priority
+other-ingredient tier instead of inheriting active IQM tier through normalized
+name lookup.
 
 The scanner already separates runtime-equivalent warning groups into:
 
-- `153` info-level IQM parent/form self-duplicates
-- `15` ordinary review groups
-- `39` high-review groups
+- `120` info-level IQM parent/form self-duplicates
+- `13` ordinary review groups
+- `40` high-review groups
 
 This file classifies the remaining high-review groups into data-model buckets so the
 next pass can make small, defensible fixes instead of broad UNII rewrites.
@@ -29,15 +32,15 @@ next pass can make small, defensible fixes instead of broad UNII rewrites.
 |---|---:|---|---|
 | Policy / safety-tier overlay carrying a compound UNII | 0 | Resolved | `88XHZ13131` was fixed in the P0-1 cleanup. |
 | Safety/allergen inherited synonym groups | 3 | Low-medium | Likely exonerate/suppress after confirming names are same allergen source. |
-| IQM cross-parent structural duplicates | 1 | High | Fix or explicitly exonerate; these can alter active parent routing. |
+| IQM cross-parent structural duplicates | 0 | Resolved | `6DU9Y533FA` and `L11K75P92J` were fixed in P0-2/P0-3. |
 | Botanical / standardized same-source variants | 24 | Medium | Build a structured exoneration relationship (`base_botanical`, `standardized_extract`, `branded_extract`) before suppressing runtime warnings. |
-| Flavor / food-source derivatives | 8 | Medium-high | Verify individually; flavors/purees/powders may not be the same ingredient identity despite sharing source UNII. |
+| Other-ingredient source / derivative variants | 16 | Medium-high | Newly surfaced after P0-3 priority fix; verify individually before exoneration. |
 | Excipient brand/synonym variants | 3 | Medium | Most likely exoneration candidates, but verify compound-vs-mixture boundaries. |
 
 ## Fix Order
 
 1. **P0: IQM structural duplicates**
-   - `L11K75P92J` calcium / dicalcium phosphate cross-parent
+   - Resolved. No `iqm_cross_parent_same_unii` groups remain in the current scanner output.
 
 2. **P1: Flavor / food-source derivatives**
    - These are most likely to produce wrong user-facing identity if blindly
@@ -92,23 +95,22 @@ No further action for this UNII unless future audits show a regression.
 
 ### `L11K75P92J` — calcium / dicalcium phosphate cross-parent + filler
 
-Records:
+Resolution:
 
-- `ingredient_quality_map.json` → `calcium.forms[dicalcium phosphate]`
-- `ingredient_quality_map.json` → `dicalcium_phosphate`
-- `other_ingredients.json` → `PII_DICALCIUM_PHOSPHATE`
+- Kept `calcium.forms[dicalcium phosphate]` as the active mineral-source owner
+  of exact UNII `L11K75P92J`.
+- Removed parent-level exact UNII ownership from standalone
+  `dicalcium_phosphate` and added a `unii_note` documenting the active and
+  inactive context owners.
+- Kept `other_ingredients.json` → `PII_DICALCIUM_PHOSPHATE` with its exact UNII
+  so inactive/excipient recognition remains intact.
+- Hardened `_build_unii_to_payload_lookup` so other-ingredient UNIIs stay at
+  low-priority other tier rather than borrowing an active IQM payload through
+  normalized name lookup.
+- Regenerated the scanner report; `L11K75P92J` no longer appears as a same-tier
+  conflict.
 
-Assessment:
-
-- Same chemical identity is modeled as active calcium form, standalone IQM
-  parent, and inactive filler.
-- This likely needs context routing rather than a single global deletion:
-  dicalcium phosphate can be an active mineral source or an excipient.
-
-Recommended next action:
-
-- Keep the active-mineral path and inactive-filler path distinct by context.
-- Do not remove the filler entry blindly; make the rule explicit.
+No further action for this UNII unless future audits show a regression.
 
 ## Safety / Allergen Inherited Synonym Groups
 
@@ -214,17 +216,18 @@ Recommended next action:
 
 ## Proposed Next Slice
 
-**Slice 1: Remaining P0 data-model cleanup plan.**
+**Slice 1: Post-P0 high-review exoneration model.**
 
 Inputs:
 
-- `L11K75P92J`
+- The 40 remaining high-review groups, especially the 16 newly visible
+  `other_ingredients` source/derivative groups.
 
 Deliverable:
 
-- One short spec deciding the data model for each group.
-- API verification for the exact UNIIs involved.
-- TDD plan for any data edit.
+- A structured exoneration schema for same-source variants vs true conflicts.
+- API verification for any exact UNIIs that will be suppressed.
+- TDD plan for any data edit or scanner suppression model.
 
 Why first:
 

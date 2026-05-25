@@ -1,41 +1,41 @@
 # UNII Same-Tier Conflict Audit
 
-Generated: 2026-05-25T21:01:13+00:00
+Generated: 2026-05-25T21:09:22+00:00
 
 ## Scope
 
 This is a read-only scanner for the runtime warning emitted by `EnhancedDSLDNormalizer._build_unii_to_payload_lookup`: same UNII, same lookup-priority tier, multiple records. Cross-tier collisions are intentionally excluded because runtime priority order resolves them.
 
-Tier labels below are **effective runtime priorities** from the normalizer's fast exact lookup. A record from `other_ingredients.json` can therefore appear in a higher tier when its exact name is already claimed by a banned, allergen, harmful-additive, or IQM payload.
+Tier labels below are **effective runtime priorities** from the normalizer's fast exact lookup for active/safety sources. `other_ingredients.json` UNII records intentionally remain in the low-priority other-ingredient tier because inactive/excipient UNII recognition is handled by a separate context-aware enricher index.
 
 No reference data was changed by this audit.
 
 ## Summary
 
-- UNII-bearing records scanned: **1494**
-- Same-tier UNII groups: **207**
+- UNII-bearing records scanned: **1493**
+- Same-tier UNII groups: **173**
 
 | Severity | Groups |
 |---|---:|
-| high_review | 39 |
-| review | 15 |
-| info | 153 |
+| high_review | 40 |
+| review | 13 |
+| info | 120 |
 
 | Tier | Groups |
 |---|---:|
-| allergens | 4 |
+| allergens | 3 |
 | banned_recalled | 1 |
 | botanical_ingredients | 3 |
 | harmful_additives | 3 |
-| ingredient_quality_map | 189 |
+| ingredient_quality_map | 138 |
+| other_ingredients | 18 |
 | standardized_botanicals | 7 |
 
 | Classification | Groups |
 |---|---:|
-| iqm_cross_parent_same_unii | 1 |
-| iqm_same_parent_parent_form | 153 |
-| same_tier_different_names | 38 |
-| same_tier_duplicate_name | 15 |
+| iqm_same_parent_parent_form | 120 |
+| same_tier_different_names | 40 |
+| same_tier_duplicate_name | 13 |
 
 ## High-Review Groups
 
@@ -45,13 +45,6 @@ No reference data was changed by this audit.
 - Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
 - `botanical_ingredients.json` → `wheatgrass_powder` (botanical; Wheatgrass Powder)
 - `ingredient_quality_map.json` → `wheatgrass` (iqm_parent; Wheatgrass, parent=`wheatgrass`)
-
-### `48268V50D5` — tier 2 `allergens` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `ingredient_quality_map.json` → `casein` (iqm_parent; Casein, parent=`casein`)
-- `other_ingredients.json` → `PII_MICELLAR_CASEIN` (other_ingredient; Micellar Casein)
 
 ### `86507VZR9K` — tier 2 `allergens` (same_tier_different_names, high_review)
 
@@ -81,26 +74,12 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `tart_cherry_fruit` (botanical; Tart Cherry Fruit)
 - `standardized_botanicals.json` → `tart_cherry` (standardized_botanical; Tart Cherry)
 
-### `230OU9XXE4` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `NHA_MONO_DIGLYCERIDES` (other_ingredient; Mono and Diglycerides)
-- `other_ingredients.json` → `PII_GLYCEROL_MONOSTEARATE` (other_ingredient; Glycerol Monostearate)
-
 ### `31T0FF0472` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
 - Action: `verify_unii_assignment`
 - Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
 - `standardized_botanicals.json` → `astaxanthin_haematococcus_pluvialis` (standardized_botanical; Astaxanthin (Haematococcus pluvialis))
 - `standardized_botanicals.json` → `astazine` (standardized_botanical; AstaZine)
-
-### `3OWL53L36A` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `PII_PARTECK` (other_ingredient; Parteck (Mannitol))
-- `other_ingredients.json` → `PII_PEARLITOL` (other_ingredient; Pearlitol (Mannitol))
 
 ### `3S5ITS5ULN` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
@@ -116,29 +95,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `acai_berry` (botanical; Acai Berry)
 - `standardized_botanicals.json` → `acai` (standardized_botanical; Acai)
 
-### `4J2TY8Y81V` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `botanical_ingredients.json` → `strawberry` (botanical; Strawberry)
-- `other_ingredients.json` → `NHA_STRAWBERRY_PUREE` (other_ingredient; Strawberry Puree)
-- `other_ingredients.json` → `OI_NATURAL_STRAWBERRY_FLAVOR` (other_ingredient; Natural Strawberry Flavor)
-
-### `5EVU04N5QU` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `NHA_ORANGE_CRYSTALS` (other_ingredient; Orange Crystals)
-- `other_ingredients.json` → `NHA_ORANGE_FLAVOR` (other_ingredient; Orange Flavor)
-
-### `5MG5Z946UO` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `botanical_ingredients.json` → `carob` (botanical; Carob)
-- `other_ingredients.json` → `OI_CAROB_CARAMEL` (other_ingredient; Carob and Caramel)
-- `other_ingredients.json` → `PII_CAROB_STJOHNS_BREAD` (other_ingredient; Carob (St. John's Bread))
-
 ### `654825W09Z` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
 - Action: `verify_unii_assignment`
@@ -146,49 +102,12 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `fenugreek_seed` (botanical; Fenugreek Seed)
 - `standardized_botanicals.json` → `fenugreek` (standardized_botanical; Fenugreek)
 
-### `6PQP1V1B6O` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `NHA_ANNATTO_VARIANTS` (other_ingredient; Annatto (Variants))
-- `other_ingredients.json` → `NHA_FRUIT_VEG_POWDERS` (other_ingredient; Fruit & Vegetable Powders)
-- `other_ingredients.json` → `OI_ANNATTO_EXTRACT` (other_ingredient; Annatto Extract)
-
 ### `714783Y9Z0` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
 - Action: `verify_unii_assignment`
 - Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
 - `botanical_ingredients.json` → `danshen` (botanical; Danshen)
 - `standardized_botanicals.json` → `salvia_miltiorrhiza` (standardized_botanical; Salvia Miltiorrhiza)
-
-### `B423VGH5S9` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `NHA_APPLE_PUREE_CONCENTRATE` (other_ingredient; Apple Puree Concentrate)
-- `other_ingredients.json` → `NHA_NATURAL_APPLE_FLAVOR` (other_ingredient; Natural Apple Flavor)
-- `other_ingredients.json` → `PII_APPLE_FLAVOR` (other_ingredient; Apple Flavor)
-
-### `C4YAD5F5G6` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `PII_GLYCEROL_MONOOLEATE` (other_ingredient; Glycerol Monooleate)
-- `other_ingredients.json` → `PII_GLYCERYL_MONOOLEATE` (other_ingredient; Glyceryl Monooleate)
-
-### `E89I1637KE` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `NHA_PARTIALLY_HYDROLYZED_GUAR_GUM` (other_ingredient; Partially Hydrolyzed Guar Gum)
-- `other_ingredients.json` → `OI_GUAR_GUM` (other_ingredient; Guar Gum)
-
-### `FZ989GH94E` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `NHA_PVP` (other_ingredient; Polyvinyl Pyrrolidone)
-- `other_ingredients.json` → `PII_KOLLIDON` (other_ingredient; Kollidon (Polyvinylpyrrolidone))
 
 ### `HP7119212T` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
@@ -209,16 +128,7 @@ No reference data was changed by this audit.
 - Action: `verify_unii_assignment`
 - Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
 - `botanical_ingredients.json` → `black_pepper` (botanical; Black Pepper)
-- `other_ingredients.json` → `NHA_BLACK_PEPPER_EXTRACT` (other_ingredient; Black Pepper Extract)
 - `standardized_botanicals.json` → `black_pepper_extract` (standardized_botanical; Black Pepper Extract)
-
-### `L11K75P92J` — tier 4 `ingredient_quality_map` (iqm_cross_parent_same_unii, high_review)
-
-- Action: `review_data_model_or_exonerate`
-- Reason: Same UNII appears under different IQM parents/forms at the same priority tier.
-- `ingredient_quality_map.json` → `calcium.forms[dicalcium phosphate]` (iqm_form; dicalcium phosphate, parent=`calcium`)
-- `ingredient_quality_map.json` → `dicalcium_phosphate` (iqm_parent; Di-Calcium Phosphate, parent=`dicalcium_phosphate`)
-- `other_ingredients.json` → `PII_DICALCIUM_PHOSPHATE` (other_ingredient; Dicalcium Phosphate (as filler))
 
 ### `QI7G114Y98` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
@@ -234,13 +144,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `holy_basil_leaf` (botanical; Holy Basil Leaf)
 - `standardized_botanicals.json` → `holy_basil` (standardized_botanical; Holy Basil)
 
-### `TJR6B3R47P` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `botanical_ingredients.json` → `millet` (botanical; Millet)
-- `other_ingredients.json` → `PII_MILLET_FLOUR` (other_ingredient; Millet Flour)
-
 ### `V038D626IF` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
 - Action: `verify_unii_assignment`
@@ -249,26 +152,12 @@ No reference data was changed by this audit.
 - `standardized_botanicals.json` → `ashwagandha` (standardized_botanical; Ashwagandha)
 - `standardized_botanicals.json` → `ksm_66_ashwagandha` (standardized_botanical; KSM-66 Ashwagandha)
 
-### `XDD2WEC9L5` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `botanical_ingredients.json` → `acerola_cherry` (botanical; Acerola Cherry)
-- `other_ingredients.json` → `NHA_WEST_INDIAN_CHERRY` (other_ingredient; West Indian Cherry (Acerola))
-
 ### `Y8P1YR4920` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 
 - Action: `verify_unii_assignment`
 - Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
 - `botanical_ingredients.json` → `shatavari_root` (botanical; Shatavari Root)
 - `standardized_botanicals.json` → `shatavari` (standardized_botanical; Shatavari)
-
-### `Y9H1V576FH` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
-
-- Action: `verify_unii_assignment`
-- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
-- `other_ingredients.json` → `PII_HONEY` (other_ingredient; Honey)
-- `other_ingredients.json` → `PII_HONEY_FLAVOR` (other_ingredient; Honey Flavor)
 
 ### `0MVO31Q3QS` — tier 5 `standardized_botanicals` (same_tier_different_names, high_review)
 
@@ -320,6 +209,122 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `myrrh_resin` (botanical; Myrrh Resin)
 - `botanical_ingredients.json` → `myrrh_resin_extract` (botanical; Myrrh Resin Extract)
 
+### `0MVO31Q3QS` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_CRANBERRY_EXTRACT` (other_ingredient; Cranberry Concentrate)
+- `other_ingredients.json` → `NHA_CRANBERRY_FIBER` (other_ingredient; Cranberry Fiber)
+
+### `230OU9XXE4` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_MONO_DIGLYCERIDES` (other_ingredient; Mono and Diglycerides)
+- `other_ingredients.json` → `PII_GLYCEROL_MONOSTEARATE` (other_ingredient; Glycerol Monostearate)
+
+### `3OWL53L36A` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `PII_PARTECK` (other_ingredient; Parteck (Mannitol))
+- `other_ingredients.json` → `PII_PEARLITOL` (other_ingredient; Pearlitol (Mannitol))
+
+### `4J2TY8Y81V` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_STRAWBERRY_PUREE` (other_ingredient; Strawberry Puree)
+- `other_ingredients.json` → `OI_NATURAL_STRAWBERRY_FLAVOR` (other_ingredient; Natural Strawberry Flavor)
+
+### `5EVU04N5QU` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_ORANGE_CRYSTALS` (other_ingredient; Orange Crystals)
+- `other_ingredients.json` → `NHA_ORANGE_FLAVOR` (other_ingredient; Orange Flavor)
+
+### `5MG5Z946UO` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `OI_CAROB_CARAMEL` (other_ingredient; Carob and Caramel)
+- `other_ingredients.json` → `PII_CAROB_STJOHNS_BREAD` (other_ingredient; Carob (St. John's Bread))
+
+### `6PQP1V1B6O` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_ANNATTO_VARIANTS` (other_ingredient; Annatto (Variants))
+- `other_ingredients.json` → `NHA_FRUIT_VEG_POWDERS` (other_ingredient; Fruit & Vegetable Powders)
+- `other_ingredients.json` → `OI_ANNATTO_EXTRACT` (other_ingredient; Annatto Extract)
+
+### `B423VGH5S9` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_APPLE_PUREE_CONCENTRATE` (other_ingredient; Apple Puree Concentrate)
+- `other_ingredients.json` → `NHA_NATURAL_APPLE_FLAVOR` (other_ingredient; Natural Apple Flavor)
+- `other_ingredients.json` → `PII_APPLE_FLAVOR` (other_ingredient; Apple Flavor)
+
+### `C4YAD5F5G6` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `PII_GLYCEROL_MONOOLEATE` (other_ingredient; Glycerol Monooleate)
+- `other_ingredients.json` → `PII_GLYCERYL_MONOOLEATE` (other_ingredient; Glyceryl Monooleate)
+
+### `C5529G5JPQ` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_GINGER_EXTRACT` (other_ingredient; Ginger Extract)
+- `other_ingredients.json` → `NHA_GINGER_FLAVOR` (other_ingredient; Ginger Flavor)
+
+### `E89I1637KE` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_PARTIALLY_HYDROLYZED_GUAR_GUM` (other_ingredient; Partially Hydrolyzed Guar Gum)
+- `other_ingredients.json` → `OI_GUAR_GUM` (other_ingredient; Guar Gum)
+
+### `FZ989GH94E` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_PVP` (other_ingredient; Polyvinyl Pyrrolidone)
+- `other_ingredients.json` → `PII_KOLLIDON` (other_ingredient; Kollidon (Polyvinylpyrrolidone))
+- `other_ingredients.json` → `PII_POVIDONE` (other_ingredient; Povidone)
+
+### `K679OBS311` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `OI_CELLULOSE_GUM` (other_ingredient; Cellulose Gum)
+- `other_ingredients.json` → `PII_SODIUM_CARBOXYMETHYLCELLULOSE` (other_ingredient; Sodium Carboxymethylcellulose)
+
+### `LSU3YX0KZO` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_BLACK_STRAP_MOLASSES` (other_ingredient; Blackstrap Molasses)
+- `other_ingredients.json` → `NHA_MAPLE_MOLASSES` (other_ingredient; Maple Syrup & Molasses)
+
+### `R60QEP13IC` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `NHA_RICE_BRAN_EXTRACT` (other_ingredient; Rice Bran Extract)
+- `other_ingredients.json` → `NHA_RICE_EXTRACT` (other_ingredient; Rice Extract Blend)
+- `other_ingredients.json` → `OI_RICE_FIBER` (other_ingredient; Rice Fiber)
+
+### `Y9H1V576FH` — tier 9 `other_ingredients` (same_tier_different_names, high_review)
+
+- Action: `verify_unii_assignment`
+- Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
+- `other_ingredients.json` → `PII_HONEY` (other_ingredient; Honey)
+- `other_ingredients.json` → `PII_HONEY_FLAVOR` (other_ingredient; Honey Flavor)
+
 
 ## Review Groups
 
@@ -366,13 +371,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `andrographis` (botanical; Andrographis)
 - `standardized_botanicals.json` → `andrographis` (standardized_botanical; Andrographis)
 
-### `3TNW8D08V3` — tier 4 `ingredient_quality_map` (same_tier_duplicate_name, review)
-
-- Action: `review_duplicate_or_alias_model`
-- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
-- `botanical_ingredients.json` → `rose_hips` (botanical; Rose Hips)
-- `other_ingredients.json` → `OI_ROSE_HIPS_INACTIVE` (other_ingredient; Rose Hips (Botanical Filler))
-
 ### `4G174V5051` — tier 4 `ingredient_quality_map` (same_tier_duplicate_name, review)
 
 - Action: `review_duplicate_or_alias_model`
@@ -380,33 +378,12 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `beetroot` (botanical; Beetroot)
 - `standardized_botanicals.json` → `beetroot` (standardized_botanical; Beetroot)
 
-### `535G2ABX9M` — tier 4 `ingredient_quality_map` (same_tier_duplicate_name, review)
-
-- Action: `review_duplicate_or_alias_model`
-- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
-- `other_ingredients.json` → `NHA_BLADDERWRACK` (other_ingredient; Bladderwrack)
-- `standardized_botanicals.json` → `bladderwrack` (standardized_botanical; Bladderwrack)
-
 ### `7M867G6T1U` — tier 4 `ingredient_quality_map` (same_tier_duplicate_name, review)
 
 - Action: `review_duplicate_or_alias_model`
 - Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
 - `botanical_ingredients.json` → `gotu_kola` (botanical; Gotu Kola)
 - `standardized_botanicals.json` → `gotu_kola` (standardized_botanical; Gotu Kola)
-
-### `H8AV0SQX4D` — tier 4 `ingredient_quality_map` (same_tier_duplicate_name, review)
-
-- Action: `review_duplicate_or_alias_model`
-- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
-- `other_ingredients.json` → `NHA_SODIUM_STARCH_GLYCOLATE` (other_ingredient; Sodium Starch Glycolate)
-- `other_ingredients.json` → `PII_SODIUM_STARCH_GLYCOLATE` (other_ingredient; Sodium Starch Glycolate)
-
-### `M4I0D6VV5M` — tier 4 `ingredient_quality_map` (same_tier_duplicate_name, review)
-
-- Action: `review_duplicate_or_alias_model`
-- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
-- `other_ingredients.json` → `NHA_CALCIUM_CHLORIDE` (other_ingredient; Calcium Chloride)
-- `other_ingredients.json` → `PII_CALCIUM_CHLORIDE_EXCIPIENT` (other_ingredient; Calcium Chloride (Excipient))
 
 ### `F84709P2XV` — tier 5 `standardized_botanicals` (same_tier_duplicate_name, review)
 
@@ -429,15 +406,22 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `broccoli` (botanical; Broccoli)
 - `standardized_botanicals.json` → `broccoli` (standardized_botanical; Broccoli)
 
+### `H8AV0SQX4D` — tier 9 `other_ingredients` (same_tier_duplicate_name, review)
+
+- Action: `review_duplicate_or_alias_model`
+- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
+- `other_ingredients.json` → `NHA_SODIUM_STARCH_GLYCOLATE` (other_ingredient; Sodium Starch Glycolate)
+- `other_ingredients.json` → `PII_SODIUM_STARCH_GLYCOLATE` (other_ingredient; Sodium Starch Glycolate)
+
+### `M4I0D6VV5M` — tier 9 `other_ingredients` (same_tier_duplicate_name, review)
+
+- Action: `review_duplicate_or_alias_model`
+- Reason: Same-tier records have the same normalized name; may be duplicate modeling or alias drift.
+- `other_ingredients.json` → `NHA_CALCIUM_CHLORIDE` (other_ingredient; Calcium Chloride)
+- `other_ingredients.json` → `PII_CALCIUM_CHLORIDE_EXCIPIENT` (other_ingredient; Calcium Chloride (Excipient))
+
 
 ## Info / Suppression-Candidate Groups
-
-### `00WNZ48OR9` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `chlorophyll` (iqm_parent; Chlorophyll, parent=`chlorophyll`)
-- `other_ingredients.json` → `NHA_NATURAL_COLORS` (other_ingredient; Natural Colors from Plants)
 
 ### `0111871I23` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -474,8 +458,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `cranberry` (botanical; Cranberry)
 - `botanical_ingredients.json` → `cranberry_fruit` (botanical; Cranberry Fruit)
 - `ingredient_quality_map.json` → `cranberry` (iqm_parent; Cranberry, parent=`cranberry`)
-- `other_ingredients.json` → `NHA_CRANBERRY_EXTRACT` (other_ingredient; Cranberry Concentrate)
-- `other_ingredients.json` → `NHA_CRANBERRY_FIBER` (other_ingredient; Cranberry Fiber)
 
 ### `0UE22Q87VC` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -483,7 +465,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `apple_cider_vinegar` (botanical; Apple Cider Vinegar)
 - `ingredient_quality_map.json` → `apple_cider_vinegar` (iqm_parent; Apple Cider Vinegar, parent=`apple_cider_vinegar`)
-- `other_ingredients.json` → `NHA_APPLE_CIDER_VINEGAR` (other_ingredient; Apple Cider Vinegar)
 
 ### `19F5HK2737` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -549,14 +530,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `citric_acid.forms[citric acid]` (iqm_form; citric acid, parent=`citric_acid`)
 - `ingredient_quality_map.json` → `citric_acid` (iqm_parent; Citric Acid, parent=`citric_acid`)
-- `other_ingredients.json` → `NHA_CITRIC_ACID` (other_ingredient; Citric Acid)
-
-### `2G86QN327L` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `collagen.forms[gelatin]` (iqm_form; gelatin, parent=`collagen`)
-- `other_ingredients.json` → `PII_GELATIN_CAPSULE` (other_ingredient; Gelatin Capsule)
 
 ### `2H1576D5WG` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -573,27 +546,12 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `mucuna_pruriens` (iqm_parent; Mucuna Pruriens (Velvet Bean), parent=`mucuna_pruriens`)
 - `standardized_botanicals.json` → `mucuna_pruriens` (standardized_botanical; Mucuna Pruriens)
 
-### `2P3VWU3H10` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `activated_charcoal` (iqm_parent; Activated Charcoal, parent=`activated_charcoal`)
-- `other_ingredients.json` → `PII_ACTIVATED_CARBON` (other_ingredient; Activated Carbon)
-
 ### `2UMI9U37CP` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `oleic_acid.forms[oleic acid]` (iqm_form; oleic acid, parent=`oleic_acid`)
 - `ingredient_quality_map.json` → `oleic_acid` (iqm_parent; Oleic Acid, parent=`oleic_acid`)
-- `other_ingredients.json` → `NHA_OLEIC_ACID` (other_ingredient; Oleic Acid)
-
-### `2URQ2N32W3` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `calcium.forms[calcium lactate]` (iqm_form; calcium lactate, parent=`calcium`)
-- `other_ingredients.json` → `NHA_CALCIUM_LACTATE` (other_ingredient; Calcium Lactate)
 
 ### `2V16EO95H1` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -615,7 +573,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `bee_pollen` (botanical; Bee Pollen)
 - `ingredient_quality_map.json` → `bee_pollen` (iqm_parent; Bee Pollen, parent=`bee_pollen`)
-- `other_ingredients.json` → `PII_BEE_POLLEN` (other_ingredient; Bee Pollen)
 
 ### `394XK0IH40` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -640,20 +597,12 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `horse_chestnut_seed` (botanical; Horse Chestnut Seed)
 - `ingredient_quality_map.json` → `horse_chestnut_seed` (iqm_parent; Horse Chestnut Seed, parent=`horse_chestnut_seed`)
 
-### `3SCV180C9W` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `tmg_betaine` (iqm_parent; TMG (Trimethylglycine), parent=`tmg_betaine`)
-- `other_ingredients.json` → `PII_BETAINE_MONOHYDRATE` (other_ingredient; Betaine Monohydrate)
-
 ### `3W1JG795YI` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `sunflower_oil.forms[sunflower oil]` (iqm_form; sunflower oil, parent=`sunflower_oil`)
 - `ingredient_quality_map.json` → `sunflower_oil` (iqm_parent; Sunflower Oil, parent=`sunflower_oil`)
-- `other_ingredients.json` → `PII_SUNFLOWER_OIL` (other_ingredient; Sunflower Oil)
 
 ### `4V59G5UW9X` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -707,14 +656,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `ceylon_cinnamon` (botanical; Ceylon Cinnamon)
 - `botanical_ingredients.json` → `cinnamon` (botanical; Cinnamon)
 - `ingredient_quality_map.json` → `cinnamon` (iqm_parent; Cinnamon, parent=`cinnamon`)
-- `other_ingredients.json` → `PII_CINNAMON_FLAVORING` (other_ingredient; Cinnamon (Natural Flavoring))
-
-### `5Z33R5TKO7` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `l_asparagine` (iqm_parent; L-Asparagine, parent=`l_asparagine`)
-- `other_ingredients.json` → `NHA_L_ASPARAGINE` (other_ingredient; L-Asparagine)
 
 ### `61H4T033E5` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -764,7 +705,6 @@ No reference data was changed by this audit.
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `propolis` (iqm_parent; Propolis, parent=`propolis`)
-- `other_ingredients.json` → `PII_PROPOLIS` (other_ingredient; Propolis)
 - `standardized_botanicals.json` → `propolis` (standardized_botanical; Propolis)
 
 ### `709HYI14M4` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
@@ -795,40 +735,12 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `pregnenolone.forms[pregnenolone]` (iqm_form; pregnenolone, parent=`pregnenolone`)
 - `ingredient_quality_map.json` → `pregnenolone` (iqm_parent; Pregnenolone, parent=`pregnenolone`)
 
-### `7797M4CPPA` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `dimethyl_glycine` (iqm_parent; Dimethyl Glycine, parent=`dimethyl_glycine`)
-- `other_ingredients.json` → `OI_DIMETHYLGLYCINE` (other_ingredient; Dimethylglycine)
-
-### `7QM776WJ5N` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `diosmin` (iqm_parent; Diosmin, parent=`diosmin`)
-- `other_ingredients.json` → `OI_DIOSMIN` (other_ingredient; Diosmin)
-
-### `7Y1255HVXR` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `sesame_seed_oil` (iqm_parent; Sesame Seed Oil, parent=`sesame_seed_oil`)
-- `other_ingredients.json` → `PII_SESAME_SEED_OIL` (other_ingredient; Sesame Seed Oil)
-
 ### `8021PR16QO` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `l_theanine` (botanical; L-Theanine)
 - `ingredient_quality_map.json` → `l_theanine` (iqm_parent; L-Theanine, parent=`l_theanine`)
-
-### `80BJ7WN25Z` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `ipriflavone` (iqm_parent; Ipriflavone, parent=`ipriflavone`)
-- `other_ingredients.json` → `OI_IPRIFLAVONE` (other_ingredient; Ipriflavone)
 
 ### `8369GFM6LY` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -844,22 +756,7 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `turmeric` (botanical; Turmeric)
 - `botanical_ingredients.json` → `turmeric_root_powder` (botanical; Turmeric Root Powder)
 - `ingredient_quality_map.json` → `turmeric` (iqm_parent; Turmeric, parent=`turmeric`)
-- `other_ingredients.json` → `OI_TURMERIC_POWDER_COLOR` (other_ingredient; Turmeric Powder (Color))
 - `standardized_botanicals.json` → `turmeric` (standardized_botanical; Turmeric)
-
-### `8617Z5FMF6` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `whey_protein` (iqm_parent; Whey Protein, parent=`whey_protein`)
-- `other_ingredients.json` → `PII_WHEY_PROTEIN_ISOLATE` (other_ingredient; Whey Protein Isolate)
-
-### `89NA02M4RX` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `prebiotics.forms[pectin]` (iqm_form; pectin, parent=`prebiotics`)
-- `other_ingredients.json` → `NHA_PECTIN` (other_ingredient; Pectin)
 
 ### `8GOM182CI3` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -925,13 +822,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `black_currant` (iqm_parent; Black Currant, parent=`black_currant`)
 - `standardized_botanicals.json` → `black_currant` (standardized_botanical; Black Currant)
 
-### `978D8U419H` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `brewers_yeast` (iqm_parent; Brewer's Yeast, parent=`brewers_yeast`)
-- `other_ingredients.json` → `PII_SACCHAROMYCES_CEREVISIAE` (other_ingredient; Saccharomyces cerevisiae (yeast))
-
 ### `98HPY76U4W` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
@@ -970,13 +860,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `bilberry` (iqm_parent; Bilberry, parent=`bilberry`)
 - `standardized_botanicals.json` → `bilberry` (standardized_botanical; Bilberry (Vaccinium myrtillus))
 
-### `9RMU91N5K2` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `artemisinin` (iqm_parent; Artemisinin, parent=`artemisinin`)
-- `other_ingredients.json` → `PII_ARTEMISININ` (other_ingredient; Artemisinin)
-
 ### `A1ST9M22TO` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
@@ -992,13 +875,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `maitake` (iqm_parent; Maitake, parent=`maitake`)
 - `standardized_botanicals.json` → `maitake` (standardized_botanical; Maitake)
 
-### `A3N5ZCN45C` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `bentonite` (iqm_parent; Bentonite, parent=`bentonite`)
-- `other_ingredients.json` → `PII_BENTONITE_CLAY` (other_ingredient; Bentonite Clay)
-
 ### `A77056YJ4K` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
@@ -1013,26 +889,12 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `succinic_acid.forms[succinic acid]` (iqm_form; succinic acid, parent=`succinic_acid`)
 - `ingredient_quality_map.json` → `succinic_acid` (iqm_parent; Succinic Acid, parent=`succinic_acid`)
 
-### `BBL281NWFG` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `cod_liver_oil` (iqm_parent; Cod Liver Oil, parent=`cod_liver_oil`)
-- `other_ingredients.json` → `PII_COD_LIVER_OIL_CARRIER` (other_ingredient; Cod Liver Oil (as carrier))
-
 ### `BD70459I50` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `lemon_bioflavonoids` (botanical; Lemon Bioflavonoids)
 - `ingredient_quality_map.json` → `citrus_bioflavonoids` (iqm_parent; Citrus Bioflavonoids, parent=`citrus_bioflavonoids`)
-
-### `BHW853AU9H` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `beta_caryophyllene` (iqm_parent; Beta-Caryophyllene, parent=`beta_caryophyllene`)
-- `other_ingredients.json` → `OI_BETA_CARYOPHYLLENE` (other_ingredient; Beta-Caryophyllene)
 
 ### `BQY1UBX046` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1049,8 +911,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `ginger_extract` (botanical; Ginger Extract)
 - `botanical_ingredients.json` → `ginger_root` (botanical; Ginger Root)
 - `ingredient_quality_map.json` → `ginger` (iqm_parent; Ginger, parent=`ginger`)
-- `other_ingredients.json` → `NHA_GINGER_EXTRACT` (other_ingredient; Ginger Extract)
-- `other_ingredients.json` → `NHA_GINGER_FLAVOR` (other_ingredient; Ginger Flavor)
 - `standardized_botanicals.json` → `ginger_extract` (standardized_botanical; Ginger (Zingiber officinale))
 
 ### `CHC1JS541R` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
@@ -1074,13 +934,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `black_seed_oil` (iqm_parent; Black Seed Oil (Nigella Sativa), parent=`black_seed_oil`)
 - `standardized_botanicals.json` → `black_seed_oil` (standardized_botanical; Black Seed Oil)
-
-### `CU9S17279X` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `phlorizin` (iqm_parent; Phlorizin, parent=`phlorizin`)
-- `other_ingredients.json` → `NHA_PHLORIDZIN` (other_ingredient; Phloridzin)
 
 ### `CUQ3A77YXI` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1110,7 +963,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `cacao_powder` (botanical; Cacao Powder)
 - `ingredient_quality_map.json` → `cocoa` (iqm_parent; Cocoa, parent=`cocoa`)
-- `other_ingredients.json` → `OI_COCOA_POWDER` (other_ingredient; Cocoa Powder)
 
 ### `E750O06Y6O` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1126,20 +978,12 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `saffron` (botanical; Saffron)
 - `ingredient_quality_map.json` → `saffron` (iqm_parent; Saffron, parent=`saffron`)
 
-### `EE90ONI6FF` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `potassium.forms[potassium citrate]` (iqm_form; potassium citrate, parent=`potassium`)
-- `other_ingredients.json` → `NHA_POTASSIUM_CITRATE` (other_ingredient; Potassium Citrate)
-
 ### `F8XAG1755S` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `borage_seed_oil.forms[borage seed oil]` (iqm_form; borage seed oil, parent=`borage_seed_oil`)
 - `ingredient_quality_map.json` → `borage_seed_oil` (iqm_parent; Borage Seed Oil, parent=`borage_seed_oil`)
-- `other_ingredients.json` → `NHA_STARFLOWER_OIL` (other_ingredient; Starflower Oil (Borage Oil))
 
 ### `FGL3685T2X` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1147,28 +991,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `chamomile` (botanical; Chamomile)
 - `ingredient_quality_map.json` → `chamomile` (iqm_parent; Chamomile, parent=`chamomile`)
-- `other_ingredients.json` → `NHA_CHAMOMILE_EXTRACT` (other_ingredient; Chamomile Extract)
-
-### `G199I91G4B` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `cla` (iqm_parent; CLA, parent=`cla`)
-- `other_ingredients.json` → `OI_CLA_OIL_INACTIVE` (other_ingredient; Conjugated Linoleic Acid Oil)
-
-### `GID333S43J` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `pepsin` (iqm_parent; Pepsin, parent=`pepsin`)
-- `other_ingredients.json` → `PII_PEPSIN` (other_ingredient; Pepsin)
-
-### `H0G9379FGK` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `calcium.forms[calcium carbonate]` (iqm_form; calcium carbonate, parent=`calcium`)
-- `other_ingredients.json` → `PII_CALCIUM_CARBONATE` (other_ingredient; Calcium Carbonate (as filler))
 
 ### `HB6PN45W4J` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1197,15 +1019,7 @@ No reference data was changed by this audit.
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `rosemary` (iqm_parent; Rosemary, parent=`rosemary`)
-- `other_ingredients.json` → `NHA_ROSEMARY_NATURAL_FLAVOR` (other_ingredient; Natural Rosemary Flavor)
 - `standardized_botanicals.json` → `rosemary` (standardized_botanical; Rosemary)
-
-### `ILJ8NEF6DT` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `urolithin_a` (iqm_parent; Urolithin A, parent=`urolithin_a`)
-- `other_ingredients.json` → `NHA_MITOPURE_UROLITHIN_A` (other_ingredient; Mitopure Urolithin A)
 
 ### `IT942ZTH98` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1221,13 +1035,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `wild_yam_root` (botanical; Wild Yam Root)
 - `ingredient_quality_map.json` → `wild_yam` (iqm_parent; Wild Yam, parent=`wild_yam`)
 - `standardized_botanicals.json` → `wild_yam` (standardized_botanical; Wild Yam)
-
-### `J7I2T6IV1N` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `spearmint` (iqm_parent; Spearmint, parent=`spearmint`)
-- `other_ingredients.json` → `NHA_SPEARMINT_NATURAL` (other_ingredient; Natural Spearmint Flavor)
 
 ### `J7WWH9M8QS` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1250,7 +1057,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `botanical_ingredients.json` → `inulin` (botanical; Inulin)
 - `ingredient_quality_map.json` → `inulin` (iqm_parent; Inulin, parent=`inulin`)
-- `other_ingredients.json` → `NHA_INULIN` (other_ingredient; Inulin)
 
 ### `JWF5YAW3QW` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1259,13 +1065,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `valerian_root` (botanical; Valerian Root)
 - `ingredient_quality_map.json` → `valerian` (iqm_parent; Valerian, parent=`valerian`)
 - `standardized_botanicals.json` → `valerian` (standardized_botanical; Valerian)
-
-### `K3D86KJ24N` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `undecylenic_acid` (iqm_parent; 10-Undecenoic Acid (Undecylenic Acid), parent=`undecylenic_acid`)
-- `other_ingredients.json` → `OI_10_UNDECENOIC_ACID` (other_ingredient; 10-Undecenoic Acid)
 
 ### `K5877MW0LE` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1288,13 +1087,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `vitamin_e.forms[tocotrienols]` (iqm_form; tocotrienols, parent=`vitamin_e`)
 - `ingredient_quality_map.json` → `vitamin_e` (iqm_parent; Vitamin E, parent=`vitamin_e`)
 
-### `KTQ9R9MS0Q` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `isovitexin` (iqm_parent; Isovitexin, parent=`isovitexin`)
-- `other_ingredients.json` → `NHA_ISOVITEXIN` (other_ingredient; Isovitexin)
-
 ### `KU94FIY6JB` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
@@ -1308,7 +1100,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `royal_jelly.forms[royal jelly]` (iqm_form; royal jelly, parent=`royal_jelly`)
 - `ingredient_quality_map.json` → `royal_jelly` (iqm_parent; Royal Jelly, parent=`royal_jelly`)
-- `other_ingredients.json` → `PII_ROYAL_JELLY` (other_ingredient; Royal Jelly)
 
 ### `L9153EKV2Y` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1333,14 +1124,6 @@ No reference data was changed by this audit.
 - `botanical_ingredients.json` → `chia_seed` (botanical; Chia Seed)
 - `ingredient_quality_map.json` → `chia_seed.forms[chia seed]` (iqm_form; chia seed, parent=`chia_seed`)
 - `ingredient_quality_map.json` → `chia_seed` (iqm_parent; Chia Seed, parent=`chia_seed`)
-- `other_ingredients.json` → `PII_CHIA_SEED_MEAL` (other_ingredient; Chia Seed Meal)
-
-### `OQS23HUA1X` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `irish_sea_moss` (iqm_parent; Irish Sea Moss, parent=`irish_sea_moss`)
-- `other_ingredients.json` → `NHA_IRISH_SEA_MOSS` (other_ingredient; Irish Sea Moss)
 
 ### `P6YC3EG204` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1355,7 +1138,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `vitamin_c.forms[ascorbic acid]` (iqm_form; ascorbic acid, parent=`vitamin_c`)
 - `ingredient_quality_map.json` → `vitamin_c` (iqm_parent; Vitamin C, parent=`vitamin_c`)
-- `other_ingredients.json` → `OI_ASCORBIC_ACID_PRESERVATIVE` (other_ingredient; Ascorbic Acid (Preservative))
 
 ### `Q369O8926L` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1370,15 +1152,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `grains_of_paradise` (iqm_parent; Grains of Paradise, parent=`grains_of_paradise`)
 - `standardized_botanicals.json` → `grains_of_paradise` (standardized_botanical; Grains of Paradise)
-
-### `R60QEP13IC` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `rice_bran` (iqm_parent; Rice Bran, parent=`rice_bran`)
-- `other_ingredients.json` → `NHA_RICE_BRAN_EXTRACT` (other_ingredient; Rice Bran Extract)
-- `other_ingredients.json` → `NHA_RICE_EXTRACT` (other_ingredient; Rice Extract Blend)
-- `other_ingredients.json` → `OI_RICE_FIBER` (other_ingredient; Rice Fiber)
 
 ### `RDS2V6DVY5` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1395,26 +1168,12 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `agmatine.forms[agmatine sulfate]` (iqm_form; agmatine sulfate, parent=`agmatine`)
 - `ingredient_quality_map.json` → `agmatine` (iqm_parent; Agmatine Sulfate, parent=`agmatine`)
 
-### `RWP5GA015D` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `potassium` (iqm_parent; Potassium, parent=`potassium`)
-- `other_ingredients.json` → `OI_POLACRILLIN_POTASSIUM` (other_ingredient; Polacrillin Potassium)
-
 ### `S347WMO6M4` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `phytosterols.forms[beta-sitosterol]` (iqm_form; beta-sitosterol, parent=`phytosterols`)
 - `ingredient_quality_map.json` → `phytosterols` (iqm_parent; Phytosterols, parent=`phytosterols`)
-
-### `SST07NLK7J` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `calcium_d_glucarate` (iqm_parent; Calcium D-Glucarate, parent=`calcium_d_glucarate`)
-- `other_ingredients.json` → `OI_CALCIUM_D_GLUCARATE` (other_ingredient; Calcium D-Glucarate)
 
 ### `SSZ9HQT61Z` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1451,7 +1210,6 @@ No reference data was changed by this audit.
 - Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
 - `ingredient_quality_map.json` → `vitamin_b2_riboflavin.forms[riboflavin]` (iqm_form; riboflavin, parent=`vitamin_b2_riboflavin`)
 - `ingredient_quality_map.json` → `vitamin_b2_riboflavin` (iqm_parent; Vitamin B2 (Riboflavin), parent=`vitamin_b2_riboflavin`)
-- `other_ingredients.json` → `OI_RIBOFLAVIN_COLORANT` (other_ingredient; Riboflavin (Color))
 
 ### `U182GP2CF3` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
@@ -1477,13 +1235,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `st_johns_wort` (iqm_parent; St. John's Wort, parent=`st_johns_wort`)
 - `standardized_botanicals.json` → `st_john_s_wort` (standardized_botanical; St. John's Wort)
 
-### `V0I3IBX33C` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `krill_oil` (iqm_parent; Krill Oil, parent=`krill_oil`)
-- `other_ingredients.json` → `PII_KRILL_OIL` (other_ingredient; Krill Oil)
-
 ### `V1V998DC17` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
@@ -1507,13 +1258,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `echinacea.forms[echinacea angustifolia]` (iqm_form; echinacea angustifolia, parent=`echinacea`)
 - `standardized_botanicals.json` → `echinacea_angustifolia` (standardized_botanical; Echinacea Angustifolia)
 
-### `W8N8R55022` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `organ_extracts` (iqm_parent; Organ Extracts (Glandulars), parent=`organ_extracts`)
-- `other_ingredients.json` → `PII_LIQUID_LIVER_FRACTIONS` (other_ingredient; Liquid Liver Fractions)
-
 ### `WQ0UW3VFG5` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 
 - Action: `suppress_runtime_warning_candidate`
@@ -1528,13 +1272,6 @@ No reference data was changed by this audit.
 - `ingredient_quality_map.json` → `lutein` (iqm_parent; Lutein, parent=`lutein`)
 - `standardized_botanicals.json` → `floraglo` (standardized_botanical; FloraGLO)
 - `standardized_botanicals.json` → `lutemax_2020` (standardized_botanical; Lutemax 2020)
-
-### `XGF7L72M0F` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
-
-- Action: `suppress_runtime_warning_candidate`
-- Reason: IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.
-- `ingredient_quality_map.json` → `fish_oil` (iqm_parent; Fish Oil, parent=`fish_oil`)
-- `other_ingredients.json` → `PII_PURIFIED_FISH_OIL` (other_ingredient; Purified Fish Oil (as carrier))
 
 ### `XII14C5FXV` — tier 4 `ingredient_quality_map` (iqm_same_parent_parent_form, info)
 

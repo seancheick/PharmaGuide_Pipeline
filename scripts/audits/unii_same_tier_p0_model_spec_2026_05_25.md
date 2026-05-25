@@ -7,8 +7,8 @@ Source reports:
 - `scripts/audits/unii_same_tier_conflicts_2026_05_25.json`
 - `scripts/audits/unii_same_tier_high_review_triage_2026_05_25.md`
 
-Scope: P0 model decisions for the three highest-risk high-review groups. P0-1
-and P0-2 have now shipped; P0-3 remains a pending context-routing decision.
+Scope: P0 model decisions for the three highest-risk high-review groups. P0-1,
+P0-2, and P0-3 have now shipped.
 
 ## Verification Summary
 
@@ -169,6 +169,10 @@ The chosen canonical model:
 
 ## P0-3: `L11K75P92J` calcium / dicalcium phosphate active-vs-filler model
 
+Status: resolved in the P0-3 cleanup. Exact dicalcium phosphate UNII remains
+available in both active and inactive contexts, but the contexts no longer
+collide as same-tier runtime payloads.
+
 Records:
 
 - `ingredient_quality_map.json` → `calcium.forms[dicalcium phosphate]`
@@ -180,45 +184,46 @@ Records:
 - GSRS verifies `L11K75P92J` as **Anhydrous dibasic calcium phosphate**.
 - Calcium parent has UNII `SY7Q814VUP`; dicalcium phosphate is a calcium salt,
   not the calcium element.
-- Current runtime UNII lookup maps `L11K75P92J` to the `Calcium` payload because
-  the calcium form is indexed before the standalone parent/filler entry.
+- Runtime active-row UNII lookup maps `L11K75P92J` to the `Calcium` payload
+  because the calcium form is indexed before lower-priority contexts.
 - The same exact substance legitimately appears in two label roles:
   - active mineral source
   - inactive filler/binder/excipient
-- Existing entries reflect that split but do not make the context rule explicit.
+- Inactive/excipient UNII recognition uses the enricher's separate
+  non-scorable UNII index and still resolves `L11K75P92J` to
+  `PII_DICALCIUM_PHOSPHATE`.
 
 ### Model Decision
 
-Do not collapse this to one global identity. Dicalcium phosphate needs
+Do not collapse this to one global identity. Dicalcium phosphate uses
 context-aware routing:
 
-- Active-ingredient row / mineral context → calcium-source form or dedicated
-  active parent, depending on final IQM model.
+- Active-ingredient row / mineral context → `calcium.forms[dicalcium phosphate]`.
 - Inactive-ingredient row / filler context → `PII_DICALCIUM_PHOSPHATE`.
+- Standalone `dicalcium_phosphate` does not own parent-level exact UNII.
 
-### Recommended Fix
+### Applied Fix
 
-Two defensible options:
-
-1. **Preferred**: keep `calcium.forms[dicalcium phosphate]` as the active
-   mineral-source model, keep `PII_DICALCIUM_PHOSPHATE` as inactive filler,
-   and remove/retire standalone `dicalcium_phosphate` as duplicate unless
-   there is a distinct scoring need.
-2. Alternative: keep standalone `dicalcium_phosphate` as the active model and
-   remove the duplicate calcium form UNII. This is less aligned with calcium
-   dose scoring because labels usually disclose dicalcium phosphate as a form
-   of calcium.
+- Removed parent-level `external_ids.unii = "L11K75P92J"` from standalone
+  `dicalcium_phosphate` and added a `unii_note` documenting active and inactive
+  context ownership.
+- Preserved `calcium.forms[dicalcium phosphate].external_ids.unii =
+  "L11K75P92J"` for active mineral-source matching.
+- Preserved `other_ingredients.json` → `PII_DICALCIUM_PHOSPHATE` UNII for
+  inactive filler recognition.
+- Hardened `_build_unii_to_payload_lookup`: other-ingredient UNIIs now build
+  explicit low-priority other-ingredient payloads instead of borrowing active
+  IQM payloads through normalized name lookup.
+- Updated the UNII same-tier scanner to mirror that runtime behavior.
+- Regenerated the scanner report; `L11K75P92J` no longer appears.
 
 ### Regression Tests
 
-- Active row `Dicalcium Phosphate` with mineral context routes to the intended
-  active calcium/dicalcium model.
-- Inactive row `Dicalcium Phosphate` routes to `PII_DICALCIUM_PHOSPHATE` and
-  remains non-scorable.
-- UNII `L11K75P92J` does not silently resolve to a misleading parent in both
-  contexts.
-- No same-tier conflict remains unless explicitly exonerated with a context
-  reason.
+- Active UNII lookup for `L11K75P92J` resolves to `Calcium` tier 4.
+- Inactive/non-scorable UNII index resolves `L11K75P92J` to
+  `PII_DICALCIUM_PHOSPHATE`.
+- Other-ingredient scanner records for `PII_DICALCIUM_PHOSPHATE` remain tier 9.
+- No same-tier conflict remains for `L11K75P92J`.
 
 ## Implementation Sequence
 
@@ -227,8 +232,7 @@ Do not batch these into one data edit. Recommended sequence:
 1. `P0-1` runtime-contract + data cleanup for disabled policy watchlist entries.
    Complete.
 2. `P0-2` vanadyl model decision + score reconciliation. Complete.
-3. `P0-3` dicalcium context-routing decision. This is an identity/context
-   problem, not a simple duplicate deletion.
+3. `P0-3` dicalcium context-routing decision. Complete.
 
 Each implementation commit should be test-first and should re-run:
 

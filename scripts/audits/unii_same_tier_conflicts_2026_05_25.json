@@ -1,11 +1,10 @@
 {
   "classification_counts": {
-    "iqm_cross_parent_same_unii": 1,
-    "iqm_same_parent_parent_form": 153,
-    "same_tier_different_names": 38,
-    "same_tier_duplicate_name": 15
+    "iqm_same_parent_parent_form": 120,
+    "same_tier_different_names": 40,
+    "same_tier_duplicate_name": 13
   },
-  "generated_at": "2026-05-25T21:01:13+00:00",
+  "generated_at": "2026-05-25T21:09:22+00:00",
   "groups": [
     {
       "action": "review_duplicate_or_alias_model",
@@ -72,39 +71,6 @@
       "tier": 2,
       "tier_name": "allergens",
       "unii": "3C3Y389JBU"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "casein",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "casein",
-          "parent_standard_name": "Casein",
-          "source": "iqm_parent",
-          "standard_name": "Casein",
-          "tier": 2,
-          "tier_name": "allergens",
-          "unii": "48268V50D5"
-        },
-        {
-          "entry_id": "PII_MICELLAR_CASEIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Micellar Casein",
-          "tier": 2,
-          "tier_name": "allergens",
-          "unii": "48268V50D5"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 2,
-      "tier_name": "allergens",
-      "unii": "48268V50D5"
     },
     {
       "action": "verify_unii_assignment",
@@ -288,39 +254,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "chlorophyll",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "chlorophyll",
-          "parent_standard_name": "Chlorophyll",
-          "source": "iqm_parent",
-          "standard_name": "Chlorophyll",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "00WNZ48OR9"
-        },
-        {
-          "entry_id": "NHA_NATURAL_COLORS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Natural Colors from Plants",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "00WNZ48OR9"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "00WNZ48OR9"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "huperzine_a",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -484,28 +417,6 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "0MVO31Q3QS"
-        },
-        {
-          "entry_id": "NHA_CRANBERRY_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Cranberry Concentrate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "0MVO31Q3QS"
-        },
-        {
-          "entry_id": "NHA_CRANBERRY_FIBER",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Cranberry Fiber",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "0MVO31Q3QS"
         }
       ],
       "severity": "info",
@@ -568,17 +479,6 @@
           "parent_id": "apple_cider_vinegar",
           "parent_standard_name": "Apple Cider Vinegar",
           "source": "iqm_parent",
-          "standard_name": "Apple Cider Vinegar",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "0UE22Q87VC"
-        },
-        {
-          "entry_id": "NHA_APPLE_CIDER_VINEGAR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
           "standard_name": "Apple Cider Vinegar",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
@@ -899,39 +799,6 @@
       "unii": "209B6YPZ4I"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "NHA_MONO_DIGLYCERIDES",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Mono and Diglycerides",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "230OU9XXE4"
-        },
-        {
-          "entry_id": "PII_GLYCEROL_MONOSTEARATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Glycerol Monostearate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "230OU9XXE4"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "230OU9XXE4"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -1034,56 +901,12 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "2968PHW8QP"
-        },
-        {
-          "entry_id": "NHA_CITRIC_ACID",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Citric Acid",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2968PHW8QP"
         }
       ],
       "severity": "info",
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "2968PHW8QP"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "collagen.forms[gelatin]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "collagen",
-          "parent_standard_name": "Collagen",
-          "source": "iqm_form",
-          "standard_name": "gelatin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2G86QN327L"
-        },
-        {
-          "entry_id": "PII_GELATIN_CAPSULE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Gelatin Capsule",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2G86QN327L"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "2G86QN327L"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -1168,39 +991,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "activated_charcoal",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "activated_charcoal",
-          "parent_standard_name": "Activated Charcoal",
-          "source": "iqm_parent",
-          "standard_name": "Activated Charcoal",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2P3VWU3H10"
-        },
-        {
-          "entry_id": "PII_ACTIVATED_CARBON",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Activated Carbon",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2P3VWU3H10"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "2P3VWU3H10"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "oleic_acid.forms[oleic acid]",
           "file": "ingredient_quality_map.json",
           "parent_id": "oleic_acid",
@@ -1221,56 +1011,12 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "2UMI9U37CP"
-        },
-        {
-          "entry_id": "NHA_OLEIC_ACID",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Oleic Acid",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2UMI9U37CP"
         }
       ],
       "severity": "info",
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "2UMI9U37CP"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "calcium.forms[calcium lactate]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "calcium",
-          "parent_standard_name": "Calcium",
-          "source": "iqm_form",
-          "standard_name": "calcium lactate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2URQ2N32W3"
-        },
-        {
-          "entry_id": "NHA_CALCIUM_LACTATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Calcium Lactate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "2URQ2N32W3"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "2URQ2N32W3"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -1393,17 +1139,6 @@
           "parent_id": "bee_pollen",
           "parent_standard_name": "Bee Pollen",
           "source": "iqm_parent",
-          "standard_name": "Bee Pollen",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3729L8MA2C"
-        },
-        {
-          "entry_id": "PII_BEE_POLLEN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
           "standard_name": "Bee Pollen",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
@@ -1542,39 +1277,6 @@
       "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
       "records": [
         {
-          "entry_id": "PII_PARTECK",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Parteck (Mannitol)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3OWL53L36A"
-        },
-        {
-          "entry_id": "PII_PEARLITOL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Pearlitol (Mannitol)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3OWL53L36A"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "3OWL53L36A"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
           "entry_id": "rhodiola_rosea_root",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -1608,72 +1310,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "tmg_betaine",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "tmg_betaine",
-          "parent_standard_name": "TMG (Trimethylglycine)",
-          "source": "iqm_parent",
-          "standard_name": "TMG (Trimethylglycine)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3SCV180C9W"
-        },
-        {
-          "entry_id": "PII_BETAINE_MONOHYDRATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Betaine Monohydrate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3SCV180C9W"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "3SCV180C9W"
-    },
-    {
-      "action": "review_duplicate_or_alias_model",
-      "classification": "same_tier_duplicate_name",
-      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
-      "records": [
-        {
-          "entry_id": "rose_hips",
-          "file": "botanical_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "botanical",
-          "standard_name": "Rose Hips",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3TNW8D08V3"
-        },
-        {
-          "entry_id": "OI_ROSE_HIPS_INACTIVE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Rose Hips (Botanical Filler)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3TNW8D08V3"
-        }
-      ],
-      "severity": "review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "3TNW8D08V3"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "sunflower_oil.forms[sunflower oil]",
           "file": "ingredient_quality_map.json",
           "parent_id": "sunflower_oil",
@@ -1690,17 +1326,6 @@
           "parent_id": "sunflower_oil",
           "parent_standard_name": "Sunflower Oil",
           "source": "iqm_parent",
-          "standard_name": "Sunflower Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "3W1JG795YI"
-        },
-        {
-          "entry_id": "PII_SUNFLOWER_OIL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
           "standard_name": "Sunflower Oil",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
@@ -1777,50 +1402,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "4G174V5051"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "strawberry",
-          "file": "botanical_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "botanical",
-          "standard_name": "Strawberry",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "4J2TY8Y81V"
-        },
-        {
-          "entry_id": "NHA_STRAWBERRY_PUREE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Strawberry Puree",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "4J2TY8Y81V"
-        },
-        {
-          "entry_id": "OI_NATURAL_STRAWBERRY_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Natural Strawberry Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "4J2TY8Y81V"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "4J2TY8Y81V"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -1977,39 +1558,6 @@
       "unii": "52U584F1CA"
     },
     {
-      "action": "review_duplicate_or_alias_model",
-      "classification": "same_tier_duplicate_name",
-      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
-      "records": [
-        {
-          "entry_id": "NHA_BLADDERWRACK",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Bladderwrack",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "535G2ABX9M"
-        },
-        {
-          "entry_id": "bladderwrack",
-          "file": "standardized_botanicals.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "standardized_botanical",
-          "standard_name": "Bladderwrack",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "535G2ABX9M"
-        }
-      ],
-      "severity": "review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "535G2ABX9M"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -2054,39 +1602,6 @@
       "unii": "56687D1Z4D"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "NHA_ORANGE_CRYSTALS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Orange Crystals",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5EVU04N5QU"
-        },
-        {
-          "entry_id": "NHA_ORANGE_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Orange Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5EVU04N5QU"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "5EVU04N5QU"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -2118,50 +1633,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "5M609NV974"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "carob",
-          "file": "botanical_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "botanical",
-          "standard_name": "Carob",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5MG5Z946UO"
-        },
-        {
-          "entry_id": "OI_CAROB_CARAMEL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Carob and Caramel",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5MG5Z946UO"
-        },
-        {
-          "entry_id": "PII_CAROB_STJOHNS_BREAD",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Carob (St. John's Bread)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5MG5Z946UO"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "5MG5Z946UO"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -2200,56 +1671,12 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "5S29HWU6QB"
-        },
-        {
-          "entry_id": "PII_CINNAMON_FLAVORING",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Cinnamon (Natural Flavoring)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5S29HWU6QB"
         }
       ],
       "severity": "info",
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "5S29HWU6QB"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "l_asparagine",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "l_asparagine",
-          "parent_standard_name": "L-Asparagine",
-          "source": "iqm_parent",
-          "standard_name": "L-Asparagine",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5Z33R5TKO7"
-        },
-        {
-          "entry_id": "NHA_L_ASPARAGINE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "L-Asparagine",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "5Z33R5TKO7"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "5Z33R5TKO7"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -2461,50 +1888,6 @@
       "unii": "6M47G7C4SY"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "NHA_ANNATTO_VARIANTS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Annatto (Variants)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "6PQP1V1B6O"
-        },
-        {
-          "entry_id": "NHA_FRUIT_VEG_POWDERS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Fruit & Vegetable Powders",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "6PQP1V1B6O"
-        },
-        {
-          "entry_id": "OI_ANNATTO_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Annatto Extract",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "6PQP1V1B6O"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "6PQP1V1B6O"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -2548,17 +1931,6 @@
           "parent_id": "propolis",
           "parent_standard_name": "Propolis",
           "source": "iqm_parent",
-          "standard_name": "Propolis",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "6Y8XYV2NOF"
-        },
-        {
-          "entry_id": "PII_PROPOLIS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
           "standard_name": "Propolis",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
@@ -2747,39 +2119,6 @@
       "unii": "73R90F7MQ8"
     },
     {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "dimethyl_glycine",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "dimethyl_glycine",
-          "parent_standard_name": "Dimethyl Glycine",
-          "source": "iqm_parent",
-          "standard_name": "Dimethyl Glycine",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "7797M4CPPA"
-        },
-        {
-          "entry_id": "OI_DIMETHYLGLYCINE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Dimethylglycine",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "7797M4CPPA"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "7797M4CPPA"
-    },
-    {
       "action": "review_duplicate_or_alias_model",
       "classification": "same_tier_duplicate_name",
       "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
@@ -2818,72 +2157,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "diosmin",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "diosmin",
-          "parent_standard_name": "Diosmin",
-          "source": "iqm_parent",
-          "standard_name": "Diosmin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "7QM776WJ5N"
-        },
-        {
-          "entry_id": "OI_DIOSMIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Diosmin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "7QM776WJ5N"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "7QM776WJ5N"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "sesame_seed_oil",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "sesame_seed_oil",
-          "parent_standard_name": "Sesame Seed Oil",
-          "source": "iqm_parent",
-          "standard_name": "Sesame Seed Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "7Y1255HVXR"
-        },
-        {
-          "entry_id": "PII_SESAME_SEED_OIL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Sesame Seed Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "7Y1255HVXR"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "7Y1255HVXR"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "l_theanine",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -2910,39 +2183,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "8021PR16QO"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "ipriflavone",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "ipriflavone",
-          "parent_standard_name": "Ipriflavone",
-          "source": "iqm_parent",
-          "standard_name": "Ipriflavone",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "80BJ7WN25Z"
-        },
-        {
-          "entry_id": "OI_IPRIFLAVONE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Ipriflavone",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "80BJ7WN25Z"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "80BJ7WN25Z"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -3016,17 +2256,6 @@
           "unii": "856YO1Z64F"
         },
         {
-          "entry_id": "OI_TURMERIC_POWDER_COLOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Turmeric Powder (Color)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "856YO1Z64F"
-        },
-        {
           "entry_id": "turmeric",
           "file": "standardized_botanicals.json",
           "parent_id": null,
@@ -3042,72 +2271,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "856YO1Z64F"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "whey_protein",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "whey_protein",
-          "parent_standard_name": "Whey Protein",
-          "source": "iqm_parent",
-          "standard_name": "Whey Protein",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "8617Z5FMF6"
-        },
-        {
-          "entry_id": "PII_WHEY_PROTEIN_ISOLATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Whey Protein Isolate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "8617Z5FMF6"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "8617Z5FMF6"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "prebiotics.forms[pectin]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "prebiotics",
-          "parent_standard_name": "Prebiotics",
-          "source": "iqm_form",
-          "standard_name": "pectin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "89NA02M4RX"
-        },
-        {
-          "entry_id": "NHA_PECTIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Pectin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "89NA02M4RX"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "89NA02M4RX"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -3423,39 +2586,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "brewers_yeast",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "brewers_yeast",
-          "parent_standard_name": "Brewer's Yeast",
-          "source": "iqm_parent",
-          "standard_name": "Brewer's Yeast",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "978D8U419H"
-        },
-        {
-          "entry_id": "PII_SACCHAROMYCES_CEREVISIAE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Saccharomyces cerevisiae (yeast)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "978D8U419H"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "978D8U419H"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "beef_tallow.forms[beef tallow]",
           "file": "ingredient_quality_map.json",
           "parent_id": "beef_tallow",
@@ -3654,39 +2784,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "artemisinin",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "artemisinin",
-          "parent_standard_name": "Artemisinin",
-          "source": "iqm_parent",
-          "standard_name": "Artemisinin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "9RMU91N5K2"
-        },
-        {
-          "entry_id": "PII_ARTEMISININ",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Artemisinin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "9RMU91N5K2"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "9RMU91N5K2"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "black_ginger",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -3764,39 +2861,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "bentonite",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "bentonite",
-          "parent_standard_name": "Bentonite",
-          "source": "iqm_parent",
-          "standard_name": "Bentonite",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "A3N5ZCN45C"
-        },
-        {
-          "entry_id": "PII_BENTONITE_CLAY",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Bentonite Clay",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "A3N5ZCN45C"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "A3N5ZCN45C"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "black_cherry",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -3858,83 +2922,6 @@
       "unii": "AB6MNQ6J6L"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "NHA_APPLE_PUREE_CONCENTRATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Apple Puree Concentrate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "B423VGH5S9"
-        },
-        {
-          "entry_id": "NHA_NATURAL_APPLE_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Natural Apple Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "B423VGH5S9"
-        },
-        {
-          "entry_id": "PII_APPLE_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Apple Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "B423VGH5S9"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "B423VGH5S9"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "cod_liver_oil",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "cod_liver_oil",
-          "parent_standard_name": "Cod Liver Oil",
-          "source": "iqm_parent",
-          "standard_name": "Cod Liver Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "BBL281NWFG"
-        },
-        {
-          "entry_id": "PII_COD_LIVER_OIL_CARRIER",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Cod Liver Oil (as carrier)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "BBL281NWFG"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "BBL281NWFG"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -3966,39 +2953,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "BD70459I50"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "beta_caryophyllene",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "beta_caryophyllene",
-          "parent_standard_name": "Beta-Caryophyllene",
-          "source": "iqm_parent",
-          "standard_name": "Beta-Caryophyllene",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "BHW853AU9H"
-        },
-        {
-          "entry_id": "OI_BETA_CARYOPHYLLENE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Beta-Caryophyllene",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "BHW853AU9H"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "BHW853AU9H"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -4045,39 +2999,6 @@
       "unii": "BQY1UBX046"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "PII_GLYCEROL_MONOOLEATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Glycerol Monooleate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "C4YAD5F5G6"
-        },
-        {
-          "entry_id": "PII_GLYCERYL_MONOOLEATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Glyceryl Monooleate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "C4YAD5F5G6"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "C4YAD5F5G6"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -4111,28 +3032,6 @@
           "parent_standard_name": "Ginger",
           "source": "iqm_parent",
           "standard_name": "Ginger",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "C5529G5JPQ"
-        },
-        {
-          "entry_id": "NHA_GINGER_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Ginger Extract",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "C5529G5JPQ"
-        },
-        {
-          "entry_id": "NHA_GINGER_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Ginger Flavor",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "C5529G5JPQ"
@@ -4270,39 +3169,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "phlorizin",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "phlorizin",
-          "parent_standard_name": "Phlorizin",
-          "source": "iqm_parent",
-          "standard_name": "Phlorizin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "CU9S17279X"
-        },
-        {
-          "entry_id": "NHA_PHLORIDZIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Phloridzin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "CU9S17279X"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "CU9S17279X"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "ginseng",
           "file": "ingredient_quality_map.json",
           "parent_id": "ginseng",
@@ -4433,17 +3299,6 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "D9108TZ9KG"
-        },
-        {
-          "entry_id": "OI_COCOA_POWDER",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Cocoa Powder",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "D9108TZ9KG"
         }
       ],
       "severity": "info",
@@ -4518,72 +3373,6 @@
       "unii": "E849G4X5YJ"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Partially Hydrolyzed Guar Gum",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "E89I1637KE"
-        },
-        {
-          "entry_id": "OI_GUAR_GUM",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Guar Gum",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "E89I1637KE"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "E89I1637KE"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "potassium.forms[potassium citrate]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "potassium",
-          "parent_standard_name": "Potassium",
-          "source": "iqm_form",
-          "standard_name": "potassium citrate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "EE90ONI6FF"
-        },
-        {
-          "entry_id": "NHA_POTASSIUM_CITRATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Potassium Citrate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "EE90ONI6FF"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "EE90ONI6FF"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -4606,17 +3395,6 @@
           "parent_standard_name": "Borage Seed Oil",
           "source": "iqm_parent",
           "standard_name": "Borage Seed Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "F8XAG1755S"
-        },
-        {
-          "entry_id": "NHA_STARFLOWER_OIL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Starflower Oil (Borage Oil)",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "F8XAG1755S"
@@ -4653,188 +3431,12 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "FGL3685T2X"
-        },
-        {
-          "entry_id": "NHA_CHAMOMILE_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Chamomile Extract",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "FGL3685T2X"
         }
       ],
       "severity": "info",
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "FGL3685T2X"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "NHA_PVP",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Polyvinyl Pyrrolidone",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "FZ989GH94E"
-        },
-        {
-          "entry_id": "PII_KOLLIDON",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Kollidon (Polyvinylpyrrolidone)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "FZ989GH94E"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "FZ989GH94E"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "cla",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "cla",
-          "parent_standard_name": "CLA",
-          "source": "iqm_parent",
-          "standard_name": "CLA",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "G199I91G4B"
-        },
-        {
-          "entry_id": "OI_CLA_OIL_INACTIVE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Conjugated Linoleic Acid Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "G199I91G4B"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "G199I91G4B"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "pepsin",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "pepsin",
-          "parent_standard_name": "Pepsin",
-          "source": "iqm_parent",
-          "standard_name": "Pepsin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "GID333S43J"
-        },
-        {
-          "entry_id": "PII_PEPSIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Pepsin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "GID333S43J"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "GID333S43J"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "calcium.forms[calcium carbonate]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "calcium",
-          "parent_standard_name": "Calcium",
-          "source": "iqm_form",
-          "standard_name": "calcium carbonate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "H0G9379FGK"
-        },
-        {
-          "entry_id": "PII_CALCIUM_CARBONATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Calcium Carbonate (as filler)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "H0G9379FGK"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "H0G9379FGK"
-    },
-    {
-      "action": "review_duplicate_or_alias_model",
-      "classification": "same_tier_duplicate_name",
-      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
-      "records": [
-        {
-          "entry_id": "NHA_SODIUM_STARCH_GLYCOLATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Sodium Starch Glycolate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "H8AV0SQX4D"
-        },
-        {
-          "entry_id": "PII_SODIUM_STARCH_GLYCOLATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Sodium Starch Glycolate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "H8AV0SQX4D"
-        }
-      ],
-      "severity": "review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "H8AV0SQX4D"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -4996,17 +3598,6 @@
           "unii": "IJ67X351P9"
         },
         {
-          "entry_id": "NHA_ROSEMARY_NATURAL_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Natural Rosemary Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "IJ67X351P9"
-        },
-        {
           "entry_id": "rosemary",
           "file": "standardized_botanicals.json",
           "parent_id": null,
@@ -5022,39 +3613,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "IJ67X351P9"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "urolithin_a",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "urolithin_a",
-          "parent_standard_name": "Urolithin A",
-          "source": "iqm_parent",
-          "standard_name": "Urolithin A",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "ILJ8NEF6DT"
-        },
-        {
-          "entry_id": "NHA_MITOPURE_UROLITHIN_A",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Mitopure Urolithin A",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "ILJ8NEF6DT"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "ILJ8NEF6DT"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -5172,39 +3730,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "spearmint",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "spearmint",
-          "parent_standard_name": "Spearmint",
-          "source": "iqm_parent",
-          "standard_name": "Spearmint",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "J7I2T6IV1N"
-        },
-        {
-          "entry_id": "NHA_SPEARMINT_NATURAL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Natural Spearmint Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "J7I2T6IV1N"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "J7I2T6IV1N"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "saw_palmetto_berry",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -5302,17 +3827,6 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "JOS53KRJ01"
-        },
-        {
-          "entry_id": "NHA_INULIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Inulin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "JOS53KRJ01"
         }
       ],
       "severity": "info",
@@ -5363,39 +3877,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "JWF5YAW3QW"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "undecylenic_acid",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "undecylenic_acid",
-          "parent_standard_name": "10-Undecenoic Acid (Undecylenic Acid)",
-          "source": "iqm_parent",
-          "standard_name": "10-Undecenoic Acid (Undecylenic Acid)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "K3D86KJ24N"
-        },
-        {
-          "entry_id": "OI_10_UNDECENOIC_ACID",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "10-Undecenoic Acid",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "K3D86KJ24N"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "K3D86KJ24N"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -5480,17 +3961,6 @@
           "unii": "KM66971LVF"
         },
         {
-          "entry_id": "NHA_BLACK_PEPPER_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Black Pepper Extract",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "KM66971LVF"
-        },
-        {
           "entry_id": "black_pepper_extract",
           "file": "standardized_botanicals.json",
           "parent_id": null,
@@ -5546,39 +4016,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "isovitexin",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "isovitexin",
-          "parent_standard_name": "Isovitexin",
-          "source": "iqm_parent",
-          "standard_name": "Isovitexin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "KTQ9R9MS0Q"
-        },
-        {
-          "entry_id": "NHA_ISOVITEXIN",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Isovitexin",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "KTQ9R9MS0Q"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "KTQ9R9MS0Q"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "papaya_fruit_powder",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -5607,50 +4044,6 @@
       "unii": "KU94FIY6JB"
     },
     {
-      "action": "review_data_model_or_exonerate",
-      "classification": "iqm_cross_parent_same_unii",
-      "reason": "Same UNII appears under different IQM parents/forms at the same priority tier.",
-      "records": [
-        {
-          "entry_id": "calcium.forms[dicalcium phosphate]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "calcium",
-          "parent_standard_name": "Calcium",
-          "source": "iqm_form",
-          "standard_name": "dicalcium phosphate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "L11K75P92J"
-        },
-        {
-          "entry_id": "dicalcium_phosphate",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "dicalcium_phosphate",
-          "parent_standard_name": "Di-Calcium Phosphate",
-          "source": "iqm_parent",
-          "standard_name": "Di-Calcium Phosphate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "L11K75P92J"
-        },
-        {
-          "entry_id": "PII_DICALCIUM_PHOSPHATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Dicalcium Phosphate (as filler)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "L11K75P92J"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "L11K75P92J"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -5672,17 +4065,6 @@
           "parent_id": "royal_jelly",
           "parent_standard_name": "Royal Jelly",
           "source": "iqm_parent",
-          "standard_name": "Royal Jelly",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "L497I37F0C"
-        },
-        {
-          "entry_id": "PII_ROYAL_JELLY",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
           "standard_name": "Royal Jelly",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
@@ -5783,39 +4165,6 @@
       "unii": "LYR4M0NH37"
     },
     {
-      "action": "review_duplicate_or_alias_model",
-      "classification": "same_tier_duplicate_name",
-      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
-      "records": [
-        {
-          "entry_id": "NHA_CALCIUM_CHLORIDE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Calcium Chloride",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "M4I0D6VV5M"
-        },
-        {
-          "entry_id": "PII_CALCIUM_CHLORIDE_EXCIPIENT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Calcium Chloride (Excipient)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "M4I0D6VV5M"
-        }
-      ],
-      "severity": "review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "M4I0D6VV5M"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -5852,56 +4201,12 @@
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "NU0OLX06F8"
-        },
-        {
-          "entry_id": "PII_CHIA_SEED_MEAL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Chia Seed Meal",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "NU0OLX06F8"
         }
       ],
       "severity": "info",
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "NU0OLX06F8"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "irish_sea_moss",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "irish_sea_moss",
-          "parent_standard_name": "Irish Sea Moss",
-          "source": "iqm_parent",
-          "standard_name": "Irish Sea Moss",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "OQS23HUA1X"
-        },
-        {
-          "entry_id": "NHA_IRISH_SEA_MOSS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Irish Sea Moss",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "OQS23HUA1X"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "OQS23HUA1X"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -5959,17 +4264,6 @@
           "parent_standard_name": "Vitamin C",
           "source": "iqm_parent",
           "standard_name": "Vitamin C",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "PQ6CK8PD0R"
-        },
-        {
-          "entry_id": "OI_ASCORBIC_ACID_PRESERVATIVE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Ascorbic Acid (Preservative)",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "PQ6CK8PD0R"
@@ -6085,61 +4379,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "rice_bran",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "rice_bran",
-          "parent_standard_name": "Rice Bran",
-          "source": "iqm_parent",
-          "standard_name": "Rice Bran",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "R60QEP13IC"
-        },
-        {
-          "entry_id": "NHA_RICE_BRAN_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Rice Bran Extract",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "R60QEP13IC"
-        },
-        {
-          "entry_id": "NHA_RICE_EXTRACT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Rice Extract Blend",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "R60QEP13IC"
-        },
-        {
-          "entry_id": "OI_RICE_FIBER",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Rice Fiber",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "R60QEP13IC"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "R60QEP13IC"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "grape_seed_extract",
           "file": "ingredient_quality_map.json",
           "parent_id": "grape_seed_extract",
@@ -6217,39 +4456,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "potassium",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "potassium",
-          "parent_standard_name": "Potassium",
-          "source": "iqm_parent",
-          "standard_name": "Potassium",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "RWP5GA015D"
-        },
-        {
-          "entry_id": "OI_POLACRILLIN_POTASSIUM",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Polacrillin Potassium",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "RWP5GA015D"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "RWP5GA015D"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "phytosterols.forms[beta-sitosterol]",
           "file": "ingredient_quality_map.json",
           "parent_id": "phytosterols",
@@ -6309,39 +4515,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "SCJ765569P"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "calcium_d_glucarate",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "calcium_d_glucarate",
-          "parent_standard_name": "Calcium D-Glucarate",
-          "source": "iqm_parent",
-          "standard_name": "Calcium D-Glucarate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "SST07NLK7J"
-        },
-        {
-          "entry_id": "OI_CALCIUM_D_GLUCARATE",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Calcium D-Glucarate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "SST07NLK7J"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "SST07NLK7J"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -6443,39 +4616,6 @@
       "unii": "TJ6XA84OQF"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "millet",
-          "file": "botanical_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "botanical",
-          "standard_name": "Millet",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "TJR6B3R47P"
-        },
-        {
-          "entry_id": "PII_MILLET_FLOUR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Millet Flour",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "TJR6B3R47P"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "TJR6B3R47P"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -6542,17 +4682,6 @@
           "parent_standard_name": "Vitamin B2 (Riboflavin)",
           "source": "iqm_parent",
           "standard_name": "Vitamin B2 (Riboflavin)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "TLM2976OFR"
-        },
-        {
-          "entry_id": "OI_RIBOFLAVIN_COLORANT",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Riboflavin (Color)",
           "tier": 4,
           "tier_name": "ingredient_quality_map",
           "unii": "TLM2976OFR"
@@ -6745,39 +4874,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "krill_oil",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "krill_oil",
-          "parent_standard_name": "Krill Oil",
-          "source": "iqm_parent",
-          "standard_name": "Krill Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "V0I3IBX33C"
-        },
-        {
-          "entry_id": "PII_KRILL_OIL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Krill Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "V0I3IBX33C"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "V0I3IBX33C"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "black_garlic",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -6899,39 +4995,6 @@
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
       "records": [
         {
-          "entry_id": "organ_extracts",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "organ_extracts",
-          "parent_standard_name": "Organ Extracts (Glandulars)",
-          "source": "iqm_parent",
-          "standard_name": "Organ Extracts (Glandulars)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "W8N8R55022"
-        },
-        {
-          "entry_id": "PII_LIQUID_LIVER_FRACTIONS",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Liquid Liver Fractions",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "W8N8R55022"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "W8N8R55022"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
           "entry_id": "oat_straw",
           "file": "botanical_ingredients.json",
           "parent_id": null,
@@ -7004,72 +5067,6 @@
       "unii": "X72A60C9MT"
     },
     {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "acerola_cherry",
-          "file": "botanical_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "botanical",
-          "standard_name": "Acerola Cherry",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "XDD2WEC9L5"
-        },
-        {
-          "entry_id": "NHA_WEST_INDIAN_CHERRY",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "West Indian Cherry (Acerola)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "XDD2WEC9L5"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "XDD2WEC9L5"
-    },
-    {
-      "action": "suppress_runtime_warning_candidate",
-      "classification": "iqm_same_parent_parent_form",
-      "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
-      "records": [
-        {
-          "entry_id": "fish_oil",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "fish_oil",
-          "parent_standard_name": "Fish Oil",
-          "source": "iqm_parent",
-          "standard_name": "Fish Oil",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "XGF7L72M0F"
-        },
-        {
-          "entry_id": "PII_PURIFIED_FISH_OIL",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Purified Fish Oil (as carrier)",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "XGF7L72M0F"
-        }
-      ],
-      "severity": "info",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "XGF7L72M0F"
-    },
-    {
       "action": "suppress_runtime_warning_candidate",
       "classification": "iqm_same_parent_parent_form",
       "reason": "IQM parent/form records share the same parent identity; runtime routes both to the same parent payload.",
@@ -7134,39 +5131,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "Y8P1YR4920"
-    },
-    {
-      "action": "verify_unii_assignment",
-      "classification": "same_tier_different_names",
-      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
-      "records": [
-        {
-          "entry_id": "PII_HONEY",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Honey",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "Y9H1V576FH"
-        },
-        {
-          "entry_id": "PII_HONEY_FLAVOR",
-          "file": "other_ingredients.json",
-          "parent_id": null,
-          "parent_standard_name": null,
-          "source": "other_ingredient",
-          "standard_name": "Honey Flavor",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "Y9H1V576FH"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "Y9H1V576FH"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -7629,21 +5593,660 @@
       "tier": 6,
       "tier_name": "botanical_ingredients",
       "unii": "JC71GJ1F3L"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_CRANBERRY_EXTRACT",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Cranberry Concentrate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "0MVO31Q3QS"
+        },
+        {
+          "entry_id": "NHA_CRANBERRY_FIBER",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Cranberry Fiber",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "0MVO31Q3QS"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "0MVO31Q3QS"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_MONO_DIGLYCERIDES",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Mono and Diglycerides",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "230OU9XXE4"
+        },
+        {
+          "entry_id": "PII_GLYCEROL_MONOSTEARATE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Glycerol Monostearate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "230OU9XXE4"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "230OU9XXE4"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "PII_PARTECK",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Parteck (Mannitol)",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "3OWL53L36A"
+        },
+        {
+          "entry_id": "PII_PEARLITOL",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Pearlitol (Mannitol)",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "3OWL53L36A"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "3OWL53L36A"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_STRAWBERRY_PUREE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Strawberry Puree",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "4J2TY8Y81V"
+        },
+        {
+          "entry_id": "OI_NATURAL_STRAWBERRY_FLAVOR",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Natural Strawberry Flavor",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "4J2TY8Y81V"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "4J2TY8Y81V"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_ORANGE_CRYSTALS",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Orange Crystals",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "5EVU04N5QU"
+        },
+        {
+          "entry_id": "NHA_ORANGE_FLAVOR",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Orange Flavor",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "5EVU04N5QU"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "5EVU04N5QU"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "OI_CAROB_CARAMEL",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Carob and Caramel",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "5MG5Z946UO"
+        },
+        {
+          "entry_id": "PII_CAROB_STJOHNS_BREAD",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Carob (St. John's Bread)",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "5MG5Z946UO"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "5MG5Z946UO"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_ANNATTO_VARIANTS",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Annatto (Variants)",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "6PQP1V1B6O"
+        },
+        {
+          "entry_id": "NHA_FRUIT_VEG_POWDERS",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Fruit & Vegetable Powders",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "6PQP1V1B6O"
+        },
+        {
+          "entry_id": "OI_ANNATTO_EXTRACT",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Annatto Extract",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "6PQP1V1B6O"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "6PQP1V1B6O"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_APPLE_PUREE_CONCENTRATE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Apple Puree Concentrate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "B423VGH5S9"
+        },
+        {
+          "entry_id": "NHA_NATURAL_APPLE_FLAVOR",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Natural Apple Flavor",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "B423VGH5S9"
+        },
+        {
+          "entry_id": "PII_APPLE_FLAVOR",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Apple Flavor",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "B423VGH5S9"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "B423VGH5S9"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "PII_GLYCEROL_MONOOLEATE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Glycerol Monooleate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "C4YAD5F5G6"
+        },
+        {
+          "entry_id": "PII_GLYCERYL_MONOOLEATE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Glyceryl Monooleate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "C4YAD5F5G6"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "C4YAD5F5G6"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_GINGER_EXTRACT",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Ginger Extract",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "C5529G5JPQ"
+        },
+        {
+          "entry_id": "NHA_GINGER_FLAVOR",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Ginger Flavor",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "C5529G5JPQ"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "C5529G5JPQ"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Partially Hydrolyzed Guar Gum",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "E89I1637KE"
+        },
+        {
+          "entry_id": "OI_GUAR_GUM",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Guar Gum",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "E89I1637KE"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "E89I1637KE"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_PVP",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Polyvinyl Pyrrolidone",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "FZ989GH94E"
+        },
+        {
+          "entry_id": "PII_KOLLIDON",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Kollidon (Polyvinylpyrrolidone)",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "FZ989GH94E"
+        },
+        {
+          "entry_id": "PII_POVIDONE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Povidone",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "FZ989GH94E"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "FZ989GH94E"
+    },
+    {
+      "action": "review_duplicate_or_alias_model",
+      "classification": "same_tier_duplicate_name",
+      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
+      "records": [
+        {
+          "entry_id": "NHA_SODIUM_STARCH_GLYCOLATE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Sodium Starch Glycolate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "H8AV0SQX4D"
+        },
+        {
+          "entry_id": "PII_SODIUM_STARCH_GLYCOLATE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Sodium Starch Glycolate",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "H8AV0SQX4D"
+        }
+      ],
+      "severity": "review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "H8AV0SQX4D"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "OI_CELLULOSE_GUM",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Cellulose Gum",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "K679OBS311"
+        },
+        {
+          "entry_id": "PII_SODIUM_CARBOXYMETHYLCELLULOSE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Sodium Carboxymethylcellulose",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "K679OBS311"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "K679OBS311"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_BLACK_STRAP_MOLASSES",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Blackstrap Molasses",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "LSU3YX0KZO"
+        },
+        {
+          "entry_id": "NHA_MAPLE_MOLASSES",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Maple Syrup & Molasses",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "LSU3YX0KZO"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "LSU3YX0KZO"
+    },
+    {
+      "action": "review_duplicate_or_alias_model",
+      "classification": "same_tier_duplicate_name",
+      "reason": "Same-tier records have the same normalized name; may be duplicate modeling or alias drift.",
+      "records": [
+        {
+          "entry_id": "NHA_CALCIUM_CHLORIDE",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Calcium Chloride",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "M4I0D6VV5M"
+        },
+        {
+          "entry_id": "PII_CALCIUM_CHLORIDE_EXCIPIENT",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Calcium Chloride (Excipient)",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "M4I0D6VV5M"
+        }
+      ],
+      "severity": "review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "M4I0D6VV5M"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "NHA_RICE_BRAN_EXTRACT",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Rice Bran Extract",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "R60QEP13IC"
+        },
+        {
+          "entry_id": "NHA_RICE_EXTRACT",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Rice Extract Blend",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "R60QEP13IC"
+        },
+        {
+          "entry_id": "OI_RICE_FIBER",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Rice Fiber",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "R60QEP13IC"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "R60QEP13IC"
+    },
+    {
+      "action": "verify_unii_assignment",
+      "classification": "same_tier_different_names",
+      "reason": "Same-tier records have materially different names; first-write wins at runtime until reviewed.",
+      "records": [
+        {
+          "entry_id": "PII_HONEY",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Honey",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "Y9H1V576FH"
+        },
+        {
+          "entry_id": "PII_HONEY_FLAVOR",
+          "file": "other_ingredients.json",
+          "parent_id": null,
+          "parent_standard_name": null,
+          "source": "other_ingredient",
+          "standard_name": "Honey Flavor",
+          "tier": 9,
+          "tier_name": "other_ingredients",
+          "unii": "Y9H1V576FH"
+        }
+      ],
+      "severity": "high_review",
+      "tier": 9,
+      "tier_name": "other_ingredients",
+      "unii": "Y9H1V576FH"
     }
   ],
-  "record_count": 1494,
-  "same_tier_group_count": 207,
+  "record_count": 1493,
+  "same_tier_group_count": 173,
   "severity_counts": {
-    "high_review": 39,
-    "info": 153,
-    "review": 15
+    "high_review": 40,
+    "info": 120,
+    "review": 13
   },
   "tier_counts": {
-    "allergens": 4,
+    "allergens": 3,
     "banned_recalled": 1,
     "botanical_ingredients": 3,
     "harmful_additives": 3,
-    "ingredient_quality_map": 189,
+    "ingredient_quality_map": 138,
+    "other_ingredients": 18,
     "standardized_botanicals": 7
   }
 }

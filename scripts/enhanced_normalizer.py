@@ -1832,17 +1832,19 @@ class EnhancedDSLDNormalizer:
             if not isinstance(entry, dict):
                 continue
             std_name = entry.get("standard_name", entry.get("id", ""))
-            processed_std = self.matcher.preprocess_text(std_name) if std_name else ""
-            payload = self._fast_exact_lookup.get(processed_std)
-            if not payload:
-                payload = {
-                    "type": "other_ingredient",
-                    "standard_name": std_name,
-                    "category": entry.get("category", "other"),
-                    "is_additive": entry.get("is_additive", False),
-                    "mapped": True,
-                    "priority": 9,
-                }
+            # Keep inactive/excipient UNIIs in the low-priority other tier.
+            # Do not borrow a higher-priority active IQM payload via normalized
+            # standard_name lookup (for example, "Dicalcium Phosphate (as
+            # filler)" normalizes to the active calcium form). Inactive UNII
+            # recognition has its own context-aware index in the enricher.
+            payload = {
+                "type": "other_ingredient",
+                "standard_name": std_name,
+                "category": entry.get("category", "other"),
+                "is_additive": entry.get("is_additive", False),
+                "mapped": True,
+                "priority": 9,
+            }
             _add(_extract_unii(entry), payload, f"other:{entry.get('id','?')}")
 
     def _try_unii_match(
