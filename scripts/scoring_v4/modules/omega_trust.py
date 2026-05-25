@@ -39,6 +39,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
+from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
+
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
@@ -204,6 +206,7 @@ def score_trust(product: Any) -> Dict[str, Any]:
     b4a_score, b4a_meta = _score_b4a(product, scope_policy, b4a_cap)
     b4b_score, b4b_meta = _score_b4b(product, _safe_dict(trust_cfg.get("b4b_gmp")))
     b4c_score, b4c_meta = _score_b4c(product, _safe_dict(trust_cfg.get("b4c_traceability")))
+    b4d_score, b4d_meta = score_brand_testing_posture(product)
 
     components: Dict[str, float] = {}
     if b4a_score > 0:
@@ -212,8 +215,10 @@ def score_trust(product: Any) -> Dict[str, Any]:
         components["b4b_gmp"] = round(b4b_score, 2)
     if b4c_score > 0:
         components["b4c_batch_traceability"] = round(b4c_score, 2)
+    if b4d_score > 0:
+        components["b4d_brand_testing_posture"] = round(b4d_score, 2)
 
-    raw_score = b4a_score + b4b_score + b4c_score
+    raw_score = b4a_score + b4b_score + b4c_score + b4d_score
     score = max(0.0, min(dim_cap, raw_score))
 
     metadata = {
@@ -223,6 +228,7 @@ def score_trust(product: Any) -> Dict[str, Any]:
         "b4a": b4a_meta,
         "b4b": b4b_meta,
         "b4c": b4c_meta,
+        "b4d": b4d_meta,
     }
 
     return {

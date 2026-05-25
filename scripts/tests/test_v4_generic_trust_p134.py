@@ -75,6 +75,7 @@ def test_trust_payload_shape_and_phase() -> None:
         "B4a_verified_certifications": 0.0,
         "B4b_gmp": 0.0,
         "B4c_batch_traceability": 0.0,
+        "B4d_brand_testing_posture": 0.0,
     }
     assert payload["penalties"] == {}
     assert payload["phase"] == "P1.3.4_testing_trust"
@@ -129,6 +130,60 @@ def test_brand_only_needs_review_and_claimed_only_score_zero() -> None:
 
     assert payload["components"]["B4a_verified_certifications"] == 0.0
     assert payload["metadata"]["verified_programs_scored"] == []
+
+
+def test_brand_level_testing_posture_scores_low_trust_without_b4a_credit() -> None:
+    """Trusted-brand testing evidence is trust posture, not SKU cert proof.
+
+    This closes the zero-testing-trust false positive for brands like
+    Transparent Labs/Nutricost while preserving the B4a rule that brand_only
+    certifications score zero.
+    """
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(
+            top_level={
+                "is_trusted_manufacturer": True,
+                "manufacturer_data": {
+                    "top_manufacturer": {
+                        "found": True,
+                        "match_type": "exact",
+                        "manufacturer_id": "MANUF_TRANSPARENT_LABS",
+                    }
+                },
+            },
+            verified_cert_programs=[_cert("NSF Certified", "brand_only")],
+        )
+    )
+
+    assert payload["components"]["B4a_verified_certifications"] == 0.0
+    assert payload["components"]["B4d_brand_testing_posture"] == 2.0
+    assert payload["score"] == 2.0
+    assert payload["metadata"]["B4d_source"] == "top_manufacturers_data.json"
+    assert payload["metadata"]["B4d_manufacturer_id"] == "MANUF_TRANSPARENT_LABS"
+
+
+def test_trusted_manufacturer_without_testing_evidence_does_not_score_b4d() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(
+            top_level={
+                "is_trusted_manufacturer": True,
+                "manufacturer_data": {
+                    "top_manufacturer": {
+                        "found": True,
+                        "match_type": "exact",
+                        "manufacturer_id": "MANUF_NO_TESTING_EVIDENCE",
+                    }
+                },
+            }
+        )
+    )
+
+    assert payload["components"]["B4d_brand_testing_posture"] == 0.0
+    assert payload["score"] == 0.0
 
 
 def test_stale_scoring_blocked_cert_scores_zero() -> None:
@@ -285,6 +340,7 @@ def test_dimension_hard_clamps_b4a_b4b_b4c_to_15() -> None:
         "B4a_verified_certifications": 12.0,
         "B4b_gmp": 4.0,
         "B4c_batch_traceability": 2.0,
+        "B4d_brand_testing_posture": 0.0,
     }
     assert payload["metadata"]["raw_testing_trust"] == 18.0
     assert payload["score"] == 15.0

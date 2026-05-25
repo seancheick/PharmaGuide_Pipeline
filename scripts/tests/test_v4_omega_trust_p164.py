@@ -103,6 +103,34 @@ def test_b4a_brand_only_scope_scores_zero() -> None:
     assert "b4a_verified_certifications" not in payload["components"]
 
 
+def test_brand_level_omega_testing_posture_scores_without_b4a_credit() -> None:
+    """Brand-level IFOS posture is not SKU proof, but it is a low trust signal.
+
+    Locks the Nordic Naturals canary shape: brand_only IFOS remains excluded
+    from b4a while the documented manufacturer testing posture contributes a
+    separate low-weight b4d component.
+    """
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "manufacturer_data": {
+            "top_manufacturer": {
+                "found": True,
+                "match_type": "exact",
+                "manufacturer_id": "MANUF_NORDIC_NATURALS",
+            }
+        },
+        "verified_cert_programs": [{"program": "IFOS", "scope": "brand_only"}],
+    }
+    payload = score_trust(product)
+
+    assert "b4a_verified_certifications" not in payload["components"]
+    assert payload["components"]["b4d_brand_testing_posture"] == 2.0
+    assert payload["score"] == 2.0
+    assert payload["metadata"]["b4d"]["source"] == "top_manufacturers_data.json"
+    assert payload["metadata"]["b4d"]["manufacturer_id"] == "MANUF_NORDIC_NATURALS"
+
+
 def test_b4a_claimed_only_scope_scores_zero() -> None:
     """POLICY LOCK: claimed_only (label text without registry verification)
     does NOT score. Same discipline as P0.1b enforced."""
@@ -300,13 +328,14 @@ def test_dimension_cap_constant() -> None:
 
 _CANARY_TRUST_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
 _CANARY_TRUST_EXPECTED = {
-    # P1.7 curated IFOS overrides verified the Sports Research line.
-    "327776": 10.0,
-    "326270": 10.0,
-    # Other anchor canaries still have only claimed_only/brand_only/unverified
-    # marine cert signals and must not receive product Trust.
-    "288740": 0.0,
-    "273630": 0.0,
+    # P1.7 curated IFOS overrides verified the Sports Research line. B4d
+    # also credits low brand-testing posture from top_manufacturers_data.
+    "327776": 12.0,
+    "326270": 12.0,
+    # Brand-only / claimed-only marine cert signals still do not receive B4a.
+    # Exact top-manufacturer testing posture now contributes B4d=2.
+    "288740": 2.0,
+    "273630": 2.0,
     "239592": 0.0,
     "182968": 0.0,
 }
@@ -347,8 +376,9 @@ def test_canary_trust_matches_curated_override_state(dsld_id):
 
     P1.7 curated overrides intentionally moved Sports Research IFOS from
     needs_review to product_line. Brand-only / claimed-only marine cert
-    signals still score 0; if a future triage batch verifies more rows,
-    update this table deliberately.
+    signals still score 0 in B4a. Low brand-testing posture can score in
+    B4d when top_manufacturers_data has explicit testing evidence; update
+    this table deliberately if either policy changes.
     """
     from scoring_v4.modules.omega_trust import score_trust
 

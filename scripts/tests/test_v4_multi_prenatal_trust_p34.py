@@ -164,6 +164,7 @@ def test_multi_prenatal_trust_combines_sku_gmp_and_traceability() -> None:
         "B4a_verified_certifications": 8.0,
         "B4b_gmp": 4.0,
         "B4c_batch_traceability": 2.0,
+        "B4d_brand_testing_posture": 0.0,
     }
 
 

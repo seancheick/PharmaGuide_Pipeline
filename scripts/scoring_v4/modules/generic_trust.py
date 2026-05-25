@@ -25,6 +25,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     get_active_ingredients,
 )
+from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
 
 
 _DHA_EPA_WORD_BOUNDARY_RE = re.compile(r"\b(epa|dha)\b", re.IGNORECASE)
@@ -69,11 +70,13 @@ def score_trust(product: Dict[str, Any]) -> Dict[str, Any]:
     b4a, cert_metadata = _score_b4a(product)
     b4b = _score_b4b(product)
     b4c = _score_b4c(product)
+    b4d, b4d_metadata = score_brand_testing_posture(product)
 
     components = {
         "B4a_verified_certifications": round(b4a, 4),
         "B4b_gmp": round(b4b, 4),
         "B4c_batch_traceability": round(b4c, 4),
+        "B4d_brand_testing_posture": round(b4d, 4),
     }
     raw_total = sum(components.values())
     score = _clamp(0.0, DIMENSION_CAP, raw_total)
@@ -83,6 +86,9 @@ def score_trust(product: Dict[str, Any]) -> Dict[str, Any]:
         "raw_testing_trust": round(raw_total, 4),
         "cap_applied": raw_total > DIMENSION_CAP,
         **cert_metadata,
+        "B4d_source": b4d_metadata.get("source"),
+        "B4d_manufacturer_id": b4d_metadata.get("manufacturer_id"),
+        "B4d_matched_evidence": b4d_metadata.get("matched_evidence", []),
     }
 
     return {
