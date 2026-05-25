@@ -1,4 +1,4 @@
-# Release hygiene validation — 2026-05-25
+# Release hygiene validation - 2026-05-25
 
 Scope: read-only validation. No Supabase cleanup, quarantine, delete, or
 manifest mutation was executed.
@@ -13,11 +13,34 @@ Local catalog artifacts all match:
 | `scripts/final_db_output/pharmaguide_core.db` | `2026.05.25.184400` | 8,951 | `02331e72a47117c0d9ac4d2f3c80b7870af307876f6568d5787bd99558a8195e` |
 | `/Users/seancheick/PharmaGuide ai/assets/db/pharmaguide_core.db` | `2026.05.25.184400` | 8,951 | `02331e72a47117c0d9ac4d2f3c80b7870af307876f6568d5787bd99558a8195e` |
 
+Manifest parity also matches across the same three locations:
+
+| Manifest | db_version | product_count | checksum_sha256 |
+|---|---|---:|---|
+| `scripts/dist/export_manifest.json` | `2026.05.25.184400` | 8,951 | `02331e72a47117c0d9ac4d2f3c80b7870af307876f6568d5787bd99558a8195e` |
+| `scripts/final_db_output/export_manifest.json` | `2026.05.25.184400` | 8,951 | `02331e72a47117c0d9ac4d2f3c80b7870af307876f6568d5787bd99558a8195e` |
+| `/Users/seancheick/PharmaGuide ai/assets/db/export_manifest.json` | `2026.05.25.184400` | 8,951 | `02331e72a47117c0d9ac4d2f3c80b7870af307876f6568d5787bd99558a8195e` |
+
 Flutter git state:
 
 - `main` local HEAD equals `origin/main`.
 - Current Flutter commit: `e25f87229d7ba5077b28bdd962c31d97f842614b`
   (`chore(catalog): bundle catalog v2026.05.25.184400 + interaction v1.0.0`).
+
+## Supabase manifest state
+
+Read-only `export_manifest` query:
+
+| Version | Current | Created at | Product count | Checksum |
+|---|---|---|---:|---|
+| `2026.05.25.184400` | true | `2026-05-25T18:51:37.21117+00:00` | 8,951 | `sha256:02331e72a47117c0d9ac4d2f3c80b7870af307876f6568d5787bd99558a8195e` |
+| `2026.05.25.163900` | false | `2026-05-25T16:47:31.184767+00:00` | 8,949 | `sha256:6eb9c8fcb2b1ccce23110da31c89eeb4413f7853ca60bf54967e122d700ed71c` |
+
+Read-only `catalog_releases` ACTIVE/VALIDATING query:
+
+| Version | State | detail_index_url | Activated at |
+|---|---|---|---|
+| `2026.05.25.184400` | ACTIVE | `v2026.05.25.184400/detail_index.json` | `2026-05-25T18:51:37.368011+00:00` |
 
 ## Release-safety protected-set prerequisites
 
@@ -28,57 +51,62 @@ Read-only protected-set computation:
 | Bundle alignment | PASS |
 | Bundled version | `2026.05.25.184400` |
 | Dist version | `2026.05.25.184400` |
+| Registry protected versions | `2026.05.25.184400` |
 | Protected set degenerate | `False` |
 | Bundled detail blob count | 8,951 |
 | Dist detail blob count | 8,951 |
-| Bundled∩dist intersection | 8,951 |
-| Bundled∪dist union | 8,951 |
+| Bundled/detail intersection | 8,951 |
+| Bundled/detail union | 8,951 |
+| Protected blob count | 8,951 |
 
 This means the prior orphan-cleanup rejection caused by an uncommitted Flutter
 bundle is resolved.
 
-## Supabase manifest state
+## Cleanup dry run
 
-Read-only `export_manifest` query:
+Dry-run version cleanup:
 
-| Version | Current | Created at |
-|---|---|---|
-| `2026.05.25.184400` | true | `2026-05-25T18:51:37.21117+00:00` |
-| `2026.05.25.163900` | false | `2026-05-25T16:47:31.184767+00:00` |
+```bash
+python3 scripts/cleanup_old_versions.py --keep 2 --cleanup-db
+```
 
-Dry-run version cleanup with `--keep 2 --cleanup-db` reports nothing to
-delete because only two manifest versions exist.
+Result:
+
+- 2 `export_manifest` versions exist.
+- Both are inside the keep window.
+- Nothing would be deleted.
 
 ## Orphan-blob cleanup status
 
 No destructive orphan cleanup was run.
 
-Attempted the read-only storage audit:
+The protected-set prerequisites are now healthy enough for the built-in
+release cleanup gate to evaluate on a future release. This validation does
+not quarantine or delete orphan blobs, and it does not compute a fresh orphan
+count by walking all Supabase storage objects.
+
+Before any future destructive orphan cleanup, run one of:
+
+- `bash scripts/release_full.sh` and let the built-in cleanup gate decide.
+- Or a dedicated read-only storage audit with progress enabled:
 
 ```bash
 PYTHONPATH=scripts python3 -m release_safety.storage_audit \
   --flutter-repo "/Users/seancheick/PharmaGuide ai" \
   --dist-dir scripts/dist \
+  --progress \
   --json
 ```
 
-The audit was intentionally stopped after a long remote walk with no completed
-result. The cheaper release-safety prerequisites above still prove that the
-bundle-alignment/protected-set gate inputs are now healthy; they do not prove
-the current orphan count.
-
-Before any future destructive orphan cleanup, run one of:
-
-- `bash scripts/release_full.sh` and let the built-in cleanup gate decide.
-- Or a dedicated storage audit with `--progress` in a long-running terminal to
-  obtain the exact orphan count first.
-
 ## Important caveat
 
-The dsld_clean repo now has a post-release commit:
+The shipped catalog `2026.05.25.184400` is internally consistent across
+Supabase, `scripts/dist`, `scripts/final_db_output`, and Flutter. It does not
+include dsld_clean commits made after that release, including:
 
-- `61c4d8ce fix(enrichment): mark omega source oil rows as parent totals`
+- `61c4d8ce` omega parent-total source-oil handling
+- `a1426de7`, `437a468a`, `e0a78fb7` UNII audit reports/specs
+- `5e9ed28a`, `3895c2de`, `23d7e56a` P0 UNII model fixes
 
-So `2026.05.25.184400` is internally consistent and shipped correctly, but it
-does **not** include the omega parent-total slice. A future corpus rerun/release
-is needed before that code affects shipped catalog rows.
+A future corpus rerun/release is needed before those code/data changes affect
+the shipped catalog.
