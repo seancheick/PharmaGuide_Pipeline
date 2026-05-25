@@ -81,10 +81,22 @@ class PipelineRunner:
             )
 
     def _resolve_path(self, path: str) -> Path:
-        """Resolve a path relative to script_dir if not absolute"""
+        """Resolve a path to absolute form.
+
+        Resolution rules:
+        - Absolute paths are returned unchanged.
+        - Paths whose first component is "scripts" are treated as
+          repo-root-relative (i.e., the user is invoking from repo root with
+          an explicit scripts/ prefix). This prevents the scripts/scripts/
+          doubling bug when subprocesses run with CWD=scripts/.
+        - All other relative paths resolve against scripts/ (the historical
+          default, since subprocesses CWD into scripts/).
+        """
         p = Path(path)
         if p.is_absolute():
             return p
+        if p.parts and p.parts[0] == "scripts":
+            return self.script_dir.parent / p
         return self.script_dir / p
 
     def _validate_input_dir(self, input_dir: str, stage: str) -> bool:
@@ -397,7 +409,13 @@ class PipelineRunner:
         raw_dir = raw_dir or paths.get("raw_directory", "raw_data")
         output_prefix = output_prefix or paths.get("output_prefix", "products/output")
 
-        # Build paths
+        # Resolve to absolute paths up-front so subprocesses (which run with
+        # CWD=scripts/) don't re-resolve relative paths and double the prefix.
+        # See _resolve_path for the "scripts/"-prefix special-case.
+        raw_dir = str(self._resolve_path(raw_dir))
+        output_prefix = str(self._resolve_path(output_prefix))
+
+        # Build paths from the absolute prefix; string concat is safe now.
         cleaned_dir = f"{output_prefix}/{paths['cleaned_suffix']}"
         enriched_dir = f"{output_prefix}_enriched/{paths['enriched_suffix']}"
         scored_dir = f"{output_prefix}_scored"
