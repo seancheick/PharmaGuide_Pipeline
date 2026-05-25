@@ -216,7 +216,20 @@ def _audit_check_vitamin_a(blob_ing: dict) -> bool:
     unit = (blob_ing.get("dosage_unit") or blob_ing.get("unit") or "").upper()
     nu = (blob_ing.get("normalized_unit") or "").upper()
     nv = blob_ing.get("normalized_value")
+    ev = blob_ing.get("conversion_evidence") or {}
+    warnings = " ".join(str(w) for w in (ev.get("warnings") or []))
+    explicit_unknown = (
+        ev.get("conversion_rule_id") == "vitamin_a_unknown"
+        and ev.get("form_detection_source") == "no_conversion_possible"
+        and str(ev.get("confidence") or "").lower() == "low"
+        and (
+            "retinol vs beta-carotene" in warnings.lower()
+            or ("form" in warnings.lower() and "unknown" in warnings.lower())
+        )
+    )
     if unit == "IU" and ("vitamin a" in n or "retinyl" in n or "carotene" in n):
+        if explicit_unknown:
+            return False
         return nv is None or nu not in ("MCG RAE", "MCG", "UG RAE", "UG")
     return False
 
@@ -254,5 +267,25 @@ def test_audit_silent_when_label_already_in_mcg() -> None:
         "dosage_unit": "mcg",
         "normalized_unit": "mcg",
         "normalized_value": 600.0,
+    }
+    assert _audit_check_vitamin_a(blob_ing) is False
+
+
+def test_audit_silent_on_unknown_form_with_explicit_conversion_warning() -> None:
+    """Unknown-form Vitamin A must not be silently converted, but it also
+    should not be reported as an unsafe conversion when the blob carries the
+    explicit low-confidence no-conversion evidence."""
+    blob_ing = {
+        "name": "Vitamin A",
+        "dosage": 1000.0,
+        "dosage_unit": "IU",
+        "normalized_unit": "IU",
+        "normalized_value": 1000.0,
+        "conversion_evidence": {
+            "conversion_rule_id": "vitamin_a_unknown",
+            "form_detection_source": "no_conversion_possible",
+            "confidence": "low",
+            "warnings": ["Cannot safely convert without knowing form - retinol vs beta-carotene matters for UL"],
+        },
     }
     assert _audit_check_vitamin_a(blob_ing) is False

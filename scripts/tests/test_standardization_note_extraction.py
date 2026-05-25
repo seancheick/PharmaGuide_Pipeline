@@ -51,6 +51,8 @@ from scripts.build_final_db import _compute_standardization_note  # noqa: E402
     ("95%+ piperine", "95% piperine"),
     ("≥50% EGCG", "50% EGCG"),
     ("80% silymarin", "80% silymarin"),
+    ("standardized to ≥10% withanolide glycosides", "10% withanolide glycosides"),
+    ("Boswellia serrata extract standardized to 65% boswellic acids", "65% boswellic acids"),
 ])
 def test_positive_cases_extract(text: str, expected: str) -> None:
     ing = {"notes": text}

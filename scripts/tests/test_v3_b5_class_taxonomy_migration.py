@@ -142,6 +142,54 @@ def test_old_batch_legacy_probiotic_still_wins(scorer):
     assert scorer._b5_class_for_product(product) == "probiotic"
 
 
+def test_product_level_probiotic_evidence_overrides_underclassified_taxonomy(scorer):
+    """GNC 1650 shape: strict scoring may leave only the prebiotic carrier
+    row scorable, so taxonomy exports general_supplement even though
+    product-level CFU/strain evidence proves this is a probiotic product."""
+    product = _product(
+        primary_type="general_supplement",
+        supp_type="general_supplement",
+        product_name="Ultra Probiotic Rescue & Refresh Kit 150 Billion CFUs",
+        brand_name="GNC Probiotics",
+    )
+    product["probiotic_data"] = {
+        "is_probiotic_product": True,
+        "total_cfu": 150_000_000_000,
+        "total_billion_count": 150.0,
+        "total_strain_count": 5,
+    }
+    assert scorer._b5_class_for_product(product) == "probiotic"
+
+
+def test_shipped_catalog_probiotic_flags_override_underclassified_taxonomy(scorer):
+    """The shipped products_core row has only catalog booleans available;
+    the canary gate must still route proven probiotic products correctly."""
+    product = _product(
+        primary_type=None,
+        supp_type="general_supplement",
+        primary_category="general_supplement",
+        product_name="Ultra Probiotic Rescue & Refresh Kit 150 Billion CFUs",
+        brand_name="GNC Probiotics",
+    )
+    product["is_probiotic"] = 1
+    product["contains_probiotics"] = 1
+    assert scorer._b5_class_for_product(product) == "probiotic"
+
+
+def test_probiotic_content_does_not_override_explicit_multivitamin_signal(scorer):
+    """Garden greens/multi products can contain probiotic strains, but a real
+    multivitamin panel still uses the multi opacity tier."""
+    product = _product(
+        supp_type="multivitamin",
+        primary_category="multivitamin",
+        product_name="Raw Organic Perfect Food Green Superfood Chocolate",
+        brand_name="Garden of Life",
+    )
+    product["is_probiotic"] = 1
+    product["contains_probiotics"] = 1
+    assert scorer._b5_class_for_product(product) == "multi_or_prenatal"
+
+
 def test_old_batch_primary_category_multivit_fallback(scorer):
     """GoL MyKind pattern — no taxonomy, supp_type=specialty, primary_category=multivitamin."""
     product = _product(supp_type="specialty", primary_category="multivitamin",

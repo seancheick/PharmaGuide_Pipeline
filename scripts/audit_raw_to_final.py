@@ -69,6 +69,44 @@ CANARY_SET: dict[str, str] = {
     # representation, restore this canary with the matching DSLD ID.
 }
 
+CANARY_PRODUCTS_PATH = Path(__file__).resolve().parent / "data" / "canary_products.json"
+
+
+def _load_current_canary_set() -> dict[str, str]:
+    """Load the maintained v4 canary catalog.
+
+    ``CANARY_SET`` above is retained as a legacy fallback for older
+    worktrees, but the shipped catalog canary source of truth is
+    ``scripts/data/canary_products.json``. Keeping this audit on the same
+    canary file prevents raw→final coverage from silently drifting to
+    retired DSLD IDs.
+    """
+    try:
+        doc = json.loads(CANARY_PRODUCTS_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return dict(CANARY_SET)
+
+    canaries = doc.get("canaries")
+    if not isinstance(canaries, list):
+        return dict(CANARY_SET)
+
+    loaded: dict[str, str] = {}
+    seen: collections.Counter[str] = collections.Counter()
+    for idx, item in enumerate(canaries, start=1):
+        if not isinstance(item, dict):
+            continue
+        dsld_id = str(item.get("dsld_id") or "").strip()
+        if not dsld_id:
+            continue
+        primary = str(item.get("primary_class") or "canary").strip() or "canary"
+        subclass = str(item.get("subclass") or idx).strip() or str(idx)
+        base = f"{primary}:{subclass}"
+        seen[base] += 1
+        archetype = base if seen[base] == 1 else f"{base}:{seen[base]}"
+        loaded[archetype] = dsld_id
+
+    return loaded or dict(CANARY_SET)
+
 
 # ---------------------------------------------------------------------------
 # Findings model
@@ -623,6 +661,21 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
     don't flag it. Vitamin E IU↔mg differs by tocopherol form (alpha vs
     mixed) and is similarly form-dependent — flag it.
     """
+    def has_explicit_unknown_vitamin_a_evidence(ing: dict) -> bool:
+        ev = ing.get("conversion_evidence")
+        if not isinstance(ev, dict):
+            return False
+        warnings = " ".join(str(w) for w in (ev.get("warnings") or []))
+        return (
+            ev.get("conversion_rule_id") == "vitamin_a_unknown"
+            and ev.get("form_detection_source") == "no_conversion_possible"
+            and str(ev.get("confidence") or "").lower() == "low"
+            and (
+                "retinol vs beta-carotene" in warnings.lower()
+                or ("form" in warnings.lower() and "unknown" in warnings.lower())
+            )
+        )
+
     for ing in blob.get("ingredients") or []:
         n = (ing.get("name") or "").lower()
         unit = (ing.get("dosage_unit") or ing.get("unit") or "").upper()
@@ -631,6 +684,8 @@ def _check_unsafe_unit_conversion(rec: ProductRecord, blob: dict) -> None:
         if unit == "IU" and ("vitamin a" in n or "retinyl" in n or "carotene" in n):
             # Need a normalized RAE value AND form-aware factor.
             if normalized_value is None or normalized_unit not in ("MCG RAE", "MCG", "UG RAE", "UG"):
+                if has_explicit_unknown_vitamin_a_evidence(ing):
+                    continue
                 rec.add("UNSAFE_UNIT_CONVERSION",
                         f"Vitamin A in IU ({ing.get('dosage')}) without form-aware normalization to mcg RAE",
                         ingredient=ing.get("name"))
@@ -876,7 +931,7 @@ def main() -> int:
         targets = [(None, did) for did in args.ids]
     else:
         # default: canary
-        targets = [(arch, did) for arch, did in CANARY_SET.items()]
+        targets = [(arch, did) for arch, did in _load_current_canary_set().items()]
 
     print(f"[raw_to_final] auditing {len(targets)} products", file=sys.stderr)
 

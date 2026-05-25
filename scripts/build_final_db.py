@@ -2205,7 +2205,8 @@ def _compute_display_badge(ingredient: Dict[str, Any]) -> str:
 # bioavailability / absorption / survival phrases, elemental content,
 # and generic marketing language ("highly standardized").
 _STANDARDIZATION_COMPOUNDS = (
-    "withanolides", "curcuminoids", "ginsenosides", "rosavins",
+    "withanolide glycosides", "withanolides", "boswellic acids",
+    "boswellic acid", "curcuminoids", "ginsenosides", "rosavins",
     "bacosides", "saponins", "piperine", "EGCG", "silymarin",
 )
 _STANDARDIZATION_RE = re.compile(
@@ -2216,7 +2217,9 @@ _STANDARDIZATION_RE = re.compile(
     # NOT preceded by a hyphen (ranges like "5-10% withanolides" rejected)
     # Negative lookbehind rejects leading digit / hyphen / dot so the
     # "5" in "5.5%" or "10-20%" never matches alone.
-    r"(?<![\d\-\.])(\d{1,3})%\+?\s+(" + "|".join(_STANDARDIZATION_COMPOUNDS) + r")\b",
+    r"(?<![\d\-\.])(\d{1,3})%\+?\s+("
+    + "|".join(re.escape(c) for c in sorted(_STANDARDIZATION_COMPOUNDS, key=len, reverse=True))
+    + r")\b",
     re.IGNORECASE,
 )
 
@@ -2890,6 +2893,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "safety_hits": combined_safety_hits,
             "normalized_amount": safe_float(ne.get("normalized_amount")),
             "normalized_unit": safe_str(ne.get("normalized_unit")),
+            "conversion_evidence": safe_dict(ne.get("conversion_evidence")) or None,
             "role": "active",
             "parent_key": safe_str(m.get("parent_key") or ing.get("normalized_key")),
             "dosage": safe_float(qty),

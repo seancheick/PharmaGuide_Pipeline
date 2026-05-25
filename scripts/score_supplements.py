@@ -2873,8 +2873,16 @@ class SupplementScorer:
         ) or product.get("supp_type") or ""
         supp_type = str(supp_type).strip().lower()
 
-        # Priority 1: probiotic (taxonomy first, legacy fallback).
-        if primary_type == "probiotic" or supp_type in self._PROBIOTIC_TYPES:
+        # Priority 1: probiotic (taxonomy first, legacy fallback, then
+        # product-level probiotic evidence). The product-level path protects
+        # probiotic-dominant products whose taxonomy falls back to
+        # general_supplement because only the prebiotic carrier row is
+        # scorable after strict-contract filtering.
+        if (
+            primary_type == "probiotic"
+            or supp_type in self._PROBIOTIC_TYPES
+            or self._has_b5_probiotic_product_signal(product)
+        ):
             return "probiotic"
 
         name_text = " ".join(
@@ -2930,6 +2938,56 @@ class SupplementScorer:
             return "multi_or_prenatal"
 
         return "generic"
+
+    @staticmethod
+    def _truthy_catalog_flag(value: Any) -> bool:
+        if isinstance(value, str):
+            return value.strip().lower() in {"1", "true", "yes", "y"}
+        return bool(value)
+
+    @classmethod
+    def _has_b5_probiotic_product_signal(cls, product: Dict[str, Any]) -> bool:
+        """Return True for explicit product-level probiotic identity.
+
+        This is intentionally narrower than "contains any probiotic token".
+        Mixed products can contain probiotic strains without being a probiotic
+        product for B5 opacity semantics; require either enriched
+        ``probiotic_data.is_probiotic_product`` with CFU/strain evidence or
+        the shipped catalog's boolean product flags.
+        """
+        primary_type = cls._primary_type_from_product(product)
+        st_payload = product.get("supplement_type", {})
+        supp_type = (
+            st_payload.get("type") if isinstance(st_payload, dict) else st_payload
+        ) or product.get("supp_type") or ""
+        supp_type = str(supp_type).strip().lower()
+        primary_category = str(product.get("primary_category") or "").strip().lower()
+        if (
+            primary_type in ("multivitamin", "b_complex")
+            or supp_type in cls._MULTI_TYPES
+            or primary_category == "multivitamin"
+        ):
+            return False
+
+        pdata = product.get("probiotic_data") or product.get("probiotic_detail")
+        if isinstance(pdata, dict) and cls._truthy_catalog_flag(pdata.get("is_probiotic_product")):
+            has_evidence = any(
+                pdata.get(key)
+                for key in (
+                    "total_cfu",
+                    "total_billion_count",
+                    "total_strain_count",
+                    "probiotic_blends",
+                    "clinical_strains",
+                )
+            )
+            if has_evidence:
+                return True
+
+        return (
+            cls._truthy_catalog_flag(product.get("is_probiotic"))
+            and cls._truthy_catalog_flag(product.get("contains_probiotics"))
+        )
 
     @staticmethod
     def _primary_type_from_product(product: Dict[str, Any]) -> str:

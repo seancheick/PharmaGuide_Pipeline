@@ -220,7 +220,8 @@ def test_canary_expected_b5_class_matches_router(canary_doc: dict) -> None:
     mismatches: list[str] = []
     for c in canary_doc["canaries"]:
         row = con.execute(
-            "SELECT supplement_type, primary_category, brand_name, product_name "
+            "SELECT supplement_type, primary_category, brand_name, product_name, "
+            "is_probiotic, contains_probiotics "
             "FROM products_core WHERE dsld_id = ?",
             (c["dsld_id"],),
         ).fetchone()
@@ -232,6 +233,8 @@ def test_canary_expected_b5_class_matches_router(canary_doc: dict) -> None:
             "brand_name": row["brand_name"],
             "product_name": row["product_name"],
             "fullName": f"{row['brand_name']} {row['product_name']}",
+            "is_probiotic": row["is_probiotic"],
+            "contains_probiotics": row["contains_probiotics"],
         }
         actual = scorer._b5_class_for_product(product)
         if actual != c["expected_b5_class"]:
