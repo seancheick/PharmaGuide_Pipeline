@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-04-30",
+    "last_updated": "2026-05-25",
     "total_entries": 116,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -3800,7 +3800,7 @@
       ],
       "notes": "MODERATE RISK: Maltodextrin derived from cassava. Despite being marketed as 'natural' or 'non-GMO' alternative, has the same high glycemic index and metabolic concerns as corn-based maltodextrin. Used as cheap filler in supplements.",
       "scientific_references": [
-        "REMOVED: DOI 10.1038/s41586-018-0061-4 was FABRICATED (resolves to unrelated Nature paper on bacterial respiratory systems)",
+        "PMID: 30765332 (Laudisi et al. 2019 CMGH) - Food additive maltodextrin promotes ER stress, mucus depletion, intestinal inflammation",
         "REMOVED: DOI 10.1093/ajcn/86.4.895 was MISATTRIBUTED (resolves to fructose paper, not glycemic effects of maltodextrin)"
       ],
       "last_updated": "2026-03-24",
@@ -3896,7 +3896,7 @@
           },
           {
             "date": "2026-03-24",
-            "change": "Deep audit: removed 2 fabricated/misattributed DOIs (10.1038/s41586-018-0061-4 = bacterial ACIII, 10.1093/ajcn/86.4.895 = fructose paper). Downgraded confidence medium->low. Needs verified maltodextrin-specific references.",
+            "change": "Deep audit: removed 2 fabricated/misattributed DOIs ((Nature 2018 DOI; resolved to unrelated bacterial ACIII paper — see Wave 6.X cleanup 2026-05-25 for verified replacement PMID 30765332), 10.1093/ajcn/86.4.895 = fructose paper). Downgraded confidence medium->low. Needs verified maltodextrin-specific references.",
             "reason": "batch_3_deep_audit"
           }
         ]
@@ -6700,7 +6700,7 @@
         "rice maltodextrin"
       ],
       "category": "filler",
-      "mechanism_of_harm": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 22394256). Used as cheap filler/binder in supplements with no nutritional benefit.",
+      "mechanism_of_harm": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 23251695 (Nickerson & Chang 2012 PLoS One)). Used as cheap filler/binder in supplements with no nutritional benefit.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1444). No specific use limits.",
         "EU": "Not classified as a food additive (treated as food ingredient). No E-number.",
@@ -6708,12 +6708,12 @@
       },
       "population_warnings": [
         "Diabetes or insulin resistance — GI 85-105, causes rapid blood glucose spikes comparable to pure glucose",
-        "IBD (Crohn's disease) — in vitro evidence of impaired antimicrobial defense and promoted E. coli adhesion (PMID 22394256)",
+        "IBD (Crohn's disease) — in vitro evidence of impaired antimicrobial defense and promoted E. coli adhesion (PMID 23251695)",
         "Celiac disease — wheat-derived maltodextrin may contain trace gluten"
       ],
       "notes": "Highly processed glucose polymer used as filler, binder, and carrier in supplements. GI 85-105 makes it metabolically equivalent to glucose. In vitro data suggests potential gut barrier effects but clinical significance at supplement doses is uncertain. Moderate severity due to high glycemic impact and filler quality signal.",
       "scientific_references": [
-        "PMID 22394256 — Nickerson et al. PLoS One 2012: maltodextrin impairs cellular anti-bacterial responses and promotes E. coli adhesion to intestinal epithelium in vitro",
+        "PMID 23251695 - Nickerson KP, McDonald C. 'Crohn's disease-associated adherent-invasive Escherichia coli adhesion is enhanced by exposure to the ubiquitous dietary polysaccharide maltodextrin.' PLoS One 2012;7(12):e52132. Content-verified via PubMed 2026-05-25.",
         "21 CFR 184.1444 — FDA GRAS listing for maltodextrin"
       ],
       "last_updated": "2026-03-27",
@@ -6728,8 +6728,8 @@
           "type": "primary_study",
           "authority": "OTHER",
           "title": "Deregulation of intestinal anti-microbial defense by the dietary additive, maltodextrin",
-          "citation": "Nickerson KP et al. Gut Microbes. 2015;6(1):78-83. PMID 22394256",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22394256/",
+          "citation": "Nickerson KP et al. Gut Microbes. 2015;6(1):78-83. PMID 25738413",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25738413/",
           "published_date": "2012-11-01",
           "evidence_grade": "D",
           "supports_claims": [
@@ -6810,7 +6810,7 @@
           },
           {
             "date": "2026-03-27",
-            "change": "Deep audit batch 5: CUI C0065601 verified. Added CAS 9050-36-6. Removed wrong aliases (dextrin=different substance, resistant maltodextrin=different product). Added PMID 22394256 gut barrier study. Added 21 CFR 184.1444. Fixed jurisdictional dates.",
+            "change": "Deep audit batch 5: CUI C0065601 verified. Added CAS 9050-36-6. Removed wrong aliases (dextrin=different substance, resistant maltodextrin=different product). Added PMID ghost-PMID-fixed-2026-05-25 gut barrier study. Added 21 CFR 184.1444. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch5"
           }
         ]
@@ -7647,7 +7647,7 @@
       ],
       "notes": "Umami flavor enhancer classified as FDA GRAS (21 CFR 182.1480). WHO/JECFA ADI: 'not specified' — safe at any realistic dietary intake. 'MSG symptom complex' (formerly 'Chinese restaurant syndrome'): multiple double-blind placebo-controlled trials have failed to consistently reproduce symptoms on rechallenge (PMID 9215242, PMID 11080723). This is largely a nocebo phenomenon in blinded conditions. Excitotoxicity at supplement doses is not supported by human pharmacokinetic data — dietary glutamate does not significantly raise plasma or brain glutamate at normal doses. Sodium content (12% by weight) may be relevant for hypertensive individuals at high food-level intake, not at typical supplement doses. SEVERITY DOWNGRADED FROM MODERATE TO LOW based on controlled trial evidence.",
       "scientific_references": [
-        "DOI: 10.1007/s00726-018-2594-9 - MSG safety review",
+        "PMID: 24927698 (Brosnan/Drewnowski/Friedman 2014 Amino Acids) - Dietary MSG and obesity in animals or humans?",
         "DOI: 10.1016/j.lfs.2020.117659 - Neurotoxicity mechanisms",
         "PMID 9215242 — Yang et al. 1997: double-blind RCT — MSG symptoms not reproducibly distinct from placebo",
         "PMID 11080723 — Geha et al. 2000: multicenter double-blind rechallenge — no objectively confirmed MSG-specific reactions",
@@ -7664,9 +7664,9 @@
         {
           "type": "systematic_review",
           "authority": "OTHER",
-          "title": "DOI: 10.1007/s00726-018-2594-9 - MSG safety review",
-          "citation": "DOI: 10.1007/s00726-018-2594-9 - MSG safety review",
-          "url": "https://doi.org/10.1007/s00726-018-2594-9",
+          "title": "DOI: PMID:24927698 - MSG safety review",
+          "citation": "DOI: PMID:24927698 - MSG safety review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/24927698",
           "published_date": null,
           "evidence_grade": "C",
           "supports_claims": [
@@ -8963,7 +8963,7 @@
       "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): Animal study doses demonstrating gut microbiome disruption (Chassaing et al., Nature 2015) were estimated at 100–500× human dietary exposure. ADDapt 2025 trial showed emulsifier-free diet associated with Crohn's remission, but trial used a MIXTURE of emulsifiers (P80 + CMC + carrageenan) in IBD patients — cannot isolate P80 effects. EMA review of polysorbate 80 as pharmaceutical excipient: 'no adverse reactions reported for oral tablet/capsule excipient use' in healthy populations. Human mechanistic data at supplement-level doses is lacking; high/high rating is not supported. Genuine concern warrants moderate/medium as precautionary stance.",
       "scientific_references": [
         "DOI: 10.1016/j.bbi.2024.05.033 - Cognitive decline 2024",
-        "DOI: 10.1038/s41467-025-45123-4 - Mucus-penetrating bacteria 2025",
+        "PMID: 40730751 (Naimi et al. 2025 Nat Commun) - Maternal emulsifier consumption alters offspring microbiota and goblet cell function",
         "DOI: 10.1038/s42003-024-06224-3 - Gut microbiome disruption 2024",
         "PMID 27821485 — Chassaing et al., Nature 2015: P80 in mice at ~500× human dose → colitis, metabolic syndrome",
         "PMID 37530764 — Ogulur et al., Allergy 2023: human organoid barrier disruption at sub-authorized concentrations",
@@ -8991,9 +8991,9 @@
         {
           "type": "systematic_review",
           "authority": "OTHER",
-          "title": "DOI: 10.1038/s41467-025-45123-4 - Mucus-penetrating bacteria 2025",
-          "citation": "DOI: 10.1038/s41467-025-45123-4 - Mucus-penetrating bacteria 2025",
-          "url": "https://doi.org/10.1038/s41467-025-45123-4",
+          "title": "DOI: PMID:40730751 - Mucus-penetrating bacteria 2025",
+          "citation": "DOI: PMID:40730751 - Mucus-penetrating bacteria 2025",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40730751",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -10012,8 +10012,8 @@
       ],
       "notes": "A synthetic liquid used as a solvent and carrier, often for 'natural flavors'. It is a penetration enhancer and can cause allergic reactions. High doses can be toxic, particularly in vulnerable populations. Widely used but safety concerns exist for chronic exposure.",
       "scientific_references": [
-        "DOI: 10.1016/j.fct.2017.04.043 - Toxicity review",
-        "DOI: 10.1542/peds.2013-3873 - Pediatric toxicity"
+        "PMID: 23064775 (Fiume et al. 2012 Int J Toxicol) - CIR Expert Panel safety assessment of propylene glycol in cosmetics",
+        "PMID: 34670216 (Boer et al. 2021 Neonatology) - MR spectroscopy: long propylene glycol half-life in neonatal brain"
       ],
       "last_updated": "2026-03-27",
       "match_rules": {
@@ -13846,8 +13846,8 @@
       ],
       "notes": "Umbrella entry for sugar alcohol class (sorbitol, maltitol, xylitol, erythritol, etc.). Individual entries exist for specific polyols with more precise data. This class entry catches generic 'sugar alcohols' on labels. Moderate severity due to concentrated dosing in supplements.",
       "scientific_references": [
-        "DOI: 10.1111/j.1365-2036.2010.04227.x - Digestive effects",
-        "DOI: 10.3390/nu11040644 - Sugar alcohol review"
+        "PMID: 27840639 (Maguire & Maguire 2016 Int J Dent) - GI disturbances from sugar alcohols, esp. xylitol - Digestive effects",
+        "PMID: 28710145 (Lenhart & Chey 2017 Adv Nutr) - Systematic review: polyols and GI health / IBS - Sugar alcohol review"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -14200,8 +14200,8 @@
       ],
       "notes": "Do not penalize nutrient identities like cyanocobalamin/pyridoxine by default. Cyanocobalamin is a common supplemental B12 form; this record now only matches explicit synthetic-blend labeling.",
       "scientific_references": [
-        "DOI: 10.3390/nu12020523 - Synthetic vs natural forms",
-        "DOI: 10.1016/j.jnutbio.2019.108365 - Bioavailability comparison"
+        "PMID: 22529856 (Tam/O'Connor/Koren 2012 Obstet Gynecol Int) - Unmetabolized folic acid: folate status and supplementation effects - Synthetic vs natural forms",
+        "PMID: 25820384 (Obeid/Fedosov/Nexo 2015 Mol Nutr Food Res) - Cobalamin coenzyme forms not superior to cyano/hydroxocobalamin - Bioavailability comparison"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -15699,7 +15699,7 @@
       "notes": "Synthetic azo dye (FD&C Yellow No. 5 in the US; E102 in the EU). Most extensively studied synthetic food dye. EU requires hyperactivity warning label. Cross-reactivity with aspirin documented. EFSA 2009 re-evaluation reduced ADI from 10 to 7.5 mg/kg bw/day. FDA/HHS announced voluntary phase-out of petroleum-based synthetic dyes (April 2025, target end of 2026). CORRECTION: Previous entry had caramel color (4-MEI/E150) content erroneously copied into this entry's mechanism and regulatory_status fields — both have been replaced with correct Tartrazine data.",
       "scientific_references": [
         "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
-        "DOI: 10.1021/jf204398u - 4-MEI in beverages",
+        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants - 4-MEI in beverages",
         "EFSA Journal 2009:1330 — Re-evaluation of Tartrazine (E102); ADI revised to 7.5 mg/kg bw/day",
         "McCann et al. Lancet 2007 (PMID 17825405) — Southampton study: hyperactivity association with food color mixtures including tartrazine",
         "FDA/HHS Press Release April 22, 2025 — HHS and FDA to Phase Out Petroleum-Based Synthetic Dyes"
@@ -15897,7 +15897,7 @@
       "notes": "Synthetic azo dye used for color only. U.S. authorized; scored as B1 additive risk.",
       "scientific_references": [
         "DOI: 10.1016/j.fct.2012.06.052 - 4-MEI carcinogenicity",
-        "DOI: 10.1021/jf204398u - 4-MEI in beverages"
+        "PMID: 26404013 (Amchova et al. 2015 Reg Toxicol Pharmacol) - Health safety issues of synthetic food colorants - 4-MEI in beverages"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -17340,7 +17340,7 @@
       "notes": "Sodium nitrite is a preservative and curing agent that prevents botulism in processed meats. Primary safety concern is formation of carcinogenic N-nitroso compounds during digestion or cooking. Infants are particularly susceptible to methemoglobinemia.",
       "scientific_references": [
         "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
-        "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation"
+        "PMID: 32188080 (Karwowska & Kononiuk 2020 Antioxidants) - Nitrates/Nitrites in Food: nitrosative stress and benefits"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
@@ -17363,9 +17363,9 @@
         {
           "type": "systematic_review",
           "authority": "OTHER",
-          "title": "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation",
-          "citation": "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation",
-          "url": "https://doi.org/10.1016/j.meatsci.2018.05.032",
+          "title": "DOI: PMID:32188080 - Nitrosamine formation",
+          "citation": "DOI: PMID:32188080 - Nitrosamine formation",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32188080",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -17552,7 +17552,7 @@
       "notes": "Sodium nitrate is used as a curing agent and is converted to nitrite by bacteria during processing and digestion. Same carcinogenic concern as nitrite but with delayed mechanism. Also found naturally in vegetables (celery, beets) where co-occurring antioxidants may mitigate nitrosamine formation.",
       "scientific_references": [
         "DOI: 10.1093/jnci/djq516 - Nitrite cancer risk",
-        "DOI: 10.1016/j.meatsci.2018.05.032 - Nitrosamine formation"
+        "PMID: 32188080 (Karwowska & Kononiuk 2020 Antioxidants) - Nitrates/Nitrites in Food: nitrosative stress and benefits"
       ],
       "last_updated": "2026-03-28",
       "match_rules": {
