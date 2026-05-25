@@ -174,6 +174,39 @@ def _ensure_registry_active(client, *, db_version):
     )
 
 
+def _retire_superseded_ota_releases(client, *, current_db_version):
+    """Retire older ACTIVE ota_stable registry rows after a successful sync.
+
+    ``catalog_releases`` is part of the orphan-blob protected-set contract:
+    every ACTIVE/VALIDATING row is treated as live. Leaving old OTA rows
+    ACTIVE keeps stale detail indexes in the protected set and can block
+    cleanup if an old index has already been pruned from storage. Bundled
+    rows are intentionally left alone because they anchor app-bundled
+    catalog state, not OTA state.
+    """
+    from release_safety import (
+        ReleaseChannel,
+        list_active_releases,
+    )
+    from release_safety.registry import retire_release
+
+    retired = []
+    for release in list_active_releases(client):
+        if release.db_version == current_db_version:
+            continue
+        if release.release_channel != ReleaseChannel.OTA_STABLE:
+            continue
+        reason = f"superseded by active release {current_db_version}"
+        print(f"  [registry] retiring superseded OTA release {release.db_version}")
+        retired.append(retire_release(client, release.db_version, reason=reason))
+
+    if retired:
+        print(f"  [registry] retired {len(retired)} superseded OTA release(s)")
+    else:
+        print("  [registry] no superseded OTA releases to retire")
+    return retired
+
+
 # ---------------------------------------------------------------------------
 # Pure functions (testable without Supabase)
 # ---------------------------------------------------------------------------
@@ -859,7 +892,16 @@ def sync(
         print("  No remote version found (first push)")
 
     if not needs_update(local, remote, force=force):
-        print("Already up to date. Nothing to do.")
+        print("Already up to date. Verifying registry state...")
+        remote_detail_index_path = f"v{version}/detail_index.json"
+        _ensure_registry_validating(
+            client,
+            db_version=version,
+            detail_index_url=remote_detail_index_path,
+        )
+        _ensure_registry_active(client, db_version=version)
+        _retire_superseded_ota_releases(client, current_db_version=version)
+        print("Already up to date. Nothing to upload.")
         return {"status": "up_to_date", "version": version}
 
     # Upload SQLite DB
@@ -978,6 +1020,7 @@ def sync(
     print(f"\n[registry] Stage 2: activating {version}...")
     _ensure_registry_active(client, db_version=version)
     print(f"  [registry] {version} is ACTIVE; release fully visible to cleanup gates")
+    _retire_superseded_ota_releases(client, current_db_version=version)
 
     # Summary
     total_time = db_time + detail_index_time + discover_time + blob_time

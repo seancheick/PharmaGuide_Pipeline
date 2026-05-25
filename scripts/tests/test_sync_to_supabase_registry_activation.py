@@ -33,6 +33,7 @@ if _scripts_dir not in sys.path:
 from sync_to_supabase import (
     _ensure_registry_active,
     _ensure_registry_validating,
+    _retire_superseded_ota_releases,
 )
 from release_safety.registry import (
     DEFAULT_TABLE as REGISTRY_TABLE,
@@ -429,6 +430,64 @@ def test_full_e2e_re_run_after_full_success_is_pure_noop(client: FakeClient):
 
     # DB row unchanged from seed (state still ACTIVE)
     assert client.rows()[0]["state"] == "ACTIVE"
+
+
+# ===========================================================================
+# Superseded OTA retirement — keep protected-set registry lean
+# ===========================================================================
+
+
+def test_retire_superseded_ota_releases_retires_only_old_ota_rows(
+    client: FakeClient,
+):
+    client.seed([
+        _row(db_version="2026.current", state="ACTIVE", channel="ota_stable"),
+        _row(db_version="2026.old1", state="ACTIVE", channel="ota_stable"),
+        _row(db_version="2026.old2", state="ACTIVE", channel="ota_stable"),
+        _row(db_version="2026.bundle", state="ACTIVE", channel="bundled"),
+        _row(db_version="2026.validating", state="VALIDATING", channel="ota_stable"),
+    ])
+
+    captured = io.StringIO()
+    with redirect_stdout(captured):
+        retired = _retire_superseded_ota_releases(
+            client, current_db_version="2026.current",
+        )
+
+    assert {r.db_version for r in retired} == {"2026.old1", "2026.old2"}
+    rows = {r["db_version"]: r for r in client.rows()}
+    assert rows["2026.current"]["state"] == "ACTIVE"
+    assert rows["2026.bundle"]["state"] == "ACTIVE"
+    assert rows["2026.validating"]["state"] == "VALIDATING"
+    assert rows["2026.old1"]["state"] == "RETIRED"
+    assert rows["2026.old2"]["state"] == "RETIRED"
+    assert (
+        rows["2026.old1"]["retired_reason"]
+        == "superseded by active release 2026.current"
+    )
+    out = captured.getvalue()
+    assert "retired 2 superseded OTA release" in out
+
+
+def test_retire_superseded_ota_releases_is_noop_when_current_is_only_active_ota(
+    client: FakeClient,
+):
+    client.seed([
+        _row(db_version="2026.current", state="ACTIVE", channel="ota_stable"),
+        _row(db_version="2026.bundle", state="ACTIVE", channel="bundled"),
+    ])
+
+    captured = io.StringIO()
+    with redirect_stdout(captured):
+        retired = _retire_superseded_ota_releases(
+            client, current_db_version="2026.current",
+        )
+
+    assert retired == []
+    rows = {r["db_version"]: r for r in client.rows()}
+    assert rows["2026.current"]["state"] == "ACTIVE"
+    assert rows["2026.bundle"]["state"] == "ACTIVE"
+    assert "no superseded OTA releases" in captured.getvalue()
 
 
 # ===========================================================================
