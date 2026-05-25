@@ -2447,6 +2447,8 @@ class SupplementEnricherV3:
 
         texts = [
             product.get('fullName', '') or '',
+            product.get('product_name', '') or '',
+            product.get('bundleName', '') or '',
             product.get('brandName', '') or '',
             self._get_safe_text_field(product, 'labelText')
         ]
@@ -2735,10 +2737,7 @@ class SupplementEnricherV3:
         # =================================================================
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
-        product_activity_text = " ".join(
-            str(product.get(key) or "")
-            for key in ("fullName", "product_name", "bundleName")
-        )
+        product_activity_text = self._get_all_product_text(product)
         for ingredient in active_ingredients:
             if product_activity_text:
                 ingredient = dict(ingredient)

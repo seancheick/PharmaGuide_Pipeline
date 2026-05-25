@@ -734,6 +734,28 @@ class TestSubstringCollisionGuards:
         assert result["percentile_category"] == "greens_powder"
         assert any("greens/superfood" in r for r in result["classification_reasons"])
 
+    def test_greens_name_without_greens_content_does_not_override_multivitamin(self):
+        """The generic word 'greens' alone is not enough to override a
+        vitamin/mineral panel when no greens/botanical content is present.
+        """
+        product = {
+            "product_name": "Daily Greens Multivitamin",
+            "ingredient_quality_data": {"ingredients_scorable": [
+                {"name": "Vitamin A", "canonical_id": "vitamin_a", "category": "vitamins", "quantity": 2033, "unit": "IU"},
+                {"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamins", "quantity": 60, "unit": "mg"},
+                {"name": "Vitamin D", "canonical_id": "vitamin_d", "category": "vitamins", "quantity": 400, "unit": "IU"},
+                {"name": "Vitamin B6", "canonical_id": "vitamin_b6", "category": "vitamins", "quantity": 2, "unit": "mg"},
+                {"name": "Folate", "canonical_id": "folate", "category": "vitamins", "quantity": 400, "unit": "mcg"},
+                {"name": "Calcium", "canonical_id": "calcium", "category": "minerals", "quantity": 50, "unit": "mg"},
+                {"name": "Iron", "canonical_id": "iron", "category": "minerals", "quantity": 5, "unit": "mg"},
+            ]},
+        }
+
+        result = classify_supplement(product)
+
+        assert result["primary_type"] == "multivitamin"
+        assert result["percentile_category"] == "multivitamin"
+
     # --- Fiber/digestive: canonical vocab includes digestive enzymes ---
 
     def test_digestive_enzymes_are_digestive(self):

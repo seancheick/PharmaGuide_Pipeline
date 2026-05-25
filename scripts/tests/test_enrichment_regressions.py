@@ -981,6 +981,47 @@ class TestBrandedFormMatching:
         assert result.get("form_id") == "sensoril ashwagandha"
         assert result.get("bio_score") == 11
 
+    def test_statement_only_sensoril_context_selects_sensoril_form(self, enricher):
+        """Product-level Sensoril context may live in claims/statements, not
+        only the product name. Active-row matching and clinical evidence must
+        use the same product-text scope so they do not split state.
+        """
+        product = {
+            "id": "statement_sensoril",
+            "fullName": "Ashwagandha Root and Leaf Extract 250 mg",
+            "brandName": "Example",
+            "statements": [
+                {"type": "claim", "text": "Made with Sensoril ashwagandha extract."},
+            ],
+            "activeIngredients": [
+                {
+                    "name": "Ashwagandha (Withania somnifera) root and leaf extract",
+                    "raw_source_text": "Ashwagandha (Withania somnifera) root and leaf extract",
+                    "standardName": "Ashwagandha",
+                    "canonical_id": "ashwagandha",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "quantity": 250,
+                    "unit": "mg",
+                    "forms": [
+                        {
+                            "name": "Withanolide Glycosides",
+                            "prefix": "minimum",
+                            "percent": 10,
+                            "ingredientGroup": "Withanolide",
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        iqd = enricher._collect_ingredient_quality_data(product)
+        scorable = iqd.get("ingredients_scorable") or []
+
+        assert len(scorable) == 1
+        assert scorable[0].get("matched_form") == "sensoril ashwagandha"
+        assert scorable[0].get("bio_score") == 11
+
     def test_product_name_sensoril_context_does_not_apply_to_non_ashwagandha(self, enricher):
         ingredient = {
             "_product_activity_text": "Daily Formula With Sensoril",
@@ -1008,6 +1049,30 @@ class TestProductContextClinicalEvidence:
             "id": "82300",
             "fullName": "Ashwagandha With Sensoril 125 mg",
             "brandName": "Doctor's Best",
+            "activeIngredients": [
+                {
+                    "name": "Ashwagandha (Withania somnifera) root and leaf extract",
+                    "raw_source_text": "Ashwagandha (Withania somnifera) root and leaf extract",
+                    "standardName": "Ashwagandha",
+                    "canonical_id": "ashwagandha",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "quantity": 250,
+                    "unit": "mg",
+                }
+            ],
+        }
+
+        evidence = enricher._collect_evidence_data(product)
+        ids = {m.get("id") for m in evidence.get("clinical_matches", [])}
+
+        assert "BRAND_SENSORIL" in ids
+
+    def test_bundle_only_sensoril_context_collects_sensoril_clinical_match(self, enricher):
+        product = {
+            "id": "bundle_sensoril",
+            "fullName": "Ashwagandha Root Extract 250 mg",
+            "bundleName": "With Sensoril",
+            "brandName": "Example",
             "activeIngredients": [
                 {
                     "name": "Ashwagandha (Withania somnifera) root and leaf extract",

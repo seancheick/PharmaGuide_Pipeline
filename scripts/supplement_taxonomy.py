@@ -157,6 +157,7 @@ _PROTEIN_NAME_TOKENS = {
     "protein blend",
 }
 _GREENS_NAME_TOKENS = {"greens", "super greens", "green superfood", "greens powder", "reds powder"}
+_STRONG_GREENS_NAME_TOKENS = {"super greens", "green superfood", "greens powder", "reds powder"}
 _ELECTROLYTE_NAME_TOKENS = {"electrolyte", "hydration powder", "hydration mix"}
 _AMINO_NAME_TOKENS = {"bcaa", "eaa", "amino acid", "amino acids", "essential amino"}
 
@@ -366,7 +367,7 @@ def _detect_functional_name(product_name: str) -> tuple[str, float, str]:
         return "pre_workout", 0.9, f"pre-workout name signal in '{product_name}'"
     if any(t in product_name for t in _PROTEIN_NAME_TOKENS):
         return "protein_powder", 0.9, f"protein name signal in '{product_name}'"
-    if any(t in product_name for t in _GREENS_NAME_TOKENS):
+    if any(t in product_name for t in _STRONG_GREENS_NAME_TOKENS):
         return "greens_powder", 0.85, f"greens/superfood name signal in '{product_name}'"
     if any(t in product_name for t in _ELECTROLYTE_NAME_TOKENS):
         return "electrolyte", 0.9, f"electrolyte/hydration name signal in '{product_name}'"
@@ -671,10 +672,10 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # Fortified greens can carry vitamin/mineral/probiotic panels, but the
     # peer class users compare is still greens/superfood rather than a
     # multivitamin.
-    elif any(t in product_name for t in _GREENS_NAME_TOKENS):
+    elif _has_greens_powder_signal(product_name, cid_set, category_counts):
         primary_type = "greens_powder"
         confidence = 0.9
-        reasons.append(f"greens/superfood name signal in '{product_name}'")
+        reasons.append(f"greens/superfood signal: ids={list(cid_set & _GREENS_IDS)}")
 
     # --- Multivitamin / prenatal panel ---
     # Checked before omega so prenatal multis with DHA don't become omega_3.
@@ -909,7 +910,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         reasons.append(f"protein powder signal: ids={list(cid_set & _PROTEIN_IDS)}")
 
     # --- Greens powder ---
-    elif any(t in product_name for t in _GREENS_NAME_TOKENS) or len(cid_set & _GREENS_IDS) >= 2:
+    elif _has_greens_powder_signal(product_name, cid_set, category_counts):
         primary_type = "greens_powder"
         confidence = 0.85
         reasons.append(f"greens/superfood signal: ids={list(cid_set & _GREENS_IDS)}")
@@ -1119,6 +1120,33 @@ def _infer_secondary_type(
                 return _SECONDARY_TYPE_MAP[cid]
 
     return None
+
+
+def _has_greens_powder_signal(
+    product_name: str,
+    cid_set: frozenset[str],
+    category_counts: dict[str, int],
+) -> bool:
+    """Return whether product identity is truly greens/superfood.
+
+    Strong phrases like "super greens" are accepted as product identity even
+    when the label panel only exposes vitamins/minerals. The generic word
+    "greens" needs ingredient support so vitamin panels marketed with a vague
+    greens word do not outrank the explicit multivitamin route.
+    """
+    if len(cid_set & _GREENS_IDS) >= 2:
+        return True
+    if any(t in product_name for t in _STRONG_GREENS_NAME_TOKENS):
+        return True
+    if "collagen greens" in product_name:
+        return True
+    if "greens" in product_name:
+        botanical_count = (
+            category_counts.get("botanical", 0)
+            + category_counts.get("herb", 0)
+        )
+        return botanical_count > 0 or bool(cid_set & _GREENS_IDS)
+    return False
 
 
 # ============================================================================
