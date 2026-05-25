@@ -63,3 +63,33 @@ Next highest-yield rule should be omega-specific constituent handling:
 
 That slice needs its own red tests from the report examples before any code
 change.
+
+## Slice #2 — omega/fish-oil constituent handling
+
+Rule added in this slice:
+
+- only applies to omega canonical groups: `fish_oil`, `epa`, `dha`, `epa_dha`
+- requires at least one nested child with positive dose
+- requires the nested child to sit under a `parentBlend` that normalizes like
+  a total omega / EPA-DHA constituent container (`Total Omega-3 Fatty Acids`,
+  `Total Omega-3 Fatty Acids Ethyl Esters`, etc.)
+- marks only top-level source-oil rows as `is_parent_total=True`; nested
+  disclosed constituent rows remain score-eligible
+
+Confirmed fixed in-process before corpus rerun:
+
+| Canonical ID | Groups fixed | Examples |
+|---|---:|---|
+| `fish_oil` | 19 | Nature Made `Fish Oil 1000 mg`, `Full Strength Minis Super Omega-3` |
+| `dha` | 3 | Sports Research `Vegan Omega-3 Algae Oil`, `Vegan Omega + D3`, `Keto Omega-3 1400 mg` |
+
+Negative control preserved:
+
+| DSLD | Canonical ID | Why not a parent total |
+|---|---|---|
+| 178674 | `fish_oil` | Spring Valley `Fish, Flax & Borage Oil`: nested omega row is under `Borage Oil`, not a total-omega disclosure for the top-level fish-oil row |
+
+Expected parent-total invariant state after slices #1 and #2: 25 of the
+original 64 miss groups are addressed in code (3 exact duplicate restatements
++ 22 omega source-oil/constituent rows), leaving 39 miss groups for later
+human-reviewed slices.

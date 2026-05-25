@@ -1688,6 +1688,158 @@ class TestParentTotalFlagging:
         assert len(rows) == 2
         assert all(ing["is_parent_total"] is False for ing in rows)
 
+    def test_collect_marks_fish_oil_source_total_when_omega_constituents_disclosed(self, enricher, monkeypatch):
+        """Omega labels commonly disclose source-oil mass plus nested EPA/DHA
+        or total-omega constituent mass. The source-oil row is the parent
+        total; A1 should score the disclosed constituent row rather than
+        double-counting the oil mass.
+        """
+
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
+            return {
+                "standard_name": ing_name,
+                "canonical_id": "fish_oil",
+                "form_id": "fish oil (unspecified)",
+                "form_name": "fish oil (unspecified)",
+                "match_tier": "exact",
+                "bio_score": 10,
+                "score": 10,
+                "natural": True,
+                "dosage_importance": 1.0,
+                "category": "fatty_acids",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-omega-source-oil",
+            "fullName": "Fish Oil 1000 mg",
+            "activeIngredients": [
+                {
+                    "name": "Fish Oil",
+                    "standardName": "Fish Oil",
+                    "quantity": 2000,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Omega-3 Fatty Acids",
+                    "standardName": "Omega-3 Fatty Acids",
+                    "quantity": 500,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Total Omega-3 Fatty Acids",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
+        assert by_name["Fish Oil"]["is_parent_total"] is True
+        assert by_name["Omega-3 Fatty Acids"]["is_parent_total"] is False
+
+    def test_collect_does_not_mark_source_oil_parent_total_for_unrelated_oil_blend(self, enricher, monkeypatch):
+        """The omega rule must not collapse separate oil-source rows. In
+        Spring Valley Fish/Flax/Borage, omega-3 fatty acids nested under
+        Borage Oil are not a Total Omega/EPA-DHA disclosure for Fish Oil.
+        """
+
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
+            return {
+                "standard_name": ing_name,
+                "canonical_id": "fish_oil",
+                "form_id": "fish oil (unspecified)",
+                "form_name": "fish oil (unspecified)",
+                "match_tier": "exact",
+                "bio_score": 10,
+                "score": 10,
+                "natural": True,
+                "dosage_importance": 1.0,
+                "category": "fatty_acids",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-omega-source-oil-negative",
+            "fullName": "Fish, Flax & Borage Oil",
+            "activeIngredients": [
+                {
+                    "name": "Fish Oil",
+                    "standardName": "Fish Oil",
+                    "quantity": 800,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Omega-3 Fatty Acids",
+                    "standardName": "Omega-3 Fatty Acids",
+                    "quantity": 800,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Borage Oil",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        assert all(not ing["is_parent_total"] for ing in result["ingredients_scorable"])
+
+    def test_collect_marks_algal_dha_source_total_when_dha_constituent_disclosed(self, enricher, monkeypatch):
+        """Branded algal-oil source rows can canonicalize to DHA while the
+        nested child discloses the actual DHA amount under Total Omega-3.
+        The source row should be excluded from A1 double-counting.
+        """
+
+        def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
+            canonical_id = "dha" if "docosahexaenoic" in ing_name.lower() or "omega" in ing_name.lower() else "epa"
+            if "life" in ing_name.lower():
+                canonical_id = "dha"
+            return {
+                "standard_name": ing_name,
+                "canonical_id": canonical_id,
+                "form_id": "dha (unspecified)",
+                "form_name": "dha (unspecified)",
+                "match_tier": "exact",
+                "bio_score": 10,
+                "score": 10,
+                "natural": True,
+                "dosage_importance": 1.0,
+                "category": "fatty_acids",
+            }
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+
+        product = {
+            "id": "test-parent-total-algal-dha-source-oil",
+            "fullName": "Vegan Omega-3 Algae Oil",
+            "activeIngredients": [
+                {
+                    "name": "life'sOmega",
+                    "standardName": "life'sOmega",
+                    "quantity": 1400,
+                    "unit": "mg",
+                    "isNestedIngredient": False,
+                },
+                {
+                    "name": "Docosahexaenoic Acid",
+                    "standardName": "Docosahexaenoic Acid",
+                    "quantity": 420,
+                    "unit": "mg",
+                    "isNestedIngredient": True,
+                    "parentBlend": "Total Omega-3 Fatty Acids",
+                },
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        by_name = {ing["name"]: ing for ing in result["ingredients_scorable"]}
+        assert by_name["life'sOmega"]["is_parent_total"] is True
+        assert by_name["Docosahexaenoic Acid"]["is_parent_total"] is False
+
     def test_collect_does_not_flag_when_no_nested_children(self, enricher, monkeypatch):
         def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
             return {

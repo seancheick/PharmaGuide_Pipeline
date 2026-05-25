@@ -5664,6 +5664,14 @@ class SupplementEnricherV3:
                 continue
             canonical_groups.setdefault(str(canonical_id), []).append(ing)
 
+        omega_parent_total_canonicals = {"fish_oil", "epa", "dha", "epa_dha"}
+
+        def _is_total_omega_constituent_blend(value: Any) -> bool:
+            text = self._normalize_text(value or "")
+            if "total" not in text:
+                return False
+            return "omega" in text or ("epa" in text and "dha" in text)
+
         for group in canonical_groups.values():
             if len(group) <= 1:
                 continue
@@ -5737,6 +5745,24 @@ class SupplementEnricherV3:
                     ):
                         parent["is_parent_total"] = True
                         break
+
+            # Omega labels often disclose a source-oil mass plus nested
+            # total-omega / EPA-DHA constituents. The source oil is the
+            # parent total for A1 purposes; the disclosed constituent row is
+            # the clinically meaningful amount. Keep this narrower than
+            # all fatty-acid rows so products with distinct oil sources
+            # (fish oil plus borage/coffee/etc.) remain additive.
+            group_canonical_id = str(group[0].get("canonical_id") or "").strip().lower()
+            if group_canonical_id in omega_parent_total_canonicals:
+                has_total_omega_child = any(
+                    bool(child.get("is_nested_ingredient", False))
+                    and _is_total_omega_constituent_blend(child.get("parent_blend"))
+                    for child in group
+                )
+                if has_total_omega_child:
+                    for parent in group:
+                        if not bool(parent.get("is_nested_ingredient", False)):
+                            parent["is_parent_total"] = True
 
             for ing in group:
                 if bool(ing.get("is_nested_ingredient", False)):
