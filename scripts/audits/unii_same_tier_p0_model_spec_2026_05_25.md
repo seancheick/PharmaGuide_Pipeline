@@ -7,8 +7,8 @@ Source reports:
 - `scripts/audits/unii_same_tier_conflicts_2026_05_25.json`
 - `scripts/audits/unii_same_tier_high_review_triage_2026_05_25.md`
 
-Scope: P0 model decisions for the three highest-risk high-review groups. This
-is a planning/spec artifact only. No data or runtime behavior was changed.
+Scope: P0 model decisions for the three highest-risk high-review groups. P0-1
+and P0-2 have now shipped; P0-3 remains a pending context-routing decision.
 
 ## Verification Summary
 
@@ -40,12 +40,12 @@ EnhancedDSLDNormalizer()._unii_to_payload_lookup["6DU9Y533FA"]
 EnhancedDSLDNormalizer()._unii_to_payload_lookup["L11K75P92J"]
 ```
 
-Original runtime first-write results before the P0-1 cleanup:
+Original runtime first-write results before the P0 cleanups:
 
 | UNII | Original runtime payload | Why this matters |
 |---|---|---|
 | `88XHZ13131` | `Policy Watchlist: Synthetic Food Acids` tier 1 | Concrete fumaric-acid UNII resolved to a broad policy umbrella. |
-| `6DU9Y533FA` | `Vanadyl Sulfate` tier 4 | Same identity exists as both a standalone IQM parent and a form under `vanadium`. |
+| `6DU9Y533FA` | `Vanadyl Sulfate` tier 4 | Same identity existed as both a standalone IQM parent and a form under `vanadium`. |
 | `L11K75P92J` | `Calcium` tier 4 | Dicalcium phosphate UNII resolves to calcium parent/form path, while standalone and inactive-filler entries also exist. |
 
 ## P0-1: `88XHZ13131` synthetic-food-acid policy vs fumaric acid
@@ -109,54 +109,63 @@ This was a two-part root fix:
 
 ## P0-2: `6DU9Y533FA` vanadium / vanadyl sulfate structural duplicate
 
+Status: resolved in the P0-2 cleanup. The exact vanadyl sulfate UNII is now
+owned only by the standalone `vanadyl_sulfate` IQM parent, while generic
+`Vanadium` lookup routes to the elemental `vanadium` parent.
+
 Records:
 
-- `ingredient_quality_map.json` → `vanadium.forms[vanadyl sulfate]`
+- `ingredient_quality_map.json` → `vanadium.forms[vanadium (unspecified)]`
 - `ingredient_quality_map.json` → `vanadyl_sulfate`
 
 ### Observed Facts
 
 - GSRS verifies `6DU9Y533FA` as **VANADYL SULFATE**, exact compound identity.
 - `vanadium` parent has UNII `00J9J9XKDE`.
-- `vanadium.forms[vanadyl sulfate]` has bio_score `4` and notes warning about
-  poor oral bioavailability and toxicity.
-- Standalone parent `vanadyl_sulfate` also carries `6DU9Y533FA` and has its own
-  richer form set, including `vanadyl sulfate (VOSO4)` with bio_score `9`.
-- Current runtime UNII lookup maps `6DU9Y533FA` to standalone `Vanadyl Sulfate`,
-  not the lower-scored form under `vanadium`.
+- `vanadium.forms[vanadium (unspecified)]` is the generic elemental-vanadium
+  label bucket and no longer carries exact vanadyl sulfate UNII ownership.
+- Standalone parent `vanadyl_sulfate` carries `6DU9Y533FA` and owns exact
+  vanadyl sulfate / vanadium salt labels.
+- Runtime exact lookup now routes `Vanadium` to `vanadium`, while explicit
+  `Vanadyl Sulfate`, `Vanadium Sulfate`, `vanadyl`, and specific vanadium
+  salt/chelate labels route to `vanadyl_sulfate`.
+- `vanadyl_sulfate` forms now share the audited class-equivalence
+  `bio_score=7` floor where old chelate-premium scores had remained.
 
-### Model Decision Needed
+### Model Decision
 
-Choose one canonical model:
+The chosen canonical model:
 
-1. **Preferred**: `vanadyl_sulfate` is the canonical IQM parent for vanadyl
-   products, and `vanadium.forms[vanadyl sulfate]` should stop carrying the
-   same UNII/form identity.
-2. Alternative: `vanadium` remains the canonical parent, and the standalone
-   `vanadyl_sulfate` parent should be retired/redirected.
+- `Vanadium` / UNII `00J9J9XKDE` → `vanadium`
+- `Vanadyl Sulfate` / UNII `6DU9Y533FA` → `vanadyl_sulfate`
+- `vanadium.forms[vanadium (unspecified)]` carries only a `unii_note`, not
+  exact `external_ids.unii`.
+- Generic aliases that preprocess to bare `vanadium` must not live on
+  `vanadyl_sulfate` forms.
 
-Given the standalone parent has multiple vanadium salt/chelate forms, the
-preferred model is to keep `vanadyl_sulfate` as canonical for these supplement
-labels and remove or de-identify the duplicate form-level UNII under `vanadium`.
+### Applied Fix
 
-### Recommended Fix
-
-- Test-first decide and lock canonical routing for labels/UNIIs:
-  - `Vanadium` / UNII `00J9J9XKDE` → `vanadium`
-  - `Vanadyl Sulfate` / UNII `6DU9Y533FA` → `vanadyl_sulfate`
-- Remove `external_ids.unii` from `vanadium.forms[vanadyl sulfate]` or replace
-  it with a note that the exact identity is represented by `vanadyl_sulfate`.
-- Reconcile score divergence between the old `vanadium.forms[vanadyl sulfate]`
-  bio_score `4` and standalone `vanadyl_sulfate` forms before shipping a data
-  edit. This is clinical-scoring data, not just identifier plumbing.
+- Renamed the `vanadium` form from `vanadyl sulfate` to
+  `vanadium (unspecified)`.
+- Removed `external_ids.unii = "6DU9Y533FA"` from the `vanadium` form and added
+  a `unii_note` pointing exact vanadyl sulfate identity to the standalone
+  `vanadyl_sulfate` parent.
+- Moved generic plain-vanadium aliases off `vanadyl_sulfate`.
+- Removed BMOV aliases `organic vanadium` / `organic vanadium supplement`
+  because the normalizer strips `organic`, making them implicit bare
+  `vanadium` aliases.
+- Collapsed old higher `vanadyl_sulfate` chelate/form scores to `bio_score=7`
+  per B25 class-equivalence / Willsky 2013 (PMID:23982218).
+- Regenerated the scanner report; `6DU9Y533FA` no longer appears.
 
 ### Regression Tests
 
-- UNII `6DU9Y533FA` resolves deterministically to the chosen parent.
+- UNII ownership is not duplicated between `vanadium` and `vanadyl_sulfate`.
 - No same-tier conflict remains for `6DU9Y533FA`.
-- A label with generic `Vanadium` does not accidentally route to vanadyl
-  sulfate.
-- A label with explicit `Vanadyl Sulfate` routes to the chosen vanadyl form.
+- A label with generic `Vanadium` routes to `vanadium`.
+- Labels with explicit `Vanadyl Sulfate` / vanadium salt terms route to
+  `vanadyl_sulfate`.
+- `vanadyl_sulfate` forms obey the class-equivalence `bio_score=7` floor.
 
 ## P0-3: `L11K75P92J` calcium / dicalcium phosphate active-vs-filler model
 
@@ -217,8 +226,7 @@ Do not batch these into one data edit. Recommended sequence:
 
 1. `P0-1` runtime-contract + data cleanup for disabled policy watchlist entries.
    Complete.
-2. `P0-2` vanadyl model decision + score reconciliation. This needs clinical
-   review because current forms disagree materially on bio_score.
+2. `P0-2` vanadyl model decision + score reconciliation. Complete.
 3. `P0-3` dicalcium context-routing decision. This is an identity/context
    problem, not a simple duplicate deletion.
 

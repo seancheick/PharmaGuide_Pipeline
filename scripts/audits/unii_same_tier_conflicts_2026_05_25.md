@@ -1,6 +1,6 @@
 # UNII Same-Tier Conflict Audit
 
-Generated: 2026-05-25T20:52:05+00:00
+Generated: 2026-05-25T21:01:13+00:00
 
 ## Scope
 
@@ -12,12 +12,12 @@ No reference data was changed by this audit.
 
 ## Summary
 
-- UNII-bearing records scanned: **1495**
-- Same-tier UNII groups: **208**
+- UNII-bearing records scanned: **1494**
+- Same-tier UNII groups: **207**
 
 | Severity | Groups |
 |---|---:|
-| high_review | 40 |
+| high_review | 39 |
 | review | 15 |
 | info | 153 |
 
@@ -27,12 +27,12 @@ No reference data was changed by this audit.
 | banned_recalled | 1 |
 | botanical_ingredients | 3 |
 | harmful_additives | 3 |
-| ingredient_quality_map | 190 |
+| ingredient_quality_map | 189 |
 | standardized_botanicals | 7 |
 
 | Classification | Groups |
 |---|---:|
-| iqm_cross_parent_same_unii | 2 |
+| iqm_cross_parent_same_unii | 1 |
 | iqm_same_parent_parent_form | 153 |
 | same_tier_different_names | 38 |
 | same_tier_duplicate_name | 15 |
@@ -145,13 +145,6 @@ No reference data was changed by this audit.
 - Reason: Same-tier records have materially different names; first-write wins at runtime until reviewed.
 - `botanical_ingredients.json` → `fenugreek_seed` (botanical; Fenugreek Seed)
 - `standardized_botanicals.json` → `fenugreek` (standardized_botanical; Fenugreek)
-
-### `6DU9Y533FA` — tier 4 `ingredient_quality_map` (iqm_cross_parent_same_unii, high_review)
-
-- Action: `review_data_model_or_exonerate`
-- Reason: Same UNII appears under different IQM parents/forms at the same priority tier.
-- `ingredient_quality_map.json` → `vanadium.forms[vanadyl sulfate]` (iqm_form; vanadyl sulfate, parent=`vanadium`)
-- `ingredient_quality_map.json` → `vanadyl_sulfate` (iqm_parent; Vanadyl Sulfate, parent=`vanadyl_sulfate`)
 
 ### `6PQP1V1B6O` — tier 4 `ingredient_quality_map` (same_tier_different_names, high_review)
 

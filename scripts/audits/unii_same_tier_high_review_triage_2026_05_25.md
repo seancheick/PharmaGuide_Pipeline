@@ -10,14 +10,15 @@ Source report:
 ## Scope
 
 This started as a report-only triage of the `41` `high_review` groups from the
-UNII same-tier scanner. After the P0-1 cleanup for `88XHZ13131`, the current
-scanner output has `40` `high_review` groups.
+UNII same-tier scanner. After the P0-1 cleanup for `88XHZ13131` and the P0-2
+cleanup for `6DU9Y533FA`, the current scanner output has `39` `high_review`
+groups.
 
 The scanner already separates runtime-equivalent warning groups into:
 
 - `153` info-level IQM parent/form self-duplicates
 - `15` ordinary review groups
-- `40` high-review groups
+- `39` high-review groups
 
 This file classifies the remaining high-review groups into data-model buckets so the
 next pass can make small, defensible fixes instead of broad UNII rewrites.
@@ -28,7 +29,7 @@ next pass can make small, defensible fixes instead of broad UNII rewrites.
 |---|---:|---|---|
 | Policy / safety-tier overlay carrying a compound UNII | 0 | Resolved | `88XHZ13131` was fixed in the P0-1 cleanup. |
 | Safety/allergen inherited synonym groups | 3 | Low-medium | Likely exonerate/suppress after confirming names are same allergen source. |
-| IQM cross-parent structural duplicates | 2 | High | Fix or explicitly exonerate; these can alter active parent routing. |
+| IQM cross-parent structural duplicates | 1 | High | Fix or explicitly exonerate; these can alter active parent routing. |
 | Botanical / standardized same-source variants | 24 | Medium | Build a structured exoneration relationship (`base_botanical`, `standardized_extract`, `branded_extract`) before suppressing runtime warnings. |
 | Flavor / food-source derivatives | 8 | Medium-high | Verify individually; flavors/purees/powders may not be the same ingredient identity despite sharing source UNII. |
 | Excipient brand/synonym variants | 3 | Medium | Most likely exoneration candidates, but verify compound-vs-mixture boundaries. |
@@ -36,7 +37,6 @@ next pass can make small, defensible fixes instead of broad UNII rewrites.
 ## Fix Order
 
 1. **P0: IQM structural duplicates**
-   - `6DU9Y533FA` vanadium / vanadyl sulfate cross-parent
    - `L11K75P92J` calcium / dicalcium phosphate cross-parent
 
 2. **P1: Flavor / food-source derivatives**
@@ -74,22 +74,21 @@ No further action for this UNII unless future audits show a regression.
 
 ### `6DU9Y533FA` — vanadium / vanadyl sulfate cross-parent
 
-Records:
+Resolution:
 
-- `ingredient_quality_map.json` → `vanadium.forms[vanadyl sulfate]`
-- `ingredient_quality_map.json` → `vanadyl_sulfate`
+- Kept `vanadyl_sulfate` as the standalone parent for exact vanadyl sulfate /
+  vanadium salt labels.
+- Renamed the generic `vanadium` form to `vanadium (unspecified)` and removed
+  exact UNII ownership from that form.
+- Moved plain `Vanadium` lookup back to the elemental `vanadium` parent while
+  preserving explicit `Vanadyl Sulfate`, `Vanadium Sulfate`, and specific
+  vanadium salt/chelate labels on `vanadyl_sulfate`.
+- Collapsed `vanadyl_sulfate` form bio_scores to the B25 / Willsky 2013 class
+  floor (`bio_score=7`) where old chelate-premium scores remained.
+- Regenerated the scanner report; `6DU9Y533FA` no longer appears as a same-tier
+  conflict.
 
-Assessment:
-
-- True IQM structural duplicate: the same UNII exists both as a form under
-  `vanadium` and as its own parent.
-- This is not just warning noise; it can decide which active parent wins.
-
-Recommended next action:
-
-- Decide whether `vanadyl_sulfate` should remain a standalone parent or only a
-  form of `vanadium`.
-- Test-first data cleanup once the modeling decision is made.
+No further action for this UNII unless future audits show a regression.
 
 ### `L11K75P92J` — calcium / dicalcium phosphate cross-parent + filler
 
@@ -219,7 +218,6 @@ Recommended next action:
 
 Inputs:
 
-- `6DU9Y533FA`
 - `L11K75P92J`
 
 Deliverable:

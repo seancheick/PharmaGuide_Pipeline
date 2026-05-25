@@ -9673,11 +9673,11 @@
     "rxcui": "39364",
     "forms": {
       "vanadyl sulfate (VOSO4)": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": false,
-        "score": 9,
+        "score": 7,
         "absorption": "moderate (~1\u20135%)",
-        "notes": "The most common vanadium supplement form. Vanadium mimics insulin by activating the insulin receptor's downstream signaling (phosphotyrosine phosphatase inhibition), which can modestly improve glucose uptake. However, oral bioavailability is extremely low \u2014 only 1\u20135% is absorbed. Animal studies are promising but human evidence for blood sugar benefits remains limited. Score reflects genuine mechanism tempered by very poor absorption.",
+        "notes": "The most common vanadium supplement form. Vanadium mimics insulin by activating the insulin receptor's downstream signaling (phosphotyrosine phosphatase inhibition), which can modestly improve glucose uptake. However, oral bioavailability is extremely low \u2014 only 1\u20135% is absorbed. Animal studies are promising but human evidence for blood sugar benefits remains limited. B25 audit 2026-04-25: V class-equivalence collapse \u2014 all forms F~1-3% (PMID:23982218). Score 9 \u2192 7 on 2026-05-25 to match class-equivalence floor; no peer-reviewed human absorption premium over other vanadium supplement forms.",
         "aliases": [
           "vanadyl sulfate",
           "vanadium sulfate",
@@ -9707,12 +9707,10 @@
         "notes": "An organovanadium chelate designed for better oral absorption \u2014 3\u20135x more bioavailable than vanadyl sulfate and with a wider safety margin. BMOV showed stronger insulin-mimetic activity in diabetic animal models (Thompson 2009). Still primarily research-grade and rarely found in consumer supplements. Higher score reflects the improved pharmacokinetics over inorganic vanadium. Dr Pham C12 sign-off: bio_score 12 \u2192 7, struct.value 0.125 \u2192 0.02. Speciation difference, NOT absorption miracle.",
         "aliases": [
           "bis maltolato oxovanadium",
-          "organic vanadium",
           "BMOV",
           "maltol vanadium",
           "chelated vanadium",
           "bis maltolato oxovanadium supplement",
-          "organic vanadium supplement",
           "BMOV supplement",
           "maltol vanadium supplement",
           "chelated vanadium supplement"
@@ -9726,9 +9724,9 @@
         }
       },
       "bis(picolinato)oxovanadium (BPOV)": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
+        "score": 7,
         "absorption": "very_low (V class baseline ~1-3%; chelate premium unsupported)",
         "notes": "Experimental organovanadium compound using picolinic acid as the chelating ligand. Similar insulin-mimetic mechanism to BMOV but with a different pharmacokinetic profile. Very limited human data \u2014 mostly preclinical research. Not commercially available in mainstream supplements. Score reflects theoretical promise but lack of clinical validation. B25 audit 2026-04-25: V class-equivalence collapse \u2014 all forms F~1-3% (PMID:23982218). Chelate marketing unsupported.",
         "aliases": [
@@ -9752,7 +9750,7 @@
         "natural": false,
         "score": 7,
         "absorption": "poor (~0.5%)",
-        "notes": "A basic inorganic vanadium salt (NaVO3) with very low oral bioavailability \u2014 roughly 0.5%. Used in early diabetes research but largely superseded by chelated forms like BMOV that absorb 10\u201320x more efficiently. Not recommended when better options exist.",
+        "notes": "A basic inorganic vanadium salt (NaVO3) with very low oral bioavailability \u2014 roughly 0.5%. Used in early diabetes research but largely superseded by chelated forms like BMOV that absorb 10\u201320x more efficiently. Not recommended when better options exist. B25 audit 2026-04-25: V class-equivalence collapse \u2014 all forms F~1-3% (PMID:23982218); sodium vanadate remains at the conservative class floor.",
         "aliases": [
           "sodium metavanadate",
           "NaVO\u2083",
@@ -9777,14 +9775,9 @@
         "absorption": "very_low (V class baseline ~1-3%)",
         "notes": "Generic vanadium listing without specifying the salt form. Most supplements use vanadyl sulfate, but the form matters significantly for bioavailability. Conservative score applied. B25 audit 2026-04-25: V class baseline (PMID:23982218).",
         "aliases": [
-          "vanadium",
-          "vanadium supplement",
-          "vanadium trace mineral",
           "bis-glycinato oxovanadium",
           "vanadium amino acid chelate",
           "vanadium glycinate",
-          "vanadium, natural",
-          "natural vanadium",
           "Vanadium Nicotinate Glycinate Chelate",
           "Vanadium Krebs Cycle Chelates",
           "Bis-Glycinato Oxo Vanadium"
@@ -9798,9 +9791,9 @@
         }
       },
       "vanadium aspartate": {
-        "bio_score": 10,
+        "bio_score": 7,
         "natural": false,
-        "score": 10,
+        "score": 7,
         "absorption": "very_low (V class baseline; aspartate carrier unsupported)",
         "notes": "Vanadium(IV) chelated with L-aspartic acid. Aspartate chelation provides organic ligand coordination that protects vanadyl cation through gastric transit, improving absorption relative to inorganic vanadyl sulfate (~1\u20135%). The aspartate carrier mirrors insulin-mimetic V4+ mechanism: downstream insulin receptor phosphotyrosine phosphatase inhibition supports glucose uptake (Thompson 2009). Estimated absorption 3\u20138% \u2014 modest improvement over VOSO4 but well below organovanadium chelates like BMOV (~10\u201315%). Limited direct human RCT data for aspartate form specifically. B25 audit 2026-04-25: V class baseline (PMID:23982218).",
         "aliases": [
@@ -9818,9 +9811,9 @@
         }
       },
       "vanadium citrate": {
-        "bio_score": 9,
+        "bio_score": 7,
         "natural": false,
-        "score": 9,
+        "score": 7,
         "absorption": "very_low (V class baseline; citrate carrier unsupported)",
         "notes": "Vanadium(IV/V) chelated with citric acid. Citrate is a weaker chelation ligand than amino acids or maltolate for transition metals \u2014 it confers modest gastric stability but does not markedly enhance mucosal transport vs. vanadyl sulfate. Oral absorption estimated 2\u20135%, comparable to VOSO4 baseline. Occasionally appears in multi-mineral products as a citrate chelate complex. Insulin-mimetic V4+ mechanism is preserved. Limited direct comparative pharmacokinetic data; score equals vanadyl sulfate given similar expected absorption class. B25 audit 2026-04-25: V class baseline (PMID:23982218).",
         "aliases": [
@@ -37466,7 +37459,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1400,
-      "total_form_aliases": 12188,
+      "total_form_aliases": 12183,
       "parents_with_parent_aliases": 193,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60791,16 +60784,18 @@
     "description": "Trace element with insulin-mimetic properties. Supplemented as vanadyl sulfate. No established RDA; UMLS classifies as potentially hazardous at supplemental doses.",
     "dosage_importance": 2.0,
     "forms": {
-      "vanadyl sulfate": {
+      "vanadium (unspecified)": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
         "absorption": "low (~5%)",
-        "notes": "Insulin-mimetic trace mineral marketed for blood sugar support. Poor oral bioavailability (~1-5%). FDA has not established an RDA. UMLS flags as 'Hazardous or Poisonous Substance'. Doses >1.8 mg/day associated with GI toxicity. Use with caution.",
+        "notes": "Generic elemental vanadium listing for labels that disclose vanadium but not a specific vanadyl salt or chelate. Insulin-mimetic trace mineral marketed for blood sugar support. Poor oral bioavailability (~1-5%). FDA has not established an RDA. UMLS flags as 'Hazardous or Poisonous Substance'. Doses >1.8 mg/day associated with GI toxicity. Use with caution. 2026-05-25 UNII model cleanup: exact VANADYL SULFATE identity is represented by standalone IQM parent vanadyl_sulfate (UNII 6DU9Y533FA); generic Vanadium retains elemental UNII 00J9J9XKDE.",
         "aliases": [
           "vanadium",
-          "vanadyl",
-          "vanadium sulfate",
+          "vanadium supplement",
+          "vanadium trace mineral",
+          "vanadium, natural",
+          "natural vanadium",
           "sodium orthovanadate"
         ],
         "dosage_importance": 2.0,
@@ -60810,9 +60805,7 @@
           "range_high": 0.1,
           "quality": "low"
         },
-        "external_ids": {
-          "unii": "6DU9Y533FA"
-        }
+        "unii_note": "No exact form-level UNII: generic Vanadium parent owns elemental UNII 00J9J9XKDE. GSRS UNII 6DU9Y533FA is exact VANADYL SULFATE and is owned by standalone IQM parent vanadyl_sulfate."
       }
     },
     "cui": "C0042306",

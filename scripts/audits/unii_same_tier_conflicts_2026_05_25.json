@@ -1,11 +1,11 @@
 {
   "classification_counts": {
-    "iqm_cross_parent_same_unii": 2,
+    "iqm_cross_parent_same_unii": 1,
     "iqm_same_parent_parent_form": 153,
     "same_tier_different_names": 38,
     "same_tier_duplicate_name": 15
   },
-  "generated_at": "2026-05-25T20:52:05+00:00",
+  "generated_at": "2026-05-25T21:01:13+00:00",
   "groups": [
     {
       "action": "review_duplicate_or_alias_model",
@@ -2393,39 +2393,6 @@
       "tier": 4,
       "tier_name": "ingredient_quality_map",
       "unii": "654825W09Z"
-    },
-    {
-      "action": "review_data_model_or_exonerate",
-      "classification": "iqm_cross_parent_same_unii",
-      "reason": "Same UNII appears under different IQM parents/forms at the same priority tier.",
-      "records": [
-        {
-          "entry_id": "vanadium.forms[vanadyl sulfate]",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "vanadium",
-          "parent_standard_name": "Vanadium",
-          "source": "iqm_form",
-          "standard_name": "vanadyl sulfate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "6DU9Y533FA"
-        },
-        {
-          "entry_id": "vanadyl_sulfate",
-          "file": "ingredient_quality_map.json",
-          "parent_id": "vanadyl_sulfate",
-          "parent_standard_name": "Vanadyl Sulfate",
-          "source": "iqm_parent",
-          "standard_name": "Vanadyl Sulfate",
-          "tier": 4,
-          "tier_name": "ingredient_quality_map",
-          "unii": "6DU9Y533FA"
-        }
-      ],
-      "severity": "high_review",
-      "tier": 4,
-      "tier_name": "ingredient_quality_map",
-      "unii": "6DU9Y533FA"
     },
     {
       "action": "suppress_runtime_warning_candidate",
@@ -7664,10 +7631,10 @@
       "unii": "JC71GJ1F3L"
     }
   ],
-  "record_count": 1495,
-  "same_tier_group_count": 208,
+  "record_count": 1494,
+  "same_tier_group_count": 207,
   "severity_counts": {
-    "high_review": 40,
+    "high_review": 39,
     "info": 153,
     "review": 15
   },
@@ -7676,7 +7643,7 @@
     "banned_recalled": 1,
     "botanical_ingredients": 3,
     "harmful_additives": 3,
-    "ingredient_quality_map": 190,
+    "ingredient_quality_map": 189,
     "standardized_botanicals": 7
   }
 }
