@@ -37464,10 +37464,10 @@
       }
     },
     "statistics": {
-      "total_parents": 621,
-      "total_forms": 1392,
-      "total_form_aliases": 12126,
-      "parents_with_parent_aliases": 187,
+      "total_parents": 627,
+      "total_forms": 1400,
+      "total_form_aliases": 12188,
+      "parents_with_parent_aliases": 193,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -37486,7 +37486,7 @@
       "vitamins": 17
     },
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-22",
+    "last_updated": "2026-05-25",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -63070,7 +63070,9 @@
     "external_ids": {
       "unii": "3729L8MA2C",
       "rxcui": "253157"
-    }
+    },
+    "rxcui": "253157",
+    "rxcui_note": "RxCUI 253157 'bee pollen' (TTY=IN, live-verified via RxNorm REST API 2026-05-25). Mirrored from external_ids.rxcui to top-level for schema parity."
   },
   "english_ivy": {
     "standard_name": "English Ivy",
@@ -63151,8 +63153,11 @@
       "C0949841"
     ],
     "external_ids": {
-      "unii": "ZP9XFG71A7"
-    }
+      "unii": "ZP9XFG71A7",
+      "rxcui": "1309795"
+    },
+    "rxcui": "1309795",
+    "rxcui_note": "RxCUI 1309795 'Hedera helix leaf extract' (TTY=IN, live-verified via RxNorm REST API 2026-05-25). Added during Wave 6.X schema reconciliation; not present in original IQM external_ids \u2014 added via RxNorm search."
   },
   "horse_chestnut_seed": {
     "standard_name": "Horse Chestnut Seed",
@@ -63234,7 +63239,9 @@
     "external_ids": {
       "unii": "3C18L6RJAZ",
       "rxcui": "260020"
-    }
+    },
+    "rxcui": "260020",
+    "rxcui_note": "RxCUI 260020 'horse chestnut seed' (TTY=IN, live-verified via RxNorm REST API 2026-05-25). Mirrored from external_ids.rxcui to top-level for schema parity."
   },
   "purple_corn_extract": {
     "standard_name": "Purple Corn Extract",
@@ -63293,7 +63300,8 @@
     "aliases": [
       "C1446590"
     ],
-    "external_ids": {}
+    "external_ids": {},
+    "rxcui_note": "No RxNorm entry for purple corn extract / Zea mays var. purple. Verified absent via RxNorm REST API search (rxnav.nlm.nih.gov) on 2026-05-25 for queries: 'purple corn', 'Zea mays purple'. This is consistent with RxNorm's focus on clinical drug ingredients \u2014 supplement-only botanical extracts are commonly absent. Identity verified via UMLS CUI C1446590."
   },
   "garcinia_indica": {
     "standard_name": "Garcinia indica",
@@ -63354,6 +63362,7 @@
     "aliases": [
       "C3460451"
     ],
-    "external_ids": {}
+    "external_ids": {},
+    "rxcui_note": "No RxNorm entry for Garcinia indica / kokum. Verified absent via RxNorm REST API search 2026-05-25 for 'Garcinia indica', 'kokum', 'Garcinia indica fruit rind'. Distinct from Garcinia cambogia which DOES have RxCUI 1311595 ('Garcinia cambogia fruit extract', TTY=IN, verified same date). Identity verified via UMLS CUI C3460451."
   }
 }
