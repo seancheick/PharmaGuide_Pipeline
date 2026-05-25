@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-22",
+    "last_updated": "2026-05-25",
     "total_entries": 691,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -1749,7 +1749,7 @@
       "additive_type": "descriptor",
       "allergen": true,
       "allergen_type": "soy",
-      "notes": "ASU (Avocado Soybean Unsaponifiables) \u2014 lipid extract from avocado and soybean oils. Studied for osteoarthritis via cartilage metabolism modulation (doi:10.1136/ard.60.2.171). Soy allergen. French prescription status (Piascledine 300).",
+      "notes": "ASU (Avocado Soybean Unsaponifiables) \u2014 lipid extract from avocado and soybean oils. Studied for osteoarthritis via cartilage metabolism modulation (PMID 31328413 - Simental-Mendia et al. 2019 Int J Rheum Dis SR+MA of ASU for hip/knee OA). Soy allergen. French prescription status (Piascledine 300).",
       "common_uses": [
         "identity mapping"
       ],
@@ -14838,7 +14838,7 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "PHGG \u2014 enzymatically hydrolyzed galactomannan from Cyamopsis tetragonoloba. Low-viscosity soluble prebiotic fiber (Sunfiber brand). FDA GRAS (GRN 61). Fermented by colonic bacteria to butyrate. Studied for IBS-D (doi:10.1016/j.nut.2006.01.012).",
+      "notes": "PHGG \u2014 enzymatically hydrolyzed galactomannan from Cyamopsis tetragonoloba. Low-viscosity soluble prebiotic fiber (Sunfiber brand). FDA GRAS (GRN 61). Fermented by colonic bacteria to butyrate. Studied for IBS-D (PMID 16413751 - Giannini 2006 Nutrition narrative review; PMID 26855665 - Niv 2016 Nutr Metab placebo-RCT for IBS).",
       "common_uses": [
         "prebiotic fiber",
         "digestive support"
@@ -17048,7 +17048,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Sarcosine (N-methylglycine) \u2014 endogenous amino acid derivative. NMDA receptor co-agonist. Studied for cognitive enhancement and adjunct therapy in schizophrenia (doi:10.1016/j.biopsych.2004.09.009). Identity mapping for label tokens.",
+      "notes": "Sarcosine (N-methylglycine) \u2014 endogenous amino acid derivative. NMDA receptor co-agonist. Studied for cognitive enhancement and adjunct therapy in schizophrenia (PMID 17659263 (Lane/Tsai 2008 Biol Psychiatry sarcosine schizophrenia RCT)). Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
