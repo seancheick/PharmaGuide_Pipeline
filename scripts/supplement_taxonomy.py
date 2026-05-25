@@ -600,6 +600,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         and probiotic_row_identity
         and not _has_non_probiotic_eligible_active(product)
     )
+    # Require a real probiotic-majority panel, not just a minority strain set
+    # alongside non-probiotic actives. Single-active products where the only
+    # active is a strain still route correctly.
+    probiotic_majority = (
+        active_count > 0
+        and probiotic_count >= 2
+        and probiotic_count >= ceil(active_count * 0.5)
+    )
+    sole_active_is_strain = (active_count == 1 and probiotic_count == 1)
     if (
         active_count == 0
         and (probiotic_name_signal or probiotic_row_identity)
@@ -617,25 +626,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
             )
     elif active_count > 0 and (
-        probiotic_count > 0
-        or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0))
+        probiotic_majority
+        or sole_active_is_strain
+        or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0) and probiotic_majority)
     ):
-        # Tightened 2026-05-23: require a real probiotic-majority panel, not
-        # just one strain alongside a non-probiotic active. The previous
-        # threshold (ceil(active_count*0.5)) routed collagen + 1-strain
-        # products (Garden 222902, 274304, 327397-9, 321351) to probiotic
-        # because 1 ≥ ceil(2*0.5)=1. Now requires probiotic_count ≥ 2 AND
-        # ≥ 50% share. Single-active products where the only active IS a
-        # strain still route correctly (sole_active_is_strain branch).
-        probiotic_majority = (
-            probiotic_count >= 2
-            and probiotic_count >= ceil(active_count * 0.5)
-        )
-        sole_active_is_strain = (active_count == 1 and probiotic_count == 1)
-        if probiotic_majority or sole_active_is_strain:
-            primary_type = "probiotic"
-            confidence = 0.9 if probiotic_majority else 0.7
-            reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
+        primary_type = "probiotic"
+        confidence = 0.9 if probiotic_majority else 0.7
+        reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
 
     # --- B-Complex ---
     # Checked before the broad multivitamin panel: B-complexes can have 6+
@@ -669,6 +666,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         primary_type = "protein_powder"
         confidence = 0.9
         reasons.append(f"protein name+id signal: ids={list(cid_set & _PROTEIN_IDS)}")
+
+    # --- Greens powder (name-driven, before multivitamin) ---
+    # Fortified greens can carry vitamin/mineral/probiotic panels, but the
+    # peer class users compare is still greens/superfood rather than a
+    # multivitamin.
+    elif any(t in product_name for t in _GREENS_NAME_TOKENS):
+        primary_type = "greens_powder"
+        confidence = 0.9
+        reasons.append(f"greens/superfood name signal in '{product_name}'")
 
     # --- Multivitamin / prenatal panel ---
     # Checked before omega so prenatal multis with DHA don't become omega_3.

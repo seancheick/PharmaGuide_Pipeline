@@ -711,6 +711,29 @@ class TestSubstringCollisionGuards:
         """Actual greens product must still match."""
         assert self._classify("Super Greens Powder") == "greens_powder"
 
+    def test_fortified_super_greens_stays_greens_not_multivitamin(self):
+        """Greens product identity beats vitamin/mineral fortification."""
+        product = {
+            "product_name": "Super Greens",
+            "ingredient_quality_data": {"ingredients_scorable": [
+                {"name": "Vitamin A", "canonical_id": "vitamin_a", "category": "vitamins", "quantity": 2033, "unit": "IU"},
+                {"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamins", "quantity": 60, "unit": "mg"},
+                {"name": "Vitamin D", "canonical_id": "vitamin_d", "category": "vitamins", "quantity": 400, "unit": "IU"},
+                {"name": "Calcium", "canonical_id": "calcium", "category": "minerals", "quantity": 50, "unit": "mg"},
+                {"name": "Iron", "canonical_id": "iron", "category": "minerals", "quantity": 5, "unit": "mg"},
+                {"name": "Potassium", "canonical_id": "potassium", "category": "minerals", "quantity": 100, "unit": "mg"},
+                {"name": "Lactobacillus acidophilus", "canonical_id": "lactobacillus_acidophilus", "category": "probiotics", "quantity": 5, "unit": "mg"},
+                {"name": "Lactobacillus bulgaricus", "canonical_id": "lactobacillus_bulgaricus", "category": "probiotics", "quantity": 5, "unit": "mg"},
+                {"name": "Bifidobacterium bifidum", "canonical_id": "bifidobacterium_bifidum", "category": "probiotics", "quantity": 5, "unit": "mg"},
+            ]},
+        }
+
+        result = classify_supplement(product)
+
+        assert result["primary_type"] == "greens_powder"
+        assert result["percentile_category"] == "greens_powder"
+        assert any("greens/superfood" in r for r in result["classification_reasons"])
+
     # --- Fiber/digestive: canonical vocab includes digestive enzymes ---
 
     def test_digestive_enzymes_are_digestive(self):
