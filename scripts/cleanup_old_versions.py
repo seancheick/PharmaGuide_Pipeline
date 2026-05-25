@@ -159,6 +159,8 @@ def delete_manifest_row(client, db_version, dry_run):
 # ---------------------------------------------------------------------------
 
 BLOB_STORAGE_PREFIX = "shared/details/sha256"
+HEX_BLOB_SHARDS = tuple(f"{i:02x}" for i in range(256))
+ORPHAN_DRY_RUN_SAMPLE_LIMIT = 20
 
 
 def fetch_current_detail_index(client, current_version):
@@ -176,16 +178,16 @@ def fetch_current_detail_index(client, current_version):
 
 
 def list_all_blob_shard_dirs(client):
-    """List shard directories under shared/details/sha256/."""
-    try:
-        items = client.storage.from_(BUCKET).list(
-            path=BLOB_STORAGE_PREFIX,
-            options={"limit": 1000, "offset": 0},
-        )
-        return [item["name"] for item in (items or []) if item.get("name")]
-    except Exception as exc:
-        print(f"  [WARN] Could not list blob shard directories: {exc}")
-        return []
+    """Return all deterministic blob shard directories.
+
+    Detail blobs are always stored as
+    ``shared/details/sha256/{first-two-hex}/{hash}.json``. Older cleanup code
+    discovered the 2-char shard directories by listing the prefix root, but
+    that Supabase call can time out at production scale. Enumerating 00..ff is
+    deterministic, complete, and lets the existing per-shard paginated listing
+    handle empty shards cheaply.
+    """
+    return list(HEX_BLOB_SHARDS)
 
 
 def list_blobs_in_shard(client, shard):
@@ -249,8 +251,10 @@ def cleanup_orphan_blobs(client, current_version, dry_run):
 
     deleted = 0
     failed = 0
-    for path in orphans:
+    for idx, path in enumerate(orphans):
         if dry_run:
+            if idx >= ORPHAN_DRY_RUN_SAMPLE_LIMIT:
+                continue
             print(f"  [DRY-RUN] Would delete orphan: {path}")
         else:
             ok, err = delete_storage_path(client, path)
@@ -261,6 +265,12 @@ def cleanup_orphan_blobs(client, current_version, dry_run):
                 failed += 1
 
     if dry_run:
+        if len(orphans) > ORPHAN_DRY_RUN_SAMPLE_LIMIT:
+            remaining = len(orphans) - ORPHAN_DRY_RUN_SAMPLE_LIMIT
+            print(
+                f"  [DRY-RUN] ... and {remaining} more orphan blob(s) "
+                f"(suppressed; exact count preserved in summary)"
+            )
         deleted = len(orphans)
 
     return deleted, failed
