@@ -82,6 +82,108 @@ pytest_args_for_full() {
   fi
 }
 
+release_preflight_staleness_check() {
+  # Wave 6.Z release hardening: emit BIG actionable messages when the
+  # pipeline chain is stale. The downstream audits (FRESHNESS_PRODUCTS_NEWER_
+  # THAN_DIST etc.) DO catch these, but their messages are technical and
+  # easy to miss. This preflight surfaces the exact next command BEFORE
+  # any pytest runs — so a stale-Flutter-bundle ship never surprises you.
+  #
+  # Skip with: SKIP_STALENESS_CHECK=1 bash scripts/test.sh release
+  if [[ "${SKIP_STALENESS_CHECK:-0}" == "1" ]]; then
+    return 0
+  fi
+
+  "$PG_PYTHON" - <<'PY' || {
+import sys, os, glob
+from pathlib import Path
+
+REPO = Path(os.environ.get("REPO_ROOT", "."))
+FLUTTER = Path(os.environ.get("FLUTTER_REPO", "/Users/seancheick/PharmaGuide ai"))
+
+
+def newest(paths):
+    mtimes = [Path(p).stat().st_mtime for p in paths if Path(p).exists()]
+    return max(mtimes) if mtimes else 0
+
+
+def warn(layer, action, command):
+    bar = "=" * 78
+    print(f"\n{bar}", file=sys.stderr)
+    print(f"STALE ARTIFACT DETECTED: {layer}", file=sys.stderr)
+    print(f"{bar}", file=sys.stderr)
+    print(f"  what:   {action}", file=sys.stderr)
+    print(f"  fix:    {command}", file=sys.stderr)
+    print(f"  bypass: SKIP_STALENESS_CHECK=1 bash scripts/test.sh release", file=sys.stderr)
+    print(f"{bar}\n", file=sys.stderr)
+
+
+stale = []
+
+# Layer 1: scripts/data/*.json vs per-brand enriched
+data_files = glob.glob(str(REPO / "scripts/data/*.json")) + glob.glob(str(REPO / "scripts/data/curated_overrides/*.json"))
+enriched = glob.glob(str(REPO / "scripts/products/output_*_enriched/enriched/*.json"))
+if data_files and enriched:
+    newest_data = newest(data_files)
+    newest_enriched = newest(enriched)
+    if newest_data > newest_enriched:
+        warn(
+            "data files newer than per-brand enriched outputs",
+            "scripts/data/ JSON changes have not propagated through the pipeline",
+            "bash batch_run_all_datasets.sh   # full clean+enrich+score across 27 brands",
+        )
+        stale.append("data_vs_enriched")
+
+# Layer 2: enriched vs scored
+scored = glob.glob(str(REPO / "scripts/products/output_*_scored/scored/*.json"))
+if enriched and scored:
+    newest_enriched = newest(enriched)
+    newest_scored = newest(scored)
+    if newest_enriched > newest_scored:
+        warn(
+            "enriched outputs newer than scored outputs",
+            "enrichment ran but scoring did not — partial pipeline state",
+            "bash batch_run_all_datasets.sh --stages score   # score-only across all brands",
+        )
+        stale.append("enriched_vs_scored")
+
+# Layer 3: scored vs dist/ catalog DB
+catalog_db = REPO / "scripts/dist/pharmaguide_core.db"
+if scored and catalog_db.exists():
+    newest_scored = newest(scored)
+    catalog_mtime = catalog_db.stat().st_mtime
+    if newest_scored > catalog_mtime:
+        warn(
+            "per-brand scored outputs newer than dist/ catalog DB",
+            "build_final_db has NOT picked up the latest scored outputs — release artifacts are stale",
+            "bash scripts/release_full.sh   # rebuild catalog + dist + Supabase + Flutter",
+        )
+        stale.append("scored_vs_dist")
+
+# Layer 4: dist/ vs Flutter bundle (only when Flutter repo mounted)
+flutter_db = FLUTTER / "assets/db/pharmaguide_core.db"
+if catalog_db.exists() and flutter_db.exists():
+    if catalog_db.stat().st_mtime > flutter_db.stat().st_mtime:
+        warn(
+            "dist/ catalog newer than Flutter bundle",
+            "Flutter app is shipping an older catalog than dist/",
+            "bash scripts/release_full.sh   # re-runs Flutter import step",
+        )
+        stale.append("dist_vs_flutter")
+
+if stale:
+    print(f"\nPREFLIGHT FAILED: {len(stale)} stale layer(s): {stale}", file=sys.stderr)
+    sys.exit(1)
+print("Preflight staleness check: OK (all artifacts in sync)", file=sys.stderr)
+PY
+    echo ""
+    echo "scripts/test.sh release: STALE ARTIFACT(S) DETECTED — see actionable fix(es) above." >&2
+    echo "After running the recommended command, re-run: bash scripts/test.sh release" >&2
+    echo "To bypass (NOT recommended): SKIP_STALENESS_CHECK=1 bash scripts/test.sh release" >&2
+    exit 1
+  }
+}
+
 run_release_artifact_gates() {
   "$PG_PYTHON" scripts/coverage_gate_functional_roles.py
   "$PG_PYTHON" scripts/audit_source_of_truth_contract.py freshness \
@@ -125,6 +227,11 @@ case "$PROFILE" in
     "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
   release)
+    # Wave 6.Z release hardening: actionable staleness preflight runs
+    # BEFORE pytest so a stale Flutter bundle never sneaks through with
+    # only a technical-finding-code warning. Skip via SKIP_STALENESS_CHECK=1.
+    REPO_ROOT="$REPO_ROOT" FLUTTER_REPO="$FLUTTER_REPO" \
+      release_preflight_staleness_check
     split_user_pytest_args "$@"
     if ((${#USER_TARGETS[@]} > 0)); then
       files=("${USER_TARGETS[@]}")
