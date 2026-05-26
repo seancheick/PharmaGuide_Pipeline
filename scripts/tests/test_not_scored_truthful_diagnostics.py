@@ -551,6 +551,59 @@ class TestStep3bExpandedReasonVocab:
         assert result["verdict"] == "NOT_SCORED"
         assert result["not_scorable_reason"] == "macro_only_product"
 
+    def test_macro_row_with_structural_blend_emits_macro_only_product(self, scorer):
+        """CVS Fiber Formula pattern — macro row plus structural fiber blend.
+
+        The blend header is not a recoverable bioactive anchor; it only
+        describes the partially disclosed fiber composition. The truthful
+        diagnostic is macro_only_product, not blend_header_primary_active_not_scored.
+        """
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Dietary Fiber",
+                standard_name="Fiber",
+                canonical_id="fiber",
+                quantity=4.0,
+                unit="Gram(s)",
+                recognized_non_scorable=False,
+                skip_reason="excluded_nutrition_fact",
+                score_exclusion_reason="excluded_nutrition_fact",
+                recognition_source=None,
+                recognition_reason=None,
+            ),
+            _rejected_row(
+                name="Proprietary Fiber Blend",
+                standard_name="Proprietary Fiber Blend",
+                canonical_id=None,
+                canonical_source_db="unmapped",
+                quantity=3.4,
+                unit="Gram(s)",
+                recognized_non_scorable=False,
+                skip_reason="blend_header_total_weight_only",
+                score_exclusion_reason="blend_header_total",
+                recognition_source=None,
+                recognition_reason=None,
+                is_blend_header=True,
+                blend_total_weight_only=True,
+            ),
+            _rejected_row(
+                name="Psyllium",
+                standard_name="Psyllium",
+                canonical_id="psyllium",
+                quantity=0.0,
+                unit="NP",
+                recognized_non_scorable=False,
+                skip_reason="nested_under_non_therapeutic_parent",
+                score_exclusion_reason="nested_display_only",
+                recognition_source=None,
+                recognition_reason=None,
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "macro_only_product"
+
     def test_blend_header_with_identity_emits_primary_active_not_scored(self, scorer):
         """Bone, Flesh & Cartilage 440 mg pattern — named blend header
         (standard_name="Bone, Flesh & Cartilage Blend") with NO canonical_id.
@@ -588,6 +641,42 @@ class TestStep3bExpandedReasonVocab:
                 skip_reason="nested_under_non_therapeutic_parent",
                 score_exclusion_reason="nested_display_only",
                 recognition_source=None,
+                recognition_reason=None,
+            ),
+        )
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "NOT_SCORED"
+        assert result["not_scorable_reason"] == "blend_header_primary_active_not_scored"
+
+    def test_non_macro_structural_blend_keeps_blend_header_diagnostic(self, scorer):
+        """Bone/Flesh/Cartilage-style botanical blends must not be relabeled macro-only."""
+        product = _make_rejected_with_rows(
+            _rejected_row(
+                name="Bone, Flesh & Cartilage Blend",
+                standard_name="Bone, Flesh & Cartilage Blend",
+                canonical_id=None,
+                canonical_source_db=None,
+                quantity=880.0,
+                unit="mg",
+                recognized_non_scorable=False,
+                skip_reason="blend_header_total_weight_only",
+                score_exclusion_reason="blend_header_total",
+                recognition_source=None,
+                recognition_reason=None,
+                is_blend_header=True,
+                blend_total_weight_only=True,
+            ),
+            _rejected_row(
+                name="White Oak",
+                standard_name="White Oak",
+                canonical_id="white_oak",
+                quantity=0.0,
+                unit="NP",
+                recognized_non_scorable=False,
+                skip_reason="nested_under_non_therapeutic_parent",
+                score_exclusion_reason="nested_display_only",
+                recognition_source="botanical_ingredients",
                 recognition_reason=None,
             ),
         )

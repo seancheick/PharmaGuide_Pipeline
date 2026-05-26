@@ -974,13 +974,37 @@ class SupplementScorer:
         ):
             return "blend_dose_in_product_name_only"
 
-        # 3b.4 — Glucomannan / Fiber Fusion / Whey Protein: every row is a
-        # macro/nutrition-fact rollup. Legitimately fail-closed for bioactive
-        # scoring.
-        if all(
-            ("excluded_nutrition_fact" in text)
-            or ("nutrition_fact" in text)
-            for text in row_texts
+        # 3b.4 — Glucomannan / Fiber Fusion / Whey Protein: macro/nutrition
+        # fact rollups. Some labels also carry a structural blend header and
+        # undosed display-only children describing the fiber/collagen blend.
+        # Those rows are not recoverable bioactive anchors; the truthful
+        # diagnostic remains macro_only_product.
+        def _is_macro_row(text: str) -> bool:
+            return ("excluded_nutrition_fact" in text) or ("nutrition_fact" in text)
+
+        def _is_structural_blend_context(row: Dict[str, Any], text: str) -> bool:
+            if (
+                bool(row.get("is_blend_header"))
+                or bool(row.get("blend_total_weight_only"))
+                or "blend_header_total" in text
+            ):
+                return True
+            if (
+                "nested_under_non_therapeutic_parent" in text
+                or "nested_display_only" in text
+            ):
+                q = row.get("quantity")
+                try:
+                    qf = float(q) if q is not None else 0
+                except (TypeError, ValueError):
+                    qf = 0
+                unit_norm = norm_text(row.get("unit") or row.get("unit_normalized") or "")
+                return qf <= 0 or unit_norm in {"", "np", "n/a", "na", "none", "0", "unspecified"}
+            return False
+
+        if any(_is_macro_row(text) for text in row_texts) and all(
+            _is_macro_row(text) or _is_structural_blend_context(row, text)
+            for row, text in zip(rows, row_texts)
         ):
             return "macro_only_product"
 
