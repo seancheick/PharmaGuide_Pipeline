@@ -2022,6 +2022,21 @@ class SupplementEnricherV3:
                 ingredient.get("standard_name"),
             )
         ).lower()
+
+        is_collagen_row = (
+            canonical_id == "collagen"
+            or "collagen" in row_text
+            or "cartilage" in row_text
+        )
+        if is_collagen_row:
+            context_text = f"{product_text} {row_text}"
+            context_key = norm_module.make_normalized_key(context_text)
+            if (
+                re.search(r"(?<![a-z0-9])uc-?ii(?![a-z0-9])", context_text.lower())
+                or "interhealthucii" in context_key
+            ):
+                return "UC-II"
+
         is_ashwagandha_row = (
             canonical_id == "ashwagandha"
             or "ashwagandha" in row_text
