@@ -12368,11 +12368,9 @@ class SupplementEnricherV3:
             break
         identity_proven = (
             primary_type == "probiotic"
-            or (
-                bool(probiotic_data.get("is_probiotic_product"))
-                and has_probiotic_row_identity
-                and not has_non_probiotic_strict_active
-            )
+            and bool(probiotic_data.get("is_probiotic_product"))
+            and has_probiotic_row_identity
+            and not has_non_probiotic_strict_active
         )
 
         base = {
@@ -12387,15 +12385,17 @@ class SupplementEnricherV3:
             "evidence_scope": probiotic_data.get("cfu_evidence_scope") or "product_level",
             "linked_rows": linked_rows,
             "confidence": "high" if identity_proven and raw_source_path and linked_rows else "low",
-            "reason": "product_level_cfu_with_probiotic_identity" if primary_type == "probiotic" else "product_level_cfu_with_probiotic_row_identity",
+            "reason": "product_level_cfu_with_probiotic_identity" if primary_type == "probiotic" else "product_level_cfu_rejected_by_taxonomy",
             "name": "Total Probiotic CFU",
             "canonical_id": "probiotic_cfu_total",
             "source_section": "product",
         }
 
         rejection_reason = None
-        if has_non_probiotic_strict_active and primary_type != "probiotic":
+        if has_non_probiotic_strict_active:
             rejection_reason = "non_probiotic_strict_active_present"
+        elif primary_type != "probiotic":
+            rejection_reason = "product_taxonomy_not_probiotic"
         elif not identity_proven or not probiotic_data.get("is_probiotic_product"):
             rejection_reason = "product_identity_not_probiotic"
         elif not raw_source_path:

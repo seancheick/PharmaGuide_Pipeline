@@ -464,6 +464,83 @@ def test_real_cfu_probiotic_with_no_scorable_strain_rows_is_still_probiotic():
     assert "probiotic row identity + product-level CFU evidence" in result["classification_reasons"]
 
 
+def test_real_cfu_probiotic_with_prebiotic_support_row_is_still_probiotic():
+    """Prebiotic/fiber rows are support ingredients in probiotic formulas.
+    They must not demote a product with real probiotic row identity + CFU
+    evidence into general_supplement, because scoreable CFU evidence is only
+    valid in the probiotic taxonomy peer class."""
+    product = {
+        "product_name": "Fortify Women's Probiotic 50 Billion",
+        "fullName": "Fortify Women's Probiotic 50 Billion",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 50_000_000_000,
+            "total_strain_count": 10,
+        },
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Chicory root Fiber inulin",
+                    "canonical_id": "prebiotics",
+                    "category": "fiber",
+                    "quantity": 100,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ],
+            "ingredients_skipped": [
+                {
+                    "name": "Fortify Women's 50 Billion CFU Proprietary Probiotic Blend",
+                    "category": "probiotics",
+                    "quantity": 550,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": False,
+                    "cleaner_row_role": "blend_header_total",
+                },
+                {
+                    "name": "Lactobacillus rhamnosus GG",
+                    "category": "probiotics",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "score_eligible_by_cleaner": False,
+                    "cleaner_row_role": "nested_display_only",
+                },
+            ],
+        },
+        "activeIngredients": [
+            {
+                "name": "Fortify Women's 50 Billion CFU Proprietary Probiotic Blend",
+                "standardName": "Probiotic Blend",
+                "cleaner_row_role": "blend_header_total",
+                "score_eligible_by_cleaner": False,
+                "quantity": 550,
+                "unit": "mg",
+            },
+            {
+                "name": "Chicory root Fiber inulin",
+                "standardName": "Inulin",
+                "canonical_id": "prebiotics",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "quantity": 100,
+                "unit": "mg",
+            },
+        ],
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "probiotic"
+    assert any(
+        reason in result["classification_reasons"]
+        for reason in (
+            "probiotic name + product-level CFU evidence",
+            "probiotic row identity + product-level CFU evidence",
+        )
+    )
+
+
 def test_product_level_cfu_does_not_hijack_non_probiotic_cleaner_active_without_iqd_rows():
     """Accessory CFU metadata must not override a cleaner-eligible CBD active."""
     product = {

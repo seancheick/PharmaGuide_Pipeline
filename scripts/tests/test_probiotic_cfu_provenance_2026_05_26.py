@@ -97,7 +97,7 @@ def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enriche
             },
         ],
         "probiotic_data": _product_level_probiotic_data(),
-        "supplement_taxonomy": {"primary_type": "general_supplement"},
+        "supplement_taxonomy": {"primary_type": "probiotic"},
         "ingredient_quality_data": {
             "ingredients_scorable": [
                 {
@@ -113,8 +113,45 @@ def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enriche
 
     assert evidence[0]["scoreable"] is True
     assert evidence[0]["canonical_id"] == "probiotic_cfu_total"
-    assert evidence[0]["reason"] == "product_level_cfu_with_probiotic_row_identity"
+    assert evidence[0]["reason"] == "product_level_cfu_with_probiotic_identity"
     assert evidence[0]["confidence"] == "high"
+
+
+def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enricher):
+    """Source-of-truth gate requires scoreable CFU evidence to agree with
+    supplement_taxonomy.primary_type. Probiotic row identity is diagnostic
+    only until taxonomy routes the product to the probiotic peer class."""
+    enriched = {
+        "activeIngredients": [
+            _fiber_row(),
+            {
+                "name": "Probiotic Blend",
+                "standardName": "Probiotic Blend",
+                "canonical_id": "probiotics",
+                "quantity": 100,
+                "unit": "mg",
+                "score_eligible_by_cleaner": False,
+                "cleaner_row_role": "blend_header_total",
+            },
+        ],
+        "probiotic_data": _product_level_probiotic_data(),
+        "supplement_taxonomy": {"primary_type": "fiber_digestive"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Dietary Fiber",
+                    "canonical_id": "fiber",
+                    "dose_class": "nutrition_fact",
+                }
+            ]
+        },
+    }
+
+    evidence = enricher._collect_product_scoring_evidence(enriched)
+
+    assert evidence[0]["scoreable"] is False
+    assert evidence[0]["scoreable_identity"] is False
+    assert evidence[0]["rejection_reason"] == "product_taxonomy_not_probiotic"
 
 
 def test_unrelated_strict_active_still_rejects_accessory_probiotic_cfu(enricher):

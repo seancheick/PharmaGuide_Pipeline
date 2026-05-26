@@ -307,6 +307,29 @@ def _row_has_probiotic_identity(row: dict[str, Any]) -> bool:
     return any(term in text for term in PROBIOTIC_TERMS)
 
 
+def _is_probiotic_cfu_support_row(row: dict[str, Any]) -> bool:
+    """Rows like fiber/prebiotics support probiotic products; they are not competing actives."""
+    cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
+    if cid in {"fiber", "prebiotics"}:
+        return True
+    text = _normalize_text(
+        " ".join(
+            str(row.get(key) or "")
+            for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
+        )
+    )
+    return any(
+        term in text
+        for term in (
+            "dietary fiber",
+            "prebiotic",
+            "inulin",
+            "fructooligosaccharide",
+            "galacto-oligosaccharide",
+        )
+    )
+
+
 def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
     """Return True when a cleaner-eligible non-probiotic active should block CFU-only routing."""
     for row in _safe_list(product.get("activeIngredients")):
@@ -318,6 +341,8 @@ def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
         if cleaner_role and cleaner_role != "active_scorable":
             continue
         if _row_has_probiotic_identity(row):
+            continue
+        if _is_probiotic_cfu_support_row(row):
             continue
         cid = _normalize_text(row.get("canonical_id"))
         qty = row.get("quantity", row.get("amount", row.get("qty")))
@@ -533,6 +558,9 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
 
     active_count = len(quantified_rows)
     nq_count = len(non_quantified_rows)
+    support_only_active = active_count > 0 and all(
+        _is_probiotic_cfu_support_row(row) for row in quantified_rows
+    )
 
     if nq_count > 0:
         reasons.append(f"excluded {nq_count} non-quantified base ingredients from classification")
@@ -611,7 +639,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     )
     sole_active_is_strain = (active_count == 1 and probiotic_count == 1)
     if (
-        active_count == 0
+        (active_count == 0 or support_only_active)
         and (probiotic_name_signal or probiotic_row_identity)
         and (non_quantified_probiotic_count > 0 or probiotic_cfu_identity_ok)
     ):
