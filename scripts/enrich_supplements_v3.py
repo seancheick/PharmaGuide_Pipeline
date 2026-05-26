@@ -11901,6 +11901,20 @@ class SupplementEnricherV3:
             source_path=product_cfu_source_path,
             evidence_scope="product_level",
         )
+        if not product_level_cfu.get("has_cfu"):
+            for field_name in ("product_name", "fullName", "bundleName"):
+                field_text = str(product.get(field_name) or "").strip()
+                if not field_text:
+                    continue
+                field_cfu = self._extract_cfu(
+                    field_text,
+                    source_path=field_name,
+                    evidence_scope="product_level",
+                )
+                if field_cfu.get("has_cfu"):
+                    field_cfu["source"] = "product_identity"
+                    product_level_cfu = field_cfu
+                    break
 
         # Check if this is a probiotic product
         probiotic_blends = []
@@ -12331,6 +12345,8 @@ class SupplementEnricherV3:
             row_text = " ".join(str(row.get(key) or "") for key in ("canonical_id", "name", "standard_name")).lower()
             if any(term in row_text for term in ("probiotic", "lactobacillus", "bifidobacterium", "saccharomyces", "bacillus")):
                 continue
+            if self._is_probiotic_cfu_support_row(row):
+                continue
             if str(row.get("dose_class") or "").lower() == "probiotic_cfu":
                 continue
             has_non_probiotic_strict_active = True
@@ -12404,6 +12420,18 @@ class SupplementEnricherV3:
             )
         )
 
+    @staticmethod
+    def _is_probiotic_cfu_support_row(row: Dict[str, Any]) -> bool:
+        """Rows like dietary fiber/prebiotics support probiotic formulas; they do not make CFU accessory."""
+        cid = str(row.get("canonical_id") or "").strip().lower()
+        if cid in {"fiber", "prebiotics"}:
+            return True
+        text = " ".join(
+            str(row.get(key) or "").lower()
+            for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
+        )
+        return any(term in text for term in ("dietary fiber", "prebiotic", "inulin", "fructooligosaccharide"))
+
     def _has_non_probiotic_active_for_cfu_evidence(self, product: Dict[str, Any]) -> bool:
         """Detect cleaner-eligible non-probiotic actives that make CFU evidence accessory."""
         for row in product.get("activeIngredients") or []:
@@ -12415,6 +12443,8 @@ class SupplementEnricherV3:
             if cleaner_role and cleaner_role != "active_scorable":
                 continue
             if self._has_probiotic_identity_text(row):
+                continue
+            if self._is_probiotic_cfu_support_row(row):
                 continue
             cid = str(row.get("canonical_id") or "").strip()
             unit = self._normalize_unit_for_signal(row.get("unit"))
