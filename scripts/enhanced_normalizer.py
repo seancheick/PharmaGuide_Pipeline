@@ -858,7 +858,37 @@ class EnhancedIngredientMatcher:
 
 class EnhancedDSLDNormalizer:
     """Enhanced DSLD normalizer with improved matching and preprocessing"""
-    
+
+    # ------------------------------------------------------------------
+    # Wave 6.Z Slice Z1 — Digestive Enzyme Cleaner cid-Gap Fallback.
+    # Spec: reports/z_opaque_sub_inventory.md (Z1 section, revised 2026-05-26).
+    # Tests: scripts/tests/test_z1_cleaner_enzyme_cid_fallback_2026_05_26.py
+    # Method: _apply_z1_enzyme_cid_fallback (below).
+    # ------------------------------------------------------------------
+    # v1 narrow allowlist of enzyme-product signals (G1). Detection runs
+    # against the product fullName AND each blend-header standardName/name.
+    _Z1_ENZYME_PRODUCT_SIGNALS = frozenset({
+        "digestive enzyme", "digestive enzymes",
+        "pancreatic enzyme", "pancreatic enzymes",
+        "enzyme blend", "enzyme complex", "enzyme formula",
+        "digezyme", "vegenzyme", "vegenzymes",
+        "extraordinary enzymes", "pancreatin", "pancrelipase",
+    })
+    # Children must be enzyme-like (≥50%) AND display-only (0 dosed) — G2.
+    _Z1_ENZYME_CHILD_TOKENS = frozenset({
+        "protease", "lipase", "amylase", "cellulase", "lactase", "bromelain",
+        "papain", "serrapeptase", "serratiopeptidase", "maltase", "sucrase",
+        "invertase", "phytase", "hemicellulase", "alpha-galactosidase",
+        "alpha galactosidase", "beta-glucanase", "beta glucanase", "pectinase",
+        "peptidase", "aspergillopepsin", "glucoamylase", "xylanase",
+        "pancreatin", "ox bile", "trypsin", "chymotrypsin",
+        "diastase", "rennet", "rennin",
+    })
+    # Units that mean "no usable individual dose" (G2 child-dose check).
+    _Z1_NON_DOSE_UNITS = frozenset({"", "np", "n/a", "na", "none", "0", "unspecified"})
+    # Header-name tokens that mark a blend as enzyme-typed for G3 dominance.
+    _Z1_ENZYME_HEADER_TOKENS = ("enzyme", "enzymes", "pancreatin", "digezyme", "vegenzyme")
+
     def __init__(self):
         # Reverse index: lowercased standard_name → (canonical_id, source_db).
         # Populated by _build_canonical_id_reverse_index() after fast lookups
@@ -4159,6 +4189,120 @@ class EnhancedDSLDNormalizer:
         )
         return row
 
+    def _apply_z1_enzyme_cid_fallback(
+        self,
+        product_fullname: str,
+        rows: List[Dict[str, Any]],
+    ) -> None:
+        """Wave 6.Z Slice Z1 — conservative product-name fallback that assigns
+        ``canonical_id="digestive_enzymes"`` to opaque enzyme blend headers
+        the cleaner's reverse-index missed (e.g. "Proprietary Enzyme Blend",
+        "Nordic Enzyme Blend", "DigeZyme"). The existing A.2b anchor path
+        (score_supplements._has_blend_header_anchor + denylist removed
+        2026-05-25) then scores these products via blend_header_anchor.
+
+        Mutates ``rows`` in place. No-op when any guard fails.
+
+        Guards (must ALL pass — see test file for full coverage):
+          G1  Explicit enzyme-product signal in product fullName OR any
+              blend-header standardName/name. Allowlist:
+              ``_Z1_ENZYME_PRODUCT_SIGNALS``.
+          G2  ≥50% of nested children carry enzyme tokens AND zero children
+              have a usable individual dose (qty > 0 with real mass unit).
+              Enzyme tokens: ``_Z1_ENZYME_CHILD_TOKENS``. Non-dose units:
+              ``_Z1_NON_DOSE_UNITS``.
+          G3  If multiple blend headers exist, the enzyme-named header must
+              be the largest by mass OR product fullName must explicitly
+              contain "enzyme"/"pancreatin". Guards against accessory-blend
+              over-crediting (e.g. wellness multivit with a 50mg accessory
+              enzyme blend next to a 1500mg opaque "Wellness Blend").
+          G4  v1 maps only to ``digestive_enzymes`` cid +
+              ``ingredient_quality_map`` src_db. No broad IQM alias fallback.
+
+        Spec: reports/z_opaque_sub_inventory.md
+        Tests: scripts/tests/test_z1_cleaner_enzyme_cid_fallback_2026_05_26.py
+        """
+        if not rows:
+            return
+
+        headers = [r for r in rows
+                   if isinstance(r, dict) and r.get("cleaner_row_role") == "blend_header_total"]
+        children = [r for r in rows
+                    if isinstance(r, dict) and r.get("cleaner_row_role") == "nested_display_only"]
+        if not headers:
+            return
+
+        # G2 — children enzyme-like AND none dosed.
+        if children:
+            enzyme_like = 0
+            for c in children:
+                name_low = (c.get("name") or "").lower()
+                std_low = (c.get("standardName") or "").lower()
+                if any(t in name_low or t in std_low
+                       for t in self._Z1_ENZYME_CHILD_TOKENS):
+                    enzyme_like += 1
+                # Any child with usable individual dose → score children, not header.
+                q = c.get("quantity")
+                try:
+                    qf = float(q) if q is not None else 0.0
+                except (TypeError, ValueError):
+                    qf = 0.0
+                unit_norm = (c.get("unit") or "").strip().lower()
+                if qf > 0 and unit_norm not in self._Z1_NON_DOSE_UNITS:
+                    return  # G2 fail: dosed child present
+            if enzyme_like / len(children) < 0.5:
+                return  # G2 fail: too few enzyme-like children
+
+        fn_low = (product_fullname or "").lower()
+
+        # G3 — multi-header dominance.
+        if len(headers) > 1:
+            def _to_mg(r: Dict[str, Any]) -> float:
+                try:
+                    qv = float(r.get("quantity") or 0.0)
+                except (TypeError, ValueError):
+                    qv = 0.0
+                u = (r.get("unit") or "").strip().lower()
+                if u in {"gram(s)", "gram", "grams", "g"}:
+                    return qv * 1000.0
+                if u in {"mcg", "microgram", "micrograms"}:
+                    return qv / 1000.0
+                return qv  # mg and unknowns default to mg-scale comparison
+            biggest = max(headers, key=_to_mg)
+            biggest_name = (biggest.get("name") or "").lower()
+            biggest_std = (biggest.get("standardName") or "").lower()
+            biggest_is_enzyme = any(
+                t in biggest_name or t in biggest_std
+                for t in self._Z1_ENZYME_HEADER_TOKENS
+            )
+            if not biggest_is_enzyme:
+                # Escape hatch: product fullName clearly enzyme-primary?
+                if "enzyme" not in fn_low and "pancreatin" not in fn_low:
+                    return  # G3 fail: accessory enzyme BH, not dominant
+
+        # G1 — enzyme signal in fullName OR any blend-header text.
+        def _has_signal(text: str) -> bool:
+            if not text:
+                return False
+            low = text.lower()
+            return any(s in low for s in self._Z1_ENZYME_PRODUCT_SIGNALS)
+
+        signal_present = _has_signal(fn_low) or any(
+            _has_signal(h.get("standardName") or "") or _has_signal(h.get("name") or "")
+            for h in headers
+        )
+        if not signal_present:
+            return
+
+        # G4 — assign digestive_enzymes ONLY (v1 narrow). Headers whose
+        # canonical_id is already set are left untouched (a curated context
+        # override, banned/recalled lookup, or upstream resolver decision
+        # always wins over this fallback).
+        for h in headers:
+            if h.get("canonical_id") is None:
+                h["canonical_id"] = "digestive_enzymes"
+                h["canonical_source_db"] = "ingredient_quality_map"
+
     def normalize_product(self, raw_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Enhanced product normalization with improved ingredient mapping
@@ -4242,6 +4386,20 @@ class EnhancedDSLDNormalizer:
                     self._apply_context_canonical_override(
                         product_id, _product_fullname, _row
                     )
+
+            # Wave 6.Z Slice Z1 — apply enzyme cid-gap fallback after
+            # curated context overrides. When a blend_header_total row has
+            # canonical_id=None AND product fullName matches the v1 enzyme
+            # allowlist AND children are enzyme-like + display-only, assign
+            # cid=digestive_enzymes. The existing A.2b anchor path then
+            # auto-fires for these products. See _apply_z1_enzyme_cid_fallback
+            # for full guard contract (G1-G4). Spec:
+            # reports/z_opaque_sub_inventory.md
+            if active_ingredients:
+                self._apply_z1_enzyme_cid_fallback(
+                    raw_data.get("fullName", "") or "",
+                    active_ingredients,
+                )
 
             # Sprint E1.2.4 (revised 2026-05-13) — count of REAL raw inactives
             # the cleaner is expected to surface in the blob. Computed AFTER
