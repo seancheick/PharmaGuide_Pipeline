@@ -541,6 +541,45 @@ def test_real_cfu_probiotic_with_prebiotic_support_row_is_still_probiotic():
     )
 
 
+def test_fiber_primary_product_with_accessory_probiotics_stays_fiber_digestive():
+    """A fiber-primary label with accessory probiotics should not be promoted
+    into the probiotic peer class solely because it has product-level CFU."""
+    product = {
+        "product_name": "Clear Mixing Super Fiber With Probiotics",
+        "fullName": "Clear Mixing Super Fiber With Probiotics",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 1_000_000_000,
+            "total_strain_count": 4,
+        },
+        "ingredient_quality_data": {"ingredients_scorable": []},
+        "activeIngredients": [
+            {
+                "name": "Dietary Fiber",
+                "standardName": "Fiber",
+                "canonical_id": "fiber",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "quantity": 6,
+                "unit": "g",
+            },
+            {
+                "name": "LAB4",
+                "standardName": "LAB4",
+                "cleaner_row_role": "blend_header_total",
+                "score_eligible_by_cleaner": False,
+                "quantity": 1_000_000_000,
+                "unit": "Viable Cells",
+            },
+        ],
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "fiber_digestive"
+    assert all("product-level CFU evidence" not in reason for reason in result["classification_reasons"])
+
+
 def test_product_level_cfu_does_not_hijack_non_probiotic_cleaner_active_without_iqd_rows():
     """Accessory CFU metadata must not override a cleaner-eligible CBD active."""
     product = {

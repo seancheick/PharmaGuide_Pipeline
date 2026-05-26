@@ -154,6 +154,41 @@ def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enriche
     assert evidence[0]["rejection_reason"] == "product_taxonomy_not_probiotic"
 
 
+def test_fiber_primary_product_with_accessory_probiotics_rejects_cfu_evidence(enricher):
+    enriched = {
+        "product_name": "Clear Mixing Super Fiber With Probiotics",
+        "fullName": "Clear Mixing Super Fiber With Probiotics",
+        "activeIngredients": [
+            _fiber_row(),
+            {
+                "name": "LAB4",
+                "standardName": "LAB4",
+                "quantity": 1_000_000_000,
+                "unit": "Viable Cells",
+                "score_eligible_by_cleaner": False,
+                "cleaner_row_role": "blend_header_total",
+            },
+        ],
+        "probiotic_data": _product_level_probiotic_data(total_cfu=1_000_000_000),
+        "supplement_taxonomy": {"primary_type": "fiber_digestive"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Dietary Fiber",
+                    "canonical_id": "fiber",
+                    "dose_class": "nutrition_fact",
+                }
+            ],
+        },
+    }
+
+    evidence = enricher._collect_product_scoring_evidence(enriched)
+
+    assert evidence[0]["scoreable"] is False
+    assert evidence[0]["rejection_reason"] == "non_probiotic_strict_active_present"
+
+
 def test_unrelated_strict_active_still_rejects_accessory_probiotic_cfu(enricher):
     enriched = {
         "activeIngredients": [

@@ -330,8 +330,23 @@ def _is_probiotic_cfu_support_row(row: dict[str, Any]) -> bool:
     )
 
 
+def _is_fiber_primary_with_accessory_probiotics(product: dict[str, Any]) -> bool:
+    """Detect fiber-primary labels where probiotics are secondary/add-on."""
+    product_name = _normalize_text(
+        " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "bundleName"))
+    )
+    has_fiber_primary_signal = any(
+        term in product_name
+        for term in ("super fiber", "fiber formula", "fiber supplement", "clear mixing fiber")
+    )
+    return has_fiber_primary_signal and any(
+        term in product_name for term in ("with probiotic", "with probiotics")
+    )
+
+
 def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
     """Return True when a cleaner-eligible non-probiotic active should block CFU-only routing."""
+    fiber_primary_with_accessory_probiotics = _is_fiber_primary_with_accessory_probiotics(product)
     for row in _safe_list(product.get("activeIngredients")):
         if not isinstance(row, dict):
             continue
@@ -343,7 +358,9 @@ def _has_non_probiotic_eligible_active(product: dict[str, Any]) -> bool:
         if _row_has_probiotic_identity(row):
             continue
         if _is_probiotic_cfu_support_row(row):
-            continue
+            cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
+            if not (cid == "fiber" and fiber_primary_with_accessory_probiotics):
+                continue
         cid = _normalize_text(row.get("canonical_id"))
         qty = row.get("quantity", row.get("amount", row.get("qty")))
         unit = _normalize_text(row.get("unit", row.get("quantityUnit", "")))

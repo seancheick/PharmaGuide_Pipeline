@@ -12447,8 +12447,24 @@ class SupplementEnricherV3:
         )
         return any(term in text for term in ("dietary fiber", "prebiotic", "inulin", "fructooligosaccharide"))
 
+    @staticmethod
+    def _is_fiber_primary_with_accessory_probiotics(product: Dict[str, Any]) -> bool:
+        """Detect fiber-primary labels where probiotics are secondary/add-on."""
+        product_name = " ".join(
+            str(product.get(key) or "").lower()
+            for key in ("product_name", "fullName", "bundleName")
+        )
+        has_fiber_primary_signal = any(
+            term in product_name
+            for term in ("super fiber", "fiber formula", "fiber supplement", "clear mixing fiber")
+        )
+        return has_fiber_primary_signal and any(
+            term in product_name for term in ("with probiotic", "with probiotics")
+        )
+
     def _has_non_probiotic_active_for_cfu_evidence(self, product: Dict[str, Any]) -> bool:
         """Detect cleaner-eligible non-probiotic actives that make CFU evidence accessory."""
+        fiber_primary_with_accessory_probiotics = self._is_fiber_primary_with_accessory_probiotics(product)
         for row in product.get("activeIngredients") or []:
             if not isinstance(row, dict):
                 continue
@@ -12460,7 +12476,9 @@ class SupplementEnricherV3:
             if self._has_probiotic_identity_text(row):
                 continue
             if self._is_probiotic_cfu_support_row(row):
-                continue
+                cid = str(row.get("canonical_id") or "").strip().lower()
+                if not (cid == "fiber" and fiber_primary_with_accessory_probiotics):
+                    continue
             cid = str(row.get("canonical_id") or "").strip()
             unit = self._normalize_unit_for_signal(row.get("unit"))
             try:
