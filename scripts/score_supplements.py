@@ -370,6 +370,7 @@ class SupplementScorer:
         self.paths = self.config.get("paths", {})
         self._parent_total_warned = False
         self._caers_signals = self._load_caers_signals()
+        self._branded_blend_anchors = self._load_branded_blend_anchors()
         self._inactive_resolver: Optional[InactiveIngredientResolver] = None
 
     def _get_inactive_resolver(self) -> InactiveIngredientResolver:
@@ -393,6 +394,39 @@ class SupplementScorer:
             return raw.get("signals", {})
         except (FileNotFoundError, json.JSONDecodeError):
             return {}
+
+    def _load_branded_blend_anchors(self) -> List[Dict[str, Any]]:
+        """Load exact-match curated branded-blend anchor overrides.
+
+        This is intentionally data-driven.  Generic BLEND_*/PII_* rows remain
+        fail-closed unless an exact branded header alias is listed in
+        scripts/data/branded_blend_anchor_overrides.json with verified evidence.
+        """
+        data_file = Path(__file__).parent / "data" / "branded_blend_anchor_overrides.json"
+        try:
+            with open(data_file, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return []
+
+        anchors: List[Dict[str, Any]] = []
+        for entry in safe_list(raw.get("anchors")):
+            if not isinstance(entry, dict):
+                continue
+            aliases = {norm_text(a) for a in safe_list(entry.get("aliases")) if norm_text(a)}
+            if not aliases:
+                continue
+            anchors.append({
+                "id": norm_text(entry.get("id") or ""),
+                "aliases": aliases,
+                "allowed_source_dbs": {
+                    norm_text(v) for v in safe_list(entry.get("allowed_source_dbs")) if norm_text(v)
+                },
+                "allowed_canonical_ids": {
+                    norm_text(v) for v in safe_list(entry.get("allowed_canonical_ids")) if norm_text(v)
+                },
+            })
+        return anchors
 
     def _setup_logging(self) -> logging.Logger:
         logging.basicConfig(
@@ -656,6 +690,75 @@ class SupplementScorer:
 
         return False
 
+    @staticmethod
+    def _row_has_usable_anchor_dose(row: Dict[str, Any]) -> bool:
+        q = row.get("quantity")
+        try:
+            qf = float(q) if q is not None else 0.0
+        except (TypeError, ValueError):
+            qf = 0.0
+        if qf <= 0:
+            return False
+        return norm_text(row.get("unit") or "") not in ANCHOR_NON_DOSE_UNITS
+
+    @staticmethod
+    def _proprietary_child_has_usable_dose(child: Dict[str, Any]) -> bool:
+        amount = child.get("amount")
+        try:
+            qf = float(amount) if amount is not None else 0.0
+        except (TypeError, ValueError):
+            qf = 0.0
+        if qf <= 0:
+            return False
+        return norm_text(child.get("unit") or "") not in ANCHOR_NON_DOSE_UNITS
+
+    def _has_dosed_proprietary_blend_children(self, product: Dict[str, Any]) -> bool:
+        """Return True if blend detector evidence exposes individually dosed children.
+
+        A.2 anchors are only for total-dose headers whose children are hidden
+        or display-only.  Some DSLD rows carry child activity units inside
+        proprietary_blends evidence rather than ingredient_quality_data; this
+        guard keeps those future/current cases from being header-credited.
+        """
+        for blend in safe_list(product.get("proprietary_blends")):
+            if not isinstance(blend, dict):
+                continue
+            for child in safe_list(blend.get("child_ingredients")):
+                if isinstance(child, dict) and self._proprietary_child_has_usable_dose(child):
+                    return True
+        return False
+
+    def _row_matches_curated_branded_blend_anchor(self, row: Dict[str, Any]) -> bool:
+        """Exact-match curated branded-blend override check."""
+        if not self._branded_blend_anchors:
+            return False
+
+        names = {
+            norm_text(row.get("name") or ""),
+            norm_text(row.get("standard_name") or ""),
+        }
+        names.discard("")
+        if not names:
+            return False
+
+        src_db = norm_text(row.get("canonical_source_db") or "")
+        cid = norm_text(row.get("canonical_id") or "")
+        for anchor in self._branded_blend_anchors:
+            aliases = anchor.get("aliases") or set()
+            if not (names & aliases):
+                continue
+
+            allowed_source_dbs = anchor.get("allowed_source_dbs") or set()
+            if allowed_source_dbs and src_db not in allowed_source_dbs:
+                continue
+
+            allowed_canonical_ids = anchor.get("allowed_canonical_ids") or set()
+            if allowed_canonical_ids and cid not in allowed_canonical_ids:
+                continue
+
+            return True
+        return False
+
     def _has_blend_header_anchor(self, product: Dict[str, Any]) -> bool:
         """Track A.2a strict eligibility check.
 
@@ -665,15 +768,13 @@ class SupplementScorer:
           3. At least one blend_header row in ingredients_skipped satisfies:
               * is_blend_header / blend_total_weight_only / score_exclusion_reason=='blend_header_total'
               * quantity > 0, unit not in ANCHOR_NON_DOSE_UNITS
-              * canonical_id non-empty AND
-                - NOT starting with 'BLEND_' or 'PII_' (case-insensitive), AND
-                - NOT in BLEND_HEADER_ANCHOR_CANONICAL_DENYLIST
-                  (class-level: digestive_enzymes, prebiotics, probiotics,
-                  whey_protein, collagen — these need dedicated future slices)
-              * canonical_source_db in BLEND_HEADER_ANCHOR_ALLOWED_DBS
-                (ingredient_quality_map or botanical_ingredients only;
-                excludes proprietary_blends, other_ingredients,
-                standardized_botanicals)
+              * either:
+                - a curated branded-blend override exact-matches row name /
+                  standard_name with verified evidence, OR
+                - canonical_id is non-empty, NOT starting with 'BLEND_' or
+                  'PII_', NOT in BLEND_HEADER_ANCHOR_CANONICAL_DENYLIST, and
+                  canonical_source_db is in BLEND_HEADER_ANCHOR_ALLOWED_DBS
+                  (ingredient_quality_map or botanical_ingredients)
 
         Spec: reports/not_scored_triage/track_A2_blend_header_anchor_spec.md
         """
@@ -683,6 +784,8 @@ class SupplementScorer:
         # Track A.1 precedence — if the standardized-botanical anchor would
         # fire, that path wins and this one stands down.
         if self._has_standardized_botanical_anchor(product):
+            return False
+        if self._has_dosed_proprietary_blend_children(product):
             return False
 
         # Wave 6.Z A.2b child-dose guard — if any non-header skipped row
@@ -708,16 +811,8 @@ class SupplementScorer:
             )
             if is_header:
                 continue
-            q = row.get("quantity")
-            try:
-                qf = float(q) if q is not None else 0.0
-            except (TypeError, ValueError):
-                qf = 0.0
-            if qf <= 0:
-                continue
-            if norm_text(row.get("unit") or "") in ANCHOR_NON_DOSE_UNITS:
-                continue
-            return False
+            if self._row_has_usable_anchor_dose(row):
+                return False
 
         for row in safe_list(iqd.get("ingredients_skipped")):
             if not isinstance(row, dict):
@@ -731,15 +826,10 @@ class SupplementScorer:
             if not is_header:
                 continue
             # dose check
-            q = row.get("quantity")
-            try:
-                qf = float(q) if q is not None else 0.0
-            except (TypeError, ValueError):
-                qf = 0.0
-            if qf <= 0:
+            if not self._row_has_usable_anchor_dose(row):
                 continue
-            if norm_text(row.get("unit") or "") in ANCHOR_NON_DOSE_UNITS:
-                continue
+            if self._row_matches_curated_branded_blend_anchor(row):
+                return True
             # canonical_id checks (strict)
             cid_raw = (row.get("canonical_id") or "").strip()
             if not cid_raw:

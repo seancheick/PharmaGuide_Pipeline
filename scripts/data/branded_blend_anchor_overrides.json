@@ -1,0 +1,98 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2026-05-26",
+    "total_entries": 5,
+    "purpose": "Curated exact-match branded blend headers eligible for conservative blend-header anchor scoring.",
+    "description": "Exact-match branded blend headers eligible for conservative blend_header_anchor scoring. Entries require live PubMed verification and remain subject to child-dose guards."
+  },
+  "anchors": [
+    {
+      "id": "urox",
+      "standard_name": "Urox",
+      "aliases": [
+        "urox",
+        "urox proprietary blend"
+      ],
+      "allowed_source_dbs": [
+        "unmapped"
+      ],
+      "allowed_canonical_ids": [],
+      "evidence_pmids": [
+        "29385990"
+      ],
+      "notes": "Urox botanical blend (Crataeva nurvala, Equisetum arvense, Lindera aggregata). PMID 29385990 is a phase 2 randomized, double-blind placebo-controlled trial in overactive bladder/urinary incontinence symptoms."
+    },
+    {
+      "id": "xanthigen",
+      "standard_name": "Xanthigen",
+      "aliases": [
+        "xanthigen",
+        "xanthigen proprietary blend"
+      ],
+      "allowed_source_dbs": [
+        "unmapped"
+      ],
+      "allowed_canonical_ids": [],
+      "evidence_pmids": [
+        "19840063"
+      ],
+      "notes": "Xanthigen nutraceutical blend. PMID 19840063 is a randomized controlled trial in weight management among obese premenopausal women with and without non-alcoholic fatty liver disease."
+    },
+    {
+      "id": "metabolaid",
+      "standard_name": "Metabolaid",
+      "aliases": [
+        "metabolaid",
+        "metabolaid (lemon verbena-hibiscus blend)"
+      ],
+      "allowed_source_dbs": [
+        "proprietary_blends"
+      ],
+      "allowed_canonical_ids": [
+        "BLEND_METABOLAID"
+      ],
+      "evidence_pmids": [
+        "33810049"
+      ],
+      "notes": "Metabolaid-related polyphenolic extract from Hibiscus sabdariffa and Lippia citriodora. PMID 33810049 is a randomized, double-blind placebo-controlled trial in prehypertensive/type 1 hypertensive subjects."
+    },
+    {
+      "id": "univestin",
+      "standard_name": "Univestin",
+      "aliases": [
+        "univestin",
+        "acacia catechu wood & bark extract and chinese skullcap root extract",
+        "acacia catechu wood and bark extract and chinese skullcap root extract"
+      ],
+      "allowed_source_dbs": [
+        "other_ingredients"
+      ],
+      "allowed_canonical_ids": [
+        "NHA_UNIVESTIN"
+      ],
+      "evidence_pmids": [
+        "24611484"
+      ],
+      "notes": "Univestin-style Scutellaria baicalensis + Acacia catechu extract combination. PMID 24611484 is a randomized controlled trial for short-term symptomatic relief of knee osteoarthritis joint discomfort."
+    },
+    {
+      "id": "br_dim_indolplex",
+      "standard_name": "Indolplex / BR-DIM",
+      "aliases": [
+        "indolplex diindolylmethane (br-dim) complex",
+        "br-dim complex",
+        "bioresponse-dim complex"
+      ],
+      "allowed_source_dbs": [
+        "unmapped"
+      ],
+      "allowed_canonical_ids": [],
+      "evidence_pmids": [
+        "22075942",
+        "28560655"
+      ],
+      "notes": "BR-DIM/diindolylmethane branded complex. PMID 22075942 and PMID 28560655 are randomized controlled trials for DIM biomarker modulation contexts."
+    }
+  ]
+}

@@ -21236,7 +21236,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Univestin \u2014 branded botanical complex (Scutellaria baicalensis + Acacia catechu) by Unigen Inc. Standardized to baicalin and catechins. Studied for joint comfort (doi:10.1186/1472-6882-12-8). Aliases include both the brand token AND the standard label phrasing used on consumer products (e.g. GNC Women's Joint Health, Move Free Advanced) where the components are spelled out instead of the brand name. Identity mapping for both label tokens and component-name disclosures.",
+      "notes": "Univestin \u2014 branded botanical complex (Scutellaria baicalensis + Acacia catechu) by Unigen Inc. Standardized to baicalin and catechins. Studied for joint comfort in a randomized controlled trial (PMID 24611484; doi:10.1089/jmf.2013.0010). Aliases include both the brand token AND the standard label phrasing used on consumer products (e.g. GNC Women's Joint Health, Move Free Advanced) where the components are spelled out instead of the brand name. Identity mapping for both label tokens and component-name disclosures.",
       "common_uses": [
         "identity mapping",
         "joint comfort"
