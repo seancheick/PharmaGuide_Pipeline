@@ -106,6 +106,22 @@ def test_bcaa_trio_routes_to_sports() -> None:
     assert class_for_product(product) == "sports"
 
 
+def test_incidental_bcaa_trio_in_mixed_formula_stays_generic() -> None:
+    product = _product(
+        primary_type="omega_3",
+        name="SynaQuell",
+        rows=[
+            _row("l_leucine", 1250, "mg"),
+            _row("l_isoleucine", 625, "mg"),
+            _row("l_valine", 625, "mg"),
+            _row("dha", 125, "mg"),
+            _row("curcumin", 125, "mg"),
+        ],
+    )
+
+    assert class_for_product(product) == "generic"
+
+
 def test_standalone_citrulline_routes_to_sports_by_name_and_canonical() -> None:
     product = _product(
         primary_type="amino_acid",

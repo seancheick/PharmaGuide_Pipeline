@@ -367,9 +367,13 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     if primary_type == "protein_powder" and _SPORTS_PROTEIN_NAME_RE.search(lowered):
         return True
 
-    if _BCAA_CANONICALS.issubset(canonicals):
+    if _BCAA_CANONICALS.issubset(canonicals) and (
+        primary_type in {"amino_acid", "pre_workout"} or _SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered)
+    ):
         return True
-    if len(canonicals & _EAA_CANONICALS) >= 6 and _SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered):
+    if len(canonicals & _EAA_CANONICALS) >= 6 and (
+        primary_type in {"amino_acid", "pre_workout"} or _SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered)
+    ):
         return True
 
     if canonicals & _SPORTS_SINGLE_CANONICALS:
