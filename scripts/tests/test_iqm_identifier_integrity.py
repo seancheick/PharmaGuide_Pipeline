@@ -363,3 +363,19 @@ def test_no_curated_interaction_uses_white_willow_bark_old_cui(curated_interacti
         f"Found {len(matches)} curated_interactions rows still using the "
         "old white_willow_bark CUI C0936557; must be C2349151."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Batch 2C — Class/extract/mixture CUI corrections (or nulls)
+# --------------------------------------------------------------------------- #
+
+
+def test_branched_chain_amino_acids_cui_is_canonical(iqm):
+    """C0359316 was 'Branched chain amino acids infusion' (Clinical Drug —
+    the IV-infusion product). C0002521 'Amino Acids, Branched-Chain' (Amino
+    Acid/Peptide/Protein / Biologically Active Substance) is the canonical
+    class-level concept for the supplement context."""
+    assert iqm["branched_chain_amino_acids"]["cui"] == "C0002521", (
+        "branched_chain_amino_acids.cui must be C0002521 (the class concept), "
+        "not C0359316 (the IV infusion clinical drug)."
+    )

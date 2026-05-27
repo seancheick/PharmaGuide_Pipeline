@@ -39261,7 +39261,7 @@
   "branched_chain_amino_acids": {
     "standard_name": "Branched Chain Amino Acids",
     "category": "amino_acids",
-    "cui": "C0359316",
+    "cui": "C0002521",
     "forms": {
       "bcaa 2:1:1": {
         "bio_score": 15,
