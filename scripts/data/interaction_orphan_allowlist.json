@@ -3,9 +3,12 @@
     "schema_version": "1.0.0",
     "last_updated": "2026-05-27",
     "purpose": "Allowlist for supplement canonical_ids that appear in pairwise interactions (interaction_db.sqlite) but do NOT have a corresponding entry in ingredient_interaction_rules.json. Used by audit_source_of_truth_contract.py::audit_interaction's INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL referential-integrity check. Each entry MUST cite a reason and a TODO for clearing the backlog. Entries here are tolerated but tracked.",
-    "total_entries": 2,
+    "total_entries": 1,
     "review_owner": "Lead Clinician (PharmaGuide)",
-    "note": "DO NOT add entries here to silence the gate. Add only when (a) the orphan is intentional (pairwise-only signal) or (b) the orphan is a known data bug pending fix. Each entry must include a reason and a tracking note."
+    "note": "DO NOT add entries here to silence the gate. Add only when (a) the orphan is intentional (pairwise-only signal) or (b) the orphan is a known data bug pending fix. Each entry must include a reason and a tracking note.",
+    "migration_notes": [
+      "2026-05-27: Removed phosphatidylserine entry. Root cause fixed in source — DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY agent2_canonical_id reassigned to genistein (correct canonical for soy isoflavones)."
+    ]
   },
   "allowlist": [
     {
@@ -14,13 +17,6 @@
       "todo": "Add RULE_NOOTROPIC_VINPOCETINE_BLEEDING entry to ingredient_interaction_rules.json with bleeding_disorders and surgery_scheduled condition_rules.",
       "added": "2026-05-27",
       "category": "missing_rule_backlog"
-    },
-    {
-      "canonical_id": "phosphatidylserine",
-      "reason": "The pairwise interactions DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY carry agent2_canonical_id='phosphatidylserine' but the interactions are about soy isoflavones (genistein/daidzein), not phosphatidylserine. Likely a canonical_id misassignment during Wave 8 batch ingestion — phosphatidylserine is often soy-derived but pharmacologically distinct.",
-      "todo": "Investigate batch_critical_2026_05.json source entries for DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Reassign agent2_canonical_id to the correct soy_isoflavones canonical_id, OR split into two interactions if phosphatidylserine itself also has the interaction.",
-      "added": "2026-05-27",
-      "category": "data_bug"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "last_updated": "2026-04-26",
+    "last_updated": "2026-05-27",
     "total_entries": 108,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -11,7 +11,11 @@
       "DailyMed (dailymed.nlm.nih.gov)",
       "PubMed (pubmed.ncbi.nlm.nih.gov)"
     ],
-    "notes": "Every Major and Contraindicated entry has at least 1 authoritative source URL. Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor) normalized by verify_interactions.py. When type is Med-Sup, agent1 is the drug and agent2 is the supplement. Drug classes use class:id format; specific drugs use RXCUI. Supplement agents use UMLS CUI where confident."
+    "notes": "Every Major and Contraindicated entry has at least 1 authoritative source URL. Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor) normalized by verify_interactions.py. When type is Med-Sup, agent1 is the drug and agent2 is the supplement. Drug classes use class:id format; specific drugs use RXCUI. Supplement agents use UMLS CUI where confident.",
+    "migration_notes": [
+      "2026-05-27T15:05:47Z: Fixed agent2_canonical_id misassignment on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY (phosphatidylserine -> genistein; soy isoflavones are pharmacologically distinct from phosphatidylserine). Added PMID 16571087 (Messina & Redmond, Thyroid 2006) to DSI_LEVOTHYROXINE_SOY source_pmids — content-verified via PubMed esummary API. Candidate PMID 15448175 rejected as ghost reference (real but off-topic: plant plasma membrane radicals).",
+      "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override."
+    ]
   },
   "interactions": [
     {
@@ -1325,28 +1329,37 @@
       "agent1_name": "Levothyroxine",
       "agent1_id": "10582",
       "agent2_name": "Soy isoflavones",
-      "agent2_id": "C0301704",
+      "agent2_id": "C0061202",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Soy isoflavones and soy protein can impair levothyroxine absorption and may also affect thyroid hormone metabolism. The effect is most pronounced in infants but relevant at high supplemental doses in adults.",
       "management": "Separate levothyroxine from soy-rich foods or supplements by at least 4 hours. Patients with hypothyroidism on stable levothyroxine should have TSH re-checked if starting high-dose soy isoflavone supplements.",
-      "source_urls": [],
-      "source_pmids": [],
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/16571087/",
+        "https://ods.od.nih.gov/factsheets/Soy-HealthProfessional/"
+      ],
+      "source_pmids": [
+        "16571087"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T15:05:47Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "16571087"
+        ],
+        "notes": "PMID 16571087 (Messina & Redmond, Thyroid 2006) content-verified via PubMed esummary on 2026-05-27 — title matches the soy-thyroid interaction claim. Replaces prior empty source_pmids that violated critical_no_hallucinated_citations."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "phosphatidylserine"
+      "agent2_canonical_id": "genistein"
     },
     {
       "id": "DSI_LEVOTHYROXINE_COFFEE",
@@ -2372,7 +2385,7 @@
       "agent1_name": "Oral Contraceptives (class)",
       "agent1_id": "class:oral_contraceptives",
       "agent2_name": "Soy isoflavones",
-      "agent2_id": "C0301704",
+      "agent2_id": "C0061202",
       "severity": "Minor",
       "interaction_effect_type": "Additive",
       "mechanism": "Soy isoflavones (genistein, daidzein) are phytoestrogens that bind estrogen receptors. They may weakly compete with or add to the estrogenic component of OCs. Clinical significance at typical dietary intake is minimal.",
@@ -2394,7 +2407,7 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "phosphatidylserine"
+      "agent2_canonical_id": "genistein"
     },
     {
       "id": "SSI_IRON_CALCIUM",
