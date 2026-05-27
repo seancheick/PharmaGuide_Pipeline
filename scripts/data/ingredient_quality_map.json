@@ -24192,7 +24192,8 @@
     "standard_name": "Cryptoxanthin",
     "category": "antioxidants",
     "cui": "C3850081",
-    "rxcui": "1116063",
+    "rxcui": null,
+    "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '1116063' returns no record in RxNav (/REST/rxcui/1116063/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
     "forms": {
       "beta-cryptoxanthin": {
         "bio_score": 10,
