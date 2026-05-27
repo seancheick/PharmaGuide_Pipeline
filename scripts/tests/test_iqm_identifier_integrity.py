@@ -628,3 +628,54 @@ def test_batch_4_defer_ambiguous_cui_locked_with_note(iqm, canonical_id, expecte
         f"taxonomy mapping (strict-mode guard cannot rescue these; the note "
         f"is the load-bearing documentation)."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Batch 5 — Policy-lock for keep_verified_alias entries
+# --------------------------------------------------------------------------- #
+#
+# These 6 entries fail the orchestrator's strict-mode no_token_overlap guard
+# because of a near-identity spelling/plural/class variance with the UMLS
+# preferred name (cynarin/cynarine, fluoride/Fluorides, etc.). The clinician
+# (review 2026-05-27) explicitly classified all 6 as 'keep_verified_alias' —
+# accept the current CUI as a verified spelling/plural variant of the same
+# concept. A future agent that mechanically follows the strict-mode guard
+# could "fix" these and break the mapping; this test locks them in place.
+
+_BATCH_5_KEEP_VERIFIED_ALIAS = [
+    # canonical_id, locked cui, UMLS preferred name, why it's accepted
+    ("cynarin",              "C0056848", "cynarine",              "spelling variant — same compound"),
+    ("ecdysterones",         "C0013495", "Ecdysterone",           "plural vs singular — same class"),
+    ("fluoride",             "C0016327", "Fluorides",             "class/plural — clinically acceptable identity"),
+    ("gypenosides",          "C0905527", "gypenoside",            "plural vs singular — same class"),
+    ("phosphatidylinositol", "C0031621", "phosphatidylinositols", "singular vs plural — same compound family"),
+    ("protein",              "C0033684", "Proteins",              "class-level — acceptable as a class identity"),
+]
+
+
+@pytest.mark.parametrize(
+    "canonical_id,locked_cui,umls_preferred_name,rationale",
+    _BATCH_5_KEEP_VERIFIED_ALIAS,
+)
+def test_batch_5_keep_verified_alias_cui_locked(
+    iqm, canonical_id, locked_cui, umls_preferred_name, rationale
+):
+    """Policy lock: each keep_verified_alias entry retains its
+    clinician-approved CUI despite the strict-mode no_token_overlap
+    guard intentionally flagging it (the variance is plural/spelling,
+    not a wrong concept).
+
+    Why this test exists: in commits Wave 6.Y Batches 1, 2A, 2B, 2C the
+    same strict-mode guard caught real hallucinations and was used to
+    drive 27 atomic IQM corrections. The same guard would also "fix"
+    these 6 — but doing so would break the mapping rather than improve
+    it. The clinician walked the report on 2026-05-27 and marked these
+    as keep_verified_alias; this assertion makes that decision durable.
+    """
+    entry = iqm[canonical_id]
+    assert entry["cui"] == locked_cui, (
+        f"{canonical_id}.cui must remain {locked_cui} (UMLS preferred name "
+        f"'{umls_preferred_name}'; clinician-approved {rationale}). If a "
+        f"sweep agent wants to change this, escalate to clinician review — "
+        f"do not rely on the strict-mode guard."
+    )
