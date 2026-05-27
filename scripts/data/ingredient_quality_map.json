@@ -21394,7 +21394,8 @@
     "standard_name": "Bilberry",
     "category": "herbs",
     "cui": "C0453269",
-    "rxcui": "11155",
+    "rxcui": null,
+    "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '11155' returns no record in RxNav (/REST/rxcui/11155/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
     "forms": {
       "bilberry extract (25% anthocyanins)": {
         "bio_score": 8,

@@ -450,6 +450,19 @@ _STALE_NOTE_TOKENS = (
 )
 
 
+# --------------------------------------------------------------------------- #
+# Batch 3 — Cleared deprecated RxCUIs (no record in RxNav)
+# --------------------------------------------------------------------------- #
+
+
+def test_bilberry_rxcui_cleared_to_null(iqm):
+    """Prior rxcui '11155' returns no record in RxNav (deprecated/withdrawn).
+    Cleared to null with rxcui_note."""
+    entry = iqm["bilberry"]
+    assert entry["rxcui"] is None, "bilberry.rxcui must be null (RxNav 404)."
+    assert entry.get("rxcui_note"), "bilberry must have an rxcui_note explaining the null."
+
+
 def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
     """Regression: when `cui` is non-null, neither cui_note nor cui_status
     may still claim that UMLS has no entry / no confirmed match. Such notes
