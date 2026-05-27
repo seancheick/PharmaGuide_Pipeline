@@ -232,3 +232,17 @@ def test_borage_seed_oil_cui_is_canonical(iqm):
         "borage_seed_oil.cui must be C0212750 (borage oil), not C5982013 "
         "(branded oral capsule)."
     )
+
+
+def test_citrus_bergamot_cui_is_canonical(iqm):
+    """C5762301 was a branded 'Jarrow Formulas Citrus Bergamot Capsules'
+    (Clinical Drug). C0725330 'Bergamot' (Food) is the canonical concept
+    and was already stored as a hint in aliases; promoted to canonical."""
+    entry = iqm["citrus_bergamot"]
+    assert entry["cui"] == "C0725330", (
+        "citrus_bergamot.cui must be C0725330 (Bergamot, Food), not "
+        "C5762301 (Jarrow branded capsule)."
+    )
+    assert "C0725330" not in (entry.get("aliases") or []), (
+        "citrus_bergamot.aliases must no longer contain C0725330 hint."
+    )

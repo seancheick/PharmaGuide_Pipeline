@@ -41098,7 +41098,7 @@
   "citrus_bergamot": {
     "standard_name": "Citrus Bergamot",
     "category": "herbs",
-    "cui": "C5762301",
+    "cui": "C0725330",
     "forms": {
       "bergamot bpf": {
         "bio_score": 14,
@@ -41192,8 +41192,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Bergavit 40",
-      "C0725330"
+      "Bergavit 40"
     ],
     "external_ids": {}
   },
