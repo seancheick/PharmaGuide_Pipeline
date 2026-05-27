@@ -285,7 +285,26 @@ def test_verify_interactions_offline_pass(tmp_path):
     assert r["total_entries"] == 20
     assert r["valid"] == 20
     assert r["errors"] == 0
-    assert r["warnings"] == 0
+    # Wave 9.B.3 Phase 1: the verifier now emits migration warnings for
+    # Minor entries that don't have explicit display_layer="background".
+    # The golden fixture contains 1 such entry (DDI_CALCIUM_ZINC, Minor).
+    # That single migration warning is expected during the Phase 1 → Phase 3
+    # window. Phase 3 will backfill display_layer everywhere; this test will
+    # then be tightened back to warnings == 0.
+    assert r["warnings"] == 1, (
+        "golden fixture should emit exactly 1 migration warning during the "
+        "Phase 1 → Phase 3 window: DDI_CALCIUM_ZINC (Minor, no display_layer). "
+        f"got: warnings={r['warnings']}; issues={r.get('issues', [])[:3]}"
+    )
+    # Confirm the warning is the migration-flagged display_layer_missing one,
+    # not something else that drifted in.
+    migration_warnings = [
+        i for i in r.get("issues", [])
+        if i.get("details", {}).get("migration_warning")
+    ]
+    assert len(migration_warnings) == 1
+    assert migration_warnings[0]["check"] == "display_layer_missing"
+    assert migration_warnings[0]["entry_id"] == "DDI_CALCIUM_ZINC"
     assert not r["blocked_by"]
     assert not r["rxcui_mismatches"]
     assert not r["unknown_classes"]

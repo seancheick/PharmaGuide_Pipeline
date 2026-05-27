@@ -67,6 +67,24 @@ SEVERITY_MAP: dict[str, str] = {
 
 FLUTTER_SEVERITIES: tuple[str, ...] = ("contraindicated", "avoid", "caution", "monitor")
 
+# Wave 9.B.3 (2026-05-27) — display_layer enum + lane policy.
+# An entry's display_layer determines whether the app surfaces it as an
+# interruptive user-facing alert ("alert") or as a non-interruptive
+# background insight ("background"). Deprecation continues to use the
+# existing `retired_at` + `retired_reason` columns — display_layer has
+# no "deprecated" value (see reports/wave_9b_minor_review/9B2_SCHEMA_DESIGN_DISPLAY_LAYER.md).
+DISPLAY_LAYER_VALUES: frozenset[str] = frozenset({"alert", "background"})
+
+# Severity-lane invariant (draft-vocab severities, pre-normalization).
+# Major / Moderate / Contraindicated entries must live in the alert lane;
+# Minor / Monitor entries must live in the background lane.
+ALERT_LANE_DRAFT_SEVERITIES: frozenset[str] = frozenset(
+    {"contraindicated", "major", "moderate"}
+)
+BACKGROUND_LANE_DRAFT_SEVERITIES: frozenset[str] = frozenset(
+    {"minor", "monitor"}
+)
+
 ALLOWED_TYPES: frozenset[str] = frozenset(
     {
         "Med-Sup", "Sup-Med", "Sup-Sup", "Med-Med",
@@ -429,6 +447,140 @@ def normalize_severity(draft_severity: str) -> str | None:
     return SEVERITY_MAP.get(draft_severity.lower())
 
 
+def check_display_layer_policy(entry: dict[str, Any]) -> list[dict[str, Any]]:
+    """Checks 12, 13, 14 (Wave 9.B.3 Phase 1, 2026-05-27). Pure function —
+    no network, no side effects. Returns a list of issue kwargs ready to be
+    wrapped in EntryIssue. Empty list means the entry's display_layer state
+    is policy-compliant.
+
+    Implements the two-lane policy from
+    reports/wave_9b_minor_review/9B2_SCHEMA_DESIGN_DISPLAY_LAYER.md:
+
+      Check 12 — display_layer enum
+        Field is OPTIONAL during migration (Phase 1 → Phase 3 window).
+        When PRESENT, must be one of {"alert", "background"} or it's an
+        error. There is no "deprecated" value — deprecation continues to
+        use the existing retired_at / retired_reason columns.
+
+      Check 13 — severity ↔ lane invariant
+        - display_layer == "alert"      requires severity ∈ {Major, Moderate, Contraindicated}
+        - display_layer == "background" requires severity ∈ {Minor, Monitor}
+        - display_layer absent + Minor/Monitor: WARNING (missing lane
+          declaration for non-alert-eligible severity). Becomes ERROR
+          after Phase 3 backfills explicit display_layer on every live
+          entry. Tracked by report `migration_warning` flag in details.
+        - display_layer absent + Major/Moderate/Contraindicated: no
+          finding (backward-compat default ⇒ alert is correct).
+        - background + alert-eligible severity (Major+): ERROR — real
+          policy conflict, not a migration artifact.
+        - alert + Minor/Monitor: WARNING during migration; severity
+          should either be upgraded to Moderate+ or display_layer should
+          flip to "background". Becomes ERROR after Phase 3.
+
+      Check 14 — background_rationale required
+        When display_layer == "background", background_rationale must be
+        a non-empty string. The rationale records WHY this entry is not
+        a user-facing alert — load-bearing context for the next reviewer.
+
+    Retired entries (`retired_at` set) are exempt from Check 13 — they
+    are not user-facing, so the lane invariant doesn't apply.
+    """
+    issues: list[dict[str, Any]] = []
+
+    display_layer = entry.get("display_layer")
+    severity_raw = entry.get("severity")
+    severity_key = severity_raw.lower() if isinstance(severity_raw, str) else None
+    background_rationale = entry.get("background_rationale")
+    if not isinstance(background_rationale, str):
+        background_rationale = ""
+    retired = bool(entry.get("retired_at"))
+
+    # Check 12 — display_layer enum (only enforced when field is present)
+    if display_layer is not None and display_layer not in DISPLAY_LAYER_VALUES:
+        issues.append({
+            "check": "display_layer_enum",
+            "severity": "error",
+            "message": (
+                f"invalid display_layer: {display_layer!r} "
+                f"(allowed: {sorted(DISPLAY_LAYER_VALUES)}; deprecation uses "
+                f"retired_at, not display_layer)"
+            ),
+        })
+        # Stop downstream checks — enum is broken, lane semantics meaningless.
+        return issues
+
+    # Retired entries skip the lane invariant (Check 13) entirely.
+    # Background_rationale (Check 14) still applies if display_layer is set,
+    # for audit symmetry, but in practice authors won't set display_layer on
+    # retired entries.
+    if not retired and severity_key is not None:
+        in_alert_lane_sev = severity_key in ALERT_LANE_DRAFT_SEVERITIES
+        in_bg_lane_sev = severity_key in BACKGROUND_LANE_DRAFT_SEVERITIES
+
+        if display_layer == "background":
+            if in_alert_lane_sev:
+                issues.append({
+                    "check": "display_layer_lane",
+                    "severity": "error",
+                    "message": (
+                        f"display_layer='background' conflicts with severity={severity_raw!r}. "
+                        f"Background lane is for Minor/Monitor only; alert-eligible severities "
+                        f"({sorted(ALERT_LANE_DRAFT_SEVERITIES)}) must use display_layer='alert'."
+                    ),
+                    "details": {"severity": severity_raw, "display_layer": display_layer},
+                })
+        elif display_layer == "alert":
+            if in_bg_lane_sev:
+                issues.append({
+                    "check": "display_layer_lane",
+                    "severity": "warning",
+                    "message": (
+                        f"display_layer='alert' with severity={severity_raw!r} violates the "
+                        f"two-lane policy (Minor/Monitor must be background). Migration "
+                        f"warning — promote severity OR move to display_layer='background'. "
+                        f"Will become error after Phase 3."
+                    ),
+                    "details": {
+                        "severity": severity_raw,
+                        "display_layer": display_layer,
+                        "migration_warning": True,
+                    },
+                })
+        else:  # display_layer absent
+            if in_bg_lane_sev:
+                issues.append({
+                    "check": "display_layer_missing",
+                    "severity": "warning",
+                    "message": (
+                        f"display_layer absent; severity={severity_raw!r} (Minor/Monitor) is "
+                        f"not alert-eligible. Set display_layer='background' explicitly "
+                        f"with a background_rationale. Migration warning — will become error "
+                        f"after Phase 3."
+                    ),
+                    "details": {
+                        "severity": severity_raw,
+                        "migration_warning": True,
+                    },
+                })
+            # display_layer absent + Major/Moderate/Contraindicated: no finding.
+            # Backward-compat default of 'alert' is correct for these. Phase 3
+            # will backfill the explicit declaration.
+
+    # Check 14 — background lane requires a rationale
+    if display_layer == "background" and not background_rationale.strip():
+        issues.append({
+            "check": "display_layer_rationale",
+            "severity": "error",
+            "message": (
+                "display_layer='background' requires a non-empty background_rationale "
+                "explaining why this entry is not a user-facing alert. Example: 'CoQ10 is "
+                "studied as MITIGATION for SAMS, not an adverse interaction.'"
+            ),
+        })
+
+    return issues
+
+
 def normalize_direction(entry: dict[str, Any]) -> dict[str, Any]:
     """Check 7. If one side is drug and the other is supplement, ensure
     agent1 is the drug. Preserve original type as type_authored.
@@ -766,6 +918,15 @@ def verify_entry(
                 EntryIssue(entry_id=entry_id, check="schema", severity="error", message=msg)
             )
         return None
+
+    # Checks 12, 13, 14 (Wave 9.B.3 Phase 1): display_layer policy.
+    # Validates the optional `display_layer` field, the severity-lane
+    # invariant, and the background_rationale requirement. Emits warnings
+    # for the migration-window cases (Minor/Monitor entries without an
+    # explicit display_layer declaration) and errors for hard policy
+    # conflicts. Pure function over the entry dict — no I/O.
+    for issue_kw in check_display_layer_policy(entry):
+        report.add_issue(EntryIssue(entry_id=entry_id, **issue_kw))
 
     # Checks 7, 8: normalize direction + severity
     normalized = normalize_direction(entry)
