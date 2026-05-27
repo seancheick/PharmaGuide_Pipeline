@@ -221,3 +221,14 @@ def test_alpha_gpc_cui_is_canonical_glycerylphosphorylcholine(iqm):
         "alpha_gpc.cui must be C0017889 (glycerylphosphorylcholine, the "
         "generic substance), not C5762292 (Jarrow Formulas branded capsule)."
     )
+
+
+def test_borage_seed_oil_cui_is_canonical(iqm):
+    """C5982013 was a branded 'borage seed oil 1300 MG Oral Capsule' (Clinical
+    Drug). C0212750 'borage oil' (Organic Chemical / Pharmacologic Substance
+    / Food) is the canonical generic concept — accepted via reverse-check on
+    'Borage Seed Oil'."""
+    assert iqm["borage_seed_oil"]["cui"] == "C0212750", (
+        "borage_seed_oil.cui must be C0212750 (borage oil), not C5982013 "
+        "(branded oral capsule)."
+    )
