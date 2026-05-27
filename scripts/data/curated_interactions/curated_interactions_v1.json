@@ -1989,7 +1989,7 @@
       "agent1_name": "NSAIDs (class)",
       "agent1_id": "class:nsaids",
       "agent2_name": "Willow Bark",
-      "agent2_id": "C0936557",
+      "agent2_id": "C2349151",
       "severity": "Major",
       "interaction_effect_type": "Additive",
       "mechanism": "Willow bark contains salicin, which is metabolized to salicylate (aspirin-like compound). Combining willow bark with NSAIDs or aspirin creates additive salicylate toxicity and GI mucosal damage risk.",

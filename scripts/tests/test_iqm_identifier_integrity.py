@@ -343,3 +343,23 @@ def test_turkey_tail_cui_cleared_to_null_with_note(iqm):
     )
     assert entry.get("cui_status") == "no_confirmed_umls_match"
     assert entry.get("cui_note"), "turkey_tail must have a cui_note explaining the null"
+
+
+def test_white_willow_bark_cui_is_canonical(iqm):
+    """C0936557 had no token overlap with 'White Willow Bark' under strict
+    guards. C2349151 'Salix alba bark extract' (Organic Chemical /
+    Pharmacologic Substance) is the canonical concept, accepted via
+    reverse-check on 'White Willow Bark'."""
+    assert iqm["white_willow_bark"]["cui"] == "C2349151", (
+        "white_willow_bark.cui must be C2349151 (Salix alba bark extract)."
+    )
+
+
+def test_no_curated_interaction_uses_white_willow_bark_old_cui(curated_interactions):
+    """Propagation check: no row may still reference C0936557 — it must
+    have been updated to C2349151."""
+    matches = [a for a in _agent2_ids(curated_interactions) if a == "C0936557"]
+    assert not matches, (
+        f"Found {len(matches)} curated_interactions rows still using the "
+        "old white_willow_bark CUI C0936557; must be C2349151."
+    )
