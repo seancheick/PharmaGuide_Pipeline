@@ -148,6 +148,23 @@ def test_beta_alanine_three_point_two_grams_scores_below_max_band() -> None:
     assert payload["metadata"]["primary_identity"] == "beta_alanine"
 
 
+def test_preworkout_ignores_tiny_accessory_creatine_when_beta_alanine_is_better_anchor() -> None:
+    payload = score_dose(
+        _product(
+            _row("beta-alanine", 3200, "mg"),
+            _row("creatine_monohydrate", 100, "mg"),
+            _row("l_leucine", 3000, "mg"),
+            _row("l_isoleucine", 1000, "mg"),
+            _row("l_valine", 1000, "mg"),
+            name="RapidDrive Pre-Workout Amino Complex",
+        )
+    )
+
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(16.0)
+    assert payload["metadata"]["primary_identity"] == "beta_alanine"
+    assert payload["metadata"]["dose_basis"] == "beta_alanine_2_to_4_g"
+
+
 def test_citrulline_malate_six_grams_is_conservative_partial_credit() -> None:
     payload = score_dose(_product(_row("l_citrulline", 6000, "mg", name="L-Citrulline Malate"), name="Citrulline Malate"))
 

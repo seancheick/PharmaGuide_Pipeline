@@ -18,7 +18,6 @@ from scoring_v4.modules.sports_helpers import (
     dose_g,
     group_bcaa,
     group_eaa,
-    primary_sports_identity,
     sports_rows,
 )
 
@@ -32,8 +31,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(product, dict):
         product = {}
 
-    identity = primary_sports_identity(product)
-    primary, basis = _score_primary(product, identity)
+    identity, primary, basis = _best_primary_score(product)
     support = _score_stack_support(product, identity)
     completeness = _score_ratio_or_completeness(product, identity)
     opaque_penalty, not_evaluable = _opaque_penalty(product, primary)
@@ -149,6 +147,24 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         return 18.0, "eaa_at_least_8_g"
 
     return 0.0, "no_sports_primary_dose"
+
+
+def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, Optional[str]]:
+    """Pick the dose-supported primary anchor with the highest credit.
+
+    A fixed canonical priority is unsafe for pre-workouts: tiny accessory
+    rows can coexist with therapeutic-dose beta-alanine/citrulline/BCAA.
+    """
+    best_identity: Optional[str] = None
+    best_score = 0.0
+    best_basis: Optional[str] = "no_sports_primary_dose"
+    for identity in ("protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline"):
+        score, basis = _score_primary(product, identity)
+        if score > best_score:
+            best_identity = identity
+            best_score = score
+            best_basis = basis
+    return best_identity, best_score, best_basis
 
 
 def _score_stack_support(product: Dict[str, Any], identity: Optional[str]) -> float:
