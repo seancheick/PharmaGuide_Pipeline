@@ -34886,7 +34886,9 @@
   "turkey_tail": {
     "standard_name": "Turkey Tail",
     "category": "herbs",
-    "cui": "C6011676",
+    "cui": null,
+    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "Wave 6.Y Batch 2B (2026-05-27): C6011676 was a branded clinical-drug CUI (Clinical Drug, rejected by strict-mode branded guard). UMLS exact-search for 'Turkey Tail' returns no atom linking the common name to the species. Species-level candidates C0319805 (Coriolus versicolor, Fungus) and C4282635 (Trametes versicolor preparation) exist but UMLS does not list 'Turkey Tail' as a synonym of either, so the species mapping cannot be auto-verified. Deferred to ontology review — taxonomy synonyms (Coriolus ↔ Trametes versicolor) are clinician decisions, not automated picks.",
     "forms": {
       "turkey tail fruiting body": {
         "bio_score": 8,

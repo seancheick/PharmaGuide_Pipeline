@@ -328,3 +328,18 @@ def test_theacrine_cui_is_canonical_tetramethyluric_acid(iqm):
     assert iqm["theacrine"]["cui"] == "C0654300", (
         "theacrine.cui must be C0654300 (1,3,7,9-tetramethyluric acid)."
     )
+
+
+def test_turkey_tail_cui_cleared_to_null_with_note(iqm):
+    """C6011676 was a branded multi-mushroom capsule (Clinical Drug). No
+    clean single-CUI candidate exists for 'Turkey Tail' under strict-mode
+    guards — UMLS does not link the common name to the species CUI
+    (Coriolus/Trametes versicolor). Per the null-CUI policy, cleared to
+    null with cui_status='no_confirmed_umls_match' and cui_note documenting
+    the deferred ontology question."""
+    entry = iqm["turkey_tail"]
+    assert entry["cui"] is None, (
+        "turkey_tail.cui must be null (no confirmed UMLS match)."
+    )
+    assert entry.get("cui_status") == "no_confirmed_umls_match"
+    assert entry.get("cui_note"), "turkey_tail must have a cui_note explaining the null"
