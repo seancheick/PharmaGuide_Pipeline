@@ -471,6 +471,26 @@ def normalize_direction(entry: dict[str, Any]) -> dict[str, Any]:
     }
     out["agent1_type"] = agent_type_map.get(a1_kind, "unknown")
     out["agent2_type"] = agent_type_map.get(a2_kind, "unknown")
+
+    # Med-Food / Food-Med / Sup-Food / Food-Sup carry a real CUI on the food
+    # side, so classify_agent() returns 'supplement' (CUI shape). Override
+    # the agent_type to "food" so downstream consumers (Flutter alert
+    # renderer, audit gates) can distinguish food advisories from
+    # supplement-drug interactions. The interaction's top-level `type`
+    # field is the source of truth for which side is food.
+    type_authored = str(out.get("type_authored", "") or "")
+    if type_authored in ("Med-Food", "Food-Med"):
+        # After normalize_direction(), Med-Food and Food-Med both place
+        # food at agent2 (drug-side ends up at agent1).
+        out["agent2_type"] = "food"
+    elif type_authored in ("Sup-Food", "Food-Sup"):
+        # Sup-Food / Food-Sup: ambiguous after CUI-sort swap. Mark whichever
+        # side does NOT match the IQM-supplement-CUI as food. For now, set
+        # both to a sentinel and let downstream choose — but in practice
+        # we have no Sup-Food entries yet, so leave a TODO.
+        # TODO: when Sup-Food entries appear, add per-side food marker on
+        #       the source entry to disambiguate.
+        pass
     return out
 
 

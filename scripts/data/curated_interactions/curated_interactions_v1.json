@@ -14,7 +14,8 @@
     "notes": "Every Major and Contraindicated entry has at least 1 authoritative source URL. Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor) normalized by verify_interactions.py. When type is Med-Sup, agent1 is the drug and agent2 is the supplement. Drug classes use class:id format; specific drugs use RXCUI. Supplement agents use UMLS CUI where confident.",
     "migration_notes": [
       "2026-05-27T15:05:47Z: Fixed agent2_canonical_id misassignment on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY (phosphatidylserine -> genistein; soy isoflavones are pharmacologically distinct from phosphatidylserine). Added PMID 16571087 (Messina & Redmond, Thyroid 2006) to DSI_LEVOTHYROXINE_SOY source_pmids — content-verified via PubMed esummary API. Candidate PMID 15448175 rejected as ghost reference (real but off-topic: plant plasma membrane radicals).",
-      "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override."
+      "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override.",
+      "2026-05-27T15:26:04Z: Added food_advisory_note schema to 5 Med-Food entries (DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE, DSI_MAOI_TYRAMINE). New optional fields: alert_style ('food_advisory_note'), note_body (plain-English explainer), practical_guidance (action-oriented). Added content-verified PMIDs: 26299317, 16814135, 35322792, 3525654 (DSI_LEVOTHYROXINE_COFFEE already had 18341376). Each PMID title content-verified via PubMed esummary API on 2026-05-27. Clinical severity field unchanged — alert_style controls UI tone, not clinical truth."
     ]
   },
   "interactions": [
@@ -493,24 +494,34 @@
       "management": "Avoid grapefruit and grapefruit juice with simvastatin, atorvastatin, and lovastatin. Pravastatin, rosuvastatin, and fluvastatin are not significantly affected. Timing the dose away from grapefruit does not eliminate the risk due to irreversible enzyme inhibition.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/list-all/",
-        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
+        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
+        "https://pubmed.ncbi.nlm.nih.gov/26299317/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "26299317"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T15:26:04Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "26299317"
+        ],
+        "notes": "Food advisory note; PMIDs content-verified via PubMed esummary on 2026-05-27."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "grapefruit"
+      "agent2_canonical_id": "grapefruit",
+      "alert_style": "food_advisory_note",
+      "note_body": "Grapefruit and grapefruit juice can affect how your body breaks down some statins (simvastatin, atorvastatin, lovastatin). It slows down a liver enzyme, which means more of the drug stays in your system than intended. This can raise the chance of muscle aches or weakness.",
+      "practical_guidance": "Either skip grapefruit while on these statins, or talk to your prescriber about switching to pravastatin, rosuvastatin, or fluvastatin — those aren't affected by grapefruit."
     },
     {
       "id": "DSI_STATINS_NIACIN",
@@ -883,24 +894,34 @@
       "management": "Avoid grapefruit and grapefruit juice with CYP3A4-metabolized calcium channel blockers. Effects can last 24–72 hours after consuming grapefruit. Check with your pharmacist about your specific CCB.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
-        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
+        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
+        "https://pubmed.ncbi.nlm.nih.gov/16814135/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "16814135"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T15:26:04Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "16814135"
+        ],
+        "notes": "Food advisory note; PMIDs content-verified via PubMed esummary on 2026-05-27."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "grapefruit"
+      "agent2_canonical_id": "grapefruit",
+      "alert_style": "food_advisory_note",
+      "note_body": "Grapefruit slows down how your body processes some blood pressure medicines (felodipine, nifedipine, amlodipine), so more of the drug ends up in your bloodstream. This can cause dizziness, flushing, or low blood pressure.",
+      "practical_guidance": "Skip grapefruit and grapefruit juice while on these medicines. The effect can last 1–3 days, so timing the dose around grapefruit doesn't really help."
     },
     {
       "id": "DSI_DIURETICS_POTASSIUM",
@@ -1381,18 +1402,25 @@
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T15:26:04Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "18341376"
+        ],
+        "notes": "Food advisory note; PMIDs content-verified via PubMed esummary on 2026-05-27."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "coffee"
+      "agent2_canonical_id": "coffee",
+      "alert_style": "food_advisory_note",
+      "note_body": "Coffee, especially espresso, can reduce how much levothyroxine your body absorbs when you take them close together. This isn't dangerous, but it can mean your thyroid medicine doesn't work as well.",
+      "practical_guidance": "Take levothyroxine with water on an empty stomach, and wait at least 30–60 minutes before having coffee or breakfast."
     },
     {
       "id": "DSI_IMMUNO_SJW",
@@ -1530,23 +1558,34 @@
       "mechanism": "Grapefruit inhibits CYP3A4, increasing blood levels of cyclosporine, tacrolimus, and sirolimus. Elevated immunosuppressant levels increase toxicity risk (nephrotoxicity, neurotoxicity, infection risk).",
       "management": "Avoid grapefruit and grapefruit juice with transplant immunosuppressants. Maintain consistent dietary patterns; avoid sudden changes in grapefruit intake.",
       "source_urls": [
-        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
+        "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix",
+        "https://pubmed.ncbi.nlm.nih.gov/35322792/"
       ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T15:26:04Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
-          "pubmed": false
+          "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "35322792"
+        ],
+        "notes": "Food advisory note; PMIDs content-verified via PubMed esummary on 2026-05-27."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "grapefruit"
+      "agent2_canonical_id": "grapefruit",
+      "alert_style": "food_advisory_note",
+      "note_body": "Grapefruit raises the level of transplant medicines (cyclosporine, tacrolimus, sirolimus) in your blood. Even small changes in level matter for these drugs because they have a narrow safe range.",
+      "practical_guidance": "Avoid grapefruit and grapefruit juice entirely while on transplant immunosuppressants. Be consistent — even occasional grapefruit can shift your levels.",
+      "source_pmids": [
+        "35322792"
+      ]
     },
     {
       "id": "DSI_ANTICONV_FOLATE",
@@ -1690,25 +1729,35 @@
       "management": "Strict low-tyramine diet is mandatory with MAOIs. Avoid: aged cheeses, cured meats, fermented foods, tap beer, overripe fruit, soy sauce, miso, tofu, and fava beans. Work with a dietitian. Carry a hypertensive crisis emergency plan.",
       "source_urls": [
         "https://medlineplus.gov/ency/article/001508.htm",
-        "https://www.ncbi.nlm.nih.gov/books/NBK539849/"
+        "https://www.ncbi.nlm.nih.gov/books/NBK539849/",
+        "https://pubmed.ncbi.nlm.nih.gov/3525654/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "3525654"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T15:26:04Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "3525654"
+        ],
+        "notes": "Food advisory note; PMIDs content-verified via PubMed esummary on 2026-05-27."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "evidence_notes": "MAOI + tyramine hypertensive crisis is one of the most established drug-food interactions in clinical pharmacology. FDA black box warning on all MAOI labels.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "tyramine"
+      "agent2_canonical_id": "tyramine",
+      "alert_style": "food_advisory_note",
+      "note_body": "MAOIs block an enzyme that normally breaks down tyramine in foods like aged cheese, cured meats, fermented foods, and tap beer. With the enzyme blocked, tyramine can spike blood pressure quickly.",
+      "practical_guidance": "A low-tyramine diet is essential while on MAOIs. Your prescriber or a dietitian should walk you through the food list. Headache, sweating, or chest pain after a meal can mean a tyramine reaction — call your prescriber."
     },
     {
       "id": "DSI_MAOI_SJW",

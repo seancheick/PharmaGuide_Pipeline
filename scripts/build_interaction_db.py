@@ -307,7 +307,19 @@ CREATE TABLE interactions (
     version_last_modified   TEXT NOT NULL,
     retired_at              TEXT,
     retired_reason          TEXT,
-    last_updated            TEXT NOT NULL
+    last_updated            TEXT NOT NULL,
+    -- Food-advisory schema (2026-05-27). Optional fields.
+    -- alert_style: NULL (default = clinical pairwise alert) or
+    --   "food_advisory_note" (UI renders soft info card, drug-only trigger,
+    --   gentle reminder tone for known food-drug interactions where the app
+    --   does not track the food side).
+    -- note_body: plain-English explainer (~150-300 chars) suitable for
+    --   end-user display. Mechanism explained without jargon.
+    -- practical_guidance: action-oriented ~80-150 chars. "Skip X" / "Take
+    --   apart by N hours" / "Talk to your prescriber".
+    alert_style             TEXT,
+    note_body               TEXT,
+    practical_guidance      TEXT
 );
 
 CREATE INDEX idx_int_a1_canon ON interactions(agent1_canonical_id)
@@ -429,6 +441,11 @@ def build_interaction_row(
         "retired_at": None,
         "retired_reason": None,
         "last_updated": build_time,
+        # Food-advisory fields (NULL for non-food entries; populated for Med-Food
+        # entries that should render as gentle informational notes in the app).
+        "alert_style": draft.get("alert_style"),
+        "note_body": draft.get("note_body"),
+        "practical_guidance": draft.get("practical_guidance"),
     }
 
 
@@ -528,6 +545,10 @@ def _column_order(table: str) -> list[str]:
             "retired_at",
             "retired_reason",
             "last_updated",
+            # Food-advisory schema (2026-05-27)
+            "alert_style",
+            "note_body",
+            "practical_guidance",
         ]
     if table == "research_pairs":
         return [
