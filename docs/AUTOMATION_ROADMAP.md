@@ -51,20 +51,20 @@ Before any new work, it helps to be honest about what exists.
 
 Everything below untangles these four:
 
-| Problem | Current state | Target state |
-|---|---|---|
-| **Data intake** (new products from NIH) | Manual, laptop | Scheduled, cloud |
-| **Pipeline execution** (clean/enrich/score/build) | Local laptop | GitHub Actions or cloud runner |
-| **Clinical-copy authoring** (Dr. Pham's work) | Files over Slack | Web UI → PR → auto-validate |
-| **Safety alerts** (FDA recalls/bans, same-day) | Not built | 15-min poller + Supabase Realtime + FCM push |
+| Problem                                           | Current state    | Target state                                 |
+| ------------------------------------------------- | ---------------- | -------------------------------------------- |
+| **Data intake** (new products from NIH)           | Manual, laptop   | Scheduled, cloud                             |
+| **Pipeline execution** (clean/enrich/score/build) | Local laptop     | GitHub Actions or cloud runner               |
+| **Clinical-copy authoring** (Dr. Pham's work)     | Files over Slack | Web UI → PR → auto-validate                  |
+| **Safety alerts** (FDA recalls/bans, same-day)    | Not built        | 15-min poller + Supabase Realtime + FCM push |
 
 ### Scale trajectory
 
-| Stage | Product count | What ships | Storage model | Monetization |
-|---|---|---|---|---|
-| **Beta** (Month 0-6) | 10k popular brands | Hand-curated top brands | Full blob bundle in app OR Supabase on-demand (either works at this size) | **Free for everyone** — acquisition phase, no paywall |
-| **V1 post-beta** (Month 6-12) | ~50k top categories | Gummies, capsules, softgels, then liquids, etc. | Reference data in app; **product blobs fetched on-demand from Supabase** | **Pro tier activates** — free tier becomes limited; Pro unlocks full features |
-| **Full** (Month 12+) | 250k (all DSLD) | Whole DSLD catalog | Reference data in app (<10 MB); all product blobs on Supabase; aggressive caching + prefetch | Pro tier enforced across all Phase 4.5 gates |
+| Stage                         | Product count       | What ships                                      | Storage model                                                                                | Monetization                                                                  |
+| ----------------------------- | ------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Beta** (Month 0-6)          | 10k popular brands  | Hand-curated top brands                         | Full blob bundle in app OR Supabase on-demand (either works at this size)                    | **Free for everyone** — acquisition phase, no paywall                         |
+| **V1 post-beta** (Month 6-12) | ~50k top categories | Gummies, capsules, softgels, then liquids, etc. | Reference data in app; **product blobs fetched on-demand from Supabase**                     | **Pro tier activates** — free tier becomes limited; Pro unlocks full features |
+| **Full** (Month 12+)          | 250k (all DSLD)     | Whole DSLD catalog                              | Reference data in app (<10 MB); all product blobs on Supabase; aggressive caching + prefetch | Pro tier enforced across all Phase 4.5 gates                                  |
 
 ### Monetization timeline & free-tier limits
 
@@ -72,18 +72,18 @@ Everything below untangles these four:
 
 **Month 6+ (Pro paywall activates):** the free tier becomes limited. Specific limits (to be calibrated from beta telemetry, but planned scope):
 
-| Feature | Free tier (post-beta) | Pro tier |
-|---|---|---|
-| Daily scans | Limited (e.g., 10/day) | Unlimited |
-| Stack size | Limited (e.g., 5 products) | Unlimited |
+| Feature                          | Free tier (post-beta)               | Pro tier                                          |
+| -------------------------------- | ----------------------------------- | ------------------------------------------------- |
+| Daily scans                      | Limited (e.g., 10/day)              | Unlimited                                         |
+| Stack size                       | Limited (e.g., 5 products)          | Unlimited                                         |
 | Stack-level interaction checking | Basic (pairwise, top severity only) | Full (multi-way, all severities, timing guidance) |
-| Offline product DB | Top 50k (Tier 1 shard only) | Top 150k (Tier 2 post-install pack) |
-| Detail blob cache | ~50 products rolling window | Unlimited |
-| FDA CRITICAL push alerts | **Always on (never gated)** | Always on |
-| FDA HIGH/CATALOG push alerts | Not included | Included |
-| Alert history / export | Current session only | Full history, CSV/PDF export |
-| Depletion tracking | View only | Monitoring tips, food-source suggestions |
-| Family sharing | Single user | Up to 5 family members |
+| Offline product DB               | Top 50k (Tier 1 shard only)         | Top 150k (Tier 2 post-install pack)               |
+| Detail blob cache                | ~50 products rolling window         | Unlimited                                         |
+| FDA CRITICAL push alerts         | **Always on (never gated)**         | Always on                                         |
+| FDA HIGH/CATALOG push alerts     | Not included                        | Included                                          |
+| Alert history / export           | Current session only                | Full history, CSV/PDF export                      |
+| Depletion tracking               | View only                           | Monitoring tips, food-source suggestions          |
+| Family sharing                   | Single user                         | Up to 5 family members                            |
 
 **What gates get enforced:** per-feature counters on the client, validated server-side on sensitive calls (detail blob fetches, Tier 2 pack download signing).
 
@@ -135,6 +135,7 @@ Pick one storage provider (see **Free options** below). Upload each brand folder
 **Step 1.2 — Write a GitHub Actions workflow.**
 
 Create `.github/workflows/build-db.yml`. It should:
+
 - Run on: `workflow_dispatch` (manual button) + weekly cron (`0 8 * * 1` = Mondays 8am UTC).
 - Install Python 3.13, dependencies.
 - Pull raw JSON from bucket.
@@ -163,6 +164,7 @@ The workflow iterates this list. Adding a new brand = one-line PR.
 **Step 1.4 — Secrets.**
 
 GitHub repo settings → Secrets → add:
+
 - `DSLD_API_KEY` — NIH DSLD API key (free from NIH)
 - `SUPABASE_URL` + `SUPABASE_SERVICE_KEY`
 - Storage credentials (Supabase / R2 / B2 keys)
@@ -172,12 +174,12 @@ All referenced in the workflow as `${{ secrets.DSLD_API_KEY }}`.
 
 ### Free options
 
-| Tool | Free tier | Paid upgrade |
-|---|---|---|
+| Tool              | Free tier                                                                                                                                                                            | Paid upgrade                                                 |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
 | **Cloud storage** | **Supabase Storage** (1 GB free, already connected to you). Alternate: Cloudflare R2 (10 GB free + zero egress cost — strongest free tier on the market). Backblaze B2 (10 GB free). | Supabase Pro ($25/mo, 100 GB). R2 after 10 GB is ~$0.015/GB. |
-| **CI/CD** | **GitHub Actions** (2,000 free minutes/month for private repos; unlimited for public). | GitHub Pro ($4/user/mo, 3,000 minutes). |
-| **Secrets mgmt** | **GitHub Secrets** (free). | Doppler, 1Password (paid). |
-| **Notifications** | **Slack incoming webhook** (free). **Discord webhook** (free). | PagerDuty ($25/user/mo). |
+| **CI/CD**         | **GitHub Actions** (2,000 free minutes/month for private repos; unlimited for public).                                                                                               | GitHub Pro ($4/user/mo, 3,000 minutes).                      |
+| **Secrets mgmt**  | **GitHub Secrets** (free).                                                                                                                                                           | Doppler, 1Password (paid).                                   |
+| **Notifications** | **Slack incoming webhook** (free). **Discord webhook** (free).                                                                                                                       | PagerDuty ($25/user/mo).                                     |
 
 **My recommendation for Phase 1:** Cloudflare R2 for storage (best free tier, no egress fees when Flutter eventually pulls from it) + GitHub Actions + Supabase for the final DB.
 
@@ -204,7 +206,7 @@ All referenced in the workflow as `${{ secrets.DSLD_API_KEY }}`.
 
 A dedicated, sub-hour lane for FDA recalls and emergency safety alerts that **bypasses the full pipeline rebuild.** When the FDA publishes a Class I recall at 9am, a user with that product in their stack gets a push notification within minutes — not the next monthly build.
 
-The existing pipeline is the *slow lane* (accurate, thorough, rebuilt monthly). Phase 1.5 builds the *fast lane* (opinionated, conservative, live in minutes) alongside it. Both stay in sync because they share the same `banned_recalled_ingredients.json` source of truth; the fast lane just reaches users a week earlier.
+The existing pipeline is the _slow lane_ (accurate, thorough, rebuilt monthly). Phase 1.5 builds the _fast lane_ (opinionated, conservative, live in minutes) alongside it. Both stay in sync because they share the same `banned_recalled_ingredients.json` source of truth; the fast lane just reaches users a week earlier.
 
 ### Why it matters
 
@@ -217,11 +219,11 @@ The existing pipeline is the *slow lane* (accurate, thorough, rebuilt monthly). 
 
 Not every alert needs a push notification. Tier the response to the severity:
 
-| Tier | Triggers | UX | Latency target |
-|---|---|---|---|
+| Tier             | Triggers                                                                                                         | UX                                         | Latency target             |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | -------------------------- |
 | **1 — CRITICAL** | FDA Class I recall, DEA Schedule I substance, undeclared controlled drug, emergency use authorization withdrawal | Push notification + red banner on app open | <15 min FDA publish → user |
-| **2 — HIGH** | Class II/III recall, FDA warning letter, CAERS adverse-event cluster, manufacturer criminal prosecution | In-app banner on next open, no push | <4 hours |
-| **3 — CATALOG** | New products, copy refinements, ingredient metadata, non-urgent reference data | Silent refresh on next app launch | <24 hours |
+| **2 — HIGH**     | Class II/III recall, FDA warning letter, CAERS adverse-event cluster, manufacturer criminal prosecution          | In-app banner on next open, no push        | <4 hours                   |
+| **3 — CATALOG**  | New products, copy refinements, ingredient metadata, non-urgent reference data                                   | Silent refresh on next app launch          | <24 hours                  |
 
 ### How it works — architecture
 
@@ -356,14 +358,14 @@ CREATE INDEX safety_alerts_canonical_ids_idx ON safety_alerts USING GIN (canonic
 
 ### Free options
 
-| Tool | Free tier | Notes |
-|---|---|---|
-| **Cloudflare Workers** | 100k requests/day | 15-min polling = 96 requests/day, 99.9% headroom |
-| **Supabase Realtime** | Unlimited channels, free tier | Already in Supabase setup |
-| **Supabase Edge Functions** | 500k invocations/month | 1–5 alerts/day, well under cap |
-| **Firebase Cloud Messaging (FCM)** | Unlimited free | Standard push-notification provider |
-| **openFDA API** | Free, rate-limited 1000 req/min | Cloudflare Worker respects rate limit |
-| **FDA RSS feed** | Free, unlimited | Backup polling channel |
+| Tool                               | Free tier                       | Notes                                            |
+| ---------------------------------- | ------------------------------- | ------------------------------------------------ |
+| **Cloudflare Workers**             | 100k requests/day               | 15-min polling = 96 requests/day, 99.9% headroom |
+| **Supabase Realtime**              | Unlimited channels, free tier   | Already in Supabase setup                        |
+| **Supabase Edge Functions**        | 500k invocations/month          | 1–5 alerts/day, well under cap                   |
+| **Firebase Cloud Messaging (FCM)** | Unlimited free                  | Standard push-notification provider              |
+| **openFDA API**                    | Free, rate-limited 1000 req/min | Cloudflare Worker respects rate limit            |
+| **FDA RSS feed**                   | Free, unlimited                 | Backup polling channel                           |
 
 **Total monthly cost at 100k users: $0.**
 
@@ -383,13 +385,13 @@ CREATE INDEX safety_alerts_canonical_ids_idx ON safety_alerts USING GIN (canonic
 ### What this changes about Phase 2+ / Phase 4
 
 - **Phase 2** gains a "safety alerts queue" view for Dr. Pham's refinement work.
-- **Phase 4** (reference-data hot-refresh) is the *catalog* fast-refresh path. Phase 1.5 is the *alerts* fast-refresh path. Both coexist; they're different problem shapes.
+- **Phase 4** (reference-data hot-refresh) is the _catalog_ fast-refresh path. Phase 1.5 is the _alerts_ fast-refresh path. Both coexist; they're different problem shapes.
 
 ### Safety alerts are tier-agnostic — never Pro-gated
 
 Important constraint for the future monetization layer (detailed in Phase 4.5): **Tier 1 CRITICAL safety alerts must fire for every user, free or Pro, no exceptions.** Push notifications for FDA Class I recalls, undeclared controlled substances, and acute hazards are a clinical-trust obligation, not a premium feature. Cheaper to send for free than to defend in court after a gated recall alert fails to reach a free user.
 
-What *can* be Pro-gated: HIGH-tier advisories, deeper "why this was flagged" explanations, stack-level alert history, bulk-export of alert history.
+What _can_ be Pro-gated: HIGH-tier advisories, deeper "why this was flagged" explanations, stack-level alert history, bulk-export of alert history.
 
 ---
 
@@ -435,6 +437,7 @@ The dashboard already shows coverage and a random spot-check picker. Add:
 **Step 2.2 — Add strict-validator PR check.**
 
 Create `.github/workflows/validate-pr.yml`. On every PR that touches `scripts/data/*.json`:
+
 - Run `python3 scripts/validate_safety_copy.py --strict`
 - Run `python3 -m pytest scripts/tests/ -q`
 - Fail the PR if either fails.
@@ -445,11 +448,11 @@ GitHub shows the status check inline on the PR — can't merge red.
 
 Three options:
 
-| Option | Setup | Free tier |
-|---|---|---|
-| **Streamlit Cloud** | Connect GitHub repo, one-click deploy. | Yes — unlimited apps on private repos for teams, rate-limited on community. |
-| **Render / Railway / Fly.io** | Docker deploy from repo. | Yes — free tier sufficient for small team. |
-| **Cloudflare Tunnel** (self-hosted) | Run Streamlit on your Mac, expose via Cloudflare tunnel. | Yes — $0 but your Mac has to be on. |
+| Option                              | Setup                                                    | Free tier                                                                   |
+| ----------------------------------- | -------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **Streamlit Cloud**                 | Connect GitHub repo, one-click deploy.                   | Yes — unlimited apps on private repos for teams, rate-limited on community. |
+| **Render / Railway / Fly.io**       | Docker deploy from repo.                                 | Yes — free tier sufficient for small team.                                  |
+| **Cloudflare Tunnel** (self-hosted) | Run Streamlit on your Mac, expose via Cloudflare tunnel. | Yes — $0 but your Mac has to be on.                                         |
 
 **Recommendation:** Streamlit Cloud for the dashboard. Free, private, GitHub-integrated. Deploys on every push.
 
@@ -459,11 +462,11 @@ Dr. Pham can edit authored fields (`alert_headline`, `alert_body`, etc.) but sho
 
 ### Free options
 
-| Tool | Free tier | Notes |
-|---|---|---|
-| **Streamlit Cloud** | Private apps free for small teams | Native GitHub integration |
-| **GitHub API** (for programmatic PRs) | Free | Use `PyGithub` library |
-| **GitHub Actions PR checks** | Included in Actions free minutes | Standard |
+| Tool                                  | Free tier                         | Notes                     |
+| ------------------------------------- | --------------------------------- | ------------------------- |
+| **Streamlit Cloud**                   | Private apps free for small teams | Native GitHub integration |
+| **GitHub API** (for programmatic PRs) | Free                              | Use `PyGithub` library    |
+| **GitHub Actions PR checks**          | Included in Actions free minutes  | Standard                  |
 
 ### Definition of done
 
@@ -492,9 +495,10 @@ Dr. Pham can edit authored fields (`alert_headline`, `alert_body`, etc.) but sho
 You said the target: "pull by category — gummies, capsules, softgels — each as its own category, once a month delta only." Today `dsld_api_sync.py` can do the pulls; this phase wraps scheduling, state tracking, and auto-PR around it.
 
 After Phase 3:
+
 - Every month, a scheduled job queries NIH DSLD by category (gummies, capsules, softgels, etc.).
 - It compares to the last snapshot (state file from `dsld_api_sync.py`).
-- New products → auto-download raw JSON → upload to storage → open a PR: *"Add 47 new gummy products (delta vs last month)"*.
+- New products → auto-download raw JSON → upload to storage → open a PR: _"Add 47 new gummy products (delta vs last month)"_.
 - You or a teammate review the PR → approve → Phase 1 rebuild kicks in → new products are live.
 
 ### Why it matters
@@ -538,7 +542,7 @@ Create `.github/workflows/monthly-intake.yml` running on cron `0 0 1 * *` (midni
    - Calls `python3 scripts/dsld_api_sync.py filter --supplement-form {code} --status 1 --limit {cap}`
    - Compares returned IDs vs `last_dsld_ids_seen` in state file → new IDs = delta
    - Downloads raw JSON for new IDs into storage bucket
-2. Opens a PR titled *"Monthly intake YYYY-MM: +X gummies, +Y capsules"* with:
+2. Opens a PR titled _"Monthly intake YYYY-MM: +X gummies, +Y capsules"_ with:
    - New raw JSON file paths
    - Updated state file
 3. You / reviewer approve → merge → triggers Phase 1 rebuild.
@@ -554,21 +558,22 @@ Same product can appear under two form codes (some gummies also count as softgel
 **Step 3.5 — Change detection (not just new products).**
 
 DSLD products get updated (new UPC, reformulation, label change). Extend the state file to track a hash of each label's core fields. On intake:
+
 - New ID → add.
 - Existing ID with different hash → flag as "updated" → re-enrich + re-score → open separate PR.
 - Unchanged → skip.
 
 ### Free options
 
-| Tool | Free tier | Notes |
-|---|---|---|
-| **GitHub Actions cron** | Included | Runs reliably once a day minimum |
-| **NIH DSLD API** | Free, public, no key limit for reasonable use | Already wired in `dsld_api_client.py` |
+| Tool                    | Free tier                                     | Notes                                 |
+| ----------------------- | --------------------------------------------- | ------------------------------------- |
+| **GitHub Actions cron** | Included                                      | Runs reliably once a day minimum      |
+| **NIH DSLD API**        | Free, public, no key limit for reasonable use | Already wired in `dsld_api_client.py` |
 
 ### Definition of done
 
 - First of the month rolls around, a workflow runs.
-- By 9am that day a PR appears in GitHub titled *"Monthly intake 2026-05: +42 gummies, +18 capsules, +3 updated products"*.
+- By 9am that day a PR appears in GitHub titled _"Monthly intake 2026-05: +42 gummies, +18 capsules, +3 updated products"_.
 - You approve → Phase 1 rebuilds → new products live in the app by end of day.
 - You spend ~5 minutes per month on intake oversight instead of an afternoon.
 
@@ -586,7 +591,7 @@ DSLD products get updated (new UPC, reformulation, label change). Extend the sta
 
 ### What it is
 
-You asked: *"If we change the wording on a harmful additive, users should get the updated version."*
+You asked: _"If we change the wording on a harmful additive, users should get the updated version."_
 
 Today, changing `scripts/data/harmful_additives.json` doesn't automatically propagate to the app — you have to rebuild + resync. Phase 4 makes this automatic.
 
@@ -618,7 +623,7 @@ Store this as `config/rebuild_dependencies.json`.
 
 **Step 4.2 — Affected-products index.**
 
-Every product blob already includes the reference-data identifiers it matched (e.g., which harmful_additive IDs hit). Build a reverse index: *"harmful_additive ADD_ASPARTAME is referenced by products X, Y, Z."* Store in Supabase as `reference_product_refs` table, populated on each build.
+Every product blob already includes the reference-data identifiers it matched (e.g., which harmful_additive IDs hit). Build a reverse index: _"harmful_additive ADD_ASPARTAME is referenced by products X, Y, Z."_ Store in Supabase as `reference_product_refs` table, populated on each build.
 
 **Step 4.3 — Change-detection workflow.**
 
@@ -628,7 +633,7 @@ Create `.github/workflows/reference-data-change.yml` triggered on PR merge to ma
 2. For each changed entry, query the affected-products index.
 3. If <50 products affected → targeted rebuild (re-enrich + re-score + re-build-blobs for just those products, patch the Supabase table).
 4. If ≥50 products affected → full rebuild (Phase 1 workflow).
-5. Post a Slack note: *"Copy change to harmful_additives:ADD_ASPARTAME rebuilt 12 products. Live in Supabase."*
+5. Post a Slack note: _"Copy change to harmful_additives:ADD_ASPARTAME rebuilt 12 products. Live in Supabase."_
 
 **Step 4.4 — Flutter cache invalidation.**
 
@@ -640,10 +645,10 @@ Keep the previous Supabase DB snapshot for 30 days. If a bad change ships, one-c
 
 ### Free options
 
-| Tool | Free tier | Notes |
-|---|---|---|
-| **Supabase snapshots** | Point-in-time restore is Pro-only ($25/mo) | Workaround: store nightly DB dump in R2 / Supabase Storage |
-| **Flutter cache invalidation** | Free | Simple client-side schema check |
+| Tool                           | Free tier                                  | Notes                                                      |
+| ------------------------------ | ------------------------------------------ | ---------------------------------------------------------- |
+| **Supabase snapshots**         | Point-in-time restore is Pro-only ($25/mo) | Workaround: store nightly DB dump in R2 / Supabase Storage |
+| **Flutter cache invalidation** | Free                                       | Simple client-side schema check                            |
 
 ### Definition of done
 
@@ -711,12 +716,13 @@ Per your existing requirement: when a user is fully offline and scans a product 
 - **Interactions + stack function:** work entirely on-device because they use the local reference data + user's local stack
 
 They do NOT see (requires network):
+
 - Full ingredient breakdown
 - Detailed warnings with clinical copy
 - Evidence / PMID citations
 - Formulation detail (proprietary blends, certification detail, proprietary_blend_audit)
 
-This matches Yuka's offline contract and sets clear user expectations via an offline banner: *"Full details available when online."*
+This matches Yuka's offline contract and sets clear user expectations via an offline banner: _"Full details available when online."_
 
 ### Why it matters
 
@@ -759,6 +765,7 @@ CREATE INDEX verdict_shard_barcode_idx ON verdict_shard (barcode);
 ```
 
 Emit three versions per build:
+
 - `verdict_shard_tier1.sqlite` — top 50k (shipped in app binary)
 - `verdict_shard_tier2.sqlite` — top 150k (ODR / Play Asset Delivery pack)
 - `verdict_shard_tier3.sqlite` — full catalog (optional power-user download)
@@ -768,6 +775,7 @@ Emit three versions per build:
 Run each shard through `sqlite-zstd` row-level compression. Real-world results: 6.5x reduction. Our 150-byte/row schema should compress to ~25–30 bytes/row effective.
 
 Target sizes post-compression:
+
 - Tier 1 (50k): <5 MB
 - Tier 2 (150k): <15 MB
 - Tier 3 (250k): <25 MB
@@ -815,6 +823,7 @@ Then update `detailBlobProvider` (already exists) to gracefully render the local
 **Step 4.5.7 — Offline-capability telemetry.**
 
 Ship a telemetry event: every scan tagged as `{tier1_hit, tier2_hit, remote_online, remote_offline_miss}`. Phase 5 dashboards show:
+
 - % of scans served by tier 1 (install-bundle)
 - % by tier 2 (post-install pack)
 - % by remote
@@ -824,12 +833,12 @@ Goal: keep offline-miss rate under 5% of total scans. If it creeps up, the Tier 
 
 ### Free options
 
-| Component | Free option | Notes |
-|---|---|---|
-| Storage for shards | Cloudflare R2 (10 GB free, zero egress) | Already used in Phase 1 |
-| Post-install delivery | iOS ODR + Android Play Asset Delivery | Free, native platform features |
-| Compression | sqlite-zstd (MIT license) | Free open-source SQLite extension |
-| Sync layer | Snapshot + delta via HTTP Range | Free; no PowerSync subscription needed |
+| Component             | Free option                             | Notes                                  |
+| --------------------- | --------------------------------------- | -------------------------------------- |
+| Storage for shards    | Cloudflare R2 (10 GB free, zero egress) | Already used in Phase 1                |
+| Post-install delivery | iOS ODR + Android Play Asset Delivery   | Free, native platform features         |
+| Compression           | sqlite-zstd (MIT license)               | Free open-source SQLite extension      |
+| Sync layer            | Snapshot + delta via HTTP Range         | Free; no PowerSync subscription needed |
 
 ### Definition of done
 
@@ -847,12 +856,14 @@ Goal: keep offline-miss rate under 5% of total scans. If it creeps up, the Tier 
 ### Monetization layer — Pro-tier offline gating
 
 **Free tier (default):**
+
 - Tier 1 shard (top 50k in app binary) — always available, including offline
 - Tier 3 (Supabase on-demand) — works when online
 - Full safety alerts (Phase 1.5, CRITICAL tier) — **always on, never gated**
 - Basic interactions + stack function — on-device, always on
 
 **Pro tier (paid):**
+
 - Everything above, PLUS:
 - Tier 2 post-install pack download (top 150k offline) — the big expansion
 - Unlimited offline detail blob caching (free tier capped at ~50 cached products)
@@ -869,9 +880,9 @@ Tier 1 CRITICAL safety alerts (FDA Class I recalls, undeclared controlled substa
 - Charging for the "will this kill me" signal is a clinical-trust failure and creates liability exposure.
 - Practically: the marginal cost of a push notification is $0; there's no business reason to gate it.
 
-What *can* be Pro-gated: HIGH tier (class II/III recalls, warning letters), CATALOG tier (copy refinements), and richer explanations of why a product is flagged.
+What _can_ be Pro-gated: HIGH tier (class II/III recalls, warning letters), CATALOG tier (copy refinements), and richer explanations of why a product is flagged.
 
-What *cannot* be gated: the actual recall notification for products in a user's stack.
+What _cannot_ be gated: the actual recall notification for products in a user's stack.
 
 This aligns with the FDA's own consumer protection guidance and keeps the app defensible against "they gated a safety feature" user stories.
 
@@ -908,6 +919,7 @@ Phases 1–4 are the backbone. Phase 5 wraps them in production-grade polish so 
 ### Why it matters
 
 You don't need this until you have real users. When you do, the compound savings are huge:
+
 - You see problems in the dashboard before users do.
 - You can prove (to auditors, to Dr. Pham, to investors) what happened when.
 - Recovering from a bad release is 5 minutes instead of a day.
@@ -932,20 +944,20 @@ You take a week off. Nothing pages you. You come back, check the dashboard, ever
 
 ## Free tool stack — consolidated
 
-| Need | Free option (recommend) | When to upgrade |
-|---|---|---|
-| **Git hosting** | GitHub (unlimited private repos) | Never — free tier is great |
-| **CI/CD** | GitHub Actions (2,000 min/mo private; unlimited public) | When you exceed minutes (~$4/mo) |
-| **Cloud storage** | **Cloudflare R2** (10 GB, zero egress) | After 10 GB ($0.015/GB) |
-| **Database + realtime** | **Supabase** free tier (500 MB DB, 1 GB file storage) | When DB >500 MB → Pro ($25/mo) |
-| **Edge compute** | Supabase Edge Functions (free tier) / Cloudflare Workers (free tier, 100k req/day) | Paid tier unlikely needed early |
-| **Dashboard hosting** | Streamlit Cloud (free for private with team) / Cloudflare Pages (free) | Never for solo |
-| **Secrets** | GitHub Secrets (free) | Never |
-| **Notifications** | Slack/Discord webhooks (free) | PagerDuty when >10 people |
-| **Monitoring** | Grafana Cloud free (10 k metric series) | Paid when >10k |
-| **Error tracking** | Sentry free tier (5,000 events/mo) | $26/mo at scale |
-| **Uptime monitoring** | UptimeRobot (free, 50 monitors) | Never — free is great |
-| **APIs** | NIH DSLD (free, public), PubMed (free with key), openFDA (free with key), UMLS (free with registration) | None needed |
+| Need                    | Free option (recommend)                                                                                 | When to upgrade                  |
+| ----------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| **Git hosting**         | GitHub (unlimited private repos)                                                                        | Never — free tier is great       |
+| **CI/CD**               | GitHub Actions (2,000 min/mo private; unlimited public)                                                 | When you exceed minutes (~$4/mo) |
+| **Cloud storage**       | **Cloudflare R2** (10 GB, zero egress)                                                                  | After 10 GB ($0.015/GB)          |
+| **Database + realtime** | **Supabase** free tier (500 MB DB, 1 GB file storage)                                                   | When DB >500 MB → Pro ($25/mo)   |
+| **Edge compute**        | Supabase Edge Functions (free tier) / Cloudflare Workers (free tier, 100k req/day)                      | Paid tier unlikely needed early  |
+| **Dashboard hosting**   | Streamlit Cloud (free for private with team) / Cloudflare Pages (free)                                  | Never for solo                   |
+| **Secrets**             | GitHub Secrets (free)                                                                                   | Never                            |
+| **Notifications**       | Slack/Discord webhooks (free)                                                                           | PagerDuty when >10 people        |
+| **Monitoring**          | Grafana Cloud free (10 k metric series)                                                                 | Paid when >10k                   |
+| **Error tracking**      | Sentry free tier (5,000 events/mo)                                                                      | $26/mo at scale                  |
+| **Uptime monitoring**   | UptimeRobot (free, 50 monitors)                                                                         | Never — free is great            |
+| **APIs**                | NIH DSLD (free, public), PubMed (free with key), openFDA (free with key), UMLS (free with registration) | None needed                      |
 
 **Minimum monthly cost at scale (~10k users, 10k products):** $0–$25 (just Supabase Pro if you outgrow the free DB tier). Everything else stays free for a long time.
 
@@ -985,26 +997,27 @@ That's it. Tomorrow you already have a config file, which is the scaffolding for
 
 ## Summary roadmap at a glance
 
-| Phase | Deliverable | Time | Cost | Depends on |
-|---|---|---|---|---|
-| **0** | Stage 0 audit (read this doc, understand current state) | 1 hour | $0 | — |
-| **1** | Pipeline runs in GitHub Actions from cloud storage | 2–3 weeks | $0 | — |
-| **1.5** | **Safety Alert Short Path — <15 min FDA-recall → user** | **2–3 weeks** | **$0** | **Phase 1 (ship before public beta)** |
-| **2** | Dr. Pham edits clinical copy via web UI → PR | 3–4 weeks | $0 | Phase 1 (recommended) |
-| **3** | Monthly scheduled DSLD intake by category with delta detection | 2 months | $0 | Phase 1 |
-| **4** | Reference-data changes auto-propagate to affected products + Flutter | 2–3 months | $0 | Phase 1 |
-| **4.5** | **Tiered offline architecture (Yuka-style) — app stays <60 MB at 250k products** | **4–6 weeks** | **$0** | **Phase 4, triggered when catalog > 50k** |
-| **5** | Full observability, alerting, audit trail, staging | ongoing | $0–$25/mo | Phases 1–4 |
+| Phase   | Deliverable                                                                      | Time          | Cost      | Depends on                                |
+| ------- | -------------------------------------------------------------------------------- | ------------- | --------- | ----------------------------------------- |
+| **0**   | Stage 0 audit (read this doc, understand current state)                          | 1 hour        | $0        | —                                         |
+| **1**   | Pipeline runs in GitHub Actions from cloud storage                               | 2–3 weeks     | $0        | —                                         |
+| **1.5** | **Safety Alert Short Path — <15 min FDA-recall → user**                          | **2–3 weeks** | **$0**    | **Phase 1 (ship before public beta)**     |
+| **2**   | Dr. Pham edits clinical copy via web UI → PR                                     | 3–4 weeks     | $0        | Phase 1 (recommended)                     |
+| **3**   | Monthly scheduled DSLD intake by category with delta detection                   | 2 months      | $0        | Phase 1                                   |
+| **4**   | Reference-data changes auto-propagate to affected products + Flutter             | 2–3 months    | $0        | Phase 1                                   |
+| **4.5** | **Tiered offline architecture (Yuka-style) — app stays <60 MB at 250k products** | **4–6 weeks** | **$0**    | **Phase 4, triggered when catalog > 50k** |
+| **5**   | Full observability, alerting, audit trail, staging                               | ongoing       | $0–$25/mo | Phases 1–4                                |
 
 **6 months from today:** a teammate adds a new brand by making a one-line PR; intake runs monthly without you; Dr. Pham's typo fix reaches users within an hour of her saving; FDA recalls hit affected users' phones in under 15 minutes; the app scales from 10k → 250k products without changing the architecture; you can take a week off and nothing breaks.
 
 ### Scaling to 250k — the tiered offline architecture
 
 **What stays the same:**
+
 - The 3-stage pipeline (clean → enrich → score) — same code, just runs on more data.
 - The validator + test suite — unchanged.
 - The dashboard — adds pagination and deeper filtering, but architecture holds.
-- Dr. Pham's review flow — she authors *reference data* (banned, harmful additives, interactions), not per-product copy. Her work scales independently of product count.
+- Dr. Pham's review flow — she authors _reference data_ (banned, harmful additives, interactions), not per-product copy. Her work scales independently of product count.
 
 **What must be right before 250k — and this is its own phase (Phase 4.5).** See [Phase 4.5](#phase-45--tiered-offline-architecture) below.
 
@@ -1012,18 +1025,18 @@ That's it. Tomorrow you already have a config file, which is the scaffolding for
 
 The problem "scanning app with millions of products + offline capability" has been solved in the market. Quick competitive scan:
 
-| App | Products | App binary | Offline strategy |
-|---|---|---|---|
-| **Yuka** | ~6M food+cosmetics | 75–126 MB | Top **100k** scanned locally (post-install download, Premium-only); free tier online-only |
-| **Open Food Facts** (smooth-app) | ~3M | — | Top 1k + recently-viewed cached; full 7GB dump never bundled |
-| **MyFitnessPal** | ~14M foods | — | Recently-logged cache only; new search needs network |
-| **Cronometer** | ~15k curated | — | Effectively online-only; long-standing user complaint thread since 2022 |
-| **EWG Healthy Living** | 200k | — | Online-first (not documented offline) |
+| App                              | Products           | App binary | Offline strategy                                                                          |
+| -------------------------------- | ------------------ | ---------- | ----------------------------------------------------------------------------------------- |
+| **Yuka**                         | ~6M food+cosmetics | 75–126 MB  | Top **100k** scanned locally (post-install download, Premium-only); free tier online-only |
+| **Open Food Facts** (smooth-app) | ~3M                | —          | Top 1k + recently-viewed cached; full 7GB dump never bundled                              |
+| **MyFitnessPal**                 | ~14M foods         | —          | Recently-logged cache only; new search needs network                                      |
+| **Cronometer**                   | ~15k curated       | —          | Effectively online-only; long-standing user complaint thread since 2022                   |
+| **EWG Healthy Living**           | 200k               | —          | Online-first (not documented offline)                                                     |
 
 **Two lessons from this:**
 
 1. **Nobody ships the whole database.** Yuka ships only **1.6%** of their catalog on-device, and they're at 6M products. At 250k we could ship more, but there's no need.
-2. **"No offline scan" is the clinical-trust failure mode.** Cronometer's forum thread is the canonical warning — health-scanner users *really* notice when the app fails at the grocery store. Even a degraded-but-present offline mode (verdict + score only) beats an error message.
+2. **"No offline scan" is the clinical-trust failure mode.** Cronometer's forum thread is the canonical warning — health-scanner users _really_ notice when the app fails at the grocery store. Even a degraded-but-present offline mode (verdict + score only) beats an error message.
 
 ### Platform constraints (2025–2026)
 
@@ -1035,7 +1048,7 @@ The problem "scanning app with millions of products + offline capability" has be
 ### SQLite compression math
 
 - Naive: **250k rows × ~2.5 KB ≈ 625 MB.** Non-shippable.
-- But ~2.5 KB includes ingredients + detailed warnings + evidence — content we explicitly want *online*.
+- But ~2.5 KB includes ingredients + detailed warnings + evidence — content we explicitly want _online_.
 - **Verdict-only shard** (dsld_id + barcode + verdict + score + score_version + timestamp): ~40 bytes/row.
   - 50k × 40 bytes = **2 MB raw, ~1 MB zstd**.
   - 150k × 40 bytes = **6 MB raw, ~3 MB zstd**.
@@ -1068,6 +1081,7 @@ The problem "scanning app with millions of products + offline capability" has be
 **Do Phase 1 + Phase 1.5 before public beta launch. Everything else can wait.**
 
 Reasoning:
+
 - **Phase 1** removes the "only Sean can build" bottleneck.
 - **Phase 1.5** is the safety-critical fast lane. A public app without same-day recall alerts is a clinical-trust liability. If a user's supplement got recalled yesterday and our monthly build hasn't run yet, that's not an inconvenience — that's a user-safety failure.
 - **Phase 2** (Dr. Pham web editor) is a productivity upgrade, not a safety blocker. Nice-to-have for beta; must-have for V1.
@@ -1076,6 +1090,7 @@ Reasoning:
 **Minimum-viable-safe shippable beta = Phase 1 + Phase 1.5.** Total time: 4–6 weeks of focused work.
 
 When you're ready, I can:
+
 - Draft `.github/workflows/build-db.yml` based on your actual `run_pipeline.py` signature.
 - Write the `scripts/storage_client.py` abstraction so the pipeline can read from R2 or Supabase Storage interchangeably.
 - Migrate one brand's raw JSON to the bucket as a proof-of-concept.
