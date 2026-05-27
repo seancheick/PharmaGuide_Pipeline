@@ -280,3 +280,12 @@ def test_lions_mane_cui_is_canonical_mushroom_not_jellyfish(iqm):
         "C6011652 (branded capsule) and NOT C1001731 (Cyanea capillata, the "
         "lion's mane JELLYFISH — entirely different organism)."
     )
+
+
+def test_mastic_gum_cui_is_canonical(iqm):
+    """C5709624 was 'Mastic Gum 500 MG Oral Capsule' (Clinical Drug).
+    C0164196 'GUM MASTIC PREPARATION' (Pharmacologic Substance) is the
+    canonical generic concept."""
+    assert iqm["mastic_gum"]["cui"] == "C0164196", (
+        "mastic_gum.cui must be C0164196 (GUM MASTIC PREPARATION)."
+    )
