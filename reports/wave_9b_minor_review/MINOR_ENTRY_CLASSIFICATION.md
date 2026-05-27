@@ -34,7 +34,7 @@ A row may be flagged with two codes if the recommendation depends on a clinician
 |---:|---|---|---|---|---|---|---|---|
 | 1 | `DSI_SSRI_MELATONIN` | SSRIs ↔ Melatonin | `class:ssris` | Minor | **A — Moderate (fluvoxamine-qualified)** | Yes — 17× melatonin level with fluvoxamine = excessive sedation | Yes | `10877005` |
 | 2 | `DSI_LEVOTHYROXINE_COFFEE` | Levothyroxine ↔ Coffee | `10582` | Minor | **A — Moderate** | Yes — under-treatment of hypothyroidism (TSH drift) | Yes (separate ≥30–60 min) | `18341376` |
-| 3 | `DSI_THYROID_TURMERIC` | Levothyroxine ↔ Turmeric | `10582` | Minor | **A — Moderate** | Plausible TSH drift on high-dose curcumin | Yes (separate ≥4h) | `30070343` |
+| 3 | `DSI_THYROID_TURMERIC` | Levothyroxine ↔ Turmeric | `10582` | Minor | **D — Evidence review first** (was A in v1; downgraded 2026-05-27) | TSH drift plausible but entry's own text describes evidence as "in vitro/animal + plausible high-dose effect"; PMID `30070343` is a clinical interaction study for the Meriva® bioavailable formulation specifically, not a class claim about all curcumin. Promote only after a confirmed-high-dose clinical anchor is found. | Timing rule is actionable IF promoted | `30070343` (Meriva®-specific) |
 | 4 | `DSI_WAR_GLUCOSAMINE` | Warfarin ↔ Glucosamine | `11289` | Minor | **D → likely A — Moderate** | INR change on narrow-therapeutic-index drug | Yes (monitor INR) | empty — needs PubMed work |
 | 5 | `DSI_WAR_GINGER` | Warfarin ↔ Ginger (high dose) | `11289` | Minor | **D → likely A — Moderate, dose-qualified** | Bleeding on warfarin is high-stakes | Yes (high dose only; INR monitor) | empty — needs PubMed work |
 | 6 | `DSI_DM_CINNAMON` | Diabetes meds ↔ Cinnamon | `class:diabetes_meds` | Minor | **B — Background** (+ separate coumarin-toxicity rule for cassia) | Low at supplement doses; coumarin tox is a separate signal | Mild | `14633804` |
@@ -58,15 +58,15 @@ A row may be flagged with two codes if the recommendation depends on a clinician
 | 24 | `SSI_MAGNESIUM_CALCIUM` | Magnesium ↔ Calcium | `C0024467` (supp-supp) | Minor | **B — Background** (absorption-timing tip) | None at typical doses | Timing tip | empty |
 | 25 | `SSI_VITD_VITK2` | Vitamin D (high) ↔ Vitamin K2 | `C0042866` (supp-supp) | Minor | **B — Background** (co-administration optimization) | None | None | `22516723` |
 
-**Distribution (my draft, pre-clinician):**
+**Distribution (my draft, pre-clinician — corrected 2026-05-27):**
 
 | Lane | Count |
 |---|---|
-| A — Promote to alert | 3 (entries 1, 2, 3) |
-| D → likely A — Promote after evidence upgrade | 2 (entries 4, 5) |
+| A — Promote to alert | 2 (entries 1, 2) |
+| D — Promote after evidence upgrade | 3 (entries 3 `DSI_THYROID_TURMERIC` downgraded from A; 4, 5 warfarin pair) |
 | B — Background insight | 16 (entries 6–18 + 20 + 24 + 25) |
-| C — Remove/deprecate | 3 (entries 19, 22, plus 21 and 23 split between C and B) |
-| C or B | 2 (entries 21, 23) |
+| C — Remove/deprecate | 1 firm (entry 19) + 2 borderline (entries 21, 23 — C or B) |
+| Borderline C/B | 2 (entries 21, 23) |
 
 ---
 
@@ -92,16 +92,18 @@ A row may be flagged with two codes if the recommendation depends on a clinician
 - **Actionable:** Yes — concrete timing rule.
 - **Harm if missed:** TSH drift, persistent hypothyroid symptoms, dose escalation without resolving the timing root cause.
 
-#### 3. `DSI_THYROID_TURMERIC` — Levothyroxine ↔ Turmeric / Curcumin
+### D — Needs evidence upgrade (some may move to A after, some to B)
+
+#### 3. `DSI_THYROID_TURMERIC` — Levothyroxine ↔ Turmeric / Curcumin **(downgraded from A → D on 2026-05-27 per clinician)**
 - **Pair:** Levothyroxine ↔ Turmeric/Curcumin
 - **Current severity:** Minor; `effect_type: Inhibitor`; PMID `30070343`
-- **Mechanism (current text):** "Curcumin may bind thyroid hormone and reduce its absorption when taken simultaneously."
-- **Why promote:** Same pattern as coffee — narrow-therapeutic-index drug, simple timing fix, harm of missing it is real (TSH drift). The evidence is somewhat thinner than coffee (in vitro + small clinical) but the action is the same (separate by ≥4h), and at high-dose curcumin (1–2 g/day standardized formulations) the effect is plausible.
-- **Recommended next action:** Promote to **Moderate**, scope to "high-dose curcumin supplements" if the existing PMID supports that qualifier (likely does — verify in re-read). Keep the 4-hour separation guidance.
-- **Actionable:** Yes — timing separation.
-- **Harm if missed:** Same as coffee.
+- **Mechanism (current text):** "Curcumin may bind thyroid hormone and reduce its absorption when taken simultaneously. Evidence is limited to in vitro and animal data, but a small clinical effect on levothyroxine absorption is plausible."
+- **Why D not A:** The entry's own text describes evidence as "in vitro and animal data + plausible high-dose effect." PMID `30070343` IS a clinical interaction study — "Interaction study between antiplatelet agents, anticoagulants, thyroid replacement therapy and a bioavailable formulation of curcumin (Meriva®)" — but the anchor is specific to the Meriva® bioavailable formulation, not curcumin generally, and the abstract truncation in my fetch did not show the conclusion. Promoting to Moderate next to `DSI_LEVOTHYROXINE_COFFEE` (which has a direct 8-case-series human study, PMID `18341376`) would be promoting on weaker evidence and risk the noise pattern the two-lane policy was built to avoid.
+- **Recommended next action:** Read PMID `30070343` end-to-end (Meriva® dose, magnitude of TSH/T4 change, statistical significance) before promoting. If the Meriva® data shows a meaningful absorption effect, promote with a Meriva-or-equivalent-high-bioavailability-curcumin qualifier — NOT a generic curcumin alert. If the data are weak, hold in B (background "separate by 4h if on high-dose curcumin" timing tip).
+- **Actionable IF promoted:** Yes — timing separation.
+- **Harm if missed:** TSH drift, same as coffee — but at lower magnitude given current evidence.
 
-### D — Needs evidence upgrade (likely A after upgrade)
+### D — Needs evidence upgrade (likely A after upgrade — warfarin pair)
 
 #### 4. `DSI_WAR_GLUCOSAMINE` — Warfarin ↔ Glucosamine
 - **Current severity:** Minor; `effect_type: Enhancer`; PMIDs: empty
@@ -162,27 +164,65 @@ These 16 entries should remain in the dataset but be tagged for a non-interrupti
 
 1. **All 25 entries have `clinical_confidence: low`.** That's an internally honest signal that they were known-soft when added. The "Minor" label has been doing double-duty as both severity (low harm) AND confidence (we're not sure). The two-lane policy is the right way to disentangle these.
 
-2. **9 of 25 entries have empty `source_pmids`.** None of these would survive a verify_interactions `--check-pubmed` strictness upgrade if PMIDs were required. Citation backfill should be paired with the lane decision: A-lane entries need PMIDs (per Batch 9.A precedent); B-lane entries may rest on NIH/NCCIH URLs alone.
+2. **12 of 25 entries have empty `source_pmids`** (corrected 2026-05-27 — earlier draft said 9, recounted treating None / missing key / `[]` as empty):
+   - `DSI_WAR_GLUCOSAMINE`, `DSI_WAR_GINGER`, `DSI_STATINS_COQ10`, `DSI_SSRI_FISHOIL`,
+     `DSI_ACEI_IRON`, `DSI_ANTICONV_VITD`, `DSI_BENZO_MELATONIN`, `DSI_CORTICO_CALCIUM_VITD`,
+     `DSI_OC_SOY`, `DSI_ANTIPSYCH_MELATONIN`, `SSI_MAGNESIUM_CALCIUM`, `DSI_ANTIHYP_VITD`
 
-3. **The melatonin cluster (entries 14, 15, 16, 19, 22, 24-ish)** is the noisiest pattern in the file. Most are "X + melatonin = sleepier" variants. Fluvoxamine (entry 1) is the only one with a real PK signal. The others should probably collapse into a single "melatonin + sedative-class" background note.
+   None of these would survive a verify_interactions `--check-pubmed` strictness
+   upgrade if PMIDs were required. Citation backfill should be paired with the
+   lane decision: A-lane entries need PMIDs (per Batch 9.A precedent); B-lane
+   entries may rest on NIH/NCCIH URLs alone.
 
-4. **`DSI_DM_VITD` PMID `41707752` is valid** (initial suspicion based on PMID-size heuristic was wrong — PubMed IDs are past 41M as of 2026). Live efetch 2026-05-27: title "Mini-review. Vitamin D for the prevention of type 2 diabetes: Evidence and implications." Content matches the entry's topic. No action needed.
+3. **Of the 13 entries that *do* have a PMID, 5 are weak anchors that do not
+   directly support the interaction claim** (content-verified via PubMed
+   efetch 2026-05-27):
 
-5. **`DSI_OC_SOY` was just re-CUI-aligned in Batch 1 (commit `c7cfeaf5`).** The entry's current Minor status is independent of that work — the soy_isoflavones canonical CUI is now correct (C0061202, genistein), but the severity classification still needs to be decided per this report.
+   | Entry | PMID | What the article is actually about | Verdict |
+   |---|---|---|---|
+   | `DSI_ANTIHYP_MAGNESIUM` | `21205110` | "Oral magnesium supplementation reduces insulin resistance in non-diabetic subjects" | Not BP / antihypertensive additivity. **Weak anchor** for an antihypertensive interaction rule. |
+   | `DSI_ANTIHYP_ASHWAGANDHA` | `25237891` | "Withania somnifera in monocrotaline-induced pulmonary hypertension" | Animal model of pulmonary HTN, not human systemic HTN co-administration. **Weak anchor.** |
+   | `DSI_SEDATIVES_ASHWAGANDHA` | `23439798` | "RCT of ashwagandha root for stress and anxiety in adults" | Supports ashwagandha-alone anxiolytic effect; says nothing about sedative co-administration. **Weak anchor for an interaction claim.** |
+   | `DSI_MELATONIN_VALERIAN` | `38359657` | "Does valerian work for insomnia? An umbrella review" | About valerian alone for insomnia; not melatonin + valerian co-admin. **Weak anchor.** |
+   | `SSI_VITD_VITK2` | `22516723` | "Vitamin K status and vascular calcification — observational/clinical evidence" | Supports a broader Vit-K role in vascular calcification, not specifically D+K2 co-administration. **Weak / generic anchor.** |
+
+   These weak anchors *support* the report's conclusion that those entries
+   belong in Lane B (background, not user-facing alert) — but the report
+   should not imply they are cleanly verified interaction PMIDs. The PMID
+   strength differs by entry; severity decisions need to look at PMID title
+   + abstract, not just the PMID-count column.
+
+4. **The melatonin cluster is 5 of 25** entries (table rows 1, 14, 15, 16, 22 —
+   not 6; my earlier draft included row 19 `DSI_SSRI_FISHOIL` and row 24
+   `SSI_MAGNESIUM_CALCIUM` by mistake, neither of which involves melatonin).
+   The 5 melatonin entries are:
+   - row 1  `DSI_SSRI_MELATONIN`      — fluvoxamine CYP1A2 (real PK signal — Lane A)
+   - row 14 `DSI_ANTIPSYCH_MELATONIN` — generic additive sedation (Lane B)
+   - row 15 `DSI_BENZO_MELATONIN`     — generic additive sedation (Lane B)
+   - row 16 `DSI_BETABLOCK_MELATONIN` — β-blocker suppresses endogenous melatonin (Lane B, often beneficial)
+   - row 22 `DSI_MELATONIN_VALERIAN`  — additive sedation (Lane C or B; weak PMID anchor)
+
+   Fluvoxamine is the only PK signal worth a user-facing alert. The other
+   four are "X + melatonin = sleepier" variants and could collapse into a
+   single "melatonin + sedative-class" background note.
+
+5. **`DSI_DM_VITD` PMID `41707752` is valid** (initial suspicion based on PMID-size heuristic was wrong — PubMed IDs are past 41M as of 2026). Live efetch 2026-05-27: title "Mini-review. Vitamin D for the prevention of type 2 diabetes: Evidence and implications." Content matches the entry's topic. No action needed.
+
+6. **`DSI_OC_SOY` was just re-CUI-aligned in Batch 1 (commit `c7cfeaf5`).** The entry's current Minor status is independent of that work — the soy_isoflavones canonical CUI is now correct (C0061202, genistein), but the severity classification still needs to be decided per this report.
 
 ---
 
-## What I'm asking the clinician to confirm
+## What I'm asking the clinician to confirm (corrected 2026-05-27)
 
-1. **Promote (Lane A) — confirm 3 entries to Moderate:**
-   - `DSI_SSRI_MELATONIN` (fluvoxamine PK)
-   - `DSI_LEVOTHYROXINE_COFFEE` (timing rule)
-   - `DSI_THYROID_TURMERIC` (timing rule)
+1. **Promote (Lane A) — confirm 2 entries to Moderate:**
+   - `DSI_SSRI_MELATONIN` (fluvoxamine CYP1A2 PK; PMID `10877005` is a direct content-verified anchor)
+   - `DSI_LEVOTHYROXINE_COFFEE` (timing rule; PMID `18341376` "Altered intestinal absorption of L-thyroxine caused by coffee" is a direct content-verified anchor)
 
-2. **D → A pipeline — authorize PubMed evidence research on 2 warfarin entries:**
+2. **Evidence review first (Lane D) — authorize PubMed work on 3 entries:**
+   - `DSI_THYROID_TURMERIC` — read PMID `30070343` end-to-end (Meriva® specifics) before promoting. Don't sit it next to coffee on weaker evidence.
    - `DSI_WAR_GLUCOSAMINE`, `DSI_WAR_GINGER` — find content-verified PMIDs first, then promote if defensible. Defer to background if no PMID survives.
 
-3. **Background lane (Lane B) — confirm 13–16 entries demoted from alert layer.** The mechanism is real but the framing of "interaction" is wrong; they're nutrient/comedication insights. Needs an app-side decision: separate shard? new `display_layer` field? `background_insights_v1.json`?
+3. **Background lane (Lane B) — confirm 13–16 entries demoted from alert layer.** The mechanism is real but the framing of "interaction" is wrong; they're nutrient/comedication insights. Needs an app-side decision: separate shard? new `display_layer` field? `background_insights_v1.json`? Note that 5 of these have **weak PMID anchors** (table in observation §3) — when those entries move to Lane B, the weak PMID can either stay (as a generic ingredient-effect reference) or be removed so the entry's only support is NIH/NCCIH/text-author.
 
 4. **Remove/deprecate (Lane C) — confirm 1 outright + 2 borderline:**
    - `DSI_SSRI_FISHOIL` — explicitly "no interaction" in its own text
