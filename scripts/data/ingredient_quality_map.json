@@ -11928,7 +11928,7 @@
   "coq10": {
     "standard_name": "Coenzyme Q10",
     "category": "antioxidants",
-    "cui": "C1843920",
+    "cui": "C0041536",
     "rxcui": "21406",
     "forms": {
       "ubiquinol crystal-free": {

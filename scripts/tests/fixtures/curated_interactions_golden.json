@@ -98,7 +98,7 @@
       "agent1_name": "Warfarin",
       "agent1_id": "11289",
       "agent2_name": "Coenzyme Q10",
-      "agent2_id": "C1843920",
+      "agent2_id": "C0041536",
       "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Coenzyme Q10 is structurally similar to vitamin K and may reduce warfarin's anticoagulant effect, lowering INR in some patients.",
