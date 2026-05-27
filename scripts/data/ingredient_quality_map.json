@@ -39454,7 +39454,7 @@
   "omega_6_fatty_acids": {
     "standard_name": "Omega-6 Fatty Acids",
     "category": "fatty_acids",
-    "cui": "C5918245",
+    "cui": "C0133860",
     "forms": {
       "omega 6 fatty acids (standard)": {
         "bio_score": 10,
@@ -39506,9 +39506,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0133860"
-    ]
+    "aliases": []
   },
   "omega_9_fatty_acids": {
     "standard_name": "Omega-9 Fatty Acids",

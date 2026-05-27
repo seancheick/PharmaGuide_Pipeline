@@ -402,3 +402,17 @@ def test_olive_fruit_extract_cui_is_canonical(iqm):
     assert iqm["olive_fruit_extract"]["cui"] == "C1365464", (
         "olive_fruit_extract.cui must be C1365464 (Olive extract)."
     )
+
+
+def test_omega_6_fatty_acids_cui_is_canonical(iqm):
+    """C5918245 was a branded clinical-drug CUI. C0133860 'fatty acids,
+    omega-6' (Organic Chemical / Biologically Active Substance) is the
+    canonical class concept — was already stored as a hint in aliases;
+    promoted to canonical and stale alias removed."""
+    entry = iqm["omega_6_fatty_acids"]
+    assert entry["cui"] == "C0133860", (
+        "omega_6_fatty_acids.cui must be C0133860 (fatty acids, omega-6)."
+    )
+    assert "C0133860" not in (entry.get("aliases") or []), (
+        "omega_6_fatty_acids.aliases must no longer contain C0133860 as a hint."
+    )
