@@ -39075,7 +39075,7 @@
   "silicon": {
     "standard_name": "Silicon",
     "category": "minerals",
-    "cui": "C0037114",
+    "cui": "C0037107",
     "rxcui": "9774",
     "forms": {
       "silicon (standard)": {
@@ -39130,9 +39130,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0037107"
-    ]
+    "aliases": []
   },
   "fluoride": {
     "standard_name": "Fluoride",

@@ -188,3 +188,20 @@ def test_horse_chestnut_seed_cui_is_canonical(iqm):
         "Sanity check failed — adenosine.cui must remain C0001443 (the "
         "correct CUI for the nucleoside). Only horse_chestnut_seed was fixed."
     )
+
+
+def test_silicon_cui_is_canonical_element(iqm):
+    """silicon must use C0037107 ('silicon', semantic type 'Element, Ion,
+    or Isotope') — the canonical elemental-silicon concept. C0037114 had
+    no token overlap with 'silicon' (resolves to an unrelated concept).
+    The correct CUI C0037107 was previously stored as a hint in aliases;
+    we promote it to the canonical `cui` field and clean up the alias."""
+    entry = iqm["silicon"]
+    assert entry["cui"] == "C0037107", (
+        "silicon.cui must be C0037107 ('silicon', Element/Ion/Isotope), "
+        "not C0037114."
+    )
+    assert "C0037107" not in (entry.get("aliases") or []), (
+        "silicon.aliases must no longer contain C0037107 — it is now the "
+        "canonical cui field."
+    )
