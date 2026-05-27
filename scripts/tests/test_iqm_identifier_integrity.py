@@ -205,3 +205,19 @@ def test_silicon_cui_is_canonical_element(iqm):
         "silicon.aliases must no longer contain C0037107 — it is now the "
         "canonical cui field."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Batch 2B — Branded clinical-drug CUI corrections (mostly IQM-only)
+# --------------------------------------------------------------------------- #
+
+
+def test_alpha_gpc_cui_is_canonical_glycerylphosphorylcholine(iqm):
+    """alpha_gpc must use C0017889 ('glycerylphosphorylcholine', Organic
+    Chemical / Biologically Active Substance). C5762292 was a branded
+    'Jarrow Formulas Alpha GPC Capsules' (Clinical Drug). Caught by
+    branded-drug guard."""
+    assert iqm["alpha_gpc"]["cui"] == "C0017889", (
+        "alpha_gpc.cui must be C0017889 (glycerylphosphorylcholine, the "
+        "generic substance), not C5762292 (Jarrow Formulas branded capsule)."
+    )
