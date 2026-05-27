@@ -1428,7 +1428,7 @@
       "agent1_id": "10582",
       "agent2_name": "Coffee",
       "agent2_id": "C0009237",
-      "severity": "Minor",
+      "severity": "Moderate",
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Coffee, particularly espresso, can reduce levothyroxine absorption when taken simultaneously. Polyphenols and other coffee compounds may interfere with GI absorption.",
       "management": "Take levothyroxine with water only, at least 30–60 minutes before coffee. This is a standard clinical recommendation for all thyroid patients.",
