@@ -247,6 +247,82 @@ def test_score_canaries_extracts_top_level_shadow_fields() -> None:
     assert rows[0]["v4_confidence"] in {"high", "moderate", "low"}
 
 
+def test_score_canaries_routes_sports_canary_to_sports_module() -> None:
+    from api_audit.v4_shadow_canary_report import score_canaries
+
+    product = {
+        "status": "active",
+        "form_factor": "powder",
+        "primary_type": "amino_acid",
+        "supplement_taxonomy": {"primary_type": "amino_acid"},
+        "fullName": "Creatine Monohydrate 3 g",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Creatine Monohydrate",
+                    "standard_name": "Creatine Monohydrate",
+                    "canonical_id": "creatine_monohydrate",
+                    "mapped": True,
+                    "mapped_identity": True,
+                    "scoreable_identity": True,
+                    "score_eligible_by_cleaner": True,
+                    "role_classification": "active_scorable",
+                    "cleaner_row_role": "active_scorable",
+                    "dose_class": "therapeutic_mass",
+                    "source_section": "activeIngredients",
+                    "raw_source_path": "activeIngredients[0]",
+                    "quantity": 3,
+                    "unit": "Gram(s)",
+                    "bio_score": 14,
+                }
+            ],
+        },
+    }
+
+    rows = score_canaries(
+        [{"dsld_id": "269425", "primary_class": "sports_transparent", "v3_shipped_score": 68.9}],
+        enriched_index={"269425": product},
+    )
+
+    assert rows[0]["status"] == "scored"
+    assert rows[0]["v4_module"] == "sports"
+    assert rows[0]["v4_dimensions"]["dose"] == 16.0
+
+
+def test_diagnose_compression_flags_sports_generic_routing_regression() -> None:
+    from api_audit.v4_shadow_canary_report import diagnose_compression
+
+    row = {
+        "primary_class": "sports_transparent",
+        "v4_module": "generic",
+        "raw_score_delta_vs_v3": -20.0,
+        "v4_dimensions": {"dose": None, "trust": 2.0, "transparency": 8.0},
+    }
+
+    flags = diagnose_compression(row)
+
+    assert "sports_generic_routing_regression" in flags
+
+
+def test_diagnose_compression_flags_sports_dose_not_evaluable() -> None:
+    from api_audit.v4_shadow_canary_report import diagnose_compression
+
+    row = {
+        "primary_class": "sports_opaque",
+        "v4_module": "sports",
+        "raw_score_delta_vs_v3": -20.0,
+        "v4_dimensions": {"dose": 0.0, "trust": 2.0, "transparency": 4.0},
+        "v4_dimension_metadata": {
+            "dose": {"not_evaluable_reason": "opaque_primary_sports_blend"}
+        },
+    }
+
+    flags = diagnose_compression(row)
+
+    assert "sports_dose_not_evaluable" in flags
+    assert "opaque_sports_blend" in flags
+
+
 def test_extract_v3_sections_from_scored_breakdown() -> None:
     from api_audit.v4_shadow_canary_report import extract_v3_sections
 

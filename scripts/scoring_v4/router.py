@@ -12,10 +12,14 @@ Priority order (post-taxonomy refactor, 2026-05-20):
        blends still go to probiotic.
   3. multivitamin / b-complex → multi_or_prenatal
      - taxonomy primary_type in {multivitamin, b_complex}
-  4. omega_3                → omega
+  4. sports                 → sports
+     - taxonomy primary_type == "pre_workout"
+     - OR sports-protein identity (not protein taxonomy alone)
+     - OR sports-active canonical panel + explicit sports label intent
+  5. omega_3                → omega
      - taxonomy primary_type == "omega_3"
      - OR EPA/DHA canonical in ingredient panel (positive quantity)
-  5. fall through           → generic
+  6. fall through           → generic
 
 The taxonomy primary_type field comes from scripts/supplement_taxonomy.py
 (introduced 2026-05-20) and uses canonical-ID-based panel composition
@@ -39,13 +43,31 @@ from typing import Any, Dict
 
 from scoring_input_contract import get_scoring_ingredients
 
-VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega")
+VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega", "sports")
 
 _PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
     re.IGNORECASE,
 )
 _PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\b", re.IGNORECASE)
+_SPORTS_PREWORKOUT_RE = re.compile(r"\b(pre[\s-]?workout|preworkout)\b", re.IGNORECASE)
+_SPORTS_PROTEIN_NAME_RE = re.compile(
+    r"\b("
+    r"whey|casein|"
+    r"protein\s+(?:powder|isolate|concentrate|hydrolysate|hydrolyzed|blend|matrix)|"
+    r"mass\s+gainer|gainer"
+    r")\b",
+    re.IGNORECASE,
+)
+_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
+    r"\b(creatine|beta[\s-]?alanine|citrulline|hmb|bcaa|eaa|essential amino|branched chain)\b",
+    re.IGNORECASE,
+)
+_SPORTS_NAME_EXCLUSION_RE = re.compile(
+    r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|sleep|calm|mood|stress|"
+    r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
+    re.IGNORECASE,
+)
 
 # Per scripts/data/omega_rubric.json router.name_keywords. Lowercased
 # substring matches against the joined product/brand/bundle name text.
@@ -93,6 +115,31 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
     "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
     "cla", "conjugated_linoleic_acid", "oleic_acid",
+}
+_SPORTS_PROTEIN_CANONICALS = {
+    "whey_protein",
+    "pea_protein",
+    "rice_protein",
+    "soy_protein",
+}
+_SPORTS_SINGLE_CANONICALS = {
+    "creatine_monohydrate",
+    "beta-alanine",
+    "beta_alanine",
+    "l_citrulline",
+    "hmb",
+}
+_BCAA_CANONICALS = {"l_leucine", "l_isoleucine", "l_valine"}
+_EAA_CANONICALS = {
+    "l_histidine",
+    "l_isoleucine",
+    "l_leucine",
+    "l_lysine",
+    "l_methionine",
+    "l_phenylalanine",
+    "l_threonine",
+    "l_tryptophan",
+    "l_valine",
 }
 
 
@@ -289,6 +336,54 @@ def _is_b_complex_route_eligible(product: Dict[str, Any], name_text: str) -> boo
     return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
 
 
+def _positive_canonicals(product: Dict[str, Any]) -> set[str]:
+    canonicals: set[str] = set()
+    for ing in _scoring_rows(product):
+        canonical = str(ing.get("canonical_id") or "").strip().lower()
+        if canonical and _positive_quantity(ing):
+            canonicals.add(canonical)
+    return canonicals
+
+
+def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
+    """Return True for explicit sports-nutrition products.
+
+    This is deliberately narrower than "any amino acid" or
+    "protein_powder taxonomy". The fresh corpus has many amino-acid products
+    (NAC, L-theanine, SAM-e, lysine) and protein-like products (keratin,
+    lactoferrin) that are not sports products and must remain generic.
+    """
+    primary_type = _read_primary_type(product)
+    if _SPORTS_PREWORKOUT_RE.search(name_text or ""):
+        return True
+    if primary_type == "pre_workout":
+        return True
+
+    canonicals = _positive_canonicals(product)
+    lowered = name_text or ""
+
+    if canonicals & _SPORTS_PROTEIN_CANONICALS:
+        return True
+    if primary_type == "protein_powder" and _SPORTS_PROTEIN_NAME_RE.search(lowered):
+        return True
+
+    if _BCAA_CANONICALS.issubset(canonicals) and (
+        primary_type in {"amino_acid", "pre_workout"} or _SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered)
+    ):
+        return True
+    if len(canonicals & _EAA_CANONICALS) >= 6 and (
+        primary_type in {"amino_acid", "pre_workout"} or _SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered)
+    ):
+        return True
+
+    if canonicals & _SPORTS_SINGLE_CANONICALS:
+        if _SPORTS_NAME_EXCLUSION_RE.search(lowered):
+            return False
+        return bool(_SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered))
+
+    return False
+
+
 # Taxonomy primary_type → v4 module mapping. The taxonomy emits 20 types
 # (see scripts/data/product_type_vocab.json); v4 has 4 scoring modules.
 # Most product classes route to `generic` because their scoring rubric is
@@ -300,6 +395,7 @@ _TAXONOMY_TO_MODULE = {
     "multivitamin": "multi_or_prenatal",
     "b_complex": "multi_or_prenatal",  # B-complex is a multi-vitamin variant
     "omega_3": "omega",
+    "pre_workout": "sports",
     # Everything else routes to generic — listed explicitly so future
     # taxonomy types are caught by the unknown-key fallthrough below:
     "single_vitamin": "generic",
@@ -376,7 +472,14 @@ def class_for_product(product: Dict[str, Any]) -> str:
     if _PRENATAL_KEYWORDS.search(name_text):
         return "multi_or_prenatal"
 
-    # Priority 3: taxonomy primary_type — canonical signal when present.
+    # Priority 3: sports. Keep this before multi/b-complex because real
+    # pre-workout products can carry enough B vitamins for b_complex taxonomy.
+    # The helper is intentionally conservative so ordinary amino-acid and
+    # protein-like products stay generic.
+    if _is_sports_class(product, name_text):
+        return "sports"
+
+    # Priority 4: taxonomy primary_type — canonical signal when present.
     # Maps the 20 taxonomy types to the 4 v4 modules. Unknown taxonomy
     # values (new types added later that aren't in _TAXONOMY_TO_MODULE)
     # fall through to the omega / generic logic below rather than crashing.
@@ -388,6 +491,8 @@ def class_for_product(product: Dict[str, Any]) -> str:
             return "multi_or_prenatal"
         if module == "omega":
             return "omega" if _is_omega_class(product, name_text) else "generic"
+        if module == "sports":
+            return "sports" if _is_sports_class(product, name_text) else "generic"
         if module == "generic":
             # Taxonomy is authoritative for generic classes, but the
             # physical panel fact of disclosed EPA/DHA still wins. Explicit

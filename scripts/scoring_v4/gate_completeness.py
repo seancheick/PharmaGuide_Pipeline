@@ -225,7 +225,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             checked_fields=["product_payload"],
         )
 
-    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega"} else "generic"
+    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
     checked_fields = [
@@ -273,8 +273,14 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             missing.append("epa_or_dha_disclosed")
         return _finalize(module, missing, coverage, dose_cov, checked_fields)
 
-    # Generic module: single nutrients, botanicals, sports stacks.
-    # Omega previously fell through here pre-P1.6; now has its own branch above.
+    if module == "sports":
+        checked_fields.append("sports_active_dose")
+        if not any(_has_sports_active_dose(i) for i in ingredients):
+            missing.append("sports_active_dose")
+        return _finalize(module, missing, coverage, dose_cov, checked_fields)
+
+    # Generic module: single nutrients, botanicals, and simple stacks.
+    # Omega and sports previously fell through here; both now have branches above.
     checked_fields.append("dose_with_unit")
     if not any(_has_dose_with_unit(i) for i in ingredients):
         missing.append("dose_with_unit")
@@ -299,3 +305,23 @@ def _has_epa_or_dha_disclosed(ingredients: List[Dict[str, Any]]) -> bool:
         if _has_dose_with_unit(ing):
             return True
     return False
+
+
+_SPORTS_ACTIVE_CANONICALS = {
+    "whey_protein",
+    "pea_protein",
+    "rice_protein",
+    "soy_protein",
+    "creatine_monohydrate",
+    "beta-alanine",
+    "beta_alanine",
+    "l_citrulline",
+    "hmb",
+    "l_leucine",
+    "l_isoleucine",
+    "l_valine",
+}
+
+
+def _has_sports_active_dose(ingredient: Dict[str, Any]) -> bool:
+    return _norm(ingredient.get("canonical_id")) in _SPORTS_ACTIVE_CANONICALS and _has_dose_with_unit(ingredient)

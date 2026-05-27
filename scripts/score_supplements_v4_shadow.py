@@ -60,6 +60,7 @@ from scoring_v4.modules.generic import score_generic
 from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 from scoring_v4.modules.omega import score_omega
 from scoring_v4.modules.probiotic import score_probiotic
+from scoring_v4.modules.sports import score_sports
 from scoring_v4.router import class_for_product
 
 
@@ -207,8 +208,9 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = "blocked_by_completeness_gate"
         return shadow
 
-    # Layer 3 — Per-class module dispatch. Generic, probiotic, omega, and
-    # multi_or_prenatal are wired as complete score-producing modules.
+    # Layer 3 — Per-class module dispatch. Generic, probiotic, omega,
+    # sports, and multi_or_prenatal are wired as complete score-producing
+    # modules.
     if module == "generic":
         module_result = score_generic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
@@ -274,6 +276,22 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_100"] = omega_result.score_100
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             omega_result.score_100,
+            shadow.get("shadow_score_v4_verdict"),
+        )
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
+            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+        )
+        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
+        shadow["shadow_score_v4_confidence"] = confidence["band"]
+    elif module == "sports":
+        sports_result = score_sports(enriched_product)
+        shadow["shadow_score_v4_breakdown"]["module"] = sports_result.to_breakdown()
+        shadow["shadow_score_v4_100"] = sports_result.score_100
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            sports_result.score_100,
             shadow.get("shadow_score_v4_verdict"),
         )
         confidence = evaluate_confidence(
