@@ -298,3 +298,12 @@ def test_neem_cui_is_canonical_azadirachta_indica(iqm):
     assert iqm["neem"]["cui"] == "C1095052", (
         "neem.cui must be C1095052 (Azadirachta indica)."
     )
+
+
+def test_noni_cui_is_canonical_morinda_citrifolia(iqm):
+    """C1814348 was 'MORINDA (NONI) CAP/TAB' (Clinical Drug). C1010822
+    'Morinda citrifolia' (Plant) is the canonical species concept —
+    accepted via reverse-check on 'Noni'."""
+    assert iqm["noni"]["cui"] == "C1010822", (
+        "noni.cui must be C1010822 (Morinda citrifolia)."
+    )
