@@ -624,7 +624,15 @@ def test_interaction_and_flutter_parity_gates_accept_matching_artifacts(tmp_path
     write_json(source_rules, {"interaction_rules": [{"id": "r1"}]})
     write_json(severity_vocab, {"severities": [{"id": "caution"}]})
 
-    args = argparse.Namespace(dist_dir=str(dist), source_rules=str(source_rules), severity_vocab=str(severity_vocab))
+    orphan_allowlist = tmp_path / "orphan_allowlist.json"
+    write_json(orphan_allowlist, {"allowlist": []})
+
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        source_rules=str(source_rules),
+        severity_vocab=str(severity_vocab),
+        orphan_allowlist=str(orphan_allowlist),
+    )
     assert audit.audit_interaction(args) == []
 
     catalog_db = dist / "pharmaguide_core.db"
@@ -637,6 +645,271 @@ def test_interaction_and_flutter_parity_gates_accept_matching_artifacts(tmp_path
 
     flutter_args = argparse.Namespace(dist_dir=str(dist), flutter_repo=str(tmp_path / "flutter"))
     assert audit.audit_flutter(flutter_args) == []
+
+
+def _build_interaction_db_with_canonical_ids(
+    db_path: Path,
+    interactions: list[dict],
+    source_drafts_count: int = 0,
+) -> None:
+    """Helper: build a richer interactions DB schema matching production layout
+    (with agent1_type/agent1_canonical_id/agent2_type/agent2_canonical_id) for
+    the new referential-integrity tests.
+    """
+    with sqlite3.connect(db_path) as conn:
+        conn.execute(
+            "CREATE TABLE interactions ("
+            "id TEXT, severity TEXT, retired_at TEXT, retired_reason TEXT,"
+            " agent1_type TEXT, agent1_canonical_id TEXT,"
+            " agent2_type TEXT, agent2_canonical_id TEXT"
+            ")"
+        )
+        for row in interactions:
+            conn.execute(
+                "INSERT INTO interactions (id, severity, retired_at, retired_reason,"
+                " agent1_type, agent1_canonical_id, agent2_type, agent2_canonical_id)"
+                " VALUES (?, ?, NULL, NULL, ?, ?, ?, ?)",
+                (
+                    row["id"],
+                    row.get("severity", "caution"),
+                    row.get("agent1_type", "drug"),
+                    row.get("agent1_canonical_id"),
+                    row.get("agent2_type", "supplement"),
+                    row.get("agent2_canonical_id"),
+                ),
+            )
+        conn.execute("CREATE TABLE interaction_db_metadata (key TEXT, value TEXT)")
+        conn.execute("INSERT INTO interaction_db_metadata VALUES ('version', '1.0.0')")
+        conn.execute(
+            "INSERT INTO interaction_db_metadata VALUES ('source_drafts_count', ?)",
+            (str(source_drafts_count),),
+        )
+        conn.execute("INSERT INTO interaction_db_metadata VALUES ('source_suppai_count', '0')")
+
+
+def test_interaction_parity_accepts_drafts_exceeding_rule_entries(tmp_path):
+    """Regression test for the false-positive count-comparison gate.
+
+    Before the fix: source_drafts_count=148 > source_rule_count=145 fired
+    INTERACTION_SOURCE_COUNT_EXCEEDS_RULES even though one ingredient entry
+    can legitimately host many pairwise interactions (e.g., St Johns Wort
+    has ~10 drug interactions packed into one ingredient_interaction_rules
+    entry). Wave 8 commit 821931df pushed pairwise above ingredient count.
+
+    After the fix: pairwise > ingredient is NOT a violation.
+    """
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    db_path = dist / "interaction_db.sqlite"
+
+    # 3 pairwise interactions, all referencing 'st_johns_wort' which has 1 rule entry.
+    # This is the exact scenario the old gate falsely rejected.
+    _build_interaction_db_with_canonical_ids(
+        db_path,
+        [
+            {"id": "i1", "agent2_canonical_id": "st_johns_wort"},
+            {"id": "i2", "agent2_canonical_id": "st_johns_wort"},
+            {"id": "i3", "agent2_canonical_id": "st_johns_wort"},
+        ],
+        source_drafts_count=3,
+    )
+    write_json(
+        dist / "interaction_db_manifest.json",
+        {
+            "checksum_sha256": sha256(db_path),
+            "interaction_db_version": "1.0.0",
+            "total_interactions": 3,
+            "source_drafts_count": 3,
+            "source_suppai_count": 0,
+        },
+    )
+    source_rules = tmp_path / "rules.json"
+    write_json(
+        source_rules,
+        {"interaction_rules": [{"id": "r1", "subject_ref": {"db": "iqm", "canonical_id": "st_johns_wort"}}]},
+    )
+    severity_vocab = tmp_path / "severity_vocab.json"
+    write_json(severity_vocab, {"severities": [{"id": "caution"}]})
+    orphan_allowlist = tmp_path / "orphan_allowlist.json"
+    write_json(orphan_allowlist, {"allowlist": []})
+
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        source_rules=str(source_rules),
+        severity_vocab=str(severity_vocab),
+        orphan_allowlist=str(orphan_allowlist),
+    )
+    findings = audit.audit_interaction(args)
+    codes = {f.code for f in findings}
+    assert "INTERACTION_SOURCE_COUNT_EXCEEDS_RULES" not in codes, (
+        f"Old count-comparison gate must not fire when source_drafts > source_rule_count. "
+        f"Got findings: {[(f.code, f.message) for f in findings]}"
+    )
+    assert findings == [], f"Unexpected findings: {[(f.code, f.message) for f in findings]}"
+
+
+def test_interaction_parity_catches_orphan_supplement_canonical_id(tmp_path):
+    """Referential-integrity check: a supplement canonical_id used in pairwise
+    interactions must exist as a subject_ref.canonical_id in
+    ingredient_interaction_rules.json (or be on the allowlist)."""
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    db_path = dist / "interaction_db.sqlite"
+
+    _build_interaction_db_with_canonical_ids(
+        db_path,
+        [
+            # Valid: vitamin_k is in rules
+            {"id": "i1", "agent2_canonical_id": "vitamin_k"},
+            # Orphan: ghost_supp does NOT have a rule entry and is NOT allowlisted
+            {"id": "i2", "agent2_canonical_id": "ghost_supp"},
+        ],
+        source_drafts_count=2,
+    )
+    write_json(
+        dist / "interaction_db_manifest.json",
+        {
+            "checksum_sha256": sha256(db_path),
+            "interaction_db_version": "1.0.0",
+            "total_interactions": 2,
+            "source_drafts_count": 2,
+            "source_suppai_count": 0,
+        },
+    )
+    source_rules = tmp_path / "rules.json"
+    write_json(
+        source_rules,
+        {
+            "interaction_rules": [
+                {"id": "r_vit_k", "subject_ref": {"db": "iqm", "canonical_id": "vitamin_k"}}
+            ]
+        },
+    )
+    severity_vocab = tmp_path / "severity_vocab.json"
+    write_json(severity_vocab, {"severities": [{"id": "caution"}]})
+    orphan_allowlist = tmp_path / "orphan_allowlist.json"
+    write_json(orphan_allowlist, {"allowlist": []})
+
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        source_rules=str(source_rules),
+        severity_vocab=str(severity_vocab),
+        orphan_allowlist=str(orphan_allowlist),
+    )
+    findings = audit.audit_interaction(args)
+    codes = {f.code for f in findings}
+    assert "INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL" in codes, (
+        f"Expected INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL but got: {[(f.code, f.message) for f in findings]}"
+    )
+    # Verify the orphan id is named in the message
+    orphan_findings = [f for f in findings if f.code == "INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL"]
+    assert any("ghost_supp" in f.message for f in orphan_findings), (
+        f"Orphan canonical_id 'ghost_supp' must be named in finding message; got: {[f.message for f in orphan_findings]}"
+    )
+
+
+def test_interaction_parity_respects_orphan_allowlist(tmp_path):
+    """Allowlisted orphans must NOT trigger INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL.
+
+    This is how we ship with known-tracked exceptions (e.g., NOOTROPIC_VINPOCETINE
+    has a real anticoagulant pairwise interaction but no standalone rule entry yet).
+    """
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    db_path = dist / "interaction_db.sqlite"
+
+    _build_interaction_db_with_canonical_ids(
+        db_path,
+        [
+            {"id": "i1", "agent2_canonical_id": "NOOTROPIC_VINPOCETINE"},
+        ],
+        source_drafts_count=1,
+    )
+    write_json(
+        dist / "interaction_db_manifest.json",
+        {
+            "checksum_sha256": sha256(db_path),
+            "interaction_db_version": "1.0.0",
+            "total_interactions": 1,
+            "source_drafts_count": 1,
+            "source_suppai_count": 0,
+        },
+    )
+    source_rules = tmp_path / "rules.json"
+    write_json(source_rules, {"interaction_rules": [{"id": "r1", "subject_ref": {"db": "iqm", "canonical_id": "something_else"}}]})
+    severity_vocab = tmp_path / "severity_vocab.json"
+    write_json(severity_vocab, {"severities": [{"id": "caution"}]})
+    orphan_allowlist = tmp_path / "orphan_allowlist.json"
+    write_json(
+        orphan_allowlist,
+        {
+            "allowlist": [
+                {
+                    "canonical_id": "NOOTROPIC_VINPOCETINE",
+                    "reason": "test fixture: vinpocetine pairwise-only signal",
+                    "todo": "add rule entry",
+                    "added": "2026-05-27",
+                }
+            ]
+        },
+    )
+
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        source_rules=str(source_rules),
+        severity_vocab=str(severity_vocab),
+        orphan_allowlist=str(orphan_allowlist),
+    )
+    findings = audit.audit_interaction(args)
+    codes = {f.code for f in findings}
+    assert "INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL" not in codes, (
+        f"Allowlisted orphan must not fire finding. Got: {[(f.code, f.message) for f in findings]}"
+    )
+
+
+def test_interaction_parity_skips_referential_check_when_schema_lacks_canonical_id_columns(tmp_path):
+    """Backward compatibility: legacy DB schemas without agent1_canonical_id /
+    agent2_canonical_id columns must NOT crash the audit. The referential
+    check silently skips for these schemas (the column-presence check is
+    permissive)."""
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    db_path = dist / "interaction_db.sqlite"
+    # Old/minimal schema — no canonical_id columns
+    with sqlite3.connect(db_path) as conn:
+        conn.execute("CREATE TABLE interactions (id TEXT, severity TEXT, retired_at TEXT, retired_reason TEXT)")
+        conn.execute("INSERT INTO interactions VALUES ('i1', 'caution', NULL, NULL)")
+        conn.execute("CREATE TABLE interaction_db_metadata (key TEXT, value TEXT)")
+        conn.execute("INSERT INTO interaction_db_metadata VALUES ('version', '1.0.0')")
+        conn.execute("INSERT INTO interaction_db_metadata VALUES ('source_drafts_count', '1')")
+        conn.execute("INSERT INTO interaction_db_metadata VALUES ('source_suppai_count', '0')")
+    write_json(
+        dist / "interaction_db_manifest.json",
+        {
+            "checksum_sha256": sha256(db_path),
+            "interaction_db_version": "1.0.0",
+            "total_interactions": 1,
+            "source_drafts_count": 1,
+            "source_suppai_count": 0,
+        },
+    )
+    source_rules = tmp_path / "rules.json"
+    write_json(source_rules, {"interaction_rules": [{"id": "r1"}]})
+    severity_vocab = tmp_path / "severity_vocab.json"
+    write_json(severity_vocab, {"severities": [{"id": "caution"}]})
+    orphan_allowlist = tmp_path / "orphan_allowlist.json"
+    write_json(orphan_allowlist, {"allowlist": []})
+
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        source_rules=str(source_rules),
+        severity_vocab=str(severity_vocab),
+        orphan_allowlist=str(orphan_allowlist),
+    )
+    findings = audit.audit_interaction(args)
+    assert findings == [], (
+        f"Legacy schema (no canonical_id columns) must not crash; got: {[(f.code, f.message) for f in findings]}"
+    )
 
 
 def test_export_contract_requires_stamped_manifest_when_requested(tmp_path):

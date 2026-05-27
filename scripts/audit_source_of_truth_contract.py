@@ -944,6 +944,86 @@ def source_rule_count(path: Path) -> int:
     return 0
 
 
+def _load_rule_subject_canonical_ids(path: Path) -> set[str]:
+    """Extract every subject_ref.canonical_id from ingredient_interaction_rules.json.
+
+    These are the supplement canonical_ids that the per-ingredient rules engine
+    knows about. Pairwise interactions (interaction_db.sqlite) reference these
+    via agent1_canonical_id / agent2_canonical_id on the supplement side.
+    """
+    payload = load_json(path)
+    if not isinstance(payload, dict):
+        return set()
+    rules = payload.get("interaction_rules") or payload.get("rules") or payload.get("interactions") or []
+    canonical_ids: set[str] = set()
+    if isinstance(rules, list):
+        for rule in rules:
+            if not isinstance(rule, dict):
+                continue
+            subject_ref = rule.get("subject_ref") or {}
+            if isinstance(subject_ref, dict):
+                cid = subject_ref.get("canonical_id")
+                if isinstance(cid, str) and cid:
+                    canonical_ids.add(cid)
+            # Also accept flat canonical_id at rule top-level for forward-compat
+            cid_flat = rule.get("canonical_id")
+            if isinstance(cid_flat, str) and cid_flat:
+                canonical_ids.add(cid_flat)
+    return canonical_ids
+
+
+def _load_orphan_allowlist(path: Path) -> set[str]:
+    """Read the orphan allowlist file. Missing file = empty allowlist (no findings)."""
+    if not path.exists():
+        return set()
+    try:
+        payload = load_json(path)
+    except Exception:
+        return set()
+    if not isinstance(payload, dict):
+        return set()
+    entries = payload.get("allowlist") or payload.get("entries") or []
+    allowed: set[str] = set()
+    if isinstance(entries, list):
+        for entry in entries:
+            if isinstance(entry, dict):
+                cid = entry.get("canonical_id")
+                if isinstance(cid, str) and cid:
+                    allowed.add(cid)
+            elif isinstance(entry, str):
+                allowed.add(entry)
+    return allowed
+
+
+def _collect_supplement_canonical_ids(conn: sqlite3.Connection) -> dict[str, list[str]]:
+    """Return {canonical_id: [interaction_id, ...]} for every supplement-side
+    canonical_id referenced in the interactions table.
+
+    A row contributes its canonical_id if agent1_type indicates a supplement
+    (agent1_canonical_id) or agent2_type indicates a supplement
+    (agent2_canonical_id). Rows without canonical_id columns or without a
+    supplement side are silently skipped (legacy schema tolerant).
+    """
+    columns = {row[1] for row in conn.execute("PRAGMA table_info(interactions)").fetchall()}
+    required = {"id", "agent1_type", "agent1_canonical_id", "agent2_type", "agent2_canonical_id"}
+    if not required.issubset(columns):
+        return {}
+    supplement_types = {"supplement", "Sup", "sup"}
+    refs: dict[str, list[str]] = {}
+    rows = conn.execute(
+        "SELECT id, agent1_type, agent1_canonical_id, agent2_type, agent2_canonical_id FROM interactions"
+    ).fetchall()
+    for iid, a1t, a1c, a2t, a2c in rows:
+        candidate_cid: str | None = None
+        if a1t in supplement_types and isinstance(a1c, str) and a1c:
+            candidate_cid = a1c
+        elif a2t in supplement_types and isinstance(a2c, str) and a2c:
+            candidate_cid = a2c
+        if candidate_cid:
+            refs.setdefault(candidate_cid, []).append(iid)
+    return refs
+
+
 def audit_interaction(args: argparse.Namespace) -> list[Finding]:
     dist_dir = repo_path(args.dist_dir)
     db_path = dist_dir / "interaction_db.sqlite"
@@ -979,12 +1059,37 @@ def audit_interaction(args: argparse.Namespace) -> list[Finding]:
         findings.append(Finding("INTERACTION_SEVERITY_INVALID", f"invalid severities in DB: {sorted(invalid_severities)}", str(db_path)))
     if source_rule_count(source_rules) <= 0:
         findings.append(Finding("INTERACTION_SOURCE_RULES_EMPTY", "source rule file has no rules", str(source_rules)))
-    source_count = source_rule_count(source_rules)
     source_drafts = int(metadata_rows.get("source_drafts_count") or manifest.get("source_drafts_count") or 0)
     if source_drafts <= 0:
         findings.append(Finding("INTERACTION_SOURCE_COUNT_MISSING", "interaction DB manifest/metadata lacks source_drafts_count", str(manifest_path)))
-    elif source_count and source_drafts > source_count:
-        findings.append(Finding("INTERACTION_SOURCE_COUNT_EXCEEDS_RULES", f"source_drafts_count={source_drafts} exceeds source rule count={source_count}", str(manifest_path)))
+    # NOTE: Removed INTERACTION_SOURCE_COUNT_EXCEEDS_RULES (count comparison) on 2026-05-27.
+    # The old check asserted source_drafts <= source_rule_count, but pairwise interactions
+    # (interaction_db.sqlite) and ingredient rule entries (ingredient_interaction_rules.json)
+    # have different cardinalities — one ingredient entry can host many pairwise interactions
+    # (e.g., St Johns Wort has ~10 drug interactions packed into one rule entry).
+    # Replaced with referential-integrity check below.
+    allowlist_path = repo_path(getattr(args, "orphan_allowlist", None) or "scripts/data/interaction_orphan_allowlist.json")
+    rule_canonical_ids = _load_rule_subject_canonical_ids(source_rules)
+    orphan_allowlist = _load_orphan_allowlist(allowlist_path)
+    with sqlite3.connect(db_path) as conn:
+        supplement_refs = _collect_supplement_canonical_ids(conn)
+    orphans = {
+        cid: ids
+        for cid, ids in supplement_refs.items()
+        if cid not in rule_canonical_ids and cid not in orphan_allowlist
+    }
+    if orphans:
+        details = "; ".join(
+            f"{cid} (in {len(ids)} interaction(s): {', '.join(sorted(ids)[:3])}{'…' if len(ids) > 3 else ''})"
+            for cid, ids in sorted(orphans.items())
+        )
+        findings.append(
+            Finding(
+                "INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL",
+                f"supplement canonical_id(s) referenced in pairwise interactions but missing from ingredient_interaction_rules.json (and not allowlisted): {details}",
+                str(db_path),
+            )
+        )
     manifest_suppai = str(manifest.get("source_suppai_count") or "")
     metadata_suppai = str(metadata_rows.get("source_suppai_count") or "")
     if manifest_suppai and metadata_suppai and manifest_suppai != metadata_suppai:
@@ -1331,6 +1436,7 @@ def build_parser() -> argparse.ArgumentParser:
     interaction.add_argument("--dist-dir", default="scripts/dist")
     interaction.add_argument("--source-rules", default="scripts/data/ingredient_interaction_rules.json")
     interaction.add_argument("--severity-vocab", default="scripts/data/severity_vocab.json")
+    interaction.add_argument("--orphan-allowlist", default="scripts/data/interaction_orphan_allowlist.json")
     interaction.set_defaults(func=audit_interaction)
 
     freshness = subparsers.add_parser("freshness", help="validate artifact freshness")
@@ -1386,6 +1492,7 @@ def build_parser() -> argparse.ArgumentParser:
     all_cmd.add_argument("--final-db-dir", default="scripts/final_db_output")
     all_cmd.add_argument("--source-rules", default="scripts/data/ingredient_interaction_rules.json")
     all_cmd.add_argument("--severity-vocab", default="scripts/data/severity_vocab.json")
+    all_cmd.add_argument("--orphan-allowlist", default="scripts/data/interaction_orphan_allowlist.json")
     all_cmd.add_argument("--flutter-repo", default=None)
     all_cmd.add_argument("--interaction-input", action="append", default=[
         "scripts/data/curated_interactions/curated_interactions_v1.json",
