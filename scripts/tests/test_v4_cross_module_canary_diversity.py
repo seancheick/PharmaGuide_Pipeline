@@ -4,9 +4,10 @@ Omega has its own P1.6 canary file. This file covers the completed
 generic and probiotic modules against real enriched catalog rows so we
 catch class-specific regressions that synthetic unit fixtures miss:
 
-- generic high / mid / low score bands
+- generic mid / low score bands
 - generic non-evaluable Dose rescaling
 - generic high Trust and zero Trust cases
+- sports high score band
 - probiotic high / mid / low score bands
 - probiotic per-strain CFU disclosed vs aggregate-CFU-only Dose=0
 - probiotic Trust positive vs Trust zero
@@ -30,12 +31,6 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 GENERIC_CANARIES = {
-    # High generic scorer with full generic final assembly online.
-    "325587": {
-        "label": "Transparent Labs Creatine HMB",
-        "score_range": (76.0, 80.0),
-        "traits": {"trust_positive": True},
-    },
     # Recent cert override / high Trust path.
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
@@ -54,6 +49,16 @@ GENERIC_CANARIES = {
         "label": "Pure Encapsulations Liposomal Glutathione",
         "score_range": (54.0, 60.0),
         "traits": {"transparency_low": True},
+    },
+}
+
+
+SPORTS_CANARIES = {
+    # High sports scorer after the P1.7 sports module split.
+    "325587": {
+        "label": "Transparent Labs Creatine HMB",
+        "score_range": (78.0, 80.5),
+        "traits": {"trust_positive": True, "dose_max": True},
     },
 }
 
@@ -98,7 +103,7 @@ PROBIOTIC_CANARIES = {
 }
 
 
-ALL_CANARY_IDS = set(GENERIC_CANARIES) | set(PROBIOTIC_CANARIES)
+ALL_CANARY_IDS = set(GENERIC_CANARIES) | set(SPORTS_CANARIES) | set(PROBIOTIC_CANARIES)
 _CANARY_CACHE: dict[str, dict] | None = None
 
 
@@ -180,6 +185,33 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
         assert _dimension_score(breakdown, "transparency") <= 2
 
 
+@pytest.mark.parametrize("dsld_id,expected", list(SPORTS_CANARIES.items()))
+def test_sports_real_catalog_canary_score_and_traits(dsld_id: str, expected: dict) -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+    from scoring_v4.modules.sports import score_sports
+    from scoring_v4.router import class_for_product
+
+    product = _load_canaries().get(dsld_id)
+    if not product:
+        pytest.skip(f"sports canary {dsld_id} not found: {expected['label']}")
+    _require_strict_v4_contract(product, expected["label"])
+
+    assert class_for_product(product) == "sports"
+    gate = evaluate_completeness_gate(product, "sports")
+    assert gate.is_live_eligible, gate.missing_fields
+
+    breakdown = score_sports(product).to_breakdown()
+    score = breakdown["score_100"]
+    lo, hi = expected["score_range"]
+    assert lo <= score <= hi, (expected["label"], score, breakdown)
+
+    traits = expected["traits"]
+    if traits.get("dose_max"):
+        assert _dimension_score(breakdown, "dose") == 20
+    if traits.get("trust_positive"):
+        assert _dimension_score(breakdown, "trust") > 0
+
+
 @pytest.mark.parametrize("dsld_id,expected", list(PROBIOTIC_CANARIES.items()))
 def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: dict) -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
@@ -214,15 +246,17 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
 
 
 def test_cross_module_canary_count_floor() -> None:
-    assert len(GENERIC_CANARIES) >= 4
+    assert len(GENERIC_CANARIES) >= 3
+    assert len(SPORTS_CANARIES) >= 1
     assert len(PROBIOTIC_CANARIES) >= 6
 
 
 def test_cross_module_canaries_cover_expected_score_bands() -> None:
     generic_ranges = [v["score_range"] for v in GENERIC_CANARIES.values()]
+    sports_ranges = [v["score_range"] for v in SPORTS_CANARIES.values()]
     probiotic_ranges = [v["score_range"] for v in PROBIOTIC_CANARIES.values()]
 
     assert any(hi <= 45 for _lo, hi in generic_ranges), "missing low generic canary"
-    assert any(lo >= 70 for lo, _hi in generic_ranges), "missing high generic canary"
+    assert any(lo >= 70 for lo, _hi in sports_ranges), "missing high sports canary"
     assert any(hi <= 46 for _lo, hi in probiotic_ranges), "missing low probiotic canary"
     assert any(lo >= 70 for lo, _hi in probiotic_ranges), "missing high probiotic canary"
