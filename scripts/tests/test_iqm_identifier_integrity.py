@@ -246,3 +246,11 @@ def test_citrus_bergamot_cui_is_canonical(iqm):
     assert "C0725330" not in (entry.get("aliases") or []), (
         "citrus_bergamot.aliases must no longer contain C0725330 hint."
     )
+
+
+def test_gamma_oryzanol_cui_is_canonical(iqm):
+    """C5979108 was a branded multi-ingredient capsule. C0061081
+    'gamma-oryzanol' (Organic Chemical) is the canonical generic substance."""
+    assert iqm["gamma_oryzanol"]["cui"] == "C0061081", (
+        "gamma_oryzanol.cui must be C0061081 (gamma-oryzanol)."
+    )

@@ -45341,7 +45341,7 @@
   "gamma_oryzanol": {
     "standard_name": "Gamma Oryzanol",
     "category": "fatty_acids",
-    "cui": "C5979108",
+    "cui": "C0061081",
     "rxcui": "25608",
     "forms": {
       "gamma oryzanol (unspecified)": {
