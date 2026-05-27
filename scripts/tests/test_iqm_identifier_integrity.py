@@ -379,3 +379,14 @@ def test_branched_chain_amino_acids_cui_is_canonical(iqm):
         "branched_chain_amino_acids.cui must be C0002521 (the class concept), "
         "not C0359316 (the IV infusion clinical drug)."
     )
+
+
+def test_flower_pollen_cui_is_canonical_source(iqm):
+    """C4073752 was 'Quercetin/Rye Flower Pollen Extract 250 MG-500 MG Oral
+    Tablet' (Clinical Drug, combo). C1328880 'flower pollen' (Plant) is the
+    canonical source-substance concept — UMLS has no exact match for
+    'Flower Pollen Extract' (the extract form), so the parent-source
+    concept is the closest defensible substance."""
+    assert iqm["flower_pollen"]["cui"] == "C1328880", (
+        "flower_pollen.cui must be C1328880 (flower pollen, Plant)."
+    )
