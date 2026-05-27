@@ -429,18 +429,31 @@
       "management": "Do not use St. John's Wort with CYP3A4-metabolized statins. If herbal antidepressant therapy is desired, discuss alternatives with your doctor. Monitor for reduced lipid-lowering effect if combined inadvertently.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/st-johns-wort",
-        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm"
+        "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
+        "https://pubmed.ncbi.nlm.nih.gov/17701167/",
+        "https://pubmed.ncbi.nlm.nih.gov/31742659/",
+        "https://pubmed.ncbi.nlm.nih.gov/15260917/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "17701167",
+        "31742659",
+        "15260917"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T16:00:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "17701167",
+          "31742659",
+          "15260917"
+        ],
+        "notes": "Wave 6.Y Batch 9.A. PMID 17701167 (Andren 2007) is the direct human PK study of SJW + atorvastatin; 31742659 is the updated clinical-relevance review; 15260917 is the pharmacokinetic-interactions mechanism review. All three content-verified via PubMed efetch 2026-05-27; titles+abstracts directly support the CYP3A4/P-gp induction → reduced statin exposure mechanism the entry describes."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
@@ -462,24 +475,37 @@
       "source_urls": [
         "https://www.nccih.nih.gov/health/red-yeast-rice",
         "https://nccih.nih.gov/health/redyeastrice",
-        "https://www.fda.gov/food/cfsan-constituent-updates/fda-warns-consumers-about-red-yeast-rice-products-containing-monacolin-k"
+        "https://www.fda.gov/food/cfsan-constituent-updates/fda-warns-consumers-about-red-yeast-rice-products-containing-monacolin-k",
+        "https://pubmed.ncbi.nlm.nih.gov/36779111/",
+        "https://pubmed.ncbi.nlm.nih.gov/40909457/",
+        "https://pubmed.ncbi.nlm.nih.gov/33538260/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "36779111",
+        "40909457",
+        "33538260"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T16:00:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "36779111",
+          "40909457",
+          "33538260"
+        ],
+        "notes": "Wave 6.Y Batch 9.A. PMIDs content-verified via PubMed efetch 2026-05-27. 36779111 is a direct case report of RYR-induced rhabdomyolysis; 40909457 documents severe RYR-induced rhabdomyolysis with AKI + respiratory failure (severity tail justifying Major); 33538260 is the JACC focus seminar on RYR for hypercholesterolemia documenting the monacolin K = lovastatin equivalence the mechanism text relies on. Official NCCIH + FDA sources retained as primary regulatory anchor."
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "red_yeast_rice"
+      "agent2_canonical_id": "BANNED_RED_YEAST_RICE"
     },
     {
       "id": "DSI_STATINS_GRAPEFRUIT",
@@ -535,18 +561,31 @@
       "mechanism": "High-dose niacin (≥1 g/day, pharmacologic dose) combined with statins increases risk of myopathy and rhabdomyolysis. The mechanism is additive muscle toxicity, possibly related to impaired CoQ10 synthesis and mitochondrial dysfunction.",
       "management": "Pharmacologic niacin doses require physician supervision when combined with statins. Monitor for muscle pain, weakness, or brown urine. Nutritional niacin doses from multivitamins are generally safe.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/"
+        "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/22085343/",
+        "https://pubmed.ncbi.nlm.nih.gov/25014686/",
+        "https://pubmed.ncbi.nlm.nih.gov/23444397/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "22085343",
+        "25014686",
+        "23444397"
+      ],
       "verification": {
         "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
+        "verified_at": "2026-05-27T16:00:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
           "pubmed": true
         },
-        "method": "live_api_batch_2026_04_13"
+        "method": "live_api_content_verify_2026_05_27",
+        "verified_pmids": [
+          "22085343",
+          "25014686",
+          "23444397"
+        ],
+        "notes": "Wave 6.Y Batch 9.A. PMIDs content-verified via PubMed efetch 2026-05-27. 22085343 is AIM-HIGH (Boden 2011 NEJM), the landmark RCT showing no incremental CV benefit of niacin added to intensive statin therapy plus the adverse-event signal. 25014686 is HPS2-THRIVE primary outcomes (Landray 2014 NEJM), the largest niacin+statin trial documenting the myopathy and hepatotoxicity signal. 23444397 is the HPS2-THRIVE design + pre-specified muscle and liver outcomes paper documenting the elevated myopathy/hepatic-event rates that anchor the 'monitor for muscle pain, weakness, or brown urine' management text. High-dose niacin qualifier (≥1 g/day pharmacologic dose) intentionally retained to avoid generic multivitamin B3 warnings."
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
