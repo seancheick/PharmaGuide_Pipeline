@@ -263,3 +263,20 @@ def test_hemp_seed_oil_cui_is_canonical(iqm):
     assert iqm["hemp_seed_oil"]["cui"] == "C4489800", (
         "hemp_seed_oil.cui must be C4489800 (hempseed oil)."
     )
+
+
+def test_lions_mane_cui_is_canonical_mushroom_not_jellyfish(iqm):
+    """C6011652 was a branded 'Black Pepper Extract/Lion's Mane Mushroom'
+    capsule (Clinical Drug). C6049163 'Lion's Mane Mushroom' (Organic
+    Chemical / Pharmacologic Substance) is the canonical mushroom concept.
+
+    Note: UMLS exact-search for 'Lion's Mane' also returns C1001731 (the
+    jellyfish Cyanea capillata) — explicitly NOT the supplement context.
+    The strict-mode guards don't differentiate jellyfish vs mushroom for
+    the common name, so the correct mushroom CUI was picked by clinician
+    judgment, not by automated guards alone."""
+    assert iqm["lions_mane"]["cui"] == "C6049163", (
+        "lions_mane.cui must be C6049163 (Lion's Mane Mushroom), not "
+        "C6011652 (branded capsule) and NOT C1001731 (Cyanea capillata, the "
+        "lion's mane JELLYFISH — entirely different organism)."
+    )
