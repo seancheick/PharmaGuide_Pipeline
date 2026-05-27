@@ -104,3 +104,18 @@ def test_no_curated_interaction_uses_5_htp_combo_cui(curated_interactions):
         f"Found {len(matches)} curated_interactions rows still using the "
         f"branded combo CUI {bad}. They must be updated to C0000578."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Batch 2A — Wrong-concept CUI corrections (no curated_interactions impact)
+# --------------------------------------------------------------------------- #
+
+
+def test_acacia_catechu_cui_is_canonical_plant(iqm):
+    """acacia_catechu must use C1135823 (Acacia catechu, Plant semantic type).
+    C0949533 resolved to 'Australian bat lyssavirus' — a virus, not the plant.
+    Caught by no-token-overlap guard."""
+    assert iqm["acacia_catechu"]["cui"] == "C1135823", (
+        "acacia_catechu.cui must be C1135823 (Acacia catechu, Plant), not "
+        "C0949533 ('Australian bat lyssavirus')."
+    )
