@@ -431,3 +431,51 @@ def test_purple_corn_extract_cui_cleared_to_null(iqm):
     assert "C1446590" not in (entry.get("aliases") or []), (
         "purple_corn_extract.aliases must no longer contain the wrong CUI."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Stale cui_note / cui_status guard (Task #13, Wave 6.Y cleanup pass)
+# --------------------------------------------------------------------------- #
+
+
+_STALE_NOTE_TOKENS = (
+    "no umls entry for",
+    "no umls cui for",
+    "no umls cui established",
+    "no umls cui assigned",
+    "no umls cui confirmed",
+    "no confirmed umls concept",
+    "no confirmed exact umls concept",
+    "no umls concept linked",
+)
+
+
+def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
+    """Regression: when `cui` is non-null, neither cui_note nor cui_status
+    may still claim that UMLS has no entry / no confirmed match. Such notes
+    are semantically stale once a valid CUI has been chosen and confuse
+    future reviewers and agents.
+
+    Legitimate notes (e.g. 'Corrected from X to Y', 'UMLS CUI: ...',
+    'Class entry spans multiple ...') are preserved — only the documented
+    'No UMLS ...' / 'No confirmed UMLS ...' phrasings are forbidden when
+    cui is set.
+    """
+    offenders = []
+    for cid, entry in iqm.items():
+        if cid.startswith("_") or not isinstance(entry, dict):
+            continue
+        if not entry.get("cui"):
+            continue
+        note = (entry.get("cui_note") or "").strip().lower()
+        status = (entry.get("cui_status") or "").strip().lower()
+        if status == "no_confirmed_umls_match":
+            offenders.append((cid, "cui_status='no_confirmed_umls_match'"))
+            continue
+        if note and any(tok in note for tok in _STALE_NOTE_TOKENS):
+            offenders.append((cid, f"cui_note=<{note[:60]}…>"))
+    assert not offenders, (
+        f"{len(offenders)} IQM entries have valid `cui` but still carry "
+        f"stale 'No UMLS ...' notes / 'no_confirmed_umls_match' status. "
+        f"Examples: {offenders[:5]}"
+    )

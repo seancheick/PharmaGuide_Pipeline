@@ -18443,7 +18443,7 @@
       "confidence": "high"
     },
     "category_enum": "proteins",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -20252,7 +20252,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -24091,7 +24091,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -24394,7 +24394,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -24446,7 +24446,7 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -24576,7 +24576,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -24866,7 +24866,7 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25056,7 +25056,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25119,7 +25119,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25184,7 +25184,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25248,7 +25248,7 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25367,7 +25367,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25431,7 +25431,7 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25483,7 +25483,7 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25558,7 +25558,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25674,7 +25674,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -25728,7 +25728,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25794,7 +25794,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -26000,7 +26000,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -26116,7 +26116,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -26196,7 +26196,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -26267,7 +26267,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -26318,7 +26318,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -26384,7 +26384,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -26436,7 +26436,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -26503,7 +26503,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -26847,7 +26847,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -26927,7 +26927,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -27094,7 +27094,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27160,7 +27160,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -27214,7 +27214,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27287,7 +27287,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27357,7 +27357,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27427,7 +27427,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27550,7 +27550,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27622,7 +27622,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27679,7 +27679,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -27742,7 +27742,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -27799,7 +27799,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -27898,7 +27898,7 @@
       "confidence": "high"
     },
     "category_enum": "fibers",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28000,7 +28000,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28077,7 +28077,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -28141,7 +28141,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -28195,7 +28195,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28331,7 +28331,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28400,7 +28400,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28458,7 +28458,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28598,7 +28598,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "Glucosinolates entry spans many crucifer-derived precursor compounds; keep RxNorm null unless the record is split to a specific glucosinolate such as glucoraphanin.",
     "data_quality": {
       "completeness": 1.0,
@@ -28649,7 +28649,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28725,7 +28725,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28786,7 +28786,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28871,7 +28871,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28935,7 +28935,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -29014,7 +29014,7 @@
       "confidence": "high"
     },
     "category_enum": "fibers",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29151,7 +29151,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "Isothiocyanates entry spans many reactive glucosinolate-derived products; keep RxNorm null unless the record is split to a specific isothiocyanate such as sulforaphane or PEITC.",
     "data_quality": {
       "completeness": 1.0,
@@ -29213,7 +29213,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -29263,7 +29263,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -29313,7 +29313,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29569,7 +29569,7 @@
       "confidence": "high"
     },
     "category_enum": "proteins",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -29697,7 +29697,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29760,7 +29760,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29886,7 +29886,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -29952,7 +29952,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -30016,7 +30016,7 @@
       "confidence": "high"
     },
     "category_enum": "fibers",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -30070,7 +30070,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -30546,7 +30546,7 @@
       "confidence": "high"
     },
     "category_enum": "fibers",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -30599,7 +30599,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -30666,7 +30666,7 @@
       "confidence": "high"
     },
     "category_enum": "proteins",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -30720,7 +30720,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -30900,7 +30900,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -30987,7 +30987,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -31193,7 +31193,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31301,7 +31301,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -31585,7 +31585,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31762,7 +31762,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -31817,7 +31817,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -31943,7 +31943,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -32007,7 +32007,7 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -32072,7 +32072,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -32138,7 +32138,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -32261,7 +32261,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -34888,7 +34888,7 @@
     "category": "herbs",
     "cui": null,
     "cui_status": "no_confirmed_umls_match",
-    "cui_note": "Wave 6.Y Batch 2B (2026-05-27): C6011676 was a branded clinical-drug CUI (Clinical Drug, rejected by strict-mode branded guard). UMLS exact-search for 'Turkey Tail' returns no atom linking the common name to the species. Species-level candidates C0319805 (Coriolus versicolor, Fungus) and C4282635 (Trametes versicolor preparation) exist but UMLS does not list 'Turkey Tail' as a synonym of either, so the species mapping cannot be auto-verified. Deferred to ontology review — taxonomy synonyms (Coriolus ↔ Trametes versicolor) are clinician decisions, not automated picks.",
+    "cui_note": "Wave 6.Y Batch 2B (2026-05-27): C6011676 was a branded clinical-drug CUI (Clinical Drug, rejected by strict-mode branded guard). UMLS exact-search for 'Turkey Tail' returns no atom linking the common name to the species. Species-level candidates C0319805 (Coriolus versicolor, Fungus) and C4282635 (Trametes versicolor preparation) exist but UMLS does not list 'Turkey Tail' as a synonym of either, so the species mapping cannot be auto-verified. Deferred to ontology review \u2014 taxonomy synonyms (Coriolus \u2194 Trametes versicolor) are clinician decisions, not automated picks.",
     "forms": {
       "turkey tail fruiting body": {
         "bio_score": 8,
@@ -35057,7 +35057,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI established for Inonotus obliquus as a supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -37269,7 +37269,7 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "cui_note": "No confirmed UMLS concept used for this whole-food grass ingredient identity.",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for food-derived grass juice ingredient identity.",
     "data_quality": {
       "completeness": 1.0,
@@ -39245,7 +39245,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -39392,7 +39392,7 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -39483,7 +39483,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -39544,7 +39544,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -39589,7 +39589,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -39835,7 +39835,7 @@
       "deprecation_note": "IQM audit 2026-04-24 (Step 3): architectural duplicate of the `probiotics` umbrella parent. All aliases have been replicated in probiotics::probiotics (unspecified). Parent kept alive for backward-compat with product output canonical_ids; full deletion scheduled for next audit after pipeline rebuild."
     },
     "category_enum": "probiotics",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -41441,7 +41441,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -41598,7 +41598,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -41744,7 +41744,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -41844,7 +41844,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "Generic bioflavonoids entry spans multiple flavonoid families and plant sources; keep RxNorm null unless the record is split to a specific source such as citrus bioflavonoids.",
     "data_quality": {
       "completeness": 1.0,
@@ -41932,7 +41932,7 @@
       "confidence": "high"
     },
     "category_enum": "proteins",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42221,7 +42221,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42404,7 +42404,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -42525,7 +42525,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42673,7 +42673,7 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -43029,7 +43029,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -44930,7 +44930,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI assigned; Eurycoma longifolia not indexed in UMLS",
+    "cui_note": "",
     "external_ids": {
       "unii": "8GOM182CI3"
     },
@@ -46187,7 +46187,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -46288,7 +46288,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -47485,7 +47485,7 @@
       "confidence": "high"
     },
     "category_enum": "proteins",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -47552,7 +47552,7 @@
       "confidence": "high"
     },
     "category_enum": "proteins",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -47632,7 +47632,7 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "Generic flower pollen extract entry spans mixed or unspecified botanical pollen sources; keep RxNorm null unless the record is split to a specific source such as Secale cereale pollen.",
     "data_quality": {
       "completeness": 1.0,
@@ -48904,7 +48904,7 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for supplement-specific labeling form",
+    "cui_note": "",
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [
@@ -50424,7 +50424,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
     "aliases": []
@@ -50479,7 +50479,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
     "aliases": []
@@ -50529,7 +50529,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "description": "Cyclic amino acid metabolite; cognition-supporting supplement",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -50662,7 +50662,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "description": "Calcium salt of pyruvic acid; glycolysis intermediate",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -50729,7 +50729,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "external_ids": {
       "unii": "UXX2N5V39P"
     },
@@ -50813,7 +50813,7 @@
       "last_reviewed_at": "2026-02-26",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "description": "Short-chain fatty acid (SCFA) produced by gut bacterial fermentation",
     "dosage_importance": 1.0,
     "external_ids": {
@@ -50901,7 +50901,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "description": "Purine nucleoside; ATP biosynthesis intermediate",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -50970,7 +50970,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {
       "unii": "LUE8BK8H5Q"
@@ -51031,7 +51031,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Complex polycarboxylic organic acids from decomposed organic matter",
     "dosage_importance": 0.5,
@@ -51080,7 +51080,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {
       "unii": "N4484W64JW"
@@ -51142,7 +51142,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "external_ids": {
       "unii": "RUU8G67GQM"
     },
@@ -51198,7 +51198,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {
       "unii": "KWI7J0A2CC"
@@ -51399,7 +51399,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "external_ids": {
       "unii": "C01825BVNL"
     },
@@ -51460,7 +51460,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "description": "Trace mineral; central atom of vitamin B12 but inorganic form has no separate indication",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -51527,7 +51527,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "description": "Ox/bovine bile for fat digestion support in cholecystectomy/bile insufficiency",
     "dosage_importance": 1.0,
@@ -51577,7 +51577,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Recombinant jellyfish protein (Prevagen); digested orally \u2014 implausible oral bioavailability",
     "dosage_importance": 0.5,
@@ -51633,9 +51633,9 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No confirmed exact UMLS concept found for split gill polypore.",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "cui_status": "no_confirmed_umls_match",
+    "cui_status": "",
     "external_ids": {
       "unii": "ZL0463V6OM"
     },
@@ -51695,10 +51695,10 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No confirmed exact UMLS concept found for dimethyl glycine; broad UMLS hits are chemically unrelated.",
+    "cui_note": "",
     "description": "Methylated amino acid metabolite; choline catabolism intermediate",
     "dosage_importance": 0.5,
-    "cui_status": "no_confirmed_umls_match",
+    "cui_status": "",
     "external_ids": {
       "unii": "7797M4CPPA"
     },
@@ -51762,7 +51762,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "external_ids": {
       "unii": "6SMK8R7TGJ"
     },
@@ -51827,7 +51827,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Glucose metabolite; hepatic glucuronidation pathway component",
     "dosage_importance": 0.5,
@@ -51880,7 +51880,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Purine alkaloid from kucha tea (Dynamine brand); adenosine receptor antagonist",
     "external_ids": {
@@ -52004,7 +52004,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
     "aliases": []
@@ -52061,7 +52061,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
     "aliases": []
@@ -52182,7 +52182,7 @@
       "confidence": "medium"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.6,
@@ -52244,7 +52244,7 @@
       "confidence": "medium"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -52369,7 +52369,7 @@
       "confidence": "medium"
     },
     "category_enum": "antioxidants",
-    "cui_note": "No confirmed exact UMLS concept found for lychee polyphenol.",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.6,
@@ -52378,7 +52378,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_status": "no_confirmed_umls_match",
+    "cui_status": "",
     "external_ids": {
       "unii": "9294024N9Q"
     },
@@ -52419,7 +52419,7 @@
       "confidence": "medium"
     },
     "category_enum": "herbs",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.6,
@@ -52434,7 +52434,7 @@
   "jujube": {
     "category": "herbs",
     "cui": "C1123049",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "jujube (unspecified)": {
         "score": 8,
@@ -52485,7 +52485,7 @@
   "threonic_acid": {
     "category": "vitamins",
     "cui": "C0076545",
-    "cui_note": "No UMLS entry for threonic acid",
+    "cui_note": "",
     "forms": {
       "threonic acid (unspecified)": {
         "score": 7,
@@ -52554,7 +52554,7 @@
   "dihydromyricetin": {
     "category": "antioxidants",
     "cui": "C1174885",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "dihydromyricetin (unspecified)": {
         "score": 8,
@@ -52614,7 +52614,7 @@
   "diamine_oxidase": {
     "category": "enzymes",
     "cui": "C3155423",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "diamine oxidase (unspecified)": {
         "score": 8,
@@ -52664,7 +52664,7 @@
   "activated_charcoal": {
     "category": "other",
     "cui": "C0001275",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "activated charcoal (unspecified)": {
         "score": 8,
@@ -52730,7 +52730,7 @@
   "aloe_vera": {
     "category": "herbs",
     "cui": "C0995182",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "aloe vera (unspecified)": {
         "score": 8,
@@ -52795,7 +52795,7 @@
   "wild_yam": {
     "category": "herbs",
     "cui": "C0772357",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "wild yam (unspecified)": {
         "score": 8,
@@ -52860,7 +52860,7 @@
   "red_clover": {
     "category": "herbs",
     "cui": "C0939844",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "red clover (unspecified)": {
         "score": 8,
@@ -52930,7 +52930,7 @@
   "juniper": {
     "category": "herbs",
     "cui": "C1148550",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "juniper (unspecified)": {
         "score": 8,
@@ -52979,7 +52979,7 @@
   "nopal": {
     "category": "herbs",
     "cui": "C3247297",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "nopal (unspecified)": {
         "score": 8,
@@ -53101,7 +53101,7 @@
   "alfalfa": {
     "category": "herbs",
     "cui": "C0002022",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "alfalfa (unspecified)": {
         "score": 8,
@@ -53431,7 +53431,7 @@
   "rhaponticum": {
     "category": "herbs",
     "cui": "C3468015",
-    "cui_note": "No UMLS entry for Rhaponticum carthamoides",
+    "cui_note": "",
     "forms": {
       "rhaponticum (unspecified)": {
         "score": 8,
@@ -53596,7 +53596,7 @@
   "bentonite": {
     "category": "minerals",
     "cui": "C0005018",
-    "cui_note": "No UMLS entry for bentonite supplement",
+    "cui_note": "",
     "forms": {
       "bentonite (unspecified)": {
         "score": 6,
@@ -54318,7 +54318,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -54369,7 +54369,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "ILJ8NEF6DT"
     },
@@ -54441,7 +54441,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "A1ST9M22TO"
     },
@@ -54516,7 +54516,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "9060PRM18Q"
     },
@@ -54583,7 +54583,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -54637,7 +54637,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "I6KAZ8AO1O"
     },
@@ -54707,7 +54707,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -54758,7 +54758,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "aliases": [
       "apple polyphenol extract"
     ],
@@ -54821,7 +54821,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -54883,7 +54883,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "aliases": [
       "coffee fruit preparation",
       "C2937579"
@@ -55014,7 +55014,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "19MU22KQ26"
     },
@@ -55175,7 +55175,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -55226,7 +55226,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -55277,7 +55277,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "CU9S17279X"
     },
@@ -55339,7 +55339,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "KTQ9R9MS0Q"
     },
@@ -55405,7 +55405,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "7QM776WJ5N"
     },
@@ -55470,7 +55470,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": [
       "C1366263"
@@ -55652,7 +55652,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -55702,7 +55702,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "D65ILJ7WLY"
     },
@@ -55817,7 +55817,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {},
     "aliases": []
   },
@@ -55867,7 +55867,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "1M84LD0UMD"
     },
@@ -55937,7 +55937,7 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "external_ids": {
       "unii": "WQ0UW3VFG5"
     },
@@ -55984,7 +55984,7 @@
       }
     },
     "cui": "C0003995",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui": "1157",
     "match_rules": {
       "priority": 0,
@@ -56068,7 +56068,7 @@
       }
     },
     "cui": "C2348275",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -56123,7 +56123,7 @@
       }
     },
     "cui": "C0330722",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -56158,7 +56158,7 @@
     "description": "Montmorency tart cherry (Prunus cerasus). Rich in anthocyanins, flavonols, and melatonin precursors. Clinical evidence supports exercise-induced muscle recovery, sleep quality improvement, and inflammation modulation. Low absolute anthocyanin bioavailability (~0.6%) offset by dose optimization in trials.",
     "dosage_importance": 0.1,
     "cui": "C5448936",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "vitacherry sports extract": {
@@ -56274,7 +56274,7 @@
     "description": "Spearmint (Mentha spicata). Rich in rosmarinic acid, luteolin, and phenolic compounds. Standard extracts used for digestion and flavoring. Proprietary high-polyphenol variants (Neumentix) clinically studied for cognitive performance and focus.",
     "dosage_importance": 0.1,
     "cui": "C1095801",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui": "1372258",
     "forms": {
       "neumentix spearmint extract": {
@@ -56379,7 +56379,7 @@
     "description": "White button mushroom (Agaricus bisporus). Rich in beta-glucans, ergothioneine, glutathione, and polysaccharides. Supports immune function via Dectin-1 receptor activation. Antioxidant and prebiotic effects. Primarily culinary; more modest medicinal evidence than reishi or maitake.",
     "dosage_importance": 0.1,
     "cui": "C0872887",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui": "901369",
     "forms": {
       "button mushroom fruiting body extract": {
@@ -56546,7 +56546,7 @@
     "description": "Andrographis paniculata (King of Bitters). Active compound andrographolide has immunomodulatory, anti-inflammatory, and antiviral properties. Clinical evidence supports reduction in severity and duration of upper respiratory tract infections. Proprietary standardized forms (AP-Bio, ParActin) show 4\u20136\u00d7 higher andrographolide bioavailability via lipid-matrix delivery.",
     "dosage_importance": 0.1,
     "cui": "C5980266",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "forms": {
       "ap-bio andrographis extract": {
@@ -56651,7 +56651,7 @@
     "description": "Salvia officinalis (Common Sage). Rich in rosmarinic acid, ursolic acid, and polyphenols. Well-documented cholinesterase inhibitory activity and antioxidant properties. Multiple RCTs support cognitive performance enhancement in healthy adults, particularly memory, attention, and processing speed (PMID 16205659, 20377818). Cognivia\u00ae (Nexira) is a proprietary high-polyphenol extract with clinical backing.",
     "dosage_importance": 0.1,
     "cui": "C3265310",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui": "1011627",
     "forms": {
       "cognivia sage extract": {
@@ -56868,7 +56868,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Endogenous trace amine neuromodulator; dopamine/norepinephrine efflux via TAAR1",
     "aliases": [
@@ -56879,7 +56879,7 @@
   "yohimbe": {
     "category": "herbs",
     "cui": "C1123032",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "forms": {
       "yohimbe (unspecified)": {
         "score": 8,
@@ -57142,7 +57142,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "NN52U3ZACZ"
     },
@@ -57267,7 +57267,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "9913I24QEE"
     },
@@ -57325,7 +57325,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "Q66E0D2443"
     },
@@ -57388,7 +57388,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "Q08Z44662J"
     },
@@ -57446,7 +57446,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "2C1F12C6AP"
     },
@@ -57522,7 +57522,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "L07O8T40TE"
     },
@@ -57683,7 +57683,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "ISK1LOY57E"
     },
@@ -57769,7 +57769,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "8CF93KW41W"
     },
@@ -57825,7 +57825,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "external_ids": {
       "unii": "KQ2N4RPK58"
     },
@@ -57880,7 +57880,7 @@
       "review_status": "validated",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS CUI for species-level probiotic parent",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for probiotic species",
     "external_ids": {},
     "aliases": []
@@ -58027,7 +58027,7 @@
       "research_status": "validated"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58095,7 +58095,7 @@
       "research_status": "validated"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58243,7 +58243,7 @@
       "last_reviewed_at": "2026-03-08",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "external_ids": {}
   },
   "coconut_water": {
@@ -58312,7 +58312,7 @@
       "last_reviewed_at": "2026-03-08",
       "research_status": "validated"
     },
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "external_ids": {
       "unii": "267F5Y81NT"
     },
@@ -58400,7 +58400,7 @@
       }
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -58429,7 +58429,7 @@
     "description": "Acyclic diterpene alcohol used in niche mitochondrial and mevalonate-pathway supplements.",
     "dosage_importance": 0.5,
     "cui": "C0061229",
-    "cui_note": "No UMLS CUI confirmed for supplement ingredient",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -58516,7 +58516,7 @@
       "research_status": "validated"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS concept linked in this DB entry",
+    "cui_note": "",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58621,7 +58621,7 @@
       "confidence": "medium"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for supplement ingredient",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.7,
@@ -58710,7 +58710,7 @@
       "confidence": "medium"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for supplement ingredient",
+    "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.7,
@@ -58754,7 +58754,7 @@
       "confidence": "medium"
     },
     "category_enum": "fatty_acids",
-    "cui_note": "No UMLS entry for supplement ingredient",
+    "cui_note": "",
     "data_quality": {
       "completeness": 0.7,
       "missing_fields": [],
@@ -58793,7 +58793,7 @@
     "notes": "Omega-3 oil from Euphausia superba (Antarctic krill). EPA/DHA delivered in phospholipid form (~40%) rather than triglycerides, which may improve bioavailability (~33% higher AUC vs. fish oil TG, Schuchardt et al. 2011 PMC3168413). Contains natural astaxanthin (~0.1-0.2 mg/g) as antioxidant. Shellfish allergy warning required. Key brands: Neptune Krill Oil (NKO) and Superba Krill (Aker BioMarine, GRAS-notified).",
     "cui": "C2725341",
     "rxcui": "880350",
-    "cui_note": "No UMLS entry for botanical/novel compound",
+    "cui_note": "",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59933,7 +59933,7 @@
       "pubchem_cid": null,
       "cas": null
     },
-    "cui_status": "no_confirmed_umls_match"
+    "cui_status": ""
   },
   "calcium_d_glucarate": {
     "standard_name": "Calcium D-Glucarate",
@@ -63230,7 +63230,7 @@
     "category": "other",
     "cui": null,
     "cui_status": "no_confirmed_umls_match",
-    "cui_note": "Wave 6.Y Batch 2C (2026-05-27): C1446590 had no token overlap with the IQM entry under strict-mode guards. UMLS exact-search returns no concept for 'Purple Corn Extract', 'Zea mays purple', or 'Purple corn'. Marker compounds (C0003161 Anthocyanins, C0056650 cyanidin) exist but are class-broader or narrower-specific — not the extract itself. Deferred to clinician/ontology review per null-CUI policy.",
+    "cui_note": "Wave 6.Y Batch 2C (2026-05-27): C1446590 had no token overlap with the IQM entry under strict-mode guards. UMLS exact-search returns no concept for 'Purple Corn Extract', 'Zea mays purple', or 'Purple corn'. Marker compounds (C0003161 Anthocyanins, C0056650 cyanidin) exist but are class-broader or narrower-specific \u2014 not the extract itself. Deferred to clinician/ontology review per null-CUI policy.",
     "forms": {
       "purple corn extract (unspecified)": {
         "bio_score": 5,
