@@ -307,3 +307,14 @@ def test_noni_cui_is_canonical_morinda_citrifolia(iqm):
     assert iqm["noni"]["cui"] == "C1010822", (
         "noni.cui must be C1010822 (Morinda citrifolia)."
     )
+
+
+def test_shilajit_cui_is_canonical_mumie(iqm):
+    """C3709449 was a branded 'Shilajit 250 MG Oral Capsule' (Clinical Drug).
+    C0066936 'mumie' (Organic Chemical / Pharmacologic Substance) — mumie /
+    mumiyo is the alternate name for shilajit (Russian transliteration of
+    the same mineral-pitch resin) — is the canonical generic concept,
+    accepted via UMLS reverse-check on 'Shilajit'."""
+    assert iqm["shilajit"]["cui"] == "C0066936", (
+        "shilajit.cui must be C0066936 (mumie)."
+    )
