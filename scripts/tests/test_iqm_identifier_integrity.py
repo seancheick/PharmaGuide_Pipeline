@@ -484,6 +484,80 @@ def test_sulforaphane_rxcui_cleared_to_null(iqm):
     assert entry.get("rxcui_note")
 
 
+# --------------------------------------------------------------------------- #
+# Batch 4 — defer_clinician_review adjudication (2026-05-27)
+# --------------------------------------------------------------------------- #
+
+
+def test_deferred_cas_findings_are_gsrs_confirmed_not_pubchem_compounds(iqm):
+    """These CAS values are valid GSRS substance identifiers for botanicals,
+    proteins, enzymes, or mixtures. PubChem has no single compound CID for
+    them, so the fix is explicit documentation rather than deletion."""
+    expected = {
+        "black_cherry": "84604-07-9",
+        "black_seed_oil": "90064-32-7",
+        "bromelain": "9001-00-7",
+        "cascara_sagrada": "8015-89-2",
+        "casein": "9000-71-9",
+        "goji_berry": "85085-46-7",
+        "pepsin": "9001-75-6",
+        "whey_protein": "91082-88-1",
+    }
+    for canonical_id, cas in expected.items():
+        external_ids = iqm[canonical_id]["external_ids"]
+        assert external_ids["cas"] == cas
+        note = external_ids.get("cas_note", "")
+        assert "GSRS" in note and "PubChem" in note, canonical_id
+
+
+def test_deferred_unii_proxy_mappings_are_cleared(iqm):
+    """Reject UNIIs that resolve to a component, source organism/plant, or
+    narrower subtype rather than the IQM parent ingredient."""
+    cleared = {
+        "chitosan": "8SH93A7QWW",
+        "gypenosides": "CHC1JS541R",
+        "organ_extracts": "W8N8R55022",
+        "phytosterols": "S347WMO6M4",
+        "shilajit": "XII14C5FXV",
+        "vitamin_e": "KP2MW85SSQ",
+        "wheatgrass": "3C3Y389JBU",
+    }
+    for canonical_id, old_unii in cleared.items():
+        external_ids = iqm[canonical_id]["external_ids"]
+        assert external_ids.get("unii") is None, canonical_id
+        note = external_ids.get("unii_note", "")
+        assert old_unii in note and "Cleared 2026-05-27" in note, canonical_id
+
+
+def test_deferred_cui_semantic_findings_are_resolved(iqm):
+    """Wrong functional/object CUIs are corrected to exact substance CUIs;
+    deer antler velvet keeps the exact source-material concept because no
+    better ingredient-level UMLS concept exists."""
+    assert iqm["cape"]["cui"] == "C0054434"
+    assert "C0453952" in iqm["cape"].get("cui_note", "")
+
+    assert iqm["diamine_oxidase"]["cui"] == "C0019587"
+    assert "C3155423" in iqm["diamine_oxidase"].get("cui_note", "")
+
+    assert iqm["nmn"]["cui"] == "C0597067"
+    assert "C1159803" in iqm["nmn"].get("cui_note", "")
+
+    same = iqm["same"]
+    assert same["cui"] == "C0036002"
+    assert "C0445247" in same.get("cui_note", "")
+    assert "C0036002" not in (same.get("aliases") or [])
+
+    deer = iqm["deer_antler_velvet"]
+    assert deer["cui"] == "C0222040"
+    assert "Clinician-adjudicated keep 2026-05-27" in deer.get("cui_note", "")
+
+
+def test_same_curated_interactions_use_promoted_substance_cui(curated_interactions):
+    agent2_ids = _agent2_ids(curated_interactions)
+    assert "C0445247" not in agent2_ids
+    assert agent2_ids.count("C0036002") == 2
+
+
 def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
     """Regression: when `cui` is non-null, neither cui_note nor cui_status
     may still claim that UMLS has no entry / no confirmed match. Such notes

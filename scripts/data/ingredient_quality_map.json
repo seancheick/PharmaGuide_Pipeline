@@ -4145,7 +4145,8 @@
       "research_status": "validated"
     },
     "external_ids": {
-      "unii": "KP2MW85SSQ"
+      "unii": null,
+      "unii_note": "Cleared 2026-05-27: KP2MW85SSQ resolves to TOCOTRIENOLS, which is not an exact UNII for Vitamin E. Vitamin E spans tocopherols and tocotrienols; tocotrienols are a narrower subclass. Leave UNII null until GSRS exposes an exact approved record."
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": [
@@ -8200,7 +8201,7 @@
     "standard_name": "Whey Protein",
     "category": "proteins",
     "cui": "C1883555",
-    "rxcui_note": "No single RxNorm concept for cow-milk whey protein supplement; UNII 8617Z5FMF6 (WHEY) and CAS 9100-88-1 are canonical.",
+    "rxcui_note": "No single RxNorm concept for cow-milk whey protein supplement; UNII 8617Z5FMF6 (WHEY) and CAS 91082-88-1 are canonical.",
     "forms": {
       "whey protein isolate": {
         "bio_score": 12,
@@ -8306,7 +8307,8 @@
     },
     "external_ids": {
       "unii": "8617Z5FMF6",
-      "cas": "91082-88-1"
+      "cas": "91082-88-1",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record 8617Z5FMF6 (WHEY) lists CAS 91082-88-1."
     },
     "gsrs": {
       "substance_name": "WHEY",
@@ -8405,7 +8407,8 @@
     },
     "external_ids": {
       "unii": "48268V50D5",
-      "cas": "9000-71-9"
+      "cas": "9000-71-9",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record 48268V50D5 (CASEIN) lists CAS 9000-71-9."
     },
     "gsrs": {
       "substance_name": "CASEIN",
@@ -8471,7 +8474,8 @@
     },
     "external_ids": {
       "unii": "A77056YJ4K",
-      "cas": "84604-07-9"
+      "cas": "84604-07-9",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record A77056YJ4K (BLACK CHERRY) lists CAS 84604-07-9."
     },
     "gsrs": {
       "substance_name": "BLACK CHERRY",
@@ -8798,7 +8802,8 @@
     },
     "external_ids": {
       "unii": "GID333S43J",
-      "cas": "9001-75-6"
+      "cas": "9001-75-6",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record GID333S43J (PEPSIN) lists CAS 9001-75-6."
     },
     "gsrs": {
       "substance_name": "PEPSIN",
@@ -23673,7 +23678,7 @@
   "same": {
     "standard_name": "SAMe (S-Adenosyl-L-Methionine)",
     "category": "amino_acids",
-    "cui": "C0445247",
+    "cui": "C0036002",
     "rxcui": "9504",
     "forms": {
       "same supplement": {
@@ -23780,9 +23785,8 @@
         }
       ]
     },
-    "aliases": [
-      "C0036002"
-    ]
+    "aliases": [],
+    "cui_note": "Corrected 2026-05-27: C0445247 resolves to 'Same' (Qualitative Concept). UMLS exact for 'SAM-e', 'ademetionine', and 'S-adenosylmethionine' is C0036002 (Amino Acid, Peptide, or Protein; Pharmacologic Substance; Biologically Active Substance)."
   },
   "rna_dna": {
     "standard_name": "RNA/DNA (Nucleic Acids)",
@@ -24570,7 +24574,7 @@
         }
       }
     },
-    "cui": "C0453952",
+    "cui": "C0054434",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24579,7 +24583,7 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "cui_note": "",
+    "cui_note": "Corrected 2026-05-27: C0453952 resolves to 'Cape' (Manufactured Object). UMLS exact for 'Caffeic Acid Phenethyl Ester' / 'phenethyl caffeate' is C0054434 (Organic Chemical, Pharmacologic Substance).",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -28738,9 +28742,8 @@
       "research_status": "validated"
     },
     "external_ids": {
-      "unii": "CHC1JS541R",
-      "unii_substance_name": "GYNOSTEMMA PENTAPHYLLUM WHOLE",
-      "unii_note": "GSRS verified 2026-05-20; gypenosides are the active saponins from this plant"
+      "unii": null,
+      "unii_note": "Cleared 2026-05-27: CHC1JS541R resolves to GYNOSTEMMA PENTAPHYLLUM WHOLE, which is not an exact UNII for Gypenosides. Gypenosides are active saponins, not the whole Gynostemma plant record. Leave UNII null until GSRS exposes an exact approved record."
     },
     "aliases": []
   },
@@ -30341,7 +30344,8 @@
       "C0054560"
     ],
     "external_ids": {
-      "unii": "S347WMO6M4"
+      "unii": null,
+      "unii_note": "Cleared 2026-05-27: S347WMO6M4 resolves to beta-sitosterol, which is not an exact UNII for Phytosterols. Phytosterols is a plant-sterol class; beta-sitosterol is one narrower member. Leave UNII null until GSRS exposes an exact approved record."
     }
   },
   "piperine": {
@@ -32380,7 +32384,7 @@
   "nmn": {
     "standard_name": "Nicotinamide Mononucleotide",
     "category": "vitamins",
-    "cui": "C1159803",
+    "cui": "C0597067",
     "rxcui": "2262276",
     "forms": {
       "beta-nicotinamide mononucleotide": {
@@ -32469,7 +32473,8 @@
       ],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "cui_note": "Corrected 2026-05-27: C1159803 resolves to 'nicotinamide mononucleotide transport' (Cell Function). UMLS exact for 'Nicotinamide Mononucleotide' is C0597067, 'nicotinamide ribotide' (Nucleic Acid, Nucleoside, or Nucleotide; Pharmacologic Substance)."
   },
   "pterostilbene": {
     "standard_name": "Pterostilbene",
@@ -33155,7 +33160,8 @@
     "aliases": [
       "Velvet of antler"
     ],
-    "external_ids": {}
+    "external_ids": {},
+    "cui_note": "Clinician-adjudicated keep 2026-05-27: C0222040 resolves to 'Velvet of antler' (Body Part, Organ, or Organ Component). It is the exact UMLS source-material concept for deer antler velvet; no more specific ingredient-level substance CUI was found, so the CUI is retained with this semantic-type exception."
   },
   "gymnema_sylvestre": {
     "standard_name": "Gymnema Sylvestre",
@@ -37286,7 +37292,8 @@
       "Triticum aestivum"
     ],
     "external_ids": {
-      "unii": "3C3Y389JBU"
+      "unii": null,
+      "unii_note": "Cleared 2026-05-27: 3C3Y389JBU resolves to TRITICUM AESTIVUM WHOLE, which is not an exact UNII for Wheatgrass. Wheatgrass juice/powder is a young-grass ingredient; whole Triticum aestivum is a source-plant proxy, not exact. Leave UNII null until GSRS exposes an exact approved record."
     },
     "gsrs": {
       "substance_name": "TRITICUM AESTIVUM WHOLE",
@@ -40206,7 +40213,8 @@
     },
     "external_ids": {
       "unii": "CS4U38E731",
-      "cas": "90064-32-7"
+      "cas": "90064-32-7",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record CS4U38E731 (NIGELLA SATIVA SEED OIL) lists CAS 90064-32-7."
     },
     "gsrs": {
       "substance_name": "NIGELLA SATIVA SEED OIL",
@@ -40494,7 +40502,8 @@
       "research_status": "validated"
     },
     "external_ids": {
-      "unii": "XII14C5FXV"
+      "unii": null,
+      "unii_note": "Cleared 2026-05-27: XII14C5FXV resolves to FULVIC ACID, which is not an exact UNII for Shilajit. Shilajit/mumie is a complex mineral-organic substance; fulvic acid is a component marker, not the ingredient identity. Leave UNII null until GSRS exposes an exact approved record."
     },
     "aliases": []
   },
@@ -42125,7 +42134,8 @@
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {
-      "unii": "W8N8R55022"
+      "unii": null,
+      "unii_note": "Cleared 2026-05-27: W8N8R55022 resolves to BEEF LIVER, which is not an exact UNII for Organ Extracts (Glandulars). Organ extracts is a multi-organ glandular class, not one beef-liver substance. Leave UNII null until GSRS exposes an exact approved record."
     }
   },
   "hemp_seed_oil": {
@@ -52617,8 +52627,8 @@
   },
   "diamine_oxidase": {
     "category": "enzymes",
-    "cui": "C3155423",
-    "cui_note": "",
+    "cui": "C0019587",
+    "cui_note": "Corrected 2026-05-27: C3155423 resolves to 'diamine oxidase activity' (Molecular Function). UMLS exact for 'diamine oxidase' is C0019587, 'Amine Oxidase (Copper-Containing)' (Amino Acid, Peptide, or Protein; Enzyme).",
     "forms": {
       "diamine oxidase (unspecified)": {
         "score": 8,
@@ -54035,7 +54045,8 @@
       "unii_substance_name": "LYCIUM BARBARUM FRUIT",
       "cas": "85085-46-7",
       "rxcui": "1311632",
-      "unii_note": "GSRS verified 2026-05-20; fruit (berry) substance, NOT root bark (766SVR5GCU)"
+      "unii_note": "GSRS verified 2026-05-20; fruit (berry) substance, NOT root bark (766SVR5GCU)",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record 930626MWDL (LYCIUM BARBARUM FRUIT) lists CAS 85085-46-7."
     }
   },
   "african_mango": {
@@ -59862,9 +59873,10 @@
     },
     "aliases": [],
     "external_ids": {
-      "unii": "8SH93A7QWW",
+      "unii": null,
       "pubchem_cid": null,
-      "cas": null
+      "cas": null,
+      "unii_note": "Cleared 2026-05-27: 8SH93A7QWW resolves to CHITIN, which is not an exact UNII for Chitosan. GSRS search exposes CHITOSAN without an approvalID; derivative UNIIs are not exact chitosan. Leave UNII null until GSRS exposes an exact approved record."
     },
     "gsrs": {
       "substance_name": "CHITIN",
@@ -60241,7 +60253,8 @@
     },
     "external_ids": {
       "unii": "4VBP01X99F",
-      "cas": "8015-89-2"
+      "cas": "8015-89-2",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record 4VBP01X99F (FRANGULA PURSHIANA BARK) lists CAS 8015-89-2."
     },
     "forms": {
       "cascara sagrada bark extract": {
@@ -62753,7 +62766,8 @@
     },
     "external_ids": {
       "unii": "U182GP2CF3",
-      "cas": "9001-00-7"
+      "cas": "9001-00-7",
+      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record U182GP2CF3 (BROMELAINS) lists CAS 9001-00-7."
     },
     "aliases": [
       "bromelain"
