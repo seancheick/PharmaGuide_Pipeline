@@ -1,0 +1,68 @@
+{
+  "canonical_id": "l_phenylalanine",
+  "verified_at": "2026-05-27T16:01:28.803808+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "L-Phenylalanine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0031453",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0031453",
+          "name": "phenylalanine",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 103,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "8156",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "8156",
+          "name": "phenylalanine",
+          "tty": "IN",
+          "synonym": "L-phenylalanine"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "47E5O17Y3R",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "47E5O17Y3R",
+          "gsrs_name": "Phenylalanine"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

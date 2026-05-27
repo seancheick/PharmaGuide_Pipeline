@@ -1,0 +1,65 @@
+{
+  "canonical_id": "split_gill_polypore",
+  "verified_at": "2026-05-27T16:04:38.362716+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Split Gill Polypore",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0319679",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0319679",
+          "name": "Schizophyllum commune",
+          "semantic_types": [
+            "Fungus"
+          ],
+          "atom_count": 30,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0319679 resolves to 'Schizophyllum commune' with no name tokens overlapping IQM 'Split Gill Polypore' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "ZL0463V6OM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "ZL0463V6OM",
+          "gsrs_name": "SCHIZOPHYLLUM COMMUNE FRUITING BODY"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

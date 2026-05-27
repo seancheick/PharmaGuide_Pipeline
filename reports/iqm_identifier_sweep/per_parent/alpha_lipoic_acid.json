@@ -1,0 +1,72 @@
+{
+  "canonical_id": "alpha_lipoic_acid",
+  "verified_at": "2026-05-27T15:56:45.037590+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Alpha Lipoic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5763195",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C5763195",
+          "name": "alpha lipoic acid meglumine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "618060",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "618060",
+          "name": "thioctate",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 618060 resolves to 'thioctate' (tty=IN) with no token overlap with IQM 'Alpha Lipoic Acid' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "73Y7P0K73Y",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "73Y7P0K73Y",
+          "gsrs_name": "ALPHA LIPOIC ACID"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

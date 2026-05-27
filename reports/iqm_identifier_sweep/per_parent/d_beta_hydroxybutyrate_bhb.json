@@ -1,0 +1,63 @@
+{
+  "canonical_id": "d_beta_hydroxybutyrate_bhb",
+  "verified_at": "2026-05-27T15:58:53.630775+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "D-Beta-Hydroxybutyrate (BHB)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0106006",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0106006",
+          "name": "3-Hydroxybutyrate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 58,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "FG2UN5EP9V",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "FG2UN5EP9V",
+          "gsrs_name": "3-HYDROXYBUTYRATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

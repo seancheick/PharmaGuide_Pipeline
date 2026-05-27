@@ -1,0 +1,63 @@
+{
+  "canonical_id": "nicotinamide_riboside",
+  "verified_at": "2026-05-27T16:02:43.928663+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Nicotinamide Riboside",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C4476285",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C4476285",
+          "name": "Nicotinamide riboside chloride",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "0I8H2M0L7N",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "0I8H2M0L7N",
+          "gsrs_name": "NICOTINAMIDE RIBOSIDE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

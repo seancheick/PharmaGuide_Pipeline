@@ -1,0 +1,62 @@
+{
+  "canonical_id": "bifidobacterium_lactis",
+  "verified_at": "2026-05-27T15:57:24.306926+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Bifidobacterium Lactis",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1001866",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1001866",
+          "name": "Bifidobacterium animalis",
+          "semantic_types": [
+            "Bacterium"
+          ],
+          "atom_count": 54,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5307V7XW8I",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "5307V7XW8I",
+          "gsrs_name": "BIFIDOBACTERIUM ANIMALIS LACTIS"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

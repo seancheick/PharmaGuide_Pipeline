@@ -1,0 +1,68 @@
+{
+  "canonical_id": "beta_carotene",
+  "verified_at": "2026-05-27T15:57:16.659806+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Beta-Carotene",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0212517",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0212517",
+          "name": "beta-carotene hydroxylase",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Enzyme"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "19143",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "19143",
+          "name": "beta carotene",
+          "tty": "IN",
+          "synonym": "betacarotene"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "01YAE03M7J",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "01YAE03M7J",
+          "gsrs_name": "BETA CAROTENE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

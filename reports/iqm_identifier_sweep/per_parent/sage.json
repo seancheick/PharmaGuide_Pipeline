@@ -1,0 +1,68 @@
+{
+  "canonical_id": "sage",
+  "verified_at": "2026-05-27T16:04:10.749869+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Sage",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3265310",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3265310",
+          "name": "sage extract",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1011627",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1011627",
+          "name": "sage leaf allergenic extract",
+          "tty": "IN",
+          "synonym": "Salvia officinalis allergenic extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "065C5D077J",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "065C5D077J",
+          "gsrs_name": "SAGE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

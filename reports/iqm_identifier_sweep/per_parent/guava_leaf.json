@@ -1,0 +1,67 @@
+{
+  "canonical_id": "guava_leaf",
+  "verified_at": "2026-05-27T16:00:25.683567+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Guava Leaf Extract",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3535763",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3535763",
+          "name": "guava leaf",
+          "semantic_types": [
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1799150",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1799150",
+          "name": "Psidium guajava leaf extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "PM0F263X0Y",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "PM0F263X0Y",
+          "gsrs_name": "PSIDIUM GUAJAVA LEAF"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

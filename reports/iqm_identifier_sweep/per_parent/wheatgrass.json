@@ -1,0 +1,73 @@
+{
+  "canonical_id": "wheatgrass",
+  "verified_at": "2026-05-27T16:05:46.141612+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Wheatgrass",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3827474",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3827474",
+          "name": "Wheatgrass Juice",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 4,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "3C3Y389JBU",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "3C3Y389JBU",
+          "gsrs_name": "TRITICUM AESTIVUM WHOLE",
+          "names_sample": [
+            "FRUMENTUM TRITICUM WHOLE",
+            "TRITICUM AESTIVUM L.",
+            "TRITICUM AESTIVUM WHOLE",
+            "TRITICUM ASIATICUM WHOLE",
+            "TRITICUM ERINACEUM WHOLE"
+          ]
+        },
+        "evidence": "UNII 3C3Y389JBU resolves to GSRS substance 'TRITICUM AESTIVUM WHOLE' with no token overlap with IQM 'Wheatgrass'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

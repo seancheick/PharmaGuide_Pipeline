@@ -1,0 +1,62 @@
+{
+  "canonical_id": "mastic_gum",
+  "verified_at": "2026-05-27T16:02:21.172875+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Mastic Gum",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5709624",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_branded_or_clinical_drug",
+        "api_response": {
+          "cui": "C5709624",
+          "name": "Jarrow Formulas Mastic Gum Capsules",
+          "semantic_types": [
+            "Clinical Drug"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C5709624 resolves to 'Jarrow Formulas Mastic Gum Capsules' with semantic types ['Clinical Drug']. Branded/clinical-drug types ['Clinical Drug'] present, but IQM entry 'Mastic Gum' is a generic substance."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

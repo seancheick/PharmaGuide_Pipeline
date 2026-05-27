@@ -1,0 +1,68 @@
+{
+  "canonical_id": "molybdenum",
+  "verified_at": "2026-05-27T16:02:28.384715+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Molybdenum",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0026402",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0026402",
+          "name": "molybdenum",
+          "semantic_types": [
+            "Biologically Active Substance",
+            "Element, Ion, or Isotope"
+          ],
+          "atom_count": 60,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "7024",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "7024",
+          "name": "molybdenum",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "81AH48963U",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "81AH48963U",
+          "gsrs_name": "MOLYBDENUM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

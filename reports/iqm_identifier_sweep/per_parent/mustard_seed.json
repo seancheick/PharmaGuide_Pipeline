@@ -1,0 +1,67 @@
+{
+  "canonical_id": "mustard_seed",
+  "verified_at": "2026-05-27T16:02:34.121185+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Mustard Seed",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0453262",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0453262",
+          "name": "Mustard seed - dietary",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "899456",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "899456",
+          "name": "mustard seed allergenic extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "58RXI817UT",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "58RXI817UT",
+          "gsrs_name": "MUSTARD SEED, UNSPECIFIED"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

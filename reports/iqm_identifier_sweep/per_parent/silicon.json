@@ -1,0 +1,71 @@
+{
+  "canonical_id": "silicon",
+  "verified_at": "2026-05-27T16:04:27.788609+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Silicon",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0037114",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0037114",
+          "name": "silicones",
+          "semantic_types": [
+            "Organic Chemical",
+            "Biomedical or Dental Material"
+          ],
+          "atom_count": 57,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0037114 resolves to 'silicones' with no name tokens overlapping IQM 'Silicon' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "9774",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "9774",
+          "name": "silicon",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Z4152N8IUI",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Z4152N8IUI",
+          "gsrs_name": "SILICON"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

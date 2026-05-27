@@ -1,0 +1,62 @@
+{
+  "canonical_id": "diamine_oxidase",
+  "verified_at": "2026-05-27T15:59:07.058646+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Diamine Oxidase",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3155423",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "resolved_concept_lacks_substance_semantic_type",
+        "api_response": {
+          "cui": "C3155423",
+          "name": "diamine oxidase activity",
+          "semantic_types": [
+            "Molecular Function"
+          ],
+          "atom_count": 2,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C3155423 resolves to 'diamine oxidase activity' with semantic types ['Molecular Function']. None match the typical substance categories. May be a procedure/finding/organism concept, or a UMLS atom that lost its substance categorization."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

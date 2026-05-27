@@ -1,0 +1,63 @@
+{
+  "canonical_id": "larch_arabinogalactan",
+  "verified_at": "2026-05-27T16:01:57.291837+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Larch Arabinogalactan",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "No confirmed exact UMLS concept for larch arabinogalactan as a supplement ingredient."
+      }
+    },
+    "rxcui": {
+      "stored": "1425353",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "1425353",
+          "name": "galactoarabinan",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 1425353 resolves to 'galactoarabinan' (tty=IN) with no token overlap with IQM 'Larch Arabinogalactan' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "SL4SX1O487",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "SL4SX1O487",
+          "gsrs_name": "GALACTOARABINAN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

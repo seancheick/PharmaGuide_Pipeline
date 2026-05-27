@@ -1,0 +1,75 @@
+{
+  "canonical_id": "diindolylmethane",
+  "verified_at": "2026-05-27T15:59:11.357164+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Diindolylmethane (DIM)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0163151",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0163151",
+          "name": "3,3'-diindolylmethane",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 20,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1603521",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1603521",
+          "name": "3,3'-diindolylmethane",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "SSZ9HQT61Z",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "SSZ9HQT61Z",
+          "gsrs_name": "3,3'-DIINDOLYLMETHANE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 3071,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 3071,
+          "iupac": "3-(1H-indol-3-ylmethyl)-1H-indole",
+          "inchi_key": "VFTRKSBEFQDZKX-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1968-05-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1968-05-4",
+          "resolved_cid": 3071
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

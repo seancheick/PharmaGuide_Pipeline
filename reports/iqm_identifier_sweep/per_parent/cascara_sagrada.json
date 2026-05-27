@@ -1,0 +1,65 @@
+{
+  "canonical_id": "cascara_sagrada",
+  "verified_at": "2026-05-27T15:58:02.051487+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Cascara Sagrada",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0205704",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0205704",
+          "name": "cascara sagrada",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 74,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "4VBP01X99F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "4VBP01X99F",
+          "gsrs_name": "FRANGULA PURSHIANA BARK"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "8015-89-2",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '8015-89-2' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "canonical_id": "superoxide_dismutase",
+  "verified_at": "2026-05-27T16:04:50.858571+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Superoxide Dismutase (SOD)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0038838",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0038838",
+          "name": "superoxide dismutase",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance",
+            "Enzyme"
+          ],
+          "atom_count": 73,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1804845",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1804845",
+          "name": "superoxide dismutase (Saccharomyces cerevisiae)",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "W2T4YRA9AD",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "W2T4YRA9AD",
+          "gsrs_name": "SUPEROXIDE DISMUTASE (SACCHAROMYCES CEREVISIAE)"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

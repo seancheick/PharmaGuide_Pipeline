@@ -1,0 +1,68 @@
+{
+  "canonical_id": "capsaicin",
+  "verified_at": "2026-05-27T15:58:00.845347+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Capsaicin (Capsicum)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0006931",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0006931",
+          "name": "capsaicin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 71,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1992",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1992",
+          "name": "capsaicin",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "S07O44R1ZM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "S07O44R1ZM",
+          "gsrs_name": "CAPSAICIN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "canonical_id": "lactobacillus_casei",
+  "verified_at": "2026-05-27T16:01:42.407281+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Lactobacillus Casei",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2978106",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2978106",
+          "name": "lactobacillus acidophilus-lactobacillus casei",
+          "semantic_types": [
+            "Bacterium"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1592255",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1592255",
+          "name": "Lacticaseibacillus casei",
+          "tty": "IN",
+          "synonym": "Lactobacillus casei"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "SA940P2U00",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "SA940P2U00",
+          "gsrs_name": "Lacticaseibacillus casei"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

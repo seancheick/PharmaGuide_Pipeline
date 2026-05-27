@@ -1,0 +1,69 @@
+{
+  "canonical_id": "vitamin_a",
+  "verified_at": "2026-05-27T16:05:23.394277+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Vitamin A",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0042839",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0042839",
+          "name": "vitamin A",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 113,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "11246",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "11246",
+          "name": "vitamin A",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "81G40H8B0T",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "81G40H8B0T",
+          "gsrs_name": "VITAMIN A"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

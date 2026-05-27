@@ -1,0 +1,67 @@
+{
+  "canonical_id": "lactobacillus_paracasei",
+  "verified_at": "2026-05-27T16:01:49.741364+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Lactobacillus Paracasei",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5708631",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C5708631",
+          "name": "Lactobacillus paracasei Subspecies paracasei",
+          "semantic_types": [
+            "Bacterium"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "2375526",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "2375526",
+          "name": "Lacticaseibacillus paracasei",
+          "tty": "IN",
+          "synonym": "Lactobacillus paracasei"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "N1G291SC6Q",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "N1G291SC6Q",
+          "gsrs_name": "Lacticaseibacillus paracasei"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "canonical_id": "cape",
+  "verified_at": "2026-05-27T15:57:59.434265+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "CAPE (Caffeic Acid Phenethyl Ester)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0453952",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "resolved_concept_lacks_substance_semantic_type",
+        "api_response": {
+          "cui": "C0453952",
+          "name": "Cape",
+          "semantic_types": [
+            "Manufactured Object"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0453952 resolves to 'Cape' with semantic types ['Manufactured Object']. None match the typical substance categories. May be a procedure/finding/organism concept, or a UMLS atom that lost its substance categorization."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "G960R9S5SK",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "G960R9S5SK",
+          "gsrs_name": "CAFFEIC ACID PHENETHYL ESTER"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

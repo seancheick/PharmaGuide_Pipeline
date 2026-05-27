@@ -1,0 +1,55 @@
+{
+  "canonical_id": "grains_of_paradise",
+  "verified_at": "2026-05-27T16:00:20.025297+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Grains of Paradise",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "No confirmed exact UMLS concept found for grains of paradise."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Q46FF3N01L",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Q46FF3N01L",
+          "gsrs_name": "GRAINS OF PARADISE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "canonical_id": "borage_seed_oil",
+  "verified_at": "2026-05-27T15:57:42.451887+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Borage Seed Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5982013",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_branded_or_clinical_drug",
+        "api_response": {
+          "cui": "C5982013",
+          "name": "Borage Seed Oil 1300 MG Oral Capsule, Liquid Filled [Borage Oil]",
+          "semantic_types": [
+            "Clinical Drug"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C5982013 resolves to 'Borage Seed Oil 1300 MG Oral Capsule, Liquid Filled [Borage Oil]' with semantic types ['Clinical Drug']. Branded/clinical-drug types ['Clinical Drug'] present, but IQM entry 'Borage Seed Oil' is a generic substance."
+      }
+    },
+    "rxcui": {
+      "stored": "68905",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "68905",
+          "name": "borage oil",
+          "tty": "IN",
+          "synonym": "starflower oil"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "F8XAG1755S",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "F8XAG1755S",
+          "gsrs_name": "BORAGE SEED OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

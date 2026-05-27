@@ -1,0 +1,68 @@
+{
+  "canonical_id": "glucosamine",
+  "verified_at": "2026-05-27T16:00:12.541318+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Glucosamine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0017718",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0017718",
+          "name": "glucosamine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 70,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "4845",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "4845",
+          "name": "glucosamine",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "N08U5BOQ1K",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "N08U5BOQ1K",
+          "gsrs_name": "GLUCOSAMINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

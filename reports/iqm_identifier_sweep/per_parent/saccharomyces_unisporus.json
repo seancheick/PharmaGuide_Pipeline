@@ -1,0 +1,60 @@
+{
+  "canonical_id": "saccharomyces_unisporus",
+  "verified_at": "2026-05-27T16:04:08.904697+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Saccharomyces Unisporus",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1001399",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1001399",
+          "name": "Kazachstania unispora",
+          "semantic_types": [
+            "Fungus"
+          ],
+          "atom_count": 13,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Saccharomyces Unisporus', but UMLS exact-search for the IQM name returns the same CUI (C1001399). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

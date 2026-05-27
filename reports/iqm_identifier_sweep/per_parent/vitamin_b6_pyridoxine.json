@@ -1,0 +1,69 @@
+{
+  "canonical_id": "vitamin_b6_pyridoxine",
+  "verified_at": "2026-05-27T16:05:31.127871+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Vitamin B6 (Pyridoxine)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0034272",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0034272",
+          "name": "pyridoxine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 105,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "42954",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "42954",
+          "name": "vitamin B6",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "KV2JZ1BI6Z",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "KV2JZ1BI6Z",
+          "gsrs_name": "PYRIDOXINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

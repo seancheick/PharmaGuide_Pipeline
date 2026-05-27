@@ -1,0 +1,65 @@
+{
+  "canonical_id": "omega_6_fatty_acids",
+  "verified_at": "2026-05-27T16:02:55.337714+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Omega-6 Fatty Acids",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5918245",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_branded_or_clinical_drug",
+        "api_response": {
+          "cui": "C5918245",
+          "name": "Alpha linolenic acid 434mg, Omega-6 Fatty Acids 276mg, Omega-9 Fatty Acids 170mg, Vitamin E 2.7mg Oral capsule, liquid filled",
+          "semantic_types": [
+            "Clinical Drug"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C5918245 resolves to 'Alpha linolenic acid 434mg, Omega-6 Fatty Acids 276mg, Omega-9 Fatty Acids 170mg, Vitamin E 2.7mg Oral capsule, liquid filled' with semantic types ['Clinical Drug']. Branded/clinical-drug types ['Clinical Drug'] present, but IQM entry 'Omega-6 Fatty Acids' is a generic substance."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "116Z6MZN1M",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "116Z6MZN1M",
+          "gsrs_name": "OMEGA-6 FATTY ACIDS"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

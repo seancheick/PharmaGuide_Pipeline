@@ -1,0 +1,65 @@
+{
+  "canonical_id": "organ_extracts",
+  "verified_at": "2026-05-27T16:02:57.582917+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Organ Extracts (Glandulars)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "Class entry spanning multiple glandular and organ extracts. No single UMLS concept is accurate."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "W8N8R55022",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "W8N8R55022",
+          "gsrs_name": "BEEF LIVER",
+          "names_sample": [
+            "BEEF LIVER",
+            "BEEF, LIVER",
+            "BOS BOVIS LIVER",
+            "BOS PRIMIGENIUS TAURUS LIVER",
+            "BOS TAURUS LIVER"
+          ]
+        },
+        "evidence": "UNII W8N8R55022 resolves to GSRS substance 'BEEF LIVER' with no token overlap with IQM 'Organ Extracts (Glandulars)'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

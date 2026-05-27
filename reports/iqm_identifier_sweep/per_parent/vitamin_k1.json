@@ -1,0 +1,69 @@
+{
+  "canonical_id": "vitamin_k1",
+  "verified_at": "2026-05-27T16:05:42.004538+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Vitamin K1",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0031862",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0031862",
+          "name": "vitamin K1",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 189,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "11258",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "11258",
+          "name": "vitamin K",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "A034SE7857",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "A034SE7857",
+          "gsrs_name": "PHYTONADIONE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "canonical_id": "l_leucine",
+  "verified_at": "2026-05-27T16:01:23.565963+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "L-Leucine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0023401",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0023401",
+          "name": "leucine",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 100,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "6308",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "6308",
+          "name": "leucine",
+          "tty": "IN",
+          "synonym": "L-leucine"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "GMW67QNF9C",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "GMW67QNF9C",
+          "gsrs_name": "Leucine"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

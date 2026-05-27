@@ -1,0 +1,81 @@
+{
+  "canonical_id": "chitosan",
+  "verified_at": "2026-05-27T15:58:15.798500+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Chitosan",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0162969",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0162969",
+          "name": "chitosan",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 34,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1788955",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "1788955",
+          "name": "shrimp shell chitin",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 1788955 resolves to 'shrimp shell chitin' (tty=IN) with no token overlap with IQM 'Chitosan' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "8SH93A7QWW",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "8SH93A7QWW",
+          "gsrs_name": "CHITIN",
+          "names_sample": [
+            "CHITAN, N-ACETYL-",
+            "CHITIN",
+            "CHITIN FROM CRAB SHELLS",
+            "CHITIN FROM SHRIMP SHELLS",
+            "CHITIN POWDER"
+          ]
+        },
+        "evidence": "UNII 8SH93A7QWW resolves to GSRS substance 'CHITIN' with no token overlap with IQM 'Chitosan'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

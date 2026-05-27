@@ -1,0 +1,71 @@
+{
+  "canonical_id": "xylitol",
+  "verified_at": "2026-05-27T16:05:54.041411+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Xylitol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0043369",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0043369",
+          "name": "xylitol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 71,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "11377",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "11377",
+          "name": "xylitol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "VCQ006KQ1E",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "VCQ006KQ1E",
+          "gsrs_name": "Xylitol"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "87-99-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "87-99-0",
+          "resolved_cid": 6912
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

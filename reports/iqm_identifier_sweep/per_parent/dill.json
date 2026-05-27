@@ -1,0 +1,67 @@
+{
+  "canonical_id": "dill",
+  "verified_at": "2026-05-27T15:59:12.391771+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Dill",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2713414",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2713414",
+          "name": "Dill Weed",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "975763",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "975763",
+          "name": "dill allergenic extract",
+          "tty": "IN",
+          "synonym": "Anethum graveolens allergenic extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Y05PC4JZRH",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Y05PC4JZRH",
+          "gsrs_name": "DILL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

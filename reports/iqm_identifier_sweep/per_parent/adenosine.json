@@ -1,0 +1,69 @@
+{
+  "canonical_id": "adenosine",
+  "verified_at": "2026-05-27T15:56:32.588799+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Adenosine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0001443",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0001443",
+          "name": "adenosine",
+          "semantic_types": [
+            "Nucleic Acid, Nucleoside, or Nucleotide",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 104,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "296",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "296",
+          "name": "adenosine",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "K72T3FS567",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "K72T3FS567",
+          "gsrs_name": "ADENOSINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

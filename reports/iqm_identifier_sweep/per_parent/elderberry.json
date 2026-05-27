@@ -1,0 +1,68 @@
+{
+  "canonical_id": "elderberry",
+  "verified_at": "2026-05-27T15:59:22.124139+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Elderberry",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1095913",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1095913",
+          "name": "elderberry preparation",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1307698",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1307698",
+          "name": "Sambucus nigra flowering top",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "BQY1UBX046",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "BQY1UBX046",
+          "gsrs_name": "EUROPEAN ELDERBERRY"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

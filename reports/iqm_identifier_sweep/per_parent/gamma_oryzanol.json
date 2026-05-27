@@ -1,0 +1,70 @@
+{
+  "canonical_id": "gamma_oryzanol",
+  "verified_at": "2026-05-27T15:59:57.008875+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Gamma Oryzanol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5979108",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_branded_or_clinical_drug",
+        "api_response": {
+          "cui": "C5979108",
+          "name": "Amylase/Cellulase/Gamma Oryzanol/Lipase/Marshmallow Root Extract/Slippery Elm Bark 75 MG-100 MG-100 MG Oral Capsule",
+          "semantic_types": [
+            "Clinical Drug"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C5979108 resolves to 'Amylase/Cellulase/Gamma Oryzanol/Lipase/Marshmallow Root Extract/Slippery Elm Bark 75 MG-100 MG-100 MG Oral Capsule' with semantic types ['Clinical Drug']. Branded/clinical-drug types ['Clinical Drug'] present, but IQM entry 'Gamma Oryzanol' is a generic substance."
+      }
+    },
+    "rxcui": {
+      "stored": "25608",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "25608",
+          "name": "gamma-oryzanol",
+          "tty": "IN",
+          "synonym": "oryzanol"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "SST9XCL51M",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "SST9XCL51M",
+          "gsrs_name": "ORYZANOL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

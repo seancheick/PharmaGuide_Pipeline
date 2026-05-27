@@ -1,0 +1,67 @@
+{
+  "canonical_id": "beta_caryophyllene",
+  "verified_at": "2026-05-27T15:57:17.705875+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Beta-Caryophyllene",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0525503",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0525503",
+          "name": "BETA-CARYOPHYLLENE",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 6,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1368148",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1368148",
+          "name": "caryophyllene",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "BHW853AU9H",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "BHW853AU9H",
+          "gsrs_name": "CARYOPHYLLENE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

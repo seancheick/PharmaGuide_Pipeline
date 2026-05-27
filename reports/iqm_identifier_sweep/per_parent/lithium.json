@@ -1,0 +1,68 @@
+{
+  "canonical_id": "lithium",
+  "verified_at": "2026-05-27T16:02:06.521699+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Lithium",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0023870",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0023870",
+          "name": "lithium",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Element, Ion, or Isotope"
+          ],
+          "atom_count": 76,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "6448",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "6448",
+          "name": "lithium",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "9FN79X2M3F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "9FN79X2M3F",
+          "gsrs_name": "LITHIUM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

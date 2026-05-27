@@ -1,0 +1,65 @@
+{
+  "canonical_id": "goji_berry",
+  "verified_at": "2026-05-27T16:00:17.817382+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Goji Berry",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3474499",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3474499",
+          "name": "Goji berry preparation",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 4,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "930626MWDL",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "930626MWDL",
+          "gsrs_name": "LYCIUM BARBARUM FRUIT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "85085-46-7",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '85085-46-7' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

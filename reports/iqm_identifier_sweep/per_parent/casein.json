@@ -1,0 +1,72 @@
+{
+  "canonical_id": "casein",
+  "verified_at": "2026-05-27T15:58:03.984667+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Casein",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0007332",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0007332",
+          "name": "caseins",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 52,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Casein', but UMLS exact-search for the IQM name returns the same CUI (C0007332). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": "1440974",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1440974",
+          "name": "caseins",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "notes": "RxNorm preferred display name 'caseins' disagrees with IQM 'Casein', but RxNav name-search for 'Casein' returns the same RxCUI (1440974)."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "48268V50D5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "48268V50D5",
+          "gsrs_name": "CASEIN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9000-71-9",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '9000-71-9' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

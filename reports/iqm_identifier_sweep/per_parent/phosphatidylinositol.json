@@ -1,0 +1,63 @@
+{
+  "canonical_id": "phosphatidylinositol",
+  "verified_at": "2026-05-27T16:03:25.774934+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Phosphatidylinositol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0031621",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0031621",
+          "name": "phosphatidylinositols",
+          "semantic_types": [
+            "Organic Chemical",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 107,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0031621 resolves to 'phosphatidylinositols' with no name tokens overlapping IQM 'Phosphatidylinositol' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

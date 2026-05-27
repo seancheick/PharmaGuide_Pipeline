@@ -1,0 +1,67 @@
+{
+  "canonical_id": "icariin",
+  "verified_at": "2026-05-27T16:00:39.837188+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Icariin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0063273",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0063273",
+          "name": "icariin",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 5,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1788871",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1788871",
+          "name": "icariin",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "VNM47R2QSQ",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "VNM47R2QSQ",
+          "gsrs_name": "ICARIIN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

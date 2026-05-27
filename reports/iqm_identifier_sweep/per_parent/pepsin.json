@@ -1,0 +1,71 @@
+{
+  "canonical_id": "pepsin",
+  "verified_at": "2026-05-27T16:03:12.126644+00:00",
+  "iqm_snapshot_sha256": "7a68a890b34e2a50a9611f05f0d078c7ed28bd25286480e1e5c9f26e80de3772",
+  "standard_name": "Pepsin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0030909",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0030909",
+          "name": "pepsin A",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance",
+            "Enzyme"
+          ],
+          "atom_count": 69,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "8016",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "8016",
+          "name": "pepsin A",
+          "tty": "IN",
+          "synonym": "pepsin"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "GID333S43J",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "GID333S43J",
+          "gsrs_name": "Pepsin"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9001-75-6",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '9001-75-6' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}
