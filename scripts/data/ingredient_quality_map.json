@@ -51647,7 +51647,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "cui_note": "",
+    "cui_note": "Clinician-adjudicated keep 2026-05-27 (Wave 6.Y Batch 4): C0319679 resolves to 'Schizophyllum commune' (Fungus) — the canonical species for Split Gill Polypore mushroom. UMLS has no atom linking the common name to the species CUI; strict-mode no_token_overlap guard intentionally fails (common name vs Latin species). Documented exception — species mapping is correct.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "",
     "external_ids": {
@@ -52383,7 +52383,7 @@
       "confidence": "medium"
     },
     "category_enum": "antioxidants",
-    "cui_note": "",
+    "cui_note": "Clinician-adjudicated keep 2026-05-27 (Wave 6.Y Batch 4): C1072272 resolves to 'Litchi chinensis' (Plant). The IQM entry name 'Lychee Polyphenol' refers to the polyphenol-fraction extract derived from this species; UMLS has no concept for the specific polyphenol fraction. The source-species CUI is retained as the closest authoritative identifier. Strict-mode no_token_overlap guard intentionally fails here (common name vs Latin species); documented exception.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.6,
@@ -62446,6 +62446,7 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
+    "cui_note": "Clinician-adjudicated keep 2026-05-27 (Wave 6.Y Batch 4): C1940772 resolves to 'Kazachstania exigua' (Fungus). UMLS reclassified Saccharomyces exiguus (older name) \u2192 Kazachstania exigua (current accepted name) \u2014 same organism, taxonomy synonym. The CUI is correct under the modern taxonomy. Strict-mode no_token_overlap guard intentionally fails (old name in IQM vs current name in UMLS); documented exception.",
     "data_quality": {
       "completeness": 0.85,
       "missing_fields": [],

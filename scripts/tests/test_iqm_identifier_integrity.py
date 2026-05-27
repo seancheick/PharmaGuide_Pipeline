@@ -587,3 +587,44 @@ def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
         f"stale 'No UMLS ...' notes / 'no_confirmed_umls_match' status. "
         f"Examples: {offenders[:5]}"
     )
+
+
+# --------------------------------------------------------------------------- #
+# Batch 4 — Clinician-adjudicated species/taxonomy mappings (defer_ambiguous)
+# --------------------------------------------------------------------------- #
+#
+# These 5 entries fail strict-mode no_token_overlap because UMLS preferred
+# names are Latin species while IQM names are common names. UMLS has no
+# atom linking the common name to the species CUI, so the orchestrator's
+# reverse-check cannot rescue them. The species CUIs are nonetheless
+# correct under modern taxonomy, so each is documented as a clinician-
+# adjudicated exception with a cui_note explaining why.
+
+_BATCH_4_DEFER_AMBIGUOUS = [
+    ("french_oak",            "C0330306"),  # Quercus robur, Plant
+    ("lychee_polyphenol",     "C1072272"),  # Litchi chinensis, Plant — source species; IQM entry is the polyphenol fraction
+    ("maqui_berry",           "C1067051"),  # Aristotelia chilensis, Plant
+    ("saccharomyces_exiguus", "C1940772"),  # Kazachstania exigua, Fungus — taxonomy reclassification
+    ("split_gill_polypore",   "C0319679"),  # Schizophyllum commune, Fungus
+]
+
+
+@pytest.mark.parametrize("canonical_id,expected_cui", _BATCH_4_DEFER_AMBIGUOUS)
+def test_batch_4_defer_ambiguous_cui_locked_with_note(iqm, canonical_id, expected_cui):
+    """Regression-lock: each defer_ambiguous entry retains its
+    clinician-adjudicated species/taxonomy CUI AND has a non-empty cui_note
+    documenting the species/common-name (or taxonomy synonym) mapping.
+
+    Future agents that "fix" these via the strict-mode guard alone would
+    break the species mapping — the cui_note is the load-bearing context."""
+    entry = iqm[canonical_id]
+    assert entry["cui"] == expected_cui, (
+        f"{canonical_id}.cui must remain {expected_cui} (clinician-adjudicated "
+        f"species/taxonomy mapping per Wave 6.Y Batch 4)."
+    )
+    note = (entry.get("cui_note") or "").strip()
+    assert note, (
+        f"{canonical_id} must carry a cui_note explaining the species/"
+        f"taxonomy mapping (strict-mode guard cannot rescue these; the note "
+        f"is the load-bearing documentation)."
+    )
