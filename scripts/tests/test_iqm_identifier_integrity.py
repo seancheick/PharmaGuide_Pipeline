@@ -390,3 +390,15 @@ def test_flower_pollen_cui_is_canonical_source(iqm):
     assert iqm["flower_pollen"]["cui"] == "C1328880", (
         "flower_pollen.cui must be C1328880 (flower pollen, Plant)."
     )
+
+
+def test_olive_fruit_extract_cui_is_canonical(iqm):
+    """C6017333 was a branded combo capsule containing olive extract among
+    other ingredients (Clinical Drug). C1365464 'Olive extract' (Organic
+    Chemical / Pharmacologic Substance) is the canonical generic concept.
+    The narrower 'Olea europaea whole extract' (C3539016) would include
+    leaves; the IQM entry is fruit-extract specifically, so the generic
+    'Olive extract' concept is the best defensible match."""
+    assert iqm["olive_fruit_extract"]["cui"] == "C1365464", (
+        "olive_fruit_extract.cui must be C1365464 (Olive extract)."
+    )
