@@ -318,3 +318,13 @@ def test_shilajit_cui_is_canonical_mumie(iqm):
     assert iqm["shilajit"]["cui"] == "C0066936", (
         "shilajit.cui must be C0066936 (mumie)."
     )
+
+
+def test_theacrine_cui_is_canonical_tetramethyluric_acid(iqm):
+    """C5778236 was a branded multi-ingredient capsule containing theacrine
+    (Clinical Drug). C0654300 '1,3,7,9-tetramethyluric acid' (Organic
+    Chemical / Pharmacologic Substance) — the IUPAC name for theacrine —
+    is the canonical generic substance."""
+    assert iqm["theacrine"]["cui"] == "C0654300", (
+        "theacrine.cui must be C0654300 (1,3,7,9-tetramethyluric acid)."
+    )
