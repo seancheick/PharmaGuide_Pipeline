@@ -289,3 +289,12 @@ def test_mastic_gum_cui_is_canonical(iqm):
     assert iqm["mastic_gum"]["cui"] == "C0164196", (
         "mastic_gum.cui must be C0164196 (GUM MASTIC PREPARATION)."
     )
+
+
+def test_neem_cui_is_canonical_azadirachta_indica(iqm):
+    """C5670607 was a branded Neem capsule (Clinical Drug). C1095052
+    'Azadirachta indica' (Plant) is the canonical species concept —
+    accepted via reverse-check on 'Neem'."""
+    assert iqm["neem"]["cui"] == "C1095052", (
+        "neem.cui must be C1095052 (Azadirachta indica)."
+    )
