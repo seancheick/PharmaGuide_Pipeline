@@ -63066,7 +63066,7 @@
   "english_ivy": {
     "standard_name": "English Ivy",
     "category": "herbs",
-    "cui": "C0949841",
+    "cui": "C0331030",
     "forms": {
       "english ivy leaf extract (unspecified)": {
         "bio_score": 8,
@@ -63138,9 +63138,7 @@
       "last_reviewed_at": "2026-05-23",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0949841"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "ZP9XFG71A7",
       "rxcui": "1309795"

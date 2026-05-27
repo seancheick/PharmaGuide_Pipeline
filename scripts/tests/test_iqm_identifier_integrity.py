@@ -151,3 +151,18 @@ def test_cla_cui_is_canonical_conjugated_linoleic_acid(iqm):
         "cla.aliases must no longer contain C0050156 as a hint — it is now "
         "the canonical cui field."
     )
+
+
+def test_english_ivy_cui_is_canonical_hedera_helix(iqm):
+    """english_ivy must use C0331030 ('Hedera helix', Plant). C0949841
+    resolved to 'Phosphate Carriers' — biochemistry concept, completely
+    unrelated to the plant species. Caught by no_token_overlap guard. The
+    old wrong CUI was stored as a hint in aliases; it has been removed."""
+    entry = iqm["english_ivy"]
+    assert entry["cui"] == "C0331030", (
+        "english_ivy.cui must be C0331030 ('Hedera helix', Plant), not "
+        "C0949841 ('Phosphate Carriers')."
+    )
+    assert "C0949841" not in (entry.get("aliases") or []), (
+        "english_ivy.aliases must no longer contain the wrong CUI C0949841."
+    )
