@@ -124,6 +124,10 @@ def score_canaries(
         module = _safe_dict(breakdown.get("module"))
         module_metadata = _safe_dict(module.get("metadata"))
         dimensions = _safe_dict(module.get("dimensions"))
+        dimension_metadata = {
+            name: _safe_dict(payload).get("metadata", {})
+            for name, payload in dimensions.items()
+        }
         confidence = breakdown.get("confidence") if isinstance(breakdown, dict) else None
         rows.append(
             {
@@ -139,6 +143,8 @@ def score_canaries(
                     name: _safe_dict(payload).get("score")
                     for name, payload in dimensions.items()
                 },
+                "v4_dimension_metadata": dimension_metadata,
+                "v4_module_metadata": module_metadata,
                 "v4_confidence_detail": confidence if isinstance(confidence, dict) else None,
             }
         )
@@ -213,6 +219,18 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
 
     v3_sections = _safe_dict(row.get("v3_sections"))
     v4_dimensions = _safe_dict(row.get("v4_dimensions"))
+    primary_class = str(row.get("primary_class") or "").strip().lower()
+    v4_module = str(row.get("v4_module") or "").strip().lower()
+    if primary_class.startswith("sports") and v4_module == "generic":
+        flags.append("sports_generic_routing_regression")
+
+    if primary_class.startswith("sports") and v4_module == "sports":
+        dose_meta = _safe_dict(_safe_dict(row.get("v4_dimension_metadata")).get("dose"))
+        if dose_meta.get("not_evaluable_reason"):
+            flags.append("sports_dose_not_evaluable")
+            if dose_meta.get("not_evaluable_reason") == "opaque_primary_sports_blend":
+                flags.append("opaque_sports_blend")
+
     v3_b = _num(v3_sections.get("B"))
     v4_trust = _num(v4_dimensions.get("trust")) or 0.0
     v4_transparency = _num(v4_dimensions.get("transparency")) or 0.0

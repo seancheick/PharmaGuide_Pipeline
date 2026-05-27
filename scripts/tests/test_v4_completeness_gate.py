@@ -260,6 +260,40 @@ def test_multi_or_prenatal_below_sixty_percent_dose_panel_is_not_scored() -> Non
     assert "micronutrient_panel_dose_coverage" not in result.missing_fields
 
 
+def test_sports_with_positive_creatine_dose_is_live_eligible() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[
+            _ingredient(name="Creatine Monohydrate", canonical_id="creatine_monohydrate", dose=3, unit="Gram(s)")
+        ],
+        primary_type="amino_acid",
+        supplement_taxonomy={"primary_type": "amino_acid"},
+    )
+
+    result = evaluate_completeness_gate(product, module="sports")
+
+    assert result.module == "sports"
+    assert result.is_live_eligible is True
+    assert "sports_active_dose" not in result.missing_fields
+
+
+def test_sports_without_sports_active_dose_is_not_scored() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[_ingredient(name="Calcium", canonical_id="calcium", dose=200, unit="mg")],
+        primary_type="pre_workout",
+        supplement_taxonomy={"primary_type": "pre_workout"},
+    )
+
+    result = evaluate_completeness_gate(product, module="sports")
+
+    assert result.module == "sports"
+    assert result.is_live_eligible is False
+    assert "sports_active_dose" in result.missing_fields
+
+
 def test_malformed_product_never_raises_and_is_not_scored() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
