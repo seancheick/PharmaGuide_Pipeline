@@ -33878,7 +33878,7 @@
   "5_htp": {
     "standard_name": "5-HTP",
     "category": "amino_acids",
-    "cui": "C5815882",
+    "cui": "C0000578",
     "forms": {
       "5-htp extract": {
         "bio_score": 11,

@@ -82,3 +82,25 @@ def test_no_curated_interaction_uses_coq10_disease_cui(curated_interactions):
         f"Found {len(matches)} curated_interactions rows still using the "
         f"disease CUI {bad}. They must be updated to C0041536 (ubidecarenone)."
     )
+
+def test_5_htp_cui_is_canonical_5_hydroxytryptophan(iqm):
+    """5_htp must use UMLS C0000578 (5-hydroxytryptophan) — the Organic
+    Chemical CUI for the compound. C5815882 was the 'Natrol Melatonin + 5-HTP'
+    combo product CUI (hallucination caught by the 2026-05-27 sweep, strict-
+    mode multi-compound combo guard via the ' + ' marker in the candidate name)."""
+    assert iqm["5_htp"]["cui"] == "C0000578", (
+        "5_htp.cui must be the generic compound CUI (C0000578, "
+        "5-hydroxytryptophan), not the branded combo CUI (C5815882, "
+        "'Natrol Melatonin + 5-HTP')."
+    )
+
+
+def test_no_curated_interaction_uses_5_htp_combo_cui(curated_interactions):
+    """No row may reference C5815882, the branded combo product CUI for 5-HTP.
+    """
+    bad = "C5815882"
+    matches = [a for a in _agent2_ids(curated_interactions) if a == bad]
+    assert not matches, (
+        f"Found {len(matches)} curated_interactions rows still using the "
+        f"branded combo CUI {bad}. They must be updated to C0000578."
+    )
