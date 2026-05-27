@@ -16929,7 +16929,8 @@
     "standard_name": "Sulforaphane",
     "category": "antioxidants",
     "cui": "C5545155",
-    "rxcui": "1116060",
+    "rxcui": null,
+    "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '1116060' returns no record in RxNav (/REST/rxcui/1116060/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
     "forms": {
       "stabilized sulforaphane": {
         "bio_score": 13,

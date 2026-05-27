@@ -477,6 +477,13 @@ def test_goldenseal_rxcui_cleared_to_null(iqm):
     assert entry.get("rxcui_note")
 
 
+def test_sulforaphane_rxcui_cleared_to_null(iqm):
+    """Prior rxcui '1116060' returns no record in RxNav."""
+    entry = iqm["sulforaphane"]
+    assert entry["rxcui"] is None, "sulforaphane.rxcui must be null."
+    assert entry.get("rxcui_note")
+
+
 def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
     """Regression: when `cui` is non-null, neither cui_note nor cui_status
     may still claim that UMLS has no entry / no confirmed match. Such notes
