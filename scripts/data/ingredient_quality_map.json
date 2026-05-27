@@ -63228,7 +63228,9 @@
   "purple_corn_extract": {
     "standard_name": "Purple Corn Extract",
     "category": "other",
-    "cui": "C1446590",
+    "cui": null,
+    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "Wave 6.Y Batch 2C (2026-05-27): C1446590 had no token overlap with the IQM entry under strict-mode guards. UMLS exact-search returns no concept for 'Purple Corn Extract', 'Zea mays purple', or 'Purple corn'. Marker compounds (C0003161 Anthocyanins, C0056650 cyanidin) exist but are class-broader or narrower-specific — not the extract itself. Deferred to clinician/ontology review per null-CUI policy.",
     "forms": {
       "purple corn extract (unspecified)": {
         "bio_score": 5,
@@ -63279,11 +63281,9 @@
       "last_reviewed_at": "2026-05-24",
       "research_status": "validated"
     },
-    "aliases": [
-      "C1446590"
-    ],
+    "aliases": [],
     "external_ids": {},
-    "rxcui_note": "No RxNorm entry for purple corn extract / Zea mays var. purple. Verified absent via RxNorm REST API search (rxnav.nlm.nih.gov) on 2026-05-25 for queries: 'purple corn', 'Zea mays purple'. This is consistent with RxNorm's focus on clinical drug ingredients \u2014 supplement-only botanical extracts are commonly absent. Identity verified via UMLS CUI C1446590."
+    "rxcui_note": "No RxNorm entry for purple corn extract / Zea mays var. purple. Verified absent via RxNorm REST API search (rxnav.nlm.nih.gov) on 2026-05-25 for queries: 'purple corn', 'Zea mays purple'. This is consistent with RxNorm's focus on clinical drug ingredients \u2014 supplement-only botanical extracts are commonly absent."
   },
   "garcinia_indica": {
     "standard_name": "Garcinia indica",

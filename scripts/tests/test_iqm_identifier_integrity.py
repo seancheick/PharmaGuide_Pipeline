@@ -416,3 +416,18 @@ def test_omega_6_fatty_acids_cui_is_canonical(iqm):
     assert "C0133860" not in (entry.get("aliases") or []), (
         "omega_6_fatty_acids.aliases must no longer contain C0133860 as a hint."
     )
+
+
+def test_purple_corn_extract_cui_cleared_to_null(iqm):
+    """C1446590 had no token overlap and no UMLS exact-match candidate
+    survives strict-mode guards. Class-broader (Anthocyanins) and
+    narrower-specific (cyanidin) markers exist but neither IS the extract
+    concept. Per null-CUI policy, cleared to null with cui_status and
+    cui_note documenting the deferral."""
+    entry = iqm["purple_corn_extract"]
+    assert entry["cui"] is None, "purple_corn_extract.cui must be null."
+    assert entry.get("cui_status") == "no_confirmed_umls_match"
+    assert entry.get("cui_note"), "purple_corn_extract must have a cui_note"
+    assert "C1446590" not in (entry.get("aliases") or []), (
+        "purple_corn_extract.aliases must no longer contain the wrong CUI."
+    )
