@@ -166,3 +166,25 @@ def test_english_ivy_cui_is_canonical_hedera_helix(iqm):
     assert "C0949841" not in (entry.get("aliases") or []), (
         "english_ivy.aliases must no longer contain the wrong CUI C0949841."
     )
+
+
+def test_horse_chestnut_seed_cui_is_canonical(iqm):
+    """horse_chestnut_seed must use C0874047 ('horse chestnut seed', Organic
+    Chemical / Pharmacologic Substance). C0001443 resolved to 'adenosine'
+    (the nucleoside) — likely a copy/paste from the IQM 'adenosine' entry
+    (which legitimately uses C0001443). Caught by no_token_overlap guard.
+    Adenosine's own use of C0001443 is correct and untouched."""
+    entry = iqm["horse_chestnut_seed"]
+    assert entry["cui"] == "C0874047", (
+        "horse_chestnut_seed.cui must be C0874047 ('horse chestnut seed'), "
+        "not C0001443 (adenosine, the nucleoside)."
+    )
+    assert "C0001443" not in (entry.get("aliases") or []), (
+        "horse_chestnut_seed.aliases must no longer contain the wrong CUI "
+        "C0001443 (which is the canonical CUI for adenosine, not horse chestnut)."
+    )
+    # Sanity: adenosine itself should still have C0001443.
+    assert iqm.get("adenosine", {}).get("cui") == "C0001443", (
+        "Sanity check failed — adenosine.cui must remain C0001443 (the "
+        "correct CUI for the nucleoside). Only horse_chestnut_seed was fixed."
+    )

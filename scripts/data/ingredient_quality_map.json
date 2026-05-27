@@ -63149,7 +63149,7 @@
   "horse_chestnut_seed": {
     "standard_name": "Horse Chestnut Seed",
     "category": "herbs",
-    "cui": "C0001443",
+    "cui": "C0874047",
     "forms": {
       "horse chestnut seed (unspecified)": {
         "bio_score": 8,
@@ -63220,9 +63220,7 @@
       "last_reviewed_at": "2026-05-24",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0001443"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "3C18L6RJAZ",
       "rxcui": "260020"
