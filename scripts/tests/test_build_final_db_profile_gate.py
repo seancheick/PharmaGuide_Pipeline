@@ -134,3 +134,47 @@ def test_warning_profile_gate_shape_matches_source():
     emitted = interaction_warnings[0]["profile_gate"]
     assert emitted["gate_type"] == source_gate["gate_type"]
     assert emitted["requires"]["conditions_any"] == source_gate["requires"]["conditions_any"]
+
+
+def test_diagnostic_interference_warning_type_survives_export():
+    """Biotin lab interference must not be exported as a generic interaction."""
+    enriched = _enriched_with_interaction_alert()
+    alert = enriched["interaction_profile"]["ingredient_alerts"][0]
+    alert["ingredient_name"] = "Biotin"
+    alert["condition_hits"] = [{
+        "condition_id": "heart_disease",
+        "warning_type": "diagnostic_interference",
+        "severity": "avoid",
+        "evidence_level": "established",
+        "mechanism": "High-dose biotin can interfere with some troponin immunoassays.",
+        "action": "Tell the lab and clinician about high-dose biotin before urgent cardiac testing.",
+        "sources": ["https://www.fda.gov/medical-devices/safety-communications/biotin-interference-lab-tests"],
+        "alert_headline": "Biotin can interfere with heart attack blood tests",
+        "alert_body": "High-dose biotin may cause misleading lab results, including some troponin tests used during heart attack evaluation.",
+        "informational_note": "This is a diagnostic lab-test interference warning, not a medication interaction.",
+        "profile_gate": {
+            "gate_type": "condition",
+            "requires": {"conditions_any": ["heart_disease"], "drug_classes_any": [], "profile_flags_any": []},
+            "excludes": {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": [],
+                         "product_forms_any": [], "nutrient_forms_any": []},
+            "dose": {"canonical_id": "vitamin_b7_biotin", "comparator": ">=", "value": 5, "unit": "mg"},
+        },
+    }]
+    alert["drug_class_hits"] = []
+
+    blob = build_detail_blob(enriched, _scored_skeleton())
+
+    diagnostic_warnings = [
+        w for w in blob["warnings"]
+        if w.get("type") == "diagnostic_interference"
+    ]
+    assert diagnostic_warnings, "expected diagnostic_interference warning"
+    warning = diagnostic_warnings[0]
+    assert warning["condition_ids"] == ["heart_disease"]
+    assert warning["display_mode_default"] == "informational"
+    assert warning["profile_gate"]["dose"]["value"] == 5
+
+    assert any(
+        w.get("type") == "diagnostic_interference"
+        for w in blob["warnings_profile_gated"]
+    )

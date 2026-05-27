@@ -14105,6 +14105,7 @@ class SupplementEnricherV3:
                         "alert_headline": cond_rule.get("alert_headline"),
                         "alert_body": cond_rule.get("alert_body"),
                         "informational_note": cond_rule.get("informational_note"),
+                        "warning_type": cond_rule.get("warning_type"),
                         "profile_gate": cond_rule.get("profile_gate"),
                     })
 
@@ -14125,6 +14126,7 @@ class SupplementEnricherV3:
                                 "alert_headline": pregnancy_block.get("alert_headline"),
                                 "alert_body": pregnancy_block.get("alert_body"),
                                 "informational_note": pregnancy_block.get("informational_note"),
+                                "warning_type": pregnancy_block.get("warning_type"),
                                 "profile_gate": pregnancy_block.get("profile_gate"),
                             })
 
@@ -14162,6 +14164,7 @@ class SupplementEnricherV3:
                         "alert_headline": drug_rule.get("alert_headline"),
                         "alert_body": drug_rule.get("alert_body"),
                         "informational_note": drug_rule.get("informational_note"),
+                        "warning_type": drug_rule.get("warning_type"),
                         "profile_gate": drug_rule.get("profile_gate"),
                     })
 

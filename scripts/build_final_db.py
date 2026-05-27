@@ -76,8 +76,9 @@ WARNING_PRIORITY = {
     "harmful_additive": 4,
     "interaction": 5,
     "drug_interaction": 6,
-    "dietary": 7,
-    "status": 8,
+    "diagnostic_interference": 7,
+    "dietary": 8,
+    "status": 9,
 }
 
 SEVERITY_PRIORITY = {
@@ -2646,7 +2647,8 @@ def build_top_warnings(enriched: Dict) -> List[str]:
             sev = safe_str(ch.get("severity"), "moderate")
             cond = safe_str(ch.get("condition_id"))
             if sev in ("contraindicated", "avoid", "critical", "high"):
-                raw_warnings.append(("interaction", sev, f"Interaction: {ing_name} / {cond}"))
+                warning_type = safe_str(ch.get("warning_type"), "interaction")
+                raw_warnings.append((warning_type, sev, f"Interaction: {ing_name} / {cond}"))
 
     # Dietary sensitivity
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
@@ -3257,8 +3259,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             if isinstance(ch, dict):
                 dose_eval = ch.get("dose_threshold_evaluation")
                 raw_sev = safe_str(ch.get("severity"), "moderate").lower()
+                warning_type = safe_str(ch.get("warning_type"), "interaction").lower()
+                if warning_type not in {"interaction", "diagnostic_interference"}:
+                    warning_type = "interaction"
                 warnings.append({
-                    "type": "interaction",
+                    "type": warning_type,
                     "severity": raw_sev,
                     "severity_contextual": _INTERACTION_CONTEXTUAL_SEVERITY.get(
                         raw_sev, raw_sev

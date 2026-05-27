@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
+    "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-04-27",
-    "total_classes": 29,
-    "total_members": 726,
+    "last_updated": "2026-05-26",
+    "total_classes": 32,
+    "total_members": 743,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)"
@@ -21,8 +21,8 @@
       "dry_run_command": "python3 scripts/api_audit/seed_drug_classes.py --dry-run",
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
-    "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
-    "total_entries": 29
+    "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class \u2192 blocks build.",
+    "total_entries": 32
   },
   "classes": {
     "class:statins": {
@@ -1627,7 +1627,7 @@
         "C08",
         "C09"
       ],
-      "notes": "Superset — overlaps with class:ace_inhibitors, class:beta_blockers, class:calcium_channel_blockers, class:diuretics"
+      "notes": "Superset \u2014 overlaps with class:ace_inhibitors, class:beta_blockers, class:calcium_channel_blockers, class:diuretics"
     },
     "class:b_vitamins": {
       "display_name": "B vitamins",
@@ -1716,7 +1716,7 @@
     },
     "class:fluoroquinolones": {
       "display_name": "Fluoroquinolones",
-      "description": "Fluoroquinolone antibiotics — ciprofloxacin, levofloxacin, moxifloxacin, etc.",
+      "description": "Fluoroquinolone antibiotics \u2014 ciprofloxacin, levofloxacin, moxifloxacin, etc.",
       "member_rxcuis": [
         "2551",
         "82122",
@@ -1736,7 +1736,7 @@
     },
     "class:proton_pump_inhibitors": {
       "display_name": "Proton Pump Inhibitors",
-      "description": "Gastric acid suppressants — omeprazole, pantoprazole, esomeprazole, etc.",
+      "description": "Gastric acid suppressants \u2014 omeprazole, pantoprazole, esomeprazole, etc.",
       "member_rxcuis": [
         "283742",
         "112002",
@@ -1758,7 +1758,7 @@
     },
     "class:bisphosphonates": {
       "display_name": "Bisphosphonates",
-      "description": "Bone resorption inhibitors — alendronate, risedronate, zoledronic acid, etc.",
+      "description": "Bone resorption inhibitors \u2014 alendronate, risedronate, zoledronic acid, etc.",
       "member_rxcuis": [
         "3009",
         "42470",
@@ -1778,7 +1778,7 @@
     },
     "class:antiplatelet_agents": {
       "display_name": "Antiplatelet Agents",
-      "description": "Platelet aggregation inhibitors — aspirin, clopidogrel, prasugrel, ticagrelor, etc.",
+      "description": "Platelet aggregation inhibitors \u2014 aspirin, clopidogrel, prasugrel, ticagrelor, etc.",
       "member_rxcuis": [
         "1191",
         "32968",
@@ -1798,7 +1798,7 @@
     },
     "class:thiazide_diuretics": {
       "display_name": "Thiazide diuretics",
-      "description": "Thiazide and thiazide-like diuretics — distinguished from loop and potassium-sparing diuretics by their calcium-retaining mechanism (relevant for vitamin D + calcium interactions).",
+      "description": "Thiazide and thiazide-like diuretics \u2014 distinguished from loop and potassium-sparing diuretics by their calcium-retaining mechanism (relevant for vitamin D + calcium interactions).",
       "member_rxcuis": [
         "1369",
         "2396",
@@ -1840,6 +1840,80 @@
         "C03A",
         "C03B"
       ]
+    },
+    "class:doacs": {
+      "display_name": "Direct oral anticoagulants (DOACs)",
+      "description": "Direct factor Xa and direct thrombin inhibitors with clinically important P-gp/CYP3A induction exposure risks.",
+      "member_rxcuis": [
+        "1364430",
+        "1037042",
+        "1599538",
+        "1114195"
+      ],
+      "member_names": [
+        "apixaban",
+        "dabigatran etexilate",
+        "edoxaban",
+        "rivaroxaban"
+      ],
+      "rxclass_id": "B01AF/B01AE",
+      "atc_codes": [
+        "B01AF",
+        "B01AE"
+      ],
+      "notes": "Narrow Wave 8 class for St. John's wort inducer interactions; excludes warfarin so DOAC treatment-failure risk can be authored separately."
+    },
+    "class:potassium_sparing_diuretics": {
+      "display_name": "Potassium-sparing diuretics",
+      "description": "Mineralocorticoid receptor antagonists and epithelial sodium channel blockers that can raise serum potassium.",
+      "member_rxcuis": [
+        "644",
+        "1982",
+        "298869",
+        "2562811",
+        "9997",
+        "10763"
+      ],
+      "member_names": [
+        "amiloride",
+        "canrenone",
+        "eplerenone",
+        "finerenone",
+        "spironolactone",
+        "triamterene"
+      ],
+      "rxclass_id": "C03D",
+      "atc_codes": [
+        "C03D"
+      ],
+      "notes": "Narrow Wave 8 class for potassium supplement and salt-substitute hyperkalemia risk; do not replace the broader diuretics class."
+    },
+    "class:tetracycline_antibiotics": {
+      "display_name": "Tetracycline antibiotics",
+      "description": "Tetracycline-class oral antibiotics whose absorption is reduced by polyvalent mineral cations.",
+      "member_rxcuis": [
+        "3154",
+        "3640",
+        "2055906",
+        "6980",
+        "2059269",
+        "2059018",
+        "10395"
+      ],
+      "member_names": [
+        "demeclocycline",
+        "doxycycline",
+        "eravacycline",
+        "minocycline",
+        "omadacycline",
+        "sarecycline",
+        "tetracycline"
+      ],
+      "rxclass_id": "J01AA",
+      "atc_codes": [
+        "J01AA"
+      ],
+      "notes": "Narrow Wave 8 class for mineral-chelation treatment-failure timing rules."
     }
   }
 }

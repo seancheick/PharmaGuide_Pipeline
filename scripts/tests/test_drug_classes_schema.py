@@ -6,7 +6,7 @@ must fail fast here, long before the pipeline builds bytes.
 
 Covers:
 - Required _metadata fields and version
-- Presence of all 24 classes listed in INTERACTION_DB_SPEC.md §10.2 (+ anticoagulants)
+- Presence of all classes referenced by interaction rules
 - Class shape: display_name, description, member_rxcuis, member_names,
   rxclass_id, atc_codes
 - member_rxcuis / member_names parallel arrays, same length, no duplicates
@@ -55,6 +55,9 @@ EXPECTED_CLASSES = {
     "class:bisphosphonates",
     "class:antiplatelet_agents",
     "class:thiazide_diuretics",
+    "class:doacs",
+    "class:potassium_sparing_diuretics",
+    "class:tetracycline_antibiotics",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -77,6 +80,9 @@ CANONICAL_ANCHORS = {
     "class:calcium_channel_blockers": ["amlodipine", "diltiazem"],
     "class:diuretics": ["furosemide", "hydrochlorothiazide"],
     "class:anticoagulants": ["warfarin"],
+    "class:doacs": ["apixaban", "rivaroxaban"],
+    "class:potassium_sparing_diuretics": ["spironolactone", "triamterene"],
+    "class:tetracycline_antibiotics": ["doxycycline", "tetracycline"],
 }
 
 RXCUI_PATTERN = re.compile(r"^\d+$")
@@ -158,8 +164,8 @@ def test_all_expected_classes_present(classes):
     assert not extra, f"Unexpected classes: {extra}"
 
 
-def test_exactly_twenty_four_classes(classes):
-    assert len(classes) == 29
+def test_exactly_expected_classes(classes):
+    assert len(classes) == len(EXPECTED_CLASSES)
 
 
 # --------------------------------------------------------------------------- #

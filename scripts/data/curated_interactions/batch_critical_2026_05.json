@@ -1,0 +1,348 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "last_updated": "2026-05-26",
+    "total_entries": 10,
+    "purpose": "Wave 8 critical-only drug-supplement interaction additions",
+    "selection_policy": "Only interactions with label-backed avoid guidance, narrow-therapeutic-index treatment-failure risk, severe electrolyte risk, antibiotic treatment-failure risk, or human PK evidence. No Minor/monitor entries.",
+    "notes": "Drug classes are intentionally narrow to avoid broad warning noise. Biotin diagnostic interference is handled in ingredient_interaction_rules.json, not in this interaction DB shard. Fluoroquinolone mineral rows are timing/treatment-failure rules and should be surfaced only with active antibiotic context."
+  },
+  "interactions": [
+    {
+      "id": "DSI_DOAC_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Direct Oral Anticoagulants (DOACs)",
+      "agent1_id": "class:doacs",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's wort induces P-gp and CYP3A pathways that can lower direct oral anticoagulant exposure. Lower exposure can reduce protection against stroke or venous thromboembolism.",
+      "management": "Avoid St. John's wort with apixaban, rivaroxaban, dabigatran, or edoxaban unless the prescriber explicitly manages the interaction. Do not start or stop St. John's wort without notifying the anticoagulant prescriber.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1523ab32-2c2c-6501-e063-6394a90aa0b3",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=291011aa-60eb-4109-b59c-1c521fbeac4f",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ba74e3cd-b06f-4145-b284-5fd6b84ff3c9",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e77d3400-56ad-11e3-949a-0800200c9a66"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
+      "evidence_notes": "DailyMed labeling for apixaban and rivaroxaban explicitly names St. John's wort among combined P-gp/CYP3A inducers to avoid; dabigatran and edoxaban labels warn against P-gp inducers that reduce exposure.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
+    },
+    {
+      "id": "DSI_POTASSIUM_SPARING_DIURETICS_POTASSIUM",
+      "type": "Med-Sup",
+      "agent1_name": "Potassium-sparing Diuretics",
+      "agent1_id": "class:potassium_sparing_diuretics",
+      "agent2_name": "Potassium",
+      "agent2_id": "C0032821",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Potassium supplements and potassium-containing salt substitutes add to the potassium-retaining effect of potassium-sparing diuretics, increasing risk of severe hyperkalemia and arrhythmia.",
+      "management": "Avoid potassium supplements and potassium salt substitutes with spironolactone, eplerenone, finerenone, amiloride, or triamterene unless specifically prescribed with serum potassium monitoring.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=7c850c17-9a7d-423a-86bd-ac108d1c7932",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a7510768-8a52-4230-6aa0-b0d92d82588f"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "whole_class",
+      "evidence_notes": "Spironolactone labeling warns against potassium supplementation and high-potassium salt substitutes because of hyperkalemia risk.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "potassium"
+    },
+    {
+      "id": "DSI_DIGOXIN_SJW",
+      "type": "Med-Sup",
+      "agent1_name": "Digoxin",
+      "agent1_id": "3407",
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "St. John's wort can induce P-glycoprotein activity and reduce digoxin exposure. Digoxin has a narrow therapeutic range, so reduced concentrations can compromise heart failure or atrial fibrillation control.",
+      "management": "Avoid adding St. John's wort to digoxin therapy without prescriber oversight. If unavoidable, monitor serum digoxin concentration and clinical response when St. John's wort is started or stopped.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=51925501-ab5b-4e12-a67e-ec2b4b592e83&version=14",
+        "https://pubmed.ncbi.nlm.nih.gov/10546917/",
+        "https://pubmed.ncbi.nlm.nih.gov/15260917/"
+      ],
+      "source_pmids": [
+        "10546917",
+        "15260917"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_rxnorm_pubmed_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "evidence_notes": "Human pharmacokinetic evidence and digoxin labeling support a clinically relevant reduction in digoxin concentration with St. John's wort.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
+    },
+    {
+      "id": "DSI_TETRACYCLINES_CALCIUM",
+      "type": "Med-Sup",
+      "agent1_name": "Tetracycline Antibiotics",
+      "agent1_id": "class:tetracycline_antibiotics",
+      "agent2_name": "Calcium",
+      "agent2_id": "C0006675",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Calcium can chelate tetracycline-class antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk.",
+      "management": "Separate calcium supplements from doxycycline, tetracycline, and related antibiotics by the interval specified on the antibiotic label or by the prescriber.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fad03768-f1d2-459f-965e-0ec29f189f1f",
+        "https://www.dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=aa30113f-ab58-4f41-82c1-2fcb540d4a82"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "calcium"
+    },
+    {
+      "id": "DSI_TETRACYCLINES_IRON",
+      "type": "Med-Sup",
+      "agent1_name": "Tetracycline Antibiotics",
+      "agent1_id": "class:tetracycline_antibiotics",
+      "agent2_name": "Iron",
+      "agent2_id": "C0302583",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Iron can chelate tetracycline-class antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk.",
+      "management": "Separate iron supplements from doxycycline, tetracycline, and related antibiotics by the interval specified on the antibiotic label or by the prescriber.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fad03768-f1d2-459f-965e-0ec29f189f1f",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dae4d4d1-e431-427b-b31f-57a5462fa9a1"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "iron"
+    },
+    {
+      "id": "DSI_TETRACYCLINES_MAGNESIUM",
+      "type": "Med-Sup",
+      "agent1_name": "Tetracycline Antibiotics",
+      "agent1_id": "class:tetracycline_antibiotics",
+      "agent2_name": "Magnesium",
+      "agent2_id": "C0024467",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Magnesium can chelate tetracycline-class antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk.",
+      "management": "Separate magnesium supplements from doxycycline, tetracycline, and related antibiotics by the interval specified on the antibiotic label or by the prescriber.",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fad03768-f1d2-459f-965e-0ec29f189f1f",
+        "https://www.dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=aa30113f-ab58-4f41-82c1-2fcb540d4a82"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "magnesium"
+    },
+    {
+      "id": "DSI_TETRACYCLINES_ZINC",
+      "type": "Med-Sup",
+      "agent1_name": "Tetracycline Antibiotics",
+      "agent1_id": "class:tetracycline_antibiotics",
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Zinc can chelate tetracycline-class antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk.",
+      "management": "Separate zinc supplements from doxycycline, tetracycline, and related antibiotics by the interval specified on the antibiotic label or by the prescriber.",
+      "source_urls": [
+        "https://www.dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=aa30113f-ab58-4f41-82c1-2fcb540d4a82"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "zinc"
+    },
+    {
+      "id": "DSI_NADOLOL_GREEN_TEA",
+      "type": "Med-Sup",
+      "agent1_name": "Nadolol",
+      "agent1_id": "7226",
+      "agent2_name": "Green Tea Extract",
+      "agent2_id": "C1704263",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Green tea catechins, especially EGCG, can inhibit intestinal uptake transporters and markedly reduce nadolol exposure. Human studies report reduced nadolol plasma exposure and reduced blood-pressure effect.",
+      "management": "Avoid concentrated green tea extract with nadolol. For brewed green tea, consult the prescriber about timing and blood pressure monitoring rather than assuming separation fully prevents the interaction.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/24419562/",
+        "https://pubmed.ncbi.nlm.nih.gov/29480324/",
+        "https://pubmed.ncbi.nlm.nih.gov/32320490/"
+      ],
+      "source_pmids": [
+        "24419562",
+        "29480324",
+        "32320490"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "live_rxnorm_pubmed_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "clinical_literature",
+      "clinical_confidence": "high",
+      "applies_to": "dose_dependent",
+      "evidence_notes": "Human pharmacokinetic studies show substantial nadolol exposure reduction with green tea or EGCG-concentrated green tea extract.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "green_tea_extract"
+    },
+    {
+      "type": "Med-Sup",
+      "agent1_name": "Fluoroquinolone Antibiotics",
+      "agent1_id": "class:fluoroquinolones",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "active_antibiotic_course",
+      "agent1_canonical_id": null,
+      "id": "DSI_FLUOROQUINOLONES_IRON",
+      "agent2_name": "Iron",
+      "agent2_id": "C0302583",
+      "agent2_canonical_id": "iron",
+      "mechanism": "Iron can chelate fluoroquinolone antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk during an active infection.",
+      "management": "Separate iron supplements from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval specified on the antibiotic label or by the prescriber.",
+      "evidence_notes": "Current ciprofloxacin and levofloxacin DailyMed labels instruct separation from iron-containing products because absorption is reduced."
+    },
+    {
+      "type": "Med-Sup",
+      "agent1_name": "Fluoroquinolone Antibiotics",
+      "agent1_id": "class:fluoroquinolones",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "source_urls": [
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1496ea0f-1419-c809-e063-6294a90a0b43",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5261da15-1b6c-fbe2-e063-6394a90ad85e"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-26T00:00:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "live_rxnorm_and_label_review_2026_05_26"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "high",
+      "applies_to": "active_antibiotic_course",
+      "agent1_canonical_id": null,
+      "id": "DSI_FLUOROQUINOLONES_MAGNESIUM",
+      "agent2_name": "Magnesium",
+      "agent2_id": "C0024467",
+      "agent2_canonical_id": "magnesium",
+      "mechanism": "Magnesium can chelate fluoroquinolone antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk during an active infection.",
+      "management": "Separate magnesium supplements or magnesium-containing antacids from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval specified on the antibiotic label or by the prescriber.",
+      "evidence_notes": "Current ciprofloxacin and levofloxacin DailyMed labels instruct separation from magnesium-containing products because absorption is reduced."
+    }
+  ]
+}
