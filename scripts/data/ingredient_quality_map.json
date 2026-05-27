@@ -35385,7 +35385,7 @@
   "cla": {
     "standard_name": "CLA",
     "category": "fatty_acids",
-    "cui": "C0055856",
+    "cui": "C0050156",
     "rxcui": "382272",
     "forms": {
       "cla 80%": {
@@ -35481,8 +35481,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Conjugated linoleic acid",
-      "C0050156"
+      "Conjugated linoleic acid"
     ],
     "external_ids": {
       "unii": "G199I91G4B"

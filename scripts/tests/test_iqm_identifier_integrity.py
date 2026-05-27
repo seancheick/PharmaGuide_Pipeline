@@ -134,3 +134,20 @@ def test_cayenne_pepper_cui_is_canonical_food_concept(iqm):
     assert "C0006909" not in (entry.get("aliases") or []), (
         "cayenne_pepper.aliases must no longer contain the wrong CUI C0006909."
     )
+
+
+def test_cla_cui_is_canonical_conjugated_linoleic_acid(iqm):
+    """cla must use C0050156 ('Conjugated Linoleic Acid', Organic Chemical).
+    C0055856 resolved to 'clarithromycin' — an antibiotic, completely
+    unrelated. Caught by no_token_overlap guard. The correct CUI C0050156
+    was previously stored as a hint in aliases; we promote it to the
+    canonical `cui` field and remove the now-redundant alias entry."""
+    entry = iqm["cla"]
+    assert entry["cui"] == "C0050156", (
+        "cla.cui must be C0050156 ('Conjugated Linoleic Acid'), not "
+        "C0055856 (clarithromycin, the macrolide antibiotic)."
+    )
+    assert "C0050156" not in (entry.get("aliases") or []), (
+        "cla.aliases must no longer contain C0050156 as a hint — it is now "
+        "the canonical cui field."
+    )
