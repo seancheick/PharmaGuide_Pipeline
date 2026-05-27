@@ -254,3 +254,12 @@ def test_gamma_oryzanol_cui_is_canonical(iqm):
     assert iqm["gamma_oryzanol"]["cui"] == "C0061081", (
         "gamma_oryzanol.cui must be C0061081 (gamma-oryzanol)."
     )
+
+
+def test_hemp_seed_oil_cui_is_canonical(iqm):
+    """C5777771 was a branded topical cream containing hemp seed oil
+    (Clinical Drug). C4489800 'hempseed oil' (Organic Chemical) is the
+    canonical generic substance — accepted via reverse-check on 'Hemp Seed Oil'."""
+    assert iqm["hemp_seed_oil"]["cui"] == "C4489800", (
+        "hemp_seed_oil.cui must be C4489800 (hempseed oil)."
+    )
