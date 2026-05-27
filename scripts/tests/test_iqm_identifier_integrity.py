@@ -119,3 +119,18 @@ def test_acacia_catechu_cui_is_canonical_plant(iqm):
         "acacia_catechu.cui must be C1135823 (Acacia catechu, Plant), not "
         "C0949533 ('Australian bat lyssavirus')."
     )
+
+
+def test_cayenne_pepper_cui_is_canonical_food_concept(iqm):
+    """cayenne_pepper must use C0007480 (Cayenne Pepper, Food semantic type).
+    C0006909 resolved to 'Capital' — no overlap. Caught by no-token-overlap
+    guard. The old wrong CUI must also no longer appear in the entry's
+    aliases array (it was previously stored there as a 'hint')."""
+    entry = iqm["cayenne_pepper"]
+    assert entry["cui"] == "C0007480", (
+        "cayenne_pepper.cui must be C0007480 ('Cayenne Pepper', Food), not "
+        "C0006909 ('Capital')."
+    )
+    assert "C0006909" not in (entry.get("aliases") or []), (
+        "cayenne_pepper.aliases must no longer contain the wrong CUI C0006909."
+    )

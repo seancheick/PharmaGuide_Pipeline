@@ -62947,7 +62947,7 @@
   "cayenne_pepper": {
     "standard_name": "Cayenne Pepper",
     "category": "herbs",
-    "cui": "C0006909",
+    "cui": "C0007480",
     "forms": {
       "cayenne pepper (unspecified)": {
         "bio_score": 6,
@@ -63000,9 +63000,7 @@
       "last_reviewed_at": "2026-05-23",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0006909"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "6M47G7C4SY",
       "rxcui": "1006340"
