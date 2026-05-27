@@ -32622,7 +32622,8 @@
     "standard_name": "Goldenseal",
     "category": "herbs",
     "cui": "C0330270",
-    "rxcui": "253171",
+    "rxcui": null,
+    "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '253171' returns no record in RxNav (/REST/rxcui/253171/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
     "forms": {
       "goldenseal root powder": {
         "bio_score": 6,
