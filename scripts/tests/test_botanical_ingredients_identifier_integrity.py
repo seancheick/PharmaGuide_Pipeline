@@ -572,3 +572,20 @@ def test_wave_9f4b_rxcui_policy_lock(botanicals, entry_id, rxcui, rxnav_name):
     assert e.get("rxcui") == rxcui, (
         f"{entry_id}.rxcui must remain {rxcui} (RxNav '{rxnav_name}')."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Wave 9.F.4c — completeness backfill (2 null entries not in the sweep set)
+# --------------------------------------------------------------------------- #
+_WAVE_9F4C_BACKFILL = [
+    ("lima_bean", "C1457867", "Phaseolus lunatus (Plant)"),
+    ("alaria_esculenta", "C0996325", "Alaria esculenta (Plant)"),
+]
+
+
+@pytest.mark.parametrize("entry_id,correct_cui,umls_name", _WAVE_9F4C_BACKFILL)
+def test_wave_9f4c_completeness_backfill(botanicals, entry_id, correct_cui, umls_name):
+    """Two entries that were null and not flagged by the sweep; backfilled with
+    the live-UMLS exact-name Plant concept for completeness (2026-05-28)."""
+    e = _find(botanicals, entry_id)
+    assert e.get("cui") == correct_cui, f"{entry_id}.cui must be {correct_cui} ({umls_name})."

@@ -15567,7 +15567,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": "C1457867"
     },
     {
       "id": "alaria_esculenta",
@@ -15592,7 +15593,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": "C0996325"
     },
     {
       "id": "wood_ear_mushroom",
