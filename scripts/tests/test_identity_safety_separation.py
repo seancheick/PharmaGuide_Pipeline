@@ -88,3 +88,47 @@ def test_derived_standard_name_is_not_safety_evidence_for_mapped_iqm_active():
     )
     assert contract["is_safety_concern"] is False
     assert contract["matched_rule_id"] is None
+
+
+def test_banned_substance_enricher_emits_canonical_safety_flags():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    result = SupplementEnricherV3()._check_banned_substances([
+        {"name": "Delta-8 THC", "standardName": "Delta-8 THC"}
+    ])
+
+    flags = result.get("safety_flags", [])
+    assert any(flag.get("entry_id") == "BANNED_DELTA8_THC" for flag in flags)
+    flag = next(flag for flag in flags if flag.get("entry_id") == "BANNED_DELTA8_THC")
+    assert flag["source_db"] == "banned_recalled_ingredients"
+    assert flag["status"] == "high_risk"
+    assert flag["severity"] == "high"
+    assert flag["match_type"] in {"exact", "alias"}
+
+    legacy_hit = next(
+        hit for hit in result.get("substances", [])
+        if hit.get("banned_id") == "BANNED_DELTA8_THC"
+    )
+    assert legacy_hit["safety_flag"] == flag
+
+
+def test_safety_precedence_and_strict_index_are_shared():
+    from identity.safety import build_safety_exact_index, top_safety_flag
+
+    flags = [
+        {"entry_id": "WATCH", "status": "watchlist"},
+        {"entry_id": "BAN", "status": "banned"},
+        {"entry_id": "HIGH", "status": "high_risk"},
+    ]
+    assert top_safety_flag(flags)["entry_id"] == "BAN"
+
+    index = build_safety_exact_index([
+        {
+            "id": "HM_CHROMIUM_HEXAVALENT",
+            "standard_name": "Chromium (VI) — Hexavalent Chromium",
+            "aliases": ["chromium(6+)", "chromium"],
+        }
+    ])
+    assert "chromium(6+)" in index
+    assert "chromium" in index
+    assert "chromium(6+)" != "chromium"

@@ -49,6 +49,14 @@ def safety_normalize_text(text: Any) -> str:
     return normalized
 
 
+def _normalize_safety_enum(value: Any) -> str:
+    normalized = "" if value is None else str(value).strip().lower()
+    normalized = normalized.translate(_SAFETY_PUNCT_TRANSLATION)
+    normalized = re.sub(r"[^a-z0-9]+", "_", normalized)
+    normalized = re.sub(r"_+", "_", normalized).strip("_")
+    return normalized
+
+
 def has_explicit_form_evidence(texts: Iterable[Any], patterns: Iterable[str]) -> Optional[str]:
     for text in texts:
         raw = "" if text is None else str(text)
@@ -67,6 +75,97 @@ _STATUS_SEVERITY = {
     "caution": "moderate",
     "watchlist": "low",
 }
+
+SAFETY_STATUS_PRIORITY = {
+    "banned": 0,
+    "recalled": 1,
+    "high_risk": 2,
+    "caution": 3,
+    "watchlist": 4,
+}
+
+_MATCH_CONFIDENCE = {
+    "exact": "high",
+    "alias": "high",
+    "explicit_form_evidence": "high",
+    "token_bounded": "medium",
+    "legacy_projection": "medium",
+}
+
+
+def safety_status_priority(status: Any) -> int:
+    return SAFETY_STATUS_PRIORITY.get(_normalize_safety_enum(status), 99)
+
+
+def top_safety_flag(flags: Iterable[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    valid = [flag for flag in flags or [] if isinstance(flag, dict)]
+    if not valid:
+        return None
+    return sorted(valid, key=lambda f: safety_status_priority(f.get("status")))[0]
+
+
+def safety_flag_matches_status(flag: Dict[str, Any], statuses: Iterable[str]) -> bool:
+    wanted = {_normalize_safety_enum(status) for status in statuses}
+    return _normalize_safety_enum(flag.get("status")) in wanted
+
+
+def normalize_safety_source(source: Any) -> str:
+    normalized = _normalize_safety_enum(source)
+    if normalized == "banned_recalled":
+        return "banned_recalled_ingredients"
+    return normalized
+
+
+def safety_severity_for_status(status: Any, fallback: Any = None) -> str:
+    normalized_status = _normalize_safety_enum(status)
+    return _STATUS_SEVERITY.get(normalized_status) or _normalize_safety_enum(fallback) or "moderate"
+
+
+def safety_flag_from_banned_match(
+    entry: Dict[str, Any],
+    *,
+    match_type: str,
+    matched_variant: Any,
+    evidence_text: Any,
+    confidence: Any = None,
+) -> SafetyFlag:
+    normalized_match_type = _normalize_safety_enum(match_type) or "exact"
+    status = _normalize_safety_enum(entry.get("status") or entry.get("recall_status"))
+    confidence_text = (
+        str(confidence).strip().lower()
+        if isinstance(confidence, str) and confidence.strip()
+        else _MATCH_CONFIDENCE.get(normalized_match_type, "medium")
+    )
+    return SafetyFlag(
+        entry_id=str(entry.get("id") or entry.get("rule_id") or ""),
+        source_db="banned_recalled_ingredients",
+        status=status,
+        severity=safety_severity_for_status(status, entry.get("severity_level") or entry.get("severity")),
+        match_type=normalized_match_type,
+        matched_variant=str(matched_variant or entry.get("standard_name") or ""),
+        evidence_text=str(evidence_text or matched_variant or ""),
+        confidence=confidence_text,
+    )
+
+
+def build_safety_exact_index(entries: Iterable[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    """Build a strict safety lookup that preserves qualified variants.
+
+    Values are lists because multiple safety rules can intentionally share a
+    label variant. This index is for candidate discovery only; evidence gates
+    and negative-match policy still run in the classifier/caller.
+    """
+    index: Dict[str, List[Dict[str, Any]]] = {}
+    for entry in entries or []:
+        if not isinstance(entry, dict):
+            continue
+        variants = [entry.get("standard_name")] + list(entry.get("aliases") or [])
+        for variant in variants:
+            key = safety_normalize_text(variant)
+            if not key:
+                continue
+            index.setdefault(key, []).append(entry)
+    return index
 
 
 def classify_safety(
@@ -102,7 +201,7 @@ def classify_safety(
     for entry in banned_recalled_entries or []:
         if not isinstance(entry, dict):
             continue
-        status = str(entry.get("status") or "").strip().lower()
+        status = _normalize_safety_enum(entry.get("status"))
         if not status:
             continue
 
@@ -127,15 +226,11 @@ def classify_safety(
                 continue
             match_type = "exact"
 
-        flags.append(SafetyFlag(
-            entry_id=str(entry.get("id") or entry.get("rule_id") or ""),
-            source_db="banned_recalled_ingredients",
-            status=status,
-            severity=_STATUS_SEVERITY.get(status, str(entry.get("severity") or "moderate")),
+        flags.append(safety_flag_from_banned_match(
+            entry,
             match_type=match_type,
             matched_variant=matched_variant,
             evidence_text=matched_variant,
-            confidence="high" if match_type == "explicit_form_evidence" else "medium",
         ))
 
     return flags
