@@ -271,7 +271,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0085839",
+      "cui": "C0002022",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -333,7 +333,7 @@
       "notes": "Aloe barbadensis (Asphodelaceae) concentrated inner leaf gel. Acemannan-rich preparation with anthraquinone latex removed. Used for GI soothing and immune modulation. Not the same as whole-leaf aloe.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0002707",
+      "cui": "C0718405",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -1753,7 +1753,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330621",
+      "cui": "C1015220",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -2053,7 +2053,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": "C0949991"
     },
     {
       "id": "brassaiopsis_glomerulata",
@@ -2266,7 +2267,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": null,
+      "cui_note": "Bulbine natalensis has no UMLS concept (live exact-search returns no results 2026-05-28)."
     },
     {
       "id": "bupleurum_root",
@@ -2482,7 +2485,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0006879",
+      "cui": "C0006622",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -2615,7 +2618,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3178930",
+      "cui": "C5752375",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -2865,7 +2868,7 @@
       "notes": "Uncaria tomentosa (Rubiaceae) inner bark. U\u00f1a de Gato from Peruvian Amazon. Contains pentacyclic oxindole alkaloids (POAs). Used for immune modulation and joint inflammation. Botanical bark form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949579",
+      "cui": "C0752336",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -3514,7 +3517,7 @@
       "notes": "Aronia melanocarpa (Rosaceae) fruit. Among the highest anthocyanin content of any berry (1,480 mg/100g). Rich in proanthocyanidins and chlorogenic acid. Potent antioxidant. Botanical fruit powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949547",
+      "cui": "C1449661",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -3915,7 +3918,8 @@
       "attributes": {
         "source_origin": "plant",
         "bonus_eligible": false
-      }
+      },
+      "cui": "C0521087"
     },
     {
       "id": "coleus_forskohlii_root",
@@ -5115,7 +5119,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": null,
+      "cui_note": "Generic multi-oil blend; no single UMLS concept."
     },
     {
       "id": "eucalyptus",
@@ -5248,7 +5254,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950325",
+      "cui": "C1135897",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5614,7 +5620,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": null,
+      "cui_note": "Generic multi-fruit base; no single UMLS concept."
     },
     {
       "id": "fruits",
@@ -7044,7 +7052,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024879",
+      "cui": "C0697153",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -7980,7 +7988,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "algal"
-      }
+      },
+      "cui": "C5702929"
     },
     {
       "id": "l_theanine",
@@ -8185,7 +8194,9 @@
       "attributes": {
         "source_origin": "plant",
         "bonus_eligible": false
-      }
+      },
+      "cui": null,
+      "cui_note": "Proprietary multi-ingredient blend; no single UMLS concept."
     },
     {
       "id": "phosphatidylserine",
@@ -8907,7 +8918,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949879",
+      "cui": "C0872905",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -8961,7 +8972,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": null,
+      "cui_note": "Two-herb blend (Magnolia + Phellodendron); no single UMLS concept."
     },
     {
       "id": "maitake",
@@ -9263,7 +9276,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "fungal"
-      }
+      },
+      "cui": null,
+      "cui_note": "Multi-species mushroom blend; no single UMLS concept."
     },
     {
       "id": "mesima",
@@ -9345,7 +9360,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0037144",
+      "cui": "C5734455",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -10913,7 +10928,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950050",
+      "cui": "C1135912",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -10945,7 +10960,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950050",
+      "cui": "C1135912",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -12115,7 +12130,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036524",
+      "cui": "C0697222",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13216,7 +13231,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040228",
+      "cui": "C1140676",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13286,7 +13301,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949851",
+      "cui": "C0696841",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13631,7 +13646,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": null,
+      "cui_note": "Multi-source vegetable powder class; no single UMLS concept."
     },
     {
       "id": "vitex",
@@ -13756,7 +13773,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0043088",
+      "cui": "C0453151",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13845,7 +13862,9 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": null,
+      "cui_note": "Wheatgrass + barley grass blend; no single UMLS concept."
     },
     {
       "id": "wheatgrass_powder",
@@ -14329,7 +14348,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949619",
+      "cui": "C1017205",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -14546,7 +14565,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024949",
+      "cui": "C0874159",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -14930,7 +14949,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": "C5750419"
     },
     {
       "id": "curry_leaf",
@@ -14989,7 +15009,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": "C0700268"
     },
     {
       "id": "betel_leaf",
@@ -15356,7 +15377,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "cui": "C5710913"
     },
     {
       "id": "sweet_orange",
@@ -15480,7 +15502,7 @@
         "imli"
       ],
       "category": "botanical",
-      "cui": "C0965568",
+      "cui": "C0973446",
       "cui_verified_source": "UMLS (pre-verified in existing pipeline; Tamarindus indica concept C0965568)",
       "external_ids": {
         "pubchem_cid": null,
@@ -15513,7 +15535,7 @@
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "cui": "C0016968",
+      "cui": "C1510487",
       "cui_verified_source": "UMLS (pre-verified; GeneralizedOrganism concept)",
       "functional_roles": [],
       "attributes": {

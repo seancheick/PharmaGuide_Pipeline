@@ -398,3 +398,79 @@ def test_wave_9f3_corrupt_cui_reresolved(botanicals, entry_id, correct_cui, umls
         f"{entry_id}.cui must be {correct_cui} (UMLS '{umls_name}', exact "
         f"Latin-name match)."
     )
+
+
+# --------------------------------------------------------------------------- #
+# Wave 9.F.4 - D_review corrupt-CUI resolutions (35: 27 corrections + 8 nulls)
+# --------------------------------------------------------------------------- #
+#
+# These 35 did not get an exact latin-name match in 9.F.3 (species present only
+# under a botanical synonym, a subspecies/variety autonym, or a common-name
+# Plant concept; or the entry is a multi-component blend with no single concept).
+# All 21 that carried a CUI resolved to GARBAGE (Arm Ergometry Test, amygdalin,
+# a virus, Galapagos Islands, etc.), so none were false positives. Each
+# correction below was content-verified live against UMLS on 2026-05-28 as the
+# correct Plant concept (accepted botanical synonyms noted in the umls_name).
+#
+# (entry_id, correct_cui, umls_name)
+_WAVE_9F4_RESOLVED = [
+    ('alfalfa_leaf', 'C0002022', 'Alfalfa'),
+    ('aloe_vera_concentrated_gel', 'C0718405', 'Aloe vera plant'),
+    ('blessed_thistle', 'C1015220', 'Centaurea benedicta (=Cnicus benedictus)'),
+    ('boswellia_carterii', 'C0949991', 'Boswellia sacra (=B. carterii)'),
+    ('cacao_powder', 'C0006622', 'Cacao Plant'),
+    ('caralluma_fimbriata', 'C5752375', 'Caralluma adscendens var. fimbriata'),
+    ('cat_s_claw_bark', 'C0752336', "Cat's Claw (Uncaria tomentosa)"),
+    ('chokeberry', 'C1449661', 'Photinia melanocarpa (=Aronia melanocarpa)'),
+    ('collard_greens', 'C5710913', 'Brassica oleracea var. viridis'),
+    ('ecklonia_kurome', 'C5702929', 'Ecklonia cava subsp. kurome'),
+    ('evodia_fruit', 'C1135897', 'Euodia ruticarpa (=Tetradium ruticarpum)'),
+    ('hemp_protein', 'C0700268', 'Cannabis sativa plant'),
+    ('horehound', 'C0697153', 'Marrubium vulgare / horehound herb'),
+    ('maca_root', 'C0872905', 'Maca (Lepidium meyenii)'),
+    ('milk_thistle_seed', 'C5734455', 'Silybum marianum var. marianum'),
+    ('picrorhiza_kurroa', 'C1135912', 'Picrorhiza kurrooa'),
+    ('picrorhiza_root', 'C1135912', 'Picrorhiza kurrooa'),
+    ('saw_palmetto_berry', 'C0697222', 'Sabal serrulata (=Serenoa repens)'),
+    ('tomato', 'C1140676', 'Lycopersicon esculentum'),
+    ('toothed_clubmoss', 'C0696841', 'Lycopodium serratum (=Huperzia serrata)'),
+    ('watercress_herb', 'C0453151', 'Watercress (Nasturtium officinale)'),
+    ('wood_betony', 'C1017205', 'Betonica officinalis (=Stachys officinalis)'),
+    ('yerba_mate_leaf', 'C0874159', 'Yerba mate (Ilex paraguariensis)'),
+    ('kamut', 'C5750419', 'Triticum turgidum subsp. turanicum'),
+    ('tamarind', 'C0973446', 'Tamarindus indica'),
+    ('green_bean', 'C1510487', 'Phaseolus vulgaris'),
+    ('coffee_bean_plain', 'C0521087', 'Coffea arabica (Plant)'),
+]
+
+# Multi-component blends / class entries (+ bulbine_natalensis, which has no
+# UMLS concept at all): CUI is explicitly null with a documenting cui_note.
+_WAVE_9F4_NULL = [
+    'bulbine_natalensis',
+    'essential_oil_blend',
+    'fruit_base',
+    'magnolia_phellodendron_blend',
+    'medicinal_mushroom_blend',
+    'organic_gold_standard_potentiating_nutrients',
+    'vegetable_powders',
+    'wheat_barley_grass_blend',
+]
+
+
+@pytest.mark.parametrize("entry_id,correct_cui,umls_name", _WAVE_9F4_RESOLVED)
+def test_wave_9f4_dreview_cui_resolved(botanicals, entry_id, correct_cui, umls_name):
+    """Each previously-garbage CUI now holds the verified Plant concept for the
+    entry's species (accepted synonyms allowed)."""
+    e = _find(botanicals, entry_id)
+    assert e.get("cui") == correct_cui, (
+        f"{entry_id}.cui must be {correct_cui} (UMLS '{umls_name}')."
+    )
+
+
+@pytest.mark.parametrize("entry_id", _WAVE_9F4_NULL)
+def test_wave_9f4_blend_cui_nulled(botanicals, entry_id):
+    """Blend/class entries (and bulbine_natalensis) carry an explicit null CUI
+    with a documenting cui_note - no single UMLS concept exists."""
+    e = _find(botanicals, entry_id)
+    assert e.get("cui") is None, f"{entry_id}.cui must be null (no single concept)."
+    assert e.get("cui_note"), f"{entry_id} must carry a cui_note explaining the null."
