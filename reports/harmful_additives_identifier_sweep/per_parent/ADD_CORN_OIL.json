@@ -1,0 +1,68 @@
+{
+  "canonical_id": "ADD_CORN_OIL",
+  "verified_at": "2026-05-28T15:16:24.474588+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Corn Oil (Refined)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0010029",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0010029",
+          "name": "corn oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Food"
+          ],
+          "atom_count": 82,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "2854",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "2854",
+          "name": "corn oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "8470G57WFM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "8470G57WFM",
+          "gsrs_name": "CORN OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

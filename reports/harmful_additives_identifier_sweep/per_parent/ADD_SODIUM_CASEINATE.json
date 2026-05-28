@@ -1,0 +1,70 @@
+{
+  "canonical_id": "ADD_SODIUM_CASEINATE",
+  "verified_at": "2026-05-28T15:19:33.993117+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Sodium Caseinate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0037488",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0037488",
+          "name": "sodium caseinate",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 15,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1366917",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1366917",
+          "name": "sodium caseinate",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "7473P66J9E",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "7473P66J9E",
+          "gsrs_name": "SODIUM CASEINATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9005-46-3",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '9005-46-3' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

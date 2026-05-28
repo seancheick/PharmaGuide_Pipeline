@@ -1,0 +1,65 @@
+{
+  "canonical_id": "ADD_SYNTHETIC_ANTIOXIDANTS",
+  "verified_at": "2026-05-28T15:20:52.764788+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Synthetic Antioxidants",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "Umbrella entry for BHA, BHT, TBHQ. See individual entries for specific CUIs."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "9T1410R4OR",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "9T1410R4OR",
+          "gsrs_name": "ETHOXYQUIN",
+          "names_sample": [
+            "1,2-DIHYDRO-2,2,4-TRIMETHYLQUINOLIN-6-YL ETHYL ETHER",
+            "1,2-DIHYDRO-6-ETHOXY-2,2,4-TRIMETHYLQUINOLINE",
+            "6-ETHOXY-1,2-DIHYDRO-2,2,4-TRIMETHYLQUINOLINE",
+            "EMQ",
+            "ETHOXYQUIN"
+          ]
+        },
+        "evidence": "UNII 9T1410R4OR resolves to GSRS substance 'ETHOXYQUIN' with no token overlap with IQM 'Synthetic Antioxidants'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

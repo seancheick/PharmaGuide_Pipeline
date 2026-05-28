@@ -1,0 +1,74 @@
+{
+  "canonical_id": "ADD_ADVANTAME",
+  "verified_at": "2026-05-28T15:15:27.389452+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Advantame",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3490290",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3490290",
+          "name": "advantame",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein"
+          ],
+          "atom_count": 6,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1591894",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1591894",
+          "name": "advantame",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "3ZA6810AWX",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "3ZA6810AWX",
+          "gsrs_name": "ADVANTAME"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 56843846,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 56843846,
+          "iupac": "(3S)-3-[3-(3-hydroxy-4-methoxyphenyl)propylamino]-4-[[(2S)-1-methoxy-1-oxo-3-phenylpropan-2-yl]amino]-4-oxobutanoic acid;hydrate",
+          "inchi_key": "NQQIEOGMDRFTDZ-HLRBRJAUSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "714229-20-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "714229-20-6",
+          "resolved_cid": 56843846
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

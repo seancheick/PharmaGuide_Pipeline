@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_BLUE1",
+  "verified_at": "2026-05-28T15:15:51.534335+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "FD&C Blue No. 1",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0772270",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0772270",
+          "name": "brilliant blue FCF",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 59,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1310605",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1310605",
+          "name": "brilliant blue FCF",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "H3R47K3TBD",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "H3R47K3TBD",
+          "gsrs_name": "FD&C BLUE NO. 1"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 19700,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 19700,
+          "iupac": "disodium;2-[[4-[ethyl-[(3-sulfonatophenyl)methyl]amino]phenyl]-[4-[ethyl-[(3-sulfonatophenyl)methyl]azaniumylidene]cyclohexa-2,5-dien-1-ylidene]methyl]benzenesulfonate",
+          "inchi_key": "SGHZXLIDFTYFHQ-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "3844-45-9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "3844-45-9",
+          "resolved_cid": 19700
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

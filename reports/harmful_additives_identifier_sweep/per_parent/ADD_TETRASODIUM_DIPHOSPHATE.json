@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_TETRASODIUM_DIPHOSPHATE",
+  "verified_at": "2026-05-28T15:21:03.670787+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Tetrasodium Diphosphate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074764",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074764",
+          "name": "sodium pyrophosphate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 28,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1364532",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1364532",
+          "name": "sodium pyrophosphate",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "O352864B8Z",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "O352864B8Z",
+          "gsrs_name": "SODIUM PYROPHOSPHATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 24403,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 24403,
+          "iupac": "tetrasodium;phosphonato phosphate",
+          "inchi_key": "FQENQNTWSFEDLI-UHFFFAOYSA-J"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7722-88-5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7722-88-5",
+          "resolved_cid": 24403
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

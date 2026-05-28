@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_MALTOL",
+  "verified_at": "2026-05-28T15:17:23.955598+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Maltol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0065605",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0065605",
+          "name": "maltol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 13,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1362894",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1362894",
+          "name": "maltol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "3A9RD92BS4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "3A9RD92BS4",
+          "gsrs_name": "MALTOL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 8369,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 8369,
+          "iupac": "3-hydroxy-2-methylpyran-4-one",
+          "inchi_key": "XPCTZQVDEJYUGT-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "118-71-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "118-71-8",
+          "resolved_cid": 8369
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

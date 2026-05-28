@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_POTASSIUM_NITRITE",
+  "verified_at": "2026-05-28T15:18:33.179284+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Potassium Nitrite",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0071773",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0071773",
+          "name": "potassium nitrite",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1365705",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1365705",
+          "name": "potassium nitrite",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "794654G42L",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "794654G42L",
+          "gsrs_name": "POTASSIUM NITRITE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 516910,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 516910,
+          "iupac": "potassium nitrite",
+          "inchi_key": "BXNHTSHTPBPRFX-UHFFFAOYSA-M"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7758-09-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7758-09-0",
+          "resolved_cid": 516910
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

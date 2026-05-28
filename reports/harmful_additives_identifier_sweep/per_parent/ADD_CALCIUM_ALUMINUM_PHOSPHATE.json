@@ -1,0 +1,66 @@
+{
+  "canonical_id": "ADD_CALCIUM_ALUMINUM_PHOSPHATE",
+  "verified_at": "2026-05-28T15:15:55.980733+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Calcium Aluminum Phosphate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0256439",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0256439",
+          "name": "calcium aluminium phosphate",
+          "semantic_types": [
+            "Inorganic Chemical"
+          ],
+          "atom_count": 4,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 161837,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 161837,
+          "iupac": "aluminum;calcium;phosphate",
+          "inchi_key": "ZMPZURBYCNDNBN-UHFFFAOYSA-K"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "34767-10-7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "34767-10-7",
+          "resolved_cid": 161837
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

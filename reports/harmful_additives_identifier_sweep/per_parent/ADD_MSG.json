@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_MSG",
+  "verified_at": "2026-05-28T15:17:40.811830+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Monosodium Glutamate (MSG)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0037511",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0037511",
+          "name": "sodium glutamate",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 73,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1313974",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1313974",
+          "name": "monosodium glutamate anhydrous",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "C3C196L9FG",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "C3C196L9FG",
+          "gsrs_name": "MONOSODIUM GLUTAMATE ANHYDROUS"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 23689119,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 23689119,
+          "iupac": "sodium;(4S)-4-amino-5-hydroxy-5-oxopentanoate;hydrate",
+          "inchi_key": "GJBHGUUFMNITCI-QTNFYWBSSA-M"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "142-47-2",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "142-47-2",
+          "resolved_cid": 23689119
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

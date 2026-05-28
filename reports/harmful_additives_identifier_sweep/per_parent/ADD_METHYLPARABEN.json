@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_METHYLPARABEN",
+  "verified_at": "2026-05-28T15:17:29.668753+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Methylparaben",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0066415",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0066415",
+          "name": "methylparaben",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 61,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "29903",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "29903",
+          "name": "methylparaben",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "A2I8C7HI9T",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "A2I8C7HI9T",
+          "gsrs_name": "Methylparaben"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 7456,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 7456,
+          "iupac": "methyl 4-hydroxybenzoate",
+          "inchi_key": "LXCFILQKKLGQFO-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "99-76-3",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "99-76-3",
+          "resolved_cid": 7456
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

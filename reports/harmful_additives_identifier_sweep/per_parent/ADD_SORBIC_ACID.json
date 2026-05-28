@@ -1,0 +1,76 @@
+{
+  "canonical_id": "ADD_SORBIC_ACID",
+  "verified_at": "2026-05-28T15:20:22.515672+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Sorbic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0037686",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0037686",
+          "name": "sorbic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 71,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1311139",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311139",
+          "name": "sorbic acid",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "X045WJ989B",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "X045WJ989B",
+          "gsrs_name": "Sorbic Acid"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": "643460",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 643460,
+          "iupac": "(2E,4E)-hexa-2,4-dienoic acid",
+          "inchi_key": "WSWCOQWTEOXDQX-MQQKCMAXSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "110-44-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "110-44-1",
+          "resolved_cid": 643460
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

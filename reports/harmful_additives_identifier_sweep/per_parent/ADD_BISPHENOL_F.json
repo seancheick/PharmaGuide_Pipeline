@@ -1,0 +1,69 @@
+{
+  "canonical_id": "ADD_BISPHENOL_F",
+  "verified_at": "2026-05-28T15:15:45.653565+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Bisphenol F",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C4309505",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C4309505",
+          "name": "bisphenol F",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "QD2C19044Z",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "QD2C19044Z",
+          "gsrs_name": "BISPHENOL F"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 12111,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 12111,
+          "iupac": "4-[(4-hydroxyphenyl)methyl]phenol",
+          "inchi_key": "PXKLMJQFEQBVLD-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "620-92-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "620-92-8",
+          "resolved_cid": 12111
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

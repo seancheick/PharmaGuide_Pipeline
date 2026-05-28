@@ -1,0 +1,70 @@
+{
+  "canonical_id": "ADD_MINERAL_OIL",
+  "verified_at": "2026-05-28T15:17:36.824345+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Mineral Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0026156",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0026156",
+          "name": "mineral oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 154,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "6972",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "6972",
+          "name": "mineral oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "T5L8T28FGP",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "T5L8T28FGP",
+          "gsrs_name": "MINERAL OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "8042-47-5",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '8042-47-5' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

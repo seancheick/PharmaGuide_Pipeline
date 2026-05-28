@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_SORBITAN_MONOSTEARATE",
+  "verified_at": "2026-05-28T15:20:25.960898+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Sorbitan Monostearate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074915",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074915",
+          "name": "sorbitan monostearate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 14,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1363057",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1363057",
+          "name": "sorbitan monostearate",
+          "tty": "IN",
+          "synonym": "sorbitan stearate"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "NVZ4I0H58X",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "NVZ4I0H58X",
+          "gsrs_name": "SORBITAN MONOSTEARATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 16218600,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 16218600,
+          "iupac": "[(2R)-2-[(2R,3R,4S)-3,4-dihydroxyoxolan-2-yl]-2-hydroxyethyl] octadecanoate",
+          "inchi_key": "HVUMOYIDDBPOLL-XWVZOOPGSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1338-41-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1338-41-6",
+          "resolved_cid": 16218600
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

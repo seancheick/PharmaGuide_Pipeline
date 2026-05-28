@@ -1,0 +1,76 @@
+{
+  "canonical_id": "ADD_ERYTHRITOL",
+  "verified_at": "2026-05-28T15:16:43.224043+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Erythritol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0014757",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0014757",
+          "name": "erythritol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 42,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1369563",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1369563",
+          "name": "erythritol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "RA96B954X6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "RA96B954X6",
+          "gsrs_name": "Erythritol"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 222285,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 222285,
+          "iupac": "(2S,3R)-butane-1,2,3,4-tetrol",
+          "inchi_key": "UNXHWFMMPAWVPI-ZXZARUISSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "149-32-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "149-32-6",
+          "resolved_cid": 222285
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

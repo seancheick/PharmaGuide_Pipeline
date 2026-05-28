@@ -1,0 +1,71 @@
+{
+  "canonical_id": "ADD_BLUE2",
+  "verified_at": "2026-05-28T15:15:54.545755+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "FD&C Blue No. 2",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0021219",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0021219",
+          "name": "indigo carmine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 166,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "L06K8R7DQK",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "L06K8R7DQK",
+          "gsrs_name": "FD&C BLUE NO. 2"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5284351,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5284351,
+          "iupac": "disodium;(2E)-3-oxo-2-(3-oxo-5-sulfonato-1H-indol-2-ylidene)-1H-indole-5-sulfonate",
+          "inchi_key": "KHLVKKOJDHCJMG-QDBORUFSSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "860-22-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "860-22-0",
+          "resolved_cid": 2723854
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

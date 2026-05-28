@@ -1,0 +1,67 @@
+{
+  "canonical_id": "ADD_CANE_MOLASSES",
+  "verified_at": "2026-05-28T15:16:08.081982+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Cane Molasses",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0026370",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0026370",
+          "name": "molasses",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 40,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1307820",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1307820",
+          "name": "molasses",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "LSU3YX0KZO",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "LSU3YX0KZO",
+          "gsrs_name": "MOLASSES"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_SACCHARIN",
+  "verified_at": "2026-05-28T15:18:57.770059+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Saccharin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0036023",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0036023",
+          "name": "saccharin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 64,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "9509",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "9509",
+          "name": "saccharin",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "FST467XS7D",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "FST467XS7D",
+          "gsrs_name": "Saccharin"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5143,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5143,
+          "iupac": "1,1-dioxo-1,2-benzothiazol-3-one",
+          "inchi_key": "CVHZOJJKTDOEJC-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "81-07-2",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "81-07-2",
+          "resolved_cid": 5143
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

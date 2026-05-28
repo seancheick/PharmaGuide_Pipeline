@@ -1,0 +1,71 @@
+{
+  "canonical_id": "ADD_YELLOW6",
+  "verified_at": "2026-05-28T15:21:25.896117+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "FD&C Yellow No. 6",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0060120",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0060120",
+          "name": "FD&C yellow no. 6",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 64,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1305574",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1305574",
+          "name": "FD&C yellow no. 6",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "H77VEI93A8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "H77VEI93A8",
+          "gsrs_name": "FD&C YELLOW NO. 6"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "2783-94-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "2783-94-0",
+          "resolved_cid": 17730
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

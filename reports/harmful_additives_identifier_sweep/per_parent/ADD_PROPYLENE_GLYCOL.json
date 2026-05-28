@@ -1,0 +1,74 @@
+{
+  "canonical_id": "ADD_PROPYLENE_GLYCOL",
+  "verified_at": "2026-05-28T15:18:43.215354+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Propylene Glycol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0033437",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0033437",
+          "name": "Propylene Glycols",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 32,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "34693",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "34693",
+          "name": "propylene glycol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "6DC9Q167V3",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "6DC9Q167V3",
+          "gsrs_name": "Propylene Glycol"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 1030,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 1030,
+          "iupac": "propane-1,2-diol",
+          "inchi_key": "DNIAPMSPPWPWGF-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "57-55-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "57-55-6",
+          "resolved_cid": 1030
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "canonical_id": "ADD_CANOLA_OIL",
+  "verified_at": "2026-05-28T15:16:12.944935+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Canola Oil (Refined)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0072982",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0072982",
+          "name": "Brassica napus oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Food"
+          ],
+          "atom_count": 38,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1306155",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1306155",
+          "name": "Brassica rapa var. rapa oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "N4G8379626",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "N4G8379626",
+          "gsrs_name": "BRASSICA RAPA SUBSP. OLEIFERA OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "8002-13-9",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '8002-13-9' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

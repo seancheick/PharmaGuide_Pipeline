@@ -1,0 +1,67 @@
+{
+  "canonical_id": "ADD_HFCS",
+  "verified_at": "2026-05-28T15:16:53.162355+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "High Fructose Corn Syrup",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2981326",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2981326",
+          "name": "high fructose corn syrup",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 75,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1310511",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1310511",
+          "name": "high fructose corn syrup",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "XY6UN3QB6S",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "XY6UN3QB6S",
+          "gsrs_name": "HIGH FRUCTOSE CORN SYRUP"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

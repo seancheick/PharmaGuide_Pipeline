@@ -1,0 +1,75 @@
+{
+  "canonical_id": "ADD_SODIUM_METABISULFITE",
+  "verified_at": "2026-05-28T15:19:50.380446+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Sodium Metabisulfite",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074744",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074744",
+          "name": "sodium metabisulfite",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 50,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "36696",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "36696",
+          "name": "sodium metabisulfite",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "4VON5FNS3C",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "4VON5FNS3C",
+          "gsrs_name": "SODIUM METABISULFITE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 656671,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 656671,
+          "iupac": null,
+          "inchi_key": "HRZFUMHJMZEROT-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7681-57-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7681-57-4",
+          "resolved_cid": 656671
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

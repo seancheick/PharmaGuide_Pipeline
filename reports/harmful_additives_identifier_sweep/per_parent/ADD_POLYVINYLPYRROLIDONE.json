@@ -1,0 +1,70 @@
+{
+  "canonical_id": "ADD_POLYVINYLPYRROLIDONE",
+  "verified_at": "2026-05-28T15:18:20.161931+00:00",
+  "iqm_snapshot_sha256": "57b2748f6784dfe9752e1e9c6e7f11084315b7f57d6048ac18c2064a3303d705",
+  "standard_name": "Polyvinylpyrrolidone (PVP)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0032856",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0032856",
+          "name": "povidone",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 134,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "8610",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "8610",
+          "name": "povidone",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "FZ989GH94E",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "FZ989GH94E",
+          "gsrs_name": "POVIDONE, UNSPECIFIED"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9003-39-8",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '9003-39-8' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}
