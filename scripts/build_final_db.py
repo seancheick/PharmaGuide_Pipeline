@@ -339,7 +339,17 @@ def _resolve_active_safety_contract(
         status = normalize_text(top_flag.get("status"))
         source = safe_str(top_flag.get("source_db") or top_flag.get("matched_source"))
         rule_id = safe_str(top_flag.get("entry_id") or top_flag.get("rule_id"))
-        reason = safe_str(top_flag.get("reason") or top_flag.get("evidence_text"))
+        reference_hit = _banned_recalled_reference_for_rule_id(
+            rule_id,
+            ingredient_hits=ingredient_hits,
+            banned_recalled_index=banned_recalled_index,
+        )
+        reason = safe_str(
+            top_flag.get("reason")
+            or top_flag.get("evidence_text")
+            or safe_dict(reference_hit).get("reason")
+            or safe_dict(reference_hit).get("safety_warning_one_liner")
+        )
         if source == "banned_recalled_ingredients":
             source = "banned_recalled"
         return {
@@ -348,8 +358,14 @@ def _resolve_active_safety_contract(
             "safety_reason": reason or None,
             "matched_source": source or None,
             "matched_rule_id": rule_id or None,
-            "safety_warning_one_liner": safe_str(top_flag.get("safety_warning_one_liner")) or None,
-            "safety_warning": safe_str(top_flag.get("safety_warning")) or None,
+            "safety_warning_one_liner": safe_str(
+                top_flag.get("safety_warning_one_liner")
+                or safe_dict(reference_hit).get("safety_warning_one_liner")
+            ) or None,
+            "safety_warning": safe_str(
+                top_flag.get("safety_warning")
+                or safe_dict(reference_hit).get("safety_warning")
+            ) or None,
         }
 
     # 1. + 2. — banned_recalled hits via enricher's contaminant_lookup
@@ -463,6 +479,162 @@ def normalize_text(value: Any) -> str:
     return safe_str(value).lower()
 
 
+def _banned_recalled_reference_for_rule_id(
+    rule_id: str,
+    *,
+    ingredient_hits: Optional[List[Dict]] = None,
+    banned_recalled_index: Optional[Dict[str, Dict]] = None,
+) -> Optional[Dict[str, Any]]:
+    """Find authored banned/recalled reference data for a canonical flag.
+
+    Canonical safety_flags are intentionally compact. Older enriched files may
+    carry the flag id but omit the authored warning copy required by the
+    Flutter banned-substance preflight sheet. This helper lets the export
+    projection fill that copy from the legacy contaminant hit or reference
+    entry without treating safety data as ingredient identity.
+    """
+    normalized_rule_id = safe_str(rule_id)
+    if not normalized_rule_id:
+        return None
+    for hit in ingredient_hits or []:
+        if not isinstance(hit, dict):
+            continue
+        hit_id = safe_str(hit.get("id") or hit.get("rule_id") or hit.get("banned_id"))
+        if hit_id == normalized_rule_id:
+            return hit
+    seen_entry_ids: set[int] = set()
+    for entry in (banned_recalled_index or {}).values():
+        if not isinstance(entry, dict):
+            continue
+        obj_id = id(entry)
+        if obj_id in seen_entry_ids:
+            continue
+        seen_entry_ids.add(obj_id)
+        if safe_str(entry.get("id") or entry.get("rule_id")) == normalized_rule_id:
+            return entry
+    return None
+
+
+_SAFETY_ONLY_IDENTITY_SOURCES = frozenset({
+    "banned_recalled",
+    "banned_recalled_ingredients",
+    "harmful_additives",
+})
+
+
+def _inactive_identity_name_for_export(
+    *,
+    name: str,
+    upstream_standard_name: str,
+    resolver_standard_name: str,
+    matched_source: str,
+) -> str:
+    """Return the inactive ingredient identity name for the Flutter blob.
+
+    The inactive resolver intentionally consults safety sources first so it
+    can project safety flags and warning metadata. Those safety sources do
+    not own identity fields. If the resolver match came from banned/recalled
+    or harmful-additives, preserve the label identity instead of exporting a
+    safety table's standard_name as standardName/standard_name.
+    """
+    if matched_source in _SAFETY_ONLY_IDENTITY_SOURCES:
+        return name or upstream_standard_name or resolver_standard_name
+    return resolver_standard_name or upstream_standard_name or name
+
+
+def _safety_flag_sources_identity_only_table(flag: Dict[str, Any]) -> bool:
+    source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+    return source in _SAFETY_ONLY_IDENTITY_SOURCES
+
+
+def _active_identity_name_for_export(
+    *,
+    name: str,
+    upstream_standard_name: str,
+    canonical_id: str,
+    safety_flags: List[Dict[str, Any]],
+) -> str:
+    """Return active ingredient identity without safety-source name bleed.
+
+    If an active ingredient is not canonically mapped and the only pressure to
+    standardize the name comes from a safety flag, keep the label identity in
+    `standardName`/`standard_name`. The safety fact still ships in
+    `safety_flags`; it just cannot overwrite identity.
+    """
+    if canonical_id:
+        return upstream_standard_name or name
+    if upstream_standard_name and upstream_standard_name != name:
+        if any(
+            isinstance(flag, dict) and _safety_flag_sources_identity_only_table(flag)
+            for flag in safety_flags or []
+        ):
+            return name or upstream_standard_name
+    return upstream_standard_name or name
+
+
+def _form_match_terms(forms: Any) -> List[str]:
+    terms: List[str] = []
+    for form in safe_list(forms):
+        if isinstance(form, dict):
+            terms.extend([
+                safe_str(form.get("name")),
+                safe_str(form.get("prefix")),
+                safe_str(form.get("label")),
+                safe_str(form.get("ingredientGroup")),
+            ])
+        elif form:
+            terms.append(safe_str(form))
+    return [term for term in terms if term]
+
+
+def _is_short_acronym_alias(value: Any) -> bool:
+    text = safe_str(value)
+    compact = re.sub(r"[^A-Za-z0-9]", "", text)
+    if compact.lower() in {"pho", "phos"}:
+        return True
+    if not (2 <= len(compact) <= 5):
+        return False
+    uppercase_count = sum(1 for ch in compact if ch.isupper())
+    return compact.isupper() or uppercase_count >= 2
+
+
+def _literal_short_alias_evidence_match(evidence_text: Any, alias: Any) -> bool:
+    evidence = safe_str(evidence_text)
+    alias_text = safe_str(alias)
+    if not evidence or not alias_text:
+        return False
+    pattern = re.compile(
+        r"(?<![A-Za-z0-9-])" + re.escape(alias_text) + r"(?![A-Za-z0-9-])",
+        re.IGNORECASE,
+    )
+    return bool(pattern.search(evidence))
+
+
+def _safety_flag_has_supported_evidence(flag: Dict[str, Any]) -> bool:
+    """Reject known low-precision token matches that lack raw evidence.
+
+    The canonical example is `Iso-Phos` matching the PHO/PHOs acronym for
+    partially hydrogenated oils after hyphen normalization. A short acronym
+    token is acceptable only when the raw evidence contains that acronym as a
+    standalone token, not as the suffix of a branded/compound term.
+    """
+    if not isinstance(flag, dict):
+        return False
+    match_type = normalize_text(flag.get("match_type"))
+    matched_variant = safe_str(flag.get("matched_variant"))
+    if match_type == "token_bounded" and _is_short_acronym_alias(matched_variant):
+        return _literal_short_alias_evidence_match(flag.get("evidence_text"), matched_variant)
+    return True
+
+
+def _supported_safety_flags(flags: Any) -> List[Dict[str, Any]]:
+    return [
+        flag
+        for flag in safe_list(flags)
+        if isinstance(flag, dict) and _safety_flag_has_supported_evidence(flag)
+    ]
+
+
 def build_supplement_type_audit(enriched: Dict, scored: Optional[Dict] = None) -> Dict[str, Any]:
     supplement_type = enriched.get("supplement_type")
     enriched_type = ""
@@ -550,13 +722,13 @@ def contaminant_safety_flags(enriched: Dict) -> List[Dict]:
         safe_dict(enriched.get("contaminant_data")).get("banned_substances")
     )
     for flag in safe_list(banned_substances.get("safety_flags")):
-        if isinstance(flag, dict):
+        if isinstance(flag, dict) and _safety_flag_has_supported_evidence(flag):
             flags.append(flag)
     for sub in safe_list(banned_substances.get("substances")):
         if not isinstance(sub, dict):
             continue
         flag = sub.get("safety_flag")
-        if isinstance(flag, dict):
+        if isinstance(flag, dict) and _safety_flag_has_supported_evidence(flag):
             flags.append(flag)
     return flags
 
@@ -573,6 +745,8 @@ def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
                 continue
             for flag in safe_list(ing.get("safety_flags")):
                 if not isinstance(flag, dict):
+                    continue
+                if not _safety_flag_has_supported_evidence(flag):
                     continue
                 source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
                 if source != "banned_recalled_ingredients":
@@ -636,6 +810,8 @@ def _resolver_status_in(
                 continue
             for flag in safe_list(ing.get("safety_flags")):
                 if not isinstance(flag, dict):
+                    continue
+                if not _safety_flag_has_supported_evidence(flag):
                     continue
                 source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
                 if (
@@ -3089,7 +3265,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             or name
         )
         standard_name = canonical_standard_name
-        safety_flags = safe_list(ing.get("safety_flags"))
+        safety_flags = _supported_safety_flags(ing.get("safety_flags"))
         evidence_terms = _active_banned_recall_evidence_terms(
             raw_source_text=raw,
             name=name,
@@ -3129,6 +3305,17 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             safety_flags=safety_flags,
         )
         projected_safety_flags = safety_flags or _safety_flags_from_contract(active_safety_contract)
+        standard_name = _active_identity_name_for_export(
+            name=name,
+            upstream_standard_name=standard_name,
+            canonical_id=canonical_id,
+            safety_flags=projected_safety_flags,
+        )
+        dose_data_quality = (
+            safe_dict(ing.get("dose_data_quality"))
+            or safe_dict(m.get("dose_data_quality"))
+            or safe_dict(safe_dict(ne.get("conversion_evidence")).get("dose_data_quality"))
+        )
         ingredients.append({
             "raw_source_text": raw,
             "name": name,
@@ -3137,6 +3324,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "forms": safe_list(ing.get("forms")),
             "quantity": safe_float(qty),
             "unit": safe_str(ing.get("unit")),
+            "dailyValue": safe_float(ing.get("dailyValue")),
+            "dose_data_quality": dose_data_quality or None,
             "standard_name": standard_name,
             "matched_form": safe_str(m.get("matched_form")),
             "matched_forms": safe_list(m.get("matched_forms")),
@@ -3267,6 +3456,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         res = inactive_resolver.resolve(
             raw_name=name or raw,
             standard_name=std_name_ing,
+            additional_terms=_form_match_terms(ing.get("forms")),
         )
 
         # Phase 4a (2026-04-30): suppress label-noise + move-to-actives
@@ -3279,7 +3469,17 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         if res.is_label_descriptor or res.is_active_only:
             intentional_inactive_drops += 1
             continue
-        inactive_standard_name = res.standard_name or std_name_ing or name
+        inactive_standard_name = _inactive_identity_name_for_export(
+            name=name,
+            upstream_standard_name=std_name_ing,
+            resolver_standard_name=safe_str(res.standard_name),
+            matched_source=safe_str(res.matched_source),
+        )
+        inactive_display_label = (
+            name
+            if safe_str(res.matched_source) in _SAFETY_ONLY_IDENTITY_SOURCES
+            else res.display_label
+        )
         inactive_contract = {
             "is_safety_concern": res.is_safety_concern,
             "is_banned": res.is_banned,
@@ -3312,7 +3512,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "identifiers": res.identifiers or {},
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.
-            "display_label": res.display_label,
+            "display_label": inactive_display_label,
             "display_role_label": res.display_role_label,
             "severity_status": res.severity_status,
             "is_safety_concern": res.is_safety_concern,
@@ -3323,6 +3523,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "matched_rule_id": res.matched_rule_id,
             "regulatory_status": res.regulatory_status,
             "inactive_policy": res.inactive_policy,
+            "safety_display_name": (
+                safe_str(res.standard_name)
+                if safe_str(res.matched_source) in _SAFETY_ONLY_IDENTITY_SOURCES
+                else None
+            ),
             # Sprint E1.1.4 / 2026-05-13 — Dr Pham authored copy threaded
             # from banned_recalled_ingredients.json through the resolver
             # to the warning emitter. None on harmful-additive /
@@ -3669,7 +3874,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             if not (ing.get("is_safety_concern") or ing.get("is_banned")):
                 continue  # watchlist/informational — top warning not required
             name = (
-                ing.get("display_label")
+                ing.get("safety_display_name")
+                or ing.get("display_label")
                 or ing.get("name")
                 or ing.get("raw_source_text")
                 or "Unknown ingredient"

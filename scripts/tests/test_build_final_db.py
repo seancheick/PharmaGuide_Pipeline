@@ -25,6 +25,7 @@ from build_final_db import (
     fetch_staged_product,
     generate_ingredient_fingerprint,
     generate_dosing_summary,
+    has_banned_substance,
     iter_json_products,
     mark_staged_product_matched,
     remote_blob_storage_path,
@@ -831,6 +832,177 @@ def test_excipient_acceptable_inactive_uses_calibrated_warning_posture():
     assert warning["severity"] == "moderate"
     assert warning["display_mode_default"] == "informational"
     assert warning["inactive_policy"] == "excipient_acceptable"
+
+
+def test_safety_source_inactive_does_not_export_safety_standard_name_as_identity():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Titanium Dioxide",
+            "raw_source_text": "Titanium Dioxide",
+            "standardName": "Titanium Dioxide (E171)",
+            "standard_name": "Titanium Dioxide (E171)",
+        }
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+    inactive = blob["inactive_ingredients"][0]
+
+    assert inactive["standardName"] == "Titanium Dioxide"
+    assert inactive["standard_name"] == "Titanium Dioxide"
+    assert inactive["display_label"] == "Titanium Dioxide"
+    assert inactive["matched_rule_id"] == "BANNED_ADD_TITANIUM_DIOXIDE"
+    assert any(
+        flag.get("entry_id") == "BANNED_ADD_TITANIUM_DIOXIDE"
+        for flag in inactive.get("safety_flags", [])
+    )
+
+
+def test_safety_source_active_without_canonical_keeps_label_identity():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Bitter Orange Citrus Bioflavonoids",
+            "raw_source_text": "Bitter Orange Citrus Bioflavonoids",
+            "standardName": "Bitter Orange",
+            "standard_name": "Bitter Orange",
+            "canonical_id": None,
+            "mapped": False,
+            "safety_flags": [
+                {
+                    "entry_id": "RISK_BITTER_ORANGE",
+                    "source_db": "banned_recalled_ingredients",
+                    "status": "high_risk",
+                    "severity": "high",
+                    "match_type": "alias",
+                    "matched_variant": "Bitter Orange",
+                    "evidence_text": "Bitter Orange Citrus Bioflavonoids",
+                    "confidence": "high",
+                }
+            ],
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
+
+    assert ingredient["standardName"] == "Bitter Orange Citrus Bioflavonoids"
+    assert ingredient["standard_name"] == "Bitter Orange Citrus Bioflavonoids"
+    assert ingredient["matched_rule_id"] == "RISK_BITTER_ORANGE"
+    assert ingredient["safety_flags"][0]["entry_id"] == "RISK_BITTER_ORANGE"
+
+
+def test_inactive_form_terms_emit_banned_preflight_detail():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = []
+    enriched["ingredient_quality_data"]["ingredients"] = []
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Creamer",
+            "raw_source_text": "Creamer",
+            "standardName": "Creamer",
+            "forms": [
+                {"name": "Corn Syrup Solids"},
+                {"name": "Partially Hydrogenated Soybean Oil"},
+            ],
+        }
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+    inactive = blob["inactive_ingredients"][0]
+
+    assert inactive["standardName"] == "Creamer"
+    assert inactive["standard_name"] == "Creamer"
+    assert inactive["matched_rule_id"] == "BANNED_PHO"
+    assert inactive["is_banned"] is True
+    assert blob["banned_substance_detail"]["substance_name"] == "Partially Hydrogenated Oils (PHOs)"
+    assert blob["banned_substance_detail"]["safety_warning_one_liner"]
+    assert blob["banned_substance_detail"]["safety_warning"]
+
+
+def test_active_safety_flag_uses_reference_copy_for_banned_detail():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Red Yeast Rice powder",
+            "raw_source_text": "Red Yeast Rice powder",
+            "standardName": "Red Yeast Rice powder",
+            "mapped": False,
+            "safety_flags": [
+                {
+                    "entry_id": "BANNED_RED_YEAST_RICE",
+                    "source_db": "banned_recalled_ingredients",
+                    "status": "banned",
+                    "severity": "critical",
+                    "match_type": "token_bounded",
+                    "matched_variant": "red yeast rice",
+                    "evidence_text": "Red Yeast Rice powder",
+                    "confidence": "medium",
+                }
+            ],
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+    enriched["contaminant_data"]["banned_substances"] = {
+        "found": True,
+        "substances": [],
+        "safety_flags": enriched["activeIngredients"][0]["safety_flags"],
+    }
+
+    blob = build_detail_blob(enriched, make_scored())
+    ingredient = blob["ingredients"][0]
+
+    assert ingredient["matched_rule_id"] == "BANNED_RED_YEAST_RICE"
+    assert blob["banned_substance_detail"]["safety_warning_one_liner"]
+    assert blob["banned_substance_detail"]["safety_warning"]
+
+
+def test_iso_phos_acronym_flag_is_not_banned_evidence():
+    enriched = make_enriched()
+    stale_flag = {
+        "entry_id": "BANNED_PHO",
+        "source_db": "banned_recalled_ingredients",
+        "status": "banned",
+        "severity": "critical",
+        "match_type": "token_bounded",
+        "matched_variant": "PHOs",
+        "evidence_text": "Iso-Phos",
+        "confidence": "medium",
+    }
+    enriched["activeIngredients"] = [
+        {
+            "name": "Iso-Phos",
+            "raw_source_text": "Iso-Phos",
+            "standardName": "Phosphatidylserine",
+            "canonical_id": "phosphatidylserine",
+            "mapped": True,
+            "forms": [{"name": "Phosphatidylserine Isolate"}],
+            "safety_flags": [stale_flag],
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "raw_source_text": "Iso-Phos",
+            "name": "Iso-Phos",
+            "standard_name": "Phosphatidylserine",
+            "canonical_id": "phosphatidylserine",
+            "mapped": True,
+            "score": 10,
+        }
+    ]
+    enriched["contaminant_data"]["banned_substances"] = {
+        "found": True,
+        "substances": [],
+        "safety_flags": [stale_flag],
+    }
+
+    assert has_banned_substance(enriched) is False
+
+    ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
+
+    assert ingredient["matched_rule_id"] is None
+    assert ingredient["is_banned"] is False
+    assert ingredient["safety_flags"] == []
 
 
 def test_core_row_honors_scorer_emitted_high_risk_blocking_reason():

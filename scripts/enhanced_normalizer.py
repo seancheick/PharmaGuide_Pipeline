@@ -174,6 +174,7 @@ def _generate_variations_module_cached(text: str) -> tuple:
     return tuple(sorted(set(variations)))
 
 logger = logging.getLogger(__name__)
+DAILY_VALUES_PATH = Path(__file__).parent / "data" / "daily_values.json"
 
 # These are deliberate active + high-risk overlaps:
 # keep the active identity for scoring/explanation, then apply the safety layer.
@@ -908,6 +909,8 @@ class EnhancedDSLDNormalizer:
         self.botanical_ingredients = self._load_json(BOTANICAL_INGREDIENTS)
         self.absorption_enhancers = self._load_json(ABSORPTION_ENHANCERS)
         self.enhanced_delivery = self._load_json(ENHANCED_DELIVERY)
+        self.daily_values = self._load_json(DAILY_VALUES_PATH)
+        self._daily_value_lookup = self._build_daily_value_lookup()
         self.clinical_strains_db = self._load_json(
             CLINICALLY_RELEVANT_STRAINS
         )
@@ -2195,6 +2198,211 @@ class EnhancedDSLDNormalizer:
                 ) from e
             logger.error(f"Failed to load {filepath}: {str(e)}")
             return {}
+
+    def _normalize_dv_lookup_key(self, value: Any) -> str:
+        """Normalize nutrient aliases for FDA Daily Value lookup."""
+        if not value:
+            return ""
+        text = str(value).lower()
+        text = text.replace("&", " and ")
+        text = re.sub(r"[^a-z0-9]+", "_", text)
+        return re.sub(r"_+", "_", text).strip("_")
+
+    def _build_daily_value_lookup(self) -> Dict[str, str]:
+        """Build alias -> nutrient key lookup for FDA labeling Daily Values."""
+        lookup: Dict[str, str] = {}
+        nutrients = self.daily_values.get("nutrients", {}) if isinstance(self.daily_values, dict) else {}
+        if not isinstance(nutrients, dict):
+            return lookup
+
+        for nutrient_key, record in nutrients.items():
+            if not isinstance(record, dict):
+                continue
+            terms = [nutrient_key, record.get("standard_name")]
+            terms.extend(record.get("aliases") or [])
+            for term in terms:
+                norm = self._normalize_dv_lookup_key(term)
+                if norm:
+                    lookup.setdefault(norm, nutrient_key)
+        return lookup
+
+    def _normalize_daily_value_unit(self, value: Any) -> str:
+        """Canonicalize units used by FDA labeling DV checks."""
+        unit = str(value or "").strip().lower().replace("µg", "mcg").replace("μg", "mcg")
+        unit = unit.replace("micrograms", "mcg").replace("microgram", "mcg")
+        unit = unit.replace("milligrams", "mg").replace("milligram", "mg")
+        unit = unit.replace("grams", "g").replace("gram", "g")
+        unit = re.sub(r"\s+", " ", unit).strip()
+        return unit
+
+    def _normalize_daily_value_target_group(self, value: Any) -> Optional[str]:
+        """Map DSLD/FDA target-group labels to daily_values.json keys."""
+        raw = str(value or "").strip()
+        if not raw:
+            return None
+        key = self._normalize_dv_lookup_key(raw)
+        direct = {
+            "adult_4_plus": "adult_4_plus",
+            "adults_4_plus": "adult_4_plus",
+            "adults_children_4_plus": "adult_4_plus",
+            "adults_and_children_4_plus": "adult_4_plus",
+            "pregnant_lactating": "pregnant_lactating",
+            "pregnant_women_lactating_women": "pregnant_lactating",
+            "pregnant_women_and_lactating_women": "pregnant_lactating",
+            "children_1_3": "children_1_3",
+            "children_1_through_3": "children_1_3",
+            "infants": "infants",
+            "infants_through_12_months": "infants",
+        }
+        if key in direct:
+            return direct[key]
+        if "preg" in key or "lactat" in key:
+            return "pregnant_lactating"
+        if "infant" in key or "12_month" in key:
+            return "infants"
+        if "children" in key and ("1_3" in key or "1_through_3" in key):
+            return "children_1_3"
+        if "adult" in key or "4" in key:
+            return "adult_4_plus"
+        return None
+
+    def _daily_value_target_group_from_dv_group(self, dv_group: Dict[str, Any]) -> Optional[str]:
+        """Extract the target group from one DSLD dailyValueTargetGroup row."""
+        if not isinstance(dv_group, dict):
+            return None
+        for field in (
+            "targetGroup",
+            "targetGroupName",
+            "dailyValueTargetGroupName",
+            "daily_value_target_group",
+            "group",
+            "name",
+        ):
+            normalized = self._normalize_daily_value_target_group(dv_group.get(field))
+            if normalized:
+                return normalized
+        return None
+
+    def _daily_value_target_group_from_variants(self, variants: List[Dict]) -> Optional[str]:
+        """Return the first explicit FDA target group preserved on quantity variants."""
+        for variant in variants or []:
+            if not isinstance(variant, dict):
+                continue
+            for field in ("daily_value_target_group", "context"):
+                normalized = self._normalize_daily_value_target_group(variant.get(field))
+                if normalized:
+                    return normalized
+        return None
+
+    def _find_daily_value_record(
+        self,
+        canonical_id: Optional[str],
+        standard_name: str,
+        ingredient_name: str,
+    ) -> Tuple[Optional[str], Optional[Dict[str, Any]]]:
+        """Resolve a cleaned nutrient row to its FDA labeling DV record."""
+        nutrients = self.daily_values.get("nutrients", {}) if isinstance(self.daily_values, dict) else {}
+        if not isinstance(nutrients, dict):
+            return None, None
+
+        for candidate in (canonical_id, standard_name, ingredient_name):
+            key = self._normalize_dv_lookup_key(candidate)
+            if not key:
+                continue
+            nutrient_key = self._daily_value_lookup.get(key)
+            if nutrient_key and isinstance(nutrients.get(nutrient_key), dict):
+                return nutrient_key, nutrients[nutrient_key]
+        return None, None
+
+    def _maybe_correct_dv_backed_unit(
+        self,
+        *,
+        ingredient_name: str,
+        standard_name: str,
+        canonical_id: Optional[str],
+        quantity: Any,
+        unit: str,
+        daily_value: Optional[float],
+        quantity_variants: List[Dict],
+    ) -> Optional[Dict[str, Any]]:
+        """Correct high-confidence DSLD mg->mcg typos proven by %DV math.
+
+        v1 is intentionally narrow: only mg->mcg corrections where the FDA
+        target-group Daily Value proves a roughly 1000x source-unit mismatch.
+        IU and heuristic-only corrections remain out of scope.
+        """
+        if daily_value is None:
+            return None
+        try:
+            percent_dv = float(daily_value)
+            amount = float(quantity)
+        except (TypeError, ValueError):
+            return None
+        if percent_dv <= 0 or amount <= 0:
+            return None
+
+        source_unit = self._normalize_daily_value_unit(unit)
+        if source_unit != "mg":
+            return None
+
+        nutrient_key, record = self._find_daily_value_record(
+            canonical_id=canonical_id,
+            standard_name=standard_name,
+            ingredient_name=ingredient_name,
+        )
+        if not nutrient_key or not record:
+            return None
+
+        target_unit = self._normalize_daily_value_unit(record.get("unit"))
+        if target_unit != "mcg":
+            return None
+
+        target_group = self._daily_value_target_group_from_variants(quantity_variants)
+        if not target_group:
+            return None
+        target_groups = record.get("target_groups") or {}
+        if not isinstance(target_groups, dict) or target_group not in target_groups:
+            return None
+        try:
+            dv_reference_amount = float(target_groups[target_group])
+        except (TypeError, ValueError):
+            return None
+        if dv_reference_amount <= 0:
+            return None
+
+        expected_amount = (percent_dv / 100.0) * dv_reference_amount
+        if expected_amount <= 0:
+            return None
+
+        declared_amount_in_target_unit = amount * 1000.0
+        mismatch_ratio = declared_amount_in_target_unit / expected_amount
+        if mismatch_ratio < 100.0:
+            return None
+
+        reinterpreted_amount = amount
+        relative_error = abs(reinterpreted_amount - expected_amount) / expected_amount
+        if relative_error > 0.20:
+            return None
+
+        return {
+            "status": "corrected",
+            "reason": "daily_value_unit_mismatch",
+            "nutrient_key": nutrient_key,
+            "raw_amount": amount,
+            "raw_unit": unit,
+            "corrected_amount": reinterpreted_amount,
+            "corrected_unit": target_unit,
+            "percent_daily_value": percent_dv,
+            "daily_value_target_group": target_group,
+            "daily_value_reference_amount": dv_reference_amount,
+            "daily_value_reference_unit": target_unit,
+            "daily_value_expected_amount": expected_amount,
+            "declared_amount_in_reference_unit": declared_amount_in_target_unit,
+            "mismatch_ratio": mismatch_ratio,
+            "correction_factor": reinterpreted_amount / declared_amount_in_target_unit,
+            "relative_error": relative_error,
+            "confidence": "high",
+        }
 
     def _normalize_for_skip(self, name: str) -> str:
         """
@@ -5779,6 +5987,31 @@ class EnhancedDSLDNormalizer:
         if raw_category in {"vitamin", "mineral"}:
             label_nutrient_context = norm_module.normalize_text(raw_name or name)
 
+        dose_data_quality = self._maybe_correct_dv_backed_unit(
+            ingredient_name=name,
+            standard_name=standard_name,
+            canonical_id=canonical_id,
+            quantity=quantity,
+            unit=unit,
+            daily_value=daily_value,
+            quantity_variants=quantity_variants,
+        )
+        if dose_data_quality:
+            quantity = dose_data_quality["corrected_amount"]
+            unit = dose_data_quality["corrected_unit"]
+            for variant in quantity_variants:
+                if not isinstance(variant, dict):
+                    continue
+                if (
+                    self._normalize_daily_value_unit(variant.get("unit")) == "mg"
+                    and variant.get("daily_value") == daily_value
+                ):
+                    variant.setdefault("raw_quantity", variant.get("quantity"))
+                    variant.setdefault("raw_unit", variant.get("unit"))
+                    variant["quantity"] = quantity
+                    variant["unit"] = unit
+                    variant["dose_data_quality"] = dose_data_quality
+
         unit_norm_for_contract = str(unit or "").strip().lower()
         nested_without_individual_dose = (
             is_active
@@ -5898,6 +6131,8 @@ class EnhancedDSLDNormalizer:
             # Hierarchy classification for scoring (source/summary/component)
             "hierarchyType": "blend_header" if is_structural_active_blend_total else self._classify_hierarchy_type(name)
         }
+        if dose_data_quality:
+            result["dose_data_quality"] = dose_data_quality
 
         # Add additive metadata flag (for enrichment phase to use)
         if is_additive:
@@ -7035,9 +7270,12 @@ class EnhancedDSLDNormalizer:
 
             # Get daily value if available
             daily_value = None
+            daily_value_target_group = None
             dv_groups = quantities.get("dailyValueTargetGroup", [])
             if dv_groups and isinstance(dv_groups, list):
-                daily_value = self._safe_float(dv_groups[0].get("percent", 0))
+                first_dv_group = dv_groups[0]
+                daily_value = self._safe_float(first_dv_group.get("percent", 0))
+                daily_value_target_group = self._daily_value_target_group_from_dv_group(first_dv_group)
 
             # Build variant with context
             variant = {
@@ -7048,6 +7286,8 @@ class EnhancedDSLDNormalizer:
             }
             if daily_value:
                 variant["daily_value"] = daily_value
+            if daily_value_target_group:
+                variant["daily_value_target_group"] = daily_value_target_group
 
             return quantity, unit, daily_value, [variant]
 
@@ -7064,9 +7304,12 @@ class EnhancedDSLDNormalizer:
 
                     # Get daily value if available
                     dv = None
+                    daily_value_target_group = None
                     dv_groups = q.get("dailyValueTargetGroup", [])
                     if dv_groups and isinstance(dv_groups, list):
-                        dv = self._safe_float(dv_groups[0].get("percent", 0))
+                        first_dv_group = dv_groups[0]
+                        dv = self._safe_float(first_dv_group.get("percent", 0))
+                        daily_value_target_group = self._daily_value_target_group_from_dv_group(first_dv_group)
 
                     # Extract serving context from dailyValueTargetGroup if available
                     context = None
@@ -7089,6 +7332,8 @@ class EnhancedDSLDNormalizer:
                     }
                     if dv:
                         variant["daily_value"] = dv
+                    if daily_value_target_group:
+                        variant["daily_value_target_group"] = daily_value_target_group
                     if serving_size_qty:
                         variant["serving_size_quantity"] = serving_size_qty
                     if serving_size_unit:

@@ -132,6 +132,25 @@ class TestLegitimatelyBannedStillFlagged:
         # Species-level name of bitter orange — the real risk.
         assert "RISK_BITTER_ORANGE" in self._banned_ids(enricher, "Citrus aurantium")
 
+    def test_partially_hydrogenated_oil_still_banned(self, enricher) -> None:
+        assert "BANNED_PHO" in self._banned_ids(enricher, "Partially Hydrogenated Soybean Oil")
+
+
+class TestPhoAcronymPrecision:
+    """PHO/PHOs acronym aliases must not match branded hyphenated terms."""
+
+    def _banned_ids(self, enricher, name: str) -> set[str]:
+        hits = enricher._check_banned_substances([
+            {"name": name, "raw_source_text": name, "standardName": name}
+        ])
+        return {row.get("banned_id") for row in hits.get("substances", [])}
+
+    def test_iso_phos_does_not_match_partially_hydrogenated_oils(self, enricher) -> None:
+        assert "BANNED_PHO" not in self._banned_ids(enricher, "Iso-Phos")
+
+    def test_standalone_phos_acronym_still_matches(self, enricher) -> None:
+        assert "BANNED_PHO" in self._banned_ids(enricher, "Contains PHOs")
+
 
 # ---------------------------------------------------------------------------
 # Parens/trademark normalization helper behavior

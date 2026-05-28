@@ -1,0 +1,132 @@
+{
+  "_metadata": {
+    "description": "FDA labeling Daily Values used for Supplement Facts %DV cross-checks",
+    "purpose": "daily_value_unit_plausibility",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-05-28",
+    "verified_date": "2026-05-28",
+    "sources": [
+      {
+        "label": "21 CFR 101.9(c)(8)(iv) RDI table",
+        "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-101/subpart-A/section-101.9"
+      },
+      {
+        "label": "FDA Daily Value and Percent Daily Value reference guide",
+        "url": "https://www.fda.gov/files/food/published/DV-Percent-DV-Nutrition-Facts-Label_09072023.pdf"
+      }
+    ],
+    "total_entries": 10
+  },
+  "nutrients": {
+    "vitamin_d": {
+      "standard_name": "Vitamin D",
+      "aliases": ["Vitamin D2", "Vitamin D3", "Cholecalciferol", "Ergocalciferol"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 20,
+        "infants": 10,
+        "children_1_3": 15,
+        "pregnant_lactating": 15
+      }
+    },
+    "iodine": {
+      "standard_name": "Iodine",
+      "aliases": ["Potassium Iodide", "Sodium Iodide", "Kelp Iodine"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 150,
+        "infants": 130,
+        "children_1_3": 90,
+        "pregnant_lactating": 290
+      }
+    },
+    "vitamin_b12": {
+      "standard_name": "Vitamin B12",
+      "aliases": ["Cobalamin", "Methyl B12", "Cyanocobalamin"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 2.4,
+        "infants": 0.5,
+        "children_1_3": 0.9,
+        "pregnant_lactating": 2.8
+      }
+    },
+    "biotin": {
+      "standard_name": "Biotin",
+      "aliases": ["Vitamin B7"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 30,
+        "infants": 6,
+        "children_1_3": 8,
+        "pregnant_lactating": 35
+      }
+    },
+    "chromium": {
+      "standard_name": "Chromium",
+      "aliases": ["Chromium Picolinate"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 35,
+        "infants": 5.5,
+        "children_1_3": 11,
+        "pregnant_lactating": 45
+      }
+    },
+    "selenium": {
+      "standard_name": "Selenium",
+      "aliases": ["Selenomethionine"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 55,
+        "infants": 20,
+        "children_1_3": 20,
+        "pregnant_lactating": 70
+      }
+    },
+    "molybdenum": {
+      "standard_name": "Molybdenum",
+      "aliases": ["Sodium Molybdate"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 45,
+        "infants": 3,
+        "children_1_3": 17,
+        "pregnant_lactating": 50
+      }
+    },
+    "vitamin_k": {
+      "standard_name": "Vitamin K",
+      "aliases": ["Vitamin K1", "Vitamin K2", "Phylloquinone", "Menaquinone"],
+      "unit": "mcg",
+      "target_groups": {
+        "adult_4_plus": 120,
+        "infants": 2.5,
+        "children_1_3": 30,
+        "pregnant_lactating": 90
+      }
+    },
+    "calcium": {
+      "standard_name": "Calcium",
+      "aliases": [],
+      "unit": "mg",
+      "target_groups": {
+        "adult_4_plus": 1300,
+        "infants": 260,
+        "children_1_3": 700,
+        "pregnant_lactating": 1300
+      }
+    },
+    "magnesium": {
+      "standard_name": "Magnesium",
+      "aliases": [],
+      "unit": "mg",
+      "target_groups": {
+        "adult_4_plus": 420,
+        "infants": 75,
+        "children_1_3": 80,
+        "pregnant_lactating": 400
+      }
+    }
+  }
+}

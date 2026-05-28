@@ -309,6 +309,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                 matched_source = _safe_str(ing.get("matched_source"))
                 matched_rule_id = _safe_str(ing.get("matched_rule_id"))
                 canonical_source_db = _safe_str(ing.get("canonical_source_db") or ing.get("source_db"))
+                canonical_id = _safe_str(ing.get("canonical_id"))
 
                 if std_camel and std_snake and std_camel != std_snake:
                     findings.append({
@@ -344,6 +345,7 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
                     and std_norm
                     and std_norm in safety_reference_keys
                     and std_norm not in raw_identity_terms
+                    and not canonical_id
                     and (
                         not canonical_source_db
                         or canonical_source_db == "unmapped"

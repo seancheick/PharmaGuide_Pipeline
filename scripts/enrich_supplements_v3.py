@@ -2163,11 +2163,41 @@ class SupplementEnricherV3:
                 continue
             if ing_norm == cand_norm:
                 return True, candidate
+            if self._is_short_acronym_alias(candidate):
+                if not self._literal_short_acronym_match(ingredient_name, candidate):
+                    continue
             pattern = self._cached_token_bounded_pattern(cand_norm)
             if pattern and pattern.search(ing_norm):
                 return True, candidate
 
         return False, None
+
+    def _is_short_acronym_alias(self, alias: str) -> bool:
+        """Return true for short acronym aliases that need literal bounds."""
+        compact = re.sub(r"[^A-Za-z0-9]", "", str(alias or ""))
+        if compact.lower() in {"pho", "phos"}:
+            return True
+        if not (2 <= len(compact) <= 5):
+            return False
+        uppercase_count = sum(1 for ch in compact if ch.isupper())
+        return compact.isupper() or uppercase_count >= 2
+
+    def _literal_short_acronym_match(self, ingredient_name: str, alias: str) -> bool:
+        """Match short acronym aliases only as raw standalone tokens.
+
+        Broad normalization turns hyphens into spaces. That is useful for
+        normal ingredient names, but it made `Iso-Phos` look like it contained
+        the PHO/PHOs acronym for partially hydrogenated oils. For acronym
+        aliases, require the original label to contain the acronym without a
+        neighboring alphanumeric or hyphen.
+        """
+        if not ingredient_name or not alias:
+            return False
+        pattern = re.compile(
+            r"(?<![A-Za-z0-9-])" + re.escape(str(alias)) + r"(?![A-Za-z0-9-])",
+            re.IGNORECASE,
+        )
+        return bool(pattern.search(str(ingredient_name)))
 
     def _is_low_precision_token_alias(self, alias: str) -> bool:
         """
@@ -2892,6 +2922,8 @@ class SupplementEnricherV3:
                     "fallback_reason": skip_reason,
                     "normalized_key": ingredient.get("normalized_key") or norm_module.make_normalized_key(raw_source_text),
                 }
+                if isinstance(ingredient.get("dose_data_quality"), dict):
+                    skipped_entry["dose_data_quality"] = dict(ingredient["dose_data_quality"])
                 self._mark_cleaner_contract_fallback(
                     skipped_entry,
                     self._missing_cleaner_contract_fields(ingredient),
@@ -5317,6 +5349,8 @@ class SupplementEnricherV3:
         cm = ingredient.get("cleaner_match_method")
         if cm:
             entry["cleaner_match_method"] = cm
+        if isinstance(ingredient.get("dose_data_quality"), dict):
+            entry["dose_data_quality"] = dict(ingredient["dose_data_quality"])
 
         return entry
 
@@ -14508,6 +14542,11 @@ class SupplementEnricherV3:
 
                     if quantity_float == 0:
                         continue
+                    dose_data_quality = (
+                        dict(ingredient["dose_data_quality"])
+                        if isinstance(ingredient.get("dose_data_quality"), dict)
+                        else None
+                    )
 
                     # The IQM matcher already resolved the canonical form
                     # (e.g. "retinyl palmitate") via alias matching, but
@@ -14539,6 +14578,8 @@ class SupplementEnricherV3:
 
                     conv_evidence = conversion.to_dict()
                     conv_evidence["ingredient"] = ing_name
+                    if dose_data_quality:
+                        conv_evidence["dose_data_quality"] = dose_data_quality
                     conversion_evidence.append(conv_evidence)
 
                     # Step 2: Compute adequacy with converted amount
@@ -14610,6 +14651,8 @@ class SupplementEnricherV3:
                     adequacy_dict["servings_per_day_min"] = servings_min
                     adequacy_dict["servings_per_day_max"] = servings_max
                     adequacy_dict["is_servings_estimated"] = servings_estimated
+                    if dose_data_quality:
+                        adequacy_dict["dose_data_quality"] = dose_data_quality
                     adequacy_results.append(adequacy_dict)
 
                     # D4.3: STAGE safety flags for later aggregation pass.
@@ -14720,6 +14763,8 @@ class SupplementEnricherV3:
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
                         "is_servings_estimated": servings_estimated,
                     })
+                    if dose_data_quality:
+                        rda_data[-1]["dose_data_quality"] = dose_data_quality
 
                 # D4.3 AGGREGATION PASS: per-canonical dose summing + UL check.
                 # When a product declares multiple forms of the same nutrient,
