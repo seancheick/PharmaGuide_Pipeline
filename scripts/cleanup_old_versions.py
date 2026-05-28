@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
 
 from supabase_client import get_supabase_client  # noqa: E402
+from release_safety import sweep_quarantine  # noqa: E402
 
 BUCKET = "pharmaguide"
 
@@ -700,6 +701,35 @@ def main(argv=None):
         else:
             print("\n  [WARN] No current version found — skipping orphan blob cleanup.")
 
+    # -----------------------------------------------------------------
+    # Quarantine sweep — hard-delete expired quarantine entries.
+    # Runs after orphan quarantine so newly quarantined blobs are NOT
+    # eligible (they were just created today, TTL is 30 days).
+    # Non-blocking: failures here are housekeeping, not data-integrity.
+    # -----------------------------------------------------------------
+    sweep_deleted = 0
+    sweep_failed = 0
+    if not dry_run:
+        print("\nSweeping expired quarantine entries (TTL=30d)...")
+        try:
+            sweep_result = sweep_quarantine(
+                client, ttl_days=30, dry_run=False,
+            )
+            sweep_deleted = sweep_result.total_deleted
+            sweep_failed = sweep_result.total_failed
+            if sweep_result.total_eligible == 0:
+                print("  No expired quarantine entries found.")
+            else:
+                print(
+                    f"  Swept {sweep_deleted} expired blobs across "
+                    f"{len(sweep_result.eligible_dates)} date(s)."
+                )
+                if sweep_failed:
+                    print(f"  Sweep failures: {sweep_failed} (non-blocking)")
+        except Exception as exc:
+            print(f"  Quarantine sweep error: {type(exc).__name__}: {exc}")
+            print("  Non-blocking — quarantine will be swept on next run.")
+
     # Summary
     print("=" * 60)
     print("Summary")
@@ -725,6 +755,10 @@ def main(argv=None):
         if total_orphans_failed:
             verb = "delete" if dry_run else "quarantine"
             print(f"  Orphan blob {verb} failures:  {total_orphans_failed}")
+    if not dry_run and (sweep_deleted or sweep_failed):
+        print(f"  Quarantine swept (hard-delete): {sweep_deleted}")
+        if sweep_failed:
+            print(f"  Quarantine sweep failures:      {sweep_failed}")
     print()
     if dry_run:
         print("Dry-run complete. Re-run with --execute to apply deletions.")
