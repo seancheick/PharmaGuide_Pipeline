@@ -15411,7 +15411,8 @@
       "external_ids": {
         "unii": "3M4G523W1G"
       },
-      "rxcui": "9785",
+      "rxcui": null,
+      "rxcui_note": "Wave 9.C.3 (2026-05-28): prior rxcui '9785' returns no record in RxNav (/REST/rxcui/9785/properties.json → 404). Live RxNav name-search for 'colloidal silver' returns no current RxCUI either. Cleared to null. cui (C0772313, 'Silver, colloidal') and unii (3M4G523W1G) remain valid.",
       "gsrs": {
         "substance_name": "SILVER",
         "substance_class": "chemical",

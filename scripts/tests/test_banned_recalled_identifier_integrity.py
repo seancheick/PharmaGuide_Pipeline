@@ -63,3 +63,22 @@ def test_banned_dhea_cui_is_canonical_prasterone(banned_recalled):
         "BANNED_DHEA.cui must be C0011185 (prasterone / DHEA), not "
         "C0011260 (which UMLS does not resolve to any concept)."
     )
+
+
+def test_add_colloidal_silver_rxcui_cleared_to_null(banned_recalled):
+    """ADD_COLLOIDAL_SILVER must NOT carry rxcui '9785' — that RxCUI is
+    deprecated in RxNav (/REST/rxcui/9785/properties.json returned 404
+    on 2026-05-28; live RxNav name-search for 'colloidal silver' returns
+    no current RxCUI). Cleared to null with rxcui_note documenting the
+    verification, same pattern as the IQM Batch 3 bilberry/goldenseal/
+    cryptoxanthin/sulforaphane clearances. The cui (C0772313) and unii
+    (3M4G523W1G) remain untouched — they are still valid identifiers."""
+    entry = _find(banned_recalled, "ADD_COLLOIDAL_SILVER")
+    assert entry.get("rxcui") is None, (
+        "ADD_COLLOIDAL_SILVER.rxcui must be null (RxNav 404 on 9785 + no "
+        "name-search match for colloidal silver). cui and unii remain valid."
+    )
+    assert entry.get("rxcui_note"), (
+        "ADD_COLLOIDAL_SILVER must have an rxcui_note explaining the "
+        "deprecation."
+    )
