@@ -18819,7 +18819,8 @@
       "confidence": "high",
       "severity_level": "high",
       "dose_thresholds": [],
-      "cui": null,
+      "cui": "C0041479",
+      "cui_note": "Wave 9.D.2 (2026-05-28): backfilled with C0041479 'tyramine' (Organic Chemical / Pharmacologic Substance / Biologically Active Substance). The harm mechanism is driven specifically by the tyramine content; the substance CUI is the appropriate canonical identifier for the extract entry. Content-verified via live UMLS REST API.",
       "external_ids": {
         "cas": "51-67-2"
       },

@@ -61,3 +61,19 @@ def test_add_senna_rxcui_cleared_to_null(harmful_additives):
     assert entry.get("rxcui_note"), (
         "ADD_SENNA must have an rxcui_note explaining the deprecation."
     )
+
+
+def test_add_tyramine_rich_extract_cui_backfilled(harmful_additives):
+    """ADD_TYRAMINE_RICH_EXTRACT must use cui C0041479 ('tyramine' —
+    Organic Chemical / Pharmacologic Substance / Biologically Active
+    Substance). The entry was sweep-flagged as 'missing_cui_has_clean_
+    candidate'; the harm mechanism (sympathomimetic biogenic amine causing
+    hypertensive crisis with MAOIs) is driven specifically by the tyramine
+    content of the extracts, so the tyramine substance CUI is the
+    appropriate canonical identifier. Verified via live UMLS REST API
+    2026-05-28 (search_exact returned C0041479)."""
+    entry = _find(harmful_additives, "ADD_TYRAMINE_RICH_EXTRACT")
+    assert entry.get("cui") == "C0041479", (
+        "ADD_TYRAMINE_RICH_EXTRACT.cui must be C0041479 (tyramine — the "
+        "harmful constituent that drives the MAOI contraindication)."
+    )
