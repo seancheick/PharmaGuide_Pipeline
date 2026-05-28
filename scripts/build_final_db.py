@@ -292,6 +292,7 @@ def _resolve_active_safety_contract(
     *,
     name_terms: Optional[List[str]] = None,
     banned_recalled_index: Optional[Dict[str, Dict]] = None,
+    safety_flags: Optional[List[Dict]] = None,
 ) -> Dict[str, Any]:
     """Unified safety contract for one active ingredient. Mirrors the
     inactive resolver's output shape (is_safety_concern / is_banned /
@@ -325,6 +326,26 @@ def _resolve_active_safety_contract(
     direct banned_recalled_index fallback (step 3) closes the second
     gap: alias variants the enricher's name-match missed entirely.
     """
+    # 0. — canonical safety flags, when present. Legacy fields are
+    # projections of this contract.
+    top_flag = _top_safety_flag(safety_flags or [])
+    if top_flag is not None:
+        status = normalize_text(top_flag.get("status"))
+        source = safe_str(top_flag.get("source_db") or top_flag.get("matched_source"))
+        rule_id = safe_str(top_flag.get("entry_id") or top_flag.get("rule_id"))
+        reason = safe_str(top_flag.get("reason") or top_flag.get("evidence_text"))
+        if source == "banned_recalled_ingredients":
+            source = "banned_recalled"
+        return {
+            "is_safety_concern": status in _ACTIVE_BANNED_RECALLED_SAFETY_STATUSES,
+            "is_banned": status == "banned",
+            "safety_reason": reason or None,
+            "matched_source": source or None,
+            "matched_rule_id": rule_id or None,
+            "safety_warning_one_liner": safe_str(top_flag.get("safety_warning_one_liner")) or None,
+            "safety_warning": safe_str(top_flag.get("safety_warning")) or None,
+        }
+
     # 1. + 2. — banned_recalled hits via enricher's contaminant_lookup
     banned_hit = None
     elevated_hit = None
@@ -511,6 +532,24 @@ def contaminant_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
             if normalize_text(match.get("status")) in wanted]
 
 
+def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
+    wanted = {normalize_text(status) for status in statuses}
+    matches: List[Dict] = []
+    for src_key in ("activeIngredients", "inactiveIngredients"):
+        for ing in safe_list(enriched.get(src_key)):
+            if not isinstance(ing, dict):
+                continue
+            for flag in safe_list(ing.get("safety_flags")):
+                if not isinstance(flag, dict):
+                    continue
+                source = safe_str(flag.get("source_db") or flag.get("matched_source"))
+                if source not in {"banned_recalled", "banned_recalled_ingredients"}:
+                    continue
+                if normalize_text(flag.get("status")) in wanted:
+                    matches.append(flag)
+    return matches
+
+
 def _resolver_status_in(
     enriched: Dict, target_statuses: tuple,
 ) -> bool:
@@ -536,10 +575,22 @@ def _resolver_status_in(
         for ing in safe_list(enriched.get(src_key)):
             if not isinstance(ing, dict):
                 continue
-            terms = _active_banned_recall_terms(
-                safe_str(ing.get("name")),
-                safe_str(ing.get("raw_source_text")),
-                safe_str(ing.get("standardName")),
+            for flag in safe_list(ing.get("safety_flags")):
+                if not isinstance(flag, dict):
+                    continue
+                status = normalize_text(flag.get("status"))
+                source = safe_str(flag.get("source_db") or flag.get("matched_source"))
+                if (
+                    status in target_set
+                    and source in {"banned_recalled", "banned_recalled_ingredients"}
+                ):
+                    return True
+            terms = _active_banned_recall_evidence_terms(
+                raw_source_text=safe_str(ing.get("raw_source_text")),
+                name=safe_str(ing.get("name")),
+                standard_name=safe_str(ing.get("standardName")),
+                forms=safe_list(ing.get("forms")),
+                identity_mapped=safe_bool(ing.get("mapped")),
             )
             for t in terms:
                 entry = index.get(t)
@@ -577,6 +628,8 @@ def has_banned_substance(enriched: Dict) -> bool:
     """
     if contaminant_status_matches(enriched, "banned"):
         return True
+    if safety_flag_status_matches(enriched, "banned"):
+        return True
     return _resolver_status_in(enriched, ("banned",))
 
 
@@ -591,6 +644,54 @@ def collect_match_terms(*values: Any) -> list[str]:
         seen.add(term)
         terms.append(term)
     return terms
+
+
+_SAFETY_FLAG_STATUS_PRIORITY = {
+    "banned": 0,
+    "recalled": 1,
+    "high_risk": 2,
+    "caution": 3,
+    "watchlist": 4,
+}
+
+
+def _top_safety_flag(flags: List[Dict]) -> Optional[Dict]:
+    valid = [flag for flag in safe_list(flags) if isinstance(flag, dict)]
+    if not valid:
+        return None
+    return sorted(
+        valid,
+        key=lambda f: _SAFETY_FLAG_STATUS_PRIORITY.get(normalize_text(f.get("status")), 99),
+    )[0]
+
+
+def _safety_flags_from_contract(contract: Dict[str, Any]) -> List[Dict[str, Any]]:
+    source = safe_str(contract.get("matched_source"))
+    rule_id = safe_str(contract.get("matched_rule_id"))
+    if not source or not rule_id:
+        return []
+    if source not in {"banned_recalled", "banned_recalled_ingredients", "harmful_additives"}:
+        return []
+    if contract.get("is_banned"):
+        status = "banned"
+        severity = "critical"
+    elif contract.get("is_safety_concern"):
+        status = "high_risk"
+        severity = "high"
+    else:
+        status = "watchlist"
+        severity = "low"
+    source_db = "banned_recalled_ingredients" if source == "banned_recalled" else source
+    return [{
+        "entry_id": rule_id,
+        "source_db": source_db,
+        "status": status,
+        "severity": severity,
+        "match_type": "legacy_projection",
+        "matched_variant": rule_id,
+        "evidence_text": safe_str(contract.get("safety_reason")),
+        "confidence": "medium",
+    }]
 
 
 def iter_match_terms(*values: Any) -> list[str]:
@@ -916,6 +1017,31 @@ def _active_banned_recall_terms(*values: str) -> List[str]:
             seen.add(n)
             out.append(n)
     return out
+
+
+def _active_banned_recall_evidence_terms(
+    *,
+    raw_source_text: str,
+    name: str,
+    standard_name: str = "",
+    forms: Optional[List[Any]] = None,
+    identity_mapped: bool = False,
+) -> List[str]:
+    """Build banned/recalled evidence terms from label evidence.
+
+    Derived identity is not safety evidence for a mapped active ingredient.
+    This prevents an upstream corrupted `standardName` from creating a
+    safety chip when the raw label only says a generic nutrient name.
+    """
+    values: List[Any] = [raw_source_text, name]
+    for form in safe_list(forms):
+        if isinstance(form, dict):
+            values.extend([form.get("name"), form.get("prefix")])
+        elif form:
+            values.append(form)
+    if not identity_mapped:
+        values.append(standard_name)
+    return _active_banned_recall_terms(*values)
 
 
 def extract_identifiers(entry: Dict) -> Optional[Dict]:
@@ -2728,6 +2854,19 @@ def blob_has_critical_banned_warning(detail_blob: Optional[Dict]) -> bool:
     return False
 
 
+def blob_has_safety_blocking_warning(detail_blob: Optional[Dict]) -> bool:
+    if not isinstance(detail_blob, dict):
+        return False
+    blocking_types = {"banned_substance", "recalled_ingredient", "high_risk_ingredient"}
+    for list_key in ("warnings", "warnings_profile_gated"):
+        for warning in safe_list(detail_blob.get(list_key)):
+            if not isinstance(warning, dict):
+                continue
+            if safe_str(warning.get("type")) in blocking_types:
+                return True
+    return False
+
+
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
     """Derive blocking_reason from B0 gate results."""
     if has_banned_substance(enriched):
@@ -2739,6 +2878,15 @@ def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
 
     for sub in contaminant_matches(enriched):
         status = safe_str(sub.get("status")).lower()
+        if status == "banned":
+            return "banned_ingredient"
+        if status == "recalled":
+            return "recalled_ingredient"
+        if status == "high_risk":
+            return "high_risk_ingredient"
+
+    for flag in safety_flag_status_matches(enriched, "banned", "recalled", "high_risk"):
+        status = safe_str(flag.get("status")).lower()
         if status == "banned":
             return "banned_ingredient"
         if status == "recalled":
@@ -2767,6 +2915,8 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
     index for recalled aliases the contaminant_data path missed.
     """
     if contaminant_status_matches(enriched, "recalled"):
+        return True
+    if safety_flag_status_matches(enriched, "recalled"):
         return True
     return _resolver_status_in(enriched, ("recalled",))
 
@@ -2863,11 +3013,25 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         ne = norm_data.get(raw, norm_data.get(name, {}))
         if not isinstance(ne, dict):
             ne = {}
-        standard_name = safe_str(ing.get("standardName"))
-        ingredient_hits = matching_contaminant_hits(contaminant_lookup, raw, name, standard_name)
-        allergen_hits = matching_allergen_hits(allergen_patterns, raw, name, standard_name)
+        canonical_standard_name = safe_str(
+            m.get("standard_name")
+            or ing.get("standard_name")
+            or ing.get("standardName")
+            or name
+        )
+        standard_name = canonical_standard_name
+        safety_flags = safe_list(ing.get("safety_flags"))
+        evidence_terms = _active_banned_recall_evidence_terms(
+            raw_source_text=raw,
+            name=name,
+            standard_name=standard_name,
+            forms=safe_list(ing.get("forms")),
+            identity_mapped=safe_bool(m.get("mapped", ing.get("mapped"))),
+        )
+        ingredient_hits = matching_contaminant_hits(contaminant_lookup, raw, name)
+        allergen_hits = matching_allergen_hits(allergen_patterns, raw, name)
         harmful_hit = None
-        for term in collect_match_terms(raw, name, standard_name):
+        for term in collect_match_terms(raw, name):
             harmful_hit = harmful_lookup.get(term)
             if harmful_hit:
                 break
@@ -2889,6 +3053,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         is_mapped = safe_bool(m.get("mapped", ing.get("mapped")))
         if not canonical_id:
             is_mapped = False
+        active_safety_contract = _resolve_active_safety_contract(
+            harmful_hit, harmful_ref, ingredient_hits,
+            name_terms=evidence_terms,
+            banned_recalled_index=_get_active_banned_recalled_index(),
+            safety_flags=safety_flags,
+        )
+        projected_safety_flags = safety_flags or _safety_flags_from_contract(active_safety_contract)
         ingredients.append({
             "raw_source_text": raw,
             "name": name,
@@ -2897,7 +3068,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "forms": safe_list(ing.get("forms")),
             "quantity": safe_float(qty),
             "unit": safe_str(ing.get("unit")),
-            "standard_name": safe_str(m.get("standard_name")),
+            "standard_name": standard_name,
             "matched_form": safe_str(m.get("matched_form")),
             "matched_forms": safe_list(m.get("matched_forms")),
             "extracted_forms": safe_list(m.get("extracted_forms")),
@@ -2911,6 +3082,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "notes": safe_str(m.get("notes")),
             "mapped": is_mapped,
             "safety_hits": combined_safety_hits,
+            "safety_flags": projected_safety_flags,
             "normalized_amount": safe_float(ne.get("normalized_amount")),
             "normalized_unit": safe_str(ne.get("normalized_unit")),
             "conversion_evidence": safe_dict(ne.get("conversion_evidence")) or None,
@@ -2939,22 +3111,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # Red Yeast Rice and other banned_recalled-only flags. See
             # `_resolve_active_safety_contract` docstring for precedence.
             "harmful_severity": harmful_hit.get("severity_level") if harmful_hit else None,
-            **(lambda c: {
-                "is_safety_concern": c["is_safety_concern"],
-                "is_banned":         c["is_banned"],
-                "safety_reason":     c["safety_reason"],
-                "matched_source":    c["matched_source"],
-                "matched_rule_id":   c["matched_rule_id"],
-                # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham
-                # copy through to the warning emitter. None when the
-                # safety contract didn't fire on a banned-recalled hit.
-                "safety_warning_one_liner": c.get("safety_warning_one_liner"),
-                "safety_warning":          c.get("safety_warning"),
-            })(_resolve_active_safety_contract(
-                harmful_hit, harmful_ref, ingredient_hits,
-                name_terms=_active_banned_recall_terms(raw, name, standard_name),
-                banned_recalled_index=_get_active_banned_recalled_index(),
-            )),
+            "is_safety_concern": active_safety_contract["is_safety_concern"],
+            "is_banned": active_safety_contract["is_banned"],
+            "safety_reason": active_safety_contract["safety_reason"],
+            "matched_source": active_safety_contract["matched_source"],
+            "matched_rule_id": active_safety_contract["matched_rule_id"],
+            # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham copy
+            # through to the warning emitter. None when the safety contract
+            # didn't fire on a banned-recalled hit.
+            "safety_warning_one_liner": active_safety_contract.get("safety_warning_one_liner"),
+            "safety_warning": active_safety_contract.get("safety_warning"),
             "harmful_notes": (
                 safe_str(harmful_ref.get("mechanism_of_harm"))
                 or safe_str(harmful_ref.get("notes"))
@@ -3044,17 +3210,26 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         if res.is_label_descriptor or res.is_active_only:
             intentional_inactive_drops += 1
             continue
+        inactive_standard_name = res.standard_name or std_name_ing or name
+        inactive_contract = {
+            "is_safety_concern": res.is_safety_concern,
+            "is_banned": res.is_banned,
+            "safety_reason": res.safety_reason,
+            "matched_source": res.matched_source,
+            "matched_rule_id": res.matched_rule_id,
+        }
 
         inactive.append({
             "raw_source_text": raw,
             "name": name,
-            "standardName": std_name_ing,
+            "standardName": inactive_standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": res.category or safe_str(ing.get("category")),
             "is_additive": res.is_additive or safe_bool(ing.get("isAdditive")),
             "functional_roles": res.functional_roles,
-            "standard_name": res.standard_name or std_name_ing or name,
+            "standard_name": inactive_standard_name,
+            "safety_flags": safe_list(ing.get("safety_flags")) or _safety_flags_from_contract(inactive_contract),
             "notes": res.notes,
             "mechanism_of_harm": res.mechanism_of_harm or "",
             "common_uses": res.common_uses,
@@ -4927,10 +5102,17 @@ def build_core_row(
                 f"({serious} serious of {total} reports)"
             )
 
+    derived_blocking = derive_blocking_reason(enriched, scored)
+    scored_blocking = safe_str(scored.get("blocking_reason"))
+    stale_safety_blocking = (
+        scored_blocking in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
+        and derived_blocking is None
+        and not blob_has_safety_blocking_warning(detail_blob)
+    )
     blocking = (
         "banned_ingredient"
         if has_export_banned_signal
-        else safe_str(scored.get("blocking_reason")) or derive_blocking_reason(enriched, scored)
+        else derived_blocking or (None if stale_safety_blocking or not scored_blocking else scored_blocking)
     )
     interaction_hint = build_interaction_summary_hint(enriched)
     decision_highlights = build_decision_highlights(enriched, effective_scored, blocking)

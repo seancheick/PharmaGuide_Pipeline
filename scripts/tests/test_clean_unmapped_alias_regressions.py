@@ -6,11 +6,17 @@ import pytest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
+from enrich_supplements_v3 import SupplementEnricherV3
 
 
 @pytest.fixture(scope="module")
 def normalizer():
     return EnhancedDSLDNormalizer()
+
+
+@pytest.fixture(scope="module")
+def enricher():
+    return SupplementEnricherV3()
 
 
 @pytest.mark.parametrize(
@@ -19,7 +25,6 @@ def normalizer():
         ("CalaMarine Oil concentrate", "Calamari Oil"),
         ("Calamarine Oil concentrate", "Calamari Oil"),
         ("NKO", "Krill Oil"),  # NKO (Neptune Krill Oil) now routes to dedicated krill_oil IQM entry
-        ("Titanium Dioxide color", "Titanium Dioxide"),
         ("D-Limonene Oil", "D-Limonene"),
     ],
 )
@@ -35,7 +40,6 @@ def test_batch1_verified_cleaning_aliases_map(normalizer, name, expected_substri
     [
         ("D-Limonene Oil", "Limonene", "Limonene"),
         ("Lime Oil", "Lime", "Lime"),
-        ("Titanium Dioxide color", "Titanium Dioxide", "Titanium Dioxide"),
     ],
 )
 def test_ingredient_group_fallback_maps_unmapped_labels(normalizer, name, ingredient_group, expected_substring):
@@ -45,6 +49,32 @@ def test_ingredient_group_fallback_maps_unmapped_labels(normalizer, name, ingred
 
     assert mapped is True
     assert expected_substring.lower() in str(standard_name).lower()
+
+
+def test_titanium_dioxide_color_is_safety_not_identity(normalizer, enricher):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Titanium Dioxide color", [], ingredient_group="Titanium Dioxide"
+    )
+
+    assert mapped is True
+    assert "Titanium Dioxide" in standard_name
+    assert normalizer._fast_exact_lookup.get(
+        normalizer.matcher.preprocess_text("Titanium Dioxide color")
+    ) is None
+    assert "Titanium Dioxide" in normalizer._safety_exact_lookup[
+        normalizer.matcher.preprocess_text("Titanium Dioxide color")
+    ]["standard_name"]
+
+    hits = enricher._check_banned_substances([
+        {
+            "name": "Titanium Dioxide color",
+            "raw_source_text": "Titanium Dioxide color",
+            "standardName": "Titanium Dioxide color",
+        }
+    ])
+    assert "BANNED_ADD_TITANIUM_DIOXIDE" in {
+        row.get("banned_id") for row in hits.get("substances", [])
+    }
 
 
 def test_ingredient_group_fallback_does_not_override_direct_name_match(normalizer):

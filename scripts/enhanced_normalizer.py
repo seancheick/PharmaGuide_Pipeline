@@ -1368,14 +1368,17 @@ class EnhancedDSLDNormalizer:
         """Build optimized fast lookup indices"""
         logger.info("Building fast lookup indices...")
 
-        # Build combined exact match lookup for all databases
+        # Build identity exact match lookup. Safety sources intentionally do
+        # not live here: a banned/harmful payload must never become an
+        # ingredient identity or canonical standardName.
         self._fast_exact_lookup = {}
         self._group_exact_lookup = {}
-        # Sprint 1: UNII-anchored payload index. Keyed by canonical UNII
-        # (10-char alphanumeric uppercase per _normalize_unii). Priority
-        # order mirrors _fast_exact_lookup: banned > allergen > harmful >
-        # IQM > standardized > botanical > other > proprietary_blends >
-        # fda_other > absorption > enhanced_delivery.
+        self._safety_exact_lookup: Dict[str, Dict[str, Any]] = {}
+        # Source-specific UNII maps. `_unii_to_payload_lookup` remains as a
+        # backward-compatible alias to the identity map because existing
+        # cleaner call sites use it for identity resolution.
+        self._identity_unii_to_payload_lookup: Dict[str, Dict[str, Any]] = {}
+        self._safety_unii_to_payload_lookup: Dict[str, Dict[str, Any]] = {}
         self._unii_to_payload_lookup: Dict[str, Dict[str, Any]] = {}
 
         def add_unii_payload(unii_raw, payload: Dict[str, Any], entry_id_for_log: str = "") -> None:
@@ -1425,11 +1428,20 @@ class EnhancedDSLDNormalizer:
                 return
             self._group_exact_lookup[normalized] = payload
 
-        # PRIORITY 1: Add BANNED/RECALLED lookups (HIGHEST PRIORITY - safety first)
-        # Iterate through ALL sections in banned_recalled database dynamically
+        def add_safety_exact(key: str, payload: Dict[str, Any]) -> None:
+            processed = self.matcher.preprocess_text(key)
+            if not processed:
+                return
+            existing = self._safety_exact_lookup.get(processed)
+            if existing and existing.get("priority", 999) <= payload.get("priority", 999):
+                return
+            self._safety_exact_lookup[processed] = payload
+
+        # Safety-source exact lookups are isolated from identity lookups.
+        # They are retained for classification/audit paths but deliberately
+        # excluded from `_fast_exact_lookup` and `_group_exact_lookup`.
         for key, value in self.banned_recalled.items():
             if isinstance(value, list) and len(value) > 0:
-                # Check if items have the expected structure for banned substances
                 if any(isinstance(item, dict) and 'standard_name' in item for item in value):
                     banned_ingredients = value
                     for banned in banned_ingredients:
@@ -1438,66 +1450,50 @@ class EnhancedDSLDNormalizer:
                             continue
                         standard_name = banned.get("standard_name", "")
                         if standard_name:
-                            processed_standard = self.matcher.preprocess_text(standard_name)
                             bucket = banned.get("status") or "banned"
                             sev = self._derive_banned_severity(banned)
-                            self._fast_exact_lookup[processed_standard] = {
+                            payload = {
                                 "type": "banned",
                                 "standard_name": standard_name,
+                                "id": banned.get("id"),
                                 "severity": sev,
                                 "bucket": bucket,
+                                "status": banned.get("status"),
                                 "reason": banned.get("reason", banned.get("recall_reason", "banned")),
                                 "match_rules": banned.get("match_rules", {}) or {},
                                 "mapped": True,
                                 "priority": 1
                             }
-                            add_group_exact(standard_name, self._fast_exact_lookup[processed_standard])
+                            add_safety_exact(standard_name, payload)
 
-                            # Add aliases
                             for alias in banned.get("aliases", []) or []:
-                                processed_alias = self.matcher.preprocess_text(alias)
-                                self._fast_exact_lookup[processed_alias] = {
-                                    "type": "banned",
-                                    "standard_name": standard_name,
-                                    "severity": sev,
-                                    "bucket": bucket,
-                                    "reason": banned.get("reason", banned.get("recall_reason", "banned")),
-                                    "match_rules": banned.get("match_rules", {}) or {},
-                                    "mapped": True,
-                                    "priority": 1
-                                }
-                                add_group_exact(alias, self._fast_exact_lookup[processed_alias])
+                                add_safety_exact(alias, payload)
 
-        # PRIORITY 2: Add allergen lookups (safety-critical)
+        # PRIORITY 2: Add allergen lookups to safety index only.
         for key, value in self.allergen_lookup.items():
-            # Only add if not already present (banned takes priority)
-            if key not in self._fast_exact_lookup:
-                # SAFETY: Ensure standard_name exists before accessing
-                standard_name = value.get("standard_name", "")
-                if not standard_name:
-                    logger.warning(f"Allergen missing standard_name: {key}")
-                    continue
-                self._fast_exact_lookup[key] = {
-                    "type": "allergen",
-                    "allergen_type": standard_name.lower(),
-                    "severity": value.get("severity_level", "low"),
-                    "mapped": True,
-                    "priority": 2
-                }
-                add_group_exact(standard_name, self._fast_exact_lookup[key])
+            standard_name = value.get("standard_name", "")
+            if not standard_name:
+                logger.warning(f"Allergen missing standard_name: {key}")
+                continue
+            add_safety_exact(key, {
+                "type": "allergen",
+                "standard_name": standard_name,
+                "allergen_type": standard_name.lower(),
+                "severity": value.get("severity_level", "low"),
+                "mapped": True,
+                "priority": 2
+            })
 
-        # PRIORITY 3: Add harmful additive lookups (safety-critical)
+        # PRIORITY 3: Add harmful additive lookups to safety index only.
         for key, value in self.harmful_lookup.items():
-            # Only add if not already present (higher priorities take precedence)
-            if key not in self._fast_exact_lookup:
-                self._fast_exact_lookup[key] = {
-                    "type": "harmful",
-                    "category": value.get("category", "other"),
-                    "severity_level": value.get("severity_level", "low"),
-                    "mapped": True,
-                    "priority": 3
-                }
-                add_group_exact(value.get("standard_name", key), self._fast_exact_lookup[key])
+            add_safety_exact(key, {
+                "type": "harmful",
+                "standard_name": value.get("standard_name", key),
+                "category": value.get("category", "other"),
+                "severity_level": value.get("severity_level", "low"),
+                "mapped": True,
+                "priority": 3
+            })
 
         # PRIORITY 4: Add ingredient lookups (active ingredients)
         for key, value in self.ingredient_alias_lookup.items():
@@ -1707,26 +1703,35 @@ class EnhancedDSLDNormalizer:
         # other > proprietary > absorption > enhanced_delivery.
         self._build_unii_to_payload_lookup()
         logger.info(
-            f"Built UNII-anchored payload index with {len(self._unii_to_payload_lookup)} entries"
+            "Built identity UNII index with %d entries and safety UNII index with %d entries",
+            len(self._identity_unii_to_payload_lookup),
+            len(self._safety_unii_to_payload_lookup),
         )
 
     def _build_unii_to_payload_lookup(self) -> None:
-        """Populate self._unii_to_payload_lookup by walking all reference
-        databases in priority order. Each entry's `external_ids.unii` (or
-        top-level `unii`) is indexed via `add_unii_payload` (defined inline
-        in `_build_fast_lookups_impl` and lifted to a closure via attribute
-        rebinding below — but easier: re-implement here to avoid scope issues)."""
+        """Populate source-specific UNII maps.
 
-        # Local helper duplicates the collision-aware add logic from
-        # _build_fast_lookups_impl's add_unii_payload. Same contract.
-        def _add(unii_raw, payload: Dict[str, Any], entry_id_for_log: str = "") -> None:
+        Identity and safety UNIIs are intentionally separated. The cleaner's
+        UNII fast path resolves ingredient identity, so it must consult only
+        identity sources. Safety-source UNIIs are retained separately for the
+        safety classifier/audits and can never supply `standardName`.
+        """
+        self._identity_unii_to_payload_lookup = {}
+        self._safety_unii_to_payload_lookup = {}
+
+        def _add(
+            target: Dict[str, Dict[str, Any]],
+            unii_raw,
+            payload: Dict[str, Any],
+            entry_id_for_log: str = "",
+        ) -> None:
             unii = _normalize_unii(unii_raw)
             if not unii:
                 return
             incoming_priority = payload.get("priority", 999)
-            existing = self._unii_to_payload_lookup.get(unii)
+            existing = target.get(unii)
             if existing is None:
-                self._unii_to_payload_lookup[unii] = payload
+                target[unii] = payload
                 return
             existing_priority = existing.get("priority", 999)
             if existing_priority < incoming_priority:
@@ -1738,7 +1743,7 @@ class EnhancedDSLDNormalizer:
                 )
                 return
             if incoming_priority < existing_priority:
-                self._unii_to_payload_lookup[unii] = payload
+                target[unii] = payload
                 logger.debug(
                     "UNII collision (cross-tier): %s previously mapped to tier-%d %r; "
                     "promoting to higher-priority tier-%d %r",
@@ -1764,30 +1769,56 @@ class EnhancedDSLDNormalizer:
                     return u
             return _normalize_unii(entry.get("unii"))
 
-        # Build a payload reflecting the entry's tier — re-using the same
-        # shape that _fast_exact_lookup uses so downstream consumers get
-        # the familiar fields.
-
-        # PRIORITY 1: banned_recalled — already indexed in _fast_exact_lookup
-        # at priority 1 with type=banned. Reuse those payloads.
-        for payload in self._fast_exact_lookup.values():
-            t = payload.get("type")
-            if t == "banned":
-                # The standard_name on banned payloads is canonical; look up
-                # the original entry to find its UNII.
-                std_name = payload.get("standard_name")
-                if not std_name:
+        # Safety source: banned/recalled.
+        for section_value in self.banned_recalled.values():
+            if not isinstance(section_value, list):
+                continue
+            for entry in section_value:
+                if not isinstance(entry, dict):
                     continue
-                # Walk banned_recalled to find UNII for this standard_name
-                for section_value in self.banned_recalled.values():
-                    if not isinstance(section_value, list):
-                        continue
-                    for entry in section_value:
-                        if not isinstance(entry, dict):
-                            continue
-                        if entry.get("standard_name") == std_name:
-                            _add(_extract_unii(entry), payload, f"banned:{std_name}")
-                            break
+                match_mode = str(entry.get("match_mode") or "active").strip().lower()
+                if match_mode in {"disabled", "historical"}:
+                    continue
+                std_name = entry.get("standard_name", entry.get("id", ""))
+                payload = {
+                    "type": "banned",
+                    "id": entry.get("id"),
+                    "standard_name": std_name,
+                    "severity": self._derive_banned_severity(entry),
+                    "bucket": entry.get("status") or "banned",
+                    "status": entry.get("status"),
+                    "reason": entry.get("reason", entry.get("recall_reason", "banned")),
+                    "match_rules": entry.get("match_rules", {}) or {},
+                    "mapped": True,
+                    "priority": 1,
+                }
+                _add(
+                    self._safety_unii_to_payload_lookup,
+                    _extract_unii(entry),
+                    payload,
+                    f"banned:{std_name}",
+                )
+
+        # Safety source: harmful additives.
+        for value in self.harmful_lookup.values():
+            if not isinstance(value, dict):
+                continue
+            std_name = value.get("standard_name", value.get("id", ""))
+            payload = {
+                "type": "harmful",
+                "id": value.get("id"),
+                "standard_name": std_name,
+                "category": value.get("category", "other"),
+                "severity_level": value.get("severity_level", "low"),
+                "mapped": True,
+                "priority": 3,
+            }
+            _add(
+                self._safety_unii_to_payload_lookup,
+                _extract_unii(value),
+                payload,
+                f"harmful:{std_name}",
+            )
 
         # PRIORITY 4: IQM (active ingredients) — walk ingredient_map (self.ingredient_map)
         quality_map = getattr(self, "ingredient_map", {})
@@ -1808,7 +1839,12 @@ class EnhancedDSLDNormalizer:
                         "mapped": True,
                         "priority": 4,
                     }
-                _add(_extract_unii(parent_data), payload, f"iqm:{parent_key}")
+                _add(
+                    self._identity_unii_to_payload_lookup,
+                    _extract_unii(parent_data),
+                    payload,
+                    f"iqm:{parent_key}",
+                )
                 # Form-level UNIIs route to the same parent payload (forms
                 # share the parent's identity for matching purposes; the
                 # downstream resolver picks the specific form by name)
@@ -1817,7 +1853,12 @@ class EnhancedDSLDNormalizer:
                     for form_name, form_data in forms.items():
                         if not isinstance(form_data, dict):
                             continue
-                        _add(_extract_unii(form_data), payload, f"iqm:{parent_key}.{form_name}")
+                        _add(
+                            self._identity_unii_to_payload_lookup,
+                            _extract_unii(form_data),
+                            payload,
+                            f"iqm:{parent_key}.{form_name}",
+                        )
 
         # PRIORITY 5: standardized_botanicals
         sb_db = getattr(self, "standardized_botanicals", None) or {}
@@ -1835,7 +1876,12 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 5,
                 }
-            _add(_extract_unii(entry), payload, f"std_bot:{entry.get('id','?')}")
+            _add(
+                self._identity_unii_to_payload_lookup,
+                _extract_unii(entry),
+                payload,
+                f"std_bot:{entry.get('id','?')}",
+            )
 
         # PRIORITY 6: botanical_ingredients
         bi_db = getattr(self, "botanical_ingredients", None) or {}
@@ -1853,7 +1899,12 @@ class EnhancedDSLDNormalizer:
                     "mapped": True,
                     "priority": 6,
                 }
-            _add(_extract_unii(entry), payload, f"botanical:{entry.get('id','?')}")
+            _add(
+                self._identity_unii_to_payload_lookup,
+                _extract_unii(entry),
+                payload,
+                f"botanical:{entry.get('id','?')}",
+            )
 
         # PRIORITY 7: other_ingredients
         oi_db = getattr(self, "other_ingredients", None) or {}
@@ -1875,7 +1926,14 @@ class EnhancedDSLDNormalizer:
                 "mapped": True,
                 "priority": 9,
             }
-            _add(_extract_unii(entry), payload, f"other:{entry.get('id','?')}")
+            _add(
+                self._identity_unii_to_payload_lookup,
+                _extract_unii(entry),
+                payload,
+                f"other:{entry.get('id','?')}",
+            )
+
+        self._unii_to_payload_lookup = self._identity_unii_to_payload_lookup
 
     def _try_unii_match(
         self, ingredient_data: Dict[str, Any]
@@ -1898,8 +1956,11 @@ class EnhancedDSLDNormalizer:
             return None
         # Try top-level row UNII
         unii = _normalize_unii(ingredient_data.get("uniiCode"))
-        if unii and unii in self._unii_to_payload_lookup:
-            return self._unii_to_payload_lookup[unii], "unii_exact_match"
+        identity_unii_lookup = getattr(
+            self, "_identity_unii_to_payload_lookup", self._unii_to_payload_lookup
+        )
+        if unii and unii in identity_unii_lookup:
+            return identity_unii_lookup[unii], "unii_exact_match"
         # Try forms[*].uniiCode
         forms = ingredient_data.get("forms") or []
         if isinstance(forms, list):
@@ -1907,8 +1968,8 @@ class EnhancedDSLDNormalizer:
                 if not isinstance(form, dict):
                     continue
                 form_unii = _normalize_unii(form.get("uniiCode"))
-                if form_unii and form_unii in self._unii_to_payload_lookup:
-                    return self._unii_to_payload_lookup[form_unii], "unii_form_exact_match"
+                if form_unii and form_unii in identity_unii_lookup:
+                    return identity_unii_lookup[form_unii], "unii_form_exact_match"
         return None
 
     def _fast_ingredient_lookup(self, name: str) -> Dict[str, Any]:
@@ -3323,6 +3384,16 @@ class EnhancedDSLDNormalizer:
             logger.debug(f"Found '{name}' in {result_type} database -> '{standard_name}' (priority: {fast_result.get('priority', 'N/A')})")
             return standard_name, True, forms
 
+        safety_result = self._safety_exact_lookup.get(self.matcher.preprocess_text(name), {})
+        if safety_result.get("mapped", False):
+            result_type = safety_result.get("type", "unknown")
+            standard_name = safety_result.get("standard_name", name)
+            logger.debug(
+                "Recognized '%s' in safety %s database after identity miss -> '%s'",
+                name, result_type, standard_name,
+            )
+            return standard_name, True, forms
+
         if allow_descriptor_fallback:
             for candidate in norm_module.descriptor_fallback_candidates(name):
                 candidate_standard_name, candidate_mapped, candidate_forms = self._perform_ingredient_mapping(
@@ -3390,6 +3461,49 @@ class EnhancedDSLDNormalizer:
                     logger.debug(
                         "ingredientGroup fallback: '%s' via exact group '%s' -> '%s' (%s)",
                         name, ingredient_group, standard_name, result_type
+                    )
+                    return standard_name, True, forms
+                safety_group_result = self._safety_exact_lookup.get(
+                    self.matcher.preprocess_text(ingredient_group), {}
+                )
+                if safety_group_result.get("mapped", False):
+                    negative_terms = (
+                        (safety_group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])
+                    )
+                    if negative_terms:
+                        def _norm_for_negmatch(s: str) -> str:
+                            s = (s or "").lower()
+                            s = re.sub(r"[()\[\]{}]", " ", s)
+                            s = re.sub(r"[\u00ae\u2122\u00a9]", " ", s)
+                            return re.sub(r"\s+", " ", s).strip()
+
+                        lowered_name = _norm_for_negmatch(name)
+                        veto_hit = None
+                        for item in negative_terms:
+                            if isinstance(item, dict):
+                                term = _norm_for_negmatch(str(item.get("term") or ""))
+                                mode = str(item.get("match_mode") or "substring").lower()
+                            else:
+                                term = _norm_for_negmatch(str(item))
+                                mode = "substring"
+                            if not term:
+                                continue
+                            if (mode == "exact" and lowered_name == term) or (
+                                mode != "exact" and term in lowered_name
+                            ):
+                                veto_hit = item
+                                break
+                        if veto_hit:
+                            logger.debug(
+                                "ingredientGroup safety recognition vetoed by negative_match_terms "
+                                "(term=%r): '%s' via '%s'",
+                                veto_hit, name, ingredient_group,
+                            )
+                            return name, False, forms
+                    standard_name = safety_group_result.get("standard_name", ingredient_group)
+                    logger.debug(
+                        "ingredientGroup safety recognition: '%s' via exact group '%s' -> '%s'",
+                        name, ingredient_group, standard_name
                     )
                     return standard_name, True, forms
 

@@ -35,11 +35,17 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
+from enrich_supplements_v3 import SupplementEnricherV3
 
 
 @pytest.fixture(scope="module")
 def normalizer() -> EnhancedDSLDNormalizer:
     return EnhancedDSLDNormalizer()
+
+
+@pytest.fixture(scope="module")
+def enricher() -> SupplementEnricherV3:
+    return SupplementEnricherV3()
 
 
 # ---------------------------------------------------------------------------
@@ -107,33 +113,24 @@ class TestOrangePeelOilNotBitterOrange:
 class TestLegitimatelyBannedStillFlagged:
     """Regression guard — real synephrine / EGCG extracts remain flagged."""
 
-    def test_bitter_orange_extract_still_banned(self, normalizer) -> None:
-        std, mapped, _ = normalizer._enhanced_ingredient_mapping(
-            "Bitter Orange Extract", forms=[], ingredient_group="Bitter orange",
-        )
-        assert mapped
-        assert "Bitter Orange" in (std or "")
+    def _banned_ids(self, enricher, name: str) -> set[str]:
+        hits = enricher._check_banned_substances([
+            {"name": name, "raw_source_text": name, "standardName": name}
+        ])
+        return {row.get("banned_id") for row in hits.get("substances", [])}
 
-    def test_synephrine_still_banned(self, normalizer) -> None:
-        std, mapped, _ = normalizer._enhanced_ingredient_mapping(
-            "Synephrine", forms=[], ingredient_group="Bitter orange",
-        )
-        assert mapped
-        assert "Synephrine" in (std or "") or "Bitter Orange" in (std or "")
+    def test_bitter_orange_extract_still_banned(self, enricher) -> None:
+        assert "RISK_BITTER_ORANGE" in self._banned_ids(enricher, "Bitter Orange Extract")
 
-    def test_egcg_high_dose_still_banned(self, normalizer) -> None:
-        std, mapped, _ = normalizer._enhanced_ingredient_mapping(
-            "EGCG >800mg", forms=[], ingredient_group="Green Tea",
-        )
-        assert mapped
-        assert "Green Tea Extract (High Dose)" in (std or "")
+    def test_synephrine_still_banned(self, enricher) -> None:
+        assert "RISK_BITTER_ORANGE" in self._banned_ids(enricher, "Synephrine")
 
-    def test_citrus_aurantium_extract_still_banned(self, normalizer) -> None:
+    def test_egcg_high_dose_still_banned(self, enricher) -> None:
+        assert "RISK_GREEN_TEA_EXTRACT_HIGH" in self._banned_ids(enricher, "EGCG >800mg")
+
+    def test_citrus_aurantium_extract_still_banned(self, enricher) -> None:
         # Species-level name of bitter orange — the real risk.
-        std, mapped, _ = normalizer._enhanced_ingredient_mapping(
-            "Citrus aurantium", forms=[], ingredient_group="Bitter orange",
-        )
-        assert mapped
+        assert "RISK_BITTER_ORANGE" in self._banned_ids(enricher, "Citrus aurantium")
 
 
 # ---------------------------------------------------------------------------
