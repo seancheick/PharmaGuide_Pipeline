@@ -327,6 +327,38 @@ class TestSafetyCategoryRouting:
         assert row["has_recalled_ingredient"] == (1 if expect_recalled else 0)
         assert row["blocking_reason"] == expect_blocking
 
+    @pytest.mark.parametrize("status,expect_banned,expect_recalled,expect_blocking", [
+        ("banned", True, False, "banned_ingredient"),
+        ("recalled", False, True, "recalled_ingredient"),
+        ("high_risk", False, False, "high_risk_ingredient"),
+        ("watchlist", False, False, None),
+    ])
+    def test_canonical_contaminant_safety_flags_route_correctly(
+        self, status, expect_banned, expect_recalled, expect_blocking
+    ):
+        e = _base_enriched()
+        e["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [],
+            "safety_flags": [{
+                "entry_id": "BANNED_TEST",
+                "source_db": "banned_recalled_ingredients",
+                "status": status,
+                "severity": "critical" if status in {"banned", "recalled"} else "high",
+                "match_type": "exact",
+                "matched_variant": "Test",
+                "evidence_text": "Test",
+                "confidence": "high",
+            }],
+        }
+        verdict = "BLOCKED" if status == "banned" else "UNSAFE" if status == "recalled" else "CAUTION"
+        s = _base_scored(verdict=verdict)
+
+        row = _row_dict(e, s)
+        assert row["has_banned_substance"] == (1 if expect_banned else 0)
+        assert row["has_recalled_ingredient"] == (1 if expect_recalled else 0)
+        assert row["blocking_reason"] == expect_blocking
+
     def test_watchlist_never_blocks(self):
         e = _base_enriched()
         e["contaminant_data"]["banned_substances"]["substances"] = [

@@ -537,8 +537,35 @@ def contaminant_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
             if normalize_text(match.get("status")) in wanted]
 
 
+def contaminant_safety_flags(enriched: Dict) -> List[Dict]:
+    """Return canonical banned/recalled safety flags from contaminant_data.
+
+    The enricher now emits `contaminant_data.banned_substances.safety_flags[]`
+    while preserving the legacy `substances[]` list. Some intermediate
+    fixtures may only carry `substances[].safety_flag`, so read both shapes.
+    """
+    flags: List[Dict] = []
+    banned_substances = safe_dict(
+        safe_dict(enriched.get("contaminant_data")).get("banned_substances")
+    )
+    for flag in safe_list(banned_substances.get("safety_flags")):
+        if isinstance(flag, dict):
+            flags.append(flag)
+    for sub in safe_list(banned_substances.get("substances")):
+        if not isinstance(sub, dict):
+            continue
+        flag = sub.get("safety_flag")
+        if isinstance(flag, dict):
+            flags.append(flag)
+    return flags
+
+
 def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
     matches: List[Dict] = []
+    for flag in contaminant_safety_flags(enriched):
+        source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+        if source == "banned_recalled_ingredients" and safety_flag_matches_status(flag, statuses):
+            matches.append(flag)
     for src_key in ("activeIngredients", "inactiveIngredients"):
         for ing in safe_list(enriched.get(src_key)):
             if not isinstance(ing, dict):
