@@ -544,6 +544,24 @@ def _resolver_status_in(
             for t in terms:
                 entry = index.get(t)
                 if entry and (entry.get("status") or "").strip().lower() in target_set:
+                    # Guard: bare "Chromium" on a supplement label is always
+                    # Cr(III). Only flag HM_CHROMIUM_HEXAVALENT when the raw
+                    # label text explicitly mentions hexavalent / Cr(VI).
+                    if entry.get("id") == "HM_CHROMIUM_HEXAVALENT":
+                        raw_name = safe_str(ing.get("name"))
+                        raw_src = safe_str(ing.get("raw_source_text"))
+                        raw_text = f"{raw_name} {raw_src}".lower()
+                        import re as _re
+                        has_hex = bool(
+                            _re.search(r"\bhexavalent", raw_text)
+                            or _re.search(r"\bchromium\s*[\(]?vi[\)]?", raw_text)
+                            or _re.search(r"\bchromium\s*-\s*6\b", raw_text)
+                            or _re.search(r"\bcr\s*[\(\-]?vi[\)]?\b", raw_text)
+                            or _re.search(r"\bchromate\b", raw_text)
+                            or _re.search(r"\bdichromate\b", raw_text)
+                        )
+                        if not has_hex:
+                            continue
                     return True
     return False
 
