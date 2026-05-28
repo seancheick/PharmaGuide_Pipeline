@@ -61,8 +61,23 @@ def _iter_blob_paths(output_dir: Path) -> Iterable[Path]:
     yield from sorted(output_dir.glob("*.json"))
 
 
+def _iter_product_blobs(doc: Any) -> Iterable[Dict[str, Any]]:
+    if isinstance(doc, list):
+        for item in doc:
+            if isinstance(item, dict):
+                yield item
+    elif isinstance(doc, dict):
+        yield doc
+
+
 def _iter_ingredients(blob: Dict[str, Any]) -> Iterable[tuple[str, Dict[str, Any]]]:
-    for key in ("ingredients", "inactive_ingredients", "activeIngredients", "inactiveIngredients"):
+    for key in (
+        "ingredients",
+        "inactive_ingredients",
+        "activeIngredients",
+        "inactiveIngredients",
+        "otherIngredients",
+    ):
         value = blob.get(key)
         if isinstance(value, list):
             for ing in value:
@@ -206,6 +221,28 @@ def _identity_reference_keys(data_dir: Path) -> Dict[str, str]:
     return keys
 
 
+def _safety_reference_keys(data_dir: Path) -> Dict[str, Dict[str, Any]]:
+    keys: Dict[str, Dict[str, Any]] = {}
+    for filename in SAFETY_SOURCE_FILES:
+        path = data_dir / filename
+        if not path.exists():
+            continue
+        try:
+            doc = json.loads(path.read_text())
+        except Exception:
+            continue
+        for entry in _iter_reference_entries(doc):
+            for variant in _entry_variants(entry):
+                key = _norm(variant)
+                if key:
+                    keys.setdefault(key, {
+                        "source_file": filename,
+                        "entry_id": entry.get("id"),
+                        "standard_name": entry.get("standard_name") or entry.get("name"),
+                    })
+    return keys
+
+
 def audit_reference_data(data_dir: Path) -> List[Dict[str, Any]]:
     findings: List[Dict[str, Any]] = []
     identity_keys = _identity_reference_keys(data_dir)
@@ -247,9 +284,14 @@ def audit_reference_data(data_dir: Path) -> List[Dict[str, Any]]:
 
 def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[Dict[str, Any]]:
     findings: List[Dict[str, Any]] = []
+    safety_reference_keys = (
+        _safety_reference_keys(reference_data_dir)
+        if reference_data_dir
+        else {}
+    )
     for path in _iter_blob_paths(output_dir):
         try:
-            blob = json.loads(path.read_text())
+            doc = json.loads(path.read_text())
         except Exception as exc:
             findings.append({
                 "code": "BLOB_READ_ERROR",
@@ -258,117 +300,149 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
             })
             continue
 
-        dsld_id = _safe_str(blob.get("dsld_id") or blob.get("id") or path.stem)
-        for section, ing in _iter_ingredients(blob):
-            std_camel = _safe_str(ing.get("standardName"))
-            std_snake = _safe_str(ing.get("standard_name"))
-            safety_flags = [f for f in ing.get("safety_flags") or [] if isinstance(f, dict)]
-            matched_source = _safe_str(ing.get("matched_source"))
-            matched_rule_id = _safe_str(ing.get("matched_rule_id"))
-            canonical_source_db = _safe_str(ing.get("canonical_source_db") or ing.get("source_db"))
+        for blob in _iter_product_blobs(doc):
+            dsld_id = _safe_str(blob.get("dsld_id") or blob.get("id") or path.stem)
+            for section, ing in _iter_ingredients(blob):
+                std_camel = _safe_str(ing.get("standardName"))
+                std_snake = _safe_str(ing.get("standard_name"))
+                safety_flags = [f for f in ing.get("safety_flags") or [] if isinstance(f, dict)]
+                matched_source = _safe_str(ing.get("matched_source"))
+                matched_rule_id = _safe_str(ing.get("matched_rule_id"))
+                canonical_source_db = _safe_str(ing.get("canonical_source_db") or ing.get("source_db"))
 
-            if std_camel and std_snake and std_camel != std_snake:
-                findings.append({
-                    "code": "STANDARD_NAME_ALIAS_DRIFT",
-                    "dsld_id": dsld_id,
-                    "section": section,
-                    "ingredient": ing.get("name"),
-                    "standardName": std_camel,
-                    "standard_name": std_snake,
-                    "path": str(path),
-                })
-
-            if canonical_source_db and _source_is_safety_identity(canonical_source_db):
-                findings.append({
-                    "code": "IDENTITY_FROM_SAFETY_SOURCE",
-                    "dsld_id": dsld_id,
-                    "section": section,
-                    "ingredient": ing.get("name"),
-                    "canonical_source_db": canonical_source_db,
-                    "standardName": std_camel,
-                    "path": str(path),
-                })
-
-            if (
-                matched_source in {"banned_recalled", "banned_recalled_ingredients", "harmful_additives"}
-                and matched_rule_id
-            ):
-                if not safety_flags:
+                if std_camel and std_snake and std_camel != std_snake:
                     findings.append({
-                        "code": "LEGACY_SAFETY_WITHOUT_FLAG",
+                        "code": "STANDARD_NAME_ALIAS_DRIFT",
                         "dsld_id": dsld_id,
                         "section": section,
                         "ingredient": ing.get("name"),
-                        "matched_source": matched_source,
-                        "matched_rule_id": matched_rule_id,
+                        "standardName": std_camel,
+                        "standard_name": std_snake,
                         "path": str(path),
                     })
-                elif not any(
-                    _flag_matches_legacy_safety(
-                        flag,
-                        matched_source=matched_source,
-                        matched_rule_id=matched_rule_id,
+
+                if canonical_source_db and _source_is_safety_identity(canonical_source_db):
+                    findings.append({
+                        "code": "IDENTITY_FROM_SAFETY_SOURCE",
+                        "dsld_id": dsld_id,
+                        "section": section,
+                        "ingredient": ing.get("name"),
+                        "canonical_source_db": canonical_source_db,
+                        "standardName": std_camel,
+                        "path": str(path),
+                    })
+
+                raw_identity_terms = {
+                    _norm(ing.get("raw_source_text")),
+                    _norm(ing.get("name")),
+                    _norm(ing.get("ingredient_name")),
+                    _norm(ing.get("display_name")),
+                }
+                std_norm = _norm(std_camel)
+                if (
+                    safety_reference_keys
+                    and std_norm
+                    and std_norm in safety_reference_keys
+                    and std_norm not in raw_identity_terms
+                    and (
+                        not canonical_source_db
+                        or canonical_source_db == "unmapped"
+                        or _source_is_safety_identity(canonical_source_db)
                     )
+                ):
+                    ref = safety_reference_keys[std_norm]
+                    findings.append({
+                        "code": "STANDARD_NAME_FROM_SAFETY_SOURCE",
+                        "dsld_id": dsld_id,
+                        "section": section,
+                        "ingredient": ing.get("name"),
+                        "standardName": std_camel,
+                        "canonical_source_db": canonical_source_db,
+                        "source_file": ref.get("source_file"),
+                        "entry_id": ref.get("entry_id"),
+                        "path": str(path),
+                    })
+
+                if (
+                    matched_source in {"banned_recalled", "banned_recalled_ingredients", "harmful_additives"}
+                    and matched_rule_id
+                ):
+                    if not safety_flags:
+                        findings.append({
+                            "code": "LEGACY_SAFETY_WITHOUT_FLAG",
+                            "dsld_id": dsld_id,
+                            "section": section,
+                            "ingredient": ing.get("name"),
+                            "matched_source": matched_source,
+                            "matched_rule_id": matched_rule_id,
+                            "path": str(path),
+                        })
+                    elif not any(
+                        _flag_matches_legacy_safety(
+                            flag,
+                            matched_source=matched_source,
+                            matched_rule_id=matched_rule_id,
+                        )
+                        for flag in safety_flags
+                    ):
+                        findings.append({
+                            "code": "LEGACY_SAFETY_WITHOUT_MATCHING_FLAG",
+                            "dsld_id": dsld_id,
+                            "section": section,
+                            "ingredient": ing.get("name"),
+                            "matched_source": matched_source,
+                            "matched_rule_id": matched_rule_id,
+                            "flag_ids": [
+                                _safe_str(flag.get("entry_id") or flag.get("rule_id"))
+                                for flag in safety_flags
+                            ],
+                            "path": str(path),
+                        })
+
+                for flag in safety_flags:
+                    if _flag_supported_only_by_standard_name(ing, flag):
+                        findings.append({
+                            "code": "SAFETY_FLAG_SUPPORTED_ONLY_BY_STANDARD_NAME",
+                            "dsld_id": dsld_id,
+                            "section": section,
+                            "ingredient": ing.get("name"),
+                            "entry_id": flag.get("entry_id") or flag.get("rule_id"),
+                            "evidence_text": flag.get("evidence_text"),
+                            "matched_variant": flag.get("matched_variant"),
+                            "standardName": std_camel,
+                            "path": str(path),
+                        })
+
+                flag_ids = {
+                    _safe_str(flag.get("entry_id") or flag.get("rule_id"))
                     for flag in safety_flags
+                }
+                if "HM_CHROMIUM_HEXAVALENT" in flag_ids or matched_rule_id == "HM_CHROMIUM_HEXAVALENT":
+                    if not _has_explicit_hexavalent_evidence(ing):
+                        findings.append({
+                            "code": "CHROMIUM_HEXAVALENT_WITHOUT_EXPLICIT_EVIDENCE",
+                            "dsld_id": dsld_id,
+                            "section": section,
+                            "ingredient": ing.get("name"),
+                            "raw_source_text": ing.get("raw_source_text"),
+                            "standardName": std_camel,
+                            "path": str(path),
+                        })
+
+                if (
+                    _norm(ing.get("name")) == "chromium"
+                    and _norm(ing.get("raw_source_text")) == "chromium"
+                    and "hexavalent" in _norm(std_camel)
+                    and not _has_explicit_hexavalent_evidence(ing)
                 ):
                     findings.append({
-                        "code": "LEGACY_SAFETY_WITHOUT_MATCHING_FLAG",
+                        "code": "CHROMIUM_IDENTITY_CORRUPTION",
                         "dsld_id": dsld_id,
                         "section": section,
                         "ingredient": ing.get("name"),
-                        "matched_source": matched_source,
-                        "matched_rule_id": matched_rule_id,
-                        "flag_ids": [
-                            _safe_str(flag.get("entry_id") or flag.get("rule_id"))
-                            for flag in safety_flags
-                        ],
-                        "path": str(path),
-                    })
-
-            for flag in safety_flags:
-                if _flag_supported_only_by_standard_name(ing, flag):
-                    findings.append({
-                        "code": "SAFETY_FLAG_SUPPORTED_ONLY_BY_STANDARD_NAME",
-                        "dsld_id": dsld_id,
-                        "section": section,
-                        "ingredient": ing.get("name"),
-                        "entry_id": flag.get("entry_id") or flag.get("rule_id"),
-                        "evidence_text": flag.get("evidence_text"),
-                        "matched_variant": flag.get("matched_variant"),
                         "standardName": std_camel,
                         "path": str(path),
                     })
-
-            flag_ids = {
-                _safe_str(flag.get("entry_id") or flag.get("rule_id"))
-                for flag in safety_flags
-            }
-            if "HM_CHROMIUM_HEXAVALENT" in flag_ids or matched_rule_id == "HM_CHROMIUM_HEXAVALENT":
-                if not _has_explicit_hexavalent_evidence(ing):
-                    findings.append({
-                        "code": "CHROMIUM_HEXAVALENT_WITHOUT_EXPLICIT_EVIDENCE",
-                        "dsld_id": dsld_id,
-                        "section": section,
-                        "ingredient": ing.get("name"),
-                        "raw_source_text": ing.get("raw_source_text"),
-                        "standardName": std_camel,
-                        "path": str(path),
-                    })
-
-            if (
-                _norm(ing.get("name")) == "chromium"
-                and _norm(ing.get("raw_source_text")) == "chromium"
-                and "hexavalent" in _norm(std_camel)
-                and not _has_explicit_hexavalent_evidence(ing)
-            ):
-                findings.append({
-                    "code": "CHROMIUM_IDENTITY_CORRUPTION",
-                    "dsld_id": dsld_id,
-                    "section": section,
-                    "ingredient": ing.get("name"),
-                    "standardName": std_camel,
-                    "path": str(path),
-                })
 
     if reference_data_dir:
         findings.extend(audit_reference_data(reference_data_dir))

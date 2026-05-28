@@ -53,6 +53,46 @@ def test_cleaner_emits_iqm_chromium_for_generic_chromium_unii():
     assert cleaned["canonical_source_db"] == "ingredient_quality_map"
 
 
+def test_cleaner_identity_fields_never_come_from_safety_sources():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    safety_sources = {
+        "banned_recalled",
+        "banned_recalled_ingredients",
+        "harmful_additives",
+        "allergens",
+    }
+
+    for row in (
+        {
+            "name": "Titanium Dioxide color",
+            "ingredientGroup": "Titanium Dioxide",
+            "category": "other",
+            "forms": [],
+        },
+        {
+            "name": "NONFAT DRIED MILK POWDER",
+            "ingredientGroup": "Milk",
+            "category": "other",
+            "forms": [],
+        },
+        {
+            "name": "Nickel",
+            "ingredientGroup": "Nickel",
+            "category": "mineral",
+            "forms": [],
+        },
+    ):
+        cleaned = normalizer._process_single_ingredient_enhanced(row, is_active=False)
+        assert cleaned.get("canonical_source_db") not in safety_sources
+        assert cleaned.get("canonical_id") not in {
+            "BANNED_ADD_TITANIUM_DIOXIDE",
+            "ALLERGEN_MILK",
+            "ADD_NICKEL",
+        }
+
+
 def test_safety_normalization_preserves_qualified_chromium_forms():
     from identity.safety import safety_normalize_text
 
@@ -259,6 +299,60 @@ def test_standardname_safety_audit_rejects_safety_source_identity(tmp_path):
 
     codes = {finding["code"] for finding in audit(tmp_path)}
     assert "IDENTITY_FROM_SAFETY_SOURCE" in codes
+
+
+def test_standardname_safety_audit_accepts_enriched_batch_lists(tmp_path):
+    from api_audit.audit_standardname_safety_separation import audit
+
+    (tmp_path / "enriched_cleaned_batch_1.json").write_text("""[
+      {
+        "dsld_id": "batch-product",
+        "activeIngredients": [{
+          "name": "Chromium",
+          "raw_source_text": "Chromium",
+          "standardName": "Chromium",
+          "standard_name": "Chromium",
+          "canonical_source_db": "ingredient_quality_map",
+          "safety_flags": []
+        }]
+      }
+    ]""")
+
+    assert audit(tmp_path) == []
+
+
+def test_standardname_safety_audit_rejects_safety_sourced_standardname(tmp_path):
+    from api_audit.audit_standardname_safety_separation import audit
+
+    detail_dir = tmp_path / "detail_blobs"
+    detail_dir.mkdir()
+    (detail_dir / "bad.json").write_text("""{
+      "dsld_id": "bad-safety-standardname",
+      "ingredients": [{
+        "name": "Hexadrone",
+        "raw_source_text": "Hexadrone",
+        "standardName": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
+        "canonical_source_db": "unmapped",
+        "safety_flags": []
+      }]
+    }""")
+
+    data_dir = tmp_path / "data"
+    data_dir.mkdir()
+    (data_dir / "banned_recalled_ingredients.json").write_text("""{
+      "ingredients": [{
+        "id": "ADD_HEXADRONE",
+        "standard_name": "Hexadrone (6-Chloro-androst-4-ene-3-one-17b-ol)",
+        "aliases": ["Hexadrone"]
+      }]
+    }""")
+    (data_dir / "harmful_additives.json").write_text("""{"additives": []}""")
+
+    codes = {
+        finding["code"]
+        for finding in audit(tmp_path, reference_data_dir=data_dir)
+    }
+    assert "STANDARD_NAME_FROM_SAFETY_SOURCE" in codes
 
 
 def test_standardname_safety_audit_rejects_legacy_rule_without_matching_flag(tmp_path):

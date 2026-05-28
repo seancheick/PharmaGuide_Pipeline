@@ -2784,18 +2784,18 @@ class EnhancedDSLDNormalizer:
         ``lower(standard_name) → (canonical_id, source_db)``.
 
         Priority order (higher wins on collisions):
-          1. banned_recalled
-          2. allergens
-          3. harmful_additives
-          4. ingredient_quality_map (IQM)
-          5. standardized_botanicals
-          6. botanical_ingredients
-          7. other_ingredients
+          1. ingredient_quality_map (IQM)
+          2. standardized_botanicals
+          3. botanical_ingredients
+          4. other_ingredients
+          5. proprietary_blends
 
         The ``canonical_id`` is the stable DB key used by the enricher:
           - IQM / botanicals / other_ingredients: the dict key (e.g., ``silymarin``)
-          - harmful / banned / allergens: the entry's ``id`` field (e.g., ``ADD_XXX``)
-            or a slugified fallback when absent.
+
+        Safety sources are intentionally excluded. Banned/recalled,
+        harmful_additives, allergens, and contaminant tables classify risk;
+        they must never provide cleaner identity fields.
         """
         from typing import Tuple as _Tuple
         idx: Dict[str, _Tuple[str, str]] = {}
@@ -2808,43 +2808,7 @@ class EnhancedDSLDNormalizer:
                 return
             idx[key] = (canonical_id, source_db)
 
-        # 1) banned_recalled — iterate all section lists; use 'id' then standard_name
-        for _section, _value in (self.banned_recalled or {}).items():
-            if not isinstance(_value, list):
-                continue
-            for item in _value:
-                if not isinstance(item, dict):
-                    continue
-                std = item.get("standard_name") or ""
-                cid = item.get("id") or std.lower().replace(" ", "_")
-                _put(std, cid, "banned_recalled")
-                for alias in item.get("aliases", []) or []:
-                    if isinstance(alias, str):
-                        _put(alias, cid, "banned_recalled")
-
-        # 2) allergens — allergens data lives in self.allergen_lookup (already normalized)
-        #    but we need the original allergens file for stable IDs. Use standard_name as key.
-        for _key, _val in (self.allergen_lookup or {}).items():
-            if not isinstance(_val, dict):
-                continue
-            std = _val.get("standard_name") or ""
-            cid = _val.get("id") or std.lower().replace(" ", "_")
-            _put(std, cid, "allergens")
-
-        # 3) harmful_additives — index standard_name AND aliases so that
-        # cleaner resolutions like "Cellulose" (an alias of Microcrystalline
-        # Cellulose) also produce a canonical_id for downstream.
-        for _key, _val in (self.harmful_lookup or {}).items():
-            if not isinstance(_val, dict):
-                continue
-            std = _val.get("standard_name") or ""
-            cid = _val.get("id") or std.lower().replace(" ", "_")
-            _put(std, cid, "harmful_additives")
-            for alias in _val.get("aliases", []) or []:
-                if isinstance(alias, str):
-                    _put(alias, cid, "harmful_additives")
-
-        # 4) IQM — iterate self.ingredient_map; key IS canonical_id. Index
+        # 1) IQM — iterate self.ingredient_map; key IS canonical_id. Index
         # every path a cleaner standardName could follow back to its IQM parent:
         # top-level standard_name, top-level aliases, form names, form aliases.
         for _iqm_key, _val in (self.ingredient_map or {}).items():
@@ -2867,7 +2831,7 @@ class EnhancedDSLDNormalizer:
                     if isinstance(form_alias, str):
                         _put(form_alias, _iqm_key, "ingredient_quality_map")
 
-        # 5) standardized_botanicals
+        # 2) standardized_botanicals
         for item in (self.standardized_botanicals or {}).get("standardized_botanicals", []):
             if not isinstance(item, dict):
                 continue
@@ -2878,7 +2842,7 @@ class EnhancedDSLDNormalizer:
                 if isinstance(alias, str):
                     _put(alias, cid, "standardized_botanicals")
 
-        # 6) botanical_ingredients
+        # 3) botanical_ingredients
         for item in (self.botanical_ingredients or {}).get("botanical_ingredients", []):
             if not isinstance(item, dict):
                 continue
@@ -2889,7 +2853,7 @@ class EnhancedDSLDNormalizer:
                 if isinstance(alias, str):
                     _put(alias, cid, "botanical_ingredients")
 
-        # 7) other_ingredients — index standard_name + aliases so labels
+        # 4) other_ingredients — index standard_name + aliases so labels
         # matching OI aliases (e.g. bare "Natural Colors" → NHA_NATURAL_COLORS)
         # resolve to a canonical_id.
         for _key, _val in (self.other_ingredients_lookup or {}).items():
@@ -2902,7 +2866,7 @@ class EnhancedDSLDNormalizer:
                 if isinstance(alias, str):
                     _put(alias, cid, "other_ingredients")
 
-        # 8) proprietary_blends — blend-concern canonicals (BLEND_PROBIOTIC,
+        # 5) proprietary_blends — blend-concern canonicals (BLEND_PROBIOTIC,
         # BLEND_GENERAL, etc.). Index standard_name + blend_terms so labels
         # using generic blend names resolve to a canonical_id.
         for item in (self.proprietary_blends or {}).get("proprietary_blend_concerns", []):
@@ -3342,37 +3306,29 @@ class EnhancedDSLDNormalizer:
             )
             if candidate_mapped:
                 return candidate_name, True, candidate_forms or forms or []
-        
-        # Check if ingredient exists in harmful additives database
+
+        # Safety-source recognition is preserved for legacy mapped=True
+        # behavior, but canonical_id / canonical_source_db are resolved later
+        # from the identity-only reverse index. A safety source may recognize
+        # the label; it must not own canonical identity fields.
         harmful_info = self._enhanced_harmful_check(name)
         if harmful_info["category"] != "none":
-            # DATA INTEGRITY FIX: Return canonical name from database, not input name
-            # This ensures fuzzy-matched ingredients use standardized names
             processed_name = self.matcher.preprocess_text(name)
             if processed_name in self.harmful_lookup:
                 canonical_name = self.harmful_lookup[processed_name].get("standard_name", name)
             else:
-                # NOTE: Fuzzy matching is disabled for "harmful" category (not in safe_fuzzy_categories).
-                # This code path is reached if _enhanced_harmful_check matched via substring or other logic.
-                # fuzzy_match will be None, so canonical_name falls back to input name.
                 fuzzy_match, _ = self.matcher.fuzzy_match(processed_name, self.harmful_variations, "harmful")
                 canonical_name = self.harmful_lookup.get(fuzzy_match, {}).get("standard_name", name) if fuzzy_match else name
 
             logger.debug(f"Found '{name}' in harmful additives database -> '{canonical_name}' (category: {harmful_info['category']})")
             return canonical_name, True, forms
 
-        # Check if ingredient exists in allergens database
         allergen_info = self._enhanced_allergen_check(name, forms)
         if allergen_info["is_allergen"]:
-            # DATA INTEGRITY FIX: Return canonical name from database, not input name
-            # This ensures fuzzy-matched allergens use standardized names
             processed_name = self.matcher.preprocess_text(name)
             if processed_name in self.allergen_lookup:
                 canonical_name = self.allergen_lookup[processed_name].get("standard_name", name)
             else:
-                # NOTE: Fuzzy matching is disabled for "allergen" category (not in safe_fuzzy_categories).
-                # This code path is reached if _enhanced_allergen_check matched via forms or other logic.
-                # fuzzy_match will be None, so canonical_name falls back to input name.
                 fuzzy_match, _ = self.matcher.fuzzy_match(processed_name, self.allergen_variations, "allergen")
                 canonical_name = self.allergen_lookup.get(fuzzy_match, {}).get("standard_name", name) if fuzzy_match else name
 
@@ -3509,7 +3465,6 @@ class EnhancedDSLDNormalizer:
                         name, ingredient_group, standard_name
                     )
                     return standard_name, True, forms
-
         # Generic-suffix fallback (Phase 5 fix).
         # Supplement labels routinely append marketing suffixes like "Complex",
         # "Formula", "Blend" to otherwise-known ingredient names. When all
@@ -5802,6 +5757,12 @@ class EnhancedDSLDNormalizer:
             canonical_id = None
             canonical_source_db = "unmapped"
         elif canonical_id is None:
+            # A legacy recognizer may have matched a safety-only source
+            # (banned/recalled, harmful additive, allergen). That is useful
+            # for safety classification, but it is not ingredient identity.
+            # Do not emit the safety table's label as standardName when the
+            # identity reverse index cannot resolve a real canonical parent.
+            standard_name = name
             is_mapped = False
             canonical_source_db = "unmapped"
             if not self._is_nutrition_fact(name):
@@ -6240,6 +6201,9 @@ class EnhancedDSLDNormalizer:
             canonical_id = None
             canonical_source_db = "unmapped"
         elif canonical_id is None:
+            # Safety-only recognizers may mark an inactive as known, but they
+            # cannot supply cleaner identity or standardName.
+            standard_name = name
             is_mapped = False
             canonical_source_db = "unmapped"
             if not self._is_nutrition_fact(name):
@@ -6342,11 +6306,22 @@ class EnhancedDSLDNormalizer:
                         form_allergen_info["is_allergen"] or
                         form_is_proprietary
                     )
+                    form_canonical_id, form_canonical_source_db = self._resolve_canonical_identity(
+                        form_std_name, raw_name=form_name,
+                    )
 
                     if not form_is_mapped and not self._is_nutrition_fact(form_name):
                         self._record_unmapped_ingredient(form_name, [], is_active=False)
+                    elif form_canonical_id is None:
+                        form_std_name = form_name
+                        form_is_mapped = False
+                        form_canonical_source_db = "unmapped"
+                        if not self._is_nutrition_fact(form_name):
+                            self._record_unmapped_ingredient(form_name, [], is_active=False)
 
                     form_ing["standardName"] = form_std_name
+                    form_ing["canonical_id"] = form_canonical_id
+                    form_ing["canonical_source_db"] = form_canonical_source_db
                     form_ing["mapped"] = form_is_mapped
                     form_ing["hierarchyType"] = self._classify_hierarchy_type(form_name)
                     processed.append(form_ing)
@@ -6367,11 +6342,22 @@ class EnhancedDSLDNormalizer:
                         form_allergen_info["is_allergen"] or
                         form_is_proprietary
                     )
+                    form_canonical_id, form_canonical_source_db = self._resolve_canonical_identity(
+                        form_std_name, raw_name=form_name,
+                    )
 
                     if not form_is_mapped and not self._is_nutrition_fact(form_name):
                         self._record_unmapped_ingredient(form_name, [], is_active=False)
+                    elif form_canonical_id is None:
+                        form_std_name = form_name
+                        form_is_mapped = False
+                        form_canonical_source_db = "unmapped"
+                        if not self._is_nutrition_fact(form_name):
+                            self._record_unmapped_ingredient(form_name, [], is_active=False)
 
                     form_ing["standardName"] = form_std_name
+                    form_ing["canonical_id"] = form_canonical_id
+                    form_ing["canonical_source_db"] = form_canonical_source_db
                     form_ing["mapped"] = form_is_mapped
                     form_ing["hierarchyType"] = self._classify_hierarchy_type(form_name)
                     processed.append(form_ing)
@@ -6460,6 +6446,9 @@ class EnhancedDSLDNormalizer:
                 canonical_id_f = None
                 canonical_source_db_f = "unmapped"
             elif canonical_id_f is None:
+                # Same identity boundary as the primary inactive path:
+                # safety-only matches must not write standardName.
+                standard_name = name
                 is_mapped = False
                 canonical_source_db_f = "unmapped"
                 if not self._is_nutrition_fact(name):

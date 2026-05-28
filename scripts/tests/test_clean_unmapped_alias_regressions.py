@@ -1683,7 +1683,6 @@ def test_iqm_rerouted_terms_map_to_conservative_forms(normalizer, name, expected
         ("Arrowroot"),
         ("CARE4U"),
         ("Calzbone"),
-        ("Hexadrone"),
         ("Vinegar"),
         ("Sodium Caprylate"),
         ("Magnesium Caprylate"),
@@ -1703,6 +1702,23 @@ def test_descriptor_terms_map_via_other_ingredients_identity(normalizer, name):
     result = normalizer._process_single_ingredient_enhanced(ing, is_active=True)
     assert result is not None
     assert result["mapped"] is True
+
+
+def test_safety_only_banned_entry_does_not_emit_identity_fields(normalizer):
+    ing = {
+        "name": "Hexadrone",
+        "quantity": [{"quantity": 10, "unit": "mg"}],
+        "unit": "mg",
+        "forms": [],
+    }
+
+    result = normalizer._process_single_ingredient_enhanced(ing, is_active=True)
+
+    assert result is not None
+    assert result["standardName"] == "Hexadrone"
+    assert result["canonical_id"] is None
+    assert result["canonical_source_db"] == "unmapped"
+    assert result["mapped"] is False
 
 
 @pytest.mark.parametrize(
