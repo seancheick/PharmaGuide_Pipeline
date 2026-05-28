@@ -85,6 +85,10 @@ def test_titanium_dioxide_resolves_to_critical_safety_concern(resolver) -> None:
     assert r.is_safety_concern is True
     assert r.safety_reason and len(r.safety_reason) > 0
     assert r.matched_rule_id and "TITANIUM_DIOXIDE" in r.matched_rule_id.upper()
+    assert r.safety_flags
+    assert r.safety_flags[0]["entry_id"] == r.matched_rule_id
+    assert r.safety_flags[0]["source_db"] == "banned_recalled_ingredients"
+    assert r.safety_flags[0]["status"] == "high_risk"
 
 
 def test_titanium_dioxide_with_form_variants(resolver) -> None:
@@ -163,6 +167,10 @@ def test_harmful_additive_resolution_falls_back_to_category_role_label(resolver)
     assert r.matched_source == "harmful_additives"
     assert r.severity_status == "critical"
     assert r.display_role_label == "Colorant (artificial)"
+    assert r.safety_flags
+    assert r.safety_flags[0]["entry_id"] == r.matched_rule_id
+    assert r.safety_flags[0]["source_db"] == "harmful_additives"
+    assert r.safety_flags[0]["status"] in {"caution", "high_risk"}
 
 
 # ---------------------------------------------------------------------------

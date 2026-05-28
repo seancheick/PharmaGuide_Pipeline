@@ -62,6 +62,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Iterable, Iterator, Optional
 
+from identity.safety import (
+    safety_flag_from_banned_match,
+    safety_flag_from_harmful_additive,
+)
+
 _REPO_ROOT = Path(__file__).resolve().parent
 _DEFAULT_DATA_DIR = _REPO_ROOT / "data"
 
@@ -163,6 +168,7 @@ class InactiveResolution:
     # under the names it expects.
     safety_warning_one_liner: Optional[str] = None
     safety_warning: Optional[str] = None
+    safety_flags: list[dict] = field(default_factory=list)
 
 
 # ---------------------------------------------------------------------------
@@ -365,6 +371,14 @@ class InactiveIngredientResolver:
             # recalled too if they want — they're authored regardless.
             safety_warning_one_liner=(entry.get("safety_warning_one_liner") or None),
             safety_warning=(entry.get("safety_warning") or None),
+            safety_flags=[
+                safety_flag_from_banned_match(
+                    entry,
+                    match_type="exact",
+                    matched_variant=raw_name,
+                    evidence_text=raw_name,
+                ).to_dict()
+            ],
             identifiers={
                 k: entry.get(k)
                 for k in ("cui", "rxcui", "gsrs", "external_ids")
@@ -416,6 +430,14 @@ class InactiveIngredientResolver:
             is_label_descriptor=False,
             is_active_only=False,
             notes=str(entry.get("notes") or "")[:500],
+            safety_flags=[
+                safety_flag_from_harmful_additive(
+                    entry,
+                    match_type="exact",
+                    matched_variant=raw_name,
+                    evidence_text=raw_name,
+                ).to_dict()
+            ],
             identifiers={
                 k: entry.get(k)
                 for k in ("cui", "rxcui", "gsrs", "external_ids")

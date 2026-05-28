@@ -148,6 +148,45 @@ def safety_flag_from_banned_match(
     )
 
 
+def safety_flag_from_harmful_additive(
+    entry: Dict[str, Any],
+    *,
+    match_type: str,
+    matched_variant: Any,
+    evidence_text: Any,
+    confidence: Any = None,
+) -> SafetyFlag:
+    normalized_match_type = _normalize_safety_enum(match_type) or "exact"
+    additive_severity = _normalize_safety_enum(entry.get("severity_level") or entry.get("severity"))
+    if additive_severity in {"critical", "high"}:
+        status = "high_risk"
+        severity = additive_severity
+    elif additive_severity == "moderate":
+        status = "caution"
+        severity = "moderate"
+    elif additive_severity == "low":
+        status = "watchlist"
+        severity = "low"
+    else:
+        status = "caution"
+        severity = additive_severity or "moderate"
+    confidence_text = (
+        str(confidence).strip().lower()
+        if isinstance(confidence, str) and confidence.strip()
+        else _MATCH_CONFIDENCE.get(normalized_match_type, "medium")
+    )
+    return SafetyFlag(
+        entry_id=str(entry.get("id") or entry.get("rule_id") or ""),
+        source_db="harmful_additives",
+        status=status,
+        severity=severity,
+        match_type=normalized_match_type,
+        matched_variant=str(matched_variant or entry.get("standard_name") or ""),
+        evidence_text=str(evidence_text or matched_variant or ""),
+        confidence=confidence_text,
+    )
+
+
 def build_safety_exact_index(entries: Iterable[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
     """Build a strict safety lookup that preserves qualified variants.
 

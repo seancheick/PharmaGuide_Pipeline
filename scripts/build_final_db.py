@@ -3298,7 +3298,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "is_additive": res.is_additive or safe_bool(ing.get("isAdditive")),
             "functional_roles": res.functional_roles,
             "standard_name": inactive_standard_name,
-            "safety_flags": safe_list(ing.get("safety_flags")) or _safety_flags_from_contract(inactive_contract),
+            "safety_flags": (
+                safe_list(ing.get("safety_flags"))
+                or safe_list(res.safety_flags)
+                or _safety_flags_from_contract(inactive_contract)
+            ),
             "notes": res.notes,
             "mechanism_of_harm": res.mechanism_of_harm or "",
             "common_uses": res.common_uses,
