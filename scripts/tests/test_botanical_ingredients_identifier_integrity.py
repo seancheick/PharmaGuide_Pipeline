@@ -474,3 +474,101 @@ def test_wave_9f4_blend_cui_nulled(botanicals, entry_id):
     e = _find(botanicals, entry_id)
     assert e.get("cui") is None, f"{entry_id}.cui must be null (no single concept)."
     assert e.get("cui_note"), f"{entry_id} must carry a cui_note explaining the null."
+
+
+# --------------------------------------------------------------------------- #
+# Wave 9.F.4b — non-CUI tail: rxcui/cas/cid nulls + UNII/rxcui policy-locks
+# --------------------------------------------------------------------------- #
+
+
+def test_wave_9f4b_goldenseal_rxcui_nulled(botanicals):
+    """rxcui 253171 returns no record in RxNav (404 on 2026-05-28)."""
+    e = _find(botanicals, "goldenseal")
+    assert e.get("rxcui") is None
+    assert e.get("rxcui_note")
+
+
+def test_wave_9f4b_peach_rxcui_nulled(botanicals):
+    """rxcui 1010999 resolves to 'nectarine allergenic extract' (RxNorm IN) —
+    an allergy-test extract, not the peach (Prunus persica) ingredient."""
+    e = _find(botanicals, "peach")
+    assert e.get("rxcui") is None
+    assert e.get("rxcui_note")
+
+
+def test_wave_9f4b_inulin_fructose_ids_removed(botanicals):
+    """cas 53188-23-1 and pubchem_cid 439709 both resolve to D-fructose
+    (CID 439709, C6H12O6) — the monomer, not the inulin fructan polymer.
+    Removed; the verified UNII JOS53KRJ01 (Inulin) is retained."""
+    e = _find(botanicals, "inulin")
+    ext = e.get("external_ids") or {}
+    assert ext.get("cas") is None, "inulin cas must be removed (was fructose)."
+    assert ext.get("pubchem_cid") is None, "inulin pubchem_cid must be removed (was fructose)."
+    assert ext.get("unii") == "JOS53KRJ01", "inulin UNII (Inulin) must be retained."
+    assert e.get("external_ids_note")
+
+
+def test_wave_9f4b_fruits_unii_removed(botanicals):
+    """unii 2A88ZO081O resolves to PINEAPPLE — too species-specific for this
+    generic multi-fruit class entry (aliases: apple, pineapple, papaya)."""
+    e = _find(botanicals, "fruits")
+    ext = e.get("external_ids") or {}
+    assert ext.get("unii") is None, "fruits unii must be removed (class entry)."
+    assert e.get("external_ids_note")
+
+
+# Policy locks: UNII resolves to the correct botanical substance under its
+# uppercase-Latin GSRS name (which does not token-overlap the English common
+# name). Verified live against FDA GSRS 2026-05-28. Locked so a future sweep
+# escalates rather than "fixing" a correct UNII.
+_WAVE_9F4B_UNII_LOCKS = [
+    ("akarkara", "E3L74Y262L", "ANACYCLUS PYRETHRUM WHOLE"),
+    ("beetroot", "4G174V5051", "BETA VULGARIS WHOLE"),
+    ("black_musli", "715B59598O", "CURCULIGO ORCHIOIDES WHOLE"),
+    ("blue_green_algae", "49VG1X560X", "APHANIZOMENON FLOSAQUAE"),
+    ("danshen", "714783Y9Z0", "SALVIA MILTIORRHIZA WHOLE"),
+    ("elderberries", "BQY1UBX046", "EUROPEAN ELDERBERRY"),
+    ("flaxseed", "310OJT00CG", "LINUM USITATISSIMUM WHOLE"),
+    ("himematsutake", "11MSQ4JG7G", "AGARICUS BLAZEI WHOLE"),
+    ("horse_gram", "379916QREU", "MACROTYLOMA UNIFLORUM WHOLE"),
+    ("huito", "C22I013G6O", "GENIPA AMERICANA WHOLE"),
+    ("jatamasi", "FJ4AE60Q9V", "Nardostachys jatamansi whole"),
+    ("khadeer", "55J167EEON", "BLACK CATECHU (Acacia catechu)"),
+    ("king_trumpet", "2WGH02ZJ1G", "PLEUROTUS ERYNGII WHOLE"),
+    ("mulungu", "NU815YHH1S", "ERYTHRINA STRICTA WHOLE"),
+    ("rosehip", "P5R39F12N2", "ROSA CANINA WHOLE"),
+    ("sarsaparilla_honduran", "KDX23MP2GS", "SMILAX OFFICINALIS WHOLE"),
+    ("shankhpushpi", "232OMT637Q", "CONVOLVULUS PROSTRATUS WHOLE"),
+    ("wheatgrass_powder", "3C3Y389JBU", "TRITICUM AESTIVUM WHOLE"),
+    ("inulin", "JOS53KRJ01", "Inulin"),
+]
+
+
+@pytest.mark.parametrize("entry_id,unii,gsrs_name", _WAVE_9F4B_UNII_LOCKS)
+def test_wave_9f4b_unii_policy_lock(botanicals, entry_id, unii, gsrs_name):
+    """UNII is the correct botanical substance (GSRS '{gsrs_name}'); the
+    sweep's name-misalignment flag is a false positive (uppercase-Latin name)."""
+    e = _find(botanicals, entry_id)
+    assert (e.get("external_ids") or {}).get("unii") == unii, (
+        f"{entry_id}.external_ids.unii must remain {unii} (GSRS '{gsrs_name}')."
+    )
+
+
+# rxcui resolves to a correct synonym/related ingredient; name-misalignment is
+# acceptable. Verified live against RxNav 2026-05-28.
+_WAVE_9F4B_RXCUI_LOCKS = [
+    ("milk_thistle", "350520", "Carduus marianus preparation (= Silybum marianum)"),
+    ("milk_thistle_seed", "350520", "Carduus marianus preparation (= Silybum marianum)"),
+    ("citrus_fruit_extract", "314661", "hesperidin complex (citrus bioflavonoid)"),
+    ("lemon_bioflavonoids", "314661", "hesperidin complex (citrus bioflavonoid)"),
+]
+
+
+@pytest.mark.parametrize("entry_id,rxcui,rxnav_name", _WAVE_9F4B_RXCUI_LOCKS)
+def test_wave_9f4b_rxcui_policy_lock(botanicals, entry_id, rxcui, rxnav_name):
+    """rxcui is a correct synonym/related RxNorm ingredient (RxNav
+    '{rxnav_name}'); name-misalignment flag is acceptable."""
+    e = _find(botanicals, entry_id)
+    assert e.get("rxcui") == rxcui, (
+        f"{entry_id}.rxcui must remain {rxcui} (RxNav '{rxnav_name}')."
+    )

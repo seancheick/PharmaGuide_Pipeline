@@ -5636,9 +5636,7 @@
       "category": "fruit",
       "notes": "Generic multi-fruit blend covering non-specific 'fruits' label terms in supplements. Identity mapping only; species composition varies by product. Not standardized.",
       "last_updated": "2026-03-01",
-      "external_ids": {
-        "unii": "2A88ZO081O"
-      },
+      "external_ids": {},
       "rxcui": "899895",
       "gsrs": {
         "substance_name": "PINEAPPLE",
@@ -5655,7 +5653,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "external_ids_note": "Wave 9.F.4b (2026-05-28): removed unii 2A88ZO081O (GSRS 'PINEAPPLE' / Ananas comosus) \u2014 too species-specific for this generic multi-fruit class entry (aliases: apple, pineapple, papaya). No single-substance identifier applies."
     },
     {
       "id": "galdieria",
@@ -6178,7 +6177,7 @@
       "external_ids": {
         "unii": "ZW3Z11D0JV"
       },
-      "rxcui": "253171",
+      "rxcui": null,
       "gsrs": {
         "substance_name": "GOLDENSEAL",
         "substance_class": "structurallyDiverse",
@@ -6196,7 +6195,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "rxcui_note": "Wave 9.F.4b (2026-05-28): rxcui 253171 returns no record in RxNav (/REST/rxcui/253171/properties.json 404). Cleared to null; cui C3500453 (Hydrastis canadensis) remains valid."
     },
     {
       "id": "gotu_kola",
@@ -7475,8 +7475,6 @@
       "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for inulin. Commonly used in dietary supplements.",
       "last_updated": "2026-05-22",
       "external_ids": {
-        "cas": "53188-23-1",
-        "pubchem_cid": 439709,
         "unii": "JOS53KRJ01"
       },
       "cui": "C0021936",
@@ -7484,7 +7482,8 @@
       "attributes": {
         "source_origin": "plant",
         "bonus_eligible": false
-      }
+      },
+      "external_ids_note": "Wave 9.F.4b (2026-05-28): removed cas 53188-23-1 and pubchem_cid 439709 \u2014 both resolve to D-fructose (CID 439709, C6H12O6), the monomer, not the inulin fructan polymer. Verified UNII JOS53KRJ01 (Inulin) retained."
     },
     {
       "id": "irvingia_gabonensis",
@@ -10708,7 +10707,7 @@
       "external_ids": {
         "unii": "3OKE88I3QG"
       },
-      "rxcui": "1010999",
+      "rxcui": null,
       "gsrs": {
         "substance_name": "PEACH",
         "substance_class": "structurallyDiverse",
@@ -10724,7 +10723,8 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
-      }
+      },
+      "rxcui_note": "Wave 9.F.4b (2026-05-28): rxcui 1010999 resolves to 'nectarine allergenic extract' (RxNorm IN), an allergy-test extract, not the peach (Prunus persica) supplement ingredient. Cleared to null."
     },
     {
       "id": "pear",
