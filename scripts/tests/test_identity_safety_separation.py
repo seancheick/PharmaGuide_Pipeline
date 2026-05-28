@@ -112,6 +112,32 @@ def test_banned_substance_enricher_emits_canonical_safety_flags():
     assert legacy_hit["safety_flag"] == flag
 
 
+def test_banned_substance_flags_are_attached_to_matched_ingredient_rows():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    product = {
+        "fullName": "Synthetic Cannabinoid Test",
+        "brandName": "X",
+        "activeIngredients": [
+            {"name": "Delta-8 THC", "standardName": "Delta-8 THC"},
+            {"name": "Chromium", "standardName": "Chromium"},
+        ],
+        "inactiveIngredients": [
+            {"name": "Rice Flour", "standardName": "Rice Flour"},
+        ],
+    }
+
+    contaminant_data = SupplementEnricherV3()._collect_contaminant_data(product)
+
+    product_flags = contaminant_data["banned_substances"].get("safety_flags", [])
+    assert any(flag.get("entry_id") == "BANNED_DELTA8_THC" for flag in product_flags)
+
+    delta8_flags = product["activeIngredients"][0].get("safety_flags", [])
+    assert any(flag.get("entry_id") == "BANNED_DELTA8_THC" for flag in delta8_flags)
+    assert product["activeIngredients"][1].get("safety_flags") == []
+    assert product["inactiveIngredients"][0].get("safety_flags") == []
+
+
 def test_bare_chromium_standardname_cannot_create_hexavalent_safety_flag():
     from enrich_supplements_v3 import SupplementEnricherV3
 

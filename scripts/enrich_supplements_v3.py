@@ -8406,20 +8406,75 @@ class SupplementEnricherV3:
         # that match harmful_additives get suppressed for low/moderate
         # severity — the IQM quality score is the correct signal there).
         active_tagged = [
-            {**ing, '_source_section': 'active'}
-            for ing in product.get('activeIngredients', [])
+            {**ing, '_source_section': 'active', '_source_index': idx}
+            for idx, ing in enumerate(product.get('activeIngredients', []))
         ]
         inactive_tagged = [
-            {**ing, '_source_section': 'inactive'}
-            for ing in product.get('inactiveIngredients', [])
+            {**ing, '_source_section': 'inactive', '_source_index': idx}
+            for idx, ing in enumerate(product.get('inactiveIngredients', []))
         ]
         all_ingredients = active_tagged + inactive_tagged
 
+        banned_substances = self._check_banned_substances(all_ingredients, product)
+        self._attach_banned_safety_flags_to_ingredients(product, banned_substances)
+
         return {
-            "banned_substances": self._check_banned_substances(all_ingredients, product),
+            "banned_substances": banned_substances,
             "harmful_additives": self._check_harmful_additives(all_ingredients),
             "allergens": self._check_allergens(all_ingredients, product)
         }
+
+    def _attach_banned_safety_flags_to_ingredients(
+        self,
+        product: Dict[str, Any],
+        banned_substances: Dict[str, Any],
+    ) -> None:
+        """Project canonical banned/recalled safety flags onto ingredient rows."""
+        for section_key in ("activeIngredients", "inactiveIngredients"):
+            for ing in product.get(section_key, []) or []:
+                if isinstance(ing, dict):
+                    ing.setdefault("safety_flags", [])
+
+        for hit in (banned_substances or {}).get("substances", []) or []:
+            if not isinstance(hit, dict) or not isinstance(hit.get("safety_flag"), dict):
+                continue
+            source_section = hit.get("source_section")
+            source_index = hit.get("ingredient_index")
+            section_key = {
+                "active": "activeIngredients",
+                "inactive": "inactiveIngredients",
+            }.get(source_section)
+            if section_key is None or not isinstance(source_index, int):
+                continue
+            rows = product.get(section_key, []) or []
+            if source_index < 0 or source_index >= len(rows):
+                continue
+            target = rows[source_index]
+            if not isinstance(target, dict):
+                continue
+            flags = target.setdefault("safety_flags", [])
+            if not isinstance(flags, list):
+                flags = []
+                target["safety_flags"] = flags
+
+            flag = hit["safety_flag"]
+            flag_key = (
+                flag.get("entry_id"),
+                flag.get("source_db"),
+                flag.get("evidence_text"),
+                flag.get("match_type"),
+            )
+            if not any(
+                isinstance(existing, dict)
+                and (
+                    existing.get("entry_id"),
+                    existing.get("source_db"),
+                    existing.get("evidence_text"),
+                    existing.get("match_type"),
+                ) == flag_key
+                for existing in flags
+            ):
+                flags.append(flag)
 
     def _check_banned_substances(self, ingredients: List[Dict], product: Optional[Dict] = None) -> Dict[str, Any]:
         """Check for banned/recalled substances.
@@ -8714,6 +8769,8 @@ class SupplementEnricherV3:
                         "match_method": match_method,
                         "matched_variant": matched_variant,
                         "safety_flag": safety_flag,
+                        "source_section": ing_source_section,
+                        "ingredient_index": ingredient.get("_source_index"),
                         "allowlist_id": allowlist_id,
                         "allowlist_version": allowlist_version if allowlist_id else None,
                         "entity_type": entity_type,
