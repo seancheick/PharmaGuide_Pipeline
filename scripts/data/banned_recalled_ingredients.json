@@ -4683,7 +4683,7 @@
       "regulatory_date": "1997-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "cui": "C5674892",
+      "cui": "C0021665",
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A synthetic growth-factor drug that is not a dietary ingredient under US law. Use is associated with hypoglycemia, tumor growth, and acromegaly risk. Stop and consult a doctor.",
