@@ -692,21 +692,30 @@ class TestIdentifierStandardization:
         )
 
     def test_no_null_valued_fields(self, entries):
-        """No field should be present with a None value. Absent is fine, None is not."""
+        """No field should be null unless an identifier note documents why.
+
+        Deprecated upstream identifiers are intentionally retained as
+        `null` when paired with a load-bearing `{field}_note`; separate
+        integrity tests assert those notes for the known RxNorm/UMLS cases.
+        """
+        nullable_identifiers_with_notes = {"cui", "rxcui", "unii", "cas"}
         violations = []
         for k, e in entries.items():
             for field, value in e.items():
                 if value is None:
+                    if field in nullable_identifiers_with_notes and e.get(f"{field}_note"):
+                        continue
                     violations.append((k, field))
         assert len(violations) == 0, (
-            f"Found {len(violations)} null-valued fields (remove the key instead):\n"
+            f"Found {len(violations)} undocumented null-valued fields "
+            "(remove the key or add a {field}_note for intentional identifier nulls):\n"
             + "\n".join(f"  {k}.{f}" for k, f in violations[:10])
         )
 
     def test_cui_is_string_when_present(self, entries):
         """CUI stays at parent level and must be a string when present."""
         invalid = [(k, type(e['cui']).__name__) for k, e in entries.items()
-                    if 'cui' in e and not isinstance(e['cui'], str)]
+                    if 'cui' in e and e['cui'] is not None and not isinstance(e['cui'], str)]
         assert len(invalid) == 0, (
             f"Found {len(invalid)} non-string CUI values:\n"
             + "\n".join(f"  {k}: {t}" for k, t in invalid[:10])

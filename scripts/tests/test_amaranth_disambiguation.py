@@ -28,11 +28,17 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from enhanced_normalizer import EnhancedDSLDNormalizer
+from enrich_supplements_v3 import SupplementEnricherV3
 
 
 @pytest.fixture(scope="module")
 def normalizer() -> EnhancedDSLDNormalizer:
     return EnhancedDSLDNormalizer()
+
+
+@pytest.fixture(scope="module")
+def enricher() -> SupplementEnricherV3:
+    return SupplementEnricherV3()
 
 
 class TestAmaranthPlantRoutesToBotanical:
@@ -57,7 +63,7 @@ class TestAmaranthPlantRoutesToBotanical:
 
 
 class TestAmaranthDyeStillBanned:
-    """Dye-specific aliases must continue to hit the banned_recalled entry."""
+    """Dye-specific aliases must flag as safety without owning identity."""
 
     @pytest.mark.parametrize("raw", [
         "amaranth dye",
@@ -73,14 +79,20 @@ class TestAmaranthDyeStillBanned:
         "food red 9",
         "acid red 27",
     ])
-    def test_dye_aliases_remain_banned(self, normalizer, raw) -> None:
+    def test_dye_aliases_remain_banned(self, normalizer, enricher, raw) -> None:
         result = normalizer._resolve_canonical_identity(raw, raw_name=raw)
-        assert result is not None, f"{raw!r} produced no canonical"
-        canonical_id, source_db = result
-        assert canonical_id == "BANNED_FDC_RED_2_AMARANTH", (
-            f"{raw!r} should still be the banned dye. Got {result!r}."
+        if result is not None:
+            canonical_id, source_db = result
+            assert canonical_id != "BANNED_FDC_RED_2_AMARANTH"
+            assert source_db != "banned_recalled"
+
+        hits = enricher._check_banned_substances([
+            {"name": raw, "raw_source_text": raw, "standardName": raw}
+        ])
+        banned_ids = {row.get("banned_id") for row in hits.get("substances", [])}
+        assert "BANNED_FDC_RED_2_AMARANTH" in banned_ids, (
+            f"{raw!r} should still raise the banned dye safety flag. Got {banned_ids!r}."
         )
-        assert source_db == "banned_recalled"
 
 
 class TestBareAmaranthNotInBannedAliases:

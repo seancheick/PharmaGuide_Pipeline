@@ -521,6 +521,11 @@ _SAFETY_ONLY_IDENTITY_SOURCES = frozenset({
     "harmful_additives",
 })
 
+_BANNED_RECALLED_SOURCES = frozenset({
+    "banned_recalled",
+    "banned_recalled_ingredients",
+})
+
 
 def _inactive_identity_name_for_export(
     *,
@@ -3477,7 +3482,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         )
         inactive_display_label = (
             name
-            if safe_str(res.matched_source) in _SAFETY_ONLY_IDENTITY_SOURCES
+            if safe_str(res.matched_source) in _BANNED_RECALLED_SOURCES
             else res.display_label
         )
         inactive_contract = {
