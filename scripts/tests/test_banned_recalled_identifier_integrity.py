@@ -82,3 +82,17 @@ def test_add_colloidal_silver_rxcui_cleared_to_null(banned_recalled):
         "ADD_COLLOIDAL_SILVER must have an rxcui_note explaining the "
         "deprecation."
     )
+
+
+def test_hm_cadmium_cui_is_canonical_substance(banned_recalled):
+    """HM_CADMIUM must use C0006632 ('cadmium' — Hazardous or Poisonous
+    Substance / Element, Ion, or Isotope). C0373557 was 'Cadmium
+    measurement' (Laboratory Procedure) — the lab assay concept, not the
+    element being banned/restricted. Caught by strict-mode 'resolved
+    concept lacks substance semantic type' guard 2026-05-28."""
+    entry = _find(banned_recalled, "HM_CADMIUM")
+    assert entry["cui"] == "C0006632", (
+        "HM_CADMIUM.cui must be C0006632 (the cadmium element/hazardous "
+        "substance), not C0373557 (Cadmium measurement, a Laboratory "
+        "Procedure concept)."
+    )
