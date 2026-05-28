@@ -24,6 +24,7 @@ Usage:
 """
 
 import logging
+import re
 from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 
@@ -171,6 +172,34 @@ class EnrichmentContractValidator:
         "percent_dv_only",
     })
 
+    SAFETY_IDENTITY_SOURCES = frozenset({
+        "banned_recalled",
+        "banned_recalled_ingredients",
+        "harmful_additives",
+        "allergens",
+        "contaminants",
+        "recalls",
+    })
+
+    SAFETY_FLAG_REQUIRED_FIELDS = frozenset({
+        "entry_id",
+        "source_db",
+        "status",
+        "severity",
+        "match_type",
+        "matched_variant",
+        "evidence_text",
+        "confidence",
+    })
+
+    NEGATIVE_MATCH_MODES = frozenset({"exact", "substring"})
+
+    QUALIFIED_SAFETY_NAME_RE = re.compile(
+        r"[\(\)\u2014\-]|"
+        r"\b(?:high\s+dose|e\d+|extract|asbestos|monacolin|hexavalent|chromate|dichromate|vi|6\+)\b",
+        re.IGNORECASE,
+    )
+
     def __init__(self, strict_mode: bool = False):
         """
         Initialize validator.
@@ -202,6 +231,7 @@ class EnrichmentContractValidator:
         violations.extend(self._validate_provenance_integrity(product, product_id))
         violations.extend(self._validate_match_ledger_consistency(product, product_id))
         violations.extend(self._validate_display_ledger_contract(product, product_id))
+        violations.extend(self._validate_identity_safety_separation(product, product_id))
 
         return violations
 
@@ -1410,6 +1440,233 @@ class EnrichmentContractValidator:
         return violations
 
     # =========================================================================
+    # RULE I: Identity / Safety Separation
+    # =========================================================================
+
+    def _validate_identity_safety_separation(
+        self, product: Dict, product_id: str
+    ) -> List[ContractViolation]:
+        """Validate that safety sources do not own identity fields."""
+        violations = []
+        all_ingredients = (
+            (product.get("activeIngredients", []) or []) +
+            (product.get("inactiveIngredients", []) or []) +
+            (product.get("ingredients", []) or []) +
+            (product.get("inactive_ingredients", []) or [])
+        )
+
+        for index, ing in enumerate(all_ingredients):
+            if not isinstance(ing, dict):
+                continue
+            field_path = f"ingredients[{index}]"
+            standard_name = ing.get("standard_name")
+            standard_name_alias = ing.get("standardName")
+            if standard_name and standard_name_alias and standard_name != standard_name_alias:
+                violations.append(ContractViolation(
+                    rule="I.1",
+                    rule_name="Identity/Safety Separation - standard name alias",
+                    severity="error",
+                    message="standardName and standard_name must be identical identity aliases",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected=standard_name,
+                    actual=standard_name_alias,
+                    evidence={"name": ing.get("name")},
+                ))
+
+            source = self._norm_source(ing.get("canonical_source_db") or ing.get("source_db"))
+            if source in self.SAFETY_IDENTITY_SOURCES:
+                violations.append(ContractViolation(
+                    rule="I.2",
+                    rule_name="Identity/Safety Separation - identity source",
+                    severity="error",
+                    message=f"Ingredient identity is sourced from safety database '{source}'",
+                    product_id=product_id,
+                    field_path=f"{field_path}.canonical_source_db",
+                    expected="identity source database",
+                    actual=source,
+                    evidence={"name": ing.get("name"), "standardName": standard_name_alias},
+                ))
+
+            safety_flags = [
+                flag for flag in (ing.get("safety_flags") or [])
+                if isinstance(flag, dict)
+            ]
+            matched_source = self._norm_source(ing.get("matched_source"))
+            matched_rule_id = ing.get("matched_rule_id")
+            if matched_source in self.SAFETY_IDENTITY_SOURCES and matched_rule_id and not safety_flags:
+                violations.append(ContractViolation(
+                    rule="I.3",
+                    rule_name="Identity/Safety Separation - legacy safety projection",
+                    severity="error",
+                    message="Legacy safety fields must be projected from safety_flags",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected="matching safety_flags[] entry",
+                    actual={"matched_source": ing.get("matched_source"), "matched_rule_id": matched_rule_id},
+                    evidence={"name": ing.get("name")},
+                ))
+
+            for flag_index, flag in enumerate(safety_flags):
+                missing = sorted(
+                    field for field in self.SAFETY_FLAG_REQUIRED_FIELDS
+                    if flag.get(field) in (None, "")
+                )
+                if missing:
+                    violations.append(ContractViolation(
+                        rule="I.4",
+                        rule_name="Identity/Safety Separation - safety flag shape",
+                        severity="error",
+                        message=f"safety_flags[{flag_index}] missing required fields: {missing}",
+                        product_id=product_id,
+                        field_path=f"{field_path}.safety_flags[{flag_index}]",
+                        expected=sorted(self.SAFETY_FLAG_REQUIRED_FIELDS),
+                        actual=sorted(flag.keys()),
+                        evidence={"name": ing.get("name")},
+                    ))
+
+        return violations
+
+    def validate_banned_recalled_reference(self, doc: Dict) -> List[ContractViolation]:
+        """Validate banned/recalled matching policy fields.
+
+        This is intentionally separate from product validation because the
+        reference database is reviewed in smaller clinical-policy batches.
+        """
+        violations: List[ContractViolation] = []
+        entries = doc.get("ingredients") or doc.get("banned_recalled_ingredients") or []
+        if not isinstance(entries, list):
+            return violations
+
+        for index, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                continue
+            entry_id = entry.get("id") or f"entry_{index}"
+            field_path = f"ingredients[{index}]"
+            match_rules = entry.get("match_rules") or {}
+            negative_terms = (
+                entry.get("negative_match_terms")
+                if "negative_match_terms" in entry
+                else match_rules.get("negative_match_terms", [])
+            )
+
+            violations.extend(self._validate_negative_match_terms(
+                negative_terms,
+                product_id=str(entry_id),
+                field_path=f"{field_path}.match_rules.negative_match_terms",
+            ))
+
+            requires_evidence = bool(entry.get("requires_explicit_form_evidence"))
+            patterns = entry.get("form_evidence_patterns") or []
+            if requires_evidence and not patterns:
+                violations.append(ContractViolation(
+                    rule="I.6",
+                    rule_name="Reference Safety Policy - explicit evidence patterns",
+                    severity="error",
+                    message="requires_explicit_form_evidence=true requires form_evidence_patterns",
+                    product_id=str(entry_id),
+                    field_path=f"{field_path}.form_evidence_patterns",
+                    expected="non-empty list[str]",
+                    actual=patterns,
+                    evidence={"standard_name": entry.get("standard_name")},
+                ))
+
+            if (
+                self._is_qualified_safety_name(entry.get("standard_name"))
+                and not requires_evidence
+                and not negative_terms
+            ):
+                violations.append(ContractViolation(
+                    rule="I.7",
+                    rule_name="Reference Safety Policy - qualified entry guard",
+                    severity="warning",
+                    message="Qualified banned/recalled entry lacks negative_match_terms or explicit evidence policy",
+                    product_id=str(entry_id),
+                    field_path=field_path,
+                    expected="negative_match_terms or requires_explicit_form_evidence=true",
+                    actual={
+                        "negative_match_terms": negative_terms,
+                        "requires_explicit_form_evidence": requires_evidence,
+                    },
+                    evidence={"standard_name": entry.get("standard_name")},
+                ))
+
+        return violations
+
+    def _validate_negative_match_terms(
+        self, terms: Any, *, product_id: str, field_path: str
+    ) -> List[ContractViolation]:
+        violations = []
+        if terms in (None, ""):
+            return violations
+        if not isinstance(terms, list):
+            return [ContractViolation(
+                rule="I.5",
+                rule_name="Reference Safety Policy - negative match terms",
+                severity="error",
+                message="negative_match_terms must be a list",
+                product_id=product_id,
+                field_path=field_path,
+                expected="list[str | {term, match_mode}]",
+                actual=type(terms).__name__,
+            )]
+
+        for index, term in enumerate(terms):
+            term_path = f"{field_path}[{index}]"
+            if isinstance(term, str):
+                continue
+            if not isinstance(term, dict):
+                violations.append(ContractViolation(
+                    rule="I.5",
+                    rule_name="Reference Safety Policy - negative match terms",
+                    severity="error",
+                    message="negative_match_terms entries must be strings or objects",
+                    product_id=product_id,
+                    field_path=term_path,
+                    expected="str | {term: str, match_mode: exact|substring}",
+                    actual=type(term).__name__,
+                ))
+                continue
+            match_term = term.get("term")
+            match_mode = term.get("match_mode", "substring")
+            if not isinstance(match_term, str) or not match_term.strip():
+                violations.append(ContractViolation(
+                    rule="I.5",
+                    rule_name="Reference Safety Policy - negative match terms",
+                    severity="error",
+                    message="negative_match_terms object entries require a non-empty term",
+                    product_id=product_id,
+                    field_path=f"{term_path}.term",
+                    expected="non-empty string",
+                    actual=match_term,
+                ))
+            if match_mode not in self.NEGATIVE_MATCH_MODES:
+                violations.append(ContractViolation(
+                    rule="I.5",
+                    rule_name="Reference Safety Policy - negative match terms",
+                    severity="error",
+                    message=f"negative_match_terms match_mode must be one of {sorted(self.NEGATIVE_MATCH_MODES)}",
+                    product_id=product_id,
+                    field_path=f"{term_path}.match_mode",
+                    expected=sorted(self.NEGATIVE_MATCH_MODES),
+                    actual=match_mode,
+                ))
+        return violations
+
+    @classmethod
+    def _is_qualified_safety_name(cls, value: Any) -> bool:
+        return bool(cls.QUALIFIED_SAFETY_NAME_RE.search(str(value or "")))
+
+    @staticmethod
+    def _norm_source(value: Any) -> str:
+        normalized = str(value or "").strip().lower()
+        normalized = re.sub(r"[^a-z0-9]+", "_", normalized)
+        normalized = re.sub(r"_+", "_", normalized).strip("_")
+        if normalized == "banned_recalled":
+            return "banned_recalled_ingredients"
+        return normalized
+
+    # =========================================================================
     # Utility Methods
     # =========================================================================
 
@@ -1462,7 +1719,11 @@ if __name__ == "__main__":
             product = json.load(f)
 
         validator = EnrichmentContractValidator()
-        violations = validator.validate(product)
+        path_arg = sys.argv[1]
+        if path_arg.endswith("banned_recalled_ingredients.json"):
+            violations = validator.validate_banned_recalled_reference(product)
+        else:
+            violations = validator.validate(product)
 
         if violations:
             print(f"Found {len(violations)} contract violations:")

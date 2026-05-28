@@ -132,3 +132,80 @@ def test_safety_precedence_and_strict_index_are_shared():
     assert "chromium(6+)" in index
     assert "chromium" in index
     assert "chromium(6+)" != "chromium"
+
+
+def test_standardname_safety_audit_rejects_standardname_only_safety_evidence(tmp_path):
+    from api_audit.audit_standardname_safety_separation import audit
+
+    detail_dir = tmp_path / "detail_blobs"
+    detail_dir.mkdir()
+    (detail_dir / "bad.json").write_text("""{
+      "dsld_id": "bad-standardname-only",
+      "ingredients": [{
+        "name": "Chromium",
+        "raw_source_text": "Chromium",
+        "standard_name": "Chromium (VI) — Hexavalent Chromium",
+        "standardName": "Chromium (VI) — Hexavalent Chromium",
+        "canonical_source_db": "ingredient_quality_map",
+        "safety_flags": [{
+          "entry_id": "HM_CHROMIUM_HEXAVALENT",
+          "source_db": "banned_recalled_ingredients",
+          "status": "high_risk",
+          "severity": "high",
+          "match_type": "exact",
+          "matched_variant": "Hexavalent Chromium",
+          "evidence_text": "Hexavalent Chromium",
+          "confidence": "high"
+        }]
+      }]
+    }""")
+
+    codes = {finding["code"] for finding in audit(tmp_path)}
+    assert "SAFETY_FLAG_SUPPORTED_ONLY_BY_STANDARD_NAME" in codes
+
+
+def test_standardname_safety_audit_rejects_safety_source_identity(tmp_path):
+    from api_audit.audit_standardname_safety_separation import audit
+
+    detail_dir = tmp_path / "detail_blobs"
+    detail_dir.mkdir()
+    (detail_dir / "bad.json").write_text("""{
+      "dsld_id": "bad-safety-identity",
+      "ingredients": [{
+        "name": "Chromium",
+        "raw_source_text": "Chromium",
+        "standard_name": "Chromium",
+        "standardName": "Chromium",
+        "canonical_source_db": "banned_recalled_ingredients",
+        "safety_flags": []
+      }]
+    }""")
+
+    codes = {finding["code"] for finding in audit(tmp_path)}
+    assert "IDENTITY_FROM_SAFETY_SOURCE" in codes
+
+
+def test_reference_data_audit_rejects_qualified_safety_alias_collapsing_to_identity(tmp_path):
+    from api_audit.audit_standardname_safety_separation import audit_reference_data
+
+    data_dir = tmp_path
+    (data_dir / "ingredient_quality_map.json").write_text("""{
+      "chromium": {"standard_name": "Chromium", "aliases": []}
+    }""")
+    (data_dir / "standardized_botanicals.json").write_text("[]")
+    (data_dir / "botanical_ingredients.json").write_text("[]")
+    (data_dir / "other_ingredients.json").write_text("[]")
+    (data_dir / "banned_recalled_ingredients.json").write_text("""{
+      "ingredients": [{
+        "id": "HM_CHROMIUM_HEXAVALENT",
+        "standard_name": "Chromium (VI) — Hexavalent Chromium",
+        "aliases": ["Chromium"]
+      }]
+    }""")
+    (data_dir / "harmful_additives.json").write_text("""{"additives": []}""")
+
+    findings = audit_reference_data(data_dir)
+    assert any(
+        finding["code"] == "QUALIFIED_SAFETY_ALIAS_COLLAPSES_TO_IDENTITY"
+        for finding in findings
+    )

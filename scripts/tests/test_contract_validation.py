@@ -182,6 +182,7 @@ class TestAllergenPrecedenceContract:
 
         assert len(rule_violations) == 1
 
+
     def test_B2_valid_with_may_contain_allergen(self, validator):
         """B.2: has_may_contain_warning is valid with may_contain allergen"""
         product = {
@@ -215,6 +216,124 @@ class TestAllergenPrecedenceContract:
         rule_violations = [v for v in violations if v.rule == "B.2"]
 
         assert len(rule_violations) == 0
+
+
+class TestIdentitySafetySeparationContract:
+    """Rule I: identity fields and safety fields remain separate."""
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    def test_standard_name_alias_drift_is_error(self, validator):
+        product = {
+            "id": "test_identity_alias",
+            "activeIngredients": [{
+                "name": "Chromium",
+                "standard_name": "Chromium",
+                "standardName": "Chromium (VI) — Hexavalent Chromium",
+            }],
+        }
+
+        violations = validator.validate(product)
+        assert any(v.rule == "I.1" for v in violations)
+
+    def test_safety_source_cannot_own_identity(self, validator):
+        product = {
+            "id": "test_safety_source_identity",
+            "activeIngredients": [{
+                "name": "Chromium",
+                "standard_name": "Chromium",
+                "standardName": "Chromium",
+                "canonical_source_db": "banned_recalled_ingredients",
+            }],
+        }
+
+        violations = validator.validate(product)
+        assert any(v.rule == "I.2" for v in violations)
+
+    def test_legacy_safety_projection_requires_safety_flag(self, validator):
+        product = {
+            "id": "test_legacy_safety_without_flag",
+            "activeIngredients": [{
+                "name": "Chromium",
+                "standard_name": "Chromium",
+                "standardName": "Chromium",
+                "matched_source": "banned_recalled",
+                "matched_rule_id": "HM_CHROMIUM_HEXAVALENT",
+                "safety_flags": [],
+            }],
+        }
+
+        violations = validator.validate(product)
+        assert any(v.rule == "I.3" for v in violations)
+
+    def test_safety_flag_shape_requires_evidence_fields(self, validator):
+        product = {
+            "id": "test_bad_safety_flag",
+            "activeIngredients": [{
+                "name": "Chromium",
+                "standard_name": "Chromium",
+                "standardName": "Chromium",
+                "safety_flags": [{"entry_id": "HM_CHROMIUM_HEXAVALENT"}],
+            }],
+        }
+
+        violations = validator.validate(product)
+        assert any(v.rule == "I.4" for v in violations)
+
+    def test_reference_negative_match_terms_accept_object_exact_mode(self, validator):
+        doc = {
+            "ingredients": [{
+                "id": "HM_CHROMIUM_HEXAVALENT",
+                "standard_name": "Chromium (VI) — Hexavalent Chromium",
+                "negative_match_terms": [
+                    {"term": "chromium", "match_mode": "exact"},
+                    "chromium picolinate",
+                ],
+                "requires_explicit_form_evidence": True,
+                "form_evidence_patterns": [r"\bhexavalent\b"],
+            }],
+        }
+
+        violations = validator.validate_banned_recalled_reference(doc)
+        assert not [v for v in violations if v.rule in {"I.5", "I.6"}]
+
+    def test_reference_negative_match_terms_reject_bad_mode(self, validator):
+        doc = {
+            "ingredients": [{
+                "id": "BAD_MODE",
+                "standard_name": "Chromium (VI) — Hexavalent Chromium",
+                "negative_match_terms": [{"term": "chromium", "match_mode": "contains"}],
+            }],
+        }
+
+        violations = validator.validate_banned_recalled_reference(doc)
+        assert any(v.rule == "I.5" for v in violations)
+
+    def test_reference_explicit_evidence_requires_patterns(self, validator):
+        doc = {
+            "ingredients": [{
+                "id": "MISSING_PATTERNS",
+                "standard_name": "Chromium (VI) — Hexavalent Chromium",
+                "requires_explicit_form_evidence": True,
+            }],
+        }
+
+        violations = validator.validate_banned_recalled_reference(doc)
+        assert any(v.rule == "I.6" for v in violations)
+
+    def test_reference_qualified_entry_without_guard_warns(self, validator):
+        doc = {
+            "ingredients": [{
+                "id": "QUALIFIED_NO_GUARD",
+                "standard_name": "Green Tea Extract (High Dose)",
+                "negative_match_terms": [],
+            }],
+        }
+
+        violations = validator.validate_banned_recalled_reference(doc)
+        assert any(v.rule == "I.7" and v.severity == "warning" for v in violations)
 
 
 class TestColorsConsistencyContract:
