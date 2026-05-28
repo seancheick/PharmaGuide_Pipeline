@@ -195,7 +195,6 @@ class EnrichmentContractValidator:
     NEGATIVE_MATCH_MODES = frozenset({"exact", "substring"})
 
     QUALIFIED_SAFETY_NAME_RE = re.compile(
-        r"[\(\)\u2014\-]|"
         r"\b(?:high\s+dose|e\d+|extract|asbestos|monacolin|hexavalent|chromate|dichromate|vi|6\+)\b",
         re.IGNORECASE,
     )
@@ -1494,18 +1493,44 @@ class EnrichmentContractValidator:
             ]
             matched_source = self._norm_source(ing.get("matched_source"))
             matched_rule_id = ing.get("matched_rule_id")
-            if matched_source in self.SAFETY_IDENTITY_SOURCES and matched_rule_id and not safety_flags:
-                violations.append(ContractViolation(
-                    rule="I.3",
-                    rule_name="Identity/Safety Separation - legacy safety projection",
-                    severity="error",
-                    message="Legacy safety fields must be projected from safety_flags",
-                    product_id=product_id,
-                    field_path=field_path,
-                    expected="matching safety_flags[] entry",
-                    actual={"matched_source": ing.get("matched_source"), "matched_rule_id": matched_rule_id},
-                    evidence={"name": ing.get("name")},
-                ))
+            if matched_source in self.SAFETY_IDENTITY_SOURCES and matched_rule_id:
+                if not safety_flags:
+                    violations.append(ContractViolation(
+                        rule="I.3",
+                        rule_name="Identity/Safety Separation - legacy safety projection",
+                        severity="error",
+                        message="Legacy safety fields must be projected from safety_flags",
+                        product_id=product_id,
+                        field_path=field_path,
+                        expected="matching safety_flags[] entry",
+                        actual={"matched_source": ing.get("matched_source"), "matched_rule_id": matched_rule_id},
+                        evidence={"name": ing.get("name")},
+                    ))
+                elif not any(
+                    self._safety_flag_matches_legacy_fields(
+                        flag,
+                        matched_source=matched_source,
+                        matched_rule_id=str(matched_rule_id),
+                    )
+                    for flag in safety_flags
+                ):
+                    violations.append(ContractViolation(
+                        rule="I.3",
+                        rule_name="Identity/Safety Separation - legacy safety projection",
+                        severity="error",
+                        message="Legacy safety fields must have a matching safety_flags[] entry",
+                        product_id=product_id,
+                        field_path=field_path,
+                        expected={"source_db": matched_source, "entry_id": matched_rule_id},
+                        actual=[
+                            {
+                                "source_db": flag.get("source_db") or flag.get("matched_source"),
+                                "entry_id": flag.get("entry_id") or flag.get("rule_id"),
+                            }
+                            for flag in safety_flags
+                        ],
+                        evidence={"name": ing.get("name")},
+                    ))
 
             for flag_index, flag in enumerate(safety_flags):
                 missing = sorted(
@@ -1665,6 +1690,18 @@ class EnrichmentContractValidator:
         if normalized == "banned_recalled":
             return "banned_recalled_ingredients"
         return normalized
+
+    @classmethod
+    def _safety_flag_matches_legacy_fields(
+        cls,
+        flag: Dict[str, Any],
+        *,
+        matched_source: str,
+        matched_rule_id: str,
+    ) -> bool:
+        flag_source = cls._norm_source(flag.get("source_db") or flag.get("matched_source"))
+        flag_rule_id = str(flag.get("entry_id") or flag.get("rule_id") or "")
+        return bool(flag_rule_id and flag_rule_id == matched_rule_id and flag_source == matched_source)
 
     # =========================================================================
     # Utility Methods

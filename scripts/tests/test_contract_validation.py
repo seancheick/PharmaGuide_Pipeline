@@ -268,6 +268,31 @@ class TestIdentitySafetySeparationContract:
         violations = validator.validate(product)
         assert any(v.rule == "I.3" for v in violations)
 
+    def test_legacy_safety_projection_requires_matching_safety_flag(self, validator):
+        product = {
+            "id": "test_legacy_safety_with_wrong_flag",
+            "activeIngredients": [{
+                "name": "Chromium",
+                "standard_name": "Chromium",
+                "standardName": "Chromium",
+                "matched_source": "banned_recalled",
+                "matched_rule_id": "HM_CHROMIUM_HEXAVALENT",
+                "safety_flags": [{
+                    "entry_id": "BANNED_DHEA",
+                    "source_db": "banned_recalled_ingredients",
+                    "status": "high_risk",
+                    "severity": "high",
+                    "match_type": "exact",
+                    "matched_variant": "DHEA",
+                    "evidence_text": "DHEA",
+                    "confidence": "high",
+                }],
+            }],
+        }
+
+        violations = validator.validate(product)
+        assert any(v.rule == "I.3" for v in violations)
+
     def test_safety_flag_shape_requires_evidence_fields(self, validator):
         product = {
             "id": "test_bad_safety_flag",

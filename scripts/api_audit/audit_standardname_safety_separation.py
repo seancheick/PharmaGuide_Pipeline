@@ -38,7 +38,6 @@ SAFETY_SOURCE_FILES = {
 }
 
 QUALIFIER_RE = re.compile(
-    r"[\(\)\u2014\-]|"
     r"\b(?:high\s+dose|e\d+|extract|asbestos|monacolin|hexavalent|chromate|dichromate|vi|6\+)\b",
     re.IGNORECASE,
 )
@@ -106,6 +105,18 @@ def _contains_normalized(haystack: Iterable[Any], needle: Any) -> bool:
 
 def _source_is_safety_identity(source: Any) -> bool:
     return normalize_safety_source(source) in SAFETY_IDENTITY_SOURCES
+
+
+def _flag_matches_legacy_safety(
+    flag: Dict[str, Any],
+    *,
+    matched_source: str,
+    matched_rule_id: str,
+) -> bool:
+    flag_source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+    legacy_source = normalize_safety_source(matched_source)
+    flag_rule_id = _safe_str(flag.get("entry_id") or flag.get("rule_id"))
+    return bool(flag_rule_id and flag_rule_id == matched_rule_id and flag_source == legacy_source)
 
 
 def _flag_supported_only_by_standard_name(ing: Dict[str, Any], flag: Dict[str, Any]) -> bool:
@@ -281,17 +292,38 @@ def audit(output_dir: Path, *, reference_data_dir: Path | None = None) -> List[D
             if (
                 matched_source in {"banned_recalled", "banned_recalled_ingredients", "harmful_additives"}
                 and matched_rule_id
-                and not safety_flags
             ):
-                findings.append({
-                    "code": "LEGACY_SAFETY_WITHOUT_FLAG",
-                    "dsld_id": dsld_id,
-                    "section": section,
-                    "ingredient": ing.get("name"),
-                    "matched_source": matched_source,
-                    "matched_rule_id": matched_rule_id,
-                    "path": str(path),
-                })
+                if not safety_flags:
+                    findings.append({
+                        "code": "LEGACY_SAFETY_WITHOUT_FLAG",
+                        "dsld_id": dsld_id,
+                        "section": section,
+                        "ingredient": ing.get("name"),
+                        "matched_source": matched_source,
+                        "matched_rule_id": matched_rule_id,
+                        "path": str(path),
+                    })
+                elif not any(
+                    _flag_matches_legacy_safety(
+                        flag,
+                        matched_source=matched_source,
+                        matched_rule_id=matched_rule_id,
+                    )
+                    for flag in safety_flags
+                ):
+                    findings.append({
+                        "code": "LEGACY_SAFETY_WITHOUT_MATCHING_FLAG",
+                        "dsld_id": dsld_id,
+                        "section": section,
+                        "ingredient": ing.get("name"),
+                        "matched_source": matched_source,
+                        "matched_rule_id": matched_rule_id,
+                        "flag_ids": [
+                            _safe_str(flag.get("entry_id") or flag.get("rule_id"))
+                            for flag in safety_flags
+                        ],
+                        "path": str(path),
+                    })
 
             for flag in safety_flags:
                 if _flag_supported_only_by_standard_name(ing, flag):

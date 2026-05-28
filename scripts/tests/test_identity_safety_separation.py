@@ -261,6 +261,37 @@ def test_standardname_safety_audit_rejects_safety_source_identity(tmp_path):
     assert "IDENTITY_FROM_SAFETY_SOURCE" in codes
 
 
+def test_standardname_safety_audit_rejects_legacy_rule_without_matching_flag(tmp_path):
+    from api_audit.audit_standardname_safety_separation import audit
+
+    detail_dir = tmp_path / "detail_blobs"
+    detail_dir.mkdir()
+    (detail_dir / "bad.json").write_text("""{
+      "dsld_id": "bad-legacy-projection",
+      "ingredients": [{
+        "name": "Chromium",
+        "raw_source_text": "Chromium",
+        "standard_name": "Chromium",
+        "standardName": "Chromium",
+        "matched_source": "banned_recalled",
+        "matched_rule_id": "HM_CHROMIUM_HEXAVALENT",
+        "safety_flags": [{
+          "entry_id": "BANNED_DHEA",
+          "source_db": "banned_recalled_ingredients",
+          "status": "high_risk",
+          "severity": "high",
+          "match_type": "exact",
+          "matched_variant": "DHEA",
+          "evidence_text": "DHEA",
+          "confidence": "high"
+        }]
+      }]
+    }""")
+
+    codes = {finding["code"] for finding in audit(tmp_path)}
+    assert "LEGACY_SAFETY_WITHOUT_MATCHING_FLAG" in codes
+
+
 def test_reference_data_audit_rejects_qualified_safety_alias_collapsing_to_identity(tmp_path):
     from api_audit.audit_standardname_safety_separation import audit_reference_data
 
