@@ -2672,7 +2672,9 @@
       ],
       "last_updated": "2026-02-18",
       "external_ids": {},
-      "cui": "C1269100",
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1269100 ('Eosinophilic major basic protein' — unrelated). This is a proprietary brand-complex label descriptor (ap-bio, Brain Shield, graminex g60, cordiart, etc.); no single UMLS concept exists for a branded multi-ingredient placeholder. Null per null-CUI policy for proprietary descriptors.",
       "functional_roles": [],
       "is_label_descriptor": true
     },
@@ -7234,7 +7236,9 @@
       "external_ids": {
         "unii": "6PQP1V1B6O"
       },
-      "cui": "C1145672",
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1145672 ('Bixa orellana (plant)' — annatto, unrelated). This is a multi-source fruit/vegetable powder class (berry/carrot/cherry/etc.); UMLS has no single concept for the mixture. Null per null-CUI policy for class entries.",
       "functional_roles": [
         "flavor_natural",
         "colorant_natural"
@@ -10244,7 +10248,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0022951",
+      "cui": "C1658042",
+      "cui_note": "Wave 9.E.2 (2026-05-28): corrected from C0022951 ('Lactose Intolerance', Disease or Syndrome) to C1658042 ('lactose monohydrate', Organic Chemical / Pharmacologic Substance). Content-verified via live UMLS exact-search.",
       "functional_roles": [
         "filler"
       ]
@@ -10272,7 +10277,9 @@
         "cas": "26001-32-1",
         "pubchem_cid": 9949212
       },
-      "cui": "C0063506",
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C0063506 ('indolepropanol phosphate' — unrelated). Lactotripeptides is a two-peptide class (IPP = C1505879 isoleucyl-prolyl-proline; VPP = C1505878 valyl-prolyl-proline); UMLS has no single 'lactotripeptides' concept. Both component CUIs were live-verified 2026-05-28. Null with documented components per null-CUI policy.",
       "functional_roles": [],
       "is_active_only": true
     },
@@ -11306,7 +11313,8 @@
       "external_ids": {
         "unii": "V8A1AW0880"
       },
-      "cui": "C0700319",
+      "cui": "C0066503",
+      "cui_note": "Wave 9.E.2 (2026-05-28): corrected from C0700319 ('Mentally ill chemical abuse', Mental or Behavioral Dysfunction) to C0066503 ('mica', Pharmacologic Substance / Inorganic Chemical). Content-verified via live UMLS exact-search.",
       "functional_roles": [
         "coating",
         "colorant_natural"
@@ -15386,7 +15394,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "cui": "C0032002",
+      "cui": "C0032005",
+      "cui_note": "Wave 9.E.2 (2026-05-28): corrected from C0032002 ('Pituitary Diseases', Disease or Syndrome) to C0032005 ('Pituitary Gland', Body Part, Organ, or Organ Component) — the glandular tissue concept appropriate for a pituitary-tissue source ingredient. Content-verified via live UMLS exact-search.",
       "functional_roles": [],
       "is_active_only": true
     },
@@ -15724,7 +15733,8 @@
       "external_ids": {
         "unii": "532B59J990"
       },
-      "rxcui": "8570",
+      "rxcui": null,
+      "rxcui_note": "Wave 9.E.2 (2026-05-28): prior rxcui '8570' returns no record in RxNav (/REST/rxcui/8570/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null. cui and unii (532B59J990) remain valid.",
       "gsrs": {
         "substance_name": "POLYVINYL ALCOHOL, UNSPECIFIED",
         "substance_class": "mixture",
@@ -21404,7 +21414,9 @@
       ],
       "last_updated": "2025-12-04",
       "external_ids": {},
-      "cui": "C4042943",
+      "cui": null,
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C4042943 ('Fruit and Vegetable Juices' — a multi-compound combo concept). This is a natural-colorant class spanning many fruit/vegetable juice color sources; UMLS has no single concept. Null per null-CUI policy for class entries.",
       "functional_roles": [
         "colorant_natural"
       ]
