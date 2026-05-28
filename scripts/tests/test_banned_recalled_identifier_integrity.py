@@ -50,3 +50,16 @@ def test_banned_igf1_cui_is_canonical_substance(banned_recalled):
         "BANNED_IGF1.cui must be C0021665 (the IGF-1 protein substance), "
         "not C5674892 (primary IGF-1 deficiency, a disease state)."
     )
+
+
+def test_banned_dhea_cui_is_canonical_prasterone(banned_recalled):
+    """BANNED_DHEA must use C0011185 ('prasterone' — the UMLS preferred
+    name for Dehydroepiandrosterone, semantic types Steroid /
+    Pharmacologic Substance). C0011260 was not found in UMLS at all
+    (deprecated or never-issued CUI; live API returned no record on
+    2026-05-28). Caught by strict-mode unresolvable guard."""
+    entry = _find(banned_recalled, "BANNED_DHEA")
+    assert entry["cui"] == "C0011185", (
+        "BANNED_DHEA.cui must be C0011185 (prasterone / DHEA), not "
+        "C0011260 (which UMLS does not resolve to any concept)."
+    )
