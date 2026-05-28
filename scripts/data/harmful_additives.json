@@ -10811,7 +10811,8 @@
       "confidence": "high",
       "severity_level": "high",
       "cui": "C0330722",
-      "rxcui": "237929",
+      "rxcui": null,
+      "rxcui_note": "Wave 9.D.2 (2026-05-28): prior rxcui '237929' returns no record in RxNav (/REST/rxcui/237929/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null. cui (C0330722) and unii remain valid.",
       "gsrs": {
         "substance_name": "SENNA LEAF",
         "substance_class": "structurallyDiverse",

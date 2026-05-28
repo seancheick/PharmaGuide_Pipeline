@@ -46,3 +46,18 @@ def test_add_polysorbate_20_unii_is_canonical_gsrs_record(harmful_additives):
         "ADD_POLYSORBATE_20.external_ids.unii must be 7T1F30V5YH "
         "(GSRS-registered POLYSORBATE 20), not the deprecated 4R0MI3KBZF."
     )
+
+
+def test_add_senna_rxcui_cleared_to_null(harmful_additives):
+    """ADD_SENNA must not carry rxcui '237929' — that RxCUI returns no
+    record from RxNav (/REST/rxcui/237929/properties.json → 404 on
+    2026-05-28). Cleared to null with rxcui_note documenting the
+    deprecation. cui (C0330722) and unii (AK7JF626KX) remain valid and
+    untouched."""
+    entry = _find(harmful_additives, "ADD_SENNA")
+    assert entry.get("rxcui") is None, (
+        "ADD_SENNA.rxcui must be null (RxNav 404 on 237929)."
+    )
+    assert entry.get("rxcui_note"), (
+        "ADD_SENNA must have an rxcui_note explaining the deprecation."
+    )
