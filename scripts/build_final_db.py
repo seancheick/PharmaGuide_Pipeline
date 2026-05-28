@@ -53,7 +53,11 @@ from audit_evidence_utils import (
     derive_proprietary_blend_audit,
 )
 from inactive_ingredient_resolver import InactiveIngredientResolver
-from identity.safety import top_safety_flag as _canonical_top_safety_flag
+from identity.safety import (
+    normalize_safety_source,
+    safety_flag_matches_status,
+    top_safety_flag as _canonical_top_safety_flag,
+)
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
 # The import remains available for backward-compat callers but is unused.
@@ -534,7 +538,6 @@ def contaminant_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
 
 
 def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
-    wanted = {normalize_text(status) for status in statuses}
     matches: List[Dict] = []
     for src_key in ("activeIngredients", "inactiveIngredients"):
         for ing in safe_list(enriched.get(src_key)):
@@ -543,10 +546,10 @@ def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
             for flag in safe_list(ing.get("safety_flags")):
                 if not isinstance(flag, dict):
                     continue
-                source = safe_str(flag.get("source_db") or flag.get("matched_source"))
-                if source not in {"banned_recalled", "banned_recalled_ingredients"}:
+                source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+                if source != "banned_recalled_ingredients":
                     continue
-                if normalize_text(flag.get("status")) in wanted:
+                if safety_flag_matches_status(flag, statuses):
                     matches.append(flag)
     return matches
 
@@ -571,7 +574,6 @@ def _resolver_status_in(
         # Defensive fallback — never crash a build because the resolver
         # index couldn't load. Original contaminant_data path still runs.
         return False
-    target_set = {s.lower() for s in target_statuses}
     for src_key in ("activeIngredients", "inactiveIngredients"):
         for ing in safe_list(enriched.get(src_key)):
             if not isinstance(ing, dict):
@@ -579,11 +581,10 @@ def _resolver_status_in(
             for flag in safe_list(ing.get("safety_flags")):
                 if not isinstance(flag, dict):
                     continue
-                status = normalize_text(flag.get("status"))
-                source = safe_str(flag.get("source_db") or flag.get("matched_source"))
+                source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
                 if (
-                    status in target_set
-                    and source in {"banned_recalled", "banned_recalled_ingredients"}
+                    source == "banned_recalled_ingredients"
+                    and safety_flag_matches_status(flag, target_statuses)
                 ):
                     return True
             terms = _active_banned_recall_evidence_terms(
@@ -595,7 +596,7 @@ def _resolver_status_in(
             )
             for t in terms:
                 entry = index.get(t)
-                if entry and (entry.get("status") or "").strip().lower() in target_set:
+                if entry and safety_flag_matches_status(entry, target_statuses):
                     # Guard: bare "Chromium" on a supplement label is always
                     # Cr(III). Only flag HM_CHROMIUM_HEXAVALENT when the raw
                     # label text explicitly mentions hexavalent / Cr(VI).
