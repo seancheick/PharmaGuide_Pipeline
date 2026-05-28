@@ -1,0 +1,68 @@
+{
+  "canonical_id": "orange_essential_oil",
+  "verified_at": "2026-05-28T19:58:27.020514+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Orange Essential Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0254751",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0254751",
+          "name": "orange oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Food"
+          ],
+          "atom_count": 38,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1309230",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309230",
+          "name": "orange oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "AKN3KSD11B",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "AKN3KSD11B",
+          "gsrs_name": "ORANGE OIL, COLD PRESSED"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

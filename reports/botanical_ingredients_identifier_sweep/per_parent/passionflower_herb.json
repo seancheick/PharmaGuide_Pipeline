@@ -1,0 +1,65 @@
+{
+  "canonical_id": "passionflower_herb",
+  "verified_at": "2026-05-28T19:58:29.083737+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Passionflower Herb",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0030524",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_disease_or_syndrome",
+        "api_response": {
+          "cui": "C0030524",
+          "name": "Paratuberculosis",
+          "semantic_types": [
+            "Disease or Syndrome"
+          ],
+          "atom_count": 80,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0030524 resolves to 'Paratuberculosis' with semantic types ['Disease or Syndrome']. Disease/syndrome types ['Disease or Syndrome'] present, but IQM entry 'Passionflower Herb' is a substance."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "CLF5YFS11O",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "CLF5YFS11O",
+          "gsrs_name": "PASSIFLORA INCARNATA FLOWERING TOP"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

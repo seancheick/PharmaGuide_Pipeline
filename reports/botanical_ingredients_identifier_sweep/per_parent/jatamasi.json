@@ -1,0 +1,72 @@
+{
+  "canonical_id": "jatamasi",
+  "verified_at": "2026-05-28T19:58:14.208479+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Jatamasi",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1187331",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1187331",
+          "name": "Nardostachys jatamansi",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 7,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "FJ4AE60Q9V",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "FJ4AE60Q9V",
+          "gsrs_name": "Nardostachys jatamansi whole",
+          "names_sample": [
+            "Fedia grandiflora whole",
+            "Fedia jatamansi whole",
+            "NARDOSTACHYS CHINENSIS WHOLE",
+            "Nardostachys gracilis whole",
+            "Nardostachys grandiflora whole"
+          ]
+        },
+        "evidence": "UNII FJ4AE60Q9V resolves to GSRS substance 'Nardostachys jatamansi whole' with no token overlap with IQM 'Jatamasi'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "canonical_id": "wheat_germ",
+  "verified_at": "2026-05-28T19:58:47.838969+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Wheat Germ",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0043178",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "high",
+        "reason_code": "cui_not_found_in_umls",
+        "evidence": "UMLS /content/CUI/C0043178 returned no result. CUI may be deprecated, withdrawn, or never existed."
+      }
+    },
+    "rxcui": {
+      "stored": "314896",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "314896",
+          "name": "wheat germ preparation",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "YR3G369F5A",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "YR3G369F5A",
+          "gsrs_name": "WHEAT GERM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "canonical_id": "boswellia_carterii",
+  "verified_at": "2026-05-28T19:57:39.928294+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Boswellia carterii",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "ambiguous_authority",
+        "reason_code": "multiple_clean_umls_candidates_for_missing_cui",
+        "api_response": {
+          "candidates": [
+            {
+              "cui": "C0949991",
+              "name": "Boswellia sacra",
+              "semantic_types": [
+                "Plant"
+              ]
+            },
+            {
+              "cui": "C3256678",
+              "name": "frankincense extract",
+              "semantic_types": [
+                "Organic Chemical",
+                "Pharmacologic Substance"
+              ]
+            },
+            {
+              "cui": "C2608032",
+              "name": "Boswellia serrata",
+              "semantic_types": [
+                "Plant"
+              ]
+            }
+          ]
+        },
+        "notes": "Multiple UMLS concepts pass strict-mode guards (free base vs salt, L- vs DL-, etc.). Clinician must pick."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "R9XLF1R1WM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "R9XLF1R1WM",
+          "gsrs_name": "FRANKINCENSE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "canonical_id": "coleus_forskohlii_root",
+  "verified_at": "2026-05-28T19:57:49.914459+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Coleus Forskohlii Root",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949706",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949706",
+          "name": "Metastasis Suppressor Proteins",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 14,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949706 resolves to 'Metastasis Suppressor Proteins' with no name tokens overlapping IQM 'Coleus Forskohlii Root' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1309454",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309454",
+          "name": "Plectranthus barbatus root extract",
+          "tty": "IN",
+          "synonym": "Coleus barbatus root extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "V5741391RG",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "V5741391RG",
+          "gsrs_name": "COLEUS BARBATUS ROOT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

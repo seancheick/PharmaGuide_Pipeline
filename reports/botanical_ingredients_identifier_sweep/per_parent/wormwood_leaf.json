@@ -1,0 +1,71 @@
+{
+  "canonical_id": "wormwood_leaf",
+  "verified_at": "2026-05-28T19:59:30.551108+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Wormwood",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0003762",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0003762",
+          "name": "ARGINASE",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Enzyme"
+          ],
+          "atom_count": 62,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0003762 resolves to 'ARGINASE' with no name tokens overlapping IQM 'Wormwood' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1309324",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309324",
+          "name": "wormwood extract",
+          "tty": "IN",
+          "synonym": "Artemisia absinthium extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "F84709P2XV",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "F84709P2XV",
+          "gsrs_name": "WORMWOOD"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "canonical_id": "huito",
+  "verified_at": "2026-05-28T19:58:12.742590+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Huito",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1020875",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1020875",
+          "name": "Genipa americana",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "C22I013G6O",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "C22I013G6O",
+          "gsrs_name": "GENIPA AMERICANA WHOLE",
+          "names_sample": [
+            "GARDENIA BRASILIENSIS WHOLE",
+            "GARDENIA GENIPA WHOLE",
+            "GARDENIA HEXANDRA WHOLE",
+            "GARDENIA OBLONGIFOLIA WHOLE",
+            "GENIPA AMERICANA L."
+          ]
+        },
+        "evidence": "UNII C22I013G6O resolves to GSRS substance 'GENIPA AMERICANA WHOLE' with no token overlap with IQM 'Huito'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

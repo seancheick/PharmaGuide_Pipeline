@@ -1,0 +1,71 @@
+{
+  "canonical_id": "turmeric_root_powder",
+  "verified_at": "2026-05-28T19:58:44.842811+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Turmeric Root Powder",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0041070",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0041070",
+          "name": "Trinitrotoluene",
+          "semantic_types": [
+            "Organic Chemical",
+            "Hazardous or Poisonous Substance"
+          ],
+          "atom_count": 53,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0041070 resolves to 'Trinitrotoluene' with no name tokens overlapping IQM 'Turmeric Root Powder' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1114883",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1114883",
+          "name": "turmeric extract",
+          "tty": "IN",
+          "synonym": "Curcuma longa extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "856YO1Z64F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "856YO1Z64F",
+          "gsrs_name": "TURMERIC"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

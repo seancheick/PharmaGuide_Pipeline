@@ -1,0 +1,70 @@
+{
+  "canonical_id": "angelica_archangelica",
+  "verified_at": "2026-05-28T19:57:31.470215+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Angelica archangelica",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0331174",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0331174",
+          "name": "Crescentia",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 7,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0331174 resolves to 'Crescentia' with no name tokens overlapping IQM 'Angelica archangelica' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1309828",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309828",
+          "name": "Angelica archangelica root extract",
+          "tty": "IN",
+          "synonym": "Norwegian angelica root extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "DTN01M69SN",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "DTN01M69SN",
+          "gsrs_name": "ANGELICA ARCHANGELICA ROOT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "canonical_id": "poria_cocos",
+  "verified_at": "2026-05-28T19:58:33.628250+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Poria cocos",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949607",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949607",
+          "name": "Procollagen Type IX",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 7,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949607 resolves to 'Procollagen Type IX' with no name tokens overlapping IQM 'Poria cocos' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "XH37TWY5O4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "XH37TWY5O4",
+          "gsrs_name": "FU LING"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "avocado_fruit",
+  "verified_at": "2026-05-28T19:57:34.391412+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Avocado Fruit",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2722027",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2722027",
+          "name": "avocado allergenic extract",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Immunologic Factor"
+          ],
+          "atom_count": 6,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "895582",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "895582",
+          "name": "avocado allergenic extract",
+          "tty": "IN",
+          "synonym": "Persea gratissima allergenic extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "SDS87L369F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "SDS87L369F",
+          "gsrs_name": "AVOCADO"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

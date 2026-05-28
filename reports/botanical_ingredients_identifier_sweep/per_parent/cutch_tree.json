@@ -1,0 +1,70 @@
+{
+  "canonical_id": "cutch_tree",
+  "verified_at": "2026-05-28T19:57:53.036933+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Cutch Tree",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949533",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949533",
+          "name": "Australian bat lyssavirus",
+          "semantic_types": [
+            "Virus"
+          ],
+          "atom_count": 21,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949533 resolves to 'Australian bat lyssavirus' with no name tokens overlapping IQM 'Cutch Tree' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1650239",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1650239",
+          "name": "Acacia catechu whole extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TJ6XA84OQF",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TJ6XA84OQF",
+          "gsrs_name": "SENEGALIA CATECHU WHOLE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

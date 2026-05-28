@@ -1,0 +1,80 @@
+{
+  "canonical_id": "garbanzo_bean",
+  "verified_at": "2026-05-28T19:58:03.305016+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Garbanzo Bean",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "ambiguous_authority",
+        "reason_code": "multiple_clean_umls_candidates_for_missing_cui",
+        "api_response": {
+          "candidates": [
+            {
+              "cui": "C4276071",
+              "name": "garbanzo bean",
+              "semantic_types": [
+                "Organic Chemical"
+              ]
+            },
+            {
+              "cui": "C0950052",
+              "name": "Chickpea (dietary)",
+              "semantic_types": [
+                "Food"
+              ]
+            },
+            {
+              "cui": "C0950051",
+              "name": "Cicer arietinum",
+              "semantic_types": [
+                "Plant"
+              ]
+            }
+          ]
+        },
+        "notes": "Multiple UMLS concepts pass strict-mode guards (free base vs salt, L- vs DL-, etc.). Clinician must pick."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "N91637DNW9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "N91637DNW9",
+          "gsrs_name": "CHICKPEA"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

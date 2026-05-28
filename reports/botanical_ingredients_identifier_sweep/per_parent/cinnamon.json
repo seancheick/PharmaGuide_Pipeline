@@ -1,0 +1,68 @@
+{
+  "canonical_id": "cinnamon",
+  "verified_at": "2026-05-28T19:57:48.464272+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Cinnamon",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0939899",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0939899",
+          "name": "cinnamon preparation",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "285245",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "285245",
+          "name": "cinnamon preparation",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5S29HWU6QB",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "5S29HWU6QB",
+          "gsrs_name": "CINNAMON"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

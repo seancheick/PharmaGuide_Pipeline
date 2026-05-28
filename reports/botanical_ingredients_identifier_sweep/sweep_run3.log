@@ -1,0 +1,28 @@
+  [25/529] apple_fiber verified.
+  [50/529] betel_leaf verified.
+  [75/529] blueberry verified.
+  [100/529] caraway verified.
+  [125/529] chia_seed verified.
+  [150/529] coptis_rhizome verified.
+  [175/529] devils_claw_tuber verified.
+  [200/529] fenugreek_seed verified.
+  [225/529] globe_artichoke verified.
+  [250/529] hemp_protein verified.
+  [275/529] ivy verified.
+  [300/529] lantana_camara verified.
+  [325/529] mango verified.
+  [350/529] mung_bean verified.
+  [375/529] paeonia_lactiflora verified.
+  [400/529] polypodium_vulgare verified.
+  [425/529] rhubarb verified.
+  [450/529] sichuan_lovage verified.
+  [475/529] tea_tree verified.
+  [500/529] wheat_germ verified.
+  [525/529] yerba_mate_leaf verified.
+{
+  "parents_audited": 529,
+  "parents_total": 529,
+  "findings_count": 367,
+  "snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "duration_seconds": 135.49175095558167
+}

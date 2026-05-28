@@ -1,0 +1,70 @@
+{
+  "canonical_id": "boswellia_serrata_resin",
+  "verified_at": "2026-05-28T19:57:40.121795+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Boswellia Serrata Resin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1260643",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_branded_or_clinical_drug",
+        "api_response": {
+          "cui": "C1260643",
+          "name": "benzocaine / clove oil Topical Gel",
+          "semantic_types": [
+            "Clinical Drug"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C1260643 resolves to 'benzocaine / clove oil Topical Gel' with semantic types ['Clinical Drug']. Branded/clinical-drug types ['Clinical Drug'] present, but IQM entry 'Boswellia Serrata Resin' is a generic substance."
+      }
+    },
+    "rxcui": {
+      "stored": "485858",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "485858",
+          "name": "boswellia preparation",
+          "tty": "IN",
+          "synonym": "Boswellia serrata extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "4PW41QCO2M",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "4PW41QCO2M",
+          "gsrs_name": "INDIAN FRANKINCENSE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

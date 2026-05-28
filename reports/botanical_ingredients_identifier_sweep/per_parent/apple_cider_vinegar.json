@@ -1,0 +1,68 @@
+{
+  "canonical_id": "apple_cider_vinegar",
+  "verified_at": "2026-05-28T19:57:31.652598+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Apple Cider Vinegar",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1178459",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1178459",
+          "name": "apple cider vinegar",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "360262",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "360262",
+          "name": "apple cider vinegar",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "0UE22Q87VC",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "0UE22Q87VC",
+          "gsrs_name": "APPLE CIDER VINEGAR"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

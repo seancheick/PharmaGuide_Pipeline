@@ -1,0 +1,70 @@
+{
+  "canonical_id": "sichuan_lovage",
+  "verified_at": "2026-05-28T19:58:38.864187+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Sichuan Lovage",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949890",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949890",
+          "name": "Actinidiaceae",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 24,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949890 resolves to 'Actinidiaceae' with no name tokens overlapping IQM 'Sichuan Lovage' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1650611",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1650611",
+          "name": "Ligusticum sinense susp. chuaxiong whole extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "CAX256379F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "CAX256379F",
+          "gsrs_name": "LIGUSTICUM SINENSE SUBSP. CHUANXIONG WHOLE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "canonical_id": "toothed_clubmoss",
+  "verified_at": "2026-05-28T19:58:44.413842+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Toothed Clubmoss",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949851",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949851",
+          "name": "Tsuga",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 40,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949851 resolves to 'Tsuga' with no name tokens overlapping IQM 'Toothed Clubmoss' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1376501",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1376501",
+          "name": "Huperzia serrata extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TLA53E5A4T",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TLA53E5A4T",
+          "gsrs_name": "HUPERZIA SERRATA WHOLE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

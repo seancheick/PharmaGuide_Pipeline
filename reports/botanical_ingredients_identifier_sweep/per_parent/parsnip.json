@@ -1,0 +1,70 @@
+{
+  "canonical_id": "parsnip",
+  "verified_at": "2026-05-28T19:58:29.081976+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Parsnip",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0030667",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0030667",
+          "name": "Pathology, Clinical",
+          "semantic_types": [
+            "Biomedical Occupation or Discipline"
+          ],
+          "atom_count": 38,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0030667 resolves to 'Pathology, Clinical' with no name tokens overlapping IQM 'Parsnip' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1011027",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1011027",
+          "name": "parsnip allergenic extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "L2V28YP49S",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "L2V28YP49S",
+          "gsrs_name": "PARSNIP"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

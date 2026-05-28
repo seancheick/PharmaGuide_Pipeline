@@ -1,0 +1,72 @@
+{
+  "canonical_id": "sarsaparilla_honduran",
+  "verified_at": "2026-05-28T19:58:38.074066+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Sarsaparilla (Honduran)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3388298",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3388298",
+          "name": "Smilax officinalis",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 2,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "KDX23MP2GS",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "KDX23MP2GS",
+          "gsrs_name": "SMILAX OFFICINALIS WHOLE",
+          "names_sample": [
+            "SMILAX BARBILLANA WHOLE",
+            "SMILAX BERNHARDII WHOLE",
+            "SMILAX CHIRIQUENSIS WHOLE",
+            "SMILAX GILGIANA WHOLE",
+            "SMILAX OFFICINALIS KUNTH"
+          ]
+        },
+        "evidence": "UNII KDX23MP2GS resolves to GSRS substance 'SMILAX OFFICINALIS WHOLE' with no token overlap with IQM 'Sarsaparilla (Honduran)'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

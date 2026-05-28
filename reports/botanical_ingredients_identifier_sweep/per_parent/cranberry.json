@@ -1,0 +1,70 @@
+{
+  "canonical_id": "cranberry",
+  "verified_at": "2026-05-28T19:57:52.001537+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Cranberry",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0010074",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "resolved_to_disease_or_syndrome",
+        "api_response": {
+          "cui": "C0010074",
+          "name": "Coronary Vessel Anomalies",
+          "semantic_types": [
+            "Congenital Abnormality"
+          ],
+          "atom_count": 62,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0010074 resolves to 'Coronary Vessel Anomalies' with semantic types ['Congenital Abnormality']. Disease/syndrome types ['Congenital Abnormality'] present, but IQM entry 'Cranberry' is a substance."
+      }
+    },
+    "rxcui": {
+      "stored": "125933",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "125933",
+          "name": "cranberry preparation",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "0MVO31Q3QS",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "0MVO31Q3QS",
+          "gsrs_name": "CRANBERRY"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

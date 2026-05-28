@@ -1,0 +1,71 @@
+{
+  "canonical_id": "buckthorn_bark",
+  "verified_at": "2026-05-28T19:57:41.122033+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Buckthorn Bark",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949619",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949619",
+          "name": "Collagen Type VI, alpha3 Subunit",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 12,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949619 resolves to 'Collagen Type VI, alpha3 Subunit' with no name tokens overlapping IQM 'Buckthorn Bark' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1310063",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1310063",
+          "name": "Frangula alnus bark extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "KD27950XHY",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "KD27950XHY",
+          "gsrs_name": "RHAMNUS CATHARTICA BARK"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

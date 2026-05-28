@@ -1,0 +1,63 @@
+{
+  "canonical_id": "lion_s_mane",
+  "verified_at": "2026-05-28T19:58:17.872079+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Lion's Mane",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1001731",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1001731",
+          "name": "Cyanea capillata",
+          "semantic_types": [
+            "Eukaryote"
+          ],
+          "atom_count": 4,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Lion's Mane', but UMLS exact-search for the IQM name returns the same CUI (C1001731). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Y62T8P9AAP",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Y62T8P9AAP",
+          "gsrs_name": "Hericium erinaceus whole"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

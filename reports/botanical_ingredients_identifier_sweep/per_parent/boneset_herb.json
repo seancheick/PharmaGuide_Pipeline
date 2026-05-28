@@ -1,0 +1,71 @@
+{
+  "canonical_id": "boneset_herb",
+  "verified_at": "2026-05-28T19:57:39.925504+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Boneset Herb",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949776",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949776",
+          "name": "Amino Acid Transport System ASC",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 31,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949776 resolves to 'Amino Acid Transport System ASC' with no name tokens overlapping IQM 'Boneset Herb' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1309783",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309783",
+          "name": "Eupatorium perfoliatum flowering top extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "1W0775VX6E",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "1W0775VX6E",
+          "gsrs_name": "EUPATORIUM PERFOLIATUM FLOWERING TOP"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

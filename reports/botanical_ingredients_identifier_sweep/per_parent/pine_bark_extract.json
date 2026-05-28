@@ -1,0 +1,68 @@
+{
+  "canonical_id": "pine_bark_extract",
+  "verified_at": "2026-05-28T19:58:31.503655+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Pine Bark Extract",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3255957",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3255957",
+          "name": "maritime pine extract",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 20,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1368708",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1368708",
+          "name": "maritime pine extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "50JZ5Z98QY",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "50JZ5Z98QY",
+          "gsrs_name": "MARITIME PINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

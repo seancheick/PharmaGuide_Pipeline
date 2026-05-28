@@ -1,0 +1,70 @@
+{
+  "canonical_id": "butchers_broom_root",
+  "verified_at": "2026-05-28T19:57:41.897202+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Butcher's Broom Root",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0330653",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0330653",
+          "name": "Malus domestica",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 29,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0330653 resolves to 'Malus domestica' with no name tokens overlapping IQM 'Butcher's Broom Root' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1309509",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309509",
+          "name": "Ruscus aculeatus root extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "ZW12V95I1Q",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "ZW12V95I1Q",
+          "gsrs_name": "RUSCUS ACULEATUS ROOT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

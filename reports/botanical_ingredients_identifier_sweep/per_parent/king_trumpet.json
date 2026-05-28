@@ -1,0 +1,76 @@
+{
+  "canonical_id": "king_trumpet",
+  "verified_at": "2026-05-28T19:58:15.027185+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "King Trumpet Mushroom",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "missing_cui_has_clean_candidate",
+        "proposed_value": "C5981114",
+        "proposed_resolution": {
+          "cui": "C5981114",
+          "name": "Pleurotus eryngii antigen",
+          "semantic_types": [
+            "Immunologic Factor"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        },
+        "evidence": "UMLS exact search yielded C5981114 ('Pleurotus eryngii antigen') passing all strict-mode guards."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2WGH02ZJ1G",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "2WGH02ZJ1G",
+          "gsrs_name": "PLEUROTUS ERYNGII WHOLE",
+          "names_sample": [
+            "AGARICUS ERYNGII WHOLE",
+            "AGARICUS FERULAE WHOLE",
+            "DENDROSARCUS ERYNGII WHOLE",
+            "PLEUROTUS ERYNGII (DC.) QUL., 1872",
+            "PLEUROTUS ERYNGII WHOLE"
+          ]
+        },
+        "evidence": "UNII 2WGH02ZJ1G resolves to GSRS substance 'PLEUROTUS ERYNGII WHOLE' with no token overlap with IQM 'King Trumpet Mushroom'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

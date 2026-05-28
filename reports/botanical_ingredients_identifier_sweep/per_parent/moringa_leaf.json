@@ -1,0 +1,65 @@
+{
+  "canonical_id": "moringa_leaf",
+  "verified_at": "2026-05-28T19:58:21.069262+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Moringa Leaf",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0330514",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0330514",
+          "name": "Erysimum cheiranthoides",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0330514 resolves to 'Erysimum cheiranthoides' with no name tokens overlapping IQM 'Moringa Leaf' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "4WET1AWO9B",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "4WET1AWO9B",
+          "gsrs_name": "MORINGA OLEIFERA LEAF"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

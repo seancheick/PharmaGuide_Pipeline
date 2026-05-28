@@ -1,0 +1,68 @@
+{
+  "canonical_id": "fragrant_angelica_root",
+  "verified_at": "2026-05-28T19:58:01.887588+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Fragrant Angelica Root",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2949322",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2949322",
+          "name": "Angelica dahurica root extract",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 21,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1306167",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1306167",
+          "name": "Angelica dahurica root extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "1V63N2S972",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "1V63N2S972",
+          "gsrs_name": "ANGELICA DAHURICA ROOT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

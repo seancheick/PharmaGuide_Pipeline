@@ -1,0 +1,66 @@
+{
+  "canonical_id": "juniper",
+  "verified_at": "2026-05-28T19:58:14.615657+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Juniper",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0022563",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0022563",
+          "name": "Keratan Sulfate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 49,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0022563 resolves to 'Keratan Sulfate' with no name tokens overlapping IQM 'Juniper' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "O84B5194RL",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "O84B5194RL",
+          "gsrs_name": "JUNIPER BERRY"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

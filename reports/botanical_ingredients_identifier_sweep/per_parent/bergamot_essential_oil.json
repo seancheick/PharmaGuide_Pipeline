@@ -1,0 +1,63 @@
+{
+  "canonical_id": "bergamot_essential_oil",
+  "verified_at": "2026-05-28T19:57:35.393552+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Bergamot Essential Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0105754",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0105754",
+          "name": "bergamot oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 44,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "39W1PKE3JI",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "39W1PKE3JI",
+          "gsrs_name": "BERGAMOT OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

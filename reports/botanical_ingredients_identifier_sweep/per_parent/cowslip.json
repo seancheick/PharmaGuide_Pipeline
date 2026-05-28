@@ -1,0 +1,71 @@
+{
+  "canonical_id": "cowslip",
+  "verified_at": "2026-05-28T19:57:51.589355+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Cowslip",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949616",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949616",
+          "name": "Collagen Type IV, alpha1 Subunit",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 13,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949616 resolves to 'Collagen Type IV, alpha1 Subunit' with no name tokens overlapping IQM 'Cowslip' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1311310",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311310",
+          "name": "Primula veris extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "W6LFQ57E4M",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "W6LFQ57E4M",
+          "gsrs_name": "PRIMULA VERIS WHOLE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

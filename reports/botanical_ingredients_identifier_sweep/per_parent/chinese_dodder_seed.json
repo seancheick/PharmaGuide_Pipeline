@@ -1,0 +1,70 @@
+{
+  "canonical_id": "chinese_dodder_seed",
+  "verified_at": "2026-05-28T19:57:48.258507+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Chinese Dodder Seed",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0949729",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0949729",
+          "name": "Oligosaccharides, Branched-Chain",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 25,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0949729 resolves to 'Oligosaccharides, Branched-Chain' with no name tokens overlapping IQM 'Chinese Dodder Seed' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": "1791062",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1791062",
+          "name": "Cuscuta australis seed extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "E6AS89L2F5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "E6AS89L2F5",
+          "gsrs_name": "CUSCUTA AUSTRALIS SEED"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

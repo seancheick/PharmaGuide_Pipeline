@@ -1,0 +1,67 @@
+{
+  "canonical_id": "akkalkara_root",
+  "verified_at": "2026-05-28T19:57:30.646835+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Akkalkara Root",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1669961",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1669961",
+          "name": "Anacyclus pyrethrum",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1309397",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309397",
+          "name": "Anacyclus pyrethrum root extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "X820IRW34J",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "X820IRW34J",
+          "gsrs_name": "ANACYCLUS PYRETHRUM ROOT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "canonical_id": "shankhpushpi",
+  "verified_at": "2026-05-28T19:58:38.481329+00:00",
+  "iqm_snapshot_sha256": "1a04944ee1a9c52d499a7297190cfa27d7cd14f4d1efd308cd475e8cd770ca46",
+  "standard_name": "Shankhpushpi",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3660905",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3660905",
+          "name": "shankhpushpi",
+          "semantic_types": [
+            "Biologically Active Substance"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "232OMT637Q",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "232OMT637Q",
+          "gsrs_name": "CONVOLVULUS PROSTRATUS WHOLE",
+          "names_sample": [
+            "CONVOLVULUS PLURICAULIS WHOLE",
+            "CONVOLVULUS PROSTRATUS FORSSK.",
+            "CONVOLVULUS PROSTRATUS WHOLE",
+            "Convolvulus prostratus [WHO-DD]",
+            "shankhapushpi [HOC]"
+          ]
+        },
+        "evidence": "UNII 232OMT637Q resolves to GSRS substance 'CONVOLVULUS PROSTRATUS WHOLE' with no token overlap with IQM 'Shankhpushpi'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}
