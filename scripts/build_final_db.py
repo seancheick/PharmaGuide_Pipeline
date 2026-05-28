@@ -53,6 +53,7 @@ from audit_evidence_utils import (
     derive_proprietary_blend_audit,
 )
 from inactive_ingredient_resolver import InactiveIngredientResolver
+from identity.safety import top_safety_flag as _canonical_top_safety_flag
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
 # The import remains available for backward-compat callers but is unused.
@@ -646,23 +647,8 @@ def collect_match_terms(*values: Any) -> list[str]:
     return terms
 
 
-_SAFETY_FLAG_STATUS_PRIORITY = {
-    "banned": 0,
-    "recalled": 1,
-    "high_risk": 2,
-    "caution": 3,
-    "watchlist": 4,
-}
-
-
 def _top_safety_flag(flags: List[Dict]) -> Optional[Dict]:
-    valid = [flag for flag in safe_list(flags) if isinstance(flag, dict)]
-    if not valid:
-        return None
-    return sorted(
-        valid,
-        key=lambda f: _SAFETY_FLAG_STATUS_PRIORITY.get(normalize_text(f.get("status")), 99),
-    )[0]
+    return _canonical_top_safety_flag(safe_list(flags))
 
 
 def _safety_flags_from_contract(contract: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -4091,6 +4077,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "total_fat_g": safe_float(ns.get("total_fat_g")),
         "protein_g": safe_float(ns.get("protein_g")),
         "dietary_fiber_g": safe_float(ns.get("dietary_fiber_g")),
+        "total_sugars_g": safe_float(ns.get("total_sugars_g")),
     }
 
     # v1.3.2: Unmapped actives — transparency panel ("X ingredients could not be mapped")

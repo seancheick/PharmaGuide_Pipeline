@@ -130,6 +130,7 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
+from identity.safety import safety_flag_from_banned_match
 
 # Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
 _CLEANER_MATCH_METHOD_MAP = {
@@ -8687,6 +8688,13 @@ class SupplementEnricherV3:
 
                     derived_severity = self._derive_banned_severity(banned_item)
 
+                    safety_flag = safety_flag_from_banned_match(
+                        banned_item,
+                        match_type=match_type,
+                        matched_variant=matched_variant,
+                        evidence_text=candidate_ing_name,
+                    ).to_dict()
+
                     found.append({
                         "ingredient": candidate_ing_name,
                         "banned_name": banned_name,
@@ -8699,6 +8707,7 @@ class SupplementEnricherV3:
                         "confidence": confidence_map.get(match_type, 0.5),
                         "match_method": match_method,
                         "matched_variant": matched_variant,
+                        "safety_flag": safety_flag,
                         "allowlist_id": allowlist_id,
                         "allowlist_version": allowlist_version if allowlist_id else None,
                         "entity_type": entity_type,
@@ -8722,7 +8731,12 @@ class SupplementEnricherV3:
 
         return {
             "found": len(found) > 0,
-            "substances": found
+            "substances": found,
+            "safety_flags": [
+                s["safety_flag"]
+                for s in found
+                if isinstance(s, dict) and isinstance(s.get("safety_flag"), dict)
+            ],
         }
 
     def _has_explicit_hexavalent_chromium_evidence(self, *values: Any) -> bool:
@@ -13017,6 +13031,7 @@ class SupplementEnricherV3:
             "total_fat_g": _amount("totalFat"),
             "protein_g": _amount("protein"),
             "dietary_fiber_g": _amount("dietaryFiber"),
+            "total_sugars_g": _amount("sugars"),
         }
 
     def _collect_serving_basis_data(self, product: Dict) -> Dict:
