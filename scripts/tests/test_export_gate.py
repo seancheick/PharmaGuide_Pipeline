@@ -359,6 +359,37 @@ class TestSafetyCategoryRouting:
         assert row["has_recalled_ingredient"] == (1 if expect_recalled else 0)
         assert row["blocking_reason"] == expect_blocking
 
+    def test_canonical_contaminant_safety_flags_emit_warnings(self):
+        e = _base_enriched()
+        e["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [],
+            "safety_flags": [{
+                "entry_id": "BANNED_TEST",
+                "source_db": "banned_recalled_ingredients",
+                "status": "banned",
+                "severity": "critical",
+                "match_type": "exact",
+                "matched_variant": "Test Substance",
+                "evidence_text": "Test Substance",
+                "confidence": "high",
+                "safety_warning_one_liner": "Do not use Test Substance.",
+                "safety_warning": "Test Substance is banned and should not be used.",
+            }],
+        }
+        s = _base_scored(verdict="BLOCKED")
+
+        assert "Banned substance: Test Substance" in build_top_warnings(e)
+
+        blob = build_detail_blob(e, s)
+        warnings = [
+            w for w in blob["warnings"]
+            if w.get("matched_rule_id") == "BANNED_TEST"
+        ]
+        assert warnings
+        assert warnings[0]["type"] == "banned_substance"
+        assert warnings[0]["source"] == "banned_recalled_ingredients"
+
     def test_watchlist_never_blocks(self):
         e = _base_enriched()
         e["contaminant_data"]["banned_substances"]["substances"] = [

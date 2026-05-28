@@ -581,6 +581,34 @@ def safety_flag_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
     return matches
 
 
+def _safety_flag_display_name(flag: Dict[str, Any]) -> str:
+    return safe_str(
+        flag.get("matched_variant")
+        or flag.get("evidence_text")
+        or flag.get("entry_id")
+        or flag.get("rule_id")
+        or "Unknown ingredient"
+    )
+
+
+def _banned_warning_type_for_status(status: str) -> str:
+    return {
+        "banned": "banned_substance",
+        "recalled": "recalled_ingredient",
+        "high_risk": "high_risk_ingredient",
+        "watchlist": "watchlist_substance",
+    }.get(status, "safety")
+
+
+def _banned_warning_title_prefix_for_status(status: str) -> str:
+    return {
+        "banned": "Banned substance",
+        "recalled": "Recalled ingredient",
+        "high_risk": "High-risk ingredient",
+        "watchlist": "Watchlist ingredient",
+    }.get(status, "Safety issue")
+
+
 def _resolver_status_in(
     enriched: Dict, target_statuses: tuple,
 ) -> bool:
@@ -2761,30 +2789,54 @@ def apply_sqlite_build_pragmas(conn: sqlite3.Connection) -> None:
 def build_top_warnings(enriched: Dict) -> List[str]:
     """Build prioritized warning list from enriched product data."""
     raw_warnings = []
+    warning_messages = set()
+
+    def add_warning(kind: str, severity: str, message: str) -> None:
+        if not message or message in warning_messages:
+            return
+        warning_messages.add(message)
+        raw_warnings.append((kind, severity, message))
 
     # Banned substances
     for sub in contaminant_matches(enriched):
         status = safe_str(sub.get("status")).lower()
         name = safe_str(sub.get("ingredient") or sub.get("banned_name") or sub.get("name"))
         if status == "banned":
-            raw_warnings.append(("banned_substance", "critical", f"Banned substance: {name}"))
+            add_warning("banned_substance", "critical", f"Banned substance: {name}")
         elif status == "recalled":
-            raw_warnings.append(("recalled_ingredient", "high", f"Recalled ingredient: {name}"))
+            add_warning("recalled_ingredient", "high", f"Recalled ingredient: {name}")
         elif status == "high_risk":
-            raw_warnings.append(("banned_substance", "high", f"High-risk ingredient: {name}"))
+            add_warning("banned_substance", "high", f"High-risk ingredient: {name}")
         elif status == "watchlist":
-            raw_warnings.append(("watchlist_substance", safe_str(sub.get("severity_level"), "moderate"),
-                                 f"Watchlist ingredient: {name}"))
+            add_warning(
+                "watchlist_substance",
+                safe_str(sub.get("severity_level"), "moderate"),
+                f"Watchlist ingredient: {name}",
+            )
+
+    for flag in contaminant_safety_flags(enriched):
+        source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+        if source != "banned_recalled_ingredients":
+            continue
+        status = safe_str(flag.get("status")).lower()
+        name = _safety_flag_display_name(flag)
+        warning_type = _banned_warning_type_for_status(status)
+        title_prefix = _banned_warning_title_prefix_for_status(status)
+        severity = safe_str(
+            flag.get("severity"),
+            "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
+        )
+        add_warning(warning_type, severity, f"{title_prefix}: {name}")
 
     # Allergens
     for a in safe_list(enriched.get("allergen_hits")):
         if not isinstance(a, dict):
             continue
-        raw_warnings.append((
+        add_warning(
             "allergen",
             safe_str(a.get("severity_level"), "moderate"),
-            f"Allergen: {safe_str(a.get('allergen_name'))} ({safe_str(a.get('presence_type'), 'contains')})"
-        ))
+            f"Allergen: {safe_str(a.get('allergen_name'))} ({safe_str(a.get('presence_type'), 'contains')})",
+        )
 
     # Harmful additives
     for h in safe_list(enriched.get("harmful_additives")):
@@ -2792,7 +2844,7 @@ def build_top_warnings(enriched: Dict) -> List[str]:
             continue
         sev = safe_str(h.get("severity_level"), "moderate")
         name = safe_str(h.get("additive_name") or h.get("ingredient"))
-        raw_warnings.append(("harmful_additive", sev, f"{sev.title()}-risk additive: {name}"))
+        add_warning("harmful_additive", sev, f"{sev.title()}-risk additive: {name}")
 
     # Interaction alerts
     for alert in safe_list(safe_dict(enriched.get("interaction_profile")).get("ingredient_alerts")):
@@ -2806,7 +2858,7 @@ def build_top_warnings(enriched: Dict) -> List[str]:
             cond = safe_str(ch.get("condition_id"))
             if sev in ("contraindicated", "avoid", "critical", "high"):
                 warning_type = safe_str(ch.get("warning_type"), "interaction")
-                raw_warnings.append((warning_type, sev, f"Interaction: {ing_name} / {cond}"))
+                add_warning(warning_type, sev, f"Interaction: {ing_name} / {cond}")
 
     # Dietary sensitivity
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
@@ -2814,32 +2866,32 @@ def build_top_warnings(enriched: Dict) -> List[str]:
     for warning in dietary_warnings:
         if not isinstance(warning, dict):
             continue
-        raw_warnings.append((
+        add_warning(
             "dietary",
             safe_str(warning.get("severity"), "informational"),
             safe_str(warning.get("message")),
-        ))
+        )
     if not dietary_warnings:
         sugar = safe_dict(ds.get("sugar"))
         sodium = safe_dict(ds.get("sodium"))
         if sugar.get("level") in ("moderate", "high"):
-            raw_warnings.append((
+            add_warning(
                 "dietary", "informational",
                 f"Sugar: {sugar.get('amount_g', 0)}g ({safe_str(sugar.get('level_display'))})"
-            ))
+            )
         if sodium.get("level") in ("moderate", "high"):
-            raw_warnings.append((
+            add_warning(
                 "dietary", "info",
                 f"Sodium: {sodium.get('amount_mg', 0)}mg ({safe_str(sodium.get('level_display'))})"
-            ))
+            )
 
     # Product status
     product_status = safe_str(enriched.get("status")).lower()
     if product_status == "discontinued":
         disc_date = safe_str(enriched.get("discontinuedDate"))[:10]
-        raw_warnings.append(("status", "info", f"Discontinued ({disc_date})"))
+        add_warning("status", "info", f"Discontinued ({disc_date})")
     elif product_status == "off_market":
-        raw_warnings.append(("status", "info", "Off market"))
+        add_warning("status", "info", "Off market")
 
     # Sort by priority
     raw_warnings.sort(key=lambda w: (
@@ -3351,6 +3403,32 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "ban_context": ban_ctx or None,
             "safety_warning": sub.get("safety_warning"),
             "safety_warning_one_liner": sub.get("safety_warning_one_liner"),
+            "display_mode_default": dm_default,
+        })
+
+    for flag in contaminant_safety_flags(enriched):
+        source = normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+        if source != "banned_recalled_ingredients":
+            continue
+        status = normalize_text(flag.get("status"))
+        name = _safety_flag_display_name(flag)
+        warning_type = _banned_warning_type_for_status(status)
+        title_prefix = _banned_warning_title_prefix_for_status(status)
+        severity = safe_str(
+            flag.get("severity"),
+            "critical" if status == "banned" else "high" if status == "recalled" else "moderate",
+        )
+        dm_default = "critical" if status in ("banned", "recalled", "high_risk") else "informational"
+        warnings.append({
+            "type": warning_type,
+            "severity": severity,
+            "title": f"{title_prefix}: {name}",
+            "detail": safe_str(flag.get("evidence_text")),
+            "source": "banned_recalled_ingredients",
+            "matched_rule_id": safe_str(flag.get("entry_id") or flag.get("rule_id")) or None,
+            "ingredient_name": name,
+            "safety_warning": flag.get("safety_warning"),
+            "safety_warning_one_liner": flag.get("safety_warning_one_liner"),
             "display_mode_default": dm_default,
         })
 
