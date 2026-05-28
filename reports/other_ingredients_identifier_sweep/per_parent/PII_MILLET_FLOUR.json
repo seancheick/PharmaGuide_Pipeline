@@ -1,0 +1,67 @@
+{
+  "canonical_id": "PII_MILLET_FLOUR",
+  "verified_at": "2026-05-28T18:47:00.861249+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Millet Flour",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0458978",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0458978",
+          "name": "Millet flour",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 5,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "899770",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "899770",
+          "name": "millet seed allergenic extract",
+          "tty": "IN",
+          "synonym": "Panicum miliaceum allergenic extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TJR6B3R47P",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TJR6B3R47P",
+          "gsrs_name": "MILLET"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

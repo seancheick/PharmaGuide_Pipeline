@@ -1,0 +1,75 @@
+{
+  "canonical_id": "PII_CALCIUM_CARBONATE",
+  "verified_at": "2026-05-28T18:42:58.776313+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Calcium Carbonate (as filler)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0006681",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0006681",
+          "name": "calcium carbonate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 93,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "349908",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "349908",
+          "name": "calcium carbonate, precipitated",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "H0G9379FGK",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "H0G9379FGK",
+          "gsrs_name": "Calcium Carbonate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 10112,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 10112,
+          "iupac": "calcium carbonate",
+          "inchi_key": "VTYYLEPIZMXCLO-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "471-34-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "471-34-1",
+          "resolved_cid": 10112
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

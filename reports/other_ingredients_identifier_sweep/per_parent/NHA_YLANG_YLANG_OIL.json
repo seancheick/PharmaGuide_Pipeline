@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NHA_YLANG_YLANG_OIL",
+  "verified_at": "2026-05-28T18:37:52.590956+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Ylang Ylang Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0439966",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0439966",
+          "name": "Cananga oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 34,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1309214",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309214",
+          "name": "Cananga oil",
+          "tty": "IN",
+          "synonym": "ylang-ylang oil"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "8YOY78GNNX",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "8YOY78GNNX",
+          "gsrs_name": "YLANG-YLANG OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

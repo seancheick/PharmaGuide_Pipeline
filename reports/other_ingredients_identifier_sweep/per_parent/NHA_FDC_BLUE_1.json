@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NHA_FDC_BLUE_1",
+  "verified_at": "2026-05-28T18:26:11.598277+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "FD&C Blue #1",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0772270",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0772270",
+          "name": "brilliant blue FCF",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 59,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1310605",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1310605",
+          "name": "brilliant blue FCF",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "H3R47K3TBD",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "H3R47K3TBD",
+          "gsrs_name": "FD&C BLUE NO. 1"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

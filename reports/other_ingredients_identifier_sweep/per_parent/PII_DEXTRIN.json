@@ -1,0 +1,80 @@
+{
+  "canonical_id": "PII_DEXTRIN",
+  "verified_at": "2026-05-28T18:44:30.047363+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Dextrin (unspecified source)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0054527",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0054527",
+          "name": "dextrin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "G263MI44RU",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "G263MI44RU",
+          "gsrs_name": "DEXTRATES",
+          "names_sample": [
+            "DEXTRATES",
+            "DEXTRATES [II]",
+            "DEXTRATES [MART.]",
+            "DEXTRATES [USAN]",
+            "EMDEX"
+          ]
+        },
+        "evidence": "UNII G263MI44RU resolves to GSRS substance 'DEXTRATES' with no token overlap with IQM 'Dextrin (unspecified source)'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 62698,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 62698,
+          "iupac": "(3R,4S,5S,6R)-2-[(2R,3S,4R,5R)-4,5-dihydroxy-2-(hydroxymethyl)-6-[(2R,3S,4R,5R,6S)-4,5,6-trihydroxy-2-(hydroxymethyl)oxan-3-yl]oxyoxan-3-yl]oxy-6-(hydroxymethyl)oxane-3,4,5-triol",
+          "inchi_key": "FYGDTMLNYKFZSV-MRCIVHHJSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9004-53-9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "9004-53-9",
+          "resolved_cid": 62698
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

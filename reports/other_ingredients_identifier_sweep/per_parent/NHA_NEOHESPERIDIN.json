@@ -1,0 +1,76 @@
+{
+  "canonical_id": "NHA_NEOHESPERIDIN",
+  "verified_at": "2026-05-28T18:30:12.731899+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Neohesperidin Dihydrochalcone",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0068517",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0068517",
+          "name": "neohesperidin dihydrochalcone",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "H5W525SX7Q",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "H5W525SX7Q",
+          "gsrs_cas_codes": [
+            "1083-30-3"
+          ],
+          "cas_stored": "20702-77-6"
+        },
+        "evidence": "IQM stores CAS=20702-77-6 but UNII H5W525SX7Q's GSRS record lists CAS codes ['1083-30-3']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 30231,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 30231,
+          "iupac": "1-[4-[(2S,3R,4S,5S,6R)-4,5-dihydroxy-6-(hydroxymethyl)-3-[(2S,3R,4R,5R,6S)-3,4,5-trihydroxy-6-methyloxan-2-yl]oxyoxan-2-yl]oxy-2,6-dihydroxyphenyl]-3-(3-hydroxy-4-methoxyphenyl)propan-1-one",
+          "inchi_key": "ITVGXXMINPYUHD-CUVHLRMHSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "20702-77-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "20702-77-6",
+          "resolved_cid": 30231
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "OI_TRIACYLGLYCEROL",
+  "verified_at": "2026-05-28T18:41:32.027804+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Triacylglycerol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0041004",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0041004",
+          "name": "Triglycerides",
+          "semantic_types": [
+            "Organic Chemical",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 72,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Triacylglycerol', but UMLS exact-search for the IQM name returns the same CUI (C0041004). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 11146,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 11146,
+          "iupac": "2,3-di(octadecanoyloxy)propyl octadecanoate",
+          "inchi_key": "DCXXMTOCNZCJGO-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "555-43-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "555-43-1",
+          "resolved_cid": 11146
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

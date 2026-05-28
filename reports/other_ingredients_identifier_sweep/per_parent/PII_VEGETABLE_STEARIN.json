@@ -1,0 +1,60 @@
+{
+  "canonical_id": "PII_VEGETABLE_STEARIN",
+  "verified_at": "2026-05-28T18:49:59.884980+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Vegetable Stearin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5449463",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C5449463",
+          "name": "Vegetable Stearin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

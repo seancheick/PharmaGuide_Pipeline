@@ -1,0 +1,67 @@
+{
+  "canonical_id": "PII_CHIA_SEED_OIL",
+  "verified_at": "2026-05-28T18:43:49.475825+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Chia Seed Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2746972",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2746972",
+          "name": "chia seed oil",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 14,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "968631",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "968631",
+          "name": "chia seed oil",
+          "tty": "IN",
+          "synonym": "Salvia hispanica seed oil"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "MC2LH51BO7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "MC2LH51BO7",
+          "gsrs_name": "CHIA SEED OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "canonical_id": "NHA_SODIUM_THIOSULFATE",
+  "verified_at": "2026-05-28T18:35:24.170363+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Thiosulfate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074774",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074774",
+          "name": "sodium thiosulfate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 67,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "36726",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "36726",
+          "name": "sodium thiosulfate",
+          "tty": "PIN",
+          "synonym": "thiosulfuric acid, disodium salt"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "HX1032V43M",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "HX1032V43M",
+          "gsrs_cas_codes": [
+            "10102-17-7"
+          ],
+          "cas_stored": "7772-98-7"
+        },
+        "evidence": "IQM stores CAS=7772-98-7 but UNII HX1032V43M's GSRS record lists CAS codes ['10102-17-7']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 24477,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 24477,
+          "iupac": "disodium;dioxido-oxo-sulfanylidene-lambda6-sulfane",
+          "inchi_key": "AKHNMLFCWUSKQB-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7772-98-7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7772-98-7",
+          "resolved_cid": 24477
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

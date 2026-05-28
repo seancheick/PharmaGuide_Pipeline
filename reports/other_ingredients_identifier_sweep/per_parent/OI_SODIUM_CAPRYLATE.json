@@ -1,0 +1,75 @@
+{
+  "canonical_id": "OI_SODIUM_CAPRYLATE",
+  "verified_at": "2026-05-28T18:41:19.515893+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Caprylate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0142816",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0142816",
+          "name": "sodium caprylate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 19,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1311123",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311123",
+          "name": "sodium caprylate",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "9XTM81VK2B",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "9XTM81VK2B",
+          "gsrs_name": "Sodium Caprylate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 23664772,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 23664772,
+          "iupac": "sodium octanoate",
+          "inchi_key": "BYKRNSHANADUFY-UHFFFAOYSA-M"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1984-06-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1984-06-1",
+          "resolved_cid": 23664772
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

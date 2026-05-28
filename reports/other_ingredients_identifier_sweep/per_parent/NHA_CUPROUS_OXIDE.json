@@ -1,0 +1,80 @@
+{
+  "canonical_id": "NHA_CUPROUS_OXIDE",
+  "verified_at": "2026-05-28T18:25:05.824093+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Cuprous Oxide",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0056603",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0056603",
+          "name": "cuprous oxide",
+          "semantic_types": [
+            "Hazardous or Poisonous Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 28,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "21842",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "21842",
+          "name": "cuprous oxide",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "T8BEA5064F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "T8BEA5064F",
+          "gsrs_name": "Cuprous oxide"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 10313194,
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_cid_disagreement",
+        "api_response": {
+          "cid": 10313194,
+          "cas_stored": "1317-39-1",
+          "cas_in_pubchem": [
+            "1308-76-5"
+          ]
+        },
+        "evidence": "IQM stores CAS=1317-39-1 but PubChem CID 10313194's synonyms list CAS=['1308-76-5']."
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1317-39-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1317-39-1",
+          "resolved_cid": 18346908
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

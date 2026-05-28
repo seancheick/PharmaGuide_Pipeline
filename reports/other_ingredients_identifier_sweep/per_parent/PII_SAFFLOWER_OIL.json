@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_SAFFLOWER_OIL",
+  "verified_at": "2026-05-28T18:48:21.845440+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Safflower Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0036048",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0036048",
+          "name": "safflower oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Food"
+          ],
+          "atom_count": 70,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "9515",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "9515",
+          "name": "safflower oil",
+          "tty": "IN",
+          "synonym": "Carthamus tinctorius oil"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "65UEH262IS",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "65UEH262IS",
+          "gsrs_name": "SAFFLOWER OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

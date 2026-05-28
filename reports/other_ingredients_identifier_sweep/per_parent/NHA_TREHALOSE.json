@@ -1,0 +1,76 @@
+{
+  "canonical_id": "NHA_TREHALOSE",
+  "verified_at": "2026-05-28T18:37:02.110163+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Trehalose",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0040815",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0040815",
+          "name": "trehalose",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 31,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1311373",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311373",
+          "name": "trehalose",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "B8WCK70T7I",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "B8WCK70T7I",
+          "gsrs_name": "TREHALOSE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 7427,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 7427,
+          "iupac": "(2R,3S,4S,5R,6R)-2-(hydroxymethyl)-6-[(2R,3R,4S,5S,6R)-3,4,5-trihydroxy-6-(hydroxymethyl)oxan-2-yl]oxyoxane-3,4,5-triol",
+          "inchi_key": "HDTRYLNUVZCQOY-LIZSDCNHSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "99-20-7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "99-20-7",
+          "resolved_cid": 7427
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

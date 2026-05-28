@@ -1,0 +1,71 @@
+{
+  "canonical_id": "PII_LYSINE_MONOHYDROCHLORIDE",
+  "verified_at": "2026-05-28T18:46:48.735507+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Lysine Monohydrochloride",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0024340",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0024340",
+          "name": "lysine hydrochloride",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 24,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "JNJ23Q2COM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "JNJ23Q2COM",
+          "gsrs_name": "Lysine Hydrochloride"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 69568,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 69568,
+          "iupac": "(2S)-2,6-diaminohexanoic acid;hydrochloride",
+          "inchi_key": "BVHLGVCQOALMSV-JEDNCBNOSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "657-27-2",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "657-27-2",
+          "resolved_cid": 69568
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

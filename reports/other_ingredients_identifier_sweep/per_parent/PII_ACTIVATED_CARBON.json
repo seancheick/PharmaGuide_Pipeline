@@ -1,0 +1,85 @@
+{
+  "canonical_id": "PII_ACTIVATED_CARBON",
+  "verified_at": "2026-05-28T18:41:51.326883+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Activated Carbon",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0001275",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0001275",
+          "name": "activated charcoal",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 96,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "272",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "272",
+          "name": "activated charcoal",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2P3VWU3H10",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "2P3VWU3H10",
+          "gsrs_cas_codes": [
+            "7440-44-0",
+            "7440-44-0",
+            "90597-58-3",
+            "64365-11-3",
+            "16291-96-6"
+          ],
+          "cas_stored": "97793-37-8"
+        },
+        "evidence": "IQM stores CAS=97793-37-8 but UNII 2P3VWU3H10's GSRS record lists CAS codes ['7440-44-0', '7440-44-0', '90597-58-3', '64365-11-3', '16291-96-6']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5462310,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5462310,
+          "iupac": "methane",
+          "inchi_key": "OKTJSMMVPCPJKN-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "97793-37-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "97793-37-8",
+          "resolved_cid": 5462310
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

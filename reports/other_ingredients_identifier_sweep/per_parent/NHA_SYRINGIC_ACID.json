@@ -1,0 +1,70 @@
+{
+  "canonical_id": "NHA_SYRINGIC_ACID",
+  "verified_at": "2026-05-28T18:36:05.949252+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Syringic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0075709",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0075709",
+          "name": "syringic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 2,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "E390O181H5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "E390O181H5",
+          "gsrs_name": "SYRINGIC ACID"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 10742,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 10742,
+          "iupac": "4-hydroxy-3,5-dimethoxybenzoic acid",
+          "inchi_key": "JMSVCTWVEWCHDZ-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "530-57-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "530-57-4",
+          "resolved_cid": 10742
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

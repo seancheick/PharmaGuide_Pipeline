@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_SODIUM_PHOSPHATE_GENERIC",
+  "verified_at": "2026-05-28T18:48:43.280083+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Phosphate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074757",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074757",
+          "name": "sodium phosphate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 54,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "36709",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "36709",
+          "name": "sodium phosphate",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "SE337SVY37",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "SE337SVY37",
+          "gsrs_name": "Sodium Phosphate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

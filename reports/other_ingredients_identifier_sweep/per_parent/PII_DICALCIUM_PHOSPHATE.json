@@ -1,0 +1,75 @@
+{
+  "canonical_id": "PII_DICALCIUM_PHOSPHATE",
+  "verified_at": "2026-05-28T18:44:34.604868+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Dicalcium Phosphate (as filler)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0795598",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0795598",
+          "name": "dicalcium phosphate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 38,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "253163",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "253163",
+          "name": "dicalcium phosphate",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "L11K75P92J",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "L11K75P92J",
+          "gsrs_name": "Anhydrous dibasic calcium phosphate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 24441,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 24441,
+          "iupac": "calcium hydrogen phosphate",
+          "inchi_key": "FUFJGUQYACFECW-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7757-93-9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7757-93-9",
+          "resolved_cid": 24441
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_SODIUM_STARCH_GLYCOLATE",
+  "verified_at": "2026-05-28T18:48:43.491977+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Starch Glycolate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0142927",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0142927",
+          "name": "sodium starch glycolate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "2360540",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "2360540",
+          "name": "sodium starch glycolate type A",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "H8AV0SQX4D",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "H8AV0SQX4D",
+          "gsrs_name": "SODIUM STARCH GLYCOLATE TYPE A"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

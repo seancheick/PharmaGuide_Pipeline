@@ -1,0 +1,65 @@
+{
+  "canonical_id": "OI_RAW_FOOD_VITAMIN_U",
+  "verified_at": "2026-05-28T18:41:02.689242+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "RAW Food-Created Vitamin U",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "missing_cui_has_clean_candidate",
+        "proposed_value": "C0042889",
+        "proposed_resolution": {
+          "cui": "C0042889",
+          "name": "Vitamin U",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 50,
+          "status": "R"
+        },
+        "evidence": "UMLS exact search yielded C0042889 ('Vitamin U') passing all strict-mode guards."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_CASTOR_OIL",
+  "verified_at": "2026-05-28T18:43:42.303882+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Castor Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0007343",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0007343",
+          "name": "castor oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 159,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "2129",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "2129",
+          "name": "castor oil",
+          "tty": "IN",
+          "synonym": "Ricinus communis oil"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "D5340Y2I9G",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "D5340Y2I9G",
+          "gsrs_name": "CASTOR OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

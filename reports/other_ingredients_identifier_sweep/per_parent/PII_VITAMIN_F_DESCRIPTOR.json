@@ -1,0 +1,64 @@
+{
+  "canonical_id": "PII_VITAMIN_F_DESCRIPTOR",
+  "verified_at": "2026-05-28T18:50:03.493875+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Vitamin F",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0003695",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0003695",
+          "name": "arachidonic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 61,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Vitamin F', but UMLS exact-search for the IQM name returns the same CUI (C0003695). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "0JXR8F0V1Q",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "0JXR8F0V1Q",
+          "gsrs_name": "LINOLEIC AND LINOLENIC ACID (MIXTURE)"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

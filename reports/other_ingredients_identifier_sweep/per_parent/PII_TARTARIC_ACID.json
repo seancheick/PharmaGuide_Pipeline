@@ -1,0 +1,78 @@
+{
+  "canonical_id": "PII_TARTARIC_ACID",
+  "verified_at": "2026-05-28T18:49:10.934250+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Tartaric Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0075821",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0075821",
+          "name": "tartaric acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 23,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1314221",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "1314221",
+          "name": "tartrate",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 1314221 resolves to 'tartrate' (tty=IN) with no token overlap with IQM 'Tartaric Acid' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "W4888I119H",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "W4888I119H",
+          "gsrs_name": "Tartaric Acid"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 444305,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 444305,
+          "iupac": "(2R,3R)-2,3-dihydroxybutanedioic acid",
+          "inchi_key": "FEWJPZIEWOKRBE-JCYAYHJZSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "87-69-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "87-69-4",
+          "resolved_cid": 444305
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

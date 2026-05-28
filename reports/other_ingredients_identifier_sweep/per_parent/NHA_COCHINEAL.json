@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NHA_COCHINEAL",
+  "verified_at": "2026-05-28T18:24:22.955489+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Cochineal",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0110382",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0110382",
+          "name": "cochineal",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 20,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1425501",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1425501",
+          "name": "cochineal",
+          "tty": "IN",
+          "synonym": "cochineal stain"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TZ8Z31B35M",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TZ8Z31B35M",
+          "gsrs_name": "COCHINEAL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

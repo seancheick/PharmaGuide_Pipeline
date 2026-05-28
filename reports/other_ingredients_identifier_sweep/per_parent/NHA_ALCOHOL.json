@@ -1,0 +1,77 @@
+{
+  "canonical_id": "NHA_ALCOHOL",
+  "verified_at": "2026-05-28T18:21:18.202466+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Alcohol (Ethanol)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5413301",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "resolved_concept_lacks_substance_semantic_type",
+        "api_response": {
+          "cui": "C5413301",
+          "name": "Alcohol (ethanol)",
+          "semantic_types": [
+            "Laboratory Procedure"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C5413301 resolves to 'Alcohol (ethanol)' with semantic types ['Laboratory Procedure']. None match the typical substance categories. May be a procedure/finding/organism concept, or a UMLS atom that lost its substance categorization."
+      }
+    },
+    "rxcui": {
+      "stored": "448",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "448",
+          "name": "ethanol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "3K9958V90M",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "3K9958V90M",
+          "gsrs_name": "Alcohol"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 702,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 702,
+          "iupac": "ethanol",
+          "inchi_key": "LFQSCWFLJHTTHZ-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "64-17-5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "64-17-5",
+          "resolved_cid": 702
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

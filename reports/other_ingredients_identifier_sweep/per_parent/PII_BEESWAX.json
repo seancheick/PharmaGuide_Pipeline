@@ -1,0 +1,65 @@
+{
+  "canonical_id": "PII_BEESWAX",
+  "verified_at": "2026-05-28T18:42:09.400638+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Beeswax",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0004924",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "resolved_concept_lacks_substance_semantic_type",
+        "api_response": {
+          "cui": "C0004924",
+          "name": "beeswax",
+          "semantic_types": [
+            "Biomedical or Dental Material"
+          ],
+          "atom_count": 63,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0004924 resolves to 'beeswax' with semantic types ['Biomedical or Dental Material']. None match the typical substance categories. May be a procedure/finding/organism concept, or a UMLS atom that lost its substance categorization."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2ZA36H0S2V",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2ZA36H0S2V",
+          "gsrs_name": "YELLOW WAX"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

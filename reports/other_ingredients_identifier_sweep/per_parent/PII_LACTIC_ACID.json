@@ -1,0 +1,76 @@
+{
+  "canonical_id": "PII_LACTIC_ACID",
+  "verified_at": "2026-05-28T18:46:29.304560+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Lactic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0064582",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0064582",
+          "name": "lactic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 83,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1314409",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1314409",
+          "name": "DL-lactic acid",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "3B8D35Y7S4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "3B8D35Y7S4",
+          "gsrs_name": "LACTIC ACID, DL-"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 612,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 612,
+          "iupac": "2-hydroxypropanoic acid",
+          "inchi_key": "JVTAAEKCZFNVCJ-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "50-21-5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "50-21-5",
+          "resolved_cid": 612
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

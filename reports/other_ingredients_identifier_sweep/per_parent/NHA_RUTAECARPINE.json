@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NHA_RUTAECARPINE",
+  "verified_at": "2026-05-28T18:33:32.768502+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Rutaecarpine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0073716",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0073716",
+          "name": "rutecarpine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Rutaecarpine', but UMLS exact-search for the IQM name returns the same CUI (C0073716). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 65752,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 65752,
+          "iupac": "3,13,21-triazapentacyclo[11.8.0.02,10.04,9.015,20]henicosa-1(21),2(10),4,6,8,15,17,19-octaen-14-one",
+          "inchi_key": "ACVGWSKVRYFWRP-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "84-26-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "84-26-4",
+          "resolved_cid": 65752
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

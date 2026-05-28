@@ -1,0 +1,66 @@
+{
+  "canonical_id": "NHA_PROTECTIN_DX",
+  "verified_at": "2026-05-28T18:33:02.141808+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Protectin DX",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3886642",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3886642",
+          "name": "protectin DX",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 11968800,
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cid_synonyms_do_not_align_with_iqm",
+        "api_response": {
+          "cid": 11968800,
+          "iupac": "(2S,3R,4S,5S,6R)-2-[2-[6-[(2R,3R,4S,5S,6R)-4,5-dihydroxy-6-(hydroxymethyl)-3-[(2R,3R,4S,5R)-3,4,5-trihydroxyoxan-2-yl]oxyoxan-2-yl]oxy-3,12-dihydroxy-4,4,8,10,14-pentamethyl-2,3,5,6,7,9,11,12,13,15,16,17-dodecahydro-1H-cyclopenta[a]phenanthren-17-yl]-6-methylhept-5-en-2-yl]oxy-6-(hydroxymethyl)oxane-3,4,5-triol",
+          "synonyms_sample": []
+        },
+        "evidence": "PubChem CID 11968800 has IUPACName='(2S,3R,4S,5S,6R)-2-[2-[6-[(2R,3R,4S,5S,6R)-4,5-dihydroxy-6-(hydroxymethyl)-3-[(2R,3R,4S,5R)-3,4,5-trihydroxyoxan-2-yl]oxyoxan-2-yl]oxy-3,12-dihydroxy-4,4,8,10,14-pentamethyl-2,3,5,6,7,9,11,12,13,15,16,17-dodecahydro-1H-cyclopenta[a]phenanthren-17-yl]-6-methylhept-5-en-2-yl]oxy-6-(hydroxymethyl)oxane-3,4,5-triol' and 0 synonyms with no token overlap with IQM 'Protectin DX'."
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

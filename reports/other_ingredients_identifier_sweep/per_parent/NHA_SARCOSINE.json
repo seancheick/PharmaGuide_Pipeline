@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_SARCOSINE",
+  "verified_at": "2026-05-28T18:33:36.011921+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sarcosine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0036228",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0036228",
+          "name": "sarcosine",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 60,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1362906",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1362906",
+          "name": "sarcosine",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Z711V88R5F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Z711V88R5F",
+          "gsrs_name": "Sarcosine"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 1088,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 1088,
+          "iupac": "2-(methylamino)acetic acid",
+          "inchi_key": "FSYKKLYZXJSNPZ-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "107-97-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "107-97-1",
+          "resolved_cid": 1088
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_SODIUM_HYDROXIDE",
+  "verified_at": "2026-05-28T18:34:44.647615+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Hydroxide",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0037517",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0037517",
+          "name": "sodium hydroxide",
+          "semantic_types": [
+            "Hazardous or Poisonous Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 69,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "9880",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "9880",
+          "name": "sodium hydroxide",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "55X04QC32I",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "55X04QC32I",
+          "gsrs_name": "Sodium hydroxide"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 14798,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 14798,
+          "iupac": "sodium hydroxide",
+          "inchi_key": "HEMHJVSKTPXQMS-UHFFFAOYSA-M"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1310-73-2",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1310-73-2",
+          "resolved_cid": 14798
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

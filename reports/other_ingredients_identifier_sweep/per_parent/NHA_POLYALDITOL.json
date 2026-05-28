@@ -1,0 +1,81 @@
+{
+  "canonical_id": "NHA_POLYALDITOL",
+  "verified_at": "2026-05-28T18:32:50.382900+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Polyalditol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "ambiguous_authority",
+        "reason_code": "multiple_clean_umls_candidates_for_missing_cui",
+        "api_response": {
+          "candidates": [
+            {
+              "cui": "C1814838",
+              "name": "Polyalditol",
+              "semantic_types": [
+                "Organic Chemical",
+                "Pharmacologic Substance"
+              ]
+            },
+            {
+              "cui": "C4026203",
+              "name": "hydrogenated starch hydrolysate",
+              "semantic_types": [
+                "Organic Chemical"
+              ]
+            }
+          ]
+        },
+        "notes": "Multiple UMLS concepts pass strict-mode guards (free base vs salt, L- vs DL-, etc.). Clinician must pick."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "27F77DSJ5V",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "27F77DSJ5V",
+          "gsrs_name": "HYDROGENATED STARCH HYDROLYSATE",
+          "names_sample": [
+            "HYDROGENATED STARCH HYDROLYSATE",
+            "HYDROGENATED STARCH HYDROLYSATE [II]"
+          ]
+        },
+        "evidence": "UNII 27F77DSJ5V resolves to GSRS substance 'HYDROGENATED STARCH HYDROLYSATE' with no token overlap with IQM 'Polyalditol'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

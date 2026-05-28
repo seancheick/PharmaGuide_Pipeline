@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_DIOSMETIN",
+  "verified_at": "2026-05-28T18:25:24.440601+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Diosmetin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0114217",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0114217",
+          "name": "diosmetin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1314347",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1314347",
+          "name": "diosmetin",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TWZ37241OT",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TWZ37241OT",
+          "gsrs_name": "DIOSMETIN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5281612,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5281612,
+          "iupac": "5,7-dihydroxy-2-(3-hydroxy-4-methoxyphenyl)chromen-4-one",
+          "inchi_key": "MBNGWHIJMBWFHU-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "520-34-3",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "520-34-3",
+          "resolved_cid": 5281612
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

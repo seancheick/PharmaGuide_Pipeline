@@ -1,0 +1,63 @@
+{
+  "canonical_id": "PII_WHEY_PROTEIN_ISOLATE",
+  "verified_at": "2026-05-28T18:50:08.182826+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Whey Protein Isolate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0078479",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0078479",
+          "name": "Whey Proteins",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Food"
+          ],
+          "atom_count": 48,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "8617Z5FMF6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "8617Z5FMF6",
+          "gsrs_name": "WHEY"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_CAFFEIC_ACID",
+  "verified_at": "2026-05-28T18:22:55.282209+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Caffeic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0054433",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0054433",
+          "name": "caffeic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 12,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1311397",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311397",
+          "name": "caffeic acid",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "U2S3A33KVM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "U2S3A33KVM",
+          "gsrs_name": "CAFFEIC ACID"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 689043,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 689043,
+          "iupac": "(E)-3-(3,4-dihydroxyphenyl)prop-2-enoic acid",
+          "inchi_key": "QAIPRVGONGVQAS-DUXPYHPUSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "331-39-5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "331-39-5",
+          "resolved_cid": 689043
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

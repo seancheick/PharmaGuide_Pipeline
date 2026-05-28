@@ -1,0 +1,62 @@
+{
+  "canonical_id": "OI_MAGNESIUM_CAPRYLATE",
+  "verified_at": "2026-05-28T18:40:25.772161+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Magnesium Caprylate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "unresolvable",
+        "reason_code": "no_clean_exact_match_for_missing_cui",
+        "notes": "Tried exact UMLS search on standard_name and aliases; no candidate passed strict-mode guards."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "K7EHJ964F3",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "K7EHJ964F3",
+          "gsrs_name": "MAGNESIUM CAPRYLATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 19595724,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 19595724,
+          "iupac": "magnesium bis(octanoate)",
+          "inchi_key": "HPBJPFJVNDHMEG-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "3386-57-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "3386-57-0",
+          "resolved_cid": 19595724
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

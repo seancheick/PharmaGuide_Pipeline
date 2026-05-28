@@ -1,0 +1,62 @@
+{
+  "canonical_id": "NHA_TOTAL_BILE_ACIDS",
+  "verified_at": "2026-05-28T18:36:27.103786+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Total Bile Acids",
+  "iqm_class_level": true,
+  "fields": {
+    "cui": {
+      "stored": "C0201914",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "resolved_concept_lacks_substance_semantic_type",
+        "api_response": {
+          "cui": "C0201914",
+          "name": "Total bile acids measurement",
+          "semantic_types": [
+            "Laboratory Procedure"
+          ],
+          "atom_count": 37,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0201914 resolves to 'Total bile acids measurement' with semantic types ['Laboratory Procedure']. None match the typical substance categories. May be a procedure/finding/organism concept, or a UMLS atom that lost its substance categorization."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

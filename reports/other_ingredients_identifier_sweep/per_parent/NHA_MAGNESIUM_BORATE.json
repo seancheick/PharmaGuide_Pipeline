@@ -1,0 +1,66 @@
+{
+  "canonical_id": "NHA_MAGNESIUM_BORATE",
+  "verified_at": "2026-05-28T18:28:16.410152+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Magnesium Borate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0065516",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0065516",
+          "name": "magnesium borate",
+          "semantic_types": [
+            "Inorganic Chemical"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2C9F60Z9FV",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2C9F60Z9FV",
+          "gsrs_name": "MAGNESIUM BORATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 13710655,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 13710655,
+          "iupac": "magnesium oxido(oxo)borane",
+          "inchi_key": "LOCZQLKNTOXJDV-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

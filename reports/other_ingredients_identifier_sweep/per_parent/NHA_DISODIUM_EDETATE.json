@@ -1,0 +1,64 @@
+{
+  "canonical_id": "NHA_DISODIUM_EDETATE",
+  "verified_at": "2026-05-28T18:25:25.484782+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Disodium Edetate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0012695",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0012695",
+          "name": "edetate disodium",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 84,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 636371,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 636371,
+          "iupac": "disodium;2-[2-[carboxylatomethyl(carboxymethyl)amino]ethyl-(carboxymethyl)amino]acetate;dihydrate",
+          "inchi_key": "OVBJJZOQPCKUOR-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

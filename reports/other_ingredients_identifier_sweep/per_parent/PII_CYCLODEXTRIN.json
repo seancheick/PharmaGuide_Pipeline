@@ -1,0 +1,71 @@
+{
+  "canonical_id": "PII_CYCLODEXTRIN",
+  "verified_at": "2026-05-28T18:44:19.306947+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Cyclodextrin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0010558",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0010558",
+          "name": "cyclodextrins",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 48,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Cyclodextrin', but UMLS exact-search for the IQM name returns the same CUI (C0010558). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "7E6SK9QDT8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "7E6SK9QDT8",
+          "gsrs_name": "CYCLODEXTRINS"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 320760,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 320760,
+          "iupac": "5,10,15,20,25,30-hexakis(hydroxymethyl)-2,4,7,9,12,14,17,19,22,24,27,29-dodecaoxaheptacyclo[26.2.2.23,6.28,11.213,16.218,21.223,26]dotetracontane-31,32,33,34,35,36,37,38,39,40,41,42-dodecol",
+          "inchi_key": "HFHDHCJBZVLPGP-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "12619-70-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "12619-70-4",
+          "resolved_cid": 320760
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "canonical_id": "PII_SACCHAROMYCES_CEREVISIAE",
+  "verified_at": "2026-05-28T18:48:15.464542+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Saccharomyces cerevisiae (yeast)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0036025",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0036025",
+          "name": "Saccharomyces cerevisiae",
+          "semantic_types": [
+            "Fungus"
+          ],
+          "atom_count": 155,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "350141",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "350141",
+          "name": "saccharomyces cerevisiae allergenic extract",
+          "tty": "IN",
+          "synonym": "baker's yeast allergenic extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "978D8U419H",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "978D8U419H",
+          "gsrs_name": "SACCHAROMYCES CEREVISIAE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "canonical_id": "NHA_ORANGE_FLAVOR",
+  "verified_at": "2026-05-28T18:31:34.802491+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Orange Flavor",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0475654",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0475654",
+          "name": "Orange flavor",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 17,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "892565",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "892565",
+          "name": "orange allergenic extract",
+          "tty": "IN",
+          "synonym": "Citrus aurantium dulcis allergenic extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5EVU04N5QU",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "5EVU04N5QU",
+          "gsrs_name": "ORANGE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 22311,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 22311,
+          "iupac": "1-methyl-4-prop-1-en-2-ylcyclohexene",
+          "inchi_key": "XMGQYMWWDOXHJM-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "138-86-3",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "138-86-3",
+          "resolved_cid": 22311
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

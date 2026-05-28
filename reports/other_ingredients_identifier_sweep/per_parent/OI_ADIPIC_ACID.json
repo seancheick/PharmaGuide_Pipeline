@@ -1,0 +1,74 @@
+{
+  "canonical_id": "OI_ADIPIC_ACID",
+  "verified_at": "2026-05-28T18:38:04.210268+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Adipic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0001522",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0001522",
+          "name": "Adipic Acids",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 19,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "17050",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "17050",
+          "name": "adipic acid",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "76A0JE0FKJ",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "76A0JE0FKJ",
+          "gsrs_name": "ADIPIC ACID"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 196,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 196,
+          "iupac": "hexanedioic acid",
+          "inchi_key": "WNLRTRBMVRJNCN-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "124-04-9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "124-04-9",
+          "resolved_cid": 196
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

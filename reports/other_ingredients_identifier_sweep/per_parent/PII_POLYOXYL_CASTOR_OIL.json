@@ -1,0 +1,59 @@
+{
+  "canonical_id": "PII_POLYOXYL_CASTOR_OIL",
+  "verified_at": "2026-05-28T18:47:45.489963+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Polyoxyl Castor Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1509464",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1509464",
+          "name": "polyoxyl 40 castor oil",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

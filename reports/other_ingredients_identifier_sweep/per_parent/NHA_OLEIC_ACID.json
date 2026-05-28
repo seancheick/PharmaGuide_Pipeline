@@ -1,0 +1,78 @@
+{
+  "canonical_id": "NHA_OLEIC_ACID",
+  "verified_at": "2026-05-28T18:31:15.929042+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Oleic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0028928",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0028928",
+          "name": "oleic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 92,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "32559",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "32559",
+          "name": "osteum",
+          "tty": "PIN",
+          "synonym": "sodium oleate"
+        },
+        "evidence": "RxCUI 32559 resolves to 'osteum' (tty=PIN) with no token overlap with IQM 'Oleic Acid' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2UMI9U37CP",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2UMI9U37CP",
+          "gsrs_name": "Oleic acid"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 445639,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 445639,
+          "iupac": "(Z)-octadec-9-enoic acid",
+          "inchi_key": "ZQPPMHVWECSIRJ-KTKRTIGZSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "112-80-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "112-80-1",
+          "resolved_cid": 445639
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "canonical_id": "NHA_GLYCERIN_ESTERS",
+  "verified_at": "2026-05-28T18:26:42.639710+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Glycerin Fatty Acid Esters",
+  "iqm_class_level": true,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "ambiguous_authority",
+        "reason_code": "multiple_clean_umls_candidates_for_missing_cui",
+        "api_response": {
+          "candidates": [
+            {
+              "cui": "C3255931",
+              "name": "diacetylated monoglycerides",
+              "semantic_types": [
+                "Organic Chemical",
+                "Pharmacologic Substance"
+              ]
+            },
+            {
+              "cui": "C0026481",
+              "name": "Monoglycerides",
+              "semantic_types": [
+                "Organic Chemical",
+                "Pharmacologic Substance"
+              ]
+            }
+          ]
+        },
+        "notes": "Multiple UMLS concepts pass strict-mode guards (free base vs salt, L- vs DL-, etc.). Clinician must pick."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5Z17386USF",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "5Z17386USF",
+          "gsrs_name": "DIACETYLATED MONOGLYCERIDES",
+          "names_sample": [
+            "ACETYLATED MONOGLYCERIDES [FCC]",
+            "DIACETYLATED MONOGLYCERIDES",
+            "DIACETYLATED MONOGLYCERIDES [II]",
+            "DIACETYLATED MONOGLYCERIDES [USP-RS]"
+          ]
+        },
+        "evidence": "UNII 5Z17386USF resolves to GSRS substance 'DIACETYLATED MONOGLYCERIDES' with no token overlap with IQM 'Glycerin Fatty Acid Esters'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 13341681,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 13341681,
+          "iupac": "(1-hydroxy-3-octadecoxypropan-2-yl) acetate",
+          "inchi_key": "HUQABGDIJUXLRG-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "77133-36-9",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_resolves_to_unrelated_compound",
+        "api_response": {
+          "cas": "77133-36-9",
+          "resolved_cid": 13341681,
+          "synonyms_sample": [
+            "77133-36-9",
+            "RefChem:1052431",
+            "1,2-Propanediol, 3-(octadecyloxy)-, 2-acetate",
+            "Diacetylated monoglycerides",
+            "(1-hydroxy-3-octadecoxypropan-2-yl) acetate",
+            "1-HYDROXY-3-(OCTADECYLOXY)PROPAN-2-YL ACETATE",
+            "DG O-18:0_2:0",
+            "SCHEMBL7411764",
+            "DTXSID50874036",
+            "HUQABGDIJUXLRG-UHFFFAOYSA-N"
+          ]
+        },
+        "evidence": "CAS 77133-36-9 resolves in PubChem to CID 13341681 whose synonyms do not token-overlap with IQM 'Glycerin Fatty Acid Esters'."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

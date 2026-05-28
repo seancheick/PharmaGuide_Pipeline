@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_MUCIN",
+  "verified_at": "2026-05-28T18:47:04.628438+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Mucin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0026682",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0026682",
+          "name": "mucins",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 48,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Mucin', but UMLS exact-search for the IQM name returns the same CUI (C0026682). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 3037582,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 3037582,
+          "iupac": "(2S,3R,4S,5R)-2,3,4,5-tetrahydroxyhexanedioic acid",
+          "inchi_key": "DSLZVSRJTYRBFB-DUHBMQHGSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "526-99-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "526-99-8",
+          "resolved_cid": 3037582
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

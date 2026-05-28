@@ -1,0 +1,62 @@
+{
+  "canonical_id": "PII_POLYETHYLENE_GLYCOL",
+  "verified_at": "2026-05-28T18:47:41.412935+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Polyethylene Glycol (PEG)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0032483",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0032483",
+          "name": "polyethylene glycols",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 176,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "25322-68-3",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '25322-68-3' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "canonical_id": "PII_GLYCERYL_MONOOLEATE",
+  "verified_at": "2026-05-28T18:45:56.840565+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Glyceryl Monooleate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0066771",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0066771",
+          "name": "monoolein",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 27,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Glyceryl Monooleate', but UMLS exact-search for the IQM name returns the same CUI (C0066771). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": "1311678",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311678",
+          "name": "monoolein",
+          "tty": "IN",
+          "synonym": "glyceryl monooleate"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "C4YAD5F5G6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "C4YAD5F5G6",
+          "gsrs_name": "GLYCERYL MONOOLEATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5283468,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5283468,
+          "iupac": "2,3-dihydroxypropyl (Z)-octadec-9-enoate",
+          "inchi_key": "RZRNAYUHWVFMIP-KTKRTIGZSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "25496-72-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "25496-72-4",
+          "resolved_cid": 5283468
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

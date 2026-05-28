@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_EXTRA_VIRGIN_OLIVE_OIL",
+  "verified_at": "2026-05-28T18:45:21.840035+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Extra Virgin Olive Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0069449",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0069449",
+          "name": "olive oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Food"
+          ],
+          "atom_count": 71,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1309250",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309250",
+          "name": "olive oil",
+          "tty": "IN",
+          "synonym": "sweet oil"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "6UYK2W1W1E",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "6UYK2W1W1E",
+          "gsrs_name": "OLIVE OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

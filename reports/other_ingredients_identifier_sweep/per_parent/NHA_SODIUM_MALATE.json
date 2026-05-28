@@ -1,0 +1,70 @@
+{
+  "canonical_id": "NHA_SODIUM_MALATE",
+  "verified_at": "2026-05-28T18:34:50.921934+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Malate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C6005473",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C6005473",
+          "name": "Sodium Hydrogen Malate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2EFF9N315F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2EFF9N315F",
+          "gsrs_name": "SODIUM MALATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 8736,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 8736,
+          "iupac": "disodium;2-hydroxybutanedioate",
+          "inchi_key": "WPUMTJGUQUYPIV-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "676-46-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "676-46-0",
+          "resolved_cid": 8736
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

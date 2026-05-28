@@ -1,0 +1,67 @@
+{
+  "canonical_id": "NHA_MONK_FRUIT",
+  "verified_at": "2026-05-28T18:29:23.574527+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Monk Fruit Extract",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0696858",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0696858",
+          "name": "Siraitia grosvenorii",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1436960",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1436960",
+          "name": "Siraitia grosvenorii fruit extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "NOU2FB51TW",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "NOU2FB51TW",
+          "gsrs_name": "SIRAITIA GROSVENORII FRUIT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

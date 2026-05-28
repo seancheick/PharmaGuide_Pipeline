@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_SOY_BEAN_OIL",
+  "verified_at": "2026-05-28T18:48:53.867344+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Soy Bean Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0037732",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0037732",
+          "name": "soybean oil",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Food"
+          ],
+          "atom_count": 92,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1309222",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309222",
+          "name": "hydrogenated soybean oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "A2M91M918C",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "A2M91M918C",
+          "gsrs_name": "HYDROGENATED SOYBEAN OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "canonical_id": "NHA_DI_WATER",
+  "verified_at": "2026-05-28T18:25:28.537939+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Deionized Water",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0790233",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0790233",
+          "name": "Distilled water",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 12,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 962,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 962,
+          "iupac": "oxidane",
+          "inchi_key": "XLYOFNOQVPJJNP-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7732-18-5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7732-18-5",
+          "resolved_cid": 962
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "canonical_id": "NHA_PHLORIDZIN",
+  "verified_at": "2026-05-28T18:32:30.426546+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Phloridzin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0031562",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0031562",
+          "name": "phlorhizin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 25,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Phloridzin', but UMLS exact-search for the IQM name returns the same CUI (C0031562). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "CU9S17279X",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "CU9S17279X",
+          "gsrs_name": "PHLORIZIN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 45933907,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 45933907,
+          "iupac": "1-[2,4-dihydroxy-6-[(2S,4R,5S)-3,4,5-trihydroxy-6-(hydroxymethyl)oxan-2-yl]oxyphenyl]-3-(4-hydroxyphenyl)propan-1-one",
+          "inchi_key": "IOUVKUPGCMBWBT-HXBJIUPGSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "60-81-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "60-81-1",
+          "resolved_cid": 45933907
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

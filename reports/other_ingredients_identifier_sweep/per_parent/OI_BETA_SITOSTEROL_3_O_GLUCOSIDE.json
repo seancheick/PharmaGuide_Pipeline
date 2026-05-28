@@ -1,0 +1,59 @@
+{
+  "canonical_id": "OI_BETA_SITOSTEROL_3_O_GLUCOSIDE",
+  "verified_at": "2026-05-28T18:38:34.860408+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Beta-Sitosterol-3-O-Glucoside",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "unresolvable",
+        "reason_code": "no_clean_exact_match_for_missing_cui",
+        "notes": "Tried exact UMLS search on standard_name and aliases; no candidate passed strict-mode guards."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5742590,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5742590,
+          "iupac": "(2R,3R,4S,5S,6R)-2-[[(3S,8S,9S,10R,13R,14S,17R)-17-[(2R,5R)-5-ethyl-6-methylheptan-2-yl]-10,13-dimethyl-2,3,4,7,8,9,11,12,14,15,16,17-dodecahydro-1H-cyclopenta[a]phenanthren-3-yl]oxy]-6-(hydroxymethyl)oxane-3,4,5-triol",
+          "inchi_key": "NPJICTMALKLTFW-OFUAXYCQSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "474-58-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "474-58-8",
+          "resolved_cid": 5742590
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

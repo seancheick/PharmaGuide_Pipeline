@@ -1,0 +1,84 @@
+{
+  "canonical_id": "NHA_LACTOTRIPEPTIDES",
+  "verified_at": "2026-05-28T18:28:04.141330+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Lactotripeptides",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0063506",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "high",
+        "reason_code": "no_token_overlap_with_iqm_name",
+        "api_response": {
+          "cui": "C0063506",
+          "name": "indolepropanol phosphate",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 4,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0063506 resolves to 'indolepropanol phosphate' with no name tokens overlapping IQM 'Lactotripeptides' or its aliases. Likely wrong-concept hallucination."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 9949212,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 9949212,
+          "iupac": "(2S)-1-[(2S)-1-[(2S,3S)-2-amino-3-methylpentanoyl]pyrrolidine-2-carbonyl]pyrrolidine-2-carboxylic acid",
+          "inchi_key": "FQYQMFCIJNWDQZ-CYDGBPFRSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "26001-32-1",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_resolves_to_unrelated_compound",
+        "api_response": {
+          "cas": "26001-32-1",
+          "resolved_cid": 9949212,
+          "synonyms_sample": [
+            "isoleucyl-prolyl-proline",
+            "isoleucine-proline-proline",
+            "IPP peptide",
+            "RefChem:923720",
+            "H-ILE-PRO-PRO-OH",
+            "26001-32-1",
+            "l-isoleucyl-l-prolyl-l-proline",
+            "(2S)-1-[(2S)-1-[(2S,3S)-2-AMINO-3-METHYLPENTANOYL]PYRROLIDINE-2-CARBONYL]PYRROLIDINE-2-CARBOXYLIC ACID",
+            "CHEMBL190994",
+            "L-Proline, L-isoleucyl-L-prolyl-"
+          ]
+        },
+        "evidence": "CAS 26001-32-1 resolves in PubChem to CID 9949212 whose synonyms do not token-overlap with IQM 'Lactotripeptides'."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

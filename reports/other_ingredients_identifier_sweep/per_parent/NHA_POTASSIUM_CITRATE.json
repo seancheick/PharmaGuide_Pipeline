@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_POTASSIUM_CITRATE",
+  "verified_at": "2026-05-28T18:33:01.176043+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Potassium Citrate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0137996",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0137996",
+          "name": "potassium citrate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 72,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "221149",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "221149",
+          "name": "potassium citrate monohydrate",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "EE90ONI6FF",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "EE90ONI6FF",
+          "gsrs_name": "Potassium CItrate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 2735208,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 2735208,
+          "iupac": "tripotassium;2-hydroxypropane-1,2,3-tricarboxylate;hydrate",
+          "inchi_key": "PJAHUDTUZRZBKM-UHFFFAOYSA-K"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "6100-05-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "6100-05-6",
+          "resolved_cid": 2735208
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

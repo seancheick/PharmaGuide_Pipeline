@@ -1,0 +1,64 @@
+{
+  "canonical_id": "NHA_WEST_INDIAN_CHERRY",
+  "verified_at": "2026-05-28T18:37:29.772540+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "West Indian Cherry (Acerola)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0718192",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0718192",
+          "name": "Acerola",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 12,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "XDD2WEC9L5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "XDD2WEC9L5",
+          "gsrs_name": "ACEROLA"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

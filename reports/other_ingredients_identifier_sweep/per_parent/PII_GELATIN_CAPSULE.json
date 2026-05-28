@@ -1,0 +1,63 @@
+{
+  "canonical_id": "PII_GELATIN_CAPSULE",
+  "verified_at": "2026-05-28T18:45:47.846868+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Gelatin Capsule",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0017237",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0017237",
+          "name": "gelatin",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 72,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2G86QN327L",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2G86QN327L",
+          "gsrs_name": "GELATIN, UNSPECIFIED"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

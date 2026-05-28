@@ -1,0 +1,79 @@
+{
+  "canonical_id": "OI_10_UNDECENOIC_ACID",
+  "verified_at": "2026-05-28T18:37:57.090804+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "10-Undecenoic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0041660",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0041660",
+          "name": "undecylenic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 47,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "314881",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "314881",
+          "name": "undecylenate",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 314881 resolves to 'undecylenate' (tty=IN) with no token overlap with IQM '10-Undecenoic Acid' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "K3D86KJ24N",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "K3D86KJ24N",
+          "gsrs_name": "Undecylenic Acid"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5634,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5634,
+          "iupac": "undec-10-enoic acid",
+          "inchi_key": "FRPZMMHWLSIFAZ-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "112-38-9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "112-38-9",
+          "resolved_cid": 5634
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "canonical_id": "NHA_CHLOROPHYLLIN",
+  "verified_at": "2026-05-28T18:24:09.305735+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Magnesium Chlorophyllin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0055435",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0055435",
+          "name": "chlorophyllin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1366841",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1366841",
+          "name": "sodium copper chlorophyllin",
+          "tty": "PIN",
+          "synonym": "chlorophyllin copper complex sodium"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "1D276TYV9O",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "1D276TYV9O",
+          "gsrs_cas_codes": [
+            "11006-34-1"
+          ],
+          "cas_stored": "15203-43-7"
+        },
+        "evidence": "IQM stores CAS=15203-43-7 but UNII 1D276TYV9O's GSRS record lists CAS codes ['11006-34-1']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 171041605,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 171041605,
+          "iupac": "magnesium;trisodium;(17R)-17-(2-carboxylatoethyl)-20-(carboxylatomethyl)-12-ethenyl-7-ethyl-3,8,13,15-tetramethyl-17,18-dihydroporphyrin-21,23-diide-2-carboxylate",
+          "inchi_key": "JVOGSHDZLOJKKR-MXFMKSRJSA-I"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "15203-43-7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "15203-43-7",
+          "resolved_cid": 138756706
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

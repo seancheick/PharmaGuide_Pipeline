@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_SODIUM_CARBONATE",
+  "verified_at": "2026-05-28T18:34:23.699027+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Carbonate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074732",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074732",
+          "name": "sodium carbonate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 32,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "36685",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "36685",
+          "name": "sodium carbonate",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "45P3261C7T",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "45P3261C7T",
+          "gsrs_name": "Sodium Carbonate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 10340,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 10340,
+          "iupac": "disodium;carbonate",
+          "inchi_key": "CDBYLPFSWZWCQE-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "497-19-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "497-19-8",
+          "resolved_cid": 10340
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

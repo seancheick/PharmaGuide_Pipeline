@@ -1,0 +1,74 @@
+{
+  "canonical_id": "OI_BETA_CARYOPHYLLENE",
+  "verified_at": "2026-05-28T18:38:32.731081+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Beta-Caryophyllene",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0525503",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0525503",
+          "name": "BETA-CARYOPHYLLENE",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 6,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1368148",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1368148",
+          "name": "caryophyllene",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "BHW853AU9H",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "BHW853AU9H",
+          "gsrs_name": "CARYOPHYLLENE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5281515,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5281515,
+          "iupac": "(1R,4E,9S)-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undec-4-ene",
+          "inchi_key": "NPNUFJAVOOONJE-GFUGXAQUSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "87-44-5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "87-44-5",
+          "resolved_cid": 5281515
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

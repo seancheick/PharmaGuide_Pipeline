@@ -1,0 +1,69 @@
+{
+  "canonical_id": "NHA_VEGETABLE_GLYCERIN",
+  "verified_at": "2026-05-28T18:37:16.139013+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Vegetable Glycerin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0017861",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0017861",
+          "name": "glycerin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 157,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "4910",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "4910",
+          "name": "glycerin",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "PDC6A3C0OX",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "PDC6A3C0OX",
+          "gsrs_name": "Glycerin"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

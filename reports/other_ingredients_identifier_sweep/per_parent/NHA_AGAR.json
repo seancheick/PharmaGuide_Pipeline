@@ -1,0 +1,81 @@
+{
+  "canonical_id": "NHA_AGAR",
+  "verified_at": "2026-05-28T18:21:10.093740+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Agar",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0001771",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0001771",
+          "name": "agar",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Indicator, Reagent, or Diagnostic Aid"
+          ],
+          "atom_count": 47,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "PFR724VXVV",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "PFR724VXVV",
+          "gsrs_name": "GRACILARIOPSIS LONGISSIMA",
+          "names_sample": [
+            "CEYLON MOSS",
+            "FUCUS LONGISSIMUS",
+            "FUCUS VERRUCOSUS",
+            "GRACILARIA VERRUCOSA",
+            "GRACILARIOPSIS LONGISSIMA"
+          ]
+        },
+        "evidence": "UNII PFR724VXVV resolves to GSRS substance 'GRACILARIOPSIS LONGISSIMA' with no token overlap with IQM 'Agar'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 71571511,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 71571511,
+          "iupac": "(2R,3S,4S,5R)-2-(hydroxymethyl)-6-[[(4R,5S)-4-hydroxy-3-methyl-2,6-dioxabicyclo[3.2.1]octan-8-yl]oxy]-4-methoxyoxane-3,5-diol",
+          "inchi_key": "GYYDPBCUIJTIBM-DYOGSRDZSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9002-18-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "9002-18-0",
+          "resolved_cid": 71571511
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

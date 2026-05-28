@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_CYCLOASTRAGENOL",
+  "verified_at": "2026-05-28T18:25:11.994549+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Cycloastragenol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0056730",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0056730",
+          "name": "cycloastragenol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 4,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "2398144",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "2398144",
+          "name": "cycloastragenol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "X37D9F2L0V",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "X37D9F2L0V",
+          "gsrs_name": "CYCLOASTRAGENOL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 13943286,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 13943286,
+          "iupac": "(1S,3R,6S,8R,9S,11S,12S,14S,15R,16R)-15-[(2R,5S)-5-(2-hydroxypropan-2-yl)-2-methyloxolan-2-yl]-7,7,12,16-tetramethylpentacyclo[9.7.0.01,3.03,8.012,16]octadecane-6,9,14-triol",
+          "inchi_key": "WENNXORDXYGDTP-UOUCMYEWSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "78574-94-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "78574-94-4",
+          "resolved_cid": 13943286
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

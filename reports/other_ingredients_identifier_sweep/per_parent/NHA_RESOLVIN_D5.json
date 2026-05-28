@@ -1,0 +1,67 @@
+{
+  "canonical_id": "NHA_RESOLVIN_D5",
+  "verified_at": "2026-05-28T18:33:17.208295+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Resolvin D5",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3492734",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3492734",
+          "name": "resolvin D5",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 2,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 24932575,
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cid_synonyms_do_not_align_with_iqm",
+        "api_response": {
+          "cid": 24932575,
+          "iupac": "2-(4-methylphenyl)-7-[2-(2,6,6-trimethylcyclohexen-1-yl)ethyl]-1,5,6,8-tetrahydropyrido[3,4-d]pyrimidin-4-one",
+          "synonyms_sample": []
+        },
+        "evidence": "PubChem CID 24932575 has IUPACName='2-(4-methylphenyl)-7-[2-(2,6,6-trimethylcyclohexen-1-yl)ethyl]-1,5,6,8-tetrahydropyrido[3,4-d]pyrimidin-4-one' and 0 synonyms with no token overlap with IQM 'Resolvin D5'."
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

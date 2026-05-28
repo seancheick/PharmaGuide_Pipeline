@@ -1,0 +1,67 @@
+{
+  "canonical_id": "OI_ALPHA_PINENE",
+  "verified_at": "2026-05-28T18:38:12.119401+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Alpha Pinene",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0051459",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0051459",
+          "name": "alpha-pinene",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 32,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 6654,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 6654,
+          "iupac": "2,6,6-trimethylbicyclo[3.1.1]hept-2-ene",
+          "inchi_key": "GRWFGVWFFZKLTI-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "80-56-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "80-56-8",
+          "resolved_cid": 6654
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

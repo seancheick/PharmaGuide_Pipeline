@@ -1,0 +1,68 @@
+{
+  "canonical_id": "OI_MACADAMIA_NUT_OIL",
+  "verified_at": "2026-05-28T18:40:19.264143+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Macadamia Nut Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3256286",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3256286",
+          "name": "macadamia oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 17,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1011066",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1011066",
+          "name": "macadamia nut allergenic extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Y5432RGW8N",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Y5432RGW8N",
+          "gsrs_name": "MACADAMIA NUT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

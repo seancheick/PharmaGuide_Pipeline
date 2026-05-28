@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_PHOSPHORIC_ACID",
+  "verified_at": "2026-05-28T18:32:35.189431+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Phosphoric Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0031700",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0031700",
+          "name": "phosphoric acid",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 33,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "8259",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "8259",
+          "name": "phosphoric acid",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "E4GA8884NN",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "E4GA8884NN",
+          "gsrs_name": "Phosphoric Acid"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 1004,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 1004,
+          "iupac": "phosphoric acid",
+          "inchi_key": "NBIIXXVUZAFLBC-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7664-38-2",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7664-38-2",
+          "resolved_cid": 1004
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

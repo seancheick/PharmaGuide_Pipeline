@@ -1,0 +1,68 @@
+{
+  "canonical_id": "PII_PROPOLIS",
+  "verified_at": "2026-05-28T18:47:59.022618+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Propolis",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0033488",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0033488",
+          "name": "propolis",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 51,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1311659",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311659",
+          "name": "propolis wax",
+          "tty": "IN",
+          "synonym": "bee propolis extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "6Y8XYV2NOF",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "6Y8XYV2NOF",
+          "gsrs_name": "PROPOLIS WAX"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

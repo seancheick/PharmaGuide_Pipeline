@@ -1,0 +1,70 @@
+{
+  "canonical_id": "NHA_XANTHAN_GUM",
+  "verified_at": "2026-05-28T18:37:48.778291+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Xanthan Gum",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0078596",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0078596",
+          "name": "xanthan gum",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 29,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1307815",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1307815",
+          "name": "xanthan gum",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TTV12P4NEE",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TTV12P4NEE",
+          "gsrs_name": "XANTHAN GUM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": "11138-66-2",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '11138-66-2' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

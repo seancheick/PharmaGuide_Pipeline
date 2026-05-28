@@ -1,0 +1,75 @@
+{
+  "canonical_id": "OI_CALCIUM_UNDECYLENATE",
+  "verified_at": "2026-05-28T18:38:48.284506+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Calcium Undecylenate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0301329",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0301329",
+          "name": "calcium undecylenate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 31,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "89746",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "89746",
+          "name": "calcium undecylenate",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "77YW1RTU8V",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "77YW1RTU8V",
+          "gsrs_name": "CALCIUM UNDECYLENATE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 14865,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 14865,
+          "iupac": "calcium bis(undec-10-enoate)",
+          "inchi_key": "CLOKKBBIKHZGNX-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1322-14-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1322-14-1",
+          "resolved_cid": 14865
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

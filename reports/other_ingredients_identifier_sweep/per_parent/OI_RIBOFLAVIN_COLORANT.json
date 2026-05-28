@@ -1,0 +1,68 @@
+{
+  "canonical_id": "OI_RIBOFLAVIN_COLORANT",
+  "verified_at": "2026-05-28T18:41:07.100377+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Riboflavin (Color)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "missing_cui_has_clean_candidate",
+        "proposed_value": "C0035527",
+        "proposed_resolution": {
+          "cui": "C0035527",
+          "name": "riboflavin",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 185,
+          "status": "R"
+        },
+        "evidence": "UMLS exact search yielded C0035527 ('riboflavin') passing all strict-mode guards."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "TLM2976OFR",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "TLM2976OFR",
+          "gsrs_name": "Riboflavin"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

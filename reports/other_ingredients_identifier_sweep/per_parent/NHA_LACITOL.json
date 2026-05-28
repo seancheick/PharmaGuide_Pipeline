@@ -1,0 +1,85 @@
+{
+  "canonical_id": "NHA_LACITOL",
+  "verified_at": "2026-05-28T18:27:58.171111+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Lacitol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0064585",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0064585",
+          "name": "lactitol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 38,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "28395",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "28395",
+          "name": "lactitol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "L2B0WJF7ZY",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "L2B0WJF7ZY",
+          "gsrs_name": "Lactitol",
+          "names_sample": [
+            "4-O-.BETA.-D-GALACTOPYRANOSYL-D-GLUCITOL",
+            "D-LACTITOL",
+            "E-966",
+            "FINLAC DC",
+            "IMPORTAL"
+          ]
+        },
+        "evidence": "UNII L2B0WJF7ZY resolves to GSRS substance 'Lactitol' with no token overlap with IQM 'Lacitol'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 157355,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 157355,
+          "iupac": "(2S,3R,4R,5R)-4-[(2S,3R,4S,5R,6R)-3,4,5-trihydroxy-6-(hydroxymethyl)oxan-2-yl]oxyhexane-1,2,3,5,6-pentol",
+          "inchi_key": "VQHSOMBJVWLPSR-JVCRWLNRSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "585-86-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "585-86-4",
+          "resolved_cid": 157355
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

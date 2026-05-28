@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NHA_GINGER_EXTRACT",
+  "verified_at": "2026-05-28T18:26:34.147361+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Ginger Extract",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0939895",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0939895",
+          "name": "ginger extract",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 31,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "125921",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "125921",
+          "name": "ginger root",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "C5529G5JPQ",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "C5529G5JPQ",
+          "gsrs_name": "GINGER"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

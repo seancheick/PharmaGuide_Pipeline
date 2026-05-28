@@ -1,0 +1,63 @@
+{
+  "canonical_id": "PII_CORN_SOURCE_DESCRIPTOR",
+  "verified_at": "2026-05-28T18:44:13.488616+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Corn (Source Descriptor)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1138842",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1138842",
+          "name": "Maize",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 39,
+          "status": "R"
+        },
+        "notes": "UMLS preferred display name disagrees with IQM 'Corn (Source Descriptor)', but UMLS exact-search for alias 'Corn' returns the same CUI (C1138842). Stored CUI is canonical."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "0N8672707O",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "0N8672707O",
+          "gsrs_name": "CORN"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

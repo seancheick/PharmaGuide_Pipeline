@@ -1,0 +1,85 @@
+{
+  "canonical_id": "NHA_CITRIC_ACID",
+  "verified_at": "2026-05-28T18:24:16.199237+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Citric Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0055819",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0055819",
+          "name": "citric acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 81,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "114200",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "114200",
+          "name": "citrate",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 114200 resolves to 'citrate' (tty=IN) with no token overlap with IQM 'Citric Acid' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2968PHW8QP",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "2968PHW8QP",
+          "gsrs_cas_codes": [
+            "5949-29-1"
+          ],
+          "cas_stored": "77-92-9"
+        },
+        "evidence": "IQM stores CAS=77-92-9 but UNII 2968PHW8QP's GSRS record lists CAS codes ['5949-29-1']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 311,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 311,
+          "iupac": "2-hydroxypropane-1,2,3-tricarboxylic acid",
+          "inchi_key": "KRKNYBCHXYNGOX-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "77-92-9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "77-92-9",
+          "resolved_cid": 311
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "canonical_id": "NHA_SODIUM_SULFATE",
+  "verified_at": "2026-05-28T18:35:13.958642+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Sulfate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0074769",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0074769",
+          "name": "sodium sulfate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 31,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "36721",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "36721",
+          "name": "sodium sulfate",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "0YPR65R21J",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "0YPR65R21J",
+          "gsrs_cas_codes": [
+            "7727-73-3"
+          ],
+          "cas_stored": "7757-82-6"
+        },
+        "evidence": "IQM stores CAS=7757-82-6 but UNII 0YPR65R21J's GSRS record lists CAS codes ['7727-73-3']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 24436,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 24436,
+          "iupac": "disodium;sulfate",
+          "inchi_key": "PMZURENOXWZQFD-UHFFFAOYSA-L"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "7757-82-6",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "7757-82-6",
+          "resolved_cid": 24436
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

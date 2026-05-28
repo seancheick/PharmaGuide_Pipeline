@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NHA_WHITE_THYME_OIL",
+  "verified_at": "2026-05-28T18:37:32.389589+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "White Thyme Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0304119",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0304119",
+          "name": "thyme oil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Food"
+          ],
+          "atom_count": 34,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "90950",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "90950",
+          "name": "thyme oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2UK410MY6B",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2UK410MY6B",
+          "gsrs_name": "THYME OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "canonical_id": "PII_ALUMINUM_OXIDE",
+  "verified_at": "2026-05-28T18:41:57.256408+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Aluminum Oxide",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0002374",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0002374",
+          "name": "aluminum oxide",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 87,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "615",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "615",
+          "name": "aluminum oxide",
+          "tty": "IN",
+          "synonym": "aluminium oxide"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "LMI26O6933",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "LMI26O6933",
+          "gsrs_name": "ALUMINUM OXIDE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 9989226,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 9989226,
+          "iupac": "dialuminum;tris(oxygen(2-))",
+          "inchi_key": "PNEYBMLMFCGWSK-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1344-28-1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1344-28-1",
+          "resolved_cid": 9989226
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

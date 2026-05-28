@@ -1,0 +1,80 @@
+{
+  "canonical_id": "NHA_KAOLIN",
+  "verified_at": "2026-05-28T18:27:54.434065+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Kaolin",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0022499",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0022499",
+          "name": "kaolin",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 102,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "104100",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "104100",
+          "name": "kaolin light",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "24H4NWX5CO",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "24H4NWX5CO",
+          "gsrs_cas_codes": [
+            "1332-58-7"
+          ],
+          "cas_stored": "12068-50-7"
+        },
+        "evidence": "IQM stores CAS=12068-50-7 but UNII 24H4NWX5CO's GSRS record lists CAS codes ['1332-58-7']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 92024769,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 92024769,
+          "iupac": "dialuminum;trioxido(trioxidosilyloxy)silane;dihydrate",
+          "inchi_key": "KGOIAFZMMLWXLM-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "12068-50-7",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "medium",
+        "reason_code": "cas_not_found_in_pubchem",
+        "evidence": "PubChem name-search for CAS '12068-50-7' returned no CID."
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

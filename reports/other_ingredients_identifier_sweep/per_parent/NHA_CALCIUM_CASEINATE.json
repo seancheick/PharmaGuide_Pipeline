@@ -1,0 +1,67 @@
+{
+  "canonical_id": "NHA_CALCIUM_CASEINATE",
+  "verified_at": "2026-05-28T18:23:05.968944+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Calcium Caseinate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0301465",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0301465",
+          "name": "Calcium caseinate",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 161712915,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 161712915,
+          "iupac": "yttrium",
+          "inchi_key": "XHNWPXNQNBLSAW-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "9005-43-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "9005-43-0",
+          "resolved_cid": 161712915
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

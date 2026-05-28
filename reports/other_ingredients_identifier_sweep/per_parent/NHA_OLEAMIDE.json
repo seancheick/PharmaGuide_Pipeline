@@ -1,0 +1,78 @@
+{
+  "canonical_id": "NHA_OLEAMIDE",
+  "verified_at": "2026-05-28T18:30:38.499318+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Oleamide",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C5886810",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C5886810",
+          "name": "oleamide",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1368883",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "rxcui_name_does_not_align_with_iqm",
+        "api_response": {
+          "rxcui": "1368883",
+          "name": "oleylamide",
+          "tty": "IN",
+          "synonym": ""
+        },
+        "evidence": "RxCUI 1368883 resolves to 'oleylamide' (tty=IN) with no token overlap with IQM 'Oleamide' or its aliases, and RxNav name-search did not reverse-confirm the RxCUI."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "7L25QK8BWO",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "7L25QK8BWO",
+          "gsrs_name": "OLEAMIDE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 5283387,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 5283387,
+          "iupac": "(Z)-octadec-9-enamide",
+          "inchi_key": "FATBGEAMYMYZAF-KTKRTIGZSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "301-02-0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "301-02-0",
+          "resolved_cid": 5283387
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

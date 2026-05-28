@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_SODIUM_STEARYL_FUMARATE",
+  "verified_at": "2026-05-28T18:35:05.246339+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Sodium Stearyl Fumarate",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1509821",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1509821",
+          "name": "sodium stearyl fumarate",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1364936",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1364936",
+          "name": "sodium stearyl fumarate",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "7CV7WJK4UI",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "7CV7WJK4UI",
+          "gsrs_name": "Sodium Stearyl Fumarate"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 23665634,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 23665634,
+          "iupac": "sodium (E)-4-octadecoxy-4-oxobut-2-enoate",
+          "inchi_key": "STFSJTPVIIDAQX-LTRPLHCISA-M"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "4070-80-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "4070-80-8",
+          "resolved_cid": 23665634
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

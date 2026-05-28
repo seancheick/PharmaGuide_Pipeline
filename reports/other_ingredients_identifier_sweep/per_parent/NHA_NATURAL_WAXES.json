@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_NATURAL_WAXES",
+  "verified_at": "2026-05-28T18:30:07.898862+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Natural Waxes",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0043076",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "low",
+        "reason_code": "resolved_concept_lacks_substance_semantic_type",
+        "api_response": {
+          "cui": "C0043076",
+          "name": "Waxes",
+          "semantic_types": [
+            "Biomedical or Dental Material"
+          ],
+          "atom_count": 38,
+          "status": "R"
+        },
+        "evidence": "Stored CUI C0043076 resolves to 'Waxes' with semantic types ['Biomedical or Dental Material']. None match the typical substance categories. May be a procedure/finding/organism concept, or a UMLS atom that lost its substance categorization."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "WL0328HX19",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "WL0328HX19",
+          "gsrs_name": "CANDELILLA WAX",
+          "names_sample": [
+            "CANDELILLA",
+            "CANDELILLA CERA",
+            "CANDELILLA WAX",
+            "CANDELILLA WAX (E902)",
+            "CANDELILLA WAX [FCC]"
+          ]
+        },
+        "evidence": "UNII WL0328HX19 resolves to GSRS substance 'CANDELILLA WAX' with no token overlap with IQM 'Natural Waxes'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

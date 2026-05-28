@@ -1,0 +1,75 @@
+{
+  "canonical_id": "NHA_MALTOSE",
+  "verified_at": "2026-05-28T18:28:53.630185+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Maltose",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0024658",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0024658",
+          "name": "maltose",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 51,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1311261",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1311261",
+          "name": "maltose",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "XJ6S9RV06F",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "XJ6S9RV06F",
+          "gsrs_name": "MALTOSE, UNSPECIFIED FORM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 439186,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 439186,
+          "iupac": "(2R,3S,4S,5R,6R)-2-(hydroxymethyl)-6-[(2R,3S,4R,5R)-4,5,6-trihydroxy-2-(hydroxymethyl)oxan-3-yl]oxyoxane-3,4,5-triol",
+          "inchi_key": "GUBGYTABKSRVRQ-PICCSMPSSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "69-79-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "69-79-4",
+          "resolved_cid": 439186
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

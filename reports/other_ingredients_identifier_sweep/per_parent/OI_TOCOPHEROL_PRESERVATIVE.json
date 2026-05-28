@@ -1,0 +1,76 @@
+{
+  "canonical_id": "OI_TOCOPHEROL_PRESERVATIVE",
+  "verified_at": "2026-05-28T18:41:29.061420+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Tocopherol (Preservative)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C3255108",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C3255108",
+          "name": "tocopherol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance",
+            "Vitamin"
+          ],
+          "atom_count": 62,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1236136",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1236136",
+          "name": "tocopherol",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "R0ZB2556P8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "R0ZB2556P8",
+          "gsrs_name": "TOCOPHEROL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 14986,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 14986,
+          "iupac": "2,7,8-trimethyl-2-(4,8,12-trimethyltridecyl)-3,4-dihydrochromen-6-ol",
+          "inchi_key": "QUEDXNHFTDJVIY-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "1406-66-2",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "1406-66-2",
+          "resolved_cid": 14986
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

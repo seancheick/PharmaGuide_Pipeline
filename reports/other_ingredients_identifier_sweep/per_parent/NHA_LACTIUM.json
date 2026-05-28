@@ -1,0 +1,59 @@
+{
+  "canonical_id": "NHA_LACTIUM",
+  "verified_at": "2026-05-28T18:28:00.952027+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Lactium",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "unresolvable",
+        "reason_code": "no_clean_exact_match_for_missing_cui",
+        "notes": "Tried exact UMLS search on standard_name and aliases; no candidate passed strict-mode guards."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no unii stored (acceptable)"
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 10351433,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 10351433,
+          "iupac": "(4S)-5-[[(2S)-5-amino-1-[[(2S)-1-[[(2S)-1-[[(1S)-1-carboxy-4-(diaminomethylideneamino)butyl]amino]-4-methyl-1-oxopentan-2-yl]amino]-4-methyl-1-oxopentan-2-yl]amino]-1,5-dioxopentan-2-yl]amino]-4-[[(2S)-2-[[(2S)-2-[[2-[[(2S)-2-[[(2S)-2-amino-3-(4-hydroxyphenyl)propanoyl]amino]-4-methylpentanoyl]amino]acetyl]amino]-3-(4-hydroxyphenyl)propanoyl]amino]-4-methylpentanoyl]amino]-5-oxopentanoic acid",
+          "inchi_key": "SKGURMFKEAFAGD-CSYZDTNESA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "117592-45-7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "117592-45-7",
+          "resolved_cid": 10351433
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

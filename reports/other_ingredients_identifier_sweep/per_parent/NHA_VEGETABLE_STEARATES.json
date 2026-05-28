@@ -1,0 +1,73 @@
+{
+  "canonical_id": "NHA_VEGETABLE_STEARATES",
+  "verified_at": "2026-05-28T18:37:17.733440+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Vegetable-Derived Stearates",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0038229",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0038229",
+          "name": "stearic acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 70,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "776XM7047L",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "776XM7047L",
+          "gsrs_name": "Calcium stearate",
+          "names_sample": [
+            "AULABRITE CA 65",
+            "BAERLOCHER 5862",
+            "CALCII STEARAS [WHO-IP LATIN]",
+            "CALCIUM DISTEARATE",
+            "CALCIUM OCTADECANOATE [WHO-IP]"
+          ]
+        },
+        "evidence": "UNII 776XM7047L resolves to GSRS substance 'Calcium stearate' with no token overlap with IQM 'Vegetable-Derived Stearates'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "OI_PAPRIKA_EXTRACT",
+  "verified_at": "2026-05-28T18:40:37.789535+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Paprika Extract",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C4724792",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C4724792",
+          "name": "paprika extract",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 2,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "899873",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "899873",
+          "name": "paprika allergenic extract",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "X72Z47861V",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "X72Z47861V",
+          "gsrs_name": "PAPRIKA"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

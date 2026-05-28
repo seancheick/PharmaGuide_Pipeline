@@ -1,0 +1,67 @@
+{
+  "canonical_id": "PII_HONEY",
+  "verified_at": "2026-05-28T18:46:06.300536+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Honey",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0019906",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0019906",
+          "name": "Honey",
+          "semantic_types": [
+            "Food"
+          ],
+          "atom_count": 30,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "285279",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "285279",
+          "name": "honey preparation",
+          "tty": "IN",
+          "synonym": "honey extract"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "Y9H1V576FH",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "Y9H1V576FH",
+          "gsrs_name": "HONEY"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

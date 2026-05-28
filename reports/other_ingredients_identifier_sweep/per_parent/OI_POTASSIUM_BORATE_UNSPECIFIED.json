@@ -1,0 +1,76 @@
+{
+  "canonical_id": "OI_POTASSIUM_BORATE_UNSPECIFIED",
+  "verified_at": "2026-05-28T18:40:52.410391+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Potassium Borate (unspecified label form)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C4733987",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C4733987",
+          "name": "Potassium Borate",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "ZV5114S322",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "cas_unii_disagreement",
+        "api_response": {
+          "unii": "ZV5114S322",
+          "gsrs_cas_codes": [
+            "1332-77-0"
+          ],
+          "cas_stored": "12712-38-8"
+        },
+        "evidence": "IQM stores CAS=12712-38-8 but UNII ZV5114S322's GSRS record lists CAS codes ['1332-77-0']."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 12816516,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 12816516,
+          "iupac": "tripotassium;borate",
+          "inchi_key": "WUUHFRRPHJEEKV-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "12712-38-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "12712-38-8",
+          "resolved_cid": 12816516
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

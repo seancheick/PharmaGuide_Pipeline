@@ -1,0 +1,75 @@
+{
+  "canonical_id": "OI_GALACTOSE",
+  "verified_at": "2026-05-28T18:39:54.274652+00:00",
+  "iqm_snapshot_sha256": "420cd8652cd47b374102e6833e10dc2acf54e82e28be1a0e8d67e479a1209d79",
+  "standard_name": "Galactose",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0016945",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0016945",
+          "name": "galactose",
+          "semantic_types": [
+            "Organic Chemical",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 69,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "4626",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "4626",
+          "name": "galactose",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "X2RN3Q8DNE",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "X2RN3Q8DNE",
+          "gsrs_name": "Galactose"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 6036,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 6036,
+          "iupac": "(3R,4S,5R,6R)-6-(hydroxymethyl)oxane-2,3,4,5-tetrol",
+          "inchi_key": "WQZGKKKJIJFFOK-SVZMEOIVSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "59-23-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "59-23-4",
+          "resolved_cid": 6036
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}
