@@ -36,6 +36,10 @@ sys.path.insert(0, str(Path(__file__).parent))
 from constants import LOG_DATE_FORMAT, LOG_FORMAT
 from audit_evidence_utils import derive_non_gmo_audit
 from inactive_ingredient_resolver import InactiveIngredientResolver
+from identity.safety import (
+    normalize_safety_source,
+    safety_flag_matches_status,
+)
 from scoring_input_contract import (
     get_scoring_ingredients,
     is_nutrition_only_product,
@@ -1282,11 +1286,14 @@ class SupplementScorer:
 
     def _evaluate_safety_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
         contaminant_data = product.get("contaminant_data") or {}
-        substances = safe_list(
-            contaminant_data
-            .get("banned_substances", {})
-            .get("substances", [])
-        )
+        banned_substances = contaminant_data.get("banned_substances", {})
+        substances = safe_list(banned_substances.get("substances", []))
+        canonical_safety_flags = [
+            f for f in safe_list(banned_substances.get("safety_flags")) if isinstance(f, dict)
+        ]
+        for substance in substances:
+            if isinstance(substance, dict) and isinstance(substance.get("safety_flag"), dict):
+                canonical_safety_flags.append(substance["safety_flag"])
 
         flags: List[str] = []
         moderate_penalty = 0
@@ -1295,7 +1302,54 @@ class SupplementScorer:
         reason = None
         matched_substance_name = None
         review_needed = False
-        seen_hits: set[tuple[str, str, str]] = set()
+        seen_hits: set[tuple[str, str]] = set()
+
+        for safety_flag in canonical_safety_flags:
+            if (
+                normalize_safety_source(
+                    safety_flag.get("source_db") or safety_flag.get("matched_source")
+                )
+                != "banned_recalled_ingredients"
+            ):
+                continue
+            match_type = self._normalize_match_type(safety_flag.get("match_type"))
+            status = norm_text(safety_flag.get("status"))
+            name = (
+                safety_flag.get("matched_variant")
+                or safety_flag.get("evidence_text")
+                or safety_flag.get("entry_id")
+                or "unknown"
+            )
+            seen_hits.add(self._safety_hit_key(name, status))
+
+            if match_type not in {"exact", "alias", "explicit_form_evidence", "legacy_projection"}:
+                review_needed = True
+                continue
+
+            if safety_flag_matches_status(safety_flag, ("banned",)):
+                blocked = True
+                reason = f"Banned substance ({name})"
+                matched_substance_name = name
+            elif safety_flag_matches_status(safety_flag, ("recalled",)):
+                unsafe = True
+                reason = f"Recalled ingredient ({name})"
+                matched_substance_name = name
+            elif safety_flag_matches_status(safety_flag, ("high_risk",)):
+                b0_cfg = self.config.get(
+                    "section_B_safety_purity", {}
+                ).get("B0_immediate_fail", {})
+                moderate_penalty += as_float(
+                    b0_cfg.get("high_risk_penalty"), 10.0
+                ) or 10.0
+                flags.append("B0_HIGH_RISK_SUBSTANCE")
+            elif safety_flag_matches_status(safety_flag, ("watchlist",)):
+                b0_cfg = self.config.get(
+                    "section_B_safety_purity", {}
+                ).get("B0_immediate_fail", {})
+                moderate_penalty += as_float(
+                    b0_cfg.get("watchlist_penalty"), 5.0
+                ) or 5.0
+                flags.append("B0_WATCHLIST_SUBSTANCE")
 
         for substance in substances:
             match_type = self._normalize_match_type(
@@ -1309,10 +1363,10 @@ class SupplementScorer:
                 or substance.get("name")
                 or "unknown"
             )
-            seen_hits.add(self._safety_hit_key(
-                name,
-                status,
-            ))
+            key = self._safety_hit_key(name, status)
+            if key in seen_hits:
+                continue
+            seen_hits.add(key)
 
             # Interim behavior: non exact/alias hits are review-only.
             if match_type not in {"exact", "alias"}:

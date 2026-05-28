@@ -32,6 +32,10 @@ from inactive_ingredient_resolver import (
     InactiveIngredientResolver,
     SOURCE_BANNED_RECALLED,
 )
+from identity.safety import (
+    normalize_safety_source,
+    safety_flag_matches_status,
+)
 
 
 # Verdict precedence — index = severity rank.
@@ -93,6 +97,7 @@ class SafetyResult:
 # Match types that authorize a verdict change. Other match types (fuzzy,
 # partial, token, etc.) route to the review queue without auto-blocking.
 _VERDICT_MATCH_TYPES = frozenset({"exact", "alias"})
+_FLAG_VERDICT_MATCH_TYPES = frozenset({"exact", "alias", "explicit_form_evidence", "legacy_projection"})
 
 
 def _safe_list(value: Any) -> list:
@@ -113,6 +118,26 @@ def _extract_substances(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     if not isinstance(bs, dict):
         return []
     return [s for s in _safe_list(bs.get("substances")) if isinstance(s, dict)]
+
+
+def _extract_banned_recalled_safety_flags(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    cd = product.get("contaminant_data")
+    if not isinstance(cd, dict):
+        return []
+    bs = cd.get("banned_substances")
+    if not isinstance(bs, dict):
+        return []
+    flags: List[Dict[str, Any]] = [
+        f for f in _safe_list(bs.get("safety_flags")) if isinstance(f, dict)
+    ]
+    for substance in _safe_list(bs.get("substances")):
+        if isinstance(substance, dict) and isinstance(substance.get("safety_flag"), dict):
+            flags.append(substance["safety_flag"])
+    return [
+        flag for flag in flags
+        if normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
+        == "banned_recalled_ingredients"
+    ]
 
 
 def _substance_name(s: Dict[str, Any]) -> str:
@@ -197,8 +222,43 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
 
     result = SafetyResult()
 
-    substances = _extract_substances(product)
     seen_hits: set[tuple[str, str]] = set()
+    for flag in _extract_banned_recalled_safety_flags(product):
+        match_type = _norm(flag.get("match_type"))
+        name = (
+            flag.get("matched_variant")
+            or flag.get("evidence_text")
+            or flag.get("entry_id")
+            or "unknown"
+        )
+        status = _norm(flag.get("status"))
+        seen_hits.add((_norm(name), status))
+        if match_type not in _FLAG_VERDICT_MATCH_TYPES:
+            result.needs_review = True
+            continue
+
+        if safety_flag_matches_status(flag, ("banned",)):
+            new_verdict = "BLOCKED"
+            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
+                result.verdict = new_verdict
+                result.blocking_reason = "banned_ingredient"
+                result.matched_substance = str(name)
+        elif safety_flag_matches_status(flag, ("recalled",)):
+            new_verdict = "UNSAFE"
+            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
+                result.verdict = new_verdict
+                result.blocking_reason = "recalled_ingredient"
+                result.matched_substance = str(name)
+        elif safety_flag_matches_status(flag, ("high_risk",)):
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            if "B0_HIGH_RISK_SUBSTANCE" not in result.safety_signals:
+                result.safety_signals.append("B0_HIGH_RISK_SUBSTANCE")
+        elif safety_flag_matches_status(flag, ("watchlist",)):
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            if "B0_WATCHLIST_SUBSTANCE" not in result.safety_signals:
+                result.safety_signals.append("B0_WATCHLIST_SUBSTANCE")
+
+    substances = _extract_substances(product)
     for s in substances:
         match_type = _norm(s.get("match_type") or s.get("match_method"))
         # Non-exact/alias hits don't auto-trigger a verdict change — they

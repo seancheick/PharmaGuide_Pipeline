@@ -199,6 +199,53 @@ class TestV30Scoring:
         assert result["score_80"] is None
         assert result["evaluation_stage"] == "safety"
 
+    def test_b0_canonical_safety_flag_is_blocked(self, scorer):
+        """Canonical banned/recalled safety_flags are the scoring source of truth."""
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [],
+            "safety_flags": [
+                {
+                    "entry_id": "BANNED_DMAA",
+                    "source_db": "banned_recalled_ingredients",
+                    "status": "banned",
+                    "severity": "critical",
+                    "match_type": "exact",
+                    "matched_variant": "DMAA",
+                    "evidence_text": "DMAA",
+                    "confidence": "high",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "BLOCKED"
+        assert result["score_80"] is None
+        assert result["evaluation_stage"] == "safety"
+
+    def test_b0_canonical_token_bounded_flag_needs_review(self, scorer):
+        product = make_base_product()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [],
+            "safety_flags": [
+                {
+                    "entry_id": "BANNED_TEST",
+                    "source_db": "banned_recalled_ingredients",
+                    "status": "banned",
+                    "severity": "critical",
+                    "match_type": "token_bounded",
+                    "matched_variant": "Test",
+                    "evidence_text": "Test",
+                    "confidence": "medium",
+                }
+            ],
+        }
+        result = scorer.score_product(product)
+        assert result["verdict"] == "CAUTION"
+        assert "BANNED_MATCH_REVIEW_NEEDED" in result["flags"]
+        assert result["breakdown"]["B"]["B0_moderate_penalty"] == pytest.approx(5.0)
+
     def test_b0_token_bounded_causes_caution_not_block(self, scorer):
         product = make_base_product()
         product["contaminant_data"]["banned_substances"] = {

@@ -74,6 +74,60 @@ def test_banned_substance_in_contaminant_data_returns_blocked() -> None:
     assert "Vinpocetine" in (result.matched_substance or "")
 
 
+def test_canonical_safety_flag_returns_blocked() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "contaminant_data": {
+            "banned_substances": {
+                "substances": [],
+                "safety_flags": [
+                    {
+                        "entry_id": "BANNED_VINPOCETINE",
+                        "source_db": "banned_recalled_ingredients",
+                        "status": "banned",
+                        "severity": "critical",
+                        "match_type": "exact",
+                        "matched_variant": "Vinpocetine",
+                        "evidence_text": "Vinpocetine",
+                        "confidence": "high",
+                    }
+                ],
+            }
+        }
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict == "BLOCKED"
+    assert result.short_circuits_scoring is True
+    assert result.blocking_reason == "banned_ingredient"
+    assert "Vinpocetine" in (result.matched_substance or "")
+
+
+def test_canonical_token_bounded_safety_flag_needs_review_not_blocked() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "contaminant_data": {
+            "banned_substances": {
+                "substances": [],
+                "safety_flags": [
+                    {
+                        "entry_id": "BANNED_TEST",
+                        "source_db": "banned_recalled_ingredients",
+                        "status": "banned",
+                        "severity": "critical",
+                        "match_type": "token_bounded",
+                        "matched_variant": "Test",
+                        "evidence_text": "Test",
+                        "confidence": "medium",
+                    }
+                ],
+            }
+        }
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict is None
+    assert result.needs_review is True
+
+
 def test_recalled_ingredient_returns_unsafe() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
     product = {
