@@ -4832,7 +4832,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0013479",
+      "cui": "C0697080",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5129,7 +5129,7 @@
       "notes": "Eucalyptus globulus (Myrtaceae) leaf. Contains 1,8-cineole (eucalyptol, 60-85% of essential oil). Traditional respiratory herb. Used as inhalant and in supplements for sinus and bronchial support.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0015143",
+      "cui": "C0015148",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5163,7 +5163,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015143",
+      "cui": "C1005038",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5408,7 +5408,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015636",
+      "cui": "C0697198",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5837,7 +5837,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017149",
+      "cui": "C1879327",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5880,7 +5880,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017149",
+      "cui": "C1879327",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -6184,7 +6184,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330520",
+      "cui": "C3500453",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -6210,7 +6210,7 @@
       "external_ids": {
         "unii": "7M867G6T1U"
       },
-      "cui": "C0007037",
+      "cui": "C2948088",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -6799,7 +6799,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949828",
+      "cui": "C0950016",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -7749,7 +7749,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949828",
+      "cui": "C0950016",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -10787,7 +10787,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0025757",
+      "cui": "C0697157",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -10819,7 +10819,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0025757",
+      "cui": "C0697157",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -11595,7 +11595,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040718",
+      "cui": "C0330783",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -11627,7 +11627,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040718",
+      "cui": "C0330783",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13155,7 +13155,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040081",
+      "cui": "C0697238",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -15873,7 +15873,7 @@
       "notes": "Tagetes erecta (Aztec marigold) flower extract. Commercial source of lutein and zeaxanthin via saponification. Per identity_bioactivity_split policy: bare marigold labels resolve to this botanical canonical; lutein marker Section C credit requires explicit standardization declaration (see scripts/data/botanical_marker_contributions.json \u2014 TODO: add entry).",
       "last_updated": "2026-05-11",
       "external_ids": {},
-      "cui": "C0938046",
+      "cui": "C1000850",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
