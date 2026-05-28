@@ -1,0 +1,71 @@
+{
+  "canonical_id": "BANNED_IBOTENIC_ACID",
+  "verified_at": "2026-05-28T14:58:05.381967+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Ibotenic Acid",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0020738",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0020738",
+          "name": "Ibotenic Acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Indicator, Reagent, or Diagnostic Aid",
+            "Hazardous or Poisonous Substance"
+          ],
+          "atom_count": 30,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "44AS82FRSI",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "44AS82FRSI",
+          "gsrs_name": "IBOTENIC ACID"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 1233,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 1233,
+          "iupac": "2-amino-2-(3-oxo-1,2-oxazol-5-yl)acetic acid",
+          "inchi_key": "IRJCBFDCFXCWGO-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "2552-55-8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "2552-55-8",
+          "resolved_cid": 1233
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

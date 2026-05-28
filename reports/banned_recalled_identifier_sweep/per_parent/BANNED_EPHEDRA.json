@@ -1,0 +1,73 @@
+{
+  "canonical_id": "BANNED_EPHEDRA",
+  "verified_at": "2026-05-28T14:57:52.244007+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Ephedra",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0885298",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0885298",
+          "name": "Ephedra vulgaris preparation",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 13,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "GN83C131XS",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "GN83C131XS",
+          "gsrs_name": "Ephedrine",
+          "names_sample": [
+            "(-)-EPHEDRINE",
+            "(1R,2S)-2-METHYLAMINO-1-PHENYLPROPAN-1-OL",
+            "(R-(R*,S*))-.ALPHA.-(1-(METHYLAMINO)ETHYL)BENZENEMETHANOL [WHO-IP]",
+            "BENZENEMETHANOL, .ALPHA.-(1-(METHYLAMINO)ETHYL)-, (R-(R*,S*))-",
+            "Ephedrine"
+          ]
+        },
+        "evidence": "UNII GN83C131XS resolves to GSRS substance 'Ephedrine' with no token overlap with IQM 'Ephedra'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

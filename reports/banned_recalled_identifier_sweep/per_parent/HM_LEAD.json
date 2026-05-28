@@ -1,0 +1,68 @@
+{
+  "canonical_id": "HM_LEAD",
+  "verified_at": "2026-05-28T14:59:04.369635+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Lead",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0023175",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0023175",
+          "name": "lead",
+          "semantic_types": [
+            "Hazardous or Poisonous Substance",
+            "Element, Ion, or Isotope"
+          ],
+          "atom_count": 61,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "6260",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "6260",
+          "name": "lead",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "2P299V784P",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "2P299V784P",
+          "gsrs_name": "Lead"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

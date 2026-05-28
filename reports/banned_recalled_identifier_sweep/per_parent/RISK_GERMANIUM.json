@@ -1,0 +1,55 @@
+{
+  "canonical_id": "RISK_GERMANIUM",
+  "verified_at": "2026-05-28T15:00:02.457226+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Germanium (Inorganic)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "Inorganic germanium entry spans multiple salts and oxides; no single ingredient-level UMLS concept is appropriate."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5O6CM4W76A",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "5O6CM4W76A",
+          "gsrs_name": "GERMANIUM DIOXIDE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

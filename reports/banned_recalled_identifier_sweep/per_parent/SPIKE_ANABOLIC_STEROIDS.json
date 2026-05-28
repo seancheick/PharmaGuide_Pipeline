@@ -1,0 +1,65 @@
+{
+  "canonical_id": "SPIKE_ANABOLIC_STEROIDS",
+  "verified_at": "2026-05-28T15:01:11.762853+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Policy Watchlist: Synthetic Anabolic Steroids",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate."
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "77P0LYX19T",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "77P0LYX19T",
+          "gsrs_name": "Androsta-3,5-diene-7,17-dione",
+          "names_sample": [
+            "3,5-ANDROSTADIENE-7,17-DIONE",
+            "ARIMISTANE",
+            "Androsta-3,5-diene-7,17-dione",
+            "ERASE",
+            "NSC-134910"
+          ]
+        },
+        "evidence": "UNII 77P0LYX19T resolves to GSRS substance 'Androsta-3,5-diene-7,17-dione' with no token overlap with IQM 'Policy Watchlist: Synthetic Anabolic Steroids'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

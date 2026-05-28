@@ -1,0 +1,63 @@
+{
+  "canonical_id": "BANNED_PHENIBUT",
+  "verified_at": "2026-05-28T14:58:15.273942+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Phenibut",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0048007",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0048007",
+          "name": "4-amino-3-phenylbutyric acid",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 13,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "T2M58D6LA8",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "T2M58D6LA8",
+          "gsrs_name": "PHENIBUT"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

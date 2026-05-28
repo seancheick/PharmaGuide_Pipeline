@@ -1,0 +1,65 @@
+{
+  "canonical_id": "ADD_COLLOIDAL_SILVER",
+  "verified_at": "2026-05-28T14:55:20.771197+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Colloidal Silver",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0772313",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0772313",
+          "name": "colloidal silver",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 20,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "9785",
+      "verdict": {
+        "status": "unresolvable",
+        "severity": "high",
+        "reason_code": "rxcui_not_found_in_rxnav",
+        "evidence": "RxNav /rxcui/9785/properties.json returned no record."
+      }
+    },
+    "external_ids.unii": {
+      "stored": "3M4G523W1G",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "3M4G523W1G",
+          "gsrs_name": "SILVER"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

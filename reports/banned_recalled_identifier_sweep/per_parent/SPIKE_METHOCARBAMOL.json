@@ -1,0 +1,68 @@
+{
+  "canonical_id": "SPIKE_METHOCARBAMOL",
+  "verified_at": "2026-05-28T15:01:46.958553+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Methocarbamol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0025659",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0025659",
+          "name": "methocarbamol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 75,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "6845",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "6845",
+          "name": "methocarbamol",
+          "tty": "IN",
+          "synonym": "guaiphenesin carbamate"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "125OD7737X",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "125OD7737X",
+          "gsrs_name": "METHOCARBAMOL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "SPIKE_DICLOFENAC",
+  "verified_at": "2026-05-28T15:01:33.478317+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Diclofenac",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0012091",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0012091",
+          "name": "diclofenac",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 84,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "3355",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "3355",
+          "name": "diclofenac",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "144O8QL0L1",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "144O8QL0L1",
+          "gsrs_name": "Diclofenac"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

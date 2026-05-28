@@ -1,0 +1,68 @@
+{
+  "canonical_id": "BANNED_ADD_TALC",
+  "verified_at": "2026-05-28T14:56:44.468975+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Talc",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0039267",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0039267",
+          "name": "talc",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Inorganic Chemical"
+          ],
+          "atom_count": 80,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "10323",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "10323",
+          "name": "talc",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "7SEV7J4R1U",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "7SEV7J4R1U",
+          "gsrs_name": "TALC"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "canonical_id": "SARM_OSTARINE",
+  "verified_at": "2026-05-28T15:00:39.740296+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Ostarine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C2742262",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C2742262",
+          "name": "enobosarm",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 15,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "2168587",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "2168587",
+          "name": "enobosarm",
+          "tty": "IN",
+          "synonym": "ostarine"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "O3571H3R8N",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "O3571H3R8N",
+          "gsrs_name": "ENOBOSARM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

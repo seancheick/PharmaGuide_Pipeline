@@ -1,0 +1,68 @@
+{
+  "canonical_id": "ADD_HORDENINE",
+  "verified_at": "2026-05-28T14:55:30.467166+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Hordenine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0062970",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0062970",
+          "name": "hordenine",
+          "semantic_types": [
+            "Pharmacologic Substance",
+            "Biologically Active Substance"
+          ],
+          "atom_count": 5,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "27120",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "27120",
+          "name": "hordenine",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "K3489CA082",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "K3489CA082",
+          "gsrs_name": "HORDENINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

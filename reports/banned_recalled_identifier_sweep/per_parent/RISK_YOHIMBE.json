@@ -1,0 +1,67 @@
+{
+  "canonical_id": "RISK_YOHIMBE",
+  "verified_at": "2026-05-28T15:00:23.745977+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Yohimbe",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1123032",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1123032",
+          "name": "Yohimbe",
+          "semantic_types": [
+            "Plant"
+          ],
+          "atom_count": 37,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "236801",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "236801",
+          "name": "yohimbe bark preparation",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "9M051HS3S5",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "9M051HS3S5",
+          "gsrs_name": "PAUSINYSTALIA YOHIMBE BARK"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "canonical_id": "PEPTIDE_MELANOTAN_II",
+  "verified_at": "2026-05-28T14:59:50.756833+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Melanotan II",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0212602",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0212602",
+          "name": "melanotan-II",
+          "semantic_types": [
+            "Amino Acid, Peptide, or Protein",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 2,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "UPF5CJ93X7",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "UPF5CJ93X7",
+          "gsrs_name": "MELANOTAN II"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

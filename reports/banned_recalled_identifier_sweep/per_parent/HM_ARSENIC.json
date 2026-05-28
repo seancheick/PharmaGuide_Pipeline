@@ -1,0 +1,67 @@
+{
+  "canonical_id": "HM_ARSENIC",
+  "verified_at": "2026-05-28T14:58:57.070220+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Arsenic (Inorganic)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0936225",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0936225",
+          "name": "Inorganic arsenic",
+          "semantic_types": [
+            "Inorganic Chemical"
+          ],
+          "atom_count": 8,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1111",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1111",
+          "name": "arsenic",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "N712M78A8G",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "N712M78A8G",
+          "gsrs_name": "Arsenic"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

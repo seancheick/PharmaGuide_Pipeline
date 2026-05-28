@@ -1,0 +1,63 @@
+{
+  "canonical_id": "BANNED_ADD_ANATABINE",
+  "verified_at": "2026-05-28T14:56:03.747464+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Anatabine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0051816",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0051816",
+          "name": "anatabine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 7,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5PP654XB7D",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "5PP654XB7D",
+          "gsrs_name": "ANATABINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

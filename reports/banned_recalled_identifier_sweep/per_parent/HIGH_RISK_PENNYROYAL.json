@@ -1,0 +1,67 @@
+{
+  "canonical_id": "HIGH_RISK_PENNYROYAL",
+  "verified_at": "2026-05-28T14:58:55.456069+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Pennyroyal Oil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0070247",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0070247",
+          "name": "pennyroyal oil",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 9,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "1309213",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1309213",
+          "name": "pennyroyal oil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "AK85U7Y3MV",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "AK85U7Y3MV",
+          "gsrs_name": "PENNYROYAL OIL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

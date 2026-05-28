@@ -1,0 +1,68 @@
+{
+  "canonical_id": "BANNED_DMSA_SUCCIMER",
+  "verified_at": "2026-05-28T14:57:47.249294+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "DMSA (Succimer)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0012384",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0012384",
+          "name": "succimer",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 78,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "3446",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "3446",
+          "name": "succimer",
+          "tty": "IN",
+          "synonym": "meso-2,3-dimercaptosuccinic acid"
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "DX1U2629QE",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "DX1U2629QE",
+          "gsrs_name": "SUCCIMER"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

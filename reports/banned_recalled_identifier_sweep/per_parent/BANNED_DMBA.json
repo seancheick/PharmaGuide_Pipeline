@@ -1,0 +1,73 @@
+{
+  "canonical_id": "BANNED_DMBA",
+  "verified_at": "2026-05-28T14:57:37.563300+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "DMBA",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C4076845",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C4076845",
+          "name": "1,3-dimethylbutylamine",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 3,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "KXP599H5R6",
+      "verdict": {
+        "status": "mismatched",
+        "severity": "medium",
+        "reason_code": "unii_name_does_not_align_with_iqm",
+        "api_response": {
+          "unii": "KXP599H5R6",
+          "gsrs_name": "1,3-DIMETHYLBUTYLAMINE",
+          "names_sample": [
+            "(±)-1,3-DIMETHYLBUTYLAMINE",
+            "(±)-4-METHYL-2-PENTANAMINE",
+            "1,3-DIMETHYLBUTYLAMINE",
+            "1,3-Dimethylbutylamine [WHO-DD]",
+            "2-AMINO-4-METHYLPENTANE"
+          ]
+        },
+        "evidence": "UNII KXP599H5R6 resolves to GSRS substance '1,3-DIMETHYLBUTYLAMINE' with no token overlap with IQM 'DMBA'."
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

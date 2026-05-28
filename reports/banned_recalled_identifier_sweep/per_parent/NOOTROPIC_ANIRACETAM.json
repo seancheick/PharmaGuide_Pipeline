@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NOOTROPIC_ANIRACETAM",
+  "verified_at": "2026-05-28T14:59:14.959711+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Aniracetam",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0051917",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0051917",
+          "name": "aniracetam",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 11,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "17939",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "17939",
+          "name": "aniracetam",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "5L16LKN964",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "5L16LKN964",
+          "gsrs_name": "ANIRACETAM"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

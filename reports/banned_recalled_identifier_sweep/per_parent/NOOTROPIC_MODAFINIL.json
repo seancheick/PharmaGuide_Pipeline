@@ -1,0 +1,68 @@
+{
+  "canonical_id": "NOOTROPIC_MODAFINIL",
+  "verified_at": "2026-05-28T14:59:24.756696+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Modafinil",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0066677",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0066677",
+          "name": "modafinil",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 80,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "30125",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "30125",
+          "name": "modafinil",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "R3UK8X3U3D",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "R3UK8X3U3D",
+          "gsrs_name": "Modafinil"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "canonical_id": "BANNED_IGF1_LR3",
+  "verified_at": "2026-05-28T14:58:09.690456+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "IGF-1 LR3 (Long R3 Insulin-like Growth Factor 1)",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": null,
+      "verdict": {
+        "status": "skipped_intentional_null",
+        "reason_code": "approved_null_cui_status",
+        "notes": "No confirmed exact UMLS concept was found for this peptide analogue name; null CUI is intentional."
+      }
+    },
+    "rxcui": {
+      "stored": "1809244",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "1809244",
+          "name": "long-(ARG3)insulin-like growth factor-I",
+          "tty": "IN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "M9L22Y19H9",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "M9L22Y19H9",
+          "gsrs_name": "LONG-(ARG3)INSULIN-LIKE GROWTH FACTOR-I"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

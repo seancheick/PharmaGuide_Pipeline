@@ -1,0 +1,68 @@
+{
+  "canonical_id": "ADD_DOCUSATE_SODIUM",
+  "verified_at": "2026-05-28T14:55:24.771944+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Docusate Sodium",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0243237",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0243237",
+          "name": "docusate sodium",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 78,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": "71722",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "rxcui": "71722",
+          "name": "docusate sodium",
+          "tty": "PIN",
+          "synonym": ""
+        }
+      }
+    },
+    "external_ids.unii": {
+      "stored": "F05Q2T2JA0",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "F05Q2T2JA0",
+          "gsrs_name": "Docusate sodium"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

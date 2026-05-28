@@ -1,0 +1,62 @@
+{
+  "canonical_id": "SARM_ANDARINE",
+  "verified_at": "2026-05-28T15:00:29.456959+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Andarine",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C1528658",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C1528658",
+          "name": "andarine",
+          "semantic_types": [
+            "Organic Chemical"
+          ],
+          "atom_count": 5,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "7UT2HAH49H",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "7UT2HAH49H",
+          "gsrs_name": "ANDARINE"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

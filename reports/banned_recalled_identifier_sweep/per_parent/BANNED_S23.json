@@ -1,0 +1,63 @@
+{
+  "canonical_id": "BANNED_S23",
+  "verified_at": "2026-05-28T14:58:28.365732+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "S-23",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0163688",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0163688",
+          "name": "S-23",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 1,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "XDK89456WM",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "XDK89456WM",
+          "gsrs_name": "S-23"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no pubchem_cid stored (acceptable)"
+      }
+    },
+    "external_ids.cas": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no cas stored (acceptable)"
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}

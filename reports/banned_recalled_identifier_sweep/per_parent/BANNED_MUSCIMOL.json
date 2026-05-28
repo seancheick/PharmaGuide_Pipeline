@@ -1,0 +1,70 @@
+{
+  "canonical_id": "BANNED_MUSCIMOL",
+  "verified_at": "2026-05-28T14:58:12.956508+00:00",
+  "iqm_snapshot_sha256": "09a9ea3e14378676284d2f9a2fa648aee4ea0406b64f7c06d7bad9fecf46c2eb",
+  "standard_name": "Muscimol",
+  "iqm_class_level": false,
+  "fields": {
+    "cui": {
+      "stored": "C0026818",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cui": "C0026818",
+          "name": "Muscimol",
+          "semantic_types": [
+            "Organic Chemical",
+            "Pharmacologic Substance"
+          ],
+          "atom_count": 51,
+          "status": "R"
+        }
+      }
+    },
+    "rxcui": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no rxcui stored (acceptable)"
+      }
+    },
+    "external_ids.unii": {
+      "stored": "D5M179TY2E",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "unii": "D5M179TY2E",
+          "gsrs_name": "MUSCIMOL"
+        }
+      }
+    },
+    "external_ids.pubchem_cid": {
+      "stored": 4266,
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cid": 4266,
+          "iupac": "5-(aminomethyl)-1,2-oxazol-3-one",
+          "inchi_key": "ZJQHPWUVQPJPQT-UHFFFAOYSA-N"
+        }
+      }
+    },
+    "external_ids.cas": {
+      "stored": "2763-96-4",
+      "verdict": {
+        "status": "verified_clean",
+        "api_response": {
+          "cas": "2763-96-4",
+          "resolved_cid": 4266
+        }
+      }
+    },
+    "external_ids.inchi_key": {
+      "stored": null,
+      "verdict": {
+        "status": "verified_clean",
+        "notes": "no inchi_key stored (acceptable)"
+      }
+    }
+  }
+}
