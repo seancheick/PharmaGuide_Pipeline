@@ -736,3 +736,142 @@ def test_class_level_detection():
     assert sweep._iqm_appears_class_level("Various Flavonoids") is True
     assert sweep._iqm_appears_class_level("Coenzyme Q10") is False
     assert sweep._iqm_appears_class_level("Genistein") is False
+
+
+# --------------------------------------------------------------------------- #
+# Wave 9.C.1 — flat-array schema support (banned_recalled / harmful_additives)
+# --------------------------------------------------------------------------- #
+
+
+def test_load_parents_default_dict_keyed_schema():
+    data = {
+        "_metadata": {"schema_version": "5.0.0"},
+        "coq10": {"standard_name": "Coenzyme Q10"},
+        "5_htp": {"standard_name": "5-HTP"},
+    }
+    parents = sweep._load_parents(data, list_key=None)
+    keys = [cid for cid, _ in parents]
+    assert keys == sorted(["coq10", "5_htp"])
+
+
+def test_load_parents_flat_array_under_ingredients_key():
+    data = {
+        "_metadata": {"schema_version": "5.4.1"},
+        "ingredients": [
+            {"id": "BANNED_RED_YEAST_RICE", "standard_name": "Red Yeast Rice (Monacolin K)"},
+            {"id": "ADULTERANT_MELOXICAM", "standard_name": "Meloxicam (adulterant)"},
+        ],
+    }
+    parents = sweep._load_parents(data, list_key="ingredients")
+    keys = [cid for cid, _ in parents]
+    assert keys == sorted(["BANNED_RED_YEAST_RICE", "ADULTERANT_MELOXICAM"])
+    by_id = dict(parents)
+    assert by_id["BANNED_RED_YEAST_RICE"]["standard_name"] == "Red Yeast Rice (Monacolin K)"
+
+
+def test_load_parents_flat_array_under_harmful_additives_key():
+    data = {
+        "_metadata": {"schema_version": "5.4.0"},
+        "harmful_additives": [
+            {"id": "ADD_ACESULFAME_K", "standard_name": "Acesulfame Potassium"},
+            {"id": "ADD_BHA", "standard_name": "Butylated hydroxyanisole"},
+        ],
+    }
+    parents = sweep._load_parents(data, list_key="harmful_additives")
+    keys = [cid for cid, _ in parents]
+    assert keys == sorted(["ADD_ACESULFAME_K", "ADD_BHA"])
+
+
+def test_load_parents_flat_array_skips_non_dict_entries():
+    data = {
+        "ingredients": [
+            {"id": "VALID_1", "x": 1},
+            "this is not a dict",
+            None,
+            {"id": "VALID_2", "x": 2},
+        ],
+    }
+    parents = sweep._load_parents(data, list_key="ingredients")
+    keys = [cid for cid, _ in parents]
+    assert keys == ["VALID_1", "VALID_2"]
+
+
+def test_load_parents_flat_array_skips_entries_without_id():
+    data = {
+        "ingredients": [
+            {"id": "HAS_ID", "x": 1},
+            {"no_id_here": True, "standard_name": "orphan"},
+            {"id": "", "x": "empty id rejected"},
+        ],
+    }
+    parents = sweep._load_parents(data, list_key="ingredients")
+    keys = [cid for cid, _ in parents]
+    assert keys == ["HAS_ID"]
+
+
+def test_load_parents_flat_array_raises_when_key_points_to_non_list():
+    data = {"ingredients": {"this": "is a dict, not a list"}}
+    with pytest.raises(ValueError, match="expected list"):
+        sweep._load_parents(data, list_key="ingredients")
+
+
+def test_load_parents_flat_array_missing_key_returns_empty():
+    data = {"_metadata": {"v": 1}, "other_key": []}
+    parents = sweep._load_parents(data, list_key="ingredients")
+    assert parents == []
+
+
+def test_run_sweep_flat_array_end_to_end(tmp_path):
+    target = tmp_path / "banned.json"
+    target.write_text(json.dumps({
+        "_metadata": {"schema_version": "5.4.1"},
+        "ingredients": [
+            {
+                "id": "BANNED_TEST_ALPHA",
+                "standard_name": "Test alpha compound",
+                "cui": "C0000001",
+                "external_ids": {"unii": "TEST111111"},
+            },
+            {
+                "id": "BANNED_TEST_BETA",
+                "standard_name": "Test beta compound",
+                "cui": None,
+                "external_ids": {},
+            },
+        ],
+    }))
+    summary = sweep.run_sweep(
+        iqm_path=target,
+        out_dir=tmp_path / "out",
+        cache_dir=tmp_path / "cache",
+        limit=None,
+        only_id=None,
+        umls=None, pubchem=None, gsrs=None, rxnorm=None,
+        list_key="ingredients",
+    )
+    assert summary["parents_audited"] == 2
+    pp_a = json.loads((tmp_path / "out" / "per_parent" / "BANNED_TEST_ALPHA.json").read_text())
+    pp_b = json.loads((tmp_path / "out" / "per_parent" / "BANNED_TEST_BETA.json").read_text())
+    assert pp_a["canonical_id"] == "BANNED_TEST_ALPHA"
+    assert pp_a["standard_name"] == "Test alpha compound"
+    assert pp_b["canonical_id"] == "BANNED_TEST_BETA"
+    assert pp_a["iqm_snapshot_sha256"] == pp_b["iqm_snapshot_sha256"]
+    master = (tmp_path / "out" / "MASTER_REPORT.md").read_text()
+    assert pp_a["iqm_snapshot_sha256"] in master
+
+
+def test_argparse_accepts_list_key():
+    parser = sweep.build_arg_parser()
+    args = parser.parse_args([
+        "--file", "/tmp/x", "--out", "/tmp/o", "--cache", "/tmp/c",
+        "--list-key", "ingredients",
+    ])
+    assert args.list_key == "ingredients"
+
+
+def test_argparse_list_key_defaults_to_none():
+    parser = sweep.build_arg_parser()
+    args = parser.parse_args([
+        "--file", "/tmp/x", "--out", "/tmp/o", "--cache", "/tmp/c",
+    ])
+    assert args.list_key is None

@@ -1306,6 +1306,47 @@ def write_master_report(
 # --------------------------------------------------------------------------- #
 
 
+def _load_parents(data: dict, list_key: str | None) -> list[tuple[str, dict]]:
+    """Return [(canonical_id, entry), ...] for both supported schemas.
+
+    Two shapes are supported:
+
+      A. IQM-style dict-keyed-by-canonical_id (the original):
+            { "_metadata": {...}, "coq10": {...}, "5_htp": {...}, ... }
+         Use when `list_key` is None.
+
+      B. Flat-array-under-named-key (banned_recalled, harmful_additives):
+            { "_metadata": {...}, "ingredients": [{"id": "...", ...}, ...] }
+         Use when `list_key` is given (e.g. "ingredients" or "harmful_additives").
+         Each entry's `id` field is used as canonical_id.
+
+    Wave 9.C.1 (2026-05-28) adds the flat-array path so the same strict-mode
+    sweep can run against banned_recalled_ingredients.json and
+    harmful_additives.json. All downstream verdict logic (Disease / Branded /
+    Combo / class-broader / cross-source / reverse-check) is unchanged.
+    """
+    if list_key is None:
+        keys = sorted(k for k in data.keys() if not k.startswith("_"))
+        return [(k, data[k]) for k in keys if isinstance(data.get(k), dict)]
+
+    items = data.get(list_key) or []
+    if not isinstance(items, list):
+        raise ValueError(
+            f"--list-key={list_key!r} but data[{list_key!r}] is "
+            f"{type(items).__name__}, expected list"
+        )
+    out: list[tuple[str, dict]] = []
+    for entry in items:
+        if not isinstance(entry, dict):
+            continue
+        cid = entry.get("id")
+        if not isinstance(cid, str) or not cid:
+            continue
+        out.append((cid, entry))
+    out.sort(key=lambda t: t[0])
+    return out
+
+
 def run_sweep(
     *,
     iqm_path: Path,
@@ -1318,14 +1359,22 @@ def run_sweep(
     gsrs: GSRSClient | None,
     rxnorm: RxNormClient | None,
     rxnav_reverse_check=None,
+    list_key: str | None = None,
 ) -> dict:
-    """Run the sweep with injected clients (for tests). Returns a summary dict."""
+    """Run the sweep with injected clients (for tests). Returns a summary dict.
+
+    `list_key` selects the schema shape:
+      - None (default): IQM-style dict-keyed-by-canonical_id.
+      - str: flat-array path; entries live under data[list_key].
+    """
     raw_bytes = iqm_path.read_bytes()
     iqm_snapshot_sha256 = hashlib.sha256(raw_bytes).hexdigest()
     iqm = json.loads(raw_bytes.decode())
 
-    parent_keys = sorted(k for k in iqm.keys() if not k.startswith("_"))
-    parents_total = len(parent_keys)
+    parents = _load_parents(iqm, list_key)
+    parents_total = len(parents)
+    parents_by_id = dict(parents)
+    parent_keys = [cid for cid, _ in parents]
 
     if only_id:
         parent_keys = [k for k in parent_keys if k == only_id]
@@ -1354,7 +1403,7 @@ def run_sweep(
 
     started = time.time()
     for idx, key in enumerate(parent_keys, start=1):
-        entry = iqm[key]
+        entry = parents_by_id.get(key)
         if not isinstance(entry, dict):
             continue
         record = audit_parent(
@@ -1466,6 +1515,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
                    help="Run with no live API calls (clients receive empty cache "
                         "and return None / unresolvable for every lookup). For "
                         "wiring tests.")
+    p.add_argument("--list-key", default=None,
+                   help="When the target file is a flat-array schema (entries "
+                        "under a named key, like banned_recalled_ingredients.json's "
+                        "'ingredients' key or harmful_additives.json's "
+                        "'harmful_additives' key), pass the key name here. Omit "
+                        "for IQM-style dict-keyed-by-canonical_id schemas.")
     # Explicitly NO --apply / --write. Adding one breaks the safety contract.
     return p
 
@@ -1523,6 +1578,7 @@ def main() -> int:
         pubchem=pubchem,
         gsrs=gsrs,
         rxnorm=rxnorm,
+        list_key=args.list_key,
     )
 
     print(json.dumps(summary, indent=2))
