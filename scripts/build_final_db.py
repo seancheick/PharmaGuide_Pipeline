@@ -54,6 +54,7 @@ from audit_evidence_utils import (
 )
 from inactive_ingredient_resolver import InactiveIngredientResolver
 from identity.safety import (
+    has_explicit_form_evidence,
     normalize_safety_source,
     safety_flag_matches_status,
     top_safety_flag as _canonical_top_safety_flag,
@@ -652,23 +653,25 @@ def _resolver_status_in(
             for t in terms:
                 entry = index.get(t)
                 if entry and safety_flag_matches_status(entry, target_statuses):
-                    # Guard: bare "Chromium" on a supplement label is always
-                    # Cr(III). Only flag HM_CHROMIUM_HEXAVALENT when the raw
-                    # label text explicitly mentions hexavalent / Cr(VI).
-                    if entry.get("id") == "HM_CHROMIUM_HEXAVALENT":
-                        raw_name = safe_str(ing.get("name"))
-                        raw_src = safe_str(ing.get("raw_source_text"))
-                        raw_text = f"{raw_name} {raw_src}".lower()
-                        import re as _re
-                        has_hex = bool(
-                            _re.search(r"\bhexavalent", raw_text)
-                            or _re.search(r"\bchromium\s*[\(]?vi[\)]?", raw_text)
-                            or _re.search(r"\bchromium\s*-\s*6\b", raw_text)
-                            or _re.search(r"\bcr\s*[\(\-]?vi[\)]?\b", raw_text)
-                            or _re.search(r"\bchromate\b", raw_text)
-                            or _re.search(r"\bdichromate\b", raw_text)
-                        )
-                        if not has_hex:
+                    if entry.get("requires_explicit_form_evidence"):
+                        evidence_values = [
+                            ing.get("raw_source_text"),
+                            ing.get("name"),
+                            ing.get("ingredientGroup"),
+                        ]
+                        for form in safe_list(ing.get("forms")):
+                            if isinstance(form, dict):
+                                evidence_values.extend([
+                                    form.get("name"),
+                                    form.get("prefix"),
+                                    form.get("label"),
+                                ])
+                            elif form:
+                                evidence_values.append(form)
+                        if not has_explicit_form_evidence(
+                            evidence_values,
+                            entry.get("form_evidence_patterns") or [],
+                        ):
                             continue
                     return True
     return False

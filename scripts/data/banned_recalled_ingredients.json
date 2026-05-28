@@ -17411,6 +17411,10 @@
         "match_type": "normalized",
         "confidence": "high",
         "negative_match_terms": [
+          {
+            "term": "chromium",
+            "match_mode": "exact"
+          },
           "chromium picolinate",
           "chromium polynicotinate",
           "chromium iii",
@@ -17425,6 +17429,15 @@
           "chromium yeast"
         ]
       },
+      "requires_explicit_form_evidence": true,
+      "form_evidence_patterns": [
+        "\\bhexavalent\\b",
+        "\\bchromium\\s*(?:\\(?vi\\)?|\\(?6\\+\\)?)(?=$|[^a-z0-9])",
+        "\\bchromium\\s*-\\s*6\\b",
+        "\\bcr\\s*[\\(\\- ]?vi[\\)]?\\b",
+        "\\bchromate\\b",
+        "\\bdichromate\\b"
+      ],
       "match_mode": "active",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "critical",

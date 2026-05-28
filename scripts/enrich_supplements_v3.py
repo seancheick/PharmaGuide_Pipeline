@@ -130,7 +130,7 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
-from identity.safety import safety_flag_from_banned_match
+from identity.safety import has_explicit_form_evidence, safety_flag_from_banned_match
 
 # Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
 _CLEANER_MATCH_METHOD_MAP = {
@@ -8602,7 +8602,10 @@ class SupplementEnricherV3:
                 negative_terms = match_rules.get('negative_match_terms', [])
                 if negative_terms and (
                     self._has_negative_match_term(candidate_ing_name_lower, negative_terms)
-                    or self._has_negative_match_term(candidate_std_name_lower, negative_terms)
+                    or (
+                        not banned_item.get("requires_explicit_form_evidence")
+                        and self._has_negative_match_term(candidate_std_name_lower, negative_terms)
+                    )
                 ):
                     continue
 
@@ -8655,13 +8658,15 @@ class SupplementEnricherV3:
                         allowlist_id = allowlist_match.get("allowlist_id")
 
                 if match_method:
-                    if (
-                        banned_id == "HM_CHROMIUM_HEXAVALENT"
-                        and not self._has_explicit_hexavalent_chromium_evidence(
-                            candidate_ing_name,
+                    if banned_item.get("requires_explicit_form_evidence"):
+                        evidence = has_explicit_form_evidence(
+                            self._banned_form_evidence_values(ingredient, candidate_ing_name, product_name),
+                            banned_item.get("form_evidence_patterns") or [],
                         )
-                    ):
-                        continue
+                        if not evidence:
+                            continue
+                        match_method = "explicit_form_evidence"
+                        matched_variant = matched_variant or evidence
 
                     # Guardrail: do not flag explicitly negated mentions like
                     # "X-free" / "free from X" / "contains no X".
@@ -8683,6 +8688,7 @@ class SupplementEnricherV3:
                     confidence_map = {
                         "exact": 1.0,
                         "alias": 0.9,
+                        "explicit_form_evidence": 0.95,
                         "token_bounded": 0.7
                     }
 
@@ -8739,18 +8745,26 @@ class SupplementEnricherV3:
             ],
         }
 
-    def _has_explicit_hexavalent_chromium_evidence(self, *values: Any) -> bool:
-        text = " ".join(str(v or "") for v in values).lower()
-        if not text:
-            return False
-        return bool(
-            re.search(r"\bhexavalent\s+chromium\b", text)
-            or re.search(r"\bchromium\s*(?:\(?vi\)?|\(?6\+\)?)(?=$|[^a-z0-9])", text)
-            or re.search(r"\bchromium\s*[-]\s*6\b", text)
-            or re.search(r"\bcr\s*[\(\- ]?vi[\)]?\b", text)
-            or re.search(r"\bchromate\b", text)
-            or re.search(r"\bdichromate\b", text)
-        )
+    def _banned_form_evidence_values(
+        self,
+        ingredient: Dict[str, Any],
+        candidate_ing_name: str,
+        product_name: str = "",
+    ) -> List[Any]:
+        values: List[Any] = [
+            ingredient.get("raw_source_text"),
+            ingredient.get("name"),
+            ingredient.get("ingredientGroup"),
+            candidate_ing_name,
+        ]
+        if product_name:
+            values.append(product_name)
+        for form in ingredient.get("forms") or []:
+            if isinstance(form, dict):
+                values.extend([form.get("name"), form.get("prefix"), form.get("label")])
+            elif form:
+                values.append(form)
+        return values
 
     def _derive_banned_severity(self, banned_item: Dict[str, Any]) -> str:
         """Derive severity from current banned DB policy fields."""
@@ -8782,14 +8796,26 @@ class SupplementEnricherV3:
 
         return "critical"
 
-    def _has_negative_match_term(self, text: str, negative_terms: List[str]) -> bool:
+    def _has_negative_match_term(self, text: str, negative_terms: List[Any]) -> bool:
         """Check if text contains any negative match terms (case-insensitive).
 
         Used to filter out false positives like 'ephedra-free', 'kava-free', etc.
         """
-        text_lower = text.lower()
-        for term in negative_terms:
-            if term.lower() in text_lower:
+        text_lower = (text or "").lower()
+        text_norm = re.sub(r"\s+", " ", text_lower).strip()
+        for item in negative_terms:
+            if isinstance(item, dict):
+                term = str(item.get("term") or "").lower()
+                match_mode = str(item.get("match_mode") or "substring").lower()
+            else:
+                term = str(item or "").lower()
+                match_mode = "substring"
+            term_norm = re.sub(r"\s+", " ", term).strip()
+            if not term_norm:
+                continue
+            if match_mode == "exact" and text_norm == term_norm:
+                return True
+            if match_mode != "exact" and term_norm in text_norm:
                 return True
         return False
 

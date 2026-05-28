@@ -74,6 +74,7 @@ from constants import (
     PRODUCT_LABEL_CORRECTIONS,
     PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
 )
+from identity.safety import has_explicit_form_evidence
 
 # Import the UnmappedIngredientTracker
 import sys
@@ -1461,6 +1462,8 @@ class EnhancedDSLDNormalizer:
                                 "status": banned.get("status"),
                                 "reason": banned.get("reason", banned.get("recall_reason", "banned")),
                                 "match_rules": banned.get("match_rules", {}) or {},
+                                "requires_explicit_form_evidence": banned.get("requires_explicit_form_evidence", False),
+                                "form_evidence_patterns": banned.get("form_evidence_patterns", []),
                                 "mapped": True,
                                 "priority": 1
                             }
@@ -3763,9 +3766,17 @@ class EnhancedDSLDNormalizer:
         allergen_info = {"is_allergen": False, "type": None, "severity": None}
         passive_info = {"is_passive": False, "category": None}
         
-        # Use unified fast lookup for all databases
+        # Use identity lookup for identity and the separate safety lookup for
+        # safety classification. Safety payloads must not live in identity
+        # lookup, but legacy callers still expect this method to report
+        # banned/high-risk classifications.
         fast_result = self._fast_ingredient_lookup(name)
-        result_type = fast_result.get("type", "none") if fast_result.get("mapped", False) else "none"
+        safety_result = self._safety_lookup_for_priority_classification(name, forms)
+        result_type = (
+            safety_result.get("type")
+            if safety_result.get("mapped", False)
+            else fast_result.get("type", "none") if fast_result.get("mapped", False) else "none"
+        )
 
         # Map fast lookup results to expected boolean/dict formats
         is_banned = result_type == "banned"
@@ -3780,8 +3791,8 @@ class EnhancedDSLDNormalizer:
             # PRIORITY 1: Banned/Recalled - highest priority, overrides all others
             banned_info = {
                 "is_banned": True,
-                "severity": fast_result.get("severity", "critical"),
-                "category": fast_result.get("bucket", "banned"),
+                "severity": safety_result.get("severity", "critical"),
+                "category": safety_result.get("bucket", "banned"),
             }
             # Still populate other info but they won't be used for scoring
             harmful_info = is_harmful
@@ -3826,6 +3837,50 @@ class EnhancedDSLDNormalizer:
                 "passive": False  # Not currently implemented
             }
         }
+
+    def _safety_lookup_for_priority_classification(
+        self, name: str, forms: List[str]
+    ) -> Dict[str, Any]:
+        result = self._safety_exact_lookup.get(self.matcher.preprocess_text(name), {})
+        if not result.get("mapped", False):
+            return {}
+        if result.get("type") != "banned":
+            return result
+
+        match_rules = result.get("match_rules", {}) or {}
+        if self._negative_terms_veto_safety_classification(
+            name,
+            match_rules.get("negative_match_terms", []),
+        ):
+            return {}
+        if result.get("requires_explicit_form_evidence") and not has_explicit_form_evidence(
+            [name] + list(forms or []),
+            result.get("form_evidence_patterns") or [],
+        ):
+            return {}
+        return result
+
+    def _negative_terms_veto_safety_classification(
+        self, text: str, negative_terms: List[Any]
+    ) -> bool:
+        text_norm = re.sub(r"\s+", " ", str(text or "").lower()).strip()
+        if not text_norm:
+            return False
+        for item in negative_terms or []:
+            if isinstance(item, dict):
+                term = str(item.get("term") or "").lower()
+                mode = str(item.get("match_mode") or "substring").lower()
+            else:
+                term = str(item or "").lower()
+                mode = "substring"
+            term_norm = re.sub(r"\s+", " ", term).strip()
+            if not term_norm:
+                continue
+            if mode == "exact" and text_norm == term_norm:
+                return True
+            if mode != "exact" and term_norm in text_norm:
+                return True
+        return False
     
     @staticmethod
     def _extract_primary_mass_unit(raw_ingredient: Dict) -> tuple:

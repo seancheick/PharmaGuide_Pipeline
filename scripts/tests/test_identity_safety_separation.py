@@ -112,6 +112,56 @@ def test_banned_substance_enricher_emits_canonical_safety_flags():
     assert legacy_hit["safety_flag"] == flag
 
 
+def test_bare_chromium_standardname_cannot_create_hexavalent_safety_flag():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    result = SupplementEnricherV3()._check_banned_substances([
+        {
+            "name": "Chromium",
+            "raw_source_text": "Chromium",
+            "standardName": "Chromium (VI) — Hexavalent Chromium",
+            "standard_name": "Chromium (VI) — Hexavalent Chromium",
+            "forms": [],
+        }
+    ])
+
+    assert not any(
+        flag.get("entry_id") == "HM_CHROMIUM_HEXAVALENT"
+        for flag in result.get("safety_flags", [])
+    )
+
+
+def test_explicit_hexavalent_chromium_still_creates_safety_flag():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    result = SupplementEnricherV3()._check_banned_substances([
+        {
+            "name": "Hexavalent Chromium",
+            "raw_source_text": "Hexavalent Chromium",
+            "standardName": "Chromium",
+            "standard_name": "Chromium",
+            "forms": [],
+        }
+    ])
+
+    flag = next(
+        flag for flag in result.get("safety_flags", [])
+        if flag.get("entry_id") == "HM_CHROMIUM_HEXAVALENT"
+    )
+    assert flag["match_type"] == "explicit_form_evidence"
+    assert flag["status"] == "high_risk"
+
+
+def test_negative_match_terms_support_exact_mode_objects():
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    enricher = SupplementEnricherV3()
+    terms = [{"term": "chromium", "match_mode": "exact"}]
+
+    assert enricher._has_negative_match_term("chromium", terms) is True
+    assert enricher._has_negative_match_term("chromium picolinate", terms) is False
+
+
 def test_safety_precedence_and_strict_index_are_shared():
     from identity.safety import build_safety_exact_index, top_safety_flag
 
