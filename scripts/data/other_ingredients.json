@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-25",
-    "total_entries": 691,
+    "last_updated": "2026-05-29",
+    "total_entries": 693,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -12608,6 +12608,73 @@
       "functional_roles": [
         "colorant_natural"
       ]
+    },
+    {
+      "id": "NHA_ARTIFICIAL_COLORS",
+      "standard_name": "Artificial Colors",
+      "aliases": [
+        "artificial colors",
+        "artificial color",
+        "artificial colour",
+        "artificial colours",
+        "artificial food coloring",
+        "artificial dyes",
+        "synthetic colors",
+        "synthetic color",
+        "synthetic dyes",
+        "FD&C colors",
+        "FD&C color",
+        "FD&C dyes",
+        "certified colors",
+        "color added (FD&C)"
+      ],
+      "category": "colorant_artificial",
+      "is_additive": true,
+      "additive_type": "artificial_colorant",
+      "allergen": false,
+      "notes": "Umbrella canonical for FD&C synthetic dyes and certified colors declared as a generic 'Colors' inactive with FD&C dye forms (e.g. Red 40, Yellow 5, Blue 1). Does NOT replace identity for individually-banned dyes like FD&C Red No. 2 / Amaranth, which retain their own canonical in banned_recalled_ingredients.json. The cleaner's color routing emits 'artificial colors' as the mapped name when forms[] contains FD&C indicators; this entry lets the resolver find a real canonical so standardName is preserved through the export contract.",
+      "common_uses": [
+        "synthetic coloring",
+        "visual differentiation",
+        "branding"
+      ],
+      "last_updated": "2026-05-29",
+      "external_ids": {},
+      "cui": null,
+      "cui_note": "Generic FD&C umbrella has no single UMLS canonical; individual dyes each carry their own CUI on the per-dye canonical entries.",
+      "functional_roles": [
+        "colorant_artificial"
+      ]
+    },
+    {
+      "id": "NHA_FISH_SOURCE_DESCRIPTOR",
+      "standard_name": "Fish",
+      "aliases": [
+        "anchovies",
+        "anchovy",
+        "sardines",
+        "sardine",
+        "menhaden",
+        "fish (unspecified)",
+        "fish source",
+        "wild-caught fish",
+        "small ocean fish"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "source_descriptor",
+      "allergen": true,
+      "notes": "Source descriptor for inactive rows that list a fish species (anchovies, sardines, menhaden) or the generic 'Fish' source without a specific IQM-scored derivative. Identity-owning: standardName 'Fish' is emitted via this entry so the identity/safety separation guard does not reset standardName to the raw label. The Big-8 Fish allergen flag fires via cross-reference to ALLERGEN_FISH in the enricher's allergen check — this descriptor does not OWN the allergen safety signal, it carries identity only. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are intentionally excluded from aliases to preserve IQM identity, matching the precedent set in allergens.json::ALLERGEN_FISH.",
+      "common_uses": [
+        "source disclosure",
+        "identity routing",
+        "allergen cross-reference anchor"
+      ],
+      "last_updated": "2026-05-29",
+      "external_ids": {},
+      "cui": "C0016163",
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_NATURAL_FLAVORS",
