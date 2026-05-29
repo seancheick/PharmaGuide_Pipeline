@@ -7,19 +7,29 @@ Per SCORING_V4_PROPOSAL.md §4 Layer 1, precedence:
   BLOCKED > UNSAFE > CAUTION > None (None = scoring continues, verdict
                                      resolved by score band in P1.3+)
 
-Trigger map:
+This gate consumes the canonical SafetySignal v1 contract from the kernel
+(identity/safety.py::normalize_safety_signals). It branches ONLY on the
+stable `match_resolution` enum + `status` — it NEVER sees a raw matcher name
+(exact / alias / token_bounded / fuzzy). All matcher-internal knowledge lives
+in the kernel's `match_resolution_for`. The architecture lock is enforced by
+test_safety_signal_contract.py::test_gate_safety_has_no_raw_match_type_branching.
 
-  status == "banned"     (exact / alias match)  →  BLOCKED  (short-circuit)
-  status == "recalled"   (exact / alias match)  →  UNSAFE   (short-circuit)
-  status == "high_risk"  (exact / alias match)  →  CAUTION  (scoring continues)
-  status == "watchlist"  (exact / alias match)  →  CAUTION  (scoring continues)
-  has_disease_claims                            →  CAUTION  (scoring continues)
-  fuzzy / partial match                         →  needs_review (no verdict)
+Policy (see _apply_signal_policy for the authoritative implementation):
 
-This module reads ONLY enriched-product fields. It does not duplicate v3's
-B0 penalty computation — v4 owns its own scoring policy in `scoring_v4/`.
-The signal source (`contaminant_data.banned_substances.substances`) IS
-shared with v3, but the verdict logic here is independent.
+  confirmed       + banned                  →  BLOCKED  (short-circuit)
+  confirmed       + recalled                →  UNSAFE   (short-circuit)
+  confirmed/likely + high_risk / watchlist  →  CAUTION  (scoring continues)
+  likely          + banned / recalled       →  needs_review, NO verdict
+                                               (a false hard-block is worse than
+                                                a missed one; hardening this to
+                                                CAUTION is a separate, corpus-
+                                                verified change — not bundled)
+  review_only     (weak / fuzzy / no id)    →  needs_review, no verdict
+  low_confidence                            →  audit signal only
+  inactive excipient_acceptable + high_risk/watchlist  →  warning only
+  has_disease_claims                        →  CAUTION  (scoring continues)
+
+The signal SOURCE is shared with v3, but the verdict policy here is v4-owned.
 """
 
 from __future__ import annotations

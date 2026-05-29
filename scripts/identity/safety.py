@@ -119,6 +119,21 @@ def safety_status_priority(status: Any) -> int:
 _CONFIRMED_MATCH_TYPES = frozenset({"exact", "alias", "explicit_form_evidence"})
 _LIKELY_MATCH_TYPES = frozenset({"token_bounded", "legacy_projection"})
 
+# Resolution strength ordering. When two raw shapes resolve to the same
+# (entry_id, status, role) the STRONGEST resolution wins — a confirmed
+# safety_flag must never be suppressed by a likely substance processed
+# earlier. confirmed > likely > review_only > low_confidence.
+_RESOLUTION_STRENGTH = {
+    "confirmed": 3,
+    "likely": 2,
+    "review_only": 1,
+    "low_confidence": 0,
+}
+
+
+def resolution_strength(resolution: Any) -> int:
+    return _RESOLUTION_STRENGTH.get(str(resolution or "").strip().lower(), -1)
+
 # Numeric-confidence fallback thresholds when match_type is unknown/absent.
 _CONFIDENCE_CONFIRMED_FLOOR = 0.85
 _CONFIDENCE_LIKELY_FLOOR = 0.5
@@ -242,17 +257,22 @@ def normalize_safety_signals(
     """
     product = product if isinstance(product, dict) else {}
     signals: List[SafetySignal] = []
-    seen: set = set()
+    seen: Dict[tuple, int] = {}  # dedup key -> index into signals
 
     def _dedup_key(sig: SafetySignal) -> tuple:
         return (sig.entry_id or sig.evidence_text, sig.status, sig.subject_role)
 
     def _add(sig: SafetySignal) -> None:
         key = _dedup_key(sig)
-        if key in seen:
+        idx = seen.get(key)
+        if idx is None:
+            seen[key] = len(signals)
+            signals.append(sig)
             return
-        seen.add(key)
-        signals.append(sig)
+        # Duplicate (entry_id, status, role): keep the STRONGEST resolution so a
+        # confirmed signal is never suppressed by an earlier likely one.
+        if resolution_strength(sig.match_resolution) > resolution_strength(signals[idx].match_resolution):
+            signals[idx] = sig
 
     cd = product.get("contaminant_data")
     bs = cd.get("banned_substances") if isinstance(cd, dict) else None

@@ -150,6 +150,67 @@ def test_normalize_empty_product_is_safe():
     assert normalize_safety_signals(None) == []  # type: ignore[arg-type]
 
 
+def test_dedupe_keeps_strongest_resolution_not_first_seen():
+    """Bug guard (reviewer-found): substances[] is processed before
+    safety_flags[], so a `likely` substance must NOT suppress a later
+    `confirmed` safety_flag for the same (entry_id, status, role). The
+    deduper must keep the STRONGEST resolution, else a confirmed BANNED hit
+    silently degrades to review-only and the product escapes BLOCKED.
+    """
+    product = {
+        "contaminant_data": {
+            "banned_substances": {
+                # processed first → token_bounded → likely
+                "substances": [
+                    {"banned_id": "BANNED_X", "banned_name": "Substance X",
+                     "status": "banned", "match_type": "token_bounded",
+                     "source_section": "active"}
+                ],
+                # processed second → alias → confirmed (must win)
+                "safety_flags": [
+                    {"entry_id": "BANNED_X", "status": "banned", "match_type": "alias",
+                     "source_db": "banned_recalled_ingredients",
+                     "subject_role": "active", "matched_variant": "Substance X"}
+                ],
+            }
+        }
+    }
+    signals = normalize_safety_signals(product)
+    banned = [s for s in signals if s.entry_id == "BANNED_X" and s.status == "banned"]
+    assert len(banned) == 1, f"expected one deduped banned signal, got {len(banned)}"
+    assert banned[0].match_resolution == "confirmed", (
+        "strongest resolution must win; likely substance suppressed confirmed flag"
+    )
+
+
+def test_strength_dedupe_drives_blocked_at_the_gate():
+    """End-to-end: the same likely-then-confirmed BANNED shape must gate to
+    BLOCKED, not review-only."""
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "contaminant_data": {
+            "banned_substances": {
+                "substances": [
+                    {"banned_id": "BANNED_X", "banned_name": "Substance X",
+                     "status": "banned", "match_type": "token_bounded",
+                     "source_section": "active"}
+                ],
+                "safety_flags": [
+                    {"entry_id": "BANNED_X", "status": "banned", "match_type": "alias",
+                     "source_db": "banned_recalled_ingredients",
+                     "subject_role": "active", "matched_variant": "Substance X"}
+                ],
+            }
+        }
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict == "BLOCKED", (
+        f"confirmed banned (via stronger flag) must BLOCK; got {result.verdict!r}"
+    )
+    assert result.short_circuits_scoring is True
+
+
 # --- architecture guard --------------------------------------------------- #
 
 def test_gate_safety_has_no_raw_match_type_branching():
