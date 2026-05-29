@@ -188,6 +188,86 @@
       "dsld_id": 306381,
       "brand_source": "Nutricost",
       "label": "Nutricost PRE Pre-Workout Complex — blend-heavy pre-workout"
+    },
+    {
+      "dsld_id": 239741,
+      "brand_source": "Spring_Valley",
+      "label": "Spring Valley Korean Panax Ginseng 100 mg — current-shipped standardized extract"
+    },
+    {
+      "dsld_id": 241353,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Raw Organic Perfect Food Original — whole-food greens baseline"
+    },
+    {
+      "dsld_id": 269278,
+      "brand_source": "Nutricost",
+      "label": "Nutricost Arginine AKG 3 g Unflavored — current-shipped AAKG release"
+    },
+    {
+      "dsld_id": 274498,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life MyKind Organics Plant Collagen Builder — collagen precursor (refresh of 173893)"
+    },
+    {
+      "dsld_id": 293924,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Encapsulations Calcium Magnesium (Citrate/Malate) — current-shipped dual-mineral form"
+    },
+    {
+      "dsld_id": 293943,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Encapsulations CoQ10 120 mg — current-shipped MicroActive delivery"
+    },
+    {
+      "dsld_id": 294077,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Encapsulations Zinc 15 — current-shipped single mineral baseline"
+    },
+    {
+      "dsld_id": 298070,
+      "brand_source": "Thorne",
+      "label": "Thorne FloraMend Prime Probiotic — current-shipped probiotic strain claims"
+    },
+    {
+      "dsld_id": 298102,
+      "brand_source": "Thorne",
+      "label": "Thorne Vitamin D — current-shipped single-ingredient vitamin"
+    },
+    {
+      "dsld_id": 306237,
+      "brand_source": "Nutricost",
+      "label": "Nutricost KSM-66 600 mg — current-shipped branded ashwagandha"
+    },
+    {
+      "dsld_id": 321405,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Wobenzym N Joint Health — proteolytic enzyme blend"
+    },
+    {
+      "dsld_id": 321969,
+      "brand_source": "Thorne",
+      "label": "Thorne Iron Bisglycinate — iron form (refresh of 15805 Iron Citrate)"
+    },
+    {
+      "dsld_id": 323080,
+      "brand_source": "Thorne",
+      "label": "Thorne Catalyte Lemon Lime Flavored Electrolytes — sodium/chloride dual-context routing"
+    },
+    {
+      "dsld_id": 327416,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Baby Multivitamin Liquid — pediatric multi (CAUTION baseline)"
+    },
+    {
+      "dsld_id": 336337,
+      "brand_source": "Thorne",
+      "label": "Thorne Green Tea Phytosome — phytosome delivery tech (refresh of 16008)"
+    },
+    {
+      "dsld_id": 337853,
+      "brand_source": "Thorne",
+      "label": "Thorne Boswellia Phytosome — new boswellia phytosome canonical_id coverage"
     }
   ],
   "changelog": [
@@ -326,6 +406,17 @@
       "product_ids": "30 products (full snapshot suite)",
       "change": "Re-froze all 30 contract snapshots after the omega-3 bonus cap clinician decision (commit 7ceac0d) which redistributed Section E bands and capped omega3_dose_bonus.max at 2.0 (was 3.0). Drift signature: uniform section_scores.E_dose_adequacy.max: 3.0 → 2.0 across every product whether omega-3 or not (the field is in every scored output). Verified as the intended downstream effect of the omega-3 cap change. Also picks up minor v1.5.0 form-vocab refactor side effects via the cleaner regex expansion (Vitamin A Palmitate now extracting retinyl palmitate directly into forms[] surfaces a more accurate bio_score for products previously matching unspecified parent).",
       "commit": "f18c895"
+    },
+    {
+      "date": "2026-05-29",
+      "product_ids": "16 products added — coverage refresh + new archetypes",
+      "products_added": [
+        239741, 241353, 269278, 274498, 293924, 293943, 294077,
+        298070, 298102, 306237, 321405, 321969, 323080, 327416,
+        336337, 337853
+      ],
+      "change": "Registered 16 contract-snapshot fixtures that had been committed in 795fb00a (DV-backed dose correction bundle) but never added to the manifest. These are current-shipped refreshes of existing archetypes (Korean ginseng, Calcium Magnesium, CoQ10, Zinc 15, Vitamin D, KSM-66, Catalyte, Plant Collagen, FloraMend, Green Tea Phytosome, AAKG, Iron Bisglycinate, Joint Health) plus three new archetypes (Garden Raw Organic Perfect Food Original, Garden Baby Multivitamin Liquid pediatric CAUTION, Thorne Boswellia Phytosome). No scoring drift in this entry — pure registration of pre-existing fixtures so the manifest contract test passes.",
+      "commit": "pending"
     }
   ]
 }

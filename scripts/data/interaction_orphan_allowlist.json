@@ -1,7 +1,8 @@
 {
   "_metadata": {
+    "description": "Allowlist of supplement canonical_ids tolerated as referential orphans in the interaction pipeline. Each entry covers a pairwise interaction surfaced in interaction_db.sqlite that does not yet have a matching ingredient_interaction_rules.json rule. Entries here are tracked, time-bound backlog items — not silent exceptions — and each MUST carry a reason and a TODO so the gate stays meaningful.",
     "schema_version": "1.0.0",
-    "last_updated": "2026-05-27",
+    "last_updated": "2026-05-29",
     "purpose": "Allowlist for supplement canonical_ids that appear in pairwise interactions (interaction_db.sqlite) but do NOT have a corresponding entry in ingredient_interaction_rules.json. Used by audit_source_of_truth_contract.py::audit_interaction's INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL referential-integrity check. Each entry MUST cite a reason and a TODO for clearing the backlog. Entries here are tolerated but tracked.",
     "total_entries": 1,
     "review_owner": "Lead Clinician (PharmaGuide)",

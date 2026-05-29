@@ -3,7 +3,18 @@
     "schema_version": "1.0.0",
     "description": "Curated 35-product v4 canary set spanning 14 primary classes (single_nutrient, multivitamin, prenatal_multi, probiotic, fish_oil, herbal_branded_extract / unstandardized / marker_pct, sports_opaque / transparent, specialty, greens_superfood, blocked_verdict, manufacturer_signal_only) and all 4 B5 router class routes (probiotic / multi_or_prenatal / sports_active / generic). Each entry encodes expected_b5_class, expected_dose_route_v4, edge_cases, and v3 shipped score/verdict for regression baselining.",
     "purpose": "v4 dose + B5 class-aware + cert coverage canary set. Used by test_v4_canary_coverage.py to guarantee every product class + edge case the v4 design depends on is exercised on real shipped data. Add a new entry before adding a new class to the scorer; remove an entry only with a decision log note. Source of truth for canary-based regression review and the score-delta report.",
-    "last_updated": "2026-05-19",
+    "last_updated": "2026-05-29",
+    "retired_canaries": [
+      {
+        "dsld_id": "294063",
+        "brand_name": "Pure Encapsulations",
+        "product_name": "Vinpocetine 20 mg",
+        "subclass": "blocked_vinpocetine",
+        "retired_on": "2026-05-29",
+        "reason": "FDA enforcement action effectively extinguished single-active vinpocetine products from the shipped catalog. No current single-active vinpocetine SKU remains to anchor this archetype; the blocked-by-vinpocetine pathway is now covered exclusively by the multi-active blend canary 232923 (Life Extension Cognitex Elite Pregnenolone). Removed rather than rotated because no replacement single-active product ships.",
+        "historical_anchors": ["294063 Pure Encapsulations Vinpocetine 20 mg", "16012 Thorne Vinpocetine"]
+      }
+    ],
     "primary_classes": [
       "single_nutrient",
       "multivitamin",
@@ -524,22 +535,6 @@
       "v3_shipped_score": 69.6,
       "v3_shipped_verdict": "SAFE",
       "notes": "After the greens taxonomy refresh this product routes as greens_powder, not multivitamin and not probiotic. It contains probiotic rows, but those must not trigger the lighter probiotic B5 multiplier; use generic opacity unless a dedicated greens B5 class is introduced."
-    },
-    {
-      "dsld_id": "294063",
-      "brand_name": "Pure Encapsulations",
-      "product_name": "Vinpocetine 20 mg",
-      "primary_class": "blocked_verdict",
-      "subclass": "blocked_vinpocetine",
-      "expected_b5_class": "generic",
-      "expected_dose_route_v4": "blocked_short_circuit",
-      "edge_cases": [
-        "banned_ingredient_vinpocetine",
-        "blocked_verdict_short_circuits_dose"
-      ],
-      "v3_shipped_score": null,
-      "v3_shipped_verdict": "BLOCKED",
-      "notes": "Vinpocetine has been targeted by FDA enforcement as not a legal supplement. BLOCKED verdict short-circuits scoring → v4 must respect this gate. Tracks the vinpocetine BLOCKED single-active archetype, not product continuity for any single brand. Historical anchor (rotated out as catalog evolved): 16012 Thorne Vinpocetine."
     },
     {
       "dsld_id": "232923",
