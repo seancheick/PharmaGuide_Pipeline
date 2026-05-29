@@ -12497,16 +12497,28 @@ class SupplementEnricherV3:
                 continue
             has_non_probiotic_strict_active = True
             break
-        taxonomy_or_row_identity = primary_type == "probiotic" or has_probiotic_row_identity
+        # Wave 6.Z gate (2026-05-29): supplement_taxonomy.primary_type drives
+        # scoreable product-level CFU evidence with a narrow "taxonomy lagging"
+        # carve-out so genuinely probiotic products whose taxonomy hasn't been
+        # classified yet (primary_type empty or "general_supplement") can still
+        # earn credit via probiotic row identity. Any OTHER concrete primary_type
+        # (fiber_digestive, mineral, omega_3, ...) actively classifies the
+        # product as non-probiotic and disqualifies CFU regardless of row
+        # identity — only blended/unknown taxonomies get the row-identity bridge.
+        # See test_probiotic_cfu_provenance_2026_05_26 and
+        # test_enrichment_regressions::TestProbioticDataStructureRegressionLock.
+        TAXONOMY_LAGGING_VALUES = {"", "general_supplement"}
+        taxonomy_is_probiotic = primary_type == "probiotic"
+        taxonomy_is_lagging = (not primary_type) or primary_type in TAXONOMY_LAGGING_VALUES
         identity_proven = (
-            taxonomy_or_row_identity
+            (taxonomy_is_probiotic or (taxonomy_is_lagging and has_probiotic_row_identity))
             and bool(probiotic_data.get("is_probiotic_product"))
             and has_probiotic_row_identity
             and not has_non_probiotic_strict_active
         )
-        if primary_type == "probiotic":
+        if taxonomy_is_probiotic:
             accepted_reason = "product_level_cfu_with_probiotic_identity"
-        elif has_probiotic_row_identity:
+        elif taxonomy_is_lagging and has_probiotic_row_identity:
             accepted_reason = "product_level_cfu_with_probiotic_row_identity"
         else:
             accepted_reason = "product_level_cfu_rejected_by_taxonomy"
@@ -12531,8 +12543,14 @@ class SupplementEnricherV3:
 
         rejection_reason = None
         if has_non_probiotic_strict_active:
+            # Strict-active check takes precedence: a non-probiotic active
+            # ingredient (e.g. zinc, CBD, Vitamin C, fiber-primary product)
+            # makes CFU evidence accessory regardless of taxonomy or row signals.
             rejection_reason = "non_probiotic_strict_active_present"
-        elif not taxonomy_or_row_identity:
+        elif not taxonomy_is_probiotic and not taxonomy_is_lagging:
+            # Taxonomy actively classifies as non-probiotic (e.g. fiber_digestive,
+            # mineral, omega_3). Row identity does NOT bridge a CONCRETE
+            # non-probiotic taxonomy — only blanks / general_supplement.
             rejection_reason = "product_taxonomy_not_probiotic"
         elif not identity_proven or not probiotic_data.get("is_probiotic_product"):
             rejection_reason = "product_identity_not_probiotic"
