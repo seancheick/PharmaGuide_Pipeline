@@ -196,8 +196,10 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
         confirmed + banned        -> BLOCKED (short-circuit)
         confirmed + recalled      -> UNSAFE  (short-circuit)
         confirmed/likely + high_risk/watchlist -> CAUTION
-        likely + banned/recalled  -> CAUTION + needs_review (never hard-block;
-                                      a false hard-block is worse than a caution)
+        likely + banned/recalled  -> needs_review, NO verdict (a false hard-block
+                                      is worse than a missed one; hardening this
+                                      to CAUTION is a separate, corpus-verified
+                                      change, not bundled here)
         review_only               -> needs_review, no verdict
         low_confidence            -> audit signal only
         inactive excipient_acceptable + high_risk/watchlist -> warning only
