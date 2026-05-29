@@ -3117,21 +3117,38 @@ def blob_has_safety_blocking_warning(detail_blob: Optional[Dict]) -> bool:
     return False
 
 
-# Profile-gated hard-safety types/severities that disqualify a base SAFE verdict.
-# Profile-gated warnings represent per-user-condition gating, but when the severity
-# is high/critical and the type is one of the hard safety categories, the base
-# (general-population) verdict still cannot ship as SAFE — the warning is too
-# serious to mask behind a per-profile filter.
+# Hard-safety types that disqualify a base SAFE verdict.
+#
+# Two tiers govern this contract:
+#   1. ALWAYS_DISQUALIFY types — the regulatory classification itself implies the
+#      product cannot honestly read SAFE regardless of warning severity. A
+#      watchlist substance (titanium dioxide, phthalates, anatabine, octopamine,
+#      etc.) is by definition under regulatory observation — moderate severity
+#      is normal for these and the type tells the whole story.
+#   2. SEVERITY_GATED types — severity classifies the impact. High-risk
+#      ingredients, contraindications, and adulterants only disqualify SAFE
+#      when the severity is in the hard set (high/critical/contraindicated/avoid).
+#      A "low" severity high_risk warning is informational; we keep SAFE.
+#
+# banned_substance and recalled_ingredient also live in ALWAYS_DISQUALIFY but
+# generally route through the banned-override path before this helper runs —
+# they are kept here for defense in depth so a stray profile-gated emission
+# never lets a banned signal ship as SAFE.
+#
 # Mirrors the contract enforced by test_release_gate_banned_safe_contradictions.py
-# ::test_no_safe_core_row_with_profile_gated_critical_safety_warning.
-_PROFILE_GATED_HARD_SAFETY_TYPES = frozenset({
+# and extends it to cover the watchlist/regulatory-observation surface raised
+# during the post-DV release-gate audit (Titanium Dioxide E171 etc.).
+_HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY = frozenset({
     "banned_substance",
     "recalled_ingredient",
     "adulterant",
+    "watchlist_substance",
+})
+_HARD_SAFETY_TYPES_SEVERITY_GATED = frozenset({
     "contraindicated",
     "high_risk_ingredient",
 })
-_PROFILE_GATED_HARD_SAFETY_SEVERITIES = frozenset({
+_HARD_SAFETY_SEVERITIES = frozenset({
     "critical",
     "high",
     "contraindicated",
@@ -3140,26 +3157,26 @@ _PROFILE_GATED_HARD_SAFETY_SEVERITIES = frozenset({
 
 
 def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> bool:
-    """True when a detail blob carries a profile-gated hard-safety warning.
+    """True when a detail blob carries a hard-safety warning that disqualifies SAFE.
 
-    Hard-safety = banned/recalled/adulterant/contraindicated/high_risk_ingredient
-    with severity in {critical, high, contraindicated, avoid}. Even though these
-    warnings are profile-gated (per-user), their severity disqualifies a base
-    SAFE verdict for the general population — bitter-orange-containing products,
-    DHEA blends, etc. should never read as SAFE on the catalog row.
+    Scans BOTH warnings[] and warnings_profile_gated[] (the per-user-condition
+    list and the general list — a hard-safety signal in either disqualifies the
+    base SAFE verdict). See _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY and
+    _HARD_SAFETY_TYPES_SEVERITY_GATED for the tier rules.
     """
     if not isinstance(detail_blob, dict):
         return False
-    for warning in safe_list(detail_blob.get("warnings_profile_gated")):
-        if not isinstance(warning, dict):
-            continue
-        warning_type = safe_str(warning.get("type"))
-        severity = safe_str(warning.get("severity")).lower()
-        if (
-            warning_type in _PROFILE_GATED_HARD_SAFETY_TYPES
-            and severity in _PROFILE_GATED_HARD_SAFETY_SEVERITIES
-        ):
-            return True
+    for list_key in ("warnings", "warnings_profile_gated"):
+        for warning in safe_list(detail_blob.get(list_key)):
+            if not isinstance(warning, dict):
+                continue
+            warning_type = safe_str(warning.get("type"))
+            if warning_type in _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY:
+                return True
+            if warning_type in _HARD_SAFETY_TYPES_SEVERITY_GATED:
+                severity = safe_str(warning.get("severity")).lower()
+                if severity in _HARD_SAFETY_SEVERITIES:
+                    return True
     return False
 
 
@@ -5435,21 +5452,32 @@ def build_core_row(
             "safety_verdict": "BLOCKED",
             "section_scores": section_scores,
         })
-    elif (
-        safe_str(effective_scored.get("verdict")).upper() == "SAFE"
-        and blob_has_profile_gated_hard_safety_warning(detail_blob)
-    ):
-        # Release-gate invariant: SAFE base verdict is incompatible with a
-        # profile-gated high/critical safety warning (bitter orange, DHEA, etc.).
-        # Even though the warning is profile-gated, its severity disqualifies
-        # the general-population SAFE label. Downgrade to CAUTION here so the
-        # products_core row honors the contract enforced by
-        # test_release_gate_banned_safe_contradictions::
-        # test_no_safe_core_row_with_profile_gated_critical_safety_warning.
-        effective_scored.update({
-            "verdict": "CAUTION",
-            "safety_verdict": "CAUTION",
-        })
+    elif blob_has_profile_gated_hard_safety_warning(detail_blob):
+        # Release-gate invariant: SAFE on either verdict or safety_verdict is
+        # incompatible with a hard-safety warning (banned/recalled/adulterant/
+        # watchlist always; high_risk_ingredient/contraindicated when severity is
+        # high/critical/contraindicated/avoid). Bitter orange, DHEA, Titanium
+        # Dioxide watchlist, etc. cannot ship as SAFE on the catalog row.
+        #
+        # Two paths to SAFE need to be guarded:
+        #   1. verdict == "SAFE"           → catalog reads SAFE directly.
+        #   2. verdict == "POOR"           → score_supplements.py auto-derives
+        #                                    safety_verdict = "SAFE" because the
+        #                                    quality drop didn't come from a
+        #                                    safety signal. A hard-safety warning
+        #                                    must override this derivation so
+        #                                    safety_verdict no longer says SAFE.
+        # In both cases the verdict drops to CAUTION (clear non-SAFE signal
+        # short of a hard block) — keeping POOR-verdict products at POOR would
+        # leave safety_verdict=SAFE under the derivation rule and re-introduce
+        # the contradiction.
+        verdict_now = safe_str(effective_scored.get("verdict")).upper()
+        safety_now = safe_str(effective_scored.get("safety_verdict")).upper()
+        if verdict_now == "SAFE" or safety_now == "SAFE":
+            effective_scored.update({
+                "verdict": "CAUTION",
+                "safety_verdict": "CAUTION",
+            })
 
     score_80 = safe_float(effective_scored.get("score_80"))
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
