@@ -44,26 +44,28 @@ def test_total_entry_count_matches_metadata(by_id, metadata):
 
 
 def test_aggregate_disposition_counts(by_id):
-    """Mapper outcome: 474 populated, balance deferred ([])."""
+    """Mapper outcome: 475 populated, balance deferred ([])."""
     populated = sum(1 for e in by_id.values() if e.get("functional_roles"))
     deferred = sum(
         1 for e in by_id.values()
         if "functional_roles" in e and not e["functional_roles"]
     )
-    # 474 = 466 batch-5 baseline (commit 7d1c0d7)
+    # 475 = 466 batch-5 baseline (commit 7d1c0d7)
     #     + 2 from 3a113c9 (OI_RIBOFLAVIN_COLORANT, OI_ROSE_HIPS_INACTIVE — TiO2/Talc resolver work)
     #     + 2 from 74aa9a0 (PII_POLYGLYCEROL_POLYRICINOLEATE, PII_TRICALCIUM_PHOSPHATE — Lane #3 excipients)
     # +4 = additional populated entries added since the 470 baseline in subsequent
     #      IQM batches (specific deltas tracked per-commit, not enumerated here —
     #      this pin tracks the current live count, locked by coverage_gate_functional_roles).
+    # +1 from 6d59fc5f (NHA_ARTIFICIAL_COLORS, functional_roles=["colorant_artificial"]
+    #     added as the identity canonical for FD&C dye umbrella routing).
     # OI_PANMOL_B_COMPLEX / OI_ALOE_POLYMAX / OI_CONCENTRATED_SEAWATER_MINERAL_COMPLEX
     # were re-categorized to label_descriptor (is_label_descriptor: true,
     # functional_roles: []) in the 2026-05-23 Wave 5 fix — they are deferred, not
     # populated, so they don't lift this count.
-    # Additional entries added in 74aa9a0 (NHA_*) are correctly deferred under the
+    # NHA_FISH_SOURCE_DESCRIPTOR (added 6d59fc5f) is correctly deferred under the
     # Phase 4 rule pinned in test_retired_descriptor_categories_have_empty_roles
-    # (category=active_pending_relocation or label_descriptor).
-    assert populated == 474, f"expected 474 populated entries; got {populated}"
+    # (category=label_descriptor → functional_roles: []).
+    assert populated == 475, f"expected 475 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

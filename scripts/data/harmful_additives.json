@@ -15413,9 +15413,7 @@
         "blue color",
         "green color",
         "color",
-        "colors",
-        "artificial colors",
-        "artificial color"
+        "colors"
       ],
       "category": "colorant_artificial",
       "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
