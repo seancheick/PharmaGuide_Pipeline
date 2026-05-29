@@ -3117,6 +3117,52 @@ def blob_has_safety_blocking_warning(detail_blob: Optional[Dict]) -> bool:
     return False
 
 
+# Profile-gated hard-safety types/severities that disqualify a base SAFE verdict.
+# Profile-gated warnings represent per-user-condition gating, but when the severity
+# is high/critical and the type is one of the hard safety categories, the base
+# (general-population) verdict still cannot ship as SAFE — the warning is too
+# serious to mask behind a per-profile filter.
+# Mirrors the contract enforced by test_release_gate_banned_safe_contradictions.py
+# ::test_no_safe_core_row_with_profile_gated_critical_safety_warning.
+_PROFILE_GATED_HARD_SAFETY_TYPES = frozenset({
+    "banned_substance",
+    "recalled_ingredient",
+    "adulterant",
+    "contraindicated",
+    "high_risk_ingredient",
+})
+_PROFILE_GATED_HARD_SAFETY_SEVERITIES = frozenset({
+    "critical",
+    "high",
+    "contraindicated",
+    "avoid",
+})
+
+
+def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> bool:
+    """True when a detail blob carries a profile-gated hard-safety warning.
+
+    Hard-safety = banned/recalled/adulterant/contraindicated/high_risk_ingredient
+    with severity in {critical, high, contraindicated, avoid}. Even though these
+    warnings are profile-gated (per-user), their severity disqualifies a base
+    SAFE verdict for the general population — bitter-orange-containing products,
+    DHEA blends, etc. should never read as SAFE on the catalog row.
+    """
+    if not isinstance(detail_blob, dict):
+        return False
+    for warning in safe_list(detail_blob.get("warnings_profile_gated")):
+        if not isinstance(warning, dict):
+            continue
+        warning_type = safe_str(warning.get("type"))
+        severity = safe_str(warning.get("severity")).lower()
+        if (
+            warning_type in _PROFILE_GATED_HARD_SAFETY_TYPES
+            and severity in _PROFILE_GATED_HARD_SAFETY_SEVERITIES
+        ):
+            return True
+    return False
+
+
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
     """Derive blocking_reason from B0 gate results."""
     if has_banned_substance(enriched):
@@ -5388,6 +5434,21 @@ def build_core_row(
             "verdict": "BLOCKED",
             "safety_verdict": "BLOCKED",
             "section_scores": section_scores,
+        })
+    elif (
+        safe_str(effective_scored.get("verdict")).upper() == "SAFE"
+        and blob_has_profile_gated_hard_safety_warning(detail_blob)
+    ):
+        # Release-gate invariant: SAFE base verdict is incompatible with a
+        # profile-gated high/critical safety warning (bitter orange, DHEA, etc.).
+        # Even though the warning is profile-gated, its severity disqualifies
+        # the general-population SAFE label. Downgrade to CAUTION here so the
+        # products_core row honors the contract enforced by
+        # test_release_gate_banned_safe_contradictions::
+        # test_no_safe_core_row_with_profile_gated_critical_safety_warning.
+        effective_scored.update({
+            "verdict": "CAUTION",
+            "safety_verdict": "CAUTION",
         })
 
     score_80 = safe_float(effective_scored.get("score_80"))
