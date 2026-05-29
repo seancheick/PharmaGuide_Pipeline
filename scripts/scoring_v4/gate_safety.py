@@ -33,8 +33,8 @@ from inactive_ingredient_resolver import (
     SOURCE_BANNED_RECALLED,
 )
 from identity.safety import (
-    normalize_safety_source,
-    safety_flag_matches_status,
+    SafetySignal,
+    normalize_safety_signals,
 )
 
 
@@ -94,16 +94,11 @@ class SafetyResult:
     needs_review: bool = False
 
 
-# Match types that authorize a verdict change. Other match types (fuzzy,
-# partial, token, etc.) route to the review queue without auto-blocking.
-_VERDICT_MATCH_TYPES = frozenset({"exact", "alias"})
-_FLAG_VERDICT_MATCH_TYPES = frozenset({"exact", "alias", "explicit_form_evidence", "legacy_projection"})
-# CAUTION is non-blocking and defensive, so it honors a broader match set than
-# the hard BLOCKED/UNSAFE verdicts. `token_bounded` is a resolved word-boundary
-# match (populated banned_id), not a fuzzy guess — for high_risk/watchlist
-# substances (DHEA, Kava, HCA) it is a genuine safety signal and v3 marks these
-# CAUTION. Banned/recalled stay on the strict set to avoid false hard-blocks.
-_CAUTION_MATCH_TYPES = frozenset({"exact", "alias", "token_bounded"})
+# NOTE: match-type → trust mapping moved to the SafetySignal v1 kernel
+# (identity/safety.py::match_resolution_for). This gate consumes the stable
+# `match_resolution` enum (confirmed / likely / review_only / low_confidence)
+# and MUST NOT branch on raw matcher names — enforced by
+# test_gate_safety_has_no_raw_match_type.
 
 
 def _safe_list(value: Any) -> list:
@@ -114,45 +109,6 @@ def _norm(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip().lower()
-
-
-def _extract_substances(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    cd = product.get("contaminant_data")
-    if not isinstance(cd, dict):
-        return []
-    bs = cd.get("banned_substances")
-    if not isinstance(bs, dict):
-        return []
-    return [s for s in _safe_list(bs.get("substances")) if isinstance(s, dict)]
-
-
-def _extract_banned_recalled_safety_flags(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    cd = product.get("contaminant_data")
-    if not isinstance(cd, dict):
-        return []
-    bs = cd.get("banned_substances")
-    if not isinstance(bs, dict):
-        return []
-    flags: List[Dict[str, Any]] = [
-        f for f in _safe_list(bs.get("safety_flags")) if isinstance(f, dict)
-    ]
-    for substance in _safe_list(bs.get("substances")):
-        if isinstance(substance, dict) and isinstance(substance.get("safety_flag"), dict):
-            flags.append(substance["safety_flag"])
-    return [
-        flag for flag in flags
-        if normalize_safety_source(flag.get("source_db") or flag.get("matched_source"))
-        == "banned_recalled_ingredients"
-    ]
-
-
-def _substance_name(s: Dict[str, Any]) -> str:
-    return (
-        s.get("banned_name")
-        or s.get("ingredient")
-        or s.get("name")
-        or "unknown"
-    )
 
 
 @lru_cache(maxsize=1)
@@ -216,6 +172,87 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return hits
 
 
+def _append_signal(result: SafetyResult, code: str) -> None:
+    if code not in result.safety_signals:
+        result.safety_signals.append(code)
+
+
+def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
+    """Apply pure safety policy to one normalized SafetySignal.
+
+    Branches ONLY on the stable contract fields (match_resolution, status,
+    subject_role, inactive_policy) — never on raw match_type. Policy:
+
+        confirmed + banned        -> BLOCKED (short-circuit)
+        confirmed + recalled      -> UNSAFE  (short-circuit)
+        confirmed/likely + high_risk/watchlist -> CAUTION
+        likely + banned/recalled  -> CAUTION + needs_review (never hard-block;
+                                      a false hard-block is worse than a caution)
+        review_only               -> needs_review, no verdict
+        low_confidence            -> audit signal only
+        inactive excipient_acceptable + high_risk/watchlist -> warning only
+    """
+    status = sig.status
+
+    # Inactive excipients with an acceptable policy are warning-only for the
+    # soft statuses (e.g. a high_risk excipient used as a capsule colorant).
+    if (sig.subject_role == "inactive"
+            and sig.inactive_policy == "excipient_acceptable"
+            and status in ("high_risk", "watchlist")):
+        marker = ("B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY" if status == "high_risk"
+                  else "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY")
+        _append_signal(result, marker)
+        return
+
+    if sig.review_required:
+        result.needs_review = True
+        return
+
+    if not sig.policy_eligible:
+        # low_confidence: record for audit, never drive a verdict.
+        if status:
+            _append_signal(result, f"B0_LOWCONF_{status.upper()}")
+        return
+
+    # policy_eligible == confirmed or likely from here.
+    #
+    # Behavior-preserving contract (matches the shipped stopgap):
+    #   - banned/recalled require a CONFIRMED match to drive a hard verdict.
+    #     A `likely` banned/recalled hit (token_bounded etc.) is review-only,
+    #     NO verdict — a false hard-block is worse than a missed one, and
+    #     hardening likely-banned → CAUTION is a separate, corpus-verified
+    #     change tracked for later, not bundled into this refactor.
+    #   - high_risk/watchlist accept `likely` → CAUTION (the DHEA/Kava fix):
+    #     CAUTION is non-blocking and defensive, so a resolved medium-trust
+    #     match is a genuine signal.
+    if status == "banned":
+        if sig.match_resolution == "confirmed":
+            if _verdict_rank("BLOCKED") < _verdict_rank(result.verdict):
+                result.verdict = "BLOCKED"
+                result.blocking_reason = "banned_ingredient"
+                result.matched_substance = sig.evidence_text or sig.entry_id
+        else:  # likely-banned: review only, NO verdict
+            result.needs_review = True
+            _append_signal(result, "B0_LIKELY_BANNED_REVIEW")
+    elif status == "recalled":
+        if sig.match_resolution == "confirmed":
+            if _verdict_rank("UNSAFE") < _verdict_rank(result.verdict):
+                result.verdict = "UNSAFE"
+                result.blocking_reason = "recalled_ingredient"
+                result.matched_substance = sig.evidence_text or sig.entry_id
+        else:  # likely-recalled: review only, NO verdict
+            result.needs_review = True
+            _append_signal(result, "B0_LIKELY_RECALLED_REVIEW")
+    elif status == "high_risk":
+        result.verdict = _max_verdict(result.verdict, "CAUTION")
+        _append_signal(result, "B0_HIGH_RISK_SUBSTANCE")
+    elif status == "watchlist":
+        result.verdict = _max_verdict(result.verdict, "CAUTION")
+        _append_signal(result, "B0_WATCHLIST_SUBSTANCE")
+    elif status:
+        _append_signal(result, f"B0_STATUS_{status.upper()}")
+
+
 def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
@@ -228,149 +265,16 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
 
     result = SafetyResult()
 
-    seen_hits: set[tuple[str, str]] = set()
-    for flag in _extract_banned_recalled_safety_flags(product):
-        match_type = _norm(flag.get("match_type"))
-        name = (
-            flag.get("matched_variant")
-            or flag.get("evidence_text")
-            or flag.get("entry_id")
-            or "unknown"
-        )
-        status = _norm(flag.get("status"))
-        seen_hits.add((_norm(name), status))
-        if match_type not in _FLAG_VERDICT_MATCH_TYPES:
-            result.needs_review = True
-            continue
-
-        if safety_flag_matches_status(flag, ("banned",)):
-            new_verdict = "BLOCKED"
-            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
-                result.verdict = new_verdict
-                result.blocking_reason = "banned_ingredient"
-                result.matched_substance = str(name)
-        elif safety_flag_matches_status(flag, ("recalled",)):
-            new_verdict = "UNSAFE"
-            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
-                result.verdict = new_verdict
-                result.blocking_reason = "recalled_ingredient"
-                result.matched_substance = str(name)
-        elif safety_flag_matches_status(flag, ("high_risk",)):
-            result.verdict = _max_verdict(result.verdict, "CAUTION")
-            if "B0_HIGH_RISK_SUBSTANCE" not in result.safety_signals:
-                result.safety_signals.append("B0_HIGH_RISK_SUBSTANCE")
-        elif safety_flag_matches_status(flag, ("watchlist",)):
-            result.verdict = _max_verdict(result.verdict, "CAUTION")
-            if "B0_WATCHLIST_SUBSTANCE" not in result.safety_signals:
-                result.safety_signals.append("B0_WATCHLIST_SUBSTANCE")
-
-    substances = _extract_substances(product)
-    for s in substances:
-        match_type = _norm(s.get("match_type") or s.get("match_method"))
-        status = _norm(s.get("status") or s.get("recall_status"))
-        name = _substance_name(s)
-
-        # Status-aware match-type policy (Phase B1 parity fix, 2026-05-29):
-        #   - banned / recalled (HARD verdicts that short-circuit scoring)
-        #     require an exact/alias match. A false BLOCK/UNSAFE is worse
-        #     than a missed one here, so token_bounded / fuzzy banned hits
-        #     route to needs_review (NOT auto-block).
-        #   - high_risk / watchlist (CAUTION, non-blocking) also honor
-        #     token_bounded matches, because a resolved banned_id match
-        #     (e.g. DHEA, Kava, HCA) is a genuine safety signal and CAUTION
-        #     is the defensive, low-harm posture. This restores v3 parity:
-        #     v3 marked these CAUTION; v4 previously let them score SAFE
-        #     because _VERDICT_MATCH_TYPES excluded token_bounded.
-        if status in ("banned", "recalled"):
-            if match_type not in _VERDICT_MATCH_TYPES:
-                result.needs_review = True
-                continue
-            seen_hits.add((_norm(name), status))
-            if status == "banned":
-                new_verdict = "BLOCKED"
-                if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
-                    result.verdict = new_verdict
-                    result.blocking_reason = "banned_ingredient"
-                    result.matched_substance = name
-            else:  # recalled
-                new_verdict = "UNSAFE"
-                if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
-                    result.verdict = new_verdict
-                    result.blocking_reason = "recalled_ingredient"
-                    result.matched_substance = name
-        elif status in ("high_risk", "watchlist"):
-            if match_type not in _CAUTION_MATCH_TYPES:
-                result.needs_review = True
-                continue
-            seen_hits.add((_norm(name), status))
-            result.verdict = _max_verdict(result.verdict, "CAUTION")
-            sig = "B0_HIGH_RISK_SUBSTANCE" if status == "high_risk" else "B0_WATCHLIST_SUBSTANCE"
-            if sig not in result.safety_signals:
-                result.safety_signals.append(sig)
-        else:
-            # Unknown / other status: never drives a verdict. Only record a
-            # signal for an exact/alias hit; weaker matches → needs_review.
-            if match_type not in _VERDICT_MATCH_TYPES:
-                result.needs_review = True
-                continue
-            seen_hits.add((_norm(name), status))
-            if status:
-                sig = f"B0_STATUS_{status.upper()}"
-                if sig not in result.safety_signals:
-                    result.safety_signals.append(sig)
-
-    for hit in _iter_resolver_safety_hits(product):
-        status = _norm(hit.get("status"))
-        name = str(hit.get("name") or "unknown")
-        key = (_norm(name), status)
-        if key in seen_hits:
-            continue
-        seen_hits.add(key)
-
-        role = _norm(hit.get("role"))
-        inactive_policy = _norm(hit.get("inactive_policy"))
-
-        if status == "banned":
-            new_verdict = "BLOCKED"
-            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
-                result.verdict = new_verdict
-                result.blocking_reason = "banned_ingredient"
-                result.matched_substance = name
-        elif status == "recalled":
-            new_verdict = "UNSAFE"
-            if _verdict_rank(new_verdict) < _verdict_rank(result.verdict):
-                result.verdict = new_verdict
-                result.blocking_reason = "recalled_ingredient"
-                result.matched_substance = name
-        elif status == "high_risk":
-            if role == "inactive" and inactive_policy == "excipient_acceptable":
-                if "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY" not in result.safety_signals:
-                    result.safety_signals.append("B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY")
-                continue
-            result.verdict = _max_verdict(result.verdict, "CAUTION")
-            if "B0_HIGH_RISK_SUBSTANCE" not in result.safety_signals:
-                result.safety_signals.append("B0_HIGH_RISK_SUBSTANCE")
-        elif status == "watchlist":
-            if role == "inactive" and inactive_policy == "excipient_acceptable":
-                if "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY" not in result.safety_signals:
-                    result.safety_signals.append("B0_WATCHLIST_EXCIPIENT_WARNING_ONLY")
-                continue
-            result.verdict = _max_verdict(result.verdict, "CAUTION")
-            if "B0_WATCHLIST_SUBSTANCE" not in result.safety_signals:
-                result.safety_signals.append("B0_WATCHLIST_SUBSTANCE")
-
-    # Top-level enricher flags — defense in depth. If contaminant_data
-    # was somehow empty but the enricher set the boolean (older blob
-    # shapes), still honor the safety signal.
-    if product.get("has_banned_substance") and result.verdict != "BLOCKED":
-        if _verdict_rank("BLOCKED") < _verdict_rank(result.verdict):
-            result.verdict = "BLOCKED"
-            result.blocking_reason = result.blocking_reason or "banned_ingredient"
-
-    if product.get("has_recalled_ingredient") and result.verdict not in {"BLOCKED"}:
-        if _verdict_rank("UNSAFE") < _verdict_rank(result.verdict):
-            result.verdict = "UNSAFE"
-            result.blocking_reason = result.blocking_reason or "recalled_ingredient"
+    # Consume the canonical SafetySignal[] contract. The kernel
+    # (identity/safety.py) owns ALL matcher-internal knowledge and emits a
+    # stable match_resolution enum; this gate applies pure policy on
+    # (match_resolution, status) and never sees a raw match_type.
+    signals = normalize_safety_signals(
+        product,
+        resolver_hits=_iter_resolver_safety_hits(product),
+    )
+    for sig in signals:
+        _apply_signal_policy(result, sig)
 
     # Disease claims → CAUTION. v3 routes this through B6 marketing
     # penalty + verdict adjustment; v4 surfaces it as a Layer 1 signal.

@@ -97,6 +97,231 @@ def safety_status_priority(status: Any) -> int:
     return SAFETY_STATUS_PRIORITY.get(_normalize_safety_enum(status), 99)
 
 
+# --------------------------------------------------------------------------- #
+# SafetySignal v1 — the canonical safety contract between enrichment and
+# scoring. This is the ONLY place that knows raw matcher implementation names
+# (exact / alias / token_bounded / fuzzy / ...). Scorers consume the stable
+# `match_resolution` enum and NEVER branch on raw match_type. Adding a new
+# matcher method only touches this module, not any scorer.
+#
+#   match_resolution semantics:
+#     confirmed     high-trust identity match (exact / alias / explicit form).
+#                   Eligible for hard verdicts (BLOCKED / UNSAFE) and CAUTION.
+#     likely        resolved medium-trust match (token_bounded / legacy with a
+#                   populated entry_id). Eligible for CAUTION; a likely BANNED/
+#                   RECALLED hit becomes CAUTION+review, never a hard block —
+#                   a false hard-block is worse than a false caution.
+#     review_only   weak / fuzzy / unresolved hit. No verdict; routes to the
+#                   safety review queue.
+#     low_confidence numeric confidence below the likely floor. Audit flag only.
+# --------------------------------------------------------------------------- #
+
+_CONFIRMED_MATCH_TYPES = frozenset({"exact", "alias", "explicit_form_evidence"})
+_LIKELY_MATCH_TYPES = frozenset({"token_bounded", "legacy_projection"})
+
+# Numeric-confidence fallback thresholds when match_type is unknown/absent.
+_CONFIDENCE_CONFIRMED_FLOOR = 0.85
+_CONFIDENCE_LIKELY_FLOOR = 0.5
+
+
+@dataclass(frozen=True)
+class SafetySignal:
+    """Normalized safety signal consumed by v3/v4 safety gates.
+
+    Stable contract: scorers branch on `match_resolution` + `status` only.
+    """
+    entry_id: str
+    source_db: str
+    status: str            # banned / recalled / high_risk / watchlist / caution / ""
+    severity: str
+    subject_role: str      # active / inactive / unknown
+    match_resolution: str  # confirmed / likely / review_only / low_confidence
+    match_confidence: Optional[float]
+    policy_eligible: bool   # match_resolution in {confirmed, likely}
+    review_required: bool   # match_resolution == review_only
+    inactive_policy: str    # e.g. "excipient_acceptable" / ""
+    evidence_text: str
+
+    def to_dict(self) -> Dict[str, Any]:
+        return asdict(self)
+
+
+def _coerce_confidence(value: Any) -> Optional[float]:
+    if isinstance(value, bool):
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        txt = value.strip().lower()
+        named = {"high": 0.95, "medium": 0.7, "low": 0.4}
+        if txt in named:
+            return named[txt]
+        try:
+            return float(txt)
+        except ValueError:
+            return None
+    return None
+
+
+def match_resolution_for(
+    match_type: Any,
+    entry_id: Any,
+    confidence: Any = None,
+) -> str:
+    """Map a raw matcher result to the stable match_resolution enum.
+
+    This is the single chokepoint for matcher-internal knowledge. Rules:
+      - exact / alias / explicit_form_evidence            -> confirmed
+      - token_bounded / legacy_projection WITH entry_id   -> likely
+      - token_bounded / legacy_projection WITHOUT entry_id -> review_only
+      - else: fall back to numeric confidence bands, then review_only
+    """
+    mt = _normalize_safety_enum(match_type)
+    has_id = bool(str(entry_id or "").strip())
+    if mt in _CONFIRMED_MATCH_TYPES:
+        return "confirmed"
+    if mt in _LIKELY_MATCH_TYPES:
+        return "likely" if has_id else "review_only"
+    conf = _coerce_confidence(confidence)
+    if conf is not None:
+        if conf >= _CONFIDENCE_CONFIRMED_FLOOR:
+            return "confirmed"
+        if conf >= _CONFIDENCE_LIKELY_FLOOR:
+            return "likely" if has_id else "review_only"
+        return "low_confidence"
+    return "review_only"
+
+
+def build_safety_signal(
+    *,
+    entry_id: Any,
+    source_db: Any,
+    status: Any,
+    match_type: Any = None,
+    confidence: Any = None,
+    severity: Any = None,
+    subject_role: Any = "unknown",
+    inactive_policy: Any = "",
+    evidence_text: Any = "",
+) -> SafetySignal:
+    status_norm = _normalize_safety_enum(status)
+    resolution = match_resolution_for(match_type, entry_id, confidence)
+    return SafetySignal(
+        entry_id=str(entry_id or ""),
+        source_db=normalize_safety_source(source_db),
+        status=status_norm,
+        severity=safety_severity_for_status(status_norm, severity),
+        subject_role=_normalize_safety_enum(subject_role) or "unknown",
+        match_resolution=resolution,
+        match_confidence=_coerce_confidence(confidence),
+        policy_eligible=resolution in ("confirmed", "likely"),
+        review_required=resolution == "review_only",
+        inactive_policy=_normalize_safety_enum(inactive_policy),
+        evidence_text=str(evidence_text or ""),
+    )
+
+
+def normalize_safety_signals(
+    product: Dict[str, Any],
+    *,
+    resolver_hits: Optional[List[Dict[str, Any]]] = None,
+) -> List[SafetySignal]:
+    """Convert every legacy safety shape on an enriched product into the
+    canonical SafetySignal[] contract. This is the ONE normalizer; scorers
+    consume its output and never touch raw match_type.
+
+    Sources consumed (deduped by (entry_id|evidence, status, role)):
+      1. contaminant_data.banned_substances.substances
+      2. contaminant_data.banned_substances.safety_flags + per-substance
+         safety_flag sub-dicts (banned_recalled source only)
+      3. resolver_hits (active+inactive banned_recalled hits) — passed in by
+         the caller to keep the heavy InactiveIngredientResolver dependency
+         out of this kernel module
+      4. top-level has_banned_substance / has_recalled_ingredient booleans
+         (defense-in-depth for older blob shapes)
+    """
+    product = product if isinstance(product, dict) else {}
+    signals: List[SafetySignal] = []
+    seen: set = set()
+
+    def _dedup_key(sig: SafetySignal) -> tuple:
+        return (sig.entry_id or sig.evidence_text, sig.status, sig.subject_role)
+
+    def _add(sig: SafetySignal) -> None:
+        key = _dedup_key(sig)
+        if key in seen:
+            return
+        seen.add(key)
+        signals.append(sig)
+
+    cd = product.get("contaminant_data")
+    bs = cd.get("banned_substances") if isinstance(cd, dict) else None
+    bs = bs if isinstance(bs, dict) else {}
+
+    # 1. substances
+    for s in bs.get("substances") or []:
+        if not isinstance(s, dict):
+            continue
+        _add(build_safety_signal(
+            entry_id=s.get("banned_id") or s.get("entry_id") or s.get("id"),
+            source_db=s.get("source_db") or s.get("matched_source") or "banned_recalled_ingredients",
+            status=s.get("status") or s.get("recall_status"),
+            match_type=s.get("match_type") or s.get("match_method"),
+            confidence=s.get("confidence"),
+            severity=s.get("severity_level") or s.get("severity"),
+            subject_role=s.get("source_section") or s.get("role") or "active",
+            evidence_text=(s.get("banned_name") or s.get("ingredient") or s.get("name") or ""),
+        ))
+
+    # 2. safety_flags (top-level + per-substance), banned_recalled source only
+    flags = [f for f in (bs.get("safety_flags") or []) if isinstance(f, dict)]
+    for s in bs.get("substances") or []:
+        if isinstance(s, dict) and isinstance(s.get("safety_flag"), dict):
+            flags.append(s["safety_flag"])
+    for f in flags:
+        if normalize_safety_source(f.get("source_db") or f.get("matched_source")) != "banned_recalled_ingredients":
+            continue
+        _add(build_safety_signal(
+            entry_id=f.get("entry_id") or f.get("matched_variant"),
+            source_db="banned_recalled_ingredients",
+            status=f.get("status"),
+            match_type=f.get("match_type"),
+            confidence=f.get("confidence"),
+            severity=f.get("severity"),
+            subject_role=f.get("subject_role") or "active",
+            evidence_text=(f.get("matched_variant") or f.get("evidence_text") or f.get("entry_id") or ""),
+        ))
+
+    # 3. resolver hits (already canonical-resolved → treat as confirmed)
+    for hit in resolver_hits or []:
+        if not isinstance(hit, dict):
+            continue
+        _add(build_safety_signal(
+            entry_id=hit.get("matched_rule_id") or hit.get("name"),
+            source_db="banned_recalled_ingredients",
+            status=hit.get("status"),
+            match_type="alias",  # resolver hits are canonical matches → confirmed
+            severity=hit.get("severity"),
+            subject_role=hit.get("role") or "unknown",
+            inactive_policy=hit.get("inactive_policy") or "",
+            evidence_text=hit.get("name") or "",
+        ))
+
+    # 4. top-level booleans (defense in depth; confirmed by construction)
+    if product.get("has_banned_substance"):
+        _add(build_safety_signal(
+            entry_id="", source_db="banned_recalled_ingredients", status="banned",
+            match_type="exact", evidence_text="has_banned_substance_flag",
+        ))
+    if product.get("has_recalled_ingredient"):
+        _add(build_safety_signal(
+            entry_id="", source_db="banned_recalled_ingredients", status="recalled",
+            match_type="exact", evidence_text="has_recalled_ingredient_flag",
+        ))
+
+    return signals
+
+
 def top_safety_flag(flags: Iterable[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
     valid = [flag for flag in flags or [] if isinstance(flag, dict)]
     if not valid:
