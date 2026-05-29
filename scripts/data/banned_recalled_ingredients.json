@@ -9851,7 +9851,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "Products from this brand faced FDA enforcement for serious manufacturing violations — linked to Salmonella contamination and sanitation issues. Stop and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for Salmonella and manufacturing issues. Stop."
+      "safety_warning_one_liner": "Salmonella contamination recall. Do not use this recalled product."
     },
     {
       "id": "RECALLED_GREEN_LUMBER",
@@ -10071,7 +10071,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "Hydroxycut was recalled in 2009 after being linked to 23 reports of severe liver injury and one death. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled product linked to liver injury. Stop."
+      "safety_warning_one_liner": "Recalled product linked to liver injury. Do not use this recalled product."
     },
     {
       "id": "RECALLED_JACK3D",
@@ -10204,7 +10204,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "Jack3d was recalled after its DMAA content was linked to two deaths in US military personnel. Stop any remaining product and consult a doctor.",
-      "safety_warning_one_liner": "Recalled DMAA product linked to deaths. Stop."
+      "safety_warning_one_liner": "Recalled DMAA product linked to deaths. Do not use this recalled product."
     },
     {
       "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
@@ -10299,7 +10299,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "Live it Up Super Greens was recalled after tests flagged potential Salmonella contamination. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for potential Salmonella. Stop."
+      "safety_warning_one_liner": "Recalled for potential Salmonella. Do not use this recalled product."
     },
     {
       "id": "RECALLED_MODERN_WARRIOR",
@@ -10636,7 +10636,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "OxyElite Pro was recalled in 2013 after being linked to an acute liver injury outbreak with 97 cases, three liver transplants, and one death. Stop any remaining product and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product linked to liver transplants. Stop."
+      "safety_warning_one_liner": "Recalled product linked to liver transplants. Do not use this recalled product."
     },
     {
       "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
@@ -10726,7 +10726,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "Purity Products My Bladder was recalled after tests found E. coli contamination, a concern for urinary tract and kidney infections. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for E. coli contamination. Stop."
+      "safety_warning_one_liner": "Recalled for E. coli contamination. Do not use this recalled product."
     },
     {
       "id": "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY",
@@ -10820,7 +10820,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "These nasal sprays were recalled after tests flagged yeast, mold, and Achromobacter — associated with respiratory infection risk, particularly in immunocompromised users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled for microbial contamination. Stop."
+      "safety_warning_one_liner": "Recalled for microbial contamination. Do not use this recalled product."
     },
     {
       "id": "RECALLED_RHEUMACARE_CAPSULES",
@@ -17624,7 +17624,7 @@
       "external_ids": {},
       "ban_context": "contamination_recall",
       "safety_warning": "Rosabella Moringa capsules were recalled after tests flagged potential Salmonella contamination. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for potential Salmonella. Stop."
+      "safety_warning_one_liner": "Recalled for potential Salmonella. Do not use this recalled product."
     },
     {
       "id": "SCHED_PSILOCIN",
@@ -18698,7 +18698,7 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Product-scoped contamination recall — any presence of this specific recalled SKU warrants the B0 gate regardless of column.",
       "safety_warning": "Aonic Complete Hers liquid drinks were recalled after tests flagged possible coliform, E. coli, or Pseudomonas contamination. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Class II FDA recall — microbial contamination risk. Stop.",
+      "safety_warning_one_liner": "Class II recall — microbial contamination. Do not use this recalled product.",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "high",
       "jurisdictions": [
@@ -18803,7 +18803,7 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Product-scoped contamination recall — any presence of this specific recalled SKU warrants the B0 gate regardless of column.",
       "safety_warning": "Aonic Complete His liquid drinks were recalled after tests flagged possible coliform, E. coli, or Pseudomonas contamination. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Class II FDA recall — microbial contamination risk. Stop.",
+      "safety_warning_one_liner": "Class II recall — microbial contamination. Do not use this recalled product.",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "high",
       "jurisdictions": [
@@ -19033,7 +19033,7 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Product-scoped recall — any presence of this specific SKU warrants the B0 gate regardless of column.",
       "safety_warning": "Imu-Tek Colostrum-5 Capsules were recalled after FDA flagged potential under-processing — the pathogen-inactivation step may have failed. Stop and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Class II FDA recall — possible under-processing. Stop.",
+      "safety_warning_one_liner": "Class II recall — possible under-processing. Do not use this recalled product.",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "high",
       "jurisdictions": [
@@ -19135,7 +19135,7 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Product-scoped recall — any presence of this specific SKU warrants the B0 gate regardless of column.",
       "safety_warning": "Imu-Tek Colostrum-5 Powder was recalled after FDA flagged potential under-processing — the pathogen-inactivation step may have failed. Stop and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Class II FDA recall — possible under-processing. Stop.",
+      "safety_warning_one_liner": "Class II recall — possible under-processing. Do not use this recalled product.",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "high",
       "jurisdictions": [
@@ -19240,7 +19240,7 @@
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Product-scoped recall — any presence of this SKU warrants the B0 gate. Undeclared allergen risk applies regardless of column.",
       "safety_warning": "Divided Sunset Multi Collagen Peptides was recalled after FDA found undeclared egg — risk of allergic reaction or anaphylaxis for egg-allergic users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Class II FDA recall — undeclared egg allergen. Stop.",
+      "safety_warning_one_liner": "Class II FDA recall — undeclared egg allergen. Do not use this recalled product.",
       "legal_status_enum": "contaminant_risk",
       "clinical_risk_enum": "high",
       "jurisdictions": [
