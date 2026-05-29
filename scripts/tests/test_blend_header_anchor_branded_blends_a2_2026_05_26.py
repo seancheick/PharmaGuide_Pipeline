@@ -7,6 +7,8 @@ scripts/data/branded_blend_anchor_overrides.json with live-verified PubMed
 evidence.  Generic proprietary/herbal/superfood blends remain fail-closed.
 """
 
+from __future__ import annotations
+
 from pathlib import Path
 import json
 import sys
