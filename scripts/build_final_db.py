@@ -434,6 +434,15 @@ def _resolve_active_safety_contract(
             ) or None,
             "matched_source": "banned_recalled",
             "matched_rule_id": safe_str(elevated_hit.get("id") or elevated_hit.get("rule_id")) or None,
+            # User-facing reason copy: high_risk and recalled hits MUST carry
+            # the authored Dr-Pham one-liner + full safety_warning so Flutter
+            # can render "why this is high-risk" under the warning title. Prior
+            # version omitted these fields, leaving bitter orange / yohimbe /
+            # garcinia warnings with an empty body (just the title). The source
+            # data already authors them on each banned_recalled_ingredients.json
+            # entry — no derivation, just thread them through.
+            "safety_warning_one_liner": safe_str(elevated_hit.get("safety_warning_one_liner")) or None,
+            "safety_warning": safe_str(elevated_hit.get("safety_warning")) or None,
         }
     # 3. — harmful_additives moderate+
     if harmful_hit is not None:
@@ -463,6 +472,11 @@ def _resolve_active_safety_contract(
             ) or None,
             "matched_source": "banned_recalled",
             "matched_rule_id": safe_str(watchlist_hit.get("id") or watchlist_hit.get("rule_id")) or None,
+            # Same pattern as banned/elevated paths: thread the authored copy
+            # through so Flutter can show "EU-banned white pigment. Avoid when
+            # possible." instead of an empty body under the title.
+            "safety_warning_one_liner": safe_str(watchlist_hit.get("safety_warning_one_liner")) or None,
+            "safety_warning": safe_str(watchlist_hit.get("safety_warning")) or None,
         }
     # 5. — nothing
     return {
