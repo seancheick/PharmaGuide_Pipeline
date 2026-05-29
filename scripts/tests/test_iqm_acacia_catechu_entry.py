@@ -38,7 +38,11 @@ def test_acacia_catechu_iqm_entry_exists(iqm):
 
 def test_acacia_catechu_identifiers(iqm):
     e = iqm["acacia_catechu"]
-    assert e.get("cui") == "C0949533", f"Expected CUI C0949533, got {e.get('cui')}"
+    # Updated Wave 9.F.3/9.F.4 to canonical Acacia catechu (Plant) CUI C1135823.
+    # See test_iqm_identifier_integrity.test_acacia_catechu_cui_is_canonical_plant —
+    # live-verified via UMLS REST API. The previous C0949533 was a different
+    # concept that did not match the Acacia catechu plant.
+    assert e.get("cui") == "C1135823", f"Expected CUI C1135823, got {e.get('cui')}"
     assert e.get("external_ids", {}).get("unii") == "TJ6XA84OQF"
 
 

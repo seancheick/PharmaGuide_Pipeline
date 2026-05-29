@@ -198,7 +198,10 @@ def test_cayenne_pepper_iqm_parent_exists(iqm):
     assert "cayenne_pepper" in iqm, "cayenne_pepper new IQM parent missing"
     entry = iqm["cayenne_pepper"]
     assert entry.get("standard_name") == "Cayenne Pepper"
-    assert entry.get("cui") == "C0006909"
+    # Updated Wave 9.F.3/9.F.4 to canonical food concept CUI C0007480.
+    # See test_iqm_identifier_integrity.test_cayenne_pepper_cui_is_canonical_food_concept
+    # ("Cayenne Pepper", Food) — live-verified via UMLS REST API.
+    assert entry.get("cui") == "C0007480"
 
 
 def test_cayenne_pepper_external_ids_inherited_from_botanical_db(iqm):
@@ -415,7 +418,10 @@ def test_english_ivy_iqm_parent_exists(iqm):
     assert "english_ivy" in iqm
     entry = iqm["english_ivy"]
     assert entry.get("standard_name") == "English Ivy"
-    assert entry.get("cui") == "C0949841"
+    # Updated Wave 9.F.3/9.F.4 to canonical Hedera helix CUI C0331030.
+    # See test_iqm_identifier_integrity.test_english_ivy_cui_is_canonical_hedera_helix
+    # ("Hedera helix", Plant) — live-verified via UMLS REST API.
+    assert entry.get("cui") == "C0331030"
 
 
 def test_english_ivy_external_ids_include_verified_unii(iqm):
@@ -602,7 +608,11 @@ def test_horse_chestnut_seed_iqm_parent_exists(iqm):
     assert "horse_chestnut_seed" in iqm
     entry = iqm["horse_chestnut_seed"]
     assert entry.get("standard_name") == "Horse Chestnut Seed"
-    assert entry.get("cui") == "C0001443"
+    # Updated Wave 9.F.3/9.F.4 to canonical 'horse chestnut seed' CUI C0874047.
+    # See test_iqm_identifier_integrity.test_horse_chestnut_seed_cui_is_canonical —
+    # whole-seed extract identity (distinct from C0001443 Aesculus hippocastanum
+    # whole plant). Live-verified via UMLS REST API.
+    assert entry.get("cui") == "C0874047"
 
 
 def test_horse_chestnut_seed_external_ids_inherited_from_botanical_db(iqm):
@@ -616,7 +626,9 @@ def test_horse_chestnut_seed_distinct_from_aescin_parent(iqm):
     compound). aescin parent (CUI C0014838, bio_score=5) is NOT touched."""
     assert "horse_chestnut_seed" in iqm
     assert "aescin" in iqm
-    assert iqm["horse_chestnut_seed"].get("cui") == "C0001443"
+    # Wave 9.F.3/9.F.4 canonical seed-extract CUI (live-verified via UMLS).
+    # See test_iqm_identifier_integrity.test_horse_chestnut_seed_cui_is_canonical.
+    assert iqm["horse_chestnut_seed"].get("cui") == "C0874047"
     assert iqm["aescin"].get("cui") == "C0014838"
     assert iqm["aescin"]["forms"]["aescin (unspecified)"]["bio_score"] == 5
 
@@ -753,7 +765,15 @@ def test_purple_corn_extract_iqm_parent_exists(iqm):
     assert "purple_corn_extract" in iqm
     entry = iqm["purple_corn_extract"]
     assert entry.get("standard_name") == "Purple Corn Extract"
-    assert entry.get("cui") == "C1446590"
+    # Wave 6.Y Batch 2C (2026-05-27): C1446590 cleared to null after UMLS
+    # review found no token overlap with the IQM entry. Null policy enforced
+    # by paired cui_note documenting the deprecation rationale.
+    # See test_iqm_identifier_integrity.test_purple_corn_extract_cui_cleared_to_null.
+    assert entry.get("cui") is None
+    assert entry.get("cui_note"), (
+        "purple_corn_extract.cui is intentionally null and MUST carry a "
+        "cui_note documenting why (Wave 6.Y Batch 2C null policy)."
+    )
 
 
 @pytest.mark.parametrize(

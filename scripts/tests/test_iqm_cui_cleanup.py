@@ -90,7 +90,13 @@ def test_iqm_flower_pollen_does_not_borrow_rye_specific_identifiers_or_aliases()
     entry = iqm["flower_pollen"]
     generic_aliases = entry["forms"]["flower pollen extract"]["aliases"]
 
-    assert entry.get("cui") == "C4073752"
+    # Updated Wave 9.F.3/9.F.4 to canonical 'flower pollen' (Plant) CUI C1328880.
+    # See test_iqm_identifier_integrity.test_flower_pollen_cui_is_canonical_source —
+    # live-verified via UMLS REST API. The previous C4073752 was rye-specific
+    # (Secale cereale pollen) and inappropriately narrow for the generic
+    # flower_pollen parent. The contract this test enforces — that flower_pollen
+    # does NOT borrow rye-specific identifiers or aliases — is preserved.
+    assert entry.get("cui") == "C1328880"
     assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
