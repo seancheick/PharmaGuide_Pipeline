@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
-    "last_updated": "2026-05-14",
+    "last_updated": "2026-05-30",
     "total_entries": 156,
     "data_source_metadata": {
       "sources": [
@@ -418,7 +418,8 @@
       "Added references_structured with evidence grades",
       "Added jurisdictions for state/regional ban support",
       "Added operations metadata (data_quality, last_reviewed_at, update_flags)",
-      "Merged 1 duplicate entries using supersedes_ids"
+      "Merged 1 duplicate entries using supersedes_ids",
+      "2026-05-30: Safety-copy tone close-out (Option B). After 6bfe7c43 voice normalization, applied the final bounded rubric to the ACTION_MISMATCH set: fixed the one true action defect (7-OH mitragynine had no action verb), aligned HM_CADMIUM to the heavy-metal contaminant voice ('Avoid untested products'), restored dropped specificity on EPHEDRA (stroke/heart) and DMAA (stroke/cardiac), and strengthened two genuinely-soft controlled/cancer-linked drug rows (modafinil, cardarine). Regulatory-only revocations (Red 3, BVO, PHO, Amaranth), legal-status (CBD, delta-8), lawful-but-cautioned (red yeast rice), OTC (docusate, simethicone), and general heavy-metal/contaminant rows are INTENTIONALLY kept soft ('Avoid'/'Avoid untested products'/'Talk to your doctor') — encoded in audit_safety_oneliner_tone.py so they no longer flag as under-warning. An earlier uncommitted batch that escalated all 19 to 'Stop using this product' was rejected: it busted the 80-char cap on 13 rows and over-corrected regulatory/contaminant cases. Closes safety-copy tone."
     ],
     "risk_breakdown": {
       "critical": 87,
@@ -1114,7 +1115,7 @@
       },
       "ban_context": "substance",
       "safety_warning": "A potent kratom alkaloid with opioid-like activity estimated around 13 times morphine potency. Associated with dependence, breathing suppression, and overdose risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Opioid-potent kratom alkaloid. Risk of dependence and overdose."
+      "safety_warning_one_liner": "Opioid-potent kratom alkaloid. Stop using and talk to your doctor."
     },
     {
       "id": "BANNED_7_KETO_DHEA",
@@ -3604,7 +3605,7 @@
       },
       "ban_context": "substance",
       "safety_warning": "An unapproved synthetic stimulant that raises blood pressure and has been linked to strokes and cardiac events in healthy users. FDA enforcement active since 2012. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved stimulant linked to strokes. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "Unapproved stimulant, stroke/cardiac risk. Stop using and talk to your doctor."
     },
     {
       "id": "BANNED_DMBA",
@@ -3927,7 +3928,7 @@
       },
       "ban_context": "substance",
       "safety_warning": "FDA banned ephedra in supplements in 2004 after it was linked to strokes, heart attacks, and over 155 deaths — many in otherwise healthy users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "FDA-banned stimulant, heart-attack risk. Stop using and talk to your doctor."
+      "safety_warning_one_liner": "FDA-banned stimulant, stroke/heart risk. Stop using and talk to your doctor."
     },
     {
       "id": "BANNED_FASORACETAM",
@@ -7162,7 +7163,7 @@
       },
       "ban_context": "substance",
       "safety_warning": "A heavy-metal contaminant that accumulates in the kidneys and is linked to long-term kidney damage and bone loss. Avoid supplements without verified contaminant testing.",
-      "safety_warning_one_liner": "Heavy-metal contaminant linked to kidney damage. Avoid.",
+      "safety_warning_one_liner": "Heavy-metal contaminant, kidney risk. Avoid untested products.",
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Heavy-metal contamination — never an excipient"
     },
@@ -8166,7 +8167,7 @@
       },
       "ban_context": "substance",
       "safety_warning": "A DEA Schedule IV controlled prescription stimulant. Its presence in a supplement is associated with illegal drug inclusion — talk to your doctor if you have been taking it.",
-      "safety_warning_one_liner": "Controlled prescription drug. Talk to your doctor."
+      "safety_warning_one_liner": "Controlled prescription drug. Stop using and talk to your doctor."
     },
     {
       "id": "NOOTROPIC_OMBERACETAM",
@@ -9673,7 +9674,7 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "Designer derivatives of cardarine — whose parent compound caused rapid multi-tissue cancer in animal studies. Not lawful as supplements; avoid any product labeled with these analogs.",
-      "safety_warning_one_liner": "Cancer-linked designer drug family. Avoid."
+      "safety_warning_one_liner": "Cancer-linked designer drug. Stop using and talk to your doctor."
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -16926,7 +16927,7 @@
       },
       "ban_context": "substance",
       "safety_warning": "Talc used in consumer products can be contaminated with asbestos, a known human carcinogen. Presence in supplements is associated with contamination risk. Avoid affected products.",
-      "safety_warning_one_liner": "Possible asbestos contamination. Avoid.",
+      "safety_warning_one_liner": "Possible asbestos contamination. Avoid affected products.",
       "inactive_policy": "excipient_acceptable",
       "inactive_policy_reason": "FDA-approved anti-caking agent / glidant for tablets; asbestos-contamination risk monitored separately"
     },

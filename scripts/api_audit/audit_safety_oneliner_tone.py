@@ -159,6 +159,29 @@ def _is_wada(entry_id: str) -> bool:
     return entry_id.upper().startswith("WADA")
 
 
+# FINAL RUBRIC (2026-05-30 clinical close-out). Entries explicitly accepted with
+# SOFT copy — they must NOT flag as ACTION_MISMATCH ("under-warning"). These are
+# regulatory-only revocations, legal-status restrictions, lawful-but-cautioned
+# supplements, OTC drugs, and general contaminant rows where future-tense
+# "Avoid" / "Talk to your doctor" is the clinically correct instruction (the
+# user is not necessarily mid-dose on a named product). Heavy metals are handled
+# by the _is_heavy_metal carve-out below (contaminant voice "Avoid untested
+# products"); this set covers the non-heavy-metal accepted-soft rows.
+_ACCEPTED_SOFT_ACTION = frozenset({
+    "ADD_RED3",
+    "ADD_DOCUSATE_SODIUM",
+    "ADD_SIMETHICONE",
+    "BANNED_BVO_2024",
+    "BANNED_CBD_US",
+    "BANNED_DELTA8_THC",
+    "BANNED_FDC_RED_2_AMARANTH",
+    "BANNED_METAL_FIBERS",
+    "BANNED_PHO",
+    "BANNED_RED_YEAST_RICE",
+    "BANNED_ADD_TALC",
+})
+
+
 def _suggested_strength(status: str, ban_context: str, clinical_risk: str,
                         heavy_metal: bool, wada: bool) -> int:
     if ban_context == "watchlist" or status == "watchlist":
@@ -173,7 +196,7 @@ def _suggested_strength(status: str, ban_context: str, clinical_risk: str,
         return 2
     # substance
     if heavy_metal:
-        return 3  # cumulative toxin: current-use action, not future avoidance
+        return 1  # contaminant voice: "Avoid untested products" (final rubric)
     if clinical_risk == "critical":
         return 3  # at least Stop using; reviewer decides if 'Stop immediately'
     if clinical_risk in ("high", "dose_dependent"):
@@ -183,7 +206,8 @@ def _suggested_strength(status: str, ban_context: str, clinical_risk: str,
 
 def _review_bucket(status: str, ban_context: str, clinical_risk: str,
                    closing: str, has_mechanical: bool,
-                   heavy_metal: bool, wada: bool) -> str:
+                   heavy_metal: bool, wada: bool,
+                   accepted_soft: bool = False) -> str:
     current_strength = _ACTION_STRENGTH.get(closing, 2)
     suggested_strength = _suggested_strength(
         status, ban_context, clinical_risk, heavy_metal, wada
@@ -197,7 +221,9 @@ def _review_bucket(status: str, ban_context: str, clinical_risk: str,
     # Heavy metals, modafinil, critical hazards reading "Avoid." land here —
     # the human decides whether the soft phrasing is intentional (e.g. WADA
     # competition rules) or an under-statement that must be strengthened.
-    if current_strength < suggested_strength:
+    # accepted_soft entries (final 2026-05-30 rubric) are explicitly cleared to
+    # keep soft copy and must never re-trigger the under-warning flag.
+    if not accepted_soft and current_strength < suggested_strength:
         return "ACTION_MISMATCH_REVIEW"
 
     # High-impact contexts get human eyes even when a mechanical fix exists —
@@ -249,9 +275,10 @@ def audit(input_path: Path, output_path: Path) -> Dict[str, int]:
         mech = _mechanical_fix(one, closing)
         heavy_metal = _is_heavy_metal(entry_id, one)
         wada = _is_wada(entry_id)
+        accepted_soft = entry_id in _ACCEPTED_SOFT_ACTION
         bucket = _review_bucket(
             status, ban_context, clinical_risk, closing,
-            mech is not None, heavy_metal, wada,
+            mech is not None, heavy_metal, wada, accepted_soft,
         )
         counts[bucket] = counts.get(bucket, 0) + 1
         rows.append({
