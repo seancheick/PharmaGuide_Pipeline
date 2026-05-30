@@ -105,6 +105,37 @@ def _has_dose_with_unit(ingredient: Dict[str, Any]) -> bool:
     return _dose_value(ingredient) is not None and bool(_dose_unit(ingredient))
 
 
+# Enzyme activity units — digestive enzymes are dosed by activity, not mass.
+# The enricher marks these rows dose_class='enzyme_activity' (mass quantity
+# stays 0/NP because the meaningful dose is the activity unit).
+_ENZYME_ACTIVITY_UNITS = {
+    "alu", "ppi", "blgu", "hut", "sapu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
+    "lacu", "fccpu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
+}
+
+
+def _has_enzyme_activity_evidence(ingredient: Dict[str, Any]) -> bool:
+    """True when an ingredient carries enzyme-activity dose evidence.
+
+    Enzymes are dosed in activity units (ALU/PPI/BLGU/...), so their mass
+    quantity is legitimately 0/NP. The enricher classifies these rows as
+    dose_class='enzyme_activity' with an activity_unit. v4 must treat that as
+    valid dose evidence rather than blocking the product as 'missing dose'.
+    """
+    if _norm(ingredient.get("dose_class")) != "enzyme_activity":
+        return False
+    return bool(
+        _norm(ingredient.get("activity_unit"))
+        or _as_float(ingredient.get("activity_value"), None)
+        or _norm(ingredient.get("unit")) in _ENZYME_ACTIVITY_UNITS
+    )
+
+
+def _has_usable_dose_evidence(ingredient: Dict[str, Any]) -> bool:
+    """Dose evidence for live-eligibility: a mass dose+unit OR enzyme activity."""
+    return _has_dose_with_unit(ingredient) or _has_enzyme_activity_evidence(ingredient)
+
+
 def _mapped_coverage(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> float:
     scoring_input = get_scoring_ingredients(product or {}, strict=True)
     if scoring_input.mapped_coverage is not None:
@@ -254,7 +285,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         # dose/safety expectations, not because they have a full panel.
         if len(ingredients) >= 8 and dose_cov < MULTI_DOSE_COVERAGE_MIN:
             missing.append("micronutrient_panel_dose_coverage")
-        elif len(ingredients) < 8 and ingredients and not any(_has_dose_with_unit(i) for i in ingredients):
+        elif len(ingredients) < 8 and ingredients and not any(_has_usable_dose_evidence(i) for i in ingredients):
             missing.append("dose_with_unit")
         return _finalize(module, missing, coverage, dose_cov, checked_fields)
 
@@ -281,8 +312,10 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
 
     # Generic module: single nutrients, botanicals, and simple stacks.
     # Omega and sports previously fell through here; both now have branches above.
+    # Enzyme-activity rows (dose_class='enzyme_activity', dosed in ALU/PPI/...)
+    # count as usable dose evidence even though their mass quantity is 0/NP.
     checked_fields.append("dose_with_unit")
-    if not any(_has_dose_with_unit(i) for i in ingredients):
+    if not any(_has_usable_dose_evidence(i) for i in ingredients):
         missing.append("dose_with_unit")
     return _finalize(module, missing, coverage, dose_cov, checked_fields)
 

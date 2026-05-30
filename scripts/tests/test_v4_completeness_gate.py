@@ -136,6 +136,32 @@ def test_generic_missing_dose_is_not_scored() -> None:
     assert "dose_with_unit" in result.missing_fields
 
 
+def test_generic_enzyme_activity_is_valid_dose_evidence() -> None:
+    """Digestive enzymes are dosed by activity units (ALU/PPI/BLGU/...), not
+    mass. The enricher marks these rows dose_class='enzyme_activity' with an
+    activity_unit, but the mass quantity stays 0/NP. v4 must treat the enzyme
+    activity as valid dose evidence — NOT block the product as missing
+    dose_with_unit. (Real case: DSLD 293966 Pure Encapsulations Tolerase G.)
+    """
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    enzyme_row = {
+        "name": "Tolerase G",
+        "standard_name": "Tolerase G",
+        "canonical_id": "digestive_enzymes",
+        "mapped": True,
+        "dose": 0.0,
+        "unit": "NP",
+        "dose_class": "enzyme_activity",
+        "activity_unit": "ALU",
+    }
+    result = evaluate_completeness_gate(_product(ingredients=[enzyme_row]), module="generic")
+
+    assert result.is_live_eligible is True
+    assert "dose_with_unit" not in result.missing_fields
+    assert result.verdict is None
+
+
 def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() -> None:
     """Garden of Life Prenatal-style shape: total CFU is present, named
     strains are present, but per-strain CFU is missing. This must ship."""
