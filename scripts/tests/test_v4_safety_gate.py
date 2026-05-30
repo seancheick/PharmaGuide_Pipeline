@@ -102,7 +102,16 @@ def test_canonical_safety_flag_returns_blocked() -> None:
     assert "Vinpocetine" in (result.matched_substance or "")
 
 
-def test_canonical_token_bounded_safety_flag_needs_review_not_blocked() -> None:
+def test_canonical_token_bounded_safety_flag_caution_review_not_blocked() -> None:
+    """A likely-banned hit (token_bounded → resolution 'likely') must force
+    CAUTION + needs_review — NEVER a hard BLOCK, and NEVER allowed to score SAFE.
+
+    Behavior change (2026-05-30, authorized): previously likely-banned yielded
+    verdict=None (review-only), which let products like Red Yeast Rice (banned
+    monacolin-K source matched via token_bounded) score SAFE — a shipped safety
+    downgrade vs v3 CAUTION. Now likely-banned forces CAUTION. Hard BLOCK still
+    requires a CONFIRMED match (exact/alias).
+    """
     from scoring_v4.gate_safety import evaluate_safety_gate
     product = {
         "contaminant_data": {
@@ -124,8 +133,11 @@ def test_canonical_token_bounded_safety_flag_needs_review_not_blocked() -> None:
         }
     }
     result = evaluate_safety_gate(product)
-    assert result.verdict is None
+    assert result.verdict == "CAUTION"          # forced — must not score SAFE
+    assert result.verdict != "BLOCKED"          # likely ≠ confirmed; no hard block
+    assert result.short_circuits_scoring is False
     assert result.needs_review is True
+    assert "B0_LIKELY_BANNED_REVIEW" in result.safety_signals
 
 
 def test_recalled_ingredient_returns_unsafe() -> None:

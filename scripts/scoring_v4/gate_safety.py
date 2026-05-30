@@ -19,11 +19,10 @@ Policy (see _apply_signal_policy for the authoritative implementation):
   confirmed       + banned                  →  BLOCKED  (short-circuit)
   confirmed       + recalled                →  UNSAFE   (short-circuit)
   confirmed/likely + high_risk / watchlist  →  CAUTION  (scoring continues)
-  likely          + banned / recalled       →  needs_review, NO verdict
-                                               (a false hard-block is worse than
-                                                a missed one; hardening this to
-                                                CAUTION is a separate, corpus-
-                                                verified change — not bundled)
+  likely          + banned / recalled       →  CAUTION + needs_review
+                                               (force CAUTION so it can never
+                                                score SAFE; hard BLOCK still
+                                                requires a CONFIRMED match)
   review_only     (weak / fuzzy / no id)    →  needs_review, no verdict
   low_confidence                            →  audit signal only
   inactive excipient_acceptable + high_risk/watchlist  →  warning only
@@ -196,10 +195,10 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
         confirmed + banned        -> BLOCKED (short-circuit)
         confirmed + recalled      -> UNSAFE  (short-circuit)
         confirmed/likely + high_risk/watchlist -> CAUTION
-        likely + banned/recalled  -> needs_review, NO verdict (a false hard-block
-                                      is worse than a missed one; hardening this
-                                      to CAUTION is a separate, corpus-verified
-                                      change, not bundled here)
+        likely + banned/recalled  -> CAUTION + needs_review (forced CAUTION so it
+                                      can never score SAFE; a hard BLOCK still
+                                      requires a CONFIRMED match — a false
+                                      hard-block is worse than a missed one)
         review_only               -> needs_review, no verdict
         low_confidence            -> audit signal only
         inactive excipient_acceptable + high_risk/watchlist -> warning only
@@ -228,22 +227,23 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
 
     # policy_eligible == confirmed or likely from here.
     #
-    # Behavior-preserving contract (matches the shipped stopgap):
-    #   - banned/recalled require a CONFIRMED match to drive a hard verdict.
-    #     A `likely` banned/recalled hit (token_bounded etc.) is review-only,
-    #     NO verdict — a false hard-block is worse than a missed one, and
-    #     hardening likely-banned → CAUTION is a separate, corpus-verified
-    #     change tracked for later, not bundled into this refactor.
-    #   - high_risk/watchlist accept `likely` → CAUTION (the DHEA/Kava fix):
-    #     CAUTION is non-blocking and defensive, so a resolved medium-trust
-    #     match is a genuine signal.
+    # Safety contract:
+    #   - banned/recalled hard verdicts (BLOCKED/UNSAFE) require a CONFIRMED
+    #     match (exact/alias). A false hard-block is worse than a missed one.
+    #   - a `likely` banned/recalled hit (token_bounded with entry_id) is NOT
+    #     hard-blocked, but MUST force CAUTION — it can never be allowed to
+    #     score SAFE. This closes the shipped downgrade where Red Yeast Rice
+    #     (banned monacolin-K source, token_bounded match) scored SAFE vs v3
+    #     CAUTION. needs_review still routes it to the safety queue.
+    #   - high_risk/watchlist accept `likely` → CAUTION (the DHEA/Kava fix).
     if status == "banned":
         if sig.match_resolution == "confirmed":
             if _verdict_rank("BLOCKED") < _verdict_rank(result.verdict):
                 result.verdict = "BLOCKED"
                 result.blocking_reason = "banned_ingredient"
                 result.matched_substance = sig.evidence_text or sig.entry_id
-        else:  # likely-banned: review only, NO verdict
+        else:  # likely-banned: force CAUTION + review, never hard-block, never SAFE
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
             result.needs_review = True
             _append_signal(result, "B0_LIKELY_BANNED_REVIEW")
     elif status == "recalled":
@@ -252,7 +252,8 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
                 result.verdict = "UNSAFE"
                 result.blocking_reason = "recalled_ingredient"
                 result.matched_substance = sig.evidence_text or sig.entry_id
-        else:  # likely-recalled: review only, NO verdict
+        else:  # likely-recalled: force CAUTION + review, never hard-block, never SAFE
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
             result.needs_review = True
             _append_signal(result, "B0_LIKELY_RECALLED_REVIEW")
     elif status == "high_risk":
