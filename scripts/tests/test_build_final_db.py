@@ -825,9 +825,17 @@ def test_excipient_acceptable_inactive_uses_calibrated_warning_posture():
         if w.get("matched_rule_id") == "BANNED_ADD_TITANIUM_DIOXIDE"
     )
 
-    assert row["verdict"] == "SAFE"
-    assert row["safety_verdict"] == "SAFE"
+    # Verdict posture updated 2026-05-29 (commit 3f1e5b82): the watchlist gate
+    # widening means a watchlist_substance (Titanium Dioxide E171, FDA-allowed
+    # but EU-banned) can no longer ship as a base SAFE verdict — per the
+    # "no product containing high-risk/banned/recalled/watchlist shows SAFE"
+    # directive. The base verdict downgrades to CAUTION (a clear non-SAFE
+    # signal short of a hard block), while the WARNING posture stays calibrated
+    # and informational. blocking_reason remains None — CAUTION is not a block.
+    assert row["verdict"] == "CAUTION"
+    assert row["safety_verdict"] == "CAUTION"
     assert row["blocking_reason"] is None
+    # Warning copy stays calibrated/informational — only the verdict moved.
     assert warning["type"] == "watchlist_substance"
     assert warning["severity"] == "moderate"
     assert warning["display_mode_default"] == "informational"
