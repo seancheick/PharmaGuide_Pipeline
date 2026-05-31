@@ -430,4 +430,4 @@ def test_score_canaries_attaches_v3_sections_and_compression_flags() -> None:
     assert rows[0]["v3_sections"]["B"] == 24.5
     assert "compression_flags" in rows[0]
     assert "v3_safety_purity_base_not_represented" not in rows[0]["compression_flags"]
-    assert rows[0]["v4_module_metadata"]["safety_hygiene_base_adjustment"] == 10.0
+    assert rows[0]["v4_module_metadata"]["safety_hygiene_base_adjustment"] == 4.0  # Phase 5

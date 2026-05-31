@@ -231,11 +231,11 @@ def _load_canaries(ids):
 # Wider than ±0.5 to tolerate small drifts in generic_evidence /
 # manufacturer pipeline; tighter than ±10 to catch real regressions.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research",      76.5, 78.5),  # Phase 4: 81.6 → 77.4
-    ("326270", "Sports Research",      76.5, 78.5),  # Phase 4: 81.6 → 77.4
-    ("288740", "Nordic Naturals",      71.0, 74.0),
-    ("273630", "Garden of Life",       70.5, 73.0),
-    ("239592", "CVS Health",           65.5, 68.5),
+    ("327776", "Sports Research",      71.9, 73.9),  # Phase 4: 81.6 → 77.4
+    ("326270", "Sports Research",      71.9, 73.9),  # Phase 4: 81.6 → 77.4
+    ("288740", "Nordic Naturals",      67.4, 69.4),
+    ("273630", "Garden of Life",       66.4, 68.4),
+    ("239592", "CVS Health",           62.4, 64.4),
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):

@@ -144,6 +144,8 @@ def score_canaries(
                     for name, payload in dimensions.items()
                 },
                 "v4_dimension_metadata": dimension_metadata,
+                # Phase 4: verification is an additive bonus, not a dimension.
+                "v4_verification_bonus": _num(_safe_dict(module.get("verification_bonus")).get("score")),
                 "v4_module_metadata": module_metadata,
                 "v4_confidence_detail": confidence if isinstance(confidence, dict) else None,
             }
@@ -249,7 +251,11 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
         v3_b is not None
         and v3_b >= 20.0
         and not hygiene_hard_failure
-        and (v4_verification + v4_transparency + safety_hygiene) <= 10.0
+        # Phase 5: the additive safety-ish contributions shrank (verification
+        # 0-8 + hygiene 0-4 vs the old trust 0-15 + hygiene 0-10), so the
+        # "not represented" threshold scales down proportionally (10 -> 6). A
+        # clean product with full hygiene credit + any transparency clears it.
+        and (v4_verification + v4_transparency + safety_hygiene) <= 6.0
     ):
         flags.append("v3_safety_purity_base_not_represented")
 

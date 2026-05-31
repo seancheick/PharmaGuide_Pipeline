@@ -12,10 +12,15 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List
 
 from identity.safety import normalize_safety_signals
-from scoring_v4.modules.generic_helpers import _as_float, _norm_text, _safe_dict, _safe_list
+from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list
 
 
-SAFETY_HYGIENE_CAP = 10.0
+# Phase 5: rebalanced +10 -> +4. Hygiene keeps ONLY the two non-overlapping
+# clean-safety components (no banned/high-risk/watchlist, no recalled). The
+# overdose / harmful-additive / manufacturer-violation passes were removed
+# because each is already penalised by its own dimension (B7 / B1 /
+# manufacturer_violations) — crediting "absence" here double-counted.
+SAFETY_HYGIENE_CAP = 4.0
 
 
 @dataclass
@@ -45,12 +50,14 @@ class SafetyHygieneResult:
 def score_safety_hygiene_base(product: Dict[str, Any]) -> SafetyHygieneResult:
     """Return the bounded clean-product safety base for a scoreable product.
 
-    Pass components:
+    Pass components (Phase 5 — two non-overlapping only, +2 each, cap 4):
       - no banned/high-risk/watchlist safety match
       - no recalled match
-      - no B7 overdose flag (>=150% UL)
-      - no harmful additive hit
-      - no manufacturer violation deduction
+
+    Overdose (B7), harmful additive (B1), and manufacturer violation are NOT
+    components here — each is penalised by its own dimension, so crediting
+    "absence" would double-count. They also no longer zero the hygiene base
+    (that would double-penalise a product already docked elsewhere).
 
     Products with no usable product payload receive no credit. That keeps
     direct defensive module calls from awarding points to empty dicts while
@@ -69,22 +76,16 @@ def score_safety_hygiene_base(product: Dict[str, Any]) -> SafetyHygieneResult:
 
     b0_pass = _passes_no_b0_safety_match(product)
     recalled_pass = _passes_no_recalled_match(product)
-    b7_pass = _passes_no_b7_overdose(product)
-    manufacturer_pass = _passes_no_manufacturer_violation(product)
 
-    # These are hard cleanliness failures. Do not award partial "clean base"
-    # credit to products with safety-status hits, overdose flags, or a
-    # manufacturer violation; the individual components are still reported
-    # as failed for audit.
-    if not (b0_pass and recalled_pass and b7_pass and manufacturer_pass):
+    # Phase 5: hard cleanliness failure is gated ONLY on the two retained
+    # safety-status components. Overdose / harmful-additive / manufacturer
+    # violation are handled by their own penalties and must NOT zero the
+    # hygiene base (that would double-penalise).
+    if not (b0_pass and recalled_pass):
         if not b0_pass:
             failed.append("banned_high_risk_or_watchlist_match_present")
         if not recalled_pass:
             failed.append("recalled_match_present")
-        if not b7_pass:
-            failed.append("b7_overdose_present")
-        if not manufacturer_pass:
-            failed.append("manufacturer_violation_present")
         return SafetyHygieneResult(
             score=0.0,
             failed_components=failed,
@@ -96,30 +97,8 @@ def score_safety_hygiene_base(product: Dict[str, Any]) -> SafetyHygieneResult:
             },
         )
 
-    if b0_pass:
-        components["no_banned_high_risk_or_watchlist_match"] = 2.0
-    else:
-        failed.append("banned_high_risk_or_watchlist_match_present")
-
-    if recalled_pass:
-        components["no_recalled_match"] = 2.0
-    else:
-        failed.append("recalled_match_present")
-
-    if b7_pass:
-        components["no_b7_overdose"] = 2.0
-    else:
-        failed.append("b7_overdose_present")
-
-    if _passes_no_harmful_additive(product):
-        components["no_harmful_additive"] = 2.0
-    else:
-        failed.append("harmful_additive_present")
-
-    if manufacturer_pass:
-        components["no_manufacturer_violation"] = 2.0
-    else:
-        failed.append("manufacturer_violation_present")
+    components["no_banned_high_risk_or_watchlist_match"] = 2.0
+    components["no_recalled_match"] = 2.0
 
     raw = sum(components.values())
     score = max(0.0, min(SAFETY_HYGIENE_CAP, raw))
@@ -160,38 +139,3 @@ def _passes_no_recalled_match(product: Dict[str, Any]) -> bool:
         if sig.status == "recalled":
             return False
     return True
-
-
-def _passes_no_b7_overdose(product: Dict[str, Any]) -> bool:
-    rda_ul = _safe_dict(product.get("rda_ul_data"))
-    for flag in _safe_list(rda_ul.get("safety_flags")):
-        if not isinstance(flag, dict):
-            continue
-        pct_ul = _as_float(flag.get("pct_ul"), 0.0) or 0.0
-        if pct_ul >= 150.0:
-            return False
-    return True
-
-
-def _passes_no_harmful_additive(product: Dict[str, Any]) -> bool:
-    contaminant = _safe_dict(product.get("contaminant_data"))
-    harmful = _safe_dict(contaminant.get("harmful_additives"))
-    additives = _safe_list(harmful.get("additives"))
-    if not additives:
-        additives = _safe_list(product.get("harmful_additives"))
-    for additive in additives:
-        if not isinstance(additive, dict):
-            continue
-        severity = _norm_text(additive.get("severity_level") or additive.get("severity"))
-        if severity in {"critical", "high", "moderate"}:
-            return False
-    return True
-
-
-def _passes_no_manufacturer_violation(product: Dict[str, Any]) -> bool:
-    violations = _safe_dict(_safe_dict(product.get("manufacturer_data")).get("violations"))
-    deduction = _as_float(violations.get("total_deduction_applied"), 0.0) or 0.0
-    if deduction < 0:
-        return False
-    items = [item for item in _safe_list(violations.get("violations")) if isinstance(item, dict)]
-    return len(items) == 0

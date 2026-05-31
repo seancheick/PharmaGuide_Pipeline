@@ -38,21 +38,21 @@ GENERIC_CANARIES = {
     # Recent cert override / high verification path (Phase 4: 79 → 74.5).
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        "score_range": (73.5, 75.5),
+        "score_range": (69.0, 71.0),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
     # but raw-score verdict guard keeps weak profiles from becoming SAFE.
     "12932": {
         "label": "vitafusion Fiber Gummies",
-        "score_range": (47.5, 49.0),
+        "score_range": (44.2, 46.2),
         "traits": {"dose_partial_no_rda": True, "trust_zero": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
     # stays generic even though fatty-acid-like carrier signals exist.
     "184661": {
         "label": "Pure Encapsulations Liposomal Glutathione",
-        "score_range": (62.0, 64.0),  # Phase 4: 65 → 63
+        "score_range": (57.5, 59.5),  # Phase 4: 65 → 63
         "traits": {"transparency_low": True},
     },
 }
@@ -62,7 +62,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (83.5, 85.5),  # Phase 4: 88 → 84.6
+        "score_range": (79.1, 81.1),  # Phase 4: 88 → 84.6
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -72,37 +72,37 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (80.5, 82.5),  # Phase 4: 85 → 81.8
+        "score_range": (76.3, 78.3),  # Phase 4: 85 → 81.8
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (52.0, 54.0),
+        "score_range": (46.9, 48.9),
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit but Dose=0.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        "score_range": (67.0, 69.0),
+        "score_range": (62.2, 64.2),
         "traits": {"form_max": True, "dose_zero": True, "trust_zero": True},
     },
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (72.0, 74.0),
+        "score_range": (67.3, 69.3),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (63.5, 65.5),  # Phase 4: 67 → 65.1
+        "score_range": (59.6, 61.6),  # Phase 4: 67 → 65.1
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (57.0, 59.0),
+        "score_range": (51.8, 53.8),
         "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }

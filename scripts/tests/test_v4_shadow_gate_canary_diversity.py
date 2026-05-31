@@ -44,13 +44,15 @@ SHADOW_CANARIES = {
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
-    # CAUTION ceiling. Blend opacity is scored in the transparency dimension.
+    # CAUTION ceiling. Phase 4+5 lowered raw below the raw-40 floor (calibrated
+    # 52.1, raw 36.1) -> POOR via the raw floor, not CAUTION. Expected interim;
+    # Phase 9 recalibrates the raw scale/floor.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",
-        "verdict": "SAFE",
+        "verdict": "POOR",
         "confidence": "low",
-        "score_range": (55.5, 57.5),  # Phase 4: 58.5 → 56.6
+        "score_range": (51.1, 53.1),
     },
     # Probiotic with named strains but no total CFU: scoreable, but cannot be
     # SAFE because the primary probiotic dose is undisclosed.
@@ -59,7 +61,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (52.5, 54.0),  # Phase 4: 55 → 53.1
+        "score_range": (47.6, 49.6),  # Phase 4: 55 → 53.1
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
     # confidence aggregate evidence with a score cap, but not an automatic
@@ -69,7 +71,7 @@ SHADOW_CANARIES = {
         "module": "omega",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (63.5, 65.0),
+        "score_range": (58.9, 60.9),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -79,7 +81,7 @@ SHADOW_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (83.5, 85.5),  # Phase 4: 88 → 84.6
+        "score_range": (79.1, 81.1),  # Phase 4: 88 → 84.6
     },
     # Typed confidence low + POOR verdict.
     "12932": {
@@ -87,7 +89,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (47.5, 49.0),
+        "score_range": (44.2, 46.2),
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -95,7 +97,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (76.0, 78.0),  # Phase 4: 80.5 → 77.1
+        "score_range": (71.6, 73.6),  # Phase 4: 80.5 → 77.1
     },
 }
 

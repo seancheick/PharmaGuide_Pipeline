@@ -202,8 +202,8 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     assert breakdown["verification_bonus"]["max"] == 8.0
     assert breakdown["manufacturer_trust"]["score"] == 5.0
     assert breakdown["manufacturer_violations"]["score"] == 0.0
-    assert hygiene == 10.0
-    assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == 10.0
+    assert hygiene == 4.0  # Phase 5: hygiene cap 10->4
+    assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == 4.0
     assert breakdown["metadata"]["verification_bonus_adjustment"] == pytest.approx(vbonus, rel=1e-6)
     # raw_score_100 is rounded to 1dp in the assembler; allow that rounding.
     assert breakdown["raw_score_100"] == pytest.approx(raw_score, abs=0.05)
@@ -330,7 +330,10 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
 
     out = score_product_v4_shadow(product)
 
-    assert out["shadow_score_v4_100"] < 40.0
+    # A -25 manufacturer violation is a weak profile: POOR. Post-Phase-4/5 the
+    # POOR comes from the RAW floor (raw < 40), not the calibrated score — the
+    # affine lift can leave the displayed score >=40 while raw stays weak.
+    assert out["shadow_score_v4_breakdown"]["module"]["raw_score_100"] < 40.0
     assert out["shadow_score_v4_verdict"] == "POOR"
 
 
@@ -342,6 +345,26 @@ def test_shadow_verdict_uses_raw_floor_not_affine_lift_alone() -> None:
 
 
 def test_safety_hygiene_base_is_zero_for_hard_cleanliness_failure() -> None:
+    # Phase 5: hard cleanliness failure is gated only on banned/recalled signals
+    # (a manufacturer violation no longer zeros hygiene — it's penalised by its
+    # own dimension, so zeroing here too would double-penalise).
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product()
+    product["contaminant_data"]["banned_substances"]["substances"] = [
+        {"name": "Banned Ingredient", "status": "banned", "match_type": "exact"}
+    ]
+
+    hygiene = score_generic(product).to_breakdown()["safety_hygiene_base"]
+
+    assert hygiene["score"] == 0.0
+    assert "banned_high_risk_or_watchlist_match_present" in hygiene["failed_components"]
+    assert hygiene["metadata"]["hard_cleanliness_failure"] is True
+
+
+def test_manufacturer_violation_no_longer_zeros_hygiene() -> None:
+    # Phase 5 anti-double-penalty: a manufacturer violation is docked by the
+    # manufacturer_violations dimension; hygiene still credits the clean axes.
     from scoring_v4.modules.generic import score_generic
 
     product = _base_product()
@@ -350,10 +373,8 @@ def test_safety_hygiene_base_is_zero_for_hard_cleanliness_failure() -> None:
     }
 
     hygiene = score_generic(product).to_breakdown()["safety_hygiene_base"]
-
-    assert hygiene["score"] == 0.0
-    assert "manufacturer_violation_present" in hygiene["failed_components"]
-    assert hygiene["metadata"]["hard_cleanliness_failure"] is True
+    assert hygiene["score"] == 4.0
+    assert hygiene["metadata"].get("hard_cleanliness_failure") is not True
 
 
 def test_generic_final_assembly_does_not_import_v3_scorer() -> None:
