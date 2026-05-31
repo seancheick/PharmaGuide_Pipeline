@@ -1111,3 +1111,227 @@ def is_nutrition_only_product(product: Dict[str, Any], *, allow_legacy_keyword_f
             "smoothie mix",
         )
     )
+
+
+# ---------------------------------------------------------------------------
+# V4 Phase 2 — ingredient role classification (compatibility mode)
+#
+# Deterministic, scoring-time role assignment so the completeness gate
+# (Phase 3) can stop capping products for *adjunct* data gaps. CLASSIFY ONLY:
+# this code changes no score, cap, or verdict. Caps are decided in Phase 3.
+#
+# Level -> role precedence (first match wins); user-approved Option 1:
+#   L1 drives selected module    -> primary         (router driver canonical)
+#   L2 named in product title    -> claim_prominent (role_source=product_name)
+#   L3 front-label claim         -> INERT (no data source today; never emitted)
+#   L4 required for subtype       -> major          (multi micronutrient panel)
+#   L5 high comparable-unit mass  -> major
+#   L6 otherwise                  -> adjunct
+#
+# Spec: docs/superpowers/specs/2026-05-31-v4-role-classification-design.md
+# ---------------------------------------------------------------------------
+
+ROLE_PRIMARY = "primary"
+ROLE_CLAIM_PROMINENT = "claim_prominent"
+ROLE_MAJOR = "major"
+ROLE_ADJUNCT = "adjunct"
+
+# Tokens too generic to prove a product is "about" an ingredient when found in
+# the title. Without these, "Vitamin C" would match "Daily Multivitamin".
+_ROLE_TITLE_STOPWORDS = {
+    "root", "leaf", "extract", "powder", "complex", "blend", "acid", "oil",
+    "capsule", "tablet", "softgel", "organic", "pure", "strength", "daily",
+    "formula", "support", "vitamin", "mineral", "multivitamin", "women",
+    "womens", "men", "mens", "with", "plus", "high", "ultra",
+}
+
+# Fraction of the largest comparable-unit (mass) row a row must reach to count
+# as a "major" formulation component by mass alone (L5).
+_ROLE_MASS_MAJOR_FRACTION = 0.25
+
+
+def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
+    """Return the row's mass in mg, or None when not a comparable mass unit.
+
+    IU and activity units (CFU, enzyme activity) are intentionally NOT
+    mass-comparable and return None so they never drive the L5 mass ratio.
+    """
+    qty = _positive_quantity(row)
+    if qty is None:
+        return None
+    unit = _norm(
+        row.get("unit")
+        or row.get("unit_normalized")
+        or row.get("normalized_unit")
+        or row.get("dose_unit")
+    ).replace(" ", "")
+    if unit in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        return qty
+    if unit in {"g", "gram", "grams", "gram(s)"}:
+        return qty * 1000.0
+    if unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms", "microgram(s)"}:
+        return qty / 1000.0
+    return None
+
+
+def _role_driver_canonicals(module: str) -> set:
+    """Module driver canonical IDs, sourced from the router (single source of
+    truth). Lazy import avoids the router<->contract circular import at load."""
+    try:
+        from scoring_v4 import router as _router  # lazy: router imports this module
+    except ImportError:  # pragma: no cover - router optional at import time
+        return set()
+    if module == "omega":
+        # EPA/DHA AND the fish-oil/krill/algal parents that route a product to
+        # the omega module — a parent-only row is still the module driver. (WR-01)
+        return set(_router._OMEGA_INGREDIENT_CANONICALS) | set(_router._OMEGA_PARENT_CANONICALS)
+    if module == "sports":
+        return (
+            set(_router._SPORTS_PROTEIN_CANONICALS)
+            | set(_router._SPORTS_SINGLE_CANONICALS)
+            | set(_router._BCAA_CANONICALS)
+            | set(_router._EAA_CANONICALS)
+        )
+    return set()
+
+
+def _role_is_blend_member(row: Dict[str, Any]) -> bool:
+    return bool(
+        row.get("is_proprietary_blend")
+        or row.get("is_blend_header")
+        or row.get("blend_total_weight_only")
+    )
+
+
+def _role_is_probiotic_strain(row: Dict[str, Any]) -> bool:
+    if _norm(row.get("dose_class")) == "probiotic_cfu":
+        return True
+    return "cfu" in _norm(row.get("unit") or row.get("dose_unit"))
+
+
+def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
+    if not title_norm:
+        return False
+    # Whole-token match, NOT substring: "iron" must not match inside
+    # "environmental". (CR-01)
+    title_tokens = {tok for tok in re.split(r"[^a-z0-9]+", title_norm) if tok}
+    candidates = (
+        _norm(row.get("name")),
+        _norm(row.get("standardName")),
+        _norm(row.get("standard_name")),
+        _norm(row.get("canonical_id")).replace("_", " "),
+    )
+    for cand in candidates:
+        for token in re.split(r"[^a-z0-9]+", cand):
+            if len(token) >= 4 and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
+                return True
+    return False
+
+
+def _role_context(
+    product: Dict[str, Any],
+    module: Optional[str],
+    rows: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    if module is None:
+        try:
+            from scoring_v4.router import class_for_product  # lazy
+        except ImportError:  # pragma: no cover
+            module = "generic"
+        else:
+            module = class_for_product(product)
+    masses = [m for m in (_role_mass_mg(r) for r in rows) if m is not None]
+    return {
+        "module": module,
+        "title_norm": _norm(product.get("product_name") or product.get("fullName")),
+        "driver_canonicals": _role_driver_canonicals(module),
+        "max_mass_mg": max(masses) if masses else 0.0,
+    }
+
+
+def _classify_one(row: Dict[str, Any], ctx: Dict[str, Any]) -> Dict[str, Any]:
+    canonical = _norm(row.get("canonical_id"))
+    module = ctx["module"]
+
+    def out(role: str, reason: str, source: str, confidence: str) -> Dict[str, Any]:
+        return {
+            "canonical_id": row.get("canonical_id"),
+            "name": row.get("name"),
+            "role": role,
+            "role_reason": reason,
+            "role_source": source,
+            "role_confidence": confidence,
+        }
+
+    # L1 — drives the selected module. A driver is primary even with no
+    # disclosed dose; Phase 3 owns the missing-primary-dose cap, so the role
+    # must still surface the driver rather than hide it. (WR-02)
+    if canonical and canonical in ctx["driver_canonicals"]:
+        return out(ROLE_PRIMARY, f"drives_module_{module}", "router_driver", "high")
+    if module == "probiotic" and _role_is_probiotic_strain(row):
+        return out(ROLE_PRIMARY, "drives_module_probiotic", "router_driver", "high")
+
+    # L2 — named in the product title. (L3 front-label-claim has no data source
+    # today and is intentionally NOT emitted — no fabricated claim provenance.)
+    if _named_in_title(row, ctx["title_norm"]):
+        return out(ROLE_CLAIM_PROMINENT, "named_in_product_title", "product_name", "high")
+
+    is_blend = _role_is_blend_member(row)
+    mass_mg = _role_mass_mg(row)
+
+    # L4 — required for subtype: micronutrient panel members of a multi/prenatal.
+    # Panel members are mass-dosed; a CFU probiotic add-on is NOT mass-dosed and
+    # so stays adjunct, so Phase 3 won't cap a multi for an adjunct's data gap.
+    if module == "multi_or_prenatal" and mass_mg is not None and not is_blend:
+        return out(ROLE_MAJOR, "multi_panel_member", "module_subtype", "medium")
+
+    # L5 — high comparable-unit mass ratio
+    if (
+        mass_mg is not None
+        and not is_blend
+        and ctx["max_mass_mg"] > 0
+        and mass_mg >= _ROLE_MASS_MAJOR_FRACTION * ctx["max_mass_mg"]
+    ):
+        return out(ROLE_MAJOR, "high_comparable_mass_ratio", "mass_ratio", "medium")
+
+    # L6 — residual
+    return out(ROLE_ADJUNCT, "residual_adjunct", "default", "medium")
+
+
+def classify_ingredient_roles(
+    product: Dict[str, Any],
+    *,
+    module: Optional[str] = None,
+) -> List[Dict[str, Any]]:
+    """Classify every scoring row's role (compatibility mode, Phase 2).
+
+    Returns one provenance dict per row in
+    ``get_scoring_ingredients(product).rows`` order. CLASSIFY ONLY — changes no
+    score, cap, or verdict. When ``module`` is omitted it is resolved via the
+    router (``class_for_product``).
+    """
+    product = product or {}
+    rows = get_scoring_ingredients(product, strict=True).rows
+    ctx = _role_context(product, module, rows)
+    return [_classify_one(row, ctx) for row in rows]
+
+
+def classify_ingredient_role(
+    product: Dict[str, Any],
+    row: Dict[str, Any],
+    *,
+    module: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Classify a single scoring ``row`` within ``product``.
+
+    Convenience wrapper around :func:`classify_ingredient_roles`; builds the
+    same product-level context (module, title, mass denominator).
+
+    NOTE: this rebuilds the full contract + context on every call. For batch
+    use (e.g. classifying every row of a product) call
+    :func:`classify_ingredient_roles` once instead — looping this is O(n^2). (WR-04)
+    """
+    product = product or {}
+    rows = get_scoring_ingredients(product, strict=True).rows
+    ctx = _role_context(product, module, rows)
+    return _classify_one(row, ctx)
