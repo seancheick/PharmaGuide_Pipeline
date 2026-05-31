@@ -234,7 +234,22 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
     v3_b = _num(v3_sections.get("B"))
     v4_trust = _num(v4_dimensions.get("trust")) or 0.0
     v4_transparency = _num(v4_dimensions.get("transparency")) or 0.0
-    if v3_b is not None and v3_b >= 20.0 and (v4_trust + v4_transparency) <= 10.0:
+    module_meta = _safe_dict(row.get("v4_module_metadata"))
+    safety_hygiene_block = _safe_dict(module_meta.get("safety_hygiene_base"))
+    safety_hygiene = (
+        _num(safety_hygiene_block.get("score"))
+        or _num(module_meta.get("safety_hygiene_base_adjustment"))
+        or 0.0
+    )
+    hygiene_hard_failure = bool(
+        _safe_dict(safety_hygiene_block.get("metadata")).get("hard_cleanliness_failure")
+    )
+    if (
+        v3_b is not None
+        and v3_b >= 20.0
+        and not hygiene_hard_failure
+        and (v4_trust + v4_transparency + safety_hygiene) <= 10.0
+    ):
         flags.append("v3_safety_purity_base_not_represented")
 
     confidence = _safe_dict(row.get("v4_confidence_detail"))

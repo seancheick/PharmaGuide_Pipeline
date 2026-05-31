@@ -193,10 +193,13 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     breakdown = score_generic(_high_quality_product()).to_breakdown()
 
     class_subtotal = breakdown["metadata"]["class_subtotal"]
-    raw_score = min(100.0, class_subtotal + 5.0)
+    hygiene = breakdown["safety_hygiene_base"]["score"]
+    raw_score = min(100.0, class_subtotal + 5.0 + hygiene)
     assert class_subtotal > 0
     assert breakdown["manufacturer_trust"]["score"] == 5.0
     assert breakdown["manufacturer_violations"]["score"] == 0.0
+    assert hygiene == 10.0
+    assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == 10.0
     assert breakdown["raw_score_100"] == pytest.approx(raw_score, rel=1e-6)
     assert breakdown["score_100"] == pytest.approx(25.0 + 0.75 * raw_score, rel=1e-6)
     assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
@@ -205,7 +208,7 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     assert breakdown["phase"] == "P1.5_affine_calibration"
 
 
-def test_not_evaluable_dose_dimension_is_excluded_from_denominator_not_zeroed() -> None:
+def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
     from scoring_v4.modules.generic import score_generic
 
     product = _base_product(
@@ -225,15 +228,34 @@ def test_not_evaluable_dose_dimension_is_excluded_from_denominator_not_zeroed() 
 
     breakdown = score_generic(product).to_breakdown()
 
-    assert breakdown["dimensions"]["dose"]["score"] is None
-    assert breakdown["metadata"]["excluded_dimensions"] == ["dose"]
-    assert breakdown["metadata"]["evaluable_class_max"] == 75.0
-    assert breakdown["raw_score_100"] > breakdown["metadata"]["class_subtotal"], (
-        "class subtotal should be rescaled to 100 when dose is not evaluable"
-    )
+    assert breakdown["dimensions"]["dose"]["score"] == 16.0
+    assert breakdown["dimensions"]["dose"]["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
+    assert breakdown["metadata"]["excluded_dimensions"] == []
+    assert breakdown["metadata"]["evaluable_class_max"] == 100.0
     assert breakdown["score_100"] > breakdown["raw_score_100"], (
         "P1.5 affine calibration should lift compressed scoreable generic rows"
     )
+
+
+def test_missing_dose_dimension_is_still_excluded_when_no_quantified_evidence() -> None:
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product(
+        ingredient=_ingredient(
+            name="Undisclosed Botanical",
+            standard_name="Botanical",
+            canonical_id="botanical",
+            bio_score=10,
+            quantity=0,
+            unit="",
+        )
+    )
+    product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
+
+    breakdown = score_generic(product).to_breakdown()
+
+    assert breakdown["dimensions"]["dose"]["score"] is None
+    assert breakdown["metadata"]["excluded_dimensions"] == ["dose"]
 
 
 def test_final_score_clamps_after_positive_and_negative_manufacturer_adjustments() -> None:
@@ -303,6 +325,28 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
 
     assert out["shadow_score_v4_100"] < 40.0
     assert out["shadow_score_v4_verdict"] == "POOR"
+
+
+def test_shadow_verdict_uses_raw_floor_not_affine_lift_alone() -> None:
+    from score_supplements_v4_shadow import _verdict_from_score
+
+    assert _verdict_from_score(48.2, raw_score_100=31.0) == "POOR"
+    assert _verdict_from_score(48.2, raw_score_100=40.0) == "SAFE"
+
+
+def test_safety_hygiene_base_is_zero_for_hard_cleanliness_failure() -> None:
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product()
+    product["manufacturer_data"] = {
+        "violations": {"total_deduction_applied": -25.0, "violations": []}
+    }
+
+    hygiene = score_generic(product).to_breakdown()["safety_hygiene_base"]
+
+    assert hygiene["score"] == 0.0
+    assert "manufacturer_violation_present" in hygiene["failed_components"]
+    assert hygiene["metadata"]["hard_cleanliness_failure"] is True
 
 
 def test_generic_final_assembly_does_not_import_v3_scorer() -> None:

@@ -34,20 +34,21 @@ GENERIC_CANARIES = {
     # Recent cert override / high Trust path.
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        "score_range": (65.0, 70.0),
+        "score_range": (78.5, 80.0),
         "traits": {"trust_high": True},
     },
-    # Dose-not-evaluable low scorer; locks botanical/fiber rescaling path.
+    # No-RDA quantified dose path: gets conservative partial dose credit,
+    # but raw-score verdict guard keeps weak profiles from becoming SAFE.
     "12932": {
         "label": "vitafusion Fiber Gummies",
-        "score_range": (28.0, 34.0),
-        "traits": {"dose_none": True, "trust_zero": True},
+        "score_range": (47.5, 49.0),
+        "traits": {"dose_partial_no_rda": True, "trust_zero": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
     # stays generic even though fatty-acid-like carrier signals exist.
     "184661": {
         "label": "Pure Encapsulations Liposomal Glutathione",
-        "score_range": (54.0, 60.0),
+        "score_range": (64.0, 66.0),
         "traits": {"transparency_low": True},
     },
 }
@@ -57,7 +58,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (78.0, 80.5),
+        "score_range": (87.0, 89.0),
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -67,37 +68,37 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (72.0, 77.0),
+        "score_range": (84.0, 86.0),
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (42.0, 45.2),
+        "score_range": (52.0, 54.0),
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit but Dose=0.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        "score_range": (57.0, 61.0),
+        "score_range": (67.0, 69.0),
         "traits": {"form_max": True, "dose_zero": True, "trust_zero": True},
     },
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (64.0, 68.0),
+        "score_range": (72.0, 74.0),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (56.0, 60.0),
+        "score_range": (66.0, 68.0),
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (47.0, 50.1),
+        "score_range": (57.0, 59.0),
         "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }
@@ -175,6 +176,12 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
     traits = expected["traits"]
     if traits.get("dose_none"):
         assert _dimension_score(breakdown, "dose") is None
+    if traits.get("dose_partial_no_rda"):
+        assert _dimension_score(breakdown, "dose") == 16.0
+        assert (
+            breakdown["dimensions"]["dose"]["metadata"]["window_proxy_status"]
+            == "partial_credit_without_rda_proxy"
+        )
     if traits.get("trust_zero"):
         assert _dimension_score(breakdown, "trust") == 0
     if traits.get("trust_positive"):
@@ -256,7 +263,7 @@ def test_cross_module_canaries_cover_expected_score_bands() -> None:
     sports_ranges = [v["score_range"] for v in SPORTS_CANARIES.values()]
     probiotic_ranges = [v["score_range"] for v in PROBIOTIC_CANARIES.values()]
 
-    assert any(hi <= 45 for _lo, hi in generic_ranges), "missing low generic canary"
+    assert any(hi <= 55 for _lo, hi in generic_ranges), "missing weak generic canary"
     assert any(lo >= 70 for lo, _hi in sports_ranges), "missing high sports canary"
-    assert any(hi <= 46 for _lo, hi in probiotic_ranges), "missing low probiotic canary"
+    assert any(hi <= 55 for _lo, hi in probiotic_ranges), "missing weak probiotic canary"
     assert any(lo >= 70 for lo, _hi in probiotic_ranges), "missing high probiotic canary"

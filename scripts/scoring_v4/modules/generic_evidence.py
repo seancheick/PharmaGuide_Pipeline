@@ -52,8 +52,8 @@ EVIDENCE_LEVEL_MULTIPLIERS: Dict[str, float] = {
     "product": 1.0,
     "branded-rct": 0.9,
     "branded_rct": 0.9,
-    "ingredient-human": 0.8,
-    "ingredient_human": 0.8,
+    "ingredient-human": 0.9,
+    "ingredient_human": 0.9,
     "strain-clinical": 0.65,
     "strain_clinical": 0.65,
     "preclinical": 0.3,
@@ -300,6 +300,9 @@ def _published_study_count(entry: Dict[str, Any]) -> Optional[float]:
     explicit = _as_float(entry.get("published_studies_count"), None)
     if explicit is not None:
         return explicit
+    registry = _as_float(entry.get("registry_completed_trials_count"), None)
+    if registry is not None:
+        return registry
     legacy = entry.get("published_studies")
     if isinstance(legacy, (int, float)):
         return _as_float(legacy, None)

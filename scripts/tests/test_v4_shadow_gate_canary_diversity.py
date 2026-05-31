@@ -40,7 +40,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (54.0, 58.0),
+        "score_range": (57.5, 59.0),
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence now scores with a CAUTION ceiling instead
@@ -50,7 +50,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "low",
-        "score_range": (40.0, 44.0),
+        "score_range": (58.0, 59.5),
     },
     # Probiotic with named strains but no total CFU: scoreable, but cannot be
     # SAFE because the primary probiotic dose is undisclosed.
@@ -59,7 +59,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (45.0, 49.0),
+        "score_range": (54.5, 56.0),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
     # confidence aggregate evidence with a CAUTION ceiling.
@@ -68,7 +68,7 @@ SHADOW_CANARIES = {
         "module": "omega",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (54.0, 58.0),
+        "score_range": (63.5, 65.0),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -78,7 +78,7 @@ SHADOW_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (78.0, 80.5),
+        "score_range": (87.0, 89.0),
     },
     # Typed confidence low + POOR verdict.
     "12932": {
@@ -86,7 +86,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (29.0, 34.0),
+        "score_range": (47.5, 49.0),
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -94,7 +94,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (70.0, 73.1),
+        "score_range": (80.0, 81.5),
     },
 }
 

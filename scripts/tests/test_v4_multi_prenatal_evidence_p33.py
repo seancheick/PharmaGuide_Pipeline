@@ -88,10 +88,10 @@ def test_multivitamin_evidence_rescales_generic_pipeline_to_15_point_cap() -> No
     generic = score_generic_evidence(product)
     multi = score_evidence(product)
 
-    assert generic["score"] == 4.0
-    assert multi["components"]["class_adjusted_clinical_evidence"] == 3.0
-    assert multi["score"] == 3.0
-    assert multi["metadata"]["generic_evidence_score"] == 4.0
+    assert generic["score"] == 4.5
+    assert multi["components"]["class_adjusted_clinical_evidence"] == 3.375
+    assert multi["score"] == 3.375
+    assert multi["metadata"]["generic_evidence_score"] == 4.5
 
 
 def test_high_evidence_panel_rescales_without_exceeding_15_point_cap() -> None:

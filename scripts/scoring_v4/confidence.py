@@ -146,6 +146,9 @@ def _label_completeness_confidence(
     if dose_meta.get("window_proxy_status") == "not_evaluable_by_rda_proxy":
         level = _min_level(level, "moderate")
         drivers.append("dose_window_not_evaluable_by_rda_proxy")
+    elif dose_meta.get("window_proxy_status") == "partial_credit_without_rda_proxy":
+        level = _min_level(level, "moderate")
+        drivers.append("dose_window_partial_without_rda_reference")
 
     # Probiotic-specific (P2.6): aggregate CFU disclosed but not per-strain.
     # `window_proxy_reason` comes from probiotic_dose.score_dose metadata.

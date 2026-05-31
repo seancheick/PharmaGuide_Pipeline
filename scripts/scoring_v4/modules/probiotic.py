@@ -65,6 +65,10 @@ from scoring_v4.modules.probiotic_dose import score_dose
 from scoring_v4.modules.probiotic_evidence import score_evidence
 from scoring_v4.modules.probiotic_formulation import score_formulation
 from scoring_v4.modules.probiotic_transparency import score_transparency
+from scoring_v4.modules.safety_hygiene import (
+    SafetyHygieneResult,
+    score_safety_hygiene_base,
+)
 
 
 PHASE_MARKER = "P2.6_probiotic_final_assembly"
@@ -106,6 +110,7 @@ class ProbioticModuleResult:
     dimensions: Dict[str, DimensionResult] = field(default_factory=dict)
     manufacturer_trust: ManufacturerTrustResult = field(default_factory=ManufacturerTrustResult)
     manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
+    safety_hygiene_base: SafetyHygieneResult = field(default_factory=SafetyHygieneResult)
     raw_score_100: Optional[float] = None
     score_100: Optional[float] = None
     phase: str = PHASE_MARKER
@@ -121,6 +126,7 @@ class ProbioticModuleResult:
             "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},
             "manufacturer_trust": self.manufacturer_trust.to_dict(),
             "manufacturer_violations": self.manufacturer_violations.to_dict(),
+            "safety_hygiene_base": self.safety_hygiene_base.to_dict(),
             "raw_score_100": self.raw_score_100,
             "score_100": self.score_100,
             "phase": self.phase,
@@ -217,6 +223,7 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     result.manufacturer_violations.floor = mv_payload["floor"]
     result.manufacturer_violations.components = mv_payload["components"]
     result.manufacturer_violations.metadata = mv_payload.get("metadata", {})
+    result.safety_hygiene_base = score_safety_hygiene_base(product)
 
     # P2.6 — Final assembly + P1.5 affine calibration. The arithmetic
     # is identical to generic._assemble_score; the calibration constants
@@ -259,7 +266,8 @@ def _assemble_score(result: ProbioticModuleResult) -> None:
 
     manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
     manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
-    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
+    safety_hygiene = float(result.safety_hygiene_base.score or 0.0)
+    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations + safety_hygiene
     raw_score_100 = max(0.0, min(100.0, adjusted))
     calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
     calibrated_score_100 = max(0.0, min(100.0, calibrated))
@@ -273,6 +281,8 @@ def _assemble_score(result: ProbioticModuleResult) -> None:
         "class_subtotal": round(class_subtotal, 4),
         "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
         "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
+        "safety_hygiene_base_adjustment": round(safety_hygiene, 4),
+        "safety_hygiene_base": result.safety_hygiene_base.to_dict(),
         "adjusted_score_before_clamp": round(adjusted, 4),
         "raw_score_100_pre_calibration": result.raw_score_100,
         "score_clamped": adjusted < 0.0 or adjusted > 100.0,

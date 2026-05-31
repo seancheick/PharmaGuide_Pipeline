@@ -173,9 +173,9 @@ def test_multi_prenatal_affine_calibration_applied() -> None:
 
     breakdown = score_multi_prenatal(_multi_product()).to_breakdown()
     raw = breakdown["raw_score_100"]
-    expected = max(0.0, min(100.0, 25.0 + 0.75 * raw))
+    expected = round(max(0.0, min(100.0, 25.0 + 0.75 * raw)), 1)
 
-    assert abs(breakdown["score_100"] - expected) < 0.01
+    assert breakdown["score_100"] == expected
     assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
 
 
@@ -195,11 +195,13 @@ def test_multi_prenatal_raw_score_sums_dimensions_and_manufacturer_adjustments()
         100.0,
         dimension_sum
         + breakdown["manufacturer_trust"]["score"]
-        + breakdown["manufacturer_violations"]["score"],
+        + breakdown["manufacturer_violations"]["score"]
+        + breakdown["safety_hygiene_base"]["score"],
     )
 
     assert breakdown["metadata"]["evaluable_class_max"] == 100.0
     assert breakdown["metadata"]["excluded_dimensions"] == []
+    assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == breakdown["safety_hygiene_base"]["score"]
     assert breakdown["raw_score_100"] == round(expected_raw, 1)
     assert breakdown["metadata"]["manufacturer_trust_adjustment"] > 0
 

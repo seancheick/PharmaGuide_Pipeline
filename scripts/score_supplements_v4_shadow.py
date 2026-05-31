@@ -121,12 +121,18 @@ def _completeness_gate_breakdown(completeness_result) -> Dict[str, Any]:
     }
 
 
-def _verdict_from_score(score_100: Any, carried_verdict: Any = None) -> str:
+def _verdict_from_score(
+    score_100: Any,
+    carried_verdict: Any = None,
+    raw_score_100: Any = None,
+) -> str:
     """Resolve the non-blocking verdict after score assembly.
 
     BLOCKED/UNSAFE/NOT_SCORED return earlier. CAUTION from Layer 1 wins
-    over POOR/SAFE; otherwise the v4 100-point equivalent of v3's 32/80
-    threshold is 40.
+    over POOR/SAFE. The calibrated score remains the user-facing 100-point
+    score, but the raw rubric score must also clear the 40-point floor while
+    the affine calibration is still in place. That prevents calibration lift
+    from promoting a genuinely weak raw profile to SAFE.
     """
     if carried_verdict == "CAUTION":
         return "CAUTION"
@@ -134,6 +140,12 @@ def _verdict_from_score(score_100: Any, carried_verdict: Any = None) -> str:
         score = float(score_100)
     except (TypeError, ValueError):
         return carried_verdict or "NOT_SCORED"
+    try:
+        raw_score = float(raw_score_100)
+    except (TypeError, ValueError):
+        raw_score = None
+    if raw_score is not None and raw_score < 40.0:
+        return "POOR"
     return "POOR" if score < 40.0 else "SAFE"
 
 
@@ -245,6 +257,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             shadow["shadow_score_v4_100"],
             _carried_verdict_with_completeness_policy(shadow, completeness),
+            module_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -268,6 +281,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             shadow["shadow_score_v4_100"],
             _carried_verdict_with_completeness_policy(shadow, completeness),
+            probiotic_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -291,6 +305,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             shadow["shadow_score_v4_100"],
             _carried_verdict_with_completeness_policy(shadow, completeness),
+            multi_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -313,6 +328,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             shadow["shadow_score_v4_100"],
             _carried_verdict_with_completeness_policy(shadow, completeness),
+            omega_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -332,6 +348,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             shadow["shadow_score_v4_100"],
             _carried_verdict_with_completeness_policy(shadow, completeness),
+            sports_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,

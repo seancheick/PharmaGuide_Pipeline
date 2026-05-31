@@ -57,6 +57,7 @@ from typing import Any, Dict, List, Optional
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     get_active_ingredients,
+    has_usable_individual_dose,
     is_scorable,
     _as_float,
     _norm_text,
@@ -76,6 +77,8 @@ WINDOW_RDA_THRESHOLD = 25.0      # pct_rda below this is sub-clinical
 WINDOW_UL_PARTIAL_BAND = 100.0   # above this and below 150 → half credit
 B7_UL_PCT_THRESHOLD = 150.0      # at/above this triggers B7 + zeroes window
 WINDOW_OVERDOSE_CREDIT = 11.0    # 100% < pct_ul < 150% credit (half of 22)
+NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = 16.0
+NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = 12.0
 
 # Multi-form bonus thresholds.
 MULTI_FORM_PREMIUM_BIO_THRESHOLD = 12.0
@@ -149,6 +152,41 @@ def _score_supplemental_window_proxy(product: Dict[str, Any]) -> tuple[float, Op
 
     avg = sum(contributions) / len(contributions)
     return round(_clamp(0.0, CAP_SUPPLEMENTAL_WINDOW, avg), 4), None
+
+
+def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float, Optional[str]]:
+    """Conservative partial dose credit when no RDA/UL table exists.
+
+    Botanicals, amino acids, enzymes, and specialty actives often have real
+    label doses but no RDA/UL benchmark. That evidence is clinically usable:
+    it should not receive full "inside supplemental window" credit, but it
+    also should not make the dose dimension disappear. Cleaner/enricher-owned
+    product_scoring_evidence is used for aggregate/blend/activity evidence.
+    """
+    for ingredient in get_active_ingredients(product):
+        if not isinstance(ingredient, dict):
+            continue
+        if ingredient.get("is_parent_total"):
+            continue
+        if has_usable_individual_dose(ingredient):
+            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "individual_quantified_dose_no_rda_reference"
+
+    for evidence in _safe_list(product.get("product_scoring_evidence")):
+        if not isinstance(evidence, dict):
+            continue
+        if not evidence.get("scoreable"):
+            continue
+        dose_value = _as_float(evidence.get("dose_value"), None)
+        if dose_value is None or dose_value <= 0:
+            continue
+        dose_class = _norm_text(evidence.get("dose_class"))
+        evidence_type = _norm_text(evidence.get("evidence_type"))
+        if dose_class in {"therapeutic_mass", "enzyme_activity", "probiotic_cfu"}:
+            if evidence_type == "blend_anchor_mass":
+                return NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT, "blend_anchor_quantified_dose_no_rda_reference"
+            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "product_evidence_quantified_dose_no_rda_reference"
+
+    return 0.0, None
 
 
 # --- Multi-form bonus ----------------------------------------------------
@@ -239,11 +277,15 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     window_credit, window_reason = _score_supplemental_window_proxy(product)
+    no_reference_credit = 0.0
+    no_reference_credit_reason: Optional[str] = None
+    if window_reason == "no_rda_reference_data":
+        no_reference_credit, no_reference_credit_reason = _score_no_reference_quantified_dose(product)
     multi_form = _score_multi_form_bonus(product)
     b7 = _penalty_b7_dose_safety(product)
 
     components: Dict[str, float] = {
-        "supplemental_window_proxy": round(window_credit, 4),
+        "supplemental_window_proxy": round(window_credit or no_reference_credit, 4),
         "multi_form_bonus":          round(multi_form, 4),
     }
     penalties: Dict[str, float] = {
@@ -255,7 +297,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     positive = components["supplemental_window_proxy"] + components["multi_form_bonus"]
     penalty_total = _sum_penalty_magnitudes(penalties)
     no_rda_reference = window_reason == "no_rda_reference_data"
-    if no_rda_reference and b7 <= 0:
+    if no_rda_reference and b7 <= 0 and no_reference_credit <= 0:
         # Botanicals / herbal actives can have clinically meaningful mg
         # dosing with no RDA/UL reference. Fail open as "not evaluable by
         # this proxy" rather than treating missing dietary-reference data
@@ -272,7 +314,12 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if window_reason is not None:
         metadata["window_proxy_reason"] = window_reason
     if no_rda_reference:
-        metadata["window_proxy_status"] = "not_evaluable_by_rda_proxy"
+        if no_reference_credit > 0:
+            metadata["window_proxy_status"] = "partial_credit_without_rda_proxy"
+            metadata["partial_credit_reason"] = no_reference_credit_reason
+            metadata["partial_credit_value"] = round(no_reference_credit, 4)
+        else:
+            metadata["window_proxy_status"] = "not_evaluable_by_rda_proxy"
 
     return {
         "score": round(score, 4) if score is not None else None,

@@ -184,24 +184,24 @@ def test_window_proxy_over_150_ul_returns_zero() -> None:
 # --- Supplemental-window proxy: no data case -----------------------------
 
 
-def test_window_proxy_no_rda_data_is_not_evaluable_not_zero() -> None:
-    """Botanicals / herbal products without RDA reference data are not
-    evaluable by the RDA/UL proxy. They keep a 0 component for audit
-    readability, but the dimension score stays None so v4 does not treat
-    "no RDA exists" as "bad dose"."""
+def test_window_proxy_no_rda_data_with_label_dose_gets_partial_credit() -> None:
+    """Botanicals / herbal products without RDA reference data can still
+    have real label dosing. They get conservative partial credit, with
+    metadata marking that this is not NIH/NHANES window math."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(_product(adequacy_results=[]))
-    assert payload["score"] is None
-    assert payload["components"]["supplemental_window_proxy"] == 0.0
+    assert payload["score"] == 16.0
+    assert payload["components"]["supplemental_window_proxy"] == 16.0
     assert payload["metadata"]["window_proxy_reason"] == "no_rda_reference_data"
-    assert payload["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
+    assert payload["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
+    assert payload["metadata"]["partial_credit_reason"] == "individual_quantified_dose_no_rda_reference"
 
 
 def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
     """KSM-66 / botanical-style products have real mg dosing but no RDA/UL
-    benchmark. The Dose proxy must fail open as not-evaluable instead of
-    pushing a good botanical toward a bad score."""
+    benchmark. The Dose proxy must award conservative partial credit
+    instead of excluding the dimension."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -221,9 +221,23 @@ def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
             ],
         )
     )
-    assert payload["score"] is None
-    assert payload["components"]["supplemental_window_proxy"] == 0.0
+    assert payload["score"] == 16.0
+    assert payload["components"]["supplemental_window_proxy"] == 16.0
     assert payload["metadata"]["window_proxy_reason"] == "no_rda_reference_data"
+    assert payload["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
+
+
+def test_window_proxy_no_rda_and_no_quantified_dose_stays_not_evaluable() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(
+        _product(
+            ingredients=[_ingredient(quantity=0, unit="")],
+            adequacy_results=[],
+        )
+    )
+
+    assert payload["score"] is None
     assert payload["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
 
 

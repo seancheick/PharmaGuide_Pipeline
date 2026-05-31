@@ -165,10 +165,10 @@ def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None
     module = out["shadow_score_v4_breakdown"]["module"]
     confidence = out["shadow_score_v4_breakdown"]["confidence"]
 
-    assert module["dimensions"]["dose"]["score"] is None
-    assert "dose" in module["metadata"]["excluded_dimensions"]
+    assert module["dimensions"]["dose"]["score"] == 16.0
+    assert "dose" not in module["metadata"]["excluded_dimensions"]
     assert confidence["label_completeness"]["level"] == "moderate"
-    assert "dose_window_not_evaluable_by_rda_proxy" in confidence["label_completeness"]["drivers"]
+    assert "dose_window_partial_without_rda_reference" in confidence["label_completeness"]["drivers"]
 
 
 def test_claimed_cert_without_registry_match_lowers_verification_confidence() -> None:

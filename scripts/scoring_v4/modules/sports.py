@@ -13,6 +13,7 @@ from scoring_v4.modules.generic_manufacturer import (
 )
 from scoring_v4.modules.generic_transparency import score_transparency
 from scoring_v4.modules.generic_trust import score_trust
+from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 from scoring_v4.modules.sports_dose import score_dose
 
 
@@ -73,6 +74,7 @@ def score_sports(product: Any) -> GenericModuleResult:
     result.manufacturer_violations.components = manufacturer_violations_payload["components"]
     result.manufacturer_violations.metadata = manufacturer_violations_payload.get("metadata", {})
 
+    result.safety_hygiene_base = score_safety_hygiene_base(product)
     _assemble_score(result)
     result.phase = PHASE_MARKER
     result.metadata["phase"] = PHASE_MARKER

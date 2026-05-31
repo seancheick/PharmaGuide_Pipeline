@@ -96,16 +96,18 @@ def test_evidence_payload_shape_and_phase() -> None:
     assert payload["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
 
-def test_magnesium_style_meta_analysis_scores_5_76() -> None:
-    """6 base × 0.8 ingredient-human × 1.0 positive × 1.2 enrollment
-    = 5.76 before depth. This matches the current Section C mechanics."""
+def test_magnesium_style_meta_analysis_scores_6_48() -> None:
+    """6 base × 0.9 ingredient-human × 1.0 positive × 1.2 enrollment
+    = 6.48 before depth. Strong ingredient-human meta-analyses should
+    clear the low-evidence diagnostic threshold without claiming product-
+    specific RCT certainty."""
     from scoring_v4.modules.generic_evidence import score_evidence
 
     payload = score_evidence(_product())
 
-    assert payload["score"] == 5.76
-    assert payload["components"]["clinical_evidence_pipeline"] == 5.76
-    assert payload["metadata"]["ingredient_points"]["magnesium"] == 5.76
+    assert payload["score"] == 6.48
+    assert payload["components"]["clinical_evidence_pipeline"] == 6.48
+    assert payload["metadata"]["ingredient_points"]["magnesium"] == 6.48
 
 
 def test_ksm66_branded_rct_scores_4_5_not_zero() -> None:
@@ -148,7 +150,7 @@ def test_effect_direction_null_downweights_but_does_not_drop_to_zero() -> None:
         _product(matches=[_match(effect_direction="null", total_enrollment=8563)])
     )
 
-    assert payload["score"] == 1.44
+    assert payload["score"] == 1.62
 
 
 def test_effect_direction_negative_scores_zero() -> None:
@@ -183,7 +185,7 @@ def test_subclinical_dose_guard_applies_when_product_dose_below_minimum() -> Non
         )
     )
 
-    assert payload["score"] == 1.44
+    assert payload["score"] == 1.62
     assert payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
     assert payload["metadata"]["sub_clinical_canonicals"] == ["magnesium"]
 
@@ -198,7 +200,7 @@ def test_supra_clinical_dose_records_flag_without_penalty() -> None:
         )
     )
 
-    assert payload["score"] == 5.76
+    assert payload["score"] == 6.48
     assert payload["metadata"]["flags"] == ["SUPRA_CLINICAL_DOSE"]
 
 
@@ -207,7 +209,7 @@ def test_marker_confidence_scale_reduces_secondary_marker_credit() -> None:
 
     payload = score_evidence(_product(matches=[_match(marker_confidence_scale=0.5)]))
 
-    assert payload["score"] == 2.88
+    assert payload["score"] == 3.24
 
 
 def test_duplicate_entries_are_counted_once() -> None:
@@ -216,7 +218,7 @@ def test_duplicate_entries_are_counted_once() -> None:
     m = _match(id="DUP")
     payload = score_evidence(_product(matches=[m, dict(m)]))
 
-    assert payload["score"] == 5.76
+    assert payload["score"] == 6.48
     assert payload["metadata"]["matched_entries"] == 1
 
 
@@ -247,7 +249,15 @@ def test_depth_bonus_uses_published_studies_count_bands() -> None:
     payload = score_evidence(_product(matches=[_match(published_studies_count=40)]))
 
     assert payload["components"]["depth_bonus"] == 0.5
-    assert payload["score"] == 6.26
+    assert payload["score"] == 6.98
+
+
+def test_depth_bonus_uses_registry_completed_trials_when_count_absent() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(_product(matches=[_match(registry_completed_trials_count=40)]))
+
+    assert payload["components"]["depth_bonus"] == 0.5
 
 
 def test_no_matches_scores_zero_not_none() -> None:
@@ -282,7 +292,7 @@ def test_shadow_wires_evidence_dimension() -> None:
     out = score_product_v4_shadow(_product())
 
     evidence = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["evidence"]
-    assert evidence["score"] == 5.76
+    assert evidence["score"] == 6.48
     assert evidence["max"] == 20.0
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
