@@ -1494,13 +1494,6 @@ CREATE TABLE IF NOT EXISTS products_core (
     safety_verdict                TEXT,
     mapped_coverage               REAL,
 
-    shadow_score_v4_100           REAL,
-    shadow_score_v4_module        TEXT,
-    shadow_score_v4_verdict       TEXT,
-    shadow_score_v4_confidence    TEXT,
-    shadow_score_v4_breakdown     TEXT,
-    shadow_score_v4_anchored      INTEGER DEFAULT 0,
-
     score_ingredient_quality      REAL,
     score_ingredient_quality_max  REAL,
     score_safety_purity           REAL,
@@ -4831,36 +4824,6 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     }
 
 
-def build_shadow_v4_columns(enriched: Dict) -> Dict[str, Any]:
-    """Run the v4 shadow scorer for products_core side-by-side columns.
-
-    v3 remains production truth. These columns are audit/shadow-only so P5 can
-    compare the shipped artifact without re-reading enriched blobs.
-    """
-    try:
-        from score_supplements_v4_shadow import score_product_v4_shadow
-
-        shadow = score_product_v4_shadow(enriched if isinstance(enriched, dict) else {})
-    except Exception as exc:  # pragma: no cover - defensive release fallback
-        logger.exception("v4 shadow scoring failed during final DB build: %s", exc)
-        return {
-            "shadow_score_v4_100": None,
-            "shadow_score_v4_module": None,
-            "shadow_score_v4_verdict": "NOT_SCORED",
-            "shadow_score_v4_confidence": "shadow_error",
-            "shadow_score_v4_breakdown": {"error": str(exc)},
-            "shadow_score_v4_anchored": False,
-        }
-    return {
-        "shadow_score_v4_100": shadow.get("shadow_score_v4_100"),
-        "shadow_score_v4_module": shadow.get("shadow_score_v4_module"),
-        "shadow_score_v4_verdict": shadow.get("shadow_score_v4_verdict"),
-        "shadow_score_v4_confidence": shadow.get("shadow_score_v4_confidence"),
-        "shadow_score_v4_breakdown": shadow.get("shadow_score_v4_breakdown") or {},
-        "shadow_score_v4_anchored": bool(shadow.get("shadow_score_v4_anchored")),
-    }
-
-
 def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -> Dict:
     """Classify product into primary/secondary categories and set boolean flags.
 
@@ -5533,7 +5496,6 @@ def build_core_row(
     score_80 = safe_float(effective_scored.get("score_80"))
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
     ss = safe_dict(effective_scored.get("section_scores"))
-    shadow_v4 = build_shadow_v4_columns(enriched)
 
     top_warnings = build_top_warnings(enriched)
 
@@ -5650,12 +5612,6 @@ def build_core_row(
         safe_str(effective_scored.get("verdict")),
         safe_str(effective_scored.get("safety_verdict")),
         safe_float(effective_scored.get("mapped_coverage")),
-        safe_float(shadow_v4.get("shadow_score_v4_100")),
-        safe_str(shadow_v4.get("shadow_score_v4_module")),
-        safe_str(shadow_v4.get("shadow_score_v4_verdict")),
-        safe_str(shadow_v4.get("shadow_score_v4_confidence")),
-        json.dumps(shadow_v4.get("shadow_score_v4_breakdown") or {}, ensure_ascii=False),
-        safe_bool(shadow_v4.get("shadow_score_v4_anchored")),
         # Section scores
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("score")),
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("max")),
@@ -5745,7 +5701,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 98  # Must match the tuple above and SCHEMA_SQL (2026-05-31: +v4 shadow columns)
+CORE_COLUMN_COUNT = 92  # Must match the tuple above and SCHEMA_SQL (2026-05-12: +ingredients_text)
 
 
 # ─── Reference Data Loader ───
