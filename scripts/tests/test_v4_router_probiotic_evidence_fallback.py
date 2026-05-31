@@ -105,6 +105,41 @@ def test_epa_dha_name_without_panel_routes_omega_for_completeness_gate():
     assert class_for_product(product) == "omega"
 
 
+def test_krill_joint_blend_anchor_routes_generic_not_omega_not_scored():
+    product = {
+        "product_name": "Krill Healthy Joint Formula",
+        "primary_type": "joint_support",
+        "form_factor": "softgel",
+        "product_scoring_evidence": [
+            {
+                "evidence_type": "blend_anchor_mass",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 353.0,
+                "dose_unit": "mg",
+                "source": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "evidence_scope": "blend_level",
+                "linked_rows": ["ingredientRows[0]"],
+                "confidence": "medium",
+                "reason": "identity_bearing_blend_header_mass",
+                "name": "Healthy Joint Proprietary Blend",
+                "canonical_id": "healthy_joint_proprietary_blend",
+                "clean_identity_id": None,
+                "scoring_parent_id": "healthy_joint_proprietary_blend",
+                "evidence_canonical_id": "healthy_joint_proprietary_blend",
+                "canonical_source_db": "unmapped",
+                "evidence_origin": "native_enrichment",
+                "source_section": "product",
+            }
+        ],
+    }
+
+    assert class_for_product(product) == "generic"
+
+
 def test_targeted_three_b_vitamin_product_does_not_route_multi_as_b_complex():
     product = {
         "product_name": "Hair Sweet Hair Berry",

@@ -59,6 +59,12 @@ PRODUCTS_CORE_COLUMNS = [
     "verdict",
     "safety_verdict",
     "mapped_coverage",
+    "shadow_score_v4_100",
+    "shadow_score_v4_module",
+    "shadow_score_v4_verdict",
+    "shadow_score_v4_confidence",
+    "shadow_score_v4_breakdown",
+    "shadow_score_v4_anchored",
     "score_ingredient_quality",
     "score_ingredient_quality_max",
     "score_safety_purity",
@@ -268,6 +274,19 @@ def test_build_core_row_includes_flutter_convenience_fields():
     assert isinstance(decision_highlights["caution"], str)
     assert isinstance(decision_highlights["danger"], list)
     assert isinstance(decision_highlights["trust"], str)
+
+
+def test_build_core_row_emits_v4_shadow_columns():
+    enriched = make_enriched()
+    scored = make_scored()
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-05-31T00:00:00Z"))
+
+    assert row["shadow_score_v4_module"]
+    assert row["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION", "NOT_SCORED", "BLOCKED", "UNSAFE"}
+    assert row["shadow_score_v4_confidence"]
+    assert isinstance(json.loads(row["shadow_score_v4_breakdown"]), dict)
+    assert row["shadow_score_v4_anchored"] in {0, 1}
 
 
 def test_export_prefers_resolved_supplement_type_over_stale_specialty():
@@ -1863,8 +1882,8 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_92_columns():
-    # Tuple emitted by build_core_row must match the 92-column schema (v1.6.x).
+def test_final_db_has_98_columns():
+    # Tuple emitted by build_core_row must match the 98-column schema (v1.6.x + v4 shadow).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -1880,8 +1899,8 @@ def test_final_db_has_92_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 92
-    assert len(PRODUCTS_CORE_COLUMNS) == 92
+    assert len(row) == 98
+    assert len(PRODUCTS_CORE_COLUMNS) == 98
 
 
 def test_dosing_summary_not_empty_for_real_product():
@@ -2003,10 +2022,10 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_92(self):
+    def test_core_row_column_count_is_98(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 92
-        assert CORE_COLUMN_COUNT == 92
+        assert len(row) == 98
+        assert CORE_COLUMN_COUNT == 98
 
     def test_schema_version_bumped_to_160(self):
         assert EXPORT_SCHEMA_VERSION == "1.6.0"

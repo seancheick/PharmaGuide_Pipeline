@@ -131,6 +131,7 @@ def build_rows(
 
         shadow = score_product_v4_shadow(enriched)
         breakdown = canary._safe_dict(shadow.get("shadow_score_v4_breakdown"))
+        completeness_gate = canary._safe_dict(breakdown.get("completeness_gate"))
         module = canary._safe_dict(breakdown.get("module"))
         module_metadata = canary._safe_dict(module.get("metadata"))
         dimensions = canary._safe_dict(module.get("dimensions"))
@@ -153,6 +154,10 @@ def build_rows(
             "v4_dimensions": {n: canary._safe_dict(p).get("score") for n, p in dimensions.items()},
             "v4_dimension_metadata": dimension_metadata,
             "v4_module_metadata": module_metadata,
+            "v4_completeness_missing": list(completeness_gate.get("missing_fields") or []),
+            "v4_completeness_soft_missing": list(completeness_gate.get("soft_missing") or []),
+            "v4_completeness_score_cap": completeness_gate.get("score_cap"),
+            "v4_completeness_verdict_ceiling": completeness_gate.get("verdict_ceiling"),
             "v4_confidence_detail": confidence if isinstance(confidence, dict) else None,
         }
         # deltas (calibrated + raw) for diagnose_compression()
@@ -241,7 +246,9 @@ def write_delta_csv(rows: List[Dict[str, Any]], path: Path) -> None:
         "v3_shipped_score", "v4_raw_score", "v4_score", "score_delta_vs_v3",
         "raw_score_delta_vs_v3", "v3_verdict", "v3_safety_verdict", "v4_verdict",
         "completeness_status", "in_shipped_universe", "compression_flags",
-        "excluded_dimensions", "status",
+        "excluded_dimensions", "v4_completeness_missing",
+        "v4_completeness_soft_missing", "v4_completeness_score_cap",
+        "v4_completeness_verdict_ceiling", "status",
     ]
     with path.open("w", newline="") as fh:
         w = csv.writer(fh)
@@ -258,6 +265,10 @@ def write_delta_csv(rows: List[Dict[str, Any]], path: Path) -> None:
                 r.get("in_shipped_universe"),
                 "|".join(r.get("compression_flags", [])),
                 "|".join(excluded) if isinstance(excluded, list) else "",
+                "|".join(r.get("v4_completeness_missing", [])),
+                "|".join(r.get("v4_completeness_soft_missing", [])),
+                r.get("v4_completeness_score_cap"),
+                r.get("v4_completeness_verdict_ceiling"),
                 r.get("status"),
             ])
 

@@ -233,6 +233,28 @@ def _has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
     return False
 
 
+def _has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
+    """Return True for conservative product evidence that is not EPA/DHA.
+
+    Name-only omega routing is useful for pure fish-oil labels, but it should
+    not pull mixed formulas into the omega module when the scoring contract
+    already says the usable evidence is a non-omega blend/header anchor.
+    """
+    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
+        if not isinstance(ing, dict):
+            continue
+        if ing.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        evidence_type = str(ing.get("evidence_type") or "").strip().lower()
+        canonical = str(ing.get("canonical_id") or "").strip().lower()
+        if evidence_type == "omega_epa_dha_aggregate":
+            continue
+        if canonical in _OMEGA_INGREDIENT_CANONICALS or canonical in _OMEGA_PARENT_CANONICALS:
+            continue
+        return True
+    return False
+
+
 def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     """Return True for ALA / GLA / CLA / 3-6-9 style panels with no EPA/DHA.
 
@@ -350,6 +372,8 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
         primary_type = _read_primary_type(product)
         if primary_type == "omega_3":
             return True
+        if _has_non_omega_product_level_evidence(product):
+            return False
         return not _has_non_omega_positive_scorable_panel(product)
     if any(token in lowered for token in _OMEGA_NAME_KEYWORDS):
         if _has_omega_scoring_evidence(product):
