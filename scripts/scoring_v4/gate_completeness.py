@@ -19,9 +19,9 @@ or module scoring, not in live eligibility.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Set
 
-from scoring_input_contract import get_scoring_ingredients
+from scoring_input_contract import classify_ingredient_roles, get_scoring_ingredients
 
 MAPPED_COVERAGE_MIN = 0.85
 MULTI_DOSE_COVERAGE_MIN = 0.60
@@ -328,6 +328,8 @@ def _has_sports_primary_identity_signal(product: Dict[str, Any]) -> bool:
 def _soft_policy_from_scoring_evidence(
     ingredients: List[Dict[str, Any]],
     module: str,
+    *,
+    cap_eligible_canonicals: Optional[Set[str]] = None,
 ) -> tuple[List[str], Optional[float], Optional[str]]:
     """Return scoring policy debt introduced by conservative evidence rows.
 
@@ -337,12 +339,26 @@ def _soft_policy_from_scoring_evidence(
     transparency debt, but it is not a safety signal by itself. Blend opacity is
     penalized inside the transparency dimension; this gate should not double
     punish it with an automatic score cap or CAUTION ceiling.
+
+    ``cap_eligible_canonicals`` (Phase 3) is the set of canonical_ids whose role
+    is cap-eligible (primary / claim_prominent). Soft-policy SCORE CAPS apply
+    only when the capping evidence belongs to a cap-eligible ingredient; an
+    adjunct's data gap keeps its audit tag but does not cap the product. When
+    ``None`` (legacy callers with no role info) the prior cap behavior holds.
     """
     evidence_rows = _product_evidence_rows(ingredients)
     evidence_types = {_norm(row.get("evidence_type")) for row in evidence_rows}
     soft_missing: List[str] = []
     score_cap: Optional[float] = None
     verdict_ceiling: Optional[str] = None
+
+    def _cap_eligible(rows: List[Dict[str, Any]]) -> bool:
+        if cap_eligible_canonicals is None:
+            return True
+        return any(
+            (cid := _norm(r.get("canonical_id"))) and cid in cap_eligible_canonicals
+            for r in rows
+        )
 
     has_conservative_blend_anchor = any(
         _norm(row.get("evidence_type")) == "blend_anchor_mass"
@@ -389,8 +405,12 @@ def _soft_policy_from_scoring_evidence(
     if omega_rows:
         soft_missing.append("omega_aggregate_epa_dha_evidence")
         if any(_norm(row.get("confidence")) == "low" for row in omega_rows):
-            score_cap = 65.0 if score_cap is None else min(score_cap, 65.0)
             soft_missing.append("low_confidence_omega_breakdown")
+            # Role-aware (Phase 3): cap only when the omega identity is a
+            # cap-eligible role. An adjunct omega in a multi/generic product
+            # keeps the audit tag but does not cap the product.
+            if _cap_eligible(omega_rows):
+                score_cap = 65.0 if score_cap is None else min(score_cap, 65.0)
 
     if "sports_primary_dose" in evidence_types:
         soft_missing.append("sports_primary_dose_evidence")
@@ -398,9 +418,16 @@ def _soft_policy_from_scoring_evidence(
     if "probiotic_cfu" in evidence_types:
         soft_missing.append("probiotic_product_cfu_evidence")
 
-    if "percent_dv_dose" in evidence_types:
+    percent_dv_rows = [
+        row for row in evidence_rows
+        if _norm(row.get("evidence_type")) == "percent_dv_dose"
+    ]
+    if percent_dv_rows:
         soft_missing.append("percent_dv_only_dose_evidence")
-        score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
+        # Role-aware (Phase 3): cap only when the %DV-only ingredient is a
+        # cap-eligible role; an adjunct's %DV-only dose suppresses credit only.
+        if _cap_eligible(percent_dv_rows):
+            score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
 
     return soft_missing, score_cap, verdict_ceiling
 
@@ -422,9 +449,19 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
+    # Phase 3: role-aware caps. Classify the already-derived rows (no second
+    # derivation) and let soft-policy caps fire only for cap-eligible roles.
+    roles = classify_ingredient_roles(product, module=module, rows=ingredients)
+    cap_eligible_canonicals = {
+        cid
+        for role in roles
+        if role.get("role") in ("primary", "claim_prominent")
+        and (cid := _norm(role.get("canonical_id")))
+    }
     soft_missing, score_cap, verdict_ceiling = _soft_policy_from_scoring_evidence(
         ingredients,
         module,
+        cap_eligible_canonicals=cap_eligible_canonicals,
     )
     checked_fields = [
         "product_status_active",

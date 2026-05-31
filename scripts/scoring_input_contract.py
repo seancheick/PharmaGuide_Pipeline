@@ -1302,6 +1302,7 @@ def classify_ingredient_roles(
     product: Dict[str, Any],
     *,
     module: Optional[str] = None,
+    rows: Optional[List[Dict[str, Any]]] = None,
 ) -> List[Dict[str, Any]]:
     """Classify every scoring row's role (compatibility mode, Phase 2).
 
@@ -1309,9 +1310,14 @@ def classify_ingredient_roles(
     ``get_scoring_ingredients(product).rows`` order. CLASSIFY ONLY — changes no
     score, cap, or verdict. When ``module`` is omitted it is resolved via the
     router (``class_for_product``).
+
+    ``rows`` lets a caller that has already derived the scoring rows (e.g. the
+    completeness gate) pass them in to avoid a second derivation pass. When
+    omitted they are derived from ``product``.
     """
     product = product or {}
-    rows = get_scoring_ingredients(product, strict=True).rows
+    if rows is None:
+        rows = get_scoring_ingredients(product, strict=True).rows
     ctx = _role_context(product, module, rows)
     return [_classify_one(row, ctx) for row in rows]
 
