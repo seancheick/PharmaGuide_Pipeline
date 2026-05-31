@@ -1181,9 +1181,10 @@ def test_shadow_transparency_populated_at_p135() -> None:
     assert evidence["score"] == 0.0
     assert "clinical_evidence_pipeline" in evidence["components"]
 
-    trust = module_block["dimensions"]["trust"]
-    assert trust["score"] == 0.0
-    assert "B4a_verified_certifications" in trust["components"]
+    # Phase 4: trust is now the additive verification_bonus (0-8).
+    verification = module_block["verification_bonus"]
+    assert verification["metadata"]["source_trust_score_0_15"] == 0.0
+    assert "B4a_verified_certifications" in verification["components"]
 
 
 # --- Architecture lock ----------------------------------------------------

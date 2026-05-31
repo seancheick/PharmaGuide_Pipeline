@@ -41,11 +41,11 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+# Phase 4: trust is no longer a core dimension (it became verification_bonus).
 EXPECTED_DIMENSION_CAPS = {
     "formulation": 25,
     "dose": 25,
     "evidence": 20,
-    "trust": 15,
     "transparency": 15,
 }
 
@@ -132,7 +132,7 @@ def test_omega_dimensions_share_stable_contract() -> None:
         assert "metadata" in dim
 
     # P1.6.6: all 5 dimensions populate.
-    for populated in ("formulation", "dose", "evidence", "trust", "transparency"):
+    for populated in ("formulation", "dose", "evidence", "transparency"):
         assert breakdown["dimensions"][populated]["score"] is not None, (
             f"omega.{populated}.score should be populated through P1.6.5"
         )
@@ -947,8 +947,10 @@ def test_omega_rubric_config_present_and_well_formed() -> None:
     assert rubric["_metadata"]["schema_version"] == "1.0.0"
     assert rubric["_metadata"]["purpose"] == "scoring_v4_omega_module_rubric"
 
-    # Dimension caps sum to 100 — total class score is locked.
-    assert sum(rubric["dimension_caps"].values()) == 100
+    # Phase 4: trust moved out of the core denominator to verification_bonus,
+    # so the core dimension caps now sum to 85 (the trust SCORING section
+    # remains in the rubric and is consumed by the verification bonus).
+    assert sum(rubric["dimension_caps"].values()) == 85
 
 
 def test_omega_rubric_form_tier_table_locked() -> None:

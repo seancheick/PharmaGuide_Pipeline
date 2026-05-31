@@ -49,18 +49,17 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from scoring_v4.modules.generic import (
-    CALIBRATION_INTERCEPT,
-    CALIBRATION_METHOD,
-    CALIBRATION_SLOPE,
     DimensionResult,
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
+    VerificationBonusResult,
+    _assemble_score,
 )
 from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_trust,
     score_manufacturer_violations,
 )
-from scoring_v4.modules.generic_trust import score_trust
+from scoring_v4.modules.verification_bonus import score_verification_bonus
 from scoring_v4.modules.probiotic_dose import score_dose
 from scoring_v4.modules.probiotic_evidence import score_evidence
 from scoring_v4.modules.probiotic_formulation import score_formulation
@@ -80,7 +79,6 @@ DIMENSION_CAPS = (
     ("formulation", 25),
     ("dose", 25),
     ("evidence", 20),
-    ("trust", 15),
     ("transparency", 15),
 )
 
@@ -93,24 +91,19 @@ class ProbioticModuleResult:
     tooling can read a single `shadow_score_v4_breakdown["module"]`
     contract regardless of which class scored the product.
 
-    Final score assembly (P2.6) — same pattern as P1.3.6 generic:
-
-        class_subtotal = (sum(d.score for d in dimensions.values()) /
-                          sum_of_evaluable_max) * 100   # rescale around None dims
-        adjusted = class_subtotal + manufacturer_trust.score
-                                  + manufacturer_violations.score
-        raw_score_100 = clamp(0, 100, adjusted)
-        score_100     = P1.5 calibration applied to raw_score_100
-                        (TBD: probiotic-specific calibration may differ
-                         from generic affine; reviewed during P2.6
-                         against probiotic canary set).
+    Final assembly (Phase 4) uses the shared generic._assemble_score: core
+    dimensions summed on native scale (max 85, NO renormalization) plus the
+    additive verification_bonus / manufacturer adjustments / safety_hygiene,
+    clamped to [0, 100], then the affine calibration.
     """
 
     module: str = "probiotic"
     dimensions: Dict[str, DimensionResult] = field(default_factory=dict)
+    verification_bonus: VerificationBonusResult = field(default_factory=VerificationBonusResult)
     manufacturer_trust: ManufacturerTrustResult = field(default_factory=ManufacturerTrustResult)
     manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
     safety_hygiene_base: SafetyHygieneResult = field(default_factory=SafetyHygieneResult)
+    botanical_dose_deferred: bool = False
     raw_score_100: Optional[float] = None
     score_100: Optional[float] = None
     phase: str = PHASE_MARKER
@@ -124,6 +117,7 @@ class ProbioticModuleResult:
         return {
             "module": self.module,
             "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},
+            "verification_bonus": self.verification_bonus.to_dict(),
             "manufacturer_trust": self.manufacturer_trust.to_dict(),
             "manufacturer_violations": self.manufacturer_violations.to_dict(),
             "safety_hygiene_base": self.safety_hygiene_base.to_dict(),
@@ -189,12 +183,12 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     # marine-only via _is_omega_like and correctly filtered for probiotics).
     # The cross-module `brand_only` / `needs_review` scope policy question
     # is tracked separately as P1.7.
-    trust_payload = score_trust(product)
-    trust_dim = result.dimensions["trust"]
-    trust_dim.score = trust_payload["score"]
-    trust_dim.components = trust_payload["components"]
-    trust_dim.penalties = trust_payload["penalties"]
-    trust_dim.metadata = trust_payload.get("metadata", {})
+    vb_payload = score_verification_bonus(product, "probiotic")
+    result.verification_bonus.score = vb_payload["score"]
+    result.verification_bonus.max = vb_payload["max"]
+    result.verification_bonus.components = vb_payload["components"]
+    result.verification_bonus.penalties = vb_payload.get("penalties", {})
+    result.verification_bonus.metadata = vb_payload.get("metadata", {})
 
     # P2.5 — Transparency dimension. Probiotic-specific positive components
     # (strain identities 8, per-strain CFU 7) with B3 reuse from generic
@@ -225,75 +219,9 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     result.manufacturer_violations.metadata = mv_payload.get("metadata", {})
     result.safety_hygiene_base = score_safety_hygiene_base(product)
 
-    # P2.6 — Final assembly + P1.5 affine calibration. The arithmetic
-    # is identical to generic._assemble_score; the calibration constants
-    # are imported from generic so both classes stay locked to the same
-    # display-score transform. (Long-term: factor into a shared helper
-    # at P1.5 cleanup; for now duplication keeps the slice tight.)
+    # Phase 4: shared assembly (generic._assemble_score) — single source of
+    # truth. Reset the module phase marker the shared assembler stamped.
     _assemble_score(result)
-
+    result.metadata["phase"] = PHASE_MARKER
     result.phase = PHASE_MARKER
     return result
-
-
-def _assemble_score(result: ProbioticModuleResult) -> None:
-    """Assemble probiotic raw_score_100 + calibrated score_100.
-
-    Mirror of generic._assemble_score: rescale around None dimensions,
-    add manufacturer adjustments, apply the P1.5 affine calibration
-    `clamp(0, 100, 25 + 0.75 * raw_score_100)`. Records the same audit
-    metadata fields (evaluable_max, excluded_dimensions, class_subtotal,
-    manufacturer adjustments, calibration block) so audit / score-delta
-    tooling sees a uniform shape across modules.
-    """
-    evaluable_scores = []
-    evaluable_max = 0.0
-    excluded = []
-    for name, dim in result.dimensions.items():
-        if dim.score is None:
-            excluded.append(name)
-            continue
-        evaluable_scores.append(float(dim.score))
-        evaluable_max += float(dim.max)
-
-    raw_dimension_sum = sum(evaluable_scores)
-    if evaluable_max <= 0:
-        class_subtotal = 0.0
-    elif evaluable_max == 100.0:
-        class_subtotal = raw_dimension_sum
-    else:
-        class_subtotal = (raw_dimension_sum / evaluable_max) * 100.0
-
-    manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
-    manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
-    safety_hygiene = float(result.safety_hygiene_base.score or 0.0)
-    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations + safety_hygiene
-    raw_score_100 = max(0.0, min(100.0, adjusted))
-    calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
-    calibrated_score_100 = max(0.0, min(100.0, calibrated))
-    result.raw_score_100 = round(raw_score_100, 1)
-    result.score_100 = round(calibrated_score_100, 1)
-    result.metadata = {
-        "phase": PHASE_MARKER,
-        "raw_dimension_sum": round(raw_dimension_sum, 4),
-        "evaluable_class_max": round(evaluable_max, 4),
-        "excluded_dimensions": excluded,
-        "class_subtotal": round(class_subtotal, 4),
-        "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
-        "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
-        "safety_hygiene_base_adjustment": round(safety_hygiene, 4),
-        "safety_hygiene_base": result.safety_hygiene_base.to_dict(),
-        "adjusted_score_before_clamp": round(adjusted, 4),
-        "raw_score_100_pre_calibration": result.raw_score_100,
-        "score_clamped": adjusted < 0.0 or adjusted > 100.0,
-        "calibration": {
-            "method": CALIBRATION_METHOD,
-            "intercept": CALIBRATION_INTERCEPT,
-            "slope": CALIBRATION_SLOPE,
-            "reason": "p1_5_canary_score_compression",
-            "raw_score_100": result.raw_score_100,
-            "calibrated_score_100": result.score_100,
-        },
-        "calibrated_score_before_clamp": round(calibrated, 4),
-        "calibrated_score_clamped": calibrated < 0.0 or calibrated > 100.0,
-    }

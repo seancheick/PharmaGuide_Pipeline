@@ -34,7 +34,6 @@ EXPECTED_DIMENSION_CAPS = {
     "formulation": 25,
     "dose": 30,
     "evidence": 15,
-    "trust": 15,
     "transparency": 15,
 }
 

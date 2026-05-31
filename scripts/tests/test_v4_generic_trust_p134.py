@@ -346,15 +346,19 @@ def test_dimension_hard_clamps_b4a_b4b_b4c_to_15() -> None:
     assert payload["score"] == 15.0
 
 
-def test_shadow_wires_trust_dimension() -> None:
+def test_shadow_wires_verification_bonus() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(_product(verified_cert_programs=[_cert("NSF Sport", "sku")]))
 
-    trust = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["trust"]
-    assert trust["score"] == 8.0
-    assert trust["max"] == 15.0
-    assert trust["metadata"]["phase"] == "P1.3.4_testing_trust"
+    # Phase 4: trust is wired as the additive verification_bonus (0-8). The
+    # bonus is the 0-15 source score rescaled x8/15; the source + B4 components
+    # remain auditable in the bonus payload.
+    verification = out["shadow_score_v4_breakdown"]["module"]["verification_bonus"]
+    assert verification["metadata"]["source_trust_score_0_15"] == 8.0
+    assert verification["score"] == round(8.0 * 8.0 / 15.0, 4)
+    assert verification["max"] == 8.0
+    assert verification["metadata"]["trust_metadata"]["phase"] == "P1.3.4_testing_trust"
 
 
 def test_generic_trust_does_not_import_v3_scorer() -> None:

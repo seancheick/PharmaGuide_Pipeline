@@ -26,6 +26,23 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+def _trust_view(breakdown: dict) -> dict:
+    """Phase 4 shim: reconstruct the legacy 0-15 trust-dimension view from the
+    verification_bonus payload so these scorer tests keep their exact
+    assertions. The bonus keeps the original 0-15 components and nests the
+    trust scorer metadata under `trust_metadata`; source_trust_score_0_15 is
+    the pre-rescale 0-15 score."""
+    vb = breakdown["verification_bonus"]
+    meta = vb.get("metadata", {})
+    return {
+        "score": meta.get("source_trust_score_0_15", 0.0),
+        "max": 15,
+        "components": vb.get("components", {}),
+        "penalties": vb.get("penalties", {}),
+        "metadata": meta.get("trust_metadata", {}),
+    }
+
+
 def _cert(program: str, scope: str, *, source: str = "registry", **extra: object) -> dict:
     row = {"program": program, "scope": scope, "evidence_source": source}
     row.update(extra)
@@ -72,7 +89,7 @@ def _multi_product(
 def _trust_breakdown(product: dict) -> dict:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
-    return score_multi_prenatal(product).to_breakdown()["dimensions"]["trust"]
+    return _trust_view(score_multi_prenatal(product).to_breakdown())
 
 
 def test_multi_prenatal_trust_zero_when_no_product_verification() -> None:
@@ -210,7 +227,7 @@ def test_score_multi_prenatal_wires_trust_dimension() -> None:
         _multi_product(verified_cert_programs=[_cert("USP Verified", "product_line")])
     ).to_breakdown()
 
-    trust = breakdown["dimensions"]["trust"]
+    trust = _trust_view(breakdown)
     assert trust["score"] == 6.0
     assert trust["metadata"]["phase"] == "P1.3.4_testing_trust"
     assert breakdown["score_100"] is not None

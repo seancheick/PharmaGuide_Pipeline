@@ -202,9 +202,21 @@ def _label_completeness_confidence(
     return level, drivers
 
 
+def _verification_metadata(module: Dict[str, Any]) -> Dict[str, Any]:
+    """Verification signal metadata, sourced from the Phase-4 verification_bonus
+    payload (all scoring modules emit it). The bonus nests the original trust
+    scorer metadata (incl. verified_scope_counts) under `trust_metadata`. The
+    legacy trust-dimension fallback below is retained only for any external /
+    pre-Phase-4 breakdown that lacks a verification_bonus block."""
+    bonus = _safe_dict(module.get("verification_bonus"))
+    if bonus:
+        meta = _safe_dict(bonus.get("metadata"))
+        return _safe_dict(meta.get("trust_metadata")) or meta
+    return _safe_dict(_dimension(module, "trust").get("metadata"))
+
+
 def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tuple[str, List[str]]:
-    trust = _dimension(module, "trust")
-    metadata = _safe_dict(trust.get("metadata"))
+    metadata = _verification_metadata(module)
     scope_counts = _safe_dict(metadata.get("verified_scope_counts"))
     if _as_float(scope_counts.get("sku"), 0.0):
         return "high", ["cert_sku_verified"]

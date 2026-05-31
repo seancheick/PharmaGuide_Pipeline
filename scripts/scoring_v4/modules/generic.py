@@ -61,8 +61,8 @@ from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_trust,
     score_manufacturer_violations,
 )
-from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.generic_transparency import score_transparency
+from scoring_v4.modules.verification_bonus import score_verification_bonus
 from scoring_v4.modules.safety_hygiene import (
     SafetyHygieneResult,
     score_safety_hygiene_base,
@@ -75,17 +75,23 @@ CALIBRATION_SLOPE = 0.75
 CALIBRATION_METHOD = "affine_p15"
 
 
-# Dimension caps per §4 line 176. Order is rendering order in audit / UI.
+# Core dimension caps. Order is rendering order in audit / UI.
+# Phase 4 (Trust→Verification Bonus): the former ("trust", 15) DIMENSION was
+# removed from the denominator and converted to an additive verification_bonus
+# (0-8). Core now sums to 85; verification is added like manufacturer_trust.
 DIMENSION_CAPS = (
     ("formulation", 30),
     ("dose", 25),
     ("evidence", 20),
-    ("trust", 15),
     ("transparency", 10),
 )
 
 MANUFACTURER_TRUST_CAP = 5
 MANUFACTURER_VIOLATIONS_FLOOR = -25
+# Phase 4 botanical guard: a botanical whose dose dimension is non-evaluable
+# must not be stamped POOR purely from removing the old renormalization, before
+# Phase 6's botanical dose adapter lands. Floors raw at the SAFE/POOR boundary.
+BOTANICAL_RAW_FLOOR = 40.0
 
 
 @dataclass
@@ -154,24 +160,53 @@ class ManufacturerViolationsResult:
 
 
 @dataclass
+class VerificationBonusResult:
+    """Additive verification bonus (0-8), Phase 4. Replaces the former 0-15
+    Testing & Trust dimension; scores the same B4a-d signals (via the module's
+    trust scorer) rescaled ×8/15 and added like manufacturer_trust rather than
+    sitting in the denominator. `components` are the original 0-15-scale sub-scores
+    (audit); `score` is the bounded bonus assembly adds."""
+
+    score: float = 0.0
+    max: float = 8.0
+    components: Dict[str, float] = field(default_factory=dict)
+    penalties: Dict[str, float] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def to_dict(self) -> Dict[str, Any]:
+        return {
+            "score": self.score,
+            "max": self.max,
+            "components": dict(self.components),
+            "penalties": dict(self.penalties),
+            "metadata": dict(self.metadata),
+        }
+
+
+@dataclass
 class GenericModuleResult:
     """Container for the generic-module breakdown.
 
-    Final score assembly (P1.3.6):
+    Final score assembly (Phase 4 — Trust→Verification Bonus):
 
-        class_subtotal = sum(d.score for d in dimensions.values())   # capped at 100
-        adjusted = class_subtotal + manufacturer_trust.score + manufacturer_violations.score
-        score_100 = max(0, min(100, adjusted))
+        core_subtotal = sum(d.score for d in dimensions.values())   # NATIVE, max 85, NO renorm
+        adjusted = core_subtotal + verification_bonus.score + manufacturer_trust.score
+                   + manufacturer_violations.score + safety_hygiene_base.score
+        raw_score_100 = max(0, min(100, adjusted))   # botanical floor may apply
+        score_100 = affine-calibrated raw_score_100
 
     `phase` lets audit / delta tooling know which dimensions are populated.
-    Removed (or rolled forward) once full math is online at P1.5.
     """
 
     module: str = "generic"
     dimensions: Dict[str, DimensionResult] = field(default_factory=dict)
+    verification_bonus: VerificationBonusResult = field(default_factory=VerificationBonusResult)
     manufacturer_trust: ManufacturerTrustResult = field(default_factory=ManufacturerTrustResult)
     manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
     safety_hygiene_base: SafetyHygieneResult = field(default_factory=SafetyHygieneResult)
+    # Phase 4 botanical guard flag: set by the module when the dose dimension is
+    # non-evaluable for a botanical, so assembly floors raw out of POOR until Phase 6.
+    botanical_dose_deferred: bool = False
     raw_score_100: Optional[float] = None
     score_100: Optional[float] = None
     phase: str = PHASE_MARKER
@@ -184,6 +219,7 @@ class GenericModuleResult:
         return {
             "module": self.module,
             "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},
+            "verification_bonus": self.verification_bonus.to_dict(),
             "manufacturer_trust": self.manufacturer_trust.to_dict(),
             "manufacturer_violations": self.manufacturer_violations.to_dict(),
             "safety_hygiene_base": self.safety_hygiene_base.to_dict(),
@@ -195,9 +231,21 @@ class GenericModuleResult:
 
 
 def _empty_dimensions() -> Dict[str, DimensionResult]:
-    """Build the 5-dimension skeleton with caps locked from DIMENSION_CAPS.
+    """Build the core-dimension skeleton with caps locked from DIMENSION_CAPS.
     Insertion order matches rendering order in audit / UI."""
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
+
+
+def _is_botanical_class(product: Any) -> bool:
+    """True when the product's taxonomy primary_type is the botanical class.
+    Used only by the Phase-4 botanical dose-deferral guard (until Phase 6)."""
+    if not isinstance(product, dict):
+        return False
+    ptype = product.get("primary_type")
+    if not (isinstance(ptype, str) and ptype.strip()):
+        taxonomy = product.get("supplement_taxonomy")
+        ptype = taxonomy.get("primary_type") if isinstance(taxonomy, dict) else None
+    return isinstance(ptype, str) and ptype.strip().lower() == "herbal_botanical"
 
 
 def score_generic(product: Any) -> GenericModuleResult:
@@ -250,13 +298,21 @@ def score_generic(product: Any) -> GenericModuleResult:
     evidence_dim.penalties = evidence_payload["penalties"]
     evidence_dim.metadata = evidence_payload.get("metadata", {})
 
-    # Layer 3 — Testing & Trust dimension (P1.3.4 complete for generic).
-    trust_payload = score_trust(product)
-    trust_dim = result.dimensions["trust"]
-    trust_dim.score = trust_payload["score"]
-    trust_dim.components = trust_payload["components"]
-    trust_dim.penalties = trust_payload["penalties"]
-    trust_dim.metadata = trust_payload.get("metadata", {})
+    # Phase 4 — verification bonus (replaces the former Testing & Trust
+    # dimension). Same B4a-d signals via the trust scorer, rescaled ×8/15 and
+    # added additively instead of sitting in the denominator.
+    vb_payload = score_verification_bonus(product, "generic")
+    result.verification_bonus.score = vb_payload["score"]
+    result.verification_bonus.max = vb_payload["max"]
+    result.verification_bonus.components = vb_payload["components"]
+    result.verification_bonus.penalties = vb_payload.get("penalties", {})
+    result.verification_bonus.metadata = vb_payload.get("metadata", {})
+
+    # Phase 4 botanical guard: a botanical whose dose proxy is non-evaluable
+    # would lose the old renormalization lift and could drop to POOR before
+    # Phase 6's dose adapter lands. Flag it so assembly floors raw out of POOR.
+    if dose_dim.score is None and _is_botanical_class(product):
+        result.botanical_dose_deferred = True
 
     # Layer 3 — Transparency dimension (P1.3.5 complete for generic).
     transparency_payload = score_transparency(product)
@@ -296,45 +352,66 @@ def score_generic(product: Any) -> GenericModuleResult:
 def _assemble_score(result: GenericModuleResult) -> None:
     """Assemble v4's final 0-100 score from populated dimensions.
 
-    If a dimension is explicitly not evaluable (`score is None`), exclude
-    its max from the denominator instead of treating it as zero. This is
-    important for botanicals / specialty actives where the Dose proxy has
-    no RDA/UL benchmark; missing reference data should lower confidence
-    later, not punish quality.
+    Phase 4: core dimensions (formulation + dose + evidence + transparency,
+    max 85) are summed on their NATIVE scale and the additive terms
+    (verification_bonus ≤8, manufacturer_trust ≤5, manufacturer_violations,
+    safety_hygiene) are added, then clamped to [0, 100]. There is NO
+    renormalization of the core to 100 (that hidden inflation was removed with
+    the trust dimension). A non-evaluable (`score is None`) dimension contributes
+    0 and is listed in `excluded_dimensions`; for botanicals whose dose proxy is
+    non-evaluable, the `botanical_dose_deferred` guard floors raw out of POOR
+    until Phase 6's dose adapter lands (so missing reference data still doesn't
+    punish quality in the interim).
     """
-    evaluable_scores = []
-    evaluable_max = 0.0
+    # Phase 4: the core dimensions are summed on their NATIVE scale (max 85).
+    # There is NO renormalization to 100 — the former `(sum/evaluable_max)*100`
+    # branch is deliberately gone (it would have silently inflated 85→100, the
+    # exact hidden inflation this phase removes). A non-evaluable (None) dimension
+    # contributes 0 and is recorded in `excluded_dimensions` for audit.
+    core_scores = []
+    core_max = 0.0
     excluded = []
     for name, dim in result.dimensions.items():
         if dim.score is None:
             excluded.append(name)
             continue
-        evaluable_scores.append(float(dim.score))
-        evaluable_max += float(dim.max)
+        core_scores.append(float(dim.score))
+        core_max += float(dim.max)
+    class_subtotal = sum(core_scores)
 
-    raw_dimension_sum = sum(evaluable_scores)
-    if evaluable_max <= 0:
-        class_subtotal = 0.0
-    elif evaluable_max == 100.0:
-        class_subtotal = raw_dimension_sum
-    else:
-        class_subtotal = (raw_dimension_sum / evaluable_max) * 100.0
-
+    verification_bonus = float(result.verification_bonus.score or 0.0)
     manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
     manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
     safety_hygiene = float(result.safety_hygiene_base.score or 0.0)
-    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations + safety_hygiene
+    adjusted = (
+        class_subtotal
+        + verification_bonus
+        + manufacturer_trust
+        + manufacturer_violations
+        + safety_hygiene
+    )
     raw_score_100 = max(0.0, min(100.0, adjusted))
+
+    # Phase 4 botanical guard (until Phase 6): keep a botanical whose dose proxy
+    # is non-evaluable out of POOR — it lost the old renorm lift, not real quality.
+    botanical_floor_applied = False
+    if result.botanical_dose_deferred and raw_score_100 < BOTANICAL_RAW_FLOOR:
+        raw_score_100 = BOTANICAL_RAW_FLOOR
+        botanical_floor_applied = True
     calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
     calibrated_score_100 = max(0.0, min(100.0, calibrated))
     result.raw_score_100 = round(raw_score_100, 1)
     result.score_100 = round(calibrated_score_100, 1)
     result.metadata = {
         "phase": PHASE_MARKER,
-        "raw_dimension_sum": round(raw_dimension_sum, 4),
-        "evaluable_class_max": round(evaluable_max, 4),
+        # Phase 4: core summed on native scale (no renorm), so class_subtotal
+        # == raw_dimension_sum and evaluable_class_max is the native core max
+        # (≤85). Key names retained for audit-tool / score-delta compatibility.
+        "raw_dimension_sum": round(class_subtotal, 4),
+        "evaluable_class_max": round(core_max, 4),
         "excluded_dimensions": excluded,
         "class_subtotal": round(class_subtotal, 4),
+        "verification_bonus_adjustment": round(verification_bonus, 4),
         "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
         "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
         "safety_hygiene_base_adjustment": round(safety_hygiene, 4),
@@ -342,6 +419,8 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "adjusted_score_before_clamp": round(adjusted, 4),
         "raw_score_100_pre_calibration": result.raw_score_100,
         "score_clamped": adjusted < 0.0 or adjusted > 100.0,
+        "botanical_dose_deferred": result.botanical_dose_deferred,
+        "botanical_raw_floor_applied": botanical_floor_applied,
         "calibration": {
             "method": CALIBRATION_METHOD,
             "intercept": CALIBRATION_INTERCEPT,

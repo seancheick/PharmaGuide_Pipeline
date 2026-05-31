@@ -231,8 +231,8 @@ def _load_canaries(ids):
 # Wider than ±0.5 to tolerate small drifts in generic_evidence /
 # manufacturer pipeline; tighter than ±10 to catch real regressions.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research",      79.5, 82.0),
-    ("326270", "Sports Research",      79.5, 82.0),
+    ("327776", "Sports Research",      76.5, 78.5),  # Phase 4: 81.6 → 77.4
+    ("326270", "Sports Research",      76.5, 78.5),  # Phase 4: 81.6 → 77.4
     ("288740", "Nordic Naturals",      71.0, 74.0),
     ("273630", "Garden of Life",       70.5, 73.0),
     ("239592", "CVS Health",           65.5, 68.5),
@@ -284,10 +284,14 @@ def test_all_five_dimensions_populated_at_p166() -> None:
     from scoring_v4.modules.omega import score_omega
 
     bd = score_omega(_premium_omega()).to_breakdown()
-    for dim in ("formulation", "dose", "evidence", "trust", "transparency"):
+    # Phase 4: trust is no longer a core dimension; the four core dimensions are
+    # populated and verification is an additive bonus.
+    for dim in ("formulation", "dose", "evidence", "transparency"):
         assert bd["dimensions"][dim]["score"] is not None, (
             f"omega.{dim}.score should be populated"
         )
+    assert "trust" not in bd["dimensions"]
+    assert bd["verification_bonus"]["max"] == 8.0
 
 
 # --- Architecture lock --------------------------------------------------

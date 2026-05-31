@@ -53,7 +53,9 @@ def test_score_sports_returns_shared_breakdown_shape_with_sports_dose() -> None:
     breakdown = result.to_breakdown()
 
     assert breakdown["module"] == "sports"
-    assert set(breakdown["dimensions"]) == {"formulation", "dose", "evidence", "trust", "transparency"}
+    # Phase 4: trust is no longer a core dimension; it became verification_bonus.
+    assert set(breakdown["dimensions"]) == {"formulation", "dose", "evidence", "transparency"}
+    assert breakdown["verification_bonus"]["max"] == 8.0
     assert breakdown["dimensions"]["dose"]["metadata"]["phase"] == "P1.7_sports_dose_v1"
     assert breakdown["dimensions"]["dose"]["score"] == 16.0
     assert breakdown["raw_score_100"] is not None

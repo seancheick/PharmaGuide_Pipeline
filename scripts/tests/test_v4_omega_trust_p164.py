@@ -33,6 +33,23 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+def _trust_view(breakdown: dict) -> dict:
+    """Phase 4 shim: reconstruct the legacy 0-15 trust-dimension view from the
+    verification_bonus payload so these scorer tests keep their exact
+    assertions. The bonus keeps the original 0-15 components and nests the
+    trust scorer metadata under `trust_metadata`; source_trust_score_0_15 is
+    the pre-rescale 0-15 score."""
+    vb = breakdown["verification_bonus"]
+    meta = vb.get("metadata", {})
+    return {
+        "score": meta.get("source_trust_score_0_15", 0.0),
+        "max": 15,
+        "components": vb.get("components", {}),
+        "penalties": vb.get("penalties", {}),
+        "metadata": meta.get("trust_metadata", {}),
+    }
+
+
 # --- Component contract --------------------------------------------------
 
 
@@ -424,7 +441,7 @@ def test_omega_trust_dimension_score_populated_in_breakdown() -> None:
         "verified_cert_programs": [{"program": "IFOS", "scope": "sku"}],
     }
     breakdown = score_omega(product).to_breakdown()
-    trust = breakdown["dimensions"]["trust"]
+    trust = _trust_view(breakdown)
     assert trust["score"] is not None
     assert trust["score"] == 10.0
 

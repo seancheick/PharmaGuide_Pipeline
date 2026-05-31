@@ -12,8 +12,8 @@ from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_violations,
 )
 from scoring_v4.modules.generic_transparency import score_transparency
-from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
+from scoring_v4.modules.verification_bonus import score_verification_bonus
 from scoring_v4.modules.sports_dose import score_dose
 
 
@@ -48,12 +48,12 @@ def score_sports(product: Any) -> GenericModuleResult:
     evidence_dim.penalties = evidence_payload["penalties"]
     evidence_dim.metadata = evidence_payload.get("metadata", {})
 
-    trust_payload = score_trust(product)
-    trust_dim = result.dimensions["trust"]
-    trust_dim.score = trust_payload["score"]
-    trust_dim.components = trust_payload["components"]
-    trust_dim.penalties = trust_payload["penalties"]
-    trust_dim.metadata = trust_payload.get("metadata", {})
+    vb_payload = score_verification_bonus(product, "generic")
+    result.verification_bonus.score = vb_payload["score"]
+    result.verification_bonus.max = vb_payload["max"]
+    result.verification_bonus.components = vb_payload["components"]
+    result.verification_bonus.penalties = vb_payload.get("penalties", {})
+    result.verification_bonus.metadata = vb_payload.get("metadata", {})
 
     transparency_payload = score_transparency(product)
     transparency_dim = result.dimensions["transparency"]

@@ -59,7 +59,6 @@ EXPECTED_DIMENSION_CAPS = {
     "formulation": 30,
     "dose": 25,
     "evidence": 20,
-    "trust": 15,
     "transparency": 10,
 }
 
@@ -127,10 +126,12 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     assert "clinical_evidence_pipeline" in evidence["components"]
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
-    trust = breakdown["dimensions"]["trust"]
-    assert trust["score"] == 0.0
-    assert "B4a_verified_certifications" in trust["components"]
-    assert trust["metadata"]["phase"] == "P1.3.4_testing_trust"
+    # Phase 4: trust is now the additive verification_bonus (0-8). Its 0-15
+    # source score + B4 components are preserved in the bonus payload.
+    verification = breakdown["verification_bonus"]
+    assert verification["metadata"]["source_trust_score_0_15"] == 0.0
+    assert "B4a_verified_certifications" in verification["components"]
+    assert verification["metadata"]["trust_metadata"]["phase"] == "P1.3.4_testing_trust"
 
     transparency = breakdown["dimensions"]["transparency"]
     assert transparency["score"] == 6.0

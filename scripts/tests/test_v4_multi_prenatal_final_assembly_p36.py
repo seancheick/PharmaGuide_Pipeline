@@ -194,12 +194,14 @@ def test_multi_prenatal_raw_score_sums_dimensions_and_manufacturer_adjustments()
     expected_raw = min(
         100.0,
         dimension_sum
+        + breakdown["verification_bonus"]["score"]  # Phase 4 additive term
         + breakdown["manufacturer_trust"]["score"]
         + breakdown["manufacturer_violations"]["score"]
         + breakdown["safety_hygiene_base"]["score"],
     )
 
-    assert breakdown["metadata"]["evaluable_class_max"] == 100.0
+    # Phase 4: trust removed from the denominator → 4 core dims sum to 85.
+    assert breakdown["metadata"]["evaluable_class_max"] == 85.0
     assert breakdown["metadata"]["excluded_dimensions"] == []
     assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == breakdown["safety_hygiene_base"]["score"]
     assert breakdown["raw_score_100"] == round(expected_raw, 1)

@@ -31,6 +31,23 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+def _trust_view(breakdown: dict) -> dict:
+    """Phase 4 shim: reconstruct the legacy 0-15 trust-dimension view from the
+    verification_bonus payload so these scorer tests keep their exact
+    assertions. The bonus keeps the original 0-15 components and nests the
+    trust scorer metadata under `trust_metadata`; source_trust_score_0_15 is
+    the pre-rescale 0-15 score."""
+    vb = breakdown["verification_bonus"]
+    meta = vb.get("metadata", {})
+    return {
+        "score": meta.get("source_trust_score_0_15", 0.0),
+        "max": 15,
+        "components": vb.get("components", {}),
+        "penalties": vb.get("penalties", {}),
+        "metadata": meta.get("trust_metadata", {}),
+    }
+
+
 def _probiotic_product(*, verified_cert_programs=None, gmp=None, has_coa=False,
                        has_batch_lookup=False, **extra):
     """Build a probiotic product with optional cert signals."""
@@ -85,7 +102,7 @@ def test_probiotic_trust_zero_when_no_certs() -> None:
 
     result = score_probiotic(_probiotic_product())
     breakdown = result.to_breakdown()
-    trust_dim = breakdown["dimensions"]["trust"]
+    trust_dim = _trust_view(breakdown)
 
     assert trust_dim["score"] == 0.0
     assert trust_dim["max"] == 15
@@ -105,7 +122,7 @@ def test_probiotic_trust_nsf_sport_sku_scores_8() -> None:
         ]
     )
     result = score_probiotic(product)
-    trust_dim = result.to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( result.to_breakdown())
 
     assert trust_dim["score"] == 8.0
     assert trust_dim["components"]["B4a_verified_certifications"] == 8.0
@@ -122,7 +139,7 @@ def test_probiotic_trust_combined_sku_plus_gmp_plus_coa() -> None:
         gmp={"nsf_gmp": True},
         has_coa=True,
     )
-    trust_dim = score_probiotic(product).to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( score_probiotic(product).to_breakdown())
 
     assert trust_dim["score"] == 13.0
     assert trust_dim["components"]["B4b_gmp"] == 4.0
@@ -143,7 +160,7 @@ def test_probiotic_trust_clamps_at_15() -> None:
         has_coa=True,
         has_batch_lookup=True,
     )
-    trust_dim = score_probiotic(product).to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( score_probiotic(product).to_breakdown())
 
     assert trust_dim["score"] == 15.0
     assert trust_dim["max"] == 15
@@ -161,7 +178,7 @@ def test_probiotic_trust_needs_review_cert_scores_zero() -> None:
             {"program": "NSF Certified", "scope": "needs_review", "evidence_source": "registry"}
         ]
     )
-    trust_dim = score_probiotic(product).to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( score_probiotic(product).to_breakdown())
     assert trust_dim["score"] == 0.0
 
 
@@ -170,7 +187,7 @@ def test_probiotic_trust_fda_registered_only_scores_2() -> None:
     from scoring_v4.modules.probiotic import score_probiotic
 
     product = _probiotic_product(gmp={"fda_registered": True})
-    trust_dim = score_probiotic(product).to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( score_probiotic(product).to_breakdown())
     assert trust_dim["components"]["B4b_gmp"] == 2.0
     assert trust_dim["score"] == 2.0
 
@@ -187,7 +204,7 @@ def test_probiotic_trust_marine_cert_filter_holds() -> None:
              "evidence_source": "product_label"}
         ]
     )
-    trust_dim = score_probiotic(product).to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( score_probiotic(product).to_breakdown())
     # IFOS on a non-omega product is correctly filtered → 0 credit.
     assert trust_dim["score"] == 0.0
 
@@ -216,7 +233,7 @@ def test_probiotic_trust_metadata_carries_audit_fields() -> None:
             {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
         ]
     )
-    trust_dim = score_probiotic(product).to_breakdown()["dimensions"]["trust"]
+    trust_dim =_trust_view( score_probiotic(product).to_breakdown())
 
     meta = trust_dim["metadata"]
     assert meta["phase"] == "P1.3.4_testing_trust"
@@ -239,7 +256,7 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
 
     breakdown = score_probiotic(high_form_no_certs).to_breakdown()
     assert breakdown["dimensions"]["formulation"]["score"] > 20.0
-    assert breakdown["dimensions"]["trust"]["score"] == 0.0
+    assert _trust_view(breakdown)["score"] == 0.0
 
 
 def test_probiotic_trust_score_is_independent_of_other_dimensions() -> None:
@@ -250,5 +267,5 @@ def test_probiotic_trust_score_is_independent_of_other_dimensions() -> None:
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
     # Trust is fully populated at this slice or later.
-    assert breakdown["dimensions"]["trust"]["score"] is not None
-    assert "B4a_verified_certifications" in breakdown["dimensions"]["trust"]["components"]
+    assert _trust_view(breakdown)["score"] is not None
+    assert "B4a_verified_certifications" in _trust_view(breakdown)["components"]

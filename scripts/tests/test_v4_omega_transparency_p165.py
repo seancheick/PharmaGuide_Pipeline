@@ -419,7 +419,7 @@ def test_omega_all_five_dimensions_populated_through_p165() -> None:
     from scoring_v4.modules.omega import score_omega
 
     breakdown = score_omega(_omega_product()).to_breakdown()
-    for dim in ("formulation", "dose", "evidence", "trust", "transparency"):
+    for dim in ("formulation", "dose", "evidence", "transparency"):
         assert breakdown["dimensions"][dim]["score"] is not None, (
             f"omega.{dim}.score should be populated through P1.6.5"
         )

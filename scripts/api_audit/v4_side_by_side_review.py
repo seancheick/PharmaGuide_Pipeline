@@ -211,7 +211,10 @@ def flatten_row(row: Dict[str, Any]) -> Dict[str, Any]:
         "v4_dose": v4_dimensions.get("dose"),
         "v4_evidence": v4_dimensions.get("evidence"),
         "v4_transparency": v4_dimensions.get("transparency"),
-        "v4_trust": v4_dimensions.get("trust"),
+        # Phase 4: trust is now an additive verification bonus (0-8), not a
+        # core dimension; v4_verification_trust_0_15 is the pre-rescale score.
+        "v4_verification_bonus": row.get("v4_verification_bonus"),
+        "v4_verification_trust_0_15": row.get("v4_verification_trust_0_15"),
         "v4_safety_hygiene_base": v4_dimensions.get("safety_hygiene_base"),
         "v4_completeness_missing": "|".join(row.get("v4_completeness_missing") or []),
         "v4_completeness_soft_missing": "|".join(row.get("v4_completeness_soft_missing") or []),

@@ -40,7 +40,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (57.5, 59.0),
+        "score_range": (55.5, 57.5),  # Phase 4 (trust→verification bonus): 58 → 56.3
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
@@ -50,7 +50,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (58.0, 59.5),
+        "score_range": (55.5, 57.5),  # Phase 4: 58.5 → 56.6
     },
     # Probiotic with named strains but no total CFU: scoreable, but cannot be
     # SAFE because the primary probiotic dose is undisclosed.
@@ -59,7 +59,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (54.5, 56.0),
+        "score_range": (52.5, 54.0),  # Phase 4: 55 → 53.1
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
     # confidence aggregate evidence with a score cap, but not an automatic
@@ -79,7 +79,7 @@ SHADOW_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (87.0, 89.0),
+        "score_range": (83.5, 85.5),  # Phase 4: 88 → 84.6
     },
     # Typed confidence low + POOR verdict.
     "12932": {
@@ -95,7 +95,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (80.0, 81.5),
+        "score_range": (76.0, 78.0),  # Phase 4: 80.5 → 77.1
     },
 }
 

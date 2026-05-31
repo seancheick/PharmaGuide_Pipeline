@@ -232,7 +232,8 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
                 flags.append("opaque_sports_blend")
 
     v3_b = _num(v3_sections.get("B"))
-    v4_trust = _num(v4_dimensions.get("trust")) or 0.0
+    # Phase 4: trust became an additive verification bonus (0-8), not a dimension.
+    v4_verification = _num(row.get("v4_verification_bonus")) or 0.0
     v4_transparency = _num(v4_dimensions.get("transparency")) or 0.0
     module_meta = _safe_dict(row.get("v4_module_metadata"))
     safety_hygiene_block = _safe_dict(module_meta.get("safety_hygiene_base"))
@@ -248,7 +249,7 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
         v3_b is not None
         and v3_b >= 20.0
         and not hygiene_hard_failure
-        and (v4_trust + v4_transparency + safety_hygiene) <= 10.0
+        and (v4_verification + v4_transparency + safety_hygiene) <= 10.0
     ):
         flags.append("v3_safety_purity_base_not_represented")
 
@@ -262,9 +263,9 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
     if evidence_score is not None and evidence_score < 6.0:
         flags.append("low_evidence_dimension")
 
-    trust_score = _num(v4_dimensions.get("trust"))
-    if trust_score is not None and trust_score <= 0.0:
-        flags.append("zero_testing_trust_dimension")
+    verification_score = _num(row.get("v4_verification_bonus"))
+    if verification_score is not None and verification_score <= 0.0:
+        flags.append("zero_verification_bonus")
 
     return flags
 

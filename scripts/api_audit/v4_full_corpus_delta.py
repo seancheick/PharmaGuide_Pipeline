@@ -153,6 +153,16 @@ def build_rows(
             "v4_module": shadow.get("shadow_score_v4_module"),
             "v4_dimensions": {n: canary._safe_dict(p).get("score") for n, p in dimensions.items()},
             "v4_dimension_metadata": dimension_metadata,
+            # Phase 4: verification is an additive bonus (0-8), no longer a core
+            # dimension. Surface its score + the pre-rescale 0-15 trust score.
+            "v4_verification_bonus": canary._num(
+                canary._safe_dict(module.get("verification_bonus")).get("score")
+            ),
+            "v4_verification_trust_0_15": canary._num(
+                canary._safe_dict(
+                    canary._safe_dict(module.get("verification_bonus")).get("metadata")
+                ).get("source_trust_score_0_15")
+            ),
             "v4_module_metadata": module_metadata,
             "v4_completeness_missing": list(completeness_gate.get("missing_fields") or []),
             "v4_completeness_soft_missing": list(completeness_gate.get("soft_missing") or []),

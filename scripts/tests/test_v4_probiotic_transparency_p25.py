@@ -349,7 +349,7 @@ def test_probiotic_canary_full_dimensions_populated_at_p25() -> None:
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic(strain_count=5)).to_breakdown()
-    for name in ("formulation", "dose", "evidence", "trust", "transparency"):
+    for name in ("formulation", "dose", "evidence", "transparency"):
         assert breakdown["dimensions"][name]["score"] is not None, (
             f"{name} should be populated at P2.5"
         )

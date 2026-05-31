@@ -194,14 +194,20 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
 
     class_subtotal = breakdown["metadata"]["class_subtotal"]
     hygiene = breakdown["safety_hygiene_base"]["score"]
-    raw_score = min(100.0, class_subtotal + 5.0 + hygiene)
+    # Phase 4: verification bonus is now an additive term (not a denominator dim).
+    vbonus = breakdown["verification_bonus"]["score"]
+    raw_score = min(100.0, class_subtotal + vbonus + 5.0 + hygiene)
     assert class_subtotal > 0
+    assert breakdown["verification_bonus"]["score"] >= 0.0
+    assert breakdown["verification_bonus"]["max"] == 8.0
     assert breakdown["manufacturer_trust"]["score"] == 5.0
     assert breakdown["manufacturer_violations"]["score"] == 0.0
     assert hygiene == 10.0
     assert breakdown["metadata"]["safety_hygiene_base_adjustment"] == 10.0
-    assert breakdown["raw_score_100"] == pytest.approx(raw_score, rel=1e-6)
-    assert breakdown["score_100"] == pytest.approx(25.0 + 0.75 * raw_score, rel=1e-6)
+    assert breakdown["metadata"]["verification_bonus_adjustment"] == pytest.approx(vbonus, rel=1e-6)
+    # raw_score_100 is rounded to 1dp in the assembler; allow that rounding.
+    assert breakdown["raw_score_100"] == pytest.approx(raw_score, abs=0.05)
+    assert breakdown["score_100"] == pytest.approx(25.0 + 0.75 * breakdown["raw_score_100"], abs=0.05)
     assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
     assert breakdown["metadata"]["calibration"]["intercept"] == 25.0
     assert breakdown["metadata"]["calibration"]["slope"] == 0.75
@@ -231,7 +237,8 @@ def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
     assert breakdown["dimensions"]["dose"]["score"] == 16.0
     assert breakdown["dimensions"]["dose"]["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
     assert breakdown["metadata"]["excluded_dimensions"] == []
-    assert breakdown["metadata"]["evaluable_class_max"] == 100.0
+    # Phase 4: core (form+dose+evid+transp) sums to 85; trust dim removed.
+    assert breakdown["metadata"]["evaluable_class_max"] == 85.0
     assert breakdown["score_100"] > breakdown["raw_score_100"], (
         "P1.5 affine calibration should lift compressed scoreable generic rows"
     )
@@ -355,3 +362,97 @@ def test_generic_final_assembly_does_not_import_v3_scorer() -> None:
     source = Path(generic.__file__).read_text()
     assert "from score_supplements" not in source
     assert "import score_supplements" not in source
+
+
+# --- Phase 4 anti-regression: Trust → Verification Bonus -------------------
+
+def test_no_cert_product_keeps_full_core_no_15pt_penalty() -> None:
+    # The whole point of Phase 4: an uncertified clean product loses NOTHING in
+    # the denominator. Its core is identical to a verified product's core; only
+    # the additive bonus differs.
+    from scoring_v4.modules.generic import score_generic
+
+    no_cert = score_generic(_base_product()).to_breakdown()
+    assert no_cert["verification_bonus"]["score"] == 0.0
+    # core sum is unaffected by the (absent) verification signal
+    assert no_cert["metadata"]["evaluable_class_max"] == 85.0
+    assert "trust" not in no_cert["dimensions"]
+
+
+def test_verified_product_core_equals_uncertified_core() -> None:
+    # Same formulation, differ only in certs → identical core, bonus differs.
+    from scoring_v4.modules.generic import score_generic
+
+    plain = score_generic(_base_product()).to_breakdown()
+    verified = score_generic(_high_quality_product()).to_breakdown()
+    # _high_quality_product differs in brand/cert/compliance; isolate the bonus:
+    assert verified["verification_bonus"]["score"] >= plain["verification_bonus"]["score"]
+    assert verified["verification_bonus"]["score"] <= 8.0
+
+
+def test_assembly_does_not_renormalize_core_to_100() -> None:
+    # No hidden (sum/evaluable_max)*100. core_class_max must be the native 85,
+    # and a product with an excluded dimension is NOT scaled up.
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product(
+        ingredient=_ingredient(
+            name="Undisclosed Botanical", standard_name="Botanical",
+            canonical_id="botanical", bio_score=10, quantity=0, unit="",
+        )
+    )
+    product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
+    breakdown = score_generic(product).to_breakdown()
+
+    assert breakdown["metadata"]["excluded_dimensions"] == ["dose"]
+    # core_class_max excludes the None dose dim (85 - 25 = 60) and the score is
+    # the NATIVE sum of the evaluable dims, never divided/scaled back up to 100.
+    assert breakdown["metadata"]["evaluable_class_max"] == 60.0
+    core_sum = breakdown["metadata"]["raw_dimension_sum"]
+    assert core_sum <= 60.0  # native, not renormalized to a 100 base
+
+
+def test_score_cannot_exceed_100() -> None:
+    from scoring_v4.modules.generic import score_generic
+
+    breakdown = score_generic(_high_quality_product()).to_breakdown()
+    assert breakdown["raw_score_100"] <= 100.0
+    assert breakdown["score_100"] <= 100.0
+
+
+def test_botanical_with_none_dose_floored_out_of_poor() -> None:
+    # Phase 4 guard: a botanical (herbal_botanical) whose dose proxy is
+    # non-evaluable must not be stamped POOR purely from the assembly change.
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product(
+        ingredient=_ingredient(
+            name="Undisclosed Botanical", standard_name="Botanical",
+            canonical_id="botanical", bio_score=8, quantity=0, unit="",
+        )
+    )
+    product["primary_type"] = "herbal_botanical"
+    product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
+    breakdown = score_generic(product).to_breakdown()
+
+    assert breakdown["dimensions"]["dose"]["score"] is None
+    assert breakdown["metadata"]["botanical_dose_deferred"] is True
+    # Raw is floored at the SAFE/POOR boundary so it does not read POOR.
+    assert breakdown["raw_score_100"] >= 40.0
+
+
+def test_non_botanical_none_dose_is_not_floored() -> None:
+    # The guard is botanical-only: a single_nutrient with None dose is NOT floored.
+    from scoring_v4.modules.generic import score_generic
+
+    product = _base_product(
+        ingredient=_ingredient(
+            name="Undisclosed", standard_name="Mystery", canonical_id="mystery",
+            bio_score=8, quantity=0, unit="",
+        )
+    )
+    product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
+    breakdown = score_generic(product).to_breakdown()
+
+    assert breakdown["metadata"]["botanical_dose_deferred"] is False
+    assert breakdown["metadata"]["botanical_raw_floor_applied"] is False

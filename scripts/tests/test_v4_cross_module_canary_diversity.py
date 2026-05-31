@@ -30,11 +30,15 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
+# NOTE: Phase 4 (Trust→Verification Bonus) lowered verified-product scores as
+# the 15-pt trust dimension became a ≤8 additive bonus and the hidden 85→100
+# renormalization was removed. These ranges are the Phase-4 interim values and
+# will be revisited when Phase 9 recalibrates the final scale.
 GENERIC_CANARIES = {
-    # Recent cert override / high Trust path.
+    # Recent cert override / high verification path (Phase 4: 79 → 74.5).
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        "score_range": (78.5, 80.0),
+        "score_range": (73.5, 75.5),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
@@ -48,7 +52,7 @@ GENERIC_CANARIES = {
     # stays generic even though fatty-acid-like carrier signals exist.
     "184661": {
         "label": "Pure Encapsulations Liposomal Glutathione",
-        "score_range": (64.0, 66.0),
+        "score_range": (62.0, 64.0),  # Phase 4: 65 → 63
         "traits": {"transparency_low": True},
     },
 }
@@ -58,7 +62,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (87.0, 89.0),
+        "score_range": (83.5, 85.5),  # Phase 4: 88 → 84.6
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -68,7 +72,7 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (84.0, 86.0),
+        "score_range": (80.5, 82.5),  # Phase 4: 85 → 81.8
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
@@ -92,7 +96,7 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (66.0, 68.0),
+        "score_range": (63.5, 65.5),  # Phase 4: 67 → 65.1
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
@@ -142,6 +146,17 @@ def _dimension_score(breakdown: dict, dimension: str):
     return breakdown["dimensions"][dimension]["score"]
 
 
+def _verification_strength(breakdown: dict) -> float:
+    """Verification on the 0-15 trust scale regardless of module generation.
+    Phase-4 modules emit a verification_bonus (0-8, rescaled back to 0-15 here);
+    not-yet-migrated modules still emit the legacy 0-15 trust dimension."""
+    bonus = breakdown.get("verification_bonus")
+    if bonus:
+        return float(bonus.get("score") or 0.0) * 15.0 / 8.0
+    trust = breakdown.get("dimensions", {}).get("trust", {})
+    return float(trust.get("score") or 0.0)
+
+
 def _require_strict_v4_contract(product: dict, label: str) -> None:
     from scoring_input_contract import get_scoring_ingredients
 
@@ -183,11 +198,11 @@ def test_generic_real_catalog_canary_score_and_traits(dsld_id: str, expected: di
             == "partial_credit_without_rda_proxy"
         )
     if traits.get("trust_zero"):
-        assert _dimension_score(breakdown, "trust") == 0
+        assert _verification_strength(breakdown) == 0
     if traits.get("trust_positive"):
-        assert _dimension_score(breakdown, "trust") > 0
+        assert _verification_strength(breakdown) > 0
     if traits.get("trust_high"):
-        assert _dimension_score(breakdown, "trust") >= 10
+        assert _verification_strength(breakdown) >= 10
     if traits.get("transparency_low"):
         assert _dimension_score(breakdown, "transparency") <= 2
 
@@ -216,7 +231,7 @@ def test_sports_real_catalog_canary_score_and_traits(dsld_id: str, expected: dic
     if traits.get("dose_max"):
         assert _dimension_score(breakdown, "dose") == 20
     if traits.get("trust_positive"):
-        assert _dimension_score(breakdown, "trust") > 0
+        assert _verification_strength(breakdown) > 0
 
 
 @pytest.mark.parametrize("dsld_id,expected", list(PROBIOTIC_CANARIES.items()))
@@ -247,9 +262,9 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
     if traits.get("dose_positive"):
         assert _dimension_score(breakdown, "dose") > 0
     if traits.get("trust_zero"):
-        assert _dimension_score(breakdown, "trust") == 0
+        assert _verification_strength(breakdown) == 0
     if traits.get("trust_positive"):
-        assert _dimension_score(breakdown, "trust") > 0
+        assert _verification_strength(breakdown) > 0
 
 
 def test_cross_module_canary_count_floor() -> None:
