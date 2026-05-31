@@ -332,11 +332,11 @@ def _soft_policy_from_scoring_evidence(
     """Return scoring policy debt introduced by conservative evidence rows.
 
     Product-level evidence makes v4 scoreable when cleaner/enricher retained
-    useful label facts outside normal ingredient rows. Some evidence is still
-    inherently conservative: an identity-bearing blend/header total preserves
-    v3's anchor path, but it does not disclose the same ingredient-level detail
-    as a normal scorable row. Such rows should score, but cannot silently become
-    SAFE.
+    useful label facts outside normal ingredient rows. An identity-bearing
+    blend/header total preserves v3's anchor path and remains an audit-visible
+    transparency debt, but it is not a safety signal by itself. Blend opacity is
+    penalized inside the transparency dimension; this gate should not double
+    punish it with an automatic score cap or CAUTION ceiling.
     """
     evidence_rows = _product_evidence_rows(ingredients)
     evidence_types = {_norm(row.get("evidence_type")) for row in evidence_rows}
@@ -370,8 +370,6 @@ def _soft_policy_from_scoring_evidence(
 
     if has_conservative_blend_anchor:
         soft_missing.append("conservative_blend_anchor_mass")
-        score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
-        verdict_ceiling = "CAUTION"
     elif has_active_anchor:
         soft_missing.append("active_anchor_mass_evidence")
         if has_botanical_active_anchor and not has_normal_scoring_row:
@@ -393,7 +391,6 @@ def _soft_policy_from_scoring_evidence(
         if any(_norm(row.get("confidence")) == "low" for row in omega_rows):
             score_cap = 65.0 if score_cap is None else min(score_cap, 65.0)
             soft_missing.append("low_confidence_omega_breakdown")
-            verdict_ceiling = "CAUTION"
 
     if "sports_primary_dose" in evidence_types:
         soft_missing.append("sports_primary_dose_evidence")

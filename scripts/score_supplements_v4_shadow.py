@@ -64,9 +64,10 @@ from scoring_v4.modules.sports import score_sports
 from scoring_v4.router import class_for_product
 
 
-# Schema lock — these are the six shadow columns documented in §14 of
-# SCORING_V4_PROPOSAL.md. Order and names are part of the public contract
-# (Flutter / audit / score-delta tooling reads against this shape).
+# Schema lock — these are the six shadow fields documented in §14 of
+# SCORING_V4_PROPOSAL.md. They are a pipeline/audit contract while v3 remains
+# production truth; they are not exported into products_core until an explicit
+# P5 cutover decision.
 SHADOW_KEYS = (
     "shadow_score_v4_100",
     "shadow_score_v4_module",
@@ -203,9 +204,9 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
             `SupplementScorer.score_product()` consumes.
 
     Returns:
-        Dict with exactly the six SHADOW_KEYS. The caller is responsible
-        for merging this into the scored-product blob (or persisting as
-        side-by-side columns in pharmaguide_core.db).
+        Dict with exactly the six SHADOW_KEYS. Audit tools consume this
+        contract for v3-v4 comparisons; the final app catalog still ships one
+        production score contract at a time.
     """
     if not isinstance(enriched_product, dict):
         enriched_product = {}

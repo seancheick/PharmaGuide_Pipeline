@@ -53,13 +53,20 @@ CLASS_CRITICAL_DISCLOSURE_FIELDS = {
     "micronutrient_panel_dose_coverage",
 }
 
-SOFT_DISCLOSURE_DEBT = {
-    "conservative_blend_anchor_mass",
+SCORE_CAPPED_SOFT_DISCLOSURE_DEBT = {
     "botanical_anchor_only_evidence",
     "low_confidence_omega_breakdown",
     "total_cfu_not_disclosed",
     "sports_primary_dose_not_disclosed",
     "percent_dv_only_dose_evidence",
+}
+
+AUDIT_ONLY_SOFT_DISCLOSURE_TAGS = {
+    "active_anchor_mass_evidence",
+    "conservative_blend_anchor_mass",
+    "enzyme_activity_dose_evidence",
+    "omega_aggregate_epa_dha_evidence",
+    "probiotic_product_cfu_evidence",
 }
 
 
@@ -113,10 +120,13 @@ def classify_row(row: Dict[str, Any]) -> str:
     if missing & CLASS_CRITICAL_DISCLOSURE_FIELDS:
         return "BLOCKER_SCORED_WITH_HARD_COMPLETENESS_MISSING"
 
-    if soft_missing & SOFT_DISCLOSURE_DEBT:
+    if soft_missing & SCORE_CAPPED_SOFT_DISCLOSURE_DEBT:
         if score_cap is not None or verdict_ceiling in {"CAUTION", "POOR"}:
             return "OK_SCORED_WITH_SOFT_DISCLOSURE_CAP"
         return "BLOCKER_SOFT_DISCLOSURE_WITHOUT_CAP"
+
+    if soft_missing & AUDIT_ONLY_SOFT_DISCLOSURE_TAGS:
+        return "OK_SCORED_WITH_SOFT_AUDIT_TAG"
 
     if v3_verdict == "POOR" and v4_verdict == "SAFE":
         raw = _float(row.get("v4_raw_score"))

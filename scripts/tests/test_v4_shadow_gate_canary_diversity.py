@@ -43,12 +43,12 @@ SHADOW_CANARIES = {
         "score_range": (57.5, 59.0),
         "safety_verdict": "CAUTION",
     },
-    # Conservative blend evidence now scores with a CAUTION ceiling instead
-    # of hard-blocking the product.
+    # Conservative blend evidence is audit-visible, but does not force a
+    # CAUTION ceiling. Blend opacity is scored in the transparency dimension.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",
-        "verdict": "CAUTION",
+        "verdict": "SAFE",
         "confidence": "low",
         "score_range": (58.0, 59.5),
     },
@@ -62,11 +62,12 @@ SHADOW_CANARIES = {
         "score_range": (54.5, 56.0),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
-    # confidence aggregate evidence with a CAUTION ceiling.
+    # confidence aggregate evidence with a score cap, but not an automatic
+    # CAUTION ceiling.
     "239467": {
         "label": "CVS Health Fish Oil 1000 mg",
         "module": "omega",
-        "verdict": "CAUTION",
+        "verdict": "SAFE",
         "confidence": "moderate",
         "score_range": (63.5, 65.0),
     },

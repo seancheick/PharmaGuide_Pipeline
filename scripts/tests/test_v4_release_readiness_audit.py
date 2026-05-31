@@ -44,15 +44,21 @@ def test_not_scored_is_allowed_only_for_no_usable_identity() -> None:
     assert classify_row(blocked) == "BLOCKER_UNEXPLAINED_NOT_SCORED"
 
 
-def test_soft_disclosure_debt_requires_cap_or_ceiling() -> None:
+def test_score_capped_soft_disclosure_debt_requires_cap_or_ceiling() -> None:
     capped = _row(
-        v4_completeness_soft_missing=["conservative_blend_anchor_mass"],
-        v4_completeness_score_cap=60.0,
+        v4_completeness_soft_missing=["low_confidence_omega_breakdown"],
+        v4_completeness_score_cap=65.0,
     )
-    uncapped = _row(v4_completeness_soft_missing=["conservative_blend_anchor_mass"])
+    uncapped = _row(v4_completeness_soft_missing=["low_confidence_omega_breakdown"])
 
     assert classify_row(capped) == "OK_SCORED_WITH_SOFT_DISCLOSURE_CAP"
     assert classify_row(uncapped) == "BLOCKER_SOFT_DISCLOSURE_WITHOUT_CAP"
+
+
+def test_blend_anchor_is_audit_tag_not_release_blocker() -> None:
+    row = _row(v4_completeness_soft_missing=["conservative_blend_anchor_mass"])
+
+    assert classify_row(row) == "OK_SCORED_WITH_SOFT_AUDIT_TAG"
 
 
 def test_poor_to_safe_quality_uplift_requires_safe_v3_safety_and_raw_floor() -> None:

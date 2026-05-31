@@ -115,11 +115,11 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
     assert float(rows[0]["quantity"]) >= 300.0
 
     out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "CAUTION"
+    assert out["shadow_score_v4_verdict"] == "SAFE"
     completeness = out["shadow_score_v4_breakdown"]["completeness_gate"]
-    assert completeness["verdict_ceiling"] == "CAUTION"
     assert "conservative_blend_anchor_mass" in completeness["soft_missing"]
-    assert float(out["shadow_score_v4_100"]) <= 60.0
+    assert completeness["score_cap"] is None
+    assert completeness["verdict_ceiling"] is None
 
 
 def test_percent_dv_only_dose_counts_as_conservative_dose_evidence() -> None:
