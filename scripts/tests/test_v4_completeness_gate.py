@@ -190,12 +190,17 @@ def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() 
             ],
         },
         product_scoring_evidence=[
-            {
-                "name": "Total CFU",
-                "canonical_id": "probiotic_cfu_total",
-                "evidence_type": "probiotic_cfu",
-                "scoreable": True,
-                "scoreable_identity": True,
+                {
+                    "name": "Total CFU",
+                    "canonical_id": "probiotic_cfu_total",
+                    "clean_identity_id": None,
+                    "scoring_parent_id": "probiotic_cfu_total",
+                    "evidence_canonical_id": "probiotic_cfu_total",
+                    "canonical_source_db": "probiotic_data",
+                    "evidence_origin": "native_enrichment",
+                    "evidence_type": "probiotic_cfu",
+                    "scoreable": True,
+                    "scoreable_identity": True,
                 "score_eligible_by_cleaner": True,
                 "dose_class": "probiotic_cfu",
                 "dose_value": 20_000_000_000,
@@ -318,6 +323,34 @@ def test_sports_without_sports_active_dose_is_not_scored() -> None:
     assert result.module == "sports"
     assert result.is_live_eligible is False
     assert "sports_active_dose" in result.missing_fields
+
+
+def test_sports_primary_identity_without_dose_scores_with_cap() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[_ingredient(name="Calcium", canonical_id="calcium", dose=200, unit="mg")],
+        primary_type="protein_powder",
+        supplement_taxonomy={"primary_type": "protein_powder"},
+        activeIngredients=[
+            {
+                "name": "Whey Protein Hydrolysate",
+                "canonical_id": "whey_protein",
+                "quantity": 0,
+                "unit": "unspecified",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            }
+        ],
+    )
+
+    result = evaluate_completeness_gate(product, module="sports")
+
+    assert result.is_live_eligible is True
+    assert "sports_active_dose" not in result.missing_fields
+    assert "sports_primary_dose_not_disclosed" in result.soft_missing
+    assert result.score_cap == 50.0
+    assert result.verdict_ceiling == "CAUTION"
 
 
 def test_malformed_product_never_raises_and_is_not_scored() -> None:

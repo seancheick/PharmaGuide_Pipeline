@@ -114,6 +114,28 @@ def test_protein_5g_panel_disclosure_filtered(normalizer):
     assert len(out["activeIngredients"]) == 0
 
 
+def test_single_form_protein_row_preserves_parent_dose(normalizer):
+    """DSLD protein powders may encode Protein=5g with the real active in
+    forms[] ("as Whey Protein hydrolysate"). Preserve the parent protein dose
+    on that single form child instead of emitting an undosed protein active.
+    """
+    out = _normalize_one_active(normalizer, {
+        "name": "Protein",
+        "category": "protein",
+        "ingredientGroup": "Protein (unspecified)",
+        "quantity": [{"quantity": 5, "unit": "Gram(s)"}],
+        "forms": [{
+            "name": "Whey Protein hydrolysate",
+            "ingredientGroup": "Whey Protein",
+            "category": "protein",
+        }],
+    })
+    assert len(out["activeIngredients"]) == 1
+    assert out["activeIngredients"][0]["standardName"] == "Whey Protein"
+    assert out["activeIngredients"][0]["quantity"] == 5
+    assert out["activeIngredients"][0]["unit"] == "Gram(s)"
+
+
 def test_protein_2g_panel_disclosure_filtered(normalizer):
     """Energy bar with 2g protein content — clear panel disclosure."""
     out = _normalize_one_active(normalizer, {

@@ -43,32 +43,32 @@ SHADOW_CANARIES = {
         "score_range": (54.0, 58.0),
         "safety_verdict": "CAUTION",
     },
-    # Generic completeness failure: missing dose with unit.
+    # Conservative blend evidence now scores with a CAUTION ceiling instead
+    # of hard-blocking the product.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",
-        "verdict": "NOT_SCORED",
-        "confidence": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"dose_with_unit"},
+        "verdict": "CAUTION",
+        "confidence": "low",
+        "score_range": (40.0, 44.0),
     },
-    # Probiotic completeness failure: pre/probiotic product with no total CFU.
+    # Probiotic with named strains but no total CFU: scoreable, but cannot be
+    # SAFE because the primary probiotic dose is undisclosed.
     "241707": {
         "label": "HUM Skin Squad Pre + Probiotic",
         "module": "probiotic",
-        "verdict": "NOT_SCORED",
-        "confidence": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"total_cfu"},
+        "verdict": "CAUTION",
+        "confidence": "moderate",
+        "score_range": (45.0, 49.0),
     },
-    # Omega completeness failure: fish-oil parent mass, no EPA/DHA breakdown.
+    # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
+    # confidence aggregate evidence with a CAUTION ceiling.
     "239467": {
         "label": "CVS Health Fish Oil 1000 mg",
         "module": "omega",
-        "verdict": "NOT_SCORED",
-        "confidence": "blocked_by_completeness_gate",
-        "score": None,
-        "missing": {"epa_or_dha_disclosed"},
+        "verdict": "CAUTION",
+        "confidence": "moderate",
+        "score_range": (54.0, 58.0),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -178,10 +178,9 @@ def test_shadow_canaries_cover_gate_and_confidence_bands() -> None:
     verdicts = {c["verdict"] for c in SHADOW_CANARIES.values()}
     confidences = {c["confidence"] for c in SHADOW_CANARIES.values()}
 
-    assert {"BLOCKED", "CAUTION", "NOT_SCORED", "POOR", "SAFE"}.issubset(verdicts)
+    assert {"BLOCKED", "CAUTION", "POOR", "SAFE"}.issubset(verdicts)
     assert {
         "blocked_by_safety_gate",
-        "blocked_by_completeness_gate",
         "high",
         "moderate",
         "low",

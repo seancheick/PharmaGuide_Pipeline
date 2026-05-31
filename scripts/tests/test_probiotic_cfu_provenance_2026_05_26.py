@@ -43,6 +43,12 @@ def _fiber_row():
     }
 
 
+def _cfu_evidence(evidence):
+    rows = [row for row in evidence if row.get("evidence_type") == "probiotic_cfu"]
+    assert rows, "Expected probiotic_cfu evidence row"
+    return rows[0]
+
+
 def test_product_name_cfu_guarantee_populates_product_level_provenance(enricher):
     product = {
         "id": "garden_of_life_name_cfu",
@@ -110,11 +116,17 @@ def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enriche
     }
 
     evidence = enricher._collect_product_scoring_evidence(enriched)
+    cfu = _cfu_evidence(evidence)
 
-    assert evidence[0]["scoreable"] is True
-    assert evidence[0]["canonical_id"] == "probiotic_cfu_total"
-    assert evidence[0]["reason"] == "product_level_cfu_with_probiotic_identity"
-    assert evidence[0]["confidence"] == "high"
+    assert cfu["scoreable"] is True
+    assert cfu["canonical_id"] == "probiotic_cfu_total"
+    assert cfu["clean_identity_id"] is None
+    assert cfu["scoring_parent_id"] == "probiotic_cfu_total"
+    assert cfu["evidence_canonical_id"] == "probiotic_cfu_total"
+    assert cfu["canonical_source_db"] == "probiotic_data"
+    assert cfu["evidence_origin"] == "native_enrichment"
+    assert cfu["reason"] == "product_level_cfu_with_probiotic_identity"
+    assert cfu["confidence"] == "high"
 
 
 def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enricher):
@@ -148,10 +160,11 @@ def test_product_cfu_evidence_is_rejected_when_taxonomy_is_not_probiotic(enriche
     }
 
     evidence = enricher._collect_product_scoring_evidence(enriched)
+    cfu = _cfu_evidence(evidence)
 
-    assert evidence[0]["scoreable"] is False
-    assert evidence[0]["scoreable_identity"] is False
-    assert evidence[0]["rejection_reason"] == "product_taxonomy_not_probiotic"
+    assert cfu["scoreable"] is False
+    assert cfu["scoreable_identity"] is False
+    assert cfu["rejection_reason"] == "product_taxonomy_not_probiotic"
 
 
 def test_fiber_primary_product_with_accessory_probiotics_rejects_cfu_evidence(enricher):
@@ -184,9 +197,10 @@ def test_fiber_primary_product_with_accessory_probiotics_rejects_cfu_evidence(en
     }
 
     evidence = enricher._collect_product_scoring_evidence(enriched)
+    cfu = _cfu_evidence(evidence)
 
-    assert evidence[0]["scoreable"] is False
-    assert evidence[0]["rejection_reason"] == "non_probiotic_strict_active_present"
+    assert cfu["scoreable"] is False
+    assert cfu["rejection_reason"] == "non_probiotic_strict_active_present"
 
 
 def test_unrelated_strict_active_still_rejects_accessory_probiotic_cfu(enricher):
@@ -208,6 +222,7 @@ def test_unrelated_strict_active_still_rejects_accessory_probiotic_cfu(enricher)
     }
 
     evidence = enricher._collect_product_scoring_evidence(enriched)
+    cfu = _cfu_evidence(evidence)
 
-    assert evidence[0]["scoreable"] is False
-    assert evidence[0]["rejection_reason"] == "non_probiotic_strict_active_present"
+    assert cfu["scoreable"] is False
+    assert cfu["rejection_reason"] == "non_probiotic_strict_active_present"

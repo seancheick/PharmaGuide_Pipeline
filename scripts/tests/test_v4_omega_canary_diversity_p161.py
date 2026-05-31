@@ -52,7 +52,7 @@ CANARY_TARGETS = {
     "273636": ("omega", "undefined", 10.0, 10.0,
                "Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor "
                "— cod liver source"),
-    "292796": ("omega", "undefined", 6.0, 6.0,
+    "292796": ("omega", "undefined", 10.0, 10.0,
                "Garden of Life Dr. Formulated Advanced Omega Citrus Flavor"),
 
     # --- 20/25 (PL krill + source + premium + sustainability) ---

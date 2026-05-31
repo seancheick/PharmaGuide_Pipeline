@@ -2498,12 +2498,18 @@ class TestProbioticDataStructureRegressionLock:
             'probiotic_data': pd,
             'supplement_taxonomy': {'primary_type': 'probiotic'},
         })
+        cfu = next(row for row in evidence if row.get('evidence_type') == 'probiotic_cfu')
 
-        assert evidence[0]['scoreable'] is True
-        assert evidence[0]['evidence_type'] == 'probiotic_cfu'
-        assert evidence[0]['dose_value'] == pytest.approx(20_000_000_000)
-        assert evidence[0]['raw_source_path'] == 'statements[0]'
-        assert evidence[0]['linked_rows'] == ['statements[0]']
+        assert cfu['scoreable'] is True
+        assert cfu['evidence_type'] == 'probiotic_cfu'
+        assert cfu['dose_value'] == pytest.approx(20_000_000_000)
+        assert cfu['raw_source_path'] == 'statements[0]'
+        assert cfu['linked_rows'] == ['statements[0]']
+        assert cfu['clean_identity_id'] is None
+        assert cfu['scoring_parent_id'] == 'probiotic_cfu_total'
+        assert cfu['evidence_canonical_id'] == 'probiotic_cfu_total'
+        assert cfu['canonical_source_db'] == 'probiotic_data'
+        assert cfu['evidence_origin'] == 'native_enrichment'
 
     def test_product_level_cfu_accepts_probiotic_row_identity_when_taxonomy_lags(self, enricher):
         evidence = enricher._collect_product_scoring_evidence({
@@ -2523,9 +2529,10 @@ class TestProbioticDataStructureRegressionLock:
             'supplement_taxonomy': {'primary_type': 'general_supplement'},
             'ingredient_quality_data': {'ingredients_scorable': []},
         })
+        cfu = next(row for row in evidence if row.get('evidence_type') == 'probiotic_cfu')
 
-        assert evidence[0]['scoreable'] is True
-        assert evidence[0]['reason'] == 'product_level_cfu_with_probiotic_row_identity'
+        assert cfu['scoreable'] is True
+        assert cfu['reason'] == 'product_level_cfu_with_probiotic_row_identity'
 
     def test_product_level_cfu_metadata_rejected_when_identity_is_not_probiotic(self, enricher):
         evidence = enricher._collect_product_scoring_evidence({
@@ -2545,9 +2552,10 @@ class TestProbioticDataStructureRegressionLock:
                 ]
             },
         })
+        cfu = next(row for row in evidence if row.get('evidence_type') == 'probiotic_cfu')
 
-        assert evidence[0]['scoreable'] is False
-        assert evidence[0]['rejection_reason'] == 'non_probiotic_strict_active_present'
+        assert cfu['scoreable'] is False
+        assert cfu['rejection_reason'] == 'non_probiotic_strict_active_present'
 
     def test_product_level_cfu_rejected_when_cleaner_active_is_non_probiotic(self, enricher):
         """CFU metadata attached to a CBD/quercetin-style product stays diagnostic only."""
@@ -2578,9 +2586,10 @@ class TestProbioticDataStructureRegressionLock:
             'supplement_taxonomy': {'primary_type': 'general_supplement'},
             'ingredient_quality_data': {'ingredients_scorable': []},
         })
+        cfu = next(row for row in evidence if row.get('evidence_type') == 'probiotic_cfu')
 
-        assert evidence[0]['scoreable'] is False
-        assert evidence[0]['rejection_reason'] == 'non_probiotic_strict_active_present'
+        assert cfu['scoreable'] is False
+        assert cfu['rejection_reason'] == 'non_probiotic_strict_active_present'
 
     def test_fucoidan_marker_label_context_overrides_generic_kelp_source(self, enricher):
         product = {

@@ -123,6 +123,11 @@ def test_product_level_probiotic_evidence_is_accepted_from_contract_only():
             {
                 "name": "Total CFU",
                 "canonical_id": "probiotic_cfu_total",
+                "clean_identity_id": None,
+                "scoring_parent_id": "probiotic_cfu_total",
+                "evidence_canonical_id": "probiotic_cfu_total",
+                "canonical_source_db": "product_scoring_evidence",
+                "evidence_origin": "native_enrichment",
                 "evidence_type": "probiotic_cfu",
                 "scoreable": True,
                 "scoreable_identity": True,
@@ -149,12 +154,126 @@ def test_product_level_probiotic_evidence_is_accepted_from_contract_only():
     assert "product_scoring_evidence" in result.source
 
 
+def test_product_level_evidence_missing_identity_chain_is_rejected():
+    product = _product(
+        [],
+        product_name="Digestive Probiotic 20 Billion",
+        product_scoring_evidence=[
+            {
+                "name": "Total CFU",
+                "canonical_id": "probiotic_cfu_total",
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "probiotic_cfu",
+                "dose_value": 20_000_000_000,
+                "dose_unit": "CFU",
+                "source": "statements",
+                "raw_source_path": "statements[0]",
+                "evidence_scope": "product_level",
+                "linked_rows": ["statements[0]"],
+                "confidence": "high",
+                "reason": "product_level_cfu_with_probiotic_identity",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert result.rejected_rows[0].reason == "malformed_product_scoring_evidence"
+    assert set(result.rejected_rows[0].missing_fields) >= {
+        "clean_identity_id",
+        "scoring_parent_id",
+        "evidence_canonical_id",
+        "canonical_source_db",
+        "evidence_origin",
+    }
+    assert result.strict_contract_passed is False
+
+
+def test_legacy_probiotic_data_can_repair_stale_native_cfu_evidence():
+    product = _product(
+        [],
+        supplement_taxonomy={"primary_type": "probiotic"},
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_cfu": 3_370_000_000,
+            "total_strain_count": 2,
+            "probiotic_blends": [{"name": "Probiotic Blend", "raw_source_path": "ingredientRows[0]"}],
+            "cfu_source": "activeIngredients.notes",
+            "cfu_raw_source_path": "ingredientRows[0]",
+            "cfu_evidence_scope": "row_level",
+            "cfu_linked_rows": ["ingredientRows[0]"],
+        },
+        product_scoring_evidence=[
+            {
+                "name": "Total CFU",
+                "canonical_id": "probiotic_cfu_total",
+                "evidence_type": "probiotic_cfu",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "probiotic_cfu",
+                "dose_value": 3_370_000_000,
+                "dose_unit": "CFU",
+                "source": "activeIngredients.notes",
+                "raw_source_path": "ingredientRows[0]",
+                "evidence_scope": "row_level",
+                "linked_rows": ["ingredientRows[0]"],
+                "confidence": "high",
+                "reason": "legacy_native_missing_identity_chain",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows
+    assert result.rows[0]["evidence_type"] == "probiotic_cfu"
+    assert result.rows[0]["evidence_origin"] == "compatibility_derived"
+    assert result.rows[0]["canonical_source_db"] == "probiotic_data"
+    assert result.rejected_rows[0].reason == "malformed_product_scoring_evidence"
+    assert "evidence_origin" in result.rejected_rows[0].missing_fields
+
+
+def test_sports_primary_identity_without_dose_is_contract_diagnostic():
+    product = _product(
+        [],
+        primary_type="protein_powder",
+        activeIngredients=[
+            {
+                "name": "Whey Protein Hydrolysate",
+                "canonical_id": "whey_protein",
+                "quantity": 0,
+                "unit": "unspecified",
+                "raw_source_path": "activeIngredients",
+                "score_eligible_by_cleaner": True,
+                "cleaner_row_role": "active_scorable",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert result.rejected_rows[0].reason == "product_evidence_not_scoreable:missing_primary_sports_dose"
+    assert result.rejected_rows[0].row["evidence_type"] == "sports_primary_dose"
+    assert result.rejected_rows[0].row["clean_identity_id"] == "whey_protein"
+
+
 def test_product_level_evidence_missing_provenance_is_rejected():
     product = _product(
         [],
         product_scoring_evidence=[
             {
                 "evidence_type": "probiotic_cfu",
+                "clean_identity_id": None,
+                "scoring_parent_id": "probiotic_cfu_total",
+                "evidence_canonical_id": "probiotic_cfu_total",
+                "canonical_source_db": "product_scoring_evidence",
+                "evidence_origin": "native_enrichment",
                 "scoreable": True,
                 "scoreable_identity": True,
                 "score_eligible_by_cleaner": True,

@@ -95,6 +95,7 @@ from constants import (
 from supplement_type_utils import infer_supplement_type
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
+from scoring_input_contract import derive_product_scoring_evidence
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -12467,7 +12468,10 @@ class SupplementEnricherV3:
 
     def _collect_product_scoring_evidence(self, enriched: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Emit enrichment-owned product-level scoring evidence."""
-        evidence: List[Dict[str, Any]] = []
+        evidence: List[Dict[str, Any]] = [
+            item for item in derive_product_scoring_evidence(enriched)
+            if item.get("evidence_type") != "probiotic_cfu"
+        ]
         probiotic_data = enriched.get("probiotic_data") if isinstance(enriched.get("probiotic_data"), dict) else {}
         try:
             total_cfu_value = float(probiotic_data.get("total_cfu") or 0)
@@ -12538,6 +12542,11 @@ class SupplementEnricherV3:
             "reason": accepted_reason,
             "name": "Total Probiotic CFU",
             "canonical_id": "probiotic_cfu_total",
+            "clean_identity_id": None,
+            "scoring_parent_id": "probiotic_cfu_total",
+            "evidence_canonical_id": "probiotic_cfu_total",
+            "canonical_source_db": "probiotic_data",
+            "evidence_origin": "native_enrichment",
             "source_section": "product",
         }
 

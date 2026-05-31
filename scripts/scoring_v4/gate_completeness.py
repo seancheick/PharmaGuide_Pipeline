@@ -25,6 +25,22 @@ from scoring_input_contract import get_scoring_ingredients
 
 MAPPED_COVERAGE_MIN = 0.85
 MULTI_DOSE_COVERAGE_MIN = 0.60
+SPORTS_PRIMARY_IDENTITY_CANONICALS = {
+    "protein",
+    "whey_protein",
+    "casein",
+    "pea_protein",
+    "rice_protein",
+    "soy_protein",
+    "creatine_monohydrate",
+    "beta-alanine",
+    "beta_alanine",
+    "l_citrulline",
+    "hmb",
+    "l_leucine",
+    "l_isoleucine",
+    "l_valine",
+}
 
 
 @dataclass
@@ -39,6 +55,9 @@ class CompletenessResult:
     mapped_coverage: float = 0.0
     dose_coverage: Optional[float] = None
     checked_fields: List[str] = field(default_factory=list)
+    soft_missing: List[str] = field(default_factory=list)
+    score_cap: Optional[float] = None
+    verdict_ceiling: Optional[str] = None
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
@@ -105,6 +124,32 @@ def _has_dose_with_unit(ingredient: Dict[str, Any]) -> bool:
     return _dose_value(ingredient) is not None and bool(_dose_unit(ingredient))
 
 
+def _daily_value_percent(ingredient: Dict[str, Any]) -> Optional[float]:
+    for key in ("daily_value", "dailyValue"):
+        value = _as_float(ingredient.get(key), None)
+        if value is not None and value > 0:
+            return value
+    raw_taxonomy = _safe_dict(ingredient.get("raw_taxonomy"))
+    for variant in _safe_list(raw_taxonomy.get("quantityVariants")):
+        if not isinstance(variant, dict):
+            continue
+        value = _as_float(variant.get("daily_value"), None)
+        if value is not None and value > 0:
+            return value
+        for target in _safe_list(variant.get("dailyValueTargetGroup")):
+            if not isinstance(target, dict):
+                continue
+            value = _as_float(target.get("percent"), None)
+            if value is not None and value > 0:
+                return value
+    return None
+
+
+def _has_percent_dv_only_evidence(ingredient: Dict[str, Any]) -> bool:
+    unit = _dose_unit(ingredient)
+    return not unit and _dose_value(ingredient) is not None and _daily_value_percent(ingredient) is not None
+
+
 # Enzyme activity units — digestive enzymes are dosed by activity, not mass.
 # The enricher marks these rows dose_class='enzyme_activity' (mass quantity
 # stays 0/NP because the meaningful dose is the activity unit).
@@ -133,7 +178,11 @@ def _has_enzyme_activity_evidence(ingredient: Dict[str, Any]) -> bool:
 
 def _has_usable_dose_evidence(ingredient: Dict[str, Any]) -> bool:
     """Dose evidence for live-eligibility: a mass dose+unit OR enzyme activity."""
-    return _has_dose_with_unit(ingredient) or _has_enzyme_activity_evidence(ingredient)
+    return (
+        _has_dose_with_unit(ingredient)
+        or _has_enzyme_activity_evidence(ingredient)
+        or _has_percent_dv_only_evidence(ingredient)
+    )
 
 
 def _mapped_coverage(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> float:
@@ -226,9 +275,14 @@ def _finalize(
     mapped_coverage: float,
     dose_coverage: Optional[float],
     checked_fields: List[str],
+    *,
+    soft_missing: Optional[List[str]] = None,
+    score_cap: Optional[float] = None,
+    verdict_ceiling: Optional[str] = None,
 ) -> CompletenessResult:
     # Preserve first occurrence order while removing duplicates.
     unique_missing = list(dict.fromkeys(missing))
+    unique_soft_missing = list(dict.fromkeys(soft_missing or []))
     eligible = not unique_missing
     return CompletenessResult(
         module=module,
@@ -239,7 +293,119 @@ def _finalize(
         mapped_coverage=round(mapped_coverage, 4),
         dose_coverage=dose_coverage,
         checked_fields=checked_fields,
+        soft_missing=unique_soft_missing,
+        score_cap=score_cap,
+        verdict_ceiling=verdict_ceiling,
     )
+
+
+def _product_evidence_rows(ingredients: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    return [
+        ing for ing in ingredients
+        if ing.get("scoring_input_kind") == "product_level_evidence"
+    ]
+
+
+def _has_product_evidence(ingredients: List[Dict[str, Any]], evidence_type: str) -> bool:
+    target = _norm(evidence_type)
+    return any(_norm(row.get("evidence_type")) == target for row in _product_evidence_rows(ingredients))
+
+
+def _has_sports_primary_identity_signal(product: Dict[str, Any]) -> bool:
+    scoring_input = get_scoring_ingredients(product or {}, strict=True)
+    for rejected in scoring_input.rejected_rows:
+        row = rejected.row if isinstance(rejected.row, dict) else {}
+        if rejected.reason not in {
+            "missing_dose_evidence",
+            "product_evidence_not_scoreable:missing_primary_sports_dose",
+        }:
+            continue
+        if _norm(row.get("canonical_id")) in SPORTS_PRIMARY_IDENTITY_CANONICALS:
+            return True
+    return False
+
+
+def _soft_policy_from_scoring_evidence(
+    ingredients: List[Dict[str, Any]],
+    module: str,
+) -> tuple[List[str], Optional[float], Optional[str]]:
+    """Return scoring policy debt introduced by conservative evidence rows.
+
+    Product-level evidence makes v4 scoreable when cleaner/enricher retained
+    useful label facts outside normal ingredient rows. Some evidence is still
+    inherently conservative: an identity-bearing blend/header total preserves
+    v3's anchor path, but it does not disclose the same ingredient-level detail
+    as a normal scorable row. Such rows should score, but cannot silently become
+    SAFE.
+    """
+    evidence_rows = _product_evidence_rows(ingredients)
+    evidence_types = {_norm(row.get("evidence_type")) for row in evidence_rows}
+    soft_missing: List[str] = []
+    score_cap: Optional[float] = None
+    verdict_ceiling: Optional[str] = None
+
+    has_conservative_blend_anchor = any(
+        _norm(row.get("evidence_type")) == "blend_anchor_mass"
+        and (
+            _norm(row.get("evidence_scope")) == "blend_level"
+            or _norm(row.get("reason")) == "identity_bearing_blend_header_mass"
+        )
+        for row in evidence_rows
+    )
+    has_active_anchor = any(
+        _norm(row.get("evidence_type")) == "blend_anchor_mass"
+        and _norm(row.get("reason")) == "identity_bearing_active_anchor_mass"
+        for row in evidence_rows
+    )
+    has_botanical_active_anchor = any(
+        _norm(row.get("evidence_type")) == "blend_anchor_mass"
+        and _norm(row.get("reason")) == "identity_bearing_active_anchor_mass"
+        and _norm(row.get("anchor_risk_class")) == "botanical_or_standardized"
+        for row in evidence_rows
+    )
+    has_normal_scoring_row = any(
+        row.get("scoring_input_kind") != "product_level_evidence"
+        for row in ingredients
+    )
+
+    if has_conservative_blend_anchor:
+        soft_missing.append("conservative_blend_anchor_mass")
+        score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
+        verdict_ceiling = "CAUTION"
+    elif has_active_anchor:
+        soft_missing.append("active_anchor_mass_evidence")
+        if has_botanical_active_anchor and not has_normal_scoring_row:
+            soft_missing.append("botanical_anchor_only_evidence")
+            verdict_ceiling = "CAUTION"
+
+    # Enzyme activity is a real dose unit and should not be hard-blocked for
+    # lacking mass. If it is paired with a blend/header anchor, the blend policy
+    # above carries the caution ceiling.
+    if "enzyme_activity" in evidence_types and module == "generic":
+        soft_missing.append("enzyme_activity_dose_evidence")
+
+    omega_rows = [
+        row for row in _product_evidence_rows(ingredients)
+        if _norm(row.get("evidence_type")) == "omega_epa_dha_aggregate"
+    ]
+    if omega_rows:
+        soft_missing.append("omega_aggregate_epa_dha_evidence")
+        if any(_norm(row.get("confidence")) == "low" for row in omega_rows):
+            score_cap = 65.0 if score_cap is None else min(score_cap, 65.0)
+            soft_missing.append("low_confidence_omega_breakdown")
+            verdict_ceiling = "CAUTION"
+
+    if "sports_primary_dose" in evidence_types:
+        soft_missing.append("sports_primary_dose_evidence")
+
+    if "probiotic_cfu" in evidence_types:
+        soft_missing.append("probiotic_product_cfu_evidence")
+
+    if "percent_dv_dose" in evidence_types:
+        soft_missing.append("percent_dv_only_dose_evidence")
+        score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
+
+    return soft_missing, score_cap, verdict_ceiling
 
 
 def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> CompletenessResult:
@@ -259,6 +425,10 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
+    soft_missing, score_cap, verdict_ceiling = _soft_policy_from_scoring_evidence(
+        ingredients,
+        module,
+    )
     checked_fields = [
         "product_status_active",
         "form_factor",
@@ -269,12 +439,27 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
 
     if module == "probiotic":
         checked_fields.extend(["total_cfu", "named_strain"])
+        strain_count = _named_strain_count(product)
         if _total_cfu_billion(product) <= 0:
-            missing.append("total_cfu")
-        if _named_strain_count(product) <= 0:
+            if strain_count > 0 and not missing:
+                soft_missing.append("total_cfu_not_disclosed")
+                score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
+                verdict_ceiling = "CAUTION"
+            else:
+                missing.append("total_cfu")
+        if strain_count <= 0:
             missing.append("named_strain")
         # Per-strain CFU and clinical-strain codes are soft fields.
-        return _finalize(module, missing, coverage, dose_cov, checked_fields)
+        return _finalize(
+            module,
+            missing,
+            coverage,
+            dose_cov,
+            checked_fields,
+            soft_missing=soft_missing,
+            score_cap=score_cap,
+            verdict_ceiling=verdict_ceiling,
+        )
 
     if module == "multi_or_prenatal":
         checked_fields.append("micronutrient_panel_dose_coverage")
@@ -287,7 +472,16 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             missing.append("micronutrient_panel_dose_coverage")
         elif len(ingredients) < 8 and ingredients and not any(_has_usable_dose_evidence(i) for i in ingredients):
             missing.append("dose_with_unit")
-        return _finalize(module, missing, coverage, dose_cov, checked_fields)
+        return _finalize(
+            module,
+            missing,
+            coverage,
+            dose_cov,
+            checked_fields,
+            soft_missing=soft_missing,
+            score_cap=score_cap,
+            verdict_ceiling=verdict_ceiling,
+        )
 
     if module == "omega":
         # Per omega_rubric.completeness_gate: at least one EPA or DHA
@@ -300,15 +494,44 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         # should score significantly lower' — enforced here as live-eligibility
         # rather than as a score cap.
         checked_fields.append("epa_or_dha_disclosed")
-        if not _has_epa_or_dha_disclosed(ingredients):
+        if not _has_epa_or_dha_disclosed(ingredients) and not _has_product_evidence(
+            ingredients,
+            "omega_epa_dha_aggregate",
+        ):
             missing.append("epa_or_dha_disclosed")
-        return _finalize(module, missing, coverage, dose_cov, checked_fields)
+        return _finalize(
+            module,
+            missing,
+            coverage,
+            dose_cov,
+            checked_fields,
+            soft_missing=soft_missing,
+            score_cap=score_cap,
+            verdict_ceiling=verdict_ceiling,
+        )
 
     if module == "sports":
         checked_fields.append("sports_active_dose")
-        if not any(_has_sports_active_dose(i) for i in ingredients):
-            missing.append("sports_active_dose")
-        return _finalize(module, missing, coverage, dose_cov, checked_fields)
+        if not any(_has_sports_active_dose(i) for i in ingredients) and not _has_product_evidence(
+            ingredients,
+            "blend_anchor_mass",
+        ):
+            if _has_sports_primary_identity_signal(product):
+                soft_missing.append("sports_primary_dose_not_disclosed")
+                score_cap = 50.0 if score_cap is None else min(score_cap, 50.0)
+                verdict_ceiling = "CAUTION"
+            else:
+                missing.append("sports_active_dose")
+        return _finalize(
+            module,
+            missing,
+            coverage,
+            dose_cov,
+            checked_fields,
+            soft_missing=soft_missing,
+            score_cap=score_cap,
+            verdict_ceiling=verdict_ceiling,
+        )
 
     # Generic module: single nutrients, botanicals, and simple stacks.
     # Omega and sports previously fell through here; both now have branches above.
@@ -317,7 +540,16 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     checked_fields.append("dose_with_unit")
     if not any(_has_usable_dose_evidence(i) for i in ingredients):
         missing.append("dose_with_unit")
-    return _finalize(module, missing, coverage, dose_cov, checked_fields)
+    return _finalize(
+        module,
+        missing,
+        coverage,
+        dose_cov,
+        checked_fields,
+        soft_missing=soft_missing,
+        score_cap=score_cap,
+        verdict_ceiling=verdict_ceiling,
+    )
 
 
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
@@ -341,7 +573,9 @@ def _has_epa_or_dha_disclosed(ingredients: List[Dict[str, Any]]) -> bool:
 
 
 _SPORTS_ACTIVE_CANONICALS = {
+    "protein",
     "whey_protein",
+    "casein",
     "pea_protein",
     "rice_protein",
     "soy_protein",

@@ -13,7 +13,7 @@ from scoring_v4.modules.generic_helpers import (
 
 
 SPORTS_PROTEIN_CANONICALS = frozenset(
-    {"whey_protein", "pea_protein", "rice_protein", "soy_protein"}
+    {"protein", "whey_protein", "casein", "pea_protein", "rice_protein", "soy_protein"}
 )
 CREATINE_CANONICALS = frozenset({"creatine_monohydrate"})
 BETA_ALANINE_CANONICALS = frozenset({"beta-alanine", "beta_alanine"})

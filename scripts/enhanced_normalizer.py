@@ -6759,6 +6759,44 @@ class EnhancedDSLDNormalizer:
 
         return processed
 
+    def _quantity_for_single_form_protein_child(
+        self,
+        ingredient: Dict[str, Any],
+        forms: List[Any],
+    ) -> Optional[List[Dict[str, Any]]]:
+        """Carry protein macro dose onto a single protein form child.
+
+        DSLD commonly represents sports protein labels as a nutrition row
+        (`Protein = 25 g`) with one form child (`as Whey Protein`). Dropping
+        the parent nutrition row is correct for display semantics, but the
+        form child must inherit that dose or downstream scoring loses the
+        primary active dose. This is deliberately narrow: aggregate omega rows
+        with multiple EPA/DHA forms must not copy the parent dose onto each
+        child and double-count it.
+        """
+        name = str(ingredient.get("name") or "").strip().lower()
+        group = str(ingredient.get("ingredientGroup") or "").strip().lower()
+        if name != "protein" and "protein" not in group:
+            return None
+        if len([form for form in forms if isinstance(form, dict) and form.get("name")]) != 1:
+            return None
+        quantity = ingredient.get("quantity")
+        if not isinstance(quantity, list) or not quantity:
+            return None
+        first = quantity[0]
+        if not isinstance(first, dict):
+            return None
+        unit = str(first.get("unit") or "").strip().lower()
+        if unit not in {"g", "gram", "grams", "gram(s)"}:
+            return None
+        try:
+            amount = float(first.get("quantity") or first.get("amount") or 0)
+        except (TypeError, ValueError):
+            return None
+        if amount <= 0:
+            return None
+        return [dict(first)]
+
     def _expand_header_forms_for_processing(self, ingredient: Dict[str, Any], source_path: str) -> List[Dict[str, Any]]:
         """Convert structural header/container forms into standalone ingredient rows."""
         name = ingredient.get("name", "")
@@ -6774,10 +6812,11 @@ class EnhancedDSLDNormalizer:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
                 form_group = form.get("ingredientGroup") or ingredient.get("ingredientGroup")
+                inherited_quantity = self._quantity_for_single_form_protein_child(ingredient, forms)
                 expanded_names = self._expand_compound_inactive_form_name(form_name, source_path)
                 if expanded_names:
                     for expanded_name in expanded_names:
-                        expanded.append({
+                        row = {
                             "ingredientId": form.get("ingredientId"),
                             "uniiCode": form.get("uniiCode"),
                             "order": form.get("order", ingredient.get("order", 0)),
@@ -6790,7 +6829,10 @@ class EnhancedDSLDNormalizer:
                             "alternateNames": [],
                             "_fromLabelHeader": name,
                             "_transparency": "standard",
-                        })
+                        }
+                        if inherited_quantity:
+                            row["quantity"] = inherited_quantity
+                        expanded.append(row)
                     continue
                 if self._is_label_header(form_name) or self._is_structural_form_container(
                     form_name, is_active=(source_path == "activeIngredients")
@@ -6803,7 +6845,7 @@ class EnhancedDSLDNormalizer:
                     )
                     continue
                 if self._should_preserve_expanded_form(form_name, source_path):
-                    expanded.append({
+                    row = {
                         "ingredientId": form.get("ingredientId"),
                         "uniiCode": form.get("uniiCode"),
                         "order": form.get("order", ingredient.get("order", 0)),
@@ -6816,7 +6858,10 @@ class EnhancedDSLDNormalizer:
                         "alternateNames": [],
                         "_fromLabelHeader": name,
                         "_transparency": "standard",
-                    })
+                    }
+                    if inherited_quantity:
+                        row["quantity"] = inherited_quantity
+                    expanded.append(row)
             elif isinstance(form, str):
                 expanded_names = self._expand_compound_inactive_form_name(form, source_path)
                 if expanded_names:

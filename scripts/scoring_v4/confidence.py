@@ -65,7 +65,7 @@ def evaluate_confidence(
     completeness_gate = _safe_dict(completeness_gate)
 
     evidence = _evidence_confidence(product, module_breakdown)
-    label = _label_completeness_confidence(module_breakdown)
+    label = _label_completeness_confidence(module_breakdown, completeness_gate)
     verification = _verification_confidence(product, module_breakdown)
     identity = _identity_confidence(product, safety_gate, completeness_gate)
     levels = [evidence[0], label[0], verification[0], identity[0]]
@@ -130,7 +130,10 @@ def _evidence_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tup
     return level, drivers
 
 
-def _label_completeness_confidence(module: Dict[str, Any]) -> Tuple[str, List[str]]:
+def _label_completeness_confidence(
+    module: Dict[str, Any],
+    completeness_gate: Dict[str, Any],
+) -> Tuple[str, List[str]]:
     dimensions = _safe_dict(module.get("dimensions"))
     dose = _safe_dict(dimensions.get("dose"))
     dose_meta = _safe_dict(dose.get("metadata"))
@@ -173,6 +176,26 @@ def _label_completeness_confidence(module: Dict[str, Any]) -> Tuple[str, List[st
     if "DISEASE_CLAIM_PENALTY" in flags:
         level = _min_level(level, "moderate")
         drivers.append("disease_claim_penalty_present")
+
+    soft_missing = set(str(f) for f in _safe_list(completeness_gate.get("soft_missing")))
+    if "conservative_blend_anchor_mass" in soft_missing:
+        level = "low"
+        drivers.append("conservative_blend_anchor_mass")
+    if "active_anchor_mass_evidence" in soft_missing:
+        level = _min_level(level, "moderate")
+        drivers.append("active_anchor_mass_evidence")
+    if "botanical_anchor_only_evidence" in soft_missing:
+        level = _min_level(level, "moderate")
+        drivers.append("botanical_anchor_only_evidence")
+    if "low_confidence_omega_breakdown" in soft_missing:
+        level = _min_level(level, "moderate")
+        drivers.append("low_confidence_omega_breakdown")
+    if "enzyme_activity_dose_evidence" in soft_missing:
+        level = _min_level(level, "moderate")
+        drivers.append("enzyme_activity_dose_evidence")
+    if "percent_dv_only_dose_evidence" in soft_missing:
+        level = _min_level(level, "moderate")
+        drivers.append("percent_dv_only_dose_evidence")
     return level, drivers
 
 

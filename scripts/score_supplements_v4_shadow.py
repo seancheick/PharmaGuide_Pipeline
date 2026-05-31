@@ -112,9 +112,12 @@ def _completeness_gate_breakdown(completeness_result) -> Dict[str, Any]:
         "verdict": completeness_result.verdict,
         "reason": completeness_result.reason,
         "missing_fields": list(completeness_result.missing_fields),
+        "soft_missing": list(getattr(completeness_result, "soft_missing", [])),
         "mapped_coverage": completeness_result.mapped_coverage,
         "dose_coverage": completeness_result.dose_coverage,
         "checked_fields": list(completeness_result.checked_fields),
+        "score_cap": getattr(completeness_result, "score_cap", None),
+        "verdict_ceiling": getattr(completeness_result, "verdict_ceiling", None),
     }
 
 
@@ -132,6 +135,27 @@ def _verdict_from_score(score_100: Any, carried_verdict: Any = None) -> str:
     except (TypeError, ValueError):
         return carried_verdict or "NOT_SCORED"
     return "POOR" if score < 40.0 else "SAFE"
+
+
+def _score_after_completeness_policy(score_100: Any, completeness_result: Any) -> Any:
+    """Apply completeness score caps without mutating module internals."""
+    cap = getattr(completeness_result, "score_cap", None)
+    if cap is None:
+        return score_100
+    try:
+        score = float(score_100)
+        cap_value = float(cap)
+    except (TypeError, ValueError):
+        return score_100
+    return min(score, cap_value)
+
+
+def _carried_verdict_with_completeness_policy(shadow: Dict[str, Any], completeness_result: Any) -> Any:
+    carried = shadow.get("shadow_score_v4_verdict")
+    ceiling = getattr(completeness_result, "verdict_ceiling", None)
+    if ceiling == "CAUTION":
+        return "CAUTION"
+    return carried
 
 
 def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
@@ -214,10 +238,13 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     if module == "generic":
         module_result = score_generic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = module_result.score_100
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
             module_result.score_100,
-            shadow.get("shadow_score_v4_verdict"),
+            completeness,
+        )
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            shadow["shadow_score_v4_100"],
+            _carried_verdict_with_completeness_policy(shadow, completeness),
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -234,10 +261,13 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # P1.4/P1.5 contract.
         probiotic_result = score_probiotic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = probiotic_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = probiotic_result.score_100
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
             probiotic_result.score_100,
-            shadow.get("shadow_score_v4_verdict"),
+            completeness,
+        )
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            shadow["shadow_score_v4_100"],
+            _carried_verdict_with_completeness_policy(shadow, completeness),
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -254,10 +284,13 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # the generic/probiotic contract.
         multi_result = score_multi_prenatal(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = multi_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = multi_result.score_100
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
             multi_result.score_100,
-            shadow.get("shadow_score_v4_verdict"),
+            completeness,
+        )
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            shadow["shadow_score_v4_100"],
+            _carried_verdict_with_completeness_policy(shadow, completeness),
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -273,10 +306,13 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # score_100 + verdict + typed confidence match the shared contract.
         omega_result = score_omega(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = omega_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = omega_result.score_100
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
             omega_result.score_100,
-            shadow.get("shadow_score_v4_verdict"),
+            completeness,
+        )
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            shadow["shadow_score_v4_100"],
+            _carried_verdict_with_completeness_policy(shadow, completeness),
         )
         confidence = evaluate_confidence(
             enriched_product,
@@ -289,10 +325,13 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     elif module == "sports":
         sports_result = score_sports(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = sports_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = sports_result.score_100
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
             sports_result.score_100,
-            shadow.get("shadow_score_v4_verdict"),
+            completeness,
+        )
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            shadow["shadow_score_v4_100"],
+            _carried_verdict_with_completeness_policy(shadow, completeness),
         )
         confidence = evaluate_confidence(
             enriched_product,

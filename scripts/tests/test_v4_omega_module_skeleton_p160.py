@@ -241,6 +241,22 @@ def test_router_dispatches_cod_liver_name_keyword_to_omega() -> None:
     assert class_for_product(product) == "omega"
 
 
+def test_router_keeps_cod_liver_vitamin_panel_generic_without_omega_evidence() -> None:
+    from scoring_v4.router import class_for_product
+
+    product = {
+        "product_name": "Cod Liver Oil A & D Supplement",
+        "primary_type": "single_vitamin",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "vitamin_a", "quantity": 1250, "unit": "IU", "mapped": True},
+                {"canonical_id": "vitamin_d", "quantity": 130, "unit": "IU", "mapped": True},
+            ]
+        },
+    }
+    assert class_for_product(product) == "generic"
+
+
 def test_router_does_not_route_fatty_acid_plurality_alone_to_omega() -> None:
     """REMOVED PLURALITY CHECK (2026-05-20 real-catalog audit).
     A product whose category_breakdown shows fatty_acid plurality but

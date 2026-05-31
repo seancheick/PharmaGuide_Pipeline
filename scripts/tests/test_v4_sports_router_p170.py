@@ -72,6 +72,16 @@ def test_whey_protein_powder_routes_to_sports() -> None:
     assert class_for_product(product) == "sports"
 
 
+def test_casein_protein_powder_routes_to_sports() -> None:
+    product = _product(
+        primary_type="protein_powder",
+        name="Micellar Casein Protein",
+        rows=[_row("casein", 5, "Gram(s)")],
+    )
+
+    assert class_for_product(product) == "sports"
+
+
 def test_keratin_protein_powder_stays_generic() -> None:
     product = _product(
         primary_type="protein_powder",

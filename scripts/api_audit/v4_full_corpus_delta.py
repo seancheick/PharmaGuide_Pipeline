@@ -300,7 +300,8 @@ def write_large_deltas_md(rows: List[Dict[str, Any]], path: Path, threshold: flo
         f"- Total large-delta products: {len(large)}",
         f"- Generated: {datetime.now(timezone.utc).isoformat()}",
         "",
-        "Baseline = shipped v3 scored outputs. delta = v4_calibrated − v3_shipped.",
+        "Baseline = shipped v3 scored outputs. Rows are selected by raw delta by default",
+        "because calibrated scores are compressed by the affine band-aid.",
         "Negative = v4 scores LOWER than v3 (under-credit). Positive = v4 higher.",
         "",
     ]
@@ -308,13 +309,15 @@ def write_large_deltas_md(rows: List[Dict[str, Any]], path: Path, threshold: flo
         group = by_class[cls]
         lines.append(f"## {cls} ({len(group)})")
         lines.append("")
-        lines.append("| dsld | product | module | v3 | v4 | Δ | flags |")
-        lines.append("|---|---|---|---:|---:|---:|---|")
+        lines.append("| dsld | product | module | v3 | v4 raw | Δ raw | v4 cal | Δ cal | flags |")
+        lines.append("|---|---|---|---:|---:|---:|---:|---:|---|")
         for r in group:
             lines.append(
                 f"| {r.get('dsld_id')} | {str(r.get('product_name'))[:40]} | "
-                f"{r.get('v4_module')} | {r.get('v3_shipped_score')} | {r.get('v4_score')} | "
-                f"{r.get('score_delta_vs_v3')} | {', '.join(r.get('compression_flags', []))} |"
+                f"{r.get('v4_module')} | {r.get('v3_shipped_score')} | "
+                f"{r.get('v4_raw_score')} | {r.get('raw_score_delta_vs_v3')} | "
+                f"{r.get('v4_score')} | {r.get('score_delta_vs_v3')} | "
+                f"{', '.join(r.get('compression_flags', []))} |"
             )
         lines.append("")
     path.write_text("\n".join(lines) + "\n")

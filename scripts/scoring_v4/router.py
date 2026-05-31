@@ -87,6 +87,16 @@ _OMEGA_NAME_KEYWORDS = (
     "epa dha",
     "epa/dha",
 )
+_OMEGA_STRONG_OIL_NAME_KEYWORDS = (
+    "fish oil",
+    "krill",
+    "algae oil",
+    "algal oil",
+    "cod liver",
+    "epa+dha",
+    "epa dha",
+    "epa/dha",
+)
 
 # Standalone EPA / DHA word-boundary detection. CRITICAL: must use \b so
 # DHEA (dehydroepiandrosterone) does not match — DHEA is one word, and
@@ -116,8 +126,10 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
     "cla", "conjugated_linoleic_acid", "oleic_acid",
 }
+_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil"}
 _SPORTS_PROTEIN_CANONICALS = {
     "whey_protein",
+    "casein",
     "pea_protein",
     "rice_protein",
     "soy_protein",
@@ -212,6 +224,15 @@ def _has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
     return False
 
 
+def _has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
+    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
+        if not isinstance(ing, dict):
+            continue
+        if str(ing.get("evidence_type") or "").strip().lower() == "omega_epa_dha_aggregate":
+            return True
+    return False
+
+
 def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     """Return True for ALA / GLA / CLA / 3-6-9 style panels with no EPA/DHA.
 
@@ -226,6 +247,23 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
         canonical = str(ing.get("canonical_id") or "").strip().lower()
         if canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS:
             return True
+    return False
+
+
+def _has_non_omega_positive_scorable_panel(product: Dict[str, Any]) -> bool:
+    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
+        if not isinstance(ing, dict):
+            continue
+        if ing.get("scoring_input_kind") == "product_level_evidence":
+            continue
+        canonical = str(ing.get("canonical_id") or "").strip().lower()
+        if not canonical or not _positive_quantity(ing):
+            continue
+        if canonical in _OMEGA_INGREDIENT_CANONICALS or canonical in _OMEGA_PARENT_CANONICALS:
+            continue
+        if canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS:
+            continue
+        return True
     return False
 
 
@@ -304,7 +342,23 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
         return False
 
     lowered = (name_text or "").lower()
+    if any(token in lowered for token in _OMEGA_STRONG_OIL_NAME_KEYWORDS):
+        if _OMEGA_STANDALONE_RE.search(name_text or ""):
+            return True
+        if _has_omega_scoring_evidence(product):
+            return True
+        primary_type = _read_primary_type(product)
+        if primary_type == "omega_3":
+            return True
+        return not _has_non_omega_positive_scorable_panel(product)
     if any(token in lowered for token in _OMEGA_NAME_KEYWORDS):
+        if _has_omega_scoring_evidence(product):
+            return True
+        if _OMEGA_STANDALONE_RE.search(name_text or ""):
+            return True
+        primary_type = _read_primary_type(product)
+        return primary_type == "omega_3"
+    if _has_omega_scoring_evidence(product):
         return True
     return bool(_OMEGA_STANDALONE_RE.search(name_text or ""))
 

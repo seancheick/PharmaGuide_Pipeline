@@ -141,6 +141,20 @@ def test_whey_twenty_two_grams_uses_protein_serving_not_minerals() -> None:
     assert payload["metadata"]["dose_basis"] == "protein_20_to_40_g"
 
 
+def test_casein_five_grams_uses_protein_serving_band() -> None:
+    payload = score_dose(
+        _product(
+            _row("casein", 5, "Gram(s)", name="Micellar Casein"),
+            name="Micellar Casein Protein",
+            primary_type="protein_powder",
+        )
+    )
+
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(8.0)
+    assert payload["metadata"]["primary_identity"] == "protein"
+    assert payload["metadata"]["dose_basis"] == "protein_under_15_g"
+
+
 def test_beta_alanine_three_point_two_grams_scores_below_max_band() -> None:
     payload = score_dose(_product(_row("beta-alanine", 3200, "mg"), name="Beta-Alanine"))
 

@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-30",
-    "total_entries": 156,
+    "total_entries": 161,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -394,6 +394,21 @@
             "Dates refreshed on 3 stale historical recalls:",
             "  RECALLED_HYDROXYCUT, RECALLED_JACK3D, RECALLED_OXYELITE_PRO last_reviewed_at → 2026-05-13",
             "Patched 9 new entries; no entry counts changed."
+          ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-30",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added ADULTERANT_TESTOSTERONE_PROPIONATE — Schedule III anabolic steroid found in Erectus Plus (FDA advisory 2026-05-29)",
+            "total_entries: 156 → 157",
+            "Added 4 product-level entries for FDA-advised tainted sexual-enhancement supplements:",
+            "  RECALLED_X10_NATURAL_ENHANCEMENT (sildenafil + tadalafil)",
+            "  RECALLED_BIG_DICK_ENERGY (tadalafil)",
+            "  RECALLED_ERECTUS_PLUS (sildenafil + tadalafil + testosterone propionate)",
+            "  RECALLED_SENSUAL_MIRACLE_HONEY (sildenafil + tadalafil)",
+            "total_entries: 157 → 161"
           ]
         }
       ],
@@ -19306,6 +19321,443 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product-scoped undeclared-allergen recall — no single UMLS concept maps to a brand collagen SKU. The undeclared allergen (egg) is governed by FALCPA labeling rules rather than a substance-level ban; egg-allergic users should consult the allergens.json catalog for general egg-allergen detection."
+    },
+    {
+      "id": "ADULTERANT_TESTOSTERONE_PROPIONATE",
+      "standard_name": "Testosterone Propionate",
+      "aliases": [
+        "testosterone propionate",
+        "testosterone 17β-propionate",
+        "testosterone 17-propionate",
+        "test prop",
+        "testoviron"
+      ],
+      "cui": null,
+      "reason": "Injectable anabolic steroid (DEA Schedule III) found undeclared in sexual-enhancement supplement; causes cardiovascular strain, liver toxicity, and endocrine suppression.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "steroid_anabolic"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": [
+          "testosterone support",
+          "testosterone booster",
+          "natural testosterone",
+          "tribulus",
+          "fenugreek testosterone"
+        ]
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Testosterone propionate is a Schedule III controlled substance — any presence in a supplement is illegal regardless of declared role.",
+      "safety_warning": "An injectable anabolic steroid found undeclared in a sexual-enhancement supplement — carries risk of cardiovascular events, liver damage, and hormone disruption. Stop the product and consult a doctor.",
+      "safety_warning_one_liner": "Hidden injectable steroid in supplements. Stop using and talk to your doctor.",
+      "legal_status_enum": "controlled_substance",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-29",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA MedWatch advisory: Erectus Plus contains sildenafil, tadalafil, and testosterone propionate — May 29, 2026",
+            "accessed_date": "2026-05-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Erectus Plus may be harmful due to hidden drug ingredients",
+          "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/erectus-plus-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-05-29",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Erectus Plus contains sildenafil, tadalafil, and testosterone propionate not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "ingredient",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-30",
+        "next_review_due": "2026-11-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-30",
+            "change": "Added from FDA advisory — Erectus Plus found to contain testosterone propionate (Schedule III controlled substance) alongside sildenafil and tadalafil",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-05-29",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": null
+    },
+    {
+      "id": "RECALLED_X10_NATURAL_ENHANCEMENT",
+      "standard_name": "X10 Natural Enhancement Supplement",
+      "aliases": [
+        "x10 natural enhancement supplement",
+        "x10 natural enhancement",
+        "x10 supplement",
+        "naturefuel x10"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with undeclared prescription drugs.",
+      "safety_warning": "Hidden in this supplement are prescription ED drugs (sildenafil, tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-29",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA MedWatch advisory: X10 Natural Enhancement Supplement — hidden drug ingredients — 2026-05-29",
+            "accessed_date": "2026-05-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: X10 Natural Enhancement Supplement may be harmful due to hidden drug ingredients",
+          "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/x10-natural-enhancement-supplement-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-05-29",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed X10 Natural Enhancement Supplement contains sildenafil, tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-30",
+        "next_review_due": "2026-11-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-30",
+            "change": "Added from FDA advisory 2026-05-29 — X10 Natural Enhancement Supplement contains undeclared sildenafil, tadalafil",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-05-29",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "X10 Natural Enhancement Supplement",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-05-29",
+        "effective_to": null,
+        "note": "Sold on naturefuel.us"
+      }
+    },
+    {
+      "id": "RECALLED_BIG_DICK_ENERGY",
+      "standard_name": "Big Dick Energy!",
+      "aliases": [
+        "big dick energy",
+        "big dick energy!",
+        "big dick energy supplement"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared tadalafil — a prescription ED drug that can cause dangerous blood-pressure drops with nitrate medications.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with undeclared prescription drugs.",
+      "safety_warning": "Hidden in this supplement is tadalafil, risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-29",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA MedWatch advisory: Big Dick Energy! — hidden drug ingredients — 2026-05-29",
+            "accessed_date": "2026-05-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Big Dick Energy! may be harmful due to hidden drug ingredients",
+          "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/big-dick-energy-may-be-harmful-due-hidden-drug-ingredient",
+          "evidence_grade": "R",
+          "date": "2026-05-29",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Big Dick Energy! contains tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-30",
+        "next_review_due": "2026-11-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-30",
+            "change": "Added from FDA advisory 2026-05-29 — Big Dick Energy! contains undeclared tadalafil",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-05-29",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "Big Dick Energy!",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-05-29",
+        "effective_to": null,
+        "note": null
+      }
+    },
+    {
+      "id": "RECALLED_ERECTUS_PLUS",
+      "standard_name": "Erectus Plus",
+      "aliases": [
+        "erectus plus",
+        "erectus plus supplement",
+        "erectus plus male enhancement"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil, tadalafil, and testosterone propionate — prescription drugs and a Schedule III anabolic steroid.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with undeclared prescription drugs.",
+      "safety_warning": "Hidden in this supplement are ED drugs and testosterone propionate, risking blood-pressure drops and hormone harm. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-29",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA MedWatch advisory: Erectus Plus — hidden drug ingredients — 2026-05-29",
+            "accessed_date": "2026-05-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Erectus Plus may be harmful due to hidden drug ingredients",
+          "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/erectus-plus-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-05-29",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Erectus Plus contains sildenafil, tadalafil, testosterone propionate not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-30",
+        "next_review_due": "2026-11-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-30",
+            "change": "Added from FDA advisory 2026-05-29 — Erectus Plus contains undeclared sildenafil, tadalafil, testosterone propionate",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-05-29",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "Erectus Plus",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-05-29",
+        "effective_to": null,
+        "note": "Sold on ebay.com"
+      }
+    },
+    {
+      "id": "RECALLED_SENSUAL_MIRACLE_HONEY",
+      "standard_name": "Sensual Miracle Honey",
+      "aliases": [
+        "sensual miracle honey",
+        "sensual honey",
+        "sensualhoneyusa"
+      ],
+      "cui": null,
+      "reason": "FDA laboratory analysis confirmed undeclared sildenafil and tadalafil — prescription ED drugs that can cause dangerous blood-pressure drops with nitrate medications.",
+      "status": "banned",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "illegal_spiking_agents",
+        "sexual_enhancement_fraud"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-level ban — entire product is adulterated with undeclared prescription drugs.",
+      "safety_warning": "Hidden in this supplement are prescription ED drugs (sildenafil, tadalafil), risking dangerous blood-pressure drops with heart medications. Stop using and talk to your doctor.",
+      "safety_warning_one_liner": "Contains hidden prescription drugs — stop using and talk to your doctor.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2026-05-29",
+          "source": {
+            "type": "fda_advisory",
+            "citation": "FDA MedWatch advisory: Sensual Miracle Honey — hidden drug ingredients — 2026-05-29",
+            "accessed_date": "2026-05-30"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-30"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_advisory",
+          "title": "FDA: Sensual Miracle Honey may be harmful due to hidden drug ingredients",
+          "url": "http://www.fda.gov/drugs/medication-health-fraud-notifications/sensual-miracle-honey-may-be-harmful-due-hidden-drug-ingredients",
+          "evidence_grade": "R",
+          "date": "2026-05-29",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis confirmed Sensual Miracle Honey contains sildenafil, tadalafil not listed on the product label."
+        }
+      ],
+      "source_category": "illegal_spiking_agents",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-30",
+        "next_review_due": "2026-11-30",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-30",
+            "change": "Added from FDA advisory 2026-05-29 — Sensual Miracle Honey contains undeclared sildenafil, tadalafil",
+            "by": "fda_weekly_sync"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-05-29",
+      "regulatory_date_label": "FDA advisory publication date",
+      "recall_scope": {
+        "brand": "Sensual Miracle Honey",
+        "formulations": null,
+        "lots": null,
+        "effective_from": "2026-05-29",
+        "effective_to": null,
+        "note": "Sold on sensualhoneyusa.com"
+      }
     }
   ]
 }
