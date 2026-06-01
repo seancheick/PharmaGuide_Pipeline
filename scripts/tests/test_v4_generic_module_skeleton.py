@@ -164,8 +164,8 @@ def test_manufacturer_violations_separate_dimension_with_floor_minus_25() -> Non
     assert mv["components"]["manufacturer_violation_deduction"] == 0.0
 
 
-def test_score_100_is_populated_with_p15_affine_calibration() -> None:
-    """P1.5 keeps the raw module score and emits the calibrated score."""
+def test_score_100_is_populated_with_raw_rubric_score() -> None:
+    """Phase 9 keeps one score: score_100 is the raw rubric score."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
@@ -173,17 +173,17 @@ def test_score_100_is_populated_with_p15_affine_calibration() -> None:
     assert breakdown["raw_score_100"] is not None
     assert 0.0 <= breakdown["score_100"] <= 100.0
     assert 0.0 <= breakdown["raw_score_100"] <= 100.0
-    assert breakdown["metadata"]["phase"] == "P1.5_affine_calibration"
-    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["phase"] == "P9_rubric_is_score"
+    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
 
 
 def test_phase_marker_in_breakdown() -> None:
     """Phase marker tells audit/delta tooling whether to expect dimension
-    scores. It now records the P1.5 final-assembly calibration slice."""
+    scores. It now records the Phase 9 rubric-is-score slice."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
-    assert breakdown["phase"] == "P1.5_affine_calibration"
+    assert breakdown["phase"] == "P9_rubric_is_score"
 
 
 def test_score_generic_resilient_to_missing_product() -> None:

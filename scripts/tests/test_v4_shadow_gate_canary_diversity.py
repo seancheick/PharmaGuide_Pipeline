@@ -54,9 +54,8 @@ SHADOW_CANARIES = {
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
-    # CAUTION ceiling. Phase 4+5 lowered raw below the raw-40 floor (calibrated
-    # 52.1, raw 36.1) -> POOR via the raw floor, not CAUTION. Expected interim;
-    # Phase 9 recalibrates the raw scale/floor.
+    # CAUTION ceiling. Phase 9 makes production score equal raw, so this stays
+    # POOR via the single 40-line rather than a blend-driven CAUTION.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",

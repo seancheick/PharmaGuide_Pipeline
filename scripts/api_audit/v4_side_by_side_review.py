@@ -31,6 +31,14 @@ from v4_release_readiness_audit import classify_row  # noqa: E402
 DEFAULT_OUT_DIR = REPO_ROOT / "reports" / "v4_side_by_side_review"
 DEFAULT_SAMPLE_SIZE = 100
 MODULE_ORDER = ["generic", "multi_or_prenatal", "probiotic", "omega", "sports"]
+SCORE_BANDS = (
+    (95.0, "near_perfect", "95-100 near-perfect; requires maxed rubric quality with no meaningful penalties"),
+    (90.0, "exceptional", "90-94 exceptional; rare on the raw rubric scale"),
+    (80.0, "excellent", "80-89 excellent on the raw rubric scale"),
+    (60.0, "good", "60-79 good / solid, not top-tier"),
+    (40.0, "acceptable", "40-59 acceptable but quality debt remains"),
+    (0.0, "weak", "<40 weak; POOR threshold"),
+)
 
 
 def _num(value: Any) -> float | None:
@@ -44,6 +52,16 @@ def _num(value: Any) -> float | None:
 
 def _json(value: Any) -> str:
     return json.dumps(value or {}, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+
+
+def score_band(score: Any) -> str:
+    value = _num(score)
+    if value is None:
+        return "not_scored"
+    for threshold, band, _description in SCORE_BANDS:
+        if value >= threshold:
+            return band
+    return "weak"
 
 
 def _delta_abs(row: Dict[str, Any]) -> float:
@@ -202,11 +220,12 @@ def flatten_row(row: Dict[str, Any]) -> Dict[str, Any]:
         "v3_B_bonuses": v3_sections.get("B_bonuses"),
         "v3_B_penalties": v3_sections.get("B_penalties"),
         "v4_raw_score": row.get("v4_raw_score"),
-        "v4_calibrated_score": row.get("v4_score"),
+        "v4_score": row.get("v4_score"),
+        "v4_score_band": score_band(row.get("v4_score")),
         "v4_verdict": row.get("v4_verdict"),
         "v4_confidence": (row.get("v4_confidence_detail") or {}).get("band"),
         "raw_delta_v4_minus_v3": row.get("raw_score_delta_vs_v3"),
-        "calibrated_delta_v4_minus_v3": row.get("score_delta_vs_v3"),
+        "score_delta_v4_minus_v3": row.get("score_delta_vs_v3"),
         "v4_formulation": v4_dimensions.get("formulation"),
         "v4_dose": v4_dimensions.get("dose"),
         "v4_evidence": v4_dimensions.get("evidence"),
@@ -248,26 +267,34 @@ def write_markdown(rows: List[Dict[str, Any]], path: Path, summary: Dict[str, An
         f"- Sample size: {summary['sample_size']}",
         f"- Source universe: shipped products with both v3 and v4 scores",
         f"- Raw delta = v4 raw rubric score minus shipped v3 score",
-        f"- Calibrated delta = v4 calibrated score minus shipped v3 score",
+        f"- Score delta = v4 production score minus shipped v3 score",
+        f"- v4 production score policy: score_100 is the raw rubric score, not a stretched display value",
         "",
         "## Distribution",
         "",
         f"- By v4 module: `{summary['module_counts']}`",
         f"- By review classification: `{summary['classification_counts']}`",
+        f"- By v4 score band: `{summary['score_band_counts']}`",
         f"- Mean raw delta: `{summary['mean_raw_delta']}`",
-        f"- Mean calibrated delta: `{summary['mean_calibrated_delta']}`",
+        f"- Mean score delta: `{summary['mean_score_delta']}`",
+        "",
+        "## v4 Raw-Score Bands",
+        "",
+        *(f"- `{band}`: {description}" for _threshold, band, description in SCORE_BANDS),
         "",
         "## Products",
         "",
-        "| # | dsld | product | class/module | v3 | v4 raw | v4 cal | deltas | verdicts | v4 dims | flags/debt |",
-        "|---:|---|---|---|---:|---:|---:|---|---|---|---|",
+        "| # | dsld | product | class/module | v3 | v4 score | band | deltas | verdicts | v4 dims | flags/debt |",
+        "|---:|---|---|---|---:|---:|---|---|---|---|---|",
     ]
     for idx, row in enumerate(rows, 1):
         flat = flatten_row(row)
         dims = (
             f"F {flat['v4_formulation']}; D {flat['v4_dose']}; "
             f"E {flat['v4_evidence']}; T {flat['v4_transparency']}; "
-            f"Trust {flat['v4_trust']}; Hyg {flat['v4_safety_hygiene_base']}"
+            f"VB {flat['v4_verification_bonus']}; "
+            f"Trust15 {flat['v4_verification_trust_0_15']}; "
+            f"Hyg {flat['v4_safety_hygiene_base']}"
         )
         debt = "; ".join(
             part for part in [
@@ -281,8 +308,8 @@ def write_markdown(rows: List[Dict[str, Any]], path: Path, summary: Dict[str, An
         lines.append(
             f"| {idx} | {flat['dsld_id']} | {product[:72]} | "
             f"{flat['primary_class']} / {flat['v4_module']} | "
-            f"{flat['v3_score']} | {flat['v4_raw_score']} | {flat['v4_calibrated_score']} | "
-            f"raw {flat['raw_delta_v4_minus_v3']}; cal {flat['calibrated_delta_v4_minus_v3']} | "
+            f"{flat['v3_score']} | {flat['v4_score']} | {flat['v4_score_band']} | "
+            f"raw {flat['raw_delta_v4_minus_v3']}; score {flat['score_delta_v4_minus_v3']} | "
             f"{flat['v3_verdict']}→{flat['v4_verdict']} | {dims} | {debt} |"
         )
     path.write_text("\n".join(lines) + "\n")
@@ -290,15 +317,16 @@ def write_markdown(rows: List[Dict[str, Any]], path: Path, summary: Dict[str, An
 
 def build_summary(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
     raw_deltas = [_num(row.get("raw_score_delta_vs_v3")) or 0.0 for row in rows]
-    cal_deltas = [_num(row.get("score_delta_vs_v3")) or 0.0 for row in rows]
+    score_deltas = [_num(row.get("score_delta_vs_v3")) or 0.0 for row in rows]
     return {
         "generated": datetime.now(timezone.utc).isoformat(),
         "sample_size": len(rows),
         "module_counts": dict(Counter(str(row.get("v4_module") or "unknown") for row in rows).most_common()),
         "primary_class_counts": dict(Counter(str(row.get("primary_class") or "unknown") for row in rows).most_common()),
         "classification_counts": dict(Counter(str(row.get("release_classification") or "") for row in rows).most_common()),
+        "score_band_counts": dict(Counter(score_band(row.get("v4_score")) for row in rows).most_common()),
         "mean_raw_delta": round(sum(raw_deltas) / len(raw_deltas), 2) if rows else None,
-        "mean_calibrated_delta": round(sum(cal_deltas) / len(cal_deltas), 2) if rows else None,
+        "mean_score_delta": round(sum(score_deltas) / len(score_deltas), 2) if rows else None,
     }
 
 

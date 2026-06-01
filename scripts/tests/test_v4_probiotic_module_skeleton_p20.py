@@ -155,7 +155,7 @@ def test_probiotic_manufacturer_violations_floor_minus_25() -> None:
 
 def test_probiotic_score_100_populated_after_p26() -> None:
     """At-or-after P2.6: raw_score_100 + score_100 are real numbers in
-    [0, 100]. The P1.5 affine calibration is applied."""
+    [0, 100]. Phase 9 uses the raw rubric as the production score."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(COMPLETE_PROBIOTIC_PRODUCT).to_breakdown()
@@ -180,7 +180,7 @@ def test_probiotic_phase_marker_rolls_forward_across_slices() -> None:
 def test_score_probiotic_resilient_to_malformed_input() -> None:
     """Never raise on malformed input — the dimensions skeleton stays
     intact and score_100 lands as a number (P2.6 final assembly runs;
-    for empty input it yields a low calibrated score, not None)."""
+    for empty input it yields a low production score, not None)."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     for bad in (None, {}, {"supplement_type": None}, 42, "oops"):
@@ -188,8 +188,8 @@ def test_score_probiotic_resilient_to_malformed_input() -> None:
         breakdown = result.to_breakdown()
         assert breakdown["module"] == "probiotic"
         assert set(breakdown["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-        # score_100 is computed via affine calibration; even empty input
-        # yields a real number (low end of the calibrated range).
+        # score_100 is the raw rubric production score; even empty input
+        # yields a real number.
         assert breakdown["score_100"] is None or 0 <= breakdown["score_100"] <= 100
 
 

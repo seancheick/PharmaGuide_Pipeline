@@ -170,7 +170,7 @@ def build_rows(
             "v4_completeness_verdict_ceiling": completeness_gate.get("verdict_ceiling"),
             "v4_confidence_detail": confidence if isinstance(confidence, dict) else None,
         }
-        # deltas (calibrated + raw) for diagnose_compression()
+        # deltas (production score + raw rubric) for diagnose_compression()
         if v3_score is not None and v4_score is not None:
             row["score_delta_vs_v3"] = round(v4_score - v3_score, 4)
         else:
@@ -208,9 +208,10 @@ def _band_summary(rows: List[Dict[str, Any]], delta_key: str) -> Dict[str, Any]:
 def summarize(rows: List[Dict[str, Any]], large_threshold: float) -> Dict[str, Any]:
     """Summary over ALL scored rows + a shipped-universe-only subset.
 
-    Reports BOTH calibrated and raw delta bands: calibrated deltas are
-    compressed by the affine band-aid (`25 + 0.75*raw`), so the real
-    under-crediting surface is the RAW band distribution.
+    Reports BOTH production-score and raw-rubric delta bands. Since Phase 9,
+    production score is the raw rubric score; the two distributions should
+    normally match. Both fields stay visible while downstream tooling migrates
+    away from the old calibrated-score vocabulary.
     """
     flag_counts: Counter = Counter()
     module_counts: Counter = Counter()
@@ -220,18 +221,18 @@ def summarize(rows: List[Dict[str, Any]], large_threshold: float) -> Dict[str, A
         module_counts[str(r.get("v4_module"))] += 1
         for f in r.get("compression_flags", []):
             flag_counts[f] += 1
-    cal_all = _band_summary(scored_rows, "score_delta_vs_v3")
+    production_all = _band_summary(scored_rows, "score_delta_vs_v3")
     raw_all = _band_summary(scored_rows, "raw_score_delta_vs_v3")
     return {
         "total_rows": len(rows),
         "scored": len(scored_rows),
         "shipped_scored": len(shipped_rows),
         "missing_enriched": sum(1 for r in rows if r.get("status") == "missing_enriched"),
-        "calibrated_band_counts": cal_all["band_counts"],
-        "calibrated_delta_stats": cal_all["delta_stats"],
+        "production_band_counts": production_all["band_counts"],
+        "production_delta_stats": production_all["delta_stats"],
         "raw_band_counts": raw_all["band_counts"],
         "raw_delta_stats": raw_all["delta_stats"],
-        "shipped_calibrated_bands": _band_summary(shipped_rows, "score_delta_vs_v3")["band_counts"],
+        "shipped_production_bands": _band_summary(shipped_rows, "score_delta_vs_v3")["band_counts"],
         "shipped_raw_bands": _band_summary(shipped_rows, "raw_score_delta_vs_v3")["band_counts"],
         "compression_flag_counts": dict(flag_counts.most_common()),
         "module_counts": dict(module_counts.most_common()),
@@ -241,7 +242,7 @@ def summarize(rows: List[Dict[str, Any]], large_threshold: float) -> Dict[str, A
             if (canary._num(r.get("raw_score_delta_vs_v3")) is not None
                 and abs(canary._num(r.get("raw_score_delta_vs_v3"))) >= large_threshold)
         ),
-        "calibrated_large_delta_count": sum(
+        "production_large_delta_count": sum(
             1 for r in scored_rows
             if (canary._num(r.get("score_delta_vs_v3")) is not None
                 and abs(canary._num(r.get("score_delta_vs_v3"))) >= large_threshold)
@@ -300,9 +301,11 @@ def load_shipped_universe(db_path: Path) -> set:
 
 def write_large_deltas_md(rows: List[Dict[str, Any]], path: Path, threshold: float,
                           delta_key: str = "raw_score_delta_vs_v3") -> int:
-    """Surface large deltas on the RAW score by default — calibrated deltas
-    are compressed by the affine band-aid and hide the under-crediting.
-    Only shipped-universe rows are listed (what reaches users at cutover).
+    """Surface large deltas on the RAW score by default.
+
+    Since Phase 9, production score equals raw rubric score; raw remains the
+    clearest name for the bug-finding surface. Only shipped-universe rows are
+    listed (what reaches users at cutover).
     """
     large = [
         r for r in rows
@@ -322,7 +325,7 @@ def write_large_deltas_md(rows: List[Dict[str, Any]], path: Path, threshold: flo
         f"- Generated: {datetime.now(timezone.utc).isoformat()}",
         "",
         "Baseline = shipped v3 scored outputs. Rows are selected by raw delta by default",
-        "because calibrated scores are compressed by the affine band-aid.",
+        "because v4 production score is now the raw rubric score.",
         "Negative = v4 scores LOWER than v3 (under-credit). Positive = v4 higher.",
         "",
     ]
@@ -330,7 +333,7 @@ def write_large_deltas_md(rows: List[Dict[str, Any]], path: Path, threshold: flo
         group = by_class[cls]
         lines.append(f"## {cls} ({len(group)})")
         lines.append("")
-        lines.append("| dsld | product | module | v3 | v4 raw | Δ raw | v4 cal | Δ cal | flags |")
+        lines.append("| dsld | product | module | v3 | v4 raw | Δ raw | v4 score | Δ score | flags |")
         lines.append("|---|---|---|---:|---:|---:|---:|---:|---|")
         for r in group:
             lines.append(

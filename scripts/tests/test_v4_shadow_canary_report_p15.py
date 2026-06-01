@@ -95,7 +95,7 @@ def test_summarize_passes_omega_when_rank_order_is_within_one() -> None:
             "expected_rank_in_group": 1,
             "actual_rank_in_group": 1,
             "rank_delta": 0,
-            "v4_calibration": {"method": "rubric_raw_is_production_score"},
+            "v4_score_policy": {"method": "rubric_raw_is_production_score"},
         },
         {
             "dsld_id": "omega-b",
@@ -105,7 +105,7 @@ def test_summarize_passes_omega_when_rank_order_is_within_one() -> None:
             "expected_rank_in_group": 2,
             "actual_rank_in_group": 2,
             "rank_delta": 0,
-            "v4_calibration": {"method": "rubric_raw_is_production_score"},
+            "v4_score_policy": {"method": "rubric_raw_is_production_score"},
         },
     ]
 
@@ -117,7 +117,7 @@ def test_summarize_passes_omega_when_rank_order_is_within_one() -> None:
     # tolerance against a generic-tier fallback. See
     # scripts/api_audit/v4_shadow_canary_report.py docstring.
     assert summary["omega"]["decision"] == "omega_module_no_drift"
-    assert summary["calibration_counts"] == {"rubric_raw_is_production_score": 2}
+    assert summary["score_policy_counts"] == {"rubric_raw_is_production_score": 2}
 
 
 def test_summarize_flags_omega_review_on_large_score_drop_even_when_rank_is_stable() -> None:
@@ -243,7 +243,7 @@ def test_score_canaries_extracts_top_level_shadow_fields() -> None:
     assert rows[0]["v4_score"] is not None
     assert rows[0]["v4_raw_score"] is not None
     assert rows[0]["v4_score"] == round(1.0 * rows[0]["v4_raw_score"], 1)
-    assert rows[0]["v4_calibration"]["method"] == "rubric_raw_is_production_score"
+    assert rows[0]["v4_score_policy"]["method"] == "rubric_raw_is_production_score"
     assert rows[0]["v4_confidence"] in {"high", "moderate", "low"}
 
 

@@ -30,9 +30,9 @@ Plus two SEPARATE adjustments (§6 line 390, module-agnostic):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
 
-P1.6.6 state: all 5 dimensions, manufacturer adjustments, final assembly,
-and P1.5 affine calibration are online. Router, completeness gate, and
-shadow scorer dispatch the omega class into a complete module result.
+P1.6.6 state: all 5 dimensions, manufacturer adjustments, and final
+rubric-score assembly are online. Router, completeness gate, and shadow
+scorer dispatch the omega class into a complete module result.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -102,7 +102,8 @@ class OmegaModuleResult:
     Final assembly (Phase 4) uses the shared generic._assemble_score: core
     dimensions summed on native scale (max 85, NO renormalization), plus the
     additive verification_bonus / manufacturer_trust / manufacturer_violations /
-    safety_hygiene, clamped to [0, 100], then the affine calibration.
+    safety_hygiene, clamped to [0, 100]. Since Phase 9 this raw rubric score
+    is the production score.
     """
 
     module: str = "omega"
@@ -146,7 +147,7 @@ def score_omega(product: Any) -> OmegaModuleResult:
     """Score an omega-class product against the v4 omega rubric.
 
     P1.6.6 state: returns a fully-instantiated result with all 5 dimensions,
-    manufacturer trust / violations, raw score, calibrated score, and module
+    manufacturer trust / violations, raw score, production score, and module
     metadata populated.
 
     Never raises on malformed input — empty / non-dict products get the

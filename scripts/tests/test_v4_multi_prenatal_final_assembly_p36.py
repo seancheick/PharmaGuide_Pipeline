@@ -5,7 +5,7 @@ Closes the multi/prenatal module by wiring:
   - Manufacturer Trust (+0..+5)
   - Manufacturer Violations (0..negative cap)
   - raw_score_100 assembly
-  - P1.5 affine calibration (`25 + 0.75 * raw`)
+  - Phase 9 rubric-is-score policy (`score_100 = raw`)
   - shadow scorer score / verdict / confidence output
 """
 
@@ -168,7 +168,7 @@ def test_multi_prenatal_score_100_assembled_at_p36() -> None:
     assert breakdown["phase"] == "P3.6_multi_prenatal_final_assembly"
 
 
-def test_multi_prenatal_affine_calibration_applied() -> None:
+def test_multi_prenatal_rubric_score_policy_applied() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(_multi_product()).to_breakdown()
@@ -176,7 +176,7 @@ def test_multi_prenatal_affine_calibration_applied() -> None:
     expected = round(max(0.0, min(100.0, 1.0 * raw)), 1)
 
     assert breakdown["score_100"] == expected
-    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
 
 
 def test_multi_prenatal_raw_score_sums_dimensions_and_manufacturer_adjustments() -> None:

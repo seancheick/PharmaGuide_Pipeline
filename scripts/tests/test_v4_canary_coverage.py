@@ -10,7 +10,7 @@ shipped catalog so:
   3. Every `expected_b5_class` declared in `_metadata.b5_class_routes`
      has at least one canary (catches B5 router class becoming dead).
   4. The canary file's schema is well-formed (every entry has the
-     fields the score-delta report + v4 calibration depend on).
+     fields the score-delta report + v4 score policy depend on).
 
 These are coverage tests, not behavior tests.  Behavior contracts live
 in test_b4a_p01b_integrity, test_b4a_p01d_label_asserted,

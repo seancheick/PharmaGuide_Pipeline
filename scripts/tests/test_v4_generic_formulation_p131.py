@@ -1143,9 +1143,9 @@ def test_shadow_populates_formulation_when_generic() -> None:
     assert formulation["metadata"]["phase"] == "P1.3.1b_formulation_complete"
     assert formulation["metadata"]["deferred_components"] == []
     assert formulation["metadata"]["deferred_penalties"] == []
-    # Module-level phase now reflects the P1.5 final-assembly calibration;
+    # Module-level phase now reflects the Phase 9 rubric-is-score assembly;
     # formulation's own metadata still records the P1.3.1b sub-slice.
-    assert module_block["phase"] == "P1.5_affine_calibration"
+    assert module_block["phase"] == "P9_rubric_is_score"
 
 
 def test_shadow_top_level_score_populated_at_p136() -> None:

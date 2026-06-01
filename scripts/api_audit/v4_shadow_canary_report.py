@@ -135,7 +135,7 @@ def score_canaries(
                 "status": "scored" if shadow.get("shadow_score_v4_100") is not None else "shadow_unscored",
                 "v4_score": shadow.get("shadow_score_v4_100"),
                 "v4_raw_score": module.get("raw_score_100"),
-                "v4_calibration": module_metadata.get("calibration"),
+                "v4_score_policy": module_metadata.get("score_policy"),
                 "v4_verdict": shadow.get("shadow_score_v4_verdict"),
                 "v4_confidence": shadow.get("shadow_score_v4_confidence"),
                 "v4_module": shadow.get("shadow_score_v4_module"),
@@ -319,8 +319,8 @@ def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "verdict_counts": _counts(row.get("v4_verdict") for row in scored),
         "confidence_counts": _counts(row.get("v4_confidence") for row in scored),
         "module_counts": _counts(row.get("v4_module") for row in scored),
-        "calibration_counts": _counts(
-            _safe_dict(row.get("v4_calibration")).get("method")
+        "score_policy_counts": _counts(
+            _safe_dict(row.get("v4_score_policy")).get("method")
             for row in scored
         ),
         "omega": {
@@ -359,9 +359,9 @@ def _markdown(summary: Dict[str, Any], rows: List[Dict[str, Any]]) -> str:
         f"- Max abs rank delta: {summary['max_abs_rank_delta']}",
         f"- Omega decision: **{summary['omega']['decision']}**",
         f"- Compression flags: {summary.get('compression_flag_counts', {})}",
-        f"- Calibration: {summary.get('calibration_counts', {})}",
+        f"- Score policy: {summary.get('score_policy_counts', {})}",
         "",
-        "| # | DSLD | Class | Product | v3 | Raw v4 | Cal v4 | Verdict | Conf | Rank Δ | Cal Δ | Raw Δ | Flags |",
+        "| # | DSLD | Class | Product | v3 | Raw v4 | v4 score | Verdict | Conf | Rank Δ | Score Δ | Raw Δ | Flags |",
         "|---:|---|---|---|---:|---:|---:|---|---|---:|---:|---:|---|",
     ]
     for row in rows:

@@ -5,9 +5,9 @@ Locks the final-assembly arithmetic:
   class_subtotal = (sum(dim.score) / sum_of_evaluable_max) * 100
   adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
   raw_score_100 = clamp(0, 100, adjusted)
-  score_100 = clamp(0, 100, P1.5 affine 25 + 0.75 * raw_score_100)
+  score_100 = raw_score_100
 
-Plus locks the calibrated canary scores so future drift in any of the
+Plus locks the raw-rubric canary scores so future drift in any of the
 5 dimensions surfaces immediately.
 
 Canary results vs v3 baselines:
@@ -76,7 +76,7 @@ def _premium_omega() -> dict:
 # --- Final assembly contract --------------------------------------------
 
 
-def test_score_omega_populates_raw_and_calibrated_scores() -> None:
+def test_score_omega_populates_raw_and_production_scores() -> None:
     """After P1.6.6, both raw_score_100 and score_100 are real numbers."""
     from scoring_v4.modules.omega import score_omega
 
@@ -95,19 +95,19 @@ def test_phase_marker_rolls_to_p166() -> None:
     assert bd["phase"] == "P1.6.6_omega_final_assembly"
 
 
-def test_score_100_calibration_metadata_present() -> None:
-    """Final assembly emits the P1.5 affine calibration audit block."""
+def test_score_100_policy_metadata_present() -> None:
+    """Final assembly emits the Phase 9 score policy audit block."""
     from scoring_v4.modules.omega import score_omega
 
     bd = score_omega(_premium_omega()).to_breakdown()
-    cal = bd["metadata"]["calibration"]
+    cal = bd["metadata"]["score_policy"]
     assert cal["method"] == "rubric_raw_is_production_score"
     assert cal["audit_affine_v3_compare"]["intercept"] == 25.0
     assert cal["audit_affine_v3_compare"]["slope"] == 0.75
 
 
-def test_score_100_calibration_arithmetic() -> None:
-    """score_100 = clamp(0,100, 25 + 0.75 * raw_score_100)."""
+def test_score_100_rubric_arithmetic() -> None:
+    """score_100 = raw_score_100."""
     from scoring_v4.modules.omega import score_omega
 
     bd = score_omega(_premium_omega()).to_breakdown()
@@ -151,17 +151,17 @@ def test_assembly_metadata_records_all_audit_fields() -> None:
         "manufacturer_trust_adjustment",
         "manufacturer_violation_adjustment",
         "adjusted_score_before_clamp",
-        "raw_score_100_pre_calibration",
-        "calibration",
-        "calibrated_score_before_clamp",
+        "raw_score_100_pre_score_policy",
+        "score_policy",
+        "production_score_before_clamp",
     ):
         assert key in md, f"missing audit metadata key: {key}"
 
 
-def test_empty_product_still_emits_calibrated_score() -> None:
+def test_empty_product_still_emits_production_score() -> None:
     """Empty input: all 5 dims score 0, but Manufacturer Trust D1 may
     award a small default tier (~1-3 pts) for products with no
-    manufacturer-data signals. Final calibrated score lands in low
+    manufacturer-data signals. Final production score lands in low
     range. Defensive — completeness gate normally short-circuits
     empty input before this module runs."""
     from scoring_v4.modules.omega import score_omega
@@ -239,7 +239,7 @@ def _load_canaries(ids):
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):
-    """Real-catalog calibrated omega scores lock in expected ranges.
+    """Real-catalog raw-rubric omega scores lock in expected ranges.
 
     If a dimension's scoring math drifts, this is the front-line alarm.
     Update the ranges deliberately — never widen them silently."""
@@ -319,9 +319,9 @@ def test_omega_orchestrator_does_not_import_v3_scorer() -> None:
 # --- Shadow integration -------------------------------------------------
 
 
-def test_shadow_scorer_emits_calibrated_omega_score() -> None:
+def test_shadow_scorer_emits_omega_production_score() -> None:
     """Through the shadow scorer entry point, omega-routed products
-    emit shadow_score_v4_100 = the calibrated score."""
+    emit shadow_score_v4_100 = the production rubric score."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(_premium_omega())

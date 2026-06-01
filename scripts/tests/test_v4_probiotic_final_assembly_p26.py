@@ -11,7 +11,7 @@ Closes the probiotic module by:
        adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
        raw_score_100 = clamp(0, 100, adjusted)
 
-  3. Applying the P1.5 affine calibration:
+  3. Applying the Phase 9 rubric-is-score policy:
        score_100 = clamp(0, 100, 25 + 0.75 * raw_score_100)
 
   4. Wiring shadow scorer dispatch so probiotic now emits a real
@@ -25,7 +25,7 @@ Closes the probiotic module by:
      probiotic-specific driver.
 
 Verdict: CAUTION carried from Layer 1 still wins. Otherwise POOR if
-calibrated score < 40, else SAFE.
+production score < 40, else SAFE.
 """
 
 from __future__ import annotations
@@ -113,7 +113,7 @@ def _probiotic_product(
 
 
 def test_probiotic_score_100_assembled_at_p26() -> None:
-    """A complete probiotic product gets a real raw_score_100 + calibrated
+    """A complete probiotic product gets a real raw_score_100 + production
     score_100 after P2.6 final assembly."""
     from scoring_v4.modules.probiotic import score_probiotic
 
@@ -125,8 +125,8 @@ def test_probiotic_score_100_assembled_at_p26() -> None:
     assert 0 <= breakdown["score_100"] <= 100
 
 
-def test_probiotic_calibration_applied() -> None:
-    """score_100 = clamp(0, 100, 25 + 0.75 * raw_score_100)."""
+def test_probiotic_rubric_score_applied() -> None:
+    """score_100 = raw_score_100."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
@@ -216,7 +216,7 @@ def test_probiotic_score_floored_at_zero() -> None:
 
 def test_probiotic_assembly_metadata_carries_audit_fields() -> None:
     """The metadata block records all the audit fields P1.3.6 emits for
-    generic — raw_dimension_sum, class_subtotal, calibration block, etc."""
+    generic — raw_dimension_sum, class_subtotal, score policy block, etc."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
@@ -226,10 +226,10 @@ def test_probiotic_assembly_metadata_carries_audit_fields() -> None:
     assert "class_subtotal" in meta
     assert "manufacturer_trust_adjustment" in meta
     assert "manufacturer_violation_adjustment" in meta
-    assert "calibration" in meta
-    assert meta["calibration"]["method"] == "rubric_raw_is_production_score"
-    assert meta["calibration"]["audit_affine_v3_compare"]["intercept"] == 25.0
-    assert meta["calibration"]["audit_affine_v3_compare"]["slope"] == 0.75
+    assert "score_policy" in meta
+    assert meta["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert meta["score_policy"]["audit_affine_v3_compare"]["intercept"] == 25.0
+    assert meta["score_policy"]["audit_affine_v3_compare"]["slope"] == 0.75
 
 
 # --- Shadow scorer wiring -------------------------------------------------
@@ -253,7 +253,7 @@ def test_shadow_emits_real_score_for_probiotic_at_p26() -> None:
 def test_shadow_verdict_safe_when_score_above_40() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
-    # Strong probiotic with SKU certs → calibrated score well above 40
+    # Strong probiotic with SKU certs → production score well above 40
     product = _probiotic_product(
         trust_certs=[
             {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}

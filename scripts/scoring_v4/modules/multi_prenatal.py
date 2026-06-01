@@ -18,10 +18,9 @@ single-ingredient products:
     Total class score  100
 
 P3.6 state: the multi/prenatal module is complete. All five dimensions,
-manufacturer adjustments, final assembly, and affine calibration are
-populated. The shape is intentionally identical to the generic and
-probiotic module breakdowns so downstream tooling can read all scored
-classes uniformly.
+manufacturer adjustments, and final rubric-score assembly are populated.
+The shape is intentionally identical to the generic and probiotic module
+breakdowns so downstream tooling can read all scored classes uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses

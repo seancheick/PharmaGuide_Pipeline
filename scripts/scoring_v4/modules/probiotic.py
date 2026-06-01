@@ -26,9 +26,9 @@ Plus two SEPARATE adjustments (§6 line 390):
                                           + severity/recency; reuses generic)
 
 P2.6 state: the probiotic module is complete. All five dimensions,
-manufacturer adjustments, final assembly, and affine calibration are
-populated. The shape is intentionally identical to the generic module
-breakdown so downstream tooling can read both classes uniformly.
+manufacturer adjustments, and final rubric-score assembly are populated.
+The shape is intentionally identical to the generic module breakdown so
+downstream tooling can read both classes uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -94,7 +94,8 @@ class ProbioticModuleResult:
     Final assembly (Phase 4) uses the shared generic._assemble_score: core
     dimensions summed on native scale (max 85, NO renormalization) plus the
     additive verification_bonus / manufacturer adjustments / safety_hygiene,
-    clamped to [0, 100], then the affine calibration.
+    clamped to [0, 100]. Since Phase 9 this raw rubric score is the
+    production score.
     """
 
     module: str = "probiotic"
@@ -138,7 +139,7 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     """Score a probiotic-class product against the v4 probiotic rubric.
 
     P2.6 state: returns a fully-instantiated result with all dimensions,
-    manufacturer adjustments, raw score, and calibrated score populated.
+    manufacturer adjustments, raw score, and production score populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.

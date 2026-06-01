@@ -30,17 +30,15 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.5 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), Evidence
-(P1.3.3 multiplicative pipeline), Testing & Trust (P1.3.4), and
-Transparency (P1.3.5) are online, with Manufacturer Trust / Violations
-and final score assembly now wired. Final display score uses the P1.5
-affine calibration `25 + 0.75 * raw_score_100` to correct canary score
-compression without changing dimension math. Dose uses an
-RDA/UL proxy because the supplemental-window math per §6 line 369 needs
-a `typical_dietary_intake` reference table that does not yet exist; the
-dose dimension's `metadata` carries explicit proxy markers so downstream
-tooling never mistakes the proxy band for final NIH/NHANES window math.
-Audit and score-delta tooling reads against this contract.
+Phase 9 state: Formulation, Dose, Evidence, Transparency, Manufacturer
+Trust / Violations, verification bonus, safety hygiene, and final score
+assembly are online. Production `score_100` is the raw rubric score. The
+retired P1.5 affine (`25 + 0.75 * raw_score_100`) is retained only as an
+audit field for v3-history comparisons. Dose uses an RDA/UL proxy where no
+class-specific clinical dose adapter exists; the dose dimension's
+`metadata` carries explicit proxy markers so downstream tooling never
+mistakes the proxy band for final NIH/NHANES window math. Audit and
+score-delta tooling reads against this contract.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -69,10 +67,10 @@ from scoring_v4.modules.safety_hygiene import (
 )
 
 
-PHASE_MARKER = "P1.5_affine_calibration"
-CALIBRATION_INTERCEPT = 25.0
-CALIBRATION_SLOPE = 0.75
-CALIBRATION_METHOD = "affine_p15"
+PHASE_MARKER = "P9_rubric_is_score"
+RETIRED_AFFINE_INTERCEPT = 25.0
+RETIRED_AFFINE_SLOPE = 0.75
+RETIRED_AFFINE_METHOD = "affine_p15"
 
 
 # Core dimension caps. Order is rendering order in audit / UI.
@@ -193,7 +191,7 @@ class GenericModuleResult:
         adjusted = core_subtotal + verification_bonus.score + manufacturer_trust.score
                    + manufacturer_violations.score + safety_hygiene_base.score
         raw_score_100 = max(0, min(100, adjusted))   # botanical floor may apply
-        score_100 = affine-calibrated raw_score_100
+        score_100 = raw_score_100
 
     `phase` lets audit / delta tooling know which dimensions are populated.
     """
@@ -241,7 +239,7 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     P1.5 state: Formulation, Dose, Evidence, Trust, Transparency,
     Manufacturer Trust, Manufacturer Violations, raw_score_100, and
-    calibrated score_100 are populated.
+    production score_100 are populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
@@ -394,7 +392,10 @@ def _assemble_score(result: GenericModuleResult) -> None:
     # user-facing score. With score_100 == raw, the verdict 40-line is one
     # consistent threshold (no raw-vs-calibrated gap) and 100 is reachable only by a
     # product that maxes every dimension + bonus with zero penalties (true ceiling).
-    affine_audit_v3 = max(0.0, min(100.0, CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100))
+    affine_audit_v3 = max(
+        0.0,
+        min(100.0, RETIRED_AFFINE_INTERCEPT + RETIRED_AFFINE_SLOPE * raw_score_100),
+    )
     result.raw_score_100 = round(raw_score_100, 1)
     result.score_100 = round(raw_score_100, 1)
     result.metadata = {
@@ -412,23 +413,24 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "safety_hygiene_base_adjustment": round(safety_hygiene, 4),
         "safety_hygiene_base": result.safety_hygiene_base.to_dict(),
         "adjusted_score_before_clamp": round(adjusted, 4),
-        "raw_score_100_pre_calibration": result.raw_score_100,
+        "rubric_score_100": result.raw_score_100,
+        "raw_score_100_pre_score_policy": result.raw_score_100,
         "score_clamped": adjusted < 0.0 or adjusted > 100.0,
         "botanical_dose_deferred": result.botanical_dose_deferred,
         "botanical_raw_floor_applied": botanical_floor_applied,
-        "calibration": {
+        "score_policy": {
             "method": "rubric_raw_is_production_score",
             "production_score": "rubric_raw_score_100",
             "raw_score_100": result.raw_score_100,
-            "calibrated_score_100": result.score_100,
+            "score_100": result.score_100,
             # Audit-only: the retired P1.5 affine, kept for v3-comparison reports.
             "audit_affine_v3_compare": {
-                "method": CALIBRATION_METHOD,
-                "intercept": CALIBRATION_INTERCEPT,
-                "slope": CALIBRATION_SLOPE,
+                "method": RETIRED_AFFINE_METHOD,
+                "intercept": RETIRED_AFFINE_INTERCEPT,
+                "slope": RETIRED_AFFINE_SLOPE,
                 "value": round(affine_audit_v3, 1),
             },
         },
-        "calibrated_score_before_clamp": round(raw_score_100, 4),
-        "calibrated_score_clamped": False,
+        "production_score_before_clamp": round(raw_score_100, 4),
+        "production_score_clamped": False,
     }

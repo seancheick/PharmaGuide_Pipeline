@@ -16,9 +16,9 @@ Current P3.6 / P2.6 / P1.6.6 state:
     multi_or_prenatal).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
-  - Generic, probiotic, omega, and multi_or_prenatal modules emit populated
-    dimensions plus manufacturer trust / violations and final affine-calibrated
-    0-100 scores.
+  - Generic, probiotic, omega, sports, and multi_or_prenatal modules emit
+    populated dimensions plus manufacturer trust / violations and final 0-100
+    rubric scores.
   - shadow_score_v4_100 mirrors the module result for complete products in
     all four online modules.
   - shadow_score_v4_confidence = top-level typed confidence band for
@@ -130,10 +130,9 @@ def _verdict_from_score(
     """Resolve the non-blocking verdict after score assembly.
 
     BLOCKED/UNSAFE/NOT_SCORED return earlier. CAUTION from Layer 1 wins
-    over POOR/SAFE. The calibrated score remains the user-facing 100-point
-    score, but the raw rubric score must also clear the 40-point floor while
-    the affine calibration is still in place. That prevents calibration lift
-    from promoting a genuinely weak raw profile to SAFE.
+    over POOR/SAFE. Since Phase 9, the user-facing score is the raw rubric
+    score; the raw-score guard remains for compatibility with direct module
+    callers and any completeness cap applied after module assembly.
     """
     if carried_verdict == "CAUTION":
         return "CAUTION"
@@ -270,9 +269,8 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "probiotic":
         # P2.6: full probiotic pipeline online — all 5 dimensions populate,
-        # manufacturer trust/violations apply, final affine-calibrated
-        # score_100 + verdict + typed confidence band match the generic
-        # P1.4/P1.5 contract.
+        # manufacturer trust/violations apply, and score_100 is the rubric
+        # production score with verdict + typed confidence band.
         probiotic_result = score_probiotic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = probiotic_result.to_breakdown()
         shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
@@ -294,9 +292,8 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "multi_or_prenatal":
         # P3.6: full multi/prenatal pipeline online — all 5 dimensions
-        # populate, manufacturer trust/violations apply, and final
-        # affine-calibrated score_100 + verdict + typed confidence match
-        # the generic/probiotic contract.
+        # populate, manufacturer trust/violations apply, and score_100 is
+        # the rubric production score with verdict + typed confidence.
         multi_result = score_multi_prenatal(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = multi_result.to_breakdown()
         shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
@@ -318,8 +315,8 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "omega":
         # P1.6.6: full omega pipeline online — all 5 dimensions populate,
-        # manufacturer trust/violations apply, and final affine-calibrated
-        # score_100 + verdict + typed confidence match the shared contract.
+        # manufacturer trust/violations apply, and score_100 is the rubric
+        # production score with verdict + typed confidence.
         omega_result = score_omega(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = omega_result.to_breakdown()
         shadow["shadow_score_v4_100"] = _score_after_completeness_policy(

@@ -208,10 +208,10 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     # raw_score_100 is rounded to 1dp in the assembler; allow that rounding.
     assert breakdown["raw_score_100"] == pytest.approx(raw_score, abs=0.05)
     assert breakdown["score_100"] == pytest.approx(1.0 * breakdown["raw_score_100"], abs=0.05)
-    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
-    assert breakdown["metadata"]["calibration"]["audit_affine_v3_compare"]["intercept"] == 25.0
-    assert breakdown["metadata"]["calibration"]["audit_affine_v3_compare"]["slope"] == 0.75
-    assert breakdown["phase"] == "P1.5_affine_calibration"
+    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["score_policy"]["audit_affine_v3_compare"]["intercept"] == 25.0
+    assert breakdown["metadata"]["score_policy"]["audit_affine_v3_compare"]["slope"] == 0.75
+    assert breakdown["phase"] == "P9_rubric_is_score"
 
 
 def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
@@ -286,18 +286,18 @@ def test_final_score_clamps_after_positive_and_negative_manufacturer_adjustments
     assert low["manufacturer_violations"]["score"] == -25.0
 
 
-def test_p15_affine_calibration_preserves_raw_score_for_audit() -> None:
+def test_rubric_score_policy_preserves_retired_affine_for_audit() -> None:
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(_base_product()).to_breakdown()
     raw = breakdown["raw_score_100"]
-    calibrated = breakdown["score_100"]
+    production_score = breakdown["score_100"]
 
     assert raw is not None
-    assert calibrated == pytest.approx(round(1.0 * raw, 1), rel=1e-6)
-    assert breakdown["metadata"]["raw_score_100_pre_calibration"] == raw
-    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
-    assert calibrated == raw  # production score IS the rubric raw (no affine lift)
+    assert production_score == pytest.approx(round(1.0 * raw, 1), rel=1e-6)
+    assert breakdown["metadata"]["raw_score_100_pre_score_policy"] == raw
+    assert breakdown["metadata"]["score_policy"]["method"] == "rubric_raw_is_production_score"
+    assert production_score == raw  # production score IS the rubric raw (no affine lift)
 
 
 def test_shadow_top_level_score_and_verdict_are_populated_for_complete_generic() -> None:
@@ -336,9 +336,8 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
 
     out = score_product_v4_shadow(product)
 
-    # A -25 manufacturer violation is a weak profile: POOR. Post-Phase-4/5 the
-    # POOR comes from the RAW floor (raw < 40), not the calibrated score — the
-    # affine lift can leave the displayed score >=40 while raw stays weak.
+    # A -25 manufacturer violation is a weak profile: POOR. Phase 9 makes
+    # production score equal raw, so the POOR threshold is a single 40-line.
     assert out["shadow_score_v4_breakdown"]["module"]["raw_score_100"] < 40.0
     assert out["shadow_score_v4_verdict"] == "POOR"
 

@@ -10,7 +10,12 @@ if str(SCRIPTS_ROOT) not in sys.path:
 if str(SCRIPTS_ROOT / "api_audit") not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT / "api_audit"))
 
-from api_audit.v4_side_by_side_review import flatten_row, select_review_sample  # noqa: E402
+from api_audit.v4_side_by_side_review import (  # noqa: E402
+    build_summary,
+    flatten_row,
+    select_review_sample,
+    write_markdown,
+)
 
 
 def _row(dsld_id: int, module: str, **overrides):
@@ -72,6 +77,35 @@ def test_flatten_row_includes_v3_sections_and_v4_dimension_metadata():
 
     assert flat["v3_A_ingredient_quality"] == 12
     assert flat["v4_formulation"] == 10
+    assert flat["v4_score"] == 60.0
+    assert flat["v4_score_band"] == "good"
+    assert flat["score_delta_v4_minus_v3"] == 0.0
     assert flat["v4_completeness_soft_missing"] == "conservative_blend_anchor_mass"
     assert flat["compression_flags"] == "low_evidence_dimension"
     assert '"dose"' in flat["v4_dimension_metadata_json"]
+
+
+def test_write_markdown_uses_verification_bonus_not_removed_trust_dimension(tmp_path):
+    row = _row(
+        42,
+        "generic",
+        v4_dimensions={
+            "formulation": 10,
+            "dose": 12,
+            "evidence": 8,
+            "transparency": 7,
+            "safety_hygiene_base": 4,
+        },
+        v4_verification_bonus=3.5,
+        v4_verification_trust_0_15=6.6,
+    )
+    row["release_classification"] = "OK_NO_RELEASE_CONCERN"
+    summary = build_summary([row])
+    path = tmp_path / "side_by_side.md"
+
+    write_markdown([row], path, summary)
+
+    text = path.read_text()
+    assert "VB 3.5" in text
+    assert "Trust15 6.6" in text
+    assert "v4 production score policy" in text
