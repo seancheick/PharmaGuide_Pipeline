@@ -932,11 +932,32 @@ def check_top_manufacturers(findings: List[Finding], data: Dict[str, Any], file:
             findings.append(Finding("warning", file, f"[{i}].evidence", "type_mismatch", "list|null", _type_name(ev)))
 
 
+def _check_metadata_count(findings: List[Finding], data: Dict[str, Any], file: str, actual: int) -> None:
+    """Verify _metadata.total_entries matches the real array length."""
+    declared = (data.get("_metadata") or {}).get("total_entries")
+    if declared is not None and declared != actual:
+        findings.append(Finding("error", file, "_metadata.total_entries", "count_mismatch", str(actual), str(declared)))
+
+
+def _check_references_shape(findings: List[Finding], file: str, entry: Dict[str, Any], i: int) -> None:
+    """`references`, when present, must be a list of bare PMID digit-strings."""
+    refs = entry.get("references")
+    if refs is None:
+        return
+    if not isinstance(refs, list):
+        findings.append(Finding("error", file, f"[{i}].references", "type_mismatch", "list", _type_name(refs)))
+        return
+    for r in refs:
+        if not (isinstance(r, str) and r.isdigit()):
+            findings.append(Finding("error", file, f"[{i}].references", "bad_pmid_token", "digit_string", repr(r)))
+
+
 def check_rda_optimal_uls(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     raw = data.get("nutrient_recommendations")
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "nutrient_recommendations", "missing_or_non_list", "list", _type_name(raw)))
         return
+    _check_metadata_count(findings, data, file, len(raw))
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
@@ -944,6 +965,7 @@ def check_rda_optimal_uls(findings: List[Finding], data: Dict[str, Any], file: s
         _check_required(findings, file, e, i, [("standard_name", str)])
         if "warnings" in e and e.get("warnings") is not None and not isinstance(e.get("warnings"), list):
             findings.append(Finding("warning", file, f"[{i}].warnings", "type_fallback_risk", "list", _type_name(e.get("warnings"))))
+        _check_references_shape(findings, file, e, i)
 
 
 def check_rda_therapeutic(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -951,11 +973,13 @@ def check_rda_therapeutic(findings: List[Finding], data: Dict[str, Any], file: s
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "therapeutic_dosing", "missing_or_non_list", "list", _type_name(raw)))
         return
+    _check_metadata_count(findings, data, file, len(raw))
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
             continue
         _check_required(findings, file, e, i, [("standard_name", str)])
+        _check_references_shape(findings, file, e, i)
 
 
 def check_unit_conversions(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

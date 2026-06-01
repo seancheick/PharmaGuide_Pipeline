@@ -653,7 +653,11 @@ Primary key: `nutrient_recommendations` (array)
 ---
 
 ### 27. rda_therapeutic_dosing.json
-**Purpose:** non-RDA dosing | **Entries:** 44
+**Purpose:** clinical therapeutic dosing for **botanical + collagen** ingredients (non-RDA) | **Entries:** 48
+
+Scoring scope: read only by the v4 `botanical_profile.py` and `collagen_profile.py` dose adapters
+(keyed on normalized `standard_name` + `aliases`). Non-botanical bioactives are scored from
+`rda_optimal_uls.json` instead — see the dosing-overhaul boundary: this file is botanical + collagen only.
 
 Primary key: `therapeutic_dosing` (array)
 
@@ -661,12 +665,15 @@ Primary key: `therapeutic_dosing` (array)
 |-------|------|----------|-------------|
 | `id` | string | YES | Unique ID |
 | `standard_name` | string | YES | Ingredient name |
-| `aliases` | string[] | YES | Alternative names |
-| `unit` | string | YES | Dosing unit |
-| `typical_dosing_range` | object | YES | Min/max therapeutic range |
+| `aliases` | string[] | YES | Alternative names (collagen routing keys on `uc-ii`/`nem`/`biocell`/`gelatin`/`collagen` — do not rename) |
+| `unit` | string | YES | Dosing unit (`mg`, `g`, `CFU`) |
+| `common_use` | string | NO | Clinical use / indication |
+| `typical_dosing_range` | string | YES | `"min-max"` or single value, in `unit` (e.g. `"250-600"`, `"40"`) |
 | `common_serving_size` | string | YES | Typical serving |
-| `upper_limit` | float/null | YES | Safety ceiling |
-| `evidence_tier` | string | YES | Evidence strength |
+| `upper_limit` | string/null | YES | Safety ceiling |
+| `upper_limit_notes` | string | NO | Caution / interaction notes |
+| `evidence_tier` | int | YES | Evidence strength (1 = strongest) |
+| `references` | string[] | NO | Bare PMID strings (content-verified via `verify_all_citations_content.py`) |
 
 ---
 

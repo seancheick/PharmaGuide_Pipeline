@@ -83,6 +83,34 @@ FILE_CONFIGS = [
         "sources_field": "source_urls",
         "source_format": "url_list",
     },
+    {
+        # Therapeutic dosing: references[] is a list of bare PMID strings.
+        # Topic words come from the ingredient name + its aliases + common use.
+        "file": "rda_therapeutic_dosing.json",
+        "array_key": "therapeutic_dosing",
+        "id_field": "id",
+        "topic_extractor": lambda e: (
+            [e.get("standard_name", ""), e.get("common_use", "")]
+            + list(e.get("aliases") or [])
+        ),
+        "sources_field": "references",
+        "source_format": "pmid_list",
+    },
+    {
+        # Optimal RDA/UL file: only the non-DRI bioactive entries carry a
+        # references[] list of bare PMID strings (DRI-backed nutrients are
+        # verified separately by verify_rda_uls.py). Entries with no
+        # references[] are simply skipped (no PubMed citations to check).
+        "file": "rda_optimal_uls.json",
+        "array_key": "nutrient_recommendations",
+        "id_field": "id",
+        "topic_extractor": lambda e: (
+            [e.get("standard_name", ""), e.get("special_considerations", "")]
+            + list(e.get("aliases") or [])
+        ),
+        "sources_field": "references",
+        "source_format": "pmid_list",
+    },
 ]
 
 
@@ -262,6 +290,15 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
 
     for s in sources:
         url = ""
+        if source_format == "pmid_list":
+            # Bare PMID string (e.g. "24401291"); tolerate "PMID:123" / int.
+            pmid = re.sub(r"[^0-9]", "", str(s))
+            if pmid:
+                results.append({
+                    "pmid": pmid,
+                    "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+                })
+            continue
         if source_format == "url_list":
             url = s if isinstance(s, str) else ""
         else:
