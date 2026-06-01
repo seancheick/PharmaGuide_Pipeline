@@ -24,6 +24,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_list,
     get_active_ingredients,
 )
+from scoring_v4.modules.botanical_profile import _mass_mg
 
 
 PHASE_MARKER = "P1.3.3_evidence_pipeline"
@@ -82,12 +83,43 @@ ENROLLMENT_DEFAULT_MULTIPLIER = 1.2
 TOP_N_WEIGHTS = (1.0, 0.7, 0.5, 0.3)
 DEPTH_BONUS_BANDS = ((20.0, 0.25), (40.0, 0.5))
 
+# Phase 8 — primary-ingredient evidence floor (PROTOTYPE). The top-N additive
+# pipeline rewards ingredient COUNT: a focused single clinically-validated
+# ingredient (KSM-66) scores ~4.5/20 while two generic minerals score ~11.5/20.
+# When the product's MASS-DOMINANT active is a strongly-evidenced, positively-
+# effective, clinically-dosed ingredient, the dimension earns a floor so quality
+# is rewarded independent of count. Keyed on the mass-dominant active (the evidence
+# match must link to an active whose mass >= PRIMARY_MASS_FRACTION of the heaviest
+# active), NOT merely the top evidence-points contributor — otherwise a well-studied
+# TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
+PRIMARY_FLOOR_STRONG = 14.0     # systematic review / multi-RCT, positive, clinical dose
+PRIMARY_FLOOR_MODERATE = 11.0   # single RCT / clinical strain, positive, clinical dose
+_STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
+_MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
+_POSITIVE_EFFECTS = frozenset({"positive_strong", "positive_weak"})
+# Effect-strength weight on the floor (mirrors the pipeline's effect multipliers)
+# so a weak-effect study floors below a strong-effect one of the same study type.
+_EFFECT_FLOOR_MULTIPLIER = {"positive_strong": 1.0, "positive_weak": 0.85}
+# Prototype toggle (Phase 8 spike). Set ENABLED=False for the no-floor baseline.
+# The floor is gated on the strongly-evidenced ingredient being a MASS-DOMINANT
+# active (mass >= PRIMARY_MASS_FRACTION of the heaviest active), so it rewards a
+# product whose PRIMARY ingredient is well-studied (KSM-66, Niacin) and never
+# floats a product on a well-studied TRACE co-ingredient (calcium in a protein
+# powder) — the failure the focus-gate benchmark surfaced.
+PRIMARY_FLOOR_ENABLED = True
+PRIMARY_MASS_FRACTION = 0.5
 
-def score_evidence(product: Dict[str, Any]) -> Dict[str, Any]:
+
+def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False) -> Dict[str, Any]:
     """Compute the generic-module Evidence dimension.
 
     Returns a dimension payload compatible with
     `GenericModuleResult.dimensions["evidence"]`.
+
+    `apply_primary_floor`: the Phase-8 primary-ingredient floor is opt-in per
+    caller. Only the GENERIC module (which has the count-over-quality flaw) passes
+    True. omega / probiotic / multi / sports reuse this scorer as a sub-component
+    and have their own evidence logic, so they must NOT inherit the floor.
     """
     if not isinstance(product, dict):
         product = {}
@@ -160,12 +192,26 @@ def score_evidence(product: Dict[str, Any]) -> Dict[str, Any]:
         pipeline_total += points * TOP_N_WEIGHTS[idx]
 
     depth_bonus = _depth_bonus(matches)
-    total = _clamp(0.0, CAP_TOTAL, pipeline_total + depth_bonus)
+
+    # Phase 8 — primary-ingredient evidence floor. The TOP evidence contributor
+    # (highest points, excluding sub-clinical) anchors a floor when it is strongly
+    # & positively evidenced, so a focused premium ingredient isn't out-scored by
+    # ingredient count.
+    primary_floor = 0.0
+    floor_canonical: Optional[str] = None
+    if apply_primary_floor and PRIMARY_FLOOR_ENABLED:
+        primary_floor, floor_canonical = _primary_mass_floor(
+            product, matches, sub_clinical_canonicals
+        )
+
+    total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
 
     components = {
         "clinical_evidence_pipeline": round(pipeline_total, 4),
         "depth_bonus": round(depth_bonus, 4),
     }
+    if primary_floor > 0.0:
+        components["primary_evidence_floor"] = round(primary_floor, 4)
 
     return {
         "score": round(total, 4),
@@ -179,9 +225,81 @@ def score_evidence(product: Dict[str, Any]) -> Dict[str, Any]:
             "matched_entries": len(matched_entry_ids),
             "top_n_applied": min(len(capped_scores), len(TOP_N_WEIGHTS)),
             "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
+            "primary_evidence_floor": round(primary_floor, 4),
+            "primary_evidence_floor_canonical": floor_canonical,
             "flags": flags,
         },
     }
+
+
+def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float]:
+    """Map each active's normalized identity tokens -> its mass (mg), plus the
+    heaviest active mass. Used to link an evidence match back to the active it
+    came from and decide whether that active is mass-dominant."""
+    index: Dict[str, float] = {}
+    max_mass = 0.0
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _mass_mg(row) or 0.0
+        if mass <= 0:
+            continue
+        max_mass = max(max_mass, mass)
+        for tok in (row.get("canonical_id"), row.get("standard_name"),
+                    row.get("name"), row.get("matched_form")):
+            key = _norm_text(tok)
+            if key:
+                index[key] = max(index.get(key, 0.0), mass)
+    return index, max_mass
+
+
+def _match_active_mass(entry: Dict[str, Any], index: Dict[str, float]) -> float:
+    """Mass of the active an evidence match links to (0 if not found). Links by
+    normalized identity (match ingredient/standard_name/matched_term/canonical)."""
+    for tok in (_canonical_from_entry(entry), entry.get("ingredient"),
+                entry.get("standard_name"), entry.get("matched_term")):
+        key = _norm_text(tok)
+        if key and key in index:
+            return index[key]
+    return 0.0
+
+
+def _primary_mass_floor(
+    product: Dict[str, Any],
+    matches: List[Any],
+    sub_clinical_canonicals: set,
+) -> Tuple[float, Optional[str]]:
+    """Evidence floor when the MASS-DOMINANT active is strongly & positively
+    evidenced at a clinical dose. Returns (floor, canonical) or (0.0, None)."""
+    index, max_mass = _active_mass_index(product)
+    if max_mass <= 0:
+        return 0.0, None
+    threshold = PRIMARY_MASS_FRACTION * max_mass
+    floor = 0.0
+    floor_canon: Optional[str] = None
+    for entry in matches:
+        if not isinstance(entry, dict):
+            continue
+        if _norm_text(entry.get("effect_direction")) not in _POSITIVE_EFFECTS:
+            continue
+        effect = _norm_text(entry.get("effect_direction"))
+        canonical = _canonical_from_entry(entry)
+        if not canonical:
+            continue  # can't identify the ingredient -> don't anchor a floor on it
+        if canonical in sub_clinical_canonicals:
+            continue
+        if _match_active_mass(entry, index) < threshold:
+            continue  # the evidenced ingredient is not a mass-dominant active
+        st = _norm_text(entry.get("study_type"))
+        base = (PRIMARY_FLOOR_STRONG if st in _STRONG_STUDY
+                else PRIMARY_FLOOR_MODERATE if st in _MODERATE_STUDY else 0.0)
+        # Weight the floor by effect strength, mirroring the pipeline's own
+        # positive_weak discount (0.85) so a weak-effect meta does not floor as
+        # high as a strong-effect one (P2 review).
+        candidate = round(base * _EFFECT_FLOOR_MULTIPLIER.get(effect, 0.0), 4)
+        if candidate > floor:
+            floor, floor_canon = candidate, canonical
+    return floor, floor_canon
 
 
 def _entry_raw_points(entry: Dict[str, Any]) -> float:

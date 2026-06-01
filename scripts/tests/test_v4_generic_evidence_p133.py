@@ -292,7 +292,11 @@ def test_shadow_wires_evidence_dimension() -> None:
     out = score_product_v4_shadow(_product())
 
     evidence = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["evidence"]
-    assert evidence["score"] == 6.48
+    # Phase 8: the generic module opts into the primary-ingredient floor. The
+    # default product's mass-primary magnesium has a systematic_review_meta
+    # positive match -> floored to 14.0 (the raw pipeline value here is 6.48).
+    assert evidence["score"] == 14.0
+    assert evidence["metadata"]["primary_evidence_floor"] == 14.0
     assert evidence["max"] == 20.0
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 

@@ -42,7 +42,10 @@ GENERIC_CANARIES = {
     # clinically-studied branded extract scoring closer to its merit.
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        "score_range": (77.0, 79.5),
+        # Phase 8 (primary-ingredient evidence floor): curcumin is the mass-primary
+        # active with strong clinical evidence -> evidence floored to 14, lifting
+        # this premium branded extract to 82.0 (crosses the 80+ bar). 78.2 -> 82.0.
+        "score_range": (81.0, 83.0),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
@@ -56,7 +59,9 @@ GENERIC_CANARIES = {
     # stays generic even though fatty-acid-like carrier signals exist.
     "184661": {
         "label": "Pure Encapsulations Liposomal Glutathione",
-        "score_range": (57.5, 59.5),  # Phase 4: 65 → 63
+        # Phase 4: 65 → 63. Phase 8: Setria glutathione (mass-primary) evidenced,
+        # but positive_weak effect -> floor 14*0.85=11.9 -> 64.8.
+        "score_range": (63.8, 65.8),
         "traits": {"transparency_low": True},
     },
 }

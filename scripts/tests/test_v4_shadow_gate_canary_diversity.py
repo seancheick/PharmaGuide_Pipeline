@@ -47,7 +47,10 @@ SHADOW_CANARIES = {
         # + clinical dose instead of an inflated vitamin proxy → 49.9. The
         # canary's point is unchanged: CAUTION carries forward and wins over the
         # SAFE/POOR score band regardless of where the band lands.
-        "score_range": (48.5, 51.0),
+        # Phase 8 (primary-ingredient evidence floor): green tea (mass-primary) has
+        # a strong study but positive_weak effect -> floor 14*0.85=11.9 -> 52.5.
+        # Verdict stays CAUTION (the canary's invariant: CAUTION wins over band).
+        "score_range": (51.5, 53.5),
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
@@ -57,9 +60,13 @@ SHADOW_CANARIES = {
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",
+        # Phase 8 (primary-ingredient evidence floor): bromelain (mass-primary) has
+        # a systematic_review_meta but positive_WEAK match, so the effect-weighted
+        # floor is 14*0.85=11.9 (not 14) — which keeps the raw score below the POOR
+        # floor. Stays POOR: a weak-effect bromelain does not auto-earn SAFE.
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (51.1, 53.1),
+        "score_range": (52.6, 54.6),
     },
     # Probiotic with named strains but no total CFU: scoreable, but cannot be
     # SAFE because the primary probiotic dose is undisclosed.
