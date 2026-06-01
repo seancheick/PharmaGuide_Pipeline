@@ -58,6 +58,10 @@ from scoring_v4.modules.botanical_profile import (
     is_botanical_product,
     score_botanical_dose,
 )
+from scoring_v4.modules.collagen_profile import (
+    is_collagen_product,
+    score_collagen_dose,
+)
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     get_active_ingredients,
@@ -279,6 +283,32 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(product, dict):
         product = {}
+
+    # Phase 7 — Collagen Profile: per-subtype clinical dose range (unit-aware) so an
+    # underdosed collagen no longer borrows its co-formulated vitamins' RDA dose.
+    # Checked before botanical (mass-dominance makes them mutually exclusive).
+    if is_collagen_product(product):
+        col = score_collagen_dose(product)
+        b7 = _penalty_b7_dose_safety(product)
+        components = {
+            "collagen_clinical_dose": round(float(col["score"]), 4),
+            "multi_form_bonus": 0.0,
+        }
+        penalties = {"B7_dose_safety": round(-b7, 4)}
+        score = _clamp(0.0, DIMENSION_CAP, float(col["score"]) - b7)
+        return {
+            "score": round(score, 4),
+            "max": DIMENSION_CAP,
+            "components": components,
+            "penalties": penalties,
+            "phase": PHASE_MARKER,
+            "metadata": {
+                "phase": PHASE_MARKER,
+                "method": "collagen_clinical_dose_v1",
+                "collagen_dose_band": col["band"],
+                "collagen_dose": col.get("metadata", {}),
+            },
+        }
 
     # Phase 6 — Botanical Profile: clinical therapeutic-range dose (via
     # rda_therapeutic_dosing.json) instead of the RDA/UL proxy. Always evaluable

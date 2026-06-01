@@ -52,6 +52,10 @@ from scoring_v4.modules.botanical_profile import (
     is_botanical_product,
     score_botanical_formulation,
 )
+from scoring_v4.modules.collagen_profile import (
+    is_collagen_product,
+    score_collagen_formulation,
+)
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     canonical_key,
@@ -464,7 +468,18 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     # disabled here because marker standardization is now core formulation
     # inside the adapter (no duplicate +1 bonus).
     botanical_formulation: Dict[str, Any] = {}
-    if is_botanical_product(product):
+    collagen_formulation: Dict[str, Any] = {}
+    if is_collagen_product(product):
+        # Phase 7 — Collagen Profile occupies the A1 slot (type/hydrolyzed/source/
+        # dose/branded). A2 premium-forms + A5b standardization are vitamin/herb
+        # concepts and are disabled for collagen. Checked before botanical;
+        # mass-dominance makes them mutually exclusive.
+        col = score_collagen_formulation(product)
+        components["A1_bio_score"] = round(col["score"], 4)
+        components["A2_premium_forms"] = 0.0
+        components["A5b_standardized_botanical"] = 0.0
+        collagen_formulation = col
+    elif is_botanical_product(product):
         bot = score_botanical_formulation(product)
         components["A1_bio_score"] = round(bot["score"], 4)
         components["A2_premium_forms"] = 0.0
@@ -521,6 +536,8 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "deferred_penalties": [],
             "botanical_profile_applied": bool(botanical_formulation),
             "botanical_formulation": botanical_formulation.get("components", {}),
+            "collagen_profile_applied": bool(collagen_formulation),
+            "collagen_formulation": collagen_formulation.get("components", {}),
         },
     }
 

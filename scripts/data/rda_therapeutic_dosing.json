@@ -3,8 +3,8 @@
     "description": "Therapeutic dosing ranges for clinical efficacy validation",
     "purpose": "Provide therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-02-16",
-    "total_entries": 44,
+    "last_updated": "2026-05-31",
+    "total_entries": 48,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
   "therapeutic_dosing": [
@@ -440,16 +440,102 @@
       "aliases": [
         "collagen",
         "hydrolyzed collagen",
-        "collagen peptides"
+        "collagen peptides",
+        "collagen hydrolysate",
+        "bioactive collagen peptides",
+        "verisol",
+        "peptan",
+        "fortigel",
+        "fortibone",
+        "tendoforte",
+        "marine collagen",
+        "fish collagen",
+        "tuna collagen",
+        "naticol",
+        "hydrolyzed fish collagen"
       ],
       "unit": "g",
-      "common_use": "Skin, hair, nail, joint, and bone health",
-      "typical_dosing_range": "10-20",
-      "common_serving_size": "10",
-      "upper_limit": "40",
-      "upper_limit_notes": "Generally very safe. Can be taken with or without food. Bioavailability varies with form.",
-      "evidence_tier": 2,
+      "common_use": "Skin/hair/nail (2.5 g+) and joint/bone (5-10 g) health; hydrolyzed Type I & III peptides incl. marine",
+      "typical_dosing_range": "2.5-10",
+      "common_serving_size": "5",
+      "upper_limit": "20",
+      "upper_limit_notes": "Generally very safe. Skin benefit validated from 2.5 g (Verisol); joint/bone 5-10 g. Bioavailability varies with form.",
+      "evidence_tier": 1,
+      "references": ["24401291", "31627309", "28177710", "29337906", "18416885", "39075819", "37432180"],
       "id": "collagen_peptides"
+    },
+    {
+      "standard_name": "Undenatured Type II Collagen (UC-II)",
+      "aliases": [
+        "uc-ii",
+        "ucii",
+        "uc ii",
+        "undenatured type ii collagen",
+        "undenatured collagen",
+        "native type ii collagen",
+        "nt2 collagen"
+      ],
+      "unit": "mg",
+      "common_use": "Knee osteoarthritis / joint; undenatured (native) Type II, oral-tolerance mechanism (low mg dose, NOT the hydrolyzed-peptide gram range)",
+      "typical_dosing_range": "40",
+      "common_serving_size": "40",
+      "upper_limit": "40",
+      "upper_limit_notes": "Standard single validated dose 40 mg/day. Do NOT conflate with hydrolyzed Type II (BioCell).",
+      "evidence_tier": 1,
+      "references": ["26822714"],
+      "id": "uc_ii_collagen"
+    },
+    {
+      "standard_name": "Hydrolyzed Type II Collagen (BioCell)",
+      "aliases": [
+        "biocell",
+        "biocell collagen",
+        "hydrolyzed type ii collagen",
+        "hydrolyzed chicken sternal cartilage"
+      ],
+      "unit": "mg",
+      "common_use": "Joint OA + skin; hydrolyzed Type II + hyaluronic acid + chondroitin (chicken sternal cartilage)",
+      "typical_dosing_range": "500-2000",
+      "common_serving_size": "1000",
+      "upper_limit": "2000",
+      "upper_limit_notes": "500 mg validated for skin, 2000 mg for OA.",
+      "evidence_tier": 2,
+      "references": ["31221944", "22486722"],
+      "id": "biocell_collagen"
+    },
+    {
+      "standard_name": "Gelatin",
+      "aliases": [
+        "gelatin",
+        "gelatine"
+      ],
+      "unit": "g",
+      "common_use": "Connective-tissue / collagen synthesis; denatured collagen with LOWER bioavailability than hydrolyzed peptides",
+      "typical_dosing_range": "5-15",
+      "common_serving_size": "10",
+      "upper_limit": "20",
+      "upper_limit_notes": "Mechanistic (collagen-synthesis-marker) evidence; intact denatured collagen, less bioavailable than pre-cleaved peptides.",
+      "evidence_tier": 3,
+      "references": ["27852613"],
+      "id": "gelatin"
+    },
+    {
+      "standard_name": "Natural Eggshell Membrane (NEM)",
+      "aliases": [
+        "nem",
+        "eggshell membrane",
+        "natural eggshell membrane",
+        "eggshell membrane collagen"
+      ],
+      "unit": "mg",
+      "common_use": "Knee osteoarthritis / joint; collagen + glycosaminoglycans",
+      "typical_dosing_range": "500",
+      "common_serving_size": "500",
+      "upper_limit": "500",
+      "upper_limit_notes": "Single validated dose 500 mg/day; pain and stiffness are the validated endpoints.",
+      "evidence_tier": 2,
+      "references": ["19340512"],
+      "id": "eggshell_membrane_nem"
     },
     {
       "standard_name": "Magnesium L-Threonate",
