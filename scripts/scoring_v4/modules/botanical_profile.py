@@ -39,6 +39,35 @@ _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
 BOTANICAL_FORMULATION_CAP = 15.0
 
+# Roles that mark an active as the product's marketed hero (Phase 2 classifier).
+# Used by the route-drift fix so a mass-heavy botanical *adjunct* can't hijack a
+# product whose primary/claim-prominent active is non-botanical.
+_PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
+_ROLE_STRENGTH = {
+    "primary": 3,
+    "claim_prominent": 3,
+    "major": 2,
+    "adjunct": 1,
+}
+
+# A title-prominent botanical can promote a mixed product into the botanical
+# profile only when it is still a material component. This prevents "Papaya
+# Enzyme" style products from scoring off a trace botanical theme while larger
+# enzyme/mineral/vitamin actives carry the dose.
+_BOTANICAL_PROMOTION_MATERIALITY_FRACTION = 0.5
+_ENZYME_TITLE_RE = re.compile(r"\b(enzyme|enzymes|digestive)\b", re.IGNORECASE)
+_ENZYME_CANONICALS = frozenset({
+    "digestive_enzymes",
+    "alpha_amylase",
+    "amylase",
+    "bromelain",
+    "papain",
+    "protease",
+    "lipase",
+    "cellulase",
+    "lactase",
+})
+
 _PLANT_PARTS = (
     "root", "leaf", "leaves", "bark", "flower", "seed", "fruit", "berry",
     "rhizome", "aerial", "bulb", "stem", "rind", "peel", "whole herb", "herb",
@@ -190,6 +219,135 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     return max(botanicals, key=lambda r: (_mass_mg(r) or 0.0))
 
 
+def _role_by_identity(product: Dict[str, Any]) -> Dict[str, str]:
+    """Map each scoring active's identity (canonical_id, then name) -> role.
+
+    Lazy import keeps the dependency one-directional at load time (the Phase 2
+    role classifier lazy-imports router constants itself); a classifier failure
+    degrades gracefully to "no roles" so the legacy mass rule still applies.
+    """
+    try:
+        from scoring_input_contract import classify_ingredient_roles
+        roles = classify_ingredient_roles(product)
+    except Exception:  # pragma: no cover - defensive: fall back to mass rule
+        return {}
+    out: Dict[str, str] = {}
+
+    def keep_strongest(key: str, role: Any) -> None:
+        if not key or not isinstance(role, str):
+            return
+        current = out.get(key)
+        if current is None or _ROLE_STRENGTH.get(role, 0) > _ROLE_STRENGTH.get(current, 0):
+            out[key] = role
+
+    for r in roles:
+        if not isinstance(r, dict):
+            continue
+        role = r.get("role")
+        cid = _norm(r.get("canonical_id"))
+        name = _norm(r.get("name"))
+        keep_strongest(cid, role)
+        keep_strongest(name, role)
+    return out
+
+
+def _role_of(row: Dict[str, Any], role_map: Dict[str, str]) -> Optional[str]:
+    return role_map.get(_norm(row.get("canonical_id"))) or role_map.get(_norm(row.get("name")))
+
+
+# Title separators that split a compound product name into head ("the product")
+# and tail ("with X"). The head segment names the active the product is selling.
+_TITLE_SEPARATORS = (" with ", " plus ", " and ", " featuring ", " + ", " & ", "+", "&")
+
+
+def _title_head_boundary(title: str) -> int:
+    """Char index where the title head ends (first separator), or len(title)."""
+    boundary = len(title)
+    for sep in _TITLE_SEPARATORS:
+        i = title.find(sep)
+        if i != -1:
+            boundary = min(boundary, i)
+    return boundary
+
+
+def _row_title_pos(row: Dict[str, Any], title: str) -> Optional[int]:
+    """Earliest char index at which a recognizable token of ``row`` appears in
+    ``title`` (normalised), or None. Tries name / standard_name / canonical_id
+    (underscores as spaces) / matched_form."""
+    positions = []
+    for key in _ingredient_identity_keys(row):
+        for cand in (key, key.replace("_", " ")):
+            i = title.find(cand)
+            if i != -1:
+                positions.append(i)
+    return min(positions) if positions else None
+
+
+def _botanical_is_title_head(
+    product: Dict[str, Any],
+    botanical: Dict[str, Any],
+    non_botanical_heroes: List[Dict[str, Any]],
+) -> bool:
+    """Tie-breaker for products that name BOTH a botanical and a non-botanical as
+    title-prominent. Grammar-aware (user policy): the title HEAD owns the dose path.
+
+      Elderberry with Zinc   -> botanical (elderberry is the head)
+      Iron with Eleuthero    -> non-botanical (iron is the head)
+      Sambucus Elderberry Zinc (no separator) -> earliest-named wins
+      ambiguous              -> False (safer generic path; botanical profile would
+                                erase the mineral/vitamin RDA/UL logic)
+    """
+    title = _norm(product.get("product_name") or product.get("fullName"))
+    if not title:
+        return False
+    boundary = _title_head_boundary(title)
+    bot_pos = _row_title_pos(botanical, title)
+    nonbot_positions = [p for p in (_row_title_pos(r, title) for r in non_botanical_heroes)
+                        if p is not None]
+
+    bot_in_head = bot_pos is not None and bot_pos < boundary
+    nonbot_in_head = any(p < boundary for p in nonbot_positions)
+    if bot_in_head and not nonbot_in_head:
+        return True
+    if nonbot_in_head and not bot_in_head:
+        return False
+    # both (or neither) in the head segment -> earliest-named ingredient wins
+    if bot_pos is not None and nonbot_positions:
+        return bot_pos < min(nonbot_positions)
+    # unresolved -> non-botanical / generic path (safer)
+    return False
+
+
+def _botanical_is_material(botanical_mass_mg: float, non_botanical: List[Dict[str, Any]]) -> bool:
+    """Return True when the botanical is material enough to own a mixed profile."""
+    max_non_botanical_mass = max((_mass_mg(r) or 0.0 for r in non_botanical), default=0.0)
+    if max_non_botanical_mass <= 0:
+        return True
+    return botanical_mass_mg >= (
+        _BOTANICAL_PROMOTION_MATERIALITY_FRACTION * max_non_botanical_mass
+    )
+
+
+def _is_nonbotanical_enzyme_active(row: Dict[str, Any]) -> bool:
+    canonical = _norm(row.get("canonical_id"))
+    tax = row.get("raw_taxonomy") if isinstance(row.get("raw_taxonomy"), dict) else {}
+    return bool(
+        canonical in _ENZYME_CANONICALS
+        or _norm(tax.get("category")) == "enzyme"
+        or _norm(row.get("category")) == "enzyme"
+        or _norm(row.get("dose_class")) == "enzyme_activity"
+    )
+
+
+def _has_enzyme_product_intent(product: Dict[str, Any], non_botanical: List[Dict[str, Any]]) -> bool:
+    """True for products whose marketed class is enzymes, not botanical herbs."""
+    title = str(product.get("product_name") or product.get("fullName") or "")
+    primary_type = _primary_type(product)
+    if primary_type not in {"fiber_digestive", "digestive_enzyme"} and not _ENZYME_TITLE_RE.search(title):
+        return False
+    return any(_is_nonbotanical_enzyme_active(r) for r in non_botanical)
+
+
 # --- public API ------------------------------------------------------------
 
 def is_botanical_product(product: Dict[str, Any]) -> bool:
@@ -203,27 +361,57 @@ def is_botanical_product(product: Dict[str, Any]) -> bool:
     `_primary_botanical_active` the adapters use, keeping router and adapters
     consistent.
 
-    Mass-dominance gate (P6 review): a generic-routed product with a non-botanical
-    active that out-masses the botanical (e.g. Magnesium 400 mg + Ginger 50 mg)
-    must NOT flip wholesale to the botanical path — that would discard the
-    dominant mineral's RDA/UL dose adequacy and A1/A2 form logic and score the
-    whole product off a trace herb. The botanical routes only when it is at least
-    as massive as the heaviest non-botanical active (comparable mg units; missing
-    masses treated as 0, so pure-botanical / anchor-only products still route)."""
+    Role-aware selector (route-drift fix): mass-dominance alone let a mass-heavy
+    botanical *adjunct* hijack a product whose marketed active is non-botanical
+    (melatonin 3 mg hijacked by passion flower 200 mg; zinc by elderberry; iron by
+    eleuthero). The Phase 2 role classifier resolves this:
+      - botanical is the role hero AND material                     -> botanical path
+      - a non-botanical active is the role hero, botanical is not    -> NOT botanical
+      - both are role heroes                                         -> title-head + material
+      - roles absent                                                 -> legacy mass rule
+
+    The legacy mass-dominance gate (P6 review) is retained as the fallback: a
+    generic-routed product with a non-botanical active that out-masses the botanical
+    (e.g. Magnesium 400 mg + Ginger 50 mg) must NOT flip wholesale to the botanical
+    path. The botanical routes only when it is at least as massive as the heaviest
+    non-botanical active (comparable mg units; missing masses treated as 0, so
+    pure-botanical / anchor-only products still route)."""
     if not isinstance(product, dict):
         return False
     primary = _primary_botanical_active(product)
     if primary is None:
         return False
+
+    actives = _scoring_actives(product)
+    non_botanical = [r for r in actives if not _is_botanical_active(r)]
     botanical_mass = _mass_mg(primary) or 0.0
-    non_botanical_masses = [
-        _mass_mg(r) or 0.0
-        for r in _scoring_actives(product)
-        if not _is_botanical_active(r)
-    ]
-    if max(non_botanical_masses, default=0.0) > botanical_mass:
-        return False
-    return True
+    mass_says_botanical = (
+        max((_mass_mg(r) or 0.0 for r in non_botanical), default=0.0) <= botanical_mass
+    )
+    botanical_is_material = _botanical_is_material(botanical_mass, non_botanical)
+
+    role_map = _role_by_identity(product)
+    if role_map:
+        botanical_is_hero = _role_of(primary, role_map) in _PRIMARY_ROLES
+        non_botanical_heroes = [r for r in non_botanical if _role_of(r, role_map) in _PRIMARY_ROLES]
+        if botanical_is_hero and _has_enzyme_product_intent(product, non_botanical):
+            return False  # enzyme products keep generic/enzyme dose logic
+        if botanical_is_hero and not non_botanical_heroes:
+            # Title/theme alone is not enough. A trace botanical in an enzyme or
+            # vitamin product should not erase the larger non-botanical dose path.
+            return botanical_is_material
+        if non_botanical_heroes and not botanical_is_hero:
+            return False  # non-botanical hero -> don't let a botanical adjunct hijack
+        if botanical_is_hero and non_botanical_heroes:
+            # both named in title -> grammar (title head) owns the dose path,
+            # but only when the botanical is material enough for that ownership.
+            return (
+                botanical_is_material
+                and _botanical_is_title_head(product, primary, non_botanical_heroes)
+            )
+
+    # roles absent / no role hero -> legacy mass-dominance rule
+    return mass_says_botanical
 
 
 def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:

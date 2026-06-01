@@ -1145,6 +1145,14 @@ _ROLE_TITLE_STOPWORDS = {
     "womens", "men", "mens", "with", "plus", "high", "ultra",
 }
 
+# Title surfaces that imply a canonical ingredient even when the row's current
+# display name is broader. Example: labels often say "tocotrienols" while the
+# enriched row is canonicalized to vitamin_e / Vitamin E; the role classifier
+# still needs to know the product title is selling that row.
+_ROLE_TITLE_ALIASES_BY_CANONICAL = {
+    "vitamin_e": ("tocotrienol", "tocotrienols", "tocopherol", "tocopherols"),
+}
+
 # Fraction of the largest comparable-unit (mass) row a row must reach to count
 # as a "major" formulation component by mass alone (L5).
 _ROLE_MASS_MAJOR_FRACTION = 0.25
@@ -1215,12 +1223,14 @@ def _named_in_title(row: Dict[str, Any], title_norm: str) -> bool:
     # Whole-token match, NOT substring: "iron" must not match inside
     # "environmental". (CR-01)
     title_tokens = {tok for tok in re.split(r"[^a-z0-9]+", title_norm) if tok}
-    candidates = (
+    canonical = _norm(row.get("canonical_id"))
+    candidates = [
         _norm(row.get("name")),
         _norm(row.get("standardName")),
         _norm(row.get("standard_name")),
-        _norm(row.get("canonical_id")).replace("_", " "),
-    )
+        canonical.replace("_", " "),
+    ]
+    candidates.extend(_ROLE_TITLE_ALIASES_BY_CANONICAL.get(canonical, ()))
     for cand in candidates:
         for token in re.split(r"[^a-z0-9]+", cand):
             if len(token) >= 4 and token not in _ROLE_TITLE_STOPWORDS and token in title_tokens:
