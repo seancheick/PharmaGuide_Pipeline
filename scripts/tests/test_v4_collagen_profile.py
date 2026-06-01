@@ -135,6 +135,17 @@ def test_dose_biocell_hydrolyzed_type2_1000mg_within():
     assert out["band"] == "within_studied_range"
 
 
+def test_scorer_prefers_enricher_emitted_collagen_subtype():
+    # When the enricher stamps an authoritative collagen_subtype, the scorer uses
+    # it instead of re-deriving from text. A 40 mg row flagged undenatured_type_ii
+    # scores against the UC-II 40 mg range (within), even with generic form text.
+    row = _collagen(name="Collagen", standard_name="Collagen", canonical_id="collagen",
+                    form="collagen", quantity=40, unit="mg", collagen_subtype="undenatured_type_ii")
+    out = score_collagen_dose(_product([row]))
+    assert out["band"] == "within_studied_range"
+    assert out["score"] == 21.0
+
+
 def test_combo_peptides_plus_ucii_does_not_misroute_dominant_peptides():
     # "Collagen Peptides + UC-II" combo: 10 g peptides dominate a 40 mg UC-II
     # co-ingredient. The dominant peptide row must NOT be routed to the UC-II

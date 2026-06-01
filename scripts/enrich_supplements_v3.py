@@ -109,6 +109,7 @@ from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer, DosageNormalizationResult
 from proprietary_blend_detector import ProprietaryBlendDetector, BlendAnalysisResult
 from rda_ul_calculator import RDAULCalculator, NutrientAdequacyResult
+from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
 from match_ledger import (
     MatchLedgerBuilder,
@@ -5352,6 +5353,23 @@ class SupplementEnricherV3:
             entry["cleaner_match_method"] = cm
         if isinstance(ingredient.get("dose_data_quality"), dict):
             entry["dose_data_quality"] = dict(ingredient["dose_data_quality"])
+
+        # Phase 7.5 — stamp an authoritative collagen_subtype on collagen rows so
+        # the scorer (and Flutter / audits) read it instead of re-deriving from
+        # text. Row-only (strict) classification: assert a subtype only when THIS
+        # row proves it; a generic "collagen" row is left 'unspecified' for the
+        # scorer to resolve with product context. Single source of truth:
+        # collagen_taxonomy.classify_collagen_subtype_strict.
+        if str(entry.get("canonical_id") or "").strip().lower() == "collagen":
+            row_text = " ".join(
+                str(x) for x in (
+                    entry.get("matched_form"), entry.get("name"),
+                    entry.get("standard_name"), raw_source_text,
+                ) if x
+            )
+            entry["collagen_subtype"] = (
+                classify_collagen_subtype_strict(row_text) or _COLLAGEN_UNSPECIFIED
+            )
 
         return entry
 

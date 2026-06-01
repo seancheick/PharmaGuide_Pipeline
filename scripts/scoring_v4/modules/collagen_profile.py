@@ -38,6 +38,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Optional
 
+from collagen_taxonomy import classify_collagen_subtype, SUBTYPE_TO_DOSING_ALIAS
 from scoring_v4.modules.botanical_profile import (
     _norm,
     _mass_mg,
@@ -101,53 +102,23 @@ def is_collagen_product(product: Dict[str, Any]) -> bool:
     return True
 
 
-_UC2_RE = re.compile(r"\buc-?ii\b|undenatured|\bnt2\b|native\s+type\s*(ii|2)\b")
-# chicken sternum / sternal cartilage is the Type-II collagen source.
-_HYDROLYZED_TYPE2_RE = re.compile(r"\bbiocell\b|hydrolyzed\s+type\s*(ii|2)\b|stern(al|um)")
-_TYPE2_RE = re.compile(r"type\s*(ii|2)\b")
-# other collagen types (I/III/1/3) — a multi-type product (I & III, I/II/III) is
-# a hydrolyzed PEPTIDE blend, not a pure Type-II joint ingredient.
-_OTHER_TYPE_RE = re.compile(r"type\s*i\b|type\s*iii\b|type\s*[13]\b")
-
-
 def _collagen_dosing_entry(row: Dict[str, Any],
                            product: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
-    """Match a collagen row to the correct clinical-dose entry by subtype, most
-    specific first. Each collagen type has a distinct studied dose (UC-II 40 mg,
-    NEM 500 mg, BioCell / hydrolyzed Type II 500-2000 mg, hydrolyzed peptides
-    2.5-10 g, gelatin 5-15 g), so a single generic entry would mis-score the
-    low-mg subtypes.
+    """Match a collagen row to the correct clinical-dose entry by subtype. Each
+    collagen type has a distinct studied dose (UC-II 40 mg, NEM 500 mg, BioCell /
+    hydrolyzed Type II 500-2000 mg, hydrolyzed peptides 2.5-10 g, gelatin 5-15 g),
+    so a single generic entry would mis-score the low-mg subtypes.
 
-    UC-II and NEM are SPECIFIC ingredients identified from the ROW's own identity
-    only — never the product name — so a dominant hydrolyzed-peptide row in a
-    "Collagen Peptides + UC-II" combo isn't mis-routed to the 40 mg range by a
-    low-mg co-ingredient named in the title (P2 review fix). The product name is
-    folded in ONLY for the lower-precedence hydrolyzed-Type-II disambiguation,
-    where the TYPE is often disclosed in the title ("Type II Collagen Complex")
-    rather than on a generic "collagen (unspecified)" row."""
-    row_text = _identity_text(row)
-    full_text = row_text
-    if isinstance(product, dict):
-        full_text = row_text + " " + _norm(product.get("product_name"))
+    Prefers the authoritative `collagen_subtype` the enricher stamps on the row;
+    falls back to the shared `classify_collagen_subtype` text classifier when the
+    field is absent (older enriched corpus) or unrecognized. Both paths use the
+    same taxonomy (collagen_taxonomy.py) — single source of truth."""
     index = _dosing_index()
-    # row-identity only: a 40 mg / 500 mg specific ingredient must be on THIS row
-    if _UC2_RE.search(row_text):
-        return index.get("uc-ii")
-    if "eggshell membrane" in row_text or re.search(r"\bnem\b", row_text):
-        return index.get("nem")
-    # Hydrolyzed Type II (BioCell class): an explicit BioCell/sternum label, OR a
-    # PURE Type-II collagen (Type II present, NOT a multi-type I/III peptide blend,
-    # and not undenatured — handled above). At supplement doses a standalone Type-II
-    # is hydrolyzed Type II (~0.5-2 g), not the 2.5-10 g peptide range. Product name
-    # allowed here for the "Type II Collagen Complex" naming case.
-    if _HYDROLYZED_TYPE2_RE.search(full_text) or (
-            _TYPE2_RE.search(full_text) and not _OTHER_TYPE_RE.search(full_text)):
-        return index.get("biocell")
-    if ("gelatin" in row_text or "gelatine" in row_text) and not any(
-            h in row_text for h in _HYDROLYZED_TOKENS):
-        return index.get("gelatin")
-    # default: hydrolyzed Type I & III peptides (incl. marine)
-    return index.get("collagen")
+    subtype = _norm(row.get("collagen_subtype"))
+    if subtype not in SUBTYPE_TO_DOSING_ALIAS:
+        product_name = product.get("product_name") if isinstance(product, dict) else None
+        subtype = classify_collagen_subtype(_identity_text(row), product_name)
+    return index.get(SUBTYPE_TO_DOSING_ALIAS[subtype])
 
 
 def _parse_dose_range(entry: Dict[str, Any]) -> Optional[tuple]:
