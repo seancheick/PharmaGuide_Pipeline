@@ -109,7 +109,7 @@ def _dosing_index() -> Dict[str, Dict[str, Any]]:
     for entry in raw.get("therapeutic_dosing", []):
         if not isinstance(entry, dict):
             continue
-        for key in [entry.get("standard_name")] + list(entry.get("aliases") or []):
+        for key in [entry.get("id"), entry.get("standard_name")] + list(entry.get("aliases") or []):
             k = _norm(key)
             if k:
                 index.setdefault(k, entry)
@@ -202,13 +202,15 @@ def _mass_mg(row: Dict[str, Any]) -> Optional[float]:
     # must convert to mg, not fall through to the assume-mg branch).
     unit = _norm(row.get("unit") or row.get("unit_normalized")).replace(" ", "")
     unit = unit.replace("(s)", "s")
+    if not unit:
+        return qty  # botanicals often omit units; default those to mg.
     if unit in {"mg", "milligram", "milligrams"}:
         return qty
     if unit in {"g", "gram", "grams"}:
         return qty * 1000.0
     if unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms"}:
         return qty / 1000.0
-    return qty  # assume mg when unit absent/unknown (botanicals default to mg)
+    return None
 
 
 def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
@@ -477,12 +479,32 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     return None
 
 
-def _parse_range(entry: Dict[str, Any]) -> Optional[tuple]:
+def _parse_dose_range(entry: Dict[str, Any]) -> Optional[tuple]:
     rng = _norm(entry.get("typical_dosing_range"))
     m = re.match(r"^\s*([0-9.]+)\s*[-–]\s*([0-9.]+)", rng)
     if not m:
+        exact = re.match(r"^\s*([0-9.]+)\s*$", rng)
+        if exact:
+            v = float(exact.group(1))
+            return v, v
         return None
     return float(m.group(1)), float(m.group(2))
+
+
+def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
+    """Parsed therapeutic dose range converted to mg for _mass_mg comparison."""
+    rng = _parse_dose_range(entry)
+    if rng is None:
+        return None
+    unit = _norm(entry.get("unit"))
+    if unit in {"g", "gram", "grams"}:
+        return rng[0] * 1000.0, rng[1] * 1000.0
+    if unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms"}:
+        return rng[0] / 1000.0, rng[1] / 1000.0
+    if unit in {"mg", "milligram", "milligrams"}:
+        return rng
+    # Non-mass units (CFU, activity units) are not comparable to _mass_mg.
+    return None
 
 
 def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -511,12 +533,12 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if entry is None:
         return {"score": 10.0, "band": "disclosed_no_reference", "metadata": {}}
 
-    rng = _parse_range(entry)
+    rng = _range_mg(entry)
     if rng is None:
         return {"score": 10.0, "band": "disclosed_no_reference", "metadata": {}}
 
     lo, hi = rng
-    meta = {"dose_mg": mass, "range": [lo, hi]}
+    meta = {"dose_mg": mass, "range_mg": [lo, hi]}
     if lo <= mass <= hi:
         return {"score": 21.0, "band": "within_studied_range", "metadata": meta}
     if 0.8 * lo <= mass < lo or hi < mass <= 1.2 * hi:

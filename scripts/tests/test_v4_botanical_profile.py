@@ -36,6 +36,13 @@ def test_mass_mg_plain_units_unchanged():
     assert _mass_mg({"quantity": 5, "unit": "grams"}) == 5000.0
 
 
+def test_mass_mg_blank_unit_defaults_to_mg_but_non_mass_units_do_not():
+    assert _mass_mg({"quantity": 250, "unit": ""}) == 250.0
+    assert _mass_mg({"quantity": 10, "unit": "Billion CFU"}) is None
+    assert _mass_mg({"quantity": 1200, "unit": "ALU"}) is None
+    assert _mass_mg({"quantity": 400, "unit": "IU"}) is None
+
+
 def _botanical_ingredient(name="KSM-66", standard_name="Ashwagandha",
                           canonical_id="ashwagandha", form="Ashwagandha Root Extract",
                           quantity=600, unit="mg", **extra):
@@ -134,6 +141,21 @@ def test_dose_within_studied_range():
     out = score_botanical_dose(_botanical_product())
     assert 20.0 <= out["score"] <= 22.0
     assert out["band"] == "within_studied_range"
+
+
+def test_dose_exact_target_reference_counts_within_range():
+    # saw palmetto is stored as a single target dose ("320" mg), not a range.
+    ing = _botanical_ingredient(
+        name="Saw Palmetto",
+        standard_name="Saw Palmetto",
+        canonical_id="saw_palmetto_berry",
+        form="Saw Palmetto Berry Extract",
+        quantity=320,
+    )
+    out = score_botanical_dose(_botanical_product(ingredient=ing))
+    assert out["band"] == "within_studied_range"
+    assert out["score"] == 21.0
+    assert out["metadata"]["range_mg"] == [320.0, 320.0]
 
 
 def test_dose_below_studied_range():

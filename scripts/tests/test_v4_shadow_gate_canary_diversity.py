@@ -59,13 +59,13 @@ SHADOW_CANARIES = {
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",
-        # Phase 8 (primary-ingredient evidence floor): bromelain (mass-primary) has
-        # a systematic_review_meta but positive_WEAK match, so the effect-weighted
-        # floor is 14*0.85=11.9 (not 14) — which keeps the raw score below the POOR
-        # floor. Stays POOR: a weak-effect bromelain does not auto-earn SAFE.
+        # Route-aware botanical hardening: this is an enzyme/proprietary-blend
+        # product, not a botanical hero product, so it stays on the generic path.
+        # It remains POOR; the canary invariant is that blend visibility does not
+        # force CAUTION and weak enzyme evidence does not auto-earn SAFE.
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (37.4, 38.8),
+        "score_range": (35.4, 36.8),
     },
     # Probiotic with named strains but no total CFU: scoreable, but cannot be
     # SAFE because the primary probiotic dose is undisclosed.
