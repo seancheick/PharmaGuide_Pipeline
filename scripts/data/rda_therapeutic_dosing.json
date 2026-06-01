@@ -4,26 +4,10 @@
     "purpose": "Provide clinical therapeutic dosing ranges for BOTANICAL and COLLAGEN ingredients (the only classes the v4 botanical_profile/collagen_profile dose adapters consume). Non-botanical bioactives live in rda_optimal_uls.json.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-31",
-    "total_entries": 40,
+    "total_entries": 25,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
   "therapeutic_dosing": [
-    {
-      "standard_name": "5-HTP (5-Hydroxytryptophan)",
-      "aliases": [
-        "5-htp",
-        "5-hydroxytryptophan",
-        "oxitriptan"
-      ],
-      "unit": "mg",
-      "common_use": "Mood support, sleep aid, serotonin precursor",
-      "typical_dosing_range": "50-300",
-      "common_serving_size": "100",
-      "upper_limit": "500",
-      "upper_limit_notes": "Do not combine with prescription antidepressants (SSRIs, MAOIs). May cause nausea at higher doses.",
-      "evidence_tier": 2,
-      "id": "5_htp_5_hydroxytryptophan"
-    },
     {
       "standard_name": "Ashwagandha Root Extract",
       "aliases": [
@@ -58,21 +42,6 @@
       "id": "bacopa_monnieri_extract"
     },
     {
-      "standard_name": "Berberine",
-      "aliases": [
-        "berberine hcl",
-        "berberine hydrochloride"
-      ],
-      "unit": "mg",
-      "common_use": "Blood sugar regulation, antimicrobial, lipid support",
-      "typical_dosing_range": "500-1500",
-      "common_serving_size": "500",
-      "upper_limit": "2000",
-      "upper_limit_notes": "Can interact with many medications via CYP450 enzyme inhibition. Consult doctor.",
-      "evidence_tier": 1,
-      "id": "berberine"
-    },
-    {
       "standard_name": "Curcumin (from Turmeric)",
       "aliases": [
         "curcumin",
@@ -91,67 +60,6 @@
       "upper_limit_notes": "High doses may cause GI upset. Enhanced formulations (with piperine, phospholipids) greatly increase bioavailability.",
       "evidence_tier": 1,
       "id": "curcumin_from_turmeric"
-    },
-    {
-      "standard_name": "DIM (Diindolylmethane)",
-      "aliases": [
-        "dim",
-        "diindolylmethane"
-      ],
-      "unit": "mg",
-      "common_use": "Hormone balance, estrogen metabolism",
-      "typical_dosing_range": "100-200",
-      "common_serving_size": "100",
-      "upper_limit": "300",
-      "upper_limit_notes": "May cause headaches or dark urine. Start with a lower dose.",
-      "evidence_tier": 2,
-      "id": "dim_diindolylmethane"
-    },
-    {
-      "standard_name": "GABA (Gamma-Aminobutyric Acid)",
-      "aliases": [
-        "gaba",
-        "gamma-aminobutyric acid"
-      ],
-      "unit": "mg",
-      "common_use": "Relaxation, stress reduction, sleep support",
-      "typical_dosing_range": "250-750",
-      "common_serving_size": "500",
-      "upper_limit": "3000",
-      "upper_limit_notes": "Generally recognized as safe (GRAS). High doses may cause brief tingling or shortness of breath.",
-      "evidence_tier": 2,
-      "id": "gaba_gamma_aminobutyric_acid"
-    },
-    {
-      "standard_name": "Glucosamine Sulfate",
-      "aliases": [
-        "glucosamine",
-        "glucosamine sulfate",
-        "glucosamine hcl"
-      ],
-      "unit": "mg",
-      "common_use": "Joint health, osteoarthritis support",
-      "typical_dosing_range": "1500",
-      "common_serving_size": "1500",
-      "upper_limit": "2000",
-      "upper_limit_notes": "May affect blood sugar; monitor if diabetic. Shellfish allergen warning.",
-      "evidence_tier": 1,
-      "id": "glucosamine_sulfate"
-    },
-    {
-      "standard_name": "Hyaluronic Acid",
-      "aliases": [
-        "hyaluronic acid",
-        "sodium hyaluronate"
-      ],
-      "unit": "mg",
-      "common_use": "Joint lubrication, skin hydration",
-      "typical_dosing_range": "100-200",
-      "common_serving_size": "100",
-      "upper_limit": "400",
-      "upper_limit_notes": "Generally well-tolerated. Low molecular weight may be better absorbed.",
-      "evidence_tier": 2,
-      "id": "hyaluronic_acid"
     },
     {
       "standard_name": "L-Theanine",
@@ -185,51 +93,6 @@
       "id": "lutein"
     },
     {
-      "standard_name": "Melatonin",
-      "aliases": [
-        "melatonin"
-      ],
-      "unit": "mg",
-      "common_use": "Sleep regulation, jet lag",
-      "typical_dosing_range": "0.5-5",
-      "common_serving_size": "3",
-      "upper_limit": "10",
-      "upper_limit_notes": "Lower doses (0.5-1mg) are often more effective for sleep regulation. Higher doses may cause morning grogginess.",
-      "evidence_tier": 1,
-      "id": "melatonin"
-    },
-    {
-      "standard_name": "MSM (Methylsulfonylmethane)",
-      "aliases": [
-        "msm",
-        "methylsulfonylmethane"
-      ],
-      "unit": "mg",
-      "common_use": "Joint health, anti-inflammatory, skin/hair/nails",
-      "typical_dosing_range": "1000-3000",
-      "common_serving_size": "1000",
-      "upper_limit": "6000",
-      "upper_limit_notes": "Start with a lower dose to minimize potential detox symptoms. Generally very safe.",
-      "evidence_tier": 2,
-      "id": "msm_methylsulfonylmethane"
-    },
-    {
-      "standard_name": "NAC (N-Acetyl Cysteine)",
-      "aliases": [
-        "nac",
-        "n-acetyl cysteine",
-        "n-acetylcysteine"
-      ],
-      "unit": "mg",
-      "common_use": "Glutathione precursor, respiratory health, detox support",
-      "typical_dosing_range": "600-1800",
-      "common_serving_size": "600",
-      "upper_limit": "3000",
-      "upper_limit_notes": "May interact with nitroglycerin and ACE inhibitors. Rare reports of histamine release.",
-      "evidence_tier": 1,
-      "id": "nac_n_acetyl_cysteine"
-    },
-    {
       "standard_name": "Probiotics (General)",
       "aliases": [
         "probiotics",
@@ -245,21 +108,6 @@
       "upper_limit_notes": "Strain-specific effects are critical. High doses may cause initial bloating. Immunocompromised individuals should consult a doctor.",
       "evidence_tier": 1,
       "id": "probiotics_general"
-    },
-    {
-      "standard_name": "Quercetin",
-      "aliases": [
-        "quercetin",
-        "quercetin dihydrate"
-      ],
-      "unit": "mg",
-      "common_use": "Antioxidant, anti-inflammatory, mast cell stabilization",
-      "typical_dosing_range": "500-1000",
-      "common_serving_size": "500",
-      "upper_limit": "2000",
-      "upper_limit_notes": "Often paired with bromelain to enhance absorption. May interact with some antibiotics.",
-      "evidence_tier": 2,
-      "id": "quercetin"
     },
     {
       "standard_name": "Resveratrol",
@@ -323,22 +171,6 @@
       "upper_limit_notes": "**Major Interaction Risk:** Induces CYP450 enzymes. Interacts with antidepressants, birth control, blood thinners, and many others. Contraindicated with many medications.",
       "evidence_tier": 1,
       "id": "st_john_s_wort"
-    },
-    {
-      "standard_name": "Ubiquinol (Active CoQ10)",
-      "aliases": [
-        "ubiquinol",
-        "active coq10",
-        "kaneka ubiquinol"
-      ],
-      "unit": "mg",
-      "common_use": "Enhanced bioavailability CoQ10 for energy and heart health",
-      "typical_dosing_range": "100-200",
-      "common_serving_size": "100",
-      "upper_limit": "600",
-      "upper_limit_notes": "Considered 2-4x more bioavailable than ubiquinone. Preferred form for those over 40 or with absorption issues.",
-      "evidence_tier": 1,
-      "id": "ubiquinol_active_coq10"
     },
     {
       "standard_name": "Valerian Root",
@@ -459,36 +291,6 @@
       "id": "eggshell_membrane_nem"
     },
     {
-      "standard_name": "Magnesium L-Threonate",
-      "aliases": [
-        "magtein",
-        "magnesium threonate"
-      ],
-      "unit": "mg",
-      "common_use": "Cognitive enhancement, memory, sleep quality",
-      "typical_dosing_range": "144-200",
-      "common_serving_size": "144",
-      "upper_limit": "2000",
-      "upper_limit_notes": "May cause drowsiness. Specific form designed to cross blood-brain barrier. Doses are for elemental magnesium.",
-      "evidence_tier": 2,
-      "id": "magnesium_l_threonate"
-    },
-    {
-      "standard_name": "NMN (Nicotinamide Mononucleotide)",
-      "aliases": [
-        "nmn",
-        "nicotinamide mononucleotide"
-      ],
-      "unit": "mg",
-      "common_use": "NAD+ precursor, anti-aging, cellular energy support",
-      "typical_dosing_range": "250-500",
-      "common_serving_size": "250",
-      "upper_limit": "1000",
-      "upper_limit_notes": "Relatively new supplement. Short-term human trials suggest good tolerability. Long-term effects are still under investigation.",
-      "evidence_tier": 2,
-      "id": "nmn_nicotinamide_mononucleotide"
-    },
-    {
       "standard_name": "Lion's Mane Mushroom Extract",
       "aliases": [
         "lion's mane",
@@ -504,23 +306,6 @@
       "upper_limit_notes": "Generally well-tolerated. Extract concentration varies significantly between products.",
       "evidence_tier": 2,
       "id": "lion_s_mane_mushroom_extract"
-    },
-    {
-      "standard_name": "PQQ (Pyrroloquinoline Quinone)",
-      "aliases": [
-        "pqq",
-        "pyrroloquinoline quinone",
-        "biopqq",
-        "methoxatin"
-      ],
-      "unit": "mg",
-      "common_use": "Mitochondrial biogenesis, cognitive function, cellular energy",
-      "typical_dosing_range": "10-20",
-      "common_serving_size": "20",
-      "upper_limit": "40",
-      "upper_limit_notes": "Clinical trials use 20-21.5mg/day. Higher doses not well studied. Often combined with CoQ10 for synergy.",
-      "evidence_tier": 2,
-      "id": "pqq_pyrroloquinoline_quinone"
     },
     {
       "standard_name": "Phosphatidylserine",
@@ -623,23 +408,6 @@
       "upper_limit_notes": "Standard dose is 140mg 2-3x daily. Phospholipid-bound forms (phytosome) have better bioavailability. Safe for long-term use.",
       "evidence_tier": 1,
       "id": "milk_thistle_silymarin"
-    },
-    {
-      "standard_name": "SAM-e (S-Adenosyl Methionine)",
-      "aliases": [
-        "sam-e",
-        "same",
-        "s-adenosyl methionine",
-        "ademethionine"
-      ],
-      "unit": "mg",
-      "common_use": "Mood support, depression, joint health, liver function, methylation support",
-      "typical_dosing_range": "400-1600",
-      "common_serving_size": "400",
-      "upper_limit": "1600",
-      "upper_limit_notes": "Take on empty stomach. Enteric-coated preferred. AVOID with bipolar disorder (may trigger mania). May interact with antidepressants.",
-      "evidence_tier": 1,
-      "id": "sam_e_s_adenosyl_methionine"
     },
     {
       "standard_name": "Cordyceps Mushroom Extract",

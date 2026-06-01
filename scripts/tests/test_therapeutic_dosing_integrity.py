@@ -196,6 +196,67 @@ def test_batch3_scores_via_calculator():
         assert r.rda_ai is not None and r.scoring_eligible, f"{name} not scoring-eligible in optimal-uls"
 
 
+# ── Batch 4: migrate remaining non-botanical bioactives → optimal-uls ───
+
+BATCH4_MIGRATED = {
+    "glucosamine_sulfate": "Glucosamine Sulfate",
+    "msm_methylsulfonylmethane": "MSM",
+    "hyaluronic_acid": "Hyaluronic Acid",
+    "gaba_gamma_aminobutyric_acid": "GABA",
+    "melatonin": "Melatonin",
+    "nac_n_acetyl_cysteine": "NAC",
+    "ubiquinol_active_coq10": "Ubiquinol",
+    "magnesium_l_threonate": "Magnesium L-Threonate",
+    "nmn_nicotinamide_mononucleotide": "NMN",
+    "pqq_pyrroloquinoline_quinone": "PQQ",
+    "sam_e_s_adenosyl_methionine": "SAM-e",
+    "berberine": "Berberine",
+    "quercetin": "Quercetin",
+    "dim_diindolylmethane": "DIM",
+    "5_htp_5_hydroxytryptophan": "5-HTP",
+}
+
+
+def test_batch4_migrated_absent_from_therapeutic(therapeutic):
+    ids = {e.get("id") for e in therapeutic["therapeutic_dosing"]}
+    for rid in BATCH4_MIGRATED:
+        assert rid not in ids, f"{rid} should have migrated out of the therapeutic file"
+
+
+def test_batch4_present_in_optimal_uls_with_refs_and_grid(optimal_uls):
+    by_name = {(e.get("standard_name") or "").lower(): e for e in optimal_uls["nutrient_recommendations"]}
+    for std in BATCH4_MIGRATED.values():
+        e = by_name.get(std.lower())
+        assert e is not None, f"{std} missing from rda_optimal_uls.json"
+        assert e.get("references"), f"{std} must carry content-verified references[]"
+        assert len(e.get("data") or []) == 16, f"{std} must have a full 16-row data[] grid"
+
+
+def test_therapeutic_is_botanical_collagen_or_probiotics_only(therapeutic):
+    """Final-state invariant: after migration the therapeutic file holds only
+    botanical-routed entries, the 5 collagen entries, Lutein (marigold-routable),
+    and the Probiotics (CFU) exception — no other non-botanical bioactives."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from scoring_v4.modules.botanical_profile import _norm, _botanical_identity_set
+
+    bset = _botanical_identity_set()
+    collagen_ids = {"collagen_peptides", "uc_ii_collagen", "biocell_collagen", "gelatin", "eggshell_membrane_nem"}
+    allowed_exceptions = {
+        "probiotics_general",  # CFU unit — cannot fit the mg/g optimal-uls schema
+        "lutein",              # marigold-routable: consumed via a marigold active's matched_form, not the entry name
+    }
+    for e in therapeutic["therapeutic_dosing"]:
+        eid = e.get("id")
+        if eid in collagen_ids or eid in allowed_exceptions:
+            continue
+        keys = [_norm(e.get("standard_name"))] + [_norm(a) for a in (e.get("aliases") or [])]
+        assert any(k in bset for k in keys), (
+            f"{e.get('standard_name')} is neither botanical-name-matched, collagen, nor an allowed exception"
+        )
+
+
 # ── citation verifier wiring ────────────────────────────────────────────
 
 def test_citation_verifier_configs_present():
