@@ -36,9 +36,17 @@ Ginkgo, **Astaxanthin**, Black Seed Oil, Maca, Milk Thistle, Cordyceps, Reishi.
 ## MIGRATE candidates — not consumed by the botanical/collagen paths (25)
 
 **Clearly non-botanical bioactives (safe to migrate after the standard verify-before-remove check):**
-- Already in `rda_optimal_uls.json` (just remove the inert copy): Alpha-Lipoic Acid, CoQ10, Lutein, Taurine, Creatine.
+- Already in `rda_optimal_uls.json` — inert copy REMOVED in Batch 1 (commit pending): Alpha-Lipoic Acid, CoQ10,
+  Taurine, Creatine. (Zero-delta: none is botanical-name-matched and none is botanical by nature → never reachable
+  via the botanical/collagen dose adapters; all 4 confirmed present in optimal-uls so no coverage lost.)
 - Add to optimal-uls (verify) then remove: Beta-Alanine, Citrulline Malate, GABA, Glucosamine Sulfate,
   Hyaluronic Acid, Melatonin, MSM, NAC, Ubiquinol, Magnesium L-Threonate, NMN, L-Citrulline, PQQ, HMB, SAM-e.
+
+**CORRECTION (Batch 1 finding) — Lutein is KEPT, not migrated.** `marigold` / `marigold extract` IS in
+`botanical_ingredients.json` (id `marigold`), so marigold-derived lutein products are botanical-routed and the
+Lutein therapeutic entry IS consumed for them. The Lutein-in-both-files state is therefore CORRECT dual-routing
+(marigold-extract → therapeutic/botanical path; isolated lutein → optimal-uls/generic path), not a dead duplicate.
+So Batch 1 removed 4, not 5; KEEP count is 24 (19 botanical incl. Lutein + 5 collagen).
 
 **FLAGGED — plant-derived isolates NOT in the identity set; confirm enricher taxonomy on corpus BEFORE removal:**
 - **Berberine** (plant alkaloid; v4 dev hypothesized botanical — static says not name-matched → must check enricher tag)

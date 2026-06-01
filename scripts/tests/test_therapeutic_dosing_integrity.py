@@ -99,6 +99,62 @@ def test_collagen_entries_carry_verified_references(therapeutic):
         assert by_id[cid].get("references"), f"collagen entry {cid} must keep its verified references[]"
 
 
+# ── Batch 1: migration of inert duplicates (zero score delta) ───────────
+
+# The 4 endogenous/synthetic compounds removed from the therapeutic file because
+# they are scored from rda_optimal_uls.json (generic path) and are NOT reachable
+# via the botanical or collagen dose adapters — so their removal is score-neutral.
+BATCH1_REMOVED = {
+    "alpha_lipoic_acid": "Alpha-Lipoic Acid",
+    "coenzyme_q10_ubiquinone": "Coenzyme Q10",
+    "creatine_monohydrate": "Creatine",
+    "taurine": "Taurine",
+}
+
+
+def test_batch1_removed_entries_absent(therapeutic):
+    ids = {e.get("id") for e in therapeutic["therapeutic_dosing"]}
+    for rid in BATCH1_REMOVED:
+        assert rid not in ids, f"{rid} should have been removed from therapeutic file"
+
+
+def test_batch1_removed_are_unreachable_via_botanical(therapeutic):
+    """Zero-delta proof (static half): the removed compounds are not in the
+    botanical identity set, so _is_botanical_active can only fire on them via an
+    enricher 'botanical' tag — which never happens for these endogenous/synthetic
+    compounds. Thus the botanical dose adapter could never have consumed them."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from scoring_v4.modules.botanical_profile import _norm, _botanical_identity_set
+
+    bset = _botanical_identity_set()
+    # probe the removed names + their aliases
+    probes = {
+        "alpha_lipoic_acid": ["alpha-lipoic acid", "ala", "thioctic acid"],
+        "coenzyme_q10_ubiquinone": ["coenzyme q10", "coq10", "ubiquinone"],
+        "creatine_monohydrate": ["creatine", "creatine monohydrate"],
+        "taurine": ["taurine", "l-taurine"],
+    }
+    for rid, names in probes.items():
+        hits = [n for n in names if _norm(n) in bset]
+        assert not hits, f"{rid} is botanical-name-matched ({hits}) — removal NOT score-neutral"
+
+
+def test_batch1_coverage_preserved_in_optimal_uls(optimal_uls):
+    """Coverage must not be lost: each removed bioactive must exist in optimal-uls."""
+    names = {(e.get("standard_name") or "").lower() for e in optimal_uls["nutrient_recommendations"]}
+    for std in BATCH1_REMOVED.values():
+        assert std.lower() in names, f"{std} missing from rda_optimal_uls.json (coverage lost)"
+
+
+def test_lutein_retained_botanical_routable(therapeutic):
+    """Lutein stays: it is botanical-routable via marigold (in botanical_ingredients.json),
+    so its therapeutic entry is consumed for marigold-derived products — NOT a dead duplicate."""
+    ids = {e.get("id") for e in therapeutic["therapeutic_dosing"]}
+    assert "lutein" in ids
+
+
 # ── citation verifier wiring ────────────────────────────────────────────
 
 def test_citation_verifier_configs_present():
