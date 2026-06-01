@@ -51,6 +51,18 @@ RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
 PHASE_MARKER = "P1.6.2_omega_dose"
 CAP_DOSE = 25.0
 
+# Indication-aware dosing for prenatal DHA. The general EPA+DHA bands target
+# cardiovascular intakes (~1000-2000 mg/day), which under-credits a prenatal
+# DHA-dominant product: the prenatal DHA target is ~200 mg DHA/day (EFSA NDA
+# Panel 2014; ACOG/March of Dimes ~200-300 mg), so a 650 mg-DHA prenatal product
+# is generous for its indication. A DHA-dominant product named for prenatal use
+# is scored against the DHA target; we take the higher of this and the general band.
+_PRENATAL_DOSE_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|maternal|gestation)\b", re.IGNORECASE)
+_PRENATAL_DHA_TARGET_MG = 200.0
+_PRENATAL_DHA_WITHIN = 20.0
+_PRENATAL_DHA_NEAR = 14.0
+_PRENATAL_DHA_BELOW = 10.0
+
 
 # Unit-conversion table — normalized to mg.
 _UNIT_TO_MG: Dict[str, float] = {
@@ -280,6 +292,25 @@ def score_dose(product: Any) -> Dict[str, Any]:
     band_score, band_label, band_flag = _band_score(per_day_mid, bands)
     band_score = min(band_score, band_cap)
 
+    # Indication-aware: a prenatal, DHA-dominant product is scored against the
+    # prenatal DHA target (EFSA/ACOG ~200 mg DHA/day), not the general EPA+DHA
+    # bands. Take the higher of the two so a generous prenatal DHA isn't penalized
+    # for a modest combined EPA+DHA total.
+    name_text = " ".join(str(product.get(k) or "") for k in ("product_name", "fullName", "brand_name"))
+    prenatal_dha = bool(_PRENATAL_DOSE_RE.search(name_text)) and dha_ps >= epa_ps and dha_ps > 0
+    indication_label: Optional[str] = None
+    if prenatal_dha:
+        dha_per_day = dha_ps * ((min_daily + max_daily) / 2.0)
+        if dha_per_day >= _PRENATAL_DHA_TARGET_MG:
+            ind_score, indication_label = _PRENATAL_DHA_WITHIN, "prenatal_dha_within_target"
+        elif dha_per_day >= _PRENATAL_DHA_TARGET_MG * 0.5:
+            ind_score, indication_label = _PRENATAL_DHA_NEAR, "prenatal_dha_near_target"
+        else:
+            ind_score, indication_label = _PRENATAL_DHA_BELOW, "prenatal_dha_below_target"
+        ind_score = min(ind_score, band_cap)
+        if ind_score > band_score:
+            band_score, band_label = ind_score, indication_label
+
     ratio_score, ratio_meta = _ratio_sanity_score(epa_ps, dha_ps, ratio_cfg)
 
     components: Dict[str, float] = {}
@@ -293,6 +324,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
 
     metadata: Dict[str, Any] = {
         "phase": PHASE_MARKER,
+        "prenatal_dha_indication": indication_label,
         "epa_mg_per_serving": round(epa_ps, 2),
         "dha_mg_per_serving": round(dha_ps, 2),
         "epa_dha_combined_mg_per_serving": round(combined_ps, 2),
