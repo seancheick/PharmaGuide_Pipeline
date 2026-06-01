@@ -14,11 +14,20 @@ from typing import Any, Dict, Iterable, List, Optional
 from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     has_usable_individual_dose,
+    bio_score_of,
     _as_float,
     _norm_text,
     _safe_dict,
     _safe_list,
 )
+
+# Bioavailability weighting of dose coverage. "Adequate on paper" (100% RDA) does
+# not mean adequate in vivo — magnesium oxide is poorly absorbed vs glycinate. So
+# each nutrient's coverage credit is scaled by its FORM bio_score, so a cheap-form
+# multi cannot out-dose a premium-form one purely on panel breadth. Floor 0.5 so a
+# cheap-but-real form still counts; unknown bio_score is neutral (1.0).
+_BIO_SCORE_MAX = 15.0
+_BIO_WEIGHT_FLOOR = 0.5
 
 
 DIMENSION_CAP = 30.0
@@ -164,9 +173,35 @@ def _coverage_unit_credit(pct_rda: Optional[float], pct_ul: Optional[float]) -> 
     return 0.65
 
 
+def _nutrient_bio_index(product: Dict[str, Any]) -> Dict[str, float]:
+    """nutrient_key -> form bio_score, from the scorable ingredient rows. Used to
+    bioavailability-weight each nutrient's dose-coverage credit."""
+    index: Dict[str, float] = {}
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        bio = bio_score_of(row)
+        if bio is None:
+            continue
+        for tok in (row.get("canonical_id"), row.get("standard_name"), row.get("name")):
+            key = _nutrient_key(tok)
+            if key:
+                index[key] = max(index.get(key, 0.0), float(bio))
+    return index
+
+
+def _bio_weight(bio_score: Optional[float]) -> float:
+    """Coverage weight from a form's bio_score: premium ~1.0, cheap ~floor.
+    Unknown bio is neutral (1.0) so we never penalize missing data."""
+    if bio_score is None:
+        return 1.0
+    return max(_BIO_WEIGHT_FLOOR, min(1.0, _BIO_WEIGHT_FLOOR + (1.0 - _BIO_WEIGHT_FLOOR) * (bio_score / _BIO_SCORE_MAX)))
+
+
 def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
     rda_ul = _safe_dict(product.get("rda_ul_data"))
     rows = _safe_list(rda_ul.get("adequacy_results"))
+    bio_index = _nutrient_bio_index(product)
     scores: Dict[str, float] = {}
 
     for row in rows:
@@ -183,6 +218,9 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
         )
         if credit is None:
             continue
+        # Bioavailability-weight the coverage credit by the nutrient's form quality
+        # (cheap oxide/synthetic forms count less toward "adequate dose").
+        credit = credit * _bio_weight(bio_index.get(key))
         # Multiple rows for the same nutrient (e.g. vitamin A forms) should
         # not overweight the average. Keep the best row-level coverage signal.
         scores[key] = max(scores.get(key, 0.0), _round(_clamp(0.0, 1.0, credit)))
