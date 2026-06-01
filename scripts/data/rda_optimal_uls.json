@@ -3,8 +3,8 @@
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-16",
-    "total_entries": 47,
+    "last_updated": "2026-06-01",
+    "total_entries": 51,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
     "country": "USA",
     "age_brackets": [
@@ -7903,6 +7903,675 @@
       "smoker_adjustment": null,
       "synthesis_precursors": null,
       "unofficial_ul": null
+    },
+    {
+      "standard_name": "Beta-Alanine",
+      "id": "beta_alanine",
+      "aliases": [
+        "beta-alanine",
+        "β-alanine",
+        "carnosyn",
+        "betapure"
+      ],
+      "unit": "g",
+      "ul": null,
+      "ul_note": "No official UL. Tolerability soft-cap ~6.4 g per single dose (harmless paresthesia), not a toxicity limit.",
+      "optimal_range": "3.2-6.4",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Harmless paresthesia (tingling) at higher single doses"
+      ],
+      "special_considerations": "Muscle-carnosine precursor; ≥3.2 g/day for 2-4 weeks raises muscle carnosine. Divided or sustained-release dosing reduces tingling.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "Generally well tolerated"
+      ],
+      "interaction_warnings": [],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — rda_ai anchor is the lower bound of the clinically effective dose.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "26175657",
+        "22270875",
+        "27797728"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 3.2,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
+    },
+    {
+      "standard_name": "Citrulline Malate",
+      "id": "citrulline_malate",
+      "aliases": [
+        "citrulline malate",
+        "l-citrulline malate"
+      ],
+      "unit": "mg",
+      "ul": null,
+      "ul_note": "No official UL; well tolerated. Mild GI distress only at very high intakes.",
+      "optimal_range": "6000-8000",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Mild GI discomfort at very high doses"
+      ],
+      "special_considerations": "Usually 2:1 citrulline:malate; most-studied 8 g taken ~1 h pre-exercise for anaerobic performance and soreness.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "Generally well tolerated"
+      ],
+      "interaction_warnings": [],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — rda_ai anchor is the lower bound of the clinically effective dose.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "20386132",
+        "31977835"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 6000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
+    },
+    {
+      "standard_name": "L-Citrulline",
+      "id": "l_citrulline",
+      "aliases": [
+        "l-citrulline",
+        "pure citrulline"
+      ],
+      "unit": "mg",
+      "ul": null,
+      "ul_note": "No official UL; well tolerated.",
+      "optimal_range": "3000-6000",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Mild GI discomfort at higher doses"
+      ],
+      "special_considerations": "Pure L-citrulline (no malate); more concentrated than citrulline malate. 3-6 g/day for nitric-oxide / blood-flow support.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "Generally well tolerated"
+      ],
+      "interaction_warnings": [],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — rda_ai anchor is the lower bound of the clinically effective dose.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "31977835"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 3000.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
+    },
+    {
+      "standard_name": "HMB",
+      "id": "hmb",
+      "aliases": [
+        "hmb",
+        "beta-hydroxy-beta-methylbutyrate",
+        "hmb-ca",
+        "hmb-fa",
+        "calcium hmb"
+      ],
+      "unit": "g",
+      "ul": null,
+      "ul_note": "No official UL; safe at and beyond 3 g/day in trials. '6 g' is a tolerability soft-cap.",
+      "optimal_range": "3",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Generally well tolerated"
+      ],
+      "special_considerations": "Canonical dose 3 g/day (≈38 mg/kg), often 1 g x3. HMB-FA (free acid) absorbs faster than HMB-Ca.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "Generally well tolerated"
+      ],
+      "interaction_warnings": [],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Migrated from rda_therapeutic_dosing.json (non-botanical bioactive); scored via the generic dose path. No official DRI — rda_ai anchor is the lower bound of the clinically effective dose.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "23374455",
+        "41305674"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 3.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
     }
   ]
 }

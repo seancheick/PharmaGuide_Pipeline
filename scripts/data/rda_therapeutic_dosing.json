@@ -4,7 +4,7 @@
     "purpose": "Provide clinical therapeutic dosing ranges for BOTANICAL and COLLAGEN ingredients (the only classes the v4 botanical_profile/collagen_profile dose adapters consume). Non-botanical bioactives live in rda_optimal_uls.json.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-31",
-    "total_entries": 44,
+    "total_entries": 40,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
   "therapeutic_dosing": [
@@ -71,38 +71,6 @@
       "upper_limit_notes": "Can interact with many medications via CYP450 enzyme inhibition. Consult doctor.",
       "evidence_tier": 1,
       "id": "berberine"
-    },
-    {
-      "standard_name": "Beta-Alanine",
-      "aliases": [
-        "beta-alanine",
-        "carnosyn",
-        "muscle fuel"
-      ],
-      "unit": "g",
-      "common_use": "Exercise performance, muscle endurance",
-      "typical_dosing_range": "2-6",
-      "common_serving_size": "3.2",
-      "upper_limit": "10",
-      "upper_limit_notes": "Causes harmless paresthesia (tingling). Doses >800mg may be best taken divided.",
-      "evidence_tier": 1,
-      "id": "beta_alanine"
-    },
-    {
-      "standard_name": "Citrulline Malate",
-      "aliases": [
-        "citrulline malate",
-        "l-citrulline malate",
-        "citrulline"
-      ],
-      "unit": "mg",
-      "common_use": "Nitric oxide production, exercise performance, blood flow",
-      "typical_dosing_range": "6000-8000",
-      "common_serving_size": "6000",
-      "upper_limit": "10000",
-      "upper_limit_notes": "Generally well-tolerated. Very high doses may cause GI distress.",
-      "evidence_tier": 1,
-      "id": "citrulline_malate"
     },
     {
       "standard_name": "Curcumin (from Turmeric)",
@@ -538,22 +506,6 @@
       "id": "lion_s_mane_mushroom_extract"
     },
     {
-      "standard_name": "L-Citrulline",
-      "aliases": [
-        "l-citrulline",
-        "citrulline",
-        "pure citrulline"
-      ],
-      "unit": "mg",
-      "common_use": "Nitric oxide production, exercise performance, blood flow",
-      "typical_dosing_range": "3000-6000",
-      "common_serving_size": "4000",
-      "upper_limit": "10000",
-      "upper_limit_notes": "Pure L-citrulline form, more concentrated than citrulline malate. May cause mild GI upset at higher doses.",
-      "evidence_tier": 1,
-      "id": "l_citrulline"
-    },
-    {
       "standard_name": "PQQ (Pyrroloquinoline Quinone)",
       "aliases": [
         "pqq",
@@ -619,24 +571,6 @@
       "upper_limit_notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint. Safe up to 24mg/day in studies.",
       "evidence_tier": 1,
       "id": "astaxanthin"
-    },
-    {
-      "standard_name": "HMB (Beta-Hydroxy-Beta-Methylbutyrate)",
-      "aliases": [
-        "hmb",
-        "beta-hydroxy-beta-methylbutyrate",
-        "hmb-ca",
-        "hmb-fa",
-        "calcium hmb"
-      ],
-      "unit": "g",
-      "common_use": "Muscle preservation, anti-catabolic, exercise recovery, sarcopenia prevention",
-      "typical_dosing_range": "3",
-      "common_serving_size": "3",
-      "upper_limit": "6",
-      "upper_limit_notes": "Standard dose is 3g/day (1g 3x daily). HMB-FA form works faster (30-60min pre-workout) vs HMB-Ca (60-120min).",
-      "evidence_tier": 1,
-      "id": "hmb_beta_hydroxy_beta_methylbutyrate"
     },
     {
       "standard_name": "Black Seed Oil (Nigella Sativa)",

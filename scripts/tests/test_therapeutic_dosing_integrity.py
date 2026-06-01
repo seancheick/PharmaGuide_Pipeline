@@ -155,6 +155,47 @@ def test_lutein_retained_botanical_routable(therapeutic):
     assert "lutein" in ids
 
 
+# ── Batch 3: migrate sports-amino bioactives → optimal-uls ──────────────
+
+# Migrated OUT of therapeutic and INTO rda_optimal_uls.json (generic dose path),
+# each with content-verified PMIDs. id-in-therapeutic -> standard_name-in-optimal-uls.
+BATCH3_MIGRATED = {
+    "beta_alanine": "Beta-Alanine",
+    "citrulline_malate": "Citrulline Malate",
+    "l_citrulline": "L-Citrulline",
+    "hmb_beta_hydroxy_beta_methylbutyrate": "HMB",
+}
+
+
+def test_batch3_migrated_absent_from_therapeutic(therapeutic):
+    ids = {e.get("id") for e in therapeutic["therapeutic_dosing"]}
+    for rid in BATCH3_MIGRATED:
+        assert rid not in ids, f"{rid} should have migrated out of the therapeutic file"
+
+
+def test_batch3_present_in_optimal_uls_with_references(optimal_uls):
+    by_name = {(e.get("standard_name") or "").lower(): e for e in optimal_uls["nutrient_recommendations"]}
+    for std in BATCH3_MIGRATED.values():
+        e = by_name.get(std.lower())
+        assert e is not None, f"{std} missing from rda_optimal_uls.json after migration"
+        assert e.get("references"), f"{std} must carry content-verified references[]"
+        assert e.get("data"), f"{std} must carry a data[] age/sex grid so it scores"
+
+
+def test_batch3_scores_via_calculator():
+    """Migrated bioactives must be found + scoring-eligible in the RDA calculator."""
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from rda_ul_calculator import RDAULCalculator
+
+    c = RDAULCalculator()
+    for name, amt, unit in [("beta-alanine", 3.2, "g"), ("citrulline malate", 8000, "mg"),
+                            ("l-citrulline", 4000, "mg"), ("hmb", 3, "g")]:
+        r = c.compute_nutrient_adequacy(name, amt, unit)
+        assert r.rda_ai is not None and r.scoring_eligible, f"{name} not scoring-eligible in optimal-uls"
+
+
 # ── citation verifier wiring ────────────────────────────────────────────
 
 def test_citation_verifier_configs_present():
