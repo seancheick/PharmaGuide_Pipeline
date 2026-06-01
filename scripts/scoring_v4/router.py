@@ -541,13 +541,18 @@ def class_for_product(product: Dict[str, Any]) -> str:
     ):
         return "probiotic"
 
-    # Priority 2: prenatal name keyword. Overrides multi / omega routing
-    # for products like Prenatal DHA, Prenatal Gummies, Pregnancy Vitamins.
-    # NOTE: prenatal-DHA gets multi_or_prenatal NOT omega — the prenatal
-    # use case has stricter dose/safety expectations (folate, iron, iodine
-    # critical-nutrient floors) that the multi module is designed to handle.
+    # Priority 2: prenatal name keyword -> multi_or_prenatal for products like
+    # Prenatal Gummies / Pregnancy Vitamins, whose prenatal use case has stricter
+    # dose/safety expectations (folate, iron, iodine critical-nutrient floors) the
+    # multi module handles. EXCEPTION: a single-purpose "Prenatal DHA" whose actives
+    # are PRIMARILY an EPA/DHA omega panel is an omega supplement, not an incomplete
+    # prenatal multi — routing it to multi_or_prenatal crushes it on prenatal-panel
+    # coverage for nutrients it never contained (Thorne Prenatal DHA 650 mg -> POOR).
+    # Route those to omega so they're scored on EPA/DHA dosing.
     # Prenatal-probiotic was already handled by Priority 1 above.
     if _PRENATAL_KEYWORDS.search(name_text):
+        if _has_primary_omega_panel(product):
+            return "omega"
         return "multi_or_prenatal"
 
     # Priority 3: sports. Keep this before multi/b-complex because real

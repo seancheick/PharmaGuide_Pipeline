@@ -396,10 +396,11 @@ def test_edge_cla_omega_3_6_9_mixed_routes_generic() -> None:
     assert class_for_product(product) == "generic"
 
 
-def test_edge_prenatal_dha_routes_multi_not_omega() -> None:
-    """A prenatal DHA product must route multi_or_prenatal (NOT omega),
-    even though it has DHA — prenatal use case has stricter dose/safety
-    expectations the multi module owns."""
+def test_edge_prenatal_dha_routes_omega_not_multi() -> None:
+    """A single-purpose prenatal DHA product (actives are primarily EPA/DHA)
+    routes OMEGA, not multi_or_prenatal: it has no prenatal nutrient panel for
+    the multi module to evaluate, so routing it to multi crushed it on
+    panel-coverage. The omega module scores it on the prenatal DHA target."""
     from scoring_v4.router import class_for_product
 
     product = {
@@ -413,7 +414,7 @@ def test_edge_prenatal_dha_routes_multi_not_omega() -> None:
             ]
         },
     }
-    assert class_for_product(product) == "multi_or_prenatal"
+    assert class_for_product(product) == "omega"
 
 
 def test_edge_dhea_does_not_match_dha_word_boundary() -> None:

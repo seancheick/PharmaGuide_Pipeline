@@ -224,13 +224,16 @@ def test_shadow_scorer_wires_complete_multivitamin_to_p3_module() -> None:
     assert shadow["shadow_score_v4_breakdown"]["module"]["phase"].startswith("P3.")
 
 
-def test_shadow_scorer_wires_prenatal_dha_to_p3_not_omega() -> None:
+def test_shadow_scorer_wires_prenatal_dha_to_omega_not_p3() -> None:
+    # A single-purpose prenatal DHA (DHA-only) routes OMEGA, not multi_or_prenatal
+    # — it has no prenatal nutrient panel for the multi module to score, and the
+    # omega module credits it against the prenatal DHA target.
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     shadow = score_product_v4_shadow(COMPLETE_PRENATAL_DHA_PRODUCT)
 
-    assert shadow["shadow_score_v4_module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "multi_or_prenatal"
+    assert shadow["shadow_score_v4_module"] == "omega"
+    assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "omega"
 
 
 def test_shadow_scorer_completeness_failure_short_circuits_before_p3_module() -> None:
