@@ -4,7 +4,7 @@
     "purpose": "Provide clinical therapeutic dosing ranges for BOTANICAL and COLLAGEN ingredients (the only classes the v4 botanical_profile/collagen_profile dose adapters consume). Non-botanical bioactives live in rda_optimal_uls.json.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-31",
-    "total_entries": 25,
+    "total_entries": 43,
     "data_source": "Clinical research, meta-analyses, standard therapeutic guidelines"
   },
   "therapeutic_dosing": [
@@ -461,6 +461,341 @@
       "evidence_tier": 2,
       "id": "reishi_mushroom_extract",
       "references": ["33405051"]
+    },
+    {
+      "standard_name": "Boswellia serrata",
+      "aliases": [
+        "boswellia",
+        "boswellia serrata",
+        "indian frankincense",
+        "salai guggul",
+        "5-loxin",
+        "aflapin",
+        "akba"
+      ],
+      "unit": "mg",
+      "common_use": "Osteoarthritis / joint pain, anti-inflammatory",
+      "typical_dosing_range": "100-250",
+      "common_serving_size": "100",
+      "upper_limit": "1000",
+      "upper_limit_notes": "Standardize to % AKBA (5-Loxin ~30% AKBA; Aflapin). Dose is meaningful only with AKBA standardization. Crude resin doses run higher.",
+      "evidence_tier": 1,
+      "references": ["18667054", "35512759"],
+      "id": "boswellia_serrata"
+    },
+    {
+      "standard_name": "Soy Isoflavones",
+      "aliases": [
+        "soy isoflavones",
+        "isoflavones",
+        "genistein",
+        "daidzein",
+        "glycine max",
+        "soy phytoestrogens"
+      ],
+      "unit": "mg",
+      "common_use": "Menopausal vasomotor symptoms (hot flashes)",
+      "typical_dosing_range": "40-80",
+      "common_serving_size": "50",
+      "upper_limit": "100",
+      "upper_limit_notes": "Dose = mg total isoflavone aglycone equivalents (genistein+daidzein+glycitein). Caution in hormone-sensitive conditions.",
+      "evidence_tier": 1,
+      "references": ["22433977", "25316502"],
+      "id": "soy_isoflavones"
+    },
+    {
+      "standard_name": "Vitex Agnus-Castus",
+      "aliases": [
+        "vitex",
+        "chasteberry",
+        "chaste tree",
+        "vitex agnus-castus",
+        "ze 440",
+        "bno 1095"
+      ],
+      "unit": "mg",
+      "common_use": "Premenstrual syndrome (PMS), cyclic mastalgia",
+      "typical_dosing_range": "4-40",
+      "common_serving_size": "20",
+      "upper_limit": "40",
+      "upper_limit_notes": "Standardized extracts Ze 440 / BNO 1095. Dopaminergic — caution with dopamine drugs; avoid in pregnancy.",
+      "evidence_tier": 1,
+      "references": ["28237870", "31780016"],
+      "id": "vitex_agnus_castus"
+    },
+    {
+      "standard_name": "Elderberry",
+      "aliases": [
+        "elderberry",
+        "black elder",
+        "sambucus nigra",
+        "sambucus",
+        "elder"
+      ],
+      "unit": "mg",
+      "common_use": "Upper respiratory tract infection symptom duration",
+      "typical_dosing_range": "600-1500",
+      "common_serving_size": "1000",
+      "upper_limit": "1500",
+      "upper_limit_notes": "Use cooked/processed extract only (raw berries/bark are cyanogenic). Standardized to anthocyanins.",
+      "evidence_tier": 1,
+      "references": ["30670267"],
+      "id": "elderberry"
+    },
+    {
+      "standard_name": "Grape Seed Extract",
+      "aliases": [
+        "grape seed extract",
+        "grape seed",
+        "gse",
+        "vitis vinifera",
+        "grape seed proanthocyanidins"
+      ],
+      "unit": "mg",
+      "common_use": "Blood pressure, endothelial / vascular support",
+      "typical_dosing_range": "100-800",
+      "common_serving_size": "300",
+      "upper_limit": "800",
+      "upper_limit_notes": "Standardize to % OPC / proanthocyanidins — dose meaningless without it.",
+      "evidence_tier": 1,
+      "references": ["27537554", "34798267"],
+      "id": "grape_seed_extract"
+    },
+    {
+      "standard_name": "Pycnogenol",
+      "aliases": [
+        "pycnogenol",
+        "french maritime pine bark",
+        "pine bark extract",
+        "pinus pinaster"
+      ],
+      "unit": "mg",
+      "common_use": "Cardiometabolic / blood pressure, endothelial support",
+      "typical_dosing_range": "50-360",
+      "common_serving_size": "100",
+      "upper_limit": "360",
+      "upper_limit_notes": "Patented pine bark extract standardized to 65-75% procyanidins (Pycnogenol trademark = the standardization).",
+      "evidence_tier": 2,
+      "references": ["31585179", "31763928"],
+      "id": "pycnogenol"
+    },
+    {
+      "standard_name": "Cinnamon (Cassia)",
+      "aliases": [
+        "cinnamon",
+        "cassia",
+        "cassia cinnamon",
+        "cinnamomum cassia",
+        "cinnamomum aromaticum"
+      ],
+      "unit": "mg",
+      "common_use": "Glycemic control (modest)",
+      "typical_dosing_range": "1000-6000",
+      "common_serving_size": "2000",
+      "upper_limit": "6000",
+      "upper_limit_notes": "Cassia carries coumarin: EFSA TDI 0.1 mg/kg bw/day (~5-6 mg/day for 60 kg). High-dose Cassia can exceed it; prefer Ceylon for chronic use.",
+      "evidence_tier": 2,
+      "references": ["24019277", "37818728"],
+      "id": "cinnamon_cassia"
+    },
+    {
+      "standard_name": "Fenugreek",
+      "aliases": [
+        "fenugreek",
+        "trigonella foenum-graecum",
+        "testofen",
+        "furosap"
+      ],
+      "unit": "mg",
+      "common_use": "Male androgen/libido support; glycemic control",
+      "typical_dosing_range": "500-1200",
+      "common_serving_size": "600",
+      "upper_limit": "1200",
+      "upper_limit_notes": "Testofen standardized to ~50% Fenuside (furostanol saponins). May lower blood glucose (additive with antidiabetics).",
+      "evidence_tier": 2,
+      "references": ["26791805", "36837450"],
+      "id": "fenugreek"
+    },
+    {
+      "standard_name": "Gymnema Sylvestre",
+      "aliases": [
+        "gymnema",
+        "gymnema sylvestre",
+        "gurmar"
+      ],
+      "unit": "mg",
+      "common_use": "Glycemic control, sugar-craving reduction",
+      "typical_dosing_range": "200-600",
+      "common_serving_size": "400",
+      "upper_limit": "1000",
+      "upper_limit_notes": "Standardize to % gymnemic acids. Additive hypoglycemia with antidiabetics — monitor.",
+      "evidence_tier": 2,
+      "references": ["34467577"],
+      "id": "gymnema_sylvestre"
+    },
+    {
+      "standard_name": "Andrographis Paniculata",
+      "aliases": [
+        "andrographis",
+        "andrographis paniculata",
+        "kalmegh",
+        "andrographolide",
+        "kalmcold",
+        "paractin"
+      ],
+      "unit": "mg",
+      "common_use": "Acute respiratory tract infection symptom relief",
+      "typical_dosing_range": "1200-6000",
+      "common_serving_size": "1200",
+      "upper_limit": "6000",
+      "upper_limit_notes": "Standardize to % andrographolides. Immunostimulant — caution in autoimmune disease; avoid in pregnancy.",
+      "evidence_tier": 1,
+      "references": ["28783743", "14748896"],
+      "id": "andrographis_paniculata"
+    },
+    {
+      "standard_name": "Saffron",
+      "aliases": [
+        "saffron",
+        "crocus sativus",
+        "affron",
+        "satiereal"
+      ],
+      "unit": "mg",
+      "common_use": "Mild-to-moderate depression / mood; appetite (Satiereal)",
+      "typical_dosing_range": "28-30",
+      "common_serving_size": "30",
+      "upper_limit": "100",
+      "upper_limit_notes": "affron/Satiereal standardized to safranal/crocin. Hard toxicity ceiling: >1.5 g/day toxic, >5 g abortifacient — keep <=100 mg/day.",
+      "evidence_tier": 2,
+      "references": ["30036891", "20579522"],
+      "id": "saffron"
+    },
+    {
+      "standard_name": "Tongkat Ali",
+      "aliases": [
+        "tongkat ali",
+        "eurycoma longifolia",
+        "longjack",
+        "malaysian ginseng",
+        "lj100",
+        "physta"
+      ],
+      "unit": "mg",
+      "common_use": "Testosterone support in stressed/aging men; stress/mood",
+      "typical_dosing_range": "200-400",
+      "common_serving_size": "200",
+      "upper_limit": "600",
+      "upper_limit_notes": "LJ100 / Physta standardized aqueous root extract (eurycomanone). Dose meaningful only with standardization.",
+      "evidence_tier": 2,
+      "references": ["36013514", "23705671"],
+      "id": "tongkat_ali"
+    },
+    {
+      "standard_name": "Bergamot",
+      "aliases": [
+        "bergamot",
+        "citrus bergamia",
+        "bpf",
+        "bergamot polyphenolic fraction"
+      ],
+      "unit": "mg",
+      "common_use": "Lipid / cardiometabolic support",
+      "typical_dosing_range": "500-1500",
+      "common_serving_size": "1000",
+      "upper_limit": "1500",
+      "upper_limit_notes": "Standardized Bergamot Polyphenolic Fraction (BPF). Caution with statins (additive lipid effect; monitor).",
+      "evidence_tier": 2,
+      "references": ["24239156", "30501605"],
+      "id": "bergamot"
+    },
+    {
+      "standard_name": "Olive Leaf Extract",
+      "aliases": [
+        "olive leaf",
+        "olive leaf extract",
+        "olea europaea",
+        "oleuropein"
+      ],
+      "unit": "mg",
+      "common_use": "Blood pressure, antioxidant support",
+      "typical_dosing_range": "500-1000",
+      "common_serving_size": "1000",
+      "upper_limit": "1000",
+      "upper_limit_notes": "Standardize to % oleuropein (commonly 16-20%). May potentiate antihypertensives/antidiabetics.",
+      "evidence_tier": 2,
+      "references": ["26951205", "40990594"],
+      "id": "olive_leaf_extract"
+    },
+    {
+      "standard_name": "Lemon Balm",
+      "aliases": [
+        "lemon balm",
+        "melissa officinalis",
+        "melissa"
+      ],
+      "unit": "mg",
+      "common_use": "Acute stress/anxiety, calm",
+      "typical_dosing_range": "300-1600",
+      "common_serving_size": "600",
+      "upper_limit": "1600",
+      "upper_limit_notes": "Often standardized to rosmarinic acid. Mild sedation — caution with CNS depressants.",
+      "evidence_tier": 2,
+      "references": ["15272110"],
+      "id": "lemon_balm"
+    },
+    {
+      "standard_name": "Passionflower",
+      "aliases": [
+        "passionflower",
+        "passiflora incarnata",
+        "passion flower"
+      ],
+      "unit": "mg",
+      "common_use": "Anxiety, sleep quality",
+      "typical_dosing_range": "250-800",
+      "common_serving_size": "500",
+      "upper_limit": "800",
+      "upper_limit_notes": "Standardized to flavonoids (vitexin). Sedation — caution with CNS depressants; avoid in pregnancy.",
+      "evidence_tier": 2,
+      "references": ["21294203"],
+      "id": "passionflower"
+    },
+    {
+      "standard_name": "Sage",
+      "aliases": [
+        "sage",
+        "salvia officinalis",
+        "salvia lavandulaefolia",
+        "spanish sage"
+      ],
+      "unit": "mg",
+      "common_use": "Memory / attention (cholinesterase inhibition)",
+      "typical_dosing_range": "300-600",
+      "common_serving_size": "333",
+      "upper_limit": "600",
+      "upper_limit_notes": "S. officinalis / S. lavandulaefolia leaf extract. Limit chronic high-dose essential oil (thujone); leaf extracts safer.",
+      "evidence_tier": 2,
+      "references": ["18350281", "12895685"],
+      "id": "sage"
+    },
+    {
+      "standard_name": "Holy Basil (Tulsi)",
+      "aliases": [
+        "holy basil",
+        "tulsi",
+        "ocimum sanctum",
+        "ocimum tenuiflorum"
+      ],
+      "unit": "mg",
+      "common_use": "Stress / anxiety, metabolic support",
+      "typical_dosing_range": "300-1200",
+      "common_serving_size": "500",
+      "upper_limit": "1200",
+      "upper_limit_notes": "Leaf extract (standardization varies; sometimes ursolic acid/eugenol). May lower blood glucose; avoid in pregnancy.",
+      "evidence_tier": 2,
+      "references": ["19253862", "26571987"],
+      "id": "holy_basil_tulsi"
     }
   ]
 }
