@@ -174,7 +174,7 @@ def test_score_100_is_populated_with_p15_affine_calibration() -> None:
     assert 0.0 <= breakdown["score_100"] <= 100.0
     assert 0.0 <= breakdown["raw_score_100"] <= 100.0
     assert breakdown["metadata"]["phase"] == "P1.5_affine_calibration"
-    assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
+    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
 
 
 def test_phase_marker_in_breakdown() -> None:

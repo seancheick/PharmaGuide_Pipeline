@@ -207,10 +207,10 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     assert breakdown["metadata"]["verification_bonus_adjustment"] == pytest.approx(vbonus, rel=1e-6)
     # raw_score_100 is rounded to 1dp in the assembler; allow that rounding.
     assert breakdown["raw_score_100"] == pytest.approx(raw_score, abs=0.05)
-    assert breakdown["score_100"] == pytest.approx(25.0 + 0.75 * breakdown["raw_score_100"], abs=0.05)
-    assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
-    assert breakdown["metadata"]["calibration"]["intercept"] == 25.0
-    assert breakdown["metadata"]["calibration"]["slope"] == 0.75
+    assert breakdown["score_100"] == pytest.approx(1.0 * breakdown["raw_score_100"], abs=0.05)
+    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
+    assert breakdown["metadata"]["calibration"]["audit_affine_v3_compare"]["intercept"] == 25.0
+    assert breakdown["metadata"]["calibration"]["audit_affine_v3_compare"]["slope"] == 0.75
     assert breakdown["phase"] == "P1.5_affine_calibration"
 
 
@@ -244,8 +244,8 @@ def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
     assert breakdown["metadata"]["excluded_dimensions"] == []
     # Phase 4: core (form+dose+evid+transp) sums to 85; trust dim removed.
     assert breakdown["metadata"]["evaluable_class_max"] == 85.0
-    assert breakdown["score_100"] > breakdown["raw_score_100"], (
-        "P1.5 affine calibration should lift compressed scoreable generic rows"
+    assert breakdown["score_100"] == breakdown["raw_score_100"], (
+        "Phase 9: production score IS the rubric raw — no cosmetic affine lift"
     )
 
 
@@ -294,9 +294,10 @@ def test_p15_affine_calibration_preserves_raw_score_for_audit() -> None:
     calibrated = breakdown["score_100"]
 
     assert raw is not None
-    assert calibrated == pytest.approx(round(25.0 + 0.75 * raw, 1), rel=1e-6)
+    assert calibrated == pytest.approx(round(1.0 * raw, 1), rel=1e-6)
     assert breakdown["metadata"]["raw_score_100_pre_calibration"] == raw
-    assert breakdown["metadata"]["calibration"]["reason"] == "p1_5_canary_score_compression"
+    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
+    assert calibrated == raw  # production score IS the rubric raw (no affine lift)
 
 
 def test_shadow_top_level_score_and_verdict_are_populated_for_complete_generic() -> None:

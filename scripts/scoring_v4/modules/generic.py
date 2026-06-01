@@ -388,10 +388,15 @@ def _assemble_score(result: GenericModuleResult) -> None:
     if result.botanical_dose_deferred and raw_score_100 < BOTANICAL_RAW_FLOOR:
         raw_score_100 = BOTANICAL_RAW_FLOOR
         botanical_floor_applied = True
-    calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
-    calibrated_score_100 = max(0.0, min(100.0, calibrated))
+    # Phase 9: the PRODUCTION score is the rubric raw score. The affine (25+0.75)
+    # was a cosmetic stretch that split raw from displayed and over-shot/clamped at
+    # 100 — it is retained ONLY as an audit / v3-comparison value, never the
+    # user-facing score. With score_100 == raw, the verdict 40-line is one
+    # consistent threshold (no raw-vs-calibrated gap) and 100 is reachable only by a
+    # product that maxes every dimension + bonus with zero penalties (true ceiling).
+    affine_audit_v3 = max(0.0, min(100.0, CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100))
     result.raw_score_100 = round(raw_score_100, 1)
-    result.score_100 = round(calibrated_score_100, 1)
+    result.score_100 = round(raw_score_100, 1)
     result.metadata = {
         "phase": PHASE_MARKER,
         # Phase 4: core summed on native scale (no renorm), so class_subtotal
@@ -412,13 +417,18 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "botanical_dose_deferred": result.botanical_dose_deferred,
         "botanical_raw_floor_applied": botanical_floor_applied,
         "calibration": {
-            "method": CALIBRATION_METHOD,
-            "intercept": CALIBRATION_INTERCEPT,
-            "slope": CALIBRATION_SLOPE,
-            "reason": "p1_5_canary_score_compression",
+            "method": "rubric_raw_is_production_score",
+            "production_score": "rubric_raw_score_100",
             "raw_score_100": result.raw_score_100,
             "calibrated_score_100": result.score_100,
+            # Audit-only: the retired P1.5 affine, kept for v3-comparison reports.
+            "audit_affine_v3_compare": {
+                "method": CALIBRATION_METHOD,
+                "intercept": CALIBRATION_INTERCEPT,
+                "slope": CALIBRATION_SLOPE,
+                "value": round(affine_audit_v3, 1),
+            },
         },
-        "calibrated_score_before_clamp": round(calibrated, 4),
-        "calibrated_score_clamped": calibrated < 0.0 or calibrated > 100.0,
+        "calibrated_score_before_clamp": round(raw_score_100, 4),
+        "calibrated_score_clamped": False,
     }

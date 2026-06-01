@@ -101,9 +101,9 @@ def test_score_100_calibration_metadata_present() -> None:
 
     bd = score_omega(_premium_omega()).to_breakdown()
     cal = bd["metadata"]["calibration"]
-    assert cal["method"] == "affine_p15"
-    assert cal["intercept"] == 25.0
-    assert cal["slope"] == 0.75
+    assert cal["method"] == "rubric_raw_is_production_score"
+    assert cal["audit_affine_v3_compare"]["intercept"] == 25.0
+    assert cal["audit_affine_v3_compare"]["slope"] == 0.75
 
 
 def test_score_100_calibration_arithmetic() -> None:
@@ -112,7 +112,7 @@ def test_score_100_calibration_arithmetic() -> None:
 
     bd = score_omega(_premium_omega()).to_breakdown()
     raw = bd["raw_score_100"]
-    expected = max(0.0, min(100.0, 25.0 + 0.75 * raw))
+    expected = max(0.0, min(100.0, 1.0 * raw))
     assert abs(bd["score_100"] - expected) <= 0.1
 
 
@@ -171,7 +171,7 @@ def test_empty_product_still_emits_calibrated_score() -> None:
     # raw_score_100 floors at 0 (dims=0) plus 0..5 Mfg Trust.
     assert 0 <= bd["raw_score_100"] <= 5
     # score_100 = 25 + 0.75 * raw → at most 25 + 3.75 = 28.75 for empty.
-    assert 25.0 <= bd["score_100"] <= 29.0
+    assert 0.0 <= bd["score_100"] <= 6.0
 
 
 # --- Rescale-around-None semantics --------------------------------------
@@ -231,11 +231,11 @@ def _load_canaries(ids):
 # Wider than ±0.5 to tolerate small drifts in generic_evidence /
 # manufacturer pipeline; tighter than ±10 to catch real regressions.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research",      71.9, 73.9),  # Phase 4: 81.6 → 77.4
-    ("326270", "Sports Research",      71.9, 73.9),  # Phase 4: 81.6 → 77.4
-    ("288740", "Nordic Naturals",      67.4, 69.4),
-    ("273630", "Garden of Life",       66.4, 68.4),
-    ("239592", "CVS Health",           62.4, 64.4),
+    ("327776", "Sports Research", 63.2, 64.6),  # Phase 4: 81.6 → 77.4
+    ("326270", "Sports Research", 63.2, 64.6),  # Phase 4: 81.6 → 77.4
+    ("288740", "Nordic Naturals", 57.2, 58.6),
+    ("273630", "Garden of Life", 55.9, 57.3),
+    ("239592", "CVS Health", 50.5, 51.9),
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):
@@ -258,9 +258,10 @@ def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expecte
 
 
 def test_canary_sports_research_improves_vs_v3_baseline() -> None:
-    """Sports Research Omega-3 (327776) was the P1.5 omega-debt canary.
-    v3=63.7 → v4 must IMPROVE (the entire point of the omega module).
-    Tolerance >= 5 pts gain locks the improvement direction."""
+    """Sports Research Omega-3 (327776), v3=63.7. With the affine removed
+    (score = rubric raw), the prior '+17.9 vs v3' was calibration inflation;
+    the honest omega RAW score lands ~v3 level. Lock NO MATERIAL REGRESSION:
+    the omega module's structural work must not score this BELOW v3."""
     from scoring_v4.modules.omega import score_omega
 
     canaries = _load_canaries({"327776"})
@@ -270,10 +271,10 @@ def test_canary_sports_research_improves_vs_v3_baseline() -> None:
     bd = score_omega(canaries["327776"]).to_breakdown()
     v3_baseline = 63.7
     delta = bd["score_100"] - v3_baseline
-    assert delta >= 5.0, (
-        f"Sports Research v4 {bd['score_100']} vs v3 {v3_baseline}: "
-        f"delta {delta} < 5 pts. The omega module is supposed to "
-        f"FIX the P1.5 omega-debt — under-credit should be eliminated."
+    assert delta >= -3.0, (
+        f"Sports Research v4 {bd['score_100']} vs v3 {v3_baseline}: with the affine "
+        f"removed (score = rubric raw), the omega module's structural work must not "
+        f"score this materially BELOW v3 (the prior +17.9 was calibration inflation)."
     )
 
 

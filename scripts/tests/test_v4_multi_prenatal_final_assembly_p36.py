@@ -173,10 +173,10 @@ def test_multi_prenatal_affine_calibration_applied() -> None:
 
     breakdown = score_multi_prenatal(_multi_product()).to_breakdown()
     raw = breakdown["raw_score_100"]
-    expected = round(max(0.0, min(100.0, 25.0 + 0.75 * raw)), 1)
+    expected = round(max(0.0, min(100.0, 1.0 * raw)), 1)
 
     assert breakdown["score_100"] == expected
-    assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
+    assert breakdown["metadata"]["calibration"]["method"] == "rubric_raw_is_production_score"
 
 
 def test_multi_prenatal_raw_score_sums_dimensions_and_manufacturer_adjustments() -> None:
