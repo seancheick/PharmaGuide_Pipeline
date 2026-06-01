@@ -636,7 +636,7 @@ Primary key: `proprietary_blend_concerns` (array)
 ---
 
 ### 26. rda_optimal_uls.json
-**Purpose:** `dosing_validation` | **Entries:** 47
+**Purpose:** `dosing_validation` — RDA/AI/UL for vitamins & minerals **and** optimal dosing for non-botanical bioactives (the generic dose path reads this via `rda_ul_calculator.py`) | **Entries:** 74
 
 Primary key: `nutrient_recommendations` (array)
 
@@ -644,16 +644,18 @@ Primary key: `nutrient_recommendations` (array)
 |-------|------|----------|-------------|
 | `id` | string | YES | Unique ID (e.g., `RDA_VITAMIN_D`) |
 | `standard_name` | string | YES | Nutrient name |
+| `aliases` | string[] | NO | Alternative names (used by the calculator's name lookup) |
 | `unit` | string | YES | Canonical dosing unit |
-| `optimal_range` | object | YES | Min/max optimal range |
-| `highest_ul` | float/null | YES | Upper tolerable limit |
-| `data` | object | YES | Age/sex-specific RDA values |
+| `optimal_range` | string | YES | `"min-max"` or single value |
+| `ul` / `highest_ul` | float/null | YES | Upper tolerable limit (null when none established) |
+| `data` | object[] | YES | Age/sex-specific `rda_ai` grid (drives `pct_rda`) |
 | `warnings` | string[] | NO | Dosing warnings |
+| `references` | string[] | NO | Bare PMID strings for non-DRI bioactives (content-verified; DRI nutrients are checked by `verify_rda_uls.py`) |
 
 ---
 
 ### 27. rda_therapeutic_dosing.json
-**Purpose:** clinical therapeutic dosing for **botanical + collagen** ingredients (non-RDA) | **Entries:** 48
+**Purpose:** clinical therapeutic dosing for **botanical + collagen** ingredients (non-RDA) | **Entries:** 43
 
 Scoring scope: read only by the v4 `botanical_profile.py` and `collagen_profile.py` dose adapters
 (keyed on normalized `standard_name` + `aliases`). Non-botanical bioactives are scored from
@@ -846,8 +848,8 @@ synergy_cluster.json (58)
   ├── ingredients → enrichment synergy detection
   └── ← user_goals_to_clusters.json
 
-rda_optimal_uls.json (47)
-  └── data → scoring dosing validation
+rda_optimal_uls.json (74)
+  └── data → scoring dosing validation (vitamins/minerals + non-botanical bioactives)
 
 manufacturer_violations.json (67)
   └── manufacturer_id → enrichment manufacturer matching
