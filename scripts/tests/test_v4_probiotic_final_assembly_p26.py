@@ -131,7 +131,7 @@ def test_probiotic_calibration_applied() -> None:
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
     raw = breakdown["raw_score_100"]
-    expected_cal = max(0.0, min(100.0, 5.0 + 1.15 * raw))
+    expected_cal = max(0.0, min(100.0, 25.0 + 0.75 * raw))
     assert abs(breakdown["score_100"] - expected_cal) < 0.01
 
 
@@ -227,9 +227,9 @@ def test_probiotic_assembly_metadata_carries_audit_fields() -> None:
     assert "manufacturer_trust_adjustment" in meta
     assert "manufacturer_violation_adjustment" in meta
     assert "calibration" in meta
-    assert meta["calibration"]["method"] == "affine_p9_steeper"
-    assert meta["calibration"]["intercept"] == 5.0
-    assert meta["calibration"]["slope"] == 1.15
+    assert meta["calibration"]["method"] == "affine_p15"
+    assert meta["calibration"]["intercept"] == 25.0
+    assert meta["calibration"]["slope"] == 0.75
 
 
 # --- Shadow scorer wiring -------------------------------------------------

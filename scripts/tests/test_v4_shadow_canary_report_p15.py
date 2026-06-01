@@ -242,8 +242,8 @@ def test_score_canaries_extracts_top_level_shadow_fields() -> None:
     assert rows[0]["v4_module"] == "generic"
     assert rows[0]["v4_score"] is not None
     assert rows[0]["v4_raw_score"] is not None
-    assert rows[0]["v4_score"] == round(5.0 + 1.15 * rows[0]["v4_raw_score"], 1)
-    assert rows[0]["v4_calibration"]["method"] == "affine_p9_steeper"
+    assert rows[0]["v4_score"] == round(25.0 + 0.75 * rows[0]["v4_raw_score"], 1)
+    assert rows[0]["v4_calibration"]["method"] == "affine_p15"
     assert rows[0]["v4_confidence"] in {"high", "moderate", "low"}
 
 
