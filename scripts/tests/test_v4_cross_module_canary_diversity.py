@@ -36,9 +36,13 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # will be revisited when Phase 9 recalibrates the final scale.
 GENERIC_CANARIES = {
     # Recent cert override / high verification path (Phase 4: 79 → 74.5).
+    # Phase 7 (_mass_mg Gram(s) fix): Meriva curcumin is dosed "1 Gram(s)" =
+    # 1000 mg; previously mis-read as 1 mg (below-range dose), now correctly
+    # within the studied range -> dose 21, score 69-71 -> 78.2. A premium
+    # clinically-studied branded extract scoring closer to its merit.
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        "score_range": (69.0, 71.0),
+        "score_range": (77.0, 79.5),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,

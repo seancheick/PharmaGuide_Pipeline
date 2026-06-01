@@ -168,7 +168,11 @@ def _mass_mg(row: Dict[str, Any]) -> Optional[float]:
     qty = _as_float(row.get("quantity"))
     if qty is None or qty <= 0:
         return None
+    # Normalize the unit: lowercase, drop spaces and the "(s)" plural marker DSLD
+    # uses ("Gram(s)" is the catalog's standard gram spelling — 1906 rows — and
+    # must convert to mg, not fall through to the assume-mg branch).
     unit = _norm(row.get("unit") or row.get("unit_normalized")).replace(" ", "")
+    unit = unit.replace("(s)", "s")
     if unit in {"mg", "milligram", "milligrams"}:
         return qty
     if unit in {"g", "gram", "grams"}:

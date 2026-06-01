@@ -15,7 +15,25 @@ from scoring_v4.modules.botanical_profile import (  # noqa: E402
     score_botanical_formulation,
     score_botanical_dose,
     BOTANICAL_FORMULATION_CAP,
+    _mass_mg,
 )
+
+
+# --- unit normalization (DSLD "Gram(s)" spelling) --------------------------
+
+def test_mass_mg_handles_dsld_gram_spelling():
+    # DSLD's standard gram unit is "Gram(s)" (1906 rows in catalog), not "g".
+    # It must convert to mg, not fall through to the assume-mg branch.
+    assert _mass_mg({"quantity": 2.5, "unit": "Gram(s)"}) == 2500.0
+    assert _mass_mg({"quantity": 1.13, "unit": "Gram(s)"}) == 1130.0
+    assert _mass_mg({"quantity": 10, "unit": "Gram(s)"}) == 10000.0
+
+
+def test_mass_mg_plain_units_unchanged():
+    assert _mass_mg({"quantity": 500, "unit": "mg"}) == 500.0
+    assert _mass_mg({"quantity": 100, "unit": "mcg"}) == 0.1
+    assert _mass_mg({"quantity": 3, "unit": "g"}) == 3000.0
+    assert _mass_mg({"quantity": 5, "unit": "grams"}) == 5000.0
 
 
 def _botanical_ingredient(name="KSM-66", standard_name="Ashwagandha",
