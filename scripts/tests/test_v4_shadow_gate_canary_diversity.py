@@ -40,7 +40,14 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (55.5, 57.5),  # Phase 4 (trust→verification bonus): 58 → 56.3
+        # Phase 4 (trust→verification bonus): 58 → 56.3.
+        # Phase 6 (botanical profile): green tea (primary botanical, 100 mg, and
+        # absent from rda_therapeutic_dosing.json so dose band is
+        # disclosed_no_reference) now scores on its real botanical formulation
+        # + clinical dose instead of an inflated vitamin proxy → 49.9. The
+        # canary's point is unchanged: CAUTION carries forward and wins over the
+        # SAFE/POOR score band regardless of where the band lands.
+        "score_range": (48.5, 51.0),
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a

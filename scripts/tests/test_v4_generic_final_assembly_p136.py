@@ -234,8 +234,13 @@ def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
 
     breakdown = score_generic(product).to_breakdown()
 
-    assert breakdown["dimensions"]["dose"]["score"] == 16.0
-    assert breakdown["dimensions"]["dose"]["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
+    # Phase 6: a recognized botanical with a quantified dose now scores via the
+    # clinical therapeutic-range adapter (ashwagandha 250-600; 600mg in range),
+    # not the old RDA-proxy partial credit. Never excluded from the denominator.
+    dose = breakdown["dimensions"]["dose"]
+    assert dose["score"] == 21.0
+    assert dose["metadata"]["method"] == "botanical_clinical_dose_v1"
+    assert dose["metadata"]["botanical_dose_band"] == "within_studied_range"
     assert breakdown["metadata"]["excluded_dimensions"] == []
     # Phase 4: core (form+dose+evid+transp) sums to 85; trust dim removed.
     assert breakdown["metadata"]["evaluable_class_max"] == 85.0
@@ -441,25 +446,26 @@ def test_score_cannot_exceed_100() -> None:
     assert breakdown["score_100"] <= 100.0
 
 
-def test_botanical_with_none_dose_floored_out_of_poor() -> None:
-    # Phase 4 guard: a botanical (herbal_botanical) whose dose proxy is
-    # non-evaluable must not be stamped POOR purely from the assembly change.
+def test_botanical_no_dose_scores_zero_not_excluded_not_floored() -> None:
+    # Phase 6 supersedes the Phase-4 floor guard: a botanical with no disclosed
+    # dose now scores the dose dimension as a real 0 (honest quality gap), not
+    # None (excluded) and not floored. The botanical_dose_deferred flag stays off.
     from scoring_v4.modules.generic import score_generic
 
     product = _base_product(
         ingredient=_ingredient(
-            name="Undisclosed Botanical", standard_name="Botanical",
-            canonical_id="botanical", bio_score=8, quantity=0, unit="",
+            name="Ashwagandha", standard_name="Ashwagandha",
+            canonical_id="ashwagandha", bio_score=8, quantity=0, unit="",
         )
     )
     product["primary_type"] = "herbal_botanical"
     product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
     breakdown = score_generic(product).to_breakdown()
 
-    assert breakdown["dimensions"]["dose"]["score"] is None
-    assert breakdown["metadata"]["botanical_dose_deferred"] is True
-    # Raw is floored at the SAFE/POOR boundary so it does not read POOR.
-    assert breakdown["raw_score_100"] >= 40.0
+    assert breakdown["dimensions"]["dose"]["score"] == 0.0
+    assert breakdown["metadata"]["excluded_dimensions"] == []
+    assert breakdown["metadata"]["botanical_dose_deferred"] is False
+    assert breakdown["metadata"]["botanical_raw_floor_applied"] is False
 
 
 def test_non_botanical_none_dose_is_not_floored() -> None:

@@ -199,9 +199,12 @@ def test_window_proxy_no_rda_data_with_label_dose_gets_partial_credit() -> None:
 
 
 def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
-    """KSM-66 / botanical-style products have real mg dosing but no RDA/UL
-    benchmark. The Dose proxy must award conservative partial credit
-    instead of excluding the dimension."""
+    """KSM-66 / botanical products have real mg dosing but no RDA/UL benchmark.
+    Phase 6: instead of the conservative generic proxy (16), a recognized
+    botanical with a clinical dose range is scored against that range. KSM-66
+    ashwagandha at 600 mg sits within the studied 250-600 mg window, so it
+    earns the within-range credit (21) — strictly better than being treated
+    as a no-RDA nutrient, and never punished as zero dose."""
     from scoring_v4.modules.generic_dose import score_dose
 
     payload = score_dose(
@@ -221,10 +224,10 @@ def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
             ],
         )
     )
-    assert payload["score"] == 16.0
-    assert payload["components"]["supplemental_window_proxy"] == 16.0
-    assert payload["metadata"]["window_proxy_reason"] == "no_rda_reference_data"
-    assert payload["metadata"]["window_proxy_status"] == "partial_credit_without_rda_proxy"
+    assert payload["score"] == 21.0
+    assert payload["components"]["botanical_clinical_dose"] == 21.0
+    assert payload["metadata"]["method"] == "botanical_clinical_dose_v1"
+    assert payload["metadata"]["botanical_dose_band"] == "within_studied_range"
 
 
 def test_window_proxy_no_rda_and_no_quantified_dose_stays_not_evaluable() -> None:

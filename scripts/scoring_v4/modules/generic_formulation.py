@@ -48,6 +48,10 @@ import re
 from typing import Any, Dict
 
 from audit_evidence_utils import derive_non_gmo_audit
+from scoring_v4.modules.botanical_profile import (
+    is_botanical_product,
+    score_botanical_formulation,
+)
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     canonical_key,
@@ -454,6 +458,19 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "enzyme_recognition":         round(_score_enzyme_recognition(product), 4),
     }
 
+    # Phase 6 — Botanical Profile. For botanical products the bio_score (A1) +
+    # premium-forms (A2) vitamin/mineral logic is replaced by the botanical
+    # formulation adapter (max 15, occupies the A1 slot). A5b standardization is
+    # disabled here because marker standardization is now core formulation
+    # inside the adapter (no duplicate +1 bonus).
+    botanical_formulation: Dict[str, Any] = {}
+    if is_botanical_product(product):
+        bot = score_botanical_formulation(product)
+        components["A1_bio_score"] = round(bot["score"], 4)
+        components["A2_premium_forms"] = 0.0
+        components["A5b_standardized_botanical"] = 0.0
+        botanical_formulation = bot
+
     penalties: Dict[str, float] = {
         # Stored as negatives for ergonomic JSON inspection — the score
         # math subtracts |abs| values explicitly via _sum_penalty_magnitudes
@@ -502,6 +519,8 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "phase": PHASE_MARKER_COMPLETE,
             "deferred_components": [],
             "deferred_penalties": [],
+            "botanical_profile_applied": bool(botanical_formulation),
+            "botanical_formulation": botanical_formulation.get("components", {}),
         },
     }
 

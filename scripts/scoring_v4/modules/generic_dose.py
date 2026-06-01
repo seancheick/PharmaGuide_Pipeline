@@ -54,6 +54,10 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Optional
 
+from scoring_v4.modules.botanical_profile import (
+    is_botanical_product,
+    score_botanical_dose,
+)
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     get_active_ingredients,
@@ -275,6 +279,33 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(product, dict):
         product = {}
+
+    # Phase 6 — Botanical Profile: clinical therapeutic-range dose (via
+    # rda_therapeutic_dosing.json) instead of the RDA/UL proxy. Always evaluable
+    # (never None), so the dose dimension is no longer excluded for botanicals
+    # and the Phase-4 botanical_dose_deferred floor guard is superseded.
+    if is_botanical_product(product):
+        bot = score_botanical_dose(product)
+        b7 = _penalty_b7_dose_safety(product)
+        components = {
+            "botanical_clinical_dose": round(float(bot["score"]), 4),
+            "multi_form_bonus": 0.0,
+        }
+        penalties = {"B7_dose_safety": round(-b7, 4)}
+        score = _clamp(0.0, DIMENSION_CAP, float(bot["score"]) - b7)
+        return {
+            "score": round(score, 4),
+            "max": DIMENSION_CAP,
+            "components": components,
+            "penalties": penalties,
+            "phase": PHASE_MARKER,
+            "metadata": {
+                "phase": PHASE_MARKER,
+                "method": "botanical_clinical_dose_v1",
+                "botanical_dose_band": bot["band"],
+                "botanical_dose": bot.get("metadata", {}),
+            },
+        }
 
     window_credit, window_reason = _score_supplemental_window_proxy(product)
     no_reference_credit = 0.0

@@ -149,15 +149,19 @@ def test_ingredient_human_underscore_study_types_are_moderate_not_absent() -> No
 def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
+    # Non-botanical no-RDA ingredient (CoQ10): exercises the GENERIC
+    # supplemental-window proxy + its confidence downgrade. Botanicals now
+    # route to the clinical-dose path (Phase 6) so they no longer hit this
+    # generic no-RDA branch — use a non-botanical to keep testing it.
     product = _product(
         ingredient=_ingredient(
-            name="KSM-66 Ashwagandha",
-            canonical_id="ashwagandha",
-            quantity=600,
+            name="Coenzyme Q10",
+            canonical_id="coq10",
+            quantity=200,
             unit="mg",
         ),
         rda_ul_data={
-            "adequacy_results": [{"nutrient": "Ashwagandha", "pct_rda": None, "pct_ul": None}],
+            "adequacy_results": [{"nutrient": "Coenzyme Q10", "pct_rda": None, "pct_ul": None}],
             "safety_flags": [],
         },
     )

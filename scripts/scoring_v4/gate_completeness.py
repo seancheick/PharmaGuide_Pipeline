@@ -389,8 +389,10 @@ def _soft_policy_from_scoring_evidence(
     elif has_active_anchor:
         soft_missing.append("active_anchor_mass_evidence")
         if has_botanical_active_anchor and not has_normal_scoring_row:
+            # Phase 6: the botanical profile now scores these on real
+            # identity/marker/dose, so the interim anchor-only CAUTION ceiling is
+            # removed. The audit tag is kept; verdict is left to the score.
             soft_missing.append("botanical_anchor_only_evidence")
-            verdict_ceiling = "CAUTION"
 
     # Enzyme activity is a real dose unit and should not be hard-blocked for
     # lacking mass. If it is paired with a blend/header anchor, the blend policy

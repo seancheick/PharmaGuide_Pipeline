@@ -236,18 +236,6 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
 
-def _is_botanical_class(product: Any) -> bool:
-    """True when the product's taxonomy primary_type is the botanical class.
-    Used only by the Phase-4 botanical dose-deferral guard (until Phase 6)."""
-    if not isinstance(product, dict):
-        return False
-    ptype = product.get("primary_type")
-    if not (isinstance(ptype, str) and ptype.strip()):
-        taxonomy = product.get("supplement_taxonomy")
-        ptype = taxonomy.get("primary_type") if isinstance(taxonomy, dict) else None
-    return isinstance(ptype, str) and ptype.strip().lower() == "herbal_botanical"
-
-
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
@@ -308,11 +296,11 @@ def score_generic(product: Any) -> GenericModuleResult:
     result.verification_bonus.penalties = vb_payload.get("penalties", {})
     result.verification_bonus.metadata = vb_payload.get("metadata", {})
 
-    # Phase 4 botanical guard: a botanical whose dose proxy is non-evaluable
-    # would lose the old renormalization lift and could drop to POOR before
-    # Phase 6's dose adapter lands. Flag it so assembly floors raw out of POOR.
-    if dose_dim.score is None and _is_botanical_class(product):
-        result.botanical_dose_deferred = True
+    # Phase 6 superseded the Phase-4 botanical_dose_deferred floor guard: the
+    # botanical dose adapter now always returns a real score (0..22, never None),
+    # so a botanical's dose dimension is never excluded and never needs flooring.
+    # The result.botanical_dose_deferred field + assembly floor remain as inert
+    # infrastructure (always False here) but are no longer set.
 
     # Layer 3 — Transparency dimension (P1.3.5 complete for generic).
     transparency_payload = score_transparency(product)
