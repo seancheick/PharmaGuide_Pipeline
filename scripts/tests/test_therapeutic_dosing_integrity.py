@@ -1,6 +1,6 @@
 """Integrity + contract regression suite for the dosing reference DBs.
 
-Covers `rda_therapeutic_dosing.json` (botanical + collagen scoring source) and the
+Covers `rda_therapeutic_dosing.json` (non-RDA therapeutic dose anchors) and the
 citation-verifier wiring shared with `rda_optimal_uls.json`. Grows per batch of the
 dosing-overhaul plan (boundary cleanup, migration, verified expansion).
 
@@ -45,6 +45,13 @@ def test_therapeutic_metadata_count_matches(therapeutic):
 def test_optimal_uls_metadata_count_matches(optimal_uls):
     entries = optimal_uls["nutrient_recommendations"]
     assert optimal_uls["_metadata"]["total_entries"] == len(entries)
+
+
+def test_therapeutic_purpose_remains_broad_non_rda_contract(therapeutic):
+    assert therapeutic["_metadata"]["purpose"] == (
+        "Provide therapeutic dosing ranges for dietary supplement ingredients "
+        "not covered by traditional RDA/UL standards."
+    )
 
 
 # ── references[] shape: bare PMID digit-strings only ────────────────────
@@ -232,10 +239,10 @@ def test_batch4_present_in_optimal_uls_with_refs_and_grid(optimal_uls):
         assert len(e.get("data") or []) == 16, f"{std} must have a full 16-row data[] grid"
 
 
-def test_therapeutic_is_botanical_collagen_or_probiotics_only(therapeutic):
-    """Final-state invariant: after migration the therapeutic file holds only
-    botanical-routed entries, the 5 collagen entries, Lutein (marigold-routable),
-    and the Probiotics (CFU) exception — no other non-botanical bioactives."""
+def test_current_therapeutic_entries_have_a_consuming_route(therapeutic):
+    """Current-state invariant: every shipped therapeutic entry must be reachable
+    by an existing scorer path or explicit route exception. This prevents dead
+    data without narrowing the file's clinical domain to botanical/collagen only."""
     import sys
 
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent))

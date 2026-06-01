@@ -1,8 +1,10 @@
 # Batch 0 — Therapeutic-entry disposition (keep vs migrate)
 
-Goal of the dosing overhaul: `rda_therapeutic_dosing.json` becomes **botanical + collagen only**; non-botanical
-bioactives move to `rda_optimal_uls.json` (where the v4 generic dose path actually reads them). This doc records
-the disposition of the current 48 entries and the method used.
+Goal of this dosing-overhaul batch: remove entries that were dead for the current v4 therapeutic-dose consumers
+and keep every entry that is consumed by an existing route. The file's broader purpose remains therapeutic dosing
+ranges for dietary supplement ingredients not covered by traditional RDA/UL standards. Some generic bioactives
+were moved to `rda_optimal_uls.json` only because that is where the current v4 generic dose path reads them today.
+This doc records the disposition of the then-current 48 entries and the method used.
 
 ## Method (code-verified)
 

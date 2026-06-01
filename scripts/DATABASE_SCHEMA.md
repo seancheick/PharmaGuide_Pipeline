@@ -655,11 +655,13 @@ Primary key: `nutrient_recommendations` (array)
 ---
 
 ### 27. rda_therapeutic_dosing.json
-**Purpose:** clinical therapeutic dosing for **botanical + collagen** ingredients (non-RDA) | **Entries:** 43
+**Purpose:** therapeutic dosing ranges for dietary supplement ingredients not covered by traditional RDA/UL standards | **Entries:** 43
 
-Scoring scope: read only by the v4 `botanical_profile.py` and `collagen_profile.py` dose adapters
-(keyed on normalized `standard_name` + `aliases`). Non-botanical bioactives are scored from
-`rda_optimal_uls.json` instead — see the dosing-overhaul boundary: this file is botanical + collagen only.
+Current v4 scoring scope: consumed by the `botanical_profile.py` and `collagen_profile.py` dose adapters
+(keyed on normalized `standard_name` + `aliases`) plus documented route exceptions such as CFU probiotic
+evidence. This is a consumption detail, not the domain boundary of the file. Additional non-RDA supplement
+actives may belong here when a scoring adapter consumes the therapeutic-dose contract. Some generic bioactive
+dose anchors currently live in `rda_optimal_uls.json` because that is the path `rda_ul_calculator.py` reads today.
 
 Primary key: `therapeutic_dosing` (array)
 
