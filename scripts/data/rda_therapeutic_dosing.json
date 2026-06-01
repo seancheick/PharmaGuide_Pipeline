@@ -23,7 +23,8 @@
       "upper_limit": "1000",
       "upper_limit_notes": "Long-term safety of very high doses not established. Use caution with thyroid medications.",
       "evidence_tier": 1,
-      "id": "ashwagandha_root_extract"
+      "id": "ashwagandha_root_extract",
+      "references": ["31517876", "23439798"]
     },
     {
       "standard_name": "Bacopa Monnieri Extract",
@@ -39,7 +40,8 @@
       "upper_limit": "600",
       "upper_limit_notes": "Standardized to 20-55% bacosides. May cause GI upset in some.",
       "evidence_tier": 1,
-      "id": "bacopa_monnieri_extract"
+      "id": "bacopa_monnieri_extract",
+      "references": ["24252493", "22747190"]
     },
     {
       "standard_name": "Curcumin (from Turmeric)",
@@ -59,7 +61,8 @@
       "upper_limit": "8000",
       "upper_limit_notes": "High doses may cause GI upset. Enhanced formulations (with piperine, phospholipids) greatly increase bioavailability.",
       "evidence_tier": 1,
-      "id": "curcumin_from_turmeric"
+      "id": "curcumin_from_turmeric",
+      "references": ["38576215"]
     },
     {
       "standard_name": "L-Theanine",
@@ -75,7 +78,8 @@
       "upper_limit": "1200",
       "upper_limit_notes": "Exceptionally safe. No known toxicity.",
       "evidence_tier": 1,
-      "id": "l_theanine"
+      "id": "l_theanine",
+      "references": ["33751906"]
     },
     {
       "standard_name": "Lutein",
@@ -90,7 +94,8 @@
       "upper_limit": "40",
       "upper_limit_notes": "Fat-soluble; take with food. Often paired with zeaxanthin.",
       "evidence_tier": 1,
-      "id": "lutein"
+      "id": "lutein",
+      "references": ["39025435", "23645227"]
     },
     {
       "standard_name": "Probiotics (General)",
@@ -122,7 +127,8 @@
       "upper_limit": "2000",
       "upper_limit_notes": "Fat-soluble; take with food. High purity trans-resveratrol is preferred.",
       "evidence_tier": 2,
-      "id": "resveratrol"
+      "id": "resveratrol",
+      "references": ["34320173", "29018489"]
     },
     {
       "standard_name": "Rhodiola Rosea Extract",
@@ -139,7 +145,8 @@
       "upper_limit": "600",
       "upper_limit_notes": "Standardized to 3% rosavins and 1% salidroside. May be stimulating for some; avoid late in the day.",
       "evidence_tier": 1,
-      "id": "rhodiola_rosea_extract"
+      "id": "rhodiola_rosea_extract",
+      "references": ["21036578"]
     },
     {
       "standard_name": "Saw Palmetto Extract",
@@ -155,7 +162,8 @@
       "upper_limit": "640",
       "upper_limit_notes": "Standardized to 85-95% fatty acids. Doses above 320mg show no additional benefit in studies.",
       "evidence_tier": 1,
-      "id": "saw_palmetto_extract"
+      "id": "saw_palmetto_extract",
+      "references": ["42157952"]
     },
     {
       "standard_name": "St. John's Wort",
@@ -170,7 +178,8 @@
       "upper_limit": "900",
       "upper_limit_notes": "**Major Interaction Risk:** Induces CYP450 enzymes. Interacts with antidepressants, birth control, blood thinners, and many others. Contraindicated with many medications.",
       "evidence_tier": 1,
-      "id": "st_john_s_wort"
+      "id": "st_john_s_wort",
+      "references": ["18843608"]
     },
     {
       "standard_name": "Valerian Root",
@@ -186,7 +195,8 @@
       "upper_limit": "3000",
       "upper_limit_notes": "Standardized to 0.8-1% valerenic acid. May cause drowsiness. Not for long-term continuous use.",
       "evidence_tier": 1,
-      "id": "valerian_root"
+      "id": "valerian_root",
+      "references": ["38359657"]
     },
     {
       "standard_name": "Collagen Peptides",
@@ -305,7 +315,8 @@
       "upper_limit": "5000",
       "upper_limit_notes": "Generally well-tolerated. Extract concentration varies significantly between products.",
       "evidence_tier": 2,
-      "id": "lion_s_mane_mushroom_extract"
+      "id": "lion_s_mane_mushroom_extract",
+      "references": ["18844328", "31413233"]
     },
     {
       "standard_name": "Phosphatidylserine",
@@ -321,7 +332,8 @@
       "upper_limit": "600",
       "upper_limit_notes": "Standard dose is 100mg 3x daily. Soy and sunflower-derived forms available. May affect blood thinners.",
       "evidence_tier": 1,
-      "id": "phosphatidylserine"
+      "id": "phosphatidylserine",
+      "references": ["39317299"]
     },
     {
       "standard_name": "Ginkgo Biloba Extract",
@@ -338,7 +350,8 @@
       "upper_limit": "240",
       "upper_limit_notes": "EGb 761 is standardized extract used in clinical trials. Doses >240mg may increase bleeding risk. Avoid with blood thinners.",
       "evidence_tier": 1,
-      "id": "ginkgo_biloba_extract"
+      "id": "ginkgo_biloba_extract",
+      "references": ["25352453", "9823823"]
     },
     {
       "standard_name": "Astaxanthin",
@@ -355,7 +368,8 @@
       "upper_limit": "24",
       "upper_limit_notes": "Fat-soluble carotenoid. Take with food. High doses may cause orange/red skin tint. Safe up to 24mg/day in studies.",
       "evidence_tier": 1,
-      "id": "astaxanthin"
+      "id": "astaxanthin",
+      "references": ["35091276", "32755613"]
     },
     {
       "standard_name": "Black Seed Oil (Nigella Sativa)",
@@ -373,7 +387,8 @@
       "upper_limit": "3000",
       "upper_limit_notes": "Active compound is thymoquinone. May lower blood pressure and blood sugar. Caution with anticoagulants.",
       "evidence_tier": 2,
-      "id": "black_seed_oil_nigella_sativa"
+      "id": "black_seed_oil_nigella_sativa",
+      "references": ["27512971", "37341696"]
     },
     {
       "standard_name": "Maca Root Extract",
@@ -390,7 +405,8 @@
       "upper_limit": "5000",
       "upper_limit_notes": "Studies use 1.5-3g daily for 6-16 weeks. Does not directly affect hormone levels. Different colors (red, black, yellow) may have different effects.",
       "evidence_tier": 2,
-      "id": "maca_root_extract"
+      "id": "maca_root_extract",
+      "references": ["27621241"]
     },
     {
       "standard_name": "Milk Thistle (Silymarin)",
@@ -407,7 +423,8 @@
       "upper_limit": "800",
       "upper_limit_notes": "Standard dose is 140mg 2-3x daily. Phospholipid-bound forms (phytosome) have better bioavailability. Safe for long-term use.",
       "evidence_tier": 1,
-      "id": "milk_thistle_silymarin"
+      "id": "milk_thistle_silymarin",
+      "references": ["40221681"]
     },
     {
       "standard_name": "Cordyceps Mushroom Extract",
@@ -424,7 +441,8 @@
       "upper_limit": "6000",
       "upper_limit_notes": "Militaris strain more sustainable than wild sinensis. CS-4 is cultured mycelium. Take before exercise for performance benefits.",
       "evidence_tier": 2,
-      "id": "cordyceps_mushroom_extract"
+      "id": "cordyceps_mushroom_extract",
+      "references": ["20804368"]
     },
     {
       "standard_name": "Reishi Mushroom Extract",
@@ -441,7 +459,8 @@
       "upper_limit": "5000",
       "upper_limit_notes": "Best taken in evening for sleep benefits. Dual-extraction (water + alcohol) captures more compounds. May affect blood clotting.",
       "evidence_tier": 2,
-      "id": "reishi_mushroom_extract"
+      "id": "reishi_mushroom_extract",
+      "references": ["33405051"]
     }
   ]
 }
