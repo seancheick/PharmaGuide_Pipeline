@@ -70,9 +70,15 @@ from scoring_v4.modules.safety_hygiene import (
 
 
 PHASE_MARKER = "P1.5_affine_calibration"
-CALIBRATION_INTERCEPT = 25.0
-CALIBRATION_SLOPE = 0.75
-CALIBRATION_METHOD = "affine_p15"
+# Phase 9 recalibration: the pre-Phase-4/5 fit (25 + 0.75*raw) compressed the top
+# (premium raw~70 capped at ~77) and inflated the bottom (+25 intercept). Refit to
+# a steeper slope + lower intercept so premium products reach their merited 85-95
+# while weak raws stay visibly weak. Shifts score VALUES only — verdicts are
+# governed by the raw-40 floor, which both fits agree on, so there are zero
+# SAFE/POOR flips. Shared by all modules via _assemble_score (single source).
+CALIBRATION_INTERCEPT = 5.0
+CALIBRATION_SLOPE = 1.15
+CALIBRATION_METHOD = "affine_p9_steeper"
 
 
 # Core dimension caps. Order is rendering order in audit / UI.

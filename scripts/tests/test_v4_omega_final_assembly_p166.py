@@ -101,9 +101,9 @@ def test_score_100_calibration_metadata_present() -> None:
 
     bd = score_omega(_premium_omega()).to_breakdown()
     cal = bd["metadata"]["calibration"]
-    assert cal["method"] == "affine_p15"
-    assert cal["intercept"] == 25.0
-    assert cal["slope"] == 0.75
+    assert cal["method"] == "affine_p9_steeper"
+    assert cal["intercept"] == 5.0
+    assert cal["slope"] == 1.15
 
 
 def test_score_100_calibration_arithmetic() -> None:
@@ -112,7 +112,7 @@ def test_score_100_calibration_arithmetic() -> None:
 
     bd = score_omega(_premium_omega()).to_breakdown()
     raw = bd["raw_score_100"]
-    expected = max(0.0, min(100.0, 25.0 + 0.75 * raw))
+    expected = max(0.0, min(100.0, 5.0 + 1.15 * raw))
     assert abs(bd["score_100"] - expected) <= 0.1
 
 
@@ -170,8 +170,8 @@ def test_empty_product_still_emits_calibrated_score() -> None:
     assert bd["score_100"] is not None
     # raw_score_100 floors at 0 (dims=0) plus 0..5 Mfg Trust.
     assert 0 <= bd["raw_score_100"] <= 5
-    # score_100 = 25 + 0.75 * raw → at most 25 + 3.75 = 28.75 for empty.
-    assert 25.0 <= bd["score_100"] <= 29.0
+    # score_100 = 5 + 1.15 * raw → at most 5 + 5.75 = 10.75 for empty.
+    assert 5.0 <= bd["score_100"] <= 11.0
 
 
 # --- Rescale-around-None semantics --------------------------------------
@@ -231,11 +231,11 @@ def _load_canaries(ids):
 # Wider than ±0.5 to tolerate small drifts in generic_evidence /
 # manufacturer pipeline; tighter than ±10 to catch real regressions.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research",      71.9, 73.9),  # Phase 4: 81.6 → 77.4
-    ("326270", "Sports Research",      71.9, 73.9),  # Phase 4: 81.6 → 77.4
-    ("288740", "Nordic Naturals",      67.4, 69.4),
-    ("273630", "Garden of Life",       66.4, 68.4),
-    ("239592", "CVS Health",           62.4, 64.4),
+    ("327776", "Sports Research",      77.9, 79.1),  # Phase 9 calib 5+1.15: ->78.5
+    ("326270", "Sports Research",      77.9, 79.1),  # Phase 9 calib 5+1.15: ->78.5
+    ("288740", "Nordic Naturals",      70.9, 72.1),  # Phase 9: ->71.5
+    ("273630", "Garden of Life",       69.5, 70.7),  # Phase 9: ->70.1
+    ("239592", "CVS Health",           63.2, 64.4),  # Phase 9: ->63.8
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):

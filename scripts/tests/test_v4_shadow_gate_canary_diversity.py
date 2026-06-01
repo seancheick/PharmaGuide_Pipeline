@@ -47,10 +47,10 @@ SHADOW_CANARIES = {
         # + clinical dose instead of an inflated vitamin proxy → 49.9. The
         # canary's point is unchanged: CAUTION carries forward and wins over the
         # SAFE/POOR score band regardless of where the band lands.
-        # Phase 8 (primary-ingredient evidence floor): green tea (mass-primary) has
-        # a strong study but positive_weak effect -> floor 14*0.85=11.9 -> 52.5.
-        # Verdict stays CAUTION (the canary's invariant: CAUTION wins over band).
-        "score_range": (51.5, 53.5),
+        # Phase 8 (evidence floor): green tea positive_weak -> floor 11.9.
+        # Phase 9 (calibration 5+1.15): score band -> 47.1. Verdict stays CAUTION
+        # (the canary's invariant: CAUTION carries forward and wins over the band).
+        "score_range": (46.5, 47.7),
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
@@ -66,7 +66,7 @@ SHADOW_CANARIES = {
         # floor. Stays POOR: a weak-effect bromelain does not auto-earn SAFE.
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (52.6, 54.6),
+        "score_range": (48.2, 49.4),
     },
     # Probiotic with named strains but no total CFU: scoreable, but cannot be
     # SAFE because the primary probiotic dose is undisclosed.
@@ -75,7 +75,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "CAUTION",
         "confidence": "moderate",
-        "score_range": (47.6, 49.6),  # Phase 4: 55 → 53.1
+        "score_range": (40.5, 41.7),  # Phase 4: 55 → 53.1
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
     # confidence aggregate evidence with a score cap, but not an automatic
@@ -85,7 +85,7 @@ SHADOW_CANARIES = {
         "module": "omega",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (58.9, 60.9),
+        "score_range": (57.9, 59.1),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -95,7 +95,7 @@ SHADOW_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (79.1, 81.1),  # Phase 4: 88 → 84.6
+        "score_range": (88.9, 90.1),  # Phase 4: 88 → 84.6
     },
     # Typed confidence low + POOR verdict.
     "12932": {
@@ -103,7 +103,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (44.2, 46.2),
+        "score_range": (35.4, 36.6),
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -111,7 +111,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (71.6, 73.6),  # Phase 4: 80.5 → 77.1
+        "score_range": (77.3, 78.5),  # Phase 4: 80.5 → 77.1
     },
 }
 
