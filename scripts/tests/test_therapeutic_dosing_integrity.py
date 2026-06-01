@@ -257,6 +257,31 @@ def test_therapeutic_is_botanical_collagen_or_probiotics_only(therapeutic):
         )
 
 
+# ── Batch 7: optimal-uls bioactive expansion + Inositol correction ──────
+
+BATCH7_NEW_BIOACTIVES = [
+    "Citicoline", "Betaine Anhydrous (TMG)", "Glycine",
+    "Essential Amino Acids (EAA)", "Pantethine", "Urolithin A",
+    "Bovine Colostrum", "L-Glutamine",
+]
+
+
+def test_batch7_new_bioactives_present_with_refs(optimal_uls):
+    by_name = {(e.get("standard_name") or "").lower(): e for e in optimal_uls["nutrient_recommendations"]}
+    for std in BATCH7_NEW_BIOACTIVES:
+        e = by_name.get(std.lower())
+        assert e is not None, f"{std} missing from rda_optimal_uls.json"
+        assert e.get("references"), f"{std} must carry content-verified references[]"
+        assert len(e.get("data") or []) == 16, f"{std} must have a 16-row data[] grid"
+
+
+def test_inositol_range_corrected(optimal_uls):
+    inos = [e for e in optimal_uls["nutrient_recommendations"] if (e.get("standard_name") or "").lower() == "inositol"]
+    assert len(inos) == 1
+    assert inos[0]["optimal_range"] == "2000-4000", "Inositol range must be corrected to the PCOS-guideline 2000-4000 mg"
+    assert "38163998" in (inos[0].get("references") or []), "Inositol must cite the 2023 PCOS guideline meta-analysis"
+
+
 # ── citation verifier wiring ────────────────────────────────────────────
 
 def test_citation_verifier_configs_present():
