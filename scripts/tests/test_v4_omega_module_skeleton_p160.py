@@ -432,6 +432,47 @@ def test_router_does_not_route_minority_fatty_acid_to_omega() -> None:
     assert class_for_product(product) == "generic"
 
 
+def test_router_routes_omega_369_when_epa_dha_are_disclosed() -> None:
+    """Omega 3-6-9 labels are not automatically excluded when EPA/DHA exists.
+
+    Real catalog regression: some 3-6-9 products disclose EPA/DHA rows and have
+    omega_3 taxonomy. Those should use the omega module rather than generic.
+    """
+    from scoring_v4.router import class_for_product
+
+    product = {
+        "product_name": "Omega 3-6-9 Lemon",
+        "primary_type": "omega_3",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"name": "Alpha-Linolenic Acid", "canonical_id": "alpha_linolenic_acid", "quantity": 378, "unit": "mg"},
+                {"name": "EPA", "canonical_id": "epa", "quantity": 180, "unit": "mg"},
+                {"name": "DHA", "canonical_id": "dha", "quantity": 120, "unit": "mg"},
+                {"name": "Gamma Linolenic Acid", "canonical_id": "gamma_linolenic_acid", "quantity": 180, "unit": "mg"},
+            ],
+        },
+    }
+    assert class_for_product(product) == "omega"
+
+
+def test_router_keeps_ala_only_omega_369_out_of_epa_dha_module() -> None:
+    """ALA/GLA/CLA 3-6-9 products without EPA/DHA stay generic."""
+    from scoring_v4.router import class_for_product
+
+    product = {
+        "product_name": "Omega 3-6-9",
+        "primary_type": "omega_3",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"name": "Alpha-Linolenic Acid", "canonical_id": "alpha_linolenic_acid", "quantity": 600, "unit": "mg"},
+                {"name": "Gamma Linolenic Acid", "canonical_id": "gamma_linolenic_acid", "quantity": 200, "unit": "mg"},
+                {"name": "Conjugated Linoleic Acid", "canonical_id": "cla", "quantity": 100, "unit": "mg"},
+            ],
+        },
+    }
+    assert class_for_product(product) == "generic"
+
+
 def test_router_valid_classes_includes_omega() -> None:
     from scoring_v4.router import VALID_CLASSES
 

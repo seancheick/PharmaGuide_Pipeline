@@ -382,8 +382,11 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
 
     # ALA / GLA / CLA / 3-6-9 products may use omega marketing language,
     # but they do not belong in the EPA/DHA omega module unless EPA/DHA is
-    # actually disclosed in the panel.
-    if _OMEGA_369_RE.search(name_text) or _has_non_epa_dha_fatty_acid_panel(product):
+    # actually disclosed in the panel. 3-6-9 labels with real EPA/DHA rows
+    # should continue through the normal omega checks below.
+    if _OMEGA_369_RE.search(name_text) and not _has_any_epa_dha_row(product):
+        return False
+    if _has_non_epa_dha_fatty_acid_panel(product):
         return False
 
     lowered = (name_text or "").lower()
