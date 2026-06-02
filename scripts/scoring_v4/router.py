@@ -149,7 +149,7 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
     "cla", "conjugated_linoleic_acid", "oleic_acid",
 }
-_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil"}
+_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
 _SPORTS_PROTEIN_CANONICALS = {
     "whey_protein",
     "casein",
@@ -206,6 +206,11 @@ def _omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
     omega_rows = 0
     total_rows = 0
     for ing in _scoring_rows(product):
+        if (
+            ing.get("scoring_input_kind") == "product_level_evidence"
+            and str(ing.get("evidence_type") or "").strip().lower() != "omega_epa_dha_aggregate"
+        ):
+            continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
         if not canonical or not _positive_quantity(ing):
             continue

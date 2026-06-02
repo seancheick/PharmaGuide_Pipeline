@@ -70,13 +70,13 @@ def test_b_complex_taxonomy_returns_multi():
     assert _b5_class_for_product(product) == "multi_or_prenatal"
 
 
-def test_prenatal_name_returns_multi():
-    """Prenatal name keyword overrides everything except probiotic."""
+def test_prenatal_dha_name_without_multi_panel_does_not_force_multi():
+    """Prenatal wording alone is not enough to force the multi rubric."""
     product = {
         "primary_type": "omega_3",  # taxonomy says omega
         "product_name": "Prenatal DHA Gummies",
     }
-    assert _b5_class_for_product(product) == "multi_or_prenatal"
+    assert _b5_class_for_product(product) == "generic"
 
 
 # --- Sports (B5-only override) ---

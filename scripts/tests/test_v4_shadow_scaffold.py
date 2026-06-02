@@ -51,18 +51,14 @@ def test_router_multivitamin_taxonomy() -> None:
     assert class_for_product(product) == "multi_or_prenatal"
 
 
-def test_router_prenatal_keyword_routes_to_multi() -> None:
-    """A specialty/targeted product named 'Prenatal …' still routes to
-    multi_or_prenatal — the safety/dose-expectation profile matches.
-
-    Mirrors the B5 router's prenatal detection but is a separate decision
-    surface (B5 multiplier vs v4 module routing)."""
+def test_router_prenatal_dha_label_routes_to_omega_not_multi() -> None:
+    """A DHA-only prenatal label should not be crushed by prenatal multi floors."""
     from scoring_v4.router import class_for_product
     product = {
         "supplement_taxonomy": {"primary_type": "general_supplement"},
         "product_name": "Prenatal Care DHA",
     }
-    assert class_for_product(product) == "multi_or_prenatal"
+    assert class_for_product(product) == "omega"
 
 
 def test_router_multivitamin_taxonomy_wins_over_legacy_noise() -> None:
