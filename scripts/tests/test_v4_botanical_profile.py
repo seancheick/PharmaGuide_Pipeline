@@ -85,6 +85,85 @@ def test_botanical_product_detected_by_taxonomy():
     assert is_botanical_product(_botanical_product()) is True
 
 
+def test_standardized_botanical_identity_routes_even_when_taxonomy_category_drifted():
+    row = {
+        "name": "Curcumin Phytosome",
+        "standard_name": "Curcumin",
+        "canonical_id": "curcumin",
+        "matched_form": "Meriva curcumin phytosome",
+        "quantity": 500,
+        "unit": "mg",
+        "mapped": True,
+        "raw_taxonomy": {"category": "non-nutrient/non-botanical", "forms": []},
+    }
+    product = {
+        "product_name": "Curcumin Phytosome 500 mg",
+        "primary_type": "general_supplement",
+        "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row]},
+        "formulation_data": {
+            "standardized_botanicals": [{
+                "name": "Meriva",
+                "botanical_id": "curcumin",
+                "standard_name": "Curcumin",
+                "markers": ["curcuminoids"],
+                "percentage_found": 95.0,
+                "min_threshold": 95,
+                "meets_threshold": True,
+            }]
+        },
+    }
+
+    assert is_botanical_product(product) is True
+    formulation = score_botanical_formulation(product)
+    assert formulation["components"]["recognized_botanical_identity"] == 6.0
+    assert formulation["components"]["marker_standardization_declared"] == 4.0
+
+    dose = score_botanical_dose(product)
+    assert dose["band"] == "within_studied_range"
+    assert dose["score"] == 21.0
+
+
+def test_standardized_botanical_parent_complex_total_is_dose_evaluable():
+    row = {
+        "name": "Curcumin Phytosome",
+        "standard_name": "Curcumin",
+        "canonical_id": "curcumin",
+        "matched_form": "Meriva curcumin phytosome",
+        "quantity": 500,
+        "unit": "mg",
+        "mapped": True,
+        "is_parent_total": True,
+        "raw_taxonomy": {
+            "category": "non-nutrient/non-botanical",
+            "forms": [
+                {"name": "Curcuma longa", "category": "botanical"},
+                {"name": "Phosphatidylcholine", "category": "fat"},
+            ],
+        },
+    }
+    product = {
+        "product_name": "Curcumin Phytosome 500 mg",
+        "primary_type": "general_supplement",
+        "ingredient_quality_data": {"ingredients_scorable": [row], "ingredients": [row]},
+        "formulation_data": {
+            "standardized_botanicals": [{
+                "name": "Curcumin Phytosome",
+                "botanical_id": "turmeric",
+                "standard_name": "Turmeric",
+                "markers": ["curcuminoids"],
+                "percentage_found": 0.0,
+                "min_threshold": 95,
+                "meets_threshold": True,
+                "evidence_source": "marker_word_match",
+            }]
+        },
+    }
+
+    dose = score_botanical_dose(product)
+    assert dose["band"] == "within_studied_range"
+    assert dose["score"] == 21.0
+
+
 def test_vitamin_product_is_not_botanical():
     vit = {
         "primary_type": "single_vitamin",

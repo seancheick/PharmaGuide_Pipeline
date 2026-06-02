@@ -134,6 +134,34 @@ def _botanical_identity_set() -> frozenset:
 
 
 @lru_cache(maxsize=1)
+def _standardized_botanical_identity_set() -> frozenset:
+    """Canonical ids/names/aliases for standardized botanical extracts.
+
+    These entries often represent marker compounds or branded extracts
+    (curcumin, Meriva, BCM-95) that are botanical-derived but may arrive from
+    enrichment with a chemical/non-botanical taxonomy category. They still need
+    the botanical formulation and therapeutic-dose adapters.
+    """
+    try:
+        raw = json.loads((_DATA_DIR / "standardized_botanicals.json").read_text())
+    except Exception:  # pragma: no cover
+        return frozenset()
+    names = set()
+    for entry in raw.get("standardized_botanicals", []):
+        if not isinstance(entry, dict):
+            continue
+        for key in [entry.get("id"), entry.get("standard_name")] + list(entry.get("aliases") or []):
+            k = _norm(key)
+            if k:
+                names.add(k)
+    return frozenset(names)
+
+
+def _known_botanical_identity_set() -> frozenset:
+    return _botanical_identity_set() | _standardized_botanical_identity_set()
+
+
+@lru_cache(maxsize=1)
 def _branded_studied_set() -> frozenset:
     """Normalised names/aliases of branded clinically-studied extracts
     (backed_clinical_studies entries flagged branded / id BRAND_*)."""
@@ -174,7 +202,7 @@ def _is_botanical_active(row: Dict[str, Any]) -> bool:
     if _norm(tax.get("category")) == "botanical" or _norm(row.get("category")) == "botanical":
         return True
     names = {_norm(row.get("canonical_id")), _norm(row.get("standard_name")), _norm(row.get("name"))}
-    return bool(names & _botanical_identity_set())
+    return bool(names & _known_botanical_identity_set())
 
 
 def _forms_text(row: Dict[str, Any]) -> str:
@@ -438,7 +466,7 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "metadata": {"reason": "no_botanical_active"}}
 
     keys = set(_ingredient_identity_keys(row))
-    recognized = bool(keys & _botanical_identity_set()) or (
+    recognized = bool(keys & _known_botanical_identity_set()) or (
         bool(_norm(row.get("canonical_id"))) and _norm(
             (row.get("raw_taxonomy") or {}).get("category")) == "botanical"
         and not str(row.get("canonical_id")).startswith("blend")
@@ -479,6 +507,18 @@ def _dosing_entry_for(row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     return None
 
 
+def _is_named_standardized_botanical_complex(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    """True when a parent-total row is itself the named standardized dose form.
+
+    Curcumin phytosome / Meriva-style labels often expose a parent complex with
+    nested form rows. That parent mass is the clinically studied dose form, not
+    an opaque proprietary-blend total. Plain blend headers and product-level
+    anchors stay conservative.
+    """
+    keys = set(_ingredient_identity_keys(row))
+    return _standardized_match(product, row) or bool(keys & _branded_studied_set())
+
+
 def _parse_dose_range(entry: Dict[str, Any]) -> Optional[tuple]:
     rng = _norm(entry.get("typical_dosing_range"))
     m = re.match(r"^\s*([0-9.]+)\s*[-–]\s*([0-9.]+)", rng)
@@ -514,7 +554,9 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     if row is None:
         return {"score": 0.0, "band": "no_botanical_active", "metadata": {}}
 
-    if row.get("is_blend_header") or row.get("blend_total_weight_only") or row.get("is_parent_total"):
+    if row.get("is_blend_header") or row.get("blend_total_weight_only"):
+        return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
+    if row.get("is_parent_total") and not _is_named_standardized_botanical_complex(product, row):
         return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
 
     # P6 review (P2#3): an anchor / product-level-evidence mass is a blend/product
