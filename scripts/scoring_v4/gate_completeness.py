@@ -323,6 +323,45 @@ def _has_sports_primary_identity_signal(product: Dict[str, Any]) -> bool:
     return False
 
 
+_PROBIOTIC_IDENTITY_TOKENS = (
+    "probiotic",
+    "lactobacillus",
+    "bifidobacterium",
+    "bacillus_coagulans",
+    "streptococcus_salivarius",
+    "saccharomyces_boulardii",
+)
+
+
+def _has_probiotic_relevant_identity(ingredients: List[Dict[str, Any]]) -> bool:
+    """True when the scoring contract contains usable probiotic identity.
+
+    Taxonomy/name can route a product to the probiotic module, but the clinical
+    score still needs probiotic-relevant contract evidence. A recovered
+    non-probiotic row such as glucose must not satisfy the active-identity gate
+    for probiotic scoring.
+    """
+    if _has_product_evidence(ingredients, "probiotic_cfu"):
+        return True
+    for ing in ingredients:
+        identity = " ".join(
+            _norm(ing.get(key))
+            for key in ("canonical_id", "name", "standard_name", "standardName")
+        )
+        if any(token in identity for token in _PROBIOTIC_IDENTITY_TOKENS):
+            return True
+    return False
+
+
+def _has_sports_relevant_identity(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> bool:
+    """True when the scoring contract contains usable sports identity."""
+    if _has_product_evidence(ingredients, "sports_primary_dose"):
+        return True
+    if _has_sports_primary_identity_signal(product):
+        return True
+    return any(_norm(ing.get("canonical_id")) in _SPORTS_ACTIVE_CANONICALS for ing in ingredients)
+
+
 def _soft_policy_from_scoring_evidence(
     ingredients: List[Dict[str, Any]],
     module: str,
@@ -462,7 +501,9 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     if module == "probiotic":
         checked_fields.extend(["total_cfu", "named_strain"])
         strain_count = _named_strain_count(product)
-        if _total_cfu_billion(product) <= 0:
+        if ingredients and not _has_probiotic_relevant_identity(ingredients):
+            missing.append("active_identity")
+        elif _total_cfu_billion(product) <= 0:
             if strain_count > 0 or ingredients:
                 soft_missing.append("total_cfu_not_disclosed")
             else:
@@ -528,7 +569,9 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
 
     if module == "sports":
         checked_fields.append("sports_active_dose")
-        if not any(_has_sports_active_dose(i) for i in ingredients) and not _has_product_evidence(
+        if ingredients and not _has_sports_relevant_identity(product, ingredients):
+            missing.append("active_identity")
+        elif not any(_has_sports_active_dose(i) for i in ingredients) and not _has_product_evidence(
             ingredients,
             "blend_anchor_mass",
         ):

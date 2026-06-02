@@ -295,6 +295,74 @@ def test_probiotic_missing_total_cfu_is_soft_debt() -> None:
     assert result.verdict_ceiling is None
 
 
+def test_probiotic_module_rejects_unrelated_recovered_active_identity() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        module="probiotic",
+        ingredients=[
+            {
+                "name": "Glucose",
+                "standard_name": "Glucose",
+                "canonical_id": "NHA_GLUCOSE_LIQUID",
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "scoring_input_kind": "recovered_active_identity",
+            }
+        ],
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_billion_count": 0,
+            "total_strain_count": 0,
+            "probiotic_blends": [],
+        },
+    )
+
+    result = evaluate_completeness_gate(product, module="probiotic")
+
+    assert result.is_live_eligible is False
+    assert result.verdict == "NOT_SCORED"
+    assert result.missing_fields == ["active_identity"]
+
+
+def test_probiotic_module_accepts_named_strain_identity_without_cfu_as_soft_debt() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        module="probiotic",
+        ingredients=[
+            _ingredient(
+                name="Lactobacillus acidophilus",
+                canonical_id="lactobacillus_acidophilus",
+                dose=15,
+                unit="mg",
+            )
+        ],
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_billion_count": 0,
+            "total_strain_count": 1,
+            "probiotic_blends": [
+                {
+                    "strains": [
+                        {
+                            "name": "Lactobacillus acidophilus",
+                            "canonical_id": "lactobacillus_acidophilus",
+                        }
+                    ]
+                }
+            ],
+        },
+    )
+
+    result = evaluate_completeness_gate(product, module="probiotic")
+
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "total_cfu_not_disclosed" in result.soft_missing
+
+
 def test_probiotic_missing_named_strain_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
@@ -372,7 +440,7 @@ def test_sports_without_sports_active_dose_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
-        ingredients=[_ingredient(name="Calcium", canonical_id="calcium", dose=200, unit="mg")],
+        ingredients=[_ingredient(name="Creatine Monohydrate", canonical_id="creatine_monohydrate", dose=None, unit="NP")],
         primary_type="pre_workout",
         supplement_taxonomy={"primary_type": "pre_workout"},
     )
@@ -383,6 +451,32 @@ def test_sports_without_sports_active_dose_is_soft_debt() -> None:
     assert result.is_live_eligible is True
     assert result.missing_fields == []
     assert "sports_active_dose_not_disclosed" in result.soft_missing
+
+
+def test_sports_module_rejects_unrelated_recovered_active_identity() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[
+            {
+                "name": "Glucose",
+                "standard_name": "Glucose",
+                "canonical_id": "NHA_GLUCOSE_LIQUID",
+                "mapped": True,
+                "quantity": 200,
+                "unit": "mg",
+                "scoring_input_kind": "recovered_active_identity",
+            }
+        ],
+        primary_type="pre_workout",
+        supplement_taxonomy={"primary_type": "pre_workout"},
+    )
+
+    result = evaluate_completeness_gate(product, module="sports")
+
+    assert result.is_live_eligible is False
+    assert result.verdict == "NOT_SCORED"
+    assert result.missing_fields == ["active_identity"]
 
 
 def test_sports_primary_identity_without_dose_scores_without_cap() -> None:
