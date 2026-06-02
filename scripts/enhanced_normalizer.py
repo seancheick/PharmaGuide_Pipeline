@@ -4075,6 +4075,27 @@ class EnhancedDSLDNormalizer:
             nested = row.get("nestedRows")
             if isinstance(nested, list):
                 self._stamp_raw_source_paths(nested, f"{path}.nestedRows", depth + 1)
+            forms = row.get("forms")
+            if isinstance(forms, list):
+                self._stamp_raw_source_paths(forms, f"{path}.forms", depth + 1)
+
+    def _raw_child_names_for_display(self, row: Dict[str, Any]) -> List[str]:
+        """Return direct child names from DSLD nestedRows/forms for display provenance."""
+        children: List[str] = []
+        for key in ("nestedRows", "forms"):
+            for child in row.get(key) or []:
+                if isinstance(child, dict):
+                    child_name = child.get("name")
+                else:
+                    child_name = child
+                if child_name:
+                    children.append(str(child_name))
+        return children
+
+    @staticmethod
+    def _source_path_is_inactive(source_path: str) -> bool:
+        source = str(source_path or "")
+        return source.startswith("inactiveIngredients") or source.startswith("otheringredients")
 
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
@@ -4216,7 +4237,19 @@ class EnhancedDSLDNormalizer:
                         source_section="activeIngredients",
                         display_type="summary_wrapper",
                         score_included=False,
-                        children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
+                        children=self._raw_child_names_for_display(ing),
+                    )
+                if ing.get("forms"):
+                    logger.debug(
+                        "Extracting %d forms from skipped parent during flattening: %s",
+                        len(ing.get("forms") or []),
+                        name,
+                    )
+                    flattened.extend(
+                        self._expand_header_forms_for_processing(
+                            ing,
+                            source_path=ing.get("raw_source_path") or "activeIngredients",
+                        )
                     )
                 # BUT: Still extract nestedRows from skipped parents (e.g., "Total Omega Oil")
                 if nested:
@@ -4229,6 +4262,13 @@ class EnhancedDSLDNormalizer:
                             # Recurse into skip-listed children that have
                             # their own nestedRows (same rescue pattern as
                             # the default-path nested skip block below).
+                            if nested_ing.get("forms"):
+                                flattened.extend(
+                                    self._expand_header_forms_for_processing(
+                                        nested_ing,
+                                        source_path=nested_ing.get("raw_source_path") or "activeIngredients",
+                                    )
+                                )
                             if nested_ing.get("nestedRows"):
                                 sub_flattened = self._flatten_nested_ingredients(
                                     [nested_ing], _depth=_depth + 1,
@@ -4236,6 +4276,13 @@ class EnhancedDSLDNormalizer:
                                 flattened.extend(sub_flattened)
                             continue
                         if self._is_chemical_decomposition_leaf(nested_ing):
+                            if nested_ing.get("forms"):
+                                flattened.extend(
+                                    self._expand_header_forms_for_processing(
+                                        nested_ing,
+                                        source_path=nested_ing.get("raw_source_path") or "activeIngredients",
+                                    )
+                                )
                             logger.debug(
                                 "Skipping chemical-decomposition leaf '%s' (cat=%s) under skipped parent '%s'",
                                 nested_name, nested_ing.get("category"), name,
@@ -4294,6 +4341,13 @@ class EnhancedDSLDNormalizer:
                                 children=[child.get("name", "") for child in grand_nested if child.get("name")],
                             )
                         # Rescue grandchildren from skipped nested items
+                        if nested_ing.get("forms"):
+                            flattened.extend(
+                                self._expand_header_forms_for_processing(
+                                    nested_ing,
+                                    source_path=nested_ing.get("raw_source_path") or "activeIngredients",
+                                )
+                            )
                         if grand_nested:
                             logger.debug(
                                 "Extracting %d nestedRows from skipped nested parent: %s",
@@ -4336,6 +4390,13 @@ class EnhancedDSLDNormalizer:
                         continue
 
                     if self._is_chemical_decomposition_leaf(nested_ing):
+                        if nested_ing.get("forms"):
+                            flattened.extend(
+                                self._expand_header_forms_for_processing(
+                                    nested_ing,
+                                    source_path=nested_ing.get("raw_source_path") or "activeIngredients",
+                                )
+                            )
                         logger.debug(
                             "Skipping chemical-decomposition leaf '%s' (cat=%s) under parent '%s'",
                             nested_name, nested_ing.get("category"), name,
@@ -4694,6 +4755,7 @@ class EnhancedDSLDNormalizer:
                     if name and name.lower() != "none":
                         yield r
                     yield from _walk_raw_actives(r.get("nestedRows") or [])
+                    yield from _walk_raw_actives(r.get("forms") or [])
             raw_actives_count = sum(1 for _ in _walk_raw_actives(raw_ingredients))
 
             # Capture nutritional info from ALL ingredients
@@ -4782,6 +4844,15 @@ class EnhancedDSLDNormalizer:
 
             # Process other ingredients - handle both key formats
             inactive_ingredients = self._process_other_ingredients_enhanced(other_ing_data)
+
+            if not active_ingredients:
+                active_ingredients, inactive_ingredients = (
+                    self._rescue_empty_panel_active_identity_from_otheringredients(
+                        raw_data,
+                        active_ingredients,
+                        inactive_ingredients,
+                    )
+                )
 
             # A4: Dedupe - remove inactive ingredients that also appear in active ingredients
             # If an ingredient has dose/unit in active list, it's the canonical record
@@ -5531,8 +5602,30 @@ class EnhancedDSLDNormalizer:
                     source_section="activeIngredients" if is_active else "inactiveIngredients",
                     display_type="summary_wrapper",
                     score_included=False,
-                    children=[nested.get("name", "") for nested in nested_rows if nested.get("name")],
+                    children=self._raw_child_names_for_display(ing),
                 )
+            if is_active and ing.get("forms"):
+                extracted = []
+                for form_ing in self._expand_header_forms_for_processing(
+                    ing,
+                    source_path=ing.get("raw_source_path") or "activeIngredients",
+                ):
+                    processed_form = self._process_single_ingredient_enhanced(
+                        form_ing,
+                        is_active=True,
+                    )
+                    if processed_form is not None:
+                        if isinstance(processed_form, list):
+                            extracted.extend(processed_form)
+                        else:
+                            extracted.append(processed_form)
+                if extracted:
+                    logger.debug(
+                        "Rescued %d form child(ren) from skipped active parent %r",
+                        len(extracted),
+                        name,
+                    )
+                    return extracted
             # BUT: If parent has nestedRows, process those as standalone ingredients
             # (e.g., "Total Omega Oil" is skipped, but Omega-3/6/9 nested rows are real data)
             if nested_rows:
@@ -6808,12 +6901,14 @@ class EnhancedDSLDNormalizer:
             return expanded
 
         logger.debug(f"Extracting {len(forms)} ingredients from label header: {name}")
+        is_active_source = not self._source_path_is_inactive(source_path)
         for form in forms:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
                 form_group = form.get("ingredientGroup") or ingredient.get("ingredientGroup")
+                form_source_path = form.get("raw_source_path") or source_path
                 inherited_quantity = self._quantity_for_single_form_protein_child(ingredient, forms)
-                expanded_names = self._expand_compound_inactive_form_name(form_name, source_path)
+                expanded_names = self._expand_compound_form_name(form_name, source_path)
                 if expanded_names:
                     for expanded_name in expanded_names:
                         row = {
@@ -6821,7 +6916,7 @@ class EnhancedDSLDNormalizer:
                             "uniiCode": form.get("uniiCode"),
                             "order": form.get("order", ingredient.get("order", 0)),
                             "raw_source_text": expanded_name,
-                            "raw_source_path": source_path,
+                            "raw_source_path": form_source_path,
                             "normalized_key": norm_module.make_normalized_key(expanded_name),
                             "name": expanded_name,
                             "ingredientGroup": form_group,
@@ -6835,7 +6930,7 @@ class EnhancedDSLDNormalizer:
                         expanded.append(row)
                     continue
                 if self._is_label_header(form_name) or self._is_structural_form_container(
-                    form_name, is_active=(source_path == "activeIngredients")
+                    form_name, is_active=is_active_source
                 ):
                     self._queue_display_ingredient(
                         raw_source_text=form_name,
@@ -6850,7 +6945,7 @@ class EnhancedDSLDNormalizer:
                         "uniiCode": form.get("uniiCode"),
                         "order": form.get("order", ingredient.get("order", 0)),
                         "raw_source_text": form_name,
-                        "raw_source_path": source_path,
+                        "raw_source_path": form_source_path,
                         "normalized_key": norm_module.make_normalized_key(form_name),
                         "name": form_name,
                         "ingredientGroup": form_group,
@@ -6863,7 +6958,7 @@ class EnhancedDSLDNormalizer:
                         row["quantity"] = inherited_quantity
                     expanded.append(row)
             elif isinstance(form, str):
-                expanded_names = self._expand_compound_inactive_form_name(form, source_path)
+                expanded_names = self._expand_compound_form_name(form, source_path)
                 if expanded_names:
                     for expanded_name in expanded_names:
                         expanded.append({
@@ -6880,7 +6975,7 @@ class EnhancedDSLDNormalizer:
                         })
                     continue
                 if self._is_label_header(form) or self._is_structural_form_container(
-                    form, is_active=(source_path == "activeIngredients")
+                    form, is_active=is_active_source
                 ):
                     self._queue_display_ingredient(
                         raw_source_text=form,
@@ -6910,7 +7005,7 @@ class EnhancedDSLDNormalizer:
 
     def _stamp_expanded_form_cleaner_contract(self, row: Dict[str, Any], source_path: str) -> None:
         """Stamp cleaner-owned row contract on rows expanded from label/header forms."""
-        source_section = "inactive" if source_path == "inactiveIngredients" else "active"
+        source_section = "inactive" if self._source_path_is_inactive(source_path) else "active"
         row.setdefault("source_section", source_section)
         row.setdefault("cleaner_row_role", "inactive" if source_section == "inactive" else "active_scorable")
         row.setdefault("score_eligible_by_cleaner", source_section == "active")
@@ -6931,14 +7026,21 @@ class EnhancedDSLDNormalizer:
             },
         )
 
-    def _expand_compound_inactive_form_name(self, form_name: str, source_path: str) -> List[str]:
-        """Split exact known concatenated inactive form labels into their real child ingredients."""
-        if source_path != "inactiveIngredients" or not form_name:
+    def _expand_compound_form_name(self, form_name: str, source_path: str) -> List[str]:
+        """Split exact known concatenated form labels into their real child ingredients."""
+        if not form_name:
             return []
 
         processed_name = self.matcher.preprocess_text(form_name)
-        if processed_name == "rice bran oil titanium dioxide color":
+        if self._source_path_is_inactive(source_path) and processed_name == "rice bran oil titanium dioxide color":
             return ["Rice Bran Oil", "Titanium Dioxide Color"]
+        if (
+            not self._source_path_is_inactive(source_path)
+            and "dha" in processed_name.split()
+            and "epa" in processed_name.split()
+            and "other" not in processed_name.split()
+        ):
+            return ["DHA", "EPA"]
 
         return []
 
@@ -6957,6 +7059,138 @@ class EnhancedDSLDNormalizer:
 
         _, mapped, _ = self._enhanced_ingredient_mapping(form_name, [])
         return mapped
+
+    def _rescue_empty_panel_active_identity_from_otheringredients(
+        self,
+        raw_data: Dict[str, Any],
+        active_ingredients: List[Dict[str, Any]],
+        inactive_ingredients: List[Dict[str, Any]],
+    ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+        """Promote narrow supplement-active identities from Other Ingredients.
+
+        Some DSLD labels put the only usable supplement identity in
+        ``otheringredients`` while the Supplement Facts rows contain only
+        macros (fish/flax/coconut oils) or while a probiotic identity is
+        expressed as an Other Ingredients wrapper. This rescue is intentionally
+        conservative: it only runs when there are no active rows, never uses the
+        product title alone to synthesize an identity, and only promotes rows
+        whose own label text/canonical identity is a known supplement active.
+        """
+        if active_ingredients or not inactive_ingredients:
+            return active_ingredients, inactive_ingredients
+
+        product_name = str(raw_data.get("fullName") or raw_data.get("name") or "")
+        title_key = self.matcher.preprocess_text(product_name)
+        rescued: List[Dict[str, Any]] = []
+        remaining: List[Dict[str, Any]] = []
+        for row in inactive_ingredients:
+            if not self._inactive_row_is_empty_panel_active_rescue_candidate(
+                row,
+                title_key,
+            ):
+                remaining.append(row)
+                continue
+            form_rescues = self._active_rows_from_rescued_inactive_forms(row)
+            if form_rescues:
+                rescued.extend(form_rescues)
+            else:
+                rescued.append(self._promote_inactive_row_to_active_identity(row))
+
+        if not rescued:
+            return active_ingredients, inactive_ingredients
+        return active_ingredients + rescued, remaining
+
+    def _inactive_row_is_empty_panel_active_rescue_candidate(
+        self,
+        row: Dict[str, Any],
+        title_key: str,
+    ) -> bool:
+        raw_name = str(row.get("raw_source_text") or row.get("name") or "")
+        standard_name = str(row.get("standardName") or "")
+        canonical_id = str(row.get("canonical_id") or "").lower()
+        row_key = self.matcher.preprocess_text(" ".join([raw_name, standard_name, canonical_id]))
+        if not row_key:
+            return False
+
+        title_tokens = set(title_key.split())
+        if not title_tokens:
+            return False
+
+        if canonical_id == "fish_oil" or "fish oil" in row_key or "fish body oil" in row_key:
+            return bool({"fish", "omega", "epa", "dha"} & title_tokens)
+        if canonical_id == "flaxseed" or "flaxseed oil" in row_key or "flax seed oil" in row_key:
+            return "flax" in title_tokens or "flaxseed" in title_tokens
+        if "coconut oil" in row_key:
+            return "coconut" in title_tokens
+        if "probiotic" in row_key or "probiotics" in row_key:
+            return True
+
+        return False
+
+    def _promote_inactive_row_to_active_identity(self, row: Dict[str, Any]) -> Dict[str, Any]:
+        promoted = dict(row)
+        promoted["source_section"] = "active"
+        promoted["cleaner_row_role"] = "active_scorable"
+        promoted["score_eligible_by_cleaner"] = True
+        promoted["score_exclusion_reason"] = None
+        promoted["dose_class"] = (
+            "probiotic_cfu"
+            if "probiotic" in self.matcher.preprocess_text(str(row.get("name") or row.get("standardName") or ""))
+            else "therapeutic_mass"
+        )
+        promoted["rescued_from_otheringredients_active_identity"] = True
+        raw_taxonomy = dict(promoted.get("raw_taxonomy") or {})
+        raw_taxonomy["rescued_from_otheringredients_active_identity"] = True
+        promoted["raw_taxonomy"] = raw_taxonomy
+        return promoted
+
+    def _active_rows_from_rescued_inactive_forms(self, row: Dict[str, Any]) -> List[Dict[str, Any]]:
+        row_key = self.matcher.preprocess_text(
+            str(row.get("name") or row.get("standardName") or row.get("canonical_id") or "")
+        )
+        if "probiotic" not in row_key:
+            return []
+        forms = row.get("forms") or []
+        if not forms:
+            return []
+
+        rescued: List[Dict[str, Any]] = []
+        for idx, form in enumerate(forms):
+            if not isinstance(form, dict):
+                form_name = str(form or "").strip()
+                form_payload: Dict[str, Any] = {}
+            else:
+                form_name = str(form.get("name") or "").strip()
+                form_payload = form
+            if not form_name:
+                continue
+            synthetic = {
+                "name": form_name,
+                "ingredientGroup": form_payload.get("ingredientGroup") or row.get("ingredientGroup"),
+                "ingredientId": form_payload.get("ingredientId"),
+                "uniiCode": form_payload.get("uniiCode"),
+                "order": form_payload.get("order", row.get("order", 0)),
+                "forms": [],
+                "alternateNames": [],
+                "raw_source_text": form_name,
+                "raw_source_path": f"{row.get('raw_source_path')}.forms[{idx}]",
+            }
+            processed = self._process_single_ingredient_enhanced(
+                synthetic,
+                is_active=True,
+            )
+            if processed is None:
+                continue
+            rows = processed if isinstance(processed, list) else [processed]
+            for processed_row in rows:
+                processed_row["rescued_from_otheringredients_active_identity"] = True
+                raw_taxonomy = dict(processed_row.get("raw_taxonomy") or {})
+                raw_taxonomy["rescued_from_otheringredients_active_identity"] = True
+                raw_taxonomy["rescued_from_otheringredients_parent"] = row.get("name")
+                processed_row["raw_taxonomy"] = raw_taxonomy
+                rescued.append(processed_row)
+
+        return rescued
 
     def _dedupe_inactive_ingredients(
         self, active_ingredients: List[Dict], inactive_ingredients: List[Dict]
