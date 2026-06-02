@@ -6,10 +6,11 @@ Priority order (post-taxonomy refactor, 2026-05-20):
      - taxonomy primary_type == "probiotic"
      - OR probiotic_data has product-level CFU + named strain identity
      - OR probiotic_data has named strain identity + explicit probiotic name
-  2. prenatal name keyword  → multi_or_prenatal
-     - overrides multi / omega routing for products like Prenatal DHA,
-       Prenatal Gummies. Does NOT override probiotic — prenatal-probiotic
-       blends still go to probiotic.
+  2. prenatal multi intent  → multi_or_prenatal
+     - product-label prenatal wording plus a true multi/B-complex taxonomy
+       or broad prenatal micronutrient panel. Does NOT override probiotic,
+       single-purpose prenatal DHA, or single-ingredient products that merely
+       live in a prenatal bundle/program.
   3. multivitamin / b-complex → multi_or_prenatal
      - taxonomy primary_type in {multivitamin, b_complex}
   4. sports                 → sports
@@ -121,6 +122,28 @@ _B_VITAMIN_CANONICALS = {
     "vitamin_b9_folate",
     "vitamin_b12_cobalamin",
 }
+_MULTI_PANEL_CANONICALS = _B_VITAMIN_CANONICALS | {
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_k1",
+    "vitamin_k2",
+    "folate",
+    "iron",
+    "iodine",
+    "choline",
+    "zinc",
+    "magnesium",
+    "calcium",
+    "selenium",
+    "manganese",
+    "copper",
+    "chromium",
+    "molybdenum",
+}
+_PRENATAL_PANEL_ANCHORS = {"folate", "vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
 _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
     "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
@@ -414,6 +437,39 @@ def _is_b_complex_route_eligible(product: Dict[str, Any], name_text: str) -> boo
     return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
 
 
+def _product_label_text(product: Dict[str, Any]) -> str:
+    """Text that belongs to the product label, excluding brand/bundle context."""
+    return " ".join(str((product or {}).get(k) or "") for k in ("product_name", "fullName"))
+
+
+def _has_broad_prenatal_multi_panel(product: Dict[str, Any]) -> bool:
+    canonicals = _positive_canonicals(product)
+    multi_nutrients = canonicals & _MULTI_PANEL_CANONICALS
+    prenatal_anchors = canonicals & _PRENATAL_PANEL_ANCHORS
+    # Fallback for under-classified prenatal gummies/multis: require a broad
+    # micronutrient panel, not merely one prenatal-adjacent nutrient.
+    return len(multi_nutrients) >= 5 and len(prenatal_anchors) >= 2
+
+
+def _is_prenatal_multi_intent(product: Dict[str, Any], name_text: str) -> bool:
+    """Return True only for prenatal products that should use the multi rubric.
+
+    Prenatal wording in a bundle/program name is not enough. Real catalog
+    examples include a single Calcium 600 item inside a "Prenatal Program" and
+    herbal "Prenatal Tummy Comfort"; neither should be crushed by prenatal
+    folate/iron/iodine/choline/DHA floors.
+    """
+    if not _PRENATAL_KEYWORDS.search(_product_label_text(product)):
+        return False
+
+    primary_type = _read_primary_type(product)
+    if primary_type == "multivitamin":
+        return True
+    if primary_type == "b_complex":
+        return _is_b_complex_route_eligible(product, name_text)
+    return _has_broad_prenatal_multi_panel(product)
+
+
 def _positive_canonicals(product: Dict[str, Any]) -> set[str]:
     canonicals: set[str] = set()
     for ing in _scoring_rows(product):
@@ -541,19 +597,22 @@ def class_for_product(product: Dict[str, Any]) -> str:
     ):
         return "probiotic"
 
-    # Priority 2: prenatal name keyword -> multi_or_prenatal for products like
+    # Priority 2: prenatal multi intent -> multi_or_prenatal for products like
     # Prenatal Gummies / Pregnancy Vitamins, whose prenatal use case has stricter
     # dose/safety expectations (folate, iron, iodine critical-nutrient floors) the
     # multi module handles. EXCEPTION: a single-purpose "Prenatal DHA" whose actives
     # are PRIMARILY an EPA/DHA omega panel is an omega supplement, not an incomplete
     # prenatal multi — routing it to multi_or_prenatal crushes it on prenatal-panel
     # coverage for nutrients it never contained (Thorne Prenatal DHA 650 mg -> POOR).
-    # Route those to omega so they're scored on EPA/DHA dosing.
+    # Route those to omega so they're scored on EPA/DHA dosing. Single-mineral /
+    # herbal prenatal-support products remain generic unless the panel itself is
+    # a broad prenatal multi.
     # Prenatal-probiotic was already handled by Priority 1 above.
-    if _PRENATAL_KEYWORDS.search(name_text):
+    if _PRENATAL_KEYWORDS.search(_product_label_text(product)):
         if _has_primary_omega_panel(product):
             return "omega"
-        return "multi_or_prenatal"
+        if _is_prenatal_multi_intent(product, name_text):
+            return "multi_or_prenatal"
 
     # Priority 3: sports. Keep this before multi/b-complex because real
     # pre-workout products can carry enough B vitamins for b_complex taxonomy.

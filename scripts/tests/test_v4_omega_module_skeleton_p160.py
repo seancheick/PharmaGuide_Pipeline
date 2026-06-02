@@ -401,17 +401,20 @@ def test_router_does_not_route_d3_with_mct_carrier_to_omega() -> None:
     assert class_for_product(product) == "generic"
 
 
-def test_router_does_not_route_prenatal_dha_to_omega() -> None:
-    """Prenatal DHA goes to multi_or_prenatal, not omega — prenatal has
-    stricter dose/safety expectations that the multi module owns."""
+def test_router_routes_single_purpose_prenatal_dha_to_omega() -> None:
+    """Single-purpose Prenatal DHA is omega, not an incomplete prenatal multi.
+
+    Broad prenatal vitamin/mineral panels still route multi_or_prenatal; a DHA
+    product should be scored on EPA/DHA disclosure and dose instead of being
+    crushed for absent folate/iron/iodine/choline.
+    """
     from scoring_v4.router import class_for_product
 
     product = {
         "product_name": "Prenatal DHA",
         "primary_category": "omega-3",  # would otherwise route to omega
     }
-    # Prenatal keyword wins.
-    assert class_for_product(product) == "multi_or_prenatal"
+    assert class_for_product(product) == "omega"
 
 
 def test_router_does_not_route_minority_fatty_acid_to_omega() -> None:

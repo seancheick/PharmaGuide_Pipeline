@@ -136,9 +136,12 @@ def _nutrient_key(value: Any) -> str:
 
 
 def _is_prenatal(product: Dict[str, Any]) -> bool:
+    # Use product-label text only. Brand/bundle context such as "Prenatal
+    # Program" can contain standalone calcium/DHA/herbal SKUs that should not
+    # inherit full prenatal-multi critical-nutrient floors.
     haystack = " ".join(
         str(product.get(key) or "")
-        for key in ("product_name", "fullName", "brand_name", "bundleName")
+        for key in ("product_name", "fullName")
     )
     return bool(PRENATAL_RE.search(_norm_text(haystack)))
 

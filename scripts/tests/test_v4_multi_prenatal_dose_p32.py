@@ -280,6 +280,23 @@ def test_prenatal_dha_critical_anchor_does_not_match_dhea() -> None:
     assert "dha" in payload["metadata"]["critical_nutrients_missing"]
 
 
+def test_prenatal_bundle_context_does_not_trigger_prenatal_critical_anchors() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    product = _product(
+        name="Calcium 600",
+        adequacy_results=[_adequacy(n) for n in CORE_ANCHORS],
+        ingredients=[_ingredient("calcium", name="Calcium", quantity=600, unit="mg")],
+    )
+    product["brand_name"] = "GNC Women's"
+    product["bundleName"] = "Prenatal Program"
+
+    payload = score_dose(product)
+
+    assert payload["metadata"]["critical_nutrient_mode"] == "core_multi"
+    assert "dha" not in payload["metadata"]["critical_nutrient_scores"]
+
+
 def test_no_rda_reference_returns_zero_score_not_none_for_multi_direct_call() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
