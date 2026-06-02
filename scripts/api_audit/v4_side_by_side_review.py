@@ -199,10 +199,50 @@ def select_review_sample(rows: List[Dict[str, Any]], sample_size: int = DEFAULT_
     return selected[:sample_size]
 
 
+def _num_or_none(value: Any) -> Optional[float]:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _delta_reason(flat: Dict[str, Any]) -> str:
+    """Mechanical, non-judgmental summary of the v3->v4 delta drivers. Names the
+    likely contributors (low dimensions, removed trust, penalties, caps); the
+    'is this legit?' call is left to the human reviewing the surface."""
+    parts: List[str] = []
+    sd = _num_or_none(flat.get("score_delta_v4_minus_v3"))
+    if sd is None:
+        parts.append("v4 not scored")
+    elif sd >= 3:
+        parts.append(f"v4 +{sd:.0f}")
+    elif sd <= -3:
+        parts.append(f"v4 {sd:.0f}")
+    else:
+        parts.append("~flat")
+    ev = _num_or_none(flat.get("v4_evidence"))
+    if ev is not None and ev <= 6:
+        parts.append(f"evid {ev:.0f}/20")
+    dose = _num_or_none(flat.get("v4_dose"))
+    if dose is not None and dose <= 10:
+        parts.append(f"dose {dose:.0f}/25")
+    if (_num_or_none(flat.get("v4_verification_bonus")) or 0) == 0:
+        parts.append("no verif bonus")
+    if (_num_or_none(flat.get("v4_manufacturer_violations")) or 0) < 0:
+        parts.append("mfr violation")
+    if flat.get("v4_score_cap") not in (None, ""):
+        parts.append(f"cap {flat.get('v4_score_cap')}")
+    if flat.get("v4_verdict_ceiling") not in (None, ""):
+        parts.append(f"ceiling {flat.get('v4_verdict_ceiling')}")
+    if flat.get("v4_completeness_missing"):
+        parts.append("missing:" + flat["v4_completeness_missing"])
+    return "; ".join(parts)
+
+
 def flatten_row(row: Dict[str, Any]) -> Dict[str, Any]:
     v3_sections = row.get("v3_sections") or {}
     v4_dimensions = row.get("v4_dimensions") or {}
-    return {
+    flat = {
         "dsld_id": row.get("dsld_id"),
         "brand_name": row.get("brand_name"),
         "product_name": row.get("product_name"),
@@ -234,7 +274,11 @@ def flatten_row(row: Dict[str, Any]) -> Dict[str, Any]:
         # core dimension; v4_verification_trust_0_15 is the pre-rescale score.
         "v4_verification_bonus": row.get("v4_verification_bonus"),
         "v4_verification_trust_0_15": row.get("v4_verification_trust_0_15"),
-        "v4_safety_hygiene_base": v4_dimensions.get("safety_hygiene_base"),
+        "v4_manufacturer_bonus": row.get("v4_manufacturer_bonus"),
+        # safety_hygiene lives outside the `dimensions` dict — read it from the
+        # row the delta tool now surfaces (was always null via v4_dimensions).
+        "v4_safety_hygiene_base": row.get("v4_safety_hygiene"),
+        "v4_manufacturer_violations": row.get("v4_manufacturer_violations"),
         "v4_completeness_missing": "|".join(row.get("v4_completeness_missing") or []),
         "v4_completeness_soft_missing": "|".join(row.get("v4_completeness_soft_missing") or []),
         "v4_score_cap": row.get("v4_completeness_score_cap"),
@@ -244,6 +288,8 @@ def flatten_row(row: Dict[str, Any]) -> Dict[str, Any]:
         "v4_dimensions_json": _json(v4_dimensions),
         "v4_dimension_metadata_json": _json(row.get("v4_dimension_metadata")),
     }
+    flat["delta_reason"] = _delta_reason(flat)
+    return flat
 
 
 def write_csv(rows: List[Dict[str, Any]], path: Path) -> None:

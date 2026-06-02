@@ -163,6 +163,18 @@ def build_rows(
                     canary._safe_dict(module.get("verification_bonus")).get("metadata")
                 ).get("source_trust_score_0_15")
             ),
+            # Additive bonuses / penalty that live outside `dimensions` (so the
+            # side-by-side review surface shows the full score composition, not
+            # just the 4 core dimensions).
+            "v4_manufacturer_bonus": canary._num(
+                canary._safe_dict(module.get("manufacturer_trust")).get("score")
+            ),
+            "v4_safety_hygiene": canary._num(
+                canary._safe_dict(module.get("safety_hygiene_base")).get("score")
+            ),
+            "v4_manufacturer_violations": canary._num(
+                canary._safe_dict(module.get("manufacturer_violations")).get("score")
+            ),
             "v4_module_metadata": module_metadata,
             "v4_completeness_missing": list(completeness_gate.get("missing_fields") or []),
             "v4_completeness_soft_missing": list(completeness_gate.get("soft_missing") or []),
