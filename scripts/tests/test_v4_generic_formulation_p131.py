@@ -374,14 +374,35 @@ def test_a5e_natural_source_minority_natural_returns_zero() -> None:
 
 
 def test_a6_single_ingredient_efficiency_high_bio_single_type() -> None:
+    """v4.1 tiered A6: elite form (bio >= 14) earns the top tier (+4),
+    compensating focused singles for the A2 breadth bonus they cannot earn."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
+    payload = score_formulation(product)
+    assert payload["components"]["A6_single_ingredient"] == 4.0
+
+
+def test_a6_tier_solid_premium_bio_12() -> None:
+    """v4.1 tiered A6: solid-premium form (bio 12-13) earns +3."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=12)])
+    payload = score_formulation(product)
+    assert payload["components"]["A6_single_ingredient"] == 3.0
+
+
+def test_a6_tier_good_bio_10() -> None:
+    """v4.1 tiered A6: good form (bio 10-11) earns +1."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=10)])
     payload = score_formulation(product)
     assert payload["components"]["A6_single_ingredient"] == 1.0
 
 
 def test_a6_single_ingredient_skipped_for_non_single_supp_type() -> None:
+    """A6 stays mutually exclusive with A2: a multi earns A2 breadth, never A6."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(supp_type="multivitamin", ingredients=[_ingredient(bio_score=14)])
@@ -389,10 +410,11 @@ def test_a6_single_ingredient_skipped_for_non_single_supp_type() -> None:
     assert payload["components"]["A6_single_ingredient"] == 0.0
 
 
-def test_a6_single_ingredient_low_bio_returns_zero() -> None:
+def test_a6_single_ingredient_below_floor_returns_zero() -> None:
+    """Below the bio-10 floor (acceptable/weak form) earns nothing."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
-    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=10)])
+    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=9)])
     payload = score_formulation(product)
     assert payload["components"]["A6_single_ingredient"] == 0.0
 
@@ -1004,7 +1026,8 @@ def test_p131b_metadata_marks_formulation_complete() -> None:
 def test_dimension_score_assembles_8_components_minus_penalty() -> None:
     """Bisglycinate single 200mg, capsule, no other signals. Expected:
     bio_score 14 + premium 0 (skip-first) + delivery 2 (capsule = tier 2)
-    + absorption 0 + A5a 0 + A5e 0 + A6 1 - sugar 0 = 17.0."""
+    + absorption 0 + A5a 0 + A5e 0 + A6 4 (v4.1 tiered, bio>=14 elite)
+    - sugar 0 = 20.0."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -1013,7 +1036,7 @@ def test_dimension_score_assembles_8_components_minus_penalty() -> None:
     )
     payload = score_formulation(product)
 
-    assert payload["score"] == 17.0
+    assert payload["score"] == 20.0
     assert payload["max"] == 30.0
 
 
@@ -1095,9 +1118,10 @@ def test_thorne_mg_bisglycinate_formulation_band() -> None:
       A4 absorption 0 (no enhancer pairing)
       A5a organic 0 (not USDA-verified)
       A5e natural 0 (synthetic chelate)
-      A6 single-ingredient 1 (single + bio≥14)
+      A6 single-ingredient 4 (v4.1 tiered: single + bio≥14 elite tier)
       - sugar 0
-      = ~17 unless label/excellence/additive signals are present."""
+      = ~20 unless label/excellence/additive signals are present.
+      v4.1 lift: a premium chelated single now reaches ~20 vs ~17 (A6 1→4)."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -1116,7 +1140,7 @@ def test_thorne_mg_bisglycinate_formulation_band() -> None:
     )
     payload = score_formulation(product)
 
-    assert 16.0 <= payload["score"] <= 19.0
+    assert 19.0 <= payload["score"] <= 22.0
 
 
 # --- Shadow integration ---------------------------------------------------

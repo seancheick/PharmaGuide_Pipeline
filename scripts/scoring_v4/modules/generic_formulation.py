@@ -9,7 +9,7 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric — Formulation 30:
     | Delivery system                       |   3 | A3 delivery_system       |
     | Absorption enhancer pairing           |   3 | A4 absorption_enhancer   |
     | Formulation excellence rollup         |   4 | A5 organic + std + synergy + non-GMO + natural |
-    | Single-ingredient efficiency          |   1 | A6 single_ingredient     |
+    | Single-ingredient efficiency (tiered) |   4 | A6 single_ingredient     |
     | Enzyme recognition (single-ing only)  |   2 | enzyme_recognition       |
     |                                       |     |                          |
     | B0 immediate_fail (moderate/watchlist)| -10 | safety_signals           |
@@ -79,7 +79,20 @@ CAP_PREMIUM_FORMS = 4.0
 CAP_DELIVERY = 3.0
 CAP_ABSORPTION = 3.0
 CAP_EXCELLENCE = 4.0       # A5 rollup
-CAP_SINGLE_INGREDIENT = 1.0
+# A6 (v4.1) — tiered focused-single-ingredient quality. Compensates a focused
+# product for the A2 "premium forms beyond primary" breadth bonus it structurally
+# cannot earn (a single active has no additional forms). Mutually exclusive with A2
+# in practice: A2 needs >=2 premium forms; A6 only fires for single-ingredient types.
+# Tiered by bio_score so "solid premium" (12) and "elite" (>=14) differ, controlling
+# inflation. A1 still pays the form's bioavailability; A6 is the focus bonus on top,
+# the single's structural analog to a multi's A2.
+CAP_SINGLE_INGREDIENT = 4.0
+A6_TIER_FLOOR_BIO = 10.0        # below this: acceptable/weak form, no focus bonus
+A6_TIER_SOLID_BIO = 12.0
+A6_TIER_ELITE_BIO = 14.0
+A6_POINTS_GOOD = 1.0            # bio 10-11.99
+A6_POINTS_SOLID = 3.0          # bio 12-13.99
+A6_POINTS_ELITE = 4.0          # bio >= 14
 CAP_ENZYME = 2.0
 DIMENSION_CAP = 30.0
 
@@ -90,7 +103,6 @@ PREMIUM_FORM_SKIP_FIRST = True
 DELIVERY_TIER_POINTS = {1: 3.0, 2: 2.0, 3: 1.0}
 
 SINGLE_INGREDIENT_SUPP_TYPES = frozenset({"single", "single_nutrient"})
-SINGLE_INGREDIENT_BIO_THRESHOLD = 14.0   # v4 single-ingredient bonus needs bio_score ≥14
 
 # A5 rollup sub-credits (sum can exceed CAP_EXCELLENCE; we clamp at the end).
 A5A_ORGANIC = 1.0
@@ -319,20 +331,26 @@ def _score_a5e_natural_source(product: Dict[str, Any]) -> float:
 
 
 def _score_single_ingredient_efficiency(product: Dict[str, Any]) -> float:
-    """+1 when the product is single-ingredient (supp_type in
-    {single, single_nutrient}) AND the first scorable active has
-    bio_score ≥ 14. v4 caps this at 1 (vs v3's 3) because the bio_score
-    contribution at the dimension level (cap 15) already covers premium
-    chelated singles."""
+    """Tiered focus bonus for single-ingredient products (supp_type in
+    {single, single_nutrient}) on the first scorable active's bio_score:
+    bio >= 14 -> +4, >= 12 -> +3, >= 10 -> +1, else 0. v4.1 raised this from a
+    flat +1 (gate 14) so a focused premium single (KSM-66, Meriva, CoQ10
+    ubiquinol, mag glycinate, zinc bisglycinate) has a legitimate route to high
+    formulation without the A2 breadth bonus it can never earn. A1 already pays
+    the form's bioavailability; this is the focus bonus on top."""
     if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
         return 0.0
     scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
     if not scorable:
         return 0.0
     score = bio_score_of(scorable[0])
-    if score is None or score < SINGLE_INGREDIENT_BIO_THRESHOLD:
+    if score is None or score < A6_TIER_FLOOR_BIO:
         return 0.0
-    return CAP_SINGLE_INGREDIENT
+    if score >= A6_TIER_ELITE_BIO:
+        return A6_POINTS_ELITE
+    if score >= A6_TIER_SOLID_BIO:
+        return A6_POINTS_SOLID
+    return A6_POINTS_GOOD
 
 
 def _score_enzyme_recognition(product: Dict[str, Any]) -> float:
