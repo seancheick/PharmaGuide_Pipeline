@@ -793,6 +793,71 @@ def test_completeness_gate_omega_rejects_omega3_parent_mass_only() -> None:
     assert "epa_or_dha_not_disclosed" in result.soft_missing
 
 
+def test_completeness_gate_omega_rejects_non_omega_identity_only() -> None:
+    """A name-routed omega product still needs omega-relevant contract identity.
+
+    Real regression: DSLD 25935 is titled "DHA" but the active panel recovered
+    only Glucose. v4 must not produce an omega score from an unrelated active
+    row just because the product name contains DHA.
+    """
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = {
+        "status": "active",
+        "form_factor": "capsule",
+        "product_name": "DHA",
+        "supplement_taxonomy": {"primary_type": "omega_3"},
+        "ingredient_quality_data": {
+            "total_active": 1,
+            "ingredients_scorable": [
+                {
+                    "name": "Glucose",
+                    "canonical_id": "NHA_GLUCOSE_LIQUID",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "scoring_input_kind": "recovered_active_identity",
+                }
+            ],
+        },
+    }
+    result = evaluate_completeness_gate(product, "omega")
+
+    assert result.is_live_eligible is False
+    assert result.verdict == "NOT_SCORED"
+    assert result.missing_fields == ["active_identity"]
+
+
+def test_shadow_omega_name_with_only_non_omega_identity_is_not_scored() -> None:
+    """Final v4 output must not score a title-only omega claim from glucose."""
+    from score_supplements_v4_shadow import score_product_v4_shadow
+
+    product = {
+        "status": "active",
+        "form_factor": "capsule",
+        "product_name": "DHA",
+        "supplement_taxonomy": {"primary_type": "omega_3"},
+        "ingredient_quality_data": {
+            "total_active": 1,
+            "ingredients_scorable": [
+                {
+                    "name": "Glucose",
+                    "canonical_id": "NHA_GLUCOSE_LIQUID",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "scoring_input_kind": "recovered_active_identity",
+                }
+            ],
+        },
+    }
+    result = score_product_v4_shadow(product)
+
+    assert result["shadow_score_v4_verdict"] == "NOT_SCORED"
+    assert result["shadow_score_v4_100"] is None
+    assert result["shadow_score_v4_breakdown"]["completeness_gate"]["missing_fields"] == ["active_identity"]
+
+
 def test_completeness_gate_omega_rejects_epa_without_quantity() -> None:
     """EPA disclosed but no mg quantity stays scoreable with soft debt.
 

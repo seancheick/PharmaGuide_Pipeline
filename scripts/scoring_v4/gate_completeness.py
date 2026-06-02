@@ -508,7 +508,9 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         # pure-DHA products (e.g. algal DHA, prescription-grade pure EPA)
         # DO qualify — the gate is 'at least one', not 'both'.
         checked_fields.append("epa_or_dha_disclosed")
-        if not _has_epa_or_dha_disclosed(ingredients) and not _has_product_evidence(
+        if ingredients and not _has_omega_relevant_identity(ingredients):
+            missing.append("active_identity")
+        elif not _has_epa_or_dha_disclosed(ingredients) and not _has_product_evidence(
             ingredients,
             "omega_epa_dha_aggregate",
         ):
@@ -565,6 +567,33 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
 
 
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
+_OMEGA_PARENT_CANONICALS = {
+    "fish_oil",
+    "krill_oil",
+    "cod_liver_oil",
+    "algal_oil",
+    "algae_oil",
+    "omega_3",
+    "omega3",
+    "omega_3_fatty_acids",
+}
+_OMEGA_RELEVANT_CANONICALS = _OMEGA_INGREDIENT_CANONICALS | _OMEGA_PARENT_CANONICALS
+
+
+def _has_omega_relevant_identity(ingredients: List[Dict[str, Any]]) -> bool:
+    """True when the scoring contract contains usable omega identity.
+
+    Name/category routing can identify an intended omega product, but the
+    clinical score still needs omega-relevant contract evidence. A recovered
+    non-omega row such as glucose must not satisfy the active-identity gate for
+    an omega module score.
+    """
+    for ing in ingredients:
+        if _norm(ing.get("evidence_type")) == "omega_epa_dha_aggregate":
+            return True
+        if _norm(ing.get("canonical_id")) in _OMEGA_RELEVANT_CANONICALS:
+            return True
+    return False
 
 
 def _has_epa_or_dha_disclosed(ingredients: List[Dict[str, Any]]) -> bool:
