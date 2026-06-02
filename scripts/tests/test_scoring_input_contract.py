@@ -337,6 +337,97 @@ def test_product_name_alone_does_not_create_product_level_evidence():
     assert result.zero_scorable_reason == "no_strict_scoring_candidates"
 
 
+def test_blend_header_mass_with_mapped_nested_child_emits_conservative_anchor():
+    product = _product(
+        [],
+        product_name="Kudzu Root 1,226 mg",
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Proprietary Blend",
+                    "canonical_id": "BLEND_GENERAL",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "blend_header_total",
+                    "skip_reason": "blend_header_total_weight_only",
+                    "quantity": 1.226,
+                    "unit": "Gram(s)",
+                    "unit_normalized": "gram(s)",
+                    "is_blend_header": True,
+                    "blend_total_weight_only": True,
+                    "raw_taxonomy": {"category": "blend", "ingredientGroup": "Proprietary Blend"},
+                },
+                {
+                    "name": "Kudzu extract",
+                    "standard_name": "Puerarin (Kudzu Extract)",
+                    "canonical_id": "puerarin_kudzu_extract",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                    "cleaner_row_role": "nested_display_only",
+                    "skip_reason": "nested_under_non_therapeutic_parent",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Kudzu extract"},
+                },
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 1
+    row = result.rows[0]
+    assert row["scoring_input_kind"] == "product_level_evidence"
+    assert row["evidence_type"] == "blend_anchor_mass"
+    assert row["canonical_id"] == "puerarin_kudzu_extract"
+    assert row["quantity"] == 1.226
+    assert row["unit"] == "Gram(s)"
+    assert row["reason"] == "identity_bearing_blend_header_mass_from_nested_child"
+    assert row["evidence_scope"] == "blend_level"
+
+
+def test_blend_header_mass_does_not_create_mass_anchor_for_probiotic_strain():
+    product = _product(
+        [],
+        product_name="Skin Squad Pre + Probiotic",
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Proprietary Blend",
+                    "canonical_id": "BLEND_GENERAL",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "blend_header_total",
+                    "skip_reason": "blend_header_total_weight_only",
+                    "quantity": 200,
+                    "unit": "mg",
+                    "is_blend_header": True,
+                    "blend_total_weight_only": True,
+                    "raw_taxonomy": {"category": "blend", "ingredientGroup": "Proprietary Blend"},
+                },
+                {
+                    "name": "Bacillus subtilis DE111",
+                    "standard_name": "Bacillus Subtilis",
+                    "canonical_id": "bacillus_subtilis",
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                    "cleaner_row_role": "nested_display_only",
+                    "skip_reason": "nested_under_non_therapeutic_parent",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_taxonomy": {"category": "bacteria", "ingredientGroup": "Bacillus subtilis"},
+                },
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert result.zero_scorable_reason == "no_strict_scoring_candidates"
+
+
 def test_nutrition_only_uses_explicit_contract_not_keywords_by_default():
     assert is_nutrition_only_product({"product_name": "Whey Protein Powder"}) is False
     assert is_nutrition_only_product({"product_scoring_class": "nutrition_only"}) is True

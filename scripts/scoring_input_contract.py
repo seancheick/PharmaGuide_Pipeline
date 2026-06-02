@@ -518,6 +518,101 @@ def _sports_primary_identity_without_dose(row: Dict[str, Any], canonical: str) -
     }
 
 
+def _is_nested_under(parent_path: str, row: Dict[str, Any]) -> bool:
+    child_path = str(row.get("raw_source_path") or "")
+    return bool(parent_path and child_path.startswith(f"{parent_path}.nestedRows["))
+
+
+def _identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    title_tokens = {
+        token
+        for token in re.split(
+            r"[^a-z0-9]+",
+            _norm(product.get("product_name") or product.get("fullName")),
+        )
+        if len(token) >= 4
+    }
+    if not title_tokens:
+        return False
+    identity_tokens: set[str] = set()
+    for value in (
+        row.get("name"),
+        row.get("standardName"),
+        row.get("standard_name"),
+        row.get("raw_source_text"),
+        row.get("canonical_id"),
+    ):
+        identity_tokens.update(
+            token
+            for token in re.split(r"[^a-z0-9]+", _norm(value).replace("_", " "))
+            if len(token) >= 4
+        )
+    return bool(title_tokens & identity_tokens)
+
+
+def _best_nested_anchor_child(
+    product: Dict[str, Any],
+    parent: Dict[str, Any],
+    candidate_rows: List[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    parent_path = str(parent.get("raw_source_path") or "")
+    children = [
+        row
+        for row in candidate_rows
+        if _is_nested_under(parent_path, row) and _anchor_identity(row)[0]
+        and not _has_probiotic_identity_text(row)
+    ]
+    if not children:
+        return None
+    title_matches = [row for row in children if _identity_named_in_product_title(product, row)]
+    if title_matches:
+        return title_matches[0]
+    return children[0]
+
+
+def _derive_blend_header_anchor_from_nested_child(
+    product: Dict[str, Any],
+    parent: Dict[str, Any],
+    candidate_rows: List[Dict[str, Any]],
+) -> Optional[Dict[str, Any]]:
+    cleaner_role = _norm(parent.get("cleaner_row_role"))
+    if cleaner_role != "blend_header_total" and not parent.get("blend_total_weight_only"):
+        return None
+    quantity = _positive_quantity(parent)
+    unit = parent.get("unit") or parent.get("unit_normalized") or parent.get("dose_unit")
+    if quantity is None or not _unit_is_mass(unit):
+        return None
+
+    child = _best_nested_anchor_child(product, parent, candidate_rows)
+    if not child:
+        return None
+    anchor_canonical, anchor_name = _anchor_identity(child)
+    if not anchor_canonical:
+        return None
+
+    title_match = _identity_named_in_product_title(product, child)
+    item = _evidence_base(
+        row=parent,
+        evidence_type="blend_anchor_mass",
+        canonical_id=anchor_canonical,
+        clean_identity_id=_norm(child.get("canonical_id")) or anchor_canonical,
+        scoring_parent_id=anchor_canonical,
+        dose_value=quantity,
+        dose_unit=str(unit),
+        evidence_scope="blend_level",
+        confidence="medium" if title_match else "low",
+        reason="identity_bearing_blend_header_mass_from_nested_child",
+        name=anchor_name or child.get("name") or "Blend anchor mass",
+    )
+    child_path = str(child.get("raw_source_path") or "")
+    if child_path and child_path not in item["linked_rows"]:
+        item["linked_rows"].append(child_path)
+    item["canonical_source_db"] = child.get("canonical_source_db") or item["canonical_source_db"]
+    if _is_botanical_or_standardized_anchor(child):
+        item["anchor_risk_class"] = "botanical_or_standardized"
+    return item
+
+
 def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Derive ScoringEvidence v1 rows from cleaner/enrichment-owned fields.
 
@@ -528,10 +623,12 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
     product = product or {}
     evidence: List[Dict[str, Any]] = []
     ptype = _primary_type(product)
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
     active_rows = [row for row in _safe_list(product.get("activeIngredients")) if isinstance(row, dict)]
+    skipped_rows = [row for row in _safe_list(iqd.get("ingredients_skipped")) if isinstance(row, dict)]
     scorable_paths = {
         str(row.get("raw_source_path"))
-        for row in _safe_list(_safe_dict(product.get("ingredient_quality_data")).get("ingredients_scorable"))
+        for row in _safe_list(iqd.get("ingredients_scorable"))
         if (
             isinstance(row, dict)
             and row.get("raw_source_path")
@@ -693,6 +790,16 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             )
             if _is_botanical_or_standardized_anchor(row):
                 item["anchor_risk_class"] = "botanical_or_standardized"
+            evidence.append(item)
+
+    candidate_rows = skipped_rows + active_rows
+    for parent in skipped_rows:
+        parent_path = str(parent.get("raw_source_path") or "")
+        if not parent_path or parent_path in scorable_paths or parent_path in special_evidence_paths:
+            continue
+        item = _derive_blend_header_anchor_from_nested_child(product, parent, candidate_rows)
+        if item:
+            special_evidence_paths.add(parent_path)
             evidence.append(item)
 
     probiotic_cfu_evidence = _derive_probiotic_cfu_evidence(product)

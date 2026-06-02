@@ -162,6 +162,54 @@ def test_generic_enzyme_activity_is_valid_dose_evidence() -> None:
     assert result.verdict is None
 
 
+def test_generic_blend_header_with_nested_anchor_is_scored_with_soft_disclosure_debt() -> None:
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[],
+        product_name="Kudzu Root 1,226 mg",
+        ingredient_quality_data={
+            "total_active": 2,
+            "ingredients_scorable": [],
+            "ingredients": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Proprietary Blend",
+                    "canonical_id": "BLEND_GENERAL",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "blend_header_total",
+                    "skip_reason": "blend_header_total_weight_only",
+                    "quantity": 1.226,
+                    "unit": "Gram(s)",
+                    "unit_normalized": "gram(s)",
+                    "is_blend_header": True,
+                    "blend_total_weight_only": True,
+                    "raw_taxonomy": {"category": "blend", "ingredientGroup": "Proprietary Blend"},
+                },
+                {
+                    "name": "Kudzu extract",
+                    "standard_name": "Puerarin (Kudzu Extract)",
+                    "canonical_id": "puerarin_kudzu_extract",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                    "cleaner_row_role": "nested_display_only",
+                    "skip_reason": "nested_under_non_therapeutic_parent",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Kudzu extract"},
+                },
+            ],
+        },
+    )
+
+    result = evaluate_completeness_gate(product, module="generic")
+
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "conservative_blend_anchor_mass" in result.soft_missing
+    assert result.verdict is None
+
+
 def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() -> None:
     """Garden of Life Prenatal-style shape: total CFU is present, named
     strains are present, but per-strain CFU is missing. This must ship."""
