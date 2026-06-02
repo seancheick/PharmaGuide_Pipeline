@@ -4810,16 +4810,18 @@ class EnhancedDSLDNormalizer:
             # asserts: raw_inactives_count > 0 ⇒ blob.inactive_ingredients[] non-empty.
             # By excluding the cases above, the audit fires only on a TRUE
             # filter regression — not on legitimate dedup or header rows.
-            _active_tokens_for_count = set()
-            for _a in active_ingredients:
-                _an = _a.get("name") or ""
-                _as = _a.get("standardName") or ""
-                if _an:
-                    _active_tokens_for_count.add(self.matcher.preprocess_text(_an))
-                if _as:
-                    _active_tokens_for_count.add(self.matcher.preprocess_text(_as))
+            def _active_tokens_for_raw_inactive_count(active_rows):
+                tokens = set()
+                for _a in active_rows:
+                    _an = _a.get("name") or ""
+                    _as = _a.get("standardName") or ""
+                    if _an:
+                        tokens.add(self.matcher.preprocess_text(_an))
+                    if _as:
+                        tokens.add(self.matcher.preprocess_text(_as))
+                return tokens
 
-            def _is_real_raw_inactive(oi):
+            def _is_real_raw_inactive(oi, active_tokens):
                 if not isinstance(oi, dict):
                     return False
                 nm = oi.get("name")
@@ -4834,13 +4836,16 @@ class EnhancedDSLDNormalizer:
                     return False
                 if self._should_skip_ingredient(nm_s):
                     return False
-                if self.matcher.preprocess_text(nm_s) in _active_tokens_for_count:
+                if self.matcher.preprocess_text(nm_s) in active_tokens:
                     return False
                 return True
 
-            raw_inactives_count = sum(
-                1 for oi in other_ingredients_raw if _is_real_raw_inactive(oi)
-            )
+            def _count_real_raw_inactives(active_rows):
+                active_tokens = _active_tokens_for_raw_inactive_count(active_rows)
+                return sum(
+                    1 for oi in other_ingredients_raw
+                    if _is_real_raw_inactive(oi, active_tokens)
+                )
 
             # Process other ingredients - handle both key formats
             inactive_ingredients = self._process_other_ingredients_enhanced(other_ing_data)
@@ -4857,6 +4862,7 @@ class EnhancedDSLDNormalizer:
             # A4: Dedupe - remove inactive ingredients that also appear in active ingredients
             # If an ingredient has dose/unit in active list, it's the canonical record
             inactive_ingredients = self._dedupe_inactive_ingredients(active_ingredients, inactive_ingredients)
+            raw_inactives_count = _count_real_raw_inactives(active_ingredients)
 
             # Process statements
             statements = self._process_statements(raw_data.get("statements", []) or [])

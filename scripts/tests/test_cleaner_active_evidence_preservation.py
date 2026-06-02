@@ -179,6 +179,34 @@ def test_title_matching_otheringredient_oil_rescues_active_identity_when_panel_i
     assert rescued.get("score_eligible_by_cleaner") is True
 
 
+def test_rescued_otheringredient_active_does_not_count_as_raw_inactive():
+    raw = {
+        "id": "fixture-coconut-oil-otheringredient-active",
+        "fullName": "Coconut Oil",
+        "ingredientRows": [
+            {"name": "Calories", "quantity": [{"quantity": 120, "unit": "Calorie(s)"}]},
+            {"name": "Total Fat", "quantity": [{"quantity": 14, "unit": "g"}]},
+        ],
+        "otheringredients": {
+            "ingredients": [
+                {
+                    "name": "organic, unrefined, cold-pressed, extra virgin Coconut Oil",
+                    "category": "fat",
+                    "ingredientGroup": "coconut oil",
+                }
+            ]
+        },
+    }
+
+    cleaned = _clean(raw)
+
+    assert cleaned.get("inactiveIngredients") == []
+    assert cleaned.get("raw_inactives_count") == 0
+    rescued = cleaned["activeIngredients"][0]
+    assert rescued.get("rescued_from_otheringredients_active_identity") is True
+    assert "coconut" in str(rescued.get("name") or "").lower()
+
+
 def test_otheringredients_probiotic_wrapper_rescues_named_strain_forms():
     raw = {
         "id": "fixture-otheringredients-probiotic-forms",
