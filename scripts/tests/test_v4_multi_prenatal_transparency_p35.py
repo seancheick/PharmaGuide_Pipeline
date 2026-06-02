@@ -118,12 +118,11 @@ def test_transparency_partial_dose_disclosure_is_proportional() -> None:
     payload = score_transparency(_product(ingredients=rows))
 
     assert payload["components"]["panel_identity_disclosure"] == 4.0
-    # Strict scoring excludes no-unit rows upstream; module sees the
-    # remaining strict scorable panel rows rather than recomputing from
-    # invalid display rows.
-    assert payload["components"]["panel_individual_dose_disclosure"] == 7.0
+    # No-unit rows stay scoreable identity rows but no longer count as
+    # individual dose disclosure.
+    assert payload["components"]["panel_individual_dose_disclosure"] == 3.5
     assert payload["metadata"]["panel_dose_count"] == 4
-    assert payload["metadata"]["panel_dose_coverage"] == 1.0
+    assert payload["metadata"]["panel_dose_coverage"] == 0.5
 
 
 def test_transparency_partial_identity_disclosure_is_proportional() -> None:

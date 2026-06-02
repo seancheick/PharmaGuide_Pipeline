@@ -199,6 +199,46 @@ def _label_completeness_confidence(
     if "percent_dv_only_dose_evidence" in soft_missing:
         level = _min_level(level, "moderate")
         drivers.append("percent_dv_only_dose_evidence")
+    if {
+        "dose_not_disclosed",
+        "total_cfu_not_disclosed",
+        "epa_or_dha_not_disclosed",
+        "sports_active_dose_not_disclosed",
+        "sports_primary_dose_not_disclosed",
+        "micronutrient_panel_dose_coverage_low",
+    } & soft_missing:
+        level = "low"
+        drivers.extend(
+            sorted(
+                {
+                    "dose_not_disclosed",
+                    "total_cfu_not_disclosed",
+                    "epa_or_dha_not_disclosed",
+                    "sports_active_dose_not_disclosed",
+                    "sports_primary_dose_not_disclosed",
+                    "micronutrient_panel_dose_coverage_low",
+                }
+                & soft_missing
+            )
+        )
+    if {
+        "named_strain_not_disclosed",
+        "low_mapped_coverage",
+        "form_factor_not_disclosed",
+        "product_status_not_active",
+    } & soft_missing:
+        level = _min_level(level, "moderate")
+        drivers.extend(
+            sorted(
+                {
+                    "named_strain_not_disclosed",
+                    "low_mapped_coverage",
+                    "form_factor_not_disclosed",
+                    "product_status_not_active",
+                }
+                & soft_missing
+            )
+        )
     return level, drivers
 
 

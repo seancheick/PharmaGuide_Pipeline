@@ -727,10 +727,9 @@ def test_completeness_gate_omega_accepts_pure_dha_only() -> None:
 
 
 def test_completeness_gate_omega_rejects_fish_oil_parent_only() -> None:
-    """A 'Fish Oil 1000 mg' product with no EPA/DHA breakdown fails the
-    omega completeness gate → NOT_SCORED. Per §9 line 509: 'Fish oil
-    1000 mg with no EPA/DHA breakdown should score significantly lower.'
-    P1.6 enforces this as live-eligibility, not a score cap."""
+    """A 'Fish Oil 1000 mg' product with no EPA/DHA breakdown remains
+    scoreable but carries soft disclosure debt. The omega dose/transparency
+    dimensions make it score significantly lower."""
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = {
@@ -752,8 +751,11 @@ def test_completeness_gate_omega_rejects_fish_oil_parent_only() -> None:
         },
     }
     result = evaluate_completeness_gate(product, "omega")
-    assert result.is_live_eligible is False
-    assert "epa_or_dha_disclosed" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "epa_or_dha_not_disclosed" in result.soft_missing
+    assert result.score_cap is None
+    assert result.verdict_ceiling is None
 
 
 def test_completeness_gate_omega_rejects_omega3_parent_mass_only() -> None:
@@ -761,8 +763,8 @@ def test_completeness_gate_omega_rejects_omega3_parent_mass_only() -> None:
 
     This locks the RDA-table integrity decision: omega_3_fatty_acids /
     omega3 is not a synonym for combined EPA+DHA. A product can route to
-    omega by name/category, but Layer 2 requires EPA, DHA, or explicit
-    EPA+DHA combined disclosure with dose and unit.
+    omega by name/category; Layer 2 keeps it scoreable and records missing
+    EPA/DHA disclosure as soft debt.
     """
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
@@ -786,14 +788,17 @@ def test_completeness_gate_omega_rejects_omega3_parent_mass_only() -> None:
         },
     }
     result = evaluate_completeness_gate(product, "omega")
-    assert result.is_live_eligible is False
-    assert "epa_or_dha_disclosed" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "epa_or_dha_not_disclosed" in result.soft_missing
 
 
 def test_completeness_gate_omega_rejects_epa_without_quantity() -> None:
-    """EPA disclosed but no mg quantity → fails the gate. Aligns with
-    'do not invent fields' — labeled-without-amount is not adequate
-    disclosure for live catalog eligibility."""
+    """EPA disclosed but no mg quantity stays scoreable with soft debt.
+
+    Aligns with 'do not invent fields': labeled-without-amount is not adequate
+    dose disclosure, but identity is still usable for scoring.
+    """
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = {
@@ -808,8 +813,9 @@ def test_completeness_gate_omega_rejects_epa_without_quantity() -> None:
         },
     }
     result = evaluate_completeness_gate(product, "omega")
-    assert result.is_live_eligible is False
-    assert "epa_or_dha_disclosed" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "epa_or_dha_not_disclosed" in result.soft_missing
 
 
 def test_completeness_gate_omega_rejects_epa_quantity_without_unit() -> None:
@@ -831,8 +837,9 @@ def test_completeness_gate_omega_rejects_epa_quantity_without_unit() -> None:
         },
     }
     result = evaluate_completeness_gate(product, "omega")
-    assert result.is_live_eligible is False
-    assert "epa_or_dha_disclosed" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "epa_or_dha_not_disclosed" in result.soft_missing
 
 
 def test_completeness_gate_omega_rejects_epa_with_np_unit() -> None:
@@ -853,8 +860,9 @@ def test_completeness_gate_omega_rejects_epa_with_np_unit() -> None:
         },
     }
     result = evaluate_completeness_gate(product, "omega")
-    assert result.is_live_eligible is False
-    assert "epa_or_dha_disclosed" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "epa_or_dha_not_disclosed" in result.soft_missing
 
 
 # --- Shadow integration ---------------------------------------------------
@@ -878,9 +886,8 @@ def test_shadow_wires_omega_module_when_route_is_omega() -> None:
     assert 0 <= module_block["score_100"] <= 100
 
 
-def test_shadow_does_not_wire_omega_module_when_completeness_fails() -> None:
-    """A fish-oil-parent-only product fails Layer 2 and skips score_omega.
-    Confirms the omega completeness gate plumbs through correctly."""
+def test_shadow_wires_omega_module_with_parent_only_soft_debt() -> None:
+    """A fish-oil-parent-only product scores through omega with soft debt."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     incomplete = {
@@ -898,10 +905,14 @@ def test_shadow_does_not_wire_omega_module_when_completeness_fails() -> None:
     }
     out = score_product_v4_shadow(incomplete)
 
-    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
+    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
     assert out["shadow_score_v4_module"] == "omega"
     assert out["shadow_score_v4_breakdown"]["completeness_gate"]["module"] == "omega"
-    assert "epa_or_dha_disclosed" in out["shadow_score_v4_breakdown"]["completeness_gate"]["missing_fields"]
+    gate = out["shadow_score_v4_breakdown"]["completeness_gate"]
+    assert "epa_or_dha_not_disclosed" in gate["soft_missing"]
+    assert gate["score_cap"] is None
+    assert gate["verdict_ceiling"] is None
+    assert "module" in out["shadow_score_v4_breakdown"]
 
 
 def test_shadow_does_not_route_generic_product_to_omega_module() -> None:

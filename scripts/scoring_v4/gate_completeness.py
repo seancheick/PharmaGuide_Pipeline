@@ -1,9 +1,11 @@
 """v4 Layer 2 — Completeness Gate.
 
-Decides whether an enriched product has enough structured data to enter
+Decides whether an enriched product has enough structured identity to enter
 the live catalog and score pipeline. This is deliberately narrower than
-quality scoring: missing hard minimums yields NOT_SCORED; missing
-nice-to-have fields should lower confidence or score later.
+quality scoring: only missing usable identity/payload yields NOT_SCORED.
+Missing disclosure such as dose, CFU, EPA/DHA breakdown, form factor, or
+mapped coverage is surfaced as soft debt for module scoring, confidence, and
+user-facing explanation.
 
 Per SCORING_V4_PROPOSAL.md §4 Layer 2:
 
@@ -11,9 +13,11 @@ Per SCORING_V4_PROPOSAL.md §4 Layer 2:
                     → verdict=NOT_SCORED (archive / QA only)
                     → excluded from the live Flutter catalog
 
-The gate is class-aware. A probiotic with named strains + total CFU but
-no per-strain CFU is eligible; the per-strain gap belongs in confidence
-or module scoring, not in live eligibility.
+The gate is class-aware. A probiotic with named strains but no CFU, an omega
+with fish-oil identity but no EPA/DHA breakdown, or a sports product with a
+primary active but missing dose remains scoreable. Those gaps are not hidden:
+they are carried as `soft_missing` tags, never as score caps or verdict
+ceilings.
 """
 
 from __future__ import annotations
@@ -220,14 +224,8 @@ def _status_is_active(product: Dict[str, Any]) -> bool:
 def _base_checks(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> tuple[List[str], float]:
     missing: List[str] = []
     coverage = _mapped_coverage(product, ingredients)
-    if not _status_is_active(product):
-        missing.append("product_status_active")
-    if not _form_factor(product):
-        missing.append("form_factor")
     if not ingredients or not any(_has_active_identity(i) for i in ingredients):
         missing.append("active_identity")
-    if coverage < MAPPED_COVERAGE_MIN:
-        missing.append("mapped_coverage")
     return missing, coverage
 
 
@@ -340,25 +338,16 @@ def _soft_policy_from_scoring_evidence(
     penalized inside the transparency dimension; this gate should not double
     punish it with an automatic score cap or CAUTION ceiling.
 
-    ``cap_eligible_canonicals`` (Phase 3) is the set of canonical_ids whose role
-    is cap-eligible (primary / claim_prominent). Soft-policy SCORE CAPS apply
-    only when the capping evidence belongs to a cap-eligible ingredient; an
-    adjunct's data gap keeps its audit tag but does not cap the product. When
-    ``None`` (legacy callers with no role info) the prior cap behavior holds.
+    ``cap_eligible_canonicals`` is accepted for compatibility with older tests
+    and callers, but completeness no longer clamps scores or forces verdicts.
+    Evidence rows only emit audit/confidence tags; the score dimensions carry
+    the actual penalty.
     """
     evidence_rows = _product_evidence_rows(ingredients)
     evidence_types = {_norm(row.get("evidence_type")) for row in evidence_rows}
     soft_missing: List[str] = []
     score_cap: Optional[float] = None
     verdict_ceiling: Optional[str] = None
-
-    def _cap_eligible(rows: List[Dict[str, Any]]) -> bool:
-        if cap_eligible_canonicals is None:
-            return True
-        return any(
-            (cid := _norm(r.get("canonical_id"))) and cid in cap_eligible_canonicals
-            for r in rows
-        )
 
     has_conservative_blend_anchor = any(
         _norm(row.get("evidence_type")) == "blend_anchor_mass"
@@ -408,11 +397,6 @@ def _soft_policy_from_scoring_evidence(
         soft_missing.append("omega_aggregate_epa_dha_evidence")
         if any(_norm(row.get("confidence")) == "low" for row in omega_rows):
             soft_missing.append("low_confidence_omega_breakdown")
-            # Role-aware (Phase 3): cap only when the omega identity is a
-            # cap-eligible role. An adjunct omega in a multi/generic product
-            # keeps the audit tag but does not cap the product.
-            if _cap_eligible(omega_rows):
-                score_cap = 65.0 if score_cap is None else min(score_cap, 65.0)
 
     if "sports_primary_dose" in evidence_types:
         soft_missing.append("sports_primary_dose_evidence")
@@ -426,10 +410,6 @@ def _soft_policy_from_scoring_evidence(
     ]
     if percent_dv_rows:
         soft_missing.append("percent_dv_only_dose_evidence")
-        # Role-aware (Phase 3): cap only when the %DV-only ingredient is a
-        # cap-eligible role; an adjunct's %DV-only dose suppresses credit only.
-        if _cap_eligible(percent_dv_rows):
-            score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
 
     return soft_missing, score_cap, verdict_ceiling
 
@@ -471,20 +451,24 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         "active_identity",
         "mapped_coverage",
     ]
+    if not _status_is_active(product):
+        soft_missing.append("product_status_not_active")
+    if not _form_factor(product):
+        soft_missing.append("form_factor_not_disclosed")
+    if ingredients and coverage < MAPPED_COVERAGE_MIN:
+        soft_missing.append("low_mapped_coverage")
     dose_cov: Optional[float] = None
 
     if module == "probiotic":
         checked_fields.extend(["total_cfu", "named_strain"])
         strain_count = _named_strain_count(product)
         if _total_cfu_billion(product) <= 0:
-            if strain_count > 0 and not missing:
+            if strain_count > 0 or ingredients:
                 soft_missing.append("total_cfu_not_disclosed")
-                score_cap = 60.0 if score_cap is None else min(score_cap, 60.0)
-                verdict_ceiling = "CAUTION"
             else:
                 missing.append("total_cfu")
         if strain_count <= 0:
-            missing.append("named_strain")
+            soft_missing.append("named_strain_not_disclosed")
         # Per-strain CFU and clinical-strain codes are soft fields.
         return _finalize(
             module,
@@ -500,14 +484,13 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     if module == "multi_or_prenatal":
         checked_fields.append("micronutrient_panel_dose_coverage")
         dose_cov = _dose_coverage(ingredients)
-        # True multis need 60% dose-bearing panel coverage. Small prenatal
-        # specialty products (e.g. prenatal DHA) can still ship if their
-        # active identity + dose are present; they are routed here for
-        # dose/safety expectations, not because they have a full panel.
+        # Dose panel coverage is a scoring/confidence signal, not a hard gate.
+        # Products with mapped identity still score; the dose dimensions and
+        # confidence explain missing disclosure.
         if len(ingredients) >= 8 and dose_cov < MULTI_DOSE_COVERAGE_MIN:
-            missing.append("micronutrient_panel_dose_coverage")
+            soft_missing.append("micronutrient_panel_dose_coverage_low")
         elif len(ingredients) < 8 and ingredients and not any(_has_usable_dose_evidence(i) for i in ingredients):
-            missing.append("dose_with_unit")
+            soft_missing.append("dose_not_disclosed")
         return _finalize(
             module,
             missing,
@@ -524,17 +507,12 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         # ingredient with quantity > 0 must be disclosed. Pure-EPA and
         # pure-DHA products (e.g. algal DHA, prescription-grade pure EPA)
         # DO qualify — the gate is 'at least one', not 'both'.
-        # Fish-oil parent mass without any EPA/DHA breakdown
-        # (e.g. "Fish Oil 1000 mg") fails the gate → NOT_SCORED.
-        # Aligns with §9: 'fish oil 1000 mg with no EPA/DHA breakdown
-        # should score significantly lower' — enforced here as live-eligibility
-        # rather than as a score cap.
         checked_fields.append("epa_or_dha_disclosed")
         if not _has_epa_or_dha_disclosed(ingredients) and not _has_product_evidence(
             ingredients,
             "omega_epa_dha_aggregate",
         ):
-            missing.append("epa_or_dha_disclosed")
+            soft_missing.append("epa_or_dha_not_disclosed")
         return _finalize(
             module,
             missing,
@@ -554,10 +532,8 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
         ):
             if _has_sports_primary_identity_signal(product):
                 soft_missing.append("sports_primary_dose_not_disclosed")
-                score_cap = 50.0 if score_cap is None else min(score_cap, 50.0)
-                verdict_ceiling = "CAUTION"
             else:
-                missing.append("sports_active_dose")
+                soft_missing.append("sports_active_dose_not_disclosed")
         return _finalize(
             module,
             missing,
@@ -575,7 +551,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     # count as usable dose evidence even though their mass quantity is 0/NP.
     checked_fields.append("dose_with_unit")
     if not any(_has_usable_dose_evidence(i) for i in ingredients):
-        missing.append("dose_with_unit")
+        soft_missing.append("dose_not_disclosed")
     return _finalize(
         module,
         missing,

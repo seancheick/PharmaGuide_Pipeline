@@ -67,24 +67,24 @@ SHADOW_CANARIES = {
         "confidence": "low",
         "score_range": (35.4, 36.8),
     },
-    # Probiotic with named strains but no total CFU: scoreable, but cannot be
-    # SAFE because the primary probiotic dose is undisclosed.
+    # Probiotic with named strains but no total CFU: scoreable with low
+    # confidence; dose/transparency dimensions keep it weak without a forced
+    # CAUTION ceiling.
     "241707": {
         "label": "HUM Skin Squad Pre + Probiotic",
         "module": "probiotic",
-        "verdict": "CAUTION",
-        "confidence": "moderate",
-        "score_range": (30.7, 32.1),  # Phase 4: 55 → 53.1
+        "verdict": "POOR",
+        "confidence": "low",
+        "score_range": (30.7, 32.1),
     },
-    # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as low-
-    # confidence aggregate evidence with a score cap, but not an automatic
-    # CAUTION ceiling.
+    # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as
+    # low-confidence aggregate evidence, with no score cap or CAUTION ceiling.
     "239467": {
         "label": "CVS Health Fish Oil 1000 mg",
         "module": "omega",
         "verdict": "SAFE",
-        "confidence": "moderate",
-        "score_range": (45.8, 47.2),
+        "confidence": "low",
+        "score_range": (44.8, 46.2),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a

@@ -43,16 +43,16 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # Each entry: (expected_route, expected_form, expected_score_min, expected_score_max, label)
 CANARY_TARGETS = {
     # --- Max-reachable 21/25 (TG + source + premium + sustainability) ---
-    "326270": ("omega", "undefined", 10.0, 10.0,
+    "326270": ("omega", "tg", 21.0, 21.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
-    "327776": ("omega", "undefined", 10.0, 10.0,
+    "327776": ("omega", "tg", 21.0, 21.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
-    "273630": ("omega", "undefined", 10.0, 10.0,
+    "273630": ("omega", "tg", 21.0, 21.0,
                "Garden of Life Dr. Formulated Advanced Omega Lemon Flavor"),
-    "273636": ("omega", "undefined", 10.0, 10.0,
+    "273636": ("omega", "tg", 21.0, 21.0,
                "Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor "
                "— cod liver source"),
-    "292796": ("omega", "undefined", 10.0, 10.0,
+    "292796": ("omega", "tg", 21.0, 21.0,
                "Garden of Life Dr. Formulated Advanced Omega Citrus Flavor"),
 
     # --- 20/25 (PL krill + source + premium + sustainability) ---
@@ -310,8 +310,10 @@ def test_edge_fish_oil_parent_only_routes_omega_but_fails_completeness() -> None
         {**product, "supplement_taxonomy": {"primary_type": "omega_3"}},
         "omega",
     )
-    assert not result.is_live_eligible
-    assert "epa_or_dha_disclosed" in result.missing_fields
+    assert result.is_live_eligible
+    assert "epa_or_dha_not_disclosed" in result.soft_missing
+    assert result.score_cap is None
+    assert result.verdict_ceiling is None
 
 
 def test_edge_rtg_explicit_form_canary() -> None:
@@ -458,7 +460,8 @@ def test_edge_pure_epa_quantity_without_unit_fails_completeness() -> None:
             "ingredient_quality_data": {"ingredients_scorable": [ing]},
         }
         result = evaluate_completeness_gate(product, "omega")
-        assert not result.is_live_eligible, (
-            f"EPA with bad unit '{ing.get('unit', '<missing>')}' wrongly "
-            f"passes completeness"
+        assert result.is_live_eligible, (
+            f"EPA with bad unit '{ing.get('unit', '<missing>')}' should stay scoreable "
+            "with soft disclosure debt"
         )
+        assert "epa_or_dha_not_disclosed" in result.soft_missing

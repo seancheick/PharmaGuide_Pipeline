@@ -44,20 +44,21 @@ NO_USABLE_IDENTITY_FIELDS = {
     "mapped_coverage",
 }
 
-CLASS_CRITICAL_DISCLOSURE_FIELDS = {
-    "dose_with_unit",
-    "epa_or_dha_disclosed",
-    "sports_active_dose",
-    "total_cfu",
-    "named_strain",
-    "micronutrient_panel_dose_coverage",
-}
+CLASS_CRITICAL_DISCLOSURE_FIELDS: set[str] = set()
 
-SCORE_CAPPED_SOFT_DISCLOSURE_DEBT = {
+SOFT_DISCLOSURE_DEBT = {
     "botanical_anchor_only_evidence",
     "low_confidence_omega_breakdown",
     "total_cfu_not_disclosed",
+    "named_strain_not_disclosed",
     "sports_primary_dose_not_disclosed",
+    "sports_active_dose_not_disclosed",
+    "epa_or_dha_not_disclosed",
+    "dose_not_disclosed",
+    "micronutrient_panel_dose_coverage_low",
+    "low_mapped_coverage",
+    "form_factor_not_disclosed",
+    "product_status_not_active",
     "percent_dv_only_dose_evidence",
 }
 
@@ -120,10 +121,11 @@ def classify_row(row: Dict[str, Any]) -> str:
     if missing & CLASS_CRITICAL_DISCLOSURE_FIELDS:
         return "BLOCKER_SCORED_WITH_HARD_COMPLETENESS_MISSING"
 
-    if soft_missing & SCORE_CAPPED_SOFT_DISCLOSURE_DEBT:
-        if score_cap is not None or verdict_ceiling in {"CAUTION", "POOR"}:
-            return "OK_SCORED_WITH_SOFT_DISCLOSURE_CAP"
-        return "BLOCKER_SOFT_DISCLOSURE_WITHOUT_CAP"
+    if score_cap is not None or verdict_ceiling in {"CAUTION", "POOR"}:
+        return "BLOCKER_COMPLETENESS_CAP_OR_CEILING"
+
+    if soft_missing & SOFT_DISCLOSURE_DEBT:
+        return "OK_SCORED_WITH_SOFT_DISCLOSURE_DEBT"
 
     if soft_missing & AUDIT_ONLY_SOFT_DISCLOSURE_TAGS:
         return "OK_SCORED_WITH_SOFT_AUDIT_TAG"

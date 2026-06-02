@@ -150,8 +150,8 @@ def test_dose_panel_structure_rewards_individual_dose_disclosure() -> None:
     partial = score_formulation(_product(ingredients=partial_rows))
 
     assert full["components"]["panel_disclosure_structure"] == 2.0
-    assert partial["components"]["panel_disclosure_structure"] == 2.0
-    assert partial["metadata"]["dose_coverage"] == 1.0
+    assert partial["components"]["panel_disclosure_structure"] == 1.0
+    assert partial["metadata"]["dose_coverage"] == 0.625
 
 
 def test_gummy_formulation_loses_dosage_form_credit_and_gets_modest_penalty() -> None:

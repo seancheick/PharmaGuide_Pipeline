@@ -236,7 +236,7 @@ def test_shadow_scorer_wires_prenatal_dha_to_omega_not_p3() -> None:
     assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "omega"
 
 
-def test_shadow_scorer_completeness_failure_short_circuits_before_p3_module() -> None:
+def test_shadow_scorer_incomplete_disclosure_still_scores_with_low_confidence() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     incomplete = json.loads(json.dumps(COMPLETE_MULTI_PRODUCT))
@@ -246,9 +246,13 @@ def test_shadow_scorer_completeness_failure_short_circuits_before_p3_module() ->
     shadow = score_product_v4_shadow(incomplete)
 
     assert shadow["shadow_score_v4_module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert shadow["shadow_score_v4_confidence"] == "blocked_by_completeness_gate"
-    assert "module" not in shadow["shadow_score_v4_breakdown"]
+    assert shadow["shadow_score_v4_verdict"] != "NOT_SCORED"
+    assert shadow["shadow_score_v4_confidence"] == "low"
+    assert "module" in shadow["shadow_score_v4_breakdown"]
+    gate = shadow["shadow_score_v4_breakdown"]["completeness_gate"]
+    assert "micronutrient_panel_dose_coverage_low" in gate["soft_missing"]
+    assert gate["score_cap"] is None
+    assert gate["verdict_ceiling"] is None
 
 
 def test_shadow_scorer_safety_short_circuits_before_p3_module() -> None:

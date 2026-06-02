@@ -113,6 +113,22 @@ def test_confidence_worst_case_rule_lowers_band_for_no_clinical_evidence() -> No
     assert out["shadow_score_v4_confidence"] == "low"
 
 
+def test_missing_primary_dose_scores_but_lowers_label_confidence() -> None:
+    from score_supplements_v4_shadow import score_product_v4_shadow
+
+    product = _product(ingredient=_ingredient(quantity=0.0, unit="NP"))
+    out = score_product_v4_shadow(product)
+    confidence = out["shadow_score_v4_breakdown"]["confidence"]
+    completeness = out["shadow_score_v4_breakdown"]["completeness_gate"]
+
+    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
+    assert "dose_not_disclosed" in completeness["soft_missing"]
+    assert completeness["score_cap"] is None
+    assert completeness["verdict_ceiling"] is None
+    assert confidence["label_completeness"]["level"] == "low"
+    assert "dose_not_disclosed" in confidence["label_completeness"]["drivers"]
+
+
 def test_ingredient_human_underscore_study_types_are_moderate_not_absent() -> None:
     """Regression for P1.4 confidence normalization.
 

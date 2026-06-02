@@ -398,6 +398,45 @@ def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
     return any(term in text for term in _PROBIOTIC_IDENTITY_TERMS)
 
 
+def _has_omega_identity_text(row: Dict[str, Any]) -> bool:
+    canonical = _slug(row.get("canonical_id"))
+    if canonical in _OMEGA_EVIDENCE_CANONICALS or canonical in {"epa", "dha", "epa_dha"}:
+        return True
+    text = _row_identity_text(row).lower()
+    return any(
+        term in text
+        for term in (
+            "eicosapentaenoic",
+            "docosahexaenoic",
+            "fish oil",
+            "omega-3",
+            "omega 3",
+            "omega3",
+            "epa",
+            "dha",
+        )
+    )
+
+
+def _recoverable_nested_identity(row: Dict[str, Any]) -> bool:
+    """True when a display-only nested row carries identity v4 can score.
+
+    This is a compatibility bridge for stale enriched artifacts where the
+    cleaner retained a child active under a blend/header but enrichment excluded
+    it from `ingredients_scorable`. It does not parse labels or product names,
+    and it does not invent dose; it only preserves an already-resolved child
+    identity so modules can score it with the appropriate disclosure penalty.
+    """
+    canonical, _ = _anchor_identity(row)
+    if not canonical:
+        return False
+    return (
+        _has_probiotic_identity_text(row)
+        or _has_omega_identity_text(row)
+        or _is_botanical_or_standardized_anchor(row)
+    )
+
+
 def _is_probiotic_support_row(row: Dict[str, Any]) -> bool:
     canonical = _norm(row.get("canonical_id"))
     if canonical in _PROBIOTIC_SUPPORT_CANONICALS:
@@ -1086,9 +1125,6 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     if row.get("scoreable_identity") is False:
         return False, _reject(row, "identity_marked_not_scoreable"), findings
 
-    if not _has_dose_evidence(row):
-        return False, _reject(row, "missing_dose_evidence"), findings
-
     if not _has_identity(row):
         return False, _reject(row, "missing_scoring_identity"), findings
 
@@ -1121,6 +1157,54 @@ def get_scoring_ingredients(
         product,
         strict=strict,
     )
+    product_evidence_linked_paths = {
+        str(path)
+        for evidence_row in product_evidence_rows
+        for path in _safe_list(evidence_row.get("linked_rows"))
+        if str(path)
+    }
+    skipped_candidates = []
+    for row in _safe_list(iqd.get("ingredients_skipped")):
+        if not isinstance(row, dict):
+            continue
+        anchor_canonical, _ = _anchor_identity(row)
+        if not anchor_canonical:
+            continue
+        path = str(row.get("raw_source_path") or "")
+        if path and path in product_evidence_linked_paths:
+            continue
+        role = _norm(row.get("cleaner_row_role"))
+        classification = _norm(row.get("role_classification"))
+        if (
+            row.get("score_eligible_by_cleaner") is True
+            and role == "active_scorable"
+            and classification in {"active_scorable", "recognized_non_scorable", "inactive_non_scorable"}
+        ):
+            skipped_candidates.append(row)
+            continue
+        if role == "nested_display_only" and _recoverable_nested_identity(row):
+            skipped_candidates.append(row)
+    if skipped_candidates:
+        seen_paths = {str(row.get("raw_source_path") or "") for row in candidates}
+        for row in skipped_candidates:
+            path = str(row.get("raw_source_path") or "")
+            if path and path in seen_paths:
+                continue
+            recovered = dict(row)
+            recovered["cleaner_row_role"] = "active_scorable"
+            recovered["role_classification"] = "active_scorable"
+            recovered["score_eligible_by_cleaner"] = True
+            recovered["mapped"] = True
+            recovered["mapped_identity"] = True
+            recovered["scoreable_identity"] = True
+            recovered["is_blend_header"] = False
+            recovered["blend_total_weight_only"] = False
+            recovered["is_proprietary_blend"] = False
+            recovered["scoring_input_kind"] = "recovered_active_identity"
+            recovered["scoring_input_recovery_reason"] = "mapped_active_identity_without_disclosed_dose"
+            candidates.append(recovered)
+            if path:
+                seen_paths.add(path)
     if product_evidence_rows:
         candidates.extend(product_evidence_rows)
         source = f"{SCORING_SOURCE}+{PRODUCT_EVIDENCE_SOURCE}"

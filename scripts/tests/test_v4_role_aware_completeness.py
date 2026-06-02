@@ -95,7 +95,7 @@ def test_adjunct_omega_in_multi_is_not_capped():
     assert "low_confidence_omega_breakdown" in res.soft_missing
 
 
-def test_primary_omega_low_confidence_is_still_capped():
+def test_primary_omega_low_confidence_is_soft_debt_not_capped():
     # Same evidence, but routed as omega -> epa_dha is the primary driver.
     product = _multi_with_adjunct_omega()
     roles = {r["canonical_id"]: r["role"]
@@ -103,7 +103,9 @@ def test_primary_omega_low_confidence_is_still_capped():
     assert roles["epa_dha"] == "primary"
 
     res = evaluate_completeness_gate(product, "omega")
-    assert res.score_cap == 65.0            # primary omega still capped
+    assert res.score_cap is None
+    assert res.verdict_ceiling is None
+    assert "low_confidence_omega_breakdown" in res.soft_missing
 
 
 @pytest.mark.parametrize("module", ["multi_or_prenatal", "generic", "sports", "probiotic"])
@@ -116,7 +118,7 @@ def test_adjunct_omega_never_caps_in_non_omega_modules(module):
 
 # --- Soft-policy unit gating ------------------------------------------------
 
-def test_soft_policy_omega_cap_requires_cap_eligible():
+def test_soft_policy_omega_evidence_never_caps():
     rows = [
         {"canonical_id": "vitamin_c_ascorbic_acid", "name": "Vitamin C",
          "quantity": 90, "unit": "mg", "scoring_input_kind": "normal"},
@@ -129,10 +131,11 @@ def test_soft_policy_omega_cap_requires_cap_eligible():
 
     soft2, cap2, _ = _soft_policy_from_scoring_evidence(
         rows, "omega", cap_eligible_canonicals={"epa_dha"})
-    assert cap2 == 65.0
+    assert cap2 is None
+    assert "low_confidence_omega_breakdown" in soft2
 
 
-def test_soft_policy_percent_dv_cap_requires_cap_eligible():
+def test_soft_policy_percent_dv_evidence_never_caps():
     rows = [_evidence_row("percent_dv_dose", "turmeric", "medium")]
     rows[0]["dose_class"] = "percent_dv_only"
 
@@ -142,7 +145,7 @@ def test_soft_policy_percent_dv_cap_requires_cap_eligible():
 
     soft, cap_primary, _ = _soft_policy_from_scoring_evidence(
         rows, "generic", cap_eligible_canonicals={"turmeric"})
-    assert cap_primary == 60.0
+    assert cap_primary is None
     assert "percent_dv_only_dose_evidence" in soft
 
 

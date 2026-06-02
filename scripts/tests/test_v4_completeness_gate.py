@@ -83,7 +83,7 @@ def test_generic_missing_active_identity_is_not_scored() -> None:
     assert "active_identity" in result.missing_fields
 
 
-def test_generic_low_mapped_coverage_is_not_scored() -> None:
+def test_generic_low_mapped_coverage_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -94,12 +94,13 @@ def test_generic_low_mapped_coverage_is_not_scored() -> None:
     )
     result = evaluate_completeness_gate(product, module="generic")
 
-    assert result.is_live_eligible is False
+    assert result.is_live_eligible is True
     assert result.mapped_coverage == 0.5
-    assert "mapped_coverage" in result.missing_fields
+    assert result.missing_fields == []
+    assert "low_mapped_coverage" in result.soft_missing
 
 
-def test_explicit_discontinued_status_is_not_live_eligible() -> None:
+def test_explicit_discontinued_status_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     result = evaluate_completeness_gate(
@@ -107,12 +108,13 @@ def test_explicit_discontinued_status_is_not_live_eligible() -> None:
         module="generic",
     )
 
-    assert result.is_live_eligible is False
-    assert result.verdict == "NOT_SCORED"
-    assert "product_status_active" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.verdict is None
+    assert result.missing_fields == []
+    assert "product_status_not_active" in result.soft_missing
 
 
-def test_missing_form_factor_is_not_scored() -> None:
+def test_missing_form_factor_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     result = evaluate_completeness_gate(
@@ -120,11 +122,12 @@ def test_missing_form_factor_is_not_scored() -> None:
         module="generic",
     )
 
-    assert result.is_live_eligible is False
-    assert "form_factor" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "form_factor_not_disclosed" in result.soft_missing
 
 
-def test_generic_missing_dose_is_not_scored() -> None:
+def test_generic_missing_dose_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     result = evaluate_completeness_gate(
@@ -132,8 +135,9 @@ def test_generic_missing_dose_is_not_scored() -> None:
         module="generic",
     )
 
-    assert result.is_live_eligible is False
-    assert "dose_with_unit" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "dose_not_disclosed" in result.soft_missing
 
 
 def test_generic_enzyme_activity_is_valid_dose_evidence() -> None:
@@ -269,7 +273,7 @@ def test_probiotic_total_cfu_plus_named_strains_passes_without_per_strain_cfu() 
     assert result.verdict is None
 
 
-def test_probiotic_missing_total_cfu_is_not_scored() -> None:
+def test_probiotic_missing_total_cfu_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -284,11 +288,14 @@ def test_probiotic_missing_total_cfu_is_not_scored() -> None:
 
     result = evaluate_completeness_gate(product, module="probiotic")
 
-    assert result.is_live_eligible is False
-    assert "total_cfu" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "total_cfu_not_disclosed" in result.soft_missing
+    assert result.score_cap is None
+    assert result.verdict_ceiling is None
 
 
-def test_probiotic_missing_named_strain_is_not_scored() -> None:
+def test_probiotic_missing_named_strain_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -304,8 +311,11 @@ def test_probiotic_missing_named_strain_is_not_scored() -> None:
 
     result = evaluate_completeness_gate(product, module="probiotic")
 
-    assert result.is_live_eligible is False
-    assert "named_strain" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "named_strain_not_disclosed" in result.soft_missing
+    assert result.score_cap is None
+    assert result.verdict_ceiling is None
 
 
 def test_multi_or_prenatal_with_sixty_percent_dose_panel_passes() -> None:
@@ -320,10 +330,10 @@ def test_multi_or_prenatal_with_sixty_percent_dose_panel_passes() -> None:
     result = evaluate_completeness_gate(product, module="multi_or_prenatal")
 
     assert result.is_live_eligible is True
-    assert result.dose_coverage == 1.0
+    assert result.dose_coverage == 0.6
 
 
-def test_multi_or_prenatal_below_sixty_percent_dose_panel_is_not_scored() -> None:
+def test_multi_or_prenatal_below_sixty_percent_dose_panel_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     ingredients = [
@@ -335,8 +345,9 @@ def test_multi_or_prenatal_below_sixty_percent_dose_panel_is_not_scored() -> Non
     result = evaluate_completeness_gate(product, module="multi_or_prenatal")
 
     assert result.is_live_eligible is True
-    assert result.dose_coverage == 1.0
-    assert "micronutrient_panel_dose_coverage" not in result.missing_fields
+    assert result.dose_coverage == 0.5
+    assert result.missing_fields == []
+    assert "micronutrient_panel_dose_coverage_low" in result.soft_missing
 
 
 def test_sports_with_positive_creatine_dose_is_live_eligible() -> None:
@@ -357,7 +368,7 @@ def test_sports_with_positive_creatine_dose_is_live_eligible() -> None:
     assert "sports_active_dose" not in result.missing_fields
 
 
-def test_sports_without_sports_active_dose_is_not_scored() -> None:
+def test_sports_without_sports_active_dose_is_soft_debt() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -369,11 +380,12 @@ def test_sports_without_sports_active_dose_is_not_scored() -> None:
     result = evaluate_completeness_gate(product, module="sports")
 
     assert result.module == "sports"
-    assert result.is_live_eligible is False
-    assert "sports_active_dose" in result.missing_fields
+    assert result.is_live_eligible is True
+    assert result.missing_fields == []
+    assert "sports_active_dose_not_disclosed" in result.soft_missing
 
 
-def test_sports_primary_identity_without_dose_scores_with_cap() -> None:
+def test_sports_primary_identity_without_dose_scores_without_cap() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
     product = _product(
@@ -397,8 +409,8 @@ def test_sports_primary_identity_without_dose_scores_with_cap() -> None:
     assert result.is_live_eligible is True
     assert "sports_active_dose" not in result.missing_fields
     assert "sports_primary_dose_not_disclosed" in result.soft_missing
-    assert result.score_cap == 50.0
-    assert result.verdict_ceiling == "CAUTION"
+    assert result.score_cap is None
+    assert result.verdict_ceiling is None
 
 
 def test_malformed_product_never_raises_and_is_not_scored() -> None:

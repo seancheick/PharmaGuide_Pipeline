@@ -105,14 +105,185 @@ def test_enzyme_activity_and_probiotic_cfu_count_as_dose_evidence():
     assert [row["canonical_id"] for row in result.rows] == ["protease", "lactobacillus"]
 
 
-def test_no_dose_known_identity_is_rejected():
+def test_no_dose_known_identity_is_kept_for_scoring():
     result = get_scoring_ingredients(
         _product([_row(quantity=None, unit=None, has_dose=False)]),
         strict=True,
     )
 
-    assert result.rows == []
-    assert result.rejected_rows[0].reason == "missing_dose_evidence"
+    assert [row["canonical_id"] for row in result.rows] == ["magnesium"]
+    assert result.rejected_rows == []
+
+
+def test_skipped_mapped_active_without_dose_is_recovered_for_scoring():
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                _row(
+                    name="Vitamin C",
+                    canonical_id="vitamin_c",
+                    quantity=0,
+                    unit="NP",
+                    role_classification="recognized_non_scorable",
+                    mapped=False,
+                    score_exclusion_reason=None,
+                )
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [row["canonical_id"] for row in result.rows] == ["vitamin_c"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"
+    assert result.rows[0]["scoring_input_recovery_reason"] == "mapped_active_identity_without_disclosed_dose"
+
+
+def test_active_scorable_canonical_row_excluded_for_missing_dose_is_recovered():
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                _row(
+                    name="Tocotrienol-Tocopherol Complex",
+                    canonical_id="vitamin_e",
+                    quantity=0,
+                    unit="NP",
+                    role_classification="inactive_non_scorable",
+                    mapped=False,
+                    mapped_identity=False,
+                    score_eligible_by_cleaner=True,
+                    score_exclusion_reason="blend_header_without_dosage",
+                    dose_class="therapeutic_mass",
+                )
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [row["canonical_id"] for row in result.rows] == ["vitamin_e"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"
+    assert result.rows[0]["mapped_identity"] is True
+
+
+def test_skipped_probiotic_strain_identity_is_recovered_without_inventing_cfu():
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                _row(
+                    name="Lactobacillus gasseri KS-13",
+                    canonical_id="lactobacillus_gasseri",
+                    quantity=0,
+                    unit="NP",
+                    cleaner_row_role="nested_display_only",
+                    role_classification="inactive_non_scorable",
+                    score_eligible_by_cleaner=False,
+                    mapped=False,
+                    dose_class="zero_or_np",
+                )
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [row["canonical_id"] for row in result.rows] == ["lactobacillus_gasseri"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"
+    assert result.rows[0]["quantity"] == 0
+    assert result.rows[0]["unit"] == "NP"
+    assert result.rows[0]["mapped_identity"] is True
+    assert result.rows[0]["is_proprietary_blend"] is False
+
+
+def test_skipped_omega_nested_identity_is_recovered_without_inventing_epa_dha_dose():
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                _row(
+                    name="Eicosapentaenoic Acid",
+                    canonical_id="epa",
+                    quantity=0,
+                    unit="NP",
+                    cleaner_row_role="nested_display_only",
+                    role_classification="inactive_non_scorable",
+                    score_eligible_by_cleaner=False,
+                    mapped=False,
+                    dose_class="zero_or_np",
+                    raw_source_path="ingredientRows[0].nestedRows[0]",
+                ),
+                _row(
+                    name="Docosahexaenoic Acid",
+                    canonical_id="dha",
+                    quantity=0,
+                    unit="NP",
+                    cleaner_row_role="nested_display_only",
+                    role_classification="inactive_non_scorable",
+                    score_eligible_by_cleaner=False,
+                    mapped=False,
+                    dose_class="zero_or_np",
+                    raw_source_path="ingredientRows[0].nestedRows[1]",
+                ),
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [row["canonical_id"] for row in result.rows] == ["epa", "dha"]
+    assert all(row["scoring_input_kind"] == "recovered_active_identity" for row in result.rows)
+    assert all(row["quantity"] == 0 for row in result.rows)
+    assert all(row["unit"] == "NP" for row in result.rows)
+    assert all(row["mapped_identity"] is True for row in result.rows)
+    assert all(row["is_proprietary_blend"] is False for row in result.rows)
+
+
+def test_skipped_botanical_nested_identity_is_recovered_when_blend_has_no_mass_anchor():
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Organic Proprietary Blend",
+                    "canonical_id": "BLEND_GENERAL",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "blend_header_total",
+                    "quantity": 1,
+                    "unit": "mL",
+                    "is_blend_header": True,
+                    "blend_total_weight_only": True,
+                    "raw_taxonomy": {"category": "blend", "ingredientGroup": "Proprietary Blend"},
+                },
+                {
+                    "name": "Astragalus",
+                    "canonical_id": "astragalus",
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                    "cleaner_row_role": "nested_display_only",
+                    "role_classification": "inactive_non_scorable",
+                    "score_eligible_by_cleaner": False,
+                    "mapped": False,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Astragalus"},
+                },
+            ],
+        },
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [row["canonical_id"] for row in result.rows] == ["astragalus"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"
+    assert result.rows[0].get("evidence_type") != "blend_anchor_mass"
+    assert result.rows[0]["is_proprietary_blend"] is False
 
 
 def test_product_level_probiotic_evidence_is_accepted_from_contract_only():
@@ -424,8 +595,10 @@ def test_blend_header_mass_does_not_create_mass_anchor_for_probiotic_strain():
 
     result = get_scoring_ingredients(product, strict=True)
 
-    assert result.rows == []
-    assert result.zero_scorable_reason == "no_strict_scoring_candidates"
+    assert [row["canonical_id"] for row in result.rows] == ["bacillus_subtilis"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"
+    assert result.rows[0].get("evidence_type") != "blend_anchor_mass"
+    assert result.rows[0]["is_proprietary_blend"] is False
 
 
 def test_nutrition_only_uses_explicit_contract_not_keywords_by_default():
