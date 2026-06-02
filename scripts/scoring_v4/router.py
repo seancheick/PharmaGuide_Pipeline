@@ -51,6 +51,30 @@ _PRENATAL_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 _PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\b", re.IGNORECASE)
+# A probiotic with only a tiny non-probiotic panel (e.g. a probiotic gummy with 1-2
+# vitamin adjuncts) can still be probiotic-primary when the name says so. Above this,
+# a non-probiotic panel means the strain is an adjunct, not the product's identity.
+_PROBIOTIC_ADJUNCT_PANEL_MAX = 2
+# A product whose ONLY scorable identity is >= this many named strains is a
+# probiotic even without CFU disclosure or a "probiotic" name token (e.g.
+# FLORASSIST: 10 strains, no CFU, brand name lacks "probiotic"). Requires panel==0
+# so it cannot capture a vitamin/mineral/protein that merely carries adjunct strains.
+_PROBIOTIC_PURE_STRAIN_MIN = 2
+# The pure-strain promotion (panel==0) is the weakest probiotic signal, so it is
+# blocked when the product clearly advertises a NON-probiotic hero. This guards
+# against future cleaner/enricher panel-loss turning a zinc/protein/fiber product
+# into a "probiotic" just because its real panel was dropped. A vague taxonomy
+# (general_supplement) plus no hero keyword is the genuine pure-probiotic case.
+_PROBIOTIC_VAGUE_TAXONOMY = frozenset({"", "general_supplement", "probiotic"})
+_NON_PROBIOTIC_HERO_TITLE_RE = re.compile(
+    r"\b(zinc|magnesium|calcium|iron|potassium|selenium|copper|chromium|iodine|"
+    r"vitamin|biotin|folate|folic|niacin|thiamine|riboflavin|"
+    r"protein|whey|casein|collagen|gelatin|"
+    r"fiber|fibre|prebiotic|psyllium|inulin|"
+    r"omega|fish\s*oil|krill|cod\s*liver|epa|dha|"
+    r"quercetin|curcumin|turmeric|creatine|coq10|ubiquinol|melatonin|ashwagandha)\b",
+    re.IGNORECASE,
+)
 _SPORTS_PREWORKOUT_RE = re.compile(r"\b(pre[\s-]?workout|preworkout)\b", re.IGNORECASE)
 _SPORTS_PROTEIN_NAME_RE = re.compile(
     r"\b("
@@ -329,6 +353,42 @@ def _positive_number(value: Any) -> bool:
         return False
 
 
+def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
+    """Count scorable active rows that are NOT probiotic strains.
+
+    A large non-probiotic panel (a multivitamin's micronutrients, a protein's
+    macros) means an accompanying strain is an adjunct, not the product identity.
+    Strains live in `probiotic_data`, so scorable rows are non-probiotic in the
+    common case; the category guard is defense-in-depth.
+    """
+    iqd = (product or {}).get("ingredient_quality_data") or {}
+    rows = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
+    count = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        tax = row.get("raw_taxonomy") if isinstance(row.get("raw_taxonomy"), dict) else {}
+        category = str(tax.get("category") or row.get("category") or "").strip().lower()
+        if category == "probiotic":
+            continue
+        count += 1
+    return count
+
+
+def _has_non_probiotic_hero(product: Dict[str, Any], name_text: str) -> bool:
+    """True when the product clearly advertises a non-probiotic primary identity
+    via a specific taxonomy class or a hero keyword in the title.
+
+    Used to guard the weakest probiotic signal (pure-strain, panel==0): a real
+    zinc/protein/fiber product whose panel was lost upstream must not be promoted
+    to probiotic just because its strain rows survived.
+    """
+    primary_type = _read_primary_type(product)
+    if primary_type and primary_type not in _PROBIOTIC_VAGUE_TAXONOMY:
+        return True
+    return bool(_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""))
+
+
 def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     """Return True for products with real probiotic identity evidence.
 
@@ -355,7 +415,35 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     )
     name_signal = bool(_PROBIOTIC_NAME_RE.search(name_text or ""))
 
-    return is_product and strain_count > 0 and (has_cfu or name_signal)
+    if not is_product or strain_count <= 0:
+        return False
+
+    non_probiotic_panel = _non_probiotic_scorable_count(product)
+
+    # Pure multi-strain products are unambiguously probiotic even without CFU
+    # disclosure or a "probiotic" name token. panel==0 means the strains are the
+    # ONLY scorable identity, so this cannot capture a vitamin/mineral/protein
+    # carrying adjunct strains (those have panel >= 1). The hero guard additionally
+    # blocks a product that advertises a non-probiotic identity (zinc/protein/fiber
+    # title or specific taxonomy) but whose real panel was lost upstream.
+    if (
+        non_probiotic_panel == 0
+        and strain_count >= _PROBIOTIC_PURE_STRAIN_MIN
+        and not _has_non_probiotic_hero(product, name_text)
+    ):
+        return True
+
+    # Otherwise require CFU-or-name evidence (guards incidental strains in
+    # whole-food / botanical products from being promoted), plus the role-aware
+    # strain-dominance gate: an adjunct strain must not hijack a product whose
+    # dominant scorable identity is something else (multivitamin, whey, hydration).
+    if not (has_cfu or name_signal):
+        return False
+    if strain_count >= non_probiotic_panel:
+        return True
+    if non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
+        return True
+    return False
 
 
 def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
