@@ -476,10 +476,29 @@ def _is_prenatal_multi_intent(product: Dict[str, Any], name_text: str) -> bool:
 def _positive_canonicals(product: Dict[str, Any]) -> set[str]:
     canonicals: set[str] = set()
     for ing in _scoring_rows(product):
+        if ing.get("scoring_input_kind") == "product_level_evidence":
+            continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
         if canonical and _positive_quantity(ing):
             canonicals.add(canonical)
     return canonicals
+
+
+def _has_sports_primary_dose_evidence(product: Dict[str, Any]) -> bool:
+    """True when the scoring contract explicitly provides sports dose evidence.
+
+    Generic product-level evidence such as conservative blend/header anchors is
+    intentionally not a class signal. Those rows can recover dose scoring, but
+    they must not override taxonomy into the sports module.
+    """
+    for ing in _scoring_rows(product):
+        if ing.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        if str(ing.get("evidence_type") or "").strip().lower() != "sports_primary_dose":
+            continue
+        if _positive_quantity(ing):
+            return True
+    return False
 
 
 def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
@@ -495,12 +514,14 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
         return True
     if primary_type == "pre_workout":
         return True
+    if _has_sports_primary_dose_evidence(product):
+        return True
 
     canonicals = _positive_canonicals(product)
     lowered = name_text or ""
 
     if canonicals & _SPORTS_PROTEIN_CANONICALS:
-        return True
+        return primary_type == "protein_powder" or bool(_SPORTS_PROTEIN_NAME_RE.search(lowered))
     if primary_type == "protein_powder" and _SPORTS_PROTEIN_NAME_RE.search(lowered):
         return True
 
