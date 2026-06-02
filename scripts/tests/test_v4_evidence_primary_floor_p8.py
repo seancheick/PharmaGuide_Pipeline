@@ -88,3 +88,59 @@ def test_weak_study_type_does_not_floor():
     p = _product([_ing()], [_match(study_type="observational")])
     out = score_evidence(p, apply_primary_floor=True)
     assert out["metadata"]["primary_evidence_floor"] == 0.0
+
+
+# --- v4.1 branded-RCT evidence tier (KSM-66 / Meriva / Sensoril) ----------
+
+def test_branded_strong_floors_to_18():
+    """A branded clinically-studied extract with strong (meta/multi-RCT) evidence
+    earns 18 — above a non-branded strong single (14) — but still below the 19-20
+    band reserved for multi-active breadth."""
+    p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["score"] >= 18.0
+
+
+def test_branded_moderate_floors_to_17():
+    """Branded extract with a single RCT / clinical strain -> 17 (branded but
+    not multi-RCT depth)."""
+    p = _product([_ing()], [_match(study_type="rct_single", evidence_level="branded-rct")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 17.0
+
+
+def test_branded_strong_weak_effect_discounts():
+    """Effect-strength discount still applies on top of the branded tier
+    (18 * 0.85 = 15.3) — a weak-effect branded meta floors below a strong one."""
+    p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="branded-rct",
+                                   effect_direction="positive_weak")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == round(18.0 * 0.85, 4)
+
+
+def test_non_branded_strong_stays_14():
+    """Guard: a merely-strong generic single does NOT get the branded tier."""
+    p = _product([_ing()], [_match(study_type="rct_multiple", evidence_level="ingredient-human")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 14.0
+
+
+def test_branded_subclinical_dose_still_blocks_floor():
+    """Even a branded extract below its min clinical dose cannot float the floor."""
+    p = _product([_ing(quantity=50)],
+                 [_match(study_type="rct_multiple", evidence_level="branded-rct",
+                         min_clinical_dose=300.0)])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 0.0
+
+
+def test_branded_trace_ingredient_does_not_float_product():
+    """A branded strong match on a TRACE co-ingredient (not mass-dominant) must
+    not float the product."""
+    ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
+            _ing("Sensoril Ashwagandha", "ashwagandha", 50, "mg")]
+    matches = [_match(ingredient="Sensoril Ashwagandha", standard_name="Sensoril Ashwagandha",
+                      study_type="rct_multiple", evidence_level="branded-rct")]
+    out = score_evidence(_product(ings, matches), apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 0.0

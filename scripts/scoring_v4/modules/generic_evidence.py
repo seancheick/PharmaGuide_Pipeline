@@ -94,6 +94,14 @@ DEPTH_BONUS_BANDS = ((20.0, 0.25), (40.0, 0.5))
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
 PRIMARY_FLOOR_STRONG = 14.0     # systematic review / multi-RCT, positive, clinical dose
 PRIMARY_FLOOR_MODERATE = 11.0   # single RCT / clinical strain, positive, clinical dose
+# v4.1 branded-RCT tier: a branded clinically-studied extract (Sensoril, KSM-66,
+# Meriva/BCM-95 — its OWN brand-specific RCT evidence, not a generic literature
+# match) earns a higher floor than a non-branded ingredient at the same study tier.
+# 18 (branded + meta/multi-RCT) / 17 (branded + single RCT). 19-20 stays reserved
+# for multi-active breadth, so a single extract can be "excellent" but not "perfect".
+PRIMARY_FLOOR_BRANDED_STRONG = 18.0
+PRIMARY_FLOOR_BRANDED_MODERATE = 17.0
+_BRANDED_EVIDENCE_LEVELS = frozenset({"branded-rct", "branded_rct"})
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 _POSITIVE_EFFECTS = frozenset({"positive_strong", "positive_weak"})
@@ -291,8 +299,13 @@ def _primary_mass_floor(
         if _match_active_mass(entry, index) < threshold:
             continue  # the evidenced ingredient is not a mass-dominant active
         st = _norm_text(entry.get("study_type"))
-        base = (PRIMARY_FLOOR_STRONG if st in _STRONG_STUDY
-                else PRIMARY_FLOOR_MODERATE if st in _MODERATE_STUDY else 0.0)
+        branded = _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS
+        if st in _STRONG_STUDY:
+            base = PRIMARY_FLOOR_BRANDED_STRONG if branded else PRIMARY_FLOOR_STRONG
+        elif st in _MODERATE_STUDY:
+            base = PRIMARY_FLOOR_BRANDED_MODERATE if branded else PRIMARY_FLOOR_MODERATE
+        else:
+            base = 0.0
         # Weight the floor by effect strength, mirroring the pipeline's own
         # positive_weak discount (0.85) so a weak-effect meta does not floor as
         # high as a strong-effect one (P2 review).
