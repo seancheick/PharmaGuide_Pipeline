@@ -122,8 +122,12 @@ def test_multi_prenatal_trust_scores_product_line_certification_at_first_rung() 
         ])
     )
 
-    assert trust["score"] == 6.0
+    # USP Verified at product_line scope now also implies B4b GMP (cert->GMP):
+    # B4a(6) + B4b(4) = 10.
     assert trust["components"]["B4a_verified_certifications"] == 6.0
+    assert trust["components"]["B4b_gmp"] == 4.0
+    assert trust["metadata"]["B4b_gmp_inferred_from_cert"] == "USP Verified"
+    assert trust["score"] == 10.0
     assert trust["metadata"]["verified_scope_counts"] == {"product_line": 1}
 
 
@@ -228,7 +232,8 @@ def test_score_multi_prenatal_wires_trust_dimension() -> None:
     ).to_breakdown()
 
     trust = _trust_view(breakdown)
-    assert trust["score"] == 6.0
+    # USP Verified product_line: B4a(6) + B4b(4, cert->GMP) = 10.
+    assert trust["score"] == 10.0
     assert trust["metadata"]["phase"] == "P1.3.4_testing_trust"
     assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")

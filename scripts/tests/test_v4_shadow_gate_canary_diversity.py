@@ -94,7 +94,7 @@ SHADOW_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (72.8, 74.2),  # Phase 4: 88 → 84.6
+        "score_range": (75.0, 76.4),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
     # Typed confidence low + POOR verdict.
     "12932": {
@@ -110,7 +110,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (62.7, 64.1),  # Phase 4: 80.5 → 77.1
+        "score_range": (64.9, 66.3),  # Phase 4: 80.5 → 77.1; cert→GMP: +2.2 (NSF Certified sku implies GMP)
     },
 }
 

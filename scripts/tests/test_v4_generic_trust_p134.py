@@ -95,7 +95,11 @@ def test_two_sku_verified_certs_score_12_b4a() -> None:
     )
 
     assert payload["components"]["B4a_verified_certifications"] == 12.0
-    assert payload["score"] == 12.0
+    # NSF Sport/Certified at sku scope now also imply B4b GMP (cert->GMP), so the
+    # dimension is B4a(12) + B4b(4) = 16, hard-clamped to 15.
+    assert payload["components"]["B4b_gmp"] == 4.0
+    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] in ("NSF Sport", "NSF Certified")
+    assert payload["score"] == 15.0
     assert payload["metadata"]["verified_scope_counts"] == {"sku": 2}
 
 
@@ -355,8 +359,9 @@ def test_shadow_wires_verification_bonus() -> None:
     # bonus is the 0-15 source score rescaled x8/15; the source + B4 components
     # remain auditable in the bonus payload.
     verification = out["shadow_score_v4_breakdown"]["module"]["verification_bonus"]
-    assert verification["metadata"]["source_trust_score_0_15"] == 8.0
-    assert verification["score"] == round(8.0 * 8.0 / 15.0, 4)
+    # NSF Sport at sku scope: B4a(8) + B4b(4, inferred cert->GMP) = 12 source trust.
+    assert verification["metadata"]["source_trust_score_0_15"] == 12.0
+    assert verification["score"] == round(12.0 * 8.0 / 15.0, 4)
     assert verification["max"] == 8.0
     assert verification["metadata"]["trust_metadata"]["phase"] == "P1.3.4_testing_trust"
 
@@ -367,3 +372,100 @@ def test_generic_trust_does_not_import_v3_scorer() -> None:
     source = Path(gt.__file__).read_text()
     assert "from score_supplements" not in source
     assert "import score_supplements" not in source
+
+
+# --- cert -> GMP implication (B4b) ----------------------------------------
+# A verified sku/product_line cert whose program REQUIRES a GMP/facility audit
+# (NSF Sport, NSF Contents Certified, USP Verified, Informed Sport/Choice, BSCG)
+# implies GMP-compliant manufacturing. We credit B4b from that stronger verified
+# signal even when the gmp_level/gmp object is empty (a data gap), instead of
+# zeroing GMP for a product we KNOW is made under audited GMP. Policy lives in
+# cert_claim_rules.json (implies_gmp); scorer only reads it. Conservative:
+# brand_only / claimed_only / needs_review / stale never imply GMP, and a
+# purity-only program (IFOS) does not.
+
+
+def test_sku_nsf_sport_cert_infers_b4b_gmp_when_gmp_data_absent() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(_product(verified_cert_programs=[_cert("NSF Sport", "sku")]))
+
+    assert payload["components"]["B4b_gmp"] == 4.0
+    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "NSF Sport"
+
+
+def test_product_line_usp_verified_cert_infers_b4b_gmp() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(_product(verified_cert_programs=[_cert("USP Verified", "product_line")]))
+
+    assert payload["components"]["B4b_gmp"] == 4.0
+    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "USP Verified"
+
+
+def test_brand_only_cert_does_not_infer_b4b_gmp() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(_product(verified_cert_programs=[_cert("NSF Sport", "brand_only")]))
+
+    assert payload["components"]["B4b_gmp"] == 0.0
+    assert "B4b_gmp_inferred_from_cert" not in payload["metadata"]
+
+
+def test_claimed_only_cert_does_not_infer_b4b_gmp() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(_product(verified_cert_programs=[_cert("USP Verified", "claimed_only")]))
+
+    assert payload["components"]["B4b_gmp"] == 0.0
+
+
+def test_stale_blocked_cert_does_not_infer_b4b_gmp() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(
+            verified_cert_programs=[
+                _cert("NSF Sport", "sku", scoring_blocked_reason="snapshot_too_stale"),
+            ]
+        )
+    )
+
+    assert payload["components"]["B4b_gmp"] == 0.0
+
+
+def test_ifos_sku_cert_does_not_infer_b4b_gmp() -> None:
+    # IFOS is a fish-oil purity/potency batch test, not a facility GMP audit.
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(
+            verified_cert_programs=[_cert("IFOS", "sku")],
+            ingredients=[_ingredient(name="Fish Oil", standard_name="Omega-3 Fish Oil")],
+        )
+    )
+
+    assert payload["components"]["B4b_gmp"] == 0.0
+
+
+def test_inferred_gmp_does_not_double_count_with_direct_gmp() -> None:
+    # Cert present AND direct gmp present -> still capped at 4, never 8.
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(verified_cert_programs=[_cert("NSF Sport", "sku")], gmp={"claimed": True})
+    )
+
+    assert payload["components"]["B4b_gmp"] == 4.0
+
+
+def test_inferred_gmp_beats_fda_registered_only() -> None:
+    # A verified GMP-implying cert (4) outranks a bare fda_registered signal (2).
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(verified_cert_programs=[_cert("NSF Sport", "sku")], gmp={"fda_registered": True})
+    )
+
+    assert payload["components"]["B4b_gmp"] == 4.0
+    assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "NSF Sport"

@@ -68,7 +68,7 @@ def score_trust(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     b4a, cert_metadata = _score_b4a(product)
-    b4b = _score_b4b(product)
+    b4b, b4b_metadata = _score_b4b(product)
     b4c = _score_b4c(product)
     b4d, b4d_metadata = score_brand_testing_posture(product)
 
@@ -86,6 +86,7 @@ def score_trust(product: Dict[str, Any]) -> Dict[str, Any]:
         "raw_testing_trust": round(raw_total, 4),
         "cap_applied": raw_total > DIMENSION_CAP,
         **cert_metadata,
+        **b4b_metadata,
         "B4d_source": b4d_metadata.get("source"),
         "B4d_manufacturer_id": b4d_metadata.get("manufacturer_id"),
         "B4d_matched_evidence": b4d_metadata.get("matched_evidence", []),
@@ -163,7 +164,20 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     return score, metadata
 
 
-def _score_b4b(product: Dict[str, Any]) -> float:
+def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
+    """Score GMP / facility quality.
+
+    Order of evidence (strongest first):
+      1. Direct GMP signal (gmp_level=certified / nsf_gmp / compliant / claimed)
+      2. cert→GMP implication: a VERIFIED sku/product_line cert whose program
+         requires a GMP facility audit (NSF Sport/Contents, USP Verified,
+         Informed Sport/Choice, BSCG — policy in cert_claim_rules.json). The
+         cert is a stronger third-party signal than an empty gmp_level field,
+         so we credit GMP from it rather than zeroing a product we KNOW is made
+         under audited GMP. Conservative: brand_only/claimed_only/needs_review
+         and stale/blocked rows never imply GMP.
+      3. FDA-registered only (weakest).
+    """
     cert = _safe_dict(product.get("certification_data"))
     gmp = _safe_dict(cert.get("gmp"))
     gmp_level = _norm_text(product.get("gmp_level"))
@@ -172,10 +186,68 @@ def _score_b4b(product: Dict[str, Any]) -> float:
         or gmp.get("gmp_certified_or_compliant")
         or (gmp.get("claimed") and not gmp.get("fda_registered"))
     ):
-        return B4B_GMP_CERTIFIED
+        return B4B_GMP_CERTIFIED, {}
+    inferred = _gmp_implied_by_verified_cert(product)
+    if inferred:
+        return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_cert": inferred}
     if gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
-        return B4B_FDA_REGISTERED
-    return 0.0
+        return B4B_FDA_REGISTERED, {}
+    return 0.0, {}
+
+
+def _gmp_implied_by_verified_cert(product: Dict[str, Any]) -> str | None:
+    """Return the program name of a verified sku/product_line cert that implies
+    GMP (per cert_claim_rules.json), or None. Mirrors B4a's verified-cert
+    gating: scope must be sku/product_line and the row must not be blocked."""
+    verified = product.get("verified_cert_programs")
+    if verified is None:
+        verified = _safe_dict(product.get("certification_data")).get("verified_cert_programs")
+    if not isinstance(verified, list):
+        return None
+    gmp_programs = _get_gmp_implying_programs()
+    for entry in verified:
+        if not isinstance(entry, dict):
+            continue
+        if entry.get("scope") not in ("sku", "product_line"):
+            continue
+        if entry.get("scoring_blocked_reason"):
+            continue
+        if _norm_text(entry.get("program") or "") in gmp_programs:
+            return entry.get("program")
+    return None
+
+
+_GMP_IMPLYING_PROGRAMS_CACHE: frozenset[str] | None = None
+
+
+def _get_gmp_implying_programs() -> frozenset[str]:
+    """Normalized canonical program names whose certification requires a GMP
+    facility audit. Loaded from cert_claim_rules.json (implies_gmp policy) so
+    the rule is data-driven, not hardcoded in the scorer."""
+    global _GMP_IMPLYING_PROGRAMS_CACHE
+    if _GMP_IMPLYING_PROGRAMS_CACHE is not None:
+        return _GMP_IMPLYING_PROGRAMS_CACHE
+
+    tokens: set[str] = set()
+    try:
+        rules_path = Path(__file__).resolve().parents[2] / "data" / "cert_claim_rules.json"
+        data = json.loads(rules_path.read_text()) if rules_path.exists() else {}
+        programs = data.get("rules", {}).get("third_party_programs", {})
+        if isinstance(programs, dict):
+            for key, entry in programs.items():
+                if key.startswith("_") or not isinstance(entry, dict):
+                    continue
+                policy = entry.get("implies_gmp")
+                if not isinstance(policy, dict):
+                    continue
+                program = _norm_text(policy.get("verified_program"))
+                if program:
+                    tokens.add(program)
+    except Exception:
+        tokens = set()
+
+    _GMP_IMPLYING_PROGRAMS_CACHE = frozenset(tokens)
+    return _GMP_IMPLYING_PROGRAMS_CACHE
 
 
 def _score_b4c(product: Dict[str, Any]) -> float:
