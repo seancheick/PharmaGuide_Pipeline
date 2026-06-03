@@ -253,31 +253,6 @@ def fuzzy_match_ingredient(
     return matcher.match_multi_algorithm(ingredient_name, candidate_names)
 
 
-def build_alias_index(ingredients: List[Dict]) -> Dict[str, str]:
-    """
-    Build an index mapping all aliases to their canonical names.
-
-    Args:
-        ingredients: List of ingredient dicts with 'standard_name' and 'aliases' keys
-
-    Returns:
-        Dict mapping alias -> standard_name
-    """
-    index = {}
-    for ing in ingredients:
-        std_name = ing.get("standard_name", "")
-        if not std_name:
-            continue
-
-        # Add standard name itself
-        index[std_name.lower()] = std_name
-
-        # Add all aliases
-        for alias in ing.get("aliases", []):
-            if alias:
-                index[alias.lower()] = std_name
-
-    return index
 
 
 if __name__ == "__main__":

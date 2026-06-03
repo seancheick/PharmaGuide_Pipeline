@@ -22,8 +22,3 @@ def field_help(field_name: str) -> str:
     
     return dictionary.get(field_name.lower(), "Description not available.")
 
-def help_icon(field_name: str):
-    """
-    Renders a help icon with a tooltip for a field.
-    """
-    st.help(field_help(field_name))

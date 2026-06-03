@@ -390,43 +390,6 @@ def _discover_batch_history(scan_dir: Path) -> tuple[list[Path], list[dict[str, 
     return sorted_files, history
 
 
-def _parse_processing_summary_metrics(text: str | None) -> dict[str, Any]:
-    if not text:
-        return {}
-
-    generated_at = None
-    total_processed = None
-    total_errors = None
-    total_cleaned = None
-    processing_seconds = None
-
-    generated_match = re.search(r"Generated:\s+([0-9:\-\s]+)", text)
-    if generated_match:
-        generated_at = _parse_datetime(generated_match.group(1).strip().replace(" ", "T") + "+00:00")
-
-    processed_match = re.search(r"Total Files Processed:\s+(\d+)", text)
-    if processed_match:
-        total_processed = int(processed_match.group(1))
-
-    errors_match = re.search(r"Errors:\s+(\d+)", text)
-    if errors_match:
-        total_errors = int(errors_match.group(1))
-
-    cleaned_match = re.search(r"Successfully cleaned:\s+(\d+)", text)
-    if cleaned_match:
-        total_cleaned = int(cleaned_match.group(1))
-
-    time_match = re.search(r"Processing Time:\s+([0-9.]+)\s+minutes", text)
-    if time_match:
-        processing_seconds = round(float(time_match.group(1)) * 60, 2)
-
-    return {
-        "generated_at": generated_at,
-        "processed": total_processed,
-        "errors": total_errors,
-        "cleaned": total_cleaned,
-        "processing_time": processing_seconds,
-    }
 
 
 def _db_lookup(db_conn: sqlite3.Connection | None) -> dict[str, dict[str, Any]]:
@@ -1043,13 +1006,6 @@ def _compute_shared_metrics(
     }
 
 
-def resolve_product_source_paths(scan_dir: Path, dsld_id: str) -> dict[str, Path | None]:
-    enriched_match = next(iter(scan_dir.glob(f"output_*/enriched/{dsld_id}.json")), None)
-    scored_match = next(iter(scan_dir.glob(f"output_*/scored/{dsld_id}.json")), None)
-    return {
-        "enriched": enriched_match.resolve() if enriched_match else None,
-        "scored": scored_match.resolve() if scored_match else None,
-    }
 
 
 @st.cache_resource(ttl=300)

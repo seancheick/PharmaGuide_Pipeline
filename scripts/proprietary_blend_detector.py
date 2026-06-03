@@ -544,12 +544,3 @@ class ProprietaryBlendDetector:
 
 
 # Convenience function
-def analyze_product_blends(product: Dict, blend_db_path: Optional[Path] = None) -> Dict:
-    """
-    Convenience function to analyze a product's proprietary blends.
-
-    Returns dictionary suitable for adding to enriched product data.
-    """
-    detector = ProprietaryBlendDetector(blend_db_path)
-    result = detector.analyze_product(product)
-    return result.to_dict()

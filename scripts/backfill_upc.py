@@ -53,12 +53,6 @@ def similarity(a: str, b: str) -> float:
     return SequenceMatcher(None, a.lower(), b.lower()).ratio()
 
 
-def clean_product_name(name: str) -> str:
-    """Strip dosage/count info for better search matching."""
-    # Remove patterns like "100 mg", "40ct", "60 Softgels", etc.
-    cleaned = re.sub(r'\d+\s*(mg|mcg|iu|ct|count|softgels?|capsules?|tablets?|gummies?)\b',
-                     '', name, flags=re.IGNORECASE)
-    return cleaned.strip()
 
 
 def search_upcitemdb(product_name: str, brand: str, mode: str, api_key: str = "") -> list:

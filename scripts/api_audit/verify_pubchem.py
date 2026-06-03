@@ -380,12 +380,6 @@ class PubChemClient:
 # Extraction helpers
 # ---------------------------------------------------------------------------
 
-def extract_cas_from_synonyms(synonyms: list[str]) -> str | None:
-    """Extract the first CAS number from a PubChem synonym list."""
-    for s in synonyms:
-        if CAS_RE.match(s):
-            return s
-    return None
 
 
 def _normalize_label(text: str) -> str:

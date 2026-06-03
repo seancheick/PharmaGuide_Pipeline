@@ -376,12 +376,6 @@ def ct_search_trials(client: APIClient, intervention: str, *, max_results: int =
     return {"total": total, "trials": trials}
 
 
-def ct_get_max_enrollment(client: APIClient, intervention: str) -> int:
-    """Get the largest enrollment from completed trials for an intervention."""
-    result = ct_search_trials(client, intervention, max_results=10)
-    if not result["trials"]:
-        return 0
-    return max(t.get("enrollment", 0) for t in result["trials"])
 
 
 def _clinical_trial_search_terms(entry: dict) -> list[str]:
@@ -447,10 +441,6 @@ def _ct_search_trials_merged(client: APIClient, search_terms: list[str], *, max_
 # PubMed PMID lookup for NCT IDs
 # ---------------------------------------------------------------------------
 
-def _get_pubmed_client() -> PubMedClient:
-    """Lazy-init a shared PubMedClient with disk cache."""
-    cache_path = CACHE_DIR / "pubmed_nct_cache.json"
-    return PubMedClient(cache_path=cache_path)
 
 
 def pubmed_find_pmid_for_nct(
@@ -474,21 +464,6 @@ def pubmed_find_pmid_for_nct(
     return None
 
 
-def pubmed_get_article_title(
-    pm_client: PubMedClient,
-    pmid: str,
-) -> str:
-    """Fetch the article title for a given PMID."""
-    if not pmid:
-        return ""
-    try:
-        xml_text = pm_client.efetch(pmid, rettype="abstract")
-        articles = parse_pubmed_article_xml(xml_text)
-        if articles:
-            return articles[0].get("title", "")
-    except Exception as e:
-        print(f"  [PUBMED] Failed to fetch title for PMID {pmid}: {e}", file=sys.stderr)
-    return ""
 
 
 # ---------------------------------------------------------------------------

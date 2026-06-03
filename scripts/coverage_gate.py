@@ -137,36 +137,6 @@ FAIL_CLOSED_DEFAULT = {
 }
 
 
-def get_domain_threshold(domain: str, custom_thresholds: Optional[Dict] = None) -> Dict[str, Any]:
-    """
-    Get threshold configuration for a domain with fail-closed default.
-
-    Args:
-        domain: The domain name (e.g., "ingredients", "manufacturer")
-        custom_thresholds: Optional custom thresholds to override defaults
-
-    Returns:
-        Dict with keys: threshold, severity, (optionally scoring_impact)
-
-    Note:
-        Unknown domains will trigger a warning and use FAIL_CLOSED_DEFAULT.
-        This ensures new domains cannot silently bypass validation.
-    """
-    # Check custom thresholds first
-    if custom_thresholds and domain in custom_thresholds:
-        return custom_thresholds[domain]
-
-    # Check known domains
-    if domain in COVERAGE_THRESHOLDS:
-        return COVERAGE_THRESHOLDS[domain]
-
-    # Fail-closed: unknown domain gets strict default
-    logger.warning(
-        f"Unknown domain '{domain}' encountered - applying fail-closed default "
-        f"(threshold={FAIL_CLOSED_DEFAULT['threshold']}%, severity={FAIL_CLOSED_DEFAULT['severity']}). "
-        f"Add '{domain}' to COVERAGE_THRESHOLDS with explicit configuration."
-    )
-    return FAIL_CLOSED_DEFAULT.copy()
 
 
 # Small batch handling configuration

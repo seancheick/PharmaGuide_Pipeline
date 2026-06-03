@@ -769,8 +769,6 @@ def _matching_allowed_name(candidate: str, allowed_names: set[str]) -> str | Non
     return None
 
 
-def _matches_allowed_name(candidate: str, allowed_names: set[str]) -> bool:
-    return _matching_allowed_name(candidate, allowed_names) is not None
 
 
 def _has_specificity_conflict(
