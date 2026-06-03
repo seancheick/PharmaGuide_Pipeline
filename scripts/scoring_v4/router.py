@@ -811,8 +811,7 @@ def class_for_product(product: Dict[str, Any]) -> str:
     route came from.
     """
     try:
-        route = _legacy_class_for_product(product)
-        contract = build_scoring_classification(product, route_module=route)
+        contract = build_scoring_classification(product)
         result = contract.get("route_module")
     except Exception:  # pragma: no cover - router is a total public API
         return "generic"

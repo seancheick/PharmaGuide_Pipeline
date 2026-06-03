@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import sys
 from pathlib import Path
 
@@ -96,6 +97,22 @@ def test_classification_builder_is_total_and_schema_valid(payload):
 def test_router_public_api_matches_legacy_parity_baseline(product):
     assert class_for_product(product) == _legacy_class_for_product(product)
     assert build_scoring_classification(product)["route_module"] == _legacy_class_for_product(product)
+
+
+def test_public_router_does_not_seed_contract_route():
+    source = (SCRIPTS_ROOT / "scoring_v4" / "router.py").read_text()
+    tree = ast.parse(source)
+    class_for_product_node = next(
+        node
+        for node in tree.body
+        if isinstance(node, ast.FunctionDef) and node.name == "class_for_product"
+    )
+    for node in ast.walk(class_for_product_node):
+        if not isinstance(node, ast.Call):
+            continue
+        if getattr(node.func, "id", "") != "build_scoring_classification":
+            continue
+        assert all(keyword.arg != "route_module" for keyword in node.keywords)
 
 
 def test_domain_and_botanical_source_are_separate_for_amino_acid():

@@ -1391,6 +1391,161 @@ _CLASSIFICATION_PROBIOTIC_TEXT_RE = re.compile(
     r"\b(probiotic|lactobacillus|bifidobacterium|saccharomyces|bacillus|acidophilus|bifidus|cfu)\b",
     re.IGNORECASE,
 )
+_ROUTE_PRENATAL_KEYWORDS = re.compile(
+    r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
+    re.IGNORECASE,
+)
+_ROUTE_PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\b", re.IGNORECASE)
+_ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX = 2
+_ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS = 1.0
+_ROUTE_PROBIOTIC_PURE_STRAIN_MIN = 2
+_ROUTE_PROBIOTIC_VAGUE_TAXONOMY = frozenset({"", "general_supplement", "probiotic"})
+_ROUTE_NON_PROBIOTIC_HERO_TITLE_RE = re.compile(
+    r"\b(zinc|magnesium|calcium|iron|potassium|selenium|copper|chromium|iodine|"
+    r"vitamin|biotin|folate|folic|niacin|thiamine|riboflavin|"
+    r"protein|whey|casein|collagen|gelatin|"
+    r"fiber|fibre|prebiotic|psyllium|inulin|"
+    r"omega|fish\s*oil|krill|cod\s*liver|epa|dha|"
+    r"quercetin|curcumin|turmeric|creatine|coq10|ubiquinol|melatonin|ashwagandha)\b",
+    re.IGNORECASE,
+)
+_ROUTE_SPORTS_PREWORKOUT_RE = re.compile(r"\b(pre[\s-]?workout|preworkout)\b", re.IGNORECASE)
+_ROUTE_SPORTS_PROTEIN_NAME_RE = re.compile(
+    r"\b("
+    r"whey|casein|"
+    r"protein\s+(?:powder|isolate|concentrate|hydrolysate|hydrolyzed|blend|matrix)|"
+    r"mass\s+gainer|gainer"
+    r")\b",
+    re.IGNORECASE,
+)
+_ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
+    r"\b(creatine|beta[\s-]?alanine|citrulline|hmb|bcaa|eaa|essential amino|branched chain)\b",
+    re.IGNORECASE,
+)
+_ROUTE_SPORTS_NAME_EXCLUSION_RE = re.compile(
+    r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|sleep|calm|mood|stress|"
+    r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
+    re.IGNORECASE,
+)
+_ROUTE_OMEGA_NAME_KEYWORDS = (
+    "fish oil",
+    "omega-3",
+    "omega 3",
+    "omega3",
+    "krill",
+    "algae oil",
+    "algal oil",
+    "cod liver",
+    "epa+dha",
+    "epa dha",
+    "epa/dha",
+)
+_ROUTE_OMEGA_STRONG_OIL_NAME_KEYWORDS = (
+    "fish oil",
+    "krill",
+    "algae oil",
+    "algal oil",
+    "cod liver",
+    "epa+dha",
+    "epa dha",
+    "epa/dha",
+)
+_ROUTE_OMEGA_STANDALONE_RE = re.compile(r"\b(EPA|DHA)\b", re.IGNORECASE)
+_ROUTE_OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\b", re.IGNORECASE)
+_ROUTE_OMEGA_EFA_RE = re.compile(r"\bEFA(?:s)?\b", re.IGNORECASE)
+_ROUTE_OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
+_ROUTE_B_VITAMIN_CANONICALS = {
+    "vitamin_b1_thiamine",
+    "vitamin_b2_riboflavin",
+    "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid",
+    "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin",
+    "vitamin_b9_folate",
+    "vitamin_b12_cobalamin",
+}
+_ROUTE_MULTI_PANEL_CANONICALS = _ROUTE_B_VITAMIN_CANONICALS | {
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_k1",
+    "vitamin_k2",
+    "folate",
+    "iron",
+    "iodine",
+    "choline",
+    "zinc",
+    "magnesium",
+    "calcium",
+    "selenium",
+    "manganese",
+    "copper",
+    "chromium",
+    "molybdenum",
+}
+_ROUTE_PRENATAL_PANEL_ANCHORS = {"folate", "vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
+_ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS = {
+    "ala",
+    "alpha_linolenic_acid",
+    "alpha_linolenic_acid_ala",
+    "omega_3_fatty_acids",
+    "gla",
+    "gamma_linolenic_acid",
+    "cla",
+    "conjugated_linoleic_acid",
+    "oleic_acid",
+}
+_ROUTE_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
+_ROUTE_SPORTS_PROTEIN_CANONICALS = {
+    "whey_protein",
+    "casein",
+    "pea_protein",
+    "rice_protein",
+    "soy_protein",
+}
+_ROUTE_SPORTS_SINGLE_CANONICALS = {
+    "creatine_monohydrate",
+    "beta-alanine",
+    "beta_alanine",
+    "l_citrulline",
+    "hmb",
+}
+_ROUTE_BCAA_CANONICALS = {"l_leucine", "l_isoleucine", "l_valine"}
+_ROUTE_EAA_CANONICALS = {
+    "l_histidine",
+    "l_isoleucine",
+    "l_leucine",
+    "l_lysine",
+    "l_methionine",
+    "l_phenylalanine",
+    "l_threonine",
+    "l_tryptophan",
+    "l_valine",
+}
+_ROUTE_TAXONOMY_TO_MODULE = {
+    "probiotic": "probiotic",
+    "multivitamin": "multi_or_prenatal",
+    "b_complex": "multi_or_prenatal",
+    "omega_3": "omega",
+    "single_vitamin": "generic",
+    "single_mineral": "generic",
+    "vitamin_mineral_combo": "generic",
+    "herbal_botanical": "generic",
+    "protein_powder": "generic",
+    "collagen": "generic",
+    "greens_powder": "generic",
+    "electrolyte": "generic",
+    "pre_workout": "generic",
+    "amino_acid": "generic",
+    "fiber_digestive": "generic",
+    "sleep_support": "generic",
+    "immune_support": "generic",
+    "joint_support": "generic",
+    "beauty_hair_skin_nails": "generic",
+    "general_supplement": "generic",
+}
 
 
 def _valid_classification_origin(origin: Any) -> str:
@@ -1406,6 +1561,363 @@ def _legacy_route_module(product: Dict[str, Any]) -> str:
     except Exception:
         return "generic"
     return route if route in SCORING_ROUTE_MODULES else "generic"
+
+
+def _route_scoring_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    try:
+        return [
+            row for row in get_scoring_ingredients(product or {}, strict=True).rows
+            if isinstance(row, dict)
+        ]
+    except Exception:
+        return []
+
+
+def _route_name_text(product: Dict[str, Any]) -> str:
+    return " ".join(
+        str((product or {}).get(k) or "")
+        for k in ("product_name", "fullName", "brand_name", "bundleName")
+    )
+
+
+def _route_product_label_text(product: Dict[str, Any]) -> str:
+    return " ".join(str((product or {}).get(k) or "") for k in ("product_name", "fullName"))
+
+
+def _route_has_positive_quantity(row: Dict[str, Any]) -> bool:
+    return _positive_quantity(row) is not None
+
+
+def _route_positive_number(value: Any) -> bool:
+    try:
+        return value is not None and float(value) > 0
+    except (TypeError, ValueError):
+        return False
+
+
+def _route_number(value: Any) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _route_positive_canonicals(product: Dict[str, Any]) -> set[str]:
+    canonicals: set[str] = set()
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") == "product_level_evidence":
+            continue
+        canonical = _norm(row.get("canonical_id"))
+        if canonical and _route_has_positive_quantity(row):
+            canonicals.add(canonical)
+    return canonicals
+
+
+def _route_omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
+    omega_rows = 0
+    total_rows = 0
+    for row in _route_scoring_rows(product):
+        if (
+            row.get("scoring_input_kind") == "product_level_evidence"
+            and _norm(row.get("evidence_type")) != "omega_epa_dha_aggregate"
+        ):
+            continue
+        canonical = _norm(row.get("canonical_id"))
+        if not canonical or not _route_has_positive_quantity(row):
+            continue
+        total_rows += 1
+        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS:
+            omega_rows += 1
+    return omega_rows, total_rows
+
+
+def _route_has_primary_omega_panel(product: Dict[str, Any]) -> bool:
+    omega_rows, total_rows = _route_omega_panel_counts(product)
+    if omega_rows <= 0 or total_rows <= 0:
+        return False
+    return omega_rows == total_rows or (omega_rows / total_rows) >= 0.5
+
+
+def _route_has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
+    for row in _route_scoring_rows(product):
+        canonical = _norm(row.get("canonical_id"))
+        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS and _route_has_positive_quantity(row):
+            return True
+    return False
+
+
+def _route_has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
+    for row in _route_scoring_rows(product):
+        if _norm(row.get("evidence_type")) == "omega_epa_dha_aggregate":
+            return True
+    return False
+
+
+def _route_has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        evidence_type = _norm(row.get("evidence_type"))
+        canonical = _norm(row.get("canonical_id"))
+        if evidence_type == "omega_epa_dha_aggregate":
+            continue
+        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS or canonical in _ROUTE_OMEGA_PARENT_CANONICALS:
+            continue
+        return True
+    return False
+
+
+def _route_has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
+    if _route_has_any_epa_dha_row(product):
+        return False
+    for row in _route_scoring_rows(product):
+        if _norm(row.get("canonical_id")) in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS:
+            return True
+    return False
+
+
+def _route_has_non_omega_positive_scorable_panel(product: Dict[str, Any]) -> bool:
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") == "product_level_evidence":
+            continue
+        canonical = _norm(row.get("canonical_id"))
+        if not canonical or not _route_has_positive_quantity(row):
+            continue
+        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS or canonical in _ROUTE_OMEGA_PARENT_CANONICALS:
+            continue
+        if canonical in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS:
+            continue
+        return True
+    return False
+
+
+def _route_probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
+    payload = (product or {}).get("probiotic_data") or (product or {}).get("probiotic_detail") or {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _route_non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
+    iqd = _safe_dict((product or {}).get("ingredient_quality_data"))
+    rows = _safe_list(iqd.get("ingredients_scorable") or iqd.get("ingredients"))
+    count = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        taxonomy = _safe_dict(row.get("raw_taxonomy"))
+        category = _norm(taxonomy.get("category") or row.get("category"))
+        if category == "probiotic":
+            continue
+        count += 1
+    return count
+
+
+def _route_has_non_probiotic_hero(product: Dict[str, Any], name_text: str) -> bool:
+    primary_type = _primary_type(product)
+    if primary_type and primary_type not in _ROUTE_PROBIOTIC_VAGUE_TAXONOMY:
+        return True
+    return bool(_ROUTE_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""))
+
+
+def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
+    data = _route_probiotic_payload(product)
+    if not data:
+        return False
+
+    is_product = bool(data.get("is_probiotic_product") or data.get("is_probiotic"))
+    strain_count = int(data.get("total_strain_count") or 0)
+    has_cfu = (
+        bool(data.get("has_cfu"))
+        or _route_positive_number(data.get("total_cfu"))
+        or _route_positive_number(data.get("total_billion_count"))
+    )
+    total_billion = _route_number(data.get("total_billion_count"))
+    total_cfu = _route_number(data.get("total_cfu"))
+    high_cfu = (
+        total_billion >= _ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS
+        or total_cfu >= (_ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000)
+    )
+    name_signal = bool(_ROUTE_PROBIOTIC_NAME_RE.search(name_text or ""))
+
+    if not is_product or strain_count <= 0:
+        return False
+
+    non_probiotic_panel = _route_non_probiotic_scorable_count(product)
+    if (
+        non_probiotic_panel == 0
+        and strain_count >= _ROUTE_PROBIOTIC_PURE_STRAIN_MIN
+        and not _route_has_non_probiotic_hero(product, name_text)
+    ):
+        return True
+
+    if not (has_cfu or name_signal):
+        return False
+
+    primary_type = _primary_type(product)
+    if primary_type and primary_type not in _ROUTE_PROBIOTIC_VAGUE_TAXONOMY and not name_signal:
+        if not (high_cfu and non_probiotic_panel <= _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX):
+            return False
+
+    if strain_count >= non_probiotic_panel:
+        return True
+    if non_probiotic_panel <= _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
+        return True
+    return False
+
+
+def _route_is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
+    if _route_has_primary_omega_panel(product):
+        return True
+    if _ROUTE_OMEGA_369_RE.search(name_text or "") and not _route_has_any_epa_dha_row(product):
+        return False
+    if _ROUTE_OMEGA_EFA_RE.search(name_text or ""):
+        return _route_has_any_epa_dha_row(product) or _route_has_omega_scoring_evidence(product)
+    if _route_has_non_epa_dha_fatty_acid_panel(product):
+        return False
+
+    lowered = (name_text or "").lower()
+    if any(token in lowered for token in _ROUTE_OMEGA_STRONG_OIL_NAME_KEYWORDS):
+        if _ROUTE_OMEGA_STANDALONE_RE.search(name_text or ""):
+            return True
+        if _route_has_omega_scoring_evidence(product):
+            return True
+        if _primary_type(product) == "omega_3":
+            return True
+        if _route_has_non_omega_product_level_evidence(product):
+            return False
+        return not _route_has_non_omega_positive_scorable_panel(product)
+    if any(token in lowered for token in _ROUTE_OMEGA_NAME_KEYWORDS):
+        if _route_has_omega_scoring_evidence(product):
+            return True
+        if _ROUTE_OMEGA_STANDALONE_RE.search(name_text or ""):
+            return True
+        return _primary_type(product) == "omega_3"
+    if _route_has_omega_scoring_evidence(product):
+        return True
+    return bool(_ROUTE_OMEGA_STANDALONE_RE.search(name_text or ""))
+
+
+def _route_is_b_complex_eligible(product: Dict[str, Any], name_text: str) -> bool:
+    lowered = (name_text or "").lower()
+    if "b-complex" in lowered or "b complex" in lowered:
+        return True
+
+    b_vitamins: set[str] = set()
+    non_b_scorable = 0
+    for row in _route_scoring_rows(product):
+        canonical = _norm(row.get("canonical_id"))
+        if not canonical:
+            continue
+        if canonical in _ROUTE_B_VITAMIN_CANONICALS:
+            b_vitamins.add(canonical)
+        else:
+            non_b_scorable += 1
+    return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
+
+
+def _route_has_broad_prenatal_multi_panel(product: Dict[str, Any]) -> bool:
+    canonicals = _route_positive_canonicals(product)
+    multi_nutrients = canonicals & _ROUTE_MULTI_PANEL_CANONICALS
+    prenatal_anchors = canonicals & _ROUTE_PRENATAL_PANEL_ANCHORS
+    return len(multi_nutrients) >= 5 and len(prenatal_anchors) >= 2
+
+
+def _route_is_prenatal_multi_intent(product: Dict[str, Any], name_text: str) -> bool:
+    if not _ROUTE_PRENATAL_KEYWORDS.search(_route_product_label_text(product)):
+        return False
+    primary_type = _primary_type(product)
+    if primary_type == "multivitamin":
+        return True
+    if primary_type == "b_complex":
+        return _route_is_b_complex_eligible(product, name_text)
+    return _route_has_broad_prenatal_multi_panel(product)
+
+
+def _route_has_sports_primary_dose_evidence(product: Dict[str, Any]) -> bool:
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        if _norm(row.get("evidence_type")) != "sports_primary_dose":
+            continue
+        if _route_has_positive_quantity(row):
+            return True
+    return False
+
+
+def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
+    primary_type = _primary_type(product)
+    if _ROUTE_SPORTS_PREWORKOUT_RE.search(name_text or ""):
+        return True
+    if primary_type == "pre_workout":
+        return True
+    if _route_has_sports_primary_dose_evidence(product):
+        return True
+
+    canonicals = _route_positive_canonicals(product)
+    if canonicals & _ROUTE_SPORTS_PROTEIN_CANONICALS:
+        return primary_type == "protein_powder" or bool(_ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""))
+    if primary_type == "protein_powder" and _ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""):
+        return True
+    if _ROUTE_BCAA_CANONICALS.issubset(canonicals) and (
+        primary_type in {"amino_acid", "pre_workout"} or _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or "")
+    ):
+        return True
+    if len(canonicals & _ROUTE_EAA_CANONICALS) >= 6 and (
+        primary_type in {"amino_acid", "pre_workout"} or _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or "")
+    ):
+        return True
+    if canonicals & _ROUTE_SPORTS_SINGLE_CANONICALS:
+        if _ROUTE_SPORTS_NAME_EXCLUSION_RE.search(name_text or ""):
+            return False
+        return bool(_ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or ""))
+    return False
+
+
+def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]]:
+    """Independent ScoringClassification v1 route decision.
+
+    This mirrors the current v4 route semantics so migration can prove parity,
+    but lives in the classification contract. The legacy router remains only as
+    an audit comparison target.
+    """
+    primary_type = _primary_type(product)
+    name_text = _route_name_text(product)
+
+    if primary_type == "probiotic" or (
+        primary_type != "greens_powder" and _route_is_probiotic_class(product, name_text)
+    ):
+        return "probiotic", "profile_content:probiotic", ["probiotic_identity_or_cfu"]
+
+    if _ROUTE_PRENATAL_KEYWORDS.search(_route_product_label_text(product)):
+        if _route_has_primary_omega_panel(product):
+            return "omega", "prenatal_title_with_primary_omega_panel", ["prenatal_title", "primary_omega_panel"]
+        if _route_is_prenatal_multi_intent(product, name_text):
+            return "multi_or_prenatal", "prenatal_multi_intent", ["prenatal_title", "multi_panel_or_taxonomy"]
+
+    if _route_is_sports_class(product, name_text):
+        return "sports", "profile_content:sports", ["sports_identity_or_dose"]
+
+    if primary_type:
+        module = _ROUTE_TAXONOMY_TO_MODULE.get(primary_type)
+        if module == "multi_or_prenatal":
+            if primary_type == "b_complex" and not _route_is_b_complex_eligible(product, name_text):
+                return "generic", "b_complex_taxonomy_without_route_eligible_panel", ["taxonomy:b_complex"]
+            return "multi_or_prenatal", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
+        if module == "omega":
+            if _route_is_omega_class(product, name_text):
+                return "omega", f"taxonomy:{primary_type}:omega_validated", [f"taxonomy:{primary_type}", "omega_evidence"]
+            return "generic", f"taxonomy:{primary_type}:omega_evidence_missing", [f"taxonomy:{primary_type}"]
+        if module == "sports":
+            if _route_is_sports_class(product, name_text):
+                return "sports", f"taxonomy:{primary_type}:sports_validated", [f"taxonomy:{primary_type}", "sports_evidence"]
+            return "generic", f"taxonomy:{primary_type}:sports_evidence_missing", [f"taxonomy:{primary_type}"]
+        if module == "generic":
+            if _route_is_omega_class(product, name_text):
+                return "omega", f"taxonomy:{primary_type}:omega_evidence_override", [f"taxonomy:{primary_type}", "omega_evidence"]
+            return "generic", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
+
+    if _route_is_omega_class(product, name_text):
+        return "omega", "profile_content:omega", ["omega_evidence"]
+    return "generic", "generic_safe_default", ["generic_safe_default"]
 
 
 def _classification_identity(row: Dict[str, Any]) -> str:
@@ -1582,13 +2094,15 @@ def build_scoring_classification(
     """Build ScoringClassification v1 for a product.
 
     Total function: never raises, always returns a schema-valid dict. In
-    compatibility mode the route is seeded by the current v4 router baseline so
-    migration can prove parity before native enrichment persists this contract.
+    compatibility mode the route is derived from the current enriched blob by
+    this contract. The legacy router is kept as an audit-only parity target.
     """
     product = product if isinstance(product, dict) else {}
     origin = _valid_classification_origin(classification_origin)
     failed = False
     failure_reason: Optional[str] = None
+    route_reason = ""
+    route_evidence: List[str] = []
     rows: List[Dict[str, Any]] = []
     roles: List[Dict[str, Any]] = []
 
@@ -1602,13 +2116,22 @@ def build_scoring_classification(
 
     if route_module not in SCORING_ROUTE_MODULES:
         try:
-            route_module = _legacy_route_module(product)
+            route_module, route_reason, route_evidence = _classify_route_module(product)
         except Exception as exc:  # pragma: no cover
             failed = True
             failure_reason = failure_reason or f"route_failed:{exc.__class__.__name__}"
             route_module = "generic"
+            route_reason = failure_reason
+            route_evidence = ["route_classification_failed"]
+    else:
+        route_reason = f"explicit_route:{route_module}"
+        route_evidence = [route_module]
     if route_module not in SCORING_ROUTE_MODULES:
         route_module = "generic"
+        if not route_reason:
+            route_reason = "invalid_route_generic_fallback"
+        if not route_evidence:
+            route_evidence = ["invalid_route_generic_fallback"]
 
     if rows:
         try:
@@ -1666,7 +2189,7 @@ def build_scoring_classification(
         failed=failed,
         forced_generic_reason=forced_generic_reason,
     )
-    route_evidence = [route_module]
+    route_evidence = list(route_evidence or [route_module])
     if rows:
         route_evidence.append("scoring_rows_present")
     if forced_generic_reason:
@@ -1678,7 +2201,7 @@ def build_scoring_classification(
         "classification_failed": failed,
         "classification_failure_reason": failure_reason,
         "route_module": route_module,
-        "route_reason": forced_generic_reason or f"compatibility_baseline:{route_module}",
+        "route_reason": forced_generic_reason or route_reason or f"classification_route:{route_module}",
         "route_confidence": confidence,
         "route_evidence": route_evidence,
         "ingredients": row_contracts,
@@ -1756,22 +2279,17 @@ def _role_mass_mg(row: Dict[str, Any]) -> Optional[float]:
 
 
 def _role_driver_canonicals(module: str) -> set:
-    """Module driver canonical IDs, sourced from the router (single source of
-    truth). Lazy import avoids the router<->contract circular import at load."""
-    try:
-        from scoring_v4 import router as _router  # lazy: router imports this module
-    except ImportError:  # pragma: no cover - router optional at import time
-        return set()
+    """Module driver canonical IDs from the scoring classification contract."""
     if module == "omega":
         # EPA/DHA AND the fish-oil/krill/algal parents that route a product to
         # the omega module — a parent-only row is still the module driver. (WR-01)
-        return set(_router._OMEGA_INGREDIENT_CANONICALS) | set(_router._OMEGA_PARENT_CANONICALS)
+        return set(_ROUTE_OMEGA_INGREDIENT_CANONICALS) | set(_ROUTE_OMEGA_PARENT_CANONICALS)
     if module == "sports":
         return (
-            set(_router._SPORTS_PROTEIN_CANONICALS)
-            | set(_router._SPORTS_SINGLE_CANONICALS)
-            | set(_router._BCAA_CANONICALS)
-            | set(_router._EAA_CANONICALS)
+            set(_ROUTE_SPORTS_PROTEIN_CANONICALS)
+            | set(_ROUTE_SPORTS_SINGLE_CANONICALS)
+            | set(_ROUTE_BCAA_CANONICALS)
+            | set(_ROUTE_EAA_CANONICALS)
         )
     return set()
 
