@@ -55,6 +55,7 @@ _PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\
 # vitamin adjuncts) can still be probiotic-primary when the name says so. Above this,
 # a non-probiotic panel means the strain is an adjunct, not the product's identity.
 _PROBIOTIC_ADJUNCT_PANEL_MAX = 2
+_PROBIOTIC_HIGH_CFU_BILLIONS = 1.0
 # A product whose ONLY scorable identity is >= this many named strains is a
 # probiotic even without CFU disclosure or a "probiotic" name token (e.g.
 # FLORASSIST: 10 strains, no CFU, brand name lacks "probiotic"). Requires panel==0
@@ -130,6 +131,7 @@ _OMEGA_STRONG_OIL_NAME_KEYWORDS = (
 # Case-insensitive so labels like "Pure epa" still route.
 _OMEGA_STANDALONE_RE = re.compile(r"\b(EPA|DHA)\b", re.IGNORECASE)
 _OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\b", re.IGNORECASE)
+_OMEGA_EFA_RE = re.compile(r"\bEFA(?:s)?\b", re.IGNORECASE)
 
 # Per scripts/data/omega_rubric.json router.ingredient_panel_canonicals.
 # Strong omega signal — operates on the enricher's canonicalized identity
@@ -353,6 +355,13 @@ def _positive_number(value: Any) -> bool:
         return False
 
 
+def _number(value: Any) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+
 def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
     """Count scorable active rows that are NOT probiotic strains.
 
@@ -413,6 +422,11 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     has_cfu = bool(data.get("has_cfu")) or _positive_number(data.get("total_cfu")) or _positive_number(
         data.get("total_billion_count")
     )
+    total_billion = _number(data.get("total_billion_count"))
+    total_cfu = _number(data.get("total_cfu"))
+    high_cfu = total_billion >= _PROBIOTIC_HIGH_CFU_BILLIONS or total_cfu >= (
+        _PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000
+    )
     name_signal = bool(_PROBIOTIC_NAME_RE.search(name_text or ""))
 
     if not is_product or strain_count <= 0:
@@ -439,6 +453,16 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     # dominant scorable identity is something else (multivitamin, whey, hydration).
     if not (has_cfu or name_signal):
         return False
+
+    primary_type = _read_primary_type(product)
+    if primary_type and primary_type not in _PROBIOTIC_VAGUE_TAXONOMY and not name_signal:
+        # Specific non-probiotic taxonomy (multivitamin, single vitamin/mineral,
+        # fiber, immune, etc.) should not be hijacked by tiny probiotic adjuncts.
+        # Allow override without a name token only for genuinely high-CFU products
+        # with a small adjunct panel, e.g. immune probiotic + vitamin C/zinc.
+        if not (high_cfu and non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX):
+            return False
+
     if strain_count >= non_probiotic_panel:
         return True
     if non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
@@ -479,6 +503,8 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     # should continue through the normal omega checks below.
     if _OMEGA_369_RE.search(name_text) and not _has_any_epa_dha_row(product):
         return False
+    if _OMEGA_EFA_RE.search(name_text or ""):
+        return _has_any_epa_dha_row(product) or _has_omega_scoring_evidence(product)
     if _has_non_epa_dha_fatty_acid_panel(product):
         return False
 

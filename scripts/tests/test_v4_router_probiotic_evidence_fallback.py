@@ -86,6 +86,57 @@ def test_prebiotic_only_name_does_not_route_to_probiotic_without_probiotic_word(
     assert class_for_product(product) == "generic"
 
 
+def test_specific_vitamin_mineral_taxonomy_with_low_cfu_adjunct_stays_generic():
+    """A tiny probiotic adjunct must not hijack a specific vitamin/mineral SKU."""
+    product = _product(
+        product_name="Cal-Mag Zinc + D3",
+        primary_type="multivitamin",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 6,
+            "has_cfu": True,
+            "total_cfu": 90_000_000,
+            "total_billion_count": 0.09,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "calcium", "quantity": 500, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "magnesium", "quantity": 250, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "zinc", "quantity": 15, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "vitamin_d", "quantity": 400, "unit": "IU", "category": "vitamins"},
+                {"canonical_id": "vitamin_k", "quantity": 50, "unit": "mcg", "category": "vitamins"},
+                {"canonical_id": "boron", "quantity": 1, "unit": "mg", "category": "minerals"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "multi_or_prenatal"
+
+
+def test_high_cfu_low_adjunct_product_can_still_route_probiotic_without_name():
+    """High-CFU products with only a tiny adjunct panel are still probiotic
+    even when the taxonomy is functional rather than probiotic."""
+    product = _product(
+        product_name="Fortify Dual Action Immune Defense 20 Billion",
+        primary_type="immune_support",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 5,
+            "has_cfu": True,
+            "total_cfu": 20_000_000_000,
+            "total_billion_count": 20.0,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "vitamin_c", "quantity": 90, "unit": "mg", "category": "vitamins"},
+                {"canonical_id": "zinc", "quantity": 10, "unit": "mg", "category": "minerals"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
 def test_epa_dha_name_without_panel_routes_omega_for_completeness_gate():
     product = {
         "product_name": "Omega-3 EPA/DHA",
@@ -98,6 +149,44 @@ def test_epa_dha_name_without_panel_routes_omega_for_completeness_gate():
             "ingredients": [
                 {"canonical_id": "vitamin_a", "quantity": 500, "unit": "IU"},
                 {"canonical_id": "vitamin_c", "quantity": 6, "unit": "mg"},
+            ]
+        },
+    }
+
+    assert class_for_product(product) == "omega"
+
+
+def test_efa_blend_with_disclosed_epa_dha_routes_omega_despite_mixed_fatty_acids():
+    """EFA products can include borage/evening-primrose/Vit E adjuncts; disclosed
+    EPA/DHA plus EFA label intent should still use the omega module."""
+    product = {
+        "product_name": "EFA Blend for Kids",
+        "primary_type": "omega_3",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "fish_oil", "quantity": 300, "unit": "mg"},
+                {"canonical_id": "epa", "quantity": 50, "unit": "mg"},
+                {"canonical_id": "dha", "quantity": 30, "unit": "mg"},
+                {"canonical_id": "evening_primrose_oil", "quantity": 50, "unit": "mg"},
+                {"canonical_id": "vitamin_e", "quantity": 3, "unit": "mg"},
+            ]
+        },
+    }
+
+    assert class_for_product(product) == "omega"
+
+
+def test_omega_369_with_disclosed_epa_dha_routes_omega():
+    product = {
+        "product_name": "Mega Omega 3/6/9",
+        "primary_type": "omega_3",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "fish_oil", "quantity": 800, "unit": "mg"},
+                {"canonical_id": "epa", "quantity": 80, "unit": "mg"},
+                {"canonical_id": "dha", "quantity": 60, "unit": "mg"},
+                {"canonical_id": "alpha_linolenic_acid", "quantity": 100, "unit": "mg"},
+                {"canonical_id": "gamma_linolenic_acid", "quantity": 40, "unit": "mg"},
             ]
         },
     }

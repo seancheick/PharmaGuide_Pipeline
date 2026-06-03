@@ -213,6 +213,39 @@ def test_source_botanical_antioxidant_still_uses_botanical_profile():
     assert is_botanical_product(p) is True
 
 
+def test_antioxidant_with_botanical_source_form_uses_botanical_profile():
+    p = _product("Quercetin", [
+        _row(
+            "quercetin",
+            "Quercetin",
+            500,
+            "mg",
+            category="antioxidants",
+            raw_taxonomy={
+                "category": "non-nutrient/non-botanical",
+                "forms": [{"name": "Sophorae japonica", "category": "botanical"}],
+            },
+        ),
+    ])
+    assert is_botanical_product(p) is True
+
+
+def test_antioxidant_without_botanical_source_stays_generic():
+    """Setria/glutathione is a fermentation-derived antioxidant, not a
+    botanical, even though a companion standardized-entry exists."""
+    p = _product("Liposomal Glutathione", [
+        _row(
+            "glutathione",
+            "Setria",
+            250,
+            "mg",
+            category="antioxidants",
+            raw_taxonomy={"category": "non-nutrient/non-botanical", "forms": []},
+        ),
+    ])
+    assert is_botanical_product(p) is False
+
+
 def test_duplicate_canonical_keeps_strongest_role_for_nonbotanical_hero():
     """Duplicate canonical rows must not let a later adjunct erase title ownership."""
     p = _product("Digestive Enzyme with Ginger", [

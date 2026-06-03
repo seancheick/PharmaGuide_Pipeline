@@ -80,6 +80,7 @@ _NON_BOTANICAL_RAW_CATEGORIES = frozenset({
     "fat",
     "enzyme",
 })
+_BOTANICAL_SOURCE_FORM_CATEGORIES = frozenset({"botanical", "herb"})
 
 _PLANT_PARTS = (
     "root", "leaf", "leaves", "bark", "flower", "seed", "fruit", "berry",
@@ -216,6 +217,13 @@ def _is_botanical_active(row: Dict[str, Any]) -> bool:
     category_key = category.replace("-", "_").replace(" ", "_")
     raw_category = _norm(tax.get("category"))
     if category_key in _NON_BOTANICAL_ACTIVE_CATEGORIES or raw_category in _NON_BOTANICAL_RAW_CATEGORIES:
+        return False
+    raw_forms = tax.get("forms") if isinstance(tax.get("forms"), list) else []
+    has_botanical_source_form = any(
+        isinstance(form, dict) and _norm(form.get("category")) in _BOTANICAL_SOURCE_FORM_CATEGORIES
+        for form in raw_forms
+    )
+    if category_key == "antioxidants" and raw_category != "botanical" and not has_botanical_source_form:
         return False
     if _norm(tax.get("category")) == "botanical" or _norm(row.get("category")) == "botanical":
         return True

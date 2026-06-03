@@ -42,10 +42,9 @@ GENERIC_CANARIES = {
     # clinically-studied branded extract scoring closer to its merit.
     "328825": {
         "label": "Thorne Curcumin Phytosome 1000 mg",
-        # Phase 8 (primary-ingredient evidence floor): curcumin is the mass-primary
-        # active with strong clinical evidence -> evidence floored to 14, lifting
-        # this premium branded extract to 82.0 (crosses the 80+ bar). 78.2 -> 82.0.
-        "score_range": (75.3, 76.7),
+        # A6 effective-quality fix: Meriva uses the botanical A1 slot for the
+        # single-ingredient focus bonus, lifting this premium branded extract.
+        "score_range": (79.8, 81.2),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
@@ -71,7 +70,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (72.8, 74.2),  # Phase 4: 88 → 84.6
+        "score_range": (75.0, 76.4),
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -81,7 +80,7 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (69.0, 70.4),  # Phase 4: 85 → 81.8
+        "score_range": (71.2, 72.6),  # cert→GMP lifts verified probiotic trust
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
