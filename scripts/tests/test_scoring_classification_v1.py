@@ -323,3 +323,47 @@ def test_profile_audit_not_ready_when_failure_changes_profile():
     assert summary["classification_failed_count"] == 1
     assert summary["failure_revoked_profile_count"] == 1
     assert summary["ready"] is False
+
+
+def test_profile_audit_reports_divergence_reason_buckets():
+    from api_audit.audit_v4_profile_consistency import summarize
+
+    summary = summarize(
+        rows=[
+            {
+                "dsld_id": "x",
+                "profile": "botanical",
+                "old_profile_eligible": False,
+                "contract_profile_eligible": True,
+                "profile_diverged": True,
+                "profile_divergence_reason": "contract_grants_recovered_botanical_rows",
+                "classification_failed": False,
+                "failure_granted_profile": False,
+                "failure_revoked_profile": False,
+                "v4_verdict": "SAFE",
+            },
+            {
+                "dsld_id": "y",
+                "profile": "collagen",
+                "old_profile_eligible": True,
+                "contract_profile_eligible": False,
+                "profile_diverged": True,
+                "profile_divergence_reason": "contract_revokes_collagen_mass_or_product_intent",
+                "classification_failed": False,
+                "failure_granted_profile": False,
+                "failure_revoked_profile": False,
+                "v4_verdict": "SAFE",
+            },
+        ],
+        canary_rows=[],
+        allowlist={},
+        elapsed_seconds=0.01,
+    )
+
+    assert summary["profile_divergence_reasons"] == {
+        "contract_grants_recovered_botanical_rows": 1,
+        "contract_revokes_collagen_mass_or_product_intent": 1,
+    }
+    assert summary["profile_divergence_reasons_by_profile"]["botanical"] == {
+        "contract_grants_recovered_botanical_rows": 1,
+    }

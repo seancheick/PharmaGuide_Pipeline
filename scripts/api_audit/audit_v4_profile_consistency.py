@@ -189,6 +189,83 @@ def _profile_evidence(contract: Dict[str, Any], profile: str) -> str:
     return str(evidence or "")
 
 
+def _profile_payload(contract: Dict[str, Any], profile: str) -> Dict[str, Any]:
+    payload = contract.get("profile_eligibility")
+    if not isinstance(payload, dict):
+        return {}
+    profile_payload = payload.get(profile)
+    return profile_payload if isinstance(profile_payload, dict) else {}
+
+
+def _profile_eligible_row_count(contract: Dict[str, Any], profile: str) -> int:
+    value = _profile_payload(contract, profile).get("eligible_row_count")
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _active_row_count(product: Dict[str, Any]) -> int:
+    iqd = product.get("ingredient_quality_data")
+    if not isinstance(iqd, dict):
+        return 0
+    rows = iqd.get("ingredients_scorable")
+    return len(rows) if isinstance(rows, list) else 0
+
+
+def _contract_row_count(contract: Dict[str, Any]) -> int:
+    rows = contract.get("ingredients")
+    return len(rows) if isinstance(rows, list) else 0
+
+
+def _profile_divergence_direction(old_eligible: bool, contract_eligible: bool) -> str:
+    if old_eligible == contract_eligible:
+        return "aligned"
+    return "contract_grants" if contract_eligible else "contract_revokes"
+
+
+def _profile_divergence_reason(
+    product: Dict[str, Any],
+    profile: str,
+    contract: Dict[str, Any],
+    *,
+    old_eligible: bool,
+    contract_eligible: bool,
+    evidence: str,
+) -> str:
+    if old_eligible == contract_eligible:
+        return "aligned"
+
+    direction = _profile_divergence_direction(old_eligible, contract_eligible)
+    active_count = _active_row_count(product)
+    contract_count = _contract_row_count(contract)
+    eligible_count = _profile_eligible_row_count(contract, profile)
+
+    if profile == "botanical":
+        if direction == "contract_grants":
+            if contract_count > active_count:
+                return "contract_grants_recovered_botanical_rows"
+            if "standardized_botanical_source_db" in evidence:
+                return "contract_grants_standardized_botanical_source"
+            if "raw_taxonomy_botanical" in evidence or "botanical_source_form" in evidence or "botanical_source_text" in evidence:
+                return "contract_grants_positive_botanical_source"
+            return "contract_grants_botanical_unclassified"
+        if not evidence or eligible_count == 0:
+            return "contract_revokes_reference_membership_without_source_evidence"
+        return "contract_revokes_role_materiality_or_intent"
+
+    if profile == "collagen":
+        if direction == "contract_grants":
+            if contract_count > active_count:
+                return "contract_grants_recovered_collagen_rows"
+            return "contract_grants_collagen_identity"
+        if not evidence or eligible_count == 0:
+            return "contract_revokes_missing_collagen_identity"
+        return "contract_revokes_collagen_mass_or_product_intent"
+
+    return f"{direction}_{profile}"
+
+
 def _profile_row(
     product: Dict[str, Any],
     profile: str,
@@ -202,6 +279,8 @@ def _profile_row(
     old_eligible = _old_profile_eligibility(product, profile, old_route)
     contract_eligible = _contract_profile(contract, profile)
     classification_failed = bool(contract.get("classification_failed"))
+    evidence = _profile_evidence(contract, profile)
+    direction = _profile_divergence_direction(old_eligible, contract_eligible)
     return {
         "dsld_id": canary._dsld_id(product),
         "brand_name": product.get("brand_name"),
@@ -213,12 +292,24 @@ def _profile_row(
         "old_profile_eligible": old_eligible,
         "contract_profile_eligible": contract_eligible,
         "profile_diverged": old_eligible != contract_eligible,
+        "profile_divergence_direction": direction,
+        "profile_divergence_reason": _profile_divergence_reason(
+            product,
+            profile,
+            contract,
+            old_eligible=old_eligible,
+            contract_eligible=contract_eligible,
+            evidence=evidence,
+        ),
+        "active_row_count": _active_row_count(product),
+        "contract_row_count": _contract_row_count(contract),
+        "contract_eligible_row_count": _profile_eligible_row_count(contract, profile),
         "classification_failed": classification_failed,
         "classification_failure_reason": contract.get("classification_failure_reason"),
         "failure_granted_profile": classification_failed and not old_eligible and contract_eligible,
         "failure_revoked_profile": classification_failed and old_eligible and not contract_eligible,
         "route_confidence": contract.get("route_confidence"),
-        "profile_evidence": _profile_evidence(contract, profile),
+        "profile_evidence": evidence,
         "v4_verdict": verdict,
         "v4_score": score,
     }
@@ -280,17 +371,28 @@ def summarize(
     failure_revokes = [row for row in rows if row.get("failure_revoked_profile")]
     canary_failures = [row for row in canary_rows if not row.get("passed")]
     by_profile = defaultdict(Counter)
+    by_reason = Counter()
+    by_profile_reason = defaultdict(Counter)
     for row in rows:
         profile = str(row.get("profile"))
         by_profile[profile]["old_true"] += bool(row.get("old_profile_eligible"))
         by_profile[profile]["contract_true"] += bool(row.get("contract_profile_eligible"))
         by_profile[profile]["diverged"] += bool(row.get("profile_diverged"))
+        if row.get("profile_diverged"):
+            reason = str(row.get("profile_divergence_reason") or "unknown")
+            by_reason[reason] += 1
+            by_profile_reason[profile][reason] += 1
     product_count = len(rows) // len(PROFILE_NAMES) if len(rows) >= len(PROFILE_NAMES) else len(rows)
     return {
         "generated": datetime.now(timezone.utc).isoformat(),
         "total_products": product_count,
         "total_profile_rows": len(rows),
         "profile_counts": {profile: dict(counter) for profile, counter in sorted(by_profile.items())},
+        "profile_divergence_reasons": dict(by_reason.most_common()),
+        "profile_divergence_reasons_by_profile": {
+            profile: dict(counter.most_common())
+            for profile, counter in sorted(by_profile_reason.items())
+        },
         "profile_divergence_count": len(divergences),
         "unsigned_profile_divergence_count": len(unsigned_divergences),
         "classification_failed_count": len(failed_rows),
@@ -320,6 +422,40 @@ def _write_csv(rows: List[Dict[str, Any]], path: Path, fields: List[str]) -> Non
             writer.writerow({field: row.get(field) for field in fields})
 
 
+def _reason_summary_rows(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    grouped: Dict[tuple[str, str, str], Counter] = defaultdict(Counter)
+    examples: Dict[tuple[str, str, str], Dict[str, Any]] = {}
+    for row in rows:
+        if not row.get("profile_diverged"):
+            continue
+        key = (
+            str(row.get("profile")),
+            str(row.get("profile_divergence_direction")),
+            str(row.get("profile_divergence_reason")),
+        )
+        grouped[key]["count"] += 1
+        grouped[key][str(row.get("v4_verdict"))] += 1
+        examples.setdefault(key, row)
+
+    output: List[Dict[str, Any]] = []
+    for key, counter in sorted(grouped.items(), key=lambda item: (-item[1]["count"], item[0])):
+        example = examples[key]
+        output.append({
+            "profile": key[0],
+            "direction": key[1],
+            "reason": key[2],
+            "count": counter["count"],
+            "safe_count": counter.get("SAFE", 0),
+            "caution_count": counter.get("CAUTION", 0),
+            "poor_count": counter.get("POOR", 0),
+            "not_scored_count": counter.get("NOT_SCORED", 0),
+            "example_dsld_id": example.get("dsld_id"),
+            "example_product_name": example.get("product_name"),
+            "example_profile_evidence": example.get("profile_evidence"),
+        })
+    return output
+
+
 FIELDS = [
     "dsld_id",
     "brand_name",
@@ -331,6 +467,11 @@ FIELDS = [
     "old_profile_eligible",
     "contract_profile_eligible",
     "profile_diverged",
+    "profile_divergence_direction",
+    "profile_divergence_reason",
+    "active_row_count",
+    "contract_row_count",
+    "contract_eligible_row_count",
     "classification_failed",
     "classification_failure_reason",
     "failure_granted_profile",
@@ -361,6 +502,23 @@ def main() -> int:
     (args.out_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     _write_csv(rows, args.out_dir / "frozen_profile_baseline.csv", FIELDS)
     _write_csv([row for row in rows if row.get("profile_diverged")], args.out_dir / "profile_divergences.csv", FIELDS)
+    _write_csv(
+        _reason_summary_rows(rows),
+        args.out_dir / "profile_divergence_reason_summary.csv",
+        [
+            "profile",
+            "direction",
+            "reason",
+            "count",
+            "safe_count",
+            "caution_count",
+            "poor_count",
+            "not_scored_count",
+            "example_dsld_id",
+            "example_product_name",
+            "example_profile_evidence",
+        ],
+    )
     _write_csv(canary_rows, args.out_dir / "canaries.csv", ["canary_id", "passed", *FIELDS])
 
     print(json.dumps(summary, indent=2))
