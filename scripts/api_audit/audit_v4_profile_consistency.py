@@ -168,9 +168,9 @@ def _contract_profile(contract: Dict[str, Any], profile: str) -> bool:
 
 def _old_profile_eligibility(product: Dict[str, Any], profile: str, old_route: str) -> bool:
     if profile == "botanical":
-        return bool(is_botanical_product(product))
+        return old_route == "generic" and bool(is_botanical_product(product))
     if profile == "collagen":
-        return bool(is_collagen_product(product))
+        return old_route == "generic" and bool(is_collagen_product(product))
     if profile in {"omega", "probiotic", "sports"}:
         return old_route == profile
     return False

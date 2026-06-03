@@ -2055,15 +2055,173 @@ def _route_confidence(
     return "low"
 
 
-def _product_profile_summary(row_contracts: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+_PROFILE_PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
+_PROFILE_BOTANICAL_MATERIALITY_FRACTION = 0.5
+_PROFILE_TITLE_SEPARATORS = (" with ", " plus ", " and ", " featuring ", " + ", " & ", "+", "&")
+_PROFILE_ENZYME_TITLE_RE = re.compile(r"\b(enzyme|enzymes|digestive)\b", re.IGNORECASE)
+
+
+def _row_profile_eligible(row_contract: Dict[str, Any], profile_name: str) -> bool:
+    return _safe_dict(_safe_dict(row_contract.get("profile_eligibility")).get(profile_name)).get("eligible") is True
+
+
+def _profile_title_boundary(title: str) -> int:
+    boundary = len(title)
+    for sep in _PROFILE_TITLE_SEPARATORS:
+        index = title.find(sep)
+        if index != -1:
+            boundary = min(boundary, index)
+    return boundary
+
+
+def _profile_row_title_pos(row_contract: Dict[str, Any], title: str) -> Optional[int]:
+    positions: List[int] = []
+    candidates = [
+        _norm(row_contract.get("canonical_id")).replace("_", " "),
+        _norm(row_contract.get("name")),
+    ]
+    for candidate in candidates:
+        if not candidate:
+            continue
+        index = title.find(candidate)
+        if index != -1:
+            positions.append(index)
+    return min(positions) if positions else None
+
+
+def _profile_botanical_is_title_head(
+    product: Dict[str, Any],
+    botanical_contract: Dict[str, Any],
+    non_botanical_heroes: List[Dict[str, Any]],
+) -> bool:
+    title = _norm(product.get("product_name") or product.get("fullName"))
+    if not title:
+        return False
+    boundary = _profile_title_boundary(title)
+    botanical_pos = _profile_row_title_pos(botanical_contract, title)
+    non_botanical_positions = [
+        pos for pos in (_profile_row_title_pos(row, title) for row in non_botanical_heroes)
+        if pos is not None
+    ]
+    botanical_in_head = botanical_pos is not None and botanical_pos < boundary
+    non_botanical_in_head = any(pos < boundary for pos in non_botanical_positions)
+    if botanical_in_head and not non_botanical_in_head:
+        return True
+    if non_botanical_in_head and not botanical_in_head:
+        return False
+    if botanical_pos is not None and non_botanical_positions:
+        return botanical_pos < min(non_botanical_positions)
+    return False
+
+
+def _profile_has_enzyme_product_intent(
+    product: Dict[str, Any],
+    non_botanical_pairs: List[tuple[Dict[str, Any], Dict[str, Any]]],
+) -> bool:
+    title = str(product.get("product_name") or product.get("fullName") or "")
+    primary_type = _primary_type(product)
+    if primary_type not in {"fiber_digestive", "digestive_enzyme"} and not _PROFILE_ENZYME_TITLE_RE.search(title):
+        return False
+    return any(contract.get("ingredient_domain") == "enzyme" for _, contract in non_botanical_pairs)
+
+
+def _profile_is_material(primary_mass_mg: float, other_pairs: List[tuple[Dict[str, Any], Dict[str, Any]]]) -> bool:
+    max_other_mass = max((_role_mass_mg(row) or 0.0 for row, _ in other_pairs), default=0.0)
+    if max_other_mass <= 0:
+        return True
+    return primary_mass_mg >= (_PROFILE_BOTANICAL_MATERIALITY_FRACTION * max_other_mass)
+
+
+def _product_botanical_profile_eligible(
+    product: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    row_contracts: List[Dict[str, Any]],
+) -> bool:
+    pairs = list(zip(rows, row_contracts))
+    botanical_pairs = [(row, contract) for row, contract in pairs if _row_profile_eligible(contract, "botanical")]
+    if not botanical_pairs:
+        return False
+    primary_row, primary_contract = max(botanical_pairs, key=lambda pair: (_role_mass_mg(pair[0]) or 0.0))
+    non_botanical_pairs = [(row, contract) for row, contract in pairs if not _row_profile_eligible(contract, "botanical")]
+    botanical_mass = _role_mass_mg(primary_row) or 0.0
+    max_non_botanical_mass = max((_role_mass_mg(row) or 0.0 for row, _ in non_botanical_pairs), default=0.0)
+    mass_says_botanical = max_non_botanical_mass <= botanical_mass
+    botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)
+
+    botanical_is_hero = primary_contract.get("role") in _PROFILE_PRIMARY_ROLES
+    non_botanical_heroes = [
+        contract for _, contract in non_botanical_pairs
+        if contract.get("role") in _PROFILE_PRIMARY_ROLES
+    ]
+    if botanical_is_hero and _profile_has_enzyme_product_intent(product, non_botanical_pairs):
+        return False
+    if botanical_is_hero and not non_botanical_heroes:
+        return botanical_is_material
+    if non_botanical_heroes and not botanical_is_hero:
+        return False
+    if botanical_is_hero and non_botanical_heroes:
+        return botanical_is_material and _profile_botanical_is_title_head(
+            product,
+            primary_contract,
+            non_botanical_heroes,
+        )
+    return mass_says_botanical
+
+
+def _product_collagen_profile_eligible(rows: List[Dict[str, Any]], row_contracts: List[Dict[str, Any]]) -> bool:
+    pairs = list(zip(rows, row_contracts))
+    collagen_pairs = [(row, contract) for row, contract in pairs if _row_profile_eligible(contract, "collagen")]
+    if not collagen_pairs:
+        return False
+    primary_row, _ = max(collagen_pairs, key=lambda pair: (_role_mass_mg(pair[0]) or 0.0))
+    collagen_mass = _role_mass_mg(primary_row) or 0.0
+    non_collagen_masses = [
+        _role_mass_mg(row) or 0.0
+        for row, contract in pairs
+        if not _row_profile_eligible(contract, "collagen")
+    ]
+    return max(non_collagen_masses, default=0.0) <= collagen_mass
+
+
+def _product_level_profile_eligible(
+    product: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    row_contracts: List[Dict[str, Any]],
+    profile_name: str,
+    route_module: str,
+) -> bool:
+    if profile_name in {"omega", "probiotic", "sports"}:
+        return route_module == profile_name
+    if profile_name in {"botanical", "collagen"} and route_module != "generic":
+        return False
+    if profile_name == "botanical":
+        return _product_botanical_profile_eligible(product, rows, row_contracts)
+    if profile_name == "collagen":
+        return _product_collagen_profile_eligible(rows, row_contracts)
+    return False
+
+
+def _product_profile_summary(
+    product: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    row_contracts: List[Dict[str, Any]],
+    *,
+    route_module: str,
+) -> Dict[str, Dict[str, Any]]:
     summary: Dict[str, Dict[str, Any]] = {}
     for profile_name in ("botanical", "omega", "probiotic", "sports", "collagen"):
         eligible_rows = [
             row for row in row_contracts
-            if _safe_dict(_safe_dict(row.get("profile_eligibility")).get(profile_name)).get("eligible") is True
+            if _row_profile_eligible(row, profile_name)
         ]
         summary[profile_name] = {
-            "eligible": bool(eligible_rows),
+            "eligible": _product_level_profile_eligible(
+                product,
+                rows,
+                row_contracts,
+                profile_name,
+                route_module,
+            ),
             "eligible_row_count": len(eligible_rows),
             "evidence": sorted({
                 str(e)
@@ -2195,7 +2353,12 @@ def build_scoring_classification(
         "route_confidence": confidence,
         "route_evidence": route_evidence,
         "ingredients": row_contracts,
-        "profile_eligibility": _product_profile_summary(row_contracts),
+        "profile_eligibility": _product_profile_summary(
+            product,
+            rows,
+            row_contracts,
+            route_module=route_module,
+        ),
     }
 
 
