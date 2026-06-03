@@ -1553,16 +1553,6 @@ def _valid_classification_origin(origin: Any) -> str:
     return origin_norm if origin_norm in SCORING_CLASSIFICATION_ORIGINS else "compatibility_derived"
 
 
-def _legacy_route_module(product: Dict[str, Any]) -> str:
-    """Return the current v4 route implementation for compatibility parity."""
-    try:
-        from scoring_v4.router import _legacy_class_for_product  # lazy: avoids import cycle
-        route = _legacy_class_for_product(product)
-    except Exception:
-        return "generic"
-    return route if route in SCORING_ROUTE_MODULES else "generic"
-
-
 def _route_scoring_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     try:
         return [
