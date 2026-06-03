@@ -1,0 +1,333 @@
+{
+  "verified_at": "2026-06-02",
+  "method": "Live API calls: NCBI E-utilities PubMed efetch/esearch, FDA/NIH GSRS, UMLS REST exact search. Anchor PMID 24259556 was added after API query correction; remembered PMID 24067245 was rejected as wrong-topic.",
+  "anchor_pmids": [
+    {
+      "pmid": "11794633",
+      "title": "Bioavailability of US commercial magnesium preparations.",
+      "journal": "Magnesium research",
+      "published_date": "2001-12-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11794633/"
+    },
+    {
+      "pmid": "14596323",
+      "title": "Mg citrate found more bioavailable than other Mg preparations in a randomised, double-blind study.",
+      "journal": "Magnesium research",
+      "published_date": "2003-09-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/14596323/"
+    },
+    {
+      "pmid": "37111104",
+      "title": "Preliminary Comparison of Fractional Absorption of Zinc Sulphate, Zinc Gluconate, and Zinc Aspartate after Oral Supple-Mentation in Healthy Human Volunteers.",
+      "journal": "Nutrients",
+      "published_date": "2023-04-13",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/37111104/"
+    },
+    {
+      "pmid": "11377130",
+      "title": "Effectiveness of treatment of iron-deficiency anemia in infants and young children with ferrous bis-glycinate chelate.",
+      "journal": "Nutrition (Burbank, Los Angeles County, Calif.)",
+      "published_date": "2001-05-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11377130/"
+    },
+    {
+      "pmid": "10958812",
+      "title": "Iron bioavailability in humans from breakfasts enriched with iron bis-glycine chelate, phytates and polyphenols.",
+      "journal": "The Journal of nutrition",
+      "published_date": "2000-09-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/10958812/"
+    },
+    {
+      "pmid": "2507689",
+      "title": "The role of vitamin C in iron absorption.",
+      "journal": "International journal for vitamin and nutrition research. Supplement = Internationale Zeitschrift fur Vitamin- und Ernahrungsforschung. Supplement",
+      "published_date": "1989-01-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/2507689/"
+    },
+    {
+      "pmid": "31187261",
+      "title": "The bioavailability of iron picolinate is comparable to iron sulfate when fortified into a complementary fruit yogurt: a stable iron isotope study in young women.",
+      "journal": "European journal of nutrition",
+      "published_date": "2020-06-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/31187261/"
+    },
+    {
+      "pmid": "24259556",
+      "title": "Zinc absorption by young adults from supplemental zinc citrate is comparable with that from zinc gluconate and higher than from zinc oxide.",
+      "journal": "The Journal of nutrition",
+      "published_date": "2014-02-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/24259556/"
+    }
+  ],
+  "new_form_candidates": [
+    {
+      "parent": "zinc",
+      "form": "zinc chloride",
+      "pubmed_query": "\"zinc chloride\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "Zinc chloride",
+        "unii": "86Q357L16B",
+        "cas": [
+          "7646-85-7"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "39937"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C0078774",
+        "name": "zinc chloride",
+        "source": "RXNORM"
+      }
+    },
+    {
+      "parent": "zinc",
+      "form": "zinc lactate",
+      "pubmed_query": "\"zinc lactate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "ZINC LACTATE",
+        "unii": "2GXR25858Y",
+        "cas": [
+          "16039-53-5"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "1305755"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C2240534",
+        "name": "zinc lactate",
+        "source": "MTH"
+      }
+    },
+    {
+      "parent": "zinc",
+      "form": "zinc carbonate",
+      "pubmed_query": "\"zinc carbonate\" absorption bioavailability human supplement",
+      "pubmed_count": 1,
+      "top_pubmed": [
+        {
+          "pmid": "9701167",
+          "title": "Zinc and micronutrient supplements for children.",
+          "journal": "The American journal of clinical nutrition",
+          "published_date": "1998-08-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9701167/"
+        }
+      ],
+      "gsrs": {
+        "name": "ZINC CARBONATE",
+        "unii": "EQR32Y7H0M",
+        "cas": [
+          "5263-02-5"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "39935"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C0078772",
+        "name": "zinc carbonate",
+        "source": "RXNORM"
+      }
+    },
+    {
+      "parent": "zinc",
+      "form": "zinc phosphate",
+      "pubmed_query": "\"zinc phosphate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "ZINC PHOSPHATE",
+        "unii": "1E2MCT2M62",
+        "cas": [
+          "7779-90-0"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "1602285"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C0078788",
+        "name": "zinc phosphate",
+        "source": "RXNORM"
+      }
+    },
+    {
+      "parent": "zinc",
+      "form": "zinc malate",
+      "pubmed_query": "\"zinc malate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "ZINC MALATE",
+        "unii": "3M0U6DM996",
+        "cas": [
+          "2847-05-4"
+        ],
+        "substance_class": "chemical",
+        "rxcui": []
+      },
+      "umls_exact": null
+    },
+    {
+      "parent": "zinc",
+      "form": "zinc ascorbate",
+      "pubmed_query": "\"zinc ascorbate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "ZINC ASCORBATE",
+        "unii": "9TI35313XW",
+        "cas": [
+          "151728-40-4",
+          "331242-75-2"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "1549114"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C1337243",
+        "name": "zinc ascorbate",
+        "source": "RXNORM"
+      }
+    },
+    {
+      "parent": "magnesium",
+      "form": "magnesium phosphate",
+      "pubmed_query": "\"magnesium phosphate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "MAGNESIUM PHOSPHATE",
+        "unii": "453COF7817",
+        "cas": [
+          "10233-87-1"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "1313280",
+          "29164"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C0065527",
+        "name": "magnesium phosphate",
+        "source": "MTH"
+      }
+    },
+    {
+      "parent": "magnesium",
+      "form": "magnesium citrate malate",
+      "pubmed_query": "\"magnesium citrate malate\" absorption bioavailability human supplement",
+      "pubmed_count": 1,
+      "top_pubmed": [
+        {
+          "pmid": "32625777",
+          "title": "Magnesium citrate malate as a source of magnesium added for nutritional purposes to food supplements.",
+          "journal": "EFSA journal. European Food Safety Authority",
+          "published_date": "2018-12-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/32625777/"
+        }
+      ],
+      "gsrs": {
+        "name": "Magnesium Citrate",
+        "unii": "RHO26O1T9V",
+        "cas": [
+          "3344-18-1",
+          "7779-25-1"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "52356"
+        ]
+      },
+      "umls_exact": null
+    },
+    {
+      "parent": "magnesium",
+      "form": "magnesium pyruvate",
+      "pubmed_query": "\"magnesium pyruvate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": null,
+      "umls_exact": null
+    },
+    {
+      "parent": "magnesium",
+      "form": "magnesium succinate",
+      "pubmed_query": "\"magnesium succinate\" absorption bioavailability human supplement",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": {
+        "name": "MAGNESIUM SUCCINATE",
+        "unii": "B728YV86FE",
+        "cas": [
+          "556-32-1"
+        ],
+        "substance_class": "chemical",
+        "rxcui": []
+      },
+      "umls_exact": {
+        "cui": "C1366048",
+        "name": "magnesium succinate",
+        "source": "NDDF"
+      }
+    },
+    {
+      "parent": "iron",
+      "form": "ferric pyrophosphate",
+      "pubmed_query": "\"ferric pyrophosphate\" absorption bioavailability human iron supplement",
+      "pubmed_count": 9,
+      "top_pubmed": [
+        {
+          "pmid": "35629967",
+          "title": "Intestinal Absorption Study of a Granular Form of Ferric Pyrophosphate.",
+          "journal": "Metabolites",
+          "published_date": "2022-05-21",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35629967/"
+        },
+        {
+          "pmid": "40600440",
+          "title": "Enhanced Bioavailability of Ferric Pyrophosphate Delivery System Constructed with \u03b2-Glucan and Casein Phosphopeptide.",
+          "journal": "Journal of agricultural and food chemistry",
+          "published_date": "2025-07-16",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/40600440/"
+        },
+        {
+          "pmid": "40594659",
+          "title": "Comparative study of the effects of different iron sources on bioavailability and gastrointestinal tolerability in iron-deficient rats.",
+          "journal": "Scientific reports",
+          "published_date": "2025-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/40594659/"
+        }
+      ],
+      "gsrs": {
+        "name": "FERRIC PYROPHOSPHATE",
+        "unii": "QK8899250F",
+        "cas": [
+          "10058-44-3"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "1607976"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C0117541",
+        "name": "ferric pyrophosphate",
+        "source": "RXNORM"
+      }
+    }
+  ],
+  "source_path": "scripts/audits/mineral_forms_20260602/api_verification.json"
+}

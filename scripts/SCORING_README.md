@@ -1,6 +1,6 @@
-# PharmaGuide Scoring README (v3.6.0 / Data Schema 5.3.0)
+# PharmaGuide Scoring README (v3.6.0 / Data Schema 5.4.1)
 
-> Last updated: 2026-05-04
+> Last updated: 2026-06-02
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -28,9 +28,14 @@ food-folate (natural mid). v3.6.0 separates the two cleanly:
 - **A6 tiers recalibrated to bio_score scale.** `>=14`/`>=12`/`>=10` → 3/2/1 (was
   `>=16`/`>=14`/`>=12` against legacy 0-18 score; the old >=16 tier was unreachable on
   bio_score).
-- **`enrich_supplements_v3.py` emits `score == bio_score`.** The natural+3 calculation is
-  retired. The `score` field is retained on the wire as a deprecated alias for backward
-  compat during the v3.6.x shadow window.
+- **IQM keeps both fields, but scoring reads `bio_score`.** In
+  `ingredient_quality_map.json`, `score = bio_score + (natural ? 3 : 0)`, capped at 18.
+  The scorer/enriched ingredient-quality math uses `bio_score` for A1/A2/A6 so sourcing
+  does not inflate absorption/form quality. `score` is a legacy/display total only.
+- **Data schema 5.4.1 Vitamin A reconciliation (2026-06-02).** Vitamin A family forms now
+  keep preformed retinoids, delivery-tech forms, and provitamin A carotenoids on the same
+  absorption-only scale. Standalone `alpha_carotene` and `cryptoxanthin` remain exact
+  identity parents, linked to `vitamin_a` without duplicate generic aliases or CUI/UNII IDs.
 - **Flutter `FormAbsorptionSection` updated** — `maxScore` 18→15, explainer copy `0–18`→
   `0–15`, tier ranges adjusted. Per-ingredient bars now agree with Section A's pillar math.
 

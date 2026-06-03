@@ -1,12 +1,12 @@
 # DATABASE_SCHEMA.md — Master Schema Reference
 
-> Reference data schema: **5.0.0 / 5.1.0 / 5.2.0 / 5.3.0 / 6.0.0** | Export schema: **v1.4.0 (91 columns)** | Last updated: 2026-04-25 | 39 database files
+> Reference data schema: **5.0.0 / 5.1.0 / 5.2.0 / 5.3.0 / 5.4.1 / 6.0.0** | Export schema: **v1.4.0 (91 columns)** | Last updated: 2026-06-02 | 39 database files
 >
 > ## Two schemas, one document
 >
 > This file covers two related but distinct schemas:
 >
-> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0 / 5.2.0 / 5.3.0 / 6.0.0. These are the input data the enricher consumes.
+> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0 / 5.2.0 / 5.3.0 / 5.4.1 / 6.0.0. These are the input data the enricher consumes.
 > 2. **Final DB export** (`pharmaguide_core.db` + `detail_blobs/*.json`) — version 1.4.0. This is what the mobile app consumes. Runtime source of truth: `CORE_COLUMN_COUNT` and `EXPORT_SCHEMA_VERSION` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
 >
 > The reference data schema drives what the enricher CAN compute. The export schema drives what the mobile app CAN query. They evolve independently.
@@ -42,7 +42,7 @@ Every database file MUST include a `_metadata` object as its first key:
 |-------|----------|------|-------|
 | `description` | YES | string | Human-readable file description |
 | `purpose` | YES | string | Machine-readable purpose tag (see Purpose Tags below) |
-| `schema_version` | YES | string | Always `"5.0.0"` (or `"5.1.0"` for clinical files) |
+| `schema_version` | YES | string | Reference-data schema version for that file, currently in the 5.0.0-5.4.1 range for most files and 6.0.0 for goal mapping |
 | `last_updated` | YES | string | ISO date `YYYY-MM-DD` |
 | `total_entries` | NO | int/null | Count of primary data entries |
 | `version` | NO | string | File-level semver (e.g., `"2.1.0"`) |
@@ -526,8 +526,8 @@ Each **form** within `forms`:
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `score` | float | YES | Quality score (1-18 scale) |
-| `bio_score` | float | YES | Bioavailability score (1-15) |
+| `score` | float | YES | Natural-bonus-inclusive form score: `bio_score + (natural ? 3 : 0)`, capped at 18 |
+| `bio_score` | float | YES | Bioavailability/absorption score (0-15); runtime scoring uses this for form quality |
 | `natural` | bool | YES | Natural vs synthetic |
 | `absorption` | string | YES | Absorption characteristic |
 | `notes` | string | NO | Form-specific notes |

@@ -1,7 +1,17 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.5.2** / Data schema: **5.4.0** / Last updated: **2026-05-12**
+> Scoring version: **3.5.2** / Data schema: **5.4.1** / Last updated: **2026-06-02**
 > Aligned to current `score_supplements.py` and `config/scoring_config.json`.
+
+## Data schema 5.4.1 note (2026-06-02)
+
+- `ingredient_quality_map.json` now documents `bio_score` as a 0-15
+  absorption/bioavailability-only score, with legacy `score` calculated as
+  `bio_score + (natural ? 3 : 0)`, capped at 18.
+- Vitamin A/provitamin carotenoid family reconciliation: `beta_carotene`,
+  `alpha_carotene`, and `cryptoxanthin` are linked to `vitamin_a` through
+  `match_rules.parent_id`; Vitamin-A-context alpha-carotene and
+  beta-cryptoxanthin forms avoid duplicating exact CUI/UNII identities.
 
 ## v3.5.2 highlights (2026-05-12, data schema 5.4.1)
 
@@ -256,11 +266,12 @@ under a shared cap so they enhance, not define, ingredient-quality differentiati
 
 ### A1 Bioavailability Form (max 18)
 
-**v3.6.0 honesty pass:** A1 reads pure `bio_score` (0-15, form quality only). The legacy
-`score` field (= `bio_score + 3*natural`; 0-18) is deprecated and now emitted as an alias of
-`bio_score`. The natural-source bonus moved to A5e where sourcing belongs architecturally —
-A1 measures form/absorption only, never sourcing. The (avg_bio_score / 15) × 18 rescale
-preserves A1's per-product budget without per-ingredient bias toward natural-source forms.
+**v3.6.0 honesty pass, reaffirmed 2026-06-02:** A1 reads pure `bio_score` (0-15,
+form quality only). In `ingredient_quality_map.json`, `score = bio_score + 3*natural`
+capped at 18, but runtime scoring does not use that total for A1/A2/A6. The natural-source
+bonus moved to A5e where sourcing belongs architecturally — A1 measures form/absorption only,
+never sourcing. The (avg_bio_score / 15) × 18 rescale preserves A1's per-product budget
+without per-ingredient bias toward natural-source forms.
 
 Input:
 - `ingredient_quality_data.ingredients_scorable` fallback `ingredient_quality_data.ingredients`

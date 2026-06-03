@@ -1,0 +1,548 @@
+{
+  "verified_at": "2026-06-02",
+  "method": "Live API calls: NCBI E-utilities PubMed efetch/esearch, FDA/NIH GSRS, UMLS REST exact search.",
+  "source_path": "scripts/audits/vitamin_a_20260602/api_verification.json",
+  "anchor_pmids": [
+    {
+      "pmid": "24036530",
+      "title": "Absorption of vitamin A and carotenoids by the enterocyte: focus on transport proteins.",
+      "journal": "Nutrients",
+      "published_date": "2013-09-12",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/24036530/"
+    },
+    {
+      "pmid": "20807466",
+      "title": "\u03b2-Cryptoxanthin- and \u03b1-carotene-rich foods have greater apparent bioavailability than \u03b2-carotene-rich foods in Western diets.",
+      "journal": "The British journal of nutrition",
+      "published_date": "2011-01-01",
+      "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/20807466/"
+    }
+  ],
+  "supplemental_pubmed_searches": [
+    {
+      "query": "\"Retinoids and carotenoids in dermatology\" vitamin A absorption",
+      "count": 40,
+      "top_pubmed": [
+        {
+          "pmid": "19695478",
+          "title": "Cosmeceuticals vitamins.",
+          "journal": "Clinics in dermatology",
+          "published_date": "2009-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/19695478/"
+        },
+        {
+          "pmid": "34785012",
+          "title": "Vitamin deficiencies/hypervitaminosis and the skin.",
+          "journal": "Clinics in dermatology",
+          "published_date": "2021-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/34785012/"
+        },
+        {
+          "pmid": "25975494",
+          "title": "Vitamin A intake and serum retinol levels in children and adolescents with cystic fibrosis.",
+          "journal": "Clinical nutrition (Edinburgh, Scotland)",
+          "published_date": "2016-06-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/25975494/"
+        },
+        {
+          "pmid": "21034992",
+          "title": "Nutrition and skin diseases in veterinary medicine.",
+          "journal": "Clinics in dermatology",
+          "published_date": "2010-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/21034992/"
+        },
+        {
+          "pmid": "11594670",
+          "title": "Developments in topical retinoid therapy for acne.",
+          "journal": "Seminars in cutaneous medicine and surgery",
+          "published_date": "2001-09-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11594670/"
+        }
+      ]
+    },
+    {
+      "query": "\"Bioavailability of beta-carotene is lower\" alpha-carotene",
+      "count": 15,
+      "top_pubmed": [
+        {
+          "pmid": "9567003",
+          "title": "Bioavailability of beta-carotene is lower in raw than in processed carrots and spinach in women.",
+          "journal": "The Journal of nutrition",
+          "published_date": "1998-05-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9567003/"
+        },
+        {
+          "pmid": "8505674",
+          "title": "The ferret as a model for evaluation of the bioavailabilities of all-trans-beta-carotene and its isomers.",
+          "journal": "The Journal of nutrition",
+          "published_date": "1993-06-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/8505674/"
+        },
+        {
+          "pmid": "29215107",
+          "title": "\u03b2-Carotene bioaccessibility from biofortified maize (Zea mays) is related to its density and is negatively influenced by lutein and zeaxanthin.",
+          "journal": "Food & function",
+          "published_date": "2018-01-24",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/29215107/"
+        },
+        {
+          "pmid": "17445346",
+          "title": "Comparison of the uptake and secretion of carotene and xanthophyll carotenoids by Caco-2 intestinal cells.",
+          "journal": "The British journal of nutrition",
+          "published_date": "2007-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/17445346/"
+        },
+        {
+          "pmid": "32086165",
+          "title": "Plasma carotenoids, tocopherols and retinol - Association with age in the Berlin Aging Study II.",
+          "journal": "Redox biology",
+          "published_date": "2020-05-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/32086165/"
+        }
+      ]
+    },
+    {
+      "query": "\"beta-cryptoxanthin\" bioavailability human PubMed",
+      "count": 1,
+      "top_pubmed": [
+        {
+          "pmid": "35389473",
+          "title": "Systematic review of carotenoid concentrations in human milk and infant blood.",
+          "journal": "Nutrition reviews",
+          "published_date": "2022-08-08",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35389473/"
+        }
+      ]
+    },
+    {
+      "query": "\"Carotenoid bioavailability\" alpha-carotene beta-cryptoxanthin human",
+      "count": 5,
+      "top_pubmed": [
+        {
+          "pmid": "36008009",
+          "title": "Assessment of dietary carotenoid intake and biologic measurement of exposure in humans.",
+          "journal": "Methods in enzymology",
+          "published_date": "2022-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/36008009/"
+        },
+        {
+          "pmid": "15212488",
+          "title": "Assessment of carotenoid bioavailability of whole foods using a Caco-2 cell culture model coupled with an in vitro digestion.",
+          "journal": "Journal of agricultural and food chemistry",
+          "published_date": "2004-06-30",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/15212488/"
+        },
+        {
+          "pmid": "19035552",
+          "title": "Carotenoids: actual knowledge on food sources, intakes, stability and bioavailability and their protective role in humans.",
+          "journal": "Molecular nutrition & food research",
+          "published_date": "2009-09-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/19035552/"
+        },
+        {
+          "pmid": "18187430",
+          "title": "The lipoprotein lipase serine 447 stop polymorphism is associated with altered serum carotenoid concentrations in the Stanislas Family Study.",
+          "journal": "Journal of the American College of Nutrition",
+          "published_date": "2007-12-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/18187430/"
+        },
+        {
+          "pmid": "35282004",
+          "title": "New associations of serum \u03b2-carotene, lycopene, and zeaxanthin concentrations with",
+          "journal": "Food science & nutrition",
+          "published_date": "2022-03-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35282004/"
+        }
+      ]
+    },
+    {
+      "query": "\"retinol activity equivalents\" alpha-carotene beta-cryptoxanthin",
+      "count": 7,
+      "top_pubmed": [
+        {
+          "pmid": "32872544",
+          "title": "Dietary \u03b2-Cryptoxanthin and \u03b1-Carotene Have Greater Apparent Bioavailability Than \u03b2-Carotene in Subjects from Countries with Different Dietary Patterns.",
+          "journal": "Nutrients",
+          "published_date": "2020-08-29",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/32872544/"
+        },
+        {
+          "pmid": "26830589",
+          "title": "Carotenoids, carotenoid esters, and anthocyanins of yellow-, orange-, and red-peeled cashew apples (Anacardium occidentale L.).",
+          "journal": "Food chemistry",
+          "published_date": "2016-06-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/26830589/"
+        },
+        {
+          "pmid": "22413040",
+          "title": "Vitamin A status of 20- to 59-year-old adults living in Seoul and the metropolitan area, Korea.",
+          "journal": "Nutrition research and practice",
+          "published_date": "2012-02-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/22413040/"
+        },
+        {
+          "pmid": "32562977",
+          "title": "Influence of high pressure homogenization and pasteurization on the in vitro bioaccessibility of carotenoids and flavonoids in orange juice.",
+          "journal": "Food chemistry",
+          "published_date": "2020-11-30",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/32562977/"
+        },
+        {
+          "pmid": "23165583",
+          "title": "[Carotenoid data base to assess dietary intake of carotenes, xanthophyls and vitamin A; its use in a comparative study of vitamin A nutritional status in young adults].",
+          "journal": "Nutricion hospitalaria",
+          "published_date": "2012-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/23165583/"
+        }
+      ]
+    }
+  ],
+  "form_candidates": [
+    {
+      "parent": "vitamin_a",
+      "form": "retinyl acetate",
+      "pubmed_query": "\"retinyl acetate\" \"vitamin A\" absorption human",
+      "pubmed_count": 25,
+      "top_pubmed": [
+        {
+          "pmid": "32271921",
+          "title": "Vitamin A Absorption Determined in Rats Using a Plasma Isotope Ratio Method.",
+          "journal": "The Journal of nutrition",
+          "published_date": "2020-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/32271921/"
+        },
+        {
+          "pmid": "2271700",
+          "title": "Vitamin A metabolism in the human intestinal Caco-2 cell line.",
+          "journal": "Biochemistry",
+          "published_date": "1990-12-18",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/2271700/"
+        },
+        {
+          "pmid": "24229649",
+          "title": "Parameter identifiability and Extended Multiple Studies Analysis of a compartmental model for human vitamin A kinetics: fixing fractional transfer coefficients for the initial steps in the absorptive process.",
+          "journal": "The British journal of nutrition",
+          "published_date": "2014-03-28",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/24229649/"
+        },
+        {
+          "pmid": "1949028",
+          "title": "Influence of dose and pharmaceutical formulation of vitamin A on plasma levels of retinyl esters and retinol and metabolic generation of retinoic acid compounds and beta-glucuronides in the cynomolgus monkey.",
+          "journal": "Toxicology and applied pharmacology",
+          "published_date": "1991-10-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/1949028/"
+        },
+        {
+          "pmid": "10343353",
+          "title": "Bioavailability of carotenoids in human subjects.",
+          "journal": "The Proceedings of the Nutrition Society",
+          "published_date": "1999-02-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/10343353/"
+        }
+      ],
+      "gsrs": {
+        "name": "RETINYL ACETATE",
+        "unii": "3LE3D9D6OY",
+        "cas": [
+          "127-47-9"
+        ],
+        "substance_class": "chemical",
+        "rxcui": [
+          "35400"
+        ]
+      },
+      "umls_exact": {
+        "cui": "C0073109",
+        "name": "retinol acetate",
+        "source": "MTH"
+      }
+    },
+    {
+      "parent": "vitamin_a",
+      "form": "micellized vitamin A",
+      "pubmed_query": "\"micellized vitamin A\" human pharmacokinetics OR \"micellized vitamin A\" absorption",
+      "pubmed_count": 47,
+      "top_pubmed": [
+        {
+          "pmid": "11123202",
+          "title": "Processing of vitamin A and E in the human gastrointestinal tract.",
+          "journal": "American journal of physiology. Gastrointestinal and liver physiology",
+          "published_date": "2001-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11123202/"
+        },
+        {
+          "pmid": "27665014",
+          "title": "Nutrients central to maintaining intestinal absorptive efficiency and barrier integrity with fowl.",
+          "journal": "Poultry science",
+          "published_date": "2017-05-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/27665014/"
+        },
+        {
+          "pmid": "35506751",
+          "title": "Influence of Proteins on the Absorption of Lipophilic Vitamins, Carotenoids and Curcumin - A Review.",
+          "journal": "Molecular nutrition & food research",
+          "published_date": "2022-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/35506751/"
+        },
+        {
+          "pmid": "38395550",
+          "title": "Fatty acid/monoglyceride type and amount modulate fat-soluble vitamin absorption from mixed assemblies in mice.",
+          "journal": "Food research international (Ottawa, Ont.)",
+          "published_date": "2024-03-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/38395550/"
+        },
+        {
+          "pmid": "26115350",
+          "title": "Carotenoid deposition in plant and animal foods and its impact on bioavailability.",
+          "journal": "Critical reviews in food science and nutrition",
+          "published_date": "2017-06-13",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/26115350/"
+        }
+      ],
+      "gsrs": {
+        "name": "VITAMIN A",
+        "unii": "81G40H8B0T",
+        "cas": [
+          "11103-57-4"
+        ],
+        "substance_class": "mixture",
+        "rxcui": [
+          "11246"
+        ]
+      },
+      "umls_exact": null
+    },
+    {
+      "parent": "vitamin_a",
+      "form": "liposomal vitamin A",
+      "pubmed_query": "\"liposomal vitamin A\" human pharmacokinetics OR \"liposomal vitamin A\" absorption",
+      "pubmed_count": 33,
+      "top_pubmed": [
+        {
+          "pmid": "37447400",
+          "title": "Pharmacokinetic Analyses of Liposomal and Non-Liposomal Multivitamin/Mineral Formulations.",
+          "journal": "Nutrients",
+          "published_date": "2023-07-07",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/37447400/"
+        },
+        {
+          "pmid": "40660647",
+          "title": "Stability, bioaccessibility and bioavailability of vitamins in different delivery systems.",
+          "journal": "Food chemistry",
+          "published_date": "2025-11-15",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/40660647/"
+        },
+        {
+          "pmid": "9160172",
+          "title": "Clinical pharmacokinetics of tretinoin.",
+          "journal": "Clinical pharmacokinetics",
+          "published_date": "1997-05-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/9160172/"
+        },
+        {
+          "pmid": "30187807",
+          "title": "In vitro and in vivo assessment of vitamin A encapsulation in a liposome-protein delivery system.",
+          "journal": "Journal of liposome research",
+          "published_date": "2019-06-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/30187807/"
+        },
+        {
+          "pmid": "15264052",
+          "title": "Vitamin A palmitate photostability and stability over time.",
+          "journal": "Journal of cosmetic science",
+          "published_date": "2004-01-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/15264052/"
+        }
+      ],
+      "gsrs": {
+        "name": "VITAMIN A",
+        "unii": "81G40H8B0T",
+        "cas": [
+          "11103-57-4"
+        ],
+        "substance_class": "mixture",
+        "rxcui": [
+          "11246"
+        ]
+      },
+      "umls_exact": null
+    },
+    {
+      "parent": "vitamin_a",
+      "form": "mixed carotenoids",
+      "pubmed_query": "\"mixed carotenoids\" \"vitamin A\" absorption human",
+      "pubmed_count": 0,
+      "top_pubmed": [],
+      "gsrs": null,
+      "umls_exact": null
+    },
+    {
+      "parent": "vitamin_a",
+      "form": "alpha-carotene",
+      "pubmed_query": "\"alpha-carotene\" \"vitamin A\" absorption human",
+      "pubmed_count": 25,
+      "top_pubmed": [
+        {
+          "pmid": "28515067",
+          "title": "Relative contribution of \u03b1-carotene to postprandial vitamin A concentrations in healthy humans after carrot consumption.",
+          "journal": "The American journal of clinical nutrition",
+          "published_date": "2017-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/28515067/"
+        },
+        {
+          "pmid": "25270992",
+          "title": "Beta-cryptoxanthin as a source of vitamin A.",
+          "journal": "Journal of the science of food and agriculture",
+          "published_date": "2015-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/25270992/"
+        },
+        {
+          "pmid": "28282870",
+          "title": "Genetic Variations Associated with Vitamin A Status and Vitamin A Bioavailability.",
+          "journal": "Nutrients",
+          "published_date": "2017-03-08",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/28282870/"
+        },
+        {
+          "pmid": "11823572",
+          "title": "Alpha- and beta-carotene from a commercial puree are more bioavailable to humans than from boiled-mashed carrots, as determined using an extrinsic stable isotope reference method.",
+          "journal": "The Journal of nutrition",
+          "published_date": "2002-02-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/11823572/"
+        },
+        {
+          "pmid": "24899156",
+          "title": "Avocado consumption enhances human postprandial provitamin A absorption and conversion from a novel high-\u03b2-carotene tomato sauce and from carrots.",
+          "journal": "The Journal of nutrition",
+          "published_date": "2014-08-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/24899156/"
+        }
+      ],
+      "gsrs": null,
+      "umls_exact": {
+        "cui": "C0051336",
+        "name": "alpha-carotene",
+        "source": "MSH"
+      }
+    },
+    {
+      "parent": "vitamin_a",
+      "form": "beta-cryptoxanthin",
+      "pubmed_query": "\"beta-cryptoxanthin\" \"vitamin A\" absorption human",
+      "pubmed_count": 22,
+      "top_pubmed": [
+        {
+          "pmid": "25270992",
+          "title": "Beta-cryptoxanthin as a source of vitamin A.",
+          "journal": "Journal of the science of food and agriculture",
+          "published_date": "2015-07-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/25270992/"
+        },
+        {
+          "pmid": "26747887",
+          "title": "Absorption, metabolism, and functions of \u03b2-cryptoxanthin.",
+          "journal": "Nutrition reviews",
+          "published_date": "2016-02-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/26747887/"
+        },
+        {
+          "pmid": "8554331",
+          "title": "beta-Cryptoxanthin selectively increases in human chylomicrons upon ingestion of tangerine concentrate rich in beta-cryptoxanthin esters.",
+          "journal": "Archives of biochemistry and biophysics",
+          "published_date": "1995-12-20",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/8554331/"
+        },
+        {
+          "pmid": "24004891",
+          "title": "The effects of daily consumption of \u03b2-cryptoxanthin-rich tangerines and \u03b2-carotene-rich sweet potatoes on vitamin A and carotenoid concentrations in plasma and breast milk of Bangladeshi women with low vitamin A status in a randomized controlled trial.",
+          "journal": "The American journal of clinical nutrition",
+          "published_date": "2013-11-01",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/24004891/"
+        },
+        {
+          "pmid": "28282870",
+          "title": "Genetic Variations Associated with Vitamin A Status and Vitamin A Bioavailability.",
+          "journal": "Nutrients",
+          "published_date": "2017-03-08",
+          "pubmed_url": "https://pubmed.ncbi.nlm.nih.gov/28282870/"
+        }
+      ],
+      "gsrs": {
+        "name": "CRYPTOXANTHIN",
+        "unii": "6ZIB13GI33",
+        "cas": [
+          "472-70-8"
+        ],
+        "substance_class": "chemical",
+        "rxcui": []
+      },
+      "umls_exact": {
+        "cui": "C0896117",
+        "name": "Beta-Cryptoxanthin",
+        "source": "MSH"
+      }
+    }
+  ],
+  "exact_phrase_followup_searches": [
+    {
+      "query": "\"micellized vitamin A\"",
+      "count": 145,
+      "top_pmids": [
+        "35429602",
+        "40513490",
+        "29857004",
+        "11123202",
+        "29117188"
+      ],
+      "interpretation": "No isolated supplement-form human oral PK match in top results; hits are vitamin-A-modified micelles, food bioaccessibility, or GI processing context."
+    },
+    {
+      "query": "\"liposomal vitamin A\"",
+      "count": 304,
+      "top_pmids": [
+        "29593395",
+        "30675748",
+        "37447400",
+        "35054157",
+        "30081711"
+      ],
+      "interpretation": "Human hits are multivitamin/liposomal formulation or disease-context studies, not isolated vitamin A superiority versus standard retinyl esters."
+    },
+    {
+      "query": "\"retinyl acetate\" \"retinyl palmitate\" bioavailability",
+      "count": 3,
+      "top_pmids": [
+        "9058282",
+        "24158962",
+        "41850408"
+      ],
+      "interpretation": "Supports treating retinyl acetate as same preformed retinyl-ester tier as palmitate; no reason to score a full tier lower."
+    },
+    {
+      "query": "\"mixed carotenoids\" \"Vitamin A\" \"human\"",
+      "count": 1,
+      "top_pmids": [
+        "16721396"
+      ],
+      "interpretation": "Mixed carotenoids have human supplementation literature, but not direct top-tier vitamin A absorption/RAE superiority evidence."
+    },
+    {
+      "query": "\"alpha-carotene\" \"retinol activity equivalent\"",
+      "count": 2,
+      "top_pmids": [
+        "17135019",
+        "42073166"
+      ],
+      "interpretation": "Alpha-carotene is a provitamin A carotenoid with lower RAE potency than beta-carotene; use conservative vitamin-A-activity score."
+    },
+    {
+      "query": "\"beta-cryptoxanthin\" \"retinol activity equivalent\"",
+      "count": 2,
+      "top_pmids": [
+        "25212310",
+        "26593622"
+      ],
+      "interpretation": "Beta-cryptoxanthin is provitamin A-active, but RAE potency remains below beta-carotene; use conservative vitamin-A-activity score."
+    }
+  ]
+}

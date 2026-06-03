@@ -65,7 +65,9 @@ def iqm():
     ('glutathione', 'liposomal glutathione',                  9),
     ('berberine_supplement', 'liposomal berberine',           9),
     ('nad_precursors', 'liposomal nmn / nr',                  9),
-    ('iron', 'liposomal iron',                                9),
+    # 2026-06-02 clinician mineral recalibration retained liposomal iron at
+    # bio_score 10 as a promising delivery form, still below heme/bisglycinate.
+    ('iron', 'liposomal iron',                                10),
     # C6 — Curcumin
     ('curcumin', 'novasol curcumin',                          9),
     ('curcumin', 'curcuwin',                                  8),
@@ -79,11 +81,11 @@ def iqm():
     ('chromium', 'chromium GTF',                              7),
     ('chromium', 'chromium histidinate',                      7),
     # C8 — Iron (bisglycinate retained at 12 per modify)
-    ('iron', 'iron bisglycinate',                             12),
+    ('iron', 'iron bisglycinate',                             13),
     ('iron', 'iron protein succinylate',                      10),
-    ('iron', 'heme iron polypeptide',                         10),
-    ('iron', 'iron amino acid chelate',                       10),
-    ('iron', 'ferrous ascorbate',                             10),
+    ('iron', 'heme iron polypeptide',                         15),
+    ('iron', 'iron amino acid chelate',                       11),
+    ('iron', 'ferrous ascorbate',                             13),
     # C9 — Probiotics → 7 placeholder
     ('lactobacillus_plantarum', 'lactobacillus plantarum (unspecified)',         7),
     ('lactobacillus_salivarius', 'lactobacillus salivarius ha-118',              7),

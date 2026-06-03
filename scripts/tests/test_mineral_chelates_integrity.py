@@ -68,7 +68,7 @@ MINERAL_BANDS = [
     ('manganese', 'manganese yeast-bound',           0.03, 0.12, 'yeast Se-analogy'),
     ('manganese', 'manganese brown rice chelate',    0.02, 0.10, 'no human PK; marketing flag'),
     # ZINC
-    ('zinc', 'zinc carnosine',                       0.40, 0.70, 'PepZin GI mucosal'),
+    ('zinc', 'zinc carnosine',                       0.20, 0.55, 'PepZin GI mucosal; systemic F not top-tier'),
     ('zinc', 'zinc bisglycinate',                    0.40, 0.70, 'TRAACS class est.'),
     ('zinc', 'zinc acetate',                         0.25, 0.55, 'Hemilä 2015 LOCAL effect'),
     ('zinc', 'zinc gluconate',                       0.25, 0.55, 'Piacenza 2023 PMID:37111104'),
