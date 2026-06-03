@@ -228,3 +228,29 @@ def test_enrichment_validator_rejects_failed_nongeneric_classification():
     product["product_scoring_classification"] = bad
     violations = EnrichmentContractValidator().validate(product)
     assert any(v.rule == "J.6" for v in violations)
+
+
+def test_route_audit_not_ready_when_failure_overrides_specialized_route():
+    from api_audit.audit_v4_route_consistency import summarize
+
+    summary = summarize(
+        rows=[
+            {
+                "dsld_id": "x",
+                "old_route": "omega",
+                "contract_route": "generic",
+                "public_route": "generic",
+                "route_confidence": "failed",
+                "classification_failed": True,
+                "failure_overrode_old_route": True,
+                "route_diverged": True,
+                "v4_verdict": "SAFE",
+            }
+        ],
+        canary_rows=[],
+        allowlist={},
+        elapsed_seconds=0.01,
+    )
+    assert summary["classification_failed_count"] == 1
+    assert summary["failure_overrode_old_route_count"] == 1
+    assert summary["ready"] is False
