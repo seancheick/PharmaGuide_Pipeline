@@ -271,3 +271,55 @@ def test_route_audit_not_ready_when_failure_overrides_specialized_route():
     assert summary["classification_failed_count"] == 1
     assert summary["failure_overrode_old_route_count"] == 1
     assert summary["ready"] is False
+
+
+def test_profile_audit_not_ready_on_unsigned_profile_divergence():
+    from api_audit.audit_v4_profile_consistency import summarize
+
+    summary = summarize(
+        rows=[
+            {
+                "dsld_id": "x",
+                "profile": "botanical",
+                "old_profile_eligible": False,
+                "contract_profile_eligible": True,
+                "profile_diverged": True,
+                "classification_failed": False,
+                "failure_granted_profile": False,
+                "failure_revoked_profile": False,
+                "v4_verdict": "SAFE",
+            }
+        ],
+        canary_rows=[],
+        allowlist={},
+        elapsed_seconds=0.01,
+    )
+    assert summary["profile_divergence_count"] == 1
+    assert summary["unsigned_profile_divergence_count"] == 1
+    assert summary["ready"] is False
+
+
+def test_profile_audit_not_ready_when_failure_changes_profile():
+    from api_audit.audit_v4_profile_consistency import summarize
+
+    summary = summarize(
+        rows=[
+            {
+                "dsld_id": "x",
+                "profile": "collagen",
+                "old_profile_eligible": True,
+                "contract_profile_eligible": False,
+                "profile_diverged": True,
+                "classification_failed": True,
+                "failure_granted_profile": False,
+                "failure_revoked_profile": True,
+                "v4_verdict": "SAFE",
+            }
+        ],
+        canary_rows=[],
+        allowlist={},
+        elapsed_seconds=0.01,
+    )
+    assert summary["classification_failed_count"] == 1
+    assert summary["failure_revoked_profile_count"] == 1
+    assert summary["ready"] is False
