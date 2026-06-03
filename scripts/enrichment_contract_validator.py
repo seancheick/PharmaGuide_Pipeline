@@ -172,6 +172,38 @@ class EnrichmentContractValidator:
         "percent_dv_only",
     })
 
+    VALID_SCORING_CLASSIFICATION_ROUTES = frozenset({
+        "generic",
+        "probiotic",
+        "multi_or_prenatal",
+        "omega",
+        "sports",
+    })
+
+    VALID_SCORING_CLASSIFICATION_ORIGINS = frozenset({
+        "compatibility_derived",
+        "native_enrichment",
+    })
+
+    VALID_SCORING_ROUTE_CONFIDENCE = frozenset({
+        "high",
+        "medium",
+        "low",
+        "failed",
+    })
+
+    REQUIRED_SCORING_CLASSIFICATION_FIELDS = frozenset({
+        "classification_schema_version",
+        "classification_origin",
+        "classification_failed",
+        "route_module",
+        "route_reason",
+        "route_confidence",
+        "route_evidence",
+        "ingredients",
+        "profile_eligibility",
+    })
+
     SAFETY_IDENTITY_SOURCES = frozenset({
         "banned_recalled",
         "banned_recalled_ingredients",
@@ -231,6 +263,7 @@ class EnrichmentContractValidator:
         violations.extend(self._validate_match_ledger_consistency(product, product_id))
         violations.extend(self._validate_display_ledger_contract(product, product_id))
         violations.extend(self._validate_identity_safety_separation(product, product_id))
+        violations.extend(self._validate_scoring_classification_contract(product, product_id))
 
         return violations
 
@@ -1059,6 +1092,142 @@ class EnrichmentContractValidator:
     @staticmethod
     def _norm_contract_value(value: Any) -> str:
         return str(value or "").strip().lower()
+
+    def _validate_scoring_classification_contract(
+        self,
+        product: Dict,
+        product_id: str,
+    ) -> List[ContractViolation]:
+        """Validate native ScoringClassification v1 when emitted.
+
+        Missing classification is allowed during compatibility migration.
+        Release/P5 gates can require native classification once fresh
+        enrichment artifacts have been generated.
+        """
+        classification = product.get("product_scoring_classification")
+        if classification is None:
+            return []
+        if not isinstance(classification, dict):
+            return [ContractViolation(
+                rule="J.1",
+                rule_name="Scoring Classification Contract - object shape",
+                severity="error",
+                message="product_scoring_classification must be an object when present",
+                product_id=product_id,
+                field_path="product_scoring_classification",
+                expected="dict",
+                actual=type(classification).__name__,
+            )]
+
+        violations: List[ContractViolation] = []
+        missing = sorted(
+            field for field in self.REQUIRED_SCORING_CLASSIFICATION_FIELDS
+            if field not in classification
+        )
+        if missing:
+            violations.append(ContractViolation(
+                rule="J.2",
+                rule_name="Scoring Classification Contract - required fields",
+                severity="error",
+                message=f"product_scoring_classification missing fields: {missing}",
+                product_id=product_id,
+                field_path="product_scoring_classification",
+                expected=sorted(self.REQUIRED_SCORING_CLASSIFICATION_FIELDS),
+                actual=sorted(classification.keys()),
+            ))
+
+        route = self._norm_contract_value(classification.get("route_module"))
+        if route not in self.VALID_SCORING_CLASSIFICATION_ROUTES:
+            violations.append(ContractViolation(
+                rule="J.3",
+                rule_name="Scoring Classification Contract - route enum",
+                severity="error",
+                message=f"Invalid scoring route '{route}'",
+                product_id=product_id,
+                field_path="product_scoring_classification.route_module",
+                expected=sorted(self.VALID_SCORING_CLASSIFICATION_ROUTES),
+                actual=classification.get("route_module"),
+            ))
+
+        origin = self._norm_contract_value(classification.get("classification_origin"))
+        if origin not in self.VALID_SCORING_CLASSIFICATION_ORIGINS:
+            violations.append(ContractViolation(
+                rule="J.4",
+                rule_name="Scoring Classification Contract - origin enum",
+                severity="error",
+                message=f"Invalid scoring classification origin '{origin}'",
+                product_id=product_id,
+                field_path="product_scoring_classification.classification_origin",
+                expected=sorted(self.VALID_SCORING_CLASSIFICATION_ORIGINS),
+                actual=classification.get("classification_origin"),
+            ))
+
+        confidence = self._norm_contract_value(classification.get("route_confidence"))
+        if confidence not in self.VALID_SCORING_ROUTE_CONFIDENCE:
+            violations.append(ContractViolation(
+                rule="J.5",
+                rule_name="Scoring Classification Contract - confidence enum",
+                severity="error",
+                message=f"Invalid route confidence '{confidence}'",
+                product_id=product_id,
+                field_path="product_scoring_classification.route_confidence",
+                expected=sorted(self.VALID_SCORING_ROUTE_CONFIDENCE),
+                actual=classification.get("route_confidence"),
+            ))
+
+        if classification.get("classification_failed") is True and route != "generic":
+            violations.append(ContractViolation(
+                rule="J.6",
+                rule_name="Scoring Classification Contract - failed route default",
+                severity="error",
+                message="classification_failed=true must route generic",
+                product_id=product_id,
+                field_path="product_scoring_classification.route_module",
+                expected="generic",
+                actual=classification.get("route_module"),
+            ))
+
+        ingredients = classification.get("ingredients")
+        if not isinstance(ingredients, list):
+            violations.append(ContractViolation(
+                rule="J.7",
+                rule_name="Scoring Classification Contract - ingredient list",
+                severity="error",
+                message="classification ingredients must be a list",
+                product_id=product_id,
+                field_path="product_scoring_classification.ingredients",
+                expected="list",
+                actual=type(ingredients).__name__,
+            ))
+            return violations
+
+        for index, ingredient in enumerate(ingredients):
+            if not isinstance(ingredient, dict):
+                violations.append(ContractViolation(
+                    rule="J.8",
+                    rule_name="Scoring Classification Contract - ingredient object",
+                    severity="error",
+                    message="classification ingredient entries must be objects",
+                    product_id=product_id,
+                    field_path=f"product_scoring_classification.ingredients[{index}]",
+                    expected="dict",
+                    actual=type(ingredient).__name__,
+                ))
+                continue
+            for field in ("ingredient_domain", "botanical_source", "role", "profile_eligibility"):
+                if field not in ingredient:
+                    violations.append(ContractViolation(
+                        rule="J.9",
+                        rule_name="Scoring Classification Contract - ingredient fields",
+                        severity="error",
+                        message=f"classification ingredient missing {field}",
+                        product_id=product_id,
+                        field_path=f"product_scoring_classification.ingredients[{index}]",
+                        expected=field,
+                        actual=sorted(ingredient.keys()),
+                    ))
+
+        return violations
 
     def _has_iqd_dose_evidence(self, row: Dict) -> bool:
         dose_class = self._norm_contract_value(row.get("dose_class"))

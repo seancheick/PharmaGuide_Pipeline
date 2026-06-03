@@ -42,7 +42,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict
 
-from scoring_input_contract import get_scoring_ingredients
+from scoring_input_contract import build_scoring_classification, get_scoring_ingredients
 
 VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega", "sports")
 
@@ -714,8 +714,8 @@ def _read_primary_type(product: Dict[str, Any]) -> str:
     return ""
 
 
-def class_for_product(product: Dict[str, Any]) -> str:
-    """Return one of VALID_CLASSES given an enriched product blob.
+def _legacy_class_for_product(product: Dict[str, Any]) -> str:
+    """Return the current v4 route implementation.
 
     Reads `primary_type` from the supplement taxonomy as the canonical
     signal. Scoring treats product names and legacy categories as display
@@ -800,3 +800,20 @@ def class_for_product(product: Dict[str, Any]) -> str:
 
     # Priority 5: generic catch-all.
     return "generic"
+
+
+def class_for_product(product: Dict[str, Any]) -> str:
+    """Return one of VALID_CLASSES via ScoringClassification v1.
+
+    The private legacy implementation remains in this module as the
+    compatibility parity baseline. The public router now consumes the single
+    classification seam so downstream callers no longer need to know where the
+    route came from.
+    """
+    try:
+        route = _legacy_class_for_product(product)
+        contract = build_scoring_classification(product, route_module=route)
+        result = contract.get("route_module")
+    except Exception:  # pragma: no cover - router is a total public API
+        return "generic"
+    return result if result in VALID_CLASSES else "generic"

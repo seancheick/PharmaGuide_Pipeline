@@ -44,7 +44,12 @@ FORBIDDEN_FIELDS: dict[str, str] = {
 ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/gate_completeness.py|_has_enzyme_activity_evidence|get|unit|30c24beac47d": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/gate_safety.py|_ingredient_name_terms|get|raw_source_text|defe2b573198": "pass_a_known_pending_native_safety_signal_contract",
+    "scripts/scoring_v4/modules/botanical_profile.py|_mass_mg|get|quantity|437869d0a4ab": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/botanical_profile.py|_mass_mg|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/botanical_profile.py|_mass_mg|get|unit_normalized|c7a08b90a025": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/botanical_profile.py|_range_mg|get|unit|83418ab1801f": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/brand_testing_posture.py|score_brand_testing_posture|get|match_type|2d68ef6686e9": "pass_a_known_pending_native_safety_signal_contract",
+    "scripts/scoring_v4/modules/collagen_profile.py|_range_mg|get|unit|83418ab1801f": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|quantity|aacd9ff64a58": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|unit_normalized|320965a122ab": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/generic_evidence.py|_dose_map|get|unit|44abae5cc7d8": "pass_a_known_pending_native_evidence_contract",

@@ -25,6 +25,10 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.0.0"
+SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
+SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
+SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
 PRODUCT_EVIDENCE_REQUIRED_VALUE_FIELDS = {
     "evidence_type",
     "scoreable",
@@ -1302,6 +1306,384 @@ def is_nutrition_only_product(product: Dict[str, Any], *, allow_legacy_keyword_f
             "smoothie mix",
         )
     )
+
+
+# ---------------------------------------------------------------------------
+# Scoring Classification v1 — single route/profile seam
+#
+# Compatibility mode derives the contract from the current enriched blob. Native
+# enrichment will call the same public builder and persist the result. Scoring
+# modules should consume this contract rather than reinterpreting raw taxonomy,
+# product-title regexes, or reference-file membership independently.
+# ---------------------------------------------------------------------------
+
+_CLASSIFICATION_BOTANICAL_SOURCE_FORM_CATEGORIES = {"botanical", "herb"}
+_CLASSIFICATION_BOTANICAL_RAW_CATEGORIES = {"botanical", "herb"}
+_CLASSIFICATION_BOTANICAL_SOURCE_TERMS = {
+    "extract", "standardized", "standardised", "root", "leaf", "leaves",
+    "bark", "flower", "seed", "fruit", "berry", "rhizome", "aerial",
+    "whole herb", "herb", "plant part",
+}
+_CLASSIFICATION_DOMAIN_BY_CANONICAL = {
+    "epa": "omega_epa_dha",
+    "dha": "omega_epa_dha",
+    "epa_dha": "omega_epa_dha",
+    "fish_oil": "omega_parent",
+    "fish_liver_oil": "omega_parent",
+    "cod_liver_oil": "omega_parent",
+    "krill_oil": "omega_parent",
+    "algal_oil": "omega_parent",
+    "algae_oil": "omega_parent",
+    "omega_3": "omega_parent",
+    "omega3": "omega_parent",
+    "omega_3_fatty_acids": "fatty_acid",
+    "ala": "fatty_acid",
+    "alpha_linolenic_acid": "fatty_acid",
+    "alpha_linolenic_acid_ala": "fatty_acid",
+    "gla": "fatty_acid",
+    "gamma_linolenic_acid": "fatty_acid",
+    "cla": "fatty_acid",
+    "conjugated_linoleic_acid": "fatty_acid",
+    "oleic_acid": "fatty_acid",
+    "protein": "sports_active",
+    "whey_protein": "sports_active",
+    "casein": "sports_active",
+    "pea_protein": "sports_active",
+    "rice_protein": "sports_active",
+    "soy_protein": "sports_active",
+    "creatine_monohydrate": "sports_active",
+    "beta-alanine": "sports_active",
+    "beta_alanine": "sports_active",
+    "l_citrulline": "sports_active",
+    "hmb": "sports_active",
+    "collagen": "collagen",
+    "collagen_peptides": "collagen",
+    "hydrolyzed_collagen": "collagen",
+    "undenatured_type_ii_collagen": "collagen",
+    "digestive_enzymes": "enzyme",
+}
+_CLASSIFICATION_RAW_CATEGORY_DOMAINS = {
+    "vitamin": "vitamin",
+    "vitamins": "vitamin",
+    "mineral": "mineral",
+    "minerals": "mineral",
+    "amino acid": "amino_acid",
+    "amino_acids": "amino_acid",
+    "fat": "fatty_acid",
+    "fatty acid": "fatty_acid",
+    "fatty_acids": "fatty_acid",
+    "omega fatty acids": "fatty_acid",
+    "omega_fatty_acids": "fatty_acid",
+    "enzyme": "enzyme",
+    "enzymes": "enzyme",
+    "botanical": "herb",
+    "herb": "herb",
+    "probiotic": "probiotic_strain",
+}
+_CLASSIFICATION_VITAMIN_CANONICAL_RE = re.compile(r"^(vitamin_|folate$|choline$)")
+_CLASSIFICATION_MINERAL_CANONICALS = {
+    "calcium", "magnesium", "zinc", "iron", "iodine", "selenium", "manganese",
+    "copper", "chromium", "molybdenum", "potassium", "sodium", "chloride",
+}
+_CLASSIFICATION_AMINO_CANONICAL_RE = re.compile(r"^(l_|n_acetyl|n-acetyl|amino_)")
+_CLASSIFICATION_COLLAGEN_TEXT_RE = re.compile(r"\b(collagen|uc-?ii|gelatin)\b", re.IGNORECASE)
+_CLASSIFICATION_PROBIOTIC_TEXT_RE = re.compile(
+    r"\b(probiotic|lactobacillus|bifidobacterium|saccharomyces|bacillus|acidophilus|bifidus|cfu)\b",
+    re.IGNORECASE,
+)
+
+
+def _valid_classification_origin(origin: Any) -> str:
+    origin_norm = _norm(origin) or "compatibility_derived"
+    return origin_norm if origin_norm in SCORING_CLASSIFICATION_ORIGINS else "compatibility_derived"
+
+
+def _legacy_route_module(product: Dict[str, Any]) -> str:
+    """Return the current v4 route implementation for compatibility parity."""
+    try:
+        from scoring_v4.router import _legacy_class_for_product  # lazy: avoids import cycle
+        route = _legacy_class_for_product(product)
+    except Exception:
+        return "generic"
+    return route if route in SCORING_ROUTE_MODULES else "generic"
+
+
+def _classification_identity(row: Dict[str, Any]) -> str:
+    return _slug(row.get("canonical_id") or row.get("evidence_canonical_id") or row.get("name"))
+
+
+def _classification_row_text(row: Dict[str, Any]) -> str:
+    pieces = [
+        row.get("name"),
+        row.get("standardName"),
+        row.get("standard_name"),
+        row.get("canonical_id"),
+        row.get("raw_source_text"),
+        row.get("category"),
+        row.get("matched_form"),
+        row.get("canonical_source_db"),
+    ]
+    raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
+    pieces.extend([raw_taxonomy.get("category"), raw_taxonomy.get("ingredientGroup")])
+    for form in _safe_list(row.get("forms") or raw_taxonomy.get("forms")):
+        if isinstance(form, dict):
+            pieces.extend([form.get("name"), form.get("category"), form.get("ingredientGroup")])
+        else:
+            pieces.append(form)
+    return " ".join(str(piece or "") for piece in pieces)
+
+
+def _botanical_source_evidence(row: Dict[str, Any]) -> tuple[bool, List[str]]:
+    """Contextual botanical-source proof.
+
+    A botanical reference-file hit is not proof by itself. Evidence must come
+    from row/product source fields such as botanical taxonomy, botanical source
+    form, plant part, extract/standardization wording, or a standardized
+    botanical source database stamp.
+    """
+    evidence: List[str] = []
+    raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
+    raw_category = _norm(raw_taxonomy.get("category") or row.get("category"))
+    if raw_category in _CLASSIFICATION_BOTANICAL_RAW_CATEGORIES:
+        evidence.append("raw_taxonomy_botanical")
+    if _norm(row.get("canonical_source_db")) == "standardized_botanicals":
+        evidence.append("standardized_botanical_source_db")
+    for form in _safe_list(row.get("forms") or raw_taxonomy.get("forms")):
+        if not isinstance(form, dict):
+            continue
+        if _norm(form.get("category")) in _CLASSIFICATION_BOTANICAL_SOURCE_FORM_CATEGORIES:
+            evidence.append("botanical_source_form")
+            break
+    text = _classification_row_text(row).lower()
+    if any(term in text for term in _CLASSIFICATION_BOTANICAL_SOURCE_TERMS):
+        evidence.append("botanical_source_text")
+    return bool(evidence), sorted(set(evidence))
+
+
+def _ingredient_domain(row: Dict[str, Any], *, botanical_source: bool) -> str:
+    canonical = _classification_identity(row)
+    dose_class = _norm(row.get("dose_class"))
+    unit = _norm(row.get("unit") or row.get("dose_unit"))
+    text = _classification_row_text(row)
+    raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
+    raw_category = _norm(raw_taxonomy.get("category") or row.get("category")).replace("-", "_")
+
+    if dose_class == "probiotic_cfu" or "cfu" in unit or _CLASSIFICATION_PROBIOTIC_TEXT_RE.search(text):
+        return "probiotic_strain"
+    if dose_class == "enzyme_activity":
+        return "enzyme"
+    if canonical in _CLASSIFICATION_DOMAIN_BY_CANONICAL:
+        return _CLASSIFICATION_DOMAIN_BY_CANONICAL[canonical]
+    if canonical in _CLASSIFICATION_MINERAL_CANONICALS:
+        return "mineral"
+    if _CLASSIFICATION_VITAMIN_CANONICAL_RE.search(canonical):
+        return "vitamin"
+    if _CLASSIFICATION_AMINO_CANONICAL_RE.search(canonical):
+        return "amino_acid"
+    if _CLASSIFICATION_COLLAGEN_TEXT_RE.search(text):
+        return "collagen"
+    if raw_category in _CLASSIFICATION_RAW_CATEGORY_DOMAINS:
+        return _CLASSIFICATION_RAW_CATEGORY_DOMAINS[raw_category]
+    if botanical_source:
+        return "herb"
+    if canonical:
+        return "generic_active"
+    return "unknown"
+
+
+def _profile_eligibility_for_row(
+    row: Dict[str, Any],
+    *,
+    domain: str,
+    botanical_source: bool,
+    botanical_evidence: List[str],
+) -> Dict[str, Dict[str, Any]]:
+    canonical = _classification_identity(row)
+    positive_dose = _positive_quantity(row) is not None
+    evidence_type = _norm(row.get("evidence_type"))
+    profile: Dict[str, Dict[str, Any]] = {
+        "botanical": {
+            "eligible": bool(botanical_source and domain in {"herb", "botanical_marker", "generic_active"}),
+            "reason": "positive_botanical_source_evidence" if botanical_source else "no_botanical_source_evidence",
+            "evidence": botanical_evidence,
+        },
+        "omega": {
+            "eligible": domain in {"omega_epa_dha", "omega_parent"} or evidence_type == "omega_epa_dha_aggregate",
+            "reason": "omega_identity_or_aggregate_evidence" if domain in {"omega_epa_dha", "omega_parent"} or evidence_type == "omega_epa_dha_aggregate" else "not_omega_identity",
+            "evidence": [canonical] if canonical else [],
+        },
+        "probiotic": {
+            "eligible": domain == "probiotic_strain",
+            "reason": "probiotic_identity_or_cfu" if domain == "probiotic_strain" else "not_probiotic_identity",
+            "evidence": [canonical] if canonical else [],
+        },
+        "sports": {
+            "eligible": domain == "sports_active" or evidence_type == "sports_primary_dose",
+            "reason": "sports_primary_identity_or_dose" if domain == "sports_active" or evidence_type == "sports_primary_dose" else "not_sports_identity",
+            "evidence": [canonical] if canonical else [],
+        },
+        "collagen": {
+            "eligible": domain == "collagen",
+            "reason": "collagen_identity" if domain == "collagen" else "not_collagen_identity",
+            "evidence": [canonical] if canonical else [],
+        },
+    }
+    if positive_dose:
+        for payload in profile.values():
+            if payload["eligible"]:
+                payload.setdefault("evidence", []).append("positive_dose")
+    return profile
+
+
+def _route_confidence(
+    route_module: str,
+    rows: List[Dict[str, Any]],
+    *,
+    failed: bool,
+    forced_generic_reason: Optional[str],
+) -> str:
+    if failed:
+        return "failed"
+    if forced_generic_reason:
+        return "low"
+    if route_module != "generic":
+        return "high"
+    if rows:
+        return "medium"
+    return "low"
+
+
+def _product_profile_summary(row_contracts: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    summary: Dict[str, Dict[str, Any]] = {}
+    for profile_name in ("botanical", "omega", "probiotic", "sports", "collagen"):
+        eligible_rows = [
+            row for row in row_contracts
+            if _safe_dict(_safe_dict(row.get("profile_eligibility")).get(profile_name)).get("eligible") is True
+        ]
+        summary[profile_name] = {
+            "eligible": bool(eligible_rows),
+            "eligible_row_count": len(eligible_rows),
+            "evidence": sorted({
+                str(e)
+                for row in eligible_rows
+                for e in _safe_list(_safe_dict(_safe_dict(row.get("profile_eligibility")).get(profile_name)).get("evidence"))
+                if str(e)
+            }),
+        }
+    return summary
+
+
+def build_scoring_classification(
+    product: Dict[str, Any],
+    *,
+    route_module: Optional[str] = None,
+    classification_origin: str = "compatibility_derived",
+) -> Dict[str, Any]:
+    """Build ScoringClassification v1 for a product.
+
+    Total function: never raises, always returns a schema-valid dict. In
+    compatibility mode the route is seeded by the current v4 router baseline so
+    migration can prove parity before native enrichment persists this contract.
+    """
+    product = product if isinstance(product, dict) else {}
+    origin = _valid_classification_origin(classification_origin)
+    failed = False
+    failure_reason: Optional[str] = None
+    rows: List[Dict[str, Any]] = []
+    roles: List[Dict[str, Any]] = []
+
+    try:
+        input_result = get_scoring_ingredients(product, strict=True)
+        rows = list(input_result.rows)
+    except Exception as exc:  # pragma: no cover - defensive totality path
+        failed = True
+        failure_reason = f"scoring_input_failed:{exc.__class__.__name__}"
+        rows = []
+
+    if route_module not in SCORING_ROUTE_MODULES:
+        try:
+            route_module = _legacy_route_module(product)
+        except Exception as exc:  # pragma: no cover
+            failed = True
+            failure_reason = failure_reason or f"route_failed:{exc.__class__.__name__}"
+            route_module = "generic"
+    if route_module not in SCORING_ROUTE_MODULES:
+        route_module = "generic"
+
+    if rows:
+        try:
+            roles = classify_ingredient_roles(product, module=route_module, rows=rows)
+        except Exception as exc:  # pragma: no cover - role failure is debt, not crash
+            failed = True
+            failure_reason = failure_reason or f"role_classification_failed:{exc.__class__.__name__}"
+            roles = []
+
+    role_by_key: Dict[str, Dict[str, Any]] = {}
+    for role in roles:
+        if not isinstance(role, dict):
+            continue
+        for key in (_slug(role.get("canonical_id")), _slug(role.get("name"))):
+            if key:
+                role_by_key.setdefault(key, role)
+
+    row_contracts: List[Dict[str, Any]] = []
+    for index, row in enumerate(rows):
+        row = row if isinstance(row, dict) else {}
+        botanical_source, botanical_evidence = _botanical_source_evidence(row)
+        domain = _ingredient_domain(row, botanical_source=botanical_source)
+        role = role_by_key.get(_classification_identity(row)) or role_by_key.get(_slug(row.get("name"))) or {}
+        row_contracts.append({
+            "row_index": index,
+            "row_ref": row.get("raw_source_path") or row.get("source") or f"scoring_row:{index}",
+            "canonical_id": row.get("canonical_id") or row.get("evidence_canonical_id"),
+            "name": row.get("name") or row.get("standardName") or row.get("raw_source_text"),
+            "ingredient_domain": domain,
+            "botanical_source": {
+                "value": botanical_source,
+                "evidence": botanical_evidence,
+            },
+            "role": role.get("role") or ROLE_ADJUNCT,
+            "role_reason": role.get("role_reason") or "classification_default",
+            "role_source": role.get("role_source") or "classification_default",
+            "role_confidence": role.get("role_confidence") or ("low" if failed else "medium"),
+            "profile_eligibility": _profile_eligibility_for_row(
+                row,
+                domain=domain,
+                botanical_source=botanical_source,
+                botanical_evidence=botanical_evidence,
+            ),
+            "confidence": "low" if failed or domain == "unknown" else "medium",
+        })
+
+    forced_generic_reason = None
+    if failed:
+        route_module = "generic"
+        forced_generic_reason = failure_reason or "classification_failed"
+
+    confidence = _route_confidence(
+        route_module,
+        rows,
+        failed=failed,
+        forced_generic_reason=forced_generic_reason,
+    )
+    route_evidence = [route_module]
+    if rows:
+        route_evidence.append("scoring_rows_present")
+    if forced_generic_reason:
+        route_evidence.append(forced_generic_reason)
+
+    return {
+        "classification_schema_version": SCORING_CLASSIFICATION_SCHEMA_VERSION,
+        "classification_origin": origin,
+        "classification_failed": failed,
+        "classification_failure_reason": failure_reason,
+        "route_module": route_module,
+        "route_reason": forced_generic_reason or f"compatibility_baseline:{route_module}",
+        "route_confidence": confidence,
+        "route_evidence": route_evidence,
+        "ingredients": row_contracts,
+        "profile_eligibility": _product_profile_summary(row_contracts),
+    }
 
 
 # ---------------------------------------------------------------------------

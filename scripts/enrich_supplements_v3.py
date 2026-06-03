@@ -95,7 +95,7 @@ from constants import (
 from supplement_type_utils import infer_supplement_type
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
-from scoring_input_contract import derive_product_scoring_evidence
+from scoring_input_contract import build_scoring_classification, derive_product_scoring_evidence
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -12604,6 +12604,20 @@ class SupplementEnricherV3:
         evidence.append(base)
         return evidence
 
+    def _collect_product_scoring_classification(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
+        """Emit native ScoringClassification v1 using the shared builder."""
+        try:
+            return build_scoring_classification(
+                enriched,
+                classification_origin="native_enrichment",
+            )
+        except Exception as exc:  # pragma: no cover - builder is total; belt/suspenders
+            self.logger.warning("Scoring classification emit failed: %s", exc)
+            return build_scoring_classification(
+                {},
+                classification_origin="native_enrichment",
+            )
+
     @staticmethod
     def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
         text = " ".join(
@@ -15118,6 +15132,7 @@ class SupplementEnricherV3:
             enriched["primary_type"] = taxonomy["primary_type"]
             enriched["secondary_type"] = taxonomy["secondary_type"]
             enriched["product_scoring_evidence"] = self._collect_product_scoring_evidence(enriched)
+            enriched["product_scoring_classification"] = self._collect_product_scoring_classification(enriched)
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
