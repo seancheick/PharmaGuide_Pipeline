@@ -33,6 +33,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 def _epa_dha_product(
     *,
+    name: str = "Test Omega",
     epa: float = 600,
     dha: float = 300,
     daily_servings: tuple = (1.0, 1.0),
@@ -42,7 +43,7 @@ def _epa_dha_product(
     product = {
         "status": "active",
         "form_factor": "softgel",
-        "product_name": "Test Omega",
+        "product_name": name,
         "supplement_type": {"type": "specialty"},
         "servingSizes": [{"minDailyServings": daily_servings[0],
                           "maxDailyServings": daily_servings[1]}],
@@ -141,6 +142,24 @@ def test_indication_relevance_for_pure_dha_uses_combined_dose() -> None:
     }
     payload = score_evidence(product)
     assert payload["components"].get("indication_relevance") == 5.0
+
+
+def test_indication_relevance_awarded_for_prenatal_dha_target() -> None:
+    """Prenatal DHA products should use the prenatal DHA indication target,
+    not only the AHA cardiovascular 1000 mg EPA+DHA threshold.
+
+    Locks Thorne Prenatal DHA's shape: 650 mg DHA + 200 mg EPA is below the
+    CV threshold, but is clearly above the prenatal DHA target already used by
+    omega_dose.
+    """
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    product = _epa_dha_product(name="Prenatal DHA 650 mg", epa=200, dha=650)
+    payload = score_evidence(product)
+
+    assert payload["components"]["indication_relevance"] == 5.0
+    assert payload["metadata"]["indication_relevance_awarded"] is True
+    assert payload["metadata"]["indication_relevance_reason"] == "prenatal_dha_target"
 
 
 # --- Clinical evidence (generic pipeline delegation) --------------------

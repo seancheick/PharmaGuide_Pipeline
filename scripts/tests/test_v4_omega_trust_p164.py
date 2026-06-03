@@ -257,6 +257,66 @@ def test_b4b_no_gmp_data_scores_zero() -> None:
     assert "b4b_gmp" not in payload["components"]
 
 
+def test_b4b_verified_nsf_contents_sku_cert_infers_gmp() -> None:
+    """A verified NSF Contents SKU cert implies audited GMP/facility quality.
+
+    Locks Thorne Prenatal DHA's shape: certification_data.gmp is empty, but
+    verified_cert_programs has NSF Certified at sku scope. Omega trust must not
+    under-credit that compared with generic/multi trust.
+    """
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "verified_cert_programs": [
+            {"program": "NSF Certified", "scope": "sku"},
+        ],
+        "certification_data": {"gmp": {"claimed": False}},
+    }
+    payload = score_trust(product)
+
+    assert payload["components"]["b4b_gmp"] == 4.0
+    assert payload["metadata"]["b4b"]["source"] == "verified_cert_implies_gmp"
+    assert payload["metadata"]["b4b"]["program"] == "NSF Certified"
+
+
+def test_b4b_brand_only_cert_does_not_infer_gmp() -> None:
+    """Conservative gate: brand_only/claimed_only/needs_review certs never
+    imply GMP. Only verified sku/product_line rows can fill this data gap."""
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "verified_cert_programs": [
+            {"program": "NSF Certified", "scope": "brand_only"},
+            {"program": "Informed Choice", "scope": "claimed_only"},
+            {"program": "USP Verified", "scope": "needs_review"},
+        ],
+        "certification_data": {"gmp": {"claimed": False}},
+    }
+    payload = score_trust(product)
+
+    assert "b4b_gmp" not in payload["components"]
+    assert payload["metadata"]["b4b"]["source"] is None
+
+
+def test_b4b_blocked_verified_cert_does_not_infer_gmp() -> None:
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "verified_cert_programs": [
+            {
+                "program": "NSF Certified",
+                "scope": "sku",
+                "scoring_blocked_reason": "snapshot_stale",
+            },
+        ],
+        "certification_data": {"gmp": {"claimed": False}},
+    }
+    payload = score_trust(product)
+
+    assert "b4b_gmp" not in payload["components"]
+    assert payload["metadata"]["b4b"]["source"] is None
+
+
 # --- B4c Batch traceability ----------------------------------------------
 
 

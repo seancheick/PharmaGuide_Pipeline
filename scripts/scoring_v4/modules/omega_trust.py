@@ -11,9 +11,11 @@ omega_rubric.json:
                               caps at 10. Multiple SKU certs don't stack
                               beyond the cap.
     b4b_gmp             /4    nsf_gmp (NSF/ANSI 173 audit) = 4.
-                              fda_registered = 2. self-attested only = 0
-                              (per P1.8 enricher hardening — Codex caught
-                              the laboratory-vs-facility false-positive).
+                              Verified sku/product_line certs that imply GMP
+                              per cert_claim_rules.json = 4. fda_registered
+                              = 2. self-attested only = 0 (per P1.8 enricher
+                              hardening — Codex caught the
+                              laboratory-vs-facility false-positive).
     b4c_traceability    /1    1 point when has_coa OR has_batch_lookup
                               (the P1.8 nested QR-code rollup is honored).
 
@@ -138,13 +140,15 @@ def _score_b4a(
 def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
     """Score B4b GMP under the omega-specific stricter policy:
       - nsf_gmp=True → 4 (NSF/ANSI 173 audit, real third-party verification)
+      - verified sku/product_line cert with cert_claim_rules.implies_gmp → 4
       - fda_registered=True → 2 (registered facility, weaker signal)
       - self-attested only (gmp.claimed=True, no NSF/FDA backing) → 0
 
     This is STRICTER than generic_trust which credits gmp_level=certified.
-    The omega module won't credit self-attested GMP because the enricher's
-    gmp_level=certified projection includes self-attested cases (per the
-    P1.8 hardening note documenting the laboratory-vs-facility gap).
+    The omega module won't credit self-attested GMP. It will, however, credit
+    GMP from a product-specific verified cert whose rules-db policy says the
+    cert requires an audited GMP/facility process. Conservative:
+    brand_only/claimed_only/needs_review and blocked rows never imply GMP.
     """
     nsf_gmp_pts = float(cfg.get("nsf_gmp", 4) or 4)
     fda_pts = float(cfg.get("fda_registered", 2) or 2)
@@ -155,6 +159,13 @@ def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dic
 
     if bool(gmp.get("nsf_gmp")):
         return min(nsf_gmp_pts, cap), {"source": "nsf_gmp", "raw": nsf_gmp_pts}
+    inferred = _gmp_implied_by_verified_cert(product)
+    if inferred:
+        return min(nsf_gmp_pts, cap), {
+            "source": "verified_cert_implies_gmp",
+            "program": inferred,
+            "raw": nsf_gmp_pts,
+        }
     if bool(gmp.get("fda_registered")):
         return min(fda_pts, cap), {"source": "fda_registered", "raw": fda_pts}
     return 0.0, {
@@ -162,6 +173,59 @@ def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dic
         "raw": 0.0,
         "self_attested_only_no_credit": bool(gmp.get("claimed")),
     }
+
+
+def _gmp_implied_by_verified_cert(product: Dict[str, Any]) -> str | None:
+    """Return the verified cert program that implies GMP, or None.
+
+    Mirrors B4a's product-specific gate: only sku/product_line cert rows count,
+    and rows blocked by the resolver never count. The program list is loaded
+    from cert_claim_rules.json so the policy stays data-driven.
+    """
+    gmp_programs = _get_gmp_implying_programs()
+    if not gmp_programs:
+        return None
+
+    for entry in _get_verified_cert_programs(product):
+        if entry.get("scoring_blocked_reason"):
+            continue
+        scope = _norm(entry.get("scope"))
+        if scope not in {"sku", "product_line"}:
+            continue
+        program = _norm(entry.get("program"))
+        if program in gmp_programs:
+            return entry.get("program") or program
+    return None
+
+
+_GMP_IMPLYING_PROGRAMS_CACHE: frozenset[str] | None = None
+
+
+def _get_gmp_implying_programs() -> frozenset[str]:
+    global _GMP_IMPLYING_PROGRAMS_CACHE
+    if _GMP_IMPLYING_PROGRAMS_CACHE is not None:
+        return _GMP_IMPLYING_PROGRAMS_CACHE
+
+    tokens: set[str] = set()
+    try:
+        rules_path = REPO_ROOT / "scripts" / "data" / "cert_claim_rules.json"
+        data = json.loads(rules_path.read_text()) if rules_path.exists() else {}
+        programs = data.get("rules", {}).get("third_party_programs", {})
+        if isinstance(programs, dict):
+            for key, entry in programs.items():
+                if key.startswith("_") or not isinstance(entry, dict):
+                    continue
+                policy = entry.get("implies_gmp")
+                if not isinstance(policy, dict):
+                    continue
+                program = _norm(policy.get("verified_program"))
+                if program:
+                    tokens.add(program)
+    except Exception:
+        tokens = set()
+
+    _GMP_IMPLYING_PROGRAMS_CACHE = frozenset(tokens)
+    return _GMP_IMPLYING_PROGRAMS_CACHE
 
 
 def _score_b4c(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:

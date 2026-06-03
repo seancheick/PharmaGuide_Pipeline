@@ -130,6 +130,12 @@
       },
       "usp_verified": {
         "id": "CERT_USP_VERIFIED",
+        "implies_gmp": {
+          "verified_program": "USP Verified",
+          "scopes": ["sku", "product_line"],
+          "basis": "USP Dietary Supplement Verification Program audits the manufacturing facility for cGMP compliance as a program requirement.",
+          "source": "https://www.usp.org/verification-services"
+        },
         "display_name": "USP Verified",
         "dedupe_key": "third_party_program:usp_verified",
         "claim_type": "third_party_certification",
@@ -161,6 +167,12 @@
       },
       "nsf_sport": {
         "id": "CERT_NSF_SPORT",
+        "implies_gmp": {
+          "verified_program": "NSF Sport",
+          "scopes": ["sku", "product_line"],
+          "basis": "NSF Certified for Sport requires GMP registration/facility audit as the first step of certification.",
+          "source": "https://www.nsfsport.com/"
+        },
         "display_name": "NSF Certified for Sport",
         "dedupe_key": "third_party_program:nsf_sport",
         "claim_type": "third_party_certification",
@@ -182,6 +194,12 @@
       },
       "nsf_contents_certified": {
         "id": "CERT_NSF_CONTENTS",
+        "implies_gmp": {
+          "verified_program": "NSF Certified",
+          "scopes": ["sku", "product_line"],
+          "basis": "NSF/ANSI 173 contents certification includes a GMP facility audit of the manufacturer.",
+          "source": "https://www.nsf.org/consumer-resources/articles/supplements-and-gmp"
+        },
         "display_name": "NSF Contents Certified",
         "dedupe_key": "third_party_program:nsf_contents_certified",
         "claim_type": "third_party_certification",
@@ -220,6 +238,12 @@
       },
       "informed_sport": {
         "id": "CERT_INFORMED_SPORT",
+        "implies_gmp": {
+          "verified_program": "Informed Sport",
+          "scopes": ["sku", "product_line"],
+          "basis": "Informed Sport requires manufacturing in a GMP-registered facility plus an audit as part of certification.",
+          "source": "https://sport.wetestyoutrust.com/"
+        },
         "display_name": "Informed Sport",
         "dedupe_key": "third_party_program:informed_sport",
         "claim_type": "third_party_certification",
@@ -236,6 +260,12 @@
       },
       "informed_choice": {
         "id": "CERT_INFORMED_CHOICE",
+        "implies_gmp": {
+          "verified_program": "Informed Choice",
+          "scopes": ["sku", "product_line"],
+          "basis": "Informed Choice (consumer arm of the Informed program) requires manufacturing in a GMP-registered, audited facility.",
+          "source": "https://choice.wetestyoutrust.com/"
+        },
         "display_name": "Informed Choice",
         "dedupe_key": "third_party_program:informed_choice",
         "claim_type": "third_party_certification",
@@ -252,6 +282,12 @@
       },
       "bscg": {
         "id": "CERT_BSCG",
+        "implies_gmp": {
+          "verified_program": "BSCG",
+          "scopes": ["sku", "product_line"],
+          "basis": "BSCG Certified Drug Free certification includes GMP audit/compliance of the manufacturer.",
+          "source": "https://www.bscg.org/"
+        },
         "display_name": "BSCG Certified Drug Free",
         "dedupe_key": "third_party_program:bscg",
         "claim_type": "third_party_certification",

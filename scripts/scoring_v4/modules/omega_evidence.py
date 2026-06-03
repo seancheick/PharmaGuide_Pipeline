@@ -10,9 +10,9 @@ Scores omega-3 evidence against the 20-point rubric in omega_rubric.json:
                               so the pipeline produces meaningful credit
                               when clinical_matches are present.
     indication_relevance /5   Bonus when EPA+DHA per_day >= 1000 mg/day
-                              (AHA CVD threshold — strongest clinical
-                              alignment with marketed cardiovascular
-                              indication). 0 below 1000 mg/day.
+                              (AHA CVD threshold), OR when a prenatal DHA
+                              product meets the prenatal DHA target already
+                              used by omega_dose. 0 otherwise.
 
 Total cap: 20.
 
@@ -42,6 +42,8 @@ from typing import Any, Dict
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 from scoring_v4.modules.omega_dose import (
+    _PRENATAL_DHA_TARGET_MG,
+    _PRENATAL_DOSE_RE,
     _extract_daily_servings,
     _sum_epa_dha_per_serving,
 )
@@ -68,19 +70,37 @@ def _as_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
-def _compute_per_day_epa_dha(product: Dict[str, Any]) -> float:
-    """Compute EPA+DHA per_day_mid for the indication-relevance check.
+def _compute_per_day_components(product: Dict[str, Any]) -> Dict[str, float]:
+    """Compute per-day midpoint dose components for indication relevance.
+
     Reuses omega_dose's identical helpers — single source of truth for
     'how much EPA+DHA does this product deliver per day?' across the
-    omega module."""
+    omega module.
+    """
     epa_ps, dha_ps, combined_ps = _sum_epa_dha_per_serving(product)
     total_per_serving = max(epa_ps + dha_ps, combined_ps)
     if total_per_serving <= 0:
-        return 0.0
+        return {"epa": 0.0, "dha": 0.0, "combined": 0.0, "total": 0.0}
     min_daily, max_daily, _defaulted = _extract_daily_servings(product)
-    per_day_min = total_per_serving * min_daily
-    per_day_max = total_per_serving * max_daily
-    return (per_day_min + per_day_max) / 2.0
+    mid_daily = (min_daily + max_daily) / 2.0
+    return {
+        "epa": epa_ps * mid_daily,
+        "dha": dha_ps * mid_daily,
+        "combined": combined_ps * mid_daily,
+        "total": total_per_serving * mid_daily,
+    }
+
+
+def _compute_per_day_epa_dha(product: Dict[str, Any]) -> float:
+    return _compute_per_day_components(product)["total"]
+
+
+def _prenatal_dha_indication_relevant(product: Dict[str, Any], dha_per_day: float) -> bool:
+    name_text = " ".join(
+        str(product.get(key) or "")
+        for key in ("product_name", "fullName", "brand_name", "brandName")
+    )
+    return bool(_PRENATAL_DOSE_RE.search(name_text)) and dha_per_day >= _PRENATAL_DHA_TARGET_MG
 
 
 def score_evidence(product: Any) -> Dict[str, Any]:
@@ -106,8 +126,17 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     clinical_score = min(clinical_sub_cap, raw_generic_score)
 
     # 2) Indication relevance bonus.
-    per_day_epa_dha = _compute_per_day_epa_dha(product)
-    indication_score = indication_score_max if per_day_epa_dha >= indication_threshold else 0.0
+    per_day = _compute_per_day_components(product)
+    per_day_epa_dha = per_day["total"]
+    indication_reason = "none"
+    if per_day_epa_dha >= indication_threshold:
+        indication_score = indication_score_max
+        indication_reason = "cv_epa_dha_threshold"
+    elif _prenatal_dha_indication_relevant(product, per_day["dha"]):
+        indication_score = indication_score_max
+        indication_reason = "prenatal_dha_target"
+    else:
+        indication_score = 0.0
 
     components: Dict[str, float] = {}
     if clinical_score > 0:
@@ -126,8 +155,10 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "generic_evidence_raw_score": round(raw_generic_score, 4),
         "clinical_evidence_after_cap": round(clinical_score, 4),
         "per_day_epa_dha_mg": round(per_day_epa_dha, 2),
+        "per_day_dha_mg": round(per_day["dha"], 2),
         "indication_threshold_mg_day": indication_threshold,
         "indication_relevance_awarded": indication_score > 0,
+        "indication_relevance_reason": indication_reason,
         "generic_evidence_metadata": generic_payload.get("metadata", {}),
     }
 

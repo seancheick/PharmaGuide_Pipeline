@@ -65,7 +65,7 @@
     "cap": 20,
     "omega_canonicals": ["epa", "dha", "epa_dha"],
     "indication_relevance": {
-      "_doc": "Bonus for products dosed at AHA CVD threshold (1g/day+ EPA+DHA) marketed for cardiovascular support — strongest clinical alignment. Score 5 if EPA+DHA >= 1000 mg/day, otherwise 0.",
+      "_doc": "Bonus for products dosed at an indication-relevant omega threshold. Score 5 if EPA+DHA >= 1000 mg/day (AHA CVD threshold) OR if a prenatal DHA-labeled product meets the prenatal DHA target already used by omega_dose.",
       "min_epa_dha_mg_day_for_bonus": 1000,
       "score": 5
     }
