@@ -419,6 +419,80 @@ def test_a6_single_ingredient_below_floor_returns_zero() -> None:
     assert payload["components"]["A6_single_ingredient"] == 0.0
 
 
+# --- A6 reads EFFECTIVE A1-slot quality (botanical/collagen seam fix) ------
+# A6 was reading the raw row bio_score, so botanical singles (Meriva/Curcumin
+# Phytosome, KSM-66) earned 0 even though the botanical adapter recognized a
+# premium profile in the A1 slot. The fix: A6 evaluates whatever fills the A1
+# slot (bio for generic, adapter for botanical/collagen) — one brain.
+
+
+def test_a6_tier_function_reads_effective_quality_not_raw_bio() -> None:
+    """The tier function scores the EFFECTIVE quality passed in, divorced from
+    the raw row bio_score (here a deliberately-low 2.0)."""
+    from scoring_v4.modules.generic_formulation import (
+        _score_single_ingredient_efficiency as a6,
+    )
+
+    single = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=2)])
+    assert a6(single, 15.0) == 4.0
+    assert a6(single, 12.0) == 3.0
+    assert a6(single, 10.0) == 1.0
+    assert a6(single, 9.0) == 0.0
+    assert a6(single, None) == 0.0
+
+
+def test_a6_tier_function_gate_blocks_non_single() -> None:
+    from scoring_v4.modules.generic_formulation import (
+        _score_single_ingredient_efficiency as a6,
+    )
+
+    multi = _product(supp_type="multivitamin", ingredients=[_ingredient(bio_score=2)])
+    assert a6(multi, 15.0) == 0.0
+
+
+def _botanical_single(**ing_overrides) -> dict:
+    row = {
+        "name": "Curcumin Phytosome",
+        "standard_name": "Curcumin",
+        "canonical_id": "curcumin",
+        "mapped": True,
+        "quantity": 500,
+        "unit": "mg",
+        "bio_score": 8.0,  # herbs sit low on the vitamin/mineral bio scale
+    }
+    row.update(ing_overrides)
+    return _product(supp_type="single_nutrient", ingredients=[row])
+
+
+def test_a6_botanical_single_earns_focus_from_adapter_not_raw_bio() -> None:
+    """Premium botanical single: raw bio is 8, but the botanical adapter fills
+    the A1 slot with a premium score, so A6 must fire (was silently 0)."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(_botanical_single())
+    a1 = payload["components"]["A1_bio_score"]
+    a6 = payload["components"]["A6_single_ingredient"]
+    assert a1 >= 10.0  # adapter recognized the botanical (not the raw bio 8)
+    assert a6 >= 1.0   # BUG FIX: previously 0 because A6 read raw bio 8
+    # one-brain invariant: A6 reflects the effective A1-slot tier
+    expected = 4.0 if a1 >= 14 else 3.0 if a1 >= 12 else 1.0 if a1 >= 10 else 0.0
+    assert a6 == expected
+
+
+def test_a6_one_brain_invariant_holds_for_generic_single() -> None:
+    """For a generic single the effective A1 slot IS the bio average, so the
+    pre-existing bio-tier behavior is preserved (no regression)."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
+    )
+    a1 = payload["components"]["A1_bio_score"]
+    a6 = payload["components"]["A6_single_ingredient"]
+    expected = 4.0 if a1 >= 14 else 3.0 if a1 >= 12 else 1.0 if a1 >= 10 else 0.0
+    assert a6 == expected == 4.0
+
+
 def test_a6_single_ingredient_does_not_use_sole_blend_parent_exemption() -> None:
     """Keep A6 aligned with v3: proprietary containers do not earn the
     single-ingredient efficiency bonus."""

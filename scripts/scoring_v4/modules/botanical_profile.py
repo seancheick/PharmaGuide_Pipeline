@@ -67,6 +67,19 @@ _ENZYME_CANONICALS = frozenset({
     "cellulase",
     "lactase",
 })
+_NON_BOTANICAL_ACTIVE_CATEGORIES = frozenset({
+    "amino_acids",
+    "fatty_acids",
+    "omega_fatty_acids",
+    "enzymes",
+    "enzyme",
+    "digestive_enzyme",
+})
+_NON_BOTANICAL_RAW_CATEGORIES = frozenset({
+    "amino acid",
+    "fat",
+    "enzyme",
+})
 
 _PLANT_PARTS = (
     "root", "leaf", "leaves", "bark", "flower", "seed", "fruit", "berry",
@@ -199,6 +212,11 @@ def _scoring_actives(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def _is_botanical_active(row: Dict[str, Any]) -> bool:
     tax = row.get("raw_taxonomy") if isinstance(row.get("raw_taxonomy"), dict) else {}
+    category = _norm(row.get("category"))
+    category_key = category.replace("-", "_").replace(" ", "_")
+    raw_category = _norm(tax.get("category"))
+    if category_key in _NON_BOTANICAL_ACTIVE_CATEGORIES or raw_category in _NON_BOTANICAL_RAW_CATEGORIES:
+        return False
     if _norm(tax.get("category")) == "botanical" or _norm(row.get("category")) == "botanical":
         return True
     names = {_norm(row.get("canonical_id")), _norm(row.get("standard_name")), _norm(row.get("name"))}

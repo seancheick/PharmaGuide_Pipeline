@@ -330,25 +330,36 @@ def _score_a5e_natural_source(product: Dict[str, Any]) -> float:
 # --- A6 single-ingredient efficiency --------------------------------------
 
 
-def _score_single_ingredient_efficiency(product: Dict[str, Any]) -> float:
+def _score_single_ingredient_efficiency(
+    product: Dict[str, Any], effective_quality: float | None
+) -> float:
     """Tiered focus bonus for single-ingredient products (supp_type in
-    {single, single_nutrient}) on the first scorable active's bio_score:
-    bio >= 14 -> +4, >= 12 -> +3, >= 10 -> +1, else 0. v4.1 raised this from a
-    flat +1 (gate 14) so a focused premium single (KSM-66, Meriva, CoQ10
-    ubiquinol, mag glycinate, zinc bisglycinate) has a legitimate route to high
-    formulation without the A2 breadth bonus it can never earn. A1 already pays
-    the form's bioavailability; this is the focus bonus on top."""
+    {single, single_nutrient}) on the EFFECTIVE formulation quality that fills
+    the A1 slot: bio_score for generic singles, the botanical adapter score for
+    botanical singles, the collagen adapter for collagen singles.
+    Tiers: >= 14 -> +4, >= 12 -> +3, >= 10 -> +1, else 0.
+
+    Reading the effective A1 quality (not the raw row bio_score) keeps A1 and A6
+    one brain: a premium botanical single (Meriva/Curcumin Phytosome, KSM-66)
+    whose adapter recognizes its identity/standardization/dose now earns the
+    focus bonus instead of being silently zeroed because herbs sit low on the
+    vitamin/mineral bio scale. For generic singles the effective A1 IS the bio
+    average, so prior bio-tier behavior is unchanged. v4.1 raised this from a
+    flat +1 (gate 14). A1 already pays the form's quality; this is the focus
+    bonus on top, compensating for the A2 breadth bonus a single can never earn.
+    """
     if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
         return 0.0
+    # Proprietary-blend containers are not transparent singles — keep them out
+    # of the focus bonus even when their parent fills the A1 slot (v3 parity).
     scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
     if not scorable:
         return 0.0
-    score = bio_score_of(scorable[0])
-    if score is None or score < A6_TIER_FLOOR_BIO:
+    if effective_quality is None or effective_quality < A6_TIER_FLOOR_BIO:
         return 0.0
-    if score >= A6_TIER_ELITE_BIO:
+    if effective_quality >= A6_TIER_ELITE_BIO:
         return A6_POINTS_ELITE
-    if score >= A6_TIER_SOLID_BIO:
+    if effective_quality >= A6_TIER_SOLID_BIO:
         return A6_POINTS_SOLID
     return A6_POINTS_GOOD
 
@@ -476,7 +487,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "A5c_synergy_cluster":        round(_score_a5c_synergy_cluster(product), 4),
         "A5d_non_gmo":                round(_score_a5d_non_gmo(product), 4),
         "A5e_natural_source":         round(_score_a5e_natural_source(product), 4),
-        "A6_single_ingredient":       round(_score_single_ingredient_efficiency(product), 4),
+        "A6_single_ingredient":       0.0,  # computed below, after the A1 slot is finalized
         "enzyme_recognition":         round(_score_enzyme_recognition(product), 4),
     }
 
@@ -503,6 +514,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         components["A2_premium_forms"] = 0.0
         components["A5b_standardized_botanical"] = 0.0
         botanical_formulation = bot
+
+    # A6 reads the EFFECTIVE A1-slot quality (bio for generic, botanical/collagen
+    # adapter for those profiles), computed after any adapter overwrite so a
+    # premium botanical single earns the focus bonus consistently with A1.
+    components["A6_single_ingredient"] = round(
+        _score_single_ingredient_efficiency(product, components["A1_bio_score"]), 4
+    )
 
     penalties: Dict[str, float] = {
         # Stored as negatives for ergonomic JSON inspection — the score

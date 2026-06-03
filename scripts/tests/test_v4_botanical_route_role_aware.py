@@ -165,6 +165,54 @@ def test_tocotrienols_title_marks_vitamin_e_as_nonbotanical_hero():
     assert is_botanical_product(p) is False
 
 
+def test_l_theanine_single_uses_generic_not_botanical_profile():
+    """L-theanine has a companion active-compound entry in botanical data, but
+    IQM/DSLD classify it as an amino acid/non-botanical. The botanical adapter
+    must not cap its formulation below the generic bio path."""
+    p = _product("L-Theanine 200 mg", [
+        _row(
+            "l_theanine",
+            "L-Theanine",
+            200,
+            "mg",
+            category="amino_acids",
+            raw_taxonomy={"category": "non-nutrient/non-botanical"},
+        ),
+    ])
+    assert is_botanical_product(p) is False
+
+
+def test_phosphatidylserine_single_uses_generic_not_botanical_profile():
+    """Phosphatidylserine is a phospholipid/fatty-acid active, not an herb."""
+    p = _product("Phosphatidylserine 100 mg", [
+        _row(
+            "phosphatidylserine",
+            "Sharp-PS Green Phosphatidylserine",
+            100,
+            "mg",
+            category="fatty_acids",
+            raw_taxonomy={"category": "fat"},
+        ),
+    ])
+    assert is_botanical_product(p) is False
+
+
+def test_source_botanical_antioxidant_still_uses_botanical_profile():
+    """Plant-derived active compounds such as curcumin/quercetin remain
+    botanical when the row carries an herbal category or botanical source form."""
+    p = _product("Curcumin Phytosome", [
+        _row(
+            "curcumin",
+            "Curcumin Phytosome",
+            500,
+            "mg",
+            category="herbs",
+            raw_taxonomy={"category": "non-nutrient/non-botanical"},
+        ),
+    ])
+    assert is_botanical_product(p) is True
+
+
 def test_duplicate_canonical_keeps_strongest_role_for_nonbotanical_hero():
     """Duplicate canonical rows must not let a later adjunct erase title ownership."""
     p = _product("Digestive Enzyme with Ginger", [
