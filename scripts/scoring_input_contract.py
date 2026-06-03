@@ -1324,6 +1324,14 @@ _CLASSIFICATION_BOTANICAL_SOURCE_TERMS = {
     "bark", "flower", "seed", "fruit", "berry", "rhizome", "aerial",
     "whole herb", "herb", "plant part",
 }
+_CLASSIFICATION_ANIMAL_SOURCE_RE = re.compile(
+    r"\b("
+    r"animal|bovine|porcine|beef|chicken|fish|marine|gelatin|cartilage|"
+    r"kidney|liver|heart|thymus|pancreas|pituitary|adrenal|spleen|"
+    r"organ|gland|glandular"
+    r")\b",
+    re.IGNORECASE,
+)
 _CLASSIFICATION_DOMAIN_BY_CANONICAL = {
     "epa": "omega_epa_dha",
     "dha": "omega_epa_dha",
@@ -1957,7 +1965,10 @@ def _botanical_source_evidence(row: Dict[str, Any]) -> tuple[bool, List[str]]:
             evidence.append("botanical_source_form")
             break
     text = _classification_row_text(row).lower()
-    if any(term in text for term in _CLASSIFICATION_BOTANICAL_SOURCE_TERMS):
+    if (
+        not _CLASSIFICATION_ANIMAL_SOURCE_RE.search(text)
+        and any(term in text for term in _CLASSIFICATION_BOTANICAL_SOURCE_TERMS)
+    ):
         evidence.append("botanical_source_text")
     return bool(evidence), sorted(set(evidence))
 

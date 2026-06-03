@@ -178,6 +178,32 @@ def test_botanical_source_form_can_grant_botanical_eligibility():
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
 
 
+def test_animal_tissue_extract_does_not_grant_botanical_source_text():
+    product = _product(
+        "DAO Enzyme",
+        [_row("diamine_oxidase", "Porcine Kidney Extract", 4, "mg")],
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+
+    assert ingredient["botanical_source"]["value"] is False
+    assert ingredient["ingredient_domain"] == "generic_active"
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is False
+
+
+def test_plant_part_extract_still_grants_botanical_source_text():
+    product = _product(
+        "Green Tea Extract",
+        [_row("green_tea_extract", "Green Tea Leaf Extract", 500, "mg")],
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+
+    assert ingredient["botanical_source"]["value"] is True
+    assert "botanical_source_text" in ingredient["botanical_source"]["evidence"]
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
+
+
 def test_content_evidence_beats_title_for_omega_positive_and_negative():
     generic_title_with_epa = _product(
         "Essential Fatty Acids",
