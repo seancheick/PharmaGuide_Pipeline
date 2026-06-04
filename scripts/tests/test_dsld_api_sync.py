@@ -890,7 +890,7 @@ def test_import_local_accepts_verified_external_string_ids(monkeypatch, tmp_path
     assert state["labels"]["RITUAL_SYNBIOTIC_001"]["last_sync_source"] == "import-local"
 
 
-def test_import_local_rejects_unverified_external_string_ids(tmp_path):
+def test_import_local_accepts_draft_external_string_ids_for_review_queue(tmp_path):
     import dsld_api_sync
 
     input_dir = tmp_path / "manual"
@@ -905,6 +905,51 @@ def test_import_local_rejects_unverified_external_string_ids(tmp_path):
         "source_type": "external_manual",
         "manual_product_provenance": {
             "source_url": "https://example.com/manual-labels/seed-ds01",
+            "label_verified_at": "2026-06-04",
+            "review_status": "draft",
+            "reviewer": "SeanB",
+        },
+    }
+    (input_dir / "seed.json").write_text(json.dumps(label), encoding="utf-8")
+
+    args = type(
+        "Args",
+        (),
+        {
+            "input_dir": str(input_dir),
+            "canonical_root": str(tmp_path / "forms"),
+            "state_file": str(tmp_path / "state.json"),
+            "delta_output_dir": None,
+            "dated_delta": False,
+            "report_dir": None,
+            "force_refetch": False,
+        },
+    )()
+
+    code = dsld_api_sync._cmd_import_local(args)
+
+    assert code == 0
+    written = next((tmp_path / "forms").rglob("SEED_DS01_001.json"))
+    written_label = json.loads(written.read_text(encoding="utf-8"))
+    assert written_label["_source"] == "external_manual"
+    assert written_label["manual_product_provenance"]["review_status"] == "draft"
+
+
+def test_import_local_rejects_external_string_ids_missing_required_provenance(tmp_path):
+    import dsld_api_sync
+
+    input_dir = tmp_path / "manual"
+    input_dir.mkdir()
+    label = {
+        "id": "SEED_DS01_001",
+        "fullName": "Seed DS-01",
+        "brandName": "Seed",
+        "offMarket": False,
+        "ingredientRows": [],
+        "physicalState": {"langualCode": "", "name": "Capsule"},
+        "source_type": "external_manual",
+        "manual_product_provenance": {
+            "source_url": "",
             "label_verified_at": "2026-06-04",
             "review_status": "draft",
             "reviewer": "SeanB",

@@ -37,7 +37,6 @@ __version__ = "0.1.0"
 _PARITY_IGNORE_KEYS = frozenset({"_source", "src"})
 _STATE_VERSION = "1.0"
 _CANONICAL_HASH_EXCLUDE_KEYS = frozenset({"_source", "src"})
-_VERIFIED_MANUAL_REVIEW_STATUSES = frozenset({"verified", "validated", "approved"})
 _MANUAL_PROVENANCE_REQUIRED_FIELDS = (
     "source_url",
     "label_verified_at",
@@ -545,10 +544,15 @@ def _validate_external_manual_label(label: dict) -> None:
 
     Numeric local labels are still supported for old DSLD-shaped fixtures. A
     string ID means this product is outside DSLD and must carry source and
-    human-verification metadata before it enters canonical raw storage.
+    review metadata before it enters canonical raw storage. Production export
+    separately requires a verified review status.
     """
     if not _is_external_manual_label(label):
         return
+
+    source_type = str(label.get("source_type") or label.get("_source") or "").strip().lower()
+    if source_type != "external_manual":
+        raise ValueError("external manual label requires source_type='external_manual'")
 
     provenance = label.get("manual_product_provenance")
     if not isinstance(provenance, dict):
@@ -561,12 +565,6 @@ def _validate_external_manual_label(label: dict) -> None:
         raise ValueError(
             "external manual label missing provenance field(s): "
             + ", ".join(missing)
-        )
-    review_status = str(provenance.get("review_status") or "").strip().lower()
-    if review_status not in _VERIFIED_MANUAL_REVIEW_STATUSES:
-        raise ValueError(
-            "external manual label review_status must be one of "
-            f"{sorted(_VERIFIED_MANUAL_REVIEW_STATUSES)}"
         )
 
 
