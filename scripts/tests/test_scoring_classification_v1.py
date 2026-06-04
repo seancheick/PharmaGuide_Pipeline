@@ -804,6 +804,66 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
     assert summary["ready_for_cutover"] is False
 
 
+def test_has_material_nonbotanical_deliverable_detects_vitamin_major():
+    """Acerola-style: a botanical-owned product whose real deliverable is a
+    material non-botanical nutrient (Vitamin C, role=major) is the bug class."""
+    from api_audit.audit_v4_profile_cutover_impact import _has_material_nonbotanical_deliverable
+
+    contract = {"ingredients": [
+        {"ingredient_domain": "vitamin", "role": "major"},
+        {"ingredient_domain": "herb", "role": "claim_prominent"},
+    ]}
+    assert _has_material_nonbotanical_deliverable(contract) is True
+
+
+def test_has_material_nonbotanical_deliverable_false_for_pure_botanical():
+    from api_audit.audit_v4_profile_cutover_impact import _has_material_nonbotanical_deliverable
+
+    contract = {"ingredients": [
+        {"ingredient_domain": "herb", "role": "primary"},
+        {"ingredient_domain": "herb", "role": "adjunct"},
+    ]}
+    assert _has_material_nonbotanical_deliverable(contract) is False
+
+
+def test_has_material_nonbotanical_deliverable_ignores_adjunct_nutrient():
+    """A non-botanical nutrient present only as an adjunct does not count as a
+    competing deliverable."""
+    from api_audit.audit_v4_profile_cutover_impact import _has_material_nonbotanical_deliverable
+
+    contract = {"ingredients": [
+        {"ingredient_domain": "herb", "role": "primary"},
+        {"ingredient_domain": "mineral", "role": "adjunct"},
+    ]}
+    assert _has_material_nonbotanical_deliverable(contract) is False
+
+
+def test_profile_cutover_impact_summary_counts_affected_class_flags():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [
+            {
+                "dsld_id": "acerola",
+                "old_score": 57.0, "new_score": 33.0, "score_delta": -24.0, "abs_score_delta": 24.0,
+                "old_verdict": "SAFE", "new_verdict": "POOR", "verdict_changed": True,
+                "less_restrictive_verdict_flip": False, "more_restrictive_verdict_flip": True,
+                "safety_verdict_flip": False, "not_scored_transition": False, "profile_diverged": True,
+                "botanical_old": False, "botanical_contract": True, "botanical_reason": "x",
+                "collagen_old": False, "collagen_contract": False,
+                "botanical_owned_with_material_nonbotanical_deliverable": True,
+                "botanical_owned_large_drop_ge20": True,
+                "active_selection_large_drop_ge20": False,
+            },
+        ],
+        elapsed_seconds=0.01,
+    )
+
+    assert summary["botanical_owned_with_material_nonbotanical_deliverable_count"] == 1
+    assert summary["botanical_owned_large_drop_ge20_count"] == 1
+    assert summary["active_selection_large_drop_ge20_count"] == 0
+
+
 def test_profile_cutover_impact_old_baseline_forces_legacy_selector():
     from api_audit.audit_v4_profile_cutover_impact import _profile_state
 

@@ -272,6 +272,30 @@ def _delta(old_score: float | None, new_score: float | None) -> float | None:
     return round(new_score - old_score, 4)
 
 
+# --- Phase 1: affected-class flags (find the bug class, not 4 products) -------
+# A "material non-botanical deliverable" is a vitamin/mineral/amino/fatty/omega/
+# sports/probiotic/enzyme/collagen row carrying a primary/claim_prominent/major
+# role. A botanical-owned product that ALSO has one is the Acerola-Vitamin-C bug
+# class: the consumer's real deliverable is the nutrient, not a therapeutic herb.
+_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
+    "vitamin", "mineral", "amino_acid", "fatty_acid", "omega_epa_dha",
+    "sports_active", "probiotic_strain", "enzyme", "collagen",
+})
+_MATERIAL_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
+
+
+def _has_material_nonbotanical_deliverable(contract: Dict[str, Any]) -> bool:
+    for ing in (contract.get("ingredients") or []):
+        if not isinstance(ing, dict):
+            continue
+        if (
+            ing.get("ingredient_domain") in _MATERIAL_NONBOTANICAL_DOMAINS
+            and ing.get("role") in _MATERIAL_DELIVERABLE_ROLES
+        ):
+            return True
+    return False
+
+
 def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     products = list(products)
     old_scores: Dict[str, Dict[str, Any]] = {}
@@ -329,6 +353,18 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "collagen_reason": collagen["reason"],
             "profile_diverged": botanical["diverged"] or collagen["diverged"],
             "profile_reasons": "|".join(reason for reason in profile_reasons if reason),
+            "botanical_owned_with_material_nonbotanical_deliverable": bool(
+                (botanical["contract"] or collagen["contract"])
+                and _has_material_nonbotanical_deliverable(contract)
+            ),
+            "botanical_owned_large_drop_ge20": bool(
+                (botanical["contract"] or collagen["contract"])
+                and score_delta is not None and score_delta <= -20.0
+            ),
+            "active_selection_large_drop_ge20": bool(
+                (botanical["active_diverged"] or collagen["active_diverged"])
+                and score_delta is not None and score_delta <= -20.0
+            ),
         })
     return rows
 
@@ -379,6 +415,15 @@ def summarize(
         "unsigned_verdict_flip_count": len(unsigned_verdict_flips),
         "signed_large_score_delta_ge_5_count": len(signed_large_score_delta),
         "unsigned_large_score_delta_ge_5_count": len(unsigned_large_score_delta),
+        "botanical_owned_with_material_nonbotanical_deliverable_count": sum(
+            1 for row in rows if row.get("botanical_owned_with_material_nonbotanical_deliverable")
+        ),
+        "botanical_owned_large_drop_ge20_count": sum(
+            1 for row in rows if row.get("botanical_owned_large_drop_ge20")
+        ),
+        "active_selection_large_drop_ge20_count": sum(
+            1 for row in rows if row.get("active_selection_large_drop_ge20")
+        ),
         "old_verdict_counts": dict(Counter(str(row.get("old_verdict")) for row in rows).most_common()),
         "new_verdict_counts": dict(Counter(str(row.get("new_verdict")) for row in rows).most_common()),
         "changed_by_profile_reason": {
@@ -435,6 +480,9 @@ FIELDS = [
     "collagen_reason",
     "profile_diverged",
     "profile_reasons",
+    "botanical_owned_with_material_nonbotanical_deliverable",
+    "botanical_owned_large_drop_ge20",
+    "active_selection_large_drop_ge20",
 ]
 
 
@@ -463,6 +511,16 @@ def main() -> int:
     _write_csv([row for row in rows if row.get("verdict_changed")], args.out_dir / "verdict_flips.csv", FIELDS)
     _write_csv([row for row in rows if row.get("safety_verdict_flip")], args.out_dir / "safety_verdict_flips.csv", FIELDS)
     _write_csv([row for row in rows if row.get("not_scored_transition")], args.out_dir / "not_scored_transitions.csv", FIELDS)
+    _write_csv(
+        [
+            row for row in rows
+            if row.get("botanical_owned_with_material_nonbotanical_deliverable")
+            or row.get("botanical_owned_large_drop_ge20")
+            or row.get("active_selection_large_drop_ge20")
+        ],
+        args.out_dir / "affected_class.csv",
+        FIELDS,
+    )
 
     print(json.dumps(summary, indent=2))
     return 0 if summary["ready_for_cutover"] else 1
