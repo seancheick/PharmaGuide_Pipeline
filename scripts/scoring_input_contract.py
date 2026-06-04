@@ -2316,6 +2316,19 @@ def _botanical_row_evidence(contract: Dict[str, Any]) -> List[str]:
     return ev if isinstance(ev, list) else []
 
 
+def _profile_material_blocking_mass(row: Dict[str, Any], botanical_mass_mg: float) -> bool:
+    """True when a non-botanical row is material enough to block ownership.
+
+    Only comparable mass units participate. Unknown/NP/activity/CFU units return
+    None from _role_mass_mg and therefore cannot win a mass comparison. When the
+    botanical mass itself is unknown, do not infer materiality from mass.
+    """
+    other_mass = _role_mass_mg(row)
+    if other_mass is None or botanical_mass_mg <= 0:
+        return False
+    return other_mass >= (_PROFILE_BOTANICAL_MATERIALITY_FRACTION * botanical_mass_mg)
+
+
 def _classify_botanical_owner_type(
     product: Dict[str, Any],
     rows: List[Dict[str, Any]],
@@ -2346,7 +2359,12 @@ def _classify_botanical_owner_type(
         c for r, c in non_botanical_pairs
         if c.get("role") in _PROFILE_DELIVERABLE_ROLES
         and c.get("ingredient_domain") in _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS
-        and _role_mass_mg(r) is not None
+        and _profile_material_blocking_mass(r, botanical_mass)
+    ]
+    micronutrient_deliverables = [
+        c for _r, c in non_botanical_pairs
+        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        and c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS
     ]
     botanical_standardized = any(
         e in _PROFILE_STANDARDIZED_EVIDENCE for e in _botanical_row_evidence(primary_contract)
@@ -2358,17 +2376,20 @@ def _classify_botanical_owner_type(
     blocking_refs = [_profile_row_ref(c) for c in material_blockers]
     support_refs = [_profile_row_ref(c) for _, c in botanical_pairs]
 
-    def owns(owner_type: str, reason: str) -> Dict[str, Any]:
+    def refs(contracts: List[Dict[str, Any]]) -> List[str]:
+        return [_profile_row_ref(c) for c in contracts]
+
+    def owns(owner_type: str, reason: str, blockers: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
         return {
             "owner_type": owner_type, "owner_reason_code": reason,
-            "owner_row_refs": owner_refs, "blocking_row_refs": blocking_refs,
+            "owner_row_refs": owner_refs, "blocking_row_refs": refs(blockers) if blockers is not None else blocking_refs,
             "support_row_refs": [],
         }
 
-    def not_owner(owner_type: str, reason: str) -> Dict[str, Any]:
+    def not_owner(owner_type: str, reason: str, blockers: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
         return {
             "owner_type": owner_type, "owner_reason_code": reason,
-            "owner_row_refs": [], "blocking_row_refs": blocking_refs,
+            "owner_row_refs": [], "blocking_row_refs": refs(blockers) if blockers is not None else blocking_refs,
             "support_row_refs": support_refs,
         }
 
@@ -2393,6 +2414,20 @@ def _classify_botanical_owner_type(
         if all_micronutrient and not botanical_has_ref:
             return not_owner("nutrient_source", "nutrient_source_blocks_botanical")
         return not_owner("phytonutrient_support", "material_nonbotanical_deliverable")
+
+    if non_botanical_heroes and not _profile_botanical_is_title_head(product, primary_contract, non_botanical_heroes):
+        return not_owner(
+            "phytonutrient_support",
+            "nonbotanical_title_head_blocks_botanical",
+            non_botanical_heroes,
+        )
+
+    if micronutrient_deliverables and not botanical_has_ref:
+        return not_owner(
+            "nutrient_source",
+            "nutrient_source_blocks_botanical",
+            micronutrient_deliverables,
+        )
 
     # No material non-botanical deliverable competes.
     if botanical_has_ref and (botanical_is_hero or botanical_is_material):

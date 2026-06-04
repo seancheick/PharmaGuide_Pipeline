@@ -933,6 +933,29 @@ def test_owner_meriva_standardized_owns_even_with_vitamin():
     assert out["owner_type"] == "standardized_botanical"
 
 
+def test_owner_nonbotanical_blocker_must_be_material_by_mass():
+    """A small nutrient add-on should not demote a material therapeutic
+    botanical just because it is dose-checkable. The blocker must be comparable
+    mass and cross the configured materiality fraction."""
+    out = _owner(
+        "Elderberry Syrup with Zinc",
+        ("Elderberry", "herb", "claim_prominent", 1000, True, ["botanical_source_text"]),
+        ("Zinc", "mineral", "major", 15, False, []),
+    )
+    assert out["owner_type"] == "therapeutic_botanical"
+    assert out["blocking_row_refs"] == []
+
+
+def test_owner_material_nonbotanical_blocker_records_blocking_ref():
+    out = _owner(
+        "Protein with Greens",
+        ("Pea Protein", "sports_active", "primary", 20000, False, []),
+        ("Spirulina", "herb", "major", 500, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+    assert "Pea Protein" in out["blocking_row_refs"]
+
+
 def test_owner_boswellia_is_therapeutic_botanical():
     out = _owner(
         "Boswellia Extract",
