@@ -9,7 +9,10 @@ from __future__ import annotations
 
 from copy import deepcopy
 from dataclasses import dataclass, field
+from functools import lru_cache
+import json
 import re
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
@@ -18,6 +21,7 @@ from typing import Any, Dict, List, Optional
 from scoring_reference_resolver import has_therapeutic_reference, is_known_botanical
 
 
+_DATA_DIR = Path(__file__).resolve().parent / "data"
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
 LEGACY_IQD_SOURCE = "ingredient_quality_data.ingredients"
 PRODUCT_EVIDENCE_SOURCE = "product_scoring_evidence"
@@ -2188,7 +2192,8 @@ def _route_confidence(
 
 
 _PROFILE_PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
-_PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION = 0.5
+_PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION = 1.0
+_PROFILE_BOTANICAL_TITLE_HEAD_MATERIALITY_FRACTION = 0.5
 _PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION = 0.5
 _PROFILE_TITLE_SEPARATORS = (" with ", " plus ", " and ", " featuring ", " + ", " & ", "+", "&")
 # Match the "digest" stem (digest, digest+, digestion, digestive) — a digestive
@@ -2227,17 +2232,50 @@ def _profile_title_boundary(title: str) -> int:
 
 def _profile_row_title_pos(row_contract: Dict[str, Any], title: str) -> Optional[int]:
     positions: List[int] = []
-    candidates = [
-        _norm(row_contract.get("canonical_id")).replace("_", " "),
-        _norm(row_contract.get("name")),
-    ]
-    for candidate in candidates:
+    for candidate in _profile_title_candidates(row_contract):
         if not candidate:
             continue
         index = title.find(candidate)
         if index != -1:
             positions.append(index)
     return min(positions) if positions else None
+
+
+@lru_cache(maxsize=1)
+def _botanical_title_alias_index() -> Dict[str, List[str]]:
+    """Identity key -> botanical aliases suitable for product-title matching."""
+    try:
+        raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
+    except Exception:  # pragma: no cover - absence only reduces title matching
+        return {}
+    index: Dict[str, set[str]] = {}
+    for entry in _safe_list(raw.get("botanical_ingredients")):
+        if not isinstance(entry, dict):
+            continue
+        aliases = {
+            _norm(entry.get("id")).replace("_", " "),
+            _norm(entry.get("standard_name")),
+            _norm(entry.get("latin_name")),
+        }
+        latin = _norm(entry.get("latin_name"))
+        if latin and " " in latin:
+            aliases.add(latin.split(" ", 1)[0])
+        aliases.update(_norm(alias) for alias in _safe_list(entry.get("aliases")))
+        aliases = {alias for alias in aliases if alias}
+        for key in aliases:
+            index.setdefault(key, set()).update(aliases)
+    return {key: sorted(values) for key, values in index.items()}
+
+
+def _profile_title_candidates(row_contract: Dict[str, Any]) -> List[str]:
+    candidates = {
+        _norm(row_contract.get("canonical_id")).replace("_", " "),
+        _norm(row_contract.get("name")),
+    }
+    alias_index = _botanical_title_alias_index()
+    for key in list(candidates):
+        candidates.update(alias_index.get(key, []))
+    return sorted(candidate for candidate in candidates if candidate)
 
 
 def _profile_botanical_is_title_head(
@@ -2298,6 +2336,13 @@ def _profile_is_material(primary_mass_mg: float, other_pairs: List[tuple[Dict[st
     if max_other_mass <= 0:
         return True
     return primary_mass_mg >= (_PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION * max_other_mass)
+
+
+def _profile_is_title_head_material(primary_mass_mg: float, other_pairs: List[tuple[Dict[str, Any], Dict[str, Any]]]) -> bool:
+    max_other_mass = max((_role_mass_mg(row) or 0.0 for row, _ in other_pairs), default=0.0)
+    if max_other_mass <= 0:
+        return True
+    return primary_mass_mg >= (_PROFILE_BOTANICAL_TITLE_HEAD_MATERIALITY_FRACTION * max_other_mass)
 
 
 # --- Phase 2: botanical owner_type model -----------------------------------
@@ -2367,6 +2412,15 @@ def _classify_botanical_owner_type(
     botanical_mass = _role_mass_mg(primary_row) or 0.0
     non_botanical_pairs = [(r, c) for r, c in pairs if not _row_profile_eligible(c, "botanical")]
     botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)
+    botanical_is_title_head = _profile_botanical_is_title_head(
+        product,
+        primary_contract,
+        [c for _, c in non_botanical_pairs],
+    )
+    botanical_is_title_head_material = (
+        botanical_is_title_head
+        and _profile_is_title_head_material(botanical_mass, non_botanical_pairs)
+    )
     botanical_is_hero = primary_contract.get("role") in _PROFILE_PRIMARY_ROLES
     non_botanical_heroes = [c for _, c in non_botanical_pairs if c.get("role") in _PROFILE_PRIMARY_ROLES]
     # Material non-botanical deliverables — comparable mass units only (advisor #4).
@@ -2412,8 +2466,12 @@ def _classify_botanical_owner_type(
     if _profile_has_enzyme_product_intent(product, non_botanical_pairs):
         return not_owner("phytonutrient_support", "material_nonbotanical_deliverable")
 
-    # Standardized / branded extract that is material -> owns even alongside a nutrient.
-    if botanical_standardized and (botanical_is_hero or botanical_is_material):
+    # Standardized / branded extract owns when it is materially dominant, or
+    # when it is the product title-head and still material enough not to be a
+    # token support ingredient. This preserves real Sambucus/elderberry-style
+    # products while preventing standardized fruit/veg support rows from owning
+    # multivitamins and mixed non-botanical formulas.
+    if botanical_standardized and (botanical_is_material or botanical_is_title_head_material):
         return owns("standardized_botanical", "standardized_botanical_owner")
 
     # Source/carrier guard (legacy-arbiter parity): a botanical that is NOT the
@@ -2441,7 +2499,11 @@ def _classify_botanical_owner_type(
             not non_botanical_heroes
             or _profile_botanical_is_title_head(product, primary_contract, non_botanical_heroes)
         )
-        if botanical_has_ref and botanical_is_hero and botanical_is_material and botanical_wins_title:
+        if (
+            botanical_has_ref
+            and botanical_wins_title
+            and (botanical_is_material or botanical_is_title_head_material)
+        ):
             return owns("therapeutic_botanical", "therapeutic_botanical_owner")
         all_micronutrient = all(
             c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS for c in material_blockers
@@ -2465,7 +2527,7 @@ def _classify_botanical_owner_type(
         )
 
     # No material non-botanical deliverable competes.
-    if botanical_has_ref and (botanical_is_hero or botanical_is_material):
+    if botanical_has_ref and (botanical_is_hero or botanical_is_material or botanical_is_title_head_material):
         return owns("therapeutic_botanical", "therapeutic_botanical_owner")
     max_non_botanical_mass = max((_role_mass_mg(r) or 0.0 for r, _ in non_botanical_pairs), default=0.0)
     if max_non_botanical_mass <= botanical_mass and botanical_is_material:

@@ -37,15 +37,18 @@ DEFAULT_OUT_DIR = REPO_ROOT / "reports" / "v4_botanical_materiality_shadow"
 
 
 @contextmanager
-def _materiality_fractions(owner_value: float, blocker_value: float) -> Iterator[None]:
+def _materiality_fractions(owner_value: float, title_head_value: float, blocker_value: float) -> Iterator[None]:
     original_owner = sic._PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION
+    original_title_head = sic._PROFILE_BOTANICAL_TITLE_HEAD_MATERIALITY_FRACTION
     original_blocker = sic._PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION
     sic._PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION = owner_value
+    sic._PROFILE_BOTANICAL_TITLE_HEAD_MATERIALITY_FRACTION = title_head_value
     sic._PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION = blocker_value
     try:
         yield
     finally:
         sic._PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION = original_owner
+        sic._PROFILE_BOTANICAL_TITLE_HEAD_MATERIALITY_FRACTION = original_title_head
         sic._PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION = original_blocker
 
 
@@ -62,8 +65,13 @@ def _profile_payload(contract: Dict[str, Any]) -> Dict[str, Any]:
     return _safe_dict(profiles.get("botanical"))
 
 
-def _botanical_state(product: Dict[str, Any], owner_threshold: float, blocker_threshold: float) -> Dict[str, Any]:
-    with _materiality_fractions(owner_threshold, blocker_threshold):
+def _botanical_state(
+    product: Dict[str, Any],
+    owner_threshold: float,
+    title_head_threshold: float,
+    blocker_threshold: float,
+) -> Dict[str, Any]:
+    with _materiality_fractions(owner_threshold, title_head_threshold, blocker_threshold):
         contract = sic.build_scoring_classification(product)
     botanical = _profile_payload(contract)
     return {
@@ -94,14 +102,26 @@ def build_rows(
     products: Iterable[Dict[str, Any]],
     *,
     current_owner_threshold: float,
+    current_title_head_threshold: float,
     current_blocker_threshold: float,
     candidate_owner_threshold: float,
+    candidate_title_head_threshold: float,
     candidate_blocker_threshold: float,
 ) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for product in products:
-        current = _botanical_state(product, current_owner_threshold, current_blocker_threshold)
-        candidate = _botanical_state(product, candidate_owner_threshold, candidate_blocker_threshold)
+        current = _botanical_state(
+            product,
+            current_owner_threshold,
+            current_title_head_threshold,
+            current_blocker_threshold,
+        )
+        candidate = _botanical_state(
+            product,
+            candidate_owner_threshold,
+            candidate_title_head_threshold,
+            candidate_blocker_threshold,
+        )
         transition = _transition(current, candidate)
         if transition == "unchanged":
             continue
@@ -114,8 +134,10 @@ def build_rows(
                 or _safe_dict(product.get("supplement_taxonomy")).get("primary_type")
             ),
             "current_owner_threshold": current_owner_threshold,
+            "current_title_head_threshold": current_title_head_threshold,
             "current_blocker_threshold": current_blocker_threshold,
             "candidate_owner_threshold": candidate_owner_threshold,
+            "candidate_title_head_threshold": candidate_title_head_threshold,
             "candidate_blocker_threshold": candidate_blocker_threshold,
             "transition": transition,
             "current_eligible": current["eligible"],
@@ -141,8 +163,10 @@ def summarize(
     *,
     total_products: int,
     current_owner_threshold: float,
+    current_title_head_threshold: float,
     current_blocker_threshold: float,
     candidate_owner_threshold: float,
+    candidate_title_head_threshold: float,
     candidate_blocker_threshold: float,
     elapsed_seconds: float,
 ) -> Dict[str, Any]:
@@ -159,8 +183,10 @@ def summarize(
         "generated": datetime.now(timezone.utc).isoformat(),
         "total_products": total_products,
         "current_owner_threshold": current_owner_threshold,
+        "current_title_head_threshold": current_title_head_threshold,
         "current_blocker_threshold": current_blocker_threshold,
         "candidate_owner_threshold": candidate_owner_threshold,
+        "candidate_title_head_threshold": candidate_title_head_threshold,
         "candidate_blocker_threshold": candidate_blocker_threshold,
         "changed_count": len(rows),
         "transition_counts": dict(transitions.most_common()),
@@ -177,8 +203,10 @@ FIELDS = [
     "product_name",
     "primary_type",
     "current_owner_threshold",
+    "current_title_head_threshold",
     "current_blocker_threshold",
     "candidate_owner_threshold",
+    "candidate_title_head_threshold",
     "candidate_blocker_threshold",
     "transition",
     "current_eligible",
@@ -211,9 +239,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--products-root", type=Path, default=DEFAULT_PRODUCTS_ROOT)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
-    parser.add_argument("--current-owner-threshold", type=float, default=0.5)
+    parser.add_argument("--current-owner-threshold", type=float, default=1.0)
+    parser.add_argument("--current-title-head-threshold", type=float, default=0.5)
     parser.add_argument("--current-blocker-threshold", type=float, default=0.5)
     parser.add_argument("--candidate-owner-threshold", type=float, default=1.0)
+    parser.add_argument("--candidate-title-head-threshold", type=float, default=0.5)
     parser.add_argument("--candidate-blocker-threshold", type=float, default=0.5)
     args = parser.parse_args()
 
@@ -222,16 +252,20 @@ def main() -> int:
     rows = build_rows(
         products,
         current_owner_threshold=args.current_owner_threshold,
+        current_title_head_threshold=args.current_title_head_threshold,
         current_blocker_threshold=args.current_blocker_threshold,
         candidate_owner_threshold=args.candidate_owner_threshold,
+        candidate_title_head_threshold=args.candidate_title_head_threshold,
         candidate_blocker_threshold=args.candidate_blocker_threshold,
     )
     summary = summarize(
         rows,
         total_products=len(products),
         current_owner_threshold=args.current_owner_threshold,
+        current_title_head_threshold=args.current_title_head_threshold,
         current_blocker_threshold=args.current_blocker_threshold,
         candidate_owner_threshold=args.candidate_owner_threshold,
+        candidate_title_head_threshold=args.candidate_title_head_threshold,
         candidate_blocker_threshold=args.candidate_blocker_threshold,
         elapsed_seconds=time.perf_counter() - started,
     )

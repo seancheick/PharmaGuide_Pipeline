@@ -46,7 +46,7 @@ def _product(name: str, rows: list[dict], *, dsld_id: str = "fixture"):
 
 def test_shadow_audit_reports_threshold_revocation_for_borderline_botanical():
     product = _product(
-        "Ashwagandha with Magnesium",
+        "Relax Formula",
         [
             _row(
                 "ashwagandha",
@@ -65,8 +65,10 @@ def test_shadow_audit_reports_threshold_revocation_for_borderline_botanical():
     rows = build_rows(
         [product],
         current_owner_threshold=0.5,
+        current_title_head_threshold=0.5,
         current_blocker_threshold=0.5,
         candidate_owner_threshold=1.0,
+        candidate_title_head_threshold=0.5,
         candidate_blocker_threshold=0.5,
     )
 
@@ -99,8 +101,10 @@ def test_shadow_audit_does_not_report_clearly_material_botanical():
     assert build_rows(
         [product],
         current_owner_threshold=0.5,
+        current_title_head_threshold=0.5,
         current_blocker_threshold=0.5,
         candidate_owner_threshold=1.0,
+        candidate_title_head_threshold=0.5,
         candidate_blocker_threshold=0.5,
     ) == []
 
@@ -120,8 +124,10 @@ def test_shadow_audit_summary_counts_transitions():
         rows,
         total_products=2,
         current_owner_threshold=0.5,
+        current_title_head_threshold=0.5,
         current_blocker_threshold=0.5,
         candidate_owner_threshold=1.0,
+        candidate_title_head_threshold=0.5,
         candidate_blocker_threshold=0.5,
         elapsed_seconds=0.2,
     )

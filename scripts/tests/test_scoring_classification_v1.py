@@ -990,6 +990,44 @@ def test_owner_meriva_standardized_owns_even_with_vitamin():
     assert out["owner_type"] == "standardized_botanical"
 
 
+def test_owner_sambucus_title_alias_preserves_elderberry_owner():
+    """Title-head matching must use botanical aliases, not only canonical IDs.
+
+    DSLD rows often normalize Sambucus products to elderberry. If the title says
+    Sambucus and the elderberry dose is still material, the product is a
+    botanical intervention even when vitamin C is slightly higher by mass.
+    """
+    out = _owner(
+        "Sambucus Relief for Kids",
+        ("Vitamin C", "vitamin", "major", 30, False, []),
+        ("Black Elderberry Extract", "herb", "major", 25, True, ["product_standardized_botanical"]),
+    )
+    assert out["owner_type"] == "standardized_botanical"
+    assert out["owner_reason_code"] == "standardized_botanical_owner"
+
+
+def test_owner_standardized_support_row_in_multivitamin_does_not_own():
+    """A standardized botanical/source row inside a multi should not make the
+    whole product use botanical formulation/dose adapters unless it owns the
+    product surface or is at least as material as the competing deliverable."""
+    out = _owner(
+        "Kids Happy & Healthy Multi",
+        ("Vitamin C", "vitamin", "major", 30, False, []),
+        ("Blueberry Extract", "herb", "major", 20, True, ["product_standardized_botanical"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+    assert out["owner_reason_code"] == "nutrient_source_blocks_botanical"
+
+
+def test_owner_title_head_botanical_keeps_half_materiality_tolerance():
+    out = _owner(
+        "Ashwagandha with Magnesium",
+        ("Ashwagandha", "herb", "claim_prominent", 300, True, ["botanical_source_text"]),
+        ("Magnesium", "mineral", "major", 400, False, []),
+    )
+    assert out["owner_type"] == "therapeutic_botanical"
+
+
 def test_owner_nonbotanical_blocker_must_be_material_by_mass():
     """A small nutrient add-on should not demote a material therapeutic
     botanical just because it is dose-checkable. The blocker must be comparable
