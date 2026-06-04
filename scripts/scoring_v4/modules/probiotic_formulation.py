@@ -47,10 +47,11 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     Components:
       - total CFU disclosed: 4
       - CFU amount tier: 4
-      - named species diversity: 4
-      - exact clinical strain codes: 4
-      - delivery/survivability: 4
-      - prebiotic complement: 5
+      - named species diversity: 4, using an appropriate-diversity curve
+        rather than rewarding strain count indefinitely
+      - exact clinical strain codes: 5
+      - delivery/survivability: 5
+      - prebiotic complement: 3
     """
     product = product if isinstance(product, dict) else {}
     pdata = _probiotic_payload(product)
@@ -65,7 +66,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "named_species_diversity": _score_named_species_diversity(strain_count),
         "clinical_strain_codes": _score_clinical_strain_codes(clinical_count),
         "delivery_survivability": _score_delivery_survivability(product, pdata),
-        "prebiotic_complement": 5.0 if pdata.get("prebiotic_present") else 0.0,
+        "prebiotic_complement": 3.0 if pdata.get("prebiotic_present") else 0.0,
     }
     raw_score = sum(components.values())
     score = max(0.0, min(CAP_FORMULATION, raw_score))
@@ -139,21 +140,23 @@ def _score_cfu_amount(total_billion: float) -> float:
 
 
 def _score_named_species_diversity(strain_count: int) -> float:
-    if strain_count >= 10:
-        return 4.0
-    if strain_count >= 6:
+    if strain_count >= 16:
+        return 2.0
+    if strain_count >= 9:
         return 3.0
     if strain_count >= 3:
-        return 2.0
+        return 4.0
     if strain_count > 0:
-        return 1.0
+        return 3.0
     return 0.0
 
 
 def _score_clinical_strain_codes(clinical_count: int) -> float:
     if clinical_count >= 5:
-        return 4.0
+        return 5.0
     if clinical_count >= 3:
+        return 4.0
+    if clinical_count >= 2:
         return 3.0
     if clinical_count >= 1:
         return 2.0
@@ -162,13 +165,13 @@ def _score_clinical_strain_codes(clinical_count: int) -> float:
 
 def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]) -> float:
     if pdata.get("has_survivability_coating"):
-        return 4.0
+        return 5.0
 
     tier = product.get("delivery_tier")
     if tier is None:
         tier = _safe_dict(product.get("delivery_data")).get("highest_tier")
     tier_int = _as_int(tier, 0)
-    return {1: 4.0, 2: 3.0, 3: 2.0}.get(tier_int, 0.0)
+    return {1: 5.0, 2: 4.0, 3: 2.5}.get(tier_int, 0.0)
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:

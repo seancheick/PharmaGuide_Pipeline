@@ -16,7 +16,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 def _product(
     *,
     total_billion: float = 50.0,
-    strain_count: int = 10,
+    strain_count: int = 8,
     clinical_strain_count: int = 5,
     prebiotic_present: bool = True,
     survivability: bool = True,
@@ -75,9 +75,9 @@ def test_probiotic_formulation_scores_full_25_point_contract() -> None:
         "total_cfu_disclosed": 4.0,
         "cfu_amount": 4.0,
         "named_species_diversity": 4.0,
-        "clinical_strain_codes": 4.0,
-        "delivery_survivability": 4.0,
-        "prebiotic_complement": 5.0,
+        "clinical_strain_codes": 5.0,
+        "delivery_survivability": 5.0,
+        "prebiotic_complement": 3.0,
     }
     assert payload["metadata"]["phase"] == "P2.1_probiotic_formulation"
 
@@ -105,10 +105,13 @@ def test_cfu_amount_tiers(total_billion: float, expected: float) -> None:
     ("strain_count", "expected"),
     [
         (0, 0.0),
-        (1, 1.0),
-        (3, 2.0),
-        (6, 3.0),
-        (10, 4.0),
+        (1, 3.0),
+        (2, 3.0),
+        (3, 4.0),
+        (8, 4.0),
+        (9, 3.0),
+        (15, 3.0),
+        (16, 2.0),
     ],
 )
 def test_named_species_diversity_tiers(strain_count: int, expected: float) -> None:
@@ -124,8 +127,9 @@ def test_named_species_diversity_tiers(strain_count: int, expected: float) -> No
     [
         (0, 0.0),
         (1, 2.0),
-        (3, 3.0),
-        (5, 4.0),
+        (2, 3.0),
+        (3, 4.0),
+        (5, 5.0),
     ],
 )
 def test_clinical_strain_code_tiers_use_v4_four_point_cap(
@@ -142,10 +146,10 @@ def test_clinical_strain_code_tiers_use_v4_four_point_cap(
 @pytest.mark.parametrize(
     ("survivability", "delivery_tier", "expected"),
     [
-        (True, None, 4.0),
-        (False, 1, 4.0),
-        (False, 2, 3.0),
-        (False, 3, 2.0),
+        (True, None, 5.0),
+        (False, 1, 5.0),
+        (False, 2, 4.0),
+        (False, 3, 2.5),
         (False, None, 0.0),
     ],
 )
@@ -167,7 +171,7 @@ def test_prebiotic_complement_uses_p05_enriched_flag() -> None:
     with_prebiotic = score_formulation(_product(prebiotic_present=True))
     without_prebiotic = score_formulation(_product(prebiotic_present=False))
 
-    assert with_prebiotic["components"]["prebiotic_complement"] == 5.0
+    assert with_prebiotic["components"]["prebiotic_complement"] == 3.0
     assert without_prebiotic["components"]["prebiotic_complement"] == 0.0
 
 
@@ -193,7 +197,7 @@ def test_strain_count_falls_back_to_unique_blend_strains() -> None:
     payload = score_formulation(_product(strain_count=0, blends=blends))
 
     assert payload["metadata"]["total_strain_count"] == 3
-    assert payload["components"]["named_species_diversity"] == 2.0
+    assert payload["components"]["named_species_diversity"] == 4.0
 
 
 def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() -> None:

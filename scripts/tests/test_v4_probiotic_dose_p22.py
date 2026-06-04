@@ -85,12 +85,12 @@ def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_ca
     assert payload["score"] == 25.0
     assert payload["max"] == 25.0
     assert payload["components"] == {
-        "per_strain_cfu_disclosure": 15.0,
-        "cfu_adequacy": 10.0,
+        "per_strain_cfu_disclosure": 10.0,
+        "cfu_adequacy": 15.0,
     }
     assert payload["metadata"]["phase"] == "P2.2_probiotic_dose"
     assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
-    assert payload["metadata"]["cfu_adequacy_scaled_points"] == 10.0
+    assert payload["metadata"]["cfu_adequacy_scaled_points"] == 15.0
 
 
 def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() -> None:
@@ -111,9 +111,9 @@ def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() 
         _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
     )
 
-    assert payload["score"] == 6.0
+    assert payload["score"] == 8.0
     assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 6.0
+    assert payload["components"]["cfu_adequacy"] == 8.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
@@ -179,7 +179,7 @@ def test_per_strain_cfu_disclosure_is_proportional_to_named_strain_count() -> No
 
     payload = score_dose(_product(total_strain_count=2, blends=blends, clinical_strains=clinical_strains))
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 7.5
+    assert payload["components"]["per_strain_cfu_disclosure"] == 5.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 1
     assert payload["metadata"]["total_strain_count"] == 2
 
@@ -198,7 +198,7 @@ def test_single_strain_has_cfu_boolean_counts_for_disclosure_without_numeric_ade
 
     payload = score_dose(_product(total_strain_count=1, blends=blends, clinical_strains=clinical_strains))
 
-    assert payload["components"]["per_strain_cfu_disclosure"] == 15.0
+    assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
     assert payload["components"]["cfu_adequacy"] == 0.0
 
 
@@ -206,12 +206,12 @@ def test_single_strain_has_cfu_boolean_counts_for_disclosure_without_numeric_ade
     ("tier", "support", "expected_v3", "expected_v4"),
     [
         ("low", "high", 0.0, 0.0),
-        ("adequate", "high", 1.0, 2.0),
-        ("good", "high", 2.0, 4.0),
-        ("excellent", "high", 3.0, 6.0),
-        ("good", "moderate", 1.5, 3.0),
-        ("excellent", "weak", 1.5, 3.0),
-        ("good", "unknown", 1.0, 2.0),
+        ("adequate", "high", 1.0, 3.0),
+        ("good", "high", 2.0, 6.0),
+        ("excellent", "high", 3.0, 9.0),
+        ("good", "moderate", 1.5, 4.5),
+        ("excellent", "weak", 1.5, 4.5),
+        ("good", "unknown", 1.0, 3.0),
     ],
 )
 def test_cfu_adequacy_preserves_v3_tier_support_math_then_scales_2x(
@@ -230,7 +230,7 @@ def test_cfu_adequacy_preserves_v3_tier_support_math_then_scales_2x(
     assert payload["components"]["cfu_adequacy"] == pytest.approx(expected_v4)
 
 
-def test_cfu_adequacy_caps_v3_five_points_to_v4_ten_points() -> None:
+def test_cfu_adequacy_caps_v3_five_points_to_v4_fifteen_points() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     strains = [
@@ -241,7 +241,7 @@ def test_cfu_adequacy_caps_v3_five_points_to_v4_ten_points() -> None:
     payload = score_dose(_product(total_strain_count=4, clinical_strains=strains))
 
     assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
-    assert payload["components"]["cfu_adequacy"] == 10.0
+    assert payload["components"]["cfu_adequacy"] == 15.0
 
 
 def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> None:

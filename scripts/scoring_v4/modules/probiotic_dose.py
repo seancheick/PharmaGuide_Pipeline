@@ -3,9 +3,9 @@
 Scores probiotic dose quality against the 25-point rubric in
 SCORING_V4_PROPOSAL §6:
 
-  - per-strain CFU disclosure: 15
-  - CFU adequacy: 10, preserving v3's tier × support-level math and
-    scaling the v3 5-point cap to the v4 10-point budget
+  - per-strain CFU disclosure: 10
+  - CFU adequacy: 15, preserving v3's tier × support-level math and
+    scaling the v3 5-point cap to the v4 15-point budget
 
 Aggregate CFU is not treated as per-strain disclosure. When named strains and
 a total CFU are present but strain-level CFU is absent, the module grants only
@@ -21,9 +21,9 @@ from typing import Any, Dict, Iterable, List, Set
 
 PHASE_MARKER = "P2.2_probiotic_dose"
 CAP_DOSE = 25.0
-CAP_PER_STRAIN_CFU_DISCLOSURE = 15.0
-CAP_CFU_ADEQUACY = 10.0
-CAP_AGGREGATE_CFU_PROXY_ADEQUACY = 6.0
+CAP_PER_STRAIN_CFU_DISCLOSURE = 10.0
+CAP_CFU_ADEQUACY = 15.0
+CAP_AGGREGATE_CFU_PROXY_ADEQUACY = 8.0
 V3_CFU_ADEQUACY_CAP = 5.0
 
 TIER_POINTS = {
@@ -46,7 +46,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
     Per-strain disclosure is proportional to the number of named strains
     with an individual CFU value. CFU adequacy mirrors v3's
     `_compute_probiotic_cfu_adequacy_points` arithmetic, then scales the
-    capped v3 total from /5 to /10.
+    capped v3 total from /5 to /15.
     """
     product = product if isinstance(product, dict) else {}
     pdata = _probiotic_payload(product)
@@ -59,7 +59,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
 
     adequacy = _compute_cfu_adequacy(clinical_strains)
     cfu_adequacy_v3 = adequacy["v3_points"]
-    cfu_adequacy_scaled = min(CAP_CFU_ADEQUACY, cfu_adequacy_v3 * 2.0)
+    cfu_adequacy_scaled = min(CAP_CFU_ADEQUACY, cfu_adequacy_v3 * 3.0)
     aggregate_proxy = _compute_aggregate_cfu_proxy(
         pdata,
         clinical_strains,
@@ -215,7 +215,7 @@ def _compute_aggregate_cfu_proxy(
         })
 
     v3_points = min(V3_CFU_ADEQUACY_CAP, total)
-    score = min(CAP_AGGREGATE_CFU_PROXY_ADEQUACY, v3_points * 2.0)
+    score = min(CAP_AGGREGATE_CFU_PROXY_ADEQUACY, v3_points * 3.0)
     payload.update({
         "applied": score > 0.0,
         "score": round(score, 4),

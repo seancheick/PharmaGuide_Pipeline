@@ -5,9 +5,10 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 (dimension weights) and §6
 
     Dimension          Cap     Subsequent slice that fills it
     -----------------  ----    -------------------------------
-    Formulation         25     P2.1 — total CFU 4 + ≥10B 4 + named species 4
-                               + clinical strains 4 + delivery 4 + prebiotic 5
-    Dose                25     P2.2 — per-strain CFU disclosed 15 + adequacy 10
+    Formulation         25     P2.1 — total CFU 4 + ≥10B 4 + appropriate
+                               diversity 4 + clinical strains 5 + delivery 5
+                               + prebiotic 3
+    Dose                25     P2.2 — per-strain CFU disclosed 10 + adequacy 15
                                (CFU/strain × tier × support level, capped per §6)
     Evidence            20     P2.3 — strain-clinical credit (multiplicative
                                pipeline, cap_per_ingredient 7) + indication
