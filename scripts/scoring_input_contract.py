@@ -15,7 +15,7 @@ from typing import Any, Dict, List, Optional
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
 # the scorer and only reads data files lazily.
-from scoring_reference_resolver import has_therapeutic_reference
+from scoring_reference_resolver import has_therapeutic_reference, is_known_botanical
 
 
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
@@ -31,7 +31,7 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.0.0"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.0"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -2042,7 +2042,17 @@ def _botanical_source_evidence(row: Dict[str, Any], product: Optional[Dict[str, 
     raw_category = _norm(raw_taxonomy.get("category") or row.get("category"))
     if raw_category in _CLASSIFICATION_BOTANICAL_RAW_CATEGORIES:
         evidence.append("raw_taxonomy_botanical")
-    if _norm(row.get("canonical_source_db")) == "standardized_botanicals":
+    # standardized_botanicals.json membership is only botanical proof for a
+    # GENUINE botanical identity. The file contains non-botanical branded
+    # compounds (e.g. Setria glutathione); membership alone must not make a
+    # tripeptide/amino-acid a botanical row. Require botanical_ingredients
+    # identity or a therapeutic botanical reference.
+    genuine_botanical = is_known_botanical(
+        row.get("canonical_id"), row.get("name") or row.get("standard_name") or row.get("standardName")
+    ) or has_therapeutic_reference(
+        row.get("canonical_id"), row.get("name") or row.get("standard_name") or row.get("standardName")
+    )
+    if genuine_botanical and _norm(row.get("canonical_source_db")) == "standardized_botanicals":
         evidence.append("standardized_botanical_source_db")
     standardized_keys = _product_standardized_botanical_keys(product or {})
     row_keys = {
@@ -2057,7 +2067,7 @@ def _botanical_source_evidence(row: Dict[str, Any], product: Optional[Dict[str, 
         _norm(row.get("standardName")),
         _norm(row.get("standard_name")),
     }
-    if standardized_keys and any(key and key in standardized_keys for key in row_keys):
+    if genuine_botanical and standardized_keys and any(key and key in standardized_keys for key in row_keys):
         evidence.append("product_standardized_botanical")
     for form in _safe_list(row.get("forms") or raw_taxonomy.get("forms")):
         if not isinstance(form, dict):
@@ -2401,6 +2411,26 @@ def _classify_botanical_owner_type(
     if botanical_standardized and (botanical_is_hero or botanical_is_material):
         return owns("standardized_botanical", "standardized_botanical_owner")
 
+    # Source/carrier guard (legacy-arbiter parity): a botanical that is NOT the
+    # marketed primary, in a product whose intent is a non-botanical nutrient,
+    # and which the title does not name, is acting as a source/support (e.g.
+    # lichen-sourced Vitamin D, acerola in a Vitamin-D+K2 product) -> not owner.
+    # This catches mass-dominant carriers even when the carried micronutrient is
+    # tiny-mass (so it never registers as a "material blocker").
+    if (
+        not botanical_is_hero
+        and not botanical_has_ref
+        and _profile_has_non_botanical_product_intent(product, non_botanical_pairs)
+        and not _profile_has_title_match(product, [c for _, c in botanical_pairs])
+    ):
+        micronutrient_present = any(
+            c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS
+            for _, c in non_botanical_pairs
+        )
+        if micronutrient_present:
+            return not_owner("nutrient_source", "nutrient_source_blocks_botanical")
+        return not_owner("phytonutrient_support", "non_botanical_product_intent")
+
     if material_blockers:
         botanical_wins_title = (
             not non_botanical_heroes
@@ -2443,41 +2473,15 @@ def _product_botanical_profile_eligible(
     rows: List[Dict[str, Any]],
     row_contracts: List[Dict[str, Any]],
 ) -> bool:
-    pairs = list(zip(rows, row_contracts))
-    botanical_pairs = [(row, contract) for row, contract in pairs if _row_profile_eligible(contract, "botanical")]
-    if not botanical_pairs:
-        return False
-    primary_row, primary_contract = max(botanical_pairs, key=lambda pair: (_role_mass_mg(pair[0]) or 0.0))
-    non_botanical_pairs = [(row, contract) for row, contract in pairs if not _row_profile_eligible(contract, "botanical")]
-    botanical_mass = _role_mass_mg(primary_row) or 0.0
-    max_non_botanical_mass = max((_role_mass_mg(row) or 0.0 for row, _ in non_botanical_pairs), default=0.0)
-    mass_says_botanical = max_non_botanical_mass <= botanical_mass
-    botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)
-
-    botanical_is_hero = primary_contract.get("role") in _PROFILE_PRIMARY_ROLES
-    non_botanical_heroes = [
-        contract for _, contract in non_botanical_pairs
-        if contract.get("role") in _PROFILE_PRIMARY_ROLES
-    ]
-    if botanical_is_hero and _profile_has_enzyme_product_intent(product, non_botanical_pairs):
-        return False
-    if (
-        not botanical_is_hero
-        and _profile_has_non_botanical_product_intent(product, non_botanical_pairs)
-        and not _profile_has_title_match(product, [contract for _, contract in botanical_pairs])
-    ):
-        return False
-    if botanical_is_hero and not non_botanical_heroes:
-        return botanical_is_material
-    if non_botanical_heroes and not botanical_is_hero:
-        return False
-    if botanical_is_hero and non_botanical_heroes:
-        return botanical_is_material and _profile_botanical_is_title_head(
-            product,
-            primary_contract,
-            non_botanical_heroes,
-        )
-    return mass_says_botanical
+    """Phase 3: botanical ownership is decided by owner_type. The product owns
+    the botanical adapters only for a genuine botanical intervention
+    (therapeutic / standardized / botanical-dominant blend) — never when it is
+    merely a nutrient source or phytonutrient support competing with a material
+    non-botanical deliverable. The full reasoning lives in
+    ``_classify_botanical_owner_type`` (role + materiality + intent + reference);
+    this is the boolean view of it."""
+    owner = _classify_botanical_owner_type(product, rows, row_contracts)
+    return owner["owner_type"] in _PROFILE_BOTANICAL_OWNER_TYPES
 
 
 def _product_collagen_profile_eligible(rows: List[Dict[str, Any]], row_contracts: List[Dict[str, Any]]) -> bool:
@@ -2542,8 +2546,9 @@ def _product_profile_summary(
                 if str(e)
             }),
         }
-    # Phase 2: emit botanical owner_type (classification only; `eligible` above is
-    # unchanged in this phase — Phase 3 derives `eligible` from owner_type).
+    # Phase 3: botanical `eligible` (computed above via _product_level_profile_
+    # eligible -> _product_botanical_profile_eligible) is now derived from
+    # owner_type. We also surface the full owner_type explanation here.
     summary["botanical"].update(_classify_botanical_owner_type(product, rows, row_contracts))
     return summary
 

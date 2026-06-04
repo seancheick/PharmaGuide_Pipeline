@@ -78,6 +78,16 @@ def test_reference_family_unknown_for_generic_active():
     assert reference_family(canonical_id="d_mannose", domain="generic_active").family == "unknown"
 
 
+def test_is_known_botanical_distinguishes_real_botanicals_from_compounds():
+    from scoring_reference_resolver import is_known_botanical
+
+    assert is_known_botanical(name="Ashwagandha") is True
+    assert is_known_botanical(name="Boswellia serrata") is True
+    # Setria/glutathione are branded non-botanical compounds, not botanicals.
+    assert is_known_botanical(name="Setria") is False
+    assert is_known_botanical(canonical_id="glutathione") is False
+
+
 def test_resolver_does_not_import_scorer_or_contract():
     import scoring_reference_resolver as r
 

@@ -58,7 +58,7 @@ def _product(name: str, rows: list[dict], *, primary_type: str = "general_supple
 )
 def test_classification_builder_is_total_and_schema_valid(payload):
     contract = build_scoring_classification(payload)  # type: ignore[arg-type]
-    assert contract["classification_schema_version"] == "1.0.0"
+    assert contract["classification_schema_version"] == "1.1.0"
     assert contract["classification_origin"] == "compatibility_derived"
     assert contract["route_module"] in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
     assert contract["route_confidence"] in {"high", "medium", "low", "failed"}
@@ -864,6 +864,63 @@ def test_profile_cutover_impact_summary_counts_affected_class_flags():
     assert summary["active_selection_large_drop_ge20_count"] == 0
 
 
+def test_profile_cutover_gate_blocks_unsigned_large_route_swing():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [{
+            "dsld_id": "acerola", "old_score": 57.0, "new_score": 33.0, "abs_score_delta": 24.0,
+            "old_verdict": "SAFE", "new_verdict": "POOR", "verdict_changed": True,
+            "safety_verdict_flip": False, "not_scored_transition": False,
+            "less_restrictive_verdict_flip": False, "more_restrictive_verdict_flip": True,
+            "botanical_old": True, "botanical_contract": False, "botanical_active_diverged": False,
+            "collagen_old": False, "collagen_contract": False, "profile_diverged": True,
+        }],
+        elapsed_seconds=0.01,
+    )
+    assert summary["large_route_or_active_swing_count"] == 1
+    assert summary["unsigned_large_route_or_active_swing_count"] == 1
+    assert summary["ready_for_cutover"] is False
+
+
+def test_profile_cutover_gate_blocks_active_selection_swing_without_ownership_change():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [{
+            "dsld_id": "x", "old_score": 60.0, "new_score": 38.0, "abs_score_delta": 22.0,
+            "old_verdict": "SAFE", "new_verdict": "POOR", "verdict_changed": True,
+            "safety_verdict_flip": False, "not_scored_transition": False,
+            "less_restrictive_verdict_flip": False, "more_restrictive_verdict_flip": True,
+            "botanical_old": True, "botanical_contract": True, "botanical_active_diverged": True,
+            "collagen_old": False, "collagen_contract": False, "profile_diverged": False,
+        }],
+        elapsed_seconds=0.01,
+    )
+    assert summary["large_route_or_active_swing_count"] == 1
+    assert summary["ready_for_cutover"] is False
+
+
+def test_profile_cutover_gate_signed_route_swing_passes():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [{
+            "dsld_id": "signed", "old_score": 57.0, "new_score": 33.0, "abs_score_delta": 24.0,
+            "old_verdict": "SAFE", "new_verdict": "SAFE", "verdict_changed": False,
+            "safety_verdict_flip": False, "not_scored_transition": False,
+            "less_restrictive_verdict_flip": False, "more_restrictive_verdict_flip": False,
+            "botanical_old": True, "botanical_contract": False, "botanical_active_diverged": False,
+            "collagen_old": False, "collagen_contract": False, "profile_diverged": True,
+        }],
+        elapsed_seconds=0.01,
+        allowlist={"signed": {"human_signoff_status": "approved"}},
+    )
+    assert summary["large_route_or_active_swing_count"] == 1
+    assert summary["unsigned_large_route_or_active_swing_count"] == 0
+    assert summary["ready_for_cutover"] is True
+
+
 # --- Phase 2: botanical owner_type classifier (canary families) -------------
 # owner_type in {therapeutic_botanical, standardized_botanical, botanical_blend}
 # => product SHOULD use botanical adapters; the others => it should NOT.
@@ -1026,6 +1083,58 @@ def test_owner_enzyme_product_with_fruit_support_is_not_owner():
         ("Papaya", "herb", "major", 100, True, ["botanical_source_text"]),
     )
     assert out["owner_type"] not in _OWNER_TYPES
+
+
+def test_standardized_botanicals_membership_requires_genuine_botanical_identity():
+    """standardized_botanicals.json contains non-botanical branded compounds
+    (e.g. Setria glutathione). Membership alone must NOT make a tripeptide a
+    botanical row; a genuine botanical identity or therapeutic reference is
+    required."""
+    from scoring_input_contract import _botanical_source_evidence
+
+    # Non-botanical (glutathione) flagged via standardized_botanicals membership
+    # must NOT be granted the standardized-membership botanical evidence.
+    non_botanical = {
+        "canonical_id": "glutathione", "name": "Glutathione",
+        "canonical_source_db": "standardized_botanicals",
+    }
+    _value, evidence = _botanical_source_evidence(non_botanical)
+    assert "standardized_botanical_source_db" not in evidence
+    assert "product_standardized_botanical" not in evidence
+
+    # Genuine botanical (ashwagandha) -> standardized-membership evidence granted.
+    genuine = {
+        "canonical_id": "ashwagandha", "name": "Ashwagandha",
+        "canonical_source_db": "standardized_botanicals",
+    }
+    _value, evidence = _botanical_source_evidence(genuine)
+    assert "standardized_botanical_source_db" in evidence
+
+
+def test_botanical_eligible_derives_from_owner_type():
+    """Phase 3 behavior change: botanical `eligible` is driven by owner_type, not
+    the legacy arbiter. Acerola (material herb) was botanized by the old arbiter;
+    owner_type says nutrient_source so it must now be NOT eligible."""
+    from scoring_input_contract import _product_botanical_profile_eligible
+
+    # nutrient_source -> NOT eligible (old arbiter botanized this: acerola is material)
+    rows, contracts = _owner_case(
+        ("Vitamin C", "vitamin", "major", 300, False, []),
+        ("Acerola", "herb", "claim_prominent", 200, True, ["botanical_source_text"]),
+    )
+    assert _product_botanical_profile_eligible({"product_name": "Acerola/Flavonoid"}, rows, contracts) is False
+
+    # standardized botanical -> eligible
+    rows, contracts = _owner_case(
+        ("KSM-66 Ashwagandha", "herb", "claim_prominent", 600, True, ["standardized_botanical_source_db"]),
+    )
+    assert _product_botanical_profile_eligible({"product_name": "KSM-66"}, rows, contracts) is True
+
+    # therapeutic botanical -> eligible
+    rows, contracts = _owner_case(
+        ("Boswellia serrata", "herb", "claim_prominent", 300, True, ["botanical_source_text"]),
+    )
+    assert _product_botanical_profile_eligible({"product_name": "Boswellia"}, rows, contracts) is True
 
 
 def test_profile_cutover_impact_old_baseline_forces_legacy_selector():

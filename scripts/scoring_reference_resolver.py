@@ -48,6 +48,7 @@ from typing import Any, Dict, List, Optional, Tuple
 _DATA_DIR = Path(__file__).resolve().parent / "data"
 _THERAPEUTIC_PATH = _DATA_DIR / "rda_therapeutic_dosing.json"
 _RDA_UL_PATH = _DATA_DIR / "rda_optimal_uls.json"
+_BOTANICAL_IDENTITY_PATH = _DATA_DIR / "botanical_ingredients.json"
 
 # Domain (as stamped by the contract's _ingredient_domain) -> reference family.
 _DOMAIN_FAMILY: Dict[str, str] = {
@@ -138,6 +139,34 @@ def _lookup(index: Dict[str, Dict[str, Any]], keys: List[str]) -> Tuple[Optional
         if entry is not None:
             return entry, k
     return None, None
+
+
+@lru_cache(maxsize=1)
+def _botanical_identity_index() -> frozenset:
+    """Normalized id/standard_name/alias set of genuine botanicals
+    (botanical_ingredients.json). Used to confirm a row is really a botanical —
+    membership in standardized_botanicals.json alone is NOT proof (it contains
+    non-botanical branded compounds, e.g. Setria glutathione)."""
+    try:
+        raw = json.loads(_BOTANICAL_IDENTITY_PATH.read_text())
+    except Exception:  # pragma: no cover
+        return frozenset()
+    names: set = set()
+    for entry in raw.get("botanical_ingredients", []):
+        if not isinstance(entry, dict):
+            continue
+        for key in [entry.get("id"), entry.get("standard_name")] + list(entry.get("aliases") or []):
+            k = _norm(key)
+            if k:
+                names.add(k)
+    return frozenset(names)
+
+
+def is_known_botanical(canonical_id: Any = None, name: Any = None, aliases: Any = None) -> bool:
+    """True when the identity matches a genuine botanical in
+    botanical_ingredients.json."""
+    index = _botanical_identity_index()
+    return any(k in index for k in _identity_keys(canonical_id, name, aliases))
 
 
 def has_therapeutic_reference(canonical_id: Any = None, name: Any = None, aliases: Any = None) -> bool:

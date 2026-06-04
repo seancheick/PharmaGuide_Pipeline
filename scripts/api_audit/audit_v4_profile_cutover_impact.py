@@ -369,11 +369,23 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return rows
 
 
+def _is_route_or_active_swing(row: Dict[str, Any]) -> bool:
+    """True when the product's profile OWNERSHIP changed or its selected profile
+    ACTIVE changed (advisor: gate active-selection swings, not just route)."""
+    return bool(
+        row.get("botanical_old") != row.get("botanical_contract")
+        or row.get("collagen_old") != row.get("collagen_contract")
+        or row.get("botanical_active_diverged")
+        or row.get("collagen_active_diverged")
+    )
+
+
 def summarize(
     rows: List[Dict[str, Any]],
     *,
     elapsed_seconds: float,
     allowlist: Dict[str, Dict[str, str]] | None = None,
+    max_route_score_swing: float = 20.0,
 ) -> Dict[str, Any]:
     allowlist = allowlist or {}
     changed = [row for row in rows if row.get("old_score") != row.get("new_score") or row.get("old_verdict") != row.get("new_verdict")]
@@ -386,6 +398,16 @@ def summarize(
         row for row in changed
         if row.get("abs_score_delta") is not None and float(row["abs_score_delta"]) >= 5.0
     ]
+    # Advisor gate: any routing/ownership- or active-selection-driven score swing
+    # >= max_route_score_swing must be reviewed before cutover (catches the
+    # adapter overpowering formulation quality, e.g. Acerola 57->33).
+    large_route_swings = [
+        row for row in rows
+        if _is_route_or_active_swing(row)
+        and row.get("abs_score_delta") is not None
+        and float(row["abs_score_delta"]) >= max_route_score_swing
+    ]
+    unsigned_large_route_swings = [row for row in large_route_swings if not _allowlist_signed(row, allowlist)]
     signed_verdict_flips = [row for row in verdict_flips if _allowlist_signed(row, allowlist)]
     unsigned_verdict_flips = [row for row in verdict_flips if not _allowlist_signed(row, allowlist)]
     signed_large_score_delta = [row for row in large_score_delta if _allowlist_signed(row, allowlist)]
@@ -424,6 +446,9 @@ def summarize(
         "active_selection_large_drop_ge20_count": sum(
             1 for row in rows if row.get("active_selection_large_drop_ge20")
         ),
+        "max_route_score_swing": max_route_score_swing,
+        "large_route_or_active_swing_count": len(large_route_swings),
+        "unsigned_large_route_or_active_swing_count": len(unsigned_large_route_swings),
         "old_verdict_counts": dict(Counter(str(row.get("old_verdict")) for row in rows).most_common()),
         "new_verdict_counts": dict(Counter(str(row.get("new_verdict")) for row in rows).most_common()),
         "changed_by_profile_reason": {
@@ -436,6 +461,7 @@ def summarize(
             not safety_flips
             and not unsigned_verdict_flips
             and not unsigned_large_score_delta
+            and not unsigned_large_route_swings
         ),
     }
 
@@ -491,6 +517,10 @@ def main() -> int:
     parser.add_argument("--products-root", type=Path, default=DEFAULT_PRODUCTS_ROOT)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     parser.add_argument("--allowlist", type=Path, default=None)
+    parser.add_argument(
+        "--max-route-score-swing", type=float, default=20.0,
+        help="Fail when an unsigned route/profile/active-selection change moves score by >= this many points.",
+    )
     args = parser.parse_args()
 
     enriched_index = canary.build_enriched_index(args.products_root)
@@ -498,7 +528,12 @@ def main() -> int:
     allowlist = _load_allowlist(args.allowlist)
     started = time.perf_counter()
     rows = build_rows(products)
-    summary = summarize(rows, elapsed_seconds=time.perf_counter() - started, allowlist=allowlist)
+    summary = summarize(
+        rows,
+        elapsed_seconds=time.perf_counter() - started,
+        allowlist=allowlist,
+        max_route_score_swing=args.max_route_score_swing,
+    )
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
