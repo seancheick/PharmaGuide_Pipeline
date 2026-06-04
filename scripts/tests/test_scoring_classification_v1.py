@@ -319,6 +319,35 @@ def test_botanical_title_product_with_vitamin_adjunct_stays_botanical():
     assert contract["profile_eligibility"]["botanical"]["eligible"] is True
 
 
+def test_botanical_title_theme_does_not_override_enzyme_product_intent():
+    product = _product(
+        "Papaya Enzyme",
+        [
+            _row(
+                "papaya",
+                "Papaya Fruit Powder",
+                20,
+                "mg",
+                raw_taxonomy={"category": "botanical"},
+            ),
+            _row(
+                "digestive_enzymes",
+                "Digestive Enzyme Blend",
+                100,
+                "mg",
+                dose_class="enzyme_activity",
+                raw_taxonomy={"category": "enzyme"},
+            ),
+        ],
+        primary_type="fiber_digestive",
+    )
+
+    contract = build_scoring_classification(product)
+
+    assert contract["route_module"] == "generic"
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is False
+
+
 @pytest.mark.parametrize(
     ("canonical", "name", "expected_domain"),
     [
