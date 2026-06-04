@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import ast
+import json
 import sys
 from pathlib import Path
 
@@ -611,6 +612,42 @@ def test_native_classification_parity_audit_detects_builder_mismatch():
     assert summary["native_builder_mismatch_count"] == 1
     assert summary["issues"][0]["issue"] == "native_builder_mismatch"
     assert summary["ready"] is False
+
+
+def test_native_classification_parity_audit_fails_on_zero_loaded_products():
+    from api_audit.audit_v4_native_classification_parity import audit_products
+
+    summary = audit_products([], require_native=True)
+
+    assert summary["total_products"] == 0
+    assert summary["blocking_issue_count"] == 1
+    assert summary["issues"][0]["issue"] == "no_products_loaded"
+    assert summary["ready"] is False
+
+
+def test_native_classification_parity_loader_reads_temp_enriched_root(tmp_path):
+    from api_audit.audit_v4_native_classification_parity import load_enriched_products
+
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+    batch_path = tmp_path / "enriched" / "enriched_cleaned_batch_1.json"
+    batch_path.parent.mkdir(parents=True)
+    batch_path.write_text(json.dumps([product]) + "\n")
+
+    products = load_enriched_products(tmp_path)
+
+    assert len(products) == 1
+    assert products[0]["product_name"] == "Zinc"
+
+
+def test_enrichment_contract_validator_accepts_batch_payload_shape():
+    from enrichment_contract_validator import validate_enriched_payload
+
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+
+    violations, product_count = validate_enriched_payload([product, "bad-row"])
+
+    assert product_count == 1
+    assert any(v.rule == "CLI.1" for v in violations)
 
 
 def test_profile_audit_not_ready_on_unsigned_profile_divergence():

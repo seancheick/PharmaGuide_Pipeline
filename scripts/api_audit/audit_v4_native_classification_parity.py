@@ -36,6 +36,25 @@ def _canonical_json(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
 
 
+def load_enriched_products(products_root: Path) -> List[Dict[str, Any]]:
+    """Load enriched batch products from either operational or temp roots.
+
+    The canary report loader only indexes the operational
+    ``output_*_enriched/enriched`` layout. Native parity is also run against
+    sample enrich outputs such as ``/tmp/.../enriched`` before a full rebuild,
+    so this audit owns a broader loader and must not silently pass on zero rows.
+    """
+    products: List[Dict[str, Any]] = []
+    seen_paths = sorted({
+        path
+        for path in products_root.rglob("enriched_cleaned_batch_*.json")
+        if path.is_file()
+    })
+    for path in seen_paths:
+        products.extend(canary._iter_products(path))
+    return products
+
+
 def audit_products(products: Iterable[Dict[str, Any]], *, require_native: bool = False) -> Dict[str, Any]:
     rows: List[Dict[str, Any]] = []
     total = 0
@@ -93,6 +112,18 @@ def audit_products(products: Iterable[Dict[str, Any]], *, require_native: bool =
                 "derived_origin": derived.get("classification_origin"),
             })
 
+    if total == 0:
+        rows.append({
+            "dsld_id": None,
+            "brand_name": None,
+            "product_name": None,
+            "issue": "no_products_loaded",
+            "embedded_route": None,
+            "derived_route": None,
+            "embedded_origin": None,
+            "derived_origin": None,
+        })
+
     blocked_count = len(rows)
     return {
         "generated": datetime.now(timezone.utc).isoformat(),
@@ -134,7 +165,7 @@ def main() -> int:
     parser.add_argument("--require-native", action="store_true")
     args = parser.parse_args()
 
-    products = list(canary.build_enriched_index(args.products_root).values())
+    products = load_enriched_products(args.products_root)
     summary = audit_products(products, require_native=args.require_native)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "summary.json").write_text(

@@ -1915,27 +1915,76 @@ def validate_enriched_product(product: Dict) -> List[Dict]:
     return [validator.to_dict(v) for v in violations]
 
 
-if __name__ == "__main__":
-    # Example usage
+def validate_enriched_payload(payload: Any) -> tuple[List[ContractViolation], int]:
+    """Validate one enriched product or an operational batch payload."""
+    validator = EnrichmentContractValidator()
+    if isinstance(payload, list):
+        violations: List[ContractViolation] = []
+        product_count = 0
+        for index, product in enumerate(payload):
+            if not isinstance(product, dict):
+                violations.append(ContractViolation(
+                    rule="CLI.1",
+                    rule_name="Enriched batch payload shape",
+                    severity="error",
+                    message="Batch entries must be enriched product objects",
+                    product_id=f"batch[{index}]",
+                    field_path=f"$[{index}]",
+                    expected="object",
+                    actual=type(product).__name__,
+                ))
+                continue
+            product_count += 1
+            violations.extend(validator.validate(product))
+        return violations, product_count
+    if isinstance(payload, dict):
+        return validator.validate(payload), 1
+    return [
+        ContractViolation(
+            rule="CLI.1",
+            rule_name="Enriched payload shape",
+            severity="error",
+            message="Payload must be an enriched product object or a batch list",
+            product_id="unknown",
+            field_path="$",
+            expected="object or list",
+            actual=type(payload).__name__,
+        )
+    ], 0
+
+
+def main(argv: Optional[List[str]] = None) -> int:
     import json
     import sys
 
-    if len(sys.argv) > 1:
-        with open(sys.argv[1]) as f:
-            product = json.load(f)
+    argv = argv or sys.argv[1:]
+
+    if argv:
+        path_arg = argv[0]
+        with open(path_arg) as f:
+            payload = json.load(f)
 
         validator = EnrichmentContractValidator()
-        path_arg = sys.argv[1]
         if path_arg.endswith("banned_recalled_ingredients.json"):
-            violations = validator.validate_banned_recalled_reference(product)
+            violations = validator.validate_banned_recalled_reference(payload)
+            product_count = 1
         else:
-            violations = validator.validate(product)
+            violations, product_count = validate_enriched_payload(payload)
 
         if violations:
+            print(f"Validated {product_count} product(s).")
             print(f"Found {len(violations)} contract violations:")
             for v in violations:
                 print(f"  [{v.severity.upper()}] {v.rule}: {v.message}")
+            return 1 if any(v.severity == "error" for v in violations) else 0
         else:
+            print(f"Validated {product_count} product(s).")
             print("All contract rules passed!")
+            return 0
     else:
         print("Usage: python enrichment_contract_validator.py <enriched_product.json>")
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
