@@ -804,6 +804,60 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
     assert summary["ready_for_cutover"] is False
 
 
+def test_profile_cutover_impact_old_baseline_forces_legacy_selector():
+    from api_audit.audit_v4_profile_cutover_impact import _profile_state
+
+    product = _product(
+        "Vitamin D3 Vegan",
+        [
+            _row("vitamin_d", "Vitamin D", 25, "mcg", category="vitamins", raw_taxonomy={"category": "vitamin"}),
+            _row("lichen", "Lichen", 100, "mg", raw_taxonomy={"category": "botanical"}),
+        ],
+    )
+    contract = build_scoring_classification(product)
+
+    state = _profile_state(product, "botanical", "generic", contract)
+
+    assert state["old"] is True
+    assert state["contract"] is False
+    assert state["diverged"] is True
+
+
+def test_botanical_scoring_actives_use_composite_row_identity_for_duplicate_refs():
+    import scoring_v4.modules.botanical_profile as botanical_profile
+
+    product = _product(
+        "Blueberry Blend",
+        [
+            _row(
+                "phytomemory_proprietary_blend",
+                "PhytoMemory Proprietary Blend",
+                150,
+                "mg",
+                raw_source_path="ingredientRows[1]",
+            ),
+            _row(
+                "blueberry",
+                "Blueberry Fruit Extract",
+                150,
+                "mg",
+                raw_source_path="ingredientRows[1]",
+                raw_taxonomy={"category": "botanical"},
+            ),
+        ],
+    )
+
+    rows = {
+        row["canonical_id"]: row
+        for row in botanical_profile._scoring_actives(product)
+    }
+
+    assert rows["phytomemory_proprietary_blend"]["_scoring_classification"]["canonical_id"] == "phytomemory_proprietary_blend"
+    assert rows["blueberry"]["_scoring_classification"]["canonical_id"] == "blueberry"
+    assert botanical_profile._is_botanical_active(rows["phytomemory_proprietary_blend"]) is False
+    assert botanical_profile._is_botanical_active(rows["blueberry"]) is True
+
+
 def test_profile_cutover_impact_allowlist_signs_non_safety_changes():
     from api_audit.audit_v4_profile_cutover_impact import summarize
 

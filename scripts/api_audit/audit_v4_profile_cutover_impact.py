@@ -34,8 +34,8 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
 from scoring_input_contract import build_scoring_classification  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
 from score_supplements_v4_shadow import score_product_v4_shadow  # noqa: E402
-from scoring_v4.modules.botanical_profile import is_botanical_product  # noqa: E402
-from scoring_v4.modules.collagen_profile import is_collagen_product  # noqa: E402
+import scoring_v4.modules.botanical_profile as botanical_profile  # noqa: E402
+import scoring_v4.modules.collagen_profile as collagen_profile  # noqa: E402
 import scoring_v4.modules.generic_dose as generic_dose  # noqa: E402
 import scoring_v4.modules.generic_formulation as generic_formulation  # noqa: E402
 import v4_shadow_canary_report as canary  # noqa: E402
@@ -90,6 +90,44 @@ def _contract_botanical_product(product: Dict[str, Any]) -> bool:
 
 def _contract_collagen_product(product: Dict[str, Any]) -> bool:
     return _contract_profile(product, "collagen")
+
+
+def _legacy_contract_unavailable(*_args: Any, **_kwargs: Any) -> None:
+    return None
+
+
+@contextmanager
+def _legacy_profile_selectors() -> Iterator[None]:
+    """Force pre-contract profile selector behavior for the old baseline."""
+    originals = {
+        "botanical_row_contract": botanical_profile._classification_profile_eligible,
+        "botanical_product_contract": botanical_profile._classification_product_profile_eligible,
+        "collagen_row_contract": collagen_profile._classification_profile_eligible,
+        "collagen_product_contract": collagen_profile._classification_product_profile_eligible,
+        "dose_botanical": generic_dose.is_botanical_product,
+        "dose_collagen": generic_dose.is_collagen_product,
+        "form_botanical": generic_formulation.is_botanical_product,
+        "form_collagen": generic_formulation.is_collagen_product,
+    }
+    try:
+        botanical_profile._classification_profile_eligible = _legacy_contract_unavailable
+        botanical_profile._classification_product_profile_eligible = _legacy_contract_unavailable
+        collagen_profile._classification_profile_eligible = _legacy_contract_unavailable
+        collagen_profile._classification_product_profile_eligible = _legacy_contract_unavailable
+        generic_dose.is_botanical_product = botanical_profile.is_botanical_product
+        generic_dose.is_collagen_product = collagen_profile.is_collagen_product
+        generic_formulation.is_botanical_product = botanical_profile.is_botanical_product
+        generic_formulation.is_collagen_product = collagen_profile.is_collagen_product
+        yield
+    finally:
+        botanical_profile._classification_profile_eligible = originals["botanical_row_contract"]
+        botanical_profile._classification_product_profile_eligible = originals["botanical_product_contract"]
+        collagen_profile._classification_profile_eligible = originals["collagen_row_contract"]
+        collagen_profile._classification_product_profile_eligible = originals["collagen_product_contract"]
+        generic_dose.is_botanical_product = originals["dose_botanical"]
+        generic_dose.is_collagen_product = originals["dose_collagen"]
+        generic_formulation.is_botanical_product = originals["form_botanical"]
+        generic_formulation.is_collagen_product = originals["form_collagen"]
 
 
 @contextmanager
@@ -162,14 +200,23 @@ def _allowlist_signed(row: Dict[str, Any], allowlist: Dict[str, Dict[str, str]])
 
 def _profile_state(product: Dict[str, Any], profile: str, route: str, contract: Dict[str, Any]) -> Dict[str, Any]:
     if profile == "botanical":
-        old_eligible = route == "generic" and is_botanical_product(product)
+        with _legacy_profile_selectors():
+            old_eligible = botanical_profile.is_botanical_product(product)
+            old_actives = _profile_active_keys(product, profile)
+        contract_actives = _profile_active_keys(product, profile)
     elif profile == "collagen":
-        old_eligible = route == "generic" and is_collagen_product(product)
+        with _legacy_profile_selectors():
+            old_eligible = collagen_profile.is_collagen_product(product)
+            old_actives = _profile_active_keys(product, profile)
+        contract_actives = _profile_active_keys(product, profile)
     else:
         old_eligible = False
+        old_actives = []
+        contract_actives = []
     payload = contract.get("profile_eligibility")
     profile_payload = payload.get(profile) if isinstance(payload, dict) else None
     contract_eligible = isinstance(profile_payload, dict) and profile_payload.get("eligible") is True
+    active_diverged = old_actives != contract_actives
     evidence = ""
     if isinstance(profile_payload, dict):
         raw_evidence = profile_payload.get("evidence")
@@ -177,19 +224,46 @@ def _profile_state(product: Dict[str, Any], profile: str, route: str, contract: 
             evidence = "|".join(str(item) for item in raw_evidence)
         else:
             evidence = str(raw_evidence or "")
+    reason = _profile_divergence_reason(
+        product,
+        profile,
+        contract,
+        old_eligible=old_eligible,
+        contract_eligible=contract_eligible,
+        evidence=evidence,
+    )
+    if old_eligible == contract_eligible and active_diverged:
+        reason = f"contract_changes_{profile}_active_selection"
     return {
         "old": old_eligible,
         "contract": contract_eligible,
-        "diverged": old_eligible != contract_eligible,
-        "reason": _profile_divergence_reason(
-            product,
-            profile,
-            contract,
-            old_eligible=old_eligible,
-            contract_eligible=contract_eligible,
-            evidence=evidence,
-        ),
+        "old_actives": old_actives,
+        "contract_actives": contract_actives,
+        "active_diverged": active_diverged,
+        "diverged": old_eligible != contract_eligible or active_diverged,
+        "reason": reason,
     }
+
+
+def _profile_active_keys(product: Dict[str, Any], profile: str) -> List[str]:
+    if profile == "botanical":
+        rows = [
+            row for row in botanical_profile._scoring_actives(product)
+            if botanical_profile._is_botanical_active(row)
+        ]
+    elif profile == "collagen":
+        rows = [
+            row for row in collagen_profile._scoring_actives(product)
+            if collagen_profile._is_collagen_active(row)
+        ]
+    else:
+        return []
+    keys = []
+    for row in rows:
+        key = str(row.get("canonical_id") or row.get("name") or "").strip()
+        if key:
+            keys.append(key)
+    return sorted(set(keys))
 
 
 def _delta(old_score: float | None, new_score: float | None) -> float | None:
@@ -202,8 +276,9 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     products = list(products)
     old_scores: Dict[str, Dict[str, Any]] = {}
     new_scores: Dict[str, Dict[str, Any]] = {}
-    for product in products:
-        old_scores[canary._dsld_id(product)] = _score(product)
+    with _legacy_profile_selectors():
+        for product in products:
+            old_scores[canary._dsld_id(product)] = _score(product)
     with _contract_profile_selectors():
         for product in products:
             new_scores[canary._dsld_id(product)] = _score(product)
@@ -242,9 +317,15 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "not_scored_transition": _not_scored_transition(old["verdict"], new["verdict"]),
             "botanical_old": botanical["old"],
             "botanical_contract": botanical["contract"],
+            "botanical_old_actives": "|".join(botanical["old_actives"]),
+            "botanical_contract_actives": "|".join(botanical["contract_actives"]),
+            "botanical_active_diverged": botanical["active_diverged"],
             "botanical_reason": botanical["reason"],
             "collagen_old": collagen["old"],
             "collagen_contract": collagen["contract"],
+            "collagen_old_actives": "|".join(collagen["old_actives"]),
+            "collagen_contract_actives": "|".join(collagen["contract_actives"]),
+            "collagen_active_diverged": collagen["active_diverged"],
             "collagen_reason": collagen["reason"],
             "profile_diverged": botanical["diverged"] or collagen["diverged"],
             "profile_reasons": "|".join(reason for reason in profile_reasons if reason),
@@ -277,7 +358,11 @@ def summarize(
     for row in changed:
         if row.get("botanical_old") != row.get("botanical_contract"):
             by_reason["botanical"][str(row.get("botanical_reason"))] += 1
+        elif row.get("botanical_active_diverged"):
+            by_reason["botanical"][str(row.get("botanical_reason"))] += 1
         if row.get("collagen_old") != row.get("collagen_contract"):
+            by_reason["collagen"][str(row.get("collagen_reason"))] += 1
+        elif row.get("collagen_active_diverged"):
             by_reason["collagen"][str(row.get("collagen_reason"))] += 1
     return {
         "generated": datetime.now(timezone.utc).isoformat(),
@@ -338,9 +423,15 @@ FIELDS = [
     "not_scored_transition",
     "botanical_old",
     "botanical_contract",
+    "botanical_old_actives",
+    "botanical_contract_actives",
+    "botanical_active_diverged",
     "botanical_reason",
     "collagen_old",
     "collagen_contract",
+    "collagen_old_actives",
+    "collagen_contract_actives",
+    "collagen_active_diverged",
     "collagen_reason",
     "profile_diverged",
     "profile_reasons",

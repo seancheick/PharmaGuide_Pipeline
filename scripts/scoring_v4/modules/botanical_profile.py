@@ -213,14 +213,34 @@ def _scoring_actives(product: Dict[str, Any]) -> List[Dict[str, Any]]:
             rows = [dict(r) for r in result.rows if isinstance(r, dict)]
             try:
                 contract = build_scoring_classification(product)
-                contracts_by_ref = {
-                    str(item.get("row_ref") or ""): item
-                    for item in contract.get("ingredients", [])
-                    if isinstance(item, dict)
-                }
+                contracts_by_key: Dict[tuple, Dict[str, Any]] = {}
+                contracts_by_unique_ref: Dict[str, Dict[str, Any]] = {}
+                duplicate_refs = set()
+                for item in contract.get("ingredients", []):
+                    if not isinstance(item, dict):
+                        continue
+                    row_ref = str(item.get("row_ref") or "")
+                    key = (
+                        row_ref,
+                        _norm(item.get("canonical_id")),
+                        _norm(item.get("name")),
+                    )
+                    contracts_by_key[key] = item
+                    if row_ref in contracts_by_unique_ref:
+                        duplicate_refs.add(row_ref)
+                    else:
+                        contracts_by_unique_ref[row_ref] = item
+                for row_ref in duplicate_refs:
+                    contracts_by_unique_ref.pop(row_ref, None)
                 for index, row in enumerate(rows):
                     row_ref = str(row.get("raw_source_path") or row.get("source") or f"scoring_row:{index}")
-                    row_contract = contracts_by_ref.get(row_ref)
+                    row_contract = contracts_by_key.get((
+                        row_ref,
+                        _norm(row.get("canonical_id")),
+                        _norm(row.get("name")),
+                    ))
+                    if row_contract is None:
+                        row_contract = contracts_by_unique_ref.get(row_ref)
                     if isinstance(row_contract, dict):
                         row["_scoring_classification"] = row_contract
             except Exception:  # pragma: no cover - profile scoring still has legacy fallback
