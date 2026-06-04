@@ -5,12 +5,14 @@
     "schema_version": "5.0.0",
     "last_updated": "2026-02-20",
     "total_entries": 77,
-    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle. 2026-02-20: Added 16 manufacturer entries (sports, DTC, international, and legacy Care/of coverage) with updated alias coverage for exact matching."
+    "recent_changes": "2025-12-04: Added Seed Health (NutraIngredients-USA 2022 winner, multiple RCTs, WHO advisor founded). 2025-12-03: Added BioGaia and Culturelle. 2026-02-20: Added 16 manufacturer entries (sports, DTC, international, and legacy Care/of coverage) with updated alias coverage for exact matching.",
+    "country_field_added": "2026-06-04 (research-verified HQ/regulatory jurisdiction; 5 unverified left blank)"
   },
   "top_manufacturers": [
     {
       "id": "MANUF_NATURE_MADE",
       "standard_name": "Nature Made",
+      "country": "USA",
       "evidence": [
         "USP-verified products",
         "No FDA warning letters or recalls (last 10 years)",
@@ -25,6 +27,7 @@
     {
       "id": "MANUF_SOLGAR",
       "standard_name": "Solgar",
+      "country": "USA",
       "evidence": [
         "GMP and USP certifications",
         "No major regulatory actions or recalls (last 10 years)"
@@ -38,6 +41,7 @@
     {
       "id": "MANUF_NORDIC_NATURALS",
       "standard_name": "Nordic Naturals",
+      "country": "USA",
       "evidence": [
         "IFOS 5-star rated omega-3s",
         "Multiple third-party purity certifications",
@@ -52,6 +56,7 @@
     {
       "id": "MANUF_GARDEN_OF_LIFE",
       "standard_name": "Garden of Life",
+      "country": "USA",
       "evidence": [
         "NSF, USDA Organic, and Non-GMO Project certifications",
         "No significant recalls or FDA warnings",
@@ -66,6 +71,7 @@
     {
       "id": "MANUF_THORNE",
       "standard_name": "Thorne",
+      "country": "USA",
       "evidence": [
         "NSF Certified for Sport",
         "USP-verified select products",
@@ -83,6 +89,7 @@
     {
       "id": "MANUF_METAGENICS",
       "standard_name": "Metagenics",
+      "country": "USA",
       "evidence": [
         "ISO, GMP certifications",
         "No regulatory penalties or recalls"
@@ -96,6 +103,7 @@
     {
       "id": "MANUF_ORTHO_MOLECULAR",
       "standard_name": "Ortho Molecular Products",
+      "country": "USA",
       "evidence": [
         "GMP certs, clinical distribution",
         "Zero warning letters and recalls"
@@ -109,6 +117,7 @@
     {
       "id": "MANUF_PURE_ENCAPSULATIONS",
       "standard_name": "Pure Encapsulations",
+      "country": "USA",
       "evidence": [
         "GMP, NSF certification",
         "No major regulatory actions"
@@ -122,6 +131,7 @@
     {
       "id": "MANUF_DOUGLAS_LABORATORIES",
       "standard_name": "Douglas Laboratories",
+      "country": "USA",
       "evidence": [
         "GMP, multiple third-party certifications",
         "Zero recalls, long history of regulatory compliance"
@@ -135,6 +145,7 @@
     {
       "id": "MANUF_NOW_FOODS",
       "standard_name": "NOW Foods",
+      "country": "USA",
       "evidence": [
         "57 years in business (founded 1968)",
         "16,000+ tests per month with extensive in-house testing",
@@ -150,6 +161,7 @@
     {
       "id": "MANUF_LIFE_EXTENSION",
       "standard_name": "Life Extension",
+      "country": "USA",
       "evidence": [
         "45 years in business (founded 1980)",
         "ConsumerLab's 2023 top multivitamin/vitamin D award winner",
@@ -165,6 +177,7 @@
     {
       "id": "MANUF_GAIA_HERBS",
       "standard_name": "Gaia Herbs",
+      "country": "USA",
       "evidence": [
         "38 years in business (founded 1987)",
         "cGMP-compliant with USDA Organic certifications",
@@ -180,6 +193,7 @@
     {
       "id": "MANUF_CARLSON_LABS",
       "standard_name": "Carlson Labs",
+      "country": "USA",
       "evidence": [
         "60 years in business (founded 1965)",
         "IFOS-certified fish oil, cGMP-compliant",
@@ -195,6 +209,7 @@
     {
       "id": "MANUF_FULLWELL",
       "standard_name": "FullWell",
+      "country": "USA",
       "evidence": [
         "Dietitian-founded with focus on transparency",
         "UL Solutions-certified facility, cGMP-compliant",
@@ -210,6 +225,7 @@
     {
       "id": "MANUF_SEEKING_HEALTH",
       "standard_name": "Seeking Health",
+      "country": "USA",
       "evidence": [
         "Founded by geneticist Dr. Ben Lynch",
         "cGMP-compliant with third-party testing",
@@ -226,6 +242,7 @@
     {
       "id": "MANUF_PHYSICIAN_THERAPEUTICS",
       "standard_name": "Physician Therapeutics",
+      "country": "USA",
       "evidence": [
         "Practitioner-only distribution",
         "cGMP-compliant with rigorous testing",
@@ -242,6 +259,7 @@
     {
       "id": "MANUF_INTEGRATIVE_THERAPEUTICS",
       "standard_name": "Integrative Therapeutics",
+      "country": "USA",
       "evidence": [
         "50+ years serving practitioners",
         "cGMP-compliant with NSF certification",
@@ -257,6 +275,7 @@
     {
       "id": "MANUF_XYMOGEN",
       "standard_name": "Xymogen",
+      "country": "USA",
       "evidence": [
         "Exclusive practitioner distribution",
         "cGMP-compliant facilities",
@@ -272,6 +291,7 @@
     {
       "id": "MANUF_BIOTICS_RESEARCH",
       "standard_name": "Biotics Research",
+      "country": "USA",
       "evidence": [
         "45+ years in business",
         "Practitioner-exclusive distribution",
@@ -287,6 +307,7 @@
     {
       "id": "MANUF_STANDARD_PROCESS",
       "standard_name": "Standard Process",
+      "country": "USA",
       "evidence": [
         "95+ years in business (founded 1929)",
         "Organic farming and whole food nutrition",
@@ -302,6 +323,7 @@
     {
       "id": "MANUF_QUICKSILVER_SCIENTIFIC",
       "standard_name": "Quicksilver Scientific",
+      "country": "USA",
       "evidence": [
         "Innovative liposomal delivery systems",
         "cGMP-compliant manufacturing",
@@ -317,6 +339,7 @@
     {
       "id": "MANUF_RESEARCH_NUTRITIONALS",
       "standard_name": "Researched Nutritionals",
+      "country": "USA",
       "evidence": [
         "Practitioner-exclusive distribution",
         "cGMP-compliant with extensive testing",
@@ -332,6 +355,7 @@
     {
       "id": "MANUF_KLAIRE_LABS",
       "standard_name": "Klaire Labs",
+      "country": "USA",
       "evidence": [
         "56 years in business (founded 1969)",
         "cGMP-compliant with hypoallergenic formulations",
@@ -347,6 +371,7 @@
     {
       "id": "MANUF_JARROW_FORMULAS",
       "standard_name": "Jarrow Formulas",
+      "country": "USA",
       "evidence": [
         "48 years in business (founded 1977)",
         "cGMP-compliant with high ConsumerLab ratings",
@@ -362,6 +387,7 @@
     {
       "id": "MANUF_VITAL_NUTRIENTS",
       "standard_name": "Vital Nutrients",
+      "country": "USA",
       "evidence": [
         "GMP, third-party certified",
         "No FDA warning letters"
@@ -375,6 +401,7 @@
     {
       "id": "MANUF_PURE_SYNERGY",
       "standard_name": "The Synergy Company",
+      "country": "USA",
       "evidence": [
         "Certified Organic and Non-GMO",
         "cGMP compliant facilities",
@@ -390,6 +417,7 @@
     {
       "id": "MANUF_DESIGNS_FOR_HEALTH",
       "standard_name": "Designs for Health",
+      "country": "USA",
       "evidence": [
         "Practitioner-trusted brand",
         "cGMP compliant facilities",
@@ -405,6 +433,7 @@
     {
       "id": "MANUF_KION",
       "standard_name": "Kion",
+      "country": "USA",
       "evidence": [
         "Third-party tested for purity and potency",
         "cGMP compliant manufacturing",
@@ -420,6 +449,7 @@
     {
       "id": "MANUF_BULK_NUTRITION",
       "standard_name": "Bulk Nutrition",
+      "country": "USA",
       "evidence": [
         "cGMP, ISO certified manufacturing",
         "Extensive third-party testing with Certificates of Analysis",
@@ -434,6 +464,7 @@
     {
       "id": "MANUF_NATURES_WAY",
       "standard_name": "Nature's Way",
+      "country": "USA",
       "evidence": [
         "NSF, cGMP certifications",
         "No major regulatory actions or recalls in last decade",
@@ -462,6 +493,7 @@
     {
       "id": "MANUF_NATURES_BOUNTY",
       "standard_name": "Nature's Bounty",
+      "country": "USA",
       "evidence": [
         "GMP and NSF registered facilities",
         "No recent FDA warning letters",
@@ -476,6 +508,7 @@
     {
       "id": "MANUF_VITACOST",
       "standard_name": "Vitacost",
+      "country": "USA",
       "evidence": [
         "cGMP and FDA registered facilities",
         "Third-party tested products",
@@ -490,6 +523,7 @@
     {
       "id": "MANUF_DOUBLE_WOOD",
       "standard_name": "Double Wood Supplements",
+      "country": "USA",
       "evidence": [
         "cGMP compliant",
         "Third-party lab testing with batch certificates",
@@ -532,6 +566,7 @@
     {
       "id": "MANUF_GENERAL_NUTRITION_CENTERS",
       "standard_name": "GNC",
+      "country": "USA",
       "evidence": [
         "cGMP and NSF certifications on many products",
         "Industry recognized for quality",
@@ -546,6 +581,7 @@
     {
       "id": "MANUF_EBIOTICS",
       "standard_name": "EBiotics",
+      "country": "Canada",
       "evidence": [
         "cGMP compliant production",
         "Third-party tested for purity",
@@ -560,6 +596,7 @@
     {
       "id": "MANUF_KIRKLAND_SIGNATURE",
       "standard_name": "Kirkland Signature",
+      "country": "USA",
       "evidence": [
         "USP-verified for many products",
         "Substantial quality control due to Costco’s internal standards",
@@ -574,6 +611,7 @@
     {
       "id": "MANUF_TRUVANI",
       "standard_name": "Truvani",
+      "country": "USA",
       "evidence": [
         "USDA Organic and Non-GMO Project certifications",
         "Transparent sourcing and third-party testing",
@@ -588,6 +626,7 @@
     {
       "id": "MANUF_SMARTYPANTS",
       "standard_name": "SmartyPants",
+      "country": "USA",
       "evidence": [
         "NSF Certified, Non-GMO Project verified",
         "Top-rated in purity testing (e.g., Clean Label Project)",
@@ -602,6 +641,7 @@
     {
       "id": "MANUF_RITUAL",
       "standard_name": "Ritual",
+      "country": "USA",
       "evidence": [
         "Traceable ingredient sourcing via publically available certificates",
         "Third-party validated by Eurofins, UL, and USP",
@@ -616,6 +656,7 @@
     {
       "id": "MANUF_MEGAFOOD",
       "standard_name": "MegaFood",
+      "country": "USA",
       "evidence": [
         "Certified B Corporation, NSF, Non-GMO Project Verified",
         "Extensive third-party testing and transparency reports",
@@ -631,6 +672,7 @@
     {
       "id": "MANUF_NATURELO",
       "standard_name": "NATURELO",
+      "country": "Canada",
       "evidence": [
         "Non-GMO and GMP certified",
         "Known for clean-label formulations",
@@ -673,6 +715,7 @@
     {
       "id": "MANUF_PRIMAL_KITCHEN",
       "standard_name": "Primal Kitchen",
+      "country": "USA",
       "evidence": [
         "Paleo and Keto certified; fair-trade and organic sources for many products",
         "No major FDA regulatory actions",
@@ -687,6 +730,7 @@
     {
       "id": "MANUF_HUM_NUTRITION",
       "standard_name": "HUM Nutrition",
+      "country": "USA",
       "evidence": [
         "GMP and ISO certified",
         "Transparent third-party testing with batch COAs",
@@ -702,6 +746,7 @@
     {
       "id": "MANUF_GARDEN_OF_LIFE_SPORT",
       "standard_name": "Garden of Life SPORT",
+      "country": "USA",
       "evidence": [
         "NSF Certified for Sport and Informed-Choice/Sport certifications",
         "Entire line is vegan-friendly, USDA Organic, and Non-GMO Project Verified",
@@ -717,6 +762,7 @@
     {
       "id": "MANUF_VEGA",
       "standard_name": "Vega",
+      "country": "Canada",
       "evidence": [
         "Vegan Society certified",
         "NSF GMP compliant; transparent ingredient sourcing",
@@ -732,6 +778,7 @@
     {
       "id": "MANUF_ORGAIN",
       "standard_name": "Orgain",
+      "country": "USA",
       "evidence": [
         "USDA Organic and NSF certified",
         "Specializes in vegan and plant-based protein and nutritional shakes",
@@ -746,6 +793,7 @@
     {
       "id": "MANUF_NAKED_NUTRITION",
       "standard_name": "Naked Nutrition",
+      "country": "USA",
       "evidence": [
         "cGMP and Informed-Sport certified for select products",
         "Emphasizes clean, single-ingredient vegan and sports proteins",
@@ -760,6 +808,7 @@
     {
       "id": "MANUF_MYPROTEIN",
       "standard_name": "MyProtein",
+      "country": "UK",
       "evidence": [
         "Informed-Sport certification for various sports supplements",
         "Vegan and allergen-free lines available",
@@ -774,6 +823,7 @@
     {
       "id": "MANUF_HUEL",
       "standard_name": "Huel",
+      "country": "UK",
       "evidence": [
         "Certified vegan",
         "Nutritionally complete meal products rigorously tested",
@@ -788,6 +838,7 @@
     {
       "id": "MANUF_ALGAE_CAL",
       "standard_name": "AlgaeCal",
+      "country": "Canada",
       "evidence": [
         "Plant-based, algae-derived calcium and minerals",
         "Third-party tested for purity, vegan certified",
@@ -802,6 +853,7 @@
     {
       "id": "MANUF_NUZEST",
       "standard_name": "Nuzest",
+      "country": "Australia",
       "evidence": [
         "Pea protein products tested for heavy metals and allergens",
         "Vegan and allergen-friendly certifications",
@@ -817,6 +869,7 @@
     {
       "id": "MANUF_SUNWARRIOR",
       "standard_name": "Sunwarrior",
+      "country": "USA",
       "evidence": [
         "USDA Organic, Non-GMO, Certified Vegan",
         "Third-party lab tested for contaminants",
@@ -831,6 +884,7 @@
     {
       "id": "MANUF_TERRA_ORIGIN",
       "standard_name": "Terra Origin",
+      "country": "USA",
       "evidence": [
         "NSF GMP certified",
         "Range of vegan, collagen, and health-focused powders",
@@ -845,6 +899,7 @@
     {
       "id": "MANUF_BIOGAIA",
       "standard_name": "BioGaia",
+      "country": "Sweden",
       "evidence": [
         "60+ clinical studies on probiotic strains",
         "Meta-analysis confirmed efficacy for periodontitis",
@@ -862,6 +917,7 @@
     {
       "id": "MANUF_CULTURELLE",
       "standard_name": "Culturelle",
+      "country": "USA",
       "evidence": [
         "USP Verified products",
         "Uses clinically studied LGG strain",
@@ -877,6 +933,7 @@
     {
       "id": "MANUF_SEED_HEALTH",
       "standard_name": "Seed Health",
+      "country": "USA",
       "evidence": [
         "2022 NutraIngredients-USA Probiotic Product of the Year",
         "Multiple published RCTs (DDW 2024, DDW 2025)",
@@ -896,6 +953,7 @@
     {
       "id": "MANUF_OPTIMUM_NUTRITION",
       "standard_name": "Optimum Nutrition",
+      "country": "USA",
       "evidence": [
         "Part of Glanbia Performance Nutrition portfolio (global sports-nutrition leader)",
         "Company states products are produced in cGMP-compliant facilities with ingredient CoA checks",
@@ -913,6 +971,7 @@
     {
       "id": "MANUF_TRANSPARENT_LABS",
       "standard_name": "Transparent Labs",
+      "country": "USA",
       "evidence": [
         "Publishes third-party testing Certificates of Analysis (COAs) via public lookup page",
         "Provides ingredient verification and gluten testing records for products",
@@ -928,6 +987,7 @@
     {
       "id": "MANUF_KLEAN_ATHLETE",
       "standard_name": "Klean Athlete",
+      "country": "USA",
       "evidence": [
         "Brand states NSF Certified for Sport across product line",
         "Brand states manufacturing in NSF-GMP registered facility",
@@ -943,6 +1003,7 @@
     {
       "id": "MANUF_ATHLETIC_GREENS",
       "standard_name": "AG1 (Athletic Greens)",
+      "country": "USA",
       "evidence": [
         "AG1 quality page states NSF Certified for Sport certification",
         "Brand states manufacturing in TGA-registered GMP facility",
@@ -959,6 +1020,7 @@
     {
       "id": "MANUF_NUTRAFOL",
       "standard_name": "Nutrafol",
+      "country": "USA",
       "evidence": [
         "Brand publishes multiple clinical studies on finished formulas",
         "Brand states studies are run at independent centers under Good Clinical Practice",
@@ -974,6 +1036,7 @@
     {
       "id": "MANUF_SPORTS_RESEARCH",
       "standard_name": "Sports Research",
+      "country": "USA",
       "evidence": [
         "Brand lists IFOS 5-star certification for selected omega products",
         "Brand lists iGen Non-GMO and third-party testing claims on key SKUs",
@@ -990,6 +1053,7 @@
     {
       "id": "MANUF_CENTRUM_HALEON",
       "standard_name": "Centrum (Haleon)",
+      "country": "UK",
       "evidence": [
         "Haleon publicly identifies Centrum as a core VMS brand in global portfolio",
         "Haleon positions brands as science-led and globally scaled consumer-health products",
@@ -1006,6 +1070,7 @@
     {
       "id": "MANUF_OLLY",
       "standard_name": "OLLY",
+      "country": "USA",
       "evidence": [
         "Brand help-center states many products are NSF certified",
         "Brand states products are rigorously third-party tested in U.S. labs",
@@ -1023,6 +1088,7 @@
     {
       "id": "MANUF_SWISSE",
       "standard_name": "Swisse",
+      "country": "Australia",
       "evidence": [
         "Brand states over 55-year history and science-backed formulation positioning",
         "Brand states H&H Group B Corp association",
@@ -1039,6 +1105,7 @@
     {
       "id": "MANUF_JAMIESON",
       "standard_name": "Jamieson Wellness",
+      "country": "Canada",
       "evidence": [
         "Brand states operation since 1922 and extensive in-house manufacturing footprint",
         "Brand references Health Canada GMP licensing and quality-control framework",
@@ -1056,6 +1123,7 @@
     {
       "id": "MANUF_BAYER_CONSUMER_HEALTH",
       "standard_name": "Bayer Consumer Health",
+      "country": "Germany",
       "evidence": [
         "Bayer is a global life-science company with established consumer-health operations",
         "Bayer consumer-health portfolio has included major VMS lines (e.g., One A Day)",
@@ -1074,6 +1142,7 @@
     {
       "id": "MANUF_NUTRICOST",
       "standard_name": "Nutricost",
+      "country": "USA",
       "evidence": [
         "Brand product pages repeatedly state third-party ISO-accredited lab testing",
         "Brand claims cGMP-compliant manufacturing across product range",
@@ -1090,6 +1159,7 @@
     {
       "id": "MANUF_ELYSIUM_HEALTH",
       "standard_name": "Elysium Health",
+      "country": "USA",
       "evidence": [
         "Basis product page states NSF Certified for Sport status",
         "Brand cites completed double-blind randomized placebo-controlled clinical trial data on product platform",
@@ -1106,6 +1176,7 @@
     {
       "id": "MANUF_FOUR_SIGMATIC",
       "standard_name": "Four Sigmatic",
+      "country": "USA",
       "evidence": [
         "Brand quality page states third-party testing for heavy metals, mycotoxins, molds/yeasts, and pesticides",
         "Brand quality messaging includes finished-product safety checks beyond baseline GMP claims",
@@ -1121,6 +1192,7 @@
     {
       "id": "MANUF_NEEDED",
       "standard_name": "Needed",
+      "country": "USA",
       "evidence": [
         "Brand quality page states every batch is third-party tested at accredited labs for heavy metals",
         "Brand states thresholds are controlled to California Prop 65 limits before release",
@@ -1137,6 +1209,7 @@
     {
       "id": "MANUF_CARE_OF_LEGACY",
       "standard_name": "Care/of (Legacy)",
+      "country": "USA",
       "evidence": [
         "Bayer announced majority stake acquisition in 2020",
         "Brand operated personalized supplement packs with direct-to-consumer model",

@@ -11698,12 +11698,13 @@ class SupplementEnricherV3:
         if not manufacturer:
             manufacturer = brand_name
 
+        top_manufacturer = self._check_top_manufacturer(brand_name, manufacturer)
         return {
             "brand_name": brand_name,
             "manufacturer": manufacturer,
-            "top_manufacturer": self._check_top_manufacturer(brand_name, manufacturer),
+            "top_manufacturer": top_manufacturer,
             "violations": self._check_violations(brand_name, manufacturer),
-            "country_of_origin": self._extract_country(product),
+            "country_of_origin": self._extract_country(product, top_manufacturer),
             "bonus_features": self._collect_bonus_features(product)
         }
 
@@ -11962,12 +11963,20 @@ class SupplementEnricherV3:
         "denmark", "eu",
     }
 
-    def _extract_country(self, product: Dict) -> Dict:
+    def _extract_country(self, product: Dict, top_manufacturer: Optional[Dict] = None) -> Dict:
         """Extract country of origin data.
 
         Detection order:
         1. Regex scan of label text ("made in USA", etc.)
         2. Structured contacts[].contactDetails.country for Manufacturer contacts
+        3. Verified country of an EXACT top-manufacturer match (manufacturer HQ /
+           regulatory jurisdiction from top_manufacturers_data.json). Most labels
+           print no "made in" text and carry no manufacturer-country contact, so
+           without this ~78% of products had no country and silently lost the
+           manufacturer-trust high-standard-region (D4) point even for known
+           USA/EU/CA/etc. brands. The label/contact signals above still take
+           precedence (they describe the actual product), with the manufacturer
+           jurisdiction as the fallback.
         """
         all_text = self._get_all_product_text(product)
 
@@ -11998,11 +12007,38 @@ class SupplementEnricherV3:
                             high_reg = True
                         break
 
+        country_source = "label_or_contact" if country else ""
+
+        # Final fallback: verified country of an exact top-manufacturer match.
+        if not country and isinstance(top_manufacturer, dict) and top_manufacturer.get("found"):
+            mfr_country = (self._top_manufacturer_country(top_manufacturer.get("manufacturer_id")) or "").strip()
+            if mfr_country:
+                country = mfr_country
+                country_source = "top_manufacturer_jurisdiction"
+                if mfr_country.lower() in self._HIGH_REG_COUNTRIES:
+                    high_reg = True
+
         return {
             "detected": country != "",
             "country": country,
-            "high_regulation_country": high_reg
+            "high_regulation_country": high_reg,
+            "source": country_source,
         }
+
+    def _top_manufacturer_country(self, manufacturer_id: Optional[str]) -> str:
+        """Verified `country` for a manufacturer id from top_manufacturers_data.json
+        (only the research-verified records carry one; unverified ones do not, so
+        they correctly yield no country)."""
+        if not manufacturer_id:
+            return ""
+        if getattr(self, "_top_mfr_country_cache", None) is None:
+            top_db = self.databases.get("top_manufacturers_data", {}) or {}
+            self._top_mfr_country_cache = {
+                str(row.get("id")): str(row.get("country") or "")
+                for row in top_db.get("top_manufacturers", [])
+                if isinstance(row, dict) and row.get("id")
+            }
+        return self._top_mfr_country_cache.get(str(manufacturer_id), "")
 
     def _collect_bonus_features(self, product: Dict) -> Dict:
         """Collect bonus feature data"""
