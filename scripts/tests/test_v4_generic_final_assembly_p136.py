@@ -459,10 +459,11 @@ def test_score_cannot_exceed_100() -> None:
     assert breakdown["score_100"] <= 100.0
 
 
-def test_botanical_no_dose_scores_zero_not_excluded_not_floored() -> None:
-    # Phase 6 supersedes the Phase-4 floor guard: a botanical with no disclosed
-    # dose now scores the dose dimension as a real 0 (honest quality gap), not
-    # None (excluded) and not floored. The botanical_dose_deferred flag stays off.
+def test_botanical_no_dose_floors_low_not_excluded() -> None:
+    # Calibration v2 (835d9fa4): a primary botanical with no disclosed dose now
+    # floors the dose dimension at 5 (was 0) — non-disclosure loses most credit
+    # but isn't destroyed. Still a real number, never None (not excluded from the
+    # denominator). The botanical_dose_deferred flag stays off.
     from scoring_v4.modules.generic import score_generic
 
     product = _base_product(
@@ -476,7 +477,8 @@ def test_botanical_no_dose_scores_zero_not_excluded_not_floored() -> None:
     product["rda_ul_data"] = {"adequacy_results": [], "safety_flags": []}
     breakdown = score_generic(product).to_breakdown()
 
-    assert breakdown["dimensions"]["dose"]["score"] == 0.0
+    assert breakdown["dimensions"]["dose"]["score"] == 5.0
+    assert breakdown["dimensions"]["dose"]["score"] is not None
     assert breakdown["metadata"]["excluded_dimensions"] == []
     assert breakdown["metadata"]["botanical_dose_deferred"] is False
     assert breakdown["metadata"]["botanical_raw_floor_applied"] is False
