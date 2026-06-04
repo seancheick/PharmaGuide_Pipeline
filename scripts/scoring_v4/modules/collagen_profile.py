@@ -11,8 +11,8 @@ with a token collagen add-on stays on the generic path).
   Formulation adapter (replaces A1/A2, max 15):
     recognized collagen identity         +6
     hydrolyzed peptides (not gelatin)    +2
-    collagen type disclosed (I/II/III…)  +3
-    source disclosed (marine/bovine/…)   +2
+    collagen type disclosed (I/II/III…)  +2
+    source disclosed (marine/bovine/…)   +3
     quantified dose present              +2
     branded clinically-studied collagen  +3
 
@@ -199,9 +199,9 @@ def score_collagen_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     if any(t in text for t in _HYDROLYZED_TOKENS):
         components["hydrolyzed_peptides"] = 2.0
     if _TYPE_RE.search(text):
-        components["type_disclosed"] = 3.0
+        components["type_disclosed"] = 2.0
     if any(t in text for t in _SOURCE_TOKENS):
-        components["source_disclosed"] = 2.0
+        components["source_disclosed"] = 3.0
     if _mass_mg(row) is not None:
         components["quantified_dose_present"] = 2.0
     if any(b in text for b in _COLLAGEN_BRANDS):

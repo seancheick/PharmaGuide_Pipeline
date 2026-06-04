@@ -251,7 +251,7 @@ def test_product_level_collagen_evidence_is_visible_to_profile_scorer():
 # --- formulation adapter (max 15) ------------------------------------------
 
 def test_formulation_full_signal_caps_at_15():
-    # recognized(6)+hydrolyzed(2)+type(3)+source(2)+quantified(2)+branded(3)=18 -> cap 15
+    # recognized(6)+hydrolyzed(2)+type(2)+source(3)+quantified(2)+branded(3)=18 -> cap 15
     row = _collagen(name="Verisol Bioactive Collagen Peptides",
                     form="hydrolyzed type I type III bovine collagen peptides")
     out = score_collagen_formulation(_product([row]))
@@ -259,8 +259,8 @@ def test_formulation_full_signal_caps_at_15():
     c = out["components"]
     assert c["recognized_collagen_identity"] == 6.0
     assert c["hydrolyzed_peptides"] == 2.0
-    assert c["type_disclosed"] == 3.0
-    assert c["source_disclosed"] == 2.0
+    assert c["type_disclosed"] == 2.0
+    assert c["source_disclosed"] == 3.0
     assert c["quantified_dose_present"] == 2.0
     assert c["branded_clinically_studied"] == 3.0
 
@@ -288,6 +288,6 @@ def test_formulation_unhydrolyzed_gelatin_scores_lower_than_peptides():
     c = out["components"]
     assert c.get("recognized_collagen_identity") == 6.0
     assert "hydrolyzed_peptides" not in c
-    assert c.get("source_disclosed") == 2.0  # bovine
+    assert c.get("source_disclosed") == 3.0  # bovine
     assert c.get("quantified_dose_present") == 2.0
-    assert out["score"] == 10.0  # 6 + 2 source + 2 dose, no hydrolyzed bonus
+    assert out["score"] == 11.0  # 6 + 3 source + 2 dose, no hydrolyzed bonus

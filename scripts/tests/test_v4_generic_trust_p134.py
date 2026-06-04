@@ -168,6 +168,77 @@ def test_brand_level_testing_posture_scores_low_trust_without_b4a_credit() -> No
     assert payload["metadata"]["B4d_manufacturer_id"] == "MANUF_TRANSPARENT_LABS"
 
 
+def test_brand_level_soft_quality_posture_scores_one_point(monkeypatch) -> None:
+    """Organic / Non-GMO posture is a useful brand-quality signal, but it is
+    not equivalent to COA/NSF/USP/IFOS-style testing evidence."""
+    from scoring_v4.modules import brand_testing_posture
+
+    monkeypatch.setattr(
+        brand_testing_posture,
+        "_top_manufacturers_by_id",
+        lambda: {
+            "MANUF_SOFT_ONLY": {
+                "id": "MANUF_SOFT_ONLY",
+                "evidence": [
+                    "USDA Organic certified product line",
+                    "Non-GMO Project Verified",
+                ],
+            }
+        },
+    )
+
+    score, metadata = brand_testing_posture.score_brand_testing_posture(
+        {
+            "manufacturer_data": {
+                "top_manufacturer": {
+                    "found": True,
+                    "match_type": "exact",
+                    "manufacturer_id": "MANUF_SOFT_ONLY",
+                }
+            }
+        }
+    )
+
+    assert score == 1.0
+    assert metadata["evidence_strength"] == "soft_quality_posture"
+
+
+def test_brand_level_hard_testing_evidence_beats_soft_quality(monkeypatch) -> None:
+    from scoring_v4.modules import brand_testing_posture
+
+    monkeypatch.setattr(
+        brand_testing_posture,
+        "_top_manufacturers_by_id",
+        lambda: {
+            "MANUF_HARD_AND_SOFT": {
+                "id": "MANUF_HARD_AND_SOFT",
+                "evidence": [
+                    "USDA Organic certified",
+                    "Publishes third-party testing Certificates of Analysis",
+                ],
+            }
+        },
+    )
+
+    score, metadata = brand_testing_posture.score_brand_testing_posture(
+        {
+            "manufacturer_data": {
+                "top_manufacturer": {
+                    "found": True,
+                    "match_type": "exact",
+                    "manufacturer_id": "MANUF_HARD_AND_SOFT",
+                }
+            }
+        }
+    )
+
+    assert score == 2.0
+    assert metadata["evidence_strength"] == "hard_testing"
+    assert metadata["matched_evidence"] == [
+        "Publishes third-party testing Certificates of Analysis"
+    ]
+
+
 def test_trusted_manufacturer_without_testing_evidence_does_not_score_b4d() -> None:
     from scoring_v4.modules.generic_trust import score_trust
 
