@@ -246,6 +246,21 @@ def _classification_profile_eligible(row: Dict[str, Any], profile: str) -> Optio
     return payload.get("eligible") is True
 
 
+def _classification_product_profile_eligible(product: Dict[str, Any], profile: str) -> Optional[bool]:
+    try:
+        from scoring_input_contract import build_scoring_classification
+        contract = build_scoring_classification(product)
+    except Exception:  # pragma: no cover - legacy fallback below owns failures
+        return None
+    profiles = contract.get("profile_eligibility")
+    if not isinstance(profiles, dict):
+        return None
+    payload = profiles.get(profile)
+    if not isinstance(payload, dict):
+        return None
+    return payload.get("eligible") is True
+
+
 def _is_botanical_active(row: Dict[str, Any]) -> bool:
     contract_eligible = _classification_profile_eligible(row, "botanical")
     if contract_eligible is not None:
@@ -472,6 +487,9 @@ def is_botanical_product(product: Dict[str, Any]) -> bool:
     pure-botanical / anchor-only products still route)."""
     if not isinstance(product, dict):
         return False
+    contract_eligible = _classification_product_profile_eligible(product, "botanical")
+    if contract_eligible is not None:
+        return contract_eligible
     primary = _primary_botanical_active(product)
     if primary is None:
         return False

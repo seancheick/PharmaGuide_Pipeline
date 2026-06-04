@@ -47,6 +47,7 @@ from scoring_v4.modules.botanical_profile import (
     _ingredient_identity_keys,
     _dosing_index,
     _classification_profile_eligible,
+    _classification_product_profile_eligible,
 )
 
 COLLAGEN_FORMULATION_CAP = 15.0
@@ -92,6 +93,9 @@ def is_collagen_product(product: Dict[str, Any]) -> bool:
     Phase-6 botanical mass-dominance gate."""
     if not isinstance(product, dict):
         return False
+    contract_eligible = _classification_product_profile_eligible(product, "collagen")
+    if contract_eligible is not None:
+        return contract_eligible
     primary = _primary_collagen_active(product)
     if primary is None:
         return False
