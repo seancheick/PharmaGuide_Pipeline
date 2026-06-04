@@ -5070,13 +5070,14 @@ class TestShipNowConfigLockdown:
         assert a2.get("score_field") == "bio_score"
 
     def test_a5_max_4_with_natural_source(self, scorer):
-        """v3.6.0: A5.max raised 3→4 to absorb natural-source signal moved
-        from A1. Sourcing lives in A5 alongside organic, standardized, non-GMO.
+        """v3.7.0: A5.max raised 4→8 to make room for the tiered standardized-
+        botanical bonus (A5b 0→4). A5 lives in core_quality, clamped by Section A
+        max=25. (v3.6.0: 3→4 to absorb the natural-source signal moved from A1.)
         """
         a5 = scorer.config["section_A_ingredient_quality"]["A5_formulation_excellence"]
-        assert a5["max"] == 4, (
-            "A5.max must be 4 (raised from 3 to absorb A5e_natural_source). "
-            "If this fails, someone reverted v3.6.0."
+        assert a5["max"] == 8, (
+            "A5.max must be 8 (v3.7.0: raised 4→8 for the tiered A5b standardized "
+            "bonus). If this is 4, someone reverted the v3.7.0 calibration."
         )
         assert a5.get("natural_source") == 1, (
             "A5.natural_source must be 1 — sourcing tiebreaker, not tier. "
