@@ -204,6 +204,18 @@ def test_plant_part_extract_still_grants_botanical_source_text():
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
 
 
+def test_kidney_bean_extract_is_not_blocked_as_animal_tissue():
+    product = _product(
+        "White Kidney Bean Extract",
+        [_row("common_bean_extract", "White Kidney Bean Extract", 500, "mg")],
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+
+    assert ingredient["botanical_source"]["value"] is True
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
+
+
 @pytest.mark.parametrize(
     ("canonical", "name", "expected_domain"),
     [

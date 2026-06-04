@@ -1327,7 +1327,7 @@ _CLASSIFICATION_BOTANICAL_SOURCE_TERMS = {
 _CLASSIFICATION_ANIMAL_SOURCE_RE = re.compile(
     r"\b("
     r"animal|bovine|porcine|beef|chicken|fish|marine|gelatin|cartilage|"
-    r"kidney|liver|heart|thymus|pancreas|pituitary|adrenal|spleen|"
+    r"kidney(?!\s+bean)|liver|heart|thymus|pancreas|pituitary|adrenal|spleen|"
     r"organ|gland|glandular"
     r")\b",
     re.IGNORECASE,
