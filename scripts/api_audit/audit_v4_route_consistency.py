@@ -211,12 +211,19 @@ def summarize(
     allowlist: Dict[str, Dict[str, str]],
     *,
     elapsed_seconds: float,
+    max_ms_per_product: float = 50.0,
 ) -> Dict[str, Any]:
     route_divergences = [row for row in rows if row.get("route_diverged")]
     unsigned_divergences = [row for row in route_divergences if not _allowlist_signed(row, allowlist)]
     canary_failures = [row for row in canary_rows if not row.get("passed")]
     failed_rows = [row for row in rows if row.get("classification_failed")]
     failure_overrides = [row for row in rows if row.get("failure_overrode_old_route")]
+    ms_per_product = round((elapsed_seconds * 1000.0 / len(rows)), 4) if rows else None
+    performance_budget_exceeded = (
+        ms_per_product is not None
+        and max_ms_per_product > 0
+        and ms_per_product > max_ms_per_product
+    )
     return {
         "generated": datetime.now(timezone.utc).isoformat(),
         "total_products": len(rows),
@@ -231,8 +238,16 @@ def summarize(
         "canary_count": len(canary_rows),
         "canary_failure_count": len(canary_failures),
         "elapsed_seconds": round(elapsed_seconds, 4),
-        "ms_per_product": round((elapsed_seconds * 1000.0 / len(rows)), 4) if rows else None,
-        "ready": not unsigned_divergences and not canary_failures and not failed_rows and not failure_overrides,
+        "ms_per_product": ms_per_product,
+        "max_ms_per_product": max_ms_per_product,
+        "performance_budget_exceeded": performance_budget_exceeded,
+        "ready": (
+            not unsigned_divergences
+            and not canary_failures
+            and not failed_rows
+            and not failure_overrides
+            and not performance_budget_exceeded
+        ),
     }
 
 
@@ -250,6 +265,12 @@ def main() -> int:
     parser.add_argument("--products-root", type=Path, default=DEFAULT_PRODUCTS_ROOT)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     parser.add_argument("--allowlist", type=Path, default=None)
+    parser.add_argument(
+        "--max-ms-per-product",
+        type=float,
+        default=50.0,
+        help="Fail when route classification/scoring audit exceeds this mean ms/product; <=0 disables.",
+    )
     args = parser.parse_args()
 
     enriched_index = canary.build_enriched_index(args.products_root)
@@ -258,7 +279,13 @@ def main() -> int:
     started = time.perf_counter()
     canary_rows = run_canaries()
     rows = build_rows(products)
-    summary = summarize(rows, canary_rows, allowlist, elapsed_seconds=time.perf_counter() - started)
+    summary = summarize(
+        rows,
+        canary_rows,
+        allowlist,
+        elapsed_seconds=time.perf_counter() - started,
+        max_ms_per_product=args.max_ms_per_product,
+    )
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")

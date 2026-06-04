@@ -545,6 +545,33 @@ def test_route_audit_not_ready_when_failure_overrides_specialized_route():
     assert summary["ready"] is False
 
 
+def test_route_audit_not_ready_when_performance_budget_is_exceeded():
+    from api_audit.audit_v4_route_consistency import summarize
+
+    summary = summarize(
+        rows=[
+            {
+                "dsld_id": "x",
+                "old_route": "generic",
+                "contract_route": "generic",
+                "public_route": "generic",
+                "route_confidence": "medium",
+                "classification_failed": False,
+                "failure_overrode_old_route": False,
+                "route_diverged": False,
+                "v4_verdict": "SAFE",
+            }
+        ],
+        canary_rows=[],
+        allowlist={},
+        elapsed_seconds=0.1,
+        max_ms_per_product=10.0,
+    )
+    assert summary["ms_per_product"] == 100.0
+    assert summary["performance_budget_exceeded"] is True
+    assert summary["ready"] is False
+
+
 def test_profile_audit_not_ready_on_unsigned_profile_divergence():
     from api_audit.audit_v4_profile_consistency import summarize
 
