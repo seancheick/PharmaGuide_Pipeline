@@ -1085,6 +1085,34 @@ def test_owner_enzyme_product_with_fruit_support_is_not_owner():
     assert out["owner_type"] not in _OWNER_TYPES
 
 
+def test_owner_digest_stem_title_with_enzyme_is_not_owner():
+    """Organic Digest+ class (Phase 4): the title carries the 'digest' stem (not
+    the exact word 'digestive'), the digestive enzymes are non-botanical adjunct
+    rows, and the botanicals are 0-dose fruit/veg window-dressing. The enzyme-
+    intent guard must de-botanize it — a 'digest'-stem title is digestive product
+    intent, not only the literal word 'digestive'. Without the stem match this
+    product is wrongly owned as a botanical_blend."""
+    out = _owner(
+        "Organic Digest+ Tropical Fruit Flavor",
+        ("Botanical Greens Blend", "herb", "major", 500, True, ["botanical_source_text"]),
+        ("Whole Food Enzyme Blend", "enzyme", "adjunct", 100, False, []),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+    assert out["owner_reason_code"] == "material_nonbotanical_deliverable"
+
+
+def test_owner_digest_title_without_enzyme_stays_botanical():
+    """The broadened 'digest'-stem title must NOT de-botanize a pure botanical
+    cleanse with no enzymes — the enzyme guard requires an actual non-botanical
+    enzyme row, so a Senna/Cascara 'Digestion' cleanse stays botanical-owned."""
+    out = _owner(
+        "Digestion & Elimination Cleanse",
+        ("Senna Leaf", "herb", "claim_prominent", 500, True, ["botanical_source_text"]),
+        ("Cascara Sagrada", "herb", "major", 300, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] in _OWNER_TYPES
+
+
 def test_standardized_botanicals_membership_requires_genuine_botanical_identity():
     """standardized_botanicals.json contains non-botanical branded compounds
     (e.g. Setria glutathione). Membership alone must NOT make a tripeptide a

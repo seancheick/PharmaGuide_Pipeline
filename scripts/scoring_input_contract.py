@@ -2190,7 +2190,11 @@ def _route_confidence(
 _PROFILE_PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
 _PROFILE_BOTANICAL_MATERIALITY_FRACTION = 0.5
 _PROFILE_TITLE_SEPARATORS = (" with ", " plus ", " and ", " featuring ", " + ", " & ", "+", "&")
-_PROFILE_ENZYME_TITLE_RE = re.compile(r"\b(enzyme|enzymes|digestive)\b", re.IGNORECASE)
+# Match the "digest" stem (digest, digest+, digestion, digestive) — a digestive
+# enzyme product titled "Digest+" carries digestive intent just like "Digestive".
+# Enzyme presence is still required separately, so this never de-botanizes a
+# botanical cleanse that merely has "Digestion" in its name.
+_PROFILE_ENZYME_TITLE_RE = re.compile(r"\b(enzymes?|digest\w*)\b", re.IGNORECASE)
 _PROFILE_NON_BOTANICAL_INTENT_TYPES = frozenset({
     "single_vitamin",
     "single_mineral",

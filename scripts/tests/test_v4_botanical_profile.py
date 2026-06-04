@@ -278,6 +278,22 @@ def test_dose_disclosed_no_clinical_reference():
     assert out["band"] == "disclosed_no_reference"
 
 
+def test_dose_grape_seed_matches_clinical_range_by_canonical_id():
+    # Phase 4 lock-in: grape seed extract is canonicalized to grape_seed_extract
+    # corpus-wide (range 100-800 mg). A 100mg grape-seed-primary product must land
+    # in the clinical range, NOT the no-reference floor. Guards the "grape seed
+    # doesn't match its dose range" risk the cutover plan flagged (which does not
+    # reproduce because the enricher already stamps the canonical id).
+    ing = _botanical_ingredient(
+        name="Grape Seed Extract", standard_name="Grape Seed Extract",
+        canonical_id="grape_seed_extract", form="Grape Seed Extract", quantity=100,
+    )
+    out = score_botanical_dose(_botanical_product(ingredient=ing, standardized=False))
+    assert out["band"] == "within_studied_range"
+    assert out["score"] == 21.0
+    assert out["metadata"]["range_mg"] == [100.0, 800.0]
+
+
 def test_primary_botanical_no_dose_scores_zero_not_excluded():
     ing = _botanical_ingredient(quantity=0, unit="")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
