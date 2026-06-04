@@ -7,6 +7,7 @@ rediscovering active rows from labels or legacy raw fields.
 
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass, field
 import re
 from typing import Any, Dict, List, Optional
@@ -29,6 +30,17 @@ SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.0.0"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
+SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
+    "classification_schema_version",
+    "classification_origin",
+    "classification_failed",
+    "route_module",
+    "route_reason",
+    "route_confidence",
+    "route_evidence",
+    "ingredients",
+    "profile_eligibility",
+}
 PRODUCT_EVIDENCE_REQUIRED_VALUE_FIELDS = {
     "evidence_type",
     "scoreable",
@@ -1584,6 +1596,36 @@ def _valid_classification_origin(origin: Any) -> str:
     return origin_norm if origin_norm in SCORING_CLASSIFICATION_ORIGINS else "compatibility_derived"
 
 
+def _embedded_native_scoring_classification(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Return a valid persisted native classification contract, if present."""
+    embedded = product.get("product_scoring_classification") if isinstance(product, dict) else None
+    if not isinstance(embedded, dict):
+        return None
+    if embedded.get("classification_schema_version") != SCORING_CLASSIFICATION_SCHEMA_VERSION:
+        return None
+    if _norm(embedded.get("classification_origin")) != "native_enrichment":
+        return None
+    if any(field not in embedded for field in SCORING_CLASSIFICATION_REQUIRED_FIELDS):
+        return None
+
+    route = _norm(embedded.get("route_module"))
+    confidence = _norm(embedded.get("route_confidence"))
+    if route not in SCORING_ROUTE_MODULES:
+        return None
+    if confidence not in SCORING_ROUTE_CONFIDENCE:
+        return None
+    if embedded.get("classification_failed") is True and route != "generic":
+        return None
+    if not isinstance(embedded.get("route_evidence"), list):
+        return None
+    if not isinstance(embedded.get("ingredients"), list):
+        return None
+    if not isinstance(embedded.get("profile_eligibility"), dict):
+        return None
+
+    return deepcopy(embedded)
+
+
 def _route_scoring_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     try:
         return [
@@ -2358,6 +2400,11 @@ def build_scoring_classification(
     this contract. The legacy router is kept as an audit-only parity target.
     """
     product = product if isinstance(product, dict) else {}
+    if route_module is None and classification_origin == "compatibility_derived":
+        embedded = _embedded_native_scoring_classification(product)
+        if embedded is not None:
+            return embedded
+
     origin = _valid_classification_origin(classification_origin)
     failed = False
     failure_reason: Optional[str] = None

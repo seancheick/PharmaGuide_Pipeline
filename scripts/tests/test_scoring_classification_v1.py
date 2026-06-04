@@ -466,6 +466,35 @@ def test_enricher_native_classification_matches_compat_builder():
     assert native_without_origin == compat_without_origin
 
 
+def test_builder_prefers_valid_embedded_native_classification():
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+    native = build_scoring_classification(
+        _product("Fish Oil EPA DHA", [_row("epa", "EPA", 500, "mg")], primary_type="omega_3"),
+        classification_origin="native_enrichment",
+    )
+    product["product_scoring_classification"] = native
+
+    contract = build_scoring_classification(product)
+
+    assert contract["classification_origin"] == "native_enrichment"
+    assert contract["route_module"] == "omega"
+
+
+def test_builder_falls_back_when_embedded_native_classification_is_stale_or_invalid():
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+    stale = build_scoring_classification(
+        _product("Fish Oil EPA DHA", [_row("epa", "EPA", 500, "mg")], primary_type="omega_3"),
+        classification_origin="native_enrichment",
+    )
+    stale["classification_schema_version"] = "0.0.0"
+    product["product_scoring_classification"] = stale
+
+    contract = build_scoring_classification(product)
+
+    assert contract["classification_origin"] == "compatibility_derived"
+    assert contract["route_module"] == "generic"
+
+
 def test_enrichment_validator_accepts_native_classification_contract():
     from enrichment_contract_validator import EnrichmentContractValidator
 
