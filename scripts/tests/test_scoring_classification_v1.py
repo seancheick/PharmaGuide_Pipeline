@@ -573,3 +573,51 @@ def test_profile_audit_reports_divergence_reason_buckets():
     assert summary["profile_divergence_reasons_by_profile"]["botanical"] == {
         "contract_grants_recovered_botanical_rows": 1,
     }
+
+
+def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [
+            {
+                "old_score": 70.0,
+                "new_score": 63.0,
+                "abs_score_delta": 7.0,
+                "old_verdict": "SAFE",
+                "new_verdict": "SAFE",
+                "verdict_changed": False,
+                "less_restrictive_verdict_flip": False,
+                "more_restrictive_verdict_flip": False,
+                "profile_diverged": True,
+                "botanical_old": True,
+                "botanical_contract": False,
+                "botanical_reason": "contract_revokes_role_materiality_or_intent",
+                "collagen_old": False,
+                "collagen_contract": False,
+            },
+            {
+                "old_score": 42.0,
+                "new_score": 41.0,
+                "abs_score_delta": 1.0,
+                "old_verdict": "SAFE",
+                "new_verdict": "POOR",
+                "verdict_changed": True,
+                "less_restrictive_verdict_flip": False,
+                "more_restrictive_verdict_flip": True,
+                "profile_diverged": True,
+                "botanical_old": False,
+                "botanical_contract": True,
+                "botanical_reason": "contract_grants_recovered_botanical_rows",
+                "collagen_old": False,
+                "collagen_contract": False,
+            },
+        ],
+        elapsed_seconds=0.01,
+    )
+
+    assert summary["large_score_delta_ge_5_count"] == 1
+    assert summary["verdict_flip_count"] == 1
+    assert summary["less_restrictive_verdict_flip_count"] == 0
+    assert summary["more_restrictive_verdict_flip_count"] == 1
+    assert summary["ready_for_cutover"] is False
