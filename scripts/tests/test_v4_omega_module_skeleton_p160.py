@@ -1079,9 +1079,9 @@ def test_omega_rubric_form_tier_table_locked() -> None:
     form_tier = rubric["formulation"]["form_tier"]
 
     # Locked weights per scientific bioavailability tiering.
-    assert form_tier["tg"] == 8     # triglyceride: gold standard
+    assert form_tier["tg"] == 8     # natural triglyceride: top tier
+    assert form_tier["rtg"] == 8    # re-esterified triglyceride: premium concentrate
     assert form_tier["pl"] == 7     # phospholipid (krill)
-    assert form_tier["rtg"] == 6    # re-esterified triglyceride
     assert form_tier["ee"] == 4     # ethyl ester
     assert form_tier["undefined"] == 2
 
@@ -1129,4 +1129,4 @@ def test_omega_rubric_sustainability_eligibility_requires_rules_db_verification(
     assert sust["eligibility"] == "rules_db_verified"
     assert "Friend of the Sea" in sust["eligible_programs"]
     assert "MSC" in sust["eligible_programs"]
-    assert sust["score"] == 4
+    assert sust["score"] == 2

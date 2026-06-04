@@ -2,13 +2,14 @@
 
 Locks the Formulation sub-component math:
 
-    form_tier            8 / 7 / 6 / 4 / 2 (TG / PL / rTG / EE / undefined)
+    form_tier            8 / 8 / 7 / 4 / 2 (TG / rTG / PL / EE / undefined)
     source_disclosed     +4
     premium_form_a2      +5 (only when form != undefined)
-    sustainability_cert  +4 (Friend of the Sea or MSC, rules_db verified)
+    sustainability_cert  +2 (Friend of the Sea or MSC, rules_db verified)
+    epa_dha_concentration +0..4 (EPA+DHA mg / omega oil mg, when disclosed)
 
-Maximum reachable: 21/25. The 4-point headroom is intentional — reserved
-for a future concentration/purity sub-component (P1.6.7+).
+Maximum reachable: 23/25 today. The remaining 2-point headroom is reserved
+for future lot-level purity/oxidation evidence.
 
 Per Sean's 2026-05-20 directive: 'Do not invent fields.' Form is credited
 only when the label or ingredient panel EXPLICITLY discloses molecular
@@ -165,7 +166,7 @@ def test_form_tier_rtg_re_esterified_match() -> None:
     payload = score_formulation(_epa_dha_product(
         name="Triple Strength Omega-3 Re-esterified"
     ))
-    assert payload["components"]["form_tier"] == 6.0
+    assert payload["components"]["form_tier"] == 8.0
     assert payload["metadata"]["form_detected"] == "rtg"
 
 
@@ -346,7 +347,7 @@ def test_sustainability_credit_friend_of_the_sea_rules_db_verified() -> None:
         certification_data=_verified_sustainability("Friend of the Sea"),
     )
     payload = score_formulation(product)
-    assert payload["components"]["sustainability_cert"] == 4.0
+    assert payload["components"]["sustainability_cert"] == 2.0
     assert payload["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
 
@@ -358,7 +359,54 @@ def test_sustainability_credit_msc_rules_db_verified() -> None:
         certification_data=_verified_sustainability("MSC"),
     )
     payload = score_formulation(product)
-    assert payload["components"]["sustainability_cert"] == 4.0
+    assert payload["components"]["sustainability_cert"] == 2.0
+
+
+# --- EPA+DHA concentration credit ----------------------------------------
+
+
+def test_concentration_credit_high_potency_fish_oil() -> None:
+    """750mg EPA+DHA in 1000mg fish oil is high concentration and earns
+    meaningful formulation credit. This is label math, not a guessed field."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _epa_dha_product(
+        name="Natural Triglyceride Fish Oil",
+        epa=500,
+        dha=250,
+        extra_ingredients=[
+            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"}
+        ],
+    )
+    payload = score_formulation(product)
+    assert payload["components"]["epa_dha_concentration"] == 4.0
+    assert payload["metadata"]["epa_dha_concentration"]["ratio"] == 0.75
+
+
+def test_concentration_credit_mid_potency_fish_oil() -> None:
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _epa_dha_product(
+        name="Fish Oil",
+        epa=180,
+        dha=120,
+        extra_ingredients=[
+            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"}
+        ],
+    )
+    payload = score_formulation(product)
+    assert payload["components"]["epa_dha_concentration"] == 2.0
+    assert payload["metadata"]["epa_dha_concentration"]["ratio"] == 0.3
+
+
+def test_concentration_not_awarded_without_oil_mass() -> None:
+    """EPA/DHA disclosure alone does not invent concentration; parent oil
+    mass must be present."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_epa_dha_product(name="Fish Oil", epa=500, dha=250))
+    assert "epa_dha_concentration" not in payload["components"]
+    assert payload["metadata"]["epa_dha_concentration"]["status"] == "missing_oil_mass"
 
 
 def test_sustainability_does_not_credit_when_score_eligible_false() -> None:
@@ -412,21 +460,22 @@ def test_sustainability_does_not_credit_unrelated_cert() -> None:
 # --- Score ceiling + headroom -------------------------------------------
 
 
-def test_maximum_reachable_score_is_21() -> None:
-    """Per the rubric: max reachable in P1.6.1 is form 8 + source 4 +
-    premium 5 + sustainability 4 = 21/25. The 4-point headroom is
-    intentional (reserved for future concentration/purity component).
-    This test locks the documented ceiling so a silent regression doesn't
-    push it higher."""
+def test_maximum_reachable_score_is_23() -> None:
+    """Per the rubric: max reachable today is form 8 + source 4 +
+    premium 5 + sustainability 2 + concentration 4 = 23/25. The remaining
+    2-point headroom is reserved for future lot-level purity evidence."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     product = _epa_dha_product(
         name="Premium Natural Triglyceride Fish Oil",
+        extra_ingredients=[
+            {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 1000, "unit": "mg"}
+        ],
         certification_data=_verified_sustainability("Friend of the Sea"),
     )
     payload = score_formulation(product)
-    assert payload["score"] == 21.0
-    assert payload["metadata"]["max_reachable_in_p161"] == 21.0
+    assert payload["score"] == 23.0
+    assert payload["metadata"]["max_reachable_in_p161"] == 23.0
 
 
 def test_dimension_cap_clamps_above_25() -> None:
@@ -445,7 +494,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
     """Sports Research Omega-3 1055mg Fish Oil (DSLD 327776) has TG form
     (via ingredient panel 'Triglycerides' row), source disclosed
     (Fish Oil Concentrate), and Friend of the Sea rules_db verified.
-    Expected: 21/25 (max reachable in P1.6.1)."""
+    Expected: 23/25 (max reachable today)."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     # Synthesize the canary blob shape from the field audit.
@@ -481,7 +530,7 @@ def test_canary_sports_research_omega_3_scores_max_reachable() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 21.0
+    assert payload["score"] == 23.0
     assert payload["metadata"]["form_detected"] == "tg"
     assert payload["metadata"]["sustainability_cert_program"] == "Friend of the Sea"
 
@@ -491,7 +540,7 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
     keyword on the DSLD label (Nordic is widely known to be rTG but
     doesn't disclose this on the label DSLD scrapes). Per
     'do not invent fields', score the undefined-form baseline only.
-    Expected: form_tier 2 + source 4 + sustainability 4 = 10/25.
+    Expected: form_tier 2 + source 4 + sustainability 2 + concentration 4 = 12/25.
     No premium_form_a2_carry (form undefined)."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
@@ -522,7 +571,7 @@ def test_canary_nordic_naturals_ultimate_omega_undefined_form() -> None:
         }
     }
     payload = score_formulation(product)
-    assert payload["score"] == 10.0
+    assert payload["score"] == 12.0
     assert payload["metadata"]["form_detected"] == "undefined"
     assert "premium_form_a2_carry" not in payload["components"]
 
@@ -596,10 +645,11 @@ def test_formulation_weights_match_rubric_config() -> None:
 
     assert f["form_tier"]["tg"] == 8
     assert f["form_tier"]["pl"] == 7
-    assert f["form_tier"]["rtg"] == 6
+    assert f["form_tier"]["rtg"] == 8
     assert f["form_tier"]["ee"] == 4
     assert f["form_tier"]["undefined"] == 2
     assert f["source_disclosed"]["score"] == 4
     assert f["premium_form_a2_carry"]["score"] == 5
-    assert f["sustainability_cert"]["score"] == 4
+    assert f["sustainability_cert"]["score"] == 2
+    assert f["epa_dha_concentration"]["score_bands"][0]["score"] == 4
     assert f["sustainability_cert"]["eligibility"] == "rules_db_verified"

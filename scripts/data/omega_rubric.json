@@ -15,12 +15,12 @@
     "transparency": 15
   },
   "formulation": {
-    "_doc": "Form tier + Source disclosed + Premium-form A2 carryforward + Marine sustainability cert (FoS/MSC). Oxidation testing lives in Transparency, not here (per Sean 2026-05-20).",
+    "_doc": "Form tier + Source disclosed + Premium-form A2 carryforward + EPA/DHA concentration + Marine sustainability cert (FoS/MSC). Oxidation testing lives in Transparency, not here (per Sean 2026-05-20).",
     "form_tier": {
-      "_doc": "Molecular form of EPA/DHA in the product. TG = natural triglyceride (gold standard). PL = phospholipid form (krill — high bioavailability via phosphatidylcholine carrier). rTG = re-esterified triglyceride (Nordic-style concentrate). EE = ethyl ester (cheaper, lower bioavailability for some markers). undefined = label does not disclose form.",
+      "_doc": "Molecular form of EPA/DHA in the product. TG and rTG are top-tier triglyceride structures; rTG supports high-concentration premium fish oil while preserving triglyceride structure. PL = phospholipid form (krill — high bioavailability via phosphatidylcholine carrier). EE = ethyl ester (cheaper, lower bioavailability for some markers). undefined = label does not disclose form.",
       "tg": 8,
       "pl": 7,
-      "rtg": 6,
+      "rtg": 8,
       "ee": 4,
       "undefined": 2
     },
@@ -32,9 +32,19 @@
       "_doc": "EPA/DHA labeled AND molecular form labeled together — carries v3's A2 premium-delivery credit forward into the omega module. Only awarded when form_tier != 'undefined'.",
       "score": 5
     },
+    "epa_dha_concentration": {
+      "_doc": "EPA+DHA concentration as a proportion of disclosed parent omega oil mass. Requires label-disclosed EPA/DHA mg and parent oil mg; no product-name inference. Rewards concentrated fish/algae/krill oils without overcrediting products that omit oil mass.",
+      "score_bands": [
+        {"min_ratio": 0.75, "score": 4, "label": "very_high_concentration"},
+        {"min_ratio": 0.50, "score": 3, "label": "high_concentration"},
+        {"min_ratio": 0.30, "score": 2, "label": "moderate_concentration"},
+        {"min_ratio": 0.15, "score": 1, "label": "low_concentration"},
+        {"min_ratio": 0.0, "score": 0, "label": "very_low_concentration"}
+      ]
+    },
     "sustainability_cert": {
       "_doc": "Marine sustainability cert (Friend of the Sea / MSC) — verified via rules_db third_party_programs.verified=true. Per Codex §9: 'lower weight than purity/testing certs' — sits in Formulation as a product attribute, not Trust as a third-party-test signal.",
-      "score": 4,
+      "score": 2,
       "eligible_programs": ["Friend of the Sea", "MSC"],
       "eligibility": "rules_db_verified",
       "_eligibility_doc": "Required: program present in certification_data.evidence_based.third_party_programs with score_eligible=true. Bare label-text without rules_db backing does NOT score (per 'no manufacturer overcredit' policy)."

@@ -42,44 +42,44 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # DSLD IDs and expected behavior, gathered from the P1.6.1 catalog sweep.
 # Each entry: (expected_route, expected_form, expected_score_min, expected_score_max, label)
 CANARY_TARGETS = {
-    # --- Max-reachable 21/25 (TG + source + premium + sustainability) ---
-    "326270": ("omega", "tg", 21.0, 21.0,
+    # --- Max-reachable 23/25 (TG + source + premium + sustainability + concentration) ---
+    "326270": ("omega", "tg", 23.0, 23.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
-    "327776": ("omega", "tg", 21.0, 21.0,
+    "327776": ("omega", "tg", 23.0, 23.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
-    "273630": ("omega", "tg", 21.0, 21.0,
+    "273630": ("omega", "tg", 23.0, 23.0,
                "Garden of Life Dr. Formulated Advanced Omega Lemon Flavor"),
-    "273636": ("omega", "tg", 21.0, 21.0,
+    "273636": ("omega", "tg", 20.0, 20.0,
                "Garden of Life Dr. Formulated Alaskan Cod Liver Oil Lemon Flavor "
                "— cod liver source"),
-    "292796": ("omega", "tg", 21.0, 21.0,
+    "292796": ("omega", "tg", 23.0, 23.0,
                "Garden of Life Dr. Formulated Advanced Omega Citrus Flavor"),
 
-    # --- 20/25 (PL krill + source + premium + sustainability) ---
-    "239592": ("omega", "pl", 20.0, 20.0,
+    # --- 18/25 (PL krill + source + premium + sustainability) ---
+    "239592": ("omega", "pl", 19.0, 19.0,
                "CVS Health 100% Pure Omega-3 Krill Oil 350 mg"),
-    "223169": ("omega", "pl", 16.0, 16.0,
+    "223169": ("omega", "pl", 14.0, 14.0,
                "Nordic Naturals Omega-3 Phospholipids"),
 
     # --- 16-17/25 (PL krill mid-tier — no sustainability cert) ---
     "1072":   ("omega", "pl", 16.0, 16.0,
                "GNC Ultra Omega Krill Oil"),
-    "179775": ("omega", "pl", 16.0, 16.0,
+    "179775": ("omega", "pl", 17.0, 17.0,
                "Nature Made Krill Oil 300 mg"),
     "223318": ("omega", "pl", 16.0, 16.0,
                "Nutricost Krill Oil 1000 mg"),
     "182968": ("omega", "pl", 16.0, 16.0,
                "Pure Encapsulations Krill-Plex"),
 
-    # --- 17/25 EE form (rare in catalog) ---
-    "239845": ("omega", "ee", 17.0, 17.0,
+    # --- 19/25 EE form with concentration (rare in catalog) ---
+    "239845": ("omega", "ee", 19.0, 19.0,
                "Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form"),
 
-    # --- 10/25 undefined-form, source + sustainability cert ---
+    # --- 4/25 undefined-form, source only in current enriched artifact ---
     # Nordic Naturals Ultimate Omega + CoQ10 — well-known rTG but DSLD
     # label omits form. Per 'do not invent fields' rule, this scores
     # 'undefined'. Bonus: confirms _has_omega_ingredient routes correctly.
-    "288740": ("omega", "undefined", 6.0, 6.0,
+    "288740": ("omega", "undefined", 4.0, 4.0,
                "Nordic Naturals Ultimate Omega + CoQ10 Lemon"),
 }
 
@@ -318,8 +318,7 @@ def test_edge_fish_oil_parent_only_routes_omega_but_fails_completeness() -> None
 
 def test_edge_rtg_explicit_form_canary() -> None:
     """Re-esterified triglyceride form explicitly labeled — must detect rTG
-    (6 pts, less than natural TG 8 because re-esterification loses some
-    bioavailability vs natural TG)."""
+    and score it at the premium triglyceride tier."""
     from scoring_v4.modules.omega_formulation import score_formulation
 
     product = {
@@ -335,7 +334,7 @@ def test_edge_rtg_explicit_form_canary() -> None:
     }
     payload = score_formulation(product)
     assert payload["metadata"]["form_detected"] == "rtg"
-    assert payload["components"]["form_tier"] == 6.0
+    assert payload["components"]["form_tier"] == 8.0
 
 
 def test_edge_mct_carrier_in_vitamin_d_routes_generic() -> None:

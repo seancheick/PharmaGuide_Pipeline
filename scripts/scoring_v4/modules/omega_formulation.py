@@ -4,22 +4,23 @@ Scores omega/fish-oil formulation quality against the 25-point rubric in
 SCORING_V4_PROPOSAL §9 + scripts/data/omega_rubric.json.
 
 Components:
-    form_tier            — molecular form (TG 8 / PL 7 / rTG 6 / EE 4 /
+    form_tier            — molecular form (TG 8 / rTG 8 / PL 7 / EE 4 /
                            undefined 2). Requires EXPLICIT label disclosure.
     source_disclosed     — marine source named (fish / krill / algae /
                            cod liver / specific species). +4.
     premium_form_a2_carry — only awarded when form_tier != undefined.
                            Carries v3's A2 premium-delivery credit forward
                            when EPA/DHA + molecular form are both labeled. +5.
+    epa_dha_concentration — EPA+DHA / parent omega oil mass when both are
+                           disclosed. +0..4.
     sustainability_cert  — Friend of the Sea or MSC verified by rules_db
                            (score_eligible=True in
-                           certification_data.evidence_based). +4.
+                           certification_data.evidence_based). +2.
 
-Maximum reachable score with current sub-components: 8 + 4 + 5 + 4 = 21/25.
-The 4-point headroom is intentional and reserved for a future concentration/
-purity sub-component when reliable label signals are available
-(P1.6.7+ TBD). Per Sean's 'do not invent fields' rule, we don't fabricate
-concentration credit from inferred fish-oil-mass ratios when labels are silent.
+Maximum reachable score with current sub-components: 8 + 4 + 5 + 4 + 2 = 23/25.
+The 2-point headroom is intentional and reserved for future lot-level purity
+signals. Per Sean's 'do not invent fields' rule, concentration credit requires
+label-disclosed parent omega oil mass and EPA/DHA mass.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). v3's A2 premium-form logic is independently
@@ -175,6 +176,28 @@ def _source_disclosed(product: Dict[str, Any]) -> bool:
 
 
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha", "fish_oil"}
+_EPA_DHA_CANONICALS = {"epa", "dha", "epa_dha"}
+_OIL_MASS_CANONICALS = {"fish_oil"}
+_OIL_MASS_NAME_PATTERN = re.compile(
+    r"\b(fish\s+oil|fish\s+body\s+oil|cod\s+liver\s+oil|krill\s+oil|"
+    r"algae\s+oil|algal\s+oil|microalgae\s+oil|deep\s+sea\s+fish\s+oil|"
+    r"oil\s+concentrate|fish\s+oil\s+concentrate)\b",
+    re.IGNORECASE,
+)
+_UNIT_TO_MG: Dict[str, float] = {
+    "mg": 1.0,
+    "milligram": 1.0,
+    "milligrams": 1.0,
+    "g": 1000.0,
+    "gram": 1000.0,
+    "grams": 1000.0,
+    "gram(s)": 1000.0,
+    "mcg": 0.001,
+    "ug": 0.001,
+    "µg": 0.001,
+    "microgram": 0.001,
+    "micrograms": 0.001,
+}
 
 
 def _has_omega_signal(product: Dict[str, Any]) -> bool:
@@ -192,6 +215,106 @@ def _has_omega_signal(product: Dict[str, Any]) -> bool:
         if canon in _OMEGA_INGREDIENT_CANONICALS:
             return True
     return False
+
+
+def _to_mg(quantity: Any, unit: Any) -> Optional[float]:
+    try:
+        q = float(quantity)
+    except (TypeError, ValueError):
+        return None
+    if q <= 0:
+        return None
+    factor = _UNIT_TO_MG.get(str(unit or "").strip().lower())
+    if factor is None:
+        return None
+    return q * factor
+
+
+def _row_mg(row: Dict[str, Any]) -> Optional[float]:
+    for qty_key in ("quantity", "amount", "dose", "dosage"):
+        mg = _to_mg(row.get(qty_key), row.get("unit") or row.get("dose_unit"))
+        if mg is not None:
+            return mg
+    return None
+
+
+def _is_parent_oil_row(row: Dict[str, Any]) -> bool:
+    canon = str(row.get("canonical_id") or "").strip().lower()
+    if canon in _OIL_MASS_CANONICALS:
+        return True
+    if canon in _EPA_DHA_CANONICALS:
+        return False
+    text = " ".join(
+        str(row.get(key) or "")
+        for key in ("name", "standard_name", "ingredient_name", "standardName")
+    )
+    return bool(_OIL_MASS_NAME_PATTERN.search(text))
+
+
+def _epa_dha_and_oil_mass_mg(product: Dict[str, Any]) -> Dict[str, float]:
+    epa = 0.0
+    dha = 0.0
+    combined = 0.0
+    oil = 0.0
+
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        mg = _row_mg(row)
+        if mg is None:
+            continue
+        canon = str(row.get("canonical_id") or "").strip().lower()
+        if canon == "epa":
+            epa += mg
+        elif canon == "dha":
+            dha += mg
+        elif canon == "epa_dha":
+            combined += mg
+        elif _is_parent_oil_row(row):
+            oil += mg
+
+    return {
+        "epa_dha_mg": max(epa + dha, combined),
+        "oil_mg": oil,
+    }
+
+
+def _score_epa_dha_concentration(product: Dict[str, Any], cfg: Dict[str, Any]) -> Dict[str, Any]:
+    masses = _epa_dha_and_oil_mass_mg(product)
+    epa_dha_mg = masses["epa_dha_mg"]
+    oil_mg = masses["oil_mg"]
+    payload: Dict[str, Any] = {
+        "score": 0.0,
+        "epa_dha_mg": round(epa_dha_mg, 4),
+        "oil_mg": round(oil_mg, 4),
+    }
+    if epa_dha_mg <= 0:
+        payload["status"] = "missing_epa_dha_mass"
+        return payload
+    if oil_mg <= 0:
+        payload["status"] = "missing_oil_mass"
+        return payload
+
+    ratio = epa_dha_mg / oil_mg
+    payload["ratio"] = round(ratio, 4)
+    bands = _safe_list(cfg.get("score_bands"))
+    for band in bands:
+        if not isinstance(band, dict):
+            continue
+        try:
+            threshold = float(band.get("min_ratio", 0.0) or 0.0)
+            score = float(band.get("score", 0.0) or 0.0)
+        except (TypeError, ValueError):
+            continue
+        if ratio >= threshold:
+            payload.update({
+                "score": score,
+                "status": "scored",
+                "band": band.get("label"),
+            })
+            return payload
+    payload["status"] = "below_lowest_band"
+    return payload
 
 
 def _sustainability_cert_verified(product: Dict[str, Any]) -> Optional[str]:
@@ -253,6 +376,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     source_pts = float(form_cfg["source_disclosed"]["score"])
     premium_pts = float(form_cfg["premium_form_a2_carry"]["score"])
     sustainability_pts = float(form_cfg["sustainability_cert"]["score"])
+    concentration_cfg = _safe_dict(form_cfg.get("epa_dha_concentration"))
 
     form_detected = _detect_form(product)
     has_omega = _has_omega_signal(product)
@@ -279,6 +403,10 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     if form_detected != "undefined":
         components["premium_form_a2_carry"] = premium_pts
 
+    concentration = _score_epa_dha_concentration(product, concentration_cfg)
+    if concentration["score"] > 0:
+        components["epa_dha_concentration"] = concentration["score"]
+
     sustainability_match = _sustainability_cert_verified(product)
     if sustainability_match:
         components["sustainability_cert"] = sustainability_pts
@@ -292,12 +420,13 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "cap_applied": raw_score > CAP_FORMULATION,
         "form_detected": form_detected,
         "source_disclosed": "source_disclosed" in components,
+        "epa_dha_concentration": concentration,
         "sustainability_cert_program": sustainability_match,
-        "max_reachable_in_p161": 21.0,
+        "max_reachable_in_p161": 23.0,
         "_max_reachable_note": (
-            "Current sub-components sum to 21/25 maximum. 4-point headroom "
-            "is reserved for a future concentration/purity sub-component "
-            "(P1.6.7+). Do not interpret a 21/25 score as a cap-applied event."
+            "Current sub-components sum to 23/25 maximum. 2-point headroom "
+            "is reserved for future lot-level purity evidence. Do not interpret "
+            "a 23/25 score as a cap-applied event."
         ),
     }
 
