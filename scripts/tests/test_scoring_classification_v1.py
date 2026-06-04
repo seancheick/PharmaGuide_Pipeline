@@ -864,6 +864,147 @@ def test_profile_cutover_impact_summary_counts_affected_class_flags():
     assert summary["active_selection_large_drop_ge20_count"] == 0
 
 
+# --- Phase 2: botanical owner_type classifier (canary families) -------------
+# owner_type in {therapeutic_botanical, standardized_botanical, botanical_blend}
+# => product SHOULD use botanical adapters; the others => it should NOT.
+
+_OWNER_TYPES = {"therapeutic_botanical", "standardized_botanical", "botanical_blend"}
+
+
+def _owner_case(*specs):
+    """Build (rows, row_contracts) from (name, domain, role, mass_mg,
+    botanical_eligible, evidence) tuples."""
+    rows, contracts = [], []
+    for name, domain, role, mass, bot_eligible, evidence in specs:
+        cid = name.lower().replace(" ", "_")
+        rows.append({"name": name, "canonical_id": cid, "quantity": mass, "unit": "mg"})
+        contracts.append({
+            "name": name, "canonical_id": cid, "row_ref": name,
+            "ingredient_domain": domain, "role": role,
+            "botanical_source": {"value": bot_eligible, "evidence": list(evidence or [])},
+            "profile_eligibility": {"botanical": {"eligible": bot_eligible}},
+        })
+    return rows, contracts
+
+
+def _owner(product_name, *specs):
+    from scoring_input_contract import _classify_botanical_owner_type
+    rows, contracts = _owner_case(*specs)
+    return _classify_botanical_owner_type({"product_name": product_name}, rows, contracts)
+
+
+def test_owner_acerola_vitamin_c_is_nutrient_source_not_owner():
+    out = _owner(
+        "Acerola/Flavonoid",
+        ("Vitamin C", "vitamin", "major", 300, False, []),
+        ("Acerola", "herb", "claim_prominent", 100, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] == "nutrient_source"
+    assert out["owner_reason_code"] == "nutrient_source_blocks_botanical"
+    assert out["owner_type"] not in _OWNER_TYPES
+    assert "Vitamin C" in out["blocking_row_refs"]
+    assert "Acerola" in out["support_row_refs"]
+
+
+def test_owner_red_wine_complex_with_vitc_is_not_owner():
+    out = _owner(
+        "Red Wine Complex",
+        ("Vitamin C", "vitamin", "major", 60, False, []),
+        ("Red Wine Complex", "herb", "claim_prominent", 200, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+
+
+def test_owner_ksm66_is_standardized_botanical_owner():
+    out = _owner(
+        "KSM-66 Ashwagandha",
+        ("KSM-66 Ashwagandha", "herb", "claim_prominent", 600, True, ["standardized_botanical_source_db"]),
+    )
+    assert out["owner_type"] == "standardized_botanical"
+    assert out["owner_reason_code"] == "standardized_botanical_owner"
+
+
+def test_owner_meriva_standardized_owns_even_with_vitamin():
+    out = _owner(
+        "Curcumin Phytosome with Vitamin C",
+        ("Curcumin Phytosome", "herb", "claim_prominent", 500, True, ["product_standardized_botanical"]),
+        ("Vitamin C", "vitamin", "major", 100, False, []),
+    )
+    assert out["owner_type"] == "standardized_botanical"
+
+
+def test_owner_boswellia_is_therapeutic_botanical():
+    out = _owner(
+        "Boswellia Extract",
+        ("Boswellia serrata", "herb", "claim_prominent", 300, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] == "therapeutic_botanical"
+
+
+def test_owner_echinacea_only_no_ref_is_botanical_blend():
+    # Echinacea has no therapeutic-dose-DB entry but is the sole material botanical.
+    out = _owner(
+        "Echinacea Root",
+        ("Echinacea Root", "herb", "claim_prominent", 400, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] == "botanical_blend"
+
+
+def test_owner_elderberry_with_zinc_owns_when_elderberry_is_title_head():
+    out = _owner(
+        "Elderberry Syrup with Zinc",
+        ("Elderberry", "herb", "claim_prominent", 1000, True, ["botanical_source_text"]),
+        ("Zinc", "mineral", "major", 15, False, []),
+    )
+    assert out["owner_type"] == "therapeutic_botanical"
+
+
+def test_owner_zinc_plus_elderberry_does_not_own_when_zinc_is_deliverable():
+    out = _owner(
+        "Zinc + Elderberry",
+        ("Zinc", "mineral", "claim_prominent", 15, False, []),
+        ("Elderberry", "herb", "major", 100, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+
+
+def test_owner_protein_with_greens_support_is_not_owner():
+    out = _owner(
+        "Protein with Greens",
+        ("Pea Protein", "sports_active", "primary", 20000, False, []),
+        ("Spirulina", "herb", "major", 500, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+    assert "Pea Protein" in out["blocking_row_refs"]
+
+
+def test_owner_collagen_with_berry_botanical_is_not_owner():
+    out = _owner(
+        "Collagen with Acai",
+        ("Collagen Peptides", "collagen", "major", 10000, False, []),
+        ("Acai", "herb", "claim_prominent", 100, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+
+
+def test_owner_l_theanine_has_no_botanical_rows():
+    out = _owner(
+        "L-Theanine",
+        ("L-Theanine", "amino_acid", "primary", 200, False, []),
+    )
+    assert out["owner_type"] == "not_botanical_owner"
+    assert out["owner_reason_code"] == "no_botanical_rows"
+
+
+def test_owner_enzyme_product_with_fruit_support_is_not_owner():
+    out = _owner(
+        "Digestive Enzyme Complex",
+        ("Bromelain", "enzyme", "primary", 100, False, []),
+        ("Papaya", "herb", "major", 100, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+
+
 def test_profile_cutover_impact_old_baseline_forces_legacy_selector():
     from api_audit.audit_v4_profile_cutover_impact import _profile_state
 

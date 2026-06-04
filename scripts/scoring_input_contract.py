@@ -12,6 +12,11 @@ from dataclasses import dataclass, field
 import re
 from typing import Any, Dict, List, Optional
 
+# Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
+# Importing it here is safe: the resolver imports nothing from the contract or
+# the scorer and only reads data files lazily.
+from scoring_reference_resolver import has_therapeutic_reference
+
 
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
 LEGACY_IQD_SOURCE = "ingredient_quality_data.ingredients"
@@ -2280,6 +2285,124 @@ def _profile_is_material(primary_mass_mg: float, other_pairs: List[tuple[Dict[st
     return primary_mass_mg >= (_PROFILE_BOTANICAL_MATERIALITY_FRACTION * max_other_mass)
 
 
+# --- Phase 2: botanical owner_type model -----------------------------------
+# Ownership ("should this product use the botanical adapters?") is SEPARATE from
+# row-level botanical source ("does this row have botanical/source properties?").
+# A botanical owns the product only when role + materiality + intent + therapeutic
+# reference agree. Reference-DB presence is EVIDENCE, not ownership.
+_PROFILE_BOTANICAL_OWNER_TYPES = frozenset({
+    "therapeutic_botanical", "standardized_botanical", "botanical_blend",
+})
+# A material non-botanical deliverable in any of these domains blocks a merely
+# source/support botanical from owning the product (advisor #4 — expanded beyond
+# vitamin/mineral). Materiality is compared in comparable mass units only.
+_PROFILE_MATERIAL_NONBOTANICAL_DOMAINS = frozenset({
+    "vitamin", "mineral", "amino_acid", "fatty_acid", "omega_epa_dha",
+    "omega_parent", "sports_active", "probiotic_strain", "enzyme", "collagen",
+})
+_PROFILE_DELIVERABLE_ROLES = frozenset({"primary", "claim_prominent", "major"})
+_PROFILE_MICRONUTRIENT_DOMAINS = frozenset({"vitamin", "mineral"})
+_PROFILE_STANDARDIZED_EVIDENCE = frozenset({
+    "standardized_botanical_source_db", "product_standardized_botanical",
+})
+
+
+def _profile_row_ref(contract: Dict[str, Any]) -> str:
+    return str(contract.get("row_ref") or contract.get("canonical_id") or contract.get("name") or "")
+
+
+def _botanical_row_evidence(contract: Dict[str, Any]) -> List[str]:
+    ev = _safe_dict(contract.get("botanical_source")).get("evidence")
+    return ev if isinstance(ev, list) else []
+
+
+def _classify_botanical_owner_type(
+    product: Dict[str, Any],
+    rows: List[Dict[str, Any]],
+    row_contracts: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Decide whether/why a product is botanical-OWNED.
+
+    Returns {owner_type, owner_reason_code, owner_row_refs, blocking_row_refs,
+    support_row_refs}. owner_type in _PROFILE_BOTANICAL_OWNER_TYPES means the
+    product should use the botanical adapters; the others mean it should not."""
+    pairs = list(zip(rows, row_contracts))
+    botanical_pairs = [(r, c) for r, c in pairs if _row_profile_eligible(c, "botanical")]
+    if not botanical_pairs:
+        return {
+            "owner_type": "not_botanical_owner",
+            "owner_reason_code": "no_botanical_rows",
+            "owner_row_refs": [], "blocking_row_refs": [], "support_row_refs": [],
+        }
+
+    primary_row, primary_contract = max(botanical_pairs, key=lambda p: (_role_mass_mg(p[0]) or 0.0))
+    botanical_mass = _role_mass_mg(primary_row) or 0.0
+    non_botanical_pairs = [(r, c) for r, c in pairs if not _row_profile_eligible(c, "botanical")]
+    botanical_is_material = _profile_is_material(botanical_mass, non_botanical_pairs)
+    botanical_is_hero = primary_contract.get("role") in _PROFILE_PRIMARY_ROLES
+    non_botanical_heroes = [c for _, c in non_botanical_pairs if c.get("role") in _PROFILE_PRIMARY_ROLES]
+    # Material non-botanical deliverables — comparable mass units only (advisor #4).
+    material_blockers = [
+        c for r, c in non_botanical_pairs
+        if c.get("role") in _PROFILE_DELIVERABLE_ROLES
+        and c.get("ingredient_domain") in _PROFILE_MATERIAL_NONBOTANICAL_DOMAINS
+        and _role_mass_mg(r) is not None
+    ]
+    botanical_standardized = any(
+        e in _PROFILE_STANDARDIZED_EVIDENCE for e in _botanical_row_evidence(primary_contract)
+    )
+    botanical_has_ref = has_therapeutic_reference(
+        primary_contract.get("canonical_id"), primary_contract.get("name")
+    )
+    owner_refs = [_profile_row_ref(c) for _, c in botanical_pairs]
+    blocking_refs = [_profile_row_ref(c) for c in material_blockers]
+    support_refs = [_profile_row_ref(c) for _, c in botanical_pairs]
+
+    def owns(owner_type: str, reason: str) -> Dict[str, Any]:
+        return {
+            "owner_type": owner_type, "owner_reason_code": reason,
+            "owner_row_refs": owner_refs, "blocking_row_refs": blocking_refs,
+            "support_row_refs": [],
+        }
+
+    def not_owner(owner_type: str, reason: str) -> Dict[str, Any]:
+        return {
+            "owner_type": owner_type, "owner_reason_code": reason,
+            "owner_row_refs": [], "blocking_row_refs": blocking_refs,
+            "support_row_refs": support_refs,
+        }
+
+    # Enzyme/digestive product whose botanical is flavor/support -> not owner.
+    if _profile_has_enzyme_product_intent(product, non_botanical_pairs):
+        return not_owner("phytonutrient_support", "material_nonbotanical_deliverable")
+
+    # Standardized / branded extract that is material -> owns even alongside a nutrient.
+    if botanical_standardized and (botanical_is_hero or botanical_is_material):
+        return owns("standardized_botanical", "standardized_botanical_owner")
+
+    if material_blockers:
+        botanical_wins_title = (
+            not non_botanical_heroes
+            or _profile_botanical_is_title_head(product, primary_contract, non_botanical_heroes)
+        )
+        if botanical_has_ref and botanical_is_hero and botanical_is_material and botanical_wins_title:
+            return owns("therapeutic_botanical", "therapeutic_botanical_owner")
+        all_micronutrient = all(
+            c.get("ingredient_domain") in _PROFILE_MICRONUTRIENT_DOMAINS for c in material_blockers
+        )
+        if all_micronutrient and not botanical_has_ref:
+            return not_owner("nutrient_source", "nutrient_source_blocks_botanical")
+        return not_owner("phytonutrient_support", "material_nonbotanical_deliverable")
+
+    # No material non-botanical deliverable competes.
+    if botanical_has_ref and (botanical_is_hero or botanical_is_material):
+        return owns("therapeutic_botanical", "therapeutic_botanical_owner")
+    max_non_botanical_mass = max((_role_mass_mg(r) or 0.0 for r, _ in non_botanical_pairs), default=0.0)
+    if max_non_botanical_mass <= botanical_mass and botanical_is_material:
+        return owns("botanical_blend", "botanical_blend_owner")
+    return not_owner("phytonutrient_support", "phytonutrient_support_only")
+
+
 def _product_botanical_profile_eligible(
     product: Dict[str, Any],
     rows: List[Dict[str, Any]],
@@ -2384,6 +2507,9 @@ def _product_profile_summary(
                 if str(e)
             }),
         }
+    # Phase 2: emit botanical owner_type (classification only; `eligible` above is
+    # unchanged in this phase — Phase 3 derives `eligible` from owner_type).
+    summary["botanical"].update(_classify_botanical_owner_type(product, rows, row_contracts))
     return summary
 
 
