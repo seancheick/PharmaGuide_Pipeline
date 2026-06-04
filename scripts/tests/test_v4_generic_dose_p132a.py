@@ -38,8 +38,9 @@ def _ingredient(
     bio_score: float = 14,
     quantity: float = 200,
     unit: str = "mg",
+    **extra,
 ) -> dict:
-    return {
+    row = {
         "name": name,
         "standard_name": standard_name or name,
         "canonical_id": canonical_id,
@@ -48,6 +49,8 @@ def _ingredient(
         "quantity": quantity,
         "unit": unit,
     }
+    row.update(extra)
+    return row
 
 
 def _product(
@@ -217,6 +220,7 @@ def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
                     bio_score=11,
                     quantity=600,
                     unit="mg",
+                    raw_taxonomy={"category": "botanical", "ingredientGroup": "Ashwagandha"},
                 )
             ],
             adequacy_results=[

@@ -79,6 +79,31 @@ def _botanical_product(ingredient=None, *, primary_type="herbal_botanical",
     return product
 
 
+def _blend_anchor_evidence(canonical_id: str, name: str, dose_value: float, dose_unit: str = "mg"):
+    return {
+        "name": name,
+        "canonical_id": canonical_id,
+        "clean_identity_id": canonical_id,
+        "scoring_parent_id": canonical_id,
+        "evidence_canonical_id": canonical_id,
+        "canonical_source_db": "ingredient_quality_map",
+        "evidence_origin": "compatibility_derived",
+        "evidence_type": "blend_anchor_mass",
+        "scoreable": True,
+        "scoreable_identity": True,
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "dose_value": dose_value,
+        "dose_unit": dose_unit,
+        "source": "activeIngredients",
+        "raw_source_path": "ingredientRows[1]",
+        "evidence_scope": "blend_level",
+        "linked_rows": ["ingredientRows[1]"],
+        "confidence": "medium",
+        "reason": "identity_bearing_blend_header_mass",
+    }
+
+
 # --- detector --------------------------------------------------------------
 
 def test_botanical_product_detected_by_taxonomy():
@@ -325,5 +350,21 @@ def test_anchor_only_dose_treated_as_blend_total_not_within_range():
     ing = _botanical_ingredient(quantity=500, scoring_input_kind="product_level_evidence",
                                 evidence_type="blend_anchor_mass")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
+    assert out["band"] == "blend_total_only"
+    assert out["score"] == 7.0
+
+
+def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
+    product = {
+        "product_name": "Red Wine Complex 200 mg",
+        "primary_type": "general_supplement",
+        "ingredient_quality_data": {"ingredients_scorable": [], "ingredients": []},
+        "product_scoring_evidence": [
+            _blend_anchor_evidence("red_wine_extract", "Red Wine Complex", 200.0)
+        ],
+    }
+
+    assert is_botanical_product(product) is True
+    out = score_botanical_dose(product)
     assert out["band"] == "blend_total_only"
     assert out["score"] == 7.0

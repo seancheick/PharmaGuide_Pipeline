@@ -1966,7 +1966,23 @@ def _classification_row_text(row: Dict[str, Any]) -> str:
     return " ".join(str(piece or "") for piece in pieces)
 
 
-def _botanical_source_evidence(row: Dict[str, Any]) -> tuple[bool, List[str]]:
+def _product_standardized_botanical_keys(product: Dict[str, Any]) -> set[str]:
+    keys: set[str] = set()
+    formulation = _safe_dict(product.get("formulation_data"))
+    for item in _safe_list(formulation.get("standardized_botanicals")):
+        if not isinstance(item, dict):
+            continue
+        for key in (item.get("name"), item.get("botanical_id"), item.get("standard_name")):
+            slug = _slug(key)
+            if slug:
+                keys.add(slug)
+            norm_key = _norm(key)
+            if norm_key:
+                keys.add(norm_key)
+    return keys
+
+
+def _botanical_source_evidence(row: Dict[str, Any], product: Optional[Dict[str, Any]] = None) -> tuple[bool, List[str]]:
     """Contextual botanical-source proof.
 
     A botanical reference-file hit is not proof by itself. Evidence must come
@@ -1981,6 +1997,21 @@ def _botanical_source_evidence(row: Dict[str, Any]) -> tuple[bool, List[str]]:
         evidence.append("raw_taxonomy_botanical")
     if _norm(row.get("canonical_source_db")) == "standardized_botanicals":
         evidence.append("standardized_botanical_source_db")
+    standardized_keys = _product_standardized_botanical_keys(product or {})
+    row_keys = {
+        _slug(row.get("canonical_id")),
+        _slug(row.get("evidence_canonical_id")),
+        _slug(row.get("name")),
+        _slug(row.get("standardName")),
+        _slug(row.get("standard_name")),
+        _norm(row.get("canonical_id")),
+        _norm(row.get("evidence_canonical_id")),
+        _norm(row.get("name")),
+        _norm(row.get("standardName")),
+        _norm(row.get("standard_name")),
+    }
+    if standardized_keys and any(key and key in standardized_keys for key in row_keys):
+        evidence.append("product_standardized_botanical")
     for form in _safe_list(row.get("forms") or raw_taxonomy.get("forms")):
         if not isinstance(form, dict):
             continue
@@ -2381,7 +2412,7 @@ def build_scoring_classification(
     row_contracts: List[Dict[str, Any]] = []
     for index, row in enumerate(rows):
         row = row if isinstance(row, dict) else {}
-        botanical_source, botanical_evidence = _botanical_source_evidence(row)
+        botanical_source, botanical_evidence = _botanical_source_evidence(row, product)
         domain = _ingredient_domain(row, botanical_source=botanical_source)
         role = role_by_key.get(_classification_identity(row)) or role_by_key.get(_slug(row.get("name"))) or {}
         row_contracts.append({

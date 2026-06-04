@@ -21,8 +21,9 @@ def _ingredient(
     bio_score: float = 14.0,
     quantity: float = 200.0,
     unit: str = "mg",
+    **extra,
 ) -> dict:
-    return {
+    row = {
         "name": name,
         "standard_name": standard_name or name,
         "canonical_id": canonical_id or (standard_name or name).lower().replace(" ", "_"),
@@ -32,6 +33,8 @@ def _ingredient(
         "quantity": quantity,
         "unit": unit,
     }
+    row.update(extra)
+    return row
 
 
 def _base_product(*, ingredient: dict | None = None, top_level: dict | None = None) -> dict:
@@ -456,6 +459,7 @@ def test_botanical_no_dose_scores_zero_not_excluded_not_floored() -> None:
         ingredient=_ingredient(
             name="Ashwagandha", standard_name="Ashwagandha",
             canonical_id="ashwagandha", bio_score=8, quantity=0, unit="",
+            raw_taxonomy={"category": "botanical", "ingredientGroup": "Ashwagandha"},
         )
     )
     product["primary_type"] = "herbal_botanical"

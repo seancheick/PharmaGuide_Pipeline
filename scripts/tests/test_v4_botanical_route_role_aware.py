@@ -213,7 +213,7 @@ def test_source_botanical_antioxidant_still_uses_botanical_profile():
     assert is_botanical_product(p) is True
 
 
-def test_antioxidant_with_botanical_source_form_uses_botanical_profile():
+def test_isolated_antioxidant_with_botanical_source_form_stays_generic():
     p = _product("Quercetin", [
         _row(
             "quercetin",
@@ -227,7 +227,7 @@ def test_antioxidant_with_botanical_source_form_uses_botanical_profile():
             },
         ),
     ])
-    assert is_botanical_product(p) is True
+    assert is_botanical_product(p) is False
 
 
 def test_antioxidant_without_botanical_source_stays_generic():

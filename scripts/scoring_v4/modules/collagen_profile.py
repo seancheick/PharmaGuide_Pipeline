@@ -46,6 +46,7 @@ from scoring_v4.modules.botanical_profile import (
     _forms_text,
     _ingredient_identity_keys,
     _dosing_index,
+    _classification_profile_eligible,
 )
 
 COLLAGEN_FORMULATION_CAP = 15.0
@@ -67,6 +68,9 @@ def _identity_text(row: Dict[str, Any]) -> str:
 
 
 def _is_collagen_active(row: Dict[str, Any]) -> bool:
+    contract_eligible = _classification_profile_eligible(row, "collagen")
+    if contract_eligible is not None:
+        return contract_eligible
     if _norm(row.get("canonical_id")) == "collagen":
         return True
     return any(t in _identity_text(row) for t in _COLLAGEN_TOKENS)

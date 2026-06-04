@@ -44,6 +44,31 @@ def _product(rows):
                                         "total_active": len(rows)}}
 
 
+def _blend_anchor_evidence(canonical_id: str, name: str, dose_value: float, dose_unit: str = "Gram(s)"):
+    return {
+        "name": name,
+        "canonical_id": canonical_id,
+        "clean_identity_id": canonical_id,
+        "scoring_parent_id": canonical_id,
+        "evidence_canonical_id": canonical_id,
+        "canonical_source_db": "ingredient_quality_map",
+        "evidence_origin": "compatibility_derived",
+        "evidence_type": "blend_anchor_mass",
+        "scoreable": True,
+        "scoreable_identity": True,
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "dose_value": dose_value,
+        "dose_unit": dose_unit,
+        "source": "activeIngredients",
+        "raw_source_path": "ingredientRows[1]",
+        "evidence_scope": "blend_level",
+        "linked_rows": ["ingredientRows[1]"],
+        "confidence": "medium",
+        "reason": "identity_bearing_blend_header_mass",
+    }
+
+
 # --- detector (mass-dominance routed) --------------------------------------
 
 def test_collagen_dominant_is_collagen_product():
@@ -203,6 +228,22 @@ def test_dose_anchor_only_treated_as_blend_total():
     out = score_collagen_dose(_product([_collagen(quantity=12, unit="Gram(s)",
                                                   scoring_input_kind="product_level_evidence",
                                                   evidence_type="blend_anchor_mass")]))
+    assert out["score"] == 7.0
+    assert out["band"] == "blend_total_only"
+
+
+def test_product_level_collagen_evidence_is_visible_to_profile_scorer():
+    product = {
+        "status": "active",
+        "product_name": "Multi-Collagen Complex",
+        "ingredient_quality_data": {"ingredients_scorable": [], "ingredients": [], "total_active": 0},
+        "product_scoring_evidence": [
+            _blend_anchor_evidence("collagen", "Multi-Collagen Complex", 9.85)
+        ],
+    }
+
+    assert is_collagen_product(product) is True
+    out = score_collagen_dose(product)
     assert out["score"] == 7.0
     assert out["band"] == "blend_total_only"
 

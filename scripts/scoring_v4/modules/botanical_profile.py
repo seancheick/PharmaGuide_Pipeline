@@ -206,12 +206,50 @@ def _branded_studied_set() -> frozenset:
 # --- ingredient helpers ----------------------------------------------------
 
 def _scoring_actives(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    try:
+        from scoring_input_contract import build_scoring_classification, get_scoring_ingredients
+        result = get_scoring_ingredients(product, strict=True)
+        if result.rows:
+            rows = [dict(r) for r in result.rows if isinstance(r, dict)]
+            try:
+                contract = build_scoring_classification(product)
+                contracts_by_ref = {
+                    str(item.get("row_ref") or ""): item
+                    for item in contract.get("ingredients", [])
+                    if isinstance(item, dict)
+                }
+                for index, row in enumerate(rows):
+                    row_ref = str(row.get("raw_source_path") or row.get("source") or f"scoring_row:{index}")
+                    row_contract = contracts_by_ref.get(row_ref)
+                    if isinstance(row_contract, dict):
+                        row["_scoring_classification"] = row_contract
+            except Exception:  # pragma: no cover - profile scoring still has legacy fallback
+                pass
+            return rows
+    except Exception:  # pragma: no cover - legacy fixture fallback
+        pass
     iqd = (product or {}).get("ingredient_quality_data") or {}
     rows = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
     return [r for r in rows if isinstance(r, dict)]
 
 
+def _classification_profile_eligible(row: Dict[str, Any], profile: str) -> Optional[bool]:
+    row_contract = row.get("_scoring_classification")
+    if not isinstance(row_contract, dict):
+        return None
+    profiles = row_contract.get("profile_eligibility")
+    if not isinstance(profiles, dict):
+        return None
+    payload = profiles.get(profile)
+    if not isinstance(payload, dict):
+        return None
+    return payload.get("eligible") is True
+
+
 def _is_botanical_active(row: Dict[str, Any]) -> bool:
+    contract_eligible = _classification_profile_eligible(row, "botanical")
+    if contract_eligible is not None:
+        return contract_eligible
     tax = row.get("raw_taxonomy") if isinstance(row.get("raw_taxonomy"), dict) else {}
     category = _norm(row.get("category"))
     category_key = category.replace("-", "_").replace(" ", "_")

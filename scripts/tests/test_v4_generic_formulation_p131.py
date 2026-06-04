@@ -36,6 +36,7 @@ def _ingredient(
     natural: bool = False,
     is_proprietary_blend: bool = False,
     is_parent_total: bool = False,
+    **extra,
 ) -> dict:
     row = {
         "name": name,
@@ -52,6 +53,7 @@ def _ingredient(
         row["quantity"] = quantity
     if unit is not None:
         row["unit"] = unit
+    row.update(extra)
     return row
 
 
@@ -459,6 +461,7 @@ def _botanical_single(**ing_overrides) -> dict:
         "quantity": 500,
         "unit": "mg",
         "bio_score": 8.0,  # herbs sit low on the vitamin/mineral bio scale
+        "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Curcumin"},
     }
     row.update(ing_overrides)
     return _product(supp_type="single_nutrient", ingredients=[row])

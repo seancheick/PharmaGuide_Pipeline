@@ -205,6 +205,43 @@ def test_plant_part_extract_still_grants_botanical_source_text():
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
 
 
+def test_product_standardized_botanical_signal_grants_botanical_profile():
+    product = _product(
+        "Curcumin Phytosome 500 mg",
+        [
+            _row(
+                "curcumin",
+                "Curcumin Phytosome",
+                500,
+                "mg",
+                raw_taxonomy={"category": "non-nutrient/non-botanical", "forms": []},
+            )
+        ],
+        formulation_data={
+            "standardized_botanicals": [
+                {
+                    "name": "Meriva",
+                    "botanical_id": "curcumin",
+                    "standard_name": "Curcumin",
+                    "markers": ["curcuminoids"],
+                    "percentage_found": 95.0,
+                    "min_threshold": 95,
+                    "meets_threshold": True,
+                }
+            ]
+        },
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+    contract = build_scoring_classification(product)
+
+    assert ingredient["botanical_source"]["value"] is True
+    assert "product_standardized_botanical" in ingredient["botanical_source"]["evidence"]
+    assert ingredient["ingredient_domain"] == "herb"
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is True
+
+
 def test_isolated_carotenoid_keeps_source_but_not_botanical_profile():
     product = _product(
         "Lycopene 10 mg",
