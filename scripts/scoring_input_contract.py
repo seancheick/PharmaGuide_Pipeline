@@ -1369,6 +1369,29 @@ _CLASSIFICATION_DOMAIN_BY_CANONICAL = {
     "hydrolyzed_collagen": "collagen",
     "undenatured_type_ii_collagen": "collagen",
     "digestive_enzymes": "enzyme",
+    "glucosamine": "generic_active",
+    "nattokinase": "enzyme",
+}
+_CLASSIFICATION_ISOLATED_BOTANICAL_MARKERS = {
+    "activated_charcoal",
+    "caffeine",
+    "ceramides",
+    "d_limonene",
+    "lycopene",
+    "lutein",
+    "policosanol",
+    "raspberry_ketones",
+    "resveratrol",
+    "sulforaphane",
+    "theobromine",
+    "zeaxanthin",
+}
+_CLASSIFICATION_ISOLATED_BOTANICAL_TEXT_RE = re.compile(
+    r"\b(yohimbine|quercetin|nattokinase)\b",
+    re.IGNORECASE,
+)
+_CLASSIFICATION_NON_BOTANICAL_GENERIC_CANONICALS = {
+    "glucosamine",
 }
 _CLASSIFICATION_RAW_CATEGORY_DOMAINS = {
     "vitamin": "vitamin",
@@ -1987,6 +2010,8 @@ def _ingredient_domain(row: Dict[str, Any], *, botanical_source: bool) -> str:
         return "enzyme"
     if canonical in _CLASSIFICATION_DOMAIN_BY_CANONICAL:
         return _CLASSIFICATION_DOMAIN_BY_CANONICAL[canonical]
+    if canonical in _CLASSIFICATION_ISOLATED_BOTANICAL_MARKERS:
+        return "botanical_marker"
     if canonical in _CLASSIFICATION_MINERAL_CANONICALS:
         return "mineral"
     if _CLASSIFICATION_VITAMIN_CANONICAL_RE.search(canonical):
@@ -1997,6 +2022,8 @@ def _ingredient_domain(row: Dict[str, Any], *, botanical_source: bool) -> str:
         return "collagen"
     if raw_category in _CLASSIFICATION_RAW_CATEGORY_DOMAINS:
         return _CLASSIFICATION_RAW_CATEGORY_DOMAINS[raw_category]
+    if _CLASSIFICATION_ISOLATED_BOTANICAL_TEXT_RE.search(text):
+        return "botanical_marker"
     if _CLASSIFICATION_PROBIOTIC_TEXT_RE.search(text):
         return "probiotic_strain"
     if botanical_source:
@@ -2016,9 +2043,13 @@ def _profile_eligibility_for_row(
     canonical = _classification_identity(row)
     positive_dose = _positive_quantity(row) is not None
     evidence_type = _norm(row.get("evidence_type"))
+    botanical_profile_domain = domain == "herb" or (
+        domain == "generic_active"
+        and canonical not in _CLASSIFICATION_NON_BOTANICAL_GENERIC_CANONICALS
+    )
     profile: Dict[str, Dict[str, Any]] = {
         "botanical": {
-            "eligible": bool(botanical_source and domain in {"herb", "botanical_marker", "generic_active"}),
+            "eligible": bool(botanical_source and botanical_profile_domain),
             "reason": "positive_botanical_source_evidence" if botanical_source else "no_botanical_source_evidence",
             "evidence": botanical_evidence,
         },
@@ -2072,6 +2103,20 @@ _PROFILE_PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
 _PROFILE_BOTANICAL_MATERIALITY_FRACTION = 0.5
 _PROFILE_TITLE_SEPARATORS = (" with ", " plus ", " and ", " featuring ", " + ", " & ", "+", "&")
 _PROFILE_ENZYME_TITLE_RE = re.compile(r"\b(enzyme|enzymes|digestive)\b", re.IGNORECASE)
+_PROFILE_NON_BOTANICAL_INTENT_TYPES = frozenset({
+    "single_vitamin",
+    "single_mineral",
+    "vitamin_mineral_combo",
+    "multivitamin",
+    "b_complex",
+    "omega_3",
+    "fish_oil",
+    "protein_powder",
+    "collagen",
+    "probiotic",
+    "pre_workout",
+    "amino_acid",
+})
 
 
 def _row_profile_eligible(row_contract: Dict[str, Any], profile_name: str) -> bool:
@@ -2138,6 +2183,23 @@ def _profile_has_enzyme_product_intent(
     return any(contract.get("ingredient_domain") == "enzyme" for _, contract in non_botanical_pairs)
 
 
+def _profile_has_title_match(product: Dict[str, Any], contracts: List[Dict[str, Any]]) -> bool:
+    title = _norm(product.get("product_name") or product.get("fullName"))
+    if not title:
+        return False
+    return any(_profile_row_title_pos(contract, title) is not None for contract in contracts)
+
+
+def _profile_has_non_botanical_product_intent(
+    product: Dict[str, Any],
+    non_botanical_pairs: List[tuple[Dict[str, Any], Dict[str, Any]]],
+) -> bool:
+    non_botanical_contracts = [contract for _, contract in non_botanical_pairs]
+    if _profile_has_title_match(product, non_botanical_contracts):
+        return True
+    return _primary_type(product) in _PROFILE_NON_BOTANICAL_INTENT_TYPES
+
+
 def _profile_is_material(primary_mass_mg: float, other_pairs: List[tuple[Dict[str, Any], Dict[str, Any]]]) -> bool:
     max_other_mass = max((_role_mass_mg(row) or 0.0 for row, _ in other_pairs), default=0.0)
     if max_other_mass <= 0:
@@ -2167,6 +2229,12 @@ def _product_botanical_profile_eligible(
         if contract.get("role") in _PROFILE_PRIMARY_ROLES
     ]
     if botanical_is_hero and _profile_has_enzyme_product_intent(product, non_botanical_pairs):
+        return False
+    if (
+        not botanical_is_hero
+        and _profile_has_non_botanical_product_intent(product, non_botanical_pairs)
+        and not _profile_has_title_match(product, [contract for _, contract in botanical_pairs])
+    ):
         return False
     if botanical_is_hero and not non_botanical_heroes:
         return botanical_is_material

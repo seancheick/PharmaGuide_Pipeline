@@ -150,12 +150,12 @@ def test_botanical_source_requires_positive_source_evidence():
         ],
     )
     ingredient = build_scoring_classification(product)["ingredients"][0]
-    assert ingredient["ingredient_domain"] == "generic_active"
+    assert ingredient["ingredient_domain"] == "botanical_marker"
     assert ingredient["botanical_source"]["value"] is False
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is False
 
 
-def test_botanical_source_form_can_grant_botanical_eligibility():
+def test_botanical_source_form_on_isolated_marker_does_not_grant_botanical_profile():
     product = _product(
         "Quercetin Sophora Extract",
         [
@@ -174,8 +174,9 @@ def test_botanical_source_form_can_grant_botanical_eligibility():
     )
     ingredient = build_scoring_classification(product)["ingredients"][0]
     assert ingredient["botanical_source"]["value"] is True
+    assert ingredient["ingredient_domain"] == "botanical_marker"
     assert "botanical_source_form" in ingredient["botanical_source"]["evidence"]
-    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is False
 
 
 def test_animal_tissue_extract_does_not_grant_botanical_source_text():
@@ -204,6 +205,63 @@ def test_plant_part_extract_still_grants_botanical_source_text():
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
 
 
+def test_isolated_carotenoid_keeps_source_but_not_botanical_profile():
+    product = _product(
+        "Lycopene 10 mg",
+        [
+            _row(
+                "lycopene",
+                "Lycopene",
+                10,
+                "mg",
+                category="antioxidants",
+                matched_form="lycopene extract",
+                raw_taxonomy={"category": "non-nutrient/non-botanical"},
+            )
+        ],
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+    contract = build_scoring_classification(product)
+
+    assert ingredient["botanical_source"]["value"] is True
+    assert ingredient["ingredient_domain"] == "botanical_marker"
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is False
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is False
+
+
+@pytest.mark.parametrize(
+    ("canonical", "name", "expected_domain"),
+    [
+        ("glucosamine", "Glucosamine Sulfate 2KCl", "generic_active"),
+        ("d_limonene", "D-Limonene", "botanical_marker"),
+        ("nattokinase", "Fermented Soy Extract", "enzyme"),
+    ],
+)
+def test_clear_non_herb_domains_do_not_become_botanical_profile(canonical, name, expected_domain):
+    product = _product(
+        name,
+        [
+            _row(
+                canonical,
+                name,
+                100,
+                "mg",
+                raw_taxonomy={
+                    "category": "non-nutrient/non-botanical",
+                    "forms": [{"name": "Botanical source extract", "category": "botanical"}],
+                },
+            )
+        ],
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+
+    assert ingredient["botanical_source"]["value"] is True
+    assert ingredient["ingredient_domain"] == expected_domain
+    assert ingredient["profile_eligibility"]["botanical"]["eligible"] is False
+
+
 def test_kidney_bean_extract_is_not_blocked_as_animal_tissue():
     product = _product(
         "White Kidney Bean Extract",
@@ -214,6 +272,51 @@ def test_kidney_bean_extract_is_not_blocked_as_animal_tissue():
 
     assert ingredient["botanical_source"]["value"] is True
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
+
+
+def test_recovered_botanical_adjuncts_do_not_make_vitamin_product_botanical():
+    product = _product(
+        "Vitamin D3 + K2",
+        [
+            _row("vitamin_d", "Vitamin D3", 25, "mcg", raw_taxonomy={"category": "vitamin"}),
+            _row("vitamin_k", "Vitamin K2", 100, "mcg", raw_taxonomy={"category": "vitamin"}),
+            _row(
+                "acerola_cherry",
+                "Acerola Cherry Extract",
+                50,
+                "mg",
+                raw_taxonomy={"category": "botanical"},
+            ),
+        ],
+        primary_type="single_vitamin",
+    )
+
+    contract = build_scoring_classification(product)
+
+    assert contract["route_module"] == "generic"
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is False
+
+
+def test_botanical_title_product_with_vitamin_adjunct_stays_botanical():
+    product = _product(
+        "Echinacea Root Complex with Vitamin C",
+        [
+            _row(
+                "echinacea",
+                "Echinacea Root Extract",
+                900,
+                "mg",
+                raw_taxonomy={"category": "botanical"},
+            ),
+            _row("vitamin_c", "Vitamin C", 90, "mg", raw_taxonomy={"category": "vitamin"}),
+        ],
+        primary_type="immune_support",
+    )
+
+    contract = build_scoring_classification(product)
+
+    assert contract["route_module"] == "generic"
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is True
 
 
 @pytest.mark.parametrize(
