@@ -1,9 +1,9 @@
 """Phase 9 — bioavailability-weighted multivitamin dose coverage.
 
 "Adequate on paper" (100% RDA) is not adequate in vivo: magnesium oxide is poorly
-absorbed vs glycinate. So each nutrient's dose-coverage credit is scaled by its
-form bio_score, so a cheap-form multi cannot out-dose a premium-form one purely on
-panel breadth (the multi-inflation that let a basic multi tie a premium one).
+absorbed vs glycinate. Each nutrient's dose-coverage credit is scaled by its
+form bio_score, but the floor stays high enough that dose does not double-penalize
+the same form-quality issue already scored in Formulation.
 """
 from __future__ import annotations
 
@@ -38,8 +38,18 @@ def _product(ingredients):
 def test_bio_weight_curve():
     assert _bio_weight(15.0) == 1.0           # premium form, full credit
     assert _bio_weight(None) == 1.0           # unknown -> neutral, never penalized
-    assert _bio_weight(0.0) == 0.5            # floored
-    assert _bio_weight(7.5) == 0.75           # mid
+    assert _bio_weight(0.0) == 0.75           # soft floor; poor form still counts as dose
+    assert _bio_weight(7.5) == 0.875          # mid
+
+
+def test_poor_form_still_receives_most_dose_coverage_credit():
+    product = _product([
+        _ing("magnesium", 0), _ing("vitamin_b12", 0), _ing("folate", 0),
+        _ing("zinc", 0), _ing("vitamin_b6", 0),
+    ])
+    coverage = score_dose(product)["components"]["rda_ai_coverage"]
+
+    assert coverage == 15.0
 
 
 def test_premium_forms_out_cover_cheap_forms_at_same_rda():
@@ -55,5 +65,5 @@ def test_premium_forms_out_cover_cheap_forms_at_same_rda():
     prem_cov = score_dose(premium)["components"]["rda_ai_coverage"]
     # same 100% RDA across the panel, but premium forms are more bioavailable
     assert prem_cov > cheap_cov
-    # and the gap is material (not a rounding wash)
-    assert prem_cov - cheap_cov >= 3.0
+    # and the gap is meaningful without double-penalizing form quality
+    assert prem_cov - cheap_cov >= 2.0

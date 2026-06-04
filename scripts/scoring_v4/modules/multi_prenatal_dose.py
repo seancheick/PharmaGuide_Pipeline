@@ -24,10 +24,11 @@ from scoring_v4.modules.generic_helpers import (
 # Bioavailability weighting of dose coverage. "Adequate on paper" (100% RDA) does
 # not mean adequate in vivo — magnesium oxide is poorly absorbed vs glycinate. So
 # each nutrient's coverage credit is scaled by its FORM bio_score, so a cheap-form
-# multi cannot out-dose a premium-form one purely on panel breadth. Floor 0.5 so a
-# cheap-but-real form still counts; unknown bio_score is neutral (1.0).
+# multi cannot out-dose a premium-form one purely on panel breadth. Floor 0.75 so
+# a cheap-but-real form still mostly counts as dose; formulation remains the main
+# lane for form-quality differences. Unknown bio_score is neutral (1.0).
 _BIO_SCORE_MAX = 15.0
-_BIO_WEIGHT_FLOOR = 0.5
+_BIO_WEIGHT_FLOOR = 0.75
 
 
 DIMENSION_CAP = 30.0
