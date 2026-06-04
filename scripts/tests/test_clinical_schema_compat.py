@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -212,6 +213,20 @@ class TestAuditRegressionData:
         assert entries["PRECLIN_LUTEOLIN"]["registry_completed_trials_count"] == 10
 
         assert entries["INGR_BLACK_COHOSH"]["effect_direction"] == "mixed"
+
+    def test_effect_direction_matches_retained_classification_rationale(self):
+        data = json.loads((DATA_DIR / "backed_clinical_studies.json").read_text())
+        mismatches = []
+        for entry in data["backed_clinical_studies"]:
+            rationale = entry.get("effect_direction_rationale") or ""
+            match = re.search(r"Retained\s+([a-z_]+)\s+classification", rationale)
+            if match and entry.get("effect_direction") != match.group(1):
+                mismatches.append(
+                    f"{entry.get('id')}: effect_direction={entry.get('effect_direction')} "
+                    f"rationale={match.group(1)}"
+                )
+
+        assert not mismatches
 
     def test_clinical_risk_taxonomy_metadata_count_matches_arrays(self):
         data = json.loads((DATA_DIR / "clinical_risk_taxonomy.json").read_text())
