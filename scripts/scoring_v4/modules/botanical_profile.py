@@ -559,6 +559,57 @@ def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
     return False
 
 
+# Tiered marker-standardization credit (0-4), calibration v2. The binary
+# meets_threshold gate destroyed credit for a near-threshold standardization
+# (Boswellia 40% vs a 65% spec earned 0) and for a disclosed marker with an
+# unparsed amount. Tiers reward genuine standardization proportionally while a
+# plain powder / no-evidence ingredient still earns nothing — good products score
+# higher without inflating weak ones.
+#   4 = branded clinically-studied extract OR full threshold met
+#   3 = marker disclosed and >= 75% of threshold
+#   2 = marker disclosed and >= 50% of threshold
+#   1 = marker/standardization disclosed but no usable quantified amount
+#   0 = below 50% of threshold / plain powder / no evidence
+STANDARDIZATION_TIER_FULL = 4.0
+STANDARDIZATION_TIER_NEAR = 3.0
+STANDARDIZATION_TIER_HALF = 2.0
+STANDARDIZATION_TIER_DISCLOSED = 1.0
+
+
+def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -> float:
+    """Return the 0-4 tiered marker-standardization credit for ``row``."""
+    keys = set(_ingredient_identity_keys(row))
+    # A branded clinically-studied extract is standardized by definition.
+    if keys & _branded_studied_set():
+        return STANDARDIZATION_TIER_FULL
+    sb = ((product.get("formulation_data") or {}).get("standardized_botanicals")) or []
+    best = 0.0
+    for item in sb:
+        if not isinstance(item, dict):
+            continue
+        item_keys = {_norm(item.get("name")), _norm(item.get("botanical_id")),
+                     _norm(item.get("standard_name"))}
+        if not (keys & item_keys):
+            continue
+        if item.get("meets_threshold"):
+            return STANDARDIZATION_TIER_FULL
+        found = _as_float(item.get("percentage_found")) or 0.0
+        thr = _as_float(item.get("min_threshold")) or 0.0
+        src = _norm(item.get("evidence_source"))
+        if found > 0 and thr > 0:
+            frac = found / thr
+            if frac >= 0.75:
+                best = max(best, STANDARDIZATION_TIER_NEAR)
+            elif frac >= 0.50:
+                best = max(best, STANDARDIZATION_TIER_HALF)
+            # < 50% of the spec is genuinely under-standardized -> no credit.
+        elif src and src not in ("none",):
+            # A marker/standardization was disclosed (e.g. marker_word_match) but
+            # carries no usable quantified amount -> conservative partial credit.
+            best = max(best, STANDARDIZATION_TIER_DISCLOSED)
+    return best
+
+
 def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     """Botanical formulation adapter (max 15). Replaces A1/A2 for botanicals."""
     row = _primary_botanical_active(product)
@@ -588,8 +639,9 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         components["quantified_dose_present"] = 2.0
     if any(tok in forms for tok in _EXTRACT_TOKENS) and "powder" not in forms:
         components["extract_not_whole_herb"] = 2.0
-    if _standardized_match(product, row):
-        components["marker_standardization_declared"] = 4.0
+    std_credit = _standardization_tier_credit(product, row)
+    if std_credit > 0:
+        components["marker_standardization_declared"] = std_credit
     if keys & _branded_studied_set():
         components["branded_clinically_studied_extract"] = 3.0
 
@@ -649,17 +701,39 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
     return None
 
 
+# Botanical dose band scores (0-22 scale). Calibration v2 — softened floors so an
+# incomplete/opaque label is no longer destroyed, while transparency (a disclosed,
+# in-range dose) is still clearly rewarded. The *verified* bands (within / near /
+# above) are unchanged; only the low/no-information bands were lifted off the floor.
+#   within  21  (verified in the studied clinical range)
+#   near    16  (verified just outside the range)
+#   above   12  (verified megadose — not evidence-backed)
+#   below   12  (verified under the range — was 10)
+#   no_ref  12  (disclosed dose, no clinical reference in our DB — was 10)
+#   blend   10  (opaque blend / anchor total — dose not per-ingredient — was 7)
+#   no_dose  5  (primary botanical, no disclosed dose — was 0; "lose credit, not all")
+#   no_active 0 (no botanical active at all)
+BOTANICAL_DOSE_WITHIN = 21.0
+BOTANICAL_DOSE_NEAR = 16.0
+BOTANICAL_DOSE_ABOVE = 12.0
+BOTANICAL_DOSE_BELOW = 12.0
+BOTANICAL_DOSE_DISCLOSED_NO_REF = 12.0
+BOTANICAL_DOSE_BLEND_TOTAL = 10.0
+BOTANICAL_DOSE_PRIMARY_NO_DOSE = 5.0
+BOTANICAL_DOSE_NO_ACTIVE = 0.0
+
+
 def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     """Botanical dose adapter via clinical therapeutic ranges. Never returns
-    None (a primary botanical with no dose is 0, not denominator-excluded)."""
+    None (a primary botanical with no dose floors low, not denominator-excluded)."""
     row = _primary_botanical_active(product)
     if row is None:
-        return {"score": 0.0, "band": "no_botanical_active", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_NO_ACTIVE, "band": "no_botanical_active", "metadata": {}}
 
     if row.get("is_blend_header") or row.get("blend_total_weight_only"):
-        return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
     if row.get("is_parent_total") and not _is_named_standardized_botanical_complex(product, row):
-        return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
 
     # P6 review (P2#3): an anchor / product-level-evidence mass is a blend/product
     # TOTAL, not a verified per-ingredient dose. It must not earn within-range
@@ -667,30 +741,30 @@ def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     # over-credit opaque blends. Score it like a blend total.
     if (row.get("scoring_input_kind") == "product_level_evidence"
             or row.get("evidence_type") == "blend_anchor_mass"):
-        return {"score": 7.0, "band": "blend_total_only", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_BLEND_TOTAL, "band": "blend_total_only", "metadata": {}}
 
     mass = _mass_mg(row)
     if mass is None:
-        return {"score": 0.0, "band": "primary_no_dose", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_PRIMARY_NO_DOSE, "band": "primary_no_dose", "metadata": {}}
 
     entry = _dosing_entry_for(row)
     if entry is None:
-        return {"score": 10.0, "band": "disclosed_no_reference", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_DISCLOSED_NO_REF, "band": "disclosed_no_reference", "metadata": {}}
 
     rng = _range_mg(entry)
     if rng is None:
-        return {"score": 10.0, "band": "disclosed_no_reference", "metadata": {}}
+        return {"score": BOTANICAL_DOSE_DISCLOSED_NO_REF, "band": "disclosed_no_reference", "metadata": {}}
 
     lo, hi = rng
     meta = {"dose_mg": mass, "range_mg": [lo, hi]}
     if lo <= mass <= hi:
-        return {"score": 21.0, "band": "within_studied_range", "metadata": meta}
+        return {"score": BOTANICAL_DOSE_WITHIN, "band": "within_studied_range", "metadata": meta}
     if 0.8 * lo <= mass < lo or hi < mass <= 1.2 * hi:
-        return {"score": 16.0, "band": "near_studied_range", "metadata": meta}
+        return {"score": BOTANICAL_DOSE_NEAR, "band": "near_studied_range", "metadata": meta}
     if mass < 0.8 * lo:
-        return {"score": 10.0, "band": "below_studied_range", "metadata": meta}
+        return {"score": BOTANICAL_DOSE_BELOW, "band": "below_studied_range", "metadata": meta}
     # Well above the studied range (P6 review P2#2): a megadose is not evidence-
     # backed and B7 cannot fire for botanicals (no RDA/UL safety flags), so it
     # must NOT earn the same near-range credit as a dose just outside the window.
     # True toxicity is still caught by the Layer-1 safety gate; this is fairness.
-    return {"score": 12.0, "band": "above_studied_range", "metadata": meta}
+    return {"score": BOTANICAL_DOSE_ABOVE, "band": "above_studied_range", "metadata": meta}

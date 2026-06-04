@@ -214,6 +214,30 @@ def test_ksm66_formulation_caps_at_15():
     assert c["branded_clinically_studied_extract"] == 3.0
 
 
+def test_standardization_tier_credit_is_proportional():
+    # Calibration v2: marker standardization is tiered 0-4, not binary on
+    # meets_threshold, so a near-threshold or disclosed standardization earns
+    # partial credit while a plain powder / no-evidence ingredient earns nothing.
+    from scoring_v4.modules.botanical_profile import _standardization_tier_credit
+
+    def case(**item):
+        product = {"formulation_data": {"standardized_botanicals": [dict(item, botanical_id="boswellia")]}}
+        row = {"canonical_id": "boswellia", "standard_name": "Boswellia serrata", "name": "Boswellia serrata"}
+        return _standardization_tier_credit(product, row)
+
+    assert case(meets_threshold=True) == 4.0
+    assert case(meets_threshold=False, percentage_found=52, min_threshold=65,
+                evidence_source="percentage_context") == 3.0   # 80% of spec
+    assert case(meets_threshold=False, percentage_found=40, min_threshold=65,
+                evidence_source="percentage_context") == 2.0   # 62% of spec
+    assert case(meets_threshold=False, percentage_found=20, min_threshold=65,
+                evidence_source="percentage_context") == 0.0   # < 50% -> under-standardized
+    assert case(meets_threshold=False, percentage_found=0, min_threshold=65,
+                evidence_source="marker_word_match") == 1.0     # disclosed, no amount
+    assert case(meets_threshold=False, percentage_found=0, min_threshold=65,
+                evidence_source="none") == 0.0                  # whole-food / no evidence
+
+
 def test_plain_whole_herb_powder_scores_modestly():
     # whole herb powder, no standardization, not branded, with a recognized id + dose
     ing = _botanical_ingredient(name="Ashwagandha Root Powder",
@@ -265,7 +289,9 @@ def test_dose_exact_target_reference_counts_within_range():
 def test_dose_below_studied_range():
     ing = _botanical_ingredient(quantity=100)  # below 250
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    assert 8.0 <= out["score"] <= 12.0
+    # Calibration v2: a verified under-range dose floors at 12 (was 10) — a real
+    # but not destructive signal; transparency (a disclosed dose) is still credited.
+    assert out["score"] == 12.0
     assert out["band"] == "below_studied_range"
 
 
@@ -274,7 +300,9 @@ def test_dose_disclosed_no_clinical_reference():
     ing = _botanical_ingredient(name="Eyebright", standard_name="Eyebright",
                                 canonical_id="eyebright", form="Eyebright Herb", quantity=300)
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    assert out["score"] == 10.0
+    # Calibration v2: a disclosed dose with no clinical reference in our 44-entry
+    # DB floors at 12 (was 10) — it is a matcher gap, not a quality defect.
+    assert out["score"] == 12.0
     assert out["band"] == "disclosed_no_reference"
 
 
@@ -294,11 +322,15 @@ def test_dose_grape_seed_matches_clinical_range_by_canonical_id():
     assert out["metadata"]["range_mg"] == [100.0, 800.0]
 
 
-def test_primary_botanical_no_dose_scores_zero_not_excluded():
+def test_primary_botanical_no_dose_floors_low_not_excluded():
     ing = _botanical_ingredient(quantity=0, unit="")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
-    assert out["score"] == 0.0
+    # Calibration v2: a primary botanical with no disclosed dose floors at 5 (was
+    # 0) — non-disclosure loses most credit, but is not destroyed ("lose credit,
+    # not all"). Still never None (must stay in the denominator).
+    assert out["score"] == 5.0
     assert out["band"] == "primary_no_dose"
+    assert out["score"] is not None
     # critical: 0, NOT None (must not be excluded from the denominator)
     assert out["score"] is not None
 
@@ -360,14 +392,15 @@ def test_megadose_above_studied_range_credited_below_near():
 
 def test_anchor_only_dose_treated_as_blend_total_not_within_range():
     # A blend/anchor total (scoring_input_kind=product_level_evidence) is NOT a
-    # verified per-ingredient dose. It must score like a blend total (7), not
-    # earn full within_studied_range credit (21) — otherwise removing the
-    # botanical-anchor CAUTION ceiling would over-credit opaque blends.
+    # verified per-ingredient dose. It must score like a blend total (10 in
+    # calibration v2, was 7), not earn full within_studied_range credit (21) —
+    # otherwise removing the botanical-anchor CAUTION ceiling would over-credit
+    # opaque blends.
     ing = _botanical_ingredient(quantity=500, scoring_input_kind="product_level_evidence",
                                 evidence_type="blend_anchor_mass")
     out = score_botanical_dose(_botanical_product(ingredient=ing))
     assert out["band"] == "blend_total_only"
-    assert out["score"] == 7.0
+    assert out["score"] == 10.0
 
 
 def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
@@ -383,4 +416,4 @@ def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
     assert is_botanical_product(product) is True
     out = score_botanical_dose(product)
     assert out["band"] == "blend_total_only"
-    assert out["score"] == 7.0
+    assert out["score"] == 10.0  # calibration v2 (was 7)
