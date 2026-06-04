@@ -2188,7 +2188,8 @@ def _route_confidence(
 
 
 _PROFILE_PRIMARY_ROLES = frozenset({"primary", "claim_prominent"})
-_PROFILE_BOTANICAL_MATERIALITY_FRACTION = 0.5
+_PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION = 0.5
+_PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION = 0.5
 _PROFILE_TITLE_SEPARATORS = (" with ", " plus ", " and ", " featuring ", " + ", " & ", "+", "&")
 # Match the "digest" stem (digest, digest+, digestion, digestive) — a digestive
 # enzyme product titled "Digest+" carries digestive intent just like "Digestive".
@@ -2296,7 +2297,7 @@ def _profile_is_material(primary_mass_mg: float, other_pairs: List[tuple[Dict[st
     max_other_mass = max((_role_mass_mg(row) or 0.0 for row, _ in other_pairs), default=0.0)
     if max_other_mass <= 0:
         return True
-    return primary_mass_mg >= (_PROFILE_BOTANICAL_MATERIALITY_FRACTION * max_other_mass)
+    return primary_mass_mg >= (_PROFILE_BOTANICAL_OWNER_MATERIALITY_FRACTION * max_other_mass)
 
 
 # --- Phase 2: botanical owner_type model -----------------------------------
@@ -2340,7 +2341,7 @@ def _profile_material_blocking_mass(row: Dict[str, Any], botanical_mass_mg: floa
     other_mass = _role_mass_mg(row)
     if other_mass is None or botanical_mass_mg <= 0:
         return False
-    return other_mass >= (_PROFILE_BOTANICAL_MATERIALITY_FRACTION * botanical_mass_mg)
+    return other_mass >= (_PROFILE_NONBOTANICAL_BLOCKER_MATERIALITY_FRACTION * botanical_mass_mg)
 
 
 def _classify_botanical_owner_type(
