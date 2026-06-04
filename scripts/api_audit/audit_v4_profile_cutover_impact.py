@@ -52,6 +52,8 @@ VERDICT_RANK = {
     "UNSAFE": 4,
     "BLOCKED": 5,
 }
+SAFETY_VERDICTS = {"UNSAFE", "BLOCKED"}
+SIGNED_STATUSES = {"approved", "signed_off", "yes"}
 
 
 def _num(value: Any) -> float | None:
@@ -125,6 +127,37 @@ def _more_restrictive(old_verdict: Any, new_verdict: Any) -> bool:
     old_rank = _verdict_rank(old_verdict)
     new_rank = _verdict_rank(new_verdict)
     return old_rank >= 0 and new_rank >= 0 and new_rank > old_rank
+
+
+def _norm_verdict(verdict: Any) -> str:
+    return str(verdict or "").strip().upper()
+
+
+def _safety_verdict_flip(old_verdict: Any, new_verdict: Any) -> bool:
+    old_norm = _norm_verdict(old_verdict)
+    new_norm = _norm_verdict(new_verdict)
+    return old_norm != new_norm and (old_norm in SAFETY_VERDICTS or new_norm in SAFETY_VERDICTS)
+
+
+def _not_scored_transition(old_verdict: Any, new_verdict: Any) -> bool:
+    old_norm = _norm_verdict(old_verdict)
+    new_norm = _norm_verdict(new_verdict)
+    return old_norm != new_norm and "NOT_SCORED" in {old_norm, new_norm}
+
+
+def _load_allowlist(path: Path | None) -> Dict[str, Dict[str, str]]:
+    if not path or not path.exists():
+        return {}
+    with path.open(newline="") as fh:
+        reader = csv.DictReader(fh)
+        return {str(row.get("dsld_id") or ""): row for row in reader if row.get("dsld_id")}
+
+
+def _allowlist_signed(row: Dict[str, Any], allowlist: Dict[str, Dict[str, str]]) -> bool:
+    allowed = allowlist.get(str(row.get("dsld_id") or ""))
+    if not allowed:
+        return False
+    return str(allowed.get("human_signoff_status") or "").strip().lower() in SIGNED_STATUSES
 
 
 def _profile_state(product: Dict[str, Any], profile: str, route: str, contract: Dict[str, Any]) -> Dict[str, Any]:
@@ -205,6 +238,8 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "verdict_changed": verdict_changed,
             "less_restrictive_verdict_flip": _less_restrictive(old["verdict"], new["verdict"]),
             "more_restrictive_verdict_flip": _more_restrictive(old["verdict"], new["verdict"]),
+            "safety_verdict_flip": _safety_verdict_flip(old["verdict"], new["verdict"]),
+            "not_scored_transition": _not_scored_transition(old["verdict"], new["verdict"]),
             "botanical_old": botanical["old"],
             "botanical_contract": botanical["contract"],
             "botanical_reason": botanical["reason"],
@@ -217,15 +252,27 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return rows
 
 
-def summarize(rows: List[Dict[str, Any]], *, elapsed_seconds: float) -> Dict[str, Any]:
+def summarize(
+    rows: List[Dict[str, Any]],
+    *,
+    elapsed_seconds: float,
+    allowlist: Dict[str, Dict[str, str]] | None = None,
+) -> Dict[str, Any]:
+    allowlist = allowlist or {}
     changed = [row for row in rows if row.get("old_score") != row.get("new_score") or row.get("old_verdict") != row.get("new_verdict")]
     verdict_flips = [row for row in rows if row.get("verdict_changed")]
     less_restrictive = [row for row in rows if row.get("less_restrictive_verdict_flip")]
     more_restrictive = [row for row in rows if row.get("more_restrictive_verdict_flip")]
+    safety_flips = [row for row in rows if row.get("safety_verdict_flip")]
+    not_scored_transitions = [row for row in rows if row.get("not_scored_transition")]
     large_score_delta = [
         row for row in changed
         if row.get("abs_score_delta") is not None and float(row["abs_score_delta"]) >= 5.0
     ]
+    signed_verdict_flips = [row for row in verdict_flips if _allowlist_signed(row, allowlist)]
+    unsigned_verdict_flips = [row for row in verdict_flips if not _allowlist_signed(row, allowlist)]
+    signed_large_score_delta = [row for row in large_score_delta if _allowlist_signed(row, allowlist)]
+    unsigned_large_score_delta = [row for row in large_score_delta if not _allowlist_signed(row, allowlist)]
     by_reason = defaultdict(Counter)
     for row in changed:
         if row.get("botanical_old") != row.get("botanical_contract"):
@@ -240,7 +287,13 @@ def summarize(rows: List[Dict[str, Any]], *, elapsed_seconds: float) -> Dict[str
         "verdict_flip_count": len(verdict_flips),
         "less_restrictive_verdict_flip_count": len(less_restrictive),
         "more_restrictive_verdict_flip_count": len(more_restrictive),
+        "safety_verdict_flip_count": len(safety_flips),
+        "not_scored_transition_count": len(not_scored_transitions),
         "large_score_delta_ge_5_count": len(large_score_delta),
+        "signed_verdict_flip_count": len(signed_verdict_flips),
+        "unsigned_verdict_flip_count": len(unsigned_verdict_flips),
+        "signed_large_score_delta_ge_5_count": len(signed_large_score_delta),
+        "unsigned_large_score_delta_ge_5_count": len(unsigned_large_score_delta),
         "old_verdict_counts": dict(Counter(str(row.get("old_verdict")) for row in rows).most_common()),
         "new_verdict_counts": dict(Counter(str(row.get("new_verdict")) for row in rows).most_common()),
         "changed_by_profile_reason": {
@@ -249,7 +302,11 @@ def summarize(rows: List[Dict[str, Any]], *, elapsed_seconds: float) -> Dict[str
         },
         "elapsed_seconds": round(elapsed_seconds, 4),
         "ms_per_product": round((elapsed_seconds * 1000.0 / len(rows)), 4) if rows else None,
-        "ready_for_cutover": not verdict_flips and not large_score_delta,
+        "ready_for_cutover": (
+            not safety_flips
+            and not unsigned_verdict_flips
+            and not unsigned_large_score_delta
+        ),
     }
 
 
@@ -277,6 +334,8 @@ FIELDS = [
     "verdict_changed",
     "less_restrictive_verdict_flip",
     "more_restrictive_verdict_flip",
+    "safety_verdict_flip",
+    "not_scored_transition",
     "botanical_old",
     "botanical_contract",
     "botanical_reason",
@@ -292,13 +351,15 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--products-root", type=Path, default=DEFAULT_PRODUCTS_ROOT)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
+    parser.add_argument("--allowlist", type=Path, default=None)
     args = parser.parse_args()
 
     enriched_index = canary.build_enriched_index(args.products_root)
     products = list(enriched_index.values())
+    allowlist = _load_allowlist(args.allowlist)
     started = time.perf_counter()
     rows = build_rows(products)
-    summary = summarize(rows, elapsed_seconds=time.perf_counter() - started)
+    summary = summarize(rows, elapsed_seconds=time.perf_counter() - started, allowlist=allowlist)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     (args.out_dir / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
@@ -309,6 +370,8 @@ def main() -> int:
         FIELDS,
     )
     _write_csv([row for row in rows if row.get("verdict_changed")], args.out_dir / "verdict_flips.csv", FIELDS)
+    _write_csv([row for row in rows if row.get("safety_verdict_flip")], args.out_dir / "safety_verdict_flips.csv", FIELDS)
+    _write_csv([row for row in rows if row.get("not_scored_transition")], args.out_dir / "not_scored_transitions.csv", FIELDS)
 
     print(json.dumps(summary, indent=2))
     return 0 if summary["ready_for_cutover"] else 1

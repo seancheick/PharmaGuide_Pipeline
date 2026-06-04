@@ -715,6 +715,7 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
     summary = summarize(
         [
             {
+                "dsld_id": "large-delta",
                 "old_score": 70.0,
                 "new_score": 63.0,
                 "abs_score_delta": 7.0,
@@ -723,6 +724,8 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
                 "verdict_changed": False,
                 "less_restrictive_verdict_flip": False,
                 "more_restrictive_verdict_flip": False,
+                "safety_verdict_flip": False,
+                "not_scored_transition": False,
                 "profile_diverged": True,
                 "botanical_old": True,
                 "botanical_contract": False,
@@ -731,6 +734,7 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
                 "collagen_contract": False,
             },
             {
+                "dsld_id": "verdict-flip",
                 "old_score": 42.0,
                 "new_score": 41.0,
                 "abs_score_delta": 1.0,
@@ -739,6 +743,8 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
                 "verdict_changed": True,
                 "less_restrictive_verdict_flip": False,
                 "more_restrictive_verdict_flip": True,
+                "safety_verdict_flip": False,
+                "not_scored_transition": False,
                 "profile_diverged": True,
                 "botanical_old": False,
                 "botanical_contract": True,
@@ -752,6 +758,115 @@ def test_profile_cutover_impact_summary_blocks_verdict_flips_and_large_deltas():
 
     assert summary["large_score_delta_ge_5_count"] == 1
     assert summary["verdict_flip_count"] == 1
+    assert summary["unsigned_large_score_delta_ge_5_count"] == 1
+    assert summary["unsigned_verdict_flip_count"] == 1
     assert summary["less_restrictive_verdict_flip_count"] == 0
     assert summary["more_restrictive_verdict_flip_count"] == 1
+    assert summary["safety_verdict_flip_count"] == 0
+    assert summary["not_scored_transition_count"] == 0
+    assert summary["ready_for_cutover"] is False
+
+
+def test_profile_cutover_impact_allowlist_signs_non_safety_changes():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    rows = [
+        {
+            "dsld_id": "large-delta",
+            "old_score": 70.0,
+            "new_score": 63.0,
+            "abs_score_delta": 7.0,
+            "old_verdict": "SAFE",
+            "new_verdict": "SAFE",
+            "verdict_changed": False,
+            "less_restrictive_verdict_flip": False,
+            "more_restrictive_verdict_flip": False,
+            "safety_verdict_flip": False,
+            "not_scored_transition": False,
+            "profile_diverged": True,
+        },
+        {
+            "dsld_id": "verdict-flip",
+            "old_score": 42.0,
+            "new_score": 41.0,
+            "abs_score_delta": 1.0,
+            "old_verdict": "SAFE",
+            "new_verdict": "POOR",
+            "verdict_changed": True,
+            "less_restrictive_verdict_flip": False,
+            "more_restrictive_verdict_flip": True,
+            "safety_verdict_flip": False,
+            "not_scored_transition": False,
+            "profile_diverged": True,
+        },
+    ]
+    allowlist = {
+        "large-delta": {"human_signoff_status": "approved"},
+        "verdict-flip": {"human_signoff_status": "approved"},
+    }
+
+    summary = summarize(rows, elapsed_seconds=0.01, allowlist=allowlist)
+
+    assert summary["signed_large_score_delta_ge_5_count"] == 1
+    assert summary["unsigned_large_score_delta_ge_5_count"] == 0
+    assert summary["signed_verdict_flip_count"] == 1
+    assert summary["unsigned_verdict_flip_count"] == 0
+    assert summary["ready_for_cutover"] is True
+
+
+def test_profile_cutover_impact_safety_flip_blocks_even_when_signed():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [
+            {
+                "dsld_id": "safety-flip",
+                "old_score": 55.0,
+                "new_score": 55.0,
+                "abs_score_delta": 0.0,
+                "old_verdict": "BLOCKED",
+                "new_verdict": "SAFE",
+                "verdict_changed": True,
+                "less_restrictive_verdict_flip": True,
+                "more_restrictive_verdict_flip": False,
+                "safety_verdict_flip": True,
+                "not_scored_transition": False,
+                "profile_diverged": True,
+            }
+        ],
+        elapsed_seconds=0.01,
+        allowlist={"safety-flip": {"human_signoff_status": "approved"}},
+    )
+
+    assert summary["safety_verdict_flip_count"] == 1
+    assert summary["signed_verdict_flip_count"] == 1
+    assert summary["unsigned_verdict_flip_count"] == 0
+    assert summary["ready_for_cutover"] is False
+
+
+def test_profile_cutover_impact_counts_not_scored_transitions_separately():
+    from api_audit.audit_v4_profile_cutover_impact import summarize
+
+    summary = summarize(
+        [
+            {
+                "dsld_id": "not-scored",
+                "old_score": 55.0,
+                "new_score": None,
+                "abs_score_delta": None,
+                "old_verdict": "SAFE",
+                "new_verdict": "NOT_SCORED",
+                "verdict_changed": True,
+                "less_restrictive_verdict_flip": False,
+                "more_restrictive_verdict_flip": True,
+                "safety_verdict_flip": False,
+                "not_scored_transition": True,
+                "profile_diverged": True,
+            }
+        ],
+        elapsed_seconds=0.01,
+    )
+
+    assert summary["not_scored_transition_count"] == 1
+    assert summary["safety_verdict_flip_count"] == 0
     assert summary["ready_for_cutover"] is False
