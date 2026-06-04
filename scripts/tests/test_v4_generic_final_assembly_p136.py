@@ -228,6 +228,16 @@ def test_quantified_no_rda_dose_gets_partial_credit_not_excluded() -> None:
             bio_score=14,
             quantity=600,
             unit="mg",
+            # Enriched botanical rows always carry a botanical taxonomy; the
+            # contract row classifier (and the scorer that consumes it) needs it
+            # to recognise the row as botanical. A bare canonical_id with no
+            # taxonomy never occurs in the corpus, so include the taxonomy here
+            # to exercise the real botanical clinical-dose path.
+            raw_taxonomy={
+                "category": "botanical",
+                "ingredientGroup": "Ashwagandha",
+                "forms": [{"name": "Ashwagandha Root Extract"}],
+            },
         )
     )
     product["rda_ul_data"] = {
