@@ -2422,13 +2422,26 @@ class SupplementEnricherV3:
             'saccharomyces': ['s'],
         }
 
-        # Extract strain ID patterns (e.g., "ATCC PTA 5289", "DSM 17938", "K12", "M18")
-        strain_id_pattern = re.compile(r'(atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|ncfm|\bgg\b|\bk12\b|\bm18\b|bb-?12|bb536|hn019|bi-?07|de111|299v)', re.IGNORECASE)
+        # Extract strain ID patterns (e.g., "ATCC PTA 5289", "DSM 17938",
+        # "LGG", "HN001", "BL-04"). Keep this list broad enough that a
+        # strain-specific DB target is not mistaken for a species-level target.
+        strain_id_pattern = re.compile(
+            r'('
+            r'atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|'
+            r'ncfm|\blgg\b|\bgg\b|\bk12\b|\bm18\b|'
+            r'bb-?12|bb536|hn0?01|hn019|bi-?07|bl-?04|uab[a-z]*-?\d+|de111|299v|'
+            r'gbi-?30|mtcc\s*5856|mtcc-?5856|is-?2|lp299v'
+            r')',
+            re.IGNORECASE,
+        )
         strain_ids = strain_id_pattern.findall(strain_norm)
 
         # Extract species name (second word, e.g., "reuteri", "rhamnosus")
         words = strain_norm.split()
         species = words[1] if len(words) > 1 else None
+        canonical_target_norm = self._normalize_text(target_name)
+        canonical_target_words = canonical_target_norm.split()
+        canonical_target_species = canonical_target_words[1] if len(canonical_target_words) > 1 else None
 
         # Check all aliases with genus normalization
         all_targets = [target_name] + aliases
@@ -2436,11 +2449,20 @@ class SupplementEnricherV3:
             target_norm = self._normalize_text(target)
             target_words = target_norm.split()
             target_species = target_words[1] if len(target_words) > 1 else None
+            target_ids = strain_id_pattern.findall(target_norm)
+
+            if strain_ids and target_ids:
+                strain_ids_norm = {re.sub(r'\s+', '', sid.lower()) for sid in strain_ids}
+                target_ids_norm = {re.sub(r'\s+', '', tid.lower()) for tid in target_ids}
+                if strain_ids_norm & target_ids_norm:
+                    if not species:
+                        return True
+                    if species == target_species or species == canonical_target_species:
+                        return True
 
             # If species match, check genus compatibility
             if species and target_species and species == target_species:
                 # Check if strain IDs match (if present in both)
-                target_ids = strain_id_pattern.findall(target_norm)
                 if strain_ids and target_ids:
                     # Normalize IDs for comparison
                     strain_ids_norm = {re.sub(r'\s+', '', sid.lower()) for sid in strain_ids}
@@ -12000,6 +12022,7 @@ class SupplementEnricherV3:
         "beta-glucan", "beta glucan", "pea fiber", "lactulose",
         "fructooligosaccharide", "galactooligosaccharide",
         "xos", "xylooligosaccharide", "raftiline", "raftilose",
+        "preforpro", "bacteriophage", "bacteriophages",
     ]
 
     def _get_prebiotic_terms(self) -> list:
@@ -12129,16 +12152,37 @@ class SupplementEnricherV3:
                     cfu_data,
                 )
 
+                strain_names = [n.get('name', '') for n in nested] if nested else [ingredient.get('name', '')]
+                strain_identity_texts = [
+                    " ".join(
+                        str(piece).strip()
+                        for piece in (
+                            n.get("name", ""),
+                            n.get("standardName", ""),
+                            n.get("standard_name", ""),
+                            n.get("ingredientGroup", ""),
+                            n.get("notes", ""),
+                            " ".join(
+                                str(form.get("name") if isinstance(form, dict) else form).strip()
+                                for form in (n.get("forms") or [])
+                            ),
+                        )
+                        if str(piece or "").strip()
+                    )
+                    for n in nested
+                ] if nested else [ingredient.get('name', '')]
+
                 probiotic_blends.append({
                     "name": ingredient.get('name', ''),
                     "strain_count": len(nested) if nested else 1,
-                    "strains": [n.get('name', '') for n in nested] if nested else [ingredient.get('name', '')],
+                    "strains": strain_names,
+                    "strain_identity_texts": strain_identity_texts,
                     "cfu_data": cfu_data,
                     "raw_source_path": ingredient_source_path,
                 })
 
                 total_strains += len(nested) if nested else 1
-                all_nested_strains.extend([n.get('name', '') for n in nested] if nested else [ingredient.get('name', '')])
+                all_nested_strains.extend(strain_names)
 
         if not probiotic_blends:
             return {"is_probiotic_product": False}
@@ -12177,6 +12221,7 @@ class SupplementEnricherV3:
 
         for blend in probiotic_blends:
             blend_strains = blend.get("strains") or []
+            blend_strain_identities = blend.get("strain_identity_texts") or blend_strains
             blend_name = blend.get("name", "") or blend.get("blend_name", "") or ""
             blend_cfu = (blend.get("cfu_data") or {}).get("cfu_count")
             per_strain_cfu = (
@@ -12184,7 +12229,12 @@ class SupplementEnricherV3:
                 if isinstance(blend_cfu, (int, float)) and blend_cfu > 0 and len(blend_strains) == 1
                 else None
             )
-            for strain in blend_strains:
+            for idx, strain in enumerate(blend_strains):
+                strain_identity = (
+                    blend_strain_identities[idx]
+                    if idx < len(blend_strain_identities)
+                    else strain
+                )
                 strain_str = str(strain).strip().lower()
                 # Hard block: clinician-decided REJECT/HOLD strains never
                 # enter the clinical_strains pool (no CFU credit, no
@@ -12205,11 +12255,11 @@ class SupplementEnricherV3:
                         "ui_copy_hint": "blend_not_individually_disclosed",
                     })
                     continue
-                postbiotic = _is_postbiotic(str(strain), blend_name)
+                postbiotic = _is_postbiotic(str(strain_identity), blend_name)
                 for clinical in clinical_strains:
                     clin_name = clinical.get('standard_name', '')
                     clin_aliases = clinical.get('aliases', [])
-                    if self._strain_match(strain, clin_name, clin_aliases):
+                    if self._strain_match(strain_identity, clin_name, clin_aliases):
                         thresholds = clinical.get("cfu_thresholds") or {}
                         tiers = thresholds.get("tiers_cfu_per_day") or {}
                         adequacy_tier = _compute_strain_cfu_tier(per_strain_cfu, tiers)
@@ -12257,7 +12307,9 @@ class SupplementEnricherV3:
         for ing in all_ingredients:
             ing_name = ing.get('name', '')
             std_name = ing.get('standardName', '') or ing_name
-            prebiotic_candidates.append((ing_name, std_name))
+            group = ing.get("ingredientGroup", "")
+            notes = ing.get("notes", "")
+            prebiotic_candidates.append((ing_name, " ".join(str(v) for v in (std_name, group, notes) if v)))
 
             # Include nested blend children so prebiotic rows inside proprietary
             # blends are not silently missed.
@@ -12266,7 +12318,12 @@ class SupplementEnricherV3:
                     continue
                 nested_name = nested_ing.get('name', '')
                 nested_std = nested_ing.get('standardName', '') or nested_name
-                prebiotic_candidates.append((nested_name, nested_std))
+                nested_group = nested_ing.get("ingredientGroup", "")
+                nested_notes = nested_ing.get("notes", "")
+                prebiotic_candidates.append((
+                    nested_name,
+                    " ".join(str(v) for v in (nested_std, nested_group, nested_notes) if v),
+                ))
 
         for ing_name, std_name in prebiotic_candidates:
             for prebiotic in prebiotics_data:
@@ -12454,6 +12511,26 @@ class SupplementEnricherV3:
                     detected_postbiotic_patterns.append(canonical)
                     has_postbiotic_strains = True
 
+        postbiotic_metabolite_present = False
+        postbiotic_metabolite_name = ""
+        for _ai in (product.get("activeIngredients") or []):
+            if not isinstance(_ai, dict):
+                continue
+            _meta_text = " ".join(
+                str(value or "")
+                for value in (
+                    _ai.get("canonical_id"),
+                    _ai.get("name"),
+                    _ai.get("standardName"),
+                    _ai.get("ingredientGroup"),
+                    _ai.get("notes"),
+                )
+            ).lower()
+            if any(term in _meta_text for term in ("butyric_acid", "tributyrin", "butyrate", "postbiotic")):
+                postbiotic_metabolite_present = True
+                postbiotic_metabolite_name = _ai.get("standardName") or _ai.get("name") or "postbiotic metabolite"
+                break
+
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
             "is_probiotic_product": True,
@@ -12482,6 +12559,8 @@ class SupplementEnricherV3:
             # clinical_strains[].
             "has_postbiotic_strains": has_postbiotic_strains,
             "detected_postbiotic_patterns": detected_postbiotic_patterns,
+            "postbiotic_metabolite_present": postbiotic_metabolite_present,
+            "postbiotic_metabolite_name": postbiotic_metabolite_name,
         }
 
     def _collect_product_scoring_evidence(self, enriched: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -14999,6 +15078,12 @@ class SupplementEnricherV3:
         try:
             # Start with all cleaned data
             enriched = dict(product)
+            manual_source_type = str(product.get("source_type") or product.get("_source") or "").strip().lower()
+            if manual_source_type == "external_manual" or product.get("manual_product_provenance"):
+                enriched["source_type"] = manual_source_type or "external_manual"
+                enriched["manual_product_provenance"] = dict(product.get("manual_product_provenance") or {})
+                if product.get("src"):
+                    enriched["manual_product_provenance"].setdefault("source_path", product.get("src"))
 
             # Strip PII: contacts contain phone, address, email
             # Manufacturer name is already extracted to manufacturer_data

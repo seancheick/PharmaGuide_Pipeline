@@ -285,6 +285,38 @@ class TestExportContractValidator:
         issues = validate_export_contract(_base_enriched(), s)
         assert any("IQD ingredients fallback" in i or "ingredients fallback" in i for i in issues)
 
+    def test_external_manual_product_requires_verified_provenance(self):
+        e = _base_enriched(
+            dsld_id="RITUAL_SYNBIOTIC_001",
+            source_type="external_manual",
+            manual_product_provenance={
+                "source_url": "https://example.com/manual-labels/ritual-synbiotic",
+                "label_verified_at": "2026-06-04",
+                "review_status": "draft",
+                "reviewer": "SeanB",
+            },
+        )
+
+        issues = validate_export_contract(e, _base_scored())
+
+        assert any("external manual product cannot ship" in issue for issue in issues)
+
+    def test_verified_external_manual_product_passes_provenance_gate(self):
+        e = _base_enriched(
+            dsld_id="RITUAL_SYNBIOTIC_001",
+            source_type="external_manual",
+            manual_product_provenance={
+                "source_url": "https://example.com/manual-labels/ritual-synbiotic",
+                "label_verified_at": "2026-06-04",
+                "review_status": "verified",
+                "reviewer": "SeanB",
+            },
+        )
+
+        issues = validate_export_contract(e, _base_scored())
+
+        assert not any("external manual product" in issue for issue in issues)
+
     def test_optional_form_fields_do_not_trigger_issues(self):
         e = _base_enriched()
         del e["ingredient_quality_data"]["ingredients"][0]["matched_forms"]

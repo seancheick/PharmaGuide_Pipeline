@@ -1,0 +1,255 @@
+{
+  "id": "RITUAL_EFW_18PLUS_001",
+  "fullName": "Ritual Essential for Women 18+",
+  "brandName": "Ritual",
+  "upcSku": "",
+  "src": "local/manual_labels/RITUAL_EFW_18PLUS_001",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_url": "https://ritual.com/collections/all/products/essential-for-women-multivitamin?variant=42283036246110",
+    "label_verified_at": "2026-06-04",
+    "review_status": "draft",
+    "reviewer": "SeanB",
+    "notes": "User-supplied Supplement Facts panel; verify against official label before production export."
+  },
+  "offMarket": 0,
+  "servingsPerContainer": 30,
+  "servingSizes": [
+    {
+      "minQuantity": 2,
+      "maxQuantity": 2,
+      "unit": "Capsule(s)",
+      "minDailyServings": 1,
+      "maxDailyServings": 1
+    }
+  ],
+  "statements": [
+    {
+      "type": "Directions",
+      "notes": "Serving Size: Two (2) Vegan Capsules"
+    },
+    {
+      "type": "Formulation",
+      "notes": "Vegan; Gluten & Major Allergen Free; No Artificial Colorants; delayed-release beadlet delivery"
+    }
+  ],
+  "ingredientRows": [
+    {
+      "name": "Vitamin D",
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin D",
+      "quantity": [
+        {
+          "quantity": 50,
+          "unit": "mcg"
+        }
+      ],
+      "amount": {
+        "quantity": 250,
+        "unit": "%"
+      },
+      "forms": [
+        {
+          "name": "Cholecalciferol"
+        }
+      ],
+      "notes": "as cholecalciferol; from Lichen (whole plant); 50 mcg = 2000 IU; Vitashine lichen",
+      "nestedRows": []
+    },
+    {
+      "name": "Vitamin E",
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin E",
+      "quantity": [
+        {
+          "quantity": 6.7,
+          "unit": "mg"
+        }
+      ],
+      "amount": {
+        "quantity": 45,
+        "unit": "%"
+      },
+      "forms": [
+        {
+          "name": "Alpha Tocopherol"
+        }
+      ],
+      "notes": "as alpha tocopherol from mixed tocopherols; from Brassica napus (seed)",
+      "nestedRows": []
+    },
+    {
+      "name": "Folate",
+      "category": "vitamin",
+      "ingredientGroup": "Folate",
+      "quantity": [
+        {
+          "quantity": 1000,
+          "unit": "mcg DFE"
+        }
+      ],
+      "amount": {
+        "quantity": 250,
+        "unit": "%"
+      },
+      "forms": [
+        {
+          "name": "L-5-Methyltetrahydrofolate"
+        }
+      ],
+      "notes": "as 6S-5-methyltetrahydrofolate (glucosamine salt)",
+      "nestedRows": []
+    },
+    {
+      "name": "Vitamin B12",
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin B12",
+      "quantity": [
+        {
+          "quantity": 8,
+          "unit": "mcg"
+        }
+      ],
+      "amount": {
+        "quantity": 333,
+        "unit": "%"
+      },
+      "forms": [
+        {
+          "name": "Methylcobalamin"
+        }
+      ],
+      "notes": "as methylcobalamin",
+      "nestedRows": []
+    },
+    {
+      "name": "Iron",
+      "category": "mineral",
+      "ingredientGroup": "Iron",
+      "quantity": [
+        {
+          "quantity": 8,
+          "unit": "mg"
+        }
+      ],
+      "amount": {
+        "quantity": 44,
+        "unit": "%"
+      },
+      "forms": [
+        {
+          "name": "Ferrous Bisglycinate"
+        }
+      ],
+      "notes": "as ferrous bisglycinate (chelate)",
+      "nestedRows": []
+    },
+    {
+      "name": "Magnesium",
+      "category": "mineral",
+      "ingredientGroup": "Magnesium",
+      "quantity": [
+        {
+          "quantity": 30,
+          "unit": "mg"
+        }
+      ],
+      "amount": {
+        "quantity": 7,
+        "unit": "%"
+      },
+      "forms": [
+        {
+          "name": "Dimagnesium Malate"
+        }
+      ],
+      "notes": "as dimagnesium malate",
+      "nestedRows": []
+    },
+    {
+      "name": "Omega-3 Docosahexaenoic Acid (DHA)",
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Omega-3 Fatty Acids",
+      "quantity": [
+        {
+          "quantity": 330,
+          "unit": "mg"
+        }
+      ],
+      "forms": [
+        {
+          "name": "Docosahexaenoic Acid (DHA)"
+        }
+      ],
+      "notes": "from Schizochytrium sp. (whole microalgae); DV not established",
+      "nestedRows": []
+    },
+    {
+      "name": "Boron",
+      "category": "mineral",
+      "ingredientGroup": "Boron",
+      "quantity": [
+        {
+          "quantity": 0.7,
+          "unit": "mg"
+        }
+      ],
+      "forms": [
+        {
+          "name": "Calcium Fructoborate"
+        }
+      ],
+      "notes": "as calcium fructoborate; DV not established",
+      "nestedRows": []
+    },
+    {
+      "name": "Vitamin K2",
+      "category": "vitamin",
+      "ingredientGroup": "Vitamin K",
+      "quantity": [
+        {
+          "quantity": 90,
+          "unit": "mcg"
+        }
+      ],
+      "forms": [
+        {
+          "name": "Menaquinone-7"
+        }
+      ],
+      "notes": "as Menaquinone-7 (MK-7); DV not established",
+      "nestedRows": []
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {
+        "name": "Cellulose",
+        "notes": "beadlet"
+      },
+      {
+        "name": "Corn Zein",
+        "notes": "beadlet; NON-GMO"
+      },
+      {
+        "name": "Hypromellose",
+        "notes": "stomach acid-resistant vegan capsule"
+      },
+      {
+        "name": "Gellan Gum",
+        "notes": "vegan capsule"
+      },
+      {
+        "name": "Silica"
+      }
+    ]
+  },
+  "physicalState": {
+    "langualCode": "",
+    "name": "Capsule"
+  },
+  "productType": {
+    "langualCode": "",
+    "name": "Combination Dietary Supplement"
+  }
+}

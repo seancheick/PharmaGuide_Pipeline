@@ -37,6 +37,13 @@ __version__ = "0.1.0"
 _PARITY_IGNORE_KEYS = frozenset({"_source", "src"})
 _STATE_VERSION = "1.0"
 _CANONICAL_HASH_EXCLUDE_KEYS = frozenset({"_source", "src"})
+_VERIFIED_MANUAL_REVIEW_STATUSES = frozenset({"verified", "validated", "approved"})
+_MANUAL_PROVENANCE_REQUIRED_FIELDS = (
+    "source_url",
+    "label_verified_at",
+    "review_status",
+    "reviewer",
+)
 _FORM_DESCRIPTION_HINTS = (
     ("gummy", "gummies"),
     ("jelly", "gummies"),
@@ -515,9 +522,52 @@ def _normalize_local_label(raw_label: dict, *, source_path: Path, input_root: Pa
 
     normalized = normalize_api_label(raw_label)
     relative_path = source_path.relative_to(input_root).as_posix()
-    normalized["_source"] = original.get("_source") or "local"
+    source_type = original.get("source_type") or original.get("_source") or "local"
+    normalized["source_type"] = source_type
+    normalized["_source"] = original.get("_source") or source_type
     normalized["src"] = original.get("src") or f"local/{relative_path}"
+    provenance = original.get("manual_product_provenance")
+    if provenance is not None:
+        normalized["manual_product_provenance"] = provenance
+    _validate_external_manual_label(normalized)
     return normalized
+
+
+def _is_external_manual_label(label: dict) -> bool:
+    source_type = str(label.get("source_type") or label.get("_source") or "").strip().lower()
+    raw_id = label.get("id")
+    id_text = str(raw_id or "").strip()
+    return source_type == "external_manual" or bool(id_text and not id_text.isdigit())
+
+
+def _validate_external_manual_label(label: dict) -> None:
+    """Require review provenance for non-DSLD products.
+
+    Numeric local labels are still supported for old DSLD-shaped fixtures. A
+    string ID means this product is outside DSLD and must carry source and
+    human-verification metadata before it enters canonical raw storage.
+    """
+    if not _is_external_manual_label(label):
+        return
+
+    provenance = label.get("manual_product_provenance")
+    if not isinstance(provenance, dict):
+        raise ValueError("external manual label requires manual_product_provenance")
+    missing = [
+        field for field in _MANUAL_PROVENANCE_REQUIRED_FIELDS
+        if not str(provenance.get(field) or "").strip()
+    ]
+    if missing:
+        raise ValueError(
+            "external manual label missing provenance field(s): "
+            + ", ".join(missing)
+        )
+    review_status = str(provenance.get("review_status") or "").strip().lower()
+    if review_status not in _VERIFIED_MANUAL_REVIEW_STATUSES:
+        raise ValueError(
+            "external manual label review_status must be one of "
+            f"{sorted(_VERIFIED_MANUAL_REVIEW_STATUSES)}"
+        )
 
 
 def _iter_local_json_files(input_dir: str | Path) -> list[Path]:
@@ -997,22 +1047,23 @@ def _cmd_import_local(args: argparse.Namespace) -> int:
     counts = _empty_sync_counts()
     run_stamp = _make_run_stamp()
     delta_output_dir = _resolve_delta_output_dir(args.delta_output_dir, dated_delta=args.dated_delta, run_stamp=run_stamp)
-    seen_ids: set[int] = set()
-    candidate_ids: list[int] = []
+    seen_ids: set[str] = set()
+    candidate_ids: list[Any] = []
 
     print(f"Importing local labels from {input_dir} ...")
     for file_path in json_files:
         try:
             raw = json.loads(file_path.read_text(encoding="utf-8"))
             label = _normalize_local_label(raw, source_path=file_path, input_root=input_dir)
-            dsld_id = int(label["id"])
-            if dsld_id in seen_ids:
+            dsld_id = label["id"]
+            dsld_id_key = str(dsld_id)
+            if dsld_id_key in seen_ids:
                 logger.warning("Duplicate local label ID %s encountered at %s; skipping later duplicate", dsld_id, file_path)
                 print(f"  SKIP duplicate ID {dsld_id}: {file_path}", file=sys.stderr)
                 counts["skipped"] += 1
                 counts["skipped_ids"].append(dsld_id)
                 continue
-            seen_ids.add(dsld_id)
+            seen_ids.add(dsld_id_key)
             candidate_ids.append(dsld_id)
             _apply_synced_label(
                 label,

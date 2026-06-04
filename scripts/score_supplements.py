@@ -5232,6 +5232,10 @@ class SupplementScorer:
 
         if product.get("match_ledger"):
             output["match_ledger"] = product["match_ledger"]
+        if product.get("source_type"):
+            output["source_type"] = product.get("source_type")
+        if product.get("manual_product_provenance"):
+            output["manual_product_provenance"] = product.get("manual_product_provenance")
 
         return output
 

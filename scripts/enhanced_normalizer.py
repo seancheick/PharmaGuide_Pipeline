@@ -5210,6 +5210,8 @@ class EnhancedDSLDNormalizer:
                 # ========== ORIGINAL DSLD FIELDS (PRESERVE) ==========
                 "id": product_id,
                 "src": raw_data.get("src"),  # Data source
+                "source_type": raw_data.get("source_type"),
+                "manual_product_provenance": raw_data.get("manual_product_provenance"),
                 "nhanesId": raw_data.get("nhanesId"),
                 "bundleName": raw_data.get("bundleName"),
                 "brandIpSymbol": raw_data.get("brandIpSymbol"),

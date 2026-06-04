@@ -183,7 +183,10 @@
         "xos",
         "xylooligosaccharide",
         "raftiline",
-        "raftilose"
+        "raftilose",
+        "preforpro",
+        "bacteriophage",
+        "bacteriophages"
       ],
       "_prebiotic_terms_note": "Substring terms used to detect prebiotic ingredients by name for the probiotic bonus prebiotic sub-score. Extend here without code changes.",
       "non_probiotic_strict_gate": {

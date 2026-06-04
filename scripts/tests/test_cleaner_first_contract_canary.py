@@ -88,6 +88,34 @@ def test_cleaner_contract_for_blend_header_enzyme_and_inactive_rows():
     assert inactive["score_eligible_by_cleaner"] is False
 
 
+def test_cleaner_preserves_external_manual_product_provenance():
+    cleaned = EnhancedDSLDNormalizer().normalize_product({
+        "id": "RITUAL_SYNBIOTIC_001",
+        "fullName": "Ritual Synbiotic+",
+        "brandName": "Ritual",
+        "src": "local/manual_labels/RITUAL_SYNBIOTIC_001",
+        "source_type": "external_manual",
+        "manual_product_provenance": {
+            "source_url": "https://ritual.example/synbiotic",
+            "label_verified_at": "2026-06-04",
+            "review_status": "verified",
+            "reviewer": "SeanB",
+        },
+        "ingredientRows": [
+            {
+                "name": "Tributyrin",
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Postbiotic",
+                "quantity": [{"quantity": 300, "unit": "mg"}],
+            }
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    assert cleaned["source_type"] == "external_manual"
+    assert cleaned["manual_product_provenance"]["review_status"] == "verified"
+
+
 def test_iqd_preserves_contract_and_blocks_default_inactive_rescue():
     product = {
         "fullName": "Inactive Leucine Capsule",

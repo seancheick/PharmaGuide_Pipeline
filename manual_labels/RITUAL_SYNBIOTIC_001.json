@@ -1,0 +1,67 @@
+{
+  "id": "RITUAL_SYNBIOTIC_001",
+  "fullName": "Ritual Synbiotic+",
+  "brandName": "Ritual",
+  "upcSku": "",
+  "src": "local/manual_labels/RITUAL_SYNBIOTIC_001",
+  "source_type": "external_manual",
+  "manual_product_provenance": {
+    "source_url": "",
+    "label_verified_at": "2026-06-04",
+    "review_status": "draft",
+    "reviewer": "SeanB",
+    "notes": "User-supplied Supplement Facts panel; add official source URL and verify against the official label before production export."
+  },
+  "offMarket": 0,
+  "servingsPerContainer": 30,
+  "physicalState": {"langualCode": "", "name": "Capsule"},
+  "productType": {"langualCode": "", "name": "Probiotic Dietary Supplement"},
+  "servingSizes": [
+    {"minQuantity": 1, "maxQuantity": 1, "unit": "Capsule(s)", "minDailyServings": 1, "maxDailyServings": 1}
+  ],
+  "nutritionalInfo": {"calories": 5},
+  "statements": [
+    {"type": "Formulation", "notes": "Shelf stable; Vegan; Gluten & Major Allergen Free; No Artificial Colorants; 3-in-1 prebiotic + probiotic + postbiotic synbiotic"}
+  ],
+  "ingredientRows": [
+    {
+      "name": "Probiotic Blend",
+      "category": "blend",
+      "ingredientGroup": "Probiotic Blend",
+      "quantity": [{"quantity": 11, "unit": "Billion CFU"}],
+      "notes": "40 mg blend; 11 Billion CFU at expiration under recommended storage",
+      "forms": [],
+      "nestedRows": [
+        {"name": "Lactobacillus rhamnosus", "category": "probiotic", "ingredientGroup": "LGG", "notes": "strain LGG", "forms": [], "nestedRows": []},
+        {"name": "Bifidobacterium animalis subsp. lactis", "category": "probiotic", "ingredientGroup": "BB-12", "notes": "strain BB-12", "forms": [], "nestedRows": []}
+      ]
+    },
+    {
+      "name": "PreforPro",
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Prebiotic",
+      "quantity": [{"quantity": 15, "unit": "mg"}],
+      "notes": "bacteriophage prebiotic blend: LH01 (Myoviridae), LL5 (Siphoviridae), T4D (Myoviridae), LL12 (Myoviridae); DV not established",
+      "forms": [],
+      "nestedRows": []
+    },
+    {
+      "name": "Tributyrin",
+      "category": "non-nutrient/non-botanical",
+      "ingredientGroup": "Postbiotic",
+      "quantity": [{"quantity": 300, "unit": "mg"}],
+      "notes": "as CoreBiome; tributyrin (butyrate postbiotic); DV not established",
+      "forms": [],
+      "nestedRows": []
+    }
+  ],
+  "otherIngredients": {
+    "ingredients": [
+      {"name": "Hypromellose", "notes": "stomach acid-resistant outer vegan capsule + inner capsule"},
+      {"name": "Gellan Gum", "notes": "outer vegan capsule"},
+      {"name": "Medium Chain Triglycerides", "notes": "from coconut; inner vegan capsule carrier"},
+      {"name": "Silica"},
+      {"name": "Cellulose"}
+    ]
+  }
+}

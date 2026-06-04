@@ -85,6 +85,57 @@ def _probiotic_product(
     }
 
 
+def test_exact_lgg_and_bb12_nested_blend_resolve_to_exact_clinical_strains(enricher) -> None:
+    """Manual/DTC labels often put branded strain IDs in a nested row's
+    ingredientGroup/notes instead of the display name. Exact strain evidence
+    must beat species-level representative strains.
+    """
+    product = _probiotic_product(
+        nested_in_blend=[
+            {
+                "name": "Lactobacillus rhamnosus",
+                "standardName": "Lactobacillus rhamnosus",
+                "ingredientGroup": "LGG",
+                "category": "probiotic",
+                "notes": "strain LGG",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Bifidobacterium animalis subsp. lactis",
+                "standardName": "Bifidobacterium animalis subsp. lactis",
+                "ingredientGroup": "BB-12",
+                "category": "probiotic",
+                "notes": "strain BB-12",
+                "nestedIngredients": [],
+            },
+        ],
+    )
+
+    pd = enricher._collect_probiotic_data(product)
+    ids = {entry["clinical_id"] for entry in pd["clinical_strains"]}
+
+    assert "STRAIN_LGG" in ids
+    assert "STRAIN_LACTIS_BB12" in ids
+    assert "STRAIN_RHAMNOSUS_HN001" not in ids
+    assert "STRAIN_LACTIS_BL04" not in ids
+
+
+def test_species_only_probiotic_rows_do_not_get_strain_specific_clinical_ids(enricher) -> None:
+    """A species-only label is not evidence for a specific clinical strain.
+
+    v3 previously treated HN001/BL-04 as representative stand-ins because the
+    strain-code parser missed those target IDs. That overstates clinical
+    evidence; exact strain bonuses require exact strain evidence.
+    """
+    product = _probiotic_product()
+
+    pd = enricher._collect_probiotic_data(product)
+    ids = {entry["clinical_id"] for entry in pd["clinical_strains"]}
+
+    assert "STRAIN_RHAMNOSUS_HN001" not in ids
+    assert "STRAIN_LACTIS_BL04" not in ids
+
+
 # --- Anchor: the GoL prenatal pattern that triggered P0.5 -----------------
 
 
@@ -157,6 +208,51 @@ def test_known_prebiotic_terms_detected(enricher, ingredient_name: str) -> None:
         f"{ingredient_name!r} contains a scorer-recognized prebiotic term; "
         f"enricher must flag prebiotic_present"
     )
+
+
+def test_preforpro_bacteriophage_prebiotic_marks_prebiotic_present(enricher) -> None:
+    product = _probiotic_product(
+        extra_active=[
+            {
+                "name": "PreforPro",
+                "standardName": "Bacteriophages",
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Prebiotic",
+                "quantity": 15,
+                "unit": "mg",
+                "notes": "bacteriophage prebiotic blend",
+                "nestedIngredients": [],
+            }
+        ],
+    )
+
+    pd = enricher._collect_probiotic_data(product)
+
+    assert pd["prebiotic_present"] is True
+    assert pd["prebiotic_name"]
+
+
+def test_tributyrin_butyrate_marks_postbiotic_metabolite(enricher) -> None:
+    product = _probiotic_product(
+        extra_active=[
+            {
+                "name": "Tributyrin",
+                "standardName": "Butyric Acid",
+                "canonical_id": "butyric_acid",
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "Postbiotic",
+                "quantity": 300,
+                "unit": "mg",
+                "notes": "as CoreBiome; tributyrin (butyrate postbiotic)",
+                "nestedIngredients": [],
+            }
+        ],
+    )
+
+    pd = enricher._collect_probiotic_data(product)
+
+    assert pd["postbiotic_metabolite_present"] is True
+    assert pd["postbiotic_metabolite_name"] == "Butyric Acid"
 
 
 # --- Coverage in nested-blend children ------------------------------------

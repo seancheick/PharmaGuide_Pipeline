@@ -333,14 +333,18 @@ _PROBIOTIC_IDENTITY_TOKENS = (
 )
 
 
-def _has_probiotic_relevant_identity(ingredients: List[Dict[str, Any]]) -> bool:
+def _has_probiotic_relevant_identity(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> bool:
     """True when the scoring contract contains usable probiotic identity.
 
     Taxonomy/name can route a product to the probiotic module, but the clinical
     score still needs probiotic-relevant contract evidence. A recovered
     non-probiotic row such as glucose must not satisfy the active-identity gate
-    for probiotic scoring.
+    for probiotic scoring. Named strains in product-level probiotic_data are
+    also valid identity evidence; many disclosed probiotic blends list strains
+    under the blend and provide aggregate CFU, so no flat scorable row exists.
     """
+    if _named_strain_count(product) > 0:
+        return True
     if _has_product_evidence(ingredients, "probiotic_cfu"):
         return True
     for ing in ingredients:
@@ -501,7 +505,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     if module == "probiotic":
         checked_fields.extend(["total_cfu", "named_strain"])
         strain_count = _named_strain_count(product)
-        if ingredients and not _has_probiotic_relevant_identity(ingredients):
+        if ingredients and not _has_probiotic_relevant_identity(product, ingredients):
             missing.append("active_identity")
         elif _total_cfu_billion(product) <= 0:
             if strain_count > 0 or ingredients:

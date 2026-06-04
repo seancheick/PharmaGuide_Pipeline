@@ -1061,6 +1061,31 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     if not safe_str(enriched.get("product_name")):
         issues.append("missing enriched.product_name")
 
+    source_type = safe_str(
+        enriched.get("source_type")
+        or scored.get("source_type")
+        or enriched.get("_source")
+        or scored.get("_source")
+    ).lower()
+    provenance = safe_dict(
+        enriched.get("manual_product_provenance")
+        or scored.get("manual_product_provenance")
+    )
+    if source_type == "external_manual" or provenance:
+        required = ("source_url", "label_verified_at", "review_status", "reviewer")
+        missing = [field for field in required if not safe_str(provenance.get(field))]
+        if missing:
+            issues.append(
+                "review_queue: external manual product missing provenance "
+                f"field(s): {', '.join(missing)}."
+            )
+        review_status = safe_str(provenance.get("review_status")).lower()
+        if review_status not in {"verified", "validated", "approved"}:
+            issues.append(
+                "review_queue: external manual product cannot ship until "
+                "manual_product_provenance.review_status is verified."
+            )
+
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     ingredients = safe_list(iqd.get("ingredients"))
 
