@@ -104,10 +104,16 @@ PRIMARY_FLOOR_BRANDED_MODERATE = 17.0
 _BRANDED_EVIDENCE_LEVELS = frozenset({"branded-rct", "branded_rct"})
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
-_POSITIVE_EFFECTS = frozenset({"positive_strong", "positive_weak"})
-# Effect-strength weight on the floor (mirrors the pipeline's effect multipliers)
-# so a weak-effect study floors below a strong-effect one of the same study type.
-_EFFECT_FLOOR_MULTIPLIER = {"positive_strong": 1.0, "positive_weak": 0.85}
+# Effect-strength weight on the primary floor. Mirrors the pipeline's effect
+# multipliers so honest mixed/null human evidence receives proportional credit
+# instead of falling through to raw low-count pipeline math. Negative evidence
+# remains zero and never anchors a floor.
+_EFFECT_FLOOR_MULTIPLIER = {
+    "positive_strong": 1.0,
+    "positive_weak": 0.85,
+    "mixed": 0.6,
+    "null": 0.25,
+}
 # Prototype toggle (Phase 8 spike). Set ENABLED=False for the no-floor baseline.
 # The floor is gated on the strongly-evidenced ingredient being a MASS-DOMINANT
 # active (mass >= PRIMARY_MASS_FRACTION of the heaviest active), so it rewards a
@@ -288,9 +294,10 @@ def _primary_mass_floor(
     for entry in matches:
         if not isinstance(entry, dict):
             continue
-        if _norm_text(entry.get("effect_direction")) not in _POSITIVE_EFFECTS:
-            continue
         effect = _norm_text(entry.get("effect_direction"))
+        effect_multiplier = _EFFECT_FLOOR_MULTIPLIER.get(effect, 0.0)
+        if effect_multiplier <= 0.0:
+            continue
         canonical = _canonical_from_entry(entry)
         if not canonical:
             continue  # can't identify the ingredient -> don't anchor a floor on it
@@ -307,9 +314,9 @@ def _primary_mass_floor(
         else:
             base = 0.0
         # Weight the floor by effect strength, mirroring the pipeline's own
-        # positive_weak discount (0.85) so a weak-effect meta does not floor as
-        # high as a strong-effect one (P2 review).
-        candidate = round(base * _EFFECT_FLOOR_MULTIPLIER.get(effect, 0.0), 4)
+        # multiplier so mixed/null evidence gets proportional credit while
+        # negative evidence remains ineligible.
+        candidate = round(base * effect_multiplier, 4)
         if candidate > floor:
             floor, floor_canon = candidate, canonical
     return floor, floor_canon

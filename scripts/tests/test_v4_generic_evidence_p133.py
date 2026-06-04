@@ -301,6 +301,46 @@ def test_shadow_wires_evidence_dimension() -> None:
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
 
+def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(matches=[_match(effect_direction="mixed")]),
+        apply_primary_floor=True,
+    )
+
+    assert payload["score"] == 8.4
+    assert payload["components"]["primary_evidence_floor"] == 8.4
+    assert payload["metadata"]["primary_evidence_floor"] == 8.4
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
+
+
+def test_primary_floor_mirrors_null_effect_multiplier() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(matches=[_match(effect_direction="null")]),
+        apply_primary_floor=True,
+    )
+
+    assert payload["score"] == 3.5
+    assert payload["components"]["primary_evidence_floor"] == 3.5
+    assert payload["metadata"]["primary_evidence_floor"] == 3.5
+
+
+def test_primary_floor_still_rejects_negative_effect() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(matches=[_match(effect_direction="negative")]),
+        apply_primary_floor=True,
+    )
+
+    assert payload["score"] == 0.0
+    assert "primary_evidence_floor" not in payload["components"]
+    assert payload["metadata"]["primary_evidence_floor"] == 0.0
+
+
 def test_generic_evidence_does_not_import_v3_scorer() -> None:
     import scoring_v4.modules.generic_evidence as ge
 
