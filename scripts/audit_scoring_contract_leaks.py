@@ -38,6 +38,25 @@ FORBIDDEN_FIELDS: dict[str, str] = {
     "inactiveIngredients": "RAW_ACTIVE_LISTS",
 }
 
+PROFILE_SELECTOR_SURFACE: tuple[Path, ...] = (
+    V4_DIR / "modules" / "generic_dose.py",
+    V4_DIR / "modules" / "generic_formulation.py",
+)
+
+# Profile routing/eligibility must come from ScoringClassification v1. These
+# fields are valid inputs for the classification builder, but generic dose and
+# formulation modules must not read them directly to re-decide profile ownership.
+PROFILE_SELECTOR_FORBIDDEN_FIELDS: dict[str, str] = {
+    "raw_taxonomy": "PROFILE_SELECTOR_RAW_TAXONOMY",
+    "canonical_source_db": "PROFILE_SELECTOR_REFERENCE_SOURCE",
+    "product_name": "PROFILE_SELECTOR_TITLE",
+    "fullName": "PROFILE_SELECTOR_TITLE",
+    "primary_type": "PROFILE_SELECTOR_TAXONOMY",
+    "supplement_taxonomy": "PROFILE_SELECTOR_TAXONOMY",
+    "category": "PROFILE_SELECTOR_RAW_CATEGORY",
+    "forms": "PROFILE_SELECTOR_ROW_FORM",
+}
+
 # Stable finding id -> justification.
 # Populated with known Pass-A violations; these are pending native ScoringEvidence
 # and SafetySignal emission in the enricher before P5.
@@ -123,9 +142,18 @@ def _stable_id(
 
 
 class _LeakVisitor(ast.NodeVisitor):
-    def __init__(self, *, filepath: Path, source: str) -> None:
+    def __init__(
+        self,
+        *,
+        filepath: Path,
+        source: str,
+        forbidden_fields: dict[str, str] | None = None,
+        allowlist: dict[str, str] | None = None,
+    ) -> None:
         self.filepath = filepath
         self.source = source
+        self.forbidden_fields = forbidden_fields or FORBIDDEN_FIELDS
+        self.allowlist = allowlist if allowlist is not None else ALLOWLIST
         self.function_stack: list[str] = []
         self.findings: list[dict] = []
 
@@ -141,13 +169,13 @@ class _LeakVisitor(ast.NodeVisitor):
 
     def visit_Call(self, node: ast.Call) -> None:
         field = _field_from_get_call(node)
-        if field in FORBIDDEN_FIELDS:
+        if field in self.forbidden_fields:
             self._add(node=node, field=field, access_kind="get")
         self.generic_visit(node)
 
     def visit_Subscript(self, node: ast.Subscript) -> None:
         field = _field_from_subscript(node)
-        if field in FORBIDDEN_FIELDS and isinstance(node.ctx, ast.Load):
+        if field in self.forbidden_fields and isinstance(node.ctx, ast.Load):
             self._add(node=node, field=field, access_kind="subscript")
         self.generic_visit(node)
 
@@ -165,7 +193,7 @@ class _LeakVisitor(ast.NodeVisitor):
             field=field,
             snippet=snippet,
         )
-        is_allowlisted = finding_id in ALLOWLIST
+        is_allowlisted = finding_id in self.allowlist
         self.findings.append({
             "id": finding_id,
             "file": rel_file,
@@ -173,14 +201,19 @@ class _LeakVisitor(ast.NodeVisitor):
             "function": function or "<module>",
             "access_kind": access_kind,
             "snippet": snippet,
-            "category": FORBIDDEN_FIELDS[field],
+            "category": self.forbidden_fields[field],
             "field": field,
             "allowlisted": is_allowlisted,
-            "allowlist_reason": ALLOWLIST.get(finding_id),
+            "allowlist_reason": self.allowlist.get(finding_id),
         })
 
 
-def _scan_file(filepath: Path) -> list[dict]:
+def _scan_file(
+    filepath: Path,
+    *,
+    forbidden_fields: dict[str, str] | None = None,
+    allowlist: dict[str, str] | None = None,
+) -> list[dict]:
     """Parse a single Python file and return findings."""
     try:
         source = filepath.read_text()
@@ -188,9 +221,31 @@ def _scan_file(filepath: Path) -> list[dict]:
     except SyntaxError:
         return []
 
-    visitor = _LeakVisitor(filepath=filepath, source=source)
+    visitor = _LeakVisitor(
+        filepath=filepath,
+        source=source,
+        forbidden_fields=forbidden_fields,
+        allowlist=allowlist,
+    )
     visitor.visit(tree)
     return visitor.findings
+
+
+def scan_profile_selector_leaks(files: list[Path] | tuple[Path, ...] | None = None) -> list[dict]:
+    """Return route/profile eligibility leaks in generic module selectors."""
+    scan_files = files if files is not None else PROFILE_SELECTOR_SURFACE
+    findings: list[dict] = []
+    for filepath in scan_files:
+        if not filepath.exists():
+            continue
+        findings.extend(
+            _scan_file(
+                filepath,
+                forbidden_fields=PROFILE_SELECTOR_FORBIDDEN_FIELDS,
+                allowlist={},
+            )
+        )
+    return findings
 
 
 def main() -> int:
@@ -202,12 +257,16 @@ def main() -> int:
 
     new_violations = [f for f in all_findings if not f["allowlisted"]]
     allowlisted = [f for f in all_findings if f["allowlisted"]]
+    profile_selector_findings = scan_profile_selector_leaks()
 
     report = {
         "total_findings": len(all_findings),
         "allowlisted": len(allowlisted),
         "new_violations": len(new_violations),
+        "profile_selector_findings": len(profile_selector_findings),
+        "profile_selector_new_violations": len(profile_selector_findings),
         "findings": all_findings,
+        "profile_selector_leaks": profile_selector_findings,
     }
 
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
@@ -219,6 +278,7 @@ def main() -> int:
     else:
         print(f"Contract leak audit: {len(all_findings)} findings "
               f"({len(allowlisted)} allowlisted, {len(new_violations)} new)")
+        print(f"Profile selector leak audit: {len(profile_selector_findings)} findings")
         if new_violations:
             print("\nNEW VIOLATIONS (must fix or allowlist):")
             for f in new_violations:
@@ -226,9 +286,16 @@ def main() -> int:
                     f"  {f['file']}:{f['line']}  {f['access_kind']}({f['field']!r})  "
                     f"[{f['category']}] id={f['id']}"
                 )
+        if profile_selector_findings:
+            print("\nPROFILE SELECTOR VIOLATIONS (generic modules must use classification):")
+            for f in profile_selector_findings:
+                print(
+                    f"  {f['file']}:{f['line']}  {f['access_kind']}({f['field']!r})  "
+                    f"[{f['category']}] id={f['id']}"
+                )
         print(f"\nReport: {report_path}")
 
-    return 1 if new_violations else 0
+    return 1 if new_violations or profile_selector_findings else 0
 
 
 if __name__ == "__main__":

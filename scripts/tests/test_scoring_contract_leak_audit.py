@@ -40,3 +40,32 @@ def test_leak_audit_scans_v4_shadow_entrypoint() -> None:
     scanned = {path.name for path in audit.iter_scan_files()}
 
     assert "score_supplements_v4_shadow.py" in scanned
+
+
+def test_profile_selector_audit_detects_raw_routing_fields(tmp_path: Path) -> None:
+    sample = tmp_path / "generic_dose.py"
+    sample.write_text(
+        "\n".join(
+            [
+                "def route_again(row, product):",
+                "    taxonomy = row.get('raw_taxonomy')",
+                "    title = product['product_name']",
+                "    source = row.get('canonical_source_db')",
+                "    return taxonomy, title, source",
+            ]
+        )
+    )
+
+    findings = audit.scan_profile_selector_leaks([sample])
+
+    assert {(item["access_kind"], item["field"]) for item in findings} == {
+        ("get", "raw_taxonomy"),
+        ("subscript", "product_name"),
+        ("get", "canonical_source_db"),
+    }
+    assert all(item["category"].startswith("PROFILE_SELECTOR_") for item in findings)
+    assert all(not item["allowlisted"] for item in findings)
+
+
+def test_real_generic_profile_selectors_do_not_read_raw_routing_fields() -> None:
+    assert audit.scan_profile_selector_leaks() == []
