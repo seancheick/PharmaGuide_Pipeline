@@ -2040,7 +2040,7 @@
       "last_updated": "2025-11-17",
       "id": "dandelion",
       "notes": "Botanical ingredient standardized for sesquiterpenes, taraxasterol. Commonly used in dietary supplements.",
-      "category": "mushroom",
+      "category": "herb_root_bark",
       "external_ids": {
         "unii": "39981FM375"
       },
@@ -2057,7 +2057,8 @@
       },
       "cui": "C0440015",
       "min_threshold": 2,
-      "threshold_source": "2% sesquiterpene lactones \u2014 standard root extract"
+      "threshold_source": "2% sesquiterpene lactones \u2014 standard root extract",
+      "_category_fix": "v3.7.0: corrected from mushroom (data error); Taraxacum officinale is an herb/root."
     },
     {
       "standard_name": "Devil's Claw",

@@ -1766,28 +1766,60 @@ class SupplementScorer:
         else:
             is_organic = bool(organic_data)
 
-        # Tiered standardized botanical scoring:
-        #   1.0 = percentage verified AND meets threshold, or branded form
-        #   0.5 = marker-word match only (no threshold or no percentage found)
-        #   0.0 = no match
+        # v3.7.0: tiered, unit-aware, class-capped standardized-botanical bonus
+        # (replaces the old binary 0/0.5/1.0). Enrich writes per-item `tier`
+        # (full / near_75 / near_50 / identity_only / none) computed unit-aware
+        # from marker% vs threshold or branded/marker evidence, plus `bonus_class`.
+        # Scorer maps tier -> points via config and caps by class so non-botanicals
+        # (minerals, enzymes, isolated compounds) cannot earn the full botanical
+        # tier. Best-qualifying ingredient wins (max, not first-match).
+        a5_cfg_local = self.config.get("section_A_ingredient_quality", {}).get(
+            "A5_formulation_excellence", {}
+        )
+        std_cfg = a5_cfg_local.get("standardized_botanical", {})
+        if isinstance(std_cfg, (int, float)):
+            # Legacy flat config — emulate the old binary full-credit behavior.
+            _flat = float(std_cfg)
+            tier_points = {"full": _flat, "near_75": _flat, "near_50": _flat,
+                           "identity_only": _flat, "none": 0.0}
+            class_caps = {}
+            std_max = _flat
+        else:
+            tier_points = std_cfg.get("tier_points", {}) or {}
+            class_caps = std_cfg.get("class_caps", {}) or {}
+            std_max = as_float(std_cfg.get("max"), 4.0)
+
+        def _tier_pts(t: str) -> float:
+            return as_float(tier_points.get(t), 0.0)
+
         std_bonus = 0.0
         std = safe_list(formulation.get("standardized_botanicals", []))
         for item in std:
-            if not isinstance(item, dict) or not item.get("meets_threshold"):
+            if not isinstance(item, dict):
                 continue
-            ev = item.get("evidence_source", "")
-            if ev in ("branded_form", "percentage_local", "percentage_context"):
-                std_bonus = 1.0
-                break  # full credit — no need to check further
-            elif ev == "marker_word_only":
-                std_bonus = max(std_bonus, 0.5)  # partial credit, keep looking
-            else:
-                # Legacy data or marker_word_match with threshold — full credit
-                std_bonus = 1.0
-                break
-        # Fallback: check top-level boolean for backward compat
+            tier = item.get("tier")
+            if tier is None:
+                # Backward-compat: derive tier from legacy meets_threshold/evidence_source.
+                if item.get("meets_threshold"):
+                    ev = item.get("evidence_source", "")
+                    if ev in ("branded_form", "percentage_local", "percentage_context"):
+                        tier = "full"
+                    elif ev == "marker_word_only":
+                        tier = "identity_only"
+                    else:
+                        tier = "full"
+                else:
+                    tier = "none"
+            pts = _tier_pts(tier)
+            bclass = item.get("bonus_class")
+            if bclass and bclass in class_caps:
+                pts = min(pts, as_float(class_caps.get(bclass), pts))
+            std_bonus = max(std_bonus, pts)
+        # Fallback: top-level boolean grants identity-only credit when the
+        # detailed per-item list is absent (older enriched payloads).
         if std_bonus == 0.0 and bool(product.get("has_standardized_botanical", False)):
-            std_bonus = 1.0
+            std_bonus = min(_tier_pts("identity_only") or 1.0, std_max)
+        std_bonus = min(std_bonus, std_max)
 
         synergy_bonus = self._synergy_cluster_qualified(product)
 

@@ -7821,40 +7821,76 @@ class SupplementEnricherV3:
                     marker_text = f"{local_text} {context_text}".strip()
 
                     # Determine if meets threshold
-                    # Both percentage and min_threshold are stored as raw percentages
-                    # e.g., percentage=5.0 means 5%, min_threshold=50 means 50%
-                    meets_threshold = False
+                    # v3.7.0: UNIT-AWARE thresholds + tiered (0-4) standardization
+                    # credit + per-entry bonus_class. min_threshold is only a
+                    # PERCENT when standardization_unit is percent/empty; non-percent
+                    # thresholds (GDU/g, mg_per_dose) must NOT be compared as "%".
+                    std_unit = (botanical.get("standardization_unit") or "percent").strip().lower()
+                    is_percent_unit = std_unit in ("", "percent", "%")
+
+                    # bonus_class: prefer explicit standardization_basis, else derive
+                    # from category so non-botanicals (minerals/enzymes/isolated
+                    # compounds) are capped below the full botanical tier downstream.
+                    basis = (botanical.get("standardization_basis") or "").strip().lower()
+                    cat = (botanical.get("category") or "").strip().lower()
+                    if basis in ("marker_percent", "mushroom_fraction", "branded_extract"):
+                        bonus_class = basis
+                    elif cat in ("mineral", "mineral_chelate", "mineral_complex"):
+                        bonus_class = "branded_form"
+                    elif cat in ("active_compound", "enzyme"):
+                        bonus_class = "enzyme_activity"
+                    elif cat in ("amino_acid", "nootropic", "tripeptide",
+                                 "fatty_acid_amide", "hormone_analog",
+                                 "structural_protein", "polysaccharide", "algal_oil"):
+                        bonus_class = "isolated_compound"
+                    elif bool(botanical.get("branded_form")):
+                        bonus_class = "branded_form"
+                    else:
+                        bonus_class = "botanical_standardization"
+
                     evidence_source = "none"
+                    tier = "none"
+                    ratio = 0.0
                     is_branded = bool(botanical.get("branded_form"))
                     if is_branded:
-                        # Branded forms (KSM-66, Cran-Max, FloraGLO, etc.)
-                        # guarantee standardization by trademark — no % needed
-                        meets_threshold = True
+                        # Branded standardized extracts (KSM-66, Cran-Max, FloraGLO,
+                        # Meriva, ...) guarantee standardization by trademark.
                         evidence_source = "branded_form"
-                    elif min_threshold is not None:
+                        tier = "full"
+                    elif min_threshold is not None and is_percent_unit:
                         if percentage > 0:
-                            # Direct comparison - both are raw percentage values
-                            meets_threshold = percentage >= min_threshold
+                            ratio = (percentage / min_threshold) if min_threshold else 0.0
                             evidence_source = f"percentage_{percentage_source}"
-                        else:
-                            # No explicit percentage on label — fall through to
-                            # marker word evidence (branded extracts like Longvida,
-                            # Meriva, KSM-66 may not restate percentage)
-                            meets_threshold = self._has_marker_word_match(
-                                markers, marker_text
-                            )
-                            if meets_threshold:
-                                evidence_source = "marker_word_match"
+                            if ratio >= 1.0:
+                                tier = "full"
+                            elif ratio >= 0.75:
+                                tier = "near_75"
+                            elif ratio >= 0.5:
+                                tier = "near_50"
+                            else:
+                                tier = "identity_only"
+                        elif self._has_marker_word_match(markers, marker_text):
+                            evidence_source = "marker_word_match"
+                            tier = "identity_only"
+                    elif min_threshold is not None and not is_percent_unit:
+                        # Non-percent threshold (e.g. GDU/g, mg_per_dose): never
+                        # compare as a percentage. Credit only via marker-word
+                        # identity here (branded form already handled above).
+                        if self._has_marker_word_match(markers, marker_text):
+                            evidence_source = "marker_word_match"
+                            tier = "identity_only"
                     else:
-                        # No threshold and not branded — marker-word match only
-                        # gets partial credit (evidence_source distinguishes)
-                        meets_threshold = percentage > 0 or self._has_marker_word_match(
-                            markers, marker_text
-                        )
+                        # No threshold and not branded — identity/marker only.
                         if percentage > 0:
                             evidence_source = f"percentage_{percentage_source}"
-                        elif meets_threshold:
+                            tier = "identity_only"
+                        elif self._has_marker_word_match(markers, marker_text):
                             evidence_source = "marker_word_only"
+                            tier = "identity_only"
+
+                    # meets_threshold kept for backward-compat consumers: True when
+                    # the marker reaches >=75% of the standardization target.
+                    meets_threshold = tier in ("full", "near_75")
 
                     found_botanicals.append({
                         "name": ing_name,
@@ -7864,6 +7900,10 @@ class SupplementEnricherV3:
                         "percentage_found": percentage,
                         "percentage_source": percentage_source if percentage > 0 else None,
                         "min_threshold": min_threshold,
+                        "standardization_unit": std_unit,
+                        "threshold_ratio": round(ratio, 3),
+                        "tier": tier,
+                        "bonus_class": bonus_class,
                         "meets_threshold": meets_threshold,
                         "evidence_source": evidence_source,
                     })

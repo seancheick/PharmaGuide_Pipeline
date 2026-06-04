@@ -99,10 +99,30 @@
       "_note": "Scoring reads enriched absorption_enhancer_paired boolean"
     },
     "A5_formulation_excellence": {
-      "max": 4,
-      "_max_rationale": "v3.6.0: cap raised 3→4 to absorb the new natural-source signal (A5e) without displacing existing organic/standardized/synergy signals. A5 sub-component sum is now 4.5 (1+1+1+0.5+1); products earning all five clip by 0.5 — same shape as today's clip pattern (3.5 raw → 3 cap). Empirically rare to hit; no real product earns all 5 sourcing signals.",
+      "max": 8,
+      "_max_rationale": "v3.7.0 (calibration): A5 pool raised 4→8 to make room for the tiered standardized-botanical bonus (A5b 0→4) without displacing organic/synergy/non-GMO/natural. A5 lives inside core_quality (a1+..+a6), clamped only by Section A max=25 — so a genuinely premium standardized single-ingredient product can finally rise, while Section A's 25 cap remains the runaway safety valve. Prior rationale (v3.6.0): cap was 3→4 to absorb the natural-source signal (A5e).",
       "organic": 1,
-      "standardized_botanical": 1,
+      "standardized_botanical": {
+        "_description": "v3.7.0 tiered, unit-aware, class-capped standardized-botanical bonus (replaces binary 0/0.5/1). Tier is computed at enrich time from marker percentage vs threshold (unit-aware) or branded-form/marker evidence; class cap prevents non-botanicals (minerals, enzymes, isolated compounds) from earning the full botanical tier.",
+        "max": 4,
+        "tier_points": {
+          "full": 4.0,
+          "near_75": 3.0,
+          "near_50": 2.0,
+          "identity_only": 1.0,
+          "none": 0.0
+        },
+        "class_caps": {
+          "botanical_standardization": 4.0,
+          "marker_percent": 4.0,
+          "mushroom_fraction": 4.0,
+          "branded_extract": 3.0,
+          "branded_form": 3.0,
+          "enzyme_activity": 3.0,
+          "isolated_compound": 2.0,
+          "identity_only": 0.0
+        }
+      },
       "synergy_cluster": {
         "_description": "Tiered synergy bonus based on evidence quality. Only ingredients with 2+ matching cluster members AND adequate doses qualify.",
         "tier_1_proven": 1.0,
