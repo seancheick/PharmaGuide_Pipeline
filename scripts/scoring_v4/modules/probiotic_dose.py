@@ -68,6 +68,11 @@ def score_dose(product: Any) -> Dict[str, Any]:
     )
     if cfu_adequacy_scaled <= 0.0 and aggregate_proxy["score"] > 0.0:
         cfu_adequacy_scaled = aggregate_proxy["score"]
+    cfu_adequacy_basis = _cfu_adequacy_basis(
+        cfu_adequacy_scaled,
+        aggregate_proxy,
+        disclosed_count=disclosed_count,
+    )
 
     components = {
         "per_strain_cfu_disclosure": round(disclosure_score, 2),
@@ -88,6 +93,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "per_strain_cfu_disclosed_count": disclosed_count,
             "cfu_adequacy_v3_points": round(cfu_adequacy_v3, 4),
             "cfu_adequacy_scaled_points": round(cfu_adequacy_scaled, 4),
+            "cfu_adequacy_basis": cfu_adequacy_basis,
             "cfu_adequacy_contributions": adequacy["strain_contributions"],
             "aggregate_cfu_proxy": aggregate_proxy,
             "window_proxy_reason": _disclosure_reason(pdata, total_strain_count, disclosed_count),
@@ -144,6 +150,21 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
         "v3_points": total,
         "strain_contributions": contributions,
     }
+
+
+def _cfu_adequacy_basis(
+    cfu_adequacy_scaled: float,
+    aggregate_proxy: Dict[str, Any],
+    *,
+    disclosed_count: int,
+) -> str:
+    if aggregate_proxy.get("applied"):
+        return "aggregate_cfu_modeled_proxy"
+    if cfu_adequacy_scaled > 0.0 and disclosed_count > 0:
+        return "per_strain_cfu_disclosed"
+    if cfu_adequacy_scaled > 0.0:
+        return "strain_level_cfu_evidence"
+    return "no_cfu_adequacy_credit"
 
 
 def _compute_aggregate_cfu_proxy(

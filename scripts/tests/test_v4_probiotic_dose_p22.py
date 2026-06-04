@@ -91,6 +91,7 @@ def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_ca
     assert payload["metadata"]["phase"] == "P2.2_probiotic_dose"
     assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
     assert payload["metadata"]["cfu_adequacy_scaled_points"] == 15.0
+    assert payload["metadata"]["cfu_adequacy_basis"] == "per_strain_cfu_disclosed"
 
 
 def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() -> None:
@@ -116,6 +117,7 @@ def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() 
     assert payload["components"]["cfu_adequacy"] == 8.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
+    assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_modeled_proxy"
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
     assert payload["metadata"]["aggregate_cfu_proxy"]["proxy_tier"] == "excellent"
 
@@ -141,6 +143,7 @@ def test_low_aggregate_cfu_still_gets_no_proxy_dose_credit() -> None:
 
     assert payload["score"] == 0.0
     assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["metadata"]["cfu_adequacy_basis"] == "no_cfu_adequacy_credit"
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is False
     assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_below_proxy_floor"
 
