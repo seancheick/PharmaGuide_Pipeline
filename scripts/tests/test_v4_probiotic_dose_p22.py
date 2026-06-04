@@ -93,7 +93,7 @@ def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_ca
     assert payload["metadata"]["cfu_adequacy_scaled_points"] == 10.0
 
 
-def test_aggregate_blend_cfu_does_not_count_as_per_strain_disclosure_or_adequacy() -> None:
+def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
     aggregate_blend = {
@@ -111,11 +111,38 @@ def test_aggregate_blend_cfu_does_not_count_as_per_strain_disclosure_or_adequacy
         _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
     )
 
-    assert payload["score"] == 0.0
+    assert payload["score"] == 6.0
     assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["components"]["cfu_adequacy"] == 6.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
+    assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
+    assert payload["metadata"]["aggregate_cfu_proxy"]["proxy_tier"] == "excellent"
+
+
+def test_low_aggregate_cfu_still_gets_no_proxy_dose_credit() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+
+    aggregate_blend = {
+        "name": "Probiotic Blend",
+        "strains": ["Lactobacillus acidophilus", "Bifidobacterium lactis", "Lactobacillus rhamnosus"],
+        "cfu_data": {"has_cfu": True, "billion_count": 0.9, "cfu_count": 900_000_000},
+    }
+    clinical_strains = [
+        _strain("Lactobacillus acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus rhamnosus", cfu_per_day=None, adequacy_tier=None, support="high"),
+    ]
+
+    product = _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
+    product["probiotic_data"]["total_billion_count"] = 0.9
+
+    payload = score_dose(product)
+
+    assert payload["score"] == 0.0
+    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is False
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_below_proxy_floor"
 
 
 def test_probiotic_dose_accepts_final_blob_probiotic_detail_alias() -> None:

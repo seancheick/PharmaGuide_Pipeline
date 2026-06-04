@@ -7,11 +7,10 @@ SCORING_V4_PROPOSAL §6:
   - CFU adequacy: 10, preserving v3's tier × support-level math and
     scaling the v3 5-point cap to the v4 10-point budget
 
-This module intentionally does not infer per-strain CFU from aggregate
-blend totals. A product can disclose a strong total CFU count and still
-score 0 here if the label does not attach CFU values to individual
-strains; that gap is handled later in Transparency/confidence, not by
-fabricating dose adequacy.
+Aggregate CFU is not treated as per-strain disclosure. When named strains and
+a total CFU are present but strain-level CFU is absent, the module grants only
+a capped adequacy proxy and keeps the disclosure/confidence caveat. This avoids
+turning real dose evidence into zero while still penalizing the label gap.
 """
 
 from __future__ import annotations
@@ -24,6 +23,7 @@ PHASE_MARKER = "P2.2_probiotic_dose"
 CAP_DOSE = 25.0
 CAP_PER_STRAIN_CFU_DISCLOSURE = 15.0
 CAP_CFU_ADEQUACY = 10.0
+CAP_AGGREGATE_CFU_PROXY_ADEQUACY = 6.0
 V3_CFU_ADEQUACY_CAP = 5.0
 
 TIER_POINTS = {
@@ -60,6 +60,14 @@ def score_dose(product: Any) -> Dict[str, Any]:
     adequacy = _compute_cfu_adequacy(clinical_strains)
     cfu_adequacy_v3 = adequacy["v3_points"]
     cfu_adequacy_scaled = min(CAP_CFU_ADEQUACY, cfu_adequacy_v3 * 2.0)
+    aggregate_proxy = _compute_aggregate_cfu_proxy(
+        pdata,
+        clinical_strains,
+        total_strain_count=total_strain_count,
+        disclosed_count=disclosed_count,
+    )
+    if cfu_adequacy_scaled <= 0.0 and aggregate_proxy["score"] > 0.0:
+        cfu_adequacy_scaled = aggregate_proxy["score"]
 
     components = {
         "per_strain_cfu_disclosure": round(disclosure_score, 2),
@@ -81,6 +89,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "cfu_adequacy_v3_points": round(cfu_adequacy_v3, 4),
             "cfu_adequacy_scaled_points": round(cfu_adequacy_scaled, 4),
             "cfu_adequacy_contributions": adequacy["strain_contributions"],
+            "aggregate_cfu_proxy": aggregate_proxy,
             "window_proxy_reason": _disclosure_reason(pdata, total_strain_count, disclosed_count),
         },
     }
@@ -135,6 +144,99 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
         "v3_points": total,
         "strain_contributions": contributions,
     }
+
+
+def _compute_aggregate_cfu_proxy(
+    pdata: Dict[str, Any],
+    clinical_strains: Iterable[Any],
+    *,
+    total_strain_count: int,
+    disclosed_count: int,
+) -> Dict[str, Any]:
+    """Conservative adequacy proxy for aggregate-CFU probiotic labels.
+
+    The proxy never grants per-strain disclosure credit. It only prevents a
+    named-strain product with a real aggregate CFU from scoring dose as if no
+    dose existed. Equal distribution is used as a conservative modeling proxy
+    and the resulting adequacy is capped below fully disclosed CFU adequacy.
+    """
+    payload = {
+        "applied": False,
+        "score": 0.0,
+        "cap": CAP_AGGREGATE_CFU_PROXY_ADEQUACY,
+        "reason": None,
+    }
+    if disclosed_count > 0:
+        payload["reason"] = "per_strain_cfu_present"
+        return payload
+    if total_strain_count <= 0:
+        payload["reason"] = "no_strain_data"
+        return payload
+
+    total_billion = _total_billion_count(pdata)
+    if total_billion <= 0.0:
+        payload["reason"] = "aggregate_cfu_missing"
+        return payload
+
+    strains = [_safe_dict(item) for item in clinical_strains or []]
+    strains = [
+        strain for strain in strains
+        if strain and not strain.get("is_inactivated") and not strain.get("is_postbiotic")
+    ]
+    if not strains:
+        payload["reason"] = "no_clinical_strains_for_proxy"
+        return payload
+
+    proxy_cfu_per_strain = (total_billion * 1_000_000_000.0) / float(total_strain_count)
+    proxy_tier = _tier_from_proxy_cfu(proxy_cfu_per_strain)
+    if proxy_tier == "low":
+        payload.update({
+            "reason": "aggregate_cfu_below_proxy_floor",
+            "total_billion_count": round(total_billion, 4),
+            "proxy_cfu_per_strain": round(proxy_cfu_per_strain, 4),
+            "proxy_tier": proxy_tier,
+        })
+        return payload
+
+    total = 0.0
+    contributions: List[Dict[str, Any]] = []
+    for strain in strains:
+        support_raw = strain.get("clinical_support_level")
+        support = _norm(support_raw) or "weak"
+        base = TIER_POINTS.get(proxy_tier, 0.0)
+        mult = SUPPORT_LEVEL_CAPS.get(support, SUPPORT_LEVEL_CAPS["weak"])
+        points = base * mult
+        total += points
+        contributions.append({
+            "strain": strain.get("strain") or strain.get("name") or strain.get("clinical_id"),
+            "proxy_tier": proxy_tier,
+            "support": support,
+            "points": round(points, 4),
+        })
+
+    v3_points = min(V3_CFU_ADEQUACY_CAP, total)
+    score = min(CAP_AGGREGATE_CFU_PROXY_ADEQUACY, v3_points * 2.0)
+    payload.update({
+        "applied": score > 0.0,
+        "score": round(score, 4),
+        "reason": "aggregate_cfu_even_split_proxy",
+        "total_billion_count": round(total_billion, 4),
+        "proxy_cfu_per_strain": round(proxy_cfu_per_strain, 4),
+        "proxy_tier": proxy_tier,
+        "v3_points": round(v3_points, 4),
+        "contributions": contributions,
+    })
+    return payload
+
+
+def _tier_from_proxy_cfu(cfu_per_strain: float) -> str:
+    if cfu_per_strain >= 10_000_000_000:
+        return "excellent"
+    if cfu_per_strain >= 5_000_000_000:
+        return "good"
+    if cfu_per_strain >= 1_000_000_000:
+        return "adequate"
+    return "low"
 
 
 def _score_per_strain_cfu_disclosure(disclosed_count: int, total_strain_count: int) -> float:
@@ -214,6 +316,24 @@ def _disclosure_reason(pdata: Dict[str, Any], total_strain_count: int, disclosed
     if pdata.get("has_cfu") or _as_float(pdata.get("total_billion_count"), 0.0) > 0:
         return "aggregate_cfu_not_per_strain"
     return "per_strain_cfu_missing"
+
+
+def _total_billion_count(pdata: Dict[str, Any]) -> float:
+    total_billion = _as_float(pdata.get("total_billion_count"), 0.0)
+    if total_billion > 0.0:
+        return total_billion
+    total_cfu = _as_float(pdata.get("total_cfu"), 0.0)
+    if total_cfu > 0.0:
+        return total_cfu / 1_000_000_000.0
+    for blend_item in _safe_list(pdata.get("probiotic_blends")):
+        cfu_data = _safe_dict(_safe_dict(blend_item).get("cfu_data"))
+        blend_billion = _as_float(cfu_data.get("billion_count"), 0.0)
+        if blend_billion > 0.0:
+            return blend_billion
+        blend_cfu = _as_float(cfu_data.get("cfu_count"), 0.0)
+        if blend_cfu > 0.0:
+            return blend_cfu / 1_000_000_000.0
+    return 0.0
 
 
 def _canonical_key(value: str) -> str:

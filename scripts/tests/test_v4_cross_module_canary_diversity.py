@@ -9,7 +9,7 @@ catch class-specific regressions that synthetic unit fixtures miss:
 - generic high Trust and zero Trust cases
 - sports high score band
 - probiotic high / mid / low score bands
-- probiotic per-strain CFU disclosed vs aggregate-CFU-only Dose=0
+- probiotic per-strain CFU disclosed vs aggregate-CFU-only capped proxy dose
 - probiotic Trust positive vs Trust zero
 - prenatal probiotic routing stays probiotic, not multi_or_prenatal
 
@@ -89,11 +89,12 @@ PROBIOTIC_CANARIES = {
         "score_range": (29.8, 31.2),
         "traits": {"trust_positive": True},
     },
-    # Aggregate-CFU-only canary: gets Formulation credit but Dose=0.
+    # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
+    # but not full per-strain disclosure/adequacy.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        "score_range": (50.3, 51.7),
-        "traits": {"form_max": True, "dose_zero": True, "trust_zero": True},
+        "score_range": (56.3, 57.7),
+        "traits": {"form_max": True, "aggregate_cfu_proxy": True, "trust_zero": True},
     },
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
@@ -269,6 +270,12 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         assert _dimension_score(breakdown, "dose") == 0
     if traits.get("dose_positive"):
         assert _dimension_score(breakdown, "dose") > 0
+    if traits.get("aggregate_cfu_proxy"):
+        dose = breakdown["dimensions"]["dose"]
+        assert dose["score"] == 6.0
+        assert dose["components"]["per_strain_cfu_disclosure"] == 0.0
+        assert dose["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
+        assert dose["metadata"]["aggregate_cfu_proxy"]["applied"] is True
     if traits.get("trust_zero"):
         assert _verification_strength(breakdown) == 0
     if traits.get("trust_positive"):
