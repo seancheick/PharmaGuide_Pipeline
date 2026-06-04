@@ -204,6 +204,42 @@ def test_plant_part_extract_still_grants_botanical_source_text():
     assert ingredient["profile_eligibility"]["botanical"]["eligible"] is True
 
 
+@pytest.mark.parametrize(
+    ("canonical", "name", "expected_domain"),
+    [
+        ("vitamin_b7_biotin", "Biotin", "vitamin"),
+        ("selenium", "Selenium", "mineral"),
+    ],
+)
+def test_source_carrier_forms_do_not_override_known_identity_domain(canonical, name, expected_domain):
+    product = _product(
+        name,
+        [
+            _row(
+                canonical,
+                name,
+                100,
+                "mcg",
+                raw_taxonomy={
+                    "category": "vitamin" if expected_domain == "vitamin" else "mineral",
+                    "forms": [
+                        {
+                            "name": "Saccharomyces cerevisiae",
+                            "category": "botanical",
+                            "ingredientGroup": "Saccharomyces cerevisiae",
+                        }
+                    ],
+                },
+            )
+        ],
+    )
+
+    ingredient = build_scoring_classification(product)["ingredients"][0]
+
+    assert ingredient["ingredient_domain"] == expected_domain
+    assert ingredient["profile_eligibility"]["probiotic"]["eligible"] is False
+
+
 def test_content_evidence_beats_title_for_omega_positive_and_negative():
     generic_title_with_epa = _product(
         "Essential Fatty Acids",

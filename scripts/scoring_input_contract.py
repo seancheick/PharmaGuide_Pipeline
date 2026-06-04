@@ -1981,7 +1981,7 @@ def _ingredient_domain(row: Dict[str, Any], *, botanical_source: bool) -> str:
     raw_taxonomy = _safe_dict(row.get("raw_taxonomy"))
     raw_category = _norm(raw_taxonomy.get("category") or row.get("category")).replace("-", "_")
 
-    if dose_class == "probiotic_cfu" or "cfu" in unit or _CLASSIFICATION_PROBIOTIC_TEXT_RE.search(text):
+    if dose_class == "probiotic_cfu" or "cfu" in unit:
         return "probiotic_strain"
     if dose_class == "enzyme_activity":
         return "enzyme"
@@ -1997,6 +1997,8 @@ def _ingredient_domain(row: Dict[str, Any], *, botanical_source: bool) -> str:
         return "collagen"
     if raw_category in _CLASSIFICATION_RAW_CATEGORY_DOMAINS:
         return _CLASSIFICATION_RAW_CATEGORY_DOMAINS[raw_category]
+    if _CLASSIFICATION_PROBIOTIC_TEXT_RE.search(text):
+        return "probiotic_strain"
     if botanical_source:
         return "herb"
     if canonical:
