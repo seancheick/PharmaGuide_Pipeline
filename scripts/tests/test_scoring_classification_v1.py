@@ -572,6 +572,47 @@ def test_route_audit_not_ready_when_performance_budget_is_exceeded():
     assert summary["ready"] is False
 
 
+def test_native_classification_parity_audit_allows_compatibility_missing_native():
+    from api_audit.audit_v4_native_classification_parity import audit_products
+
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+
+    summary = audit_products([product], require_native=False)
+
+    assert summary["native_classification_count"] == 0
+    assert summary["missing_native_classification_count"] == 1
+    assert summary["ready"] is True
+
+
+def test_native_classification_parity_audit_requires_native_for_release_gate():
+    from api_audit.audit_v4_native_classification_parity import audit_products
+
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+
+    summary = audit_products([product], require_native=True)
+
+    assert summary["blocking_issue_count"] == 1
+    assert summary["issues"][0]["issue"] == "missing_native_classification"
+    assert summary["ready"] is False
+
+
+def test_native_classification_parity_audit_detects_builder_mismatch():
+    from api_audit.audit_v4_native_classification_parity import audit_products
+
+    product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
+    product["product_scoring_classification"] = build_scoring_classification(
+        _product("Fish Oil EPA DHA", [_row("epa", "EPA", 500, "mg")], primary_type="omega_3"),
+        classification_origin="native_enrichment",
+    )
+
+    summary = audit_products([product], require_native=True)
+
+    assert summary["native_classification_count"] == 1
+    assert summary["native_builder_mismatch_count"] == 1
+    assert summary["issues"][0]["issue"] == "native_builder_mismatch"
+    assert summary["ready"] is False
+
+
 def test_profile_audit_not_ready_on_unsigned_profile_divergence():
     from api_audit.audit_v4_profile_consistency import summarize
 
