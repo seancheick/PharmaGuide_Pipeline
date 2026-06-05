@@ -2876,3 +2876,26 @@ def test_bug11_cerevisiae_alias_absent_cross_parent_constraint(parent_key):
         f"'S. cerevisiae culture' must NOT be in {parent_key} form aliases — "
         f"cross-parent uniqueness invariant: alias appears in 5 vitamin parents"
     )
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "Red Yeast Rice",
+        "Red Yeast Rice powder",
+        "Red Yeast Rice Powder",
+        "organic Red Yeast Rice",
+        "organic Red Yeast Rice powder",
+    ],
+)
+def test_red_yeast_rice_resolves_canonical_identity(normalizer, name):
+    """Red Yeast Rice (Monascus purpureus fermented rice, FDA UNII 43CAU2Q6DY) was
+    UNMAPPED — _resolve_canonical_identity returned (None, None) — quarantining 13
+    products at the export contract ('missing required active identity', which
+    requires canonical_id). It must now resolve to the red_yeast_rice botanical
+    identity so those products ship and pick up their existing monacolin-K safety
+    handling (banned_recalled_ingredients.json)."""
+    canonical_id, source_db = normalizer._resolve_canonical_identity(name, name)
+
+    assert canonical_id == "red_yeast_rice"
+    assert source_db == "botanical_ingredients"
