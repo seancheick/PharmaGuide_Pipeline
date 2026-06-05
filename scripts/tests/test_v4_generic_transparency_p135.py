@@ -87,6 +87,18 @@ def _ingredient(name: str = "Magnesium", standard_name: str | None = None) -> di
     }
 
 
+def _probiotic_ingredient() -> dict:
+    return {
+        "name": "Lactobacillus rhamnosus GG",
+        "standard_name": "Lactobacillus rhamnosus GG",
+        "mapped": True,
+        "canonical_id": "lactobacillus_rhamnosus_gg",
+        "category": "probiotic",
+        "quantity": 10,
+        "unit": "billion CFU",
+    }
+
+
 def _product(
     *,
     blends: list | None = None,
@@ -99,7 +111,14 @@ def _product(
     allergens: list | None = None,
     top_level: dict | None = None,
 ) -> dict:
-    rows = [_ingredient()]
+    if supp_type == "probiotic":
+        rows = [_probiotic_ingredient()]
+        if product_name == "Example Product":
+            product_name = "Example Probiotic"
+    else:
+        rows = [_ingredient()]
+        if supp_type == "multivitamin" and product_name == "Example Product":
+            product_name = "Example Multivitamin"
     primary_type_by_supp_type = {
         "probiotic": "probiotic",
         "multivitamin": "multivitamin",
@@ -128,6 +147,12 @@ def _product(
             "total_active_mg": total_active_mg,
             "total_active_ingredients": total_active_ingredients,
         },
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_strain_count": 1,
+            "has_cfu": True,
+            "total_billion_count": 10,
+        } if supp_type == "probiotic" else {},
         "contaminant_data": {
             "allergens": {"found": bool(allergens), "allergens": allergens or []}
         },
