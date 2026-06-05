@@ -5,13 +5,13 @@ v3↔v4 comparison rows from `v4_full_corpus_delta.build_rows` (shipped v3 score
 artifacts as baseline, fresh v4 shadow scores) and produces:
 
   1. The 4 AUTOMATED cutover gates (GREEN/RED):
-       G1  shipped_safety_downgrades == 0   (v3 SAFE → v4 CAUTION/BLOCKED that ships)
+       G1  shipped_safety_downgrades == 0   (v3 CAUTION+ → v4 more permissive)
        G2  no confirmed banned/recalled product becomes v4 SAFE
        G3  no v3-scored product becomes v4 NOT_SCORED (unexplained)
        G4  no product is v4 CAUTION solely because of ADJUNCT missing data
            (reported as review candidates — adjunct attribution needs an eye)
 
-  2. The 7 MANUAL review cohorts, each written as a scaffold CSV with a
+  2. The 8 MANUAL review cohorts, each written as a scaffold CSV with a
      `classification` slot per product (correct | tune | data_issue |
      deliberate_v3_divergence):
        - balanced_side_by_side (100)     [delegates to v4_side_by_side_review.py]
