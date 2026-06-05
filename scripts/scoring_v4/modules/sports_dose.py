@@ -13,11 +13,14 @@ from scoring_v4.modules.sports_helpers import (
     BETA_ALANINE_CANONICALS,
     CITRULLINE_CANONICALS,
     CREATINE_CANONICALS,
+    HMB_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
     canonical,
     dose_g,
     group_bcaa,
     group_eaa,
+    primary_sports_identity,
+    sports_dosed_rows,
     sports_rows,
 )
 
@@ -35,6 +38,14 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     support = _score_stack_support(product, identity)
     completeness = _score_ratio_or_completeness(product, identity)
     opaque_penalty, not_evaluable = _opaque_penalty(product, primary)
+    if (
+        primary <= 0
+        and identity
+        and basis
+        and not_evaluable == "no_sports_primary_dose"
+        and basis != "no_sports_primary_dose"
+    ):
+        not_evaluable = basis
 
     components = {
         "sports_primary_active_dose": round(primary, 4),
@@ -70,7 +81,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[float, Optional[str]]:
-    rows = sports_rows(product)
+    rows = sports_dosed_rows(product)
     if identity == "protein":
         grams = _max_g(rows, SPORTS_PROTEIN_CANONICALS)
         if grams is None:
@@ -87,11 +98,13 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
         grams = _max_g(rows, CREATINE_CANONICALS)
         if grams is None:
             return 0.0, "creatine_no_dose"
+        if grams < 2:
+            return 8.0, "creatine_under_2_g"
         if grams < 3:
-            return 8.0, "creatine_under_3_g"
-        if grams < 5:
-            return 16.0, "creatine_3_to_5_g"
-        return 20.0, "creatine_at_least_5_g"
+            return 16.0, "creatine_2_to_3_g"
+        if grams <= 10:
+            return 20.0, "creatine_3_to_10_g"
+        return 16.0, "creatine_above_10_g_no_loading_protocol"
 
     if identity == "beta_alanine":
         grams = _max_g(rows, BETA_ALANINE_CANONICALS)
@@ -124,6 +137,18 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
             return 16.0, "l_citrulline_3_to_6_g"
         return 18.0, "l_citrulline_6_to_8_g"
 
+    if identity == "hmb":
+        grams = _max_g(rows, HMB_CANONICALS)
+        if grams is None:
+            return 0.0, "hmb_no_dose"
+        if grams < 1.5:
+            return _partial(grams, 1.5, 8.0), "hmb_under_1_5_g"
+        if grams < 3:
+            return 16.0, "hmb_1_5_to_3_g"
+        if grams <= 6:
+            return 20.0, "hmb_3_to_6_g"
+        return 16.0, "hmb_above_6_g"
+
     if identity == "bcaa":
         grouped = group_bcaa(rows)
         if not grouped["complete"]:
@@ -139,12 +164,21 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
 
     if identity == "eaa":
         grouped = group_eaa(rows)
+        count = int(grouped.get("count") or 0)
         total = float(grouped["total_g"])
+        if count < 6:
+            return 0.0, "eaa_incomplete_under_6"
+        if count < 9:
+            if total < 5:
+                return _partial(total, 5.0, 10.0), "eaa_partial_profile_under_5_g"
+            if total < 8:
+                return 10.0, "eaa_partial_profile_5_to_8_g"
+            return 12.0, "eaa_partial_profile_at_least_8_g"
         if total < 5:
             return _partial(total, 5.0, 12.0), "eaa_under_5_g"
         if total < 8:
-            return 12.0, "eaa_5_to_8_g"
-        return 18.0, "eaa_at_least_8_g"
+            return 14.0, "eaa_5_to_8_g"
+        return 18.0, "eaa_complete_at_least_8_g"
 
     return 0.0, "no_sports_primary_dose"
 
@@ -158,12 +192,17 @@ def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, 
     best_identity: Optional[str] = None
     best_score = 0.0
     best_basis: Optional[str] = "no_sports_primary_dose"
-    for identity in ("protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline"):
+    for identity in ("protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline", "hmb"):
         score, basis = _score_primary(product, identity)
         if score > best_score:
             best_identity = identity
             best_score = score
             best_basis = basis
+    if best_identity is None:
+        fallback_identity = primary_sports_identity(product)
+        if fallback_identity:
+            _score, basis = _score_primary(product, fallback_identity)
+            return fallback_identity, 0.0, basis
     return best_identity, best_score, best_basis
 
 

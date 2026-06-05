@@ -15,7 +15,19 @@ from scoring_v4.modules.generic_helpers import (
 SPORTS_PROTEIN_CANONICALS = frozenset(
     {"protein", "whey_protein", "casein", "pea_protein", "rice_protein", "soy_protein"}
 )
-CREATINE_CANONICALS = frozenset({"creatine_monohydrate"})
+CREATINE_CANONICALS = frozenset(
+    {
+        "creatine",
+        "creatine_monohydrate",
+        "creatine_anhydrous",
+        "creatine_hydrochloride",
+        "creatine_hcl",
+        "creatine_nitrate",
+        "creatine_citrate",
+        "buffered_creatine",
+        "magnesium_creatine_chelate",
+    }
+)
 BETA_ALANINE_CANONICALS = frozenset({"beta-alanine", "beta_alanine"})
 CITRULLINE_CANONICALS = frozenset({"l_citrulline"})
 HMB_CANONICALS = frozenset({"hmb"})
@@ -71,17 +83,29 @@ def dose_mg(row: Dict[str, Any]) -> Optional[float]:
     return None if grams is None else grams * 1000.0
 
 
-def sports_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+def sports_identity_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for row in get_active_ingredients(product or {}):
         if not isinstance(row, dict):
             continue
         if canonical(row) not in SPORTS_CANONICALS:
             continue
+        rows.append(row)
+    return rows
+
+
+def sports_dosed_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for row in sports_identity_rows(product):
         if not has_usable_individual_dose(row):
             continue
         rows.append(row)
     return rows
+
+
+def sports_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Backward-compatible alias for dose-bearing sports rows."""
+    return sports_dosed_rows(product)
 
 
 def _row_by_canonical(rows: Iterable[Dict[str, Any]], target: str) -> Optional[Dict[str, Any]]:
@@ -130,7 +154,8 @@ def group_eaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         if grams is not None:
             values[key] = grams
     return {
-        "complete": len(values) >= 6,
+        "complete": len(values) >= len(EAA_CANONICALS),
+        "partial": 6 <= len(values) < len(EAA_CANONICALS),
         "count": len(values),
         "values_g": values,
         "total_g": sum(values.values()),
@@ -138,7 +163,7 @@ def group_eaa(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def primary_sports_identity(product: Dict[str, Any]) -> Optional[str]:
-    rows = sports_rows(product)
+    rows = sports_identity_rows(product)
     canons = {canonical(row) for row in rows}
     name = _norm_text((product or {}).get("product_name") or (product or {}).get("fullName"))
 

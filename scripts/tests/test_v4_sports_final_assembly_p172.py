@@ -57,9 +57,25 @@ def test_score_sports_returns_shared_breakdown_shape_with_sports_dose() -> None:
     assert set(breakdown["dimensions"]) == {"formulation", "dose", "evidence", "transparency"}
     assert breakdown["verification_bonus"]["max"] == 8.0
     assert breakdown["dimensions"]["dose"]["metadata"]["phase"] == "P1.7_sports_dose_v1"
-    assert breakdown["dimensions"]["dose"]["score"] == 16.0
+    assert breakdown["dimensions"]["dose"]["score"] == 20.0
     assert breakdown["raw_score_100"] is not None
     assert breakdown["score_100"] is not None
+
+
+def test_score_sports_requests_primary_evidence_floor(monkeypatch) -> None:
+    import scoring_v4.modules.sports as sports_module
+
+    seen = {}
+
+    def fake_score_evidence(product, *, apply_primary_floor=False):
+        seen["apply_primary_floor"] = apply_primary_floor
+        return {"score": 0.0, "components": {}, "penalties": {}, "metadata": {}}
+
+    monkeypatch.setattr(sports_module, "score_evidence", fake_score_evidence)
+
+    score_sports(_sports_product())
+
+    assert seen["apply_primary_floor"] is True
 
 
 def test_shadow_dispatch_scores_sports_module() -> None:

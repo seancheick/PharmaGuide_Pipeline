@@ -41,7 +41,7 @@ def score_sports(product: Any) -> GenericModuleResult:
     dose_dim.penalties = dose_payload["penalties"]
     dose_dim.metadata = dose_payload.get("metadata", {})
 
-    evidence_payload = score_evidence(product)
+    evidence_payload = score_evidence(product, apply_primary_floor=True)
     evidence_dim = result.dimensions["evidence"]
     evidence_dim.score = evidence_payload["score"]
     evidence_dim.components = evidence_payload["components"]
