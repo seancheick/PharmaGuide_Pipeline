@@ -60,8 +60,8 @@ GENERIC_CANARIES = {
         "label": "Pure Encapsulations Liposomal Glutathione",
         # Phase 4: 65 → 63. Phase 8: Setria glutathione (mass-primary) evidenced,
         # but positive_weak effect -> floor 14*0.85=11.9 -> 64.8.
-        "score_range": (52.4, 53.8),
-        "traits": {"transparency_low": True},
+        "score_range": (55.9, 57.3),  # v3.7.0 A5 cap + calibration (still not_botanical_owner)
+        "traits": {},
     },
 }
 
