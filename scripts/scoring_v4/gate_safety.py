@@ -114,10 +114,23 @@ def _safe_list(value: Any) -> list:
     return value if isinstance(value, list) else []
 
 
+def _safe_dict(value: Any) -> dict:
+    return value if isinstance(value, dict) else {}
+
+
 def _norm(value: Any) -> str:
     if value is None:
         return ""
     return str(value).strip().lower()
+
+
+def _as_float(value: Any) -> Optional[float]:
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
 
 
 @lru_cache(maxsize=1)
@@ -184,6 +197,121 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 def _append_signal(result: SafetyResult, code: str) -> None:
     if code not in result.safety_signals:
         result.safety_signals.append(code)
+
+
+def _dose_mg(row: Dict[str, Any]) -> Optional[float]:
+    quantity = _as_float(
+        row.get("quantity")
+        if row.get("quantity") is not None
+        else row.get("amount")
+        if row.get("amount") is not None
+        else row.get("dose")
+    )
+    if quantity is None or quantity <= 0:
+        return None
+    unit = _norm(row.get("unit_normalized") or row.get("unit"))
+    compact = unit.replace(" ", "")
+    if compact in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        return quantity
+    if compact in {"g", "gram", "grams", "gram(s)"}:
+        return quantity * 1000.0
+    if compact in {"mcg", "ug", "µg", "μg", "microgram", "micrograms", "microgram(s)"}:
+        return quantity / 1000.0
+    return None
+
+
+def _iter_active_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for key in ("activeIngredients", "display_ingredients"):
+        for row in _safe_list(product.get(key)):
+            if isinstance(row, dict):
+                rows.append(row)
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    for key in ("ingredients_scorable", "ingredients_skipped"):
+        for row in _safe_list(iqd.get(key)):
+            if isinstance(row, dict):
+                rows.append(row)
+    return rows
+
+
+def _is_caffeine_row(row: Dict[str, Any]) -> bool:
+    text = " ".join(
+        _norm(row.get(field))
+        for field in (
+            "canonical_id",
+            "name",
+            "standard_name",
+            "standardName",
+            "raw_source_text",
+            "matched_form",
+            "form_name",
+        )
+    )
+    return "caffeine" in text
+
+
+def _is_stimulant_context(product: Dict[str, Any]) -> bool:
+    fields = [
+        product.get("product_name"),
+        product.get("fullName"),
+        product.get("primary_type"),
+        _safe_dict(product.get("supplement_taxonomy")).get("primary_type"),
+    ]
+    text = " ".join(_norm(value) for value in fields)
+    if any(
+        token in text
+        for token in (
+            "pre_workout",
+            "pre workout",
+            "pre-workout",
+            "energy",
+            "thermogenic",
+            "fat burner",
+            "stimulant",
+        )
+    ):
+        return True
+    for blend in _safe_list(product.get("proprietary_blends")):
+        if not isinstance(blend, dict):
+            continue
+        blend_text = " ".join(_norm(blend.get(field)) for field in ("name", "raw_name", "purpose"))
+        if any(token in blend_text for token in ("energy", "stimulant", "pre workout", "pre-workout", "thermogenic")):
+            return True
+    return False
+
+
+def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
+    """Surface caffeine safety only when it is a consumer-action issue.
+
+    Moderate disclosed caffeine is not a global CAUTION. A high per-serving
+    caffeine dose (>400 mg) or undisclosed caffeine in a stimulant/pre-workout
+    context is different: the user cannot judge safe use without taking action.
+    """
+    caffeine_rows = [row for row in _iter_active_rows(product) if _is_caffeine_row(row)]
+    if not caffeine_rows:
+        return
+
+    doses = [_dose_mg(row) for row in caffeine_rows]
+    known_doses = [dose for dose in doses if dose is not None]
+    unknown_dose = len(known_doses) < len(caffeine_rows)
+
+    if known_doses:
+        total_mg = sum(known_doses)
+        if total_mg > 400.0:
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            _append_signal(result, "STIMULANT_CAFFEINE_HIGH_DOSE")
+        elif total_mg > 300.0:
+            _append_signal(result, "STIMULANT_CAFFEINE_ELEVATED_DOSE")
+        else:
+            _append_signal(result, "STIMULANT_CAFFEINE_MODERATE_DOSE")
+
+    if unknown_dose:
+        result.needs_review = True
+        if _is_stimulant_context(product):
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            _append_signal(result, "STIMULANT_CAFFEINE_UNDISCLOSED_PREWORKOUT")
+        else:
+            _append_signal(result, "STIMULANT_CAFFEINE_UNDISCLOSED_REVIEW")
 
 
 def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
@@ -288,6 +416,8 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     )
     for sig in signals:
         _apply_signal_policy(result, sig)
+
+    _apply_stimulant_policy(result, product)
 
     # Disease claims → CAUTION. v3 routes this through B6 marketing
     # penalty + verdict adjustment; v4 surfaces it as a Layer 1 signal.

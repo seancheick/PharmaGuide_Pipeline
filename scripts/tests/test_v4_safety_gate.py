@@ -208,6 +208,87 @@ def test_disease_claims_alone_returns_caution() -> None:
     assert "DISEASE_CLAIM_DETECTED" in result.safety_signals
 
 
+def test_caffeine_at_or_below_200_mg_does_not_change_safety_verdict() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "activeIngredients": [
+            {"name": "Caffeine", "canonical_id": "caffeine", "quantity": 200, "unit": "mg"}
+        ]
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict is None
+    assert "STIMULANT_CAFFEINE_MODERATE_DOSE" in result.safety_signals
+
+
+def test_high_caffeine_over_400_mg_forces_caution_without_short_circuit() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "activeIngredients": [
+            {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": 425, "unit": "mg"}
+        ]
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict == "CAUTION"
+    assert result.short_circuits_scoring is False
+    assert "STIMULANT_CAFFEINE_HIGH_DOSE" in result.safety_signals
+
+
+def test_caffeine_300_to_400_mg_surfaces_signal_without_global_caution() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "activeIngredients": [
+            {"name": "Caffeine", "canonical_id": "caffeine", "quantity": 325, "unit": "mg"}
+        ]
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict is None
+    assert "STIMULANT_CAFFEINE_ELEVATED_DOSE" in result.safety_signals
+
+
+def test_hidden_caffeine_in_preworkout_blend_forces_caution_and_review() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "product_name": "Explosive Pre-Workout",
+        "primary_type": "pre_workout",
+        "activeIngredients": [
+            {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": None, "unit": None}
+        ],
+        "proprietary_blends": [
+            {"name": "Energy Matrix", "disclosure_level": "partial"}
+        ],
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict == "CAUTION"
+    assert result.short_circuits_scoring is False
+    assert result.needs_review is True
+    assert "STIMULANT_CAFFEINE_UNDISCLOSED_PREWORKOUT" in result.safety_signals
+
+
+def test_undosed_green_tea_caffeine_outside_stimulant_context_is_review_signal_only() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "product_name": "Green Tea Extract",
+        "primary_type": "botanical",
+        "activeIngredients": [
+            {"name": "Caffeine", "canonical_id": "caffeine", "quantity": None, "unit": None}
+        ],
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict is None
+    assert result.needs_review is True
+    assert "STIMULANT_CAFFEINE_UNDISCLOSED_REVIEW" in result.safety_signals
+
+
 def test_clean_product_returns_none() -> None:
     """No safety triggers → verdict=None, scoring continues normally."""
     from scoring_v4.gate_safety import evaluate_safety_gate
