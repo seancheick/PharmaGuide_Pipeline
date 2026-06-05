@@ -310,6 +310,90 @@ def test_b5_partial_blend_uses_hidden_mass_share() -> None:
     assert evidence["hidden_mass_mg"] == 800.0
 
 
+def test_b5_dedupes_detector_placeholder_when_cleaned_blend_exists() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    detector_placeholder = {
+        "name": "Superfood, Greens & Herbal Blends",
+        "disclosure_level": "none",
+        "source_field": "activeIngredients[19]",
+        "source_path": "activeIngredients[19]",
+        "sources": ["detector"],
+        "evidence": {
+            "blend_id": "BLEND_SUPERFOOD",
+            "matched_text": "Organic Fruit & Vegetable Blend",
+            "source_field": "activeIngredients[19]",
+        },
+    }
+    cleaned_blend = {
+        "name": "Raw Organic Fruit & Vegetable Blend",
+        "disclosure_level": "partial",
+        "blend_total_mg": 20.0,
+        "total_weight": 20.0,
+        "unit": "mg",
+        "source_field": "activeIngredients[19]",
+        "source_path": "activeIngredients[19]",
+        "sources": ["cleaning"],
+    }
+
+    payload = score_transparency(_product(
+        blends=[detector_placeholder, cleaned_blend],
+        supp_type="multivitamin",
+        total_active_mg=200.0,
+        total_active_ingredients=46,
+    ))
+
+    evidence = payload["metadata"]["B5_blend_evidence"]
+    assert len(evidence) == 1
+    assert evidence[0]["blend_name"] == "Raw Organic Fruit & Vegetable Blend"
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] == pytest.approx(-1.69)
+
+
+def test_b5_dedupes_parent_and_child_rows_for_same_blend_total() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    parent = {
+        "name": "Raw Organic Fruit & Vegetable Blend",
+        "disclosure_level": "partial",
+        "blend_total_mg": 20.0,
+        "total_weight": 20.0,
+        "unit": "mg",
+        "source_field": "activeIngredients[19]",
+        "source_path": "activeIngredients[19]",
+        "sources": ["cleaning"],
+    }
+    child_list = {
+        "name": "Raw Organic Fruit & Vegetable Blend",
+        "disclosure_level": "none",
+        "blend_total_mg": 20.0,
+        "total_weight": 20.0,
+        "unit": "mg",
+        "hidden_count": 3,
+        "nested_count": 3,
+        "source_field": "activeIngredients[20]",
+        "source_path": "activeIngredients[20]",
+        "sources": ["cleaning"],
+        "child_ingredients": [
+            {"name": "Broccoli", "amount": None, "unit": ""},
+            {"name": "Apple", "amount": None, "unit": ""},
+            {"name": "Carrot", "amount": None, "unit": ""},
+        ],
+    }
+
+    payload = score_transparency(_product(
+        blends=[parent, child_list],
+        supp_type="multivitamin",
+        total_active_mg=200.0,
+        total_active_ingredients=46,
+    ))
+
+    evidence = payload["metadata"]["B5_blend_evidence"]
+    assert len(evidence) == 1
+    assert evidence[0]["disclosure_tier"] == "partial"
+    assert evidence[0]["children_without_amount_count"] == 3
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] == pytest.approx(-1.69)
+
+
 def test_shadow_wires_transparency_dimension_when_generic_module_runs() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
