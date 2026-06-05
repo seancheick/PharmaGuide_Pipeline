@@ -93,6 +93,14 @@ _MCT_TRIGLYCERIDE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+_TRIGLYCERIDE_HEALTH_CLAIM_PATTERN = re.compile(
+    r"\b(?:healthy|normal|blood|serum|plasma|support(?:s|ing)?|maintain(?:s|ing)?|"
+    r"already\s+within)\b.{0,64}\btriglyceride[s]?\s+level[s]?\b|"
+    r"\btriglyceride[s]?\s+level[s]?\b.{0,64}\b(?:healthy|normal|range|blood|serum|"
+    r"plasma|support(?:s|ing)?|maintain(?:s|ing)?|already\s+within)\b",
+    re.IGNORECASE,
+)
+
 
 # Source-detection regex — any marine source keyword counts.
 _SOURCE_PATTERN = re.compile(
@@ -180,6 +188,8 @@ def _detect_form(product: Dict[str, Any]) -> str:
     for form_label, pattern in _FORM_PATTERNS:
         for surface in surfaces:
             if form_label == "tg" and _MCT_TRIGLYCERIDE_PATTERN.search(surface):
+                continue
+            if form_label == "tg" and _TRIGLYCERIDE_HEALTH_CLAIM_PATTERN.search(surface):
                 continue
             if pattern.search(surface):
                 return form_label

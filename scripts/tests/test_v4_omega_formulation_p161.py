@@ -207,6 +207,22 @@ def test_form_tier_detected_from_statements_notes() -> None:
     assert payload["metadata"]["form_detected"] == "tg"
 
 
+def test_triglyceride_health_claim_in_label_does_not_trigger_form() -> None:
+    """A blood-lipid HEALTH CLAIM ('supports healthy triglyceride levels') is NOT
+    a molecular-form disclosure. Reading label prose must not false-positive these
+    into form=tg — only an explicit form context ('in the triglyceride form')
+    counts. ~52 omega labels carry the health claim; mis-crediting them would
+    invent a premium form that isn't disclosed."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _epa_dha_product(name="Omega-3 Fish Oil")
+    product["labelText"] = {
+        "raw": "Helps support healthy triglyceride levels already within the normal range."
+    }
+    payload = score_formulation(product)
+    assert payload["metadata"]["form_detected"] == "undefined"
+
+
 def test_form_tier_pl_krill_implies_phospholipid() -> None:
     """Krill omega-3 is naturally phospholipid-bound (phosphatidylcholine
     carrier). Per the rubric, 'krill' or 'krill oil' in the name maps to
