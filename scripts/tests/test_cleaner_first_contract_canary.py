@@ -402,3 +402,30 @@ def test_iqd_emits_enzyme_activity_dose_from_raw_notes():
     assert enzyme["dose_class"] == "enzyme_activity"
     assert enzyme["activity_quantity"] == 40000
     assert enzyme["activity_unit"] == "SPU"
+
+
+def test_iqd_emits_galu_enzyme_activity_dose_from_raw_notes():
+    product = {
+        "fullName": "Beanaid",
+        "activeIngredients": [
+            {
+                "name": "Alpha-Galactosidase",
+                "standardName": "Digestive Enzymes",
+                "quantity": 0,
+                "unit": "NP",
+                "notes": "Alpha Galactosidase (Form: Aspergillus niger) Note: 300 GALU",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "zero_or_np",
+            }
+        ],
+    }
+
+    iqd = SupplementEnricherV3()._collect_ingredient_quality_data(product)
+    enzyme = _first_named(iqd["ingredients_scorable"], "Alpha-Galactosidase")
+    assert enzyme["has_dose"] is True
+    assert enzyme["dose_class"] == "enzyme_activity"
+    assert enzyme["activity_quantity"] == 300
+    assert enzyme["activity_unit"] == "GALU"

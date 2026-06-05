@@ -106,6 +106,114 @@ def test_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
     assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
 
 
+def test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
+    """Alpha-galactosidase products commonly disclose GALU activity units.
+    GALU is a real enzyme activity unit and must not be treated as no dose.
+    """
+    product = {
+        "product_name": "Beanaid",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Alpha-Galactosidase",
+                    "standard_name": "Digestive Enzymes",
+                    "canonical_id": "digestive_enzymes",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "notes": "Alpha Galactosidase (Form: Aspergillus niger) Note: 300 GALU",
+                    "raw_source_text": "Alpha-Galactosidase",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                    "score_exclusion_reason": None,
+                }
+            ],
+        },
+    }
+
+    rows = [
+        row for row in derive_product_scoring_evidence(product)
+        if row.get("evidence_type") == "enzyme_activity"
+    ]
+
+    assert rows
+    assert rows[0]["dose_value"] == 300.0
+    assert rows[0]["dose_unit"] == "GALU"
+    assert rows[0]["dose_class"] == "enzyme_activity"
+
+
+def test_single_active_title_embedded_mass_reaches_v4_as_low_confidence_dose_evidence() -> None:
+    product = {
+        "product_name": "Tocotrienols 50 mg",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Tocotrienol-Tocopherol Complex",
+                    "standard_name": "Tocotrienols",
+                    "canonical_id": "vitamin_e",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_source_text": "Tocotrienol-Tocopherol Complex",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                    "score_exclusion_reason": None,
+                }
+            ],
+        },
+    }
+
+    rows = [
+        row for row in derive_product_scoring_evidence(product)
+        if row.get("reason") == "single_active_title_embedded_mass"
+    ]
+
+    assert rows
+    assert rows[0]["dose_value"] == 50.0
+    assert rows[0]["dose_unit"].lower() == "mg"
+    assert rows[0]["confidence"] == "low"
+
+
+def test_title_embedded_mass_does_not_apply_to_multi_identity_oil_titles() -> None:
+    product = {
+        "product_name": "1300 mg Omega 3-6-9 Fish, Flax, Borage",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Fish Oil",
+                    "canonical_id": "fish_oil",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                },
+                {
+                    "name": "Flaxseed Oil",
+                    "canonical_id": "flaxseed",
+                    "mapped": True,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "raw_source_path": "ingredientRows[1]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                },
+            ],
+        },
+    }
+
+    assert not [
+        row for row in derive_product_scoring_evidence(product)
+        if row.get("reason") == "single_active_title_embedded_mass"
+    ]
+
+
 def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> None:
     product = _load_product("309492")
 

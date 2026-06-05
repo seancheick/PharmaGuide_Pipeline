@@ -143,11 +143,15 @@ _NON_EPA_DHA_OMEGA_CANONICALS = {
 }
 _ENZYME_UNITS = {
     "alu", "ppi", "blgu", "hut", "sapu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
-    "lacu", "fccpu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
+    "lacu", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
     "du", "pc", "agu", "bgu", "lu", "phy", "ftu", "su",
 }
 _ENZYME_ACTIVITY_RE = re.compile(
-    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCCPU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU)(?:\b|$)",
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>ALU|PPI|BLGU|HUT|SAPU|FIP|CU|GDU|DPP[- ]?IV|LACU|FCCPU|GALU|AU|SKB|MWU|PU|DP|CKPU|AJU|USP|DU|PC|AGU|BGU|LU|PHY|FTU|SU)(?:\b|$)",
+    re.IGNORECASE,
+)
+_TITLE_MASS_RE = re.compile(
+    r"(?P<value>\d[\d,]*(?:\.\d+)?)\s*(?P<unit>mg|milligrams?|g|grams?|mcg|µg|μg|micrograms?)\b",
     re.IGNORECASE,
 )
 _GENERIC_BLEND_IDENTITIES = {
@@ -619,6 +623,81 @@ def _identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any
     return bool(title_tokens & identity_tokens)
 
 
+def _loose_identity_named_in_product_title(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
+    title_tokens = {
+        token
+        for token in re.split(
+            r"[^a-z0-9]+",
+            _norm(product.get("product_name") or product.get("fullName")),
+        )
+        if len(token) >= 4
+    }
+    if not title_tokens:
+        return False
+    title_tokens |= {token[:-1] for token in title_tokens if token.endswith("s") and len(token) >= 5}
+    identity_tokens: set[str] = set()
+    for value in (
+        row.get("name"),
+        row.get("standardName"),
+        row.get("standard_name"),
+        row.get("raw_source_text"),
+        row.get("canonical_id"),
+    ):
+        for token in re.split(r"[^a-z0-9]+", _norm(value).replace("_", " ")):
+            if len(token) < 4:
+                continue
+            identity_tokens.add(token)
+            if token.endswith("s") and len(token) >= 5:
+                identity_tokens.add(token[:-1])
+    return bool(title_tokens & identity_tokens)
+
+
+def _title_embedded_single_active_mass(
+    product: Dict[str, Any],
+    row: Dict[str, Any],
+    candidate_rows: List[Dict[str, Any]],
+) -> tuple[Optional[float], Optional[str]]:
+    """Conservative title-dose fallback for single-active labels.
+
+    Some DSLD rows carry the dose only in the product name ("Tocotrienols
+    50 mg") while the structured active row is 0/NP. This fallback is
+    intentionally narrow so broad titles like "1300 mg Omega 3-6-9" do not
+    assign a product-level mass to one child ingredient.
+    """
+    title = str(product.get("product_name") or product.get("fullName") or "")
+    matches = list(_TITLE_MASS_RE.finditer(title))
+    if len(matches) != 1:
+        return None, None
+    path = str(row.get("raw_source_path") or "")
+    if not path:
+        return None, None
+    anchor_canonical, _ = _anchor_identity(row)
+    if not anchor_canonical:
+        return None, None
+    if _positive_quantity(row) is not None:
+        return None, None
+    if not _loose_identity_named_in_product_title(product, row):
+        return None, None
+
+    unique_identity_paths = {
+        str(candidate.get("raw_source_path") or f"_idx_{idx}")
+        for idx, candidate in enumerate(candidate_rows)
+        if isinstance(candidate, dict)
+        and _anchor_identity(candidate)[0]
+        and _norm(candidate.get("cleaner_row_role")) == "active_scorable"
+        and candidate.get("score_eligible_by_cleaner") is True
+    }
+    if len(unique_identity_paths) != 1:
+        return None, None
+
+    match = matches[0]
+    value = _as_float(match.group("value").replace(",", ""), None)
+    if value is None or value <= 0:
+        return None, None
+    unit = match.group("unit")
+    return value, unit
+
+
 def _best_nested_anchor_child(
     product: Dict[str, Any],
     parent: Dict[str, Any],
@@ -862,6 +941,59 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
             evidence.append(item)
 
     candidate_rows = skipped_rows + active_rows
+    for row in skipped_rows:
+        path = str(row.get("raw_source_path") or "")
+        if path and (path in scorable_paths or path in special_evidence_paths):
+            continue
+        canonical = _norm(row.get("canonical_id"))
+        activity_value, activity_unit = _extract_enzyme_activity(row)
+        if activity_value is None or not activity_unit:
+            continue
+        special_evidence_paths.add(path)
+        evidence.append(_evidence_base(
+            row=row,
+            evidence_type="enzyme_activity",
+            canonical_id=canonical or "digestive_enzymes",
+            clean_identity_id=canonical or None,
+            scoring_parent_id=canonical or "digestive_enzymes",
+            dose_value=activity_value,
+            dose_unit=activity_unit,
+            evidence_scope="row_level",
+            confidence="high",
+            reason="enzyme_activity_unit_from_skipped_label_notes",
+            name=row.get("name") or "Enzyme activity",
+            dose_class="enzyme_activity",
+        ))
+
+    for row in skipped_rows:
+        path = str(row.get("raw_source_path") or "")
+        if path and (path in scorable_paths or path in special_evidence_paths):
+            continue
+        title_dose_value, title_dose_unit = _title_embedded_single_active_mass(
+            product,
+            row,
+            candidate_rows,
+        )
+        if title_dose_value is None or not title_dose_unit:
+            continue
+        anchor_canonical, anchor_name = _anchor_identity(row)
+        if not anchor_canonical:
+            continue
+        special_evidence_paths.add(path)
+        evidence.append(_evidence_base(
+            row=row,
+            evidence_type="blend_anchor_mass",
+            canonical_id=anchor_canonical,
+            clean_identity_id=_norm(row.get("canonical_id")) or anchor_canonical,
+            scoring_parent_id=anchor_canonical,
+            dose_value=title_dose_value,
+            dose_unit=str(title_dose_unit),
+            evidence_scope="row_level",
+            confidence="low",
+            reason="single_active_title_embedded_mass",
+            name=anchor_name or row.get("name") or "Title embedded dose",
+        ))
+
     for parent in skipped_rows:
         parent_path = str(parent.get("raw_source_path") or "")
         if not parent_path or parent_path in scorable_paths or parent_path in special_evidence_paths:

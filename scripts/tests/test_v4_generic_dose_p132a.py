@@ -201,6 +201,42 @@ def test_window_proxy_no_rda_data_with_label_dose_gets_partial_credit() -> None:
     assert payload["metadata"]["partial_credit_reason"] == "individual_quantified_dose_no_rda_reference"
 
 
+def test_enzyme_activity_evidence_gets_no_reference_partial_dose_credit() -> None:
+    """Enzyme products are dosed by activity units, not mg. When the scoring
+    contract recovers a GALU/HUT/etc. activity row, generic dose should treat it
+    as real quantified dose evidence instead of "not evaluable".
+    """
+    from scoring_v4.modules.generic_dose import score_dose
+
+    product = _product(
+        ingredients=[],
+        adequacy_results=[],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                _ingredient(
+                    name="Alpha-Galactosidase",
+                    standard_name="Digestive Enzymes",
+                    canonical_id="digestive_enzymes",
+                    quantity=0,
+                    unit="NP",
+                    notes="Alpha Galactosidase (Form: Aspergillus niger) Note: 300 GALU",
+                    raw_source_path="ingredientRows[0]",
+                    cleaner_row_role="active_scorable",
+                    score_eligible_by_cleaner=True,
+                    score_exclusion_reason=None,
+                )
+            ],
+        },
+    )
+
+    payload = score_dose(product)
+
+    assert payload["score"] == 16.0
+    assert payload["components"]["supplemental_window_proxy"] == 16.0
+    assert payload["metadata"]["partial_credit_reason"] == "enzyme_activity_quantified_dose_no_rda_reference"
+
+
 def test_ksm66_style_botanical_no_rda_is_not_punished_as_zero_dose() -> None:
     """KSM-66 / botanical products have real mg dosing but no RDA/UL benchmark.
     Phase 6: instead of the conservative generic proxy (16), a recognized

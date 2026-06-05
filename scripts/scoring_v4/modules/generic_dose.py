@@ -176,6 +176,12 @@ def _score_no_reference_quantified_dose(product: Dict[str, Any]) -> tuple[float,
             continue
         if ingredient.get("is_parent_total"):
             continue
+        dose_class = _norm_text(ingredient.get("dose_class"))
+        quantity = _as_float(ingredient.get("quantity"), None)
+        if dose_class == "enzyme_activity" and quantity is not None and quantity > 0:
+            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "enzyme_activity_quantified_dose_no_rda_reference"
+        if dose_class == "probiotic_cfu" and quantity is not None and quantity > 0:
+            return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "probiotic_cfu_quantified_dose_no_rda_reference"
         if has_usable_individual_dose(ingredient):
             return NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT, "individual_quantified_dose_no_rda_reference"
 

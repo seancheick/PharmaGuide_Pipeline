@@ -3784,10 +3784,10 @@ class SupplementEnricherV3:
         return unit_normalized
 
     _ENZYME_ACTIVITY_UNITS = frozenset({
-        "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu", "fu"
+        "spu", "hut", "fcc", "galu", "su", "du", "alu", "fip", "sapu", "cu", "fu"
     })
     _ENZYME_ACTIVITY_RE = re.compile(
-        r"\b(\d[\d,]*(?:\.\d+)?)\s*(SAPU|SPU|HUT|FCC|ALU|FIP|DU|SU|CU|FU)\b",
+        r"\b(\d[\d,]*(?:\.\d+)?)\s*(SAPU|SPU|HUT|FCC|GALU|ALU|FIP|DU|SU|CU|FU)\b",
         re.IGNORECASE,
     )
 
