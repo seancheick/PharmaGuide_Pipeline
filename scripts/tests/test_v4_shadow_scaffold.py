@@ -38,11 +38,15 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # --- Router contract ------------------------------------------------------
 
 
-def test_router_probiotic_taxonomy() -> None:
-    """taxonomy primary_type=probiotic — strongest signal, beats everything."""
+def test_router_probiotic_taxonomy_without_content_falls_back_generic() -> None:
+    """Taxonomy alone is not enough to enter the probiotic module.
+
+    Stale taxonomy can be polluted by upstream strain extraction, so route
+    probiotic only when content evidence validates the class.
+    """
     from scoring_v4.router import class_for_product
     product = {"supplement_taxonomy": {"primary_type": "probiotic"}}
-    assert class_for_product(product) == "probiotic"
+    assert class_for_product(product) == "generic"
 
 
 def test_router_multivitamin_taxonomy() -> None:
@@ -75,11 +79,18 @@ def test_router_multivitamin_taxonomy_wins_over_legacy_noise() -> None:
 
 
 def test_router_probiotic_supp_type_beats_prenatal_keyword() -> None:
-    """If the enricher already classified a product as probiotic, that
-    wins over a 'Prenatal' name keyword (the type classifier already
-    inspected the ingredient panel — trust it)."""
+    """Validated probiotic content wins over a 'Prenatal' name keyword."""
     from scoring_v4.router import class_for_product
-    product = {"supplement_taxonomy": {"primary_type": "probiotic"}, "product_name": "Prenatal Probiotic"}
+    product = {
+        "supplement_taxonomy": {"primary_type": "probiotic"},
+        "product_name": "Prenatal Probiotic",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 1_500_000_000,
+        },
+    }
     assert class_for_product(product) == "probiotic"
 
 

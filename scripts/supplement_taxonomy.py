@@ -26,12 +26,21 @@ from math import ceil
 from typing import Any
 
 from supplement_type_utils import (
-    PROBIOTIC_TERMS,
     NON_SCORABLE_CATEGORIES,
     canonical_category,
     _normalize_text,
     _safe_list,
     _ingredient_name,
+)
+
+_PROBIOTIC_IDENTITY_RE = re.compile(
+    r"\b("
+    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
+    r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
+    r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
+    r")\b",
+    re.IGNORECASE,
 )
 
 # ============================================================================
@@ -304,7 +313,7 @@ def _row_has_probiotic_identity(row: dict[str, Any]) -> bool:
             for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text")
         )
     )
-    return any(term in text for term in PROBIOTIC_TERMS)
+    return bool(_PROBIOTIC_IDENTITY_RE.search(text))
 
 
 def _is_probiotic_cfu_support_row(row: dict[str, Any]) -> bool:
@@ -520,7 +529,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         }:
             continue
         is_probiotic_strain = category in {"probiotic", "bacteria"} or (
-            name and any(term in name for term in PROBIOTIC_TERMS)
+            name and bool(_PROBIOTIC_IDENTITY_RE.search(name))
         )
 
         # Skip truly non-scorable
@@ -570,7 +579,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         # Probiotic counting
         if category in {"probiotic", "bacteria"}:
             probiotic_count += 1
-        elif any(term in name for term in PROBIOTIC_TERMS):
+        elif _PROBIOTIC_IDENTITY_RE.search(name):
             probiotic_count += 1
 
     active_count = len(quantified_rows)
@@ -632,7 +641,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     ala_only_signal = bool(cid_set & _ALA_CANONICAL_IDS) and not bool(cid_set & _OMEGA_CANONICAL_IDS)
 
     # --- Probiotic ---
-    probiotic_name_signal = any(term in product_name for term in PROBIOTIC_TERMS)
+    probiotic_name_signal = bool(_PROBIOTIC_IDENTITY_RE.search(product_name))
     probiotic_data = product.get("probiotic_data", {})
     # Require real CFU data — Paradise-style products set is_probiotic_product=True
     # even for Zinc/Quercetin because NP probiotic strains exist in the base.

@@ -86,6 +86,92 @@ def test_prebiotic_only_name_does_not_route_to_probiotic_without_probiotic_word(
     assert class_for_product(product) == "generic"
 
 
+def test_casein_decapeptide_is_not_probiotic_even_with_stale_taxonomy_payload():
+    """Milk peptides contain "casein"; this must not match L. casei.
+
+    Fresh artifacts exposed a false route where casein decapeptide polluted
+    probiotic_data, primary_type, and native classification. The final route
+    should require real live-microbe evidence and fall back to generic here.
+    """
+    product = _product(
+        product_name="Bioactive Milk Peptides",
+        primary_type="probiotic",
+        supplement_taxonomy={"primary_type": "probiotic"},
+        probiotic_data={
+            "is_probiotic_product": True,
+            "is_probiotic": True,
+            "total_strain_count": 1,
+            "has_cfu": False,
+            "total_cfu": 0,
+            "total_billion_count": 0,
+            "probiotic_blends": [
+                {
+                    "name": "Casein Decapeptide",
+                    "strain_count": 1,
+                    "strains": ["Casein Decapeptide"],
+                    "raw_source_path": "activeIngredients[0]",
+                }
+            ],
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {
+                    "name": "Casein Decapeptide",
+                    "canonical_id": "casein_hydrolysate",
+                    "quantity": 150,
+                    "unit": "mg",
+                    "category": "amino_acid",
+                }
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "generic"
+
+
+def test_taxonomy_probiotic_single_named_strain_without_cfu_routes_probiotic():
+    """A one-strain probiotic with no CFU should still score as probiotic.
+
+    Missing CFU is a dose/transparency/confidence issue, not a reason to use
+    generic nutrient scoring when the only active identity is a real strain.
+    """
+    product = _product(
+        product_name="Bifido GI Balance",
+        primary_type="probiotic",
+        supplement_taxonomy={"primary_type": "probiotic"},
+        probiotic_data={
+            "is_probiotic_product": True,
+            "is_probiotic": True,
+            "total_strain_count": 1,
+            "has_cfu": False,
+            "total_cfu": 0,
+            "total_billion_count": 0,
+            "probiotic_blends": [
+                {
+                    "name": "Bifidobacterium longum BB536",
+                    "strain_count": 1,
+                    "strains": ["Bifidobacterium longum BB536"],
+                    "raw_source_path": "activeIngredients[0]",
+                }
+            ],
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {
+                    "name": "Bifidobacterium longum BB536",
+                    "canonical_id": "bifidobacterium_longum",
+                    "quantity": 25,
+                    "unit": "mg",
+                    "category": "probiotics",
+                    "raw_taxonomy": {"category": "bacteria"},
+                }
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
 def test_specific_vitamin_mineral_taxonomy_with_low_cfu_adjunct_stays_generic():
     """A tiny probiotic adjunct must not hijack a specific vitamin/mineral SKU."""
     product = _product(

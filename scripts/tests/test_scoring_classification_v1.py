@@ -12,7 +12,10 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from scoring_input_contract import build_scoring_classification  # noqa: E402
+from scoring_input_contract import (  # noqa: E402
+    SCORING_CLASSIFICATION_SCHEMA_VERSION,
+    build_scoring_classification,
+)
 from scoring_v4.router import _legacy_class_for_product, class_for_product  # noqa: E402
 
 
@@ -58,7 +61,7 @@ def _product(name: str, rows: list[dict], *, primary_type: str = "general_supple
 )
 def test_classification_builder_is_total_and_schema_valid(payload):
     contract = build_scoring_classification(payload)  # type: ignore[arg-type]
-    assert contract["classification_schema_version"] == "1.1.0"
+    assert contract["classification_schema_version"] == SCORING_CLASSIFICATION_SCHEMA_VERSION
     assert contract["classification_origin"] == "compatibility_derived"
     assert contract["route_module"] in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
     assert contract["route_confidence"] in {"high", "medium", "low", "failed"}

@@ -267,6 +267,15 @@ _UI_COPY_HINT_VALUES = (
     "label_disclosed_no_threshold",
     "blend_not_individually_disclosed",
 )
+_PROBIOTIC_IDENTITY_RE = re.compile(
+    r"\b("
+    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"bacillus|limosilactobacillus|lacticaseibacillus|lactiplantibacillus|"
+    r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
+    r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
+    r")\b",
+    re.IGNORECASE,
+)
 
 
 def _compute_probiotic_confidence_hybrid(
@@ -12196,21 +12205,11 @@ class SupplementEnricherV3:
             std_name = ingredient.get('standardName', '').lower()
             category = ingredient.get('category', '').lower()
 
-            # Check for probiotic indicators (including abbreviated forms and strain names)
-            probiotic_terms = [
-                'probiotic', 'lactobacillus', 'bifidobacterium', 'streptococcus',
-                'bacillus', 'saccharomyces', 'limosilactobacillus',
-                # Strain-specific terms
-                'reuteri', 'rhamnosus', 'acidophilus', 'plantarum', 'casei',
-                'salivarius', 'coagulans', 'prodentis', 'protectis', 'subtilis',
-                # Abbreviated forms
-                'l. reuteri', 'l. rhamnosus', 'l. acidophilus', 'l. plantarum',
-                'b. lactis', 'b. longum', 'b. infantis', 's. salivarius',
-                'b. subtilis', 'b. coagulans',
-                # CFU indicators
-                'cfu', 'billion cfu', 'live cultures', 'viable cells'
-            ]
-            is_probiotic = any(term in ing_name or term in std_name for term in probiotic_terms)
+            # Check for probiotic indicators (including abbreviated forms and
+            # strain names) using bounded terms. Substring matching made
+            # "casein decapeptide" look like L. casei and polluted route
+            # classification with false probiotic_data.
+            is_probiotic = bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
             is_probiotic = is_probiotic or 'probiotic' in category or 'bacteria' in category
 
             if is_probiotic:
@@ -12782,16 +12781,10 @@ class SupplementEnricherV3:
     @staticmethod
     def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
         text = " ".join(
-            str(row.get(key) or "").lower()
+            str(row.get(key) or "")
             for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")
         )
-        return any(
-            term in text
-            for term in (
-                "probiotic", "lactobacillus", "bifidobacterium", "streptococcus",
-                "saccharomyces", "bacillus", "limosilactobacillus", "cfu",
-            )
-        )
+        return bool(_PROBIOTIC_IDENTITY_RE.search(text))
 
     @staticmethod
     def _is_probiotic_cfu_support_row(row: Dict[str, Any]) -> bool:

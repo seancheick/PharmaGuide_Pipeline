@@ -35,7 +35,7 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.0"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.1"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -110,19 +110,13 @@ _SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
     "l_isoleucine",
     "l_valine",
 }
-_PROBIOTIC_IDENTITY_TERMS = {
-    "probiotic",
-    "lactobacillus",
-    "bifidobacterium",
-    "streptococcus",
-    "saccharomyces",
-    "bacillus",
-    "limosilactobacillus",
-    "acidophilus",
-    "dophilus",
-    "bifidus",
-    "cfu",
-}
+_PROBIOTIC_IDENTITY_RE = re.compile(
+    r"\b("
+    r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
+    r"bacillus|limosilactobacillus|acidophilus|dophilus|bifidus|cfu"
+    r")\b",
+    re.IGNORECASE,
+)
 _PROBIOTIC_SUPPORT_CANONICALS = {"fiber", "prebiotics"}
 _OMEGA_PRODUCT_TYPES = {"omega_3", "fish_oil"}
 _OMEGA_EVIDENCE_CANONICALS = {
@@ -428,10 +422,10 @@ def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Opti
 
 def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
     text = " ".join(
-        str(row.get(key) or "").lower()
+        str(row.get(key) or "")
         for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text", "category")
     )
-    return any(term in text for term in _PROBIOTIC_IDENTITY_TERMS)
+    return bool(_PROBIOTIC_IDENTITY_RE.search(text))
 
 
 def _has_omega_identity_text(row: Dict[str, Any]) -> bool:
@@ -1794,7 +1788,11 @@ def _route_non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
             continue
         taxonomy = _safe_dict(row.get("raw_taxonomy"))
         category = _norm(taxonomy.get("category") or row.get("category"))
-        if category == "probiotic":
+        if category in {"probiotic", "probiotics", "bacteria"}:
+            continue
+        if _has_probiotic_identity_text(row):
+            continue
+        if _is_probiotic_support_row(row):
             continue
         count += 1
     return count
@@ -1826,6 +1824,7 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         or total_cfu >= (_ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000)
     )
     name_signal = bool(_ROUTE_PROBIOTIC_NAME_RE.search(name_text or ""))
+    primary_type = _primary_type(product)
 
     if not is_product or strain_count <= 0:
         return False
@@ -1838,13 +1837,23 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     ):
         return True
 
+    if (
+        primary_type == "probiotic"
+        and non_probiotic_panel == 0
+        and strain_count >= 1
+        and not _route_has_non_probiotic_hero(product, name_text)
+    ):
+        return True
+
     if not (has_cfu or name_signal):
         return False
 
-    primary_type = _primary_type(product)
     if primary_type and primary_type not in _ROUTE_PROBIOTIC_VAGUE_TAXONOMY and not name_signal:
         if not (high_cfu and non_probiotic_panel <= _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX):
             return False
+
+    if name_signal and non_probiotic_panel > 0 and _route_has_non_probiotic_hero(product, name_text):
+        return False
 
     if strain_count >= non_probiotic_panel:
         return True
@@ -1968,9 +1977,7 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     primary_type = _primary_type(product)
     name_text = _route_name_text(product)
 
-    if primary_type == "probiotic" or (
-        primary_type != "greens_powder" and _route_is_probiotic_class(product, name_text)
-    ):
+    if primary_type != "greens_powder" and _route_is_probiotic_class(product, name_text):
         return "probiotic", "profile_content:probiotic", ["probiotic_identity_or_cfu"]
 
     if _ROUTE_PRENATAL_KEYWORDS.search(_route_product_label_text(product)):

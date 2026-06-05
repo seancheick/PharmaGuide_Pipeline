@@ -609,6 +609,30 @@ def test_BUG_15_real_probiotic_panel_still_routes_probiotic():
     assert result["primary_type"] == "probiotic"
 
 
+def test_BUG_15_casein_decapeptide_does_not_match_l_casei():
+    """Casein/milk peptides are not probiotic strains.
+
+    The probiotic matcher must not substring-match the species token "casei"
+    inside "casein"; otherwise Lactium/casein decapeptide products route through
+    probiotic and get scored against CFU/strain rules.
+    """
+    product = {
+        "product_name": "Bioactive Milk Peptides",
+        "fullName": "Bioactive Milk Peptides",
+        "ingredient_quality_data": {"ingredients": [
+            {
+                "name": "Casein Decapeptide",
+                "canonical_id": "casein_hydrolysate",
+                "category": "amino_acid",
+                "quantity": 150.0,
+                "unit": "mg",
+            },
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "probiotic"
+
+
 # ============================================================================
 # BUG-16: MCT Oil with incidental DHA misclassifies as omega_3
 # ============================================================================

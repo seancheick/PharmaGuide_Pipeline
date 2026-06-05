@@ -3,8 +3,7 @@
 Priority order (post-taxonomy refactor, 2026-05-20):
 
   1. probiotic              → probiotic
-     - taxonomy primary_type == "probiotic"
-     - OR probiotic_data has product-level CFU + named strain identity
+     - probiotic_data has product-level CFU + named strain identity
      - OR probiotic_data has named strain identity + explicit probiotic name
   2. prenatal multi intent  → multi_or_prenatal
      - product-label prenatal wording plus a true multi/B-complex taxonomy
@@ -386,7 +385,30 @@ def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
             continue
         tax = row.get("raw_taxonomy") if isinstance(row.get("raw_taxonomy"), dict) else {}
         category = str(tax.get("category") or row.get("category") or "").strip().lower()
-        if category == "probiotic":
+        if category in {"probiotic", "probiotics", "bacteria"}:
+            continue
+        canonical = str(row.get("canonical_id") or "").strip().lower()
+        if canonical in {"fiber", "prebiotics"}:
+            continue
+        text = " ".join(
+            str(row.get(key) or "")
+            for key in ("name", "standardName", "standard_name", "raw_source_text", "category")
+        ).lower()
+        if any(
+            term in text
+            for term in (
+                "probiotic",
+                "lactobacillus",
+                "bifidobacterium",
+                "streptococcus",
+                "saccharomyces",
+                "bacillus",
+                "limosilactobacillus",
+                "cfu",
+            )
+        ):
+            continue
+        if any(term in text for term in ("dietary fiber", "prebiotic", "inulin", "fructooligosaccharide")):
             continue
         count += 1
     return count
@@ -436,6 +458,7 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         _PROBIOTIC_HIGH_CFU_BILLIONS * 1_000_000_000
     )
     name_signal = bool(_PROBIOTIC_NAME_RE.search(name_text or ""))
+    primary_type = _read_primary_type(product)
 
     if not is_product or strain_count <= 0:
         return False
@@ -455,6 +478,14 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     ):
         return True
 
+    if (
+        primary_type == "probiotic"
+        and non_probiotic_panel == 0
+        and strain_count >= 1
+        and not _has_non_probiotic_hero(product, name_text)
+    ):
+        return True
+
     # Otherwise require CFU-or-name evidence (guards incidental strains in
     # whole-food / botanical products from being promoted), plus the role-aware
     # strain-dominance gate: an adjunct strain must not hijack a product whose
@@ -462,7 +493,6 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     if not (has_cfu or name_signal):
         return False
 
-    primary_type = _read_primary_type(product)
     if primary_type and primary_type not in _PROBIOTIC_VAGUE_TAXONOMY and not name_signal:
         # Specific non-probiotic taxonomy (multivitamin, single vitamin/mineral,
         # fiber, immune, etc.) should not be hijacked by tiny probiotic adjuncts.
@@ -470,6 +500,9 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         # with a small adjunct panel, e.g. immune probiotic + vitamin C/zinc.
         if not (high_cfu and non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX):
             return False
+
+    if name_signal and non_probiotic_panel > 0 and _has_non_probiotic_hero(product, name_text):
+        return False
 
     if strain_count >= non_probiotic_panel:
         return True
@@ -734,14 +767,12 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
         for k in ("product_name", "fullName", "brand_name", "bundleName")
     )
 
-    # Priority 1: probiotic. Taxonomy is the scoring contract, with a
-    # probiotic_data fallback for artifacts where taxonomy under-classifies a
-    # real probiotic panel. Explicit greens taxonomy is not under-classified:
-    # greens/superfood products can carry probiotic strains without becoming
+    # Priority 1: probiotic. Taxonomy can be stale or polluted by upstream
+    # strain extraction, so the final route requires validated probiotic content
+    # evidence. Explicit greens taxonomy is not under-classified: greens/
+    # superfood products can carry probiotic strains without becoming
     # probiotic-module products.
-    if primary_type == "probiotic" or (
-        primary_type != "greens_powder" and _is_probiotic_class(product, name_text)
-    ):
+    if primary_type != "greens_powder" and _is_probiotic_class(product, name_text):
         return "probiotic"
 
     # Priority 2: prenatal multi intent -> multi_or_prenatal for products like
