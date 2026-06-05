@@ -111,6 +111,27 @@ FILE_CONFIGS = [
         "sources_field": "references",
         "source_format": "pmid_list",
     },
+    {
+        # Probiotic strain database: citations live inside
+        # cfu_thresholds.evidence.{pmid,secondary_pmid,additional_pmids}.
+        # Some entries are formula-backed (for example Seed DS-01), so include
+        # notable_studies/key_benefits in topic extraction instead of checking
+        # only the exact strain code.
+        "file": "clinically_relevant_strains.json",
+        "array_key": "clinically_relevant_strains",
+        "id_field": "id",
+        "topic_extractor": lambda e: (
+            [
+                e.get("standard_name", ""),
+                e.get("notable_studies", ""),
+                (e.get("cfu_thresholds") or {}).get("indication_primary", ""),
+                ((e.get("cfu_thresholds") or {}).get("evidence") or {}).get("source_short", ""),
+            ]
+            + list(e.get("aliases") or [])
+            + list(e.get("key_benefits") or [])
+        ),
+        "source_format": "nested_cfu_evidence_pmids",
+    },
 ]
 
 
@@ -285,6 +306,22 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
     source_format = config.get("source_format", "dict_list")
 
     sources = entry.get(sources_field, [])
+    if source_format == "nested_cfu_evidence_pmids":
+        evidence = ((entry.get("cfu_thresholds") or {}).get("evidence") or {})
+        candidates = [
+            evidence.get("pmid"),
+            evidence.get("secondary_pmid"),
+            *list(evidence.get("additional_pmids") or []),
+        ]
+        for candidate in candidates:
+            pmid = re.sub(r"[^0-9]", "", str(candidate or ""))
+            if pmid:
+                results.append({
+                    "pmid": pmid,
+                    "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+                })
+        return results
+
     if not isinstance(sources, list):
         return results
 

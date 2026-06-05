@@ -2439,6 +2439,7 @@ class SupplementEnricherV3:
             r'atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|'
             r'ncfm|\blgg\b|\bgg\b|\bk12\b|\bm18\b|'
             r'bb-?12|bb536|hn0?01|hn019|bi-?07|bl-?04|uab[a-z]*-?\d+|de111|299v|'
+            r'sd-[a-z0-9]+(?:-[a-z0-9]+){1,3}|'
             r'gbi-?30|mtcc\s*5856|mtcc-?5856|is-?2|lp299v'
             r')',
             re.IGNORECASE,

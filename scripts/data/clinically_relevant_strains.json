@@ -3,11 +3,11 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-05-22",
-    "total_entries": 44,
+    "last_updated": "2026-06-05",
+    "total_entries": 48,
     "data_source": null,
     "version": "2.2.6",
-    "signoff_status_note": "42/44 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). All 44 PMIDs API-verified. Zero hallucinated citations.",
+    "signoff_status_note": "42/48 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). 2026-06-05 Seed DS-01 exact-code batch added 4 formula-backed SD-* strains pending Dr Pham review; PMIDs 40944126 and 41750436 are DS-01 product/formula RCTs, not isolated strain-specific trials.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
   },
@@ -2640,6 +2640,254 @@
         "dr_pham_signoff": false,
         "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-05-22 as Phase 2 of the 2026-05-22 unmapped-resolution batch (BS-01 / BS01 / BS-1 / 'B. lactis BS01' variants surfaced in Life Extension probiotic products)."
       }
+    },
+    {
+      "id": "STRAIN_BREVE_SD_BR3_IT",
+      "standard_name": "Bifidobacterium breve SD-BR3-IT",
+      "aliases": [
+        "B. breve SD-BR3-IT",
+        "Bifidobacterium breve SD BR3 IT",
+        "SD-BR3-IT",
+        "SD BR3 IT"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "gut health",
+        "microbiome diversity",
+        "immune support"
+      ],
+      "notable_studies": "Seed DS-01 formula-level RCTs evaluated a 24-strain multi-species synbiotic containing this labeled strain. Evidence is formula-backed, not isolated strain-specific.",
+      "cfu_thresholds": {
+        "indication_primary": "gut microbiome diversity and gut barrier support",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 10000000000
+          },
+          "good": {
+            "lower_inclusive": 10000000000,
+            "upper_exclusive": 50000000000
+          },
+          "excellent": {
+            "lower_inclusive": 50000000000
+          }
+        },
+        "evidence": {
+          "type": "product_formula_rct",
+          "source_short": "Seed DS-01 RCTs: healthy adults (PMID 40944126) and post-antibiotic recovery (PMID 41750436)",
+          "pmid": "40944126",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
+          "secondary_pmid": "41750436",
+          "secondary_url": "https://pubmed.ncbi.nlm.nih.gov/41750436/",
+          "verified_date": "2026-06-05",
+          "evidence_strength": "medium",
+          "clinical_support_level": "moderate",
+          "clinical_validation": {
+            "q1_strain_explicit": "FORMULA_LEVEL",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "YES",
+            "q4_dose_sample": "DS-01 53.6 billion AFU multi-species probiotic plus 400 mg Indian pomegranate extract for 91 days.",
+            "score_yes_count": 3,
+            "validated_by": "agent:codex",
+            "validated_date": "2026-06-05",
+            "framework": "4-question clinical validation; formula-level evidence cannot be upgraded to isolated strain-specific high support"
+          }
+        },
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). DS-01 PMIDs support the complete formula, not this strain alone; keep support moderate until clinician review or isolated strain-specific human evidence is added.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-06-05 to support exact Seed DS-01 label identity without mapping to unrelated representative strains."
+      }
+    },
+    {
+      "id": "STRAIN_SALIVARIUS_SD_LS1_IT",
+      "standard_name": "Ligilactobacillus salivarius SD-LS1-IT",
+      "aliases": [
+        "L. salivarius SD-LS1-IT",
+        "Lactobacillus salivarius SD-LS1-IT",
+        "Ligilactobacillus salivarius SD LS1 IT",
+        "SD-LS1-IT",
+        "SD LS1 IT"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "gut health",
+        "microbiome diversity",
+        "skin health"
+      ],
+      "notable_studies": "Seed DS-01 formula-level RCTs evaluated a 24-strain multi-species synbiotic containing this labeled strain. Evidence is formula-backed, not isolated strain-specific.",
+      "cfu_thresholds": {
+        "indication_primary": "gut microbiome diversity and gut barrier support",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 10000000000
+          },
+          "good": {
+            "lower_inclusive": 10000000000,
+            "upper_exclusive": 50000000000
+          },
+          "excellent": {
+            "lower_inclusive": 50000000000
+          }
+        },
+        "evidence": {
+          "type": "product_formula_rct",
+          "source_short": "Seed DS-01 RCTs: healthy adults (PMID 40944126) and post-antibiotic recovery (PMID 41750436)",
+          "pmid": "40944126",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
+          "secondary_pmid": "41750436",
+          "secondary_url": "https://pubmed.ncbi.nlm.nih.gov/41750436/",
+          "verified_date": "2026-06-05",
+          "evidence_strength": "medium",
+          "clinical_support_level": "moderate",
+          "clinical_validation": {
+            "q1_strain_explicit": "FORMULA_LEVEL",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "YES",
+            "q4_dose_sample": "DS-01 53.6 billion AFU multi-species probiotic plus 400 mg Indian pomegranate extract for 91 days.",
+            "score_yes_count": 3,
+            "validated_by": "agent:codex",
+            "validated_date": "2026-06-05",
+            "framework": "4-question clinical validation; formula-level evidence cannot be upgraded to isolated strain-specific high support"
+          }
+        },
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). DS-01 PMIDs support the complete formula, not this strain alone; keep support moderate until clinician review or isolated strain-specific human evidence is added.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-06-05 to support exact Seed DS-01 label identity without mapping to unrelated representative strains."
+      }
+    },
+    {
+      "id": "STRAIN_PLANTARUM_SD_LP1_IT",
+      "standard_name": "Lactiplantibacillus plantarum SD-LP1-IT",
+      "aliases": [
+        "L. plantarum SD-LP1-IT",
+        "Lactobacillus plantarum SD-LP1-IT",
+        "Lactiplantibacillus plantarum SD LP1 IT",
+        "SD-LP1-IT",
+        "SD LP1 IT"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "gut health",
+        "microbiome diversity",
+        "immune support"
+      ],
+      "notable_studies": "Seed DS-01 formula-level RCTs evaluated a 24-strain multi-species synbiotic containing this labeled strain. Evidence is formula-backed, not isolated strain-specific.",
+      "cfu_thresholds": {
+        "indication_primary": "gut microbiome diversity and gut barrier support",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 10000000000
+          },
+          "good": {
+            "lower_inclusive": 10000000000,
+            "upper_exclusive": 50000000000
+          },
+          "excellent": {
+            "lower_inclusive": 50000000000
+          }
+        },
+        "evidence": {
+          "type": "product_formula_rct",
+          "source_short": "Seed DS-01 RCTs: healthy adults (PMID 40944126) and post-antibiotic recovery (PMID 41750436)",
+          "pmid": "40944126",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
+          "secondary_pmid": "41750436",
+          "secondary_url": "https://pubmed.ncbi.nlm.nih.gov/41750436/",
+          "verified_date": "2026-06-05",
+          "evidence_strength": "medium",
+          "clinical_support_level": "moderate",
+          "clinical_validation": {
+            "q1_strain_explicit": "FORMULA_LEVEL",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "YES",
+            "q4_dose_sample": "DS-01 53.6 billion AFU multi-species probiotic plus 400 mg Indian pomegranate extract for 91 days.",
+            "score_yes_count": 3,
+            "validated_by": "agent:codex",
+            "validated_date": "2026-06-05",
+            "framework": "4-question clinical validation; formula-level evidence cannot be upgraded to isolated strain-specific high support"
+          }
+        },
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). DS-01 PMIDs support the complete formula, not this strain alone; keep support moderate until clinician review or isolated strain-specific human evidence is added.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-06-05 to support exact Seed DS-01 label identity without mapping to unrelated representative strains."
+      }
+    },
+    {
+      "id": "STRAIN_PLANTARUM_SD_LPLDL_UK",
+      "standard_name": "Lactiplantibacillus plantarum SD-LPLDL-UK",
+      "aliases": [
+        "L. plantarum SD-LPLDL-UK",
+        "Lactobacillus plantarum SD-LPLDL-UK",
+        "Lactiplantibacillus plantarum SD LPLDL UK",
+        "LPLDL",
+        "SD-LPLDL-UK",
+        "SD LPLDL UK"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "gut health",
+        "microbiome diversity",
+        "cardiometabolic support"
+      ],
+      "notable_studies": "Seed DS-01 formula-level RCTs evaluated a 24-strain multi-species synbiotic containing this labeled strain. Evidence is formula-backed, not isolated strain-specific.",
+      "cfu_thresholds": {
+        "indication_primary": "gut microbiome diversity and gut barrier support",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 10000000000
+          },
+          "good": {
+            "lower_inclusive": 10000000000,
+            "upper_exclusive": 50000000000
+          },
+          "excellent": {
+            "lower_inclusive": 50000000000
+          }
+        },
+        "evidence": {
+          "type": "product_formula_rct",
+          "source_short": "Seed DS-01 RCTs: healthy adults (PMID 40944126) and post-antibiotic recovery (PMID 41750436)",
+          "pmid": "40944126",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40944126/",
+          "secondary_pmid": "41750436",
+          "secondary_url": "https://pubmed.ncbi.nlm.nih.gov/41750436/",
+          "verified_date": "2026-06-05",
+          "evidence_strength": "medium",
+          "clinical_support_level": "moderate",
+          "clinical_validation": {
+            "q1_strain_explicit": "FORMULA_LEVEL",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "YES",
+            "q4_dose_sample": "DS-01 53.6 billion AFU multi-species probiotic plus 400 mg Indian pomegranate extract for 91 days.",
+            "score_yes_count": 3,
+            "validated_by": "agent:codex",
+            "validated_date": "2026-06-05",
+            "framework": "4-question clinical validation; formula-level evidence cannot be upgraded to isolated strain-specific high support"
+          }
+        },
+        "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). DS-01 PMIDs support the complete formula, not this strain alone; keep support moderate until clinician review or isolated strain-specific human evidence is added. Heart-health positioning for LPLDL remains label-level unless separate strain-specific human lipid evidence is added.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending Dr Pham review. Entry added 2026-06-05 to support exact Seed DS-01 label identity without mapping to unrelated representative strains."
+      }
     }
   ],
   "prebiotics": {
@@ -2689,6 +2937,16 @@
         "aliases": [
           "pectin",
           "fruit pectin"
+        ]
+      },
+      {
+        "standard_name": "Pomegranate Polyphenol Extract",
+        "aliases": [
+          "Indian pomegranate extract",
+          "pomegranate extract",
+          "pomegranate fruit extract",
+          "Punica granatum extract",
+          "polyphenol-based prebiotic"
         ]
       },
       {

@@ -136,6 +136,104 @@ def test_species_only_probiotic_rows_do_not_get_strain_specific_clinical_ids(enr
     assert "STRAIN_LACTIS_BL04" not in ids
 
 
+def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enricher) -> None:
+    """Seed DS-01 style labels carry exact SD-* strain codes in nested rows.
+
+    Those codes must resolve as exact identities, not as species-level
+    representative strains, and not disappear because the strain-code parser
+    only knows legacy IDs like LGG/BB-12.
+    """
+    product = _probiotic_product(
+        extra_active=[
+            {
+                "name": "Indian pomegranate extract",
+                "standardName": "Indian Pomegranate Extract",
+                "category": "botanical",
+                "quantity": 400,
+                "unit": "mg",
+                "nestedIngredients": [],
+                "harvestMethod": "",
+                "notes": "polyphenol-based prebiotic",
+            }
+        ],
+        nested_in_blend=[
+            {
+                "name": "Bifidobacterium breve",
+                "standardName": "Bifidobacterium breve",
+                "ingredientGroup": "SD-BR3-IT",
+                "category": "probiotic",
+                "notes": "strain SD-BR3-IT",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Ligilactobacillus salivarius",
+                "standardName": "Ligilactobacillus salivarius",
+                "ingredientGroup": "SD-LS1-IT",
+                "category": "probiotic",
+                "notes": "strain SD-LS1-IT",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Lactiplantibacillus plantarum",
+                "standardName": "Lactiplantibacillus plantarum",
+                "ingredientGroup": "SD-LP1-IT",
+                "category": "probiotic",
+                "notes": "strain SD-LP1-IT",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Lactiplantibacillus plantarum",
+                "standardName": "Lactiplantibacillus plantarum",
+                "ingredientGroup": "SD-LPLDL-UK",
+                "category": "probiotic",
+                "notes": "strain SD-LPLDL-UK",
+                "nestedIngredients": [],
+            },
+        ],
+    )
+
+    pd = enricher._collect_probiotic_data(product)
+    ids = {entry["clinical_id"] for entry in pd["clinical_strains"]}
+
+    assert {
+        "STRAIN_BREVE_SD_BR3_IT",
+        "STRAIN_SALIVARIUS_SD_LS1_IT",
+        "STRAIN_PLANTARUM_SD_LP1_IT",
+        "STRAIN_PLANTARUM_SD_LPLDL_UK",
+    } <= ids
+    assert "STRAIN_PLANTARUM_299V" not in ids
+    assert "STRAIN_RHAMNOSUS_HN001" not in ids
+    assert pd["prebiotic_present"] is True
+    assert "pomegranate" in pd["prebiotic_name"].lower()
+
+
+def test_clinically_relevant_strains_are_in_content_verifier_config() -> None:
+    sys.path.insert(0, str(SCRIPTS_ROOT / "api_audit"))
+    import verify_all_citations_content as vac
+
+    by_file = {config["file"]: config for config in vac.FILE_CONFIGS}
+    config = by_file.get("clinically_relevant_strains.json")
+
+    assert config is not None
+    assert config["source_format"] == "nested_cfu_evidence_pmids"
+
+    refs = vac.extract_pmids_from_entry(
+        {
+            "id": "TEST",
+            "cfu_thresholds": {
+                "evidence": {
+                    "pmid": "40944126",
+                    "secondary_pmid": "41750436",
+                    "additional_pmids": ["26756877"],
+                }
+            },
+        },
+        config,
+    )
+
+    assert [ref["pmid"] for ref in refs] == ["40944126", "41750436", "26756877"]
+
+
 # --- Anchor: the GoL prenatal pattern that triggered P0.5 -----------------
 
 
