@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 177,
+    "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -406,7 +406,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1061163"
+      "cui": "C1061163",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Astaxanthin (Haematococcus pluvialis)",
@@ -553,7 +556,10 @@
       "notes": "Cognitive enhancement botanical standardized for bacosides. Range is 20-55% bacosides; clinical studies commonly use 300-450mg at 50% standardization.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C1040526"
+      "cui": "C1040526",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Banaba Leaf",
@@ -2137,7 +2143,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0697080"
+      "cui": "C0697080",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Echinacea Extract",
@@ -2458,7 +2467,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0936126"
+      "cui": "C0936126",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Feverfew",
@@ -2757,7 +2769,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330206"
+      "cui": "C0330206",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Ginkgolides",
@@ -3127,7 +3142,10 @@
           }
         ]
       },
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Guarana",
@@ -3243,7 +3261,10 @@
       "notes": "Cardiovascular herb standardized for 1.8% vitexin and 18.75% oligomeric procyanidins.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C0600416"
+      "cui": "C0600416",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "He Shou Wu",
@@ -3341,7 +3362,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1483721"
+      "cui": "C1483721",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Hops",
@@ -3756,7 +3780,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1095918"
+      "cui": "C1095918",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Magnolia Bark",
@@ -3968,7 +3995,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331428"
+      "cui": "C0331428",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Mistletoe",
@@ -4344,7 +4374,10 @@
       "external_ids": {
         "unii": "CUQ3A77YXI"
       },
-      "cui": "C1119918"
+      "cui": "C1119918",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Passionflower",
@@ -5117,7 +5150,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C4082853"
+      "cui": "C4082853",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Schisandra",
@@ -5988,7 +6024,10 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0042281"
+      "cui": "C0042281",
+      "standardization_basis": "marker_percent",
+      "bonus_eligible": true,
+      "_basis_backfill": "v3.7.0: basis=marker_percent inferred from existing marker % threshold + markers (Phase 5 contract completion)."
     },
     {
       "standard_name": "Wellmune",
@@ -6139,6 +6178,117 @@
       "min_threshold": 1,
       "external_ids": {},
       "cui": "C3256110"
+    },
+    {
+      "standard_name": "Horse Chestnut Seed Extract",
+      "id": "horse_chestnut",
+      "aliases": [
+        "horse chestnut",
+        "aesculus hippocastanum",
+        "horse chestnut seed extract",
+        "horse chestnut extract",
+        "aescin",
+        "escin",
+        "standardized horse chestnut"
+      ],
+      "markers": [
+        "aescin",
+        "escin",
+        "triterpene glycosides"
+      ],
+      "marker_compounds": [
+        "aescin (escin)",
+        "alpha-aescin",
+        "beta-aescin",
+        "triterpene glycosides"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "pharmacopeial_marker",
+      "min_threshold": 16,
+      "standardization_unit": "percent",
+      "threshold_source": "Commission E monograph (Hippocastani semen): extract standardized to 16-20% triterpene glycosides calc. as aescin; 100 mg aescin/day for chronic venous insufficiency.",
+      "bonus_rationale": "Bonus-eligible when the label declares aescin/escin standardization (16-20% triterpene glycosides) or a named branded standardized horse-chestnut extract. Identity lives in botanical_ingredients.horse_chestnut_seed.",
+      "sources": [
+        "Commission E / ESCOP Hippocastani semen monograph (16-20% aescin)",
+        "Pittler & Ernst, horse chestnut seed extract for CVI (Cochrane) \u2014 PMC7144685"
+      ],
+      "category": "seed_fruit",
+      "priority": "medium",
+      "last_updated": "2026-06-04",
+      "notes": "Aesculus hippocastanum (Hippocastanaceae) seed. Standardized to triterpene glycosides as aescin (16-20%). Added v3.7.0 standardized-botanical Phase 5 (was MISSING). CUI/UNII deferred to a verified identifier sweep."
+    },
+    {
+      "standard_name": "American Ginseng",
+      "id": "american_ginseng_std",
+      "aliases": [
+        "american ginseng",
+        "panax quinquefolius",
+        "panax quinquefolium",
+        "american ginseng extract",
+        "wisconsin ginseng",
+        "xi yang shen"
+      ],
+      "markers": [
+        "ginsenosides",
+        "total ginsenosides",
+        "Rb1",
+        "Re"
+      ],
+      "marker_compounds": [
+        "total ginsenosides (Rg1+Re+Rb1+Rc+Rb2+Rd)"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "pharmacopeial_marker",
+      "min_threshold": 10,
+      "standardization_unit": "percent",
+      "threshold_source": "USP-NF American Ginseng Root and Rhizome Dry Extract: NLT 10.0% total ginsenosides (Rg1+Re+Rb1+Rc+Rb2+Rd), anhydrous. NOTE: higher floor than Asian ginseng (3.0%); species are not interchangeable (Rf absent in P. quinquefolius).",
+      "bonus_rationale": "Distinct species from Panax ginseng (Asian). USP requires NLT 10% total ginsenosides for American ginseng vs 3% Asian. Bonus-eligible on declared ginsenoside % or named standardized American-ginseng extract.",
+      "sources": [
+        "USP-NF American Ginseng Root and Rhizome Dry Extract (NLT 10.0% total ginsenosides)",
+        "USP ICSB summary on ginseng species differentiation (egrove.olemiss.edu/icsb/2023)"
+      ],
+      "category": "herb_root_bark",
+      "priority": "medium",
+      "last_updated": "2026-06-04",
+      "notes": "Panax quinquefolius (Araliaceae) root. Separate species from Asian Panax ginseng with a higher USP ginsenoside floor (10% vs 3%). Added v3.7.0 Phase 5 (was MISSING; identity exists in botanical_ingredients.american_ginseng). CUI/UNII deferred to verified sweep."
+    },
+    {
+      "standard_name": "Garlic",
+      "id": "garlic_std",
+      "aliases": [
+        "garlic",
+        "allium sativum",
+        "garlic extract",
+        "aged garlic extract",
+        "garlic bulb",
+        "standardized garlic",
+        "allicin"
+      ],
+      "markers": [
+        "alliin",
+        "allicin",
+        "allicin potential"
+      ],
+      "marker_compounds": [
+        "alliin",
+        "allicin (allicin potential)",
+        "gamma-glutamyl-S-allyl-L-cysteine"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "pharmacopeial_marker",
+      "min_threshold": 0.3,
+      "standardization_unit": "percent",
+      "threshold_source": "USP Powdered Garlic: NLT 0.3% alliin (dry wt). EMA Allium sativum bulbus: 4-12 mg alliin (approx 2-5 mg allicin). Alliin is the stable pharmacopeial assay marker; allicin potential is derived (1 mg alliin approx 0.45 mg allicin).",
+      "bonus_rationale": "Bonus-eligible when the label declares alliin % or allicin potential. Alliin is the USP assay marker; allicin yield is the derived label claim. Identity lives in botanical_ingredients.garlic_bulb.",
+      "sources": [
+        "USP Powdered Garlic monograph (NLT 0.3% alliin)",
+        "EMA Assessment report Allium sativum L., bulbus (4-12 mg alliin)",
+        "Linus Pauling Institute garlic review"
+      ],
+      "category": "seed_fruit",
+      "priority": "low",
+      "last_updated": "2026-06-04",
+      "notes": "Allium sativum (Amaryllidaceae) bulb. Standardized to alliin (USP NLT 0.3%) / allicin potential. Added v3.7.0 Phase 5 (was MISSING; identity in botanical_ingredients.garlic_bulb). CUI/UNII deferred to verified sweep."
     }
   ]
 }

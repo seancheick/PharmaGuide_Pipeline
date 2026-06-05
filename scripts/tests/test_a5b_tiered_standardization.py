@@ -107,3 +107,29 @@ def test_non_percent_thresholds_declare_unit(sbot, entry_id):
             f"{entry_id} has a non-percent threshold ({e.get('min_threshold')}) "
             f"and must declare its real standardization_unit."
         )
+
+
+# --------------------------------------------------------------------------- #
+# Phase 5 — newly added classic standardized botanicals (source-verified)
+# --------------------------------------------------------------------------- #
+_PHASE5_ADDED = [
+    ("horse_chestnut", "aescin", 16),
+    ("american_ginseng_std", "ginsenosides", 10),
+    ("garlic_std", "alliin", 0.3),
+]
+
+
+@pytest.mark.parametrize("entry_id,marker,threshold", _PHASE5_ADDED)
+def test_phase5_added_botanicals_present_and_eligible(sbot, entry_id, marker, threshold):
+    """Classic standardized botanicals added in v3.7.0 Phase 5 must be present,
+    bonus_eligible, carry a pharmacopeial basis, a percent unit, the verified
+    threshold, and a threshold_source citation (no fabricated identifiers)."""
+    assert entry_id in sbot, f"{entry_id} must be present (was missing)."
+    e = sbot[entry_id]
+    assert e.get("bonus_eligible") is True
+    assert e.get("standardization_basis") == "pharmacopeial_marker"
+    assert (e.get("standardization_unit") or "").lower() == "percent"
+    assert e.get("min_threshold") == threshold
+    assert e.get("threshold_source"), f"{entry_id} must cite a threshold_source."
+    hay = " ".join(e.get("markers", []) + e.get("marker_compounds", [])).lower()
+    assert marker in hay, f"{entry_id} must list its standardization marker '{marker}'."
