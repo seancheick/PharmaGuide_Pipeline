@@ -14,9 +14,9 @@ Priority order (post-taxonomy refactor, 2026-05-20):
   3. multivitamin / b-complex → multi_or_prenatal
      - taxonomy primary_type in {multivitamin, b_complex}
   4. sports                 → sports
-     - taxonomy primary_type == "pre_workout"
-     - OR sports-protein identity (not protein taxonomy alone)
+     - sports-protein identity (not protein taxonomy alone)
      - OR sports-active canonical panel + explicit sports label intent
+     - OR native sports_primary_dose evidence
   5. omega_3                → omega
      - taxonomy primary_type == "omega_3"
      - OR EPA/DHA canonical in ingredient panel (positive quantity)
@@ -629,10 +629,7 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     lactoferrin) that are not sports products and must remain generic.
     """
     primary_type = _read_primary_type(product)
-    if _SPORTS_PREWORKOUT_RE.search(name_text or ""):
-        return True
-    if primary_type == "pre_workout":
-        return True
+    sports_intent = primary_type == "pre_workout" or bool(_SPORTS_PREWORKOUT_RE.search(name_text or ""))
     if _has_sports_primary_dose_evidence(product):
         return True
 
@@ -656,7 +653,7 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     if canonicals & _SPORTS_SINGLE_CANONICALS:
         if _SPORTS_NAME_EXCLUSION_RE.search(lowered):
             return False
-        return bool(_SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered))
+        return sports_intent or bool(_SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered))
 
     return False
 
@@ -672,7 +669,6 @@ _TAXONOMY_TO_MODULE = {
     "multivitamin": "multi_or_prenatal",
     "b_complex": "multi_or_prenatal",  # B-complex is a multi-vitamin variant
     "omega_3": "omega",
-    "pre_workout": "sports",
     # Everything else routes to generic — listed explicitly so future
     # taxonomy types are caught by the unknown-key fallthrough below:
     "single_vitamin": "generic",

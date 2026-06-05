@@ -468,6 +468,17 @@ def test_enricher_native_classification_matches_compat_builder():
 
 
 def test_builder_prefers_valid_embedded_native_classification():
+    product = _product("Fish Oil EPA DHA", [_row("epa", "EPA", 500, "mg")], primary_type="omega_3")
+    native = build_scoring_classification(product, classification_origin="native_enrichment")
+    product["product_scoring_classification"] = native
+
+    contract = build_scoring_classification(product)
+
+    assert contract["classification_origin"] == "native_enrichment"
+    assert contract["route_module"] == "omega"
+
+
+def test_builder_ignores_embedded_native_classification_when_route_drifted():
     product = _product("Zinc", [_row("zinc", "Zinc", 15, "mg")], primary_type="single_mineral")
     native = build_scoring_classification(
         _product("Fish Oil EPA DHA", [_row("epa", "EPA", 500, "mg")], primary_type="omega_3"),
@@ -477,8 +488,8 @@ def test_builder_prefers_valid_embedded_native_classification():
 
     contract = build_scoring_classification(product)
 
-    assert contract["classification_origin"] == "native_enrichment"
-    assert contract["route_module"] == "omega"
+    assert contract["classification_origin"] == "compatibility_derived"
+    assert contract["route_module"] == "generic"
 
 
 def test_builder_falls_back_when_embedded_native_classification_is_stale_or_invalid():

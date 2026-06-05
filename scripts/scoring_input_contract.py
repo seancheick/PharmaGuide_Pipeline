@@ -87,7 +87,7 @@ _MASS_UNITS = {
     "g", "gram", "grams", "gram(s)",
     "mcg", "ug", "µg", "μg", "microgram", "micrograms", "microgram(s)",
 }
-_SPORTS_PRIMARY_TYPES = {"protein_powder", "pre_workout", "sports"}
+_SPORTS_PRIMARY_TYPES = {"protein_powder", "sports"}
 _PROTEIN_CANONICALS = {"protein", "whey_protein", "casein", "pea_protein", "rice_protein", "soy_protein"}
 _SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
     "creatine_monohydrate",
@@ -1631,6 +1631,12 @@ def _embedded_native_scoring_classification(product: Dict[str, Any]) -> Optional
         return None
     if not isinstance(embedded.get("profile_eligibility"), dict):
         return None
+    try:
+        derived_route, _, _ = _classify_route_module(product)
+    except Exception:
+        derived_route = None
+    if derived_route in SCORING_ROUTE_MODULES and route != derived_route:
+        return None
 
     return deepcopy(embedded)
 
@@ -1917,10 +1923,7 @@ def _route_has_sports_primary_dose_evidence(product: Dict[str, Any]) -> bool:
 
 def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     primary_type = _primary_type(product)
-    if _ROUTE_SPORTS_PREWORKOUT_RE.search(name_text or ""):
-        return True
-    if primary_type == "pre_workout":
-        return True
+    sports_intent = primary_type == "pre_workout" or bool(_ROUTE_SPORTS_PREWORKOUT_RE.search(name_text or ""))
     if _route_has_sports_primary_dose_evidence(product):
         return True
 
@@ -1940,7 +1943,7 @@ def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     if canonicals & _ROUTE_SPORTS_SINGLE_CANONICALS:
         if _ROUTE_SPORTS_NAME_EXCLUSION_RE.search(name_text or ""):
             return False
-        return bool(_ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or ""))
+        return sports_intent or bool(_ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or ""))
     return False
 
 

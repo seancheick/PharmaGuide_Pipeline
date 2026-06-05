@@ -12,6 +12,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
+from scoring_input_contract import SCORING_CLASSIFICATION_SCHEMA_VERSION
 from scoring_v4.router import class_for_product
 
 
@@ -93,6 +94,62 @@ def test_pre_workout_name_overrides_b_complex_taxonomy() -> None:
     )
 
     assert class_for_product(product) == "sports"
+
+
+def test_pre_workout_without_sports_dose_anchor_routes_generic() -> None:
+    """Pre-workout intent alone is not enough for sports dose scoring.
+
+    Products like Thorne Pre-Workout Elite can contain mapped performance
+    actives (Alpha-GPC, ATP, stimulant botanicals) but no creatine/protein/
+    BCAA/EAA/HMB/beta-alanine/citrulline anchor. Those should still score,
+    but through generic + transparency/safety policy rather than becoming
+    NOT_SCORED in the sports completeness gate.
+    """
+    product = _product(
+        primary_type="pre_workout",
+        name="Pre-Workout Elite Citrus Berry Flavored",
+        rows=[
+            _row("alpha_gpc", 600, "mg"),
+            _row("adenosine_triphosphate", 450, "mg"),
+            _row("guayusa_leaf", 350, "mg"),
+            _row("mango_leaf_extract", 140, "mg"),
+        ],
+    )
+
+    assert class_for_product(product) == "generic"
+
+
+def test_stale_native_sports_classification_without_anchor_is_ignored() -> None:
+    """Native classification cannot pin an obsolete sports route.
+
+    Fresh enriched artifacts can carry a persisted native route. Compatibility
+    scoring must still reject that route when it no longer matches the current
+    derived contract; otherwise old pre-workout blobs stay NOT_SCORED until a
+    full re-enrich.
+    """
+    product = _product(
+        primary_type="pre_workout",
+        name="Pre-Workout Elite Citrus Berry Flavored",
+        rows=[
+            _row("alpha_gpc", 600, "mg"),
+            _row("adenosine_triphosphate", 450, "mg"),
+            _row("guayusa_leaf", 350, "mg"),
+            _row("mango_leaf_extract", 140, "mg"),
+        ],
+    )
+    product["product_scoring_classification"] = {
+        "classification_schema_version": SCORING_CLASSIFICATION_SCHEMA_VERSION,
+        "classification_origin": "native_enrichment",
+        "classification_failed": False,
+        "route_module": "sports",
+        "route_reason": "profile_content:sports",
+        "route_confidence": "high",
+        "route_evidence": ["sports_identity_or_dose", "scoring_rows_present"],
+        "ingredients": [],
+        "profile_eligibility": {},
+    }
+
+    assert class_for_product(product) == "generic"
 
 
 def test_whey_protein_powder_routes_to_sports() -> None:
