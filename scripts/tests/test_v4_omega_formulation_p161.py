@@ -180,6 +180,33 @@ def test_form_tier_ee_ethyl_ester_match() -> None:
     assert payload["metadata"]["form_detected"] == "ee"
 
 
+def test_form_tier_detected_from_label_text_statement() -> None:
+    """Nordic-style: the molecular form is disclosed in the label text /
+    statements ('All fish oils are in the triglyceride form'), NOT in the product
+    name or ingredient panel. Form detection must read those surfaces — otherwise
+    the gold-standard rTG/TG brands crater at form_tier=undefined (2)."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _epa_dha_product(name="Daily Omega")  # name carries no form keyword
+    product["labelText"] = {
+        "raw": "Wild caught. Pure. All fish oils are in the triglyceride form "
+               "and surpass the strictest international standards."
+    }
+    payload = score_formulation(product)
+    assert payload["metadata"]["form_detected"] == "tg"
+    assert payload["components"]["form_tier"] == 8.0
+
+
+def test_form_tier_detected_from_statements_notes() -> None:
+    """Form disclosed in structured statements[].notes (another real surface)."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _epa_dha_product(name="Omega-3")
+    product["statements"] = [{"type": "other", "notes": "Superior Triglyceride Form."}]
+    payload = score_formulation(product)
+    assert payload["metadata"]["form_detected"] == "tg"
+
+
 def test_form_tier_pl_krill_implies_phospholipid() -> None:
     """Krill omega-3 is naturally phospholipid-bound (phosphatidylcholine
     carrier). Per the rubric, 'krill' or 'krill oil' in the name maps to

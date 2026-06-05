@@ -141,6 +141,24 @@ def _gather_text_surfaces(product: Dict[str, Any]) -> List[str]:
             v = ing.get(ing_key)
             if v:
                 parts.append(str(v))
+
+    # Label text and structured statements are real form-disclosure surfaces:
+    # gold-standard brands (Nordic Naturals, etc.) state the molecular form there
+    # ("All fish oils are in the triglyceride form" / "Superior Triglyceride Form")
+    # rather than in the product name or ingredient panel. Each is appended as its
+    # OWN surface so the MCT-carrier guard still applies per-surface.
+    label_text = product.get("labelText")
+    if isinstance(label_text, dict):
+        raw = label_text.get("raw")
+        if raw:
+            parts.append(str(raw))
+    elif label_text:
+        parts.append(str(label_text))
+    for statement in product.get("statements") or []:
+        if isinstance(statement, dict):
+            note = statement.get("notes") or statement.get("text")
+            if note:
+                parts.append(str(note))
     return parts
 
 
