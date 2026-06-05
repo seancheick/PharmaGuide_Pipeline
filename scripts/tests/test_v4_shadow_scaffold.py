@@ -49,9 +49,43 @@ def test_router_probiotic_taxonomy_without_content_falls_back_generic() -> None:
     assert class_for_product(product) == "generic"
 
 
-def test_router_multivitamin_taxonomy() -> None:
+def _mv_panel_rows(canonicals: list[str]) -> list[dict]:
+    """Minimal scorable rows for a multi-nutrient panel (router reads via
+    get_scoring_ingredients)."""
+    return [
+        {
+            "canonical_id": cid, "name": cid, "quantity": 100, "unit": "mg",
+            "mapped": True, "source_section": "activeIngredients",
+            "cleaner_row_role": "active_scorable", "score_eligible_by_cleaner": True,
+            "dose_class": "therapeutic_mass", "role_classification": "active_scorable",
+            "scoreable_identity": True,
+        }
+        for cid in canonicals
+    ]
+
+
+def test_router_multivitamin_taxonomy_without_content_falls_back_generic() -> None:
+    """Taxonomy alone is not enough to enter the multi/prenatal module — mirrors
+    the probiotic content-validation precedent. A `multivitamin` taxonomy tag with
+    no disclosed multi-nutrient panel is a mis-tag and must route generic, not be
+    crushed by prenatal-panel coverage floors for nutrients it never contained."""
     from scoring_v4.router import class_for_product
     product = {"supplement_taxonomy": {"primary_type": "multivitamin"}}
+    assert class_for_product(product) == "generic"
+
+
+def test_router_multivitamin_taxonomy_with_panel_routes_multi() -> None:
+    """A real multivitamin (broad multi-nutrient panel) still routes multi."""
+    from scoring_v4.router import class_for_product
+    product = {
+        "supplement_taxonomy": {"primary_type": "multivitamin"},
+        "product_name": "Daily Foundation Formula",
+        "ingredient_quality_data": {
+            "ingredients_scorable": _mv_panel_rows(
+                ["vitamin_a", "vitamin_c", "vitamin_d", "zinc", "iron"]
+            )
+        },
+    }
     assert class_for_product(product) == "multi_or_prenatal"
 
 
@@ -66,14 +100,20 @@ def test_router_prenatal_dha_label_routes_to_omega_not_multi() -> None:
 
 
 def test_router_multivitamin_taxonomy_wins_over_legacy_noise() -> None:
-    """GoL Men's Multi style: taxonomy multivitamin routes to multi even
-    when legacy fields are noisy."""
+    """GoL Men's Multi style: a real multivitamin (broad panel) routes to multi
+    even when legacy fields are noisy. Content validation (the panel) is what
+    confirms the route — taxonomy + a genuine multi-nutrient panel together."""
     from scoring_v4.router import class_for_product
     product = {
         "supplement_type": {"type": "specialty"},
         "primary_category": "multivitamin",
         "supplement_taxonomy": {"primary_type": "multivitamin"},
         "product_name": "Men's Multi Organic Berry",
+        "ingredient_quality_data": {
+            "ingredients_scorable": _mv_panel_rows(
+                ["vitamin_a", "vitamin_c", "vitamin_d", "vitamin_b12_cobalamin", "zinc", "selenium"]
+            )
+        },
     }
     assert class_for_product(product) == "multi_or_prenatal"
 

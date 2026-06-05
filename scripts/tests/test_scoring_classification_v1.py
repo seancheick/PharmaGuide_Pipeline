@@ -103,6 +103,63 @@ def test_router_public_api_matches_legacy_parity_baseline(product):
     assert build_scoring_classification(product)["route_module"] == _legacy_class_for_product(product)
 
 
+# ── Multivitamin route-trust hardening ──────────────────────────────────────
+# Every taxonomy route validates content (omega requires an EPA/DHA panel,
+# sports a dose, b_complex ≥4 B-vitamins) EXCEPT plain `multivitamin`, which
+# returned multi_or_prenatal on the native primary_type alone — the same
+# "trust the native classification" pattern hardened for probiotic (casein/casei).
+# A thin product mis-tagged `multivitamin` by taxonomy drift would be crushed by
+# the prenatal-panel floors for nutrients it never contained.
+
+def test_multivitamin_taxonomy_thin_panel_routes_generic():
+    """primary_type=multivitamin but a thin panel (<4 multi-nutrients) and no
+    multi* in the name is a mis-tag, not a real multivitamin. It must route
+    generic, not multi_or_prenatal (which would impose prenatal-panel floors)."""
+    p = _product(
+        "Bulk Strawberry Kiwi",
+        [
+            _row("calcium", "Calcium", 50, "mg"),
+            _row("magnesium", "Magnesium", 50, "mg"),
+            _row("zinc", "Zinc", 5, "mg"),
+        ],
+        primary_type="multivitamin",
+    )
+    assert build_scoring_classification(p)["route_module"] == "generic"
+    assert _legacy_class_for_product(p) == "generic"  # parity: both brains agree
+
+
+def test_multivitamin_real_broad_panel_routes_multi():
+    """A genuine multivitamin (≥4 distinct multi-panel nutrients) still routes
+    multi_or_prenatal — regression guard so the hardening doesn't demote real
+    multis."""
+    p = _product(
+        "Daily Foundation Formula",
+        [
+            _row("vitamin_a", "Vitamin A", 900, "mcg"),
+            _row("vitamin_c", "Vitamin C", 90, "mg"),
+            _row("vitamin_d", "Vitamin D", 25, "mcg"),
+            _row("zinc", "Zinc", 11, "mg"),
+            _row("magnesium", "Magnesium", 100, "mg"),
+        ],
+        primary_type="multivitamin",
+    )
+    assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
+    assert _legacy_class_for_product(p) == "multi_or_prenatal"
+
+
+def test_multivitamin_name_override_routes_multi_even_thin():
+    """A product whose NAME claims 'multivitamin' is taken at its word (mirrors
+    the b-complex name override) — routes multi_or_prenatal so the panel-coverage
+    scoring can rate the (mislabeled) product, rather than silently re-routing."""
+    p = _product(
+        "Daily Multivitamin",
+        [_row("vitamin_d", "Vitamin D", 25, "mcg")],
+        primary_type="multivitamin",
+    )
+    assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
+    assert _legacy_class_for_product(p) == "multi_or_prenatal"
+
+
 def test_public_router_does_not_seed_contract_route():
     source = (SCRIPTS_ROOT / "scoring_v4" / "router.py").read_text()
     tree = ast.parse(source)

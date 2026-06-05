@@ -600,6 +600,23 @@ def _is_b_complex_route_eligible(product: Dict[str, Any], name_text: str) -> boo
     return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
 
 
+def _is_multivitamin_route_eligible(product: Dict[str, Any], name_text: str) -> bool:
+    """Parity mirror of scoring_input_contract._route_is_multivitamin_eligible.
+    Guards the `multivitamin` taxonomy route by content (broad multi-nutrient
+    panel) instead of trusting the native primary_type alone. Explicit multi*
+    naming is taken at its word (mirrors b_complex)."""
+    lowered = (name_text or "").lower()
+    if (
+        "multivitamin" in lowered
+        or "multi-vitamin" in lowered
+        or "multi vitamin" in lowered
+        or "multimineral" in lowered
+    ):
+        return True
+    canonicals = _positive_canonicals(product)
+    return len(canonicals & _MULTI_PANEL_CANONICALS) >= 4
+
+
 def _product_label_text(product: Dict[str, Any]) -> str:
     """Text that belongs to the product label, excluding brand/bundle context."""
     return " ".join(str((product or {}).get(k) or "") for k in ("product_name", "fullName"))
@@ -807,6 +824,8 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
         module = _TAXONOMY_TO_MODULE.get(primary_type)
         if module == "multi_or_prenatal":
             if primary_type == "b_complex" and not _is_b_complex_route_eligible(product, name_text):
+                return "generic"
+            if primary_type == "multivitamin" and not _is_multivitamin_route_eligible(product, name_text):
                 return "generic"
             return "multi_or_prenatal"
         if module == "omega":

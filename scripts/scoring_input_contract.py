@@ -1912,6 +1912,24 @@ def _route_is_b_complex_eligible(product: Dict[str, Any], name_text: str) -> boo
     return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
 
 
+def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> bool:
+    """Guard the `multivitamin` taxonomy route the same way omega/sports/b_complex
+    are guarded — by content, not the native primary_type alone. A real multivitamin
+    has a broad multi-nutrient panel; a thin product mis-tagged `multivitamin` by
+    taxonomy drift must not be crushed by the prenatal/multi panel-coverage floors.
+    Explicit multi* naming is taken at its word (mirrors the b_complex name override)."""
+    lowered = (name_text or "").lower()
+    if (
+        "multivitamin" in lowered
+        or "multi-vitamin" in lowered
+        or "multi vitamin" in lowered
+        or "multimineral" in lowered
+    ):
+        return True
+    canonicals = _route_positive_canonicals(product)
+    return len(canonicals & _ROUTE_MULTI_PANEL_CANONICALS) >= 4
+
+
 def _route_has_broad_prenatal_multi_panel(product: Dict[str, Any]) -> bool:
     canonicals = _route_positive_canonicals(product)
     multi_nutrients = canonicals & _ROUTE_MULTI_PANEL_CANONICALS
@@ -1994,6 +2012,8 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
         if module == "multi_or_prenatal":
             if primary_type == "b_complex" and not _route_is_b_complex_eligible(product, name_text):
                 return "generic", "b_complex_taxonomy_without_route_eligible_panel", ["taxonomy:b_complex"]
+            if primary_type == "multivitamin" and not _route_is_multivitamin_eligible(product, name_text):
+                return "generic", "multivitamin_taxonomy_without_route_eligible_panel", ["taxonomy:multivitamin"]
             return "multi_or_prenatal", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
         if module == "omega":
             if _route_is_omega_class(product, name_text):
