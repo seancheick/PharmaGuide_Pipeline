@@ -1155,8 +1155,9 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     # NOTE: a product whose actives carry no canonical identity is OPAQUE, not
     # unscoreable. The scorer rates it POOR/CAUTION via the transparency penalty,
     # and that low rating IS the consumer-relevant signal ("we can't verify what's
-    # in this product"). So it SHIPS (with an `opaque_unidentified_active` flag set
-    # in build_detail_blob), rather than being silently quarantined. Genuinely
+    # in this product"). So it SHIPS (with a `proprietary_blend` or
+    # `unverified_ingredient` flag set in build_detail_blob — split by why the
+    # active is unidentifiable), rather than being silently quarantined. Genuinely
     # unscoreable products are NOT_SCORED (handled above) and still quarantine.
     elif not score_optional:
         s100 = scored.get("score_100_equivalent")
@@ -4618,19 +4619,32 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     else:
         blob["product_status"] = None
 
-    # Opaque-product flag: True when NO active carries a canonical identity. The
-    # product ships with its POOR/CAUTION verdict (the transparency penalty caps
-    # opaque labels low), but we cannot verify its ingredients — Flutter surfaces
-    # "We can't verify this product's ingredients" alongside the rating instead of
-    # the product being silently quarantined. Mirrors validate_export_contract's
-    # has_active_identity logic.
+    # Opaque-product flags: split by WHY the active is unidentifiable so Flutter
+    # shows the correct consumer message. The product ships with its POOR/CAUTION
+    # verdict (the transparency penalty caps opaque labels low) instead of being
+    # silently quarantined; the flag tells the app which copy to render.
+    #
+    #   • proprietary_blend     — a disclosed blend with undisclosed per-ingredient
+    #                             amounts (TRISYNEX, Tea Trio). NOT a data gap; the
+    #                             opacity IS the consumer signal.
+    #                             Copy: "Contains an undisclosed proprietary blend"
+    #   • unverified_ingredient — a single named ingredient we couldn't map to a
+    #                             canonical identity (Silver, Germanium). A mapping
+    #                             gap, not a blend — must not be mislabeled "blend".
+    #                             Copy: "Ingredient not yet verified"
+    #
+    # Both default False for identified products. Mirrors validate_export_contract's
+    # has_active_identity logic for the opacity test.
     _active_rows = [a for a in safe_list(enriched.get("activeIngredients")) if isinstance(a, dict)]
     _iqd_rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
     _has_active_identity = any(
         safe_str(i.get("canonical_id") or i.get("parent_key"))
         for i in _iqd_rows if isinstance(i, dict)
     ) or any(safe_str(a.get("canonical_id")) for a in _active_rows)
-    blob["opaque_unidentified_active"] = bool(_active_rows) and not _has_active_identity
+    _is_opaque = bool(_active_rows) and not _has_active_identity
+    _has_blend = bool(safe_bool(safe_dict(enriched.get("proprietary_data")).get("has_proprietary_blends")))
+    blob["proprietary_blend"] = bool(_is_opaque and _has_blend)
+    blob["unverified_ingredient"] = bool(_is_opaque and not _has_blend)
 
     return blob
 

@@ -275,20 +275,42 @@ class TestExportContractValidator:
         issues = validate_export_contract(e, s)
         assert any("NOT_SCORED" in i for i in issues)
 
-    def test_opaque_no_identity_blob_carries_opaque_flag(self):
-        """The shipped blob must carry opaque_unidentified_active=True so Flutter
-        can surface 'we can't verify this product's ingredients' alongside the
-        POOR/CAUTION rating."""
+    def _opaque_blend_enriched(self):
+        """Opaque product that IS a disclosed proprietary blend (undisclosed
+        per-ingredient amounts). Distinct from the single unmapped compound."""
         e = self._opaque_no_identity_enriched()
+        e["proprietary_data"] = {"has_proprietary_blends": True,
+                                 "blends": [{"name": "Proprietary Complex"}]}
+        return e
+
+    def test_single_unmapped_compound_flagged_unverified_not_blend(self):
+        """A single named ingredient we couldn't map (e.g. Silver, Germanium) is
+        NOT a blend. Flutter must read 'ingredient not yet verified', so the blob
+        carries unverified_ingredient=True and proprietary_blend=False."""
+        e = self._opaque_no_identity_enriched()  # has_proprietary_blends=False
         s = _base_scored()
         s["verdict"] = "POOR"
         s["score_100_equivalent"] = 27.6
         blob = build_detail_blob(e, s)
-        assert blob["opaque_unidentified_active"] is True
+        assert blob["unverified_ingredient"] is True
+        assert blob["proprietary_blend"] is False
+
+    def test_proprietary_blend_flagged_blend_not_unverified(self):
+        """A disclosed proprietary blend (TRISYNEX, Tea Trio) IS a blend. Flutter
+        must read 'contains an undisclosed proprietary blend', so the blob carries
+        proprietary_blend=True and unverified_ingredient=False (not mislabeled)."""
+        e = self._opaque_blend_enriched()
+        s = _base_scored()
+        s["verdict"] = "POOR"
+        s["score_100_equivalent"] = 27.6
+        blob = build_detail_blob(e, s)
+        assert blob["proprietary_blend"] is True
+        assert blob["unverified_ingredient"] is False
 
     def test_identified_product_blob_not_flagged_opaque(self):
         blob = build_detail_blob(_base_enriched(), _base_scored())
-        assert blob["opaque_unidentified_active"] is False
+        assert blob["unverified_ingredient"] is False
+        assert blob["proprietary_blend"] is False
 
     def test_missing_section_scores_flagged(self):
         s = _base_scored()
