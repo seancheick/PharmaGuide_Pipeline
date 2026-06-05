@@ -151,8 +151,9 @@ def test_primary_identity_prefers_creatine_single() -> None:
 def test_creatine_three_grams_scores_primary_dose_max() -> None:
     payload = score_dose(_product(_row("creatine_monohydrate", 3, "Gram(s)"), name="Creatine Monohydrate"))
 
-    assert payload["score"] == pytest.approx(20.0)
+    assert payload["score"] == pytest.approx(25.0)
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(5.0)
     assert payload["metadata"]["primary_identity"] == "creatine"
     assert payload["metadata"]["dose_basis"] == "creatine_3_to_10_g"
 
@@ -175,7 +176,21 @@ def test_creatine_five_grams_scores_primary_dose_max() -> None:
     payload = score_dose(_product(_row("creatine_monohydrate", 5000, "mg"), name="Creatine Monohydrate"))
 
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
-    assert payload["score"] == pytest.approx(20.0)
+    assert payload["score"] == pytest.approx(25.0)
+
+
+def test_creatine_hmb_stack_does_not_get_focused_single_completion() -> None:
+    payload = score_dose(
+        _product(
+            _row("creatine_monohydrate", 5, "Gram(s)"),
+            _row("hmb", 3, "Gram(s)"),
+            name="Creatine HMB",
+        )
+    )
+
+    assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(0.0)
+    assert payload["score"] == pytest.approx(21.0)
 
 
 def test_creatine_above_ten_grams_drops_without_loading_protocol() -> None:
@@ -226,6 +241,8 @@ def test_hmb_three_grams_scores_primary_dose_max() -> None:
     payload = score_dose(_product(_row("hmb", 3, "Gram(s)"), name="HMB"))
 
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(20.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(5.0)
+    assert payload["score"] == pytest.approx(25.0)
     assert payload["metadata"]["primary_identity"] == "hmb"
     assert payload["metadata"]["dose_basis"] == "hmb_3_to_6_g"
 
@@ -273,6 +290,7 @@ def test_bcaa_2_1_1_ratio_scores_high_with_completeness_credit() -> None:
     )
 
     assert payload["components"]["sports_primary_active_dose"] == pytest.approx(18.0)
+    assert payload["components"]["sports_focused_single_completion"] == pytest.approx(0.0)
     assert payload["components"]["sports_ratio_or_completeness"] == pytest.approx(2.0)
     assert payload["score"] == pytest.approx(20.0)
     assert payload["metadata"]["primary_identity"] == "bcaa"

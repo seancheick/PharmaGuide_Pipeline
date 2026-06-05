@@ -10,9 +10,11 @@ from typing import Any, Dict, Optional, Tuple
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list
 from scoring_v4.modules.sports_helpers import (
+    BCAA_CANONICALS,
     BETA_ALANINE_CANONICALS,
     CITRULLINE_CANONICALS,
     CREATINE_CANONICALS,
+    EAA_CANONICALS,
     HMB_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
     canonical,
@@ -37,6 +39,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
     identity, primary, basis = _best_primary_score(product)
     support = _score_stack_support(product, identity)
     completeness = _score_ratio_or_completeness(product, identity)
+    focused_single = _score_focused_single_completion(product, identity, primary)
     opaque_penalty, not_evaluable = _opaque_penalty(product, primary)
     if (
         primary <= 0
@@ -51,6 +54,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "sports_primary_active_dose": round(primary, 4),
         "sports_stack_support": round(support, 4),
         "sports_ratio_or_completeness": round(completeness, 4),
+        "sports_focused_single_completion": round(focused_single, 4),
     }
     penalties = {
         "opaque_primary_sports_blend": round(-opaque_penalty, 4),
@@ -218,6 +222,8 @@ def _score_stack_support(product: Dict[str, Any], identity: Optional[str]) -> fl
         support_groups += 1
     if identity != "citrulline" and canons & CITRULLINE_CANONICALS:
         support_groups += 1
+    if identity != "hmb" and canons & HMB_CANONICALS:
+        support_groups += 1
     return min(3.0, float(support_groups))
 
 
@@ -228,6 +234,39 @@ def _score_ratio_or_completeness(product: Dict[str, Any], identity: Optional[str
     if identity == "eaa" and group_eaa(rows)["complete"]:
         return 2.0
     return 0.0
+
+
+def _score_focused_single_completion(
+    product: Dict[str, Any],
+    identity: Optional[str],
+    primary_score: float,
+) -> float:
+    """Fill the sports dose dimension for transparent focused singles.
+
+    A standalone creatine/HMB/protein product with a fully adequate primary dose
+    should not lose the final 5 dose points merely because it is not a stack.
+    Multi-active stacks still earn those points through stack/completeness logic.
+    """
+    if primary_score < 20.0 or not identity:
+        return 0.0
+    rows = sports_rows(product)
+    groups = set()
+    canons = {canonical(row) for row in rows}
+    if canons & SPORTS_PROTEIN_CANONICALS:
+        groups.add("protein")
+    if canons & CREATINE_CANONICALS:
+        groups.add("creatine")
+    if canons & BETA_ALANINE_CANONICALS:
+        groups.add("beta_alanine")
+    if canons & CITRULLINE_CANONICALS:
+        groups.add("citrulline")
+    if canons & HMB_CANONICALS:
+        groups.add("hmb")
+    if canons and canons.issubset(BCAA_CANONICALS):
+        groups.add("bcaa")
+    elif canons and canons.issubset(EAA_CANONICALS):
+        groups.add("eaa")
+    return 5.0 if groups == {identity} else 0.0
 
 
 def _opaque_penalty(product: Dict[str, Any], primary_score: float) -> Tuple[float, Optional[str]]:

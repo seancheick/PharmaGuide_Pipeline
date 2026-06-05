@@ -421,6 +421,67 @@ def test_a6_single_ingredient_below_floor_returns_zero() -> None:
     assert payload["components"]["A6_single_ingredient"] == 0.0
 
 
+def test_premium_single_formulation_floor_lifts_elite_focused_single() -> None:
+    """An elite focused single can reach a premium formulation tier even though
+    it cannot earn multi-form breadth credit."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
+    payload = score_formulation(product)
+
+    assert payload["score"] == 24.0
+    assert payload["components"]["premium_single_ingredient_floor_adjustment"] == 6.0
+    assert payload["metadata"]["premium_single_ingredient_floor"]["target"] == 24.0
+
+
+def test_premium_single_formulation_floor_lifts_solid_focused_single_less() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=12)])
+    payload = score_formulation(product)
+
+    assert payload["score"] == 22.0
+    assert payload["components"]["premium_single_ingredient_floor_adjustment"] == 7.0
+    assert payload["metadata"]["premium_single_ingredient_floor"]["target"] == 22.0
+
+
+def test_premium_single_formulation_floor_does_not_lift_weak_single() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=10)])
+    payload = score_formulation(product)
+
+    assert "premium_single_ingredient_floor_adjustment" not in payload["components"]
+    assert payload["score"] == 11.0
+
+
+def test_premium_single_formulation_floor_does_not_lift_multi() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(supp_type="multivitamin", ingredients=[_ingredient(bio_score=14)])
+    payload = score_formulation(product)
+
+    assert "premium_single_ingredient_floor_adjustment" not in payload["components"]
+    assert payload["score"] == 14.0
+
+
+def test_premium_single_formulation_floor_does_not_lift_proprietary_container() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        supp_type="single_nutrient",
+        ingredients=[
+            _ingredient(
+                bio_score=14,
+                is_proprietary_blend=True,
+            )
+        ],
+    )
+    payload = score_formulation(product)
+
+    assert "premium_single_ingredient_floor_adjustment" not in payload["components"]
+
+
 # --- A6 reads EFFECTIVE A1-slot quality (botanical/collagen seam fix) ------
 # A6 was reading the raw row bio_score, so botanical singles (Meriva/Curcumin
 # Phytosome, KSM-66) earned 0 even though the botanical adapter recognized a
@@ -1104,7 +1165,7 @@ def test_dimension_score_assembles_8_components_minus_penalty() -> None:
     """Bisglycinate single 200mg, capsule, no other signals. Expected:
     bio_score 14 + premium 0 (skip-first) + delivery 2 (capsule = tier 2)
     + absorption 0 + A5a 0 + A5e 0 + A6 4 (v4.1 tiered, bio>=14 elite)
-    - sugar 0 = 20.0."""
+    - sugar 0 = 20.0, then premium-single floor lifts to 24.0."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -1113,8 +1174,9 @@ def test_dimension_score_assembles_8_components_minus_penalty() -> None:
     )
     payload = score_formulation(product)
 
-    assert payload["score"] == 20.0
+    assert payload["score"] == 24.0
     assert payload["max"] == 30.0
+    assert payload["components"]["premium_single_ingredient_floor_adjustment"] == 4.0
 
 
 def test_dimension_score_clamps_to_max_30() -> None:
@@ -1197,8 +1259,8 @@ def test_thorne_mg_bisglycinate_formulation_band() -> None:
       A5e natural 0 (synthetic chelate)
       A6 single-ingredient 4 (v4.1 tiered: single + bio≥14 elite tier)
       - sugar 0
-      = ~20 unless label/excellence/additive signals are present.
-      v4.1 lift: a premium chelated single now reaches ~20 vs ~17 (A6 1→4)."""
+      = ~20 before the premium-single floor. The top-band ceiling fix lifts
+      elite focused singles to 24 without changing weak singles or multis."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -1217,7 +1279,8 @@ def test_thorne_mg_bisglycinate_formulation_band() -> None:
     )
     payload = score_formulation(product)
 
-    assert 19.0 <= payload["score"] <= 22.0
+    assert payload["score"] == 24.0
+    assert payload["metadata"]["premium_single_ingredient_floor"]["applied"] is True
 
 
 # --- Shadow integration ---------------------------------------------------

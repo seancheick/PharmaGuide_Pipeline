@@ -95,6 +95,8 @@ A6_POINTS_SOLID = 3.0          # bio 12-13.99
 A6_POINTS_ELITE = 4.0          # bio >= 14
 CAP_ENZYME = 2.0
 DIMENSION_CAP = 30.0
+PREMIUM_SINGLE_FLOOR_SOLID = 22.0
+PREMIUM_SINGLE_FLOOR_ELITE = 24.0
 
 PREMIUM_FORM_THRESHOLD = 12.0           # v3.6.0 A2 threshold on bio_score scale
 PREMIUM_FORM_POINTS_PER_ADDITIONAL = 0.5
@@ -364,6 +366,35 @@ def _score_single_ingredient_efficiency(
     return A6_POINTS_GOOD
 
 
+def _premium_single_floor_target(
+    product: Dict[str, Any],
+    effective_quality: float | None,
+) -> float:
+    """Return the formulation floor for a focused premium single.
+
+    This is the top-band ceiling repair: focused singles cannot earn A2 breadth
+    or most formulation-stack bonuses, so premium-quality singles were capped in
+    the high teens. The floor is deliberately narrow:
+      - only explicit single/single_nutrient products,
+      - exactly one non-blend, dose-bearing scorable active,
+      - effective A1 quality >= 12.
+
+    It does not lift weak forms, multis, or proprietary blend containers.
+    """
+    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+        return 0.0
+    scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
+    if len(scorable) != 1:
+        return 0.0
+    if effective_quality is None:
+        return 0.0
+    if effective_quality >= A6_TIER_ELITE_BIO:
+        return PREMIUM_SINGLE_FLOOR_ELITE
+    if effective_quality >= A6_TIER_SOLID_BIO:
+        return PREMIUM_SINGLE_FLOOR_SOLID
+    return 0.0
+
+
 def _score_enzyme_recognition(product: Dict[str, Any]) -> float:
     """Named-enzyme recognition for single-ingredient generic products.
     Dedupes enzyme families and caps at 2 points in v4."""
@@ -552,6 +583,13 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         + components["A6_single_ingredient"]
         + components["enzyme_recognition"]
     )
+    premium_single_floor = _premium_single_floor_target(product, components["A1_bio_score"])
+    premium_single_floor_adjustment = max(0.0, premium_single_floor - positive)
+    if premium_single_floor_adjustment > 0:
+        components["premium_single_ingredient_floor_adjustment"] = round(
+            premium_single_floor_adjustment, 4
+        )
+        positive += premium_single_floor_adjustment
     penalty_total = _sum_penalty_magnitudes(penalties)
 
     score = _clamp(0.0, DIMENSION_CAP, positive - penalty_total)
@@ -574,6 +612,11 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
             "botanical_formulation": botanical_formulation.get("components", {}),
             "collagen_profile_applied": bool(collagen_formulation),
             "collagen_formulation": collagen_formulation.get("components", {}),
+            "premium_single_ingredient_floor": {
+                "target": round(premium_single_floor, 4),
+                "adjustment": round(premium_single_floor_adjustment, 4),
+                "applied": premium_single_floor_adjustment > 0,
+            },
         },
     }
 

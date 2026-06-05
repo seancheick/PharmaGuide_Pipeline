@@ -294,9 +294,9 @@ def test_shadow_wires_evidence_dimension() -> None:
     evidence = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["evidence"]
     # Phase 8: the generic module opts into the primary-ingredient floor. The
     # default product's mass-primary magnesium has a systematic_review_meta
-    # positive match -> floored to 14.0 (the raw pipeline value here is 6.48).
-    assert evidence["score"] == 14.0
-    assert evidence["metadata"]["primary_evidence_floor"] == 14.0
+    # positive match -> floored to 18.0 (the raw pipeline value here is 6.48).
+    assert evidence["score"] == 18.0
+    assert evidence["metadata"]["primary_evidence_floor"] == 18.0
     assert evidence["max"] == 20.0
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
@@ -309,9 +309,9 @@ def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 8.4
-    assert payload["components"]["primary_evidence_floor"] == 8.4
-    assert payload["metadata"]["primary_evidence_floor"] == 8.4
+    assert payload["score"] == 10.8
+    assert payload["components"]["primary_evidence_floor"] == 10.8
+    assert payload["metadata"]["primary_evidence_floor"] == 10.8
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
 
 
@@ -323,9 +323,9 @@ def test_primary_floor_mirrors_null_effect_multiplier() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 3.5
-    assert payload["components"]["primary_evidence_floor"] == 3.5
-    assert payload["metadata"]["primary_evidence_floor"] == 3.5
+    assert payload["score"] == 4.5
+    assert payload["components"]["primary_evidence_floor"] == 4.5
+    assert payload["metadata"]["primary_evidence_floor"] == 4.5
 
 
 def test_primary_floor_still_rejects_negative_effect() -> None:

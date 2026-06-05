@@ -92,7 +92,7 @@ DEPTH_BONUS_BANDS = ((20.0, 0.25), (40.0, 0.5))
 # match must link to an active whose mass >= PRIMARY_MASS_FRACTION of the heaviest
 # active), NOT merely the top evidence-points contributor — otherwise a well-studied
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
-PRIMARY_FLOOR_STRONG = 14.0     # systematic review / multi-RCT, positive, clinical dose
+PRIMARY_FLOOR_STRONG = 18.0     # systematic review / multi-RCT, positive, clinical dose
 PRIMARY_FLOOR_MODERATE = 11.0   # single RCT / clinical strain, positive, clinical dose
 # v4.1 branded-RCT tier: a branded clinically-studied extract (Sensoril, KSM-66,
 # Meriva/BCM-95 — its OWN brand-specific RCT evidence, not a generic literature
