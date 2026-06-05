@@ -89,8 +89,19 @@ _MASS_UNITS = {
 }
 _SPORTS_PRIMARY_TYPES = {"protein_powder", "sports"}
 _PROTEIN_CANONICALS = {"protein", "whey_protein", "casein", "pea_protein", "rice_protein", "soy_protein"}
-_SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
+_CREATINE_CANONICALS = {
+    "creatine",
     "creatine_monohydrate",
+    "creatine_anhydrous",
+    "creatine_hydrochloride",
+    "creatine_hcl",
+    "creatine_nitrate",
+    "creatine_citrate",
+    "buffered_creatine",
+    "magnesium_creatine_chelate",
+}
+_SPORTS_PRIMARY_CANONICALS = _PROTEIN_CANONICALS | {
+    *_CREATINE_CANONICALS,
     "beta-alanine",
     "beta_alanine",
     "l_citrulline",
@@ -1380,7 +1391,7 @@ _CLASSIFICATION_DOMAIN_BY_CANONICAL = {
     "pea_protein": "sports_active",
     "rice_protein": "sports_active",
     "soy_protein": "sports_active",
-    "creatine_monohydrate": "sports_active",
+    **{canonical: "sports_active" for canonical in _CREATINE_CANONICALS},
     "beta-alanine": "sports_active",
     "beta_alanine": "sports_active",
     "l_citrulline": "sports_active",
@@ -1558,7 +1569,7 @@ _ROUTE_SPORTS_PROTEIN_CANONICALS = {
     "soy_protein",
 }
 _ROUTE_SPORTS_SINGLE_CANONICALS = {
-    "creatine_monohydrate",
+    *_CREATINE_CANONICALS,
     "beta-alanine",
     "beta_alanine",
     "l_citrulline",
@@ -2468,6 +2479,13 @@ def _classify_botanical_owner_type(
     # Enzyme/digestive product whose botanical is flavor/support -> not owner.
     if _profile_has_enzyme_product_intent(product, non_botanical_pairs):
         return not_owner("phytonutrient_support", "material_nonbotanical_deliverable")
+
+    # Isolated plant-derived markers (resveratrol, lycopene, lutein, etc.) can
+    # have botanical-source evidence, but they are not herb/extract owners for
+    # botanical dose/formulation adapters. They should score as the isolated
+    # active unless paired with a genuine owning herb/extract row.
+    if primary_contract.get("ingredient_domain") == "botanical_marker":
+        return not_owner("phytonutrient_support", "isolated_botanical_marker")
 
     # Standardized / branded extract owns when it is materially dominant, or
     # when it is the product title-head and still material enough not to be a

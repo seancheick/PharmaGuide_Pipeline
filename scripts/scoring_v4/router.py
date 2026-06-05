@@ -184,7 +184,15 @@ _SPORTS_PROTEIN_CANONICALS = {
     "soy_protein",
 }
 _SPORTS_SINGLE_CANONICALS = {
+    "creatine",
     "creatine_monohydrate",
+    "creatine_anhydrous",
+    "creatine_hydrochloride",
+    "creatine_hcl",
+    "creatine_nitrate",
+    "creatine_citrate",
+    "buffered_creatine",
+    "magnesium_creatine_chelate",
     "beta-alanine",
     "beta_alanine",
     "l_citrulline",

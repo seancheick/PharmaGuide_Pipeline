@@ -1125,6 +1125,15 @@ def test_owner_l_theanine_has_no_botanical_rows():
     assert out["owner_reason_code"] == "no_botanical_rows"
 
 
+def test_owner_resveratrol_is_isolated_marker_not_botanical_owner():
+    out = _owner(
+        "Trans-Resveratrol",
+        ("Trans-Resveratrol", "botanical_marker", "claim_prominent", 100, True, ["botanical_source_text"]),
+    )
+    assert out["owner_type"] not in _OWNER_TYPES
+    assert out["owner_reason_code"] == "isolated_botanical_marker"
+
+
 def test_owner_enzyme_product_with_fruit_support_is_not_owner():
     out = _owner(
         "Digestive Enzyme Complex",

@@ -96,6 +96,17 @@ def test_pre_workout_name_overrides_b_complex_taxonomy() -> None:
     assert class_for_product(product) == "sports"
 
 
+def test_creatine_variants_route_to_sports() -> None:
+    for canonical in ("creatine", "creatine_hcl", "creatine_nitrate", "magnesium_creatine_chelate"):
+        product = _product(
+            primary_type="general_supplement",
+            name="Creatine Performance",
+            rows=[_row(canonical, 5, "g")],
+        )
+
+        assert class_for_product(product) == "sports", canonical
+
+
 def test_pre_workout_without_sports_dose_anchor_routes_generic() -> None:
     """Pre-workout intent alone is not enough for sports dose scoring.
 
