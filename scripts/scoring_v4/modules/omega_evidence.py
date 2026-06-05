@@ -114,6 +114,9 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     indication_cfg = ev_cfg.get("indication_relevance", {}) or {}
     indication_threshold = float(indication_cfg.get("min_epa_dha_mg_day_for_bonus", 1000) or 1000)
     indication_score_max = float(indication_cfg.get("score", 5) or 5)
+    floor_cfg = ev_cfg.get("disclosed_epa_dha_clinical_floor", {}) or {}
+    floor_threshold = float(floor_cfg.get("min_epa_dha_mg_day", 250) or 250)
+    floor_score = float(floor_cfg.get("score", 0) or 0)
 
     # Clinical evidence sub-cap = total_cap - indication_score_max.
     # Keeps the dimension cap-additive (15 + 5 = 20) without hardcoding
@@ -123,11 +126,17 @@ def score_evidence(product: Any) -> Dict[str, Any]:
     # 1) Generic multiplicative evidence pipeline.
     generic_payload = score_generic_evidence(product)
     raw_generic_score = _as_float(generic_payload.get("score"), 0.0)
-    clinical_score = min(clinical_sub_cap, raw_generic_score)
 
     # 2) Indication relevance bonus.
     per_day = _compute_per_day_components(product)
     per_day_epa_dha = per_day["total"]
+    class_floor_score = 0.0
+    class_floor_awarded = False
+    if floor_score > 0 and per_day_epa_dha >= floor_threshold:
+        class_floor_score = min(clinical_sub_cap, floor_score)
+        class_floor_awarded = True
+    clinical_score = min(clinical_sub_cap, max(raw_generic_score, class_floor_score))
+
     indication_reason = "none"
     if per_day_epa_dha >= indication_threshold:
         indication_score = indication_score_max
@@ -153,6 +162,9 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "cap_applied": raw_score > CAP_EVIDENCE,
         "clinical_sub_cap": clinical_sub_cap,
         "generic_evidence_raw_score": round(raw_generic_score, 4),
+        "disclosed_epa_dha_clinical_floor_score": round(class_floor_score, 4),
+        "disclosed_epa_dha_clinical_floor_awarded": class_floor_awarded,
+        "disclosed_epa_dha_clinical_floor_threshold_mg_day": floor_threshold,
         "clinical_evidence_after_cap": round(clinical_score, 4),
         "per_day_epa_dha_mg": round(per_day_epa_dha, 2),
         "per_day_dha_mg": round(per_day["dha"], 2),

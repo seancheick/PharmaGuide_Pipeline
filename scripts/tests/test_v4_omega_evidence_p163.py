@@ -178,15 +178,53 @@ def test_clinical_evidence_capped_at_15() -> None:
     assert payload["metadata"]["clinical_sub_cap"] == 15.0
 
 
-def test_clinical_evidence_zero_when_no_evidence_data() -> None:
-    """No evidence_data → 0 clinical credit. Indication bonus still applies
-    if dose qualifies."""
+def test_disclosed_epa_dha_class_floor_when_no_evidence_data() -> None:
+    """Disclosed EPA+DHA at an evidence-relevant daily dose earns the
+    conservative omega class-evidence floor even when generic evidence_data
+    is missing. This prevents matcher gaps from making EPA/DHA look
+    evidence-poor, without crediting parent fish-oil mass."""
     from scoring_v4.modules.omega_evidence import score_evidence
 
     product = _epa_dha_product(epa=700, dha=400)  # 1100 mg/day, no evidence
     payload = score_evidence(product)
-    assert "clinical_evidence" not in payload["components"]
+    assert payload["components"]["clinical_evidence"] == 10.0
     assert payload["components"].get("indication_relevance") == 5.0
+    assert payload["metadata"]["generic_evidence_raw_score"] == 0.0
+    assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is True
+
+
+def test_disclosed_epa_dha_class_floor_not_awarded_below_efsa_zone() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    product = _epa_dha_product(epa=100, dha=100)  # 200 mg/day
+    payload = score_evidence(product)
+
+    assert "clinical_evidence" not in payload["components"]
+    assert "indication_relevance" not in payload["components"]
+    assert payload["metadata"]["disclosed_epa_dha_clinical_floor_awarded"] is False
+
+
+def test_final_blob_omega3_detail_can_drive_evidence_floor() -> None:
+    from scoring_v4.modules.omega_evidence import score_evidence
+
+    product = {
+        "product_name": "Final Blob Fish Oil",
+        "omega3_detail": {
+            "epa_mg_per_unit": 690.0,
+            "dha_mg_per_unit": 310.0,
+            "per_day_mid_mg": 1000.0,
+        },
+        "serving_info": {
+            "min_servings_per_day": 1,
+            "max_servings_per_day": 1,
+        },
+    }
+
+    payload = score_evidence(product)
+
+    assert payload["metadata"]["per_day_epa_dha_mg"] == 1000.0
+    assert payload["components"]["clinical_evidence"] == 10.0
+    assert payload["components"]["indication_relevance"] == 5.0
 
 
 # --- Score ceiling ------------------------------------------------------
@@ -340,6 +378,9 @@ def test_evidence_weights_match_rubric_config() -> None:
     ev = rubric["evidence"]
     assert ev["cap"] == 20
     assert ev["omega_canonicals"] == ["epa", "dha", "epa_dha"]
+    floor = ev["disclosed_epa_dha_clinical_floor"]
+    assert floor["min_epa_dha_mg_day"] == 250
+    assert floor["score"] == 10
     ir = ev["indication_relevance"]
     assert ir["min_epa_dha_mg_day_for_bonus"] == 1000
     assert ir["score"] == 5

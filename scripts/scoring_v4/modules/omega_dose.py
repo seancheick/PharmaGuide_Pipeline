@@ -101,6 +101,15 @@ def _safe_list(value: Any) -> List[Any]:
     return value if isinstance(value, list) else []
 
 
+def _as_float(value: Any, default: float = 0.0) -> float:
+    try:
+        if value is None:
+            return default
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def _normalize_unit(unit: Any) -> str:
     return str(unit or "").strip().lower()
 
@@ -153,6 +162,11 @@ def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, flo
             dha_total += mg
         elif canon == "epa_dha":
             combined_total += mg
+    if epa_total <= 0 and dha_total <= 0 and combined_total <= 0:
+        detail = _safe_dict(product.get("omega3_detail"))
+        epa_total = _as_float(detail.get("epa_mg_per_unit"), 0.0)
+        dha_total = _as_float(detail.get("dha_mg_per_unit"), 0.0)
+        combined_total = _as_float(detail.get("epa_dha_mg_per_unit"), 0.0)
     return epa_total, dha_total, combined_total
 
 
@@ -190,6 +204,18 @@ def _extract_daily_servings(product: Dict[str, Any]) -> Tuple[float, float, bool
                     return f, f, False
             except (TypeError, ValueError):
                 continue
+    serving_info = _safe_dict(product.get("serving_info"))
+    mn = serving_info.get("min_servings_per_day")
+    mx = serving_info.get("max_servings_per_day")
+    try:
+        mn_f = float(mn) if mn is not None else None
+        mx_f = float(mx) if mx is not None else None
+    except (TypeError, ValueError):
+        mn_f = mx_f = None
+    if mn_f is not None and mn_f > 0:
+        if mx_f is None or mx_f <= 0:
+            mx_f = mn_f
+        return mn_f, mx_f, False
     return 1.0, 1.0, True
 
 

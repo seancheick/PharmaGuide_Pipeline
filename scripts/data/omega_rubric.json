@@ -74,6 +74,11 @@
     "_doc": "Delegates to the generic evidence pipeline with omega-specific canonicals (EPA, DHA) prioritized in top-N selection. EPA/DHA evidence is well-established AHA/EFSA-backed; cap stays /20 with cap_per_ingredient = 7 inherited from scoring_config.",
     "cap": 20,
     "omega_canonicals": ["epa", "dha", "epa_dha"],
+    "disclosed_epa_dha_clinical_floor": {
+      "_doc": "Conservative class-evidence floor when a product discloses EPA/DHA at or above the EFSA adequate-intake zone. Prevents well-disclosed EPA/DHA products from scoring as evidence-poor solely because the generic evidence matcher emits one broad omega-3 match. Parent fish-oil mass without EPA/DHA disclosure does not qualify.",
+      "min_epa_dha_mg_day": 250,
+      "score": 10
+    },
     "indication_relevance": {
       "_doc": "Bonus for products dosed at an indication-relevant omega threshold. Score 5 if EPA+DHA >= 1000 mg/day (AHA CVD threshold) OR if a prenatal DHA-labeled product meets the prenatal DHA target already used by omega_dose.",
       "min_epa_dha_mg_day_for_bonus": 1000,
