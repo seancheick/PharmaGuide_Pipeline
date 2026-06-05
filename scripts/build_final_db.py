@@ -1152,12 +1152,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             "failed upstream; product cannot ship without a coherent "
             "score (Batch 3 data integrity gate)."
         )
-    elif active_ingredients and not has_active_identity:
-        issues.append(
-            "review_queue: missing required active identity — product has "
-            "activeIngredients but no canonical_id in active or IQM rows; "
-            "opaque/rollup-only labels cannot ship as scored catalog rows."
-        )
+    # NOTE: a product whose actives carry no canonical identity is OPAQUE, not
+    # unscoreable. The scorer rates it POOR/CAUTION via the transparency penalty,
+    # and that low rating IS the consumer-relevant signal ("we can't verify what's
+    # in this product"). So it SHIPS (with an `opaque_unidentified_active` flag set
+    # in build_detail_blob), rather than being silently quarantined. Genuinely
+    # unscoreable products are NOT_SCORED (handled above) and still quarantine.
     elif not score_optional:
         s100 = scored.get("score_100_equivalent")
         if s100 is None:
@@ -4617,6 +4617,20 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         }
     else:
         blob["product_status"] = None
+
+    # Opaque-product flag: True when NO active carries a canonical identity. The
+    # product ships with its POOR/CAUTION verdict (the transparency penalty caps
+    # opaque labels low), but we cannot verify its ingredients — Flutter surfaces
+    # "We can't verify this product's ingredients" alongside the rating instead of
+    # the product being silently quarantined. Mirrors validate_export_contract's
+    # has_active_identity logic.
+    _active_rows = [a for a in safe_list(enriched.get("activeIngredients")) if isinstance(a, dict)]
+    _iqd_rows = safe_list(safe_dict(enriched.get("ingredient_quality_data")).get("ingredients"))
+    _has_active_identity = any(
+        safe_str(i.get("canonical_id") or i.get("parent_key"))
+        for i in _iqd_rows if isinstance(i, dict)
+    ) or any(safe_str(a.get("canonical_id")) for a in _active_rows)
+    blob["opaque_unidentified_active"] = bool(_active_rows) and not _has_active_identity
 
     return blob
 

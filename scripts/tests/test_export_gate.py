@@ -242,6 +242,54 @@ class TestExportContractValidator:
         issues = validate_export_contract(e, _base_scored())
         assert any("score" in i for i in issues)
 
+    def _opaque_no_identity_enriched(self):
+        e = _base_enriched()
+        e["activeIngredients"] = [
+            {"name": "Proprietary Complex", "raw_source_text": "Proprietary Complex",
+             "quantity": 500, "unit": "mg"}
+        ]
+        for ing in e["ingredient_quality_data"]["ingredients"]:
+            ing.pop("canonical_id", None)
+            ing.pop("parent_key", None)
+        return e
+
+    def test_opaque_no_identity_scored_product_ships_not_quarantined(self):
+        """A product whose actives carry no canonical identity is OPAQUE, not
+        unscoreable. The scorer rates it POOR via the transparency penalty, and
+        that rating is exactly the consumer-relevant signal. It must SHIP (no
+        review_queue gate) rather than be silently quarantined."""
+        e = self._opaque_no_identity_enriched()
+        s = _base_scored()
+        s["verdict"] = "POOR"
+        s["score_100_equivalent"] = 27.6
+        issues = validate_export_contract(e, s)
+        assert not any("missing required active identity" in i for i in issues), issues
+
+    def test_opaque_no_identity_still_quarantined_when_not_scored(self):
+        """NOT_SCORED is genuinely unscoreable and must STILL quarantine, even
+        with no identity (regression guard for the ship-opaque change)."""
+        e = self._opaque_no_identity_enriched()
+        s = _base_scored()
+        s["verdict"] = "NOT_SCORED"
+        s["score_100_equivalent"] = None
+        issues = validate_export_contract(e, s)
+        assert any("NOT_SCORED" in i for i in issues)
+
+    def test_opaque_no_identity_blob_carries_opaque_flag(self):
+        """The shipped blob must carry opaque_unidentified_active=True so Flutter
+        can surface 'we can't verify this product's ingredients' alongside the
+        POOR/CAUTION rating."""
+        e = self._opaque_no_identity_enriched()
+        s = _base_scored()
+        s["verdict"] = "POOR"
+        s["score_100_equivalent"] = 27.6
+        blob = build_detail_blob(e, s)
+        assert blob["opaque_unidentified_active"] is True
+
+    def test_identified_product_blob_not_flagged_opaque(self):
+        blob = build_detail_blob(_base_enriched(), _base_scored())
+        assert blob["opaque_unidentified_active"] is False
+
     def test_missing_section_scores_flagged(self):
         s = _base_scored()
         del s["section_scores"]
