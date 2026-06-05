@@ -118,6 +118,7 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
     re.IGNORECASE,
 )
 _PROBIOTIC_SUPPORT_CANONICALS = {"fiber", "prebiotics"}
+_ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN = 8
 _OMEGA_PRODUCT_TYPES = {"omega_3", "fish_oil"}
 _OMEGA_EVIDENCE_CANONICALS = {
     "fish_oil",
@@ -2059,7 +2060,24 @@ def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> 
     ):
         return True
     canonicals = _route_positive_canonicals(product)
-    return len(canonicals & _ROUTE_MULTI_PANEL_CANONICALS) >= 4
+    if len(canonicals & _ROUTE_MULTI_PANEL_CANONICALS) >= 4:
+        return True
+    if _primary_type(product) == "multivitamin":
+        return (
+            _route_positive_scorable_row_count(product)
+            >= _ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN
+        )
+    return False
+
+
+def _route_positive_scorable_row_count(product: Dict[str, Any]) -> int:
+    count = 0
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") == "product_level_evidence":
+            continue
+        if _route_has_positive_quantity(row):
+            count += 1
+    return count
 
 
 def _route_has_broad_prenatal_multi_panel(product: Dict[str, Any]) -> bool:

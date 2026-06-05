@@ -98,13 +98,40 @@ def test_probiotic_evidence_scores_pipeline_plus_exact_indication_relevance() ->
     payload = score_evidence(_product())
 
     assert payload["max"] == 20.0
-    assert payload["score"] == 10.6
+    assert payload["score"] == 16.0
     assert payload["components"] == {
-        "strain_clinical_evidence": 2.6,
+        "strain_clinical_evidence": 8.0,
         "indication_relevance": 8.0,
     }
     assert payload["metadata"]["phase"] == "P2.3_probiotic_evidence"
     assert payload["metadata"]["indication_relevance_level"] == "direct"
+    assert payload["metadata"]["native_clinical_strain_evidence_score"] == 8.0
+
+
+def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing() -> None:
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    product = _product(
+        product_name="Bifido GI Balance",
+        matches=[],
+        clinical_strains=[
+            {
+                "strain": "Bifidobacterium longum BB536",
+                "clinical_id": "STRAIN_LONGUM_BB536",
+                "clinical_support_level": "moderate",
+                "indication_primary": "digestive comfort and immune support",
+            }
+        ],
+    )
+
+    payload = score_evidence(product)
+
+    assert payload["components"]["strain_clinical_evidence"] == 6.0
+    assert payload["components"]["indication_relevance"] == 4.0
+    assert payload["metadata"]["generic_evidence_score"] == 0.0
+    assert payload["metadata"]["native_clinical_strain_evidence_score"] == 6.0
+    native_rows = payload["metadata"]["native_clinical_strain_evidence_rows"]
+    assert native_rows[0]["clinical_id"] == "STRAIN_LONGUM_BB536"
 
 
 def test_strain_clinical_evidence_caps_at_12_points() -> None:
@@ -204,7 +231,7 @@ def test_score_probiotic_wires_evidence_dimension_at_p23() -> None:
     breakdown = score_probiotic(_product()).to_breakdown()
 
     evidence = breakdown["dimensions"]["evidence"]
-    assert evidence["score"] == 10.6
+    assert evidence["score"] == 16.0
     assert evidence["metadata"]["phase"] == "P2.3_probiotic_evidence"
     # Module-level phase rolls forward as each P2.x slice lands.
     assert breakdown["phase"].startswith("P2.")
@@ -222,7 +249,7 @@ def test_probiotic_evidence_accepts_final_blob_probiotic_detail_alias() -> None:
 
     payload = score_evidence(product)
 
-    assert payload["score"] == 10.6
+    assert payload["score"] == 16.0
     assert payload["metadata"]["clinical_strain_count"] == 1
 
 

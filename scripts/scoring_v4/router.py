@@ -60,6 +60,7 @@ _PROBIOTIC_HIGH_CFU_BILLIONS = 1.0
 # FLORASSIST: 10 strains, no CFU, brand name lacks "probiotic"). Requires panel==0
 # so it cannot capture a vitamin/mineral/protein that merely carries adjunct strains.
 _PROBIOTIC_PURE_STRAIN_MIN = 2
+_MULTIVITAMIN_BROAD_PANEL_MIN = 8
 # The pure-strain promotion (panel==0) is the weakest probiotic signal, so it is
 # blocked when the product clearly advertises a NON-probiotic hero. This guards
 # against future cleaner/enricher panel-loss turning a zinc/protein/fiber product
@@ -614,7 +615,24 @@ def _is_multivitamin_route_eligible(product: Dict[str, Any], name_text: str) -> 
     ):
         return True
     canonicals = _positive_canonicals(product)
-    return len(canonicals & _MULTI_PANEL_CANONICALS) >= 4
+    if len(canonicals & _MULTI_PANEL_CANONICALS) >= 4:
+        return True
+    if _read_primary_type(product) == "multivitamin":
+        return (
+            _positive_scorable_row_count(product)
+            >= _MULTIVITAMIN_BROAD_PANEL_MIN
+        )
+    return False
+
+
+def _positive_scorable_row_count(product: Dict[str, Any]) -> int:
+    count = 0
+    for row in _scoring_rows(product):
+        if row.get("scoring_input_kind") == "product_level_evidence":
+            continue
+        if _positive_quantity(row):
+            count += 1
+    return count
 
 
 def _product_label_text(product: Dict[str, Any]) -> str:

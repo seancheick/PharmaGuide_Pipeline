@@ -15,7 +15,7 @@ does not invent condition matching when the source fields are absent.
 from __future__ import annotations
 
 import re
-from typing import Any, Dict, Iterable, List, Set
+from typing import Any, Dict, List, Set
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
 
@@ -68,6 +68,18 @@ EFFECT_DIRECTION_MULTIPLIERS = {
     "negative": 0.0,
 }
 
+NATIVE_STRAIN_EVIDENCE_POINTS = {
+    "strong": 8.0,
+    "high": 8.0,
+    "moderate": 6.0,
+    "medium": 6.0,
+    "weak": 3.0,
+    "low": 3.0,
+    "limited": 3.0,
+}
+
+NATIVE_STRAIN_EVIDENCE_WEIGHTS = (1.0, 0.7, 0.5, 0.3)
+
 
 def score_evidence(product: Any) -> Dict[str, Any]:
     """Return the probiotic Evidence dimension payload."""
@@ -75,7 +87,15 @@ def score_evidence(product: Any) -> Dict[str, Any]:
 
     generic_payload = score_generic_evidence(product)
     generic_score = _as_float(generic_payload.get("score"), 0.0)
-    strain_clinical = min(CAP_STRAIN_CLINICAL, generic_score)
+    effect_multiplier = _best_effect_direction_multiplier(product)
+    native_evidence = _score_native_clinical_strain_evidence(
+        product,
+        effect_multiplier=effect_multiplier,
+    )
+    strain_clinical = min(
+        CAP_STRAIN_CLINICAL,
+        max(generic_score, native_evidence["score"]),
+    )
 
     relevance = _score_indication_relevance(product)
     indication_relevance = relevance["score"]
@@ -97,6 +117,8 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "phase": PHASE_MARKER,
             "generic_evidence_score": generic_score,
             "generic_evidence_metadata": generic_payload.get("metadata", {}),
+            "native_clinical_strain_evidence_score": round(native_evidence["score"], 4),
+            "native_clinical_strain_evidence_rows": native_evidence["rows"],
             "clinical_strain_count": len(_clinical_strains(product)),
             "indication_relevance_level": relevance["level"],
             "product_positioning_categories": sorted(relevance["product_categories"]),
@@ -105,6 +127,71 @@ def score_evidence(product: Any) -> Dict[str, Any]:
             "relevance_reason": relevance["reason"],
             "indication_effect_multiplier": relevance["effect_multiplier"],
         },
+    }
+
+
+def _score_native_clinical_strain_evidence(
+    product: Dict[str, Any],
+    *,
+    effect_multiplier: float,
+) -> Dict[str, Any]:
+    """Score probiotic-native clinical strain evidence already found by enrichment.
+
+    The generic evidence pipeline remains the preferred evidence source when it
+    matches. This fallback prevents a second-brain gap where
+    ``probiotic_data.clinical_strains`` identifies a known clinical strain but
+    ``evidence_data.clinical_matches`` is empty, which otherwise produces zero
+    strain evidence for products like BB536-only probiotics.
+    """
+
+    if effect_multiplier <= 0:
+        return {"score": 0.0, "rows": []}
+
+    seen: Set[str] = set()
+    rows: List[Dict[str, Any]] = []
+    for strain in _clinical_strains(product):
+        key = _native_strain_key(strain)
+        if key in seen:
+            continue
+        seen.add(key)
+
+        support_token = _native_support_token(strain)
+        base_points = NATIVE_STRAIN_EVIDENCE_POINTS.get(support_token, 0.0)
+        if base_points <= 0:
+            continue
+
+        rows.append(
+            {
+                "clinical_id": strain.get("clinical_id"),
+                "strain": (
+                    strain.get("strain")
+                    or strain.get("standard_name")
+                    or strain.get("name")
+                ),
+                "support_level": support_token,
+                "base_points": base_points,
+            }
+        )
+
+    rows.sort(key=lambda row: row["base_points"], reverse=True)
+    weighted_score = 0.0
+    weighted_rows: List[Dict[str, Any]] = []
+    for idx, row in enumerate(rows[: len(NATIVE_STRAIN_EVIDENCE_WEIGHTS)]):
+        weight = NATIVE_STRAIN_EVIDENCE_WEIGHTS[idx]
+        contribution = row["base_points"] * weight * effect_multiplier
+        weighted_score += contribution
+        weighted_rows.append(
+            {
+                **row,
+                "weight": weight,
+                "effect_multiplier": effect_multiplier,
+                "contribution": round(contribution, 4),
+            }
+        )
+
+    return {
+        "score": min(CAP_STRAIN_CLINICAL, weighted_score),
+        "rows": weighted_rows,
     }
 
 
@@ -235,6 +322,33 @@ def _strain_indication_categories(product: Dict[str, Any]) -> Set[str]:
 def _clinical_strains(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     pdata = _probiotic_payload(product)
     return [row for row in _safe_list(pdata.get("clinical_strains")) if isinstance(row, dict)]
+
+
+def _native_strain_key(strain: Dict[str, Any]) -> str:
+    return _norm_text(
+        strain.get("clinical_id")
+        or strain.get("canonical_id")
+        or strain.get("strain")
+        or strain.get("standard_name")
+        or strain.get("name")
+    )
+
+
+def _native_support_token(strain: Dict[str, Any]) -> str:
+    candidates = (
+        strain.get("clinical_support_level"),
+        strain.get("evidence_level"),
+        strain.get("evidence_strength"),
+        strain.get("support_level"),
+    )
+    for candidate in candidates:
+        token = _norm_text(candidate)
+        if not token:
+            continue
+        for known in NATIVE_STRAIN_EVIDENCE_POINTS:
+            if known in token.split() or token == known:
+                return known
+    return ""
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
