@@ -8,7 +8,7 @@ Multi/prenatal Transparency is panel-aware:
         B3 claim_compliance bonus               up to +4
 
     Penalties reused from generic_transparency:
-        B2 allergen presence                    up to -2
+        B2 false allergen-free claim            up to -2
         B5 proprietary blend opacity            class-aware multi/prenatal 1.3x
         B6 marketing / disease claims           -5
 
@@ -161,14 +161,32 @@ def test_transparency_b3_claim_compliance_reuses_generic_and_clamps_at_15() -> N
     assert payload["metadata"]["cap_applied"] is False
 
 
-def test_transparency_b2_allergen_penalty_reuses_generic() -> None:
+def test_transparency_b2_allergen_presence_alone_has_no_penalty() -> None:
     from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
     payload = score_transparency(_product(
         allergens=[{"allergen_id": "soy", "severity_level": "high"}]
     ))
 
-    assert payload["penalties"]["B2_allergen_presence"] == -2.0
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
+    assert payload["score"] == 11.0
+
+
+def test_transparency_b2_false_allergen_claim_reuses_generic() -> None:
+    from scoring_v4.modules.multi_prenatal_transparency import score_transparency
+
+    payload = score_transparency(_product(
+        allergens=[{"allergen_id": "soy", "severity_level": "high"}],
+        compliance={
+            "allergen_free_claims": ["soy-free"],
+            "gluten_free": False,
+            "vegan": False,
+            "conflicts": [],
+            "has_may_contain_warning": False,
+        },
+    ))
+
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == -2.0
     assert payload["score"] == 9.0
 
 

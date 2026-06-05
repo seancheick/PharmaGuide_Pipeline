@@ -13,7 +13,7 @@ positives + reuses the generic Transparency penalty machinery:
                                                            vegan_or_veg +1)
 
     Penalties (reused from generic_transparency):
-        B2 allergen presence                    up to -2
+        B2 false allergen-free claim            up to -2
         B5 opacity (class-aware probiotic 0.4x) up to -5
         B6 marketing / disease claims           -5
 
@@ -200,14 +200,31 @@ def test_transparency_b3_claim_compliance_reuses_generic() -> None:
 # --- B2 allergen penalty (reused) ----------------------------------------
 
 
-def test_transparency_b2_allergen_penalty_reuses_generic() -> None:
+def test_transparency_b2_allergen_presence_alone_has_no_penalty() -> None:
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     product = _probiotic(
         allergens=[{"allergen_id": "milk", "severity_level": "high"}],
     )
     payload = score_transparency(product)
-    assert payload["penalties"]["B2_allergen_presence"] == -2.0
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
+
+
+def test_transparency_b2_false_allergen_claim_reuses_generic() -> None:
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    product = _probiotic(
+        allergens=[{"allergen_id": "milk", "severity_level": "high"}],
+        compliance={
+            "allergen_free_claims": ["dairy-free"],
+            "conflicts": [],
+            "has_may_contain_warning": False,
+            "gluten_free": False,
+            "vegan": False,
+        },
+    )
+    payload = score_transparency(product)
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == -2.0
 
 
 # --- B5 opacity class-aware probiotic 0.4x (reused) ----------------------

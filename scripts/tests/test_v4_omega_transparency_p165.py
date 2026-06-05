@@ -285,14 +285,32 @@ def test_b3_capped_at_4() -> None:
 # --- Penalties ----------------------------------------------------------
 
 
-def test_b2_allergen_penalty_applied() -> None:
+def test_b2_allergen_presence_alone_has_no_penalty() -> None:
     from scoring_v4.modules.omega_transparency import score_transparency
 
     product = _omega_product(contaminant_data={
         "allergens": {"allergens": [{"allergen_id": "shellfish", "severity_level": "high"}]}
     })
     payload = score_transparency(product)
-    assert payload["penalties"].get("b2_allergen_presence", 0) < 0
+    assert payload["penalties"].get("b2_false_allergen_free_claim", 0) == 0
+
+
+def test_b2_false_allergen_claim_penalty_applied() -> None:
+    from scoring_v4.modules.omega_transparency import score_transparency
+
+    product = _omega_product(
+        contaminant_data={
+            "allergens": {"allergens": [{"allergen_id": "shellfish", "severity_level": "high"}]}
+        },
+        compliance_data={
+            "allergen_free_claims": ["shellfish-free"],
+            "gluten_free": False,
+            "vegan": False,
+            "conflicts": [],
+        },
+    )
+    payload = score_transparency(product)
+    assert payload["penalties"].get("b2_false_allergen_free_claim", 0) == -2.0
 
 
 def test_b6_marketing_penalty_applied() -> None:
@@ -372,9 +390,9 @@ def _load_canaries(ids):
 # break this lock — what we want to guarantee is that Transparency is in
 # the right ballpark and the positive components fire correctly.
 @pytest.mark.parametrize("dsld_id,min_score,max_score", [
-    ("327776", 10.0, 11.0),   # Sports Research: EPA/DHA + TG form disclosed
-    ("326270", 10.0, 11.0),   # Sports Research alt
-    ("288740", 7.5, 8.5),     # Nordic: undefined form so no form_disclosed
+    ("327776", 11.5, 12.5),   # Sports Research: EPA/DHA + TG form disclosed
+    ("326270", 11.5, 12.5),   # Sports Research alt
+    ("288740", 10.5, 11.5),   # Nordic: undefined form; honest allergen presence no longer penalizes
     ("273630", 8.5, 9.5),     # Garden of Life Advanced Omega
     ("239592", 8.0, 12.0),    # CVS Krill
     ("182968", 8.0, 12.0),    # Pure Encap Krill-Plex

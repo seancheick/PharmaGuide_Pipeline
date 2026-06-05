@@ -155,7 +155,7 @@ def test_transparency_payload_shape_and_phase() -> None:
     assert payload["max"] == 10.0
     assert payload["components"]["clear_disclosure_base"] == 6.0
     assert payload["components"]["B3_claim_compliance"] == 0.0
-    assert payload["penalties"]["B2_allergen_presence"] == 0.0
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
     assert payload["penalties"]["B5_proprietary_blend_opacity"] == 0.0
     assert payload["penalties"]["B6_marketing_claims"] == 0.0
     assert payload["phase"] == "P1.3.5_transparency"
@@ -185,7 +185,24 @@ def test_valid_claims_can_reach_full_transparency_score() -> None:
     }
 
 
-def test_allergen_penalty_deduplicates_and_blocks_allergen_free_claim() -> None:
+def test_disclosed_allergen_without_free_claim_has_no_transparency_penalty() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    payload = score_transparency(
+        _product(
+            allergens=[
+                {"allergen_name": "Milk", "severity_level": "high"},
+                {"allergen_name": "Soy", "severity_level": "moderate"},
+            ],
+        )
+    )
+
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
+    assert payload["metadata"]["B2_seen_allergens"] == {"milk": 2.0, "soy": 1.5}
+    assert payload["metadata"]["matched_false_claim_groups"] == []
+
+
+def test_false_allergen_free_claim_penalty_deduplicates_and_blocks_bonus() -> None:
     from scoring_v4.modules.generic_transparency import score_transparency
 
     compliance = {
@@ -207,10 +224,46 @@ def test_allergen_penalty_deduplicates_and_blocks_allergen_free_claim() -> None:
         )
     )
 
-    assert payload["penalties"]["B2_allergen_presence"] == -2.0
+    assert payload["penalties"]["B2_false_allergen_free_claim"] == -2.0
     assert payload["components"]["B3_claim_compliance"] == 0.0
-    assert payload["metadata"]["B2_raw_before_cap"] == pytest.approx(3.5)
+    assert payload["metadata"]["B2_raw_before_cap"] == pytest.approx(2.0)
     assert payload["metadata"]["claim_validations"]["allergen_free"] is False
+    assert payload["metadata"]["matched_false_claim_groups"] == ["dairy"]
+
+
+def test_gluten_free_claim_penalizes_wheat_or_barley_conflict_only() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    gluten_conflict = score_transparency(
+        _product(
+            compliance_data={
+                "allergen_free_claims": [],
+                "gluten_free": True,
+                "vegan": False,
+                "vegetarian": False,
+                "conflicts": ["gluten-free claim conflicts with detected gluten/wheat"],
+                "has_may_contain_warning": False,
+            },
+            allergens=[{"allergen_name": "Kamut", "severity_level": "high"}],
+        )
+    )
+    dairy_present = score_transparency(
+        _product(
+            compliance_data={
+                "allergen_free_claims": [],
+                "gluten_free": True,
+                "vegan": False,
+                "vegetarian": False,
+                "conflicts": [],
+                "has_may_contain_warning": False,
+            },
+            allergens=[{"allergen_name": "Milk", "severity_level": "high"}],
+        )
+    )
+
+    assert gluten_conflict["penalties"]["B2_false_allergen_free_claim"] == -2.0
+    assert dairy_present["penalties"]["B2_false_allergen_free_claim"] == 0.0
+    assert dairy_present["metadata"]["claim_validations"]["gluten_free"] is True
 
 
 def test_label_contradiction_blocks_gluten_and_vegan_claims() -> None:

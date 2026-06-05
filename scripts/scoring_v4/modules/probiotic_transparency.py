@@ -14,7 +14,7 @@ generic Transparency penalty machinery:
          from generic_transparency unchanged.)
 
     Penalties (reused from generic_transparency):
-      - B2 allergen presence                    up to -2
+      - B2 false allergen-free claim            up to -2
       - B5 opacity (class-aware probiotic 0.4x) up to -5
         (§5 line 255: probiotic with hidden per-strain CFU but
          named strains earns a moderate penalty, not a severe one.)
@@ -41,7 +41,7 @@ from typing import Any, Dict
 
 from scoring_v4.modules.generic_transparency import (
     _derive_claim_validations,
-    _score_b2_allergen_penalty,
+    _score_b2_false_allergen_claim_penalty,
     _score_b3_claim_compliance,
     _score_b5_proprietary_blend_penalty,
     _score_b6_disease_claim_penalty,
@@ -71,7 +71,7 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     flags: list = []
 
     # Reuse penalty machinery + claim validations from generic_transparency.
-    b2, b2_meta = _score_b2_allergen_penalty(product)
+    b2, b2_meta = _score_b2_false_allergen_claim_penalty(product)
     allergen_valid, gluten_valid, vegan_valid, claim_flags = _derive_claim_validations(product, b2)
     flags.extend(claim_flags)
     b3 = _score_b3_claim_compliance(
@@ -92,7 +92,7 @@ def score_transparency(product: Any) -> Dict[str, Any]:
         "B3_claim_compliance":         round(b3, 4),
     }
     penalties = {
-        "B2_allergen_presence":            _neg_or_zero(b2),
+        "B2_false_allergen_free_claim":    _neg_or_zero(b2),
         "B5_proprietary_blend_opacity":    _neg_or_zero(b5),
         "B6_marketing_claims":             _neg_or_zero(b6),
     }

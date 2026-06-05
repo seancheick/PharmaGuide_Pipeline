@@ -19,7 +19,7 @@ omega_rubric.json:
                                   vegan reused from generic_transparency)
 
     Penalties (reused from generic_transparency):
-      - b2_allergen presence         up to -2
+      - b2_false_allergen_free_claim up to -2
       - b5_opacity (class-aware)     up to -5
         (omega defaults to the 'generic' B5 class so the standard
          opacity multiplier applies; not the probiotic 0.4x)
@@ -47,7 +47,7 @@ from typing import Any, Dict, List
 from scoring_v4.modules.generic_helpers import get_active_ingredients
 from scoring_v4.modules.generic_transparency import (
     _derive_claim_validations,
-    _score_b2_allergen_penalty,
+    _score_b2_false_allergen_claim_penalty,
     _score_b3_claim_compliance,
     _score_b5_proprietary_blend_penalty,
     _score_b6_disease_claim_penalty,
@@ -190,7 +190,7 @@ def score_transparency(product: Any) -> Dict[str, Any]:
 
     # B3 reused from generic — produces 0..4 based on allergen_free /
     # gluten_free / vegan validations.
-    b2_for_validations, b2_meta = _score_b2_allergen_penalty(product)
+    b2_for_validations, b2_meta = _score_b2_false_allergen_claim_penalty(product)
     allergen_valid, gluten_valid, vegan_valid, claim_flags = _derive_claim_validations(
         product, b2_for_validations
     )
@@ -214,7 +214,7 @@ def score_transparency(product: Any) -> Dict[str, Any]:
 
     penalties: Dict[str, float] = {}
     if b2_penalty > 0:
-        penalties["b2_allergen_presence"] = -round(b2_penalty, 4)
+        penalties["b2_false_allergen_free_claim"] = -round(b2_penalty, 4)
     if b5_penalty > 0:
         penalties["b5_proprietary_blend_opacity"] = -round(b5_penalty, 4)
     if b6_penalty > 0:

@@ -4,7 +4,7 @@ Transparency (10) is the user-facing home for disclosure quality:
 
     clear disclosure base             6
     B3 claim compliance              +4
-    B2 allergen presence             -2
+    B2 false allergen-free claim     -2
     B5 proprietary blend opacity     -10 (class-aware)
     B6 marketing / disease claims    -5
 
@@ -91,7 +91,7 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     flags: List[str] = []
-    b2, b2_meta = _score_b2_allergen_penalty(product)
+    b2, b2_meta = _score_b2_false_allergen_claim_penalty(product)
     allergen_valid, gluten_valid, vegan_valid, claim_flags = _derive_claim_validations(product, b2)
     flags.extend(claim_flags)
     b3 = _score_b3_claim_compliance(
@@ -111,7 +111,7 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
         "hypoallergenic_bonus": 0.0,
     }
     penalties = {
-        "B2_allergen_presence": _negative_or_zero(b2),
+        "B2_false_allergen_free_claim": _negative_or_zero(b2),
         "B5_proprietary_blend_opacity": _negative_or_zero(b5),
         "B6_marketing_claims": _negative_or_zero(b6),
     }
@@ -134,6 +134,10 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
         "flags": sorted(set(flags)),
         "B2_raw_before_cap": round(b2_meta["raw_before_cap"], 4),
         "B2_seen_allergens": b2_meta["seen_allergens"],
+        "claimed_allergen_groups": b2_meta.get("claimed_allergen_groups", []),
+        "present_allergen_groups": b2_meta.get("present_allergen_groups", []),
+        "conflict_allergen_groups": b2_meta.get("conflict_allergen_groups", []),
+        "matched_false_claim_groups": b2_meta.get("matched_false_claim_groups", []),
         "B5_blend_evidence": b5_evidence,
         "B5_blend_count": len(b5_evidence),
         "B5_raw_before_cap": round(sum(e["computed_blend_penalty_magnitude"] for e in b5_evidence), 4),
@@ -150,13 +154,16 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _score_b2_allergen_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
+    return _score_b2_false_allergen_claim_penalty(product)
+
+
+def _score_b2_false_allergen_claim_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
     allergens = _safe_list(
         _safe_dict(_safe_dict(product.get("contaminant_data")).get("allergens")).get(
             "allergens", product.get("allergen_hits", [])
         )
     )
     seen: Dict[str, float] = {}
-    anonymous_penalty = 0.0
     for item in allergens:
         if not isinstance(item, dict):
             continue
@@ -170,13 +177,37 @@ def _score_b2_allergen_penalty(product: Dict[str, Any]) -> Tuple[float, Dict[str
         )
         if key:
             seen[key] = max(seen.get(key, 0.0), severity)
-        else:
-            anonymous_penalty += severity
 
-    raw = anonymous_penalty + sum(seen.values())
+    compliance = _safe_dict(product.get("compliance_data"))
+    conflicts = [_norm_text(x) for x in _safe_list(compliance.get("conflicts"))]
+    claim_groups = _claimed_allergen_groups(compliance)
+    present_groups = _present_allergen_groups(seen)
+    conflict_groups = _conflict_allergen_groups(conflicts)
+
+    matched_groups = sorted(
+        (present_groups | conflict_groups)
+        if "allergen" in claim_groups
+        else claim_groups & (present_groups | conflict_groups)
+    )
+    conflict_only = bool(conflicts and claim_groups and conflict_groups and not matched_groups)
+    if conflict_only:
+        matched_groups = sorted(conflict_groups)
+
+    raw = 0.0
+    if matched_groups:
+        raw = max((seen.get(group, 0.0) for group in matched_groups), default=0.0)
+        if raw == 0.0:
+            raw = B2_CAP
+    elif claim_groups and bool(compliance.get("has_may_contain_warning", False)):
+        raw = B2_CAP
+
     return _clamp(0.0, B2_CAP, raw), {
         "raw_before_cap": raw,
         "seen_allergens": dict(sorted(seen.items())),
+        "claimed_allergen_groups": sorted(claim_groups),
+        "present_allergen_groups": sorted(present_groups),
+        "conflict_allergen_groups": sorted(conflict_groups),
+        "matched_false_claim_groups": matched_groups,
     }
 
 
@@ -234,6 +265,69 @@ def _derive_claim_validations(
         flags.append("LABEL_CONTRADICTION_DETECTED")
 
     return allergen_valid, gluten_valid, vegan_valid, flags
+
+
+def _claimed_allergen_groups(compliance: Dict[str, Any]) -> set[str]:
+    groups: set[str] = set()
+    for claim in _safe_list(compliance.get("allergen_free_claims")):
+        text_parts: List[str] = []
+        if isinstance(claim, dict):
+            text_parts.extend(
+                str(claim.get(key) or "")
+                for key in ("allergen", "allergen_type", "claim", "claim_type", "id", "dedupe_key", "display_name")
+            )
+        else:
+            text_parts.append(str(claim))
+        for text in text_parts:
+            groups.update(_allergen_groups_from_text(text))
+    if bool(compliance.get("gluten_free", False)):
+        groups.add("gluten")
+    return groups
+
+
+def _present_allergen_groups(seen: Dict[str, float]) -> set[str]:
+    groups: set[str] = set()
+    for text in seen:
+        groups.update(_allergen_groups_from_text(text))
+    return groups
+
+
+def _conflict_allergen_groups(conflicts: List[str]) -> set[str]:
+    groups: set[str] = set()
+    for text in conflicts:
+        groups.update(_allergen_groups_from_text(text))
+    return groups
+
+
+def _allergen_groups_from_text(text: str) -> set[str]:
+    norm = _norm_text(text)
+    if not norm:
+        return set()
+
+    groups: set[str] = set()
+    if "allergen" in norm and "free" in norm:
+        groups.add("allergen")
+    if any(term in norm for term in ("gluten", "wheat", "barley", "rye", "kamut", "spelt")):
+        groups.add("gluten")
+    if any(term in norm for term in ("dairy", "milk", "casein", "whey", "lactose")):
+        groups.add("dairy")
+    if "soy" in norm:
+        groups.add("soy")
+    if "egg" in norm:
+        groups.add("egg")
+    if any(term in norm for term in ("shellfish", "crustacean", "shrimp", "crab", "lobster")):
+        groups.add("shellfish")
+    if any(term in norm for term in ("peanut", "groundnut")):
+        groups.add("peanut")
+    if any(term in norm for term in ("tree nut", "treenut", "almond", "cashew", "walnut", "pecan", "hazelnut", "pistachio")):
+        groups.add("tree_nut")
+    elif "nut" in norm:
+        groups.add("tree_nut")
+    if "yeast" in norm:
+        groups.add("yeast")
+    if "sesame" in norm:
+        groups.add("sesame")
+    return groups
 
 
 def _score_b3_claim_compliance(
