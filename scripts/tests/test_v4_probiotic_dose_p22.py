@@ -187,6 +187,63 @@ def test_per_strain_cfu_disclosure_is_proportional_to_named_strain_count() -> No
     assert payload["metadata"]["total_strain_count"] == 2
 
 
+def test_incomplete_per_strain_cfu_still_uses_aggregate_cfu_adequacy_proxy() -> None:
+    """Aggregate CFU is dose evidence even when a label discloses CFU for
+    only part of a multi-strain blend.
+
+    Real case: a probiotic with total 10B CFU and 8 named strains disclosed
+    one per-strain CFU-like row. The old logic treated "one per-strain CFU
+    present" as a reason to discard the aggregate CFU proxy entirely, causing
+    Dose to collapse to disclosure-only points.
+    """
+    from scoring_v4.modules.probiotic_dose import score_dose
+
+    blends = [
+        {
+            "name": "B. bifidum",
+            "strains": ["B. bifidum"],
+            "cfu_data": {"has_cfu": True},
+        },
+        {
+            "name": "Probiotic Complex Blend",
+            "strains": [
+                "B. bifidum",
+                "B. lactis",
+                "L. rhamnosus",
+                "L. plantarum",
+                "L. acidophilus",
+                "L. salivarius",
+                "B. longum",
+                "L. reuteri",
+            ],
+            "cfu_data": {"has_cfu": True, "billion_count": 10.0, "cfu_count": 10_000_000_000},
+        },
+    ]
+    clinical_strains = [
+        _strain("B. bifidum", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("B. lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("L. rhamnosus", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("L. plantarum", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("L. acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("L. salivarius", cfu_per_day=None, adequacy_tier=None, support="weak"),
+        _strain("B. longum", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("L. reuteri", cfu_per_day=None, adequacy_tier=None, support="weak"),
+    ]
+
+    product = _product(total_strain_count=8, blends=blends, clinical_strains=clinical_strains)
+    product["probiotic_data"]["total_billion_count"] = 10.0
+    product["probiotic_data"]["total_cfu"] = 10_000_000_000
+
+    payload = score_dose(product)
+
+    assert payload["components"]["per_strain_cfu_disclosure"] == 1.25
+    assert payload["components"]["cfu_adequacy"] == 8.0
+    assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 1
+    assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_even_split_proxy"
+    assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_modeled_proxy"
+
+
 def test_single_strain_has_cfu_boolean_counts_for_disclosure_without_numeric_adequacy() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
 
@@ -257,7 +314,13 @@ def test_cfu_adequacy_hard_gates_missing_tier_missing_cfu_and_postbiotic() -> No
         _strain("Inactivated", adequacy_tier="excellent", support="high", is_inactivated=True),
     ]
 
-    payload = score_dose(_product(total_strain_count=4, clinical_strains=strains))
+    product = _product(total_strain_count=4, clinical_strains=strains)
+    product["probiotic_data"]["has_cfu"] = False
+    product["probiotic_data"]["total_billion_count"] = 0.0
+    product["probiotic_data"]["total_cfu"] = 0
+    product["probiotic_data"]["probiotic_blends"] = []
+
+    payload = score_dose(product)
 
     assert payload["components"]["cfu_adequacy"] == 0.0
     skipped = [row.get("skipped_reason") for row in payload["metadata"]["cfu_adequacy_contributions"]]

@@ -66,8 +66,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
         total_strain_count=total_strain_count,
         disclosed_count=disclosed_count,
     )
-    if cfu_adequacy_scaled <= 0.0 and aggregate_proxy["score"] > 0.0:
-        cfu_adequacy_scaled = aggregate_proxy["score"]
+    if aggregate_proxy["score"] > 0.0:
+        cfu_adequacy_scaled = max(cfu_adequacy_scaled, aggregate_proxy["score"])
     cfu_adequacy_basis = _cfu_adequacy_basis(
         cfu_adequacy_scaled,
         aggregate_proxy,
@@ -187,8 +187,8 @@ def _compute_aggregate_cfu_proxy(
         "cap": CAP_AGGREGATE_CFU_PROXY_ADEQUACY,
         "reason": None,
     }
-    if disclosed_count > 0:
-        payload["reason"] = "per_strain_cfu_present"
+    if disclosed_count >= total_strain_count:
+        payload["reason"] = "full_per_strain_cfu_present"
         return payload
     if total_strain_count <= 0:
         payload["reason"] = "no_strain_data"
