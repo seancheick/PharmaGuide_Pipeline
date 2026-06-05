@@ -80,13 +80,13 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (71.2, 72.6),  # cert→GMP lifts verified probiotic trust
+        "score_range": (73.9, 75.3),  # c644d77c: aggregate-CFU rebalance (cap 6->8)
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (29.8, 31.2),
+        "score_range": (32.4, 33.8),  # c644d77c CFU rebalance
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
@@ -94,7 +94,9 @@ PROBIOTIC_CANARIES = {
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
         "score_range": (56.3, 57.7),
-        "traits": {"form_max": True, "aggregate_cfu_proxy": True, "trust_zero": True},
+        # c644d77c: appropriate-diversity curve drops a 16+-strain 50B aggregate
+        # product below formulation max (no longer form_max=25); still aggregate-CFU proxy.
+        "traits": {"aggregate_cfu_proxy": True, "trust_zero": True},
     },
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
@@ -105,13 +107,13 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (46.8, 48.2),  # Phase 4: 67 → 65.1
+        "score_range": (48.8, 50.2),  # c644d77c CFU rebalance
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (36.4, 37.8),
+        "score_range": (38.5, 39.9),  # c644d77c CFU rebalance
         "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }
@@ -272,7 +274,7 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         assert _dimension_score(breakdown, "dose") > 0
     if traits.get("aggregate_cfu_proxy"):
         dose = breakdown["dimensions"]["dose"]
-        assert dose["score"] == 6.0
+        assert dose["score"] == 8.0  # c644d77c: aggregate-CFU cap 6->8
         assert dose["components"]["per_strain_cfu_disclosure"] == 0.0
         assert dose["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
         assert dose["metadata"]["aggregate_cfu_proxy"]["applied"] is True
