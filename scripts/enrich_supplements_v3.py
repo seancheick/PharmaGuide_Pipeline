@@ -7828,12 +7828,18 @@ class SupplementEnricherV3:
                     std_unit = (botanical.get("standardization_unit") or "percent").strip().lower()
                     is_percent_unit = std_unit in ("", "percent", "%")
 
-                    # bonus_class: prefer explicit standardization_basis, else derive
-                    # from category so non-botanicals (minerals/enzymes/isolated
-                    # compounds) are capped below the full botanical tier downstream.
+                    # bonus_class: an explicit data `bonus_class` wins (lets the
+                    # file honestly mark non-botanicals — e.g. berberine/beta-glucans
+                    # as isolated_compound — so category guessing can't grant them
+                    # the full botanical tier). Else prefer standardization_basis,
+                    # else derive from category. Downstream per-class caps then keep
+                    # non-botanicals below the botanical_standardization tier.
+                    explicit_class = (botanical.get("bonus_class") or "").strip().lower()
                     basis = (botanical.get("standardization_basis") or "").strip().lower()
                     cat = (botanical.get("category") or "").strip().lower()
-                    if basis in ("marker_percent", "mushroom_fraction", "branded_extract"):
+                    if explicit_class:
+                        bonus_class = explicit_class
+                    elif basis in ("marker_percent", "mushroom_fraction", "branded_extract"):
                         bonus_class = basis
                     elif cat in ("mineral", "mineral_chelate", "mineral_complex"):
                         bonus_class = "branded_form"

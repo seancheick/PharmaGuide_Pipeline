@@ -133,3 +133,39 @@ def test_phase5_added_botanicals_present_and_eligible(sbot, entry_id, marker, th
     assert e.get("threshold_source"), f"{entry_id} must cite a threshold_source."
     hay = " ".join(e.get("markers", []) + e.get("marker_compounds", [])).lower()
     assert marker in hay, f"{entry_id} must list its standardization marker '{marker}'."
+
+
+# --------------------------------------------------------------------------- #
+# Contamination guard — non-botanicals carry an honest, capped bonus_class
+# --------------------------------------------------------------------------- #
+_CONTAMINATION_CLASSES = [
+    ("berberine", "isolated_compound"),
+    ("beta_glucans", "isolated_compound"),
+    ("astaxanthin_haematococcus_pluvialis", "isolated_compound"),
+    ("chromax", "branded_form"),
+    ("alphawave_l_theanine", "isolated_compound"),
+    ("cognizin_citicoline", "isolated_compound"),
+    ("bromelain", "enzyme_activity"),
+]
+
+
+@pytest.mark.parametrize("entry_id,expected_class", _CONTAMINATION_CLASSES)
+def test_non_botanicals_carry_capped_bonus_class(sbot, entry_id, expected_class):
+    """Non-botanicals living in the bonus file must declare an explicit
+    bonus_class that caps them BELOW the +4 botanical-standardization tier
+    (isolated_compound<=2, branded_form/enzyme_activity<=3). Prevents minerals,
+    enzymes, and isolated compounds from earning a 'botanical standardization'
+    bonus they don't deserve."""
+    e = sbot[entry_id]
+    assert e.get("bonus_class") == expected_class, (
+        f"{entry_id} must be bonus_class={expected_class} (not a full botanical tier)."
+    )
+    assert expected_class != "botanical_standardization"
+
+
+def test_contaminated_classes_cap_below_botanical(scorer):
+    """Scored end-to-end: an isolated_compound at 'full' tier caps at 2,
+    branded/enzyme at 3 — below the botanical 4."""
+    assert _a5b(scorer, [{"tier": "full", "bonus_class": "isolated_compound"}]) == 2.0
+    assert _a5b(scorer, [{"tier": "full", "bonus_class": "enzyme_activity"}]) == 3.0
+    assert _a5b(scorer, [{"tier": "full", "bonus_class": "branded_form"}]) == 3.0

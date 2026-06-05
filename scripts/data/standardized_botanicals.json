@@ -197,7 +197,9 @@
       "min_threshold": 100,
       "attributes": {
         "iqm_parent_id": "l_theanine"
-      }
+      },
+      "bonus_class": "isolated_compound",
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Amla",
@@ -462,7 +464,9 @@
         "https://pubmed.ncbi.nlm.nih.gov/21962237/",
         "https://www.nccih.nih.gov/health/astaxanthin",
         "https://www.cyanotech.com/bioastin/"
-      ]
+      ],
+      "bonus_class": "isolated_compound",
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "AstaZine",
@@ -737,7 +741,9 @@
           }
         ]
       },
-      "cui": "C0005117"
+      "cui": "C0005117",
+      "bonus_class": "isolated_compound",
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Beta-Glucans",
@@ -767,7 +773,9 @@
       },
       "cui": "C1134651",
       "min_threshold": 20,
-      "threshold_source": "20% beta-glucans \u2014 minimum for functional claim"
+      "threshold_source": "20% beta-glucans \u2014 minimum for functional claim",
+      "bonus_class": "isolated_compound",
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Bil-Max",
@@ -1221,7 +1229,9 @@
       "threshold_source": "2400 GDU/g \u2014 activity unit threshold",
       "attributes": {
         "iqm_parent_id": "bromelain"
-      }
+      },
+      "bonus_class": "enzyme_activity",
+      "_bonus_class_note": "v3.7.0: explicitly classed enzyme_activity \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Burdock Root",
@@ -1519,7 +1529,9 @@
       "sources": [
         "https://pubmed.ncbi.nlm.nih.gov/16823477/",
         "https://www.nccih.nih.gov/health/chromium"
-      ]
+      ],
+      "bonus_class": "branded_form",
+      "_bonus_class_note": "v3.7.0: explicitly classed branded_form \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Cinnamon Bark Essential Oil",
@@ -1742,7 +1754,9 @@
       "min_threshold": 99,
       "attributes": {
         "iqm_parent_id": "choline"
-      }
+      },
+      "bonus_class": "isolated_compound",
+      "_bonus_class_note": "v3.7.0: explicitly classed isolated_compound \u2014 NOT botanical standardization. Capped below the +4 botanical tier; lives in standardized_botanicals.json as the bonus layer rather than a separate file (per in-file bonus_class decision)."
     },
     {
       "standard_name": "Coleus Forskohlii",
@@ -2029,7 +2043,9 @@
           }
         ]
       },
-      "cui": "C0010467"
+      "cui": "C0010467",
+      "bonus_class": "botanical_standardization",
+      "_bonus_class_note": "v3.7.0: 95% curcuminoids = the standardized Curcuma longa (turmeric) extract standard (Meriva/BCM-95/Longvida class) \u2014 kept botanical. A synthetic isolated curcumin would be isolated_compound, but this entry represents the extract."
     },
     {
       "standard_name": "Dandelion",
