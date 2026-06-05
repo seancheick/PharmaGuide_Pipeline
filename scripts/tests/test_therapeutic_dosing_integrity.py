@@ -289,6 +289,65 @@ def test_inositol_range_corrected(optimal_uls):
     assert "38163998" in (inos[0].get("references") or []), "Inositol must cite the 2023 PCOS guideline meta-analysis"
 
 
+# ── Batch 8: fatty-acid/chlorophyllin dose-anchor expansion ─────────────
+
+BATCH8_NEW_DOSE_ANCHORS = [
+    "Gamma-Linolenic Acid",
+    "Evening Primrose Oil",
+    "Chlorophyllin",
+]
+
+
+def test_batch8_new_dose_anchors_present_with_refs(optimal_uls):
+    by_name = {(e.get("standard_name") or "").lower(): e for e in optimal_uls["nutrient_recommendations"]}
+    for std in BATCH8_NEW_DOSE_ANCHORS:
+        e = by_name.get(std.lower())
+        assert e is not None, f"{std} missing from rda_optimal_uls.json"
+        assert e.get("references"), f"{std} must carry content-verified references[]"
+        assert len(e.get("data") or []) == 16, f"{std} must have a 16-row data[] grid"
+
+
+def test_batch8_new_dose_anchors_score_via_calculator():
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from rda_ul_calculator import RDAULCalculator
+
+    c = RDAULCalculator()
+    for name, amt, unit in [
+        ("gamma-linolenic acid", 120, "mg"),
+        ("evening primrose oil", 500, "mg"),
+        ("sodium copper chlorophyllin", 300, "mg"),
+    ]:
+        r = c.compute_nutrient_adequacy(name, amt, unit)
+        assert r.rda_ai is not None and r.scoring_eligible, f"{name} not scoring-eligible in optimal-uls"
+
+
+def test_chlorophyllin_anchor_does_not_alias_generic_chlorophyll(optimal_uls):
+    chlorophyllin = [
+        e for e in optimal_uls["nutrient_recommendations"]
+        if (e.get("standard_name") or "").lower() == "chlorophyllin"
+    ][0]
+    aliases = {a.lower() for a in chlorophyllin.get("aliases") or []}
+    assert "chlorophyll" not in aliases
+
+
+def test_generic_chlorophyll_does_not_partially_match_chlorophyllin_anchor():
+    import sys
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from rda_ul_calculator import RDAULCalculator
+
+    c = RDAULCalculator()
+    natural = c.compute_nutrient_adequacy("chlorophyll", 300, "mg")
+    chlorophyllin = c.compute_nutrient_adequacy("chlorophyllin", 300, "mg")
+
+    assert natural.rda_ai is None
+    assert natural.scoring_eligible is False
+    assert chlorophyllin.rda_ai == 300.0
+    assert chlorophyllin.scoring_eligible is True
+
+
 # ── citation verifier wiring ────────────────────────────────────────────
 
 def test_citation_verifier_configs_present():

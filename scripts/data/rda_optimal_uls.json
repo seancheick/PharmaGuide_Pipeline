@@ -3,8 +3,8 @@
     "description": "RDA (Recommended Dietary Allowance), optimal dosing, and UL (Upper Limit) reference values for nutrient dosing validation",
     "purpose": "dosing_validation",
     "schema_version": "5.0.0",
-    "last_updated": "2026-06-01",
-    "total_entries": 74,
+    "last_updated": "2026-06-05",
+    "total_entries": 77,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
     "country": "USA",
     "age_brackets": [
@@ -5539,6 +5539,523 @@
       "smoker_adjustment": null,
       "synthesis_precursors": null,
       "unofficial_ul": null
+    },
+    {
+      "standard_name": "Gamma-Linolenic Acid",
+      "id": "gamma_linolenic_acid",
+      "aliases": [
+        "gamma-linolenic acid",
+        "gamma linolenic acid",
+        "GLA",
+        "18:3 n-6"
+      ],
+      "unit": "mg",
+      "ul": null,
+      "ul_note": "No official UL established for gamma-linolenic acid.",
+      "optimal_range": "120-480",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Use caution with bleeding disorders or anticoagulant/antiplatelet drugs"
+      ],
+      "special_considerations": "Use when GLA is disclosed as the active fatty-acid amount; evening primrose/borage/black currant seed oil parent mass should not be treated as pure GLA.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "GI upset at higher intakes"
+      ],
+      "interaction_warnings": [
+        "Potential additive bleeding risk with anticoagulants/antiplatelets",
+        "Use caution in seizure disorders"
+      ],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Added from verified evening primrose oil / GLA clinical dosing sources. No official DRI; rda_ai anchor is the conservative lower bound for disclosed supplemental GLA.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "9707349",
+        "19052401",
+        "31497576"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 120.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
+    },
+    {
+      "standard_name": "Evening Primrose Oil",
+      "id": "evening_primrose_oil",
+      "aliases": [
+        "evening primrose oil",
+        "evening primrose seed oil",
+        "oenothera biennis oil",
+        "EPO"
+      ],
+      "unit": "mg",
+      "ul": null,
+      "ul_note": "No official UL established for evening primrose oil.",
+      "optimal_range": "500-4000",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Use caution with bleeding disorders or anticoagulant/antiplatelet drugs"
+      ],
+      "special_considerations": "Carrier-oil anchor for labels that disclose evening primrose oil mass rather than GLA mass. GLA content varies by oil standardization.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "GI upset at higher intakes"
+      ],
+      "interaction_warnings": [
+        "Potential additive bleeding risk with anticoagulants/antiplatelets",
+        "Use caution in seizure disorders"
+      ],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Added from verified evening primrose oil clinical dosing sources. No official DRI; rda_ai anchor is a conservative lower-bound supplemental oil dose.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "19052401",
+        "9707349",
+        "31497576"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 500.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
+    },
+    {
+      "standard_name": "Chlorophyllin",
+      "id": "chlorophyllin",
+      "aliases": [
+        "chlorophyllin",
+        "sodium copper chlorophyllin",
+        "copper chlorophyllin",
+        "chlorophyllin copper complex",
+        "chlorophyll copper sodium",
+        "sodium chlorophyllin"
+      ],
+      "unit": "mg",
+      "ul": null,
+      "ul_note": "No supplement UL established; copper-containing forms may matter in Wilson disease or copper overload.",
+      "optimal_range": "300",
+      "highest_ul": null,
+      "ul_status": "not_determined",
+      "is_conditionally_essential": false,
+      "conditionally_essential_for": [],
+      "synthesis_precursors": null,
+      "warnings": [
+        "Contains copper in sodium copper chlorophyllin forms",
+        "Use caution in Wilson disease or copper overload"
+      ],
+      "special_considerations": "Applies to chlorophyllin/sodium copper chlorophyllin active ingredients, not generic natural chlorophyll unless the label identifies chlorophyllin.",
+      "deficiency_symptoms": [],
+      "toxicity_symptoms": [
+        "GI upset or green discoloration of stool/urine reported"
+      ],
+      "interaction_warnings": [
+        "Copper-containing form may be inappropriate in Wilson disease"
+      ],
+      "cdrr": null,
+      "cdrr_note": null,
+      "dri_update": null,
+      "notes": "Added from content-verified chlorophyllin human intervention sources. No official DRI; rda_ai anchor is 100 mg three times daily from the aflatoxin-DNA adduct intervention.",
+      "smoker_adjustment": null,
+      "unofficial_ul": null,
+      "references": [
+        "11724948",
+        "16417778"
+      ],
+      "data": [
+        {
+          "group": "Male",
+          "age_range": "14-18",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "19-30",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "31-50",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "51-70",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Male",
+          "age_range": "71+",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "14-18",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "19-30",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "31-50",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "51-70",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Female",
+          "age_range": "71+",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "14-18",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "19-30",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Pregnancy",
+          "age_range": "31-50",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "14-18",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "19-30",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        },
+        {
+          "group": "Lactation",
+          "age_range": "31-50",
+          "rda_ai": 300.0,
+          "ul": null,
+          "rda_ai_status": null,
+          "ul_status": "not_determined"
+        }
+      ]
     },
     {
       "standard_name": "Coenzyme Q10",

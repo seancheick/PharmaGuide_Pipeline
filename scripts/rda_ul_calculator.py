@@ -425,6 +425,8 @@ class RDAULCalculator:
 
         # Try partial matching for common variations
         for db_key, data in self.nutrient_lookup.items():
+            if key == "chlorophyll" and db_key == "chlorophyllin":
+                continue
             if key in db_key or db_key in key:
                 return data
 
