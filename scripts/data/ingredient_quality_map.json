@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1413,
-      "total_form_aliases": 12227,
+      "total_form_aliases": 12223,
       "parents_with_parent_aliases": 186,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -59,7 +59,7 @@
       "proteins": 16,
       "vitamins": 22
     },
-    "schema_version": "5.4.1",
+    "schema_version": "5.4.2",
     "last_updated": "2026-06-06",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -1588,6 +1588,16 @@
           "Added Vitamin-A-context alpha-carotene and beta-cryptoxanthin forms without duplicating exact UNII/CUI identifiers or generic aliases."
         ],
         "verification_report": "scripts/audits/vitamin_a_20260602/api_verification.json"
+      },
+      "5.4.2": {
+        "date": "2026-06-06",
+        "audit": "IQM v4 defensibility audit — mechanical routing/scoring fixes",
+        "changes": [
+          "Removed over-broad generic amino-acid aliases from branched_chain_amino_acids::bcaa 2:1:1 so generic amino-acid/EAA labels do not resolve to a premium BCAA ratio.",
+          "Removed natural-source bonus from branched_chain_amino_acids::branched chain amino acids (standard).",
+          "Lowered dha/epa/fish_oil/ceramides/hemp_seed_oil unspecified forms to bio_score 8, natural=false, score=8 so unspecified labels do not outscore disclosed lower-quality specific forms."
+        ],
+        "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
       }
     },
     "category_enum": [
@@ -39810,16 +39820,12 @@
           "branched-chain amino acids",
           "leucine:isoleucine:valine 2:1:1",
           "bcaa powder",
-          "amino acids",
-          "essential amino acids",
           "bcaa supplement",
           "bcaas supplement",
           "branched-chain amino acids supplement",
           "bcaa 2:1:1 supplement",
           "leucine:isoleucine:valine 2:1:1 supplement",
           "bcaa powder supplement",
-          "amino acids supplement",
-          "essential amino acids supplement",
           "2:1:1 BCAA"
         ],
         "dosage_importance": 1.0,
@@ -39902,8 +39908,8 @@
       },
       "branched chain amino acids (standard)": {
         "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "natural": false,
+        "score": 10,
         "absorption": "BCAAs; LAT1/B0AT1 small-intestine transport; class F~90% as free or peptide-bound",
         "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Specify ratio (2:1:1 or 4:1:1) for accurate scoring. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
@@ -41928,9 +41934,9 @@
         }
       },
       "dha (unspecified)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
         "absorption": "form unspecified; could be TG, EE, rTG, or PL",
         "notes": "DHA form not specified. Conservative scoring. DHA (docosahexaenoic acid, 22:6 n-3) is critical for brain, retina, and cardiovascular health. Form significantly affects absorption — check product label. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
@@ -42085,9 +42091,9 @@
         }
       },
       "epa (unspecified)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
         "absorption": "form unspecified; could be TG, EE, rTG, or PL",
         "notes": "EPA form not specified. Conservative scoring. EPA (eicosapentaenoic acid) is the primary anti-inflammatory omega-3 fatty acid. Form affects bioavailability — check product label. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
@@ -42252,9 +42258,9 @@
         }
       },
       "ceramides (unspecified)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
         "absorption": "low (<5%); pre-absorption hydrolysis to sphingoid bases",
         "notes": "Ceramide form not specified. Conservative scoring. Ceramides are essential skin barrier lipids. Oral supplementation targets skin hydration and anti-aging. Check label for plant vs synthetic source. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
@@ -42727,9 +42733,9 @@
         }
       },
       "hemp seed oil (unspecified)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
         "absorption": "form unknown; assume TG class F ~70-85%",
         "notes": "Hemp seed oil form not specified. Conservative scoring. Hemp seed oil provides balanced omega-3/6/9 fatty acids and GLA. Contains no significant CBD or THC. Check label for cold-pressed specification. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
@@ -43454,9 +43460,9 @@
         }
       },
       "fish oil (unspecified)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
         "absorption": "form unspecified; likely TG/EE blend, F ranges 0.65-0.90",
         "notes": "Fish oil form not specified on label. Conservative scoring applied. Could be TG, EE, or rTG — form significantly affects bioavailability (up to 70% difference between worst and best). Check product label for specific form information. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
