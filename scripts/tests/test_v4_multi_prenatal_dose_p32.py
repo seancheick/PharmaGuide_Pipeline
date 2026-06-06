@@ -33,14 +33,18 @@ def _ingredient(
     name: str | None = None,
     quantity: float = 10.0,
     unit: str = "mg",
+    bio_score: float | None = None,
 ) -> dict:
-    return {
+    row = {
         "name": name or canonical_id.replace("_", " ").title(),
         "canonical_id": canonical_id,
         "mapped": True,
         "quantity": quantity,
         "unit": unit,
     }
+    if bio_score is not None:
+        row["bio_score"] = bio_score
+    return row
 
 
 def _product(*, name: str = "Complete Multivitamin", adequacy_results=None, safety_flags=None, ingredients=None) -> dict:
@@ -191,6 +195,31 @@ def test_prenatal_critical_coverage_requires_folate_iron_iodine_choline_and_dha(
     assert payload["components"]["critical_nutrient_coverage"] == 5.0
     assert payload["metadata"]["critical_nutrient_mode"] == "prenatal"
     assert payload["metadata"]["critical_nutrients_missing"] == []
+
+
+def test_prenatal_critical_thresholds_are_not_downgraded_by_form_bio_weighting() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal with DHA",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[
+            _ingredient("folate", name="Folate", bio_score=3),
+            _ingredient("iron", name="Iron", bio_score=3),
+            _ingredient("iodine", name="Iodine", bio_score=3),
+            _ingredient("choline", name="Choline", bio_score=3),
+            _ingredient("dha", name="DHA", quantity=200, unit="mg"),
+        ],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"] == {
+        "choline": 1.0,
+        "dha": 1.0,
+        "folate": 1.0,
+        "iodine": 1.0,
+        "iron": 1.0,
+    }
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_dha_half_credit_at_100mg_and_missing_list_records_gaps() -> None:

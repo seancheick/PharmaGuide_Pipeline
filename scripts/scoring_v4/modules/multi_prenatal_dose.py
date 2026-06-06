@@ -231,6 +231,38 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
     return scores
 
 
+def _critical_threshold_scores(product: Dict[str, Any]) -> Dict[str, float]:
+    """Raw RDA/AI threshold credit for prenatal-critical nutrients.
+
+    Broad dose coverage is bioavailability-weighted so a low-quality form does
+    not outscore a premium one. Critical prenatal adequacy is a different
+    question: did the label disclose enough folate/iron/iodine/choline to clear
+    the clinically meaningful minimum? Use raw pct_rda for that threshold, then
+    let formulation carry form quality and B7 carry excess-dose safety.
+    """
+    rda_ul = _safe_dict(product.get("rda_ul_data"))
+    rows = _safe_list(rda_ul.get("adequacy_results"))
+    scores: Dict[str, float] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if row.get("scoring_eligible") is False:
+            continue
+        key = _nutrient_key(row.get("nutrient") or row.get("standard_name"))
+        min_pct = CRITICAL_MIN_PCT_RDA.get(key)
+        if min_pct is None:
+            continue
+        pct_rda = _as_float(row.get("pct_rda"), None)
+        if pct_rda is None or pct_rda <= 0:
+            credit = 0.0
+        elif pct_rda >= min_pct:
+            credit = 1.0
+        else:
+            credit = 0.5
+        scores[key] = max(scores.get(key, 0.0), credit)
+    return scores
+
+
 def _score_rda_ai_coverage(scores: Dict[str, float]) -> float:
     if not scores:
         return 0.0
@@ -307,12 +339,15 @@ def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float])
     prenatal = _is_prenatal(product)
     anchors = PRENATAL_CRITICAL_ANCHORS if prenatal else CORE_MULTI_ANCHORS
     mode = "prenatal" if prenatal else "core_multi"
+    threshold_scores = _critical_threshold_scores(product) if prenatal else {}
 
     scores: Dict[str, float] = {}
     missing: List[str] = []
     for anchor in anchors:
         if anchor == "dha":
             value = _dha_score(product)
+        elif anchor in threshold_scores:
+            value = threshold_scores[anchor]
         else:
             coverage = coverage_scores.get(anchor, 0.0)
             # Critical coverage uses stricter minimums than the broad RDA
