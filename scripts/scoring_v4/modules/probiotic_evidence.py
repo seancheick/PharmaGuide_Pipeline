@@ -28,7 +28,7 @@ CAP_INDICATION_RELEVANCE = 8.0
 INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "digestive": {
         "digestive", "digestion", "gut", "bowel", "regularity", "constipation",
-        "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic",
+        "diarrhea", "ibs", "irritable", "bloating", "gastro", "colic", "gi",
     },
     "immune": {
         "immune", "immunity", "respiratory", "cold", "allergy", "allergic",
@@ -50,6 +50,12 @@ INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "metabolic": {"weight", "metabolic", "glucose", "glycemic", "visceral", "fat"},
     "mood": {"mood", "stress", "anxiety", "cognition", "psychobiotic", "sleep"},
     "bone": {"bone", "density"},
+}
+
+POSITIONING_STATEMENT_TYPES = {
+    "general statements all other content",
+    "formula re type",
+    "formulation re other",
 }
 
 BROAD_PROBIOTIC_CATEGORIES = {"digestive", "immune"}
@@ -297,11 +303,18 @@ def _best_effect_direction_multiplier(product: Dict[str, Any]) -> float:
 
 
 def _product_positioning_categories(product: Dict[str, Any]) -> Set[str]:
-    text = " ".join(
+    text_parts = [
         str(product.get(field) or "")
         for field in ("product_name", "brand_name", "serving_description", "suggested_use")
-    )
-    categories = _categories_from_text(text)
+    ]
+    for statement in _safe_list(product.get("statements")):
+        if not isinstance(statement, dict):
+            continue
+        statement_type = _norm_text(statement.get("type"))
+        if statement_type not in POSITIONING_STATEMENT_TYPES:
+            continue
+        text_parts.append(str(statement.get("notes") or statement.get("text") or ""))
+    categories = _categories_from_text(" ".join(text_parts))
     # "Probiotic" by itself is generic class text, not a targeted claim.
     categories.discard("probiotic")
     return categories

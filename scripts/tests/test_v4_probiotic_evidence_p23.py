@@ -127,7 +127,8 @@ def test_native_clinical_strain_evidence_scores_when_generic_matches_are_missing
     payload = score_evidence(product)
 
     assert payload["components"]["strain_clinical_evidence"] == 6.0
-    assert payload["components"]["indication_relevance"] == 4.0
+    assert payload["components"]["indication_relevance"] == 8.0
+    assert payload["metadata"]["indication_relevance_level"] == "direct"
     assert payload["metadata"]["generic_evidence_score"] == 0.0
     assert payload["metadata"]["native_clinical_strain_evidence_score"] == 6.0
     native_rows = payload["metadata"]["native_clinical_strain_evidence_rows"]
@@ -185,6 +186,54 @@ def test_generic_daily_probiotic_gets_broad_relevance_for_gut_or_immune_strains(
 
     assert payload["components"]["indication_relevance"] == 4.0
     assert payload["metadata"]["indication_relevance_level"] == "broad"
+
+
+def test_structured_positioning_statement_gets_direct_relevance() -> None:
+    """Real labels often put the probiotic purpose in structured statements
+    (e.g. "GI Support / Immune Support") rather than the product name."""
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    product = _product(
+        product_name="FloraSport 20B",
+        clinical_strains=[_clinical_strain(indication="immune support and gut health")],
+    )
+    product["statements"] = [
+        {"type": "Formulation re: Other", "notes": "GI Support\nImmune Support"}
+    ]
+
+    payload = score_evidence(product)
+
+    assert payload["components"]["indication_relevance"] == 8.0
+    assert payload["metadata"]["indication_relevance_level"] == "direct"
+    assert payload["metadata"]["product_positioning_categories"] == ["digestive", "immune"]
+
+
+def test_precaution_statement_does_not_create_positioning_relevance() -> None:
+    """Warnings such as "if pregnant..." are safety context, not a prenatal
+    product-positioning claim."""
+    from scoring_v4.modules.probiotic_evidence import score_evidence
+
+    product = _product(
+        product_name="Daily Probiotic",
+        clinical_strains=[
+            _clinical_strain(
+                strain="Lactobacillus rhamnosus HN001",
+                indication="preterm infant feeding support",
+            )
+        ],
+    )
+    product["statements"] = [
+        {
+            "type": "Precautions re: Pregnant or Nursing or Prescription Medications",
+            "notes": "If pregnant, consult your health-care practitioner before using this product.",
+        }
+    ]
+
+    payload = score_evidence(product)
+
+    assert payload["components"]["indication_relevance"] == 0.0
+    assert payload["metadata"]["indication_relevance_level"] == "none"
+    assert payload["metadata"]["product_positioning_categories"] == []
 
 
 def test_unrelated_positioning_gets_no_indication_relevance() -> None:
