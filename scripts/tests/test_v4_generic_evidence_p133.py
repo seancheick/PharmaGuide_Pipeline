@@ -330,8 +330,13 @@ def test_token_collagen_addon_does_not_recover_primary_collagen_evidence() -> No
 
     payload = score_evidence(product, apply_primary_floor=True)
 
-    assert payload["score"] == 0.0
+    # Collagen (trace) must NOT recover/float the product on collagen evidence.
     assert payload["metadata"]["recovered_matches"] == []
+    # P5 (2026-06): Vitamin C is the mass-dominant essential DRI nutrient, so it
+    # earns the nutrition-authority floor (10) on its OWN necessity — never via the
+    # trace collagen. The collagen-recovery guard is unaffected.
+    assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
+    assert payload["score"] == 10.0
 
 
 def test_gelatin_does_not_recover_hydrolyzed_collagen_peptides_evidence() -> None:
@@ -406,22 +411,34 @@ def test_shadow_wires_evidence_dimension() -> None:
 def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
+    # P5: use a NON-essential primary (ashwagandha) so the clinical effect-multiplier
+    # is tested in isolation from the DRI nutrition-authority floor (essentials -> 10).
     payload = score_evidence(
-        _product(matches=[_match(effect_direction="mixed")]),
+        _product(
+            ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
+            matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+                            standard_name="Ashwagandha", effect_direction="mixed")],
+        ),
         apply_primary_floor=True,
     )
 
     assert payload["score"] == 8.4
     assert payload["components"]["primary_evidence_floor"] == 8.4
     assert payload["metadata"]["primary_evidence_floor"] == 8.4
-    assert payload["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "ashwagandha"
 
 
 def test_primary_floor_mirrors_null_effect_multiplier() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
+    # P5: non-essential primary (ashwagandha) isolates the null-effect multiplier
+    # from the DRI nutrition-authority floor.
     payload = score_evidence(
-        _product(matches=[_match(effect_direction="null")]),
+        _product(
+            ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
+            matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+                            standard_name="Ashwagandha", effect_direction="null")],
+        ),
         apply_primary_floor=True,
     )
 
@@ -433,8 +450,14 @@ def test_primary_floor_mirrors_null_effect_multiplier() -> None:
 def test_primary_floor_still_rejects_negative_effect() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
+    # P5: non-essential primary (ashwagandha) — a negative-effect primary earns no
+    # clinical floor AND no authority floor (not a DRI-essential nutrient).
     payload = score_evidence(
-        _product(matches=[_match(effect_direction="negative")]),
+        _product(
+            ingredients=[_ingredient(name="Ashwagandha", canonical_id="ashwagandha", quantity=600)],
+            matches=[_match(id="INGR_ASHWAGANDHA", ingredient="Ashwagandha",
+                            standard_name="Ashwagandha", effect_direction="negative")],
+        ),
         apply_primary_floor=True,
     )
 

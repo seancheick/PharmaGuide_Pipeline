@@ -55,12 +55,15 @@ def test_floor_not_applied_without_opt_in():
 
 def test_trace_strong_ingredient_does_not_floor():
     # selenium (trace, 0.05 mg) has a strong match; magnesium (primary, 1000 mg)
-    # does not. The trace ingredient must NOT anchor a floor.
+    # does not. The trace ingredient must NOT anchor the CLINICAL floor (14).
+    # P5: magnesium (mass-dominant essential) earns the nutrition-authority floor
+    # (10); the selenium trace match still does not push it to the clinical tier.
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
             _ing("Selenium", "selenium", 50, "mcg")]
     matches = [_match(ingredient="Selenium", standard_name="Selenium", study_type="rct_multiple")]
     out = score_evidence(_product(ings, matches), apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 0.0
+    assert out["metadata"]["primary_evidence_floor"] == 10.0
+    assert out["metadata"]["nutrition_authority_canonical"] == "magnesium"
 
 
 def test_weak_effect_floors_below_strong_effect():
@@ -181,10 +184,55 @@ def test_branded_subclinical_dose_still_blocks_floor():
 
 def test_branded_trace_ingredient_does_not_float_product():
     """A branded strong match on a TRACE co-ingredient (not mass-dominant) must
-    not float the product."""
+    not float the product to the branded tier (18). P5: magnesium (the
+    mass-dominant essential) earns the nutrition-authority floor 10 — the trace
+    branded ashwagandha does NOT lift it to 18."""
     ings = [_ing("Magnesium", "magnesium", 1000, "mg"),
             _ing("Sensoril Ashwagandha", "ashwagandha", 50, "mg")]
     matches = [_match(ingredient="Sensoril Ashwagandha", standard_name="Sensoril Ashwagandha",
                       study_type="rct_multiple", evidence_level="branded-rct")]
     out = score_evidence(_product(ings, matches), apply_primary_floor=True)
-    assert out["metadata"]["primary_evidence_floor"] == 0.0
+    assert out["metadata"]["primary_evidence_floor"] == 10.0
+    assert out["metadata"]["nutrition_authority_canonical"] == "magnesium"
+
+
+# --- P5 nutrition-authority floor (DRI-essential nutrients) 2026-06 ----------
+
+def test_essential_nutrient_authority_floor_lifts_copper():
+    """P5: copper (essential DRI mineral) with no strong RCT match still has
+    evidence of necessity -> nutrition-authority floor 10 (below the 14 clinical
+    tier). Was evidence 0 -> POOR."""
+    p = _product([_ing("Copper", "copper", 2, "mg")], [])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["score"] >= 10.0
+    assert out["metadata"]["nutrition_authority_floor_applied"] is True
+    assert out["metadata"]["nutrition_authority_canonical"] == "copper"
+
+
+def test_non_essential_gets_no_authority_floor():
+    """Guard: boron (UL only, no RDA) is NOT DRI-essential -> no authority floor,
+    stays evidence-light."""
+    p = _product([_ing("Boron", "boron", 3, "mg")], [])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["nutrition_authority_floor_applied"] is False
+    assert out["score"] < 10.0
+
+
+def test_authority_floor_never_lowers_stronger_floor():
+    """Authority is a floor, never a cap: an essential with consensus/branded
+    evidence keeps its higher floor (vitamin D consensus = 18 > authority 10)."""
+    p = _product([_ing("Vitamin D", "vitamin_d", 25, "mcg")],
+                 [_match(ingredient="Vitamin D", standard_name="Vitamin D",
+                         canonical_id="vitamin_d", study_type="rct_multiple",
+                         evidence_level="ingredient-human")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
+
+
+def test_authority_floor_is_generic_opt_in_only():
+    """omega/probiotic/multi reuse this scorer without the floor flag -> no
+    authority floor (they have their own evidence logic)."""
+    p = _product([_ing("Copper", "copper", 2, "mg")], [])
+    out = score_evidence(p)  # default apply_primary_floor=False
+    assert out["metadata"]["nutrition_authority_floor_applied"] is False
+    assert out["score"] < 10.0

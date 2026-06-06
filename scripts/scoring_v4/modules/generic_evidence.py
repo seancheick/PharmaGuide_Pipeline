@@ -127,6 +127,27 @@ _CONSENSUS_GOLD_STANDARD = frozenset({
 })
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
+# P5 nutrition-authority floor (2026-06): an ESSENTIAL vitamin/mineral with an
+# established DRI (RDA/AI) has evidence of *necessity* even without a
+# product-specific RCT — "no RCT in our data" must not mean "no evidence of
+# usefulness" for a nutrient the body provably requires (copper at evidence 0 was
+# the failure). The floor is 10 — deliberately BELOW the 14 non-branded clinical
+# floor and 18 branded/consensus tier (established necessity < RCT-proven effect).
+# Curated DRI-essentials only (mirrors the multi-panel canonicals); excludes
+# UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
+# light, and excludes anything not in this set.
+NUTRITION_AUTHORITY_FLOOR = 10.0
+_DRI_ESSENTIAL_NUTRIENTS = frozenset({
+    # essential minerals / electrolytes with established RDA or AI
+    "copper", "zinc", "selenium", "iodine", "chromium", "molybdenum", "manganese",
+    "iron", "calcium", "magnesium", "potassium", "phosphorus", "chloride", "sodium",
+    # essential vitamins with established RDA or AI
+    "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e",
+    "vitamin_k", "vitamin_k1", "vitamin_k2",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine", "vitamin_b7_biotin",
+    "vitamin_b9_folate", "vitamin_b12_cobalamin", "choline",
+})
 # Effect-strength weight on the primary floor. Mirrors the pipeline's effect
 # multipliers so honest mixed/null human evidence receives proportional credit
 # instead of falling through to raw low-count pipeline math. Negative evidence
@@ -255,10 +276,21 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     # ingredient count.
     primary_floor = 0.0
     floor_canonical: Optional[str] = None
+    nutrition_authority_canonical: Optional[str] = None
     if apply_primary_floor and PRIMARY_FLOOR_ENABLED:
         primary_floor, floor_canonical = _primary_mass_floor(
             product, matches, sub_clinical_canonicals
         )
+        # P5: DRI-essential nutrient authority floor. An essential vitamin/mineral
+        # with established RDA/AI has evidence of necessity even without a strong
+        # RCT match. Floor (never cap) — it only lifts, never lowers the clinical
+        # floor above it (e.g. a consensus/branded 18 stays 18).
+        auth_canon = _mass_dominant_essential_canonical(product)
+        if auth_canon and primary_floor < NUTRITION_AUTHORITY_FLOOR:
+            primary_floor = NUTRITION_AUTHORITY_FLOOR
+            nutrition_authority_canonical = auth_canon
+            if not floor_canonical:
+                floor_canonical = auth_canon
 
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
 
@@ -283,6 +315,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
             "primary_evidence_floor": round(primary_floor, 4),
             "primary_evidence_floor_canonical": floor_canonical,
+            "nutrition_authority_floor_applied": nutrition_authority_canonical is not None,
+            "nutrition_authority_canonical": nutrition_authority_canonical,
             "recovered_matches": [
                 _entry_id(entry)
                 for entry in recovered_matches
@@ -446,6 +480,25 @@ def _matched_active_canonical(entry: Dict[str, Any], canon_index: Dict[str, str]
         if key in canon_index:
             return canon_index[key]
     return ""
+
+
+def _mass_dominant_essential_canonical(product: Dict[str, Any]) -> Optional[str]:
+    """Canonical_id of the heaviest active IFF it is a DRI-essential vitamin/mineral
+    (established RDA/AI). Anchors the P5 nutrition-authority evidence floor — keyed
+    on the mass-dominant active so a trace essential co-ingredient never floats a
+    product, only a product whose PRIMARY ingredient is the essential nutrient."""
+    best_cid: Optional[str] = None
+    best_mass = 0.0
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _mass_mg(row) or 0.0
+        if mass > best_mass:
+            best_mass = mass
+            best_cid = str(row.get("canonical_id") or "").strip().lower()
+    if best_mass > 0 and best_cid in _DRI_ESSENTIAL_NUTRIENTS:
+        return best_cid
+    return None
 
 
 def _primary_mass_floor(
