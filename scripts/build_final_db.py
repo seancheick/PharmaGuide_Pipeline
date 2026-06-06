@@ -2766,6 +2766,93 @@ def _compute_dose_status(ingredient: Dict[str, Any]) -> str:
     return "missing"
 
 
+_ZERO_DOSE_DUPLICATE_UNITS = _NP_SENTINELS | {"unspecified", "unknown", "not specified"}
+
+
+def _ingredient_export_dedup_key(ingredient: Dict[str, Any]) -> str:
+    """Stable identity for final-blob duplicate cleanup.
+
+    Prefer canonical_id because this is a display/export hygiene pass, not a
+    matcher. Falling back to names is intentionally conservative: only exact
+    normalized label identity suppresses a placeholder row.
+    """
+    canonical_id = safe_str(ingredient.get("canonical_id")).lower()
+    if canonical_id:
+        return f"canonical:{canonical_id}"
+    name = (
+        safe_str(ingredient.get("standardName"))
+        or safe_str(ingredient.get("standard_name"))
+        or safe_str(ingredient.get("name"))
+        or safe_str(ingredient.get("raw_source_text"))
+    ).lower()
+    return f"name:{re.sub(r'[^a-z0-9]+', ' ', name).strip()}" if name else ""
+
+
+def _has_positive_export_dose(ingredient: Dict[str, Any]) -> bool:
+    qty = safe_float(ingredient.get("quantity"), 0) or 0.0
+    unit = safe_str(ingredient.get("unit")).strip().lower()
+    return qty > 0 and unit not in _ZERO_DOSE_DUPLICATE_UNITS
+
+
+def _is_zero_dose_placeholder_duplicate(
+    ingredient: Dict[str, Any],
+    positive_dose_keys: set[str],
+) -> bool:
+    key = _ingredient_export_dedup_key(ingredient)
+    if not key or key not in positive_dose_keys:
+        return False
+
+    qty = safe_float(ingredient.get("quantity"), 0) or 0.0
+    unit = safe_str(ingredient.get("unit")).strip().lower()
+    if qty > 0 or unit not in _ZERO_DOSE_DUPLICATE_UNITS:
+        return False
+
+    # Keep truly undisclosed blend members. They carry transparency meaning
+    # even when a separate positive-dose row for the same canonical exists.
+    if safe_str(ingredient.get("dose_status")) == "not_disclosed_blend":
+        return False
+
+    # Never drop a row that carries a product-safety concern. Informational
+    # safety_hits are canonical-level payloads and remain attached to the
+    # retained positive-dose duplicate for the same canonical.
+    if ingredient.get("is_safety_concern") or ingredient.get("is_banned"):
+        return False
+    if safe_list(ingredient.get("safety_flags")):
+        return False
+
+    return True
+
+
+def _suppress_zero_dose_duplicate_active_rows(
+    ingredients: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Remove stale zero-dose placeholders when a real same-active row exists.
+
+    Some enriched products carry both a recognized non-scorable active row
+    (`quantity=0`, `unit=unspecified`) and the later recovered dose-bearing row
+    for the same canonical, e.g. EPA/DHA in omega labels. Strict v4 scoring
+    already consumes `ingredients_scorable`, so the duplicate does not change
+    scores. This cleanup prevents final detail blobs, explain tools, and UI
+    surfaces from showing both rows as if the label had two EPA/DHA entries.
+    """
+    positive_dose_keys = {
+        _ingredient_export_dedup_key(ing)
+        for ing in ingredients
+        if isinstance(ing, dict) and _has_positive_export_dose(ing)
+    }
+    positive_dose_keys.discard("")
+    if not positive_dose_keys:
+        return ingredients
+
+    return [
+        ing for ing in ingredients
+        if not (
+            isinstance(ing, dict)
+            and _is_zero_dose_placeholder_duplicate(ing, positive_dose_keys)
+        )
+    ]
+
+
 def _validate_banned_preflight_propagation(
     blob: Dict[str, Any], enriched: Dict[str, Any], dsld_id: str
 ) -> None:
@@ -3532,6 +3619,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # Reads adequacy_tier above, so must come AFTER the E1.3.2 fields.
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
+    ingredients = _suppress_zero_dose_duplicate_active_rows(ingredients)
 
     # Inactive ingredients
     # Inactive ingredients — unified resolver path (2026-05-12).
