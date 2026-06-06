@@ -94,7 +94,7 @@ DEPTH_BONUS_BANDS = ((20.0, 0.25), (40.0, 0.5))
 # match must link to an active whose mass >= PRIMARY_MASS_FRACTION of the heaviest
 # active), NOT merely the top evidence-points contributor — otherwise a well-studied
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
-PRIMARY_FLOOR_STRONG = 18.0     # systematic review / multi-RCT, positive, clinical dose
+PRIMARY_FLOOR_STRONG = 14.0     # systematic review / multi-RCT, positive, clinical dose
 PRIMARY_FLOOR_MODERATE = 11.0   # single RCT / clinical strain, positive, clinical dose
 # v4.1 branded-RCT tier: a branded clinically-studied extract (Sensoril, KSM-66,
 # Meriva/BCM-95 — its OWN brand-specific RCT evidence, not a generic literature
@@ -104,6 +104,27 @@ PRIMARY_FLOOR_MODERATE = 11.0   # single RCT / clinical strain, positive, clinic
 PRIMARY_FLOOR_BRANDED_STRONG = 18.0
 PRIMARY_FLOOR_BRANDED_MODERATE = 17.0
 _BRANDED_EVIDENCE_LEVELS = frozenset({"branded-rct", "branded_rct"})
+# 3-lane evidence floor (2026-06-06): a broad-consensus SIMPLE ingredient whose
+# GENERIC form IS the clinically-validated form earns the elevated (branded-tier)
+# floor even without a brand-specific RCT — but only via this explicit allowlist,
+# never from automatic generic literature. This keeps a generic ashwagandha BELOW
+# KSM-66 (14 vs 18) while letting gold-standard simple ingredients score like the
+# reference ingredients they are. Curated, conservative, broad-consensus only:
+#   - creatine_monohydrate: monohydrate IS the studied form (sports-routed; here for intent)
+#   - psyllium: FDA-recognized soluble-fiber cholesterol/laxation claim; generic husk is studied
+#   - vitamin_d: D3 cholecalciferol; overwhelming human evidence, generic form is the studied form
+#   - vitamin_b9_folate: folate/folic acid/methylfolate; NTD-prevention consensus
+#   - epa / dha: omega-3 actives (omega-routed; here for intent completeness)
+# Deliberately EXCLUDED (form-dependent or not consensus-generic): magnesium (oxide
+# vs glycinate), iron (form/context-dependent), zinc, generic botanicals.
+_CONSENSUS_GOLD_STANDARD = frozenset({
+    "creatine_monohydrate",
+    "psyllium",
+    "vitamin_d",
+    "vitamin_b9_folate",
+    "epa",
+    "dha",
+})
 _STRONG_STUDY = frozenset({"systematic_review_meta", "rct_multiple"})
 _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # Effect-strength weight on the primary floor. Mirrors the pipeline's effect
@@ -397,6 +418,36 @@ def _match_active_mass(entry: Dict[str, Any], index: Dict[str, float]) -> float:
     return 0.0
 
 
+def _active_canonical_index(product: Dict[str, Any]) -> Dict[str, str]:
+    """Map each active's normalized identity tokens -> its raw canonical_id. An
+    evidence match resolves to a normalized standard-name (e.g. 'psyllium husk',
+    'vitamin d3'); this lets it be tied back to the active's clean canonical_id
+    ('psyllium', 'vitamin_d') for the consensus gold-standard allowlist check."""
+    out: Dict[str, str] = {}
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        cid_raw = str(row.get("canonical_id") or "").strip().lower()
+        if not cid_raw:
+            continue
+        for tok in (row.get("canonical_id"), row.get("standard_name"),
+                    row.get("name"), row.get("matched_form")):
+            key = _norm_text(tok)
+            if key:
+                out.setdefault(key, cid_raw)
+    return out
+
+
+def _matched_active_canonical(entry: Dict[str, Any], canon_index: Dict[str, str]) -> str:
+    """Raw canonical_id of the active an evidence match links to ('' if unknown)."""
+    for tok in (_canonical_from_entry(entry), entry.get("ingredient"),
+                entry.get("standard_name"), entry.get("matched_term")):
+        key = _norm_text(tok)
+        if key in canon_index:
+            return canon_index[key]
+    return ""
+
+
 def _primary_mass_floor(
     product: Dict[str, Any],
     matches: List[Any],
@@ -407,6 +458,7 @@ def _primary_mass_floor(
     index, max_mass = _active_mass_index(product)
     if max_mass <= 0:
         return 0.0, None
+    canon_index = _active_canonical_index(product)
     threshold = PRIMARY_MASS_FRACTION * max_mass
     floor = 0.0
     floor_canon: Optional[str] = None
@@ -426,10 +478,16 @@ def _primary_mass_floor(
             continue  # the evidenced ingredient is not a mass-dominant active
         st = _norm_text(entry.get("study_type"))
         branded = _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS
+        # 3-lane: brand-specific RCT OR a broad-consensus gold-standard generic
+        # both earn the elevated floor; a merely-strong generic literature match
+        # does not. Consensus is keyed on the matched ACTIVE's clean canonical_id
+        # (not the match's normalized standard-name), so 'psyllium husk' -> psyllium.
+        consensus = _matched_active_canonical(entry, canon_index) in _CONSENSUS_GOLD_STANDARD
+        elevated = branded or consensus
         if st in _STRONG_STUDY:
-            base = PRIMARY_FLOOR_BRANDED_STRONG if branded else PRIMARY_FLOOR_STRONG
+            base = PRIMARY_FLOOR_BRANDED_STRONG if elevated else PRIMARY_FLOOR_STRONG
         elif st in _MODERATE_STUDY:
-            base = PRIMARY_FLOOR_BRANDED_MODERATE if branded else PRIMARY_FLOOR_MODERATE
+            base = PRIMARY_FLOOR_BRANDED_MODERATE if elevated else PRIMARY_FLOOR_MODERATE
         else:
             base = 0.0
         # Weight the floor by effect strength, mirroring the pipeline's own

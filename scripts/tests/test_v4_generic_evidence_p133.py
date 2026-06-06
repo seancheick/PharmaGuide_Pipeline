@@ -290,8 +290,14 @@ def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_mat
 
     payload = score_evidence(product, apply_primary_floor=True)
 
-    assert payload["score"] == 18.0
-    assert payload["components"]["primary_evidence_floor"] == 18.0
+    # 3-lane model (2026-06-06): recovered collagen evidence is generic
+    # (ingredient-human, not brand-specific), so it floors to the non-branded
+    # strong tier (14), not 18. Collagen products get their real score from the
+    # collagen_profile module; this is a dropped-evidence fallback. (Collagen is
+    # a candidate for the consensus allowlist — broad generic evidence, 26 studies
+    # — but is left off pending review since peptide MW/profile is form-sensitive.)
+    assert payload["score"] == 14.0
+    assert payload["components"]["primary_evidence_floor"] == 14.0
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "collagen"
     assert payload["metadata"]["recovered_matches"] == ["RECOVERED_COLLAGEN_PEPTIDES_V1"]
 
@@ -389,9 +395,10 @@ def test_shadow_wires_evidence_dimension() -> None:
     evidence = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["evidence"]
     # Phase 8: the generic module opts into the primary-ingredient floor. The
     # default product's mass-primary magnesium has a systematic_review_meta
-    # positive match -> floored to 18.0 (the raw pipeline value here is 6.48).
-    assert evidence["score"] == 18.0
-    assert evidence["metadata"]["primary_evidence_floor"] == 18.0
+    # positive match -> floored to 14.0 (non-branded strong; 3-lane model 2026-06-06:
+    # magnesium is form-dependent, not a consensus gold-standard generic).
+    assert evidence["score"] == 14.0
+    assert evidence["metadata"]["primary_evidence_floor"] == 14.0
     assert evidence["max"] == 20.0
     assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
@@ -404,9 +411,9 @@ def test_primary_floor_mirrors_mixed_effect_multiplier() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 10.8
-    assert payload["components"]["primary_evidence_floor"] == 10.8
-    assert payload["metadata"]["primary_evidence_floor"] == 10.8
+    assert payload["score"] == 8.4
+    assert payload["components"]["primary_evidence_floor"] == 8.4
+    assert payload["metadata"]["primary_evidence_floor"] == 8.4
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "magnesium"
 
 
@@ -418,9 +425,9 @@ def test_primary_floor_mirrors_null_effect_multiplier() -> None:
         apply_primary_floor=True,
     )
 
-    assert payload["score"] == 4.5
-    assert payload["components"]["primary_evidence_floor"] == 4.5
-    assert payload["metadata"]["primary_evidence_floor"] == 4.5
+    assert payload["score"] == 3.5
+    assert payload["components"]["primary_evidence_floor"] == 3.5
+    assert payload["metadata"]["primary_evidence_floor"] == 3.5
 
 
 def test_primary_floor_still_rejects_negative_effect() -> None:

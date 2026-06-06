@@ -126,6 +126,32 @@ def test_non_branded_strong_stays_14():
     assert out["metadata"]["primary_evidence_floor"] == 14.0
 
 
+def test_consensus_gold_standard_non_branded_floors_to_18():
+    """3-lane (2026-06-06): a broad-consensus simple ingredient whose GENERIC form
+    IS the clinically-validated form (psyllium, vitamin D, folate) earns the
+    elevated floor (18) even non-branded — via the explicit allowlist, NOT
+    automatic generic literature. Keeps generic ashwagandha (14) below KSM-66 (18)
+    while letting gold-standard generics score like the reference ingredients."""
+    p = _product([_ing("Psyllium", "psyllium", 5000, "mg")],
+                 [_match(ingredient="Psyllium", standard_name="Psyllium",
+                         canonical_id="psyllium", study_type="rct_multiple",
+                         evidence_level="ingredient-human")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
+    assert out["metadata"]["primary_evidence_floor_canonical"] == "psyllium"
+
+
+def test_consensus_excludes_form_dependent_minerals():
+    """Guard: magnesium is NOT consensus-gold-standard (oxide vs glycinate differ),
+    so a strong generic magnesium match floors to 14, not 18."""
+    p = _product([_ing("Magnesium", "magnesium", 400, "mg")],
+                 [_match(ingredient="Magnesium", standard_name="Magnesium",
+                         canonical_id="magnesium", study_type="rct_multiple",
+                         evidence_level="ingredient-human")])
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 14.0
+
+
 def test_branded_subclinical_dose_still_blocks_floor():
     """Even a branded extract below its min clinical dose cannot float the floor."""
     p = _product([_ing(quantity=50)],
