@@ -55,7 +55,7 @@ B33_BANDS = [
     ('shiitake', 'shiitake (unspecified)',                          0.10, 0.15, 'mushroom class-poor B1'),
     ('stinging_nettle', 'stinging nettle (unspecified)',            0.55, 0.70, 'nettle class'),
     ('streptococcus_salivarius', 'streptococcus salivarius (unspecified)',
-                                                                    0.60, 0.80, 'probiotic harmonization'),
+                                                                    0.45, 0.65, '2026-06-06 species-only probiotic fallback'),
     ('sulforaphane', 'sulforaphane (unspecified)',                  0.10, 0.55, 'myrosinase-dep class'),
     ('tmg_betaine', 'tmg (trimethylglycine) (unspecified)',         0.75, 0.95, 'TMG class'),
     ('turkey_tail', 'turkey tail (unspecified)',                    0.10, 0.13, 'mushroom class-poor B1'),

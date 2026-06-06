@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1413,
-      "total_form_aliases": 12232,
+      "total_form_aliases": 12227,
       "parents_with_parent_aliases": 186,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,7 +60,7 @@
       "vitamins": 22
     },
     "schema_version": "5.4.1",
-    "last_updated": "2026-06-02",
+    "last_updated": "2026-06-06",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -38836,11 +38836,11 @@
         }
       },
       "lactobacillus casei (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": true,
-        "score": 16,
-        "absorption": "good",
-        "notes": "A versatile probiotic strain that supports digestive health and immune function. Often confused with L. paracasei due to genetic similarity.",
+        "score": 13,
+        "absorption": "moderate species-level survivability; strain not specified",
+        "notes": "Lactobacillus casei species-level label without a verified strain designation. Exact strains should be credited through specific strain/form entries or the probiotic clinical-strain matcher. Recalibrated 2026-06-06: species-only probiotic rows should not score like exact clinical strains.",
         "aliases": [
           "lactobacillus casei",
           "Lactobacillus casei K-1",
@@ -39049,11 +39049,11 @@
         }
       },
       "saccharomyces boulardii (unspecified)": {
-        "bio_score": 15,
+        "bio_score": 12,
         "natural": true,
-        "score": 18,
-        "absorption": "excellent",
-        "notes": "Probiotic yeast with inherent acid resistance (viable pH 2-8) and natural antibiotic resistance. Extensive clinical evidence for antibiotic-associated diarrhea and C. difficile. Does not require enteric coating for GI survival. One of the most clinically validated probiotic organisms.",
+        "score": 15,
+        "absorption": "good organism-level survivability; strain not specified",
+        "notes": "Probiotic yeast with inherent acid resistance (viable pH 2-8) and natural antibiotic resistance. Strain-specific clinical evidence still requires a named strain such as CNCM I-745; species-only labels should not earn the same IQM tier as exact clinical strains. Recalibrated 2026-06-06: species-only probiotic rows are good survivability signals, not premium strain-identity signals.",
         "aliases": [
           "saccharomyces boulardii",
           "S. boulardii",
@@ -39067,10 +39067,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.9,
-          "range_low": 0.85,
-          "range_high": 0.95,
-          "quality": "very_good"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate"
         }
       }
     },
@@ -39121,11 +39121,11 @@
         }
       },
       "lactobacillus paracasei (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": true,
-        "score": 16,
-        "absorption": "low (live organism class; B18 framework)",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: live-organism class (B18).",
+        "score": 13,
+        "absorption": "moderate species-level survivability; strain not specified",
+        "notes": "Species-level label without a verified strain designation. Exact strains should be credited through specific strain/form entries or the probiotic clinical-strain matcher. Recalibrated 2026-06-06: species-only probiotic rows should not score like exact clinical strains.",
         "aliases": [
           "lactobacillus paracasei",
           "l. paracasei",
@@ -39133,10 +39133,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.1,
-          "range_low": 0.05,
-          "range_high": 0.2,
-          "quality": "low"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate"
         }
       },
       "lactobacillus paracasei l.casei 431": {
@@ -57650,21 +57650,21 @@
         }
       },
       "streptococcus salivarius (unspecified)": {
-        "bio_score": 14,
-        "score": 17,
+        "bio_score": 10,
+        "score": 13,
         "natural": true,
-        "absorption": "good (S. salivarius class — companion harmonization flag)",
-        "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for an accurate score. B33 audit 2026-04-25: probiotic harmonization flag (B18 vs older nutrient-density framework).",
+        "absorption": "moderate species-level survivability; strain not specified",
+        "notes": "Strain not specified on label. Conservative score — look for a specific strain designation (K12/M18) for accurate premium scoring. B33 audit 2026-04-25: probiotic harmonization flag (B18 vs older nutrient-density framework). Recalibrated 2026-06-06: species-only probiotic rows should not score like exact clinical strains.",
         "aliases": [
           "streptococcus salivarius",
           "S.. salivarius"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.7,
-          "range_low": 0.6,
-          "range_high": 0.8,
-          "quality": "good"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate"
         }
       }
     },
@@ -57705,30 +57705,22 @@
     "rxcui": "285156",
     "forms": {
       "lactobacillus reuteri (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": true,
-        "score": 17,
-        "absorption": "very good",
-        "notes": "A strain known for its ability to produce antimicrobial substances (reuterin) and its benefits for infant colic, oral health, and gut barrier integrity. Often branded as DSM 17938 or Protectis.",
+        "score": 13,
+        "absorption": "moderate species-level survivability; strain not specified",
+        "notes": "Limosilactobacillus reuteri species-level label without a strain designation. Exact strains such as DSM 17938, ATCC PTA 5289, RC-14, and NCIMB 30242 have strain-specific evidence and should map to specific forms when present. Recalibrated 2026-06-06: species-only probiotic rows should not score like exact clinical strains.",
         "aliases": [
           "L. reuteri",
           "lactobacillus reuteri",
-          "pylopass lactobacillus reuteri",
-          "DSM 17938",
-          "protectis",
-          "Biogaia",
-          "Limosilactobacillus reuteri",
-          "heart health probiotic lactobacillus reuteri (ncimb 30242)",
-          "heart health probiotic",
-          "ncimb 30242",
-          "lactobacillus reuteri ncimb 30242"
+          "Limosilactobacillus reuteri"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.75,
-          "range_low": 0.65,
-          "range_high": 0.85,
-          "quality": "good"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate"
         }
       },
       "lactobacillus reuteri ATCC PTA 5289": {
@@ -57761,7 +57753,10 @@
           "L. reuteri DSM 17938",
           "limosilactobacillus reuteri DSM 17938",
           "L. reuteri 17938",
-          "reuteri DSM 17938"
+          "reuteri DSM 17938",
+          "DSM 17938",
+          "protectis",
+          "Biogaia"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -57830,11 +57825,11 @@
     "rxcui": "2462497",
     "forms": {
       "lactobacillus gasseri (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": true,
-        "score": 16,
-        "absorption": "good",
-        "notes": "A probiotic strain that may help with weight management and metabolic health in addition to digestive benefits.",
+        "score": 13,
+        "absorption": "moderate species-level survivability; strain not specified",
+        "notes": "Species-level label without a verified strain designation. Exact strains should be credited through specific strain/form entries or the probiotic clinical-strain matcher. Recalibrated 2026-06-06: species-only probiotic rows should not score like exact clinical strains.",
         "aliases": [
           "L. gasseri",
           "lactobacillus gasseri",
@@ -57844,10 +57839,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.7,
-          "range_low": 0.6,
-          "range_high": 0.8,
-          "quality": "good"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate"
         }
       }
     },
@@ -58030,21 +58025,21 @@
         }
       },
       "bifidobacterium breve (unspecified)": {
-        "bio_score": 14,
-        "score": 17,
+        "bio_score": 10,
+        "score": 13,
         "natural": true,
-        "absorption": "unknown — strain not specified",
-        "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for an accurate score. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
+        "absorption": "moderate species-level survivability; strain not specified",
+        "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for accurate premium scoring. Recalibrated 2026-06-06: species-only probiotic rows should not score like exact clinical strains.",
         "aliases": [
           "bifidobacterium breve",
           "B. breve"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.2,
-          "range_low": 0.1,
-          "range_high": 0.3,
-          "quality": "low"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.65,
+          "quality": "moderate"
         }
       }
     },
@@ -58085,11 +58080,11 @@
     "rxcui": "1310844",
     "forms": {
       "bacillus coagulans (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
-        "absorption": "excellent",
-        "notes": "A spore-forming probiotic with characteristics of both Bacillus and Lactobacillus. Excellent acid and bile tolerance due to spore formation.",
+        "score": 15,
+        "absorption": "good spore survivability; strain not specified",
+        "notes": "A spore-forming probiotic with good acid and bile tolerance due to spore formation. Exact clinical strains such as GBI-30, MTCC 5856, Unique IS-2, and SNZ 1969 remain higher-confidence premium forms. Recalibrated 2026-06-06: species-only probiotic rows are good survivability signals, not premium strain-identity signals.",
         "aliases": [
           "B. coagulans",
           "bacillus coagulans",
@@ -58106,10 +58101,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.9,
-          "range_low": 0.85,
-          "range_high": 0.95,
-          "quality": "very_good"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good"
         }
       },
       "bacillus coagulans gbi-30": {
@@ -58246,11 +58241,11 @@
     "rxcui": "1311119",
     "forms": {
       "bacillus subtilis (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": true,
-        "score": 17,
-        "absorption": "excellent",
-        "notes": "A spore-forming probiotic with excellent environmental resistance. Supports gut health and may help with antibiotic-associated disruption.",
+        "score": 15,
+        "absorption": "good spore survivability; strain not specified",
+        "notes": "A spore-forming probiotic with good environmental resistance. Exact clinical strains such as DE111 remain higher-confidence premium forms. Recalibrated 2026-06-06: species-only probiotic rows are good survivability signals, not premium strain-identity signals.",
         "aliases": [
           "B. subtilis",
           "bacillus subtilis",
@@ -58264,10 +58259,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.9,
-          "range_low": 0.85,
-          "range_high": 0.95,
-          "quality": "very_good"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good"
         }
       },
       "bacillus subtilis de111": {
@@ -58332,11 +58327,11 @@
     "rxcui": "2600050",
     "forms": {
       "bacillus clausii (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": true,
-        "score": 16,
-        "absorption": "excellent",
-        "notes": "A spore-forming probiotic with natural antibiotic resistance, making it suitable for use during antibiotic therapy.",
+        "score": 15,
+        "absorption": "good spore survivability; strain not specified",
+        "notes": "A spore-forming probiotic with natural acid/bile resilience. Exact strains should be credited through specific strain/form entries or the probiotic clinical-strain matcher. Recalibrated 2026-06-06: species-only probiotic rows are good survivability signals, not premium strain-identity signals.",
         "aliases": [
           "B. clausii",
           "bacillus clausii",
@@ -58344,10 +58339,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.85,
-          "range_low": 0.8,
-          "range_high": 0.9,
-          "quality": "very_good"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good"
         }
       }
     },

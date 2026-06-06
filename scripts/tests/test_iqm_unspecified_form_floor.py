@@ -57,6 +57,26 @@ _DR_PHAM_PEER_MIN_EXEMPTIONS = {
     'lactobacillus_rhamnosus',
 }
 
+# Probiotic species-only exemptions (2026-06-06).
+#
+# The generic peer-min rule is correct for most supplement forms, but it is
+# wrong for probiotics because named strains are not merely "specific forms" of
+# an honest-middle parent. They carry strain-specific clinical identity that v4
+# scores separately in the probiotic module. A species-only row should not be
+# forced up to the named-strain peer minimum.
+_PROBIOTIC_SPECIES_ONLY_PEER_MIN_EXEMPTIONS = {
+    'lactobacillus_casei',
+    'saccharomyces_boulardii',
+    'streptococcus_salivarius',
+    'lactobacillus_reuteri',
+    'bacillus_coagulans',
+    'bacillus_subtilis',
+    'lactobacillus_paracasei',
+    'lactobacillus_gasseri',
+    'bifidobacterium_breve',
+    'bacillus_clausii',
+}
+
 # Standardization-marker peer-min exemptions (2026-05-25).
 #
 # The peer-min policy (Batch 5 recalibration, 2026-04-29) assumes the
@@ -111,6 +131,8 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
         if parent_key.startswith('_') or not isinstance(v, dict):
             continue
         if parent_key in _DR_PHAM_PEER_MIN_EXEMPTIONS:
+            continue
+        if parent_key in _PROBIOTIC_SPECIES_ONLY_PEER_MIN_EXEMPTIONS:
             continue
         if parent_key in _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS:
             continue

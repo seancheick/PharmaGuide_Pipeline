@@ -58,7 +58,7 @@ B32_BANDS = [
     ('lactobacillus_acidophilus', 'lactobacillus acidophilus (unspecified)',
                                                                     0.05, 0.20, 'probiotic class B18'),
     ('lactobacillus_paracasei', 'lactobacillus paracasei (unspecified)',
-                                                                    0.05, 0.20, 'probiotic class B18'),
+                                                                    0.45, 0.65, '2026-06-06 species-only probiotic fallback'),
     ("lions_mane", "lion's mane (unspecified)",                     0.10, 0.18, 'mushroom class-poor'),
     ('maca', 'maca (unspecified)',                                  0.60, 0.72, 'maca class'),
     ('maitake', 'maitake (unspecified)',                            0.08, 0.15, 'mushroom class-poor'),
