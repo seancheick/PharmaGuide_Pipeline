@@ -477,7 +477,10 @@ def _primary_mass_floor(
         if _match_active_mass(entry, index) < threshold:
             continue  # the evidenced ingredient is not a mass-dominant active
         st = _norm_text(entry.get("study_type"))
-        branded = _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS
+        branded = (
+            _norm_text(entry.get("evidence_level")) in _BRANDED_EVIDENCE_LEVELS
+            or _norm_text(entry.get("id")).startswith("brand_")
+        )
         # 3-lane: brand-specific RCT OR a broad-consensus gold-standard generic
         # both earn the elevated floor; a merely-strong generic literature match
         # does not. Consensus is keyed on the matched ACTIVE's clean canonical_id

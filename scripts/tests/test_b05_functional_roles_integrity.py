@@ -105,4 +105,7 @@ def test_botanical_total_count_unchanged(botanicals):
     # deserticola deferred to species-split batch), and
     # organic_gold_standard_potentiating_nutrients (proprietary blend
     # display-only catch-all).
-    assert len(botanicals) == 529
+    # 530 after 2026-06-04 Red Yeast Rice identity entry added so products
+    # can ship with existing monacolin-K safety handling instead of becoming
+    # unscoreable.
+    assert len(botanicals) == 530

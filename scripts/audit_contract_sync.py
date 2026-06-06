@@ -79,7 +79,8 @@ INACTIVE_CONTRACT: dict[str, dict[str, Any]] = {
     "normalized_key":      {"required": False, "type": "string?",  "is_enum": False},
     "severity_level":      {"required": False, "type": "string?",  "is_enum": False, "deprecated_note": "v1.5.0 prefers severity_status enum"},
     "is_additive":         {"required": False, "type": "bool?",    "is_enum": False},
-    "additive_type":       {"required": False, "type": "string?",  "is_enum": False},
+    "additive_type":       {"required": False, "type": "string?",  "is_enum": False,
+                            "deprecated_note": "retired; functional_roles is the v1.5.0 role contract"},
     "functional_roles":    {"required": False, "type": "array?",   "is_enum": False},
     "identifiers":         {"required": False, "type": "object?",  "is_enum": False},
     # v1.5.0 canonical fields (PROMISED in doc):
@@ -119,7 +120,9 @@ BLOB_TOP_LEVEL: dict[str, dict[str, Any]] = {
 }
 
 
-def _classify_status(present_pct: float, required: bool) -> str:
+def _classify_status(present_pct: float, required: bool, *, deprecated: bool = False) -> str:
+    if deprecated:
+        return "DEPRECATED"
     if required:
         if present_pct >= 0.95:
             return "GREEN"
@@ -173,13 +176,19 @@ def _audit_ingredient_contract(
             "promised": True,
             "required": spec.get("required", False),
             "v1_5_0": spec.get("v1_5_0", False),
-            "deprecated": spec.get("deprecated", False),
+            "deprecated": bool(spec.get("deprecated") or spec.get("deprecated_note")),
             "present_in": round(pct, 4),
             "absent_in": round(1.0 - pct, 4),
-            "status": _classify_status(pct, spec.get("required", False)),
+            "status": _classify_status(
+                pct,
+                spec.get("required", False),
+                deprecated=bool(spec.get("deprecated") or spec.get("deprecated_note")),
+            ),
         }
         if spec.get("note"):
             entry["note"] = spec["note"]
+        if spec.get("deprecated_note"):
+            entry["deprecated_note"] = spec["deprecated_note"]
         if spec.get("is_enum"):
             counts = enum_value_counts[field]
             entry["values_seen"] = dict(counts)

@@ -75,7 +75,9 @@ class TestCommonFormCoverage:
         ("Magnesium", "Magnesium Glycinate",   "magnesium", "glycinate",   12),
         ("Magnesium", "Magnesium Citrate",     "magnesium", "citrate",     8),
         ("Magnesium", "Magnesium Oxide",       "magnesium", "oxide",       2),   # bio=4 but >= 2 passes
-        ("Magnesium", "Magnesium Threonate",   "magnesium", "threonate",   12),
+        # 2026-06-02 mineral recalibration: good/solid cognitive form, but
+        # not top-tier systemic magnesium bioavailability.
+        ("Magnesium", "Magnesium Threonate",   "magnesium", "threonate",   10),
         # Chromium forms — Dr Pham C7 (2026-04-25) downgraded all chromium chelates
         # to bio=7 because Cr class F is form-independent (~0.5-2.5%).
         ("Chromium",  "Chromium Picolinate",   "chromium",  "picolinate",   7),

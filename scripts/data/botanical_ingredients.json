@@ -15946,6 +15946,10 @@
       "external_ids": {
         "unii": "43CAU2Q6DY"
       },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      },
       "notes": "Monascus purpureus fermented on rice. Contains monacolin K (chemically identical to the statin lovastatin); regulated as a borderline supplement/drug. Identity entry added so RYR products ship and pick up their existing monacolin-K safety handling in banned_recalled_ingredients.json. UNII 43CAU2Q6DY (FDA UNII cache, verified).",
       "last_updated": "2026-06-04"
     }

@@ -54,8 +54,8 @@ B30_BANDS = [
     ('sarsaparilla', 'sarsaparilla root extract',                   0.10, 0.25, 'saponin class-poor'),
     ('sarsaparilla', 'sarsaparilla (unspecified)',                  0.05, 0.20, 'saponin class'),
     # zinc
-    ('zinc', 'zinc oxide',                                          0.25, 0.35, 'Wapnir 1985 ZnO'),
-    ('zinc', 'zinc (unspecified)',                                  0.30, 0.65, 'Zn class baseline'),
+    ('zinc', 'zinc oxide',                                          0.05, 0.20, '2026-06-02 mineral recalibration: low ZnO'),
+    ('zinc', 'zinc (unspecified)',                                  0.10, 0.45, '2026-06-02 conservative Zn class baseline'),
     # nad
     ('nad_precursors', 'oxidized nad+ precursor',                   0.00, 0.05, 'oxidative degradation'),
     ('nad_precursors', 'nad+ precursors (unspecified)',             0.30, 0.70, 'NR/NMN class'),

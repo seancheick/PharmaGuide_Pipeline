@@ -110,6 +110,24 @@ def test_branded_moderate_floors_to_17():
     assert out["metadata"]["primary_evidence_floor"] == 17.0
 
 
+def test_brand_id_product_human_record_floors_to_18():
+    """Some verified branded entries are marked by BRAND_* id while their
+    evidence_level remains product-human. Treat the brand id as the branded
+    signal so BioCell-style records do not miss the elevated floor."""
+    p = _product(
+        [_ing("BioCell Collagen", "collagen", 1000, "mg")],
+        [_match(
+            id="BRAND_BIOCELL",
+            ingredient="BioCell",
+            standard_name="BioCell Collagen",
+            study_type="rct_multiple",
+            evidence_level="product-human",
+        )],
+    )
+    out = score_evidence(p, apply_primary_floor=True)
+    assert out["metadata"]["primary_evidence_floor"] == 18.0
+
+
 def test_branded_strong_weak_effect_discounts():
     """Effect-strength discount still applies on top of the branded tier
     (18 * 0.85 = 15.3) — a weak-effect branded meta floors below a strong one."""
