@@ -130,6 +130,24 @@ def test_transparency_strain_identities_partial_when_unnamed_blends_present() ->
     assert 5.0 <= payload["components"]["strain_identities_named"] <= 6.0
 
 
+def test_transparency_ignores_zero_strain_blend_header_provenance() -> None:
+    """A flattened parent blend row retained only for aggregate CFU provenance
+    must not dilute identity credit when child rows carry the strain names."""
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    product = _probiotic(
+        strain_count=2,
+        blends=[
+            {"name": "Probiotic Blend", "strains": [], "is_blend_header_total": True},
+            {"name": "L. rhamnosus", "strains": ["Lactobacillus rhamnosus HN001"]},
+            {"name": "B. lactis", "strains": ["Bifidobacterium lactis BB-12"]},
+        ],
+    )
+    payload = score_transparency(product)
+
+    assert payload["components"]["strain_identities_named"] == 8.0
+
+
 # --- Per-strain CFU on label (7) -----------------------------------------
 
 

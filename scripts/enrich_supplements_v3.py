@@ -12221,17 +12221,47 @@ class SupplementEnricherV3:
         total_strains = 0
         all_nested_strains = []
 
-        for ingredient in active_ingredients:
-            ing_name = ingredient.get('name', '').lower()
-            std_name = ingredient.get('standardName', '').lower()
-            category = ingredient.get('category', '').lower()
+        def _row_path(row: Dict) -> str:
+            return str(row.get("raw_source_path") or "").strip()
 
+        def _parent_path(path: str) -> str:
+            marker = ".nestedRows["
+            return path.split(marker, 1)[0] if marker in path else ""
+
+        def _is_probiotic_identity(ingredient: Dict) -> bool:
+            ing_name = str(ingredient.get('name', '') or '').lower()
+            std_name = str(ingredient.get('standardName', '') or '').lower()
+            category = str(ingredient.get('category', '') or '').lower()
+            return (
+                bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
+                or 'probiotic' in category
+                or 'bacteria' in category
+            )
+
+        def _is_blend_header_total(ingredient: Dict) -> bool:
+            role = str(ingredient.get("cleaner_row_role") or "").lower()
+            hierarchy = str(ingredient.get("hierarchyType") or "").lower()
+            reason = str(ingredient.get("score_exclusion_reason") or "").lower()
+            dose_class = str(ingredient.get("dose_class") or "").lower()
+            return (
+                role == "blend_header_total"
+                or hierarchy == "blend_header"
+                or reason == "blend_header_total"
+                or dose_class == "blend_total_weight"
+            )
+
+        flattened_child_parent_paths = {
+            _parent_path(_row_path(ingredient))
+            for ingredient in active_ingredients
+            if _parent_path(_row_path(ingredient)) and _is_probiotic_identity(ingredient)
+        }
+
+        for ingredient in active_ingredients:
             # Check for probiotic indicators (including abbreviated forms and
             # strain names) using bounded terms. Substring matching made
             # "casein decapeptide" look like L. casei and polluted route
             # classification with false probiotic_data.
-            is_probiotic = bool(_PROBIOTIC_IDENTITY_RE.search(f"{ing_name} {std_name}"))
-            is_probiotic = is_probiotic or 'probiotic' in category or 'bacteria' in category
+            is_probiotic = _is_probiotic_identity(ingredient)
 
             if is_probiotic:
                 nested = ingredient.get('nestedIngredients', [])
@@ -12254,7 +12284,15 @@ class SupplementEnricherV3:
                     cfu_data,
                 )
 
-                strain_names = [n.get('name', '') for n in nested] if nested else [ingredient.get('name', '')]
+                header_has_flattened_children = (
+                    _is_blend_header_total(ingredient)
+                    and ingredient_source_path in flattened_child_parent_paths
+                )
+                strain_names = (
+                    [n.get('name', '') for n in nested]
+                    if nested
+                    else ([] if header_has_flattened_children else [ingredient.get('name', '')])
+                )
                 strain_identity_texts = [
                     " ".join(
                         str(piece).strip()
@@ -12272,18 +12310,19 @@ class SupplementEnricherV3:
                         if str(piece or "").strip()
                     )
                     for n in nested
-                ] if nested else [ingredient.get('name', '')]
+                ] if nested else ([] if header_has_flattened_children else [ingredient.get('name', '')])
 
                 probiotic_blends.append({
                     "name": ingredient.get('name', ''),
-                    "strain_count": len(nested) if nested else 1,
+                    "strain_count": len(strain_names),
                     "strains": strain_names,
                     "strain_identity_texts": strain_identity_texts,
                     "cfu_data": cfu_data,
                     "raw_source_path": ingredient_source_path,
+                    "is_blend_header_total": header_has_flattened_children,
                 })
 
-                total_strains += len(nested) if nested else 1
+                total_strains += len(strain_names)
                 all_nested_strains.extend(strain_names)
 
         if not probiotic_blends:
@@ -12508,12 +12547,21 @@ class SupplementEnricherV3:
         cfu_evidence_scope = None
         cfu_linked_rows: List[str] = []
 
+        header_blends = {
+            str(blend.get("raw_source_path") or ""): blend
+            for blend in probiotic_blends
+            if blend.get("is_blend_header_total")
+        }
+        child_blends_by_parent: Dict[str, List[Dict]] = {}
         for blend in probiotic_blends:
-            cfu_data = blend.get('cfu_data', {})
+            parent = _parent_path(str(blend.get("raw_source_path") or ""))
+            if parent and parent in header_blends:
+                child_blends_by_parent.setdefault(parent, []).append(blend)
+
+        def _add_cfu_source(cfu_data: Dict, blend: Dict) -> None:
+            nonlocal has_cfu, guarantee_type, cfu_source, cfu_raw_source_path, cfu_evidence_scope
             if cfu_data.get('has_cfu'):
                 has_cfu = True
-                total_cfu += cfu_data.get('cfu_count', 0)
-                total_billion_count += cfu_data.get('billion_count', 0)
                 if not cfu_source:
                     cfu_source = cfu_data.get("source")
                 if not cfu_raw_source_path:
@@ -12522,9 +12570,39 @@ class SupplementEnricherV3:
                     cfu_evidence_scope = cfu_data.get("evidence_scope") or "row_level"
                 linked = cfu_data.get("linked_rows") or [blend.get("raw_source_path")]
                 cfu_linked_rows.extend(str(path) for path in linked if path)
-            # Take first non-None guarantee_type
             if not guarantee_type and cfu_data.get('guarantee_type'):
                 guarantee_type = cfu_data.get('guarantee_type')
+
+        handled_child_paths = set()
+        for header_path, header in header_blends.items():
+            header_cfu = header.get('cfu_data', {}) or {}
+            _add_cfu_source(header_cfu, header)
+            header_count = header_cfu.get('cfu_count', 0) if header_cfu.get('has_cfu') else 0
+            header_billion = header_cfu.get('billion_count', 0) if header_cfu.get('has_cfu') else 0
+
+            child_count = 0
+            child_billion = 0.0
+            for child in child_blends_by_parent.get(header_path, []):
+                handled_child_paths.add(child.get("raw_source_path"))
+                child_cfu = child.get('cfu_data', {}) or {}
+                _add_cfu_source(child_cfu, child)
+                if child_cfu.get('has_cfu'):
+                    child_count += child_cfu.get('cfu_count', 0)
+                    child_billion += child_cfu.get('billion_count', 0)
+
+            group_count = max(header_count or 0, child_count or 0)
+            group_billion = max(header_billion or 0, child_billion or 0)
+            total_cfu += group_count
+            total_billion_count += group_billion
+
+        for blend in probiotic_blends:
+            if blend.get("is_blend_header_total") or blend.get("raw_source_path") in handled_child_paths:
+                continue
+            cfu_data = blend.get('cfu_data', {})
+            if cfu_data.get('has_cfu'):
+                total_cfu += cfu_data.get('cfu_count', 0)
+                total_billion_count += cfu_data.get('billion_count', 0)
+            _add_cfu_source(cfu_data, blend)
 
         # Use product-level CFU if it's a total claim and exceeds per-strain sum
         # (prevents overcounting when "50 Billion CFU" is a product total, not per-strain)

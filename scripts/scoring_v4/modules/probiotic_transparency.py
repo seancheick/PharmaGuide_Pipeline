@@ -159,6 +159,7 @@ def _score_strain_identities(pdata: Dict[str, Any]) -> float:
         return CAP_STRAIN_IDENTITIES
 
     named_blend_count = 0
+    eligible_blend_count = 0
     for blend in blends:
         if not isinstance(blend, dict):
             continue
@@ -167,12 +168,21 @@ def _score_strain_identities(pdata: Dict[str, Any]) -> float:
             for s in _safe_list(blend.get("strains"))
             if str(s or "").strip()
         ]
+        if blend.get("is_blend_header_total") and not strains:
+            # Flattened DSLD labels can emit a parent "Probiotic Blend"
+            # row only to carry aggregate CFU provenance, while the child
+            # rows carry the actual strain identities. That header is not an
+            # unnamed strain container and must not dilute identity credit.
+            continue
+        eligible_blend_count += 1
         if strains:
             named_blend_count += 1
 
     if named_blend_count == 0:
         return 0.0
-    ratio = min(1.0, named_blend_count / len(blends))
+    if eligible_blend_count <= 0:
+        return CAP_STRAIN_IDENTITIES
+    ratio = min(1.0, named_blend_count / eligible_blend_count)
     return round(CAP_STRAIN_IDENTITIES * ratio, 4)
 
 

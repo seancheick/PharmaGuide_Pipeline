@@ -88,6 +88,103 @@ def test_product_name_cfu_guarantee_populates_product_level_provenance(enricher)
     assert probiotic_data["cfu_raw_source_path"] in probiotic_data["cfu_linked_rows"]
 
 
+def test_blend_header_total_does_not_double_count_nested_strain_cfus(enricher):
+    """A flattened blend header can carry the aggregate CFU guarantee while
+    nested strain rows carry individual CFUs. The header is provenance, not a
+    fifth strain, and its total must not stack on top of child CFUs."""
+    product = {
+        "id": "florasport_like",
+        "product_name": "FloraSport 20B",
+        "fullName": "Thorne FloraSport 20B",
+        "bundleName": "",
+        "statements": [],
+        "activeIngredients": [
+            {
+                "name": "Probiotic Blend",
+                "standardName": "Probiotic & Microbiome Blends",
+                "category": "blend",
+                "quantity": 250,
+                "unit": "mg",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "hierarchyType": "blend_header",
+                "score_exclusion_reason": "blend_header_total",
+                "nestedIngredients": [],
+                "notes": "20 Billion CFUs, At time of expiration when stored as recommended",
+            },
+            {
+                "name": "Lactobacillus paracasei UALpc-04",
+                "standardName": "Lactobacillus Paracasei",
+                "category": "bacteria",
+                "quantity": 0,
+                "unit": "NP",
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+                "notes": "5 Billion CFUs",
+            },
+            {
+                "name": "Lactobacillus acidophilus UALa-01",
+                "standardName": "Lactobacillus Acidophilus",
+                "category": "bacteria",
+                "quantity": 0,
+                "unit": "NP",
+                "raw_source_path": "ingredientRows[0].nestedRows[1]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+                "notes": "5 Billion CFUs",
+            },
+            {
+                "name": "Bacillus subtilis DE111",
+                "standardName": "Bacillus subtilis DE111",
+                "category": "bacteria",
+                "quantity": 0,
+                "unit": "NP",
+                "raw_source_path": "ingredientRows[0].nestedRows[2]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+                "notes": "5 Billion CFUs",
+            },
+            {
+                "name": "Bifidobacterium animalis lactis HN019",
+                "standardName": "Bifidobacterium Lactis",
+                "category": "bacteria",
+                "quantity": 0,
+                "unit": "NP",
+                "raw_source_path": "ingredientRows[0].nestedRows[3]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+                "notes": "5 Billion CFUs",
+            },
+        ],
+        "inactiveIngredients": [],
+    }
+
+    probiotic_data = enricher._collect_probiotic_data(product)
+
+    assert probiotic_data["is_probiotic_product"] is True
+    assert probiotic_data["total_strain_count"] == 4
+    assert probiotic_data["total_billion_count"] == pytest.approx(20.0)
+    assert probiotic_data["total_cfu"] == pytest.approx(20_000_000_000)
+    assert probiotic_data["guarantee_type"] == "at_expiration"
+    assert probiotic_data["cfu_raw_source_path"] == "ingredientRows[0]"
+    assert probiotic_data["cfu_linked_rows"] == [
+        "ingredientRows[0]",
+        "ingredientRows[0].nestedRows[0]",
+        "ingredientRows[0].nestedRows[1]",
+        "ingredientRows[0].nestedRows[2]",
+        "ingredientRows[0].nestedRows[3]",
+    ]
+    assert all(
+        "Probiotic Blend" not in (blend.get("strains") or [])
+        for blend in probiotic_data["probiotic_blends"]
+    )
+    assert {
+        strain["strain"]: strain["cfu_per_day"]
+        for strain in probiotic_data["clinical_strains"]
+    }["Bifidobacterium animalis lactis HN019"] == pytest.approx(5_000_000_000)
+
+
 def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enricher):
     enriched = {
         "activeIngredients": [
