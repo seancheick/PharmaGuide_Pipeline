@@ -90,9 +90,9 @@ def test_dose_payload_shape_and_phase() -> None:
     payload = score_dose(_product(adequacy_results=[_adequacy(n) for n in CORE_ANCHORS]))
 
     assert set(payload.keys()) == {"score", "max", "components", "penalties", "metadata"}
-    assert payload["max"] == 30.0
+    assert payload["max"] == 25.0
     assert payload["metadata"]["phase"] == "P3.2_multi_prenatal_dose"
-    assert payload["score"] <= 30.0
+    assert payload["score"] <= 25.0
 
 
 def test_rda_ai_coverage_full_credit_for_50_to_200_pct_rda_under_ul() -> None:
@@ -104,7 +104,7 @@ def test_rda_ai_coverage_full_credit_for_50_to_200_pct_rda_under_ul() -> None:
         _adequacy("Vitamin B12", pct_rda=200, pct_ul=None),
     ]))
 
-    assert payload["components"]["rda_ai_coverage"] == 20.0
+    assert payload["components"]["rda_ai_coverage"] == 15.0
     assert payload["metadata"]["coverage_nutrient_count"] == 3
 
 
@@ -116,8 +116,8 @@ def test_rda_ai_coverage_is_proportional_below_half_rda() -> None:
         _adequacy("Zinc", pct_rda=10, pct_ul=3),
     ]))
 
-    # pct_rda 25 => 0.50 credit; pct_rda 10 => 0.20 credit; avg=.35*20=7
-    assert payload["components"]["rda_ai_coverage"] == 7.0
+    # pct_rda 25 => 0.50 credit; pct_rda 10 => 0.20 credit; avg=.35*15=5.25
+    assert payload["components"]["rda_ai_coverage"] == 5.25
 
 
 def test_high_b_vitamin_without_ul_is_softly_downweighted_not_zeroed() -> None:
@@ -127,7 +127,7 @@ def test_high_b_vitamin_without_ul_is_softly_downweighted_not_zeroed() -> None:
         _adequacy("Vitamin B1 (Thiamine)", pct_rda=4000, pct_ul=None),
     ]))
 
-    assert payload["components"]["rda_ai_coverage"] == 13.0
+    assert payload["components"]["rda_ai_coverage"] == 9.75
     assert payload["metadata"]["coverage_nutrient_scores"]["vitamin_b1_thiamine"] == 0.65
 
 
@@ -138,7 +138,7 @@ def test_over_ul_but_below_b7_threshold_gets_partial_credit_without_penalty() ->
         _adequacy("Niacin", pct_rda=300, pct_ul=120),
     ]))
 
-    assert payload["components"]["rda_ai_coverage"] == 10.0
+    assert payload["components"]["rda_ai_coverage"] == 7.5
     assert payload["penalties"]["B7_dose_safety"] == -0.0
 
 
@@ -167,7 +167,7 @@ def test_panel_breadth_scales_to_five_points_at_eighteen_nutrients() -> None:
     nutrients = [f"Nutrient {i}" for i in range(18)]
     payload = score_dose(_product(adequacy_results=[_adequacy(n) for n in nutrients]))
 
-    assert payload["components"]["panel_breadth"] == 5.0
+    assert payload["components"]["panel_breadth"] == 3.0
     assert payload["metadata"]["panel_breadth_count"] == 18
 
 

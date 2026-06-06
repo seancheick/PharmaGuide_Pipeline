@@ -31,9 +31,9 @@ _BIO_SCORE_MAX = 15.0
 _BIO_WEIGHT_FLOOR = 0.75
 
 
-DIMENSION_CAP = 30.0
-CAP_RDA_AI_COVERAGE = 20.0
-CAP_PANEL_BREADTH = 5.0
+DIMENSION_CAP = 25.0
+CAP_RDA_AI_COVERAGE = 15.0
+CAP_PANEL_BREADTH = 3.0
 CAP_CRITICAL_NUTRIENT_COVERAGE = 5.0
 CAP_PRENATAL_COMPLEMENT_SUPPORT = 2.0
 
@@ -462,7 +462,7 @@ def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
 
 
 def score_dose(product: Any) -> Dict[str, Any]:
-    """Compute the P3.2 multi/prenatal Dose 30 dimension."""
+    """Compute the P3.2 multi/prenatal Dose 25 dimension."""
     product = _safe_product(product)
 
     coverage_scores = _coverage_scores(product)

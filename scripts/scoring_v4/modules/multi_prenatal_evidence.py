@@ -1,10 +1,9 @@
 """v4 multi/prenatal Evidence dimension (P3.3).
 
 Multi/prenatal Evidence uses the already-verified generic multiplicative
-pipeline as its source of truth, then rescales from the generic 20-point
-cap to the multi/prenatal 15-point cap. This preserves top-N dampening,
-effect-direction handling, dose guards, and depth bonus without inventing
-new evidence math for broad nutrient panels.
+pipeline as its source of truth under the same 20-point cap. This preserves
+top-N dampening, effect-direction handling, dose guards, and depth bonus
+without inventing new evidence math for broad nutrient panels.
 """
 
 from __future__ import annotations
@@ -16,7 +15,7 @@ from scoring_v4.modules.generic_evidence import score_evidence as score_generic_
 
 
 PHASE_MARKER = "P3.3_multi_prenatal_evidence"
-CAP_EVIDENCE = 15.0
+CAP_EVIDENCE = 20.0
 GENERIC_CAP_EVIDENCE = 20.0
 RESCALE_FACTOR = CAP_EVIDENCE / GENERIC_CAP_EVIDENCE
 
@@ -26,7 +25,7 @@ def _clamp(low: float, high: float, value: float) -> float:
 
 
 def score_evidence(product: Any) -> Dict[str, Any]:
-    """Return the multi/prenatal Evidence 15 dimension payload."""
+    """Return the multi/prenatal Evidence 20 dimension payload."""
     if not isinstance(product, dict):
         product = {}
 
@@ -46,12 +45,11 @@ def score_evidence(product: Any) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "metadata": {
             "phase": PHASE_MARKER,
-            "method": "generic_evidence_pipeline_rescaled_to_multi_prenatal_cap",
-            "dampening_policy": "generic_top_n_then_0_75_rescale",
+            "method": "generic_evidence_pipeline_shared_20_point_cap",
+            "dampening_policy": "generic_top_n_shared_20_point_cap",
             "generic_evidence_score": round(generic_score, 4),
             "generic_evidence_components": dict(_safe_dict(generic_payload.get("components"))),
             "generic_evidence_metadata": dict(_safe_dict(generic_payload.get("metadata"))),
             "rescale_factor": RESCALE_FACTOR,
         },
     }
-

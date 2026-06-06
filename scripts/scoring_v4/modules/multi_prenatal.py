@@ -8,10 +8,10 @@ single-ingredient products:
     -----------------  ----    -------------------------------
     Formulation         25     P3.1 — panel form quality, prenatal-critical
                                nutrient form checks, gummy/formulation limits
-    Dose                30     P3.2 — RDA/AI coverage, UL safety, prenatal
+    Dose                25     P3.2 — RDA/AI coverage, UL safety, prenatal
                                critical nutrient adequacy floors
-    Evidence            15     P3.3 — nutrient-outcome support and class
-                               evidence, lower cap than generic
+    Evidence            20     P3.3 — nutrient-outcome support and class
+                               evidence
     Testing & Trust     15     P3.4 — B4a SKU + B4b GMP + B4c traceability
     Transparency        15     P3.5 — panel disclosure, blend opacity, claims,
                                allergens, marketing penalties
@@ -62,8 +62,8 @@ PHASE_MARKER = "P3.6_multi_prenatal_final_assembly"
 # audit / UI and should remain stable across P3 slices.
 DIMENSION_CAPS = (
     ("formulation", 25),
-    ("dose", 30),
-    ("evidence", 15),
+    ("dose", 25),
+    ("evidence", 20),
     ("transparency", 15),
 )
 

@@ -49,7 +49,7 @@ def test_poor_form_still_receives_most_dose_coverage_credit():
     ])
     coverage = score_dose(product)["components"]["rda_ai_coverage"]
 
-    assert coverage == 15.0
+    assert coverage == 11.25
 
 
 def test_premium_forms_out_cover_cheap_forms_at_same_rda():

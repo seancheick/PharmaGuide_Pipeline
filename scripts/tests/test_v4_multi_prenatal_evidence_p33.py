@@ -72,12 +72,12 @@ def test_evidence_payload_shape_and_phase() -> None:
     payload = score_evidence(_product(matches=[_match("Vitamin D")]))
 
     assert set(payload.keys()) == {"score", "max", "components", "penalties", "metadata", "phase"}
-    assert payload["max"] == 15.0
+    assert payload["max"] == 20.0
     assert payload["phase"] == "P3.3_multi_prenatal_evidence"
     assert payload["metadata"]["phase"] == "P3.3_multi_prenatal_evidence"
 
 
-def test_multivitamin_evidence_rescales_generic_pipeline_to_15_point_cap() -> None:
+def test_multivitamin_evidence_uses_generic_pipeline_under_shared_20_point_cap() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
     from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 
@@ -89,12 +89,12 @@ def test_multivitamin_evidence_rescales_generic_pipeline_to_15_point_cap() -> No
     multi = score_evidence(product)
 
     assert generic["score"] == 4.5
-    assert multi["components"]["class_adjusted_clinical_evidence"] == 3.375
-    assert multi["score"] == 3.375
+    assert multi["components"]["class_adjusted_clinical_evidence"] == 4.5
+    assert multi["score"] == 4.5
     assert multi["metadata"]["generic_evidence_score"] == 4.5
 
 
-def test_high_evidence_panel_rescales_without_exceeding_15_point_cap() -> None:
+def test_high_evidence_panel_uses_shared_20_point_cap() -> None:
     from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 
     product = _product(
@@ -115,8 +115,8 @@ def test_high_evidence_panel_rescales_without_exceeding_15_point_cap() -> None:
     payload = score_evidence(product)
 
     assert payload["metadata"]["generic_evidence_score"] == 18.0
-    assert payload["score"] == 13.5
-    assert payload["score"] <= 15.0
+    assert payload["score"] == 18.0
+    assert payload["score"] <= 20.0
 
 
 def test_top_n_dampening_is_preserved_from_generic_pipeline() -> None:
@@ -126,7 +126,7 @@ def test_top_n_dampening_is_preserved_from_generic_pipeline() -> None:
     payload = score_evidence(_product(matches=matches))
 
     assert payload["metadata"]["generic_evidence_metadata"]["top_n_applied"] == 4
-    assert payload["metadata"]["dampening_policy"] == "generic_top_n_then_0_75_rescale"
+    assert payload["metadata"]["dampening_policy"] == "generic_top_n_shared_20_point_cap"
 
 
 def test_negative_effect_direction_contributes_zero() -> None:
@@ -153,7 +153,7 @@ def test_depth_bonus_is_rescaled_with_pipeline_not_added_separately() -> None:
 
     assert generic["components"]["depth_bonus"] == 0.5
     assert multi["metadata"]["generic_evidence_components"]["depth_bonus"] == 0.5
-    assert multi["score"] == round(generic["score"] * 0.75, 4)
+    assert multi["score"] == generic["score"]
 
 
 def test_empty_or_malformed_product_scores_zero() -> None:

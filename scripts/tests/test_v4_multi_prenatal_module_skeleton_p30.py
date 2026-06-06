@@ -10,8 +10,8 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §4:
     | Dimension          | multi/prenatal |
     |--------------------|---------------:|
     | Formulation        |             25 |
-    | Dose               |             30 |
-    | Evidence           |             15 |
+    | Dose               |             25 |
+    | Evidence           |             20 |
     | Testing & Trust    |             15 |
     | Transparency       |             15 |
     | (5-dimension sum)  |            100 |
@@ -32,8 +32,8 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 EXPECTED_DIMENSION_CAPS = {
     "formulation": 25,
-    "dose": 30,
-    "evidence": 15,
+    "dose": 25,
+    "evidence": 20,
     "transparency": 15,
 }
 
