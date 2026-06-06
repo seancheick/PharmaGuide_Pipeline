@@ -77,6 +77,30 @@ SHADOW_KEYS = (
     "shadow_score_v4_anchored",
 )
 
+# Scoring-engine provenance (Phase 0 config-driven calibration). Stamped into
+# breakdown["provenance"] on EVERY scored artifact so an audit / score dispute
+# can reconstruct exactly what produced a score: the engine version, the
+# classification-schema version, and the version+fingerprint of every config
+# rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
+# config-value changes are captured by the per-rubric fingerprints, not here.
+# SCORING_MODE stays 'shadow' until the §P5 cutover decision flips it.
+SCORING_ENGINE_VERSION = "4.0.0"
+SCORING_MODE = "shadow"
+
+
+def _provenance_block(module: str) -> Dict[str, Any]:
+    """Reproducibility stamp for a scored artifact (engine + schema + config)."""
+    from scoring_input_contract import SCORING_CLASSIFICATION_SCHEMA_VERSION
+    from scoring_v4.config_registry import all_config_provenance
+
+    return {
+        "scoring_engine_version": SCORING_ENGINE_VERSION,
+        "classification_schema_version": SCORING_CLASSIFICATION_SCHEMA_VERSION,
+        "config_versions": all_config_provenance(),
+        "module_route": module,
+        "mode": SCORING_MODE,
+    }
+
 
 def _empty_shadow(module: str) -> Dict[str, Any]:
     """Skeleton shadow output — module routed, but no scoring math yet.
@@ -212,6 +236,9 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
 
     module = class_for_product(enriched_product)
     shadow = _empty_shadow(module)
+    # Provenance stamped before any early return, so BLOCKED / NOT_SCORED
+    # artifacts carry the same engine+config fingerprint as fully scored ones.
+    shadow["shadow_score_v4_breakdown"]["provenance"] = _provenance_block(module)
 
     # Layer 1 — Safety Gate.
     safety = evaluate_safety_gate(enriched_product)

@@ -90,7 +90,8 @@ _OMEGA_CANONICALS = {"epa", "dha", "epa_dha"}
 def _load_rubric() -> Dict[str, Any]:
     """Load omega_rubric.json. Same pattern as omega_formulation — loaded
     fresh per call for testability; cost is negligible."""
-    return json.loads(RUBRIC_PATH.read_text())
+    from scoring_v4.config_registry import load_rubric
+    return load_rubric("omega")  # Phase 0: shared registry (validated + fingerprinted)
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:

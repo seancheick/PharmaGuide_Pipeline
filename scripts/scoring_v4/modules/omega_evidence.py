@@ -58,7 +58,8 @@ CAP_EVIDENCE = 20.0
 
 
 def _load_rubric() -> Dict[str, Any]:
-    return json.loads(RUBRIC_PATH.read_text())
+    from scoring_v4.config_registry import load_rubric
+    return load_rubric("omega")  # Phase 0: shared registry (validated + fingerprinted)
 
 
 def _as_float(value: Any, default: float = 0.0) -> float:

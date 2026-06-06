@@ -80,7 +80,8 @@ _OXIDATION_TOP_LEVEL_KEYS = (
 
 
 def _load_rubric() -> Dict[str, Any]:
-    return json.loads(RUBRIC_PATH.read_text())
+    from scoring_v4.config_registry import load_rubric
+    return load_rubric("omega")  # Phase 0: shared registry (validated + fingerprinted)
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:

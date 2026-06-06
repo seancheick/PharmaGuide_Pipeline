@@ -120,7 +120,8 @@ def _load_rubric() -> Dict[str, Any]:
     """Load omega_rubric.json. Loaded fresh per call so tests that monkey-patch
     the config file see the change. In production this is a few-µs JSON parse
     per scored product; negligible vs the rest of the pipeline."""
-    return json.loads(RUBRIC_PATH.read_text())
+    from scoring_v4.config_registry import load_rubric
+    return load_rubric("omega")  # Phase 0: shared registry (validated + fingerprinted)
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:
