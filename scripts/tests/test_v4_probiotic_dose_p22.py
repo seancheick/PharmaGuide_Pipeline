@@ -353,3 +353,106 @@ def test_probiotic_dose_resilient_to_malformed_input() -> None:
         assert payload["max"] == 25.0
         assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
         assert payload["components"]["cfu_adequacy"] == 0.0
+
+# Direct per-strain mass floor (Bifido-style: named strain disclosed at a mass
+# but no CFU). A conservative 5/25 floor, below the 8-point aggregate-CFU proxy,
+# so dose is no longer treated as if no dose were disclosed. Must not fire for
+# proprietary-blend mass, because opacity is not rewarded.
+
+def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0):
+    return {
+        "status": "active",
+        "supplement_type": {"type": "probiotic"},
+        "activeIngredients": active_rows,
+        "ingredient_quality_data": {"total_active": max(1, len(active_rows)), "ingredients_scorable": []},
+        "probiotic_data": {
+            "is_probiotic": True,
+            "is_probiotic_product": True,
+            "total_strain_count": len(clinical_strains),
+            "total_billion_count": total_billion,
+            "has_cfu": total_billion > 0,
+            "probiotic_blends": [],
+            "clinical_strains": clinical_strains,
+        },
+    }
+
+
+def test_direct_strain_mass_floors_dose_when_named_strain_has_mass_no_cfu() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = _no_cfu_probiotic(
+        active_rows=[{"name": "Bifidobacterium longum BB536", "quantity": "25.0", "unit": "mg"}],
+        clinical_strains=[_strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None)],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["cfu_adequacy"] == 5.0
+    assert payload["score"] == 5.0  # disclosure 0 + floor 5
+    assert payload["metadata"]["cfu_adequacy_basis"] == "direct_strain_mass_no_cfu_floor"
+    assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is True
+
+
+def test_final_blob_ingredients_shape_can_floor_direct_strain_mass() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = _no_cfu_probiotic(
+        active_rows=[],
+        clinical_strains=[_strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None)],
+    )
+    product["ingredients"] = [
+        {"name": "Bifidobacterium longum BB536", "quantity": 25.0, "unit": "mg"},
+    ]
+    payload = score_dose(product)
+    assert payload["components"]["cfu_adequacy"] == 5.0
+    assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is True
+
+
+def test_proprietary_blend_mass_does_not_floor_dose() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+    product = _no_cfu_probiotic(
+        active_rows=[
+            {
+                "name": "Proprietary Probiotic Blend",
+                "quantity": "200.0",
+                "unit": "mg",
+                "is_proprietary_blend": True,
+            },
+            {"name": "Lactobacillus acidophilus", "quantity": 0.0, "unit": "NP"},
+        ],
+        clinical_strains=[_strain("Lactobacillus acidophilus", cfu_per_day=None, adequacy_tier=None)],
+    )
+    payload = score_dose(product)
+    assert payload["components"]["cfu_adequacy"] == 0.0
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
+
+
+def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+    # named strains + a real total CFU + a strain row that ALSO discloses a mass:
+    # the 8-pt aggregate proxy must win, the 5-pt mass floor must not override it.
+    product = _no_cfu_probiotic(
+        active_rows=[{"name": "Lactobacillus rhamnosus GG", "quantity": 30.0, "unit": "mg"}],
+        clinical_strains=[
+            _strain("Lactobacillus rhamnosus GG", cfu_per_day=None, adequacy_tier="excellent", support="high"),
+            _strain("Bifidobacterium lactis BB-12", cfu_per_day=None, adequacy_tier="good", support="high"),
+        ],
+        total_billion=20.0,
+    )
+    payload = score_dose(product)
+    assert payload["components"]["cfu_adequacy"] == 8.0  # aggregate proxy, not 5
+    assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_modeled_proxy"
+    assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
+
+
+def test_per_strain_cfu_disclosed_blocks_direct_mass_floor() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+    # Strain DISCLOSES per-strain CFU (disclosed_count>=1) but adequacy computes 0
+    # (no tier). CFU is disclosed, so dose is not "absent" — the mass floor must NOT
+    # fire (it is only for products with no CFU at all).
+    product = _no_cfu_probiotic(
+        active_rows=[{"name": "Lactobacillus acidophilus La-14", "quantity": 10.0, "unit": "mg"}],
+        clinical_strains=[_strain("Lactobacillus acidophilus La-14",
+                                  cfu_per_day=5_000_000_000, adequacy_tier=None)],
+    )
+    payload = score_dose(product)
+    assert payload["metadata"]["per_strain_cfu_disclosed_count"] >= 1
+    assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
+    assert payload["components"]["cfu_adequacy"] == 0.0

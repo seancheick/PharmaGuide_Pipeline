@@ -24,6 +24,19 @@ CAP_DOSE = 25.0
 CAP_PER_STRAIN_CFU_DISCLOSURE = 10.0
 CAP_CFU_ADEQUACY = 15.0
 CAP_AGGREGATE_CFU_PROXY_ADEQUACY = 8.0
+# A named strain disclosed at its OWN mass (e.g. BB536 25 mg) with no CFU gets a
+# small dose floor — strictly below the aggregate-CFU proxy, since mass is a weaker
+# potency signal than CFU and must not approach real CFU credit.
+CAP_DIRECT_STRAIN_MASS_FLOOR = 5.0
+# Rows whose NAME marks them as a blend/header/container, not a single strain at a
+# disclosed mass. The floor must never fire on these (opacity is not rewarded).
+_BLEND_ROW_RE = re.compile(
+    r"\b(blend|proprietary|complex|matrix|formula|formulation|cultures?|"
+    r"prebiotic|probiotic\s+blend|bacteria)\b",
+    re.IGNORECASE,
+)
+_MASS_UNITS = frozenset({"mg", "milligram", "milligrams", "g", "gram", "grams", "gm",
+                         "mcg", "microgram", "micrograms", "ug", "µg"})
 V3_CFU_ADEQUACY_CAP = 5.0
 
 TIER_POINTS = {
@@ -68,9 +81,25 @@ def score_dose(product: Any) -> Dict[str, Any]:
     )
     if aggregate_proxy["score"] > 0.0:
         cfu_adequacy_scaled = max(cfu_adequacy_scaled, aggregate_proxy["score"])
+    # Direct per-strain mass floor: a named strain disclosed at its OWN mass (e.g.
+    # BB536 25 mg) with no CFU is not "no dose disclosed". Give a conservative floor
+    # (below the 8-pt aggregate-CFU proxy) so dose isn't treated as fully absent.
+    # Never fires for proprietary-blend mass — opacity is not rewarded.
+    direct_strain_mass_floor = _compute_direct_strain_mass_floor(product, clinical_strains)
+    # Only when NO per-strain CFU is disclosed (disclosed_count == 0) AND adequacy is
+    # otherwise 0. A product that discloses per-strain CFU already has its dose
+    # assessed — mass must not stack a floor on top of real CFU disclosure.
+    if (
+        disclosed_count == 0
+        and cfu_adequacy_scaled <= 0.0
+        and direct_strain_mass_floor["score"] > 0.0
+    ):
+        cfu_adequacy_scaled = direct_strain_mass_floor["score"]
+        direct_strain_mass_floor["applied"] = True
     cfu_adequacy_basis = _cfu_adequacy_basis(
         cfu_adequacy_scaled,
         aggregate_proxy,
+        direct_strain_mass_floor,
         disclosed_count=disclosed_count,
     )
 
@@ -96,6 +125,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "cfu_adequacy_basis": cfu_adequacy_basis,
             "cfu_adequacy_contributions": adequacy["strain_contributions"],
             "aggregate_cfu_proxy": aggregate_proxy,
+            "direct_strain_mass_floor": direct_strain_mass_floor,
             "window_proxy_reason": _disclosure_reason(pdata, total_strain_count, disclosed_count),
         },
     }
@@ -155,16 +185,135 @@ def _compute_cfu_adequacy(clinical_strains: Iterable[Any]) -> Dict[str, Any]:
 def _cfu_adequacy_basis(
     cfu_adequacy_scaled: float,
     aggregate_proxy: Dict[str, Any],
+    direct_strain_mass_floor: Dict[str, Any],
     *,
     disclosed_count: int,
 ) -> str:
     if aggregate_proxy.get("applied"):
         return "aggregate_cfu_modeled_proxy"
+    if direct_strain_mass_floor.get("applied"):
+        return "direct_strain_mass_no_cfu_floor"
     if cfu_adequacy_scaled > 0.0 and disclosed_count > 0:
         return "per_strain_cfu_disclosed"
     if cfu_adequacy_scaled > 0.0:
         return "strain_level_cfu_evidence"
     return "no_cfu_adequacy_credit"
+
+
+def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for a in _safe_list(product.get("activeIngredients")):
+        if isinstance(a, dict):
+            rows.append(a)
+    for a in _safe_list(product.get("ingredients")):
+        if isinstance(a, dict):
+            rows.append(a)
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    for key in ("ingredients_scorable", "ingredients"):
+        for a in _safe_list(iqd.get(key)):
+            if isinstance(a, dict):
+                rows.append(a)
+    return rows
+
+
+def _row_is_blend_header(row: Dict[str, Any]) -> bool:
+    if (
+        row.get("is_in_proprietary_blend")
+        or row.get("is_proprietary_blend")
+        or row.get("is_blend_header")
+        or row.get("is_blend")
+        or row.get("is_parent_total")
+    ):
+        return True
+    if row.get("scoring_input_kind") == "product_level_evidence":
+        return True
+    if _norm(row.get("evidence_type")) in {"blend_anchor_mass", "conservative_blend_anchor_mass"}:
+        return True
+    role = _norm(row.get("role") or row.get("cleaner_role") or row.get("scoring_input_kind"))
+    if role in {"blend_header_total", "nested_display_only", "composition_leaf"}:
+        return True
+    text = " ".join(
+        str(row.get(key) or "")
+        for key in ("name", "standardName", "standard_name", "raw_source_text", "display_label")
+    )
+    return bool(_BLEND_ROW_RE.search(text))
+
+
+def _row_positive_mass(row: Dict[str, Any]) -> bool:
+    quantity = None
+    for key in ("quantity", "amount", "dose", "dosage"):
+        quantity = _as_float(row.get(key), None)
+        if quantity is not None:
+            break
+    unit = _norm(row.get("unit_normalized") or row.get("unit") or row.get("dose_unit"))
+    return quantity is not None and quantity > 0 and unit in _MASS_UNITS
+
+
+def _compute_direct_strain_mass_floor(
+    product: Dict[str, Any],
+    clinical_strains: Iterable[Any],
+) -> Dict[str, Any]:
+    """Conservative dose floor for a named strain disclosed at its OWN mass with no
+    CFU (Bifido BB536 25 mg). Matches a clinical strain to an ingredient row that
+    (a) carries that strain's name, (b) has a positive disclosed mass, and (c) is
+    NOT a blend/header row. Never fires for proprietary-blend mass. Payload is
+    shaped like the aggregate-CFU proxy."""
+    payload: Dict[str, Any] = {
+        "applied": False,
+        "score": 0.0,
+        "cap": CAP_DIRECT_STRAIN_MASS_FLOOR,
+        "reason": None,
+        "matched_strains": [],
+        "excluded_blend_rows": [],
+    }
+    strains = [_safe_dict(s) for s in (clinical_strains or [])]
+    strains = [s for s in strains if s and not s.get("is_inactivated") and not s.get("is_postbiotic")]
+    if not strains:
+        payload["reason"] = "no_named_strains"
+        return payload
+
+    # Canonical strain-name keys (name/strain only — NOT short clinical_id codes,
+    # which could spuriously substring-match unrelated rows).
+    strain_keys = set()
+    for s in strains:
+        for v in (s.get("strain"), s.get("name")):
+            k = _canonical_key(str(v or ""))
+            if k:
+                strain_keys.add(k)
+    if not strain_keys:
+        payload["reason"] = "no_named_strains"
+        return payload
+
+    matched: List[str] = []
+    for row in _ingredient_rows(product):
+        name = str(
+            row.get("name")
+            or row.get("standardName")
+            or row.get("standard_name")
+            or row.get("raw_source_text")
+            or ""
+        )
+        if _row_is_blend_header(row):
+            if name:
+                payload["excluded_blend_rows"].append(name[:48])
+            continue
+        if not _row_positive_mass(row):
+            continue
+        rkey = _canonical_key(name)
+        if not rkey:
+            continue
+        # The row must carry a named strain (exact, or the row name contains the
+        # full strain name — never the reverse, to avoid short-token false matches).
+        if any(sk == rkey or sk in rkey for sk in strain_keys):
+            matched.append(name[:48])
+
+    if matched:
+        payload["score"] = CAP_DIRECT_STRAIN_MASS_FLOOR
+        payload["reason"] = "direct_strain_mass_no_cfu"
+        payload["matched_strains"] = matched
+    else:
+        payload["reason"] = "no_direct_strain_mass_match"
+    return payload
 
 
 def _compute_aggregate_cfu_proxy(
