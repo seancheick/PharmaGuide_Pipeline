@@ -35,9 +35,21 @@ from scoring_v4.modules.generic_transparency import _b5_class_for_product
 # --- Probiotic ---
 
 def test_probiotic_taxonomy_returns_probiotic():
+    """A probiotic with real strain identity evidence routes probiotic.
+
+    Evidence-gated routing: `primary_type: probiotic` is honored when backed
+    by probiotic_data (is_probiotic_product + named strains), not on the
+    taxonomy token alone. Real probiotics carry this evidence (verified:
+    328/330 probiotic-taxonomy corpus products route probiotic)."""
     product = {
         "primary_type": "probiotic",
         "product_name": "Daily Probiotic 50B CFU",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_strain_count": 3,
+            "has_cfu": True,
+            "total_cfu": 50_000_000_000,
+        },
     }
     assert _b5_class_for_product(product) == "probiotic"
 
@@ -54,11 +66,37 @@ def test_probiotic_legacy_supp_type_is_not_routing_contract():
 # --- Multi / prenatal ---
 
 def test_multivitamin_taxonomy_returns_multi():
+    """A multivitamin with a real multi-nutrient panel routes multi.
+
+    Evidence-gated routing (a0cec71b): the `multivitamin` taxonomy is no
+    longer trusted on its own — a broad nutrient panel (>=4 of the multi
+    panel canonicals) or explicit `multivitamin` naming is required. A real
+    multivitamin carries the panel, so it routes multi (verified: 1400/1402
+    multivitamin-taxonomy corpus products route multi_or_prenatal)."""
+    product = {
+        "primary_type": "multivitamin",
+        "product_name": "Daily Women's Multi",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Vitamin A", "canonical_id": "vitamin_a", "quantity": 700, "unit": "mcg"},
+            {"name": "Vitamin C", "canonical_id": "vitamin_c", "quantity": 90, "unit": "mg"},
+            {"name": "Vitamin D", "canonical_id": "vitamin_d", "quantity": 25, "unit": "mcg"},
+            {"name": "Zinc", "canonical_id": "zinc", "quantity": 11, "unit": "mg"},
+            {"name": "Iron", "canonical_id": "iron", "quantity": 18, "unit": "mg"},
+        ]},
+    }
+    assert _b5_class_for_product(product) == "multi_or_prenatal"
+
+
+def test_multivitamin_taxonomy_without_panel_routes_generic():
+    """Lock for a0cec71b: a bare `multivitamin` taxonomy with NO nutrient
+    panel and no `multivitamin` naming routes generic, not multi. This guards
+    against trusting a native primary_type that isn't backed by a real broad
+    panel (e.g. a mis-tagged single-nutrient product)."""
     product = {
         "primary_type": "multivitamin",
         "product_name": "Daily Women's Multi",
     }
-    assert _b5_class_for_product(product) == "multi_or_prenatal"
+    assert _b5_class_for_product(product) == "generic"
 
 
 def test_b_complex_taxonomy_returns_multi():
@@ -194,10 +232,17 @@ def test_old_batch_supp_type_specialty_returns_generic():
 # --- Probiotic > prenatal priority lock ---
 
 def test_probiotic_prenatal_combo_returns_probiotic():
-    """Probiotic priority is absolute — even with prenatal name keyword,
-    probiotic taxonomy wins."""
+    """Probiotic priority is absolute — a real probiotic (strain evidence)
+    routes probiotic even when the name carries a prenatal keyword; the
+    prenatal wording does not divert it to the multi/prenatal rubric."""
     product = {
         "primary_type": "probiotic",
         "product_name": "Prenatal Probiotic Blend",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 10_000_000_000,
+        },
     }
     assert _b5_class_for_product(product) == "probiotic"
