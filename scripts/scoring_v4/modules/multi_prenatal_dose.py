@@ -449,16 +449,76 @@ def _score_prenatal_complement_support(scores: Dict[str, float]) -> float:
     return _round(_clamp(0.0, CAP_PRENATAL_COMPLEMENT_SUPPORT, avg * CAP_PRENATAL_COMPLEMENT_SUPPORT))
 
 
-def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
+def _is_folate_parent_total_duplicate_flag(flag: Dict[str, Any]) -> bool:
+    canonical = _norm_text(flag.get("canonical_id"))
+    nutrient = _norm_text(flag.get("nutrient"))
+    if canonical not in {"vitamin_b9_folate", "folate"} and "folate" not in nutrient:
+        return False
+    if _norm_text(flag.get("aggregation")) != "canonical_sum":
+        return False
+
+    rows = [row for row in _safe_list(flag.get("contributing_rows")) if isinstance(row, dict)]
+    if len(rows) < 2:
+        return False
+
+    parent_amount = None
+    form_amounts: List[float] = []
+    for row in rows:
+        name = _norm_text(row.get("ingredient"))
+        amount = _as_float(row.get("amount"), None)
+        if amount is None or amount <= 0:
+            continue
+        is_parent_total = name in {"folate", "vitamin b9 folate", "vitamin b9"} or name == nutrient
+        is_form = any(
+            token in name
+            for token in (
+                "folic acid",
+                "mthf",
+                "methyltetrahydrofolate",
+                "methylfolate",
+                "folinic",
+                "folinate",
+            )
+        )
+        if is_parent_total:
+            parent_amount = max(parent_amount or 0.0, amount)
+        elif is_form:
+            form_amounts.append(amount)
+
+    if parent_amount is None or not form_amounts:
+        return False
+    form_sum = sum(form_amounts)
+    if form_sum <= 0:
+        return False
+    tolerance = max(50.0, parent_amount * 0.10)
+    return abs(parent_amount - form_sum) <= tolerance
+
+
+def _b7_dose_safety(product: Dict[str, Any]) -> tuple[float, List[Dict[str, Any]]]:
     rda_ul = _safe_dict(product.get("rda_ul_data"))
     total = 0.0
+    ignored: List[Dict[str, Any]] = []
     for flag in _safe_list(rda_ul.get("safety_flags")):
         if not isinstance(flag, dict):
             continue
         pct_ul = _as_float(flag.get("pct_ul"), 0.0) or 0.0
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
-            total += B7_PER_FLAG_PENALTY
-    return _round(_clamp(0.0, B7_CAP, total))
+        if pct_ul < B7_UL_PCT_THRESHOLD:
+            continue
+        if _is_folate_parent_total_duplicate_flag(flag):
+            ignored.append({
+                "nutrient": flag.get("nutrient"),
+                "canonical_id": flag.get("canonical_id"),
+                "pct_ul": flag.get("pct_ul"),
+                "reason": "folate_parent_total_plus_form_breakdown_duplicate",
+            })
+            continue
+        total += B7_PER_FLAG_PENALTY
+    return _round(_clamp(0.0, B7_CAP, total)), ignored
+
+
+def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
+    penalty, _ = _b7_dose_safety(product)
+    return penalty
 
 
 def score_dose(product: Any) -> Dict[str, Any]:
@@ -472,7 +532,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
     critical_coverage = _score_critical_coverage(critical_scores)
     prenatal_complement_scores = _prenatal_complement_scores(product)
     prenatal_complement_support = _score_prenatal_complement_support(prenatal_complement_scores)
-    b7 = _penalty_b7_dose_safety(product)
+    b7, b7_ignored_flags = _b7_dose_safety(product)
 
     components = {
         "rda_ai_coverage": rda_ai_coverage,
@@ -496,6 +556,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "critical_nutrient_scores": dict(sorted(critical_scores.items())),
         "critical_nutrients_missing": critical_missing,
         "prenatal_complement_scores": dict(sorted(prenatal_complement_scores.items())),
+        "B7_ignored_safety_flags": b7_ignored_flags,
     }
     if not coverage_scores:
         metadata["coverage_status"] = "no_rda_reference_data"

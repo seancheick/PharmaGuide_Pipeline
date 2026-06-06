@@ -559,6 +559,71 @@ def test_b5_dedupes_parent_and_child_rows_for_same_blend_total() -> None:
     assert payload["penalties"]["B5_proprietary_blend_opacity"] == pytest.approx(-1.69)
 
 
+def test_b5_trivial_non_safety_micro_blend_is_discounted() -> None:
+    """A sub-milligram carotenoid carrier blend in a multi/prenatal is a label
+    clarity limitation, not the same opacity risk as a real hidden formula."""
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    blend = {
+        "name": "Mixed Carotenoid Blend",
+        "disclosure_level": "partial",
+        "blend_total_mg": 0.45,
+        "total_weight": 0.45,
+        "unit": "mg",
+        "hidden_count": 2,
+        "nested_count": 2,
+        "source_field": "activeIngredients[22]",
+        "source_path": "activeIngredients[22]",
+        "sources": ["cleaning"],
+        "child_ingredients": [
+            {"name": "Lutein", "amount": None, "unit": ""},
+            {"name": "Zeaxanthin", "amount": None, "unit": ""},
+        ],
+    }
+
+    payload = score_transparency(_product(
+        blends=[blend],
+        supp_type="multivitamin",
+        total_active_mg=800.0,
+        total_active_ingredients=24,
+    ))
+
+    evidence = payload["metadata"]["B5_blend_evidence"][0]
+    assert evidence["hidden_mass_mg"] == 0.45
+    assert evidence["trivial_micro_blend_discount_applied"] is True
+    assert evidence["computed_blend_penalty_magnitude"] == 0.0
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] == 0.0
+
+
+def test_b5_trivial_micro_blend_discount_does_not_apply_to_stimulants() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    blend = {
+        "name": "Caffeine Energy Matrix",
+        "disclosure_level": "partial",
+        "blend_total_mg": 0.45,
+        "total_weight": 0.45,
+        "unit": "mg",
+        "hidden_count": 1,
+        "nested_count": 1,
+        "source_field": "activeIngredients[2]",
+        "source_path": "activeIngredients[2]",
+        "sources": ["cleaning"],
+        "child_ingredients": [{"name": "Caffeine", "amount": None, "unit": ""}],
+    }
+
+    payload = score_transparency(_product(
+        blends=[blend],
+        supp_type="multivitamin",
+        total_active_mg=800.0,
+        total_active_ingredients=24,
+    ))
+
+    evidence = payload["metadata"]["B5_blend_evidence"][0]
+    assert evidence["trivial_micro_blend_discount_applied"] is False
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] == pytest.approx(-1.69)
+
+
 def test_shadow_wires_transparency_dimension_when_generic_module_runs() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 

@@ -84,6 +84,14 @@ B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES = {
     "enzyme",
     "enzymes",
 }
+B5_TRIVIAL_MICRO_BLEND_HIDDEN_MASS_MG = 1.0
+B5_TRIVIAL_MICRO_BLEND_MAX_IMPACT = 0.01
+B5_SAFETY_RELEVANT_BLEND_PATTERN = re.compile(
+    r"\b(caffeine|stimulant|yohimbine|yohimbe|synephrine|octopamine|dmha|"
+    r"dmaa|geranium|ephedra|higenamine|phenethylamine|pea|theacrine|"
+    r"dynamine|eria\s+jarensis|energy\s+matrix|thermogenic|fat\s+burner)\b",
+    re.IGNORECASE,
+)
 
 B6_DISEASE_CLAIM_PENALTY = 5.0
 
@@ -552,10 +560,12 @@ def _score_b5_proprietary_blend_penalty(
 
         hidden_mass_mg = None
         impact_floor_applied = False
+        raw_impact = None
         if blend_total_mg is not None and total_active_mg and total_active_mg > 0:
             disclosed_clamped = min(disclosed_child_mg_sum, blend_total_mg)
             hidden_mass_mg = max(blend_total_mg - disclosed_clamped, 0.0)
-            impact = _clamp(0.0, 1.0, hidden_mass_mg / total_active_mg)
+            raw_impact = _clamp(0.0, 1.0, hidden_mass_mg / total_active_mg)
+            impact = raw_impact
             if hidden_mass_mg > 0 and impact < 0.1:
                 impact = 0.1
                 impact_floor_applied = True
@@ -572,7 +582,15 @@ def _score_b5_proprietary_blend_penalty(
             impact_source = "count_share"
 
         raw_blend_penalty = 0.0 if level == "full" else base + (prop_coef * impact)
-        blend_penalty = raw_blend_penalty * class_multiplier
+        pre_discount_penalty = raw_blend_penalty * class_multiplier
+        trivial_micro_discount = _is_trivial_non_safety_micro_blend(
+            blend=blend,
+            children_without_amounts=children_without_amounts,
+            hidden_mass_mg=hidden_mass_mg,
+            impact=raw_impact if raw_impact is not None else impact,
+            blend_class=blend_class,
+        )
+        blend_penalty = 0.0 if trivial_micro_discount else pre_discount_penalty
         penalty_sum += blend_penalty
 
         evidence_rows.append(
@@ -594,6 +612,8 @@ def _score_b5_proprietary_blend_penalty(
                     if level == "full"
                     else ("partial: -(1 + 3*impact)" if level == "partial" else "none: -(2 + 5*impact)")
                 ),
+                "pre_discount_blend_penalty_magnitude": round(pre_discount_penalty, 4),
+                "trivial_micro_blend_discount_applied": bool(trivial_micro_discount),
                 "computed_blend_penalty": round(-blend_penalty, 4),
                 "computed_blend_penalty_magnitude": round(blend_penalty, 4),
                 "dedupe_fingerprint": _fingerprint_to_string(_blend_dedupe_fingerprint(blend)),
@@ -606,6 +626,31 @@ def _score_b5_proprietary_blend_penalty(
         )
 
     return _clamp(0.0, B5_CAP, penalty_sum), evidence_rows
+
+
+def _is_trivial_non_safety_micro_blend(
+    *,
+    blend: Dict[str, Any],
+    children_without_amounts: List[str],
+    hidden_mass_mg: Optional[float],
+    impact: float,
+    blend_class: str,
+) -> bool:
+    if hidden_mass_mg is None or hidden_mass_mg <= 0:
+        return False
+    if hidden_mass_mg > B5_TRIVIAL_MICRO_BLEND_HIDDEN_MASS_MG:
+        return False
+    if impact > B5_TRIVIAL_MICRO_BLEND_MAX_IMPACT:
+        return False
+    # Sports/pre-workout products can hide user-action safety ingredients;
+    # keep the normal opacity penalty unless the label fully discloses them.
+    if blend_class == "sports_active":
+        return False
+    names = [str(blend.get("name") or "")]
+    names.extend(str(name or "") for name in children_without_amounts)
+    children_with_amounts, _ = _blend_child_payload(blend)
+    names.extend(str(child.get("name") or "") for child in children_with_amounts)
+    return not B5_SAFETY_RELEVANT_BLEND_PATTERN.search(" ".join(names))
 
 
 def _get_disclosure_blends(product: Dict[str, Any]) -> List[Dict[str, Any]]:

@@ -83,6 +83,21 @@ def _verified_sustainability(program: str) -> dict:
     }
 
 
+def _verified_quality_program(program: str) -> dict:
+    return {
+        "evidence_based": {
+            "third_party_programs": [
+                {
+                    "rule_id": f"CERT_{program.upper().replace(' ', '_')}",
+                    "display_name": program,
+                    "score_eligible": True,
+                    "evidence_strength": "strong",
+                }
+            ]
+        }
+    }
+
+
 # --- Component contract --------------------------------------------------
 
 
@@ -257,6 +272,99 @@ def test_form_tier_undefined_bare_fish_oil_no_form_keyword() -> None:
     ))
     assert payload["components"]["form_tier"] == 2.0
     assert payload["metadata"]["form_detected"] == "undefined"
+
+
+def test_undefined_form_high_dose_verified_quality_gets_data_limited_floor() -> None:
+    """A strong, source-disclosed EPA/DHA product with verified third-party
+    quality evidence should not crater to 6/25 solely because DSLD omitted
+    molecular form. This is a data-limited floor, not invented TG/rTG credit:
+    premium_form_a2_carry remains absent and form_detected stays undefined."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_epa_dha_product(
+        name="Prenatal DHA Fish Oil",
+        epa=200,
+        dha=650,
+        certification_data=_verified_quality_program("IFOS Certified"),
+    ))
+
+    assert payload["score"] == 17.0
+    assert payload["components"]["form_tier"] == 2.0
+    assert payload["components"]["source_disclosed"] == 4.0
+    assert payload["components"]["data_limited_formulation_floor"] == 11.0
+    assert "premium_form_a2_carry" not in payload["components"]
+    assert payload["metadata"]["form_detected"] == "undefined"
+    assert payload["metadata"]["data_limited_form_floor_applied"] is True
+    assert payload["metadata"]["data_limited_form_floor"]["quality_programs"] == ["IFOS Certified"]
+
+
+def test_undefined_form_high_dose_without_verified_quality_stays_label_only() -> None:
+    """Dose + source alone is not enough to infer quality/form. Commodity
+    undefined-form fish oil stays at form_tier + source only."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_epa_dha_product(
+        name="Prenatal DHA Fish Oil",
+        epa=200,
+        dha=650,
+    ))
+
+    assert payload["score"] == 6.0
+    assert "data_limited_formulation_floor" not in payload["components"]
+    assert payload["metadata"]["data_limited_form_floor_applied"] is False
+
+
+def test_undefined_form_floor_accepts_sku_verified_cert_programs() -> None:
+    """Some enriched records carry verified SKU certs in verified_cert_programs
+    even when evidence_based.third_party_programs is empty. SKU/product-line
+    verified certs are real quality evidence; claimed_only/brand_only remain
+    ineligible."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    payload = score_formulation(_epa_dha_product(
+        name="Prenatal DHA Fish Oil",
+        epa=200,
+        dha=650,
+        certification_data={
+            "verified_cert_programs": [
+                {"program": "NSF Certified", "scope": "sku", "match_confidence": 1.0},
+                {"program": "IFOS", "scope": "brand_only"},
+            ],
+            "evidence_based": {"third_party_programs": []},
+        },
+    ))
+
+    assert payload["score"] == 17.0
+    assert payload["metadata"]["data_limited_form_floor"]["quality_programs"] == ["NSF Certified"]
+
+
+def test_undefined_form_floor_rejects_mismatched_registry_brand() -> None:
+    """A stale/bad cert match can carry scope=sku but point to another brand.
+    Do not use it as quality evidence for the omega form fallback."""
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = _epa_dha_product(
+        name="Fish Oil 1000 mg",
+        epa=600,
+        dha=400,
+        certification_data={
+            "verified_cert_programs": [
+                {
+                    "program": "NSF Sport",
+                    "scope": "sku",
+                    "match_confidence": 1.0,
+                    "matched_brand": "LTH",
+                    "matched_product": "GLOW Omega-3 Fish Oil",
+                }
+            ]
+        },
+    )
+    product["brandName"] = "CVS Health"
+
+    payload = score_formulation(product)
+
+    assert payload["score"] == 6.0
+    assert payload["metadata"]["data_limited_form_floor"]["quality_programs"] == []
 
 
 def test_form_tier_does_not_treat_mct_carrier_as_omega_tg_form() -> None:

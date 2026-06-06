@@ -161,6 +161,54 @@ def test_b7_penalty_caps_at_three_and_zeroes_over_150_ul_coverage() -> None:
     assert payload["score"] == 0.0
 
 
+def test_b7_ignores_folate_parent_total_plus_form_breakdown_duplicate() -> None:
+    """Pure PreNatal-style labels can carry a Folate parent total plus the
+    component forms used to make that total. The safety flag should not sum
+    the parent and forms together as if the consumer receives both twice."""
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="PreNatal Nutrients",
+        adequacy_results=[
+            _adequacy("Vitamin B9 (Folate)", pct_rda=416.75, pct_ul=100.0),
+            _adequacy("L-5-MTHF", pct_rda=255.0, pct_ul=61.2),
+            _adequacy("Folic Acid", pct_rda=170.0, pct_ul=40.8),
+        ],
+        safety_flags=[
+            {
+                "nutrient": "Vitamin B9 (Folate)",
+                "canonical_id": "vitamin_b9_folate",
+                "pct_ul": 201.98,
+                "aggregation": "canonical_sum",
+                "contributing_rows": [
+                    {
+                        "ingredient": "Folate",
+                        "amount": 1667.0,
+                        "unit": "mcg DFE",
+                        "pct_ul_individual": 100.0,
+                    },
+                    {
+                        "ingredient": "L-5-MTHF",
+                        "amount": 1020.0,
+                        "unit": "mcg DFE",
+                        "pct_ul_individual": 61.2,
+                    },
+                    {
+                        "ingredient": "Folic Acid",
+                        "amount": 680.0,
+                        "unit": "mcg DFE",
+                        "pct_ul_individual": 40.8,
+                    },
+                ],
+            }
+        ],
+    ))
+
+    assert payload["penalties"]["B7_dose_safety"] == -0.0
+    ignored = payload["metadata"]["B7_ignored_safety_flags"]
+    assert ignored[0]["reason"] == "folate_parent_total_plus_form_breakdown_duplicate"
+
+
 def test_panel_breadth_scales_to_five_points_at_eighteen_nutrients() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
