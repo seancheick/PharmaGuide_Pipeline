@@ -10411,7 +10411,7 @@ class SupplementEnricherV3:
         if registry is None:
             return []
 
-        from cert_resolver import resolve  # local import (kept colocated with usage)
+        from cert_resolver import discover_verified_programs, resolve  # local import (kept colocated with usage)
 
         brand = product.get("brandName", "") or ""
         product_name = (
@@ -10443,22 +10443,42 @@ class SupplementEnricherV3:
             if name:
                 manufacturer_claim_names.add(self._normalize_text(name))
 
-        if not claimed_programs:
-            return []
-
         product_dsld_id = (
             product.get("dsld_id")
             or product.get("id")
             or product.get("dsldId")
             or product.get("productId")
         )
-        resolutions = resolve(
+        resolutions = (
+            resolve(
+                brand,
+                product_name,
+                claimed_programs,
+                registry,
+                dsld_id=str(product_dsld_id) if product_dsld_id is not None else None,
+            )
+            if claimed_programs
+            else []
+        )
+        discovered_resolutions = discover_verified_programs(
             brand,
             product_name,
-            claimed_programs,
             registry,
             dsld_id=str(product_dsld_id) if product_dsld_id is not None else None,
         )
+        if discovered_resolutions:
+            by_program = {
+                self._normalize_text(resolution.program): resolution
+                for resolution in resolutions
+            }
+            for resolution in discovered_resolutions:
+                key = self._normalize_text(resolution.program)
+                current = by_program.get(key)
+                if current is None or (
+                    not current.scores_points() and resolution.scores_points()
+                ):
+                    by_program[key] = resolution
+            resolutions = list(by_program.values())
         covered_programs = {
             self._normalize_text(program)
             for program in getattr(registry, "records_by_program", {}).keys()

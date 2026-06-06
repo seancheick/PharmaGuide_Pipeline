@@ -22,6 +22,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from cert_resolver import (  # noqa: E402
     CertRegistry,
     CertResolution,
+    discover_verified_programs,
     normalize_brand,
     normalize_product,
     normalize_program,
@@ -160,6 +161,48 @@ class TestResolverHappyPath:
         out = resolve("Thorne", "Magnesium Bisglycinate", ["NSF Certified for Sport"], registry)
         assert len(out) == 1
         assert out[0].scope == "sku"
+
+
+class TestRegistryDiscovery:
+    def test_discovers_sku_cert_without_label_claim(self) -> None:
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "USP Verified",
+                    "brand": "Ritual",
+                    "product": "Ritual Essential for Women Multivitamin 18+",
+                    "record_id": "USP_RITUAL_EFW",
+                    "verified_at": "2026-05-18",
+                }
+            ]
+        )
+
+        out = discover_verified_programs(
+            "Ritual",
+            "Ritual Essential for Women 18+",
+            registry,
+        )
+
+        assert len(out) == 1
+        assert out[0].program == "USP Verified"
+        assert out[0].scope == "sku"
+        assert out[0].record_id == "USP_RITUAL_EFW"
+        assert "registry_discovered_product_match" in (out[0].notes or "")
+
+    def test_discovery_does_not_emit_brand_only_cert(self) -> None:
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "USP Verified",
+                    "brand": "Ritual",
+                    "product": "Ritual Essential Protein Daily Shake",
+                }
+            ]
+        )
+
+        out = discover_verified_programs("Ritual", "Ritual Synbiotic+", registry)
+
+        assert out == []
 
 
 class TestResolverConservativeThresholds:

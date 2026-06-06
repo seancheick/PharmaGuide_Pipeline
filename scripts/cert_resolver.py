@@ -29,7 +29,7 @@ from __future__ import annotations
 import json
 import re
 import unicodedata
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -593,6 +593,32 @@ def resolve(
             )
 
     return out
+
+
+def discover_verified_programs(
+    brand: str,
+    product: str,
+    registry: CertRegistry,
+    dsld_id: str | None = None,
+) -> list[CertResolution]:
+    """Discover direct SKU/product-line certs from loaded registries.
+
+    `resolve()` is claim-driven: it answers "does this claimed program match
+    the registry?" For scoring reachability we also need the inverse when a
+    public registry lists the product but the label text does not repeat the
+    program name. Only SKU/product-line matches are returned; brand-only,
+    claimed-only, and needs-review results remain non-scoring.
+    """
+    discovered: list[CertResolution] = []
+    for program in sorted(registry.records_by_program):
+        for resolution in resolve(brand, product, [program], registry, dsld_id=dsld_id):
+            if resolution.scope not in {"sku", "product_line"}:
+                continue
+            note = "registry_discovered_product_match"
+            if resolution.notes:
+                note = f"{resolution.notes}; {note}"
+            discovered.append(replace(resolution, notes=note))
+    return discovered
 
 
 def _record_to_resolution(

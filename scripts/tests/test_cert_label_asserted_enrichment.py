@@ -11,6 +11,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 from cert_resolver import CertRegistry  # noqa: E402
+from cert_resolver import normalize_brand, normalize_product  # noqa: E402
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
 
 
@@ -104,6 +105,64 @@ def test_enricher_does_not_label_assert_when_live_registry_is_loaded() -> None:
     )
 
     assert resolved == [{"program": "USP Verified", "scope": "claimed_only"}]
+
+
+def test_enricher_discovers_registry_sku_cert_without_label_claim() -> None:
+    registry = CertRegistry()
+    registry.records_by_program["USP Verified"] = [{
+        "record_id": "USP_RITUAL_EFW",
+        "program": "USP Verified",
+        "brand": "Ritual",
+        "product": "Ritual Essential for Women Multivitamin 18+",
+        "brand_normalized": normalize_brand("Ritual"),
+        "product_normalized": normalize_product("Ritual Essential for Women Multivitamin 18+"),
+        "_recency_status": "fresh",
+        "_snapshot_date": "2026-05-18",
+        "_snapshot_age_days": 0,
+    }]
+    enricher = _enricher_with_registry(registry)
+
+    resolved = enricher._resolve_verified_cert_programs(
+        product={
+            "brandName": "Ritual",
+            "fullName": "Ritual Essential for Women 18+",
+        },
+        third_party_programs={"programs": []},
+        manufacturer_signals=[],
+    )
+
+    assert len(resolved) == 1
+    assert resolved[0]["program"] == "USP Verified"
+    assert resolved[0]["scope"] == "sku"
+    assert resolved[0]["record_id"] == "USP_RITUAL_EFW"
+    assert "registry_discovered_product_match" in resolved[0]["notes"]
+
+
+def test_enricher_discovery_ignores_brand_only_registry_presence() -> None:
+    registry = CertRegistry()
+    registry.records_by_program["USP Verified"] = [{
+        "record_id": "USP_RITUAL_PROTEIN",
+        "program": "USP Verified",
+        "brand": "Ritual",
+        "product": "Ritual Essential Protein Daily Shake",
+        "brand_normalized": normalize_brand("Ritual"),
+        "product_normalized": normalize_product("Ritual Essential Protein Daily Shake"),
+        "_recency_status": "fresh",
+        "_snapshot_date": "2026-05-18",
+        "_snapshot_age_days": 0,
+    }]
+    enricher = _enricher_with_registry(registry)
+
+    resolved = enricher._resolve_verified_cert_programs(
+        product={
+            "brandName": "Ritual",
+            "fullName": "Ritual Synbiotic+",
+        },
+        third_party_programs={"programs": []},
+        manufacturer_signals=[],
+    )
+
+    assert resolved == []
 
 
 def test_enricher_emits_label_asserted_for_ifos_label_claim() -> None:
