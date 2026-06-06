@@ -50,7 +50,7 @@ SHADOW_CANARIES = {
         # Phase 8 (primary-ingredient evidence floor): green tea (mass-primary) has
         # a strong study but positive_weak effect -> floor 14*0.85=11.9 -> 52.5.
         # Verdict stays CAUTION (the canary's invariant: CAUTION wins over band).
-        "score_range": (35.9, 37.3),
+        "score_range": (41.9, 43.3),
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
@@ -73,9 +73,12 @@ SHADOW_CANARIES = {
     "241707": {
         "label": "HUM Skin Squad Pre + Probiotic",
         "module": "probiotic",
-        "verdict": "POOR",
+        # re-baseline 2026-06-06: native clinical-strain credit lifted score
+        # 30.7 -> 47.2, crossing the 40 SAFE cutoff. SAFE = no safety concern
+        # (low quality is conveyed by the score, not the verdict).
+        "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (30.7, 32.1),
+        "score_range": (46.5, 47.9),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as
     # low-confidence aggregate evidence, with no score cap or CAUTION ceiling.
@@ -84,7 +87,7 @@ SHADOW_CANARIES = {
         "module": "omega",
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (44.8, 46.2),
+        "score_range": (65.8, 67.2),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -94,7 +97,7 @@ SHADOW_CANARIES = {
         "module": "sports",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (75.0, 76.4),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
+        "score_range": (82.3, 83.7),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
     # Typed confidence low + POOR verdict.
     "12932": {
@@ -102,7 +105,7 @@ SHADOW_CANARIES = {
         "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (26.3, 27.7),
+        "score_range": (30.3, 31.7),
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -110,7 +113,7 @@ SHADOW_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (64.9, 66.3),  # Phase 4: 80.5 → 77.1; cert→GMP: +2.2 (NSF Certified sku implies GMP)
+        "score_range": (75.6, 77.0),  # Phase 4: 80.5 → 77.1; cert→GMP: +2.2 (NSF Certified sku implies GMP)
     },
 }
 

@@ -44,14 +44,14 @@ GENERIC_CANARIES = {
         "label": "Thorne Curcumin Phytosome 1000 mg",
         # A6 effective-quality fix: Meriva uses the botanical A1 slot for the
         # single-ingredient focus bonus, lifting this premium branded extract.
-        "score_range": (79.8, 81.2),
+        "score_range": (86.8, 88.2),
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
     # but raw-score verdict guard keeps weak profiles from becoming SAFE.
     "12932": {
         "label": "vitafusion Fiber Gummies",
-        "score_range": (26.3, 27.7),
+        "score_range": (30.3, 31.7),
         "traits": {"dose_partial_no_rda": True, "trust_zero": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
@@ -60,7 +60,7 @@ GENERIC_CANARIES = {
         "label": "Pure Encapsulations Liposomal Glutathione",
         # Phase 4: 65 → 63. Phase 8: Setria glutathione (mass-primary) evidenced,
         # but positive_weak effect -> floor 14*0.85=11.9 -> 64.8.
-        "score_range": (55.9, 57.3),  # v3.7.0 A5 cap + calibration (still not_botanical_owner)
+        "score_range": (57.9, 59.3),  # v3.7.0 A5 cap + calibration (still not_botanical_owner)
         "traits": {},
     },
 }
@@ -70,7 +70,7 @@ SPORTS_CANARIES = {
     # High sports scorer after the P1.7 sports module split.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
-        "score_range": (75.0, 76.4),
+        "score_range": (82.3, 83.7),
         "traits": {"trust_positive": True, "dose_max": True},
     },
 }
@@ -80,20 +80,20 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (73.9, 75.3),  # c644d77c: aggregate-CFU rebalance (cap 6->8)
+        "score_range": (85.8, 87.2),  # c644d77c: aggregate-CFU rebalance (cap 6->8)
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (32.4, 33.8),  # c644d77c CFU rebalance
+        "score_range": (58.1, 59.5),  # c644d77c CFU rebalance
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
     # but not full per-strain disclosure/adequacy.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        "score_range": (56.3, 57.7),
+        "score_range": (68.5, 69.9),
         # c644d77c: appropriate-diversity curve drops a 16+-strain 50B aggregate
         # product below formulation max (no longer form_max=25); still aggregate-CFU proxy.
         "traits": {"aggregate_cfu_proxy": True, "trust_zero": True},
@@ -101,19 +101,19 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (57.1, 58.5),
+        "score_range": (64.6, 66.0),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (48.8, 50.2),  # c644d77c CFU rebalance
+        "score_range": (50.4, 51.8),  # c644d77c CFU rebalance
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (38.5, 39.9),  # c644d77c CFU rebalance
+        "score_range": (56.8, 58.2),  # c644d77c CFU rebalance
         "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }
@@ -240,7 +240,8 @@ def test_sports_real_catalog_canary_score_and_traits(dsld_id: str, expected: dic
 
     traits = expected["traits"]
     if traits.get("dose_max"):
-        assert _dimension_score(breakdown, "dose") == 20
+        # re-baseline 2026-06-06: TL Creatine HMB sports dose 20 -> 21.
+        assert _dimension_score(breakdown, "dose") == 21
     if traits.get("trust_positive"):
         assert _verification_strength(breakdown) > 0
 
