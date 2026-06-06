@@ -54,7 +54,7 @@
     "_doc": "EPA+DHA per-day dose adequacy bands (lifted and rescaled from scoring_config.section_A_ingredient_quality.omega3_dose_bonus.bands) + EPA:DHA ratio sanity bonus. Rescaled cap is /20 (band) + /5 (ratio) = 25.",
     "epa_dha_bands": [
       {"min_mg_day": 4000, "score": 20, "label": "prescription_dose", "flag": "PRESCRIPTION_DOSE_OMEGA3", "_source": "AHA/ACC prescription dose for hypertriglyceridemia"},
-      {"min_mg_day": 2000, "score": 17.5, "label": "high_clinical", "_source": "EFSA approved health claim for blood triglycerides: >= 2 g/day"},
+      {"min_mg_day": 2000, "score": 20, "label": "high_clinical", "_source": "EFSA approved health claim for blood triglycerides: >= 2 g/day. Full dose credit at 2 g/day: a genuine high-clinical consumer dose, no longer gated behind the prescription-level 4000 mg band (purpose-fit calibration 2026-06-05). The 4000 mg band gives no extra credit but keeps its PRESCRIPTION_DOSE_OMEGA3 context flag"},
       {"min_mg_day": 1000, "score": 16.0, "label": "aha_cvd", "_source": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA"},
       {"min_mg_day": 500, "score": 10.0, "label": "general_health", "_source": "FDA qualified health claim minimum for combined EPA+DHA"},
       {"min_mg_day": 250, "score": 5.0, "label": "efsa_ai_zone", "_source": "EFSA (2012) AI for EPA+DHA: 250 mg/day general population"},

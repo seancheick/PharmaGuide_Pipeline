@@ -118,13 +118,35 @@ def test_band_prescription_dose() -> None:
 
 
 def test_band_high_clinical() -> None:
-    """2000-4000 mg/day → high_clinical band (17.5). EFSA TG claim."""
+    """2000-4000 mg/day → high_clinical band = FULL dose credit (20).
+
+    Calibration 2026-06-05 (purpose-fit omega lane): 2000 mg EPA+DHA/day is a
+    genuine high-clinical consumer dose (AHA secondary-prevention ~1000 mg;
+    2-4 g is the hypertriglyceridemia range). Full dose credit is reached here,
+    NOT gated behind the prescription-level 4000 mg band. Bands below 2000 are
+    unchanged — no low-dose fish-oil inflation."""
     from scoring_v4.modules.omega_dose import score_dose
 
     product = _omega_product(epa=1500, dha=900)  # 2400 mg/day
     payload = score_dose(product)
-    assert payload["components"]["epa_dha_band"] == 17.5
+    assert payload["components"]["epa_dha_band"] == 20.0
     assert payload["metadata"]["epa_dha_band_label"] == "high_clinical"
+
+
+def test_no_extra_band_credit_above_2000() -> None:
+    """Policy lock: >2000 mg/day earns NO extra band credit over the 2000 mg
+    full-credit dose — prescription-level intake is special-use, not "better".
+    A 2400 mg and a 4500 mg product both cap the band at 20; the only
+    difference is the 4500 mg product carries the PRESCRIPTION_DOSE_OMEGA3
+    context flag."""
+    from scoring_v4.modules.omega_dose import score_dose
+
+    high_clinical = score_dose(_omega_product(epa=1500, dha=900))   # 2400 mg/day
+    prescription = score_dose(_omega_product(epa=2500, dha=2000))   # 4500 mg/day
+    assert high_clinical["components"]["epa_dha_band"] == 20.0
+    assert prescription["components"]["epa_dha_band"] == 20.0
+    assert high_clinical["metadata"]["epa_dha_band_flag"] is None
+    assert prescription["metadata"]["epa_dha_band_flag"] == "PRESCRIPTION_DOSE_OMEGA3"
 
 
 def test_band_aha_cvd() -> None:

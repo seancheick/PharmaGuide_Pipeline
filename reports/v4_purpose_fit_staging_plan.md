@@ -64,21 +64,40 @@ distribution.
 
 ### 1. Omega Dose Band
 
-Owner: Claude currently touching omega; Codex should not collide.
+Owner: Claude. Status: **DONE (uncommitted, 2026-06-05).**
 
-Purpose-fit rule:
+Purpose-fit rule (implemented in `data/omega_rubric.json` `dose.epa_dha_bands`):
 
-- 500 mg EPA+DHA/day: partial/general health.
-- 1000 mg EPA+DHA/day: strong consumer dose.
-- 2000 mg EPA+DHA/day: full/high clinical consumer dose.
-- 3000-4000+ mg/day: prescription-style context note, no extra quality credit.
+- 500 mg EPA+DHA/day: partial/general health (10/20, unchanged).
+- 1000 mg EPA+DHA/day: strong consumer dose (16/20, unchanged).
+- 2000 mg EPA+DHA/day: full/high clinical consumer dose (17.5 -> **20/20**).
+- 3000-4000+ mg/day: full credit (20), no extra over 2000, keeps
+  PRESCRIPTION_DOSE_OMEGA3 context flag.
 
-Guardrails:
+Change = single band score (2000: 17.5 -> 20). TDD'd: `test_band_high_clinical`
+(RED->GREEN) + new `test_no_extra_band_credit_above_2000` policy lock. 36 omega-
+dose tests pass.
+
+Measured (829 products with disclosed EPA+DHA):
+
+- Movers (2000-3999 mg/day, dose +2.5): **112**, all genuine high-dose fish oils.
+- Below 2000 mg/day (696 products): **unchanged** — zero low-dose inflation.
+- >=4000 (21 products): unchanged at 20.
+
+Honest finding — premium omegas are NOT dose-under-scored:
+
+- Nordic Ultimate Omega+CoQ10 = 1100 mg/day, GoL Advanced Omega = 1160,
+  Sports Research = 1000. All genuinely the aha_cvd band (16/20), serving size
+  (2-softgel serving) read correctly — not an under-read.
+- Their score gap is in formulation (molecular-form disclosure), evidence, and
+  verification, NOT dose. This fix lifts genuine 2000mg+ products only.
+
+Guardrails (held):
 
 - Parent fish-oil mass still does not count as EPA+DHA.
 - Aggregate EPA+DHA counts only when explicitly disclosed.
 - Multi/prenatal adjunct omega should not nuke the whole product dose.
-- Review top gainers and low-dose products after change.
+- Top gainers + low-dose products reviewed (above).
 
 ### 2. Verification Reachability
 
