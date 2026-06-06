@@ -11,13 +11,13 @@ catalog and locks expected Formulation score ranges so a future regression
 loudly.
 
 Coverage targets:
-  - max-reachable TG (Sports Research, Garden of Life Dr. Formulated) — 2
+  - max-reachable rTG/TG (Sports Research, Garden of Life Dr. Formulated) — 2
   - krill PL form (CVS, Nordic, Spring Valley, GNC, Nature Made,
     Nutricost, Pure Encapsulations) — ≥3 brands
   - EE form (Spring Valley) — 1
   - cod liver source (Garden of Life Alaskan Cod Liver Oil) — 1
-  - undefined-form fallthrough (Nordic Naturals Ultimate Omega — well-known
-    rTG but DSLD label omits form) — 1
+  - undefined-form fallthrough (Nordic Naturals Ultimate Omega — DSLD label
+    omits molecular form, but source/sustainability still score) — 1
   - false-positive guard (a product that pre-fix wrongly routed omega
     via fatty_acid plurality — must NOT route here) — 2
 
@@ -43,9 +43,9 @@ if str(SCRIPTS_ROOT) not in sys.path:
 # Each entry: (expected_route, expected_form, expected_score_min, expected_score_max, label)
 CANARY_TARGETS = {
     # --- Max-reachable 23/25 (TG + source + premium + sustainability + concentration) ---
-    "326270": ("omega", "tg", 23.0, 23.0,
+    "326270": ("omega", "rtg", 23.0, 23.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (one of several SKUs)"),
-    "327776": ("omega", "tg", 23.0, 23.0,
+    "327776": ("omega", "rtg", 23.0, 23.0,
                "Sports Research Omega-3 1055 mg Fish Oil 1250 mg (original canary)"),
     "273630": ("omega", "tg", 23.0, 23.0,
                "Garden of Life Dr. Formulated Advanced Omega Lemon Flavor"),
@@ -58,7 +58,7 @@ CANARY_TARGETS = {
     # --- 18/25 (PL krill + source + premium + sustainability) ---
     "239592": ("omega", "pl", 19.0, 19.0,
                "CVS Health 100% Pure Omega-3 Krill Oil 350 mg"),
-    "223169": ("omega", "pl", 14.0, 14.0,
+    "223169": ("omega", "pl", 18.0, 18.0,
                "Nordic Naturals Omega-3 Phospholipids"),
 
     # --- 16-17/25 (PL krill mid-tier — no sustainability cert) ---
@@ -75,11 +75,11 @@ CANARY_TARGETS = {
     "239845": ("omega", "ee", 19.0, 19.0,
                "Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form"),
 
-    # --- 4/25 undefined-form, source only in current enriched artifact ---
-    # Nordic Naturals Ultimate Omega + CoQ10 — well-known rTG but DSLD
-    # label omits form. Per 'do not invent fields' rule, this scores
-    # 'undefined'. Bonus: confirms _has_omega_ingredient routes correctly.
-    "288740": ("omega", "undefined", 4.0, 4.0,
+    # --- 8/25 undefined-form, source + sustainability in current enriched artifact ---
+    # Nordic Naturals Ultimate Omega + CoQ10 — label omits molecular form in
+    # this artifact, so form remains 'undefined'. Source and Friend of the Sea
+    # sustainability are real signals and still score.
+    "288740": ("omega", "undefined", 8.0, 8.0,
                "Nordic Naturals Ultimate Omega + CoQ10 Lemon"),
 }
 
