@@ -283,6 +283,17 @@ def _dha_score(product: Dict[str, Any]) -> float:
         qty = _quantity_mg(ing)
         if qty is None:
             continue
+        canonical = _norm_text(ing.get("canonical_id") or ing.get("standard_name") or "")
+        is_combined_epa_dha = canonical == "epa_dha"
+        if is_combined_epa_dha:
+            # EPA+DHA aggregate is useful omega evidence, but it does not prove
+            # the DHA component alone reaches the prenatal DHA target. Give
+            # partial critical-nutrient credit without pretending itemization.
+            if qty >= PRENATAL_DHA_FULL_MG:
+                best = max(best, 0.5)
+            elif qty > 0:
+                best = max(best, 0.25)
+            continue
         if qty >= PRENATAL_DHA_FULL_MG:
             best = max(best, 1.0)
         elif qty >= PRENATAL_DHA_PARTIAL_MG:

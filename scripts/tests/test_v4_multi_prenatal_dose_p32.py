@@ -210,6 +210,35 @@ def test_prenatal_dha_half_credit_at_100mg_and_missing_list_records_gaps() -> No
     assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.5
 
 
+def test_prenatal_combined_epa_dha_gets_partial_not_full_dha_critical_credit() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal with Omega-3",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[_ingredient("epa_dha", name="EPA+DHA", quantity=300, unit="mg")],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.5
+    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+
+
+def test_prenatal_combined_epa_dha_does_not_override_itemized_dha_credit() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal with DHA",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[
+            _ingredient("epa_dha", name="EPA+DHA", quantity=300, unit="mg"),
+            _ingredient("dha", name="DHA", quantity=200, unit="mg"),
+        ],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
+    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+
+
 def test_prenatal_dha_detection_accepts_final_detail_blob_ingredients_alias() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
