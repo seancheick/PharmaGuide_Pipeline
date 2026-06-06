@@ -23,7 +23,7 @@ one or the other; never let them disagree silently.
 
 | Field | Range | Meaning |
 |---|---|---|
-| `bio_score` | 1–15 | Bioavailability / quality score. **14–15** = premium (chelates, liposomal, patented tech). **11–13** = high-quality with clinical evidence. **8–10** = standard absorption. **5–7** = basic / unspecified. **1–4** = poor (oxides, degraded isomers). |
+| `bio_score` | 1–15 | Form-quality score. For systemic actives, this means absorption/bioavailability. For local/matrix actives (fibers, prebiotics, mushrooms, demulcents, phytosterols), this means active-form quality and delivery-to-site confidence rather than serum absorption. **14–15** = premium; **11–13** = high quality; **8–10** = standard; **5–7** = basic / unspecified; **1–4** = poor. |
 | `natural` | bool | Whether the form is naturally derived (food / plant / whole-food / naturally-occurring chelate). |
 | `natural_bonus` | +3 | Added to `score` if `natural: true`. |
 | `score` | 1–18 | `bio_score + natural_bonus`. Max possible = 18. |

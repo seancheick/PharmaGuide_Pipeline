@@ -77,6 +77,17 @@ _PROBIOTIC_SPECIES_ONLY_PEER_MIN_EXEMPTIONS = {
     'bacillus_clausii',
 }
 
+# Undisclosed oil/fatty-acid forms deliberately sit below disclosed lower-quality
+# forms and are locked in test_iqm_report_mechanical_fixes.py. This older
+# peer-min contract predates that convention.
+_UNDISCLOSED_OIL_PEER_MIN_EXEMPTIONS = {
+    'dha',
+    'epa',
+    'fish_oil',
+    'ceramides',
+    'hemp_seed_oil',
+}
+
 # Standardization-marker peer-min exemptions (2026-05-25).
 #
 # The peer-min policy (Batch 5 recalibration, 2026-04-29) assumes the
@@ -121,6 +132,28 @@ _STANDARDIZATION_MARKER_LOCKED_SPREAD = {
     },
 }
 
+_LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
+    'lions_mane',
+    'reishi',
+    'cordyceps',
+    'shiitake',
+    'maitake',
+    'turkey_tail',
+    'button_mushroom',
+    'auricularia',
+}
+
+_LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD = {
+    'lions_mane': ("lion's mane (unspecified)", 7, 7, 8),
+    'reishi': ('reishi (unspecified)', 8, 8, 9),
+    'cordyceps': ('cordyceps (unspecified)', 8, 8, 9),
+    'shiitake': ('shiitake (unspecified)', 7, 7, 8),
+    'maitake': ('maitake (unspecified)', 7, 7, 8),
+    'turkey_tail': ('turkey tail (unspecified)', 7, 7, 8),
+    'button_mushroom': ('button mushroom (unspecified)', 6, 6, 7),
+    'auricularia': ('auricularia (unspecified)', 6, 6, 7),
+}
+
 
 def test_no_unspec_form_scores_below_peer_min(iqm):
     """Every '(unspecified)' form must score ≥ parent's peer min,
@@ -134,7 +167,11 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
             continue
         if parent_key in _PROBIOTIC_SPECIES_ONLY_PEER_MIN_EXEMPTIONS:
             continue
+        if parent_key in _UNDISCLOSED_OIL_PEER_MIN_EXEMPTIONS:
+            continue
         if parent_key in _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS:
+            continue
+        if parent_key in _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
             continue
         forms = v.get('forms', {})
         if not isinstance(forms, dict):
@@ -163,7 +200,6 @@ def test_recalibrated_high_impact_entries(iqm):
     """Spot-check the highest-impact recalibrations from the audit."""
     expected = {
         # parent: minimum acceptable unspec score (peer-min from audit)
-        'reishi': 12,
         'maca': 12,
         'ashwagandha': 7,
         'rhodiola': 10,
@@ -238,6 +274,65 @@ def test_standardization_marker_spread_locked(iqm):
         'the IQM was edited without updating _STANDARDIZATION_MARKER_LOCKED_'
         'SPREAD, or the lock needs deliberate revision after clinical '
         'review:\n  ' + '\n  '.join(mismatches)
+    )
+
+
+def test_local_matrix_mushroom_unspecified_spread_locked(iqm):
+    """Mushroom/fungal actives are local/matrix ingredients.
+
+    Their form-quality signal is fruiting body / extract / standardization
+    disclosure, not systemic absorption alone. An unspecified mushroom row
+    must therefore sit below the lowest disclosed form and must not receive a
+    natural-source bonus.
+    """
+    unlocked = (
+        _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS
+        - _LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD.keys()
+    )
+    assert not unlocked, (
+        f'Local/matrix parents exempted from peer-min but not spread-locked: {unlocked}'
+    )
+
+    mismatches = []
+    for parent_key, (unspec_form, exp_bio, exp_score, exp_lowest_disclosed) in (
+        _LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD.items()
+    ):
+        forms = iqm.get(parent_key, {}).get('forms', {})
+        unspec = forms.get(unspec_form)
+        if not isinstance(unspec, dict):
+            mismatches.append(f'{parent_key}/{unspec_form}: missing form')
+            continue
+
+        disclosed_bios = [
+            form.get('bio_score')
+            for form_name, form in forms.items()
+            if form_name != unspec_form
+            and isinstance(form, dict)
+            and isinstance(form.get('bio_score'), (int, float))
+        ]
+        lowest_disclosed = min(disclosed_bios) if disclosed_bios else None
+
+        if unspec.get('bio_score') != exp_bio or unspec.get('score') != exp_score:
+            mismatches.append(
+                f'{parent_key}/{unspec_form}: bio={unspec.get("bio_score")}/'
+                f'score={unspec.get("score")} expected bio={exp_bio}/score={exp_score}'
+            )
+        if unspec.get('natural') is not False:
+            mismatches.append(f'{parent_key}/{unspec_form}: natural must be false')
+        if lowest_disclosed != exp_lowest_disclosed:
+            mismatches.append(
+                f'{parent_key}: lowest disclosed bio={lowest_disclosed}, '
+                f'expected {exp_lowest_disclosed}'
+            )
+        if isinstance(lowest_disclosed, (int, float)) and unspec.get('bio_score') >= lowest_disclosed:
+            mismatches.append(
+                f'{parent_key}/{unspec_form}: unspecified bio={unspec.get("bio_score")} '
+                f'must be below lowest disclosed bio={lowest_disclosed}'
+            )
+
+    assert not mismatches, (
+        'Local/matrix mushroom unspecified spread drifted from locked values:\n  '
+        + '\n  '.join(mismatches)
     )
 
 

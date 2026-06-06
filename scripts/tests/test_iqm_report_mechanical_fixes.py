@@ -102,3 +102,30 @@ def test_acetyl_l_carnitine_duplicate_parent_is_deprecated_compat_only(iqm: dict
         assert form["bio_score"] == canonical["bio_score"]
         assert form["score"] == canonical["score"]
         assert "deprecated compatibility form" in form["notes"]
+
+
+@pytest.mark.parametrize(
+    "parent,form_name,required_aliases",
+    [
+        (
+            "lions_mane",
+            "lions mane standardized extract",
+            {"lion's mane mushroom extract", "lions mane mushroom extract"},
+        ),
+        ("reishi", "reishi standardized extract", {"reishi mushroom extract"}),
+        ("maitake", "maitake d-fraction", {"maitake mushroom extract"}),
+        ("turkey_tail", "turkey tail standardized extract", {"turkey tail mushroom extract"}),
+        ("cordyceps", "cordyceps militaris", {"cordyceps mushroom extract"}),
+    ],
+)
+def test_common_mushroom_extract_labels_stay_scorable(
+    iqm: dict,
+    parent: str,
+    form_name: str,
+    required_aliases: set[str],
+) -> None:
+    aliases = {
+        str(alias).strip().lower()
+        for alias in iqm[parent]["forms"][form_name]["aliases"]
+    }
+    assert required_aliases <= aliases

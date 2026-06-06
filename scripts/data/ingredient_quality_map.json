@@ -5,7 +5,7 @@
     "purpose": "quality_scoring",
     "scoring_system": {
       "bio_score": {
-        "description": "bio_score: 0–15, based only on absorption/bioavailability evidence.",
+        "description": "bio_score: 0–15. For systemic actives, based on absorption/bioavailability evidence. For local/matrix actives (fibers, prebiotics, mushrooms, demulcents, phytosterols), based on active-form quality and delivery-to-site confidence rather than systemic absorption.",
         "range": "0-15",
         "scoring_factors": [
           "Direct human absorption or bioavailability evidence",
@@ -20,7 +20,7 @@
           "6-9": "Acceptable but not premium.",
           "0-5": "Weak, poor, or mostly formulation/tolerability-driven."
         },
-        "honesty_rule": "Keep bio_score reserved for absorption/bioavailability. Do not inflate bio_score for natural sourcing, manufacturing polish, branding, delivery-tech claims, tolerability, or indication-specific effects unless they are backed by direct absorption/bioavailability evidence."
+        "honesty_rule": "Do not inflate bio_score for natural sourcing, manufacturing polish, branding, tolerability, or indication-specific effects. Systemic actives require absorption/bioavailability evidence. Local/matrix actives may use form-quality/delivery-to-site evidence, but must not treat poor systemic absorption as premium systemic bioavailability."
       },
       "natural_bonus": {
         "description": "Natural-source bonus added only to the legacy/form total score, not to bio_score.",
@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1413,
-      "total_form_aliases": 12225,
+      "total_form_aliases": 12236,
       "parents_with_parent_aliases": 186,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -1676,7 +1676,7 @@
     "cui_note": "No UMLS CUI for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "notes": "| identity_bioactivity_split: source-botanical aliases relocated to canonical homes (Phase 2). | identity_bioactivity_split Phase 8: source-only kelp/marigold/citrus aliases relocated.",
-    "scoring_contract_note": "Clinician/operator rule added 2026-06-02: bio_score must stay honest to absorption/bioavailability evidence; score is the natural-bonus-inclusive total score, capped at 18."
+    "scoring_contract_note": "Clinician/operator rule updated 2026-06-06: bio_score stays honest to the relevant form-quality axis. Systemic actives use absorption/bioavailability; local/matrix actives use delivery-to-site/form-quality confidence. score remains the natural-bonus-inclusive total score, capped at 18."
   },
   "vitamin_a": {
     "standard_name": "Vitamin A",
@@ -36622,7 +36622,7 @@
         "bio_score": 9,
         "natural": true,
         "absorption": "poor (~15% for erinacines in rats; polysaccharides not absorbed intact)",
-        "notes": "Standardized lion's mane extract (typically to polysaccharides/beta-glucans, or hericenones from fruiting body). The only published bioavailability data: erinacine S had 15.13% oral F in rats (PMID 31022946). No human PK exists. Beta-glucans are not absorbed intact — they interact with gut immune receptors (GALT/Peyer's patches) and are fermented. The nootropic compounds (hericenones, erinacines) have limited and poorly characterized PK.",
+        "notes": "Standardized lion's mane extract (typically to polysaccharides/beta-glucans, or hericenones from fruiting body). The only published bioavailability data: erinacine S had 15.13% oral F in rats (PMID 31022946). No human PK exists. Beta-glucans are not absorbed intact — they interact with gut immune receptors (GALT/Peyer's patches) and are fermented. The nootropic compounds (hericenones, erinacines) have limited and poorly characterized PK. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
         "aliases": [
           "standardized lion's mane",
           "lion's mane 30% polysaccharides",
@@ -36631,7 +36631,10 @@
           "erinacine A",
           "erinacine A-enriched mycelium",
           "hericium erinaceus mycelium erinacine A",
-          "erinacine A-enriched hericium erinaceus mycelium"
+          "erinacine A-enriched hericium erinaceus mycelium",
+          "lion's mane mushroom extract",
+          "lions mane mushroom extract",
+          "hericium erinaceus mushroom extract"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -36643,11 +36646,11 @@
         }
       },
       "lion's mane (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
-        "absorption": "low (mushroom class-poor; chitin shell barrier)",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1).",
+        "score": 7,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "lion's mane"
         ],
@@ -36834,11 +36837,13 @@
         "bio_score": 13,
         "natural": true,
         "absorption": "excellent (~85%)",
-        "notes": "Ganoderma lucidum extract standardized to polysaccharides (typically >30%) and/or triterpenes. Dual extraction (hot water + ethanol) captures both bioactive fractions. Clinical evidence for immune modulation, sleep quality, and adaptogenic stress support. Host Defense and Real Mushrooms are quality brands.",
+        "notes": "Ganoderma lucidum extract standardized to polysaccharides (typically >30%) and/or triterpenes. Dual extraction (hot water + ethanol) captures both bioactive fractions. Clinical evidence for immune modulation, sleep quality, and adaptogenic stress support. Host Defense and Real Mushrooms are quality brands. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
         "aliases": [
           "standardized reishi",
           "reishi extract",
-          "reishi 30% polysaccharides"
+          "reishi 30% polysaccharides",
+          "reishi mushroom extract",
+          "ganoderma lucidum mushroom extract"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -36850,11 +36855,11 @@
         }
       },
       "reishi (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
-        "absorption": "good (reishi triterpene + polysaccharide class)",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B33 audit 2026-04-25: reishi triterpene class (higher than standard mushroom B1 framework due to lipid-soluble actives).",
+        "score": 8,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B33 audit 2026-04-25: reishi triterpene class (higher than standard mushroom B1 framework due to lipid-soluble actives). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "reishi"
         ],
@@ -36936,7 +36941,7 @@
         "bio_score": 10,
         "natural": true,
         "absorption": "poor for polysaccharides; D-fraction is a purified beta-glucan extract",
-        "notes": "Patented maitake beta-glucan extract (Maitake Products Inc). D-fraction is a protein-bound polysaccharide (~30% protein, ~70% polysaccharide). Beta-glucans are NOT absorbed systemically — they interact with gut-associated lymphoid tissue (GALT), dendritic cells, and macrophages via Dectin-1 receptor. Clinical studies show immune modulation effects. Nanba et al. research. Score reflects purified form quality, not systemic bioavailability.",
+        "notes": "Patented maitake beta-glucan extract (Maitake Products Inc). D-fraction is a protein-bound polysaccharide (~30% protein, ~70% polysaccharide). Beta-glucans are NOT absorbed systemically — they interact with gut-associated lymphoid tissue (GALT), dendritic cells, and macrophages via Dectin-1 receptor. Clinical studies show immune modulation effects. Nanba et al. research. Score reflects purified form quality, not systemic bioavailability. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
         "aliases": [
           "maitake d fraction",
           "maitake d-fraction extract",
@@ -36944,7 +36949,9 @@
           "maitake standardized extract",
           "maitake beta-glucan extract",
           "maitake d-fraction supplement",
-          "Maitake PD-Fraction powder"
+          "Maitake PD-Fraction powder",
+          "maitake mushroom extract",
+          "grifola frondosa mushroom extract"
         ],
         "score": 13,
         "dosage_importance": 1.0,
@@ -36956,11 +36963,11 @@
         }
       },
       "maitake (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
-        "absorption": "low (mushroom class-poor; chitin shell barrier)",
-        "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied. B32 audit 2026-04-25: mushroom class-poor (B1).",
+        "score": 7,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied. B32 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "maitake"
         ],
@@ -37055,11 +37062,11 @@
         }
       },
       "shiitake (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
-        "absorption": "low (mushroom class-poor; chitin shell barrier)",
-        "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied. B33 audit 2026-04-25: mushroom class-poor (B1).",
+        "score": 7,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied. B33 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "shiitake"
         ],
@@ -37127,7 +37134,7 @@
         "bio_score": 10,
         "natural": true,
         "absorption": "low systemic (~10%); acts via gut immune cells (M-cell uptake); PSK given IV clinically",
-        "notes": "Standardized extract of Trametes versicolor, typically to polysaccharopeptides (PSK/PSP). PSK (Krestin) and PSP are protein-bound polysaccharides used as cancer adjuvant therapy in Japan. They modulate immune function via Toll-like receptors and complement activation in gut-associated lymphoid tissue. Not absorbed intact systemically. Strong clinical evidence base in oncology (meta-analyses show survival benefit as adjuvant). Evidence: PSK/PSP are clinically used as IV/intraperitoneal agents because oral bioavailability is inadequate for systemic effect (PMID:41943369, 2026 review).",
+        "notes": "Standardized extract of Trametes versicolor, typically to polysaccharopeptides (PSK/PSP). PSK (Krestin) and PSP are protein-bound polysaccharides used as cancer adjuvant therapy in Japan. They modulate immune function via Toll-like receptors and complement activation in gut-associated lymphoid tissue. Not absorbed intact systemically. Strong clinical evidence base in oncology (meta-analyses show survival benefit as adjuvant). Evidence: PSK/PSP are clinically used as IV/intraperitoneal agents because oral bioavailability is inadequate for systemic effect (PMID:41943369, 2026 review). B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
         "aliases": [
           "turkey tail extract",
           "trametes versicolor extract",
@@ -37135,7 +37142,10 @@
           "standardized turkey tail",
           "turkey tail beta-glucan extract",
           "PSK turkey tail",
-          "turkey tail standardized extract supplement"
+          "turkey tail standardized extract supplement",
+          "turkey tail mushroom extract",
+          "trametes versicolor mushroom extract",
+          "coriolus versicolor mushroom extract"
         ],
         "score": 13,
         "dosage_importance": 1.0,
@@ -37147,11 +37157,11 @@
         }
       },
       "turkey tail (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
-        "absorption": "low (mushroom class-poor; chitin shell barrier)",
-        "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified. B33 audit 2026-04-25: mushroom class-poor (B1).",
+        "score": 7,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified. B33 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "turkey tail"
         ],
@@ -37279,7 +37289,7 @@
         "bio_score": 13,
         "natural": true,
         "absorption": "very low (intact cordycepin not detected in plasma; rapid ADA deamination)",
-        "notes": "Cordyceps militaris fruiting body (cultivated). Contains cordycepin (3'-deoxyadenosine), adenosine, and polysaccharides. Cordycepin is well-absorbed but rapidly deaminated by adenosine deaminase (short t1/2). Polysaccharide beta-glucans act via gut immune receptors. Clinical studies support exercise performance, fatigue reduction, and immune modulation at 1-3 g/day. CS-4 strain is most studied. Evidence update 2026-04-24: PMID:31673018 (Lee 2019) demonstrates intact cordycepin is NOT orally absorbed in rats — only the deaminated metabolite 3'-deoxyinosine reaches circulation. PMID:37329165 (Chen 2023 review) confirms rapid ADA deamination truncates systemic cordycepin half-life. Prior struct.value=0.6 was inconsistent with this PK evidence; corrected to 0.15.",
+        "notes": "Cordyceps militaris fruiting body (cultivated). Contains cordycepin (3'-deoxyadenosine), adenosine, and polysaccharides. Cordycepin is well-absorbed but rapidly deaminated by adenosine deaminase (short t1/2). Polysaccharide beta-glucans act via gut immune receptors. Clinical studies support exercise performance, fatigue reduction, and immune modulation at 1-3 g/day. CS-4 strain is most studied. Evidence update 2026-04-24: PMID:31673018 (Lee 2019) demonstrates intact cordycepin is NOT orally absorbed in rats — only the deaminated metabolite 3'-deoxyinosine reaches circulation. PMID:37329165 (Chen 2023 review) confirms rapid ADA deamination truncates systemic cordycepin half-life. Prior struct.value=0.6 was inconsistent with this PK evidence; corrected to 0.15. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
         "aliases": [
           "cordyceps mushroom",
           "cordyceps extract",
@@ -37288,7 +37298,8 @@
           "cordyceps militaris bionectria",
           "cordyceps cs-4",
           "Cordyceps militaris Mycelium Extract",
-          "cordyceps militaris mycelium"
+          "cordyceps militaris mycelium",
+          "cordyceps mushroom extract"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -37320,11 +37331,11 @@
         }
       },
       "cordyceps (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
-        "absorption": "low (cordyceps class baseline; militaris/sinensis range)",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B31 audit 2026-04-25: cordyceps class baseline. Cordycepin metabolite-only absorption (PMID:31673018).",
+        "score": 8,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B31 audit 2026-04-25: cordyceps class baseline. Cordycepin metabolite-only absorption (PMID:31673018). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "cordyceps",
           "Cordyceps 7% extract",
@@ -56956,11 +56967,11 @@
         }
       },
       "button mushroom (unspecified)": {
-        "bio_score": 7,
-        "natural": true,
-        "score": 10,
-        "absorption": "low (mushroom class-poor; unspecified)",
-        "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1).",
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "button mushroom",
           "white button mushroom",
@@ -57044,11 +57055,11 @@
         }
       },
       "auricularia (unspecified)": {
-        "bio_score": 7,
-        "natural": true,
-        "score": 10,
-        "absorption": "low (mushroom class-poor; unspecified default)",
-        "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1).",
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
+        "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
           "auricularia",
           "black fungus",
