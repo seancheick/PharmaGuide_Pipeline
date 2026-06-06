@@ -40,8 +40,6 @@ helpers (form/source detection) and v4 generic_transparency helpers
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Any, Dict, List
 
 from scoring_v4.modules.generic_helpers import get_active_ingredients
@@ -56,10 +54,6 @@ from scoring_v4.modules.omega_formulation import (
     _detect_form,
     _source_disclosed,
 )
-
-
-REPO_ROOT = Path(__file__).resolve().parents[3]
-RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
 
 
 PHASE_MARKER = "P1.6.5_omega_transparency"

@@ -56,6 +56,27 @@ def test_empty_product_still_carries_provenance():
     assert prov["mode"] == "shadow"
 
 
+def test_blocked_product_still_carries_provenance():
+    """A safety-gate short-circuit must still be reproducible/auditable."""
+    product = {
+        "supplement_type": {"type": "single_nutrient"},
+        "contaminant_data": {
+            "banned_substances": {
+                "substances": [
+                    {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
+                ]
+            }
+        },
+    }
+    from score_supplements_v4_shadow import score_product_v4_shadow
+
+    out = score_product_v4_shadow(product)
+    assert out["shadow_score_v4_verdict"] == "BLOCKED"
+    prov = out["shadow_score_v4_breakdown"]["provenance"]
+    assert _REQUIRED <= set(prov.keys())
+    assert prov["mode"] == "shadow"
+
+
 def test_module_route_recorded_in_provenance():
     product = {
         "product_name": "Creatine Monohydrate 5 g",

@@ -36,8 +36,6 @@ v4-only, safe to reuse.)
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
 from typing import Any, Dict
 
 from scoring_v4.modules.generic_evidence import score_evidence as score_generic_evidence
@@ -47,10 +45,6 @@ from scoring_v4.modules.omega_dose import (
     _extract_daily_servings,
     _sum_epa_dha_per_serving,
 )
-
-
-REPO_ROOT = Path(__file__).resolve().parents[3]
-RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
 
 
 PHASE_MARKER = "P1.6.3_omega_evidence"

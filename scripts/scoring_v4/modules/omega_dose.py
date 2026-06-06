@@ -36,16 +36,10 @@ Conservative EPA+DHA handling:
 
 from __future__ import annotations
 
-import json
 import re
-from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from scoring_v4.modules.generic_helpers import get_active_ingredients
-
-
-REPO_ROOT = Path(__file__).resolve().parents[3]
-RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
 
 
 PHASE_MARKER = "P1.6.2_omega_dose"

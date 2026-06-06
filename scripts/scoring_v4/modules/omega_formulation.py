@@ -35,16 +35,10 @@ are sold as natural TG but processing is opaque without label disclosure.
 
 from __future__ import annotations
 
-import json
 import re
-from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from scoring_v4.modules.generic_helpers import get_active_ingredients
-
-
-REPO_ROOT = Path(__file__).resolve().parents[3]
-RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
 
 
 PHASE_MARKER = "P1.6.1_omega_formulation"

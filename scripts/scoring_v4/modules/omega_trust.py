@@ -48,7 +48,6 @@ from scoring_v4.modules.brand_testing_posture import (
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
-RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
 
 
 PHASE_MARKER = "P1.6.4_omega_trust"
