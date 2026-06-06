@@ -1832,6 +1832,8 @@ class EnhancedDSLDNormalizer:
             for parent_key, parent_data in quality_map.items():
                 if parent_key.startswith("_") or not isinstance(parent_data, dict):
                     continue
+                if (parent_data.get("match_rules") or {}).get("deprecated_in_favor_of"):
+                    continue
                 parent_std = parent_data.get("standard_name", parent_key)
                 # Use the IQM-tier payload from _fast_exact_lookup if present
                 # via parent_std preprocessing
@@ -2741,6 +2743,8 @@ class EnhancedDSLDNormalizer:
             # Skip metadata keys (like _metadata, _comment, etc.)
             if vitamin_name.startswith("_") or not isinstance(vitamin_data, dict):
                 continue
+            if (vitamin_data.get("match_rules") or {}).get("deprecated_in_favor_of"):
+                continue
             standard_name = vitamin_data.get("standard_name", vitamin_name)
             
             # Add standard name and its variations FIRST (prioritize exact matches)
@@ -2967,6 +2971,8 @@ class EnhancedDSLDNormalizer:
         for parent_key, parent_val in (self.ingredient_map or {}).items():
             if parent_key.startswith("_") or not isinstance(parent_val, dict):
                 continue
+            if (parent_val.get("match_rules") or {}).get("deprecated_in_favor_of"):
+                continue
             forms = parent_val.get("forms") or {}
             if not isinstance(forms, dict):
                 continue
@@ -3021,6 +3027,8 @@ class EnhancedDSLDNormalizer:
         # top-level standard_name, top-level aliases, form names, form aliases.
         for _iqm_key, _val in (self.ingredient_map or {}).items():
             if _iqm_key.startswith("_") or not isinstance(_val, dict):
+                continue
+            if (_val.get("match_rules") or {}).get("deprecated_in_favor_of"):
                 continue
             std = _val.get("standard_name") or _iqm_key
             _put(std, _iqm_key, "ingredient_quality_map")

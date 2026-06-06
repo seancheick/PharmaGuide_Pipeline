@@ -85,7 +85,7 @@ class TestRealLabelCorpus:
         # Specific forms vs generic
         ("5-HTP (from Griffonia simplicifolia)", "5_htp", True),
         ("L-Tryptophan 500mg", "l_tryptophan", True),
-        ("Acetyl-L-Carnitine HCl", "acetyl_l_carnitine", True),
+        ("Acetyl-L-Carnitine HCl", "l_carnitine", True),
         ("L-Carnitine Tartrate", "l_carnitine", True),
 
         # Bioflavonoids vs specific compounds
@@ -327,7 +327,7 @@ class TestAliasResolution:
         ("linseed oil", "flaxseed"),
         ("silymarin", "milk_thistle"),
         ("5-htp", "5_htp"),
-        ("alcar", "acetyl_l_carnitine"),
+        ("alcar", "l_carnitine"),
         ("quercetin dihydrate", "quercetin"),
         ("beta glucan", "beta_glucan"),
         ("oat beta-glucan", "beta_glucan"),

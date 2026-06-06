@@ -60,3 +60,45 @@ def test_unspecified_form_does_not_outrank_lowest_specific_form(
         f"{parent}::{unspecified} should not outscore a disclosed lower-quality form."
     )
     assert unspecified_form["natural"] is False
+
+
+def test_acetyl_l_carnitine_aliases_route_to_l_carnitine_alcar_form(iqm: dict) -> None:
+    form = iqm["l_carnitine"]["forms"]["acetyl-l-carnitine (alcar)"]
+    aliases = {str(a).strip().lower() for a in form["aliases"]}
+
+    expected_aliases = {
+        "acetyl-l-carnitine",
+        "acetyl l-carnitine",
+        "acetyl l carnitine",
+        "acetyl-l-carnitine hcl",
+        "acetyl l carnitine hcl",
+        "acetyl l-carnitine hcl",
+        "n-acetyl-l-carnitine hcl",
+        "n-acetyl-l-carnitine hydrochloride",
+        "alcar",
+        "alcar hcl",
+    }
+    assert expected_aliases <= aliases
+    assert form["bio_score"] == 11
+    assert form["score"] == 11
+    assert form["external_ids"]["unii"] == "6DH1W9VH8Q"
+
+
+def test_acetyl_l_carnitine_duplicate_parent_is_deprecated_compat_only(iqm: dict) -> None:
+    canonical = iqm["l_carnitine"]["forms"]["acetyl-l-carnitine (alcar)"]
+    duplicate = iqm["acetyl_l_carnitine"]
+
+    assert duplicate["match_rules"]["parent_id"] == "l_carnitine"
+    assert duplicate["match_rules"]["deprecated_in_favor_of"] == "l_carnitine"
+
+    canonical_aliases = {str(a).strip().lower() for a in canonical["aliases"]}
+    for form_name, form in duplicate["forms"].items():
+        aliases = {str(a).strip().lower() for a in form["aliases"]}
+        assert aliases
+        assert aliases.isdisjoint(canonical_aliases), (
+            f"Deprecated acetyl_l_carnitine::{form_name} must not keep real "
+            "ALCAR routing aliases that compete with l_carnitine."
+        )
+        assert form["bio_score"] == canonical["bio_score"]
+        assert form["score"] == canonical["score"]
+        assert "deprecated compatibility form" in form["notes"]

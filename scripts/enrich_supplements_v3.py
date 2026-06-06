@@ -1136,6 +1136,8 @@ class SupplementEnricherV3:
                 continue
 
             match_rules = parent_data.get('match_rules', {})
+            if match_rules.get("deprecated_in_favor_of"):
+                continue
             priority = match_rules.get('priority', 1)
             match_mode = match_rules.get('match_mode', 'alias_and_fuzzy')
 
@@ -7131,11 +7133,15 @@ class SupplementEnricherV3:
                 for _pk, _pd in quality_map.items():
                     if _pk.startswith("_") or not isinstance(_pd, dict):
                         continue
+                    if (_pd.get("match_rules") or {}).get("deprecated_in_favor_of"):
+                        continue
                     if _pd.get('contains_aliases') or _pd.get('pattern_aliases'):
                         _candidate_parent_keys.add(_pk)
 
         for parent_key, parent_data in quality_map.items():
             if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                continue
+            if (parent_data.get("match_rules") or {}).get("deprecated_in_favor_of"):
                 continue
 
             # Skip parents not in the pre-filtered set (index-accelerated path)

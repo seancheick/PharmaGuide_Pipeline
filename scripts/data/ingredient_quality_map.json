@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1413,
-      "total_form_aliases": 12223,
+      "total_form_aliases": 12225,
       "parents_with_parent_aliases": 186,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -16558,14 +16558,40 @@
         "natural": false,
         "score": 11,
         "absorption": "low-moderate (likely higher than L-carnitine base ~14-18%, but no published oral bioavailability for ALCAR specifically)",
-        "notes": "Acetylated form that crosses the blood-brain barrier. Well-studied for cognitive function, memory, and neuroprotection. Preferred form for brain health. Oral bioavailability not formally measured for ALCAR but likely modestly above L-carnitine base (~14-18%). The BBB-crossing property is the key differentiator.",
+        "notes": "Acetylated form that crosses the blood-brain barrier. Well-studied for cognitive function, memory, and neuroprotection. Preferred form for brain health. Oral bioavailability not formally measured for ALCAR but likely modestly above L-carnitine base (~14-18%). The BBB-crossing property is the key differentiator. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
         "aliases": [
           "ALC",
           "n-acetyl-l-carnitine",
           "brain carnitine",
           "acetyl carnitine",
           "acetyl-l-carnitine supplement",
-          "n-acetyl l-carnitine hydrochloride"
+          "n-acetyl l-carnitine hydrochloride",
+          "acetylcarnitine",
+          "acetyl l carnitine",
+          "levacecarnine",
+          "acetyl l-carnitine hydrochloride",
+          "acetyl-l-carnitine hydrochloride",
+          "acetyl l-carnitine",
+          "arginocarn acetyl-l-carnitine arginate dihydrochloride",
+          "acetyl-l-carnitine arginate dihydrochloride",
+          "n-acetyl-l-carnitine hcl",
+          "Acetyl L-Carnitine HCl",
+          "acetyl l carnitine hcl",
+          "n-acetyl l-carnitine",
+          "n-acetyl-l-carnitine hydrochloride",
+          "N-Acetyl L-Carnitine HCl",
+          "n-acetyl carnitine",
+          "Acetyl-L-Carnitine HCI",
+          "Acetyl L-Carnitine HCI",
+          "acetyl-l-carnitine hcl",
+          "alcar hcl",
+          "ArginoCarn Acetyl L-Carnitine Arginate Di-HCl",
+          "Acetyl L-Carnitine Arginate Dihydrochloride",
+          "Acetyl L Carnitine Hydrochloride",
+          "Acetyl-L-Carnitine Chloride",
+          "ALCAR Chloride",
+          "acetyl-l-carnitine",
+          "alcar"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -16573,6 +16599,9 @@
           "range_low": 0.14,
           "range_high": 0.25,
           "quality": "low"
+        },
+        "external_ids": {
+          "unii": "6DH1W9VH8Q"
         }
       },
       "l-carnitine tartrate (lclt)": {
@@ -36162,37 +36191,14 @@
     "rxcui": "193",
     "forms": {
       "alcar": {
-        "bio_score": 8,
+        "bio_score": 11,
         "natural": false,
         "absorption": "poor (~10-20% oral F; similar to L-carnitine supplements)",
-        "notes": "Acetylated L-carnitine with improved BBB penetration over L-carnitine. However, oral bioavailability is only 10-20% (comparable to L-carnitine at 14-18%, Rebouche 2004, PMID 15591001). ALCAR actually showed 7.7x lower delta-AUC than L-carnitine in head-to-head PK study (PMID 19178874). Despite low F, clinically effective for cognitive support and neuropathy at 1500-3000 mg/day, likely due to sufficient carnitine pool loading at high oral doses.",
+        "notes": "Acetylated L-carnitine with improved BBB penetration over L-carnitine. However, oral bioavailability is only 10-20% (comparable to L-carnitine at 14-18%, Rebouche 2004, PMID 15591001). ALCAR actually showed 7.7x lower delta-AUC than L-carnitine in head-to-head PK study (PMID 19178874). Despite low F, clinically effective for cognitive support and neuropathy at 1500-3000 mg/day, likely due to sufficient carnitine pool loading at high oral doses. B42 structural merge 2026-06-06: deprecated compatibility form; scoring aligned to canonical l_carnitine::acetyl-l-carnitine (alcar), and real routing aliases moved to the canonical parent.",
         "aliases": [
-          "acetylcarnitine",
-          "acetyl l carnitine",
-          "levacecarnine",
-          "acetyl l-carnitine hydrochloride",
-          "acetyl-l-carnitine hydrochloride",
-          "acetyl l-carnitine",
-          "arginocarn acetyl-l-carnitine arginate dihydrochloride",
-          "acetyl-l-carnitine arginate dihydrochloride",
-          "n-acetyl-l-carnitine hcl",
-          "Acetyl L-Carnitine HCl",
-          "acetyl l carnitine hcl",
-          "n-acetyl l-carnitine",
-          "n-acetyl-l-carnitine hydrochloride",
-          "N-Acetyl L-Carnitine HCl",
-          "n-acetyl carnitine",
-          "Acetyl-L-Carnitine HCI",
-          "Acetyl L-Carnitine HCI",
-          "acetyl-l-carnitine hcl",
-          "alcar hcl",
-          "ArginoCarn Acetyl L-Carnitine Arginate Di-HCl",
-          "Acetyl L-Carnitine Arginate Dihydrochloride",
-          "Acetyl L Carnitine Hydrochloride",
-          "Acetyl-L-Carnitine Chloride",
-          "ALCAR Chloride"
+          "deprecated acetyl_l_carnitine alcar compat only"
         ],
-        "score": 8,
+        "score": 11,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.15,
@@ -36202,14 +36208,13 @@
         }
       },
       "acetyl-l-carnitine (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 11,
         "natural": false,
-        "score": 8,
+        "score": 11,
         "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score. B42 structural merge 2026-06-06: deprecated compatibility form; scoring aligned to canonical l_carnitine::acetyl-l-carnitine (alcar), and real routing aliases moved to the canonical parent.",
         "aliases": [
-          "acetyl-l-carnitine",
-          "alcar"
+          "deprecated acetyl_l_carnitine acetyl-l-carnitine (unspecified) compat only"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36225,7 +36230,9 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": "l_carnitine",
-      "confidence": "high"
+      "confidence": "high",
+      "deprecated_in_favor_of": "l_carnitine",
+      "deprecation_note": "Compatibility parent only. New acetyl-L-carnitine/ALCAR labels route to l_carnitine::acetyl-l-carnitine (alcar); keep this parent until legacy enriched artifacts are rebuilt."
     },
     "category_enum": "amino_acids",
     "relationships": [
