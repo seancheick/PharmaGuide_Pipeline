@@ -35,6 +35,7 @@ DIMENSION_CAP = 30.0
 CAP_RDA_AI_COVERAGE = 20.0
 CAP_PANEL_BREADTH = 5.0
 CAP_CRITICAL_NUTRIENT_COVERAGE = 5.0
+CAP_PRENATAL_COMPLEMENT_SUPPORT = 2.0
 
 B7_UL_PCT_THRESHOLD = 150.0
 B7_PER_FLAG_PENALTY = 2.0
@@ -59,18 +60,21 @@ CORE_MULTI_ANCHORS = (
     "zinc",
 )
 
-PRENATAL_CRITICAL_ANCHORS = (
+PRENATAL_CORE_ANCHORS = (
     "folate",
     "iron",
     "iodine",
-    "choline",
-    "dha",
+    "vitamin_d",
+    "vitamin_b12",
 )
+PRENATAL_COMPLEMENT_ANCHORS = ("choline", "dha")
 
 CRITICAL_MIN_PCT_RDA = {
     "folate": 50.0,
     "iron": 50.0,
     "iodine": 50.0,
+    "vitamin_d": 50.0,
+    "vitamin_b12": 50.0,
     "choline": 25.0,
 }
 
@@ -337,7 +341,7 @@ def _dha_score(product: Dict[str, Any]) -> float:
 
 def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float]) -> tuple[str, Dict[str, float], List[str]]:
     prenatal = _is_prenatal(product)
-    anchors = PRENATAL_CRITICAL_ANCHORS if prenatal else CORE_MULTI_ANCHORS
+    anchors = PRENATAL_CORE_ANCHORS if prenatal else CORE_MULTI_ANCHORS
     mode = "prenatal" if prenatal else "core_multi"
     threshold_scores = _critical_threshold_scores(product) if prenatal else {}
 
@@ -366,11 +370,29 @@ def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float])
     return mode, scores, missing
 
 
+def _prenatal_complement_scores(product: Dict[str, Any]) -> Dict[str, float]:
+    if not _is_prenatal(product):
+        return {}
+    threshold_scores = _critical_threshold_scores(product)
+    scores = {
+        "choline": _round(_clamp(0.0, 1.0, threshold_scores.get("choline", 0.0))),
+        "dha": _round(_clamp(0.0, 1.0, _dha_score(product))),
+    }
+    return scores
+
+
 def _score_critical_coverage(scores: Dict[str, float]) -> float:
     if not scores:
         return 0.0
     avg = sum(scores.values()) / len(scores)
     return _round(_clamp(0.0, CAP_CRITICAL_NUTRIENT_COVERAGE, avg * CAP_CRITICAL_NUTRIENT_COVERAGE))
+
+
+def _score_prenatal_complement_support(scores: Dict[str, float]) -> float:
+    if not scores:
+        return 0.0
+    avg = sum(scores.values()) / len(PRENATAL_COMPLEMENT_ANCHORS)
+    return _round(_clamp(0.0, CAP_PRENATAL_COMPLEMENT_SUPPORT, avg * CAP_PRENATAL_COMPLEMENT_SUPPORT))
 
 
 def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
@@ -394,6 +416,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
     panel_breadth = _score_panel_breadth(coverage_scores)
     critical_mode, critical_scores, critical_missing = _critical_scores(product, coverage_scores)
     critical_coverage = _score_critical_coverage(critical_scores)
+    prenatal_complement_scores = _prenatal_complement_scores(product)
+    prenatal_complement_support = _score_prenatal_complement_support(prenatal_complement_scores)
     b7 = _penalty_b7_dose_safety(product)
 
     components = {
@@ -401,6 +425,8 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "panel_breadth": panel_breadth,
         "critical_nutrient_coverage": critical_coverage,
     }
+    if prenatal_complement_support > 0:
+        components["prenatal_complement_support"] = prenatal_complement_support
     penalties = {"B7_dose_safety": -b7}
 
     positive = sum(components.values())
@@ -415,6 +441,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
         "critical_nutrient_mode": critical_mode,
         "critical_nutrient_scores": dict(sorted(critical_scores.items())),
         "critical_nutrients_missing": critical_missing,
+        "prenatal_complement_scores": dict(sorted(prenatal_complement_scores.items())),
     }
     if not coverage_scores:
         metadata["coverage_status"] = "no_rda_reference_data"

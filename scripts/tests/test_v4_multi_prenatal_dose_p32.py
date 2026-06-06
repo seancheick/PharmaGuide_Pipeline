@@ -75,11 +75,12 @@ CORE_ANCHORS = [
 ]
 
 
-PRENATAL_CRITICAL = [
+PRENATAL_CORE = [
     "Folate",
     "Iron",
     "Iodine",
-    "Choline",
+    "Vitamin D",
+    "Vitamin B12",
 ]
 
 
@@ -183,18 +184,20 @@ def test_general_multi_core_anchor_coverage_uses_non_prenatal_anchor_set() -> No
     assert payload["metadata"]["critical_nutrients_missing"] == []
 
 
-def test_prenatal_critical_coverage_requires_folate_iron_iodine_choline_and_dha() -> None:
+def test_prenatal_core_coverage_does_not_require_choline_or_dha() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
     payload = score_dose(_product(
-        name="Complete Prenatal with DHA",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
-        ingredients=[_ingredient("dha", name="DHA", quantity=200, unit="mg")],
+        name="Complete Prenatal",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
+        ingredients=[],
     ))
 
     assert payload["components"]["critical_nutrient_coverage"] == 5.0
     assert payload["metadata"]["critical_nutrient_mode"] == "prenatal"
     assert payload["metadata"]["critical_nutrients_missing"] == []
+    assert payload["metadata"]["prenatal_complement_scores"] == {"choline": 0.0, "dha": 0.0}
+    assert "prenatal_complement_support" not in payload["components"]
 
 
 def test_prenatal_critical_thresholds_are_not_downgraded_by_form_bio_weighting() -> None:
@@ -202,22 +205,23 @@ def test_prenatal_critical_thresholds_are_not_downgraded_by_form_bio_weighting()
 
     payload = score_dose(_product(
         name="Complete Prenatal with DHA",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[
             _ingredient("folate", name="Folate", bio_score=3),
             _ingredient("iron", name="Iron", bio_score=3),
             _ingredient("iodine", name="Iodine", bio_score=3),
-            _ingredient("choline", name="Choline", bio_score=3),
+            _ingredient("vitamin_d", name="Vitamin D", bio_score=3),
+            _ingredient("vitamin_b12", name="Vitamin B12", bio_score=3),
             _ingredient("dha", name="DHA", quantity=200, unit="mg"),
         ],
     ))
 
     assert payload["metadata"]["critical_nutrient_scores"] == {
-        "choline": 1.0,
-        "dha": 1.0,
         "folate": 1.0,
         "iodine": 1.0,
         "iron": 1.0,
+        "vitamin_b12": 1.0,
+        "vitamin_d": 1.0,
     }
     assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
@@ -234,9 +238,10 @@ def test_prenatal_dha_half_credit_at_100mg_and_missing_list_records_gaps() -> No
         ingredients=[_ingredient("dha", name="DHA", quantity=100, unit="mg")],
     ))
 
-    assert payload["components"]["critical_nutrient_coverage"] == 2.5
-    assert payload["metadata"]["critical_nutrients_missing"] == ["iodine", "choline"]
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.5
+    assert payload["components"]["critical_nutrient_coverage"] == 2.0
+    assert payload["components"]["prenatal_complement_support"] == 0.5
+    assert payload["metadata"]["critical_nutrients_missing"] == ["iodine", "vitamin_d", "vitamin_b12"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 0.5
 
 
 def test_prenatal_combined_epa_dha_gets_partial_not_full_dha_critical_credit() -> None:
@@ -244,12 +249,13 @@ def test_prenatal_combined_epa_dha_gets_partial_not_full_dha_critical_credit() -
 
     payload = score_dose(_product(
         name="Complete Prenatal with Omega-3",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[_ingredient("epa_dha", name="EPA+DHA", quantity=300, unit="mg")],
     ))
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.5
-    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 0.5
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
+    assert "dha" not in payload["metadata"]["critical_nutrient_scores"]
 
 
 def test_prenatal_combined_epa_dha_does_not_override_itemized_dha_credit() -> None:
@@ -257,15 +263,15 @@ def test_prenatal_combined_epa_dha_does_not_override_itemized_dha_credit() -> No
 
     payload = score_dose(_product(
         name="Complete Prenatal with DHA",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[
             _ingredient("epa_dha", name="EPA+DHA", quantity=300, unit="mg"),
             _ingredient("dha", name="DHA", quantity=200, unit="mg"),
         ],
     ))
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
-    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 1.0
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_dha_detection_accepts_final_detail_blob_ingredients_alias() -> None:
@@ -273,7 +279,7 @@ def test_prenatal_dha_detection_accepts_final_detail_blob_ingredients_alias() ->
 
     product = _product(
         name="Prenatal DHA",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[],
     )
     product["ingredient_quality_data"]["ingredients_scorable"] = [
@@ -282,8 +288,8 @@ def test_prenatal_dha_detection_accepts_final_detail_blob_ingredients_alias() ->
 
     payload = score_dose(product)
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
-    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 1.0
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_dha_critical_anchor_accepts_gram_units() -> None:
@@ -291,12 +297,12 @@ def test_prenatal_dha_critical_anchor_accepts_gram_units() -> None:
 
     payload = score_dose(_product(
         name="Complete Prenatal with DHA",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[_ingredient("dha", name="DHA", quantity=0.2, unit="g")],
     ))
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
-    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 1.0
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_dha_critical_anchor_accepts_microgram_units() -> None:
@@ -304,12 +310,12 @@ def test_prenatal_dha_critical_anchor_accepts_microgram_units() -> None:
 
     payload = score_dose(_product(
         name="Complete Prenatal with DHA",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[_ingredient("dha", name="DHA", quantity=200000, unit="mcg")],
     ))
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
-    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 1.0
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_dha_critical_anchor_does_not_use_fish_oil_parent_mass() -> None:
@@ -317,12 +323,12 @@ def test_prenatal_dha_critical_anchor_does_not_use_fish_oil_parent_mass() -> Non
 
     payload = score_dose(_product(
         name="Complete Prenatal with Fish Oil",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[_ingredient("fish_oil", name="Fish Oil", quantity=1000, unit="mg")],
     ))
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.0
-    assert "dha" in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 0.0
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_dha_critical_anchor_does_not_match_dhea() -> None:
@@ -330,12 +336,12 @@ def test_prenatal_dha_critical_anchor_does_not_match_dhea() -> None:
 
     payload = score_dose(_product(
         name="Complete Prenatal",
-        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CORE],
         ingredients=[_ingredient("dhea", name="DHEA", quantity=200, unit="mg")],
     ))
 
-    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.0
-    assert "dha" in payload["metadata"]["critical_nutrients_missing"]
+    assert payload["metadata"]["prenatal_complement_scores"]["dha"] == 0.0
+    assert payload["components"]["critical_nutrient_coverage"] == 5.0
 
 
 def test_prenatal_bundle_context_does_not_trigger_prenatal_critical_anchors() -> None:
