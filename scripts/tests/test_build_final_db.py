@@ -1378,7 +1378,11 @@ def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():
     assert "BANNED_CBD_US" in row["ingredients_text"]
 
 
-def test_validate_export_contract_quarantines_active_rows_without_identity():
+def test_validate_export_contract_ships_unidentified_active_with_flag():
+    """79301899: an unidentified/opaque active is no longer quarantined out of
+    the export. The recall/ship-don't-drop principle ships it (no identity-gate
+    issue) and the blob carries an unverified_ingredient / proprietary_blend flag
+    so the user still sees the product. Was: quarantine on missing identity."""
     enriched = make_enriched()
     enriched["activeIngredients"] = [
         {
@@ -1394,7 +1398,7 @@ def test_validate_export_contract_quarantines_active_rows_without_identity():
 
     issues = validate_export_contract(enriched, make_scored())
 
-    assert any("missing required active identity" in issue for issue in issues)
+    assert not any("missing required active identity" in issue for issue in issues)
 
 
 def test_validate_export_contract_allows_mapped_blend_identity():
