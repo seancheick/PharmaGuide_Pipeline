@@ -260,6 +260,101 @@ def test_depth_bonus_uses_registry_completed_trials_when_count_absent() -> None:
     assert payload["components"]["depth_bonus"] == 0.5
 
 
+def test_collagen_primary_recovers_verified_evidence_when_enrichment_dropped_match() -> None:
+    """Garden-of-Life collagen canary: the enriched product can carry a
+    canonical collagen active/product-level evidence row while
+    evidence_data.clinical_matches is empty. v4 should recover the verified
+    collagen-peptides evidence instead of assigning Evidence=0.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Collagen Peptides",
+                standard_name="Collagen",
+                canonical_id="collagen",
+                quantity=20,
+                unit="Gram(s)",
+            ),
+            _ingredient(
+                name="Bacillus coagulans SNZ-1969",
+                standard_name="Bacillus Coagulans",
+                canonical_id="bacillus_coagulans",
+                quantity=2.5,
+                unit="mg",
+            ),
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["score"] == 18.0
+    assert payload["components"]["primary_evidence_floor"] == 18.0
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "collagen"
+    assert payload["metadata"]["recovered_matches"] == ["RECOVERED_COLLAGEN_PEPTIDES_V1"]
+
+
+def test_token_collagen_addon_does_not_recover_primary_collagen_evidence() -> None:
+    """A multi/nutrient product with trace collagen is not a collagen product;
+    recovery must not float it on collagen evidence.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Vitamin C",
+                standard_name="Vitamin C",
+                canonical_id="vitamin_c",
+                quantity=500,
+                unit="mg",
+            ),
+            _ingredient(
+                name="Collagen Peptides",
+                standard_name="Collagen",
+                canonical_id="collagen",
+                quantity=100,
+                unit="mg",
+            ),
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["recovered_matches"] == []
+
+
+def test_gelatin_does_not_recover_hydrolyzed_collagen_peptides_evidence() -> None:
+    """Gelatin is a separate collagen subtype; do not borrow the hydrolyzed
+    collagen-peptides evidence fallback.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Gelatin",
+                standard_name="Collagen",
+                canonical_id="collagen",
+                quantity=1.3,
+                unit="Gram(s)",
+            )
+        ],
+        matches=[],
+    )
+    product["ingredient_quality_data"]["ingredients_scorable"][0]["matched_form"] = "gelatin"
+    product["ingredient_quality_data"]["ingredients_scorable"][0]["collagen_subtype"] = "gelatin"
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["recovered_matches"] == []
+
+
 def test_no_matches_scores_zero_not_none() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 

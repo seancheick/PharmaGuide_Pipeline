@@ -1593,7 +1593,9 @@ _ROUTE_PROBIOTIC_VAGUE_TAXONOMY = frozenset({"", "general_supplement", "probioti
 _ROUTE_NON_PROBIOTIC_HERO_TITLE_RE = re.compile(
     r"\b(zinc|magnesium|calcium|iron|potassium|selenium|copper|chromium|iodine|"
     r"vitamin|biotin|folate|folic|niacin|thiamine|riboflavin|"
+    r"d2|d3|k2|b12|"
     r"protein|whey|casein|collagen|gelatin|"
+    r"enzyme|enzymes|"
     r"fiber|fibre|prebiotic|psyllium|inulin|"
     r"omega|fish\s*oil|krill|cod\s*liver|epa|dha|"
     r"quercetin|curcumin|turmeric|creatine|coq10|ubiquinol|melatonin|ashwagandha)\b",
@@ -1987,6 +1989,12 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
 
     if name_signal and non_probiotic_panel > 0 and _route_has_non_probiotic_hero(product, name_text):
         return False
+
+    if non_probiotic_panel > 0 and not name_signal:
+        if _ROUTE_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""):
+            return False
+        if not high_cfu:
+            return False
 
     if strain_count >= non_probiotic_panel:
         return True

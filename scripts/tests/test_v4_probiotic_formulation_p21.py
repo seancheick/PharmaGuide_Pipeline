@@ -73,11 +73,11 @@ def test_probiotic_formulation_scores_full_25_point_contract() -> None:
     assert payload["max"] == 25.0
     assert payload["components"] == {
         "total_cfu_disclosed": 4.0,
-        "cfu_amount": 4.0,
+        "cfu_amount": 5.0,
         "named_species_diversity": 4.0,
-        "clinical_strain_codes": 5.0,
-        "delivery_survivability": 5.0,
-        "prebiotic_complement": 3.0,
+        "clinical_strain_codes": 8.0,
+        "delivery_survivability": 3.0,
+        "prebiotic_complement": 1.0,
     }
     assert payload["metadata"]["phase"] == "P2.1_probiotic_formulation"
 
@@ -86,10 +86,10 @@ def test_probiotic_formulation_scores_full_25_point_contract() -> None:
     ("total_billion", "expected"),
     [
         (0.0, 0.0),
-        (0.5, 1.0),
-        (1.1, 2.0),
-        (10.0, 3.0),
-        (50.0, 4.0),
+        (0.5, 1.5),
+        (1.1, 3.0),
+        (10.0, 4.0),
+        (50.0, 5.0),
     ],
 )
 def test_cfu_amount_tiers(total_billion: float, expected: float) -> None:
@@ -126,13 +126,13 @@ def test_named_species_diversity_tiers(strain_count: int, expected: float) -> No
     ("clinical_strain_count", "expected"),
     [
         (0, 0.0),
-        (1, 2.0),
-        (2, 3.0),
-        (3, 4.0),
-        (5, 5.0),
+        (1, 3.0),
+        (2, 5.0),
+        (3, 7.0),
+        (5, 8.0),
     ],
 )
-def test_clinical_strain_code_tiers_use_v4_four_point_cap(
+def test_clinical_strain_code_tiers_use_v4_eight_point_cap(
     clinical_strain_count: int,
     expected: float,
 ) -> None:
@@ -146,10 +146,10 @@ def test_clinical_strain_code_tiers_use_v4_four_point_cap(
 @pytest.mark.parametrize(
     ("survivability", "delivery_tier", "expected"),
     [
-        (True, None, 5.0),
-        (False, 1, 5.0),
-        (False, 2, 4.0),
-        (False, 3, 2.5),
+        (True, None, 3.0),
+        (False, 1, 3.0),
+        (False, 2, 2.5),
+        (False, 3, 1.5),
         (False, None, 0.0),
     ],
 )
@@ -171,7 +171,7 @@ def test_prebiotic_complement_uses_p05_enriched_flag() -> None:
     with_prebiotic = score_formulation(_product(prebiotic_present=True))
     without_prebiotic = score_formulation(_product(prebiotic_present=False))
 
-    assert with_prebiotic["components"]["prebiotic_complement"] == 3.0
+    assert with_prebiotic["components"]["prebiotic_complement"] == 1.0
     assert without_prebiotic["components"]["prebiotic_complement"] == 0.0
 
 

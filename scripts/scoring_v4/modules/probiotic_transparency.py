@@ -7,8 +7,8 @@ generic Transparency penalty machinery:
     Positive components (probiotic-specific):
       - all strain identities named on label    8 pts
       - per-strain CFU on label                 7 pts
-        (Intentionally double-counts with the Dose dimension per
-         §6 line 298 — strong-signal design.)
+        (Aggregate CFU can floor this line at 4 pts; per-strain CFU is
+         still required for full premium disclosure.)
       - B3 claim_compliance bonus               up to +4
         (allergen_free +2, gluten_free +1, vegan_or_veg +1; reused
          from generic_transparency unchanged.)
@@ -26,9 +26,10 @@ Strain identities (8 pts): credited proportionally. A blend container
 ("Probiotic Blend") with named children counts the children as named
 identities. Empty/unnamed blends drag the credit down.
 
-Per-strain CFU (7 pts): proportional to the disclosure ratio
-(disclosed_count / total_strain_count). Reuses the disclosure logic
-from `probiotic_dose._per_strain_cfu_disclosed_keys` for consistency.
+CFU disclosure (7 pts): per-strain CFU is proportional to the disclosure
+ratio (disclosed_count / total_strain_count). Aggregate CFU is acceptable
+but non-premium disclosure, so it can floor this line at 4 pts without
+stacking beyond the per-strain signal.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Penalty sub-functions are imported from
@@ -54,6 +55,7 @@ PHASE_MARKER = "P2.5_probiotic_transparency"
 DIMENSION_CAP = 15.0
 CAP_STRAIN_IDENTITIES = 8.0
 CAP_PER_STRAIN_CFU = 7.0
+CAP_AGGREGATE_CFU_DISCLOSURE_PROXY = 4.0
 
 
 def score_transparency(product: Any) -> Dict[str, Any]:
@@ -85,10 +87,12 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     # Probiotic-specific positive components.
     strain_identities = _score_strain_identities(pdata)
     per_strain_cfu = _score_per_strain_cfu_on_label(pdata)
+    aggregate_cfu_proxy = _score_aggregate_cfu_disclosure_proxy(pdata, per_strain_cfu)
 
     components = {
         "strain_identities_named":     round(strain_identities, 4),
         "per_strain_cfu_on_label":     round(per_strain_cfu, 4),
+        "aggregate_cfu_disclosure_proxy": round(aggregate_cfu_proxy, 4),
         "B3_claim_compliance":         round(b3, 4),
     }
     penalties = {
@@ -116,6 +120,17 @@ def score_transparency(product: Any) -> Dict[str, Any]:
         "B2_raw_before_cap": round(b2_meta["raw_before_cap"], 4),
         "B5_blend_evidence": b5_evidence,
         "B5_blend_count": len(b5_evidence),
+        "aggregate_cfu_disclosure": {
+            "total_billion_count": _total_billion_count(pdata),
+            "proxy_cap": CAP_AGGREGATE_CFU_DISCLOSURE_PROXY,
+            "proxy_points": round(aggregate_cfu_proxy, 4),
+            "per_strain_points": round(per_strain_cfu, 4),
+            "basis": (
+                "aggregate_cfu_floor"
+                if aggregate_cfu_proxy > 0.0
+                else ("per_strain_cfu" if per_strain_cfu > 0.0 else "no_cfu_disclosure")
+            ),
+        },
     }
 
     return {
@@ -182,6 +197,40 @@ def _score_per_strain_cfu_on_label(pdata: Dict[str, Any]) -> float:
     return round(CAP_PER_STRAIN_CFU * ratio, 4)
 
 
+def _score_aggregate_cfu_disclosure_proxy(pdata: Dict[str, Any], per_strain_points: float) -> float:
+    """Floor CFU-disclosure credit for aggregate-CFU labels.
+
+    Aggregate CFU is real disclosure, but it is not the same as per-strain
+    CFU. Use it as a non-stacking floor so "50B CFU total" is not treated
+    like no CFU disclosure, while fully per-strain labels still own the
+    full 7-point line.
+    """
+    total_billion = _total_billion_count(pdata)
+    if total_billion <= 0.0 or per_strain_points >= CAP_PER_STRAIN_CFU:
+        return 0.0
+
+    if total_billion >= 10.0:
+        target = CAP_AGGREGATE_CFU_DISCLOSURE_PROXY
+    elif total_billion >= 1.0:
+        target = 3.0
+    else:
+        target = 2.0
+    return round(max(0.0, target - per_strain_points), 4)
+
+
+def _total_billion_count(pdata: Dict[str, Any]) -> float:
+    total = _as_float(pdata.get("total_billion_count"), 0.0)
+    if total > 0:
+        return total
+    total_cfu = _as_float(pdata.get("total_cfu"), 0.0)
+    if total_cfu > 0:
+        return total_cfu / 1_000_000_000.0
+    for blend in _safe_list(pdata.get("probiotic_blends")):
+        cfu_data = _safe_dict(_safe_dict(blend).get("cfu_data"))
+        total += _as_float(cfu_data.get("billion_count"), 0.0)
+    return max(0.0, total)
+
+
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
     """Read enriched-input `probiotic_data` and final-blob `probiotic_detail`."""
     return _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))
@@ -210,5 +259,14 @@ def _as_int(value: Any, default: int = 0) -> int:
         if value is None:
             return default
         return int(float(value))
+    except (TypeError, ValueError):
+        return default
+
+
+def _as_float(value: Any, default: float = 0.0) -> float:
+    try:
+        if value is None:
+            return default
+        return float(value)
     except (TypeError, ValueError):
         return default

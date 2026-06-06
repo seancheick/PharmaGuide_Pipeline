@@ -223,6 +223,56 @@ def test_high_cfu_low_adjunct_product_can_still_route_probiotic_without_name():
     assert class_for_product(product) == "probiotic"
 
 
+def test_d3_hero_with_low_cfu_adjunct_stays_generic():
+    """Garden-of-Life Raw D3 style: vitamin D is the product job; tiny
+    probiotic/chlorella adjunct evidence must not hijack the route.
+    """
+    product = _product(
+        product_name="Raw D3 2,000 IU (50 mcg)",
+        primary_type="general_supplement",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 500_000_000,
+            "total_billion_count": 0.5,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "vitamin_d", "name": "Vitamin D", "quantity": 50, "unit": "mcg", "category": "vitamins"},
+                {"canonical_id": "chlorella", "name": "Chlorella", "quantity": 250, "unit": "mg", "category": "functional_foods"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "generic"
+
+
+def test_enzyme_hero_with_probiotic_adjunct_stays_generic():
+    """Grammar-aware guard: 'Digestive Enzymes with Probiotics' is an
+    enzyme product with probiotic adjuncts, not a probiotic primary.
+    """
+    product = _product(
+        product_name="Enhanced Super Digestive Enzymes With Probiotics",
+        primary_type="general_supplement",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 1_000_000_000,
+            "total_billion_count": 1.0,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "digestive_enzymes", "name": "Digestive Enzymes", "quantity": 250, "unit": "mg", "category": "enzymes"},
+                {"canonical_id": "papain", "name": "Papain", "quantity": 50, "unit": "mg", "category": "enzymes"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "generic"
+
+
 def test_epa_dha_name_without_panel_routes_omega_for_completeness_gate():
     product = {
         "product_name": "Omega-3 EPA/DHA",

@@ -5,9 +5,8 @@ positives + reuses the generic Transparency penalty machinery:
 
     Positive components (probiotic-specific):
         all strain identities named on label    8 pts
-        per-strain CFU on label                 7 pts  (intentionally
-                                                        double-counts with
-                                                        Dose per §6 line 298)
+        per-strain CFU on label                 7 pts
+        aggregate CFU floor                     up to +4, non-stacking
         B3 claim_compliance bonus               up to +4  (allergen_free +2,
                                                            gluten_free +1,
                                                            vegan_or_veg +1)
@@ -24,7 +23,9 @@ each named blend has at least one strain identified by name. A
 "Probiotic Blend" container with named children counts as identities-named.
 
 Per-strain CFU (7 pts): reuses the disclosure signal from P2.2 dose —
-proportional to disclosed_count / total_strain_count.
+proportional to disclosed_count / total_strain_count. Aggregate CFU is
+acceptable but non-premium disclosure, so it floors this line below the
+full per-strain score instead of scoring as zero.
 """
 
 from __future__ import annotations
@@ -151,10 +152,14 @@ def test_transparency_per_strain_cfu_credit_when_disclosed() -> None:
     )
     payload = score_transparency(product)
     assert payload["components"]["per_strain_cfu_on_label"] == 7.0
+    assert payload["components"]["aggregate_cfu_disclosure_proxy"] == 0.0
+    assert payload["metadata"]["aggregate_cfu_disclosure"]["basis"] == "per_strain_cfu"
 
 
 def test_transparency_per_strain_cfu_proportional() -> None:
-    """Partial disclosure — only 1 of 4 strains has CFU → 7 * 0.25 = 1.75."""
+    """Partial disclosure — only 1 of 4 strains has CFU → 7 * 0.25 = 1.75,
+    then aggregate CFU fills the non-premium disclosure floor to 4 total.
+    """
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     product = _probiotic(
@@ -171,15 +176,42 @@ def test_transparency_per_strain_cfu_proportional() -> None:
     product["probiotic_data"]["total_strain_count"] = 4
     payload = score_transparency(product)
     assert payload["components"]["per_strain_cfu_on_label"] == 1.75
+    assert payload["components"]["aggregate_cfu_disclosure_proxy"] == 2.25
+    assert payload["metadata"]["aggregate_cfu_disclosure"]["basis"] == "aggregate_cfu_floor"
 
 
-def test_transparency_per_strain_cfu_zero_when_aggregate_only() -> None:
+def test_transparency_aggregate_cfu_gets_non_premium_disclosure_floor() -> None:
     """The 3 real probiotic canaries (Spring Valley, GNC Ultra, GoL Prenatal):
-    all disclose aggregate CFU but not per-strain CFU → 0 pts."""
+    all disclose aggregate CFU but not per-strain CFU. That is acceptable
+    disclosure, not premium disclosure: 4 pts, not 0 and not 7.
+    """
     from scoring_v4.modules.probiotic_transparency import score_transparency
 
     payload = score_transparency(_probiotic(strain_count=10))
     assert payload["components"]["per_strain_cfu_on_label"] == 0.0
+    assert payload["components"]["aggregate_cfu_disclosure_proxy"] == 4.0
+    assert payload["metadata"]["aggregate_cfu_disclosure"] == {
+        "total_billion_count": 20.0,
+        "proxy_cap": 4.0,
+        "proxy_points": 4.0,
+        "per_strain_points": 0.0,
+        "basis": "aggregate_cfu_floor",
+    }
+
+
+def test_transparency_no_cfu_still_gets_no_cfu_disclosure_credit() -> None:
+    from scoring_v4.modules.probiotic_transparency import score_transparency
+
+    product = _probiotic(strain_count=2)
+    product["probiotic_data"]["total_billion_count"] = 0.0
+    for blend in product["probiotic_data"]["probiotic_blends"]:
+        blend["cfu_data"] = {"has_cfu": False, "billion_count": 0}
+
+    payload = score_transparency(product)
+
+    assert payload["components"]["per_strain_cfu_on_label"] == 0.0
+    assert payload["components"]["aggregate_cfu_disclosure_proxy"] == 0.0
+    assert payload["metadata"]["aggregate_cfu_disclosure"]["basis"] == "no_cfu_disclosure"
 
 
 # --- B3 claim_compliance bonus (reused) ----------------------------------

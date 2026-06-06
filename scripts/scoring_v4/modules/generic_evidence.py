@@ -17,6 +17,7 @@ from collections import defaultdict
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
+from collagen_taxonomy import PEPTIDES_I_III, classify_collagen_subtype_strict
 from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
@@ -25,6 +26,7 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
 )
 from scoring_v4.modules.botanical_profile import _mass_mg
+from scoring_v4.modules.collagen_profile import is_collagen_product
 
 
 PHASE_MARKER = "P1.3.3_evidence_pipeline"
@@ -123,6 +125,22 @@ _EFFECT_FLOOR_MULTIPLIER = {
 PRIMARY_FLOOR_ENABLED = True
 PRIMARY_MASS_FRACTION = 0.5
 
+_RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
+    "id": "RECOVERED_COLLAGEN_PEPTIDES_V1",
+    "ingredient": "collagen",
+    "standard_name": "Collagen",
+    "study_type": "systematic_review_meta",
+    "evidence_level": "ingredient-human",
+    "effect_direction": "positive_strong",
+    "total_enrollment": 250,
+    "published_studies_count": 26,
+    "min_clinical_dose": 2500,
+    "max_studied_clinical_dose": 20000,
+    "dose_unit": "mg",
+    "evidence_origin": "scoring_contract_recovery",
+    "source_data": "backed_clinical_studies:INGR_COLLAGEN_PEPTIDES",
+}
+
 
 def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False) -> Dict[str, Any]:
     """Compute the generic-module Evidence dimension.
@@ -138,7 +156,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     if not isinstance(product, dict):
         product = {}
 
-    matches = _safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches"))
+    matches = list(_safe_list(_safe_dict(product.get("evidence_data")).get("clinical_matches")))
+    recovered_matches = _recover_contract_evidence_matches(product, matches)
+    if recovered_matches:
+        matches.extend(recovered_matches)
     dose_map = _dose_map(product)
     ingredient_points: Dict[str, float] = defaultdict(float)
     matched_entry_ids: set[str] = set()
@@ -241,9 +262,107 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
             "primary_evidence_floor": round(primary_floor, 4),
             "primary_evidence_floor_canonical": floor_canonical,
+            "recovered_matches": [
+                _entry_id(entry)
+                for entry in recovered_matches
+            ],
             "flags": flags,
         },
     }
+
+
+def _recover_contract_evidence_matches(
+    product: Dict[str, Any],
+    matches: List[Any],
+) -> List[Dict[str, Any]]:
+    """Recover evidence when the scoring input contract has a clear primary
+    identity but enrichment failed to copy the corresponding clinical match.
+
+    Keep this deliberately narrow. It currently only handles collagen because
+    the project has verified collagen-peptide evidence in
+    backed_clinical_studies.json and the collagen profile already proves product
+    ownership via mass/intent. Token collagen add-ons stay excluded by
+    is_collagen_product().
+    """
+    if not _has_primary_collagen_peptide_identity(product):
+        return []
+    if _has_match_for_identity(matches, "collagen"):
+        return []
+    if not is_collagen_product(product):
+        return []
+    return [dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH)]
+
+
+def _has_primary_collagen_peptide_identity(product: Dict[str, Any]) -> bool:
+    max_active_mass = 0.0
+    max_peptide_mass = 0.0
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _mass_mg(row) or 0.0
+        max_active_mass = max(max_active_mass, mass)
+        if _is_collagen_peptide_row(row):
+            max_peptide_mass = max(max_peptide_mass, mass)
+    if max_peptide_mass <= 0.0:
+        return False
+    if max_active_mass <= 0.0:
+        return False
+    return max_peptide_mass >= (PRIMARY_MASS_FRACTION * max_active_mass)
+
+
+def _is_collagen_peptide_row(row: Dict[str, Any]) -> bool:
+    if not _has_row_identity(row, "collagen"):
+        return False
+    subtype = _norm_text(row.get("collagen_subtype"))
+    if subtype:
+        return subtype == PEPTIDES_I_III
+    text = " ".join(
+        _norm_text(row.get(key))
+        for key in ("matched_form", "name", "standard_name", "raw_source_text")
+    )
+    return classify_collagen_subtype_strict(text) == PEPTIDES_I_III
+
+
+def _has_row_identity(row: Dict[str, Any], canonical_id: str) -> bool:
+    target = _canonical_text(canonical_id)
+    values = (
+        row.get("canonical_id"),
+        row.get("scoring_parent_id"),
+        row.get("evidence_canonical_id"),
+        row.get("standard_name"),
+        row.get("name"),
+        row.get("matched_form"),
+    )
+    return any(_identity_matches(value, target) for value in values)
+
+
+def _has_match_for_identity(matches: List[Any], canonical_id: str) -> bool:
+    target = _canonical_text(canonical_id)
+    for entry in matches:
+        if not isinstance(entry, dict):
+            continue
+        values = (
+            entry.get("canonical_id"),
+            entry.get("ingredient_canonical_id"),
+            entry.get("standard_name"),
+            entry.get("ingredient"),
+            entry.get("matched_term"),
+            entry.get("id"),
+        )
+        if any(_identity_matches(value, target) for value in values):
+            return True
+    return False
+
+
+def _identity_matches(value: Any, target: str) -> bool:
+    key = _canonical_text(value)
+    if not key:
+        return False
+    if key == target:
+        return True
+    # Collagen evidence frequently appears as "hydrolyzed collagen peptides" or
+    # INGR_COLLAGEN_PEPTIDES while the active canonical_id is just "collagen".
+    return target == "collagen" and "collagen" in key
 
 
 def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float]:
