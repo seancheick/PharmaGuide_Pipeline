@@ -15,9 +15,9 @@ from typing import Any, Dict
 import jsonschema
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SCHEMA_DIR = REPO_ROOT / "scripts" / "data" / "schemas"
+SCHEMA_DIR = REPO_ROOT / "scripts" / "scoring_v4" / "schemas"
 
-# Logical config name -> schema filename under scripts/data/schemas/.
+# Logical config name -> schema filename under scripts/scoring_v4/schemas/.
 _SCHEMAS: Dict[str, str] = {
     "omega": "omega_rubric.schema.json",
 }
