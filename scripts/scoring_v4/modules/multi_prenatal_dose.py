@@ -50,6 +50,11 @@ METHOD_MARKER = "rda_ai_panel_coverage_from_enriched_rda_ul_data"
 
 PRENATAL_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b")
 DHA_RE = re.compile(r"\bdha\b|docosahexaenoic", re.IGNORECASE)
+TARGETED_MULTI_RE = re.compile(r"\b(essential|targeted|selective|minimalist|core)\b", re.IGNORECASE)
+BROAD_MULTI_RE = re.compile(
+    r"\b(complete|comprehensive|full[\s-]*spectrum|one\s+a\s+day|whole\s+food|total|centrum|mega\s+men)\b",
+    re.IGNORECASE,
+)
 
 CORE_MULTI_ANCHORS = (
     "vitamin_a",
@@ -59,6 +64,15 @@ CORE_MULTI_ANCHORS = (
     "vitamin_b12",
     "zinc",
 )
+TARGETED_MULTI_ANCHORS = (
+    "vitamin_d",
+    "folate",
+    "vitamin_b12",
+    "iron",
+    "magnesium",
+    "zinc",
+)
+TARGETED_MULTI_SELECTED_ANCHORS = 5
 
 PRENATAL_CORE_ANCHORS = (
     "folate",
@@ -149,6 +163,26 @@ def _is_prenatal(product: Dict[str, Any]) -> bool:
         for key in ("product_name", "fullName")
     )
     return bool(PRENATAL_RE.search(_norm_text(haystack)))
+
+
+def _label_text(product: Dict[str, Any]) -> str:
+    return " ".join(
+        str(product.get(key) or "")
+        for key in ("product_name", "fullName")
+    )
+
+
+def _is_targeted_multi(product: Dict[str, Any]) -> bool:
+    """Return True for selective gap-filler multivitamins.
+
+    A targeted multi should be judged on whether it covers its adult
+    gap-filler job, not whether it includes every classical complete-multi
+    anchor. Broad/complete multis keep the fixed complete-multi anchor set.
+    """
+    text = _label_text(product)
+    if not TARGETED_MULTI_RE.search(text):
+        return False
+    return not BROAD_MULTI_RE.search(text)
 
 
 def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -339,29 +373,49 @@ def _dha_score(product: Dict[str, Any]) -> float:
     return best
 
 
+def _anchor_critical_value(anchor: str, coverage_scores: Dict[str, float], threshold_scores: Dict[str, float]) -> float:
+    if anchor in threshold_scores:
+        return threshold_scores[anchor]
+    coverage = coverage_scores.get(anchor, 0.0)
+    # Critical coverage uses stricter minimums than the broad RDA average. If a
+    # nutrient is present but below the minimum, it can still earn half credit.
+    min_pct = CRITICAL_MIN_PCT_RDA.get(anchor)
+    if min_pct is None:
+        return coverage
+    return coverage if coverage >= 1.0 else (0.5 if coverage > 0 else 0.0)
+
+
+def _targeted_multi_critical_scores(
+    coverage_scores: Dict[str, float],
+    threshold_scores: Dict[str, float],
+) -> tuple[Dict[str, float], Dict[str, float]]:
+    scored = {
+        anchor: _round(_clamp(0.0, 1.0, _anchor_critical_value(anchor, coverage_scores, threshold_scores)))
+        for anchor in TARGETED_MULTI_ANCHORS
+    }
+    selected = sorted(scored.items(), key=lambda item: (-item[1], item[0]))[:TARGETED_MULTI_SELECTED_ANCHORS]
+    return dict(sorted(selected)), scored
+
+
 def _critical_scores(product: Dict[str, Any], coverage_scores: Dict[str, float]) -> tuple[str, Dict[str, float], List[str]]:
     prenatal = _is_prenatal(product)
+    targeted_multi = (not prenatal) and _is_targeted_multi(product)
     anchors = PRENATAL_CORE_ANCHORS if prenatal else CORE_MULTI_ANCHORS
-    mode = "prenatal" if prenatal else "core_multi"
-    threshold_scores = _critical_threshold_scores(product) if prenatal else {}
+    mode = "prenatal" if prenatal else ("targeted_core_multi" if targeted_multi else "core_multi")
+    threshold_scores = _critical_threshold_scores(product)
+
+    if targeted_multi:
+        scores, all_scores = _targeted_multi_critical_scores(coverage_scores, threshold_scores)
+        missing = [anchor for anchor in TARGETED_MULTI_ANCHORS if all_scores.get(anchor, 0.0) <= 0]
+        return mode, scores, missing
 
     scores: Dict[str, float] = {}
     missing: List[str] = []
     for anchor in anchors:
         if anchor == "dha":
             value = _dha_score(product)
-        elif anchor in threshold_scores:
-            value = threshold_scores[anchor]
         else:
-            coverage = coverage_scores.get(anchor, 0.0)
-            # Critical coverage uses stricter minimums than the broad RDA
-            # average. If a nutrient is present but below the minimum, it can
-            # still earn half credit rather than zero.
-            min_pct = CRITICAL_MIN_PCT_RDA.get(anchor)
-            if min_pct is None:
-                value = coverage
-            else:
-                value = coverage if coverage >= 1.0 else (0.5 if coverage > 0 else 0.0)
+            value = _anchor_critical_value(anchor, coverage_scores, threshold_scores)
         value = _round(_clamp(0.0, 1.0, value))
         scores[anchor] = value
         if value <= 0:

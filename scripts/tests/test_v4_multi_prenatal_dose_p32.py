@@ -184,6 +184,43 @@ def test_general_multi_core_anchor_coverage_uses_non_prenatal_anchor_set() -> No
     assert payload["metadata"]["critical_nutrients_missing"] == []
 
 
+def test_targeted_essential_multi_uses_gap_filler_anchor_support_not_complete_multi_missing_list() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Essential for Women Multivitamin 18+",
+        adequacy_results=[
+            _adequacy("Vitamin D", pct_rda=250),
+            _adequacy("Folate", pct_rda=250),
+            _adequacy("Vitamin B12", pct_rda=333),
+            _adequacy("Iron", pct_rda=44),
+            _adequacy("Magnesium", pct_rda=7),
+        ],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_mode"] == "targeted_core_multi"
+    assert "vitamin_a" not in payload["metadata"]["critical_nutrient_scores"]
+    assert "vitamin_c" not in payload["metadata"]["critical_nutrient_scores"]
+    assert payload["metadata"]["critical_nutrients_missing"] == ["zinc"]
+    assert payload["components"]["critical_nutrient_coverage"] == 3.64
+
+
+def test_targeted_essential_multi_with_only_two_supported_anchors_does_not_max_critical_support() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Essential Daily Multi",
+        adequacy_results=[
+            _adequacy("Vitamin D", pct_rda=100),
+            _adequacy("Vitamin B12", pct_rda=100),
+        ],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_mode"] == "targeted_core_multi"
+    assert payload["components"]["critical_nutrient_coverage"] == 2.0
+    assert payload["metadata"]["critical_nutrients_missing"] == ["folate", "iron", "magnesium", "zinc"]
+
+
 def test_prenatal_core_coverage_does_not_require_choline_or_dha() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 
