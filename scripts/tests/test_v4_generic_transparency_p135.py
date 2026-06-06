@@ -179,12 +179,99 @@ def test_transparency_payload_shape_and_phase() -> None:
     assert payload["score"] == 6.0
     assert payload["max"] == 10.0
     assert payload["components"]["clear_disclosure_base"] == 6.0
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 0.0
     assert payload["components"]["B3_claim_compliance"] == 0.0
     assert payload["penalties"]["B2_false_allergen_free_claim"] == 0.0
     assert payload["penalties"]["B5_proprietary_blend_opacity"] == 0.0
     assert payload["penalties"]["B6_marketing_claims"] == 0.0
     assert payload["phase"] == "P1.3.5_transparency"
     assert payload["metadata"]["phase"] == "P1.3.5_transparency"
+    assert payload["metadata"]["complete_active_disclosure"]["qualifies"] is False
+    assert payload["metadata"]["complete_active_disclosure"]["blockers"] == [
+        "declared_count_exceeds_rows",
+        "incomplete_active_rows",
+    ]
+
+
+def test_complete_single_active_identity_and_dose_earns_disclosure_credit() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    payload = score_transparency(
+        _product(total_active_ingredients=1, total_active_mg=200.0)
+    )
+
+    assert payload["components"]["clear_disclosure_base"] == 6.0
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 3.0
+    assert payload["components"]["B3_claim_compliance"] == 0.0
+    assert payload["score"] == 9.0
+    assert payload["metadata"]["complete_active_disclosure"] == {
+        "qualifies": True,
+        "bonus": 3.0,
+        "declared_active_count": 1,
+        "active_row_count": 1,
+        "complete_row_count": 1,
+        "blockers": [],
+        "incomplete_rows": [],
+    }
+
+
+def test_complete_active_disclosure_credit_requires_usable_dose() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    product = _product(total_active_ingredients=1, total_active_mg=0.0)
+    row = product["ingredient_quality_data"]["ingredients_scorable"][0]
+    row["quantity"] = None
+    row["unit"] = ""
+
+    payload = score_transparency(product)
+
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 0.0
+    assert payload["score"] == 6.0
+    assert payload["metadata"]["complete_active_disclosure"]["qualifies"] is False
+    assert payload["metadata"]["complete_active_disclosure"]["blockers"] == [
+        "incomplete_active_rows"
+    ]
+    assert payload["metadata"]["complete_active_disclosure"]["incomplete_rows"][0]["blockers"] == [
+        "missing_usable_dose"
+    ]
+
+
+def test_complete_active_disclosure_credit_blocked_by_proprietary_opacity() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    payload = score_transparency(
+        _product(
+            blends=[_opaque_blend()],
+            total_active_ingredients=1,
+            total_active_mg=500.0,
+        )
+    )
+
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 0.0
+    assert "proprietary_blend_opacity" in payload["metadata"]["complete_active_disclosure"]["blockers"]
+
+
+def test_complete_active_disclosure_and_claims_still_cap_at_ten() -> None:
+    from scoring_v4.modules.generic_transparency import score_transparency
+
+    compliance = {
+        "allergen_free_claims": [{"validated": True, "allergen": "dairy"}],
+        "gluten_free": True,
+        "vegan": True,
+        "vegetarian": False,
+        "conflicts": [],
+        "has_may_contain_warning": False,
+    }
+
+    payload = score_transparency(
+        _product(total_active_ingredients=1, total_active_mg=200.0, compliance_data=compliance)
+    )
+
+    assert payload["components"]["complete_active_identity_dose_disclosure"] == 3.0
+    assert payload["components"]["B3_claim_compliance"] == 4.0
+    assert payload["metadata"]["raw_transparency"] == 13.0
+    assert payload["metadata"]["cap_applied"] is True
+    assert payload["score"] == 10.0
 
 
 def test_valid_claims_can_reach_full_transparency_score() -> None:

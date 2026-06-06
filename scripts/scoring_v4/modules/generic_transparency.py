@@ -3,6 +3,7 @@
 Transparency (10) is the user-facing home for disclosure quality:
 
     clear disclosure base             6
+    complete active identity+dose     +3
     B3 claim compliance              +4
     B2 false allergen-free claim     -2
     B5 proprietary blend opacity     -10 (class-aware)
@@ -26,6 +27,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
     get_active_ingredients,
+    has_usable_individual_dose,
 )
 
 
@@ -33,6 +35,7 @@ PHASE_MARKER = "P1.3.5_transparency"
 
 DIMENSION_CAP = 10.0
 CLEAR_DISCLOSURE_BASE = 6.0
+COMPLETE_ACTIVE_DISCLOSURE_BONUS = 3.0
 
 B2_CAP = 2.0
 B2_SEVERITY_POINTS = {
@@ -101,9 +104,15 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
     )
     b5, b5_evidence = _score_b5_proprietary_blend_penalty(product, flags)
     b6 = _score_b6_disease_claim_penalty(product, flags)
+    complete_active_bonus, complete_active_meta = _score_complete_active_disclosure_bonus(
+        product,
+        b5_penalty=b5,
+        b6_penalty=b6,
+    )
 
     components = {
         "clear_disclosure_base": CLEAR_DISCLOSURE_BASE,
+        "complete_active_identity_dose_disclosure": round(complete_active_bonus, 4),
         "B3_claim_compliance": round(b3, 4),
         # The v3 feature gate for hypoallergenic bonus is disabled in the
         # shipped config. Keep the line explicit so v4 display has a stable
@@ -141,6 +150,7 @@ def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
         "B5_blend_evidence": b5_evidence,
         "B5_blend_count": len(b5_evidence),
         "B5_raw_before_cap": round(sum(e["computed_blend_penalty_magnitude"] for e in b5_evidence), 4),
+        "complete_active_disclosure": complete_active_meta,
     }
 
     return {
@@ -342,6 +352,103 @@ def _score_b3_claim_compliance(
         + (B3_VEGAN_OR_VEGETARIAN if vegan_or_vegetarian else 0.0)
     )
     return _clamp(0.0, B3_CAP, raw)
+
+
+def _score_complete_active_disclosure_bonus(
+    product: Dict[str, Any],
+    *,
+    b5_penalty: float,
+    b6_penalty: float,
+) -> Tuple[float, Dict[str, Any]]:
+    """Reward complete active identity + dose disclosure.
+
+    B3 rewards validated clean-label claims. A product can be fully
+    transparent about what matters clinically (active identity and dose)
+    without making any gluten-free / vegan / allergen-free claim, so keep
+    that disclosure credit in its own lane. The gate is intentionally
+    conservative: every declared active must be represented by an
+    individually dose-bearing row, and proprietary/parent-total rows do
+    not qualify.
+    """
+    rows = [row for row in get_active_ingredients(product) if isinstance(row, dict)]
+    declared_count = _declared_active_count(product, rows)
+
+    blockers: List[str] = []
+    if not rows:
+        blockers.append("no_active_rows")
+    if declared_count <= 0:
+        blockers.append("no_declared_active_count")
+    if declared_count > len(rows):
+        blockers.append("declared_count_exceeds_rows")
+    if b5_penalty > 0.0:
+        blockers.append("proprietary_blend_opacity")
+    if b6_penalty > 0.0:
+        blockers.append("disease_or_marketing_claim")
+
+    complete_rows = 0
+    incomplete_rows: List[Dict[str, Any]] = []
+    for idx, row in enumerate(rows):
+        row_blockers: List[str] = []
+        if row.get("is_proprietary_blend"):
+            row_blockers.append("proprietary_blend_row")
+        if row.get("is_parent_total"):
+            row_blockers.append("parent_total_row")
+        if not _has_active_identity(row):
+            row_blockers.append("missing_identity")
+        if not _has_usable_disclosure_dose(row):
+            row_blockers.append("missing_usable_dose")
+        if row_blockers:
+            incomplete_rows.append(
+                {
+                    "index": idx,
+                    "name": row.get("name") or row.get("standard_name") or "",
+                    "blockers": row_blockers,
+                }
+            )
+        else:
+            complete_rows += 1
+
+    if complete_rows < declared_count:
+        blockers.append("incomplete_active_rows")
+
+    qualifies = not blockers
+    return (COMPLETE_ACTIVE_DISCLOSURE_BONUS if qualifies else 0.0), {
+        "qualifies": bool(qualifies),
+        "bonus": COMPLETE_ACTIVE_DISCLOSURE_BONUS if qualifies else 0.0,
+        "declared_active_count": declared_count,
+        "active_row_count": len(rows),
+        "complete_row_count": complete_rows,
+        "blockers": sorted(set(blockers)),
+        "incomplete_rows": incomplete_rows[:10],
+    }
+
+
+def _declared_active_count(product: Dict[str, Any], rows: List[Dict[str, Any]]) -> int:
+    proprietary = _safe_dict(product.get("proprietary_data"))
+    quality = _safe_dict(product.get("ingredient_quality_data"))
+    for value in (
+        proprietary.get("total_active_ingredients"),
+        quality.get("total_active"),
+        quality.get("total_active_ingredients"),
+    ):
+        parsed = int(_as_float(value, 0) or 0)
+        if parsed > 0:
+            return parsed
+    return len(rows)
+
+
+def _has_active_identity(row: Dict[str, Any]) -> bool:
+    return any(row.get(field) for field in ("canonical_id", "standard_name", "name"))
+
+
+def _has_usable_disclosure_dose(row: Dict[str, Any]) -> bool:
+    if has_usable_individual_dose(row):
+        return True
+    for key in ("amount", "dose", "quantity_mg", "amount_mg"):
+        value = _as_float(row.get(key), None)
+        if value is not None and value > 0:
+            return True
+    return False
 
 
 def _score_b6_disease_claim_penalty(product: Dict[str, Any], flags: List[str]) -> float:

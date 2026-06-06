@@ -1337,8 +1337,9 @@ def test_shadow_transparency_populated_at_p135() -> None:
     module_block = out["shadow_score_v4_breakdown"]["module"]
     for name in ("transparency",):
         dim = module_block["dimensions"][name]
-        assert dim["score"] == 6.0
+        assert dim["score"] == 9.0
         assert dim["components"]["clear_disclosure_base"] == 6.0
+        assert dim["components"]["complete_active_identity_dose_disclosure"] == 3.0
         assert dim["metadata"]["phase"] == "P1.3.5_transparency"
 
     evidence = module_block["dimensions"]["evidence"]

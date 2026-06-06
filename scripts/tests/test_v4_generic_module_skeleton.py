@@ -134,8 +134,9 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     assert verification["metadata"]["trust_metadata"]["phase"] == "P1.3.4_testing_trust"
 
     transparency = breakdown["dimensions"]["transparency"]
-    assert transparency["score"] == 6.0
+    assert transparency["score"] == 9.0
     assert "clear_disclosure_base" in transparency["components"]
+    assert transparency["components"]["complete_active_identity_dose_disclosure"] == 3.0
     assert transparency["metadata"]["phase"] == "P1.3.5_transparency"
 
 
