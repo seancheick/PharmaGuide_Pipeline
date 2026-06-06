@@ -11,6 +11,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from scoring_input_contract import (  # noqa: E402
     LEGACY_IQD_SOURCE,
     SCORING_SOURCE,
+    build_scoring_classification,
     get_scoring_ingredients,
     is_nutrition_only_product,
 )
@@ -407,6 +408,170 @@ def test_legacy_probiotic_data_can_repair_stale_native_cfu_evidence():
     assert result.rows[0]["canonical_source_db"] == "probiotic_data"
     assert result.rejected_rows[0].reason == "malformed_product_scoring_evidence"
     assert "evidence_origin" in result.rejected_rows[0].missing_fields
+
+
+def test_derived_active_anchor_preserves_botanical_context_for_profile():
+    product = _product(
+        [],
+        product_name="Blessed Thistle 780 mg",
+        activeIngredients=[
+            {
+                "name": "Blessed Thistle",
+                "standardName": "Blessed Thistle",
+                "canonical_id": "blessed_thistle",
+                "canonical_source_db": "botanical_ingredients",
+                "quantity": 780,
+                "unit": "mg",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Blessed Thistle"},
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+    contract = build_scoring_classification(product)
+
+    assert result.rows[0]["canonical_id"] == "blessed_thistle"
+    assert result.rows[0]["scoring_input_kind"] == "product_level_evidence"
+    assert result.rows[0]["raw_taxonomy"]["category"] == "botanical"
+    assert contract["ingredients"][0]["botanical_source"]["value"] is True
+    assert "raw_taxonomy_botanical" in contract["ingredients"][0]["botanical_source"]["evidence"]
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is True
+
+
+def test_stale_native_anchor_evidence_is_repaired_with_active_context():
+    product = _product(
+        [],
+        product_name="Blessed Thistle 780 mg",
+        activeIngredients=[
+            {
+                "name": "Blessed Thistle",
+                "standardName": "Blessed Thistle",
+                "canonical_id": "blessed_thistle",
+                "canonical_source_db": "botanical_ingredients",
+                "quantity": 780,
+                "unit": "mg",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Blessed Thistle"},
+            }
+        ],
+        product_scoring_evidence=[
+            {
+                "evidence_type": "blend_anchor_mass",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 780,
+                "dose_unit": "mg",
+                "source": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "evidence_scope": "row_level",
+                "linked_rows": ["ingredientRows[0]"],
+                "confidence": "medium",
+                "reason": "identity_bearing_active_anchor_mass",
+                "name": "Blessed Thistle",
+                "canonical_id": "blessed_thistle",
+                "clean_identity_id": "blessed_thistle",
+                "scoring_parent_id": "blessed_thistle",
+                "evidence_canonical_id": "blessed_thistle",
+                "canonical_source_db": "botanical_ingredients",
+                "evidence_origin": "compatibility_derived",
+                "source_section": "product",
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+    contract = build_scoring_classification(product)
+
+    assert result.rows[0]["raw_taxonomy"]["category"] == "botanical"
+    assert contract["ingredients"][0]["botanical_source"]["value"] is True
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is True
+
+
+def test_stale_embedded_classification_is_rederived_after_contract_bump():
+    product = _product(
+        [],
+        product_name="Blessed Thistle 780 mg",
+        activeIngredients=[
+            {
+                "name": "Blessed Thistle",
+                "standardName": "Blessed Thistle",
+                "canonical_id": "blessed_thistle",
+                "canonical_source_db": "botanical_ingredients",
+                "quantity": 780,
+                "unit": "mg",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "raw_taxonomy": {"category": "botanical", "ingredientGroup": "Blessed Thistle"},
+            }
+        ],
+        product_scoring_classification={
+            "classification_schema_version": "1.1.1",
+            "classification_origin": "native_enrichment",
+            "classification_failed": False,
+            "route_module": "generic",
+            "route_reason": "stale_fixture",
+            "route_confidence": "medium",
+            "route_evidence": ["stale_fixture"],
+            "ingredients": [
+                {
+                    "canonical_id": "blessed_thistle",
+                    "name": "Blessed Thistle",
+                    "ingredient_domain": "generic_active",
+                    "botanical_source": {"value": False, "evidence": []},
+                    "profile_eligibility": {"botanical": {"eligible": False, "evidence": []}},
+                }
+            ],
+            "profile_eligibility": {
+                "botanical": {"eligible": False, "eligible_row_count": 0, "evidence": []}
+            },
+        },
+    )
+
+    contract = build_scoring_classification(product)
+
+    assert contract["classification_schema_version"] != "1.1.1"
+    assert contract["ingredients"][0]["botanical_source"]["value"] is True
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is True
+
+
+def test_botanical_reference_membership_alone_still_does_not_grant_profile():
+    product = _product(
+        [],
+        product_name="Petroselinic Acid 100 mg",
+        activeIngredients=[
+            {
+                "name": "Petroselinic Acid",
+                "canonical_id": "petroselinic_acid",
+                "canonical_source_db": "botanical_ingredients",
+                "quantity": 100,
+                "unit": "mg",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+            }
+        ],
+    )
+
+    contract = build_scoring_classification(product)
+
+    assert contract["ingredients"][0]["botanical_source"]["value"] is False
+    assert contract["profile_eligibility"]["botanical"]["eligible"] is False
 
 
 def test_sports_primary_identity_without_dose_is_contract_diagnostic():

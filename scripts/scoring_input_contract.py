@@ -35,7 +35,7 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.1"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.2"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
@@ -348,7 +348,7 @@ def _evidence_base(
     scoring_parent_id: Optional[str] = None,
 ) -> Dict[str, Any]:
     raw_source_path = row.get("raw_source_path") or row.get("source") or evidence_type
-    return {
+    item = {
         "evidence_type": evidence_type,
         "scoreable": True,
         "scoreable_identity": True,
@@ -371,6 +371,19 @@ def _evidence_base(
         "evidence_origin": "compatibility_derived",
         "source_section": "product",
     }
+    for field in (
+        "raw_taxonomy",
+        "forms",
+        "matched_form",
+        "category",
+        "dsld_category",
+        "standardName",
+        "standard_name",
+        "raw_source_text",
+    ):
+        if field in row and row.get(field) not in (None, ""):
+            item[field] = deepcopy(row.get(field))
+    return item
 
 
 def _has_epa_or_dha_signal(row: Dict[str, Any]) -> bool:
@@ -1181,13 +1194,44 @@ def _product_scoring_evidence_rows(
 ) -> tuple[List[Dict[str, Any]], List[RejectedScoringRow], List[str]]:
     evidence = product.get("product_scoring_evidence")
     if isinstance(evidence, dict):
-        evidence_rows = _safe_list(evidence.get("items") or evidence.get("evidence"))
-        if not evidence_rows and evidence:
-            evidence_rows = [evidence]
+        native_evidence_rows = _safe_list(evidence.get("items") or evidence.get("evidence"))
+        if not native_evidence_rows and evidence:
+            native_evidence_rows = [evidence]
     else:
-        evidence_rows = _safe_list(evidence)
-    evidence_rows = [item for item in evidence_rows if isinstance(item, dict)]
-    evidence_rows.extend(derive_product_scoring_evidence(product))
+        native_evidence_rows = _safe_list(evidence)
+    native_evidence_rows = [deepcopy(item) for item in native_evidence_rows if isinstance(item, dict)]
+    derived_evidence_rows = derive_product_scoring_evidence(product)
+
+    def evidence_key(item: Dict[str, Any]) -> tuple[Any, ...]:
+        return (
+            item.get("evidence_type"),
+            item.get("canonical_id") or item.get("evidence_canonical_id"),
+            item.get("raw_source_path"),
+            item.get("dose_value"),
+            item.get("dose_unit"),
+        )
+
+    derived_by_key = {evidence_key(item): item for item in derived_evidence_rows}
+    context_fields = (
+        "raw_taxonomy",
+        "forms",
+        "matched_form",
+        "category",
+        "dsld_category",
+        "standardName",
+        "standard_name",
+        "raw_source_text",
+        "anchor_risk_class",
+    )
+    for item in native_evidence_rows:
+        derived_item = derived_by_key.get(evidence_key(item))
+        if not derived_item:
+            continue
+        for field in context_fields:
+            if item.get(field) in (None, "") and derived_item.get(field) not in (None, ""):
+                item[field] = deepcopy(derived_item.get(field))
+
+    evidence_rows = native_evidence_rows + derived_evidence_rows
 
     rows: List[Dict[str, Any]] = []
     rejected: List[RejectedScoringRow] = []
