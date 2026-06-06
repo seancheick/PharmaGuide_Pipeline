@@ -41,7 +41,10 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
+from scoring_v4.modules.brand_testing_posture import (
+    gmp_facility_evidence,
+    score_brand_testing_posture,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -164,6 +167,16 @@ def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dic
         return min(nsf_gmp_pts, cap), {
             "source": "verified_cert_implies_gmp",
             "program": inferred,
+            "raw": nsf_gmp_pts,
+        }
+    # Facility-level GMP: exact-matched manufacturer evidence can fill B4b only
+    # when the manufacturer corpus explicitly says GMP/cGMP/facility/manufacturing
+    # quality. Product-only NSF/USP wording stays in B4a or product-cert→GMP.
+    facility = gmp_facility_evidence(product)
+    if facility:
+        return min(nsf_gmp_pts, cap), {
+            "source": "manufacturer_facility_gmp",
+            "program": facility,
             "raw": nsf_gmp_pts,
         }
     if bool(gmp.get("fda_registered")):

@@ -540,3 +540,48 @@ def test_inferred_gmp_beats_fda_registered_only() -> None:
 
     assert payload["components"]["B4b_gmp"] == 4.0
     assert payload["metadata"]["B4b_gmp_inferred_from_cert"] == "NSF Sport"
+
+
+def test_facility_gmp_inferred_from_explicit_manufacturer_gmp_evidence(monkeypatch) -> None:
+    """A known manufacturer with explicit GMP/facility evidence earns B4b
+    facility GMP even when this product has no verified product-specific cert."""
+    from scoring_v4.modules import generic_trust, brand_testing_posture
+    monkeypatch.setattr(
+        brand_testing_posture, "_top_manufacturers_by_id",
+        lambda: {"MANUF_THORNE": {"id": "MANUF_THORNE",
+                                  "evidence": ["NSF GMP-registered facility", "third-party tested"]}},
+    )
+    payload = generic_trust.score_trust(
+        _product(top_level={
+            "manufacturer_data": {"top_manufacturer": {
+                "found": True, "match_type": "exact", "manufacturer_id": "MANUF_THORNE"}},
+        })
+    )
+    assert payload["components"]["B4b_gmp"] == 4.0
+    assert payload["metadata"].get("B4b_gmp_inferred_from_manufacturer_facility")
+
+
+def test_facility_gmp_not_inferred_from_soft_or_product_only_evidence(monkeypatch) -> None:
+    """Organic/Non-GMO, product-only certs (NSF/USP), and purity testing
+    (IFOS/ConsumerLab) do NOT prove every product is made in an audited GMP
+    facility."""
+    from scoring_v4.modules import generic_trust, brand_testing_posture
+    monkeypatch.setattr(
+        brand_testing_posture, "_top_manufacturers_by_id",
+        lambda: {"MANUF_SOFT": {"id": "MANUF_SOFT",
+                                "evidence": [
+                                    "USDA Organic",
+                                    "IFOS 5-star rated",
+                                    "ConsumerLab tested",
+                                    "NSF Certified for Sport",
+                                    "USP-verified select products",
+                                ]}},
+    )
+    payload = generic_trust.score_trust(
+        _product(top_level={
+            "manufacturer_data": {"top_manufacturer": {
+                "found": True, "match_type": "exact", "manufacturer_id": "MANUF_SOFT"}},
+        })
+    )
+    assert payload["components"]["B4b_gmp"] == 0.0
+    assert not payload["metadata"].get("B4b_gmp_inferred_from_manufacturer_facility")

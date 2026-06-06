@@ -40,6 +40,72 @@ SOFT_QUALITY_POSTURE_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Manufacturer evidence that explicitly describes audited GMP / manufacturing
+# facility quality. Keep this stricter than product-cert rules: an NSF/USP
+# product certification can imply GMP for that SKU through certification_data,
+# but a broad top-manufacturer evidence string like "USP-verified products" does
+# not prove every product from the manufacturer is made in the same audited GMP
+# facility.
+GMP_FACILITY_EVIDENCE_RE = re.compile(
+    r"("
+    r"\bcGMP\b|"
+    r"\bGMP\b|"
+    r"\bGMP[\s-]*(certified|registered|compliant|compliance)\b|"
+    r"\b(certified|registered|audited)[\s-]+GMP\b|"
+    r"\bNSF[\s-]*GMP\b|"
+    r"\bNPA[\s-]*GMP\b|"
+    r"\bUL[\s-]*(Solutions[\s-]*)?GMP\b|"
+    r"\bGMP[\s-]*(facility|facilities|manufacturing|production)\b|"
+    r"\b(manufacturing|production|facility|facilities)[^.;,]{0,80}\bGMP\b|"
+    r"\bFDA[\s-]*registered[\s-]*(facility|facilities)\b"
+    r")",
+    re.IGNORECASE,
+)
+SELF_ASSERTED_FACILITY_RE = re.compile(
+    r"\b(brand|company)\s+(states?|claims?|describes?)\b|\bclaims?\b",
+    re.IGNORECASE,
+)
+AUDITED_FACILITY_EVIDENCE_RE = re.compile(
+    r"("
+    r"\b(certified|registered|audited|licensed|licensing)\b|"
+    r"\b(certification|certifications|certs)\b|"
+    r"\bNSF[\s-]*GMP\b|"
+    r"\bNPA[\s-]*GMP\b|"
+    r"\bUL[\s-]*(Solutions[\s-]*)?certified[\s-]+facility\b|"
+    r"\bTGA[\s-]*registered\b"
+    r")",
+    re.IGNORECASE,
+)
+
+
+def gmp_facility_evidence(product: Dict[str, Any]) -> str | None:
+    """Return explicit facility/manufacturing GMP evidence for an exact top-
+    manufacturer match, or None.
+
+    This is intentionally stricter than product-specific cert→GMP inference.
+    Product certs such as NSF Sport / USP Verified can imply GMP only for the
+    matched SKU/product line through certification_data. Manufacturer-level B4b
+    needs explicit GMP/facility/manufacturing wording.
+    """
+    if not isinstance(product, dict):
+        return None
+    top = _safe_dict(_safe_dict(product.get("manufacturer_data")).get("top_manufacturer"))
+    if not (top.get("found") and _norm(top.get("match_type")) == "exact"):
+        return None
+    manufacturer_id = str(top.get("manufacturer_id") or "").strip()
+    if not manufacturer_id:
+        return None
+    entry = _top_manufacturers_by_id().get(manufacturer_id)
+    if not isinstance(entry, dict):
+        return None
+    for item in entry.get("evidence", []):
+        if not isinstance(item, str) or not GMP_FACILITY_EVIDENCE_RE.search(item):
+            continue
+        if SELF_ASSERTED_FACILITY_RE.search(item) and not AUDITED_FACILITY_EVIDENCE_RE.search(item):
+            continue
+        return item[:60]
+    return None
+
 
 def score_brand_testing_posture(product: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
     """Return low brand-level testing posture score and audit metadata."""

@@ -25,7 +25,10 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     get_active_ingredients,
 )
-from scoring_v4.modules.brand_testing_posture import score_brand_testing_posture
+from scoring_v4.modules.brand_testing_posture import (
+    gmp_facility_evidence,
+    score_brand_testing_posture,
+)
 
 
 _DHA_EPA_WORD_BOUNDARY_RE = re.compile(r"\b(epa|dha)\b", re.IGNORECASE)
@@ -190,6 +193,12 @@ def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     inferred = _gmp_implied_by_verified_cert(product)
     if inferred:
         return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_cert": inferred}
+    # Facility-level GMP: exact-matched manufacturer evidence can fill B4b only
+    # when the manufacturer corpus explicitly says GMP/cGMP/facility/manufacturing
+    # quality. Product-only NSF/USP wording stays in B4a or product-cert→GMP.
+    facility = gmp_facility_evidence(product)
+    if facility:
+        return B4B_GMP_CERTIFIED, {"B4b_gmp_inferred_from_manufacturer_facility": facility}
     if gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
         return B4B_FDA_REGISTERED, {}
     return 0.0, {}

@@ -411,7 +411,12 @@ _CANARY_TRUST_EXPECTED = {
     "326270": 12.0,
     # Brand-only / claimed-only marine cert signals still do not receive B4a.
     # Exact top-manufacturer testing posture now contributes B4d=2.
+    # 288740 (Nordic): evidence text is "third-party purity"/IFOS — no GMP-mandating
+    # keyword, so no facility-GMP B4b (data-wording gap, not policy).
     "288740": 2.0,
+    # 273630 (Garden of Life): manufacturer evidence says NSF certification, but
+    # not GMP/facility/manufacturing quality. Product-only cert language must not
+    # infer facility-level GMP for every SKU.
     "273630": 2.0,
     "239592": 0.0,
     "182968": 0.0,
