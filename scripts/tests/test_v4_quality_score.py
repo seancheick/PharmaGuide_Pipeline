@@ -68,6 +68,29 @@ def test_pillars_use_six_pillar_weights() -> None:
     assert p["safety_hygiene"]["max"] == 10
 
 
+# ---- PR6 category-aware evidence pillar ------------------------------------
+
+def test_evidence_strong_single_not_capped() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    # KSM-66/creatine-like: branded-RCT evidence 18 (the single-ingredient floor)
+    # -> 18/19*20 ~= 18.9, NOT linear-capped at 18.
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(evidence=18)))
+    assert out["quality_pillars_v4"]["evidence"]["score"] >= 18.5
+
+
+def test_evidence_weak_single_stays_low() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    # a weak-evidence single (unstudied botanical) must NOT be lifted
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(evidence=6)))
+    assert out["quality_pillars_v4"]["evidence"]["score"] < 8.0
+
+
+def test_evidence_never_exceeds_20() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(evidence=20)))
+    assert out["quality_pillars_v4"]["evidence"]["score"] <= 20.0
+
+
 # ---- PR5 category-aware dose pillar ----------------------------------------
 
 def test_dose_well_dosed_single_reaches_near_full() -> None:
@@ -137,11 +160,6 @@ def test_archetype_classification() -> None:
     assert _archetype("generic", botan) == "generic_botanical_branded"
     assert _archetype("generic", {}) == "generic_single_molecule"
 
-
-def test_evidence_pillar_is_identity_when_caps_match() -> None:
-    from scoring_v4.quality_score import assemble_quality_score
-    out = assemble_quality_score(_shadow(bd=_module_bd(evidence=18)))
-    assert out["quality_pillars_v4"]["evidence"]["score"] == 18.0  # (18/20)*20
 
 
 def test_safety_hygiene_pillar_scales_to_10() -> None:

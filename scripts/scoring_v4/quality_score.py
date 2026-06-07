@@ -125,6 +125,26 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     }
 
 
+def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
+                     cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """Category-aware evidence fit. The branded-RCT/consensus floor caps a single
+    ingredient at 18 (reserving 19-20 for multi-active breadth); the spec forbids
+    capping single-ingredient evidence. Normalize single-purpose archetypes to a 19
+    ceiling so a strong branded/consensus single earns ~19 by HAVING the evidence. A
+    weak-evidence single (low raw) still scores low — focused != automatically high."""
+    sub = cfg["evidence_subscale"]
+    ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
+    score = _num(dim.get("score"))
+    val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    return {
+        "score": val,
+        "max": weight,
+        "reason": f"Evidence fit {_g(score)}/{_g(ref)} for {archetype.replace('_', ' ')} "
+                  f"(single-ingredient evidence not capped → {_g(val)}/{_g(weight)})",
+        "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
+    }
+
+
 def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
                  cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Category-aware purpose-fit dose. Normalize to the archetype's APPROPRIATE-dose
@@ -214,6 +234,8 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
                                                 weight, archetype, cfg)
         elif assembler == "dose":
             pillars[name] = _pillar_dose(dims.get("dose") or {}, weight, archetype, cfg)
+        elif assembler == "evidence":
+            pillars[name] = _pillar_evidence(dims.get("evidence") or {}, weight, archetype, cfg)
         elif "source_dim" in spec:
             pillars[name] = _pillar_from_dim(name, dims.get(spec["source_dim"]) or {},
                                              weight, spec["source_dim"])
