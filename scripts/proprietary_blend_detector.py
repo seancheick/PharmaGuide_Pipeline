@@ -124,12 +124,16 @@ class ProprietaryBlendDetector:
     final scores (that's the scorer's job).
     """
 
-    # Additional patterns for blend detection beyond database terms
-    BLEND_INDICATOR_PATTERNS = [
-        r'proprietary\s+(?:blend|complex|formula|matrix)',
-        r'\b(?:blend|complex|matrix|formula)\b.*\d+\s*(?:mg|g|mcg)',
-        r'\d+\s*(?:mg|g|mcg)\s*(?:blend|complex|matrix|formula)',
-    ]
+    # NOTE: bare name-token blend detection ("\b(blend|complex|matrix|formula)\b")
+    # is intentionally NOT performed here. A marketing suffix token does not make
+    # a single ingredient an opaque blend (e.g. "Curcumin C3 Complex" = curcumin,
+    # "Boron Complex" = boron). Distinguishing a branded single active from a real
+    # blend requires chemical-identity resolution, which lives in the enricher
+    # (`_collect_proprietary_data` / `_is_known_therapeutic`). This detector stays
+    # identity-blind and matches only the curated, multi-word `blend_terms` from
+    # proprietary_blends.json. A former `BLEND_INDICATOR_PATTERNS` constant encoded
+    # such bare-token matching but was never wired in; it was removed because it is
+    # the exact mechanism that mislabels premium single-actives as opaque blends.
 
     EXPLICIT_OPACITY_MARKERS = (
         "proprietary blend",
