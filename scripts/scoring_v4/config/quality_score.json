@@ -1,0 +1,30 @@
+{
+  "_metadata": {
+    "config_name": "quality_score",
+    "version": "1.0.0-phase1",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-07",
+    "description": "PharmaGuide public six-pillar Quality Score (decision score). PHASE 1 = side-by-side scaffold: pillars are LINEAR remaps of the existing v4 module dimensions/bonuses into the 20/20/20/15/15/10 frame. This intentionally reproduces the raw inversion (e.g. creatine ~87) so the bias is visible; category-aware pillar adapters land in later PRs. raw_score_v4_100 (the audit/math score) is NEVER changed.",
+    "phase": "1_linear_mapping"
+  },
+  "pillars": {
+    "formulation":    { "weight": 20, "source_dim": "formulation" },
+    "dose":           { "weight": 20, "source_dim": "dose" },
+    "evidence":       { "weight": 20, "source_dim": "evidence" },
+    "transparency":   { "weight": 15, "source_dim": "transparency" },
+    "verification":   { "weight": 15, "source_bonuses": ["verification_bonus", "manufacturer_trust"], "soft_signal_cap": 3 },
+    "safety_hygiene": { "weight": 10, "source_bonuses": ["safety_hygiene_base"] }
+  },
+  "tiers": [
+    { "min": 95.0, "name": "Elite" },
+    { "min": 90.0, "name": "Excellent" },
+    { "min": 80.0, "name": "Strong" },
+    { "min": 70.0, "name": "Acceptable" },
+    { "min": 55.0, "name": "Weak" },
+    { "min": 0.0,  "name": "Poor" }
+  ],
+  "suppression": {
+    "suppressed_safety_verdicts": ["BLOCKED", "UNSAFE"],
+    "not_scored_verdicts": ["NOT_SCORED"]
+  }
+}

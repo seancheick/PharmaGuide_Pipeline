@@ -63,6 +63,7 @@ from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.modules.sports import score_sports
 from scoring_v4.router import class_for_product
 from scoring_v4.display_calibration import calibrate_display
+from scoring_v4.quality_score import assemble_quality_score
 
 
 # Schema lock — these are the six shadow fields documented in §14 of
@@ -198,7 +199,7 @@ def _carried_verdict_with_completeness_policy(shadow: Dict[str, Any], completene
     return carried
 
 
-def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
+def _score_v4_shadow_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """Score an enriched product against the v4 shadow scorer.
 
     Returns a dict of the six shadow columns. Never raises on malformed
@@ -388,10 +389,23 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
 
-    # Layer 5 — display-layer top-band calibration. Adds shadow_score_v4_display_100
-    # (consumer score) + breakdown["display_calibration"] provenance. raw
-    # (shadow_score_v4_100) is NEVER modified; gated so only SAFE, well-disclosed,
-    # raw>=80 products lift. No-op for null/blocked scores.
-    shadow = calibrate_display(shadow)
+    return shadow
 
+
+def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
+    """Public v4 shadow scorer. Runs the core pipeline, then the two display/score
+    finalizers on EVERY return path (including early BLOCKED / NOT_SCORED returns),
+    so the public contract fields are always present:
+
+      - Layer 5 (display calibration, superseded): shadow_score_v4_display_100.
+        raw is never modified; gated; no-op for null/blocked. Experimental, removed
+        at the app switch once the quality score is cohort-validated.
+      - Layer 6 (public six-pillar Quality Score): quality_score_v4_100 +
+        quality_pillars_v4 + quality_tier + quality_score_status + version, projected
+        from the module breakdown (Phase-1 linear map). raw never modified;
+        BLOCKED/UNSAFE suppress the public number; NOT_SCORED yields not_scored.
+    """
+    shadow = _score_v4_shadow_core(enriched_product)
+    shadow = calibrate_display(shadow)
+    shadow = assemble_quality_score(shadow)
     return shadow
