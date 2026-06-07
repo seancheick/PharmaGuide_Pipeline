@@ -827,6 +827,166 @@ def _clean_nutrasource_text(value: str) -> str:
 
 
 # ============================================================================
+# BSCG Certified Drug Free (live) — bscg.org/certified-drug-free-database
+# ============================================================================
+
+BSCG_DATABASE_URL = "https://www.bscg.org/certified-drug-free-database"
+BSCG_AJAX_URL = "https://www.bscg.org/selected_program"
+# `program` is a comma-separated set of numeric program codes; '1' == Certified
+# Drug Free, the per-SKU banned-substance (anti-doping) program. Other codes
+# (4=CBD, 5=animal supplements) are intentionally excluded here.
+BSCG_DRUG_FREE_CODE = "1"
+# The /selected_program endpoint sits behind a GoDaddy/Sucuri WAF that 403s plain
+# requests. A browser-like UA + a seeding GET (captures the WAF cookie) + the
+# Referer/Origin/X-Requested-With headers the page's own AJAX sends get accepted.
+BSCG_BROWSER_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+)
+
+
+def _clean_bscg_text(value: object) -> str:
+    return re.sub(r"\s+", " ", html.unescape(str(value or ""))).strip()
+
+
+def _parse_bscg_report_date(value: str) -> "datetime | None":
+    """BSCG report dates look like '30 July 2022'. Tolerant parse for max()."""
+    value = (value or "").strip()
+    for fmt in ("%d %B %Y", "%d %b %Y", "%B %d, %Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(value, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def parse_bscg_products_payload(payload: list[dict], snapshot_date: str) -> list[dict]:
+    """Collapse the BSCG /selected_program JSON into one SKU record per product.
+
+    The endpoint returns every BSCG program; we keep only Certified-Drug-Free
+    rows (program code '1'). BSCG certifies by lot, so a single product appears
+    in many rows (one per tested lot). We group by (brand, product) and carry
+    every tested lot in ``lot_numbers_tested`` plus the most-recent report date —
+    matching the registry's per-SKU shape (cf. NSF Sport) instead of emitting one
+    redundant record per lot.
+    """
+    groups: dict[tuple[str, str], dict] = {}
+    for item in payload:
+        codes = {c.strip() for c in str(item.get("program", "")).split(",") if c.strip()}
+        if BSCG_DRUG_FREE_CODE not in codes:
+            continue
+        company = _clean_bscg_text(item.get("company"))
+        product = _clean_bscg_text(item.get("product"))
+        if not company or not product:
+            continue
+        key = (normalize_brand(company), normalize_product(product))
+        grp = groups.get(key)
+        if grp is None:
+            company_slug = str(item.get("company_slug") or "").strip()
+            product_slug = str(item.get("product_slug") or "").strip()
+            source_url = (
+                f"{BSCG_DATABASE_URL}/{company_slug}/{product_slug}"
+                if company_slug and product_slug
+                else BSCG_DATABASE_URL
+            )
+            grp = groups[key] = {
+                "company": company,
+                "product": product,
+                "lots": [],
+                "categories": set(),
+                "countries": set(),
+                "report_dates": [],
+                "source_url": source_url,
+                "product_id": str(item.get("product_id") or ""),
+            }
+        lot = _clean_bscg_text(item.get("product_lot"))
+        if lot and lot not in grp["lots"]:
+            grp["lots"].append(lot)
+        category = _clean_bscg_text(item.get("category"))
+        if category:
+            grp["categories"].add(category)
+        country = _clean_bscg_text(item.get("countries_sold"))
+        if country:
+            grp["countries"].add(country)
+        report_date = _clean_bscg_text(item.get("report_date"))
+        if report_date:
+            grp["report_dates"].append(report_date)
+
+    records: list[dict] = []
+    for grp in groups.values():
+        latest_report = max(
+            grp["report_dates"],
+            key=lambda d: _parse_bscg_report_date(d) or datetime.min,
+            default="",
+        )
+        records.append(
+            {
+                "record_id": _make_record_id(
+                    "BSCG", grp["company"], grp["product"], grp["lots"], grp["product_id"]
+                ),
+                "program": "BSCG",
+                "brand": grp["company"],
+                "product": grp["product"],
+                "brand_normalized": normalize_brand(grp["company"]),
+                "product_normalized": normalize_product(grp["product"]),
+                "scope": "sku",
+                "lot_numbers_tested": grp["lots"],
+                "verified_at": snapshot_date,
+                "source_url": grp["source_url"],
+                "evidence_band": "strong",
+                "report_date": latest_report or None,
+                "category": "; ".join(sorted(grp["categories"])) or None,
+                "countries_sold": "; ".join(sorted(grp["countries"])) or None,
+            }
+        )
+    return records
+
+
+def fetch_bscg_live() -> tuple[list[dict], str]:
+    """Fetch BSCG Certified Drug Free products from the public database.
+
+    Data feeds a DataTables grid via POST /selected_program (JSON, program/cat/
+    type filters; all-zero == everything). We seed a session GET to clear the WAF
+    and filter to the Certified-Drug-Free program in the parser.
+    """
+    snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    session = requests.Session()
+    base_headers = {"User-Agent": BSCG_BROWSER_UA, "Accept-Language": "en-US,en;q=0.9"}
+
+    print(f"GET {BSCG_DATABASE_URL} (seed WAF session)", file=sys.stderr)
+    seed = session.get(BSCG_DATABASE_URL, headers=base_headers, timeout=REQUEST_TIMEOUT)
+    seed.raise_for_status()
+
+    post_headers = {
+        **base_headers,
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Referer": BSCG_DATABASE_URL,
+        "Origin": "https://www.bscg.org",
+    }
+    print(f"POST {BSCG_AJAX_URL} (all programs)", file=sys.stderr)
+    r = session.post(
+        BSCG_AJAX_URL,
+        headers=post_headers,
+        data={"program_id": 0, "cat_id": 0, "type_id": 0},
+        timeout=REQUEST_TIMEOUT,
+    )
+    r.raise_for_status()
+    payload = r.json()
+    if not isinstance(payload, list):
+        raise ValueError(f"unexpected BSCG payload type: {type(payload).__name__}")
+
+    records = parse_bscg_products_payload(payload, snapshot_date)
+    print(
+        f"BSCG Certified Drug Free: {len(records)} product records "
+        f"(collapsed from {len(payload)} program rows)",
+        file=sys.stderr,
+    )
+    return records, snapshot_date
+
+
+# ============================================================================
 # PDF (fixture only, marked stale via recency gate)
 # ============================================================================
 
@@ -1004,6 +1164,7 @@ def main() -> None:
             "live-informed-choice",
             "live-informed-sport",
             "live-ifos",
+            "live-bscg",
             "pdf",
             "all",
         ],
@@ -1096,6 +1257,17 @@ def main() -> None:
             {
                 "program": "IFOS",
                 "url": NUTRASOURCE_CERTIFIED_PRODUCTS_URL,
+                "snapshot_date": snapshot,
+                "records": records,
+            }
+        )
+
+    if args.source in ("live-bscg", "all"):
+        records, snapshot = fetch_bscg_live()
+        sources.append(
+            {
+                "program": "BSCG",
+                "url": BSCG_DATABASE_URL,
                 "snapshot_date": snapshot,
                 "records": records,
             }
