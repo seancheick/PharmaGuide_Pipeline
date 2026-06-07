@@ -53,6 +53,29 @@ def _tier(score: float) -> str:
     return bands[-1]["name"]
 
 
+def _manuf_violation_split(module_bd: Dict[str, Any]) -> Dict[str, float]:
+    """PR3: route a maker's violation deduction into ONE pillar by type.
+
+    The raw ``manufacturer_violations`` deduction lives in the raw score but in NO
+    pillar, so the public quality score is currently BLIND to maker violations (a
+    product with an FDA violation scores identical to a clean one). Split it:
+      - Class I / critical recall in 3y (``class_i_count_3y`` > 0) = safety/contamination
+        → the SAFETY pillar absorbs the deduction.
+      - otherwise (GMP / labeling / quality-system) → the VERIFICATION pillar.
+    Magnitude = the raw deduction itself (same /100 scale), so nothing is invented.
+    B1 (harmful additive) and B7 (overdose) are NOT here — they already lower the
+    formulation/dose pillars (single-count)."""
+    mv = module_bd.get("manufacturer_violations") or {}
+    score = _num(mv.get("score"))  # negative deduction or 0
+    if score >= 0:
+        return {"safety": 0.0, "verification": 0.0}
+    penalty = abs(score)
+    class_i = _num((mv.get("metadata") or {}).get("class_i_count_3y"))
+    if class_i > 0:
+        return {"safety": penalty, "verification": 0.0}
+    return {"safety": 0.0, "verification": penalty}
+
+
 def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) -> Dict[str, Any]:
     score = _num(dim.get("score"))
     mx = _num(dim.get("max"))
@@ -85,6 +108,36 @@ def _pillar_from_bonuses(name: str, module_bd: Dict[str, Any],
         "reason": f"{name.replace('_', ' ').title()} {_g(total_score)}/{_g(total_max)} "
                   f"from {'+'.join(sources)} (Phase-1 → {_g(val)}/{_g(weight)})",
         "components": parts,
+    }
+
+
+def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
+                           cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """Product-level safety pillar (/10). Clean base (no banned/recalled/watchlist) maps
+    to full credit; banned/recalled/watchlist present already zeroes the raw base. PR3:
+    a Class I (critical) manufacturer recall deducts the raw violation magnitude here (the
+    safety/contamination half of the violation split). B1 harmful additive and B7 overdose
+    are intentionally absent — they already lower the formulation/dose pillars, so crediting
+    or re-deducting them here would double-count (>50% of the catalog carries a B1)."""
+    base = module_bd.get("safety_hygiene_base") or {}
+    bscore = _num(base.get("score"))
+    bmax = _num(base.get("max"))
+    clean = round((bscore / bmax) * weight, 1) if bmax else 0.0
+    clean = max(0.0, min(float(weight), clean))
+    safety_pen = _manuf_violation_split(module_bd)["safety"]
+    val = round(max(0.0, min(float(weight), clean - safety_pen)), 1)
+    if safety_pen > 0:
+        reason = (f"Safety {_g(val)}/{_g(weight)} — clean base {_g(clean)} "
+                  f"− Class I recall {_g(safety_pen)} (critical safety violation)")
+    elif bscore <= 0:
+        reason = f"Safety {_g(val)}/{_g(weight)} — banned/recalled/watchlist signal present"
+    else:
+        reason = f"Safety {_g(val)}/{_g(weight)} — no banned/recalled/watchlist, no safety recall"
+    return {
+        "score": val,
+        "max": weight,
+        "reason": reason,
+        "components": {"clean_base": clean, "class_i_recall_penalty": safety_pen},
     }
 
 
@@ -209,13 +262,21 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                   f"(data unknown → neutral baseline {sub['neutral_baseline']:g}), soft {soft:g}")
         fail_open = True
 
-    val = round(max(0.0, min(cap, total)), 1)
+    # PR3: a quality-system (non-critical) manufacturer violation lowers verification.
+    # Applied AFTER the positive cert logic + clamp so it composes with future baseline
+    # changes (PR2.1) as an independent negative term.
+    qs_pen = _manuf_violation_split(module_bd)["verification"]
+    positive = min(cap, total)
+    val = round(max(0.0, positive - qs_pen), 1)
+    if qs_pen > 0:
+        reason += f"; − quality-system violation {qs_pen:g}"
     return {
         "score": val,
         "max": weight,
         "reason": reason,
         "components": {"cert": cert, "coa_batch": coa_batch, "gmp": gmp,
-                       "brand_testing": testing, "soft": soft, "fail_open_neutral": fail_open},
+                       "brand_testing": testing, "soft": soft, "fail_open_neutral": fail_open,
+                       "quality_system_violation_penalty": qs_pen},
     }
 
 
@@ -229,6 +290,8 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
         assembler = spec.get("assembler")
         if assembler == "verification":
             pillars[name] = _pillar_verification(module_bd, weight, cfg)
+        elif assembler == "safety_hygiene":
+            pillars[name] = _pillar_safety_hygiene(module_bd, weight, cfg)
         elif assembler == "formulation":
             pillars[name] = _pillar_formulation(dims.get("formulation") or {},
                                                 weight, archetype, cfg)

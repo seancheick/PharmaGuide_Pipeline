@@ -20,8 +20,8 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 def _module_bd(form=24, form_max=30, dose=20, evidence=18, transparency=10, transp_max=10,
-               verification=4, manuf_trust=3, hygiene=4):
-    return {
+               verification=4, manuf_trust=3, hygiene=4, violation=0.0, class_i=0):
+    bd = {
         "dimensions": {
             "formulation": {"score": form, "max": form_max},
             "dose": {"score": dose, "max": 25},
@@ -32,6 +32,15 @@ def _module_bd(form=24, form_max=30, dose=20, evidence=18, transparency=10, tran
         "manufacturer_trust": {"score": manuf_trust, "max": 5},
         "safety_hygiene_base": {"score": hygiene, "max": 4},
     }
+    if violation:
+        # raw manufacturer-violation deduction is negative; class_i_count_3y splits
+        # critical (safety) from quality-system (verification) per PR3.
+        bd["manufacturer_violations"] = {
+            "score": -abs(float(violation)),
+            "metadata": {"class_i_count_3y": int(class_i),
+                         "violation_count": max(1, int(class_i))},
+        }
+    return bd
 
 
 def _shadow(raw=86.0, verdict="SAFE", module="sports", bd=None, suppressed_reason=None):
@@ -162,10 +171,69 @@ def test_archetype_classification() -> None:
 
 
 
-def test_safety_hygiene_pillar_scales_to_10() -> None:
+def test_safety_hygiene_pillar_clean_product_full_credit() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow(bd=_module_bd(hygiene=4)))
-    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 10.0  # (4/4)*10
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 10.0  # clean base 4/4 → 10
+
+
+def test_safety_hygiene_banned_recalled_zeroes_pillar() -> None:
+    # raw safety_hygiene_base = 0 when banned/recalled/watchlist present
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(verdict="CAUTION", bd=_module_bd(hygiene=0)))
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 0.0
+
+
+# ---- PR3: manufacturer-violation split (was invisible in the public score) --
+
+def test_quality_system_violation_lowers_verification_not_safety() -> None:
+    # class_i == 0 → quality-system violation → verification pillar absorbs it
+    from scoring_v4.quality_score import assemble_quality_score
+    base = assemble_quality_score(_shadow(module="generic", bd=_module_bd()))
+    viol = assemble_quality_score(_shadow(module="generic", bd=_module_bd(violation=2.5, class_i=0)))
+    bp = base["quality_pillars_v4"]; vp = viol["quality_pillars_v4"]
+    assert vp["verification"]["score"] == round(bp["verification"]["score"] - 2.5, 1)
+    assert vp["safety_hygiene"]["score"] == bp["safety_hygiene"]["score"]  # safety untouched
+
+
+def test_class_i_recall_lowers_safety_not_verification() -> None:
+    # class_i > 0 → critical safety recall → safety pillar absorbs it
+    from scoring_v4.quality_score import assemble_quality_score
+    base = assemble_quality_score(_shadow(module="generic", bd=_module_bd()))
+    viol = assemble_quality_score(_shadow(module="generic", bd=_module_bd(violation=4.0, class_i=1)))
+    bp = base["quality_pillars_v4"]; vp = viol["quality_pillars_v4"]
+    assert vp["safety_hygiene"]["score"] == round(bp["safety_hygiene"]["score"] - 4.0, 1)
+    assert vp["verification"]["score"] == bp["verification"]["score"]  # verification untouched
+
+
+def test_violation_penalty_floors_pillar_at_zero() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    viol = assemble_quality_score(_shadow(module="generic", bd=_module_bd(violation=99.0, class_i=1)))
+    assert viol["quality_pillars_v4"]["safety_hygiene"]["score"] == 0.0
+
+
+def test_b1_harmful_additive_does_not_touch_safety_pillar() -> None:
+    # a low formulation (B1 penalty already applied there) must NOT also lower safety
+    # — no double-count. Safety only moves on banned/recalled/watchlist or violations.
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(form=2, form_max=30, hygiene=4)))
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 10.0
+
+
+def test_violation_makes_quality_reflect_it_and_sum_holds() -> None:
+    # the gap PR3 fixes: a violation product used to score IDENTICAL to a clean one
+    from scoring_v4.quality_score import assemble_quality_score
+    clean = assemble_quality_score(_shadow(module="generic", bd=_module_bd()))
+    viol = assemble_quality_score(_shadow(module="generic", bd=_module_bd(violation=2.5, class_i=0)))
+    assert viol["quality_score_v4_100"] < clean["quality_score_v4_100"]
+    s = round(sum(p["score"] for p in viol["quality_pillars_v4"].values()), 1)
+    assert s == viol["quality_score_v4_100"]
+
+
+def test_violation_does_not_change_raw_score() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    viol = assemble_quality_score(_shadow(raw=70.2, module="generic", bd=_module_bd(violation=2.5)))
+    assert viol["raw_score_v4_100"] == 70.2  # raw audit score never moves
 
 
 # ---- raw preservation ------------------------------------------------------
@@ -243,7 +311,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert "phase1" in out["quality_score_version"] or "1.0.0" in out["quality_score_version"]
+    assert out["quality_score_version"].startswith("1.0.0")  # versioned public contract
 
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------

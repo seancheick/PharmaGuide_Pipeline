@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.0-phase1",
+    "version": "1.0.0-pr3",
     "schema_version": "1.0.0",
     "last_updated": "2026-06-07",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score). PHASE 1 = side-by-side scaffold: pillars are LINEAR remaps of the existing v4 module dimensions/bonuses into the 20/20/20/15/15/10 frame. This intentionally reproduces the raw inversion (e.g. creatine ~87) so the bias is visible; category-aware pillar adapters land in later PRs. raw_score_v4_100 (the audit/math score) is NEVER changed.",
-    "phase": "1_linear_mapping"
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2); safety_hygiene is a product-level pillar that routes a maker's Class I recall here and quality-system violations to verification (PR3). Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 (the audit/math score) is NEVER changed. v4 is SHADOW-ONLY until app cutover.",
+    "phase": "pr3_safety_hygiene_split"
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
@@ -13,7 +13,11 @@
     "evidence":       { "weight": 20, "assembler": "evidence" },
     "transparency":   { "weight": 15, "source_dim": "transparency" },
     "verification":   { "weight": 15, "assembler": "verification" },
-    "safety_hygiene": { "weight": 10, "source_bonuses": ["safety_hygiene_base"] }
+    "safety_hygiene": { "weight": 10, "assembler": "safety_hygiene" }
+  },
+  "safety_hygiene_subscale": {
+    "_doc": "PR3: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Manufacturer violations were previously absent from EVERY pillar, so the public score was blind to them (a violation product scored identical to a clean one). B1 harmful additive and B7 overdose are NOT here — they already lower the formulation/dose pillars, so re-deducting would double-count >50% of the catalog.",
+    "base_max": 10.0
   },
   "evidence_subscale": {
     "_doc": "PR6: category-aware evidence fit. The raw evidence dimension's branded-RCT/consensus floor caps a SINGLE ingredient at 18, reserving 19-20 for multi-active breadth. The spec explicitly forbids this ('do not cap single-ingredient evidence just because it is single; a focused product can have better evidence than a blend'). Normalize single-purpose archetypes to an evidence ceiling of 19 so a strong branded/consensus single (KSM-66, creatine, EPA/DHA) earns ~19 by HAVING the evidence — a weak single (low raw evidence) still scores low. 19 not 20 keeps a sliver for the rare perfect-evidence case; multi/breadth archetypes keep 20.",
