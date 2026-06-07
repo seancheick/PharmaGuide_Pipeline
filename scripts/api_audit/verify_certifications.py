@@ -327,6 +327,85 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
 
 
 # ============================================================================
+# NSF/ANSI 455-2 GMP (live) — info.nsf.org/Certified/455GMP/Listings.asp
+# ============================================================================
+
+NSF_455_GMP_URL = "https://info.nsf.org/Certified/455GMP/Listings.asp"
+# 455-2 is the Dietary Supplements GMP standard (facility audit). 455-1 covers
+# label claims; 455-3 the sport/banned-substance annex. We snapshot 455-2 only.
+NSF_455_2_STANDARD = "455-2GMP"
+
+
+def parse_nsf_455_listing(
+    html_text: str, snapshot_date: str, standard_label: str = "NSF/ANSI 455-2"
+) -> list[dict]:
+    """Parse the NSF/ANSI 455-2 GMP facility-registration listing.
+
+    These are FACILITY registrations (company + facility, no finished products),
+    so each record carries ``scope='facility'`` and an empty ``product`` — the
+    resolver brand-matches them to ``brand_only`` (manufacturer-trust signal),
+    never B4a. Structure mirrors the NSF/ANSI 173 page: companies split by
+    ``<hr noshade>``, name in ``<font size='+2'>``, NSF company id embedded in
+    the logo image path (``/logo/C0006061.gif``) → a verifiable per-company URL.
+    """
+    from bs4 import BeautifulSoup
+
+    records: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+    chunks = re.split(r"<hr\s+noshade\s*>", html_text, flags=re.IGNORECASE)
+    for chunk_html in chunks:
+        chunk = BeautifulSoup(chunk_html, "lxml")
+        name_el = chunk.find("font", attrs={"size": "+2"})
+        if not name_el:
+            continue
+        company = name_el.get_text(strip=True).rstrip("\xa0").strip()
+        if not company or company.upper().startswith("NSF"):
+            continue
+        cid_match = re.search(r"/logo/(C\d+)\.gif", chunk_html, re.IGNORECASE)
+        cid = cid_match.group(1) if cid_match else ""
+        source_url = (
+            f"{NSF_455_GMP_URL}?Company={cid}&Standard={NSF_455_2_STANDARD}"
+            if cid
+            else f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}"
+        )
+        key = (normalize_brand(company), cid)
+        if key in seen:
+            continue
+        seen.add(key)
+        records.append(
+            {
+                "record_id": _make_record_id("NSF/ANSI 455", company, "", [], cid),
+                "program": "NSF/ANSI 455",
+                "brand": company,
+                "product": "",
+                "brand_normalized": normalize_brand(company),
+                "product_normalized": "",
+                "scope": "facility",
+                "lot_numbers_tested": [],
+                "verified_at": snapshot_date,
+                "source_url": source_url,
+                "evidence_band": "strong",
+                "standard": standard_label,
+                "company_id": cid or None,
+            }
+        )
+    return records
+
+
+def fetch_nsf_455_live() -> tuple[list[dict], str]:
+    """Fetch NSF/ANSI 455-2 (Dietary Supplements GMP) facility registrations."""
+    snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    url = f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}"
+    print(f"GET {url}", file=sys.stderr)
+    r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    r.raise_for_status()
+    r.encoding = "utf-8"
+    records = parse_nsf_455_listing(r.text, snapshot_date)
+    print(f"NSF/ANSI 455-2: {len(records)} facility registrations", file=sys.stderr)
+    return records, snapshot_date
+
+
+# ============================================================================
 # USP Verified (live) — quality-supplements.org/usp_verified_products
 # ============================================================================
 
@@ -1160,6 +1239,7 @@ def main() -> None:
         choices=[
             "live-nsf-sport",
             "live-nsf-173",
+            "live-nsf-455",
             "live-usp",
             "live-informed-choice",
             "live-informed-sport",
@@ -1213,6 +1293,17 @@ def main() -> None:
             {
                 "program": "NSF Certified",
                 "url": NSF_173_URL,
+                "snapshot_date": snapshot,
+                "records": records,
+            }
+        )
+
+    if args.source in ("live-nsf-455", "all"):
+        records, snapshot = fetch_nsf_455_live()
+        sources.append(
+            {
+                "program": "NSF/ANSI 455",
+                "url": f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}",
                 "snapshot_date": snapshot,
                 "records": records,
             }
