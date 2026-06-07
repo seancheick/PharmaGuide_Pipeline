@@ -140,6 +140,40 @@ def test_key_form_support_credits_core_multi_forms_without_prenatal_requirement(
     assert "missing_prenatal_dha" not in payload["penalties"]
 
 
+def test_presence_floor_preserves_positive_multi_form_signal_after_penalty_clamp(monkeypatch) -> None:
+    """If a formulation penalty exceeds positive form signal, keep a small
+    presence floor instead of displaying 0 for a mapped active."""
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    monkeypatch.setattr(formulation, "GUMMY_FORMULATION_PENALTY", 10.0)
+
+    product = _product(
+        form_factor="gummy",
+        ingredients=[
+            _ingredient("vitamin_c", bio_score=1, matched_form="ascorbic acid"),
+        ],
+    )
+
+    payload = formulation.score_formulation(product)
+
+    assert payload["score"] == formulation.FORMULATION_PRESENCE_FLOOR
+    assert payload["metadata"]["presence_floor"]["applied"] is True
+    assert payload["metadata"]["presence_floor"]["pre_floor_score"] < 0
+
+
+def test_presence_floor_does_not_apply_to_multi_with_no_positive_form_signal(monkeypatch) -> None:
+    import scoring_v4.modules.multi_prenatal_formulation as formulation
+
+    monkeypatch.setattr(formulation, "GUMMY_FORMULATION_PENALTY", 10.0)
+
+    product = _product(form_factor="gummy", ingredients=[])
+
+    payload = formulation.score_formulation(product)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["presence_floor"]["applied"] is False
+
+
 def test_dose_panel_structure_rewards_individual_dose_disclosure() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 

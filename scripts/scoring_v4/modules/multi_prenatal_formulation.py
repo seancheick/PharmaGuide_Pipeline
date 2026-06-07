@@ -32,6 +32,7 @@ from scoring_v4.modules.generic_helpers import (
 
 
 CAP_FORMULATION = 25.0
+FORMULATION_PRESENCE_FLOOR = 2.0
 CAP_PANEL_FORM_QUALITY = 12.0
 CAP_PREMIUM_FORM_DIVERSITY = 4.0
 CAP_KEY_FORM_SUPPORT = 5.0
@@ -76,6 +77,13 @@ def _clamp(low: float, high: float, value: float) -> float:
 
 def _round(value: float) -> float:
     return round(float(value), 2)
+
+
+def _has_mapped_formulation_active(product: Dict[str, Any]) -> bool:
+    for ing in _scorable_ingredients(product):
+        if bool(ing.get("mapped", False)) or canonical_key(ing):
+            return True
+    return False
 
 
 def _ingredient_text(ingredient: Dict[str, Any]) -> str:
@@ -318,7 +326,22 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     positive = sum(components.values())
     penalty_magnitude = sum(abs(value) for value in penalties.values())
-    score = _round(_clamp(0.0, CAP_FORMULATION, positive - penalty_magnitude))
+    pre_floor_score = positive - penalty_magnitude
+    presence_floor_applied = (
+        _has_mapped_formulation_active(product)
+        and positive > 0
+        and penalty_magnitude > 0
+        and pre_floor_score <= 0
+    )
+    score = _clamp(0.0, CAP_FORMULATION, pre_floor_score)
+    if presence_floor_applied:
+        score = max(score, FORMULATION_PRESENCE_FLOOR)
+    score = _round(score)
+    metadata["presence_floor"] = {
+        "target": FORMULATION_PRESENCE_FLOOR,
+        "pre_floor_score": _round(pre_floor_score),
+        "applied": presence_floor_applied,
+    }
 
     return {
         "score": score,

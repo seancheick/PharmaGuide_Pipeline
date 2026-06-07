@@ -235,6 +235,62 @@ def test_a2_premium_forms_does_not_use_sole_blend_parent_exemption() -> None:
     payload = score_formulation(product)
 
     assert payload["components"]["A1_bio_score"] == 14.0
+
+
+def test_presence_floor_preserves_positive_form_signal_after_penalty_clamp() -> None:
+    """A harmful-additive penalty should not erase the separate fact that a
+    mapped active has some form-quality signal."""
+    from scoring_v4.modules.generic_formulation import FORMULATION_PRESENCE_FLOOR, score_formulation
+
+    product = _product(
+        supp_type="multi",
+        ingredients=[
+            _ingredient(
+                name="Magnesium Oxide",
+                canonical_id="magnesium_oxide",
+                bio_score=3,
+            )
+        ],
+        contaminant_data={
+            "harmful_additives": {
+                "additives": [
+                    {"additive_id": "one", "severity_level": "critical"},
+                    {"additive_id": "two", "severity_level": "high"},
+                ]
+            }
+        },
+    )
+
+    payload = score_formulation(product)
+
+    assert payload["score"] == FORMULATION_PRESENCE_FLOOR
+    assert payload["metadata"]["presence_floor"]["applied"] is True
+    assert payload["metadata"]["presence_floor"]["pre_floor_score"] < 0
+
+
+def test_presence_floor_does_not_apply_without_mapped_active() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Unknown Active",
+                canonical_id="",
+                bio_score=None,
+                quantity=None,
+            )
+        ],
+        contaminant_data={
+            "harmful_additives": {
+                "additives": [{"additive_id": "one", "severity_level": "critical"}]
+            }
+        },
+    )
+
+    payload = score_formulation(product)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["presence_floor"]["applied"] is False
     assert payload["components"]["A2_premium_forms"] == 0.0
 
 

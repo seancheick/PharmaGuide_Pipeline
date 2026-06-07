@@ -95,6 +95,7 @@ A6_POINTS_SOLID = 3.0          # bio 12-13.99
 A6_POINTS_ELITE = 4.0          # bio >= 14
 CAP_ENZYME = 2.0
 DIMENSION_CAP = 30.0
+FORMULATION_PRESENCE_FLOOR = 2.0
 PREMIUM_SINGLE_FLOOR_SOLID = 22.0
 PREMIUM_SINGLE_FLOOR_ELITE = 24.0
 
@@ -592,7 +593,16 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         positive += premium_single_floor_adjustment
     penalty_total = _sum_penalty_magnitudes(penalties)
 
-    score = _clamp(0.0, DIMENSION_CAP, positive - penalty_total)
+    pre_floor_score = positive - penalty_total
+    presence_floor_applied = (
+        _has_mapped_formulation_active(product)
+        and positive > 0
+        and penalty_total > 0
+        and pre_floor_score <= 0
+    )
+    score = _clamp(0.0, DIMENSION_CAP, pre_floor_score)
+    if presence_floor_applied:
+        score = max(score, FORMULATION_PRESENCE_FLOOR)
 
     # Record the excellence rollup clamp in the breakdown for explainability.
     if a5_excess > 0:
@@ -617,6 +627,11 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "adjustment": round(premium_single_floor_adjustment, 4),
                 "applied": premium_single_floor_adjustment > 0,
             },
+            "presence_floor": {
+                "target": FORMULATION_PRESENCE_FLOOR,
+                "pre_floor_score": round(pre_floor_score, 4),
+                "applied": presence_floor_applied,
+            },
         },
     }
 
@@ -626,6 +641,16 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
 
 def _clamp(lo: float, hi: float, value: float) -> float:
     return max(lo, min(hi, value))
+
+
+def _has_mapped_formulation_active(product: Dict[str, Any]) -> bool:
+    """True when the product has a mapped, dose-bearing active eligible for
+    formulation scoring. The presence floor only protects a real positive form
+    signal from being erased by unrelated penalties."""
+    for ing in scorable_ingredients(product, allow_sole_mapped_blend=True):
+        if bool(ing.get("mapped", False)) or canonical_key(ing):
+            return True
+    return False
 
 
 def _known_enzyme_name(ingredient: Dict[str, Any]) -> str | None:
