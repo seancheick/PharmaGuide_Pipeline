@@ -59,7 +59,7 @@
       "proteins": 16,
       "vitamins": 22
     },
-    "schema_version": "5.4.2",
+    "schema_version": "5.4.3",
     "last_updated": "2026-06-06",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -1596,6 +1596,16 @@
           "Removed over-broad generic amino-acid aliases from branched_chain_amino_acids::bcaa 2:1:1 so generic amino-acid/EAA labels do not resolve to a premium BCAA ratio.",
           "Removed natural-source bonus from branched_chain_amino_acids::branched chain amino acids (standard).",
           "Lowered dha/epa/fish_oil/ceramides/hemp_seed_oil unspecified forms to bio_score 8, natural=false, score=8 so unspecified labels do not outscore disclosed lower-quality specific forms."
+        ],
+        "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
+      },
+      "5.4.3": {
+        "date": "2026-06-06",
+        "audit": "IQM v4 defensibility audit — replay safe natural-bonus fixes from claude/eloquent-ride-Bq8cO batches 28 and 30 onto current main",
+        "changes": [
+          "Lowered manuka_honey::manuka honey (unspecified) below disclosed ungraded manuka and removed its natural-source bonus.",
+          "Removed natural-source bonus from catch-all generic forms pine_bark_extract::generic pine bark extract and lactobacillus_salivarius::generic lactobacillus salivarius.",
+          "Removed natural-source bonus from manufactured delivery forms: liposomal saw palmetto, quercetin phytosome, liposomal probiotics, silymarin phytosome, and micellized K1."
         ],
         "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
       }
@@ -11322,8 +11332,8 @@
     "forms": {
       "liposomal saw palmetto": {
         "bio_score": 12,
-        "natural": true,
-        "score": 15,
+        "natural": false,
+        "score": 12,
         "absorption": "liposomal saw palmetto; mechanistic claim; lipid baseline already good (oral lipid)",
         "technology": "Phospholipid encapsulation technology",
         "notes": "Saw palmetto's active fatty acids (lauric, oleic, myristic) wrapped in phospholipid liposomes for enhanced gut absorption — claimed 2–3x greater bioavailability than conventional extracts. Liposomal delivery protects the lipophilic compounds from bile salt disruption. Limited head-to-head trials vs CO2 extract specifically, but the delivery technology is well-established for fat-soluble botanicals. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
@@ -14855,8 +14865,8 @@
     "forms": {
       "quercetin phytosome": {
         "bio_score": 13,
-        "natural": true,
-        "score": 16,
+        "natural": false,
+        "score": 13,
         "absorption": "phytosome lipid carrier; modest 2-4× over rutin baseline; still class-poor",
         "notes": "Indena's Quercefit — quercetin bound to sunflower lecithin (phospholipid phytosome). About 20x better absorption than standard quercetin (Riva 2019). The best-studied enhanced quercetin form with clinical data for respiratory health and antioxidant support. If you want quercetin that actually gets absorbed, this is the top choice. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -15243,8 +15253,8 @@
       },
       "liposomal probiotics": {
         "bio_score": 13,
-        "natural": true,
-        "score": 16,
+        "natural": false,
+        "score": 13,
         "absorption": "enhanced",
         "notes": "Liposome-encapsulated strains for enhanced acid protection and targeted intestinal release. Premium delivery technology with improved shelf stability.",
         "aliases": [
@@ -20944,8 +20954,8 @@
     "forms": {
       "silymarin phytosome": {
         "bio_score": 12,
-        "natural": true,
-        "score": 15,
+        "natural": false,
+        "score": 12,
         "absorption": "3.4x higher bioavailability vs standard silymarin (PMID:2088770)",
         "notes": "Silybin-phosphatidylcholine complex (Siliphos/IdB 1016). Human crossover PK (PMID:2088770, Barzaghi 1990, n=9): 3.4x relative bioavailability vs standard silymarin at equivalent 360mg silibinin. The '4-10x' claim is inflated — 3.4x is the peer-reviewed figure. Still the best-studied enhanced silymarin form for hepatoprotection.",
         "aliases": [
@@ -22508,8 +22518,8 @@
       },
       "generic pine bark extract": {
         "bio_score": 9,
-        "natural": true,
-        "score": 12,
+        "natural": false,
+        "score": 9,
         "absorption": "poor (~1-8%; OPCs gut-degraded, monomers absorbed)",
         "notes": "Non-Pycnogenol pine bark extract from various Pinus species (thunbergii, densiflora, massoniana, radiata). Variable procyanidin content and composition. Pycnogenol research cannot be extrapolated to other species (PMID:38757126). Same absorption limitation: procyanidin oligomers not absorbed intact, only monomers and microbial catabolites reach circulation. PMID:38757126 (Bayer & Högger 2024 review) confirms oligomeric procyanidins are not bioavailable as parent compounds; colonic microbiota metabolize them to phenolic acids.",
         "aliases": [
@@ -35255,8 +35265,8 @@
       },
       "generic lactobacillus salivarius": {
         "bio_score": 8,
-        "natural": true,
-        "score": 11,
+        "natural": false,
+        "score": 8,
         "absorption": "variable",
         "notes": "Non-strain-specific L. salivarius entry. Benefits may vary significantly without strain identification. Some strains (e.g., HA-118, UCC118) have antimicrobial bacteriocin production. Look for strain designation. B34 audit 2026-04-25: bulk class-application (variable class) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -36045,14 +36055,14 @@
       },
       "micellized k1": {
         "bio_score": 11,
-        "natural": true,
+        "natural": false,
         "absorption": "excellent (~90%)",
         "notes": "K1 processed into water-soluble micelles for significantly enhanced absorption. Standard K1 is poorly absorbed (~10-20% from food); micellization can dramatically improve this. Valuable for people with fat malabsorption or those taking K1 without a fat-containing meal.",
         "aliases": [
           "micellized vitamin k1",
           "micellized phylloquinone"
         ],
-        "score": 14,
+        "score": 11,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
@@ -43205,9 +43215,9 @@
         }
       },
       "manuka honey (unspecified)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
         "absorption": "unspecified manuka grade; local-action mechanism applies",
         "notes": "Manuka honey grade not specified. Conservative scoring. Manuka's benefits depend on MGO content — verify UMF or MGO certification on label. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [

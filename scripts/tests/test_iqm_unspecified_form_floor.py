@@ -141,6 +141,7 @@ _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'turkey_tail',
     'button_mushroom',
     'auricularia',
+    'manuka_honey',
 }
 
 _LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD = {
@@ -152,6 +153,7 @@ _LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD = {
     'turkey_tail': ('turkey tail (unspecified)', 7, 7, 8),
     'button_mushroom': ('button mushroom (unspecified)', 6, 6, 7),
     'auricularia': ('auricularia (unspecified)', 6, 6, 7),
+    'manuka_honey': ('manuka honey (unspecified)', 8, 8, 9),
 }
 
 

@@ -38,6 +38,53 @@ def test_generic_bcaa_standard_does_not_receive_natural_bonus(iqm: dict) -> None
 
 
 @pytest.mark.parametrize(
+    "parent,form_name",
+    [
+        ("pine_bark_extract", "generic pine bark extract"),
+        ("lactobacillus_salivarius", "generic lactobacillus salivarius"),
+    ],
+)
+def test_generic_catch_all_forms_do_not_receive_natural_bonus(
+    iqm: dict,
+    parent: str,
+    form_name: str,
+) -> None:
+    form = iqm[parent]["forms"][form_name]
+    assert form["natural"] is False
+    assert form["score"] == form["bio_score"]
+
+
+@pytest.mark.parametrize(
+    "parent,form_name",
+    [
+        ("saw_palmetto", "liposomal saw palmetto"),
+        ("quercetin", "quercetin phytosome"),
+        ("probiotics", "liposomal probiotics"),
+        ("milk_thistle", "silymarin phytosome"),
+        ("vitamin_k1", "micellized k1"),
+    ],
+)
+def test_manufactured_delivery_forms_do_not_receive_natural_bonus(
+    iqm: dict,
+    parent: str,
+    form_name: str,
+) -> None:
+    form = iqm[parent]["forms"][form_name]
+    assert form["natural"] is False
+    assert form["score"] == form["bio_score"]
+
+
+def test_manuka_unspecified_does_not_outrank_disclosed_ungraded_form(iqm: dict) -> None:
+    forms = iqm["manuka_honey"]["forms"]
+    unspecified = forms["manuka honey (unspecified)"]
+    ungraded = forms["ungraded manuka"]
+
+    assert unspecified["natural"] is False
+    assert unspecified["score"] == unspecified["bio_score"]
+    assert unspecified["score"] < ungraded["score"]
+
+
+@pytest.mark.parametrize(
     "parent,unspecified,specific_forms",
     [
         ("dha", "dha (unspecified)", ["DHA fish oil ethyl ester"]),
