@@ -184,41 +184,44 @@ def _brand_from_nsf_sport_img(img_src: str) -> str:
     return ""
 
 
-def _fetch_nsf_sport_detail(listing_id: str) -> dict:
-    """Fetch lot numbers and manufacturer from a single NSF Sport detail page."""
+def parse_nsf_sport_detail_html(html_text: str) -> dict:
+    """Parse an NSF Sport listing-detail page for lot numbers + facility metadata.
+
+    The page is a ``<tr><th>Field</th><td>value<br>value…</td></tr>`` table, e.g.
+    ``<tr><th>Lot #</th><td>48715<br/>49759<br/>…</td></tr>`` — so the values are
+    in the cell adjacent to a header label, NOT on the same text line with a
+    ``:``/``-`` separator. (The previous same-line regex required a separator the
+    live page never emits, so lot capture silently returned nothing.)
+    """
     from bs4 import BeautifulSoup
 
+    soup = BeautifulSoup(html_text, "lxml")
+    out: dict = {}
+    for th in soup.find_all("th"):
+        label = th.get_text(" ", strip=True).lower()
+        td = th.find_next("td")
+        if td is None:
+            continue
+        values = [ln.strip() for ln in td.get_text("\n", strip=True).split("\n") if ln.strip()]
+        if not values:
+            continue
+        if label.startswith("lot"):
+            out["lot_numbers"] = values
+        elif "manufacturer" in label or label in ("company", "brand"):
+            out.setdefault("manufacturer", values[0])
+        elif "date" in label and ("certif" in label or "registered" in label):
+            out.setdefault("cert_date", values[0])
+        elif label.startswith("facility"):
+            out.setdefault("facility", values[0])
+    return out
+
+
+def _fetch_nsf_sport_detail(listing_id: str) -> dict:
+    """Fetch lot numbers and facility metadata from one NSF Sport detail page."""
     url = f"{NSF_SPORT_DETAIL_URL}?id={listing_id}"
     r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
     r.raise_for_status()
-    soup = BeautifulSoup(r.text, "lxml")
-    text = soup.get_text("\n", strip=True)
-
-    out: dict = {}
-    # Manufacturer/Company — pattern varies; try a few label patterns
-    for label in ("Manufacturer", "Company", "Brand"):
-        m = re.search(rf"{label}\s*[:\-]\s*(.+)", text, re.IGNORECASE)
-        if m:
-            out["manufacturer"] = m.group(1).strip().split("\n")[0]
-            break
-
-    # Lot numbers — comma/whitespace separated under "Lot" label
-    m = re.search(r"Lot\s*(?:Numbers?|#s?)\s*[:\-]\s*(.+)", text, re.IGNORECASE)
-    if m:
-        raw = m.group(1).split("\n")[0]
-        out["lot_numbers"] = [lot.strip() for lot in re.split(r"[\s,;]+", raw) if lot.strip()]
-
-    # Cert date — "Certified Date" / "Date Certified"
-    m = re.search(r"(Certified\s*Date|Date\s*Certified)\s*[:\-]\s*([0-9/\-A-Za-z, ]+)", text, re.IGNORECASE)
-    if m:
-        out["cert_date"] = m.group(2).strip()
-
-    # Facility
-    m = re.search(r"Facility\s*[:\-]\s*(.+)", text, re.IGNORECASE)
-    if m:
-        out["facility"] = m.group(1).split("\n")[0].strip()
-
-    return out
+    return parse_nsf_sport_detail_html(r.text)
 
 
 # ============================================================================
