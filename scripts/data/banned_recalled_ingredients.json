@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-30",
-    "total_entries": 161,
+    "total_entries": 164,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -19757,6 +19757,260 @@
         "effective_from": "2026-05-29",
         "effective_to": null,
         "note": "Sold on sensualhoneyusa.com"
+      }
+    },
+    {
+      "id": "BANNED_ADD_GREEN3",
+      "standard_name": "FD&C Green No. 3 (E143)",
+      "aliases": [
+        "fd&c green no. 3",
+        "fd&c green no 3",
+        "fd&c green 3",
+        "fd&c green #3",
+        "fast green fcf",
+        "fast green",
+        "green 3",
+        "green #3",
+        "green 3 lake",
+        "e143",
+        "fd and c green 3"
+      ],
+      "reason": "FD&C Green No. 3 (E143, Fast Green FCF) is NOT on the EU positive list of permitted food colours (Annex II of Regulation (EC) No 1333/2008); it is authorised in the US but prohibited for food use in the EU.",
+      "status": "high_risk",
+      "class_tags": [
+        "high_risk_ingredients",
+        "colorant_artificial",
+        "eu_banned"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "moderate",
+      "jurisdictions": [
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2010-01-20",
+          "source": {
+            "type": "regulation",
+            "citation": "Not on the EU positive list, Annex II of Regulation (EC) No 1333/2008 (positive-list regime in force 20 Jan 2010).",
+            "accessed_date": "2026-06-07"
+          },
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-06-07"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulation",
+          "title": "Regulation (EC) No 1333/2008 — Annex II positive list (E143 not listed)",
+          "evidence_grade": "R",
+          "url": "https://eur-lex.europa.eu/LexUriServ/LexUriServ.do?uri=OJ:L:2008:354:0016:0033:en:PDF",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Not on the EU positive list, Annex II of Regulation (EC) No 1333/2008 (positive-list regime in force 20 Jan 2010)."
+        }
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Prohibited for EU food use; precautionary CAUTION even as an excipient/colorant.",
+      "safety_warning": "EU-banned artificial green dye (E143). Not permitted in EU food.",
+      "safety_warning_one_liner": "Artificial green dye banned for food use in the EU. Talk to your doctor if avoiding synthetic dyes.",
+      "cui": "C0060087",
+      "external_ids": {
+        "cas": "2353-45-9",
+        "pubchem_cid": 16887,
+        "unii": "9J3VQ0Y6BV"
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-07",
+        "next_review_due": "2026-12-07",
+        "reviewed_by": "opus_eu_additive_pass",
+        "change_log": [
+          {
+            "date": "2026-06-07",
+            "change": "Added EU-banned additive as high_risk (warns on inactive use)",
+            "by": "opus_eu_additive_pass"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BANNED_ADD_PROPYLPARABEN",
+      "standard_name": "Propylparaben (E216)",
+      "aliases": [
+        "propylparaben",
+        "propylparabens",
+        "propyl paraben",
+        "e216",
+        "propyl 4-hydroxybenzoate",
+        "propyl p-hydroxybenzoate",
+        "propyl parahydroxybenzoate",
+        "4-hydroxybenzoic acid propyl ester",
+        "propylparaben sodium",
+        "nipasol p",
+        "propyl parabens",
+        "propyl-paraben",
+        "propyl-parabens"
+      ],
+      "reason": "Propylparaben (E216) had its EU food-additive authorisation WITHDRAWN by Directive 2006/52/EC, following the EFSA 2004 opinion that invalidated its ADI over adverse effects on sex hormones and the male reproductive system in juvenile rats. E216/E217 are no longer permitted EU food additives.",
+      "status": "high_risk",
+      "class_tags": [
+        "high_risk_ingredients",
+        "preservative",
+        "eu_banned"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "moderate",
+      "jurisdictions": [
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2006-01-01",
+          "source": {
+            "type": "regulation",
+            "citation": "Authorisation withdrawn by Directive 2006/52/EC, following EFSA 2004 opinion (ADI invalidated).",
+            "accessed_date": "2026-06-07"
+          },
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-06-07"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulation",
+          "title": "Directive 2006/52/EC (E216 authorisation withdrawn)",
+          "evidence_grade": "R",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/83",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Authorisation withdrawn by Directive 2006/52/EC, following EFSA 2004 opinion (ADI invalidated)."
+        }
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Prohibited for EU food use; precautionary CAUTION even as an excipient/colorant.",
+      "safety_warning": "EU-banned preservative (E216), withdrawn over hormone concerns.",
+      "safety_warning_one_liner": "Preservative withdrawn from EU food additives over reproductive-hormone concerns. Talk to your doctor.",
+      "cui": "C0072238",
+      "external_ids": {
+        "cas": "94-13-3",
+        "pubchem_cid": 7175,
+        "unii": "Z8IX2SC1OH"
+      },
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-07",
+        "next_review_due": "2026-12-07",
+        "reviewed_by": "opus_eu_additive_pass",
+        "change_log": [
+          {
+            "date": "2026-06-07",
+            "change": "Added EU-banned additive as high_risk (warns on inactive use)",
+            "by": "opus_eu_additive_pass"
+          }
+        ]
+      }
+    },
+    {
+      "id": "BANNED_ADD_AZODICARBONAMIDE",
+      "standard_name": "Azodicarbonamide",
+      "aliases": [
+        "azodicarbonamide",
+        "azodicarbonimide",
+        "azo-dicarbonamide",
+        "adca",
+        "1,1'-azobisformamide",
+        "azobisformamide"
+      ],
+      "reason": "Azodicarbonamide (flour/dough conditioner) is NOT on the EU positive list of permitted food additives (Annex II of Regulation (EC) No 1333/2008) and is not authorised for food use in the EU. It is also a REACH SVHC (respiratory sensitiser) under Regulation (EC) No 1907/2006; its food-contact use was restricted in the EU in 2005.",
+      "status": "high_risk",
+      "class_tags": [
+        "high_risk_ingredients",
+        "flour_treatment",
+        "eu_banned"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "moderate",
+      "jurisdictions": [
+        {
+          "region": "EU",
+          "level": "federal",
+          "status": "banned",
+          "effective_date": "2013-06-01",
+          "source": {
+            "type": "regulation",
+            "citation": "Not on the EU positive list, Annex II of Regulation (EC) No 1333/2008; REACH SVHC under Regulation (EC) No 1907/2006.",
+            "accessed_date": "2026-06-07"
+          },
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-06-07"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulation",
+          "title": "Regulation (EC) No 1333/2008 — Annex II (not listed) + REACH SVHC",
+          "evidence_grade": "R",
+          "url": "https://echa.europa.eu/substance-information/-/substanceinfo/100.004.229",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Not on the EU positive list, Annex II of Regulation (EC) No 1333/2008; REACH SVHC under Regulation (EC) No 1907/2006."
+        }
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Prohibited for EU food use; precautionary CAUTION even as an excipient/colorant.",
+      "safety_warning": "EU-banned flour/dough conditioner; respiratory sensitiser.",
+      "safety_warning_one_liner": "Dough conditioner not authorised for food use in the EU; a respiratory sensitiser. Talk to your doctor.",
+      "cui": null,
+      "external_ids": {},
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-07",
+        "next_review_due": "2026-12-07",
+        "reviewed_by": "opus_eu_additive_pass",
+        "change_log": [
+          {
+            "date": "2026-06-07",
+            "change": "Added EU-banned additive as high_risk (warns on inactive use)",
+            "by": "opus_eu_additive_pass"
+          }
+        ]
       }
     }
   ]
