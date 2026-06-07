@@ -55,6 +55,7 @@ EXPECTED_HITS_PER_FILE = {
     "scripts/build_final_db.py": 15,
     "scripts/scoring_v4/confidence.py": 1,
     "scripts/scoring_v4/modules/generic_helpers.py": 1,
+    "scripts/scoring_v4/router.py": 1,
 }
 
 
@@ -116,15 +117,18 @@ def test_sp2_inventory_doc_exists():
     )
 
 
-def test_sp2_router_uses_taxonomy_contract_only():
-    """The router must read primary_type and must not fall back to legacy."""
+def test_sp2_router_legacy_read_is_only_themed_multi_broad_panel_fallback():
+    """The router reads taxonomy first. Its only legacy read is the explicitly
+    guarded themed-multivitamin fallback, which also requires broad-panel
+    physical evidence."""
     import pathlib
     router = pathlib.Path(__file__).resolve().parents[1] / "scoring_v4" / "router.py"
     src = router.read_text()
     primary_type_idx = src.find("_read_primary_type(product)")
     assert primary_type_idx != -1, "Router must call _read_primary_type"
     assert "_read_legacy_supp_type(product)" not in src
-    assert 'get("supplement_type")' not in src
+    assert src.count('get("supplement_type")') == 1
+    assert "_has_broad_legacy_multivitamin_panel" in src
     assert 'get("primary_category")' not in src
 
 

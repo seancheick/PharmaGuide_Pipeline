@@ -147,6 +147,97 @@ def test_multivitamin_real_broad_panel_routes_multi():
     assert _legacy_class_for_product(p) == "multi_or_prenatal"
 
 
+@pytest.mark.parametrize("primary_type", ["immune_support", "sleep_support", "herbal_botanical"])
+def test_themed_legacy_multivitamin_with_broad_panel_routes_multi(primary_type):
+    """The taxonomy can carry the product theme while the enriched product type
+    still correctly says multivitamin. A broad multi-nutrient panel plus the
+    legacy multivitamin signal should route to multi_or_prenatal instead of
+    generic, without trusting the legacy field by itself."""
+    p = _product(
+        "Daily Pure Pack",
+        [
+            _row("vitamin_a", "Vitamin A", 900, "mcg"),
+            _row("vitamin_c", "Vitamin C", 90, "mg"),
+            _row("vitamin_d", "Vitamin D", 25, "mcg"),
+            _row("vitamin_e", "Vitamin E", 15, "mg"),
+            _row("vitamin_b12_cobalamin", "Vitamin B12", 100, "mcg"),
+            _row("zinc", "Zinc", 11, "mg"),
+            _row("magnesium", "Magnesium", 100, "mg"),
+            _row("selenium", "Selenium", 55, "mcg"),
+        ],
+        primary_type=primary_type,
+        supplement_type={"type": "multivitamin"},
+    )
+    assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
+    assert _legacy_class_for_product(p) == "multi_or_prenatal"
+
+
+def test_themed_legacy_multivitamin_without_broad_panel_stays_generic():
+    """The legacy multivitamin fallback is not a resurrection of the old
+    over-eager router. Targeted sleep/beauty products still need a broad panel
+    before they enter the multi/prenatal rubric."""
+    p = _product(
+        "Mighty Night Sleep Gummies",
+        [
+            _row("vitamin_b6_pyridoxine", "Vitamin B6", 2, "mg"),
+            _row("melatonin", "Melatonin", 3, "mg"),
+            _row("lemon_balm", "Lemon Balm", 100, "mg"),
+        ],
+        primary_type="sleep_support",
+        supplement_type={"type": "multivitamin"},
+    )
+    assert build_scoring_classification(p)["route_module"] == "generic"
+    assert _legacy_class_for_product(p) == "generic"
+
+
+def test_legacy_multivitamin_targeted_formula_with_four_nutrients_stays_generic():
+    """The legacy fallback needs stronger evidence than native multivitamin
+    taxonomy. Four micronutrients plus functional actives is a targeted formula,
+    not enough to override a generic/themed taxonomy into multi_or_prenatal."""
+    p = _product(
+        "Hist Reset",
+        [
+            _row("vitamin_c", "Vitamin C", 250, "mg"),
+            _row("vitamin_b2_riboflavin", "Riboflavin", 5, "mg"),
+            _row("vitamin_b3_niacin", "Niacin", 20, "mg"),
+            _row("molybdenum", "Molybdenum", 100, "mcg"),
+            _row("nac", "N-Acetyl L-Cysteine", 100, "mg"),
+            _row("quercetin", "Quercetin", 300, "mg"),
+            _row("digestive_enzymes", "Bromelain", 200, "mg"),
+            _row("luteolin", "Luteolin", 100, "mg"),
+            _row("citrus_bioflavonoids", "Rutin", 100, "mg"),
+        ],
+        primary_type="general_supplement",
+        supplement_type={"type": "multivitamin"},
+    )
+    assert build_scoring_classification(p)["route_module"] == "generic"
+    assert _legacy_class_for_product(p) == "generic"
+
+
+def test_legacy_multivitamin_greens_collagen_identity_stays_generic():
+    """A broad micronutrient sprinkle inside a greens/collagen product is not a
+    themed multivitamin. The fallback must not capture non-multi primary
+    identities just because legacy metadata says multivitamin."""
+    p = _product(
+        "Grass Fed Collagen Greens Beauty",
+        [
+            _row("vitamin_a", "Vitamin A", 14, "mcg"),
+            _row("vitamin_d", "Vitamin D", 2, "mcg"),
+            _row("vitamin_k", "Vitamin K", 96, "mcg"),
+            _row("vitamin_b9_folate", "Folate", 28, "mcg"),
+            _row("calcium", "Calcium", 73, "mg"),
+            _row("iron", "Iron", 2, "mg"),
+            _row("magnesium", "Magnesium", 25, "mg"),
+            _row("collagen", "Collagen", 12, "g"),
+            _row("bacillus_subtilis", "Bacillus subtilis", 5, "mg"),
+        ],
+        primary_type="greens_powder",
+        supplement_type={"type": "multivitamin"},
+    )
+    assert build_scoring_classification(p)["route_module"] == "generic"
+    assert _legacy_class_for_product(p) == "generic"
+
+
 def test_multivitamin_name_override_routes_multi_even_thin():
     """A product whose NAME claims 'multivitamin' is taken at its word (mirrors
     the b-complex name override) — routes multi_or_prenatal so the panel-coverage

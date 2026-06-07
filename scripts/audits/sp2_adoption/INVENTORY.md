@@ -27,6 +27,7 @@ in v4 routing, scoring, gates, confidence, and final export.
 | `scoring_v4/router.py:181-182` | `_is_omega_class` primary_category check | `primary_category` | 🟢 PHYSICAL-FACT | keep — enricher canonicalizes omega-3 / fish_oil primary_category from panel composition |
 | `scoring_v4/router.py:255-262` | `_read_legacy_supp_type` helper | `supplement_type.type` | 🟡 LEGACY-FALLBACK | keep — used only for pre-2026-05-20 batches |
 | `scoring_v4/router.py:334-335` | Priority 5 multivitamin fallback | `supplement_type.type`, `primary_category` | 🟡 LEGACY-FALLBACK | keep — gated by `if not primary_type:` |
+| `scoring_v4/router.py:663` | Themed multivitamin broad-panel fallback | `supplement_type.type` | 🟡 LEGACY-FALLBACK | keep — only fires when legacy type is multivitamin AND the physical panel has ≥8 positive rows, ≥5 multi nutrients, and ≥3 nutrient groups |
 | `scoring_v4/confidence.py:246-252` | `supplement_type_low_confidence` driver | `supplement_type.confidence` | 🔄 MIGRATE (ADOPT-1) | Add `taxonomy.classification_confidence` driver; legacy as fallback |
 | `scoring_v4/modules/generic_helpers.py:200-209` | `supp_type_of()` helper | `supplement_type.type` | 🔄 MIGRATE (ADOPT-2) | Add `primary_type_of()` companion helper. Do NOT remove `supp_type_of()` — callers migrate progressively |
 | `scoring_v4/modules/generic_trust.py:185-202` | `_is_omega_like` marine cert gate | `supplement_type.type == "specialty"` | 🔄 MIGRATE (ADOPT-3) | Read `primary_type == "omega_3"` first. Keep ingredient-text fallback (existing, fine) |
@@ -72,10 +73,10 @@ in v4 routing, scoring, gates, confidence, and final export.
 |---|---|---|
 | ✅ COMPLIANT | 11 | 5 |
 | 🔄 MIGRATE | 6 | 4 (ADOPT-1..4) |
-| 🟡 LEGACY-FALLBACK | 5 | 3 |
+| 🟡 LEGACY-FALLBACK | 6 | 4 |
 | 🟢 PHYSICAL-FACT | 1 | 1 |
 | 📝 NON-ROUTING | 6 | 2 |
-| **Total** | **29** | **15** |
+| **Total** | **30** | **16** |
 
 ## SP-2 atomic commits (this skill, this session)
 

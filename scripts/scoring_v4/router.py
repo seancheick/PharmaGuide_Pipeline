@@ -12,6 +12,8 @@ Priority order (post-taxonomy refactor, 2026-05-20):
        live in a prenatal bundle/program.
   3. multivitamin / b-complex → multi_or_prenatal
      - taxonomy primary_type in {multivitamin, b_complex}
+     - OR legacy type=multivitamin only when the physical panel is broad
+       enough to be a true themed multivitamin
   4. sports                 → sports
      - sports-protein identity (not protein taxonomy alone)
      - OR sports-active canonical panel + explicit sports label intent
@@ -26,7 +28,8 @@ The taxonomy primary_type field comes from scripts/supplement_taxonomy.py
 analysis. It replaces the legacy supp_type heuristic which over-classified
 single-issue targeted products (Collagen Love, Mighty Night sleep aid,
 Vitafusion Omega-3 EPA/DHA, etc.) as multivitamin. The router prefers
-taxonomy and scoring input contracts only.
+taxonomy and scoring input contracts; the only legacy read is the guarded
+themed-multivitamin fallback, which requires a broad disclosed panel.
 
 §13 architecture lock — this router does not import from score_supplements.py.
 
@@ -171,6 +174,29 @@ _MULTI_PANEL_CANONICALS = _B_VITAMIN_CANONICALS | {
     "chromium",
     "molybdenum",
 }
+_NON_B_VITAMIN_CANONICALS = {
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_k1",
+    "vitamin_k2",
+}
+_MINERAL_CANONICALS = {
+    "iron",
+    "iodine",
+    "zinc",
+    "magnesium",
+    "calcium",
+    "selenium",
+    "manganese",
+    "copper",
+    "chromium",
+    "molybdenum",
+}
+_MULTI_SUPPORT_CANONICALS = {"choline", "folate"}
+_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS = 5
 _PRENATAL_PANEL_ANCHORS = {"folate", "vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
 _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
@@ -633,6 +659,48 @@ def _is_multivitamin_route_eligible(product: Dict[str, Any], name_text: str) -> 
     return False
 
 
+def _read_legacy_multivitamin_type(product: Dict[str, Any]) -> str:
+    payload = (product or {}).get("supplement_type")
+    if not isinstance(payload, dict):
+        return ""
+    value = payload.get("type")
+    return str(value or "").strip().lower()
+
+
+def _multi_panel_group_count(canonicals: set[str]) -> int:
+    groups = set()
+    if canonicals & _B_VITAMIN_CANONICALS:
+        groups.add("b_vitamins")
+    if canonicals & _NON_B_VITAMIN_CANONICALS:
+        groups.add("vitamins")
+    if canonicals & _MINERAL_CANONICALS:
+        groups.add("minerals")
+    if canonicals & _MULTI_SUPPORT_CANONICALS:
+        groups.add("support_nutrients")
+    return len(groups)
+
+
+def _has_broad_legacy_multivitamin_panel(product: Dict[str, Any]) -> bool:
+    """True only for old enriched themed multi-packs with a real broad panel.
+
+    This is the sole v4 router legacy-type fallback. It fixes products whose
+    normalized taxonomy stores the theme (immune/sleep/herbal) while legacy
+    type still correctly says multivitamin. The broad-panel gate prevents the
+    old over-classification failures from returning.
+    """
+    if _read_legacy_multivitamin_type(product) != "multivitamin":
+        return False
+    if _read_primary_type(product) in _LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES:
+        return False
+    canonicals = _positive_canonicals(product)
+    multi_nutrients = canonicals & _MULTI_PANEL_CANONICALS
+    return (
+        len(multi_nutrients) >= _LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS
+        and _positive_scorable_row_count(product) >= _MULTIVITAMIN_BROAD_PANEL_MIN
+        and _multi_panel_group_count(multi_nutrients) >= 3
+    )
+
+
 def _positive_scorable_row_count(product: Dict[str, Any]) -> int:
     count = 0
     for row in _scoring_rows(product):
@@ -772,6 +840,16 @@ _TAXONOMY_TO_MODULE = {
     "beauty_hair_skin_nails": "generic",
     "general_supplement": "generic",
 }
+_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES = {
+    "amino_acid",
+    "collagen",
+    "fiber_digestive",
+    "greens_powder",
+    "omega_3",
+    "pre_workout",
+    "probiotic",
+    "protein_powder",
+}
 
 
 def _read_primary_type(product: Dict[str, Any]) -> str:
@@ -866,7 +944,11 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
             # EPA-DHA products instead of letting generic score unrelated
             # vitamins. ALA / 3-6-9 / fatty-acid blends are still guarded in
             # _is_omega_class unless EPA/DHA is actually disclosed.
-            return "omega" if _is_omega_class(product, name_text) else "generic"
+            if _is_omega_class(product, name_text):
+                return "omega"
+            if _has_broad_legacy_multivitamin_panel(product):
+                return "multi_or_prenatal"
+            return "generic"
         # Unknown taxonomy type: fall through to legacy omega / multi fallback
         # rather than crashing.
 
@@ -877,6 +959,8 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     # EPA/DHA fallbacks catch labels where canonicalization didn't run.
     if _is_omega_class(product, name_text):
         return "omega"
+    if _has_broad_legacy_multivitamin_panel(product):
+        return "multi_or_prenatal"
 
     # Priority 5: generic catch-all.
     return "generic"

@@ -1801,6 +1801,29 @@ _ROUTE_MULTI_PANEL_CANONICALS = _ROUTE_B_VITAMIN_CANONICALS | {
     "chromium",
     "molybdenum",
 }
+_ROUTE_NON_B_VITAMIN_CANONICALS = {
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_k1",
+    "vitamin_k2",
+}
+_ROUTE_MINERAL_CANONICALS = {
+    "iron",
+    "iodine",
+    "zinc",
+    "magnesium",
+    "calcium",
+    "selenium",
+    "manganese",
+    "copper",
+    "chromium",
+    "molybdenum",
+}
+_ROUTE_MULTI_SUPPORT_CANONICALS = {"choline", "folate"}
+_ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS = 5
 _ROUTE_PRENATAL_PANEL_ANCHORS = {"folate", "vitamin_b9_folate", "iron", "iodine", "choline", "dha", "epa_dha"}
 _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala",
@@ -1861,6 +1884,16 @@ _ROUTE_TAXONOMY_TO_MODULE = {
     "joint_support": "generic",
     "beauty_hair_skin_nails": "generic",
     "general_supplement": "generic",
+}
+_ROUTE_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES = {
+    "amino_acid",
+    "collagen",
+    "fiber_digestive",
+    "greens_powder",
+    "omega_3",
+    "pre_workout",
+    "probiotic",
+    "protein_powder",
 }
 
 
@@ -2202,6 +2235,45 @@ def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> 
     return False
 
 
+def _route_read_legacy_multivitamin_type(product: Dict[str, Any]) -> str:
+    payload = _safe_dict((product or {}).get("supplement_type"))
+    return _norm(payload.get("type"))
+
+
+def _route_multi_panel_group_count(canonicals: set[str]) -> int:
+    groups = set()
+    if canonicals & _ROUTE_B_VITAMIN_CANONICALS:
+        groups.add("b_vitamins")
+    if canonicals & _ROUTE_NON_B_VITAMIN_CANONICALS:
+        groups.add("vitamins")
+    if canonicals & _ROUTE_MINERAL_CANONICALS:
+        groups.add("minerals")
+    if canonicals & _ROUTE_MULTI_SUPPORT_CANONICALS:
+        groups.add("support_nutrients")
+    return len(groups)
+
+
+def _route_has_broad_legacy_multivitamin_panel(product: Dict[str, Any]) -> bool:
+    """Compatibility fallback for themed multi-packs.
+
+    Some enriched products correctly retain legacy type=multivitamin while the
+    normalized taxonomy uses the product theme (immune_support, sleep_support,
+    herbal_botanical). Trust that legacy signal only when the physical panel is
+    broad enough to be a real multivitamin, so old false positives stay generic.
+    """
+    if _route_read_legacy_multivitamin_type(product) != "multivitamin":
+        return False
+    if _primary_type(product) in _ROUTE_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES:
+        return False
+    canonicals = _route_positive_canonicals(product)
+    multi_nutrients = canonicals & _ROUTE_MULTI_PANEL_CANONICALS
+    return (
+        len(multi_nutrients) >= _ROUTE_LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS
+        and _route_positive_scorable_row_count(product) >= _ROUTE_MULTIVITAMIN_BROAD_PANEL_MIN
+        and _route_multi_panel_group_count(multi_nutrients) >= 3
+    )
+
+
 def _route_positive_scorable_row_count(product: Dict[str, Any]) -> int:
     count = 0
     for row in _route_scoring_rows(product):
@@ -2308,10 +2380,22 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
         if module == "generic":
             if _route_is_omega_class(product, name_text):
                 return "omega", f"taxonomy:{primary_type}:omega_evidence_override", [f"taxonomy:{primary_type}", "omega_evidence"]
+            if _route_has_broad_legacy_multivitamin_panel(product):
+                return (
+                    "multi_or_prenatal",
+                    "legacy_multivitamin_broad_panel",
+                    ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
+                )
             return "generic", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
 
     if _route_is_omega_class(product, name_text):
         return "omega", "profile_content:omega", ["omega_evidence"]
+    if _route_has_broad_legacy_multivitamin_panel(product):
+        return (
+            "multi_or_prenatal",
+            "legacy_multivitamin_broad_panel",
+            ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
+        )
     return "generic", "generic_safe_default", ["generic_safe_default"]
 
 
