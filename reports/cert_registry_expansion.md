@@ -1,8 +1,16 @@
 # Cert Registry Expansion / Refresh — 2026-06-07
 
-**Scope:** DATA-only refresh + verified expansion of `scripts/data/cert_registry.json`.
-No scoring code touched (`scripts/scoring_v4/` untouched). Schema shape unchanged
-(`schema_version` stays `6.0.0`).
+**Scope:** Verified refresh **and program expansion** of
+`scripts/data/cert_registry.json`. No scoring code touched (`scripts/scoring_v4/`
+untouched). The resolver/fetcher were extended to recognize and source two new
+programs (BSCG, NSF/ANSI 455). Schema shape unchanged (`schema_version` stays
+`6.0.0`).
+
+> **Update 2026-06-07 (follow-up):** after the initial refresh, two missing
+> certification programs were sourced and added — **BSCG Certified Drug Free**
+> (per-SKU) and **NSF/ANSI 455-2** (facility GMP) — and USP + NSF-lots fidelity
+> was checked. The registry now holds **9,081 records across 8 programs**. See
+> **§11**. Sections 1–10 below describe the original 6-program refresh.
 
 ---
 
@@ -282,3 +290,106 @@ python -m pytest scripts/tests/test_cert_resolver.py scripts/tests/test_cert_aud
   scripts/tests/test_cert_informed_fetcher.py scripts/tests/test_cert_ifos_fetcher.py \
   scripts/tests/test_cert_usp_fetcher.py -q
 ```
+
+---
+
+## 11. Program expansion — BSCG + NSF/ANSI 455 (follow-up, 2026-06-07)
+
+A second pass found that the repo has a **two-layer** cert system and the
+registry layer was missing programs the label layer already recognizes:
+
+| Layer | File | Programs |
+| ----- | ---- | -------- |
+| Claim recognition (reads the label) | `cert_claim_rules.json` | ~10: the 6 verified **+ BSCG, ConsumerLab, Clean Label Project, NSF/ANSI 455, ISURA, USDA Organic, Non-GMO Project** |
+| Independent verification (the registry) | `cert_registry.json` | was **6** → now **8** |
+
+So several programs could be *recognized on a label* but not independently
+*verified* (resolver returned `claimed_only`). The two highest-value gaps were
+sourced and added.
+
+### 11.1 BSCG Certified Drug Free (new per-SKU program)
+
+- **+679 SKU records, 58 brands (55 new to the registry).** Per-SKU anti-doping
+  screening (700+ substances), directly comparable to NSF Sport / Informed Sport.
+- Source: `bscg.org/certified-drug-free-database` (DataTables fed by
+  `POST /selected_program`; GoDaddy/Sucuri WAF bypassed with a seeding GET +
+  the page's own AJAX headers). BSCG certifies by **lot**, so 2,769 program rows
+  collapse to one SKU record per (brand, product), carrying all tested lots and
+  the most-recent report date.
+- BSCG covers brands the sport registries miss — mostly **MLM/direct-sales and
+  niche** lines: Arbonne, Shaklee, Herbalife 24, LifeVantage, Neurohacker
+  Collective, Vitargo, etc. (None of the big retail brands GNC/NOW/Thorne — they
+  use NSF/Informed instead.)
+- Verified: a live sample (Ambrosia "Mental Jewels") re-checked against the BSCG
+  database (present); a fabricated control (Klean "Creatine") correctly absent.
+
+### 11.2 NSF/ANSI 455-2 GMP (new facility-scope program)
+
+- **+708 facility registrations** (`scope="facility"`). NSF/ANSI 455-2 is a
+  **facility GMP audit, not a per-SKU cert** — so these route to `brand_only`
+  (manufacturer-trust), never B4a. That is the correct treatment.
+- Source: `info.nsf.org/Certified/455GMP/Listings.asp?Standard=455-2GMP`
+  (clean bulk 455-2 listing). Chosen over the legacy `gmp/Listings.asp` (NSF/ANSI
+  173 §8 — mostly B2B suppliers absent from any consumer catalog) and over
+  hand-picked per-brand lookups.
+- **This closes the gap §4 flagged.** The brands that were per-SKU "known-
+  negatives" now resolve to a definite *facility-GMP* status:
+
+| Brand | Resolves to (claiming NSF/ANSI 455) | Meaning |
+| ----- | ----------------------------------- | ------- |
+| Pure Encapsulations | `brand_only` | **KNOWN facility GMP** (was per-SKU negative) |
+| Nutricost | `brand_only` | **KNOWN facility GMP** |
+| Life Extension | `brand_only` | **KNOWN facility GMP** (plus its 1 IFOS omega SKU) |
+| Doctor's Best | `claimed_only` | **true KNOWN-negative** (not 455-registered) |
+
+  Also newly captured as facility-GMP: Thorne, Nordic Naturals, Carlson,
+  Solgar (+ Nature's Bounty / Puritan's Pride / Rexall), Metagenics, Vital
+  Proteins, Herbalife, Designs for Health, Seeking Health. 23% of records carry a
+  precise per-company NSF URL (logo-derived company id); the rest use the
+  verifiable 455-2 listing URL.
+- Verified: Pure Encapsulations' per-company 455-2 URL re-checked live.
+
+### 11.3 USP Verified — checked, confirmed unchanged
+
+USP could not be re-scraped here (its fetcher needs Playwright/Chromium, which
+fails in this container with `ERR_CERT_AUTHORITY_INVALID` — the sandbox's
+TLS-intercepting egress proxy uses a CA Chromium doesn't trust; this works fine
+on a normal machine). A probe (the repo's own USP parser + a temporary,
+**uncommitted** cert-bypass) confirmed the live listing is **byte-for-byte
+unchanged**: 159 products, **0 additions, 0 removals** vs. the 2026-05-19
+snapshot. USP is fresh and current; no refresh warranted, snapshot date left
+honest at 2026-05-19.
+
+### 11.4 NSF Sport — lot-number fidelity
+
+NSF Sport records carry an empty `lot_numbers_tested: []` because the base
+refresh skips the per-product detail pages. `--with-lots` backfills them, but
+it is **fidelity-only**: lot numbers are informational and are **not used by the
+resolver** (which matches by brand + product, never lot). The enrichment is
+~1,282 NSF detail-page GETs at NSF's ~3–4 s/page latency (≈ 90 min), so it is run
+**out-of-band** rather than inline with scoring refreshes. It was kicked off in
+this session; if it completed it was merged as a follow-up commit (NSF Sport
+record count and brand coverage are unchanged — only `lot_numbers_tested`
+populates). Recommended cadence: with the maintainer's quarterly NSF refresh
+(`--source live-nsf-sport --with-lots`), not on every run.
+
+### 11.5 Registry state after expansion
+
+| Program | Records | Scope | Snapshot |
+| ------- | ------: | ----- | -------- |
+| NSF Certified (173) | 2,887 | sku | 2026-06-07 |
+| Informed Sport | 1,783 | sku | 2026-06-07 |
+| NSF Sport | 1,282 | sku | 2026-06-07 |
+| Informed Choice | 817 | sku | 2026-06-07 |
+| IFOS | 766 | sku | 2026-06-07 |
+| **NSF/ANSI 455** | **708** | **facility** | 2026-06-07 |
+| **BSCG** | **679** | sku | 2026-06-07 |
+| USP Verified | 159 | sku | 2026-05-19 (unchanged) |
+| **Total** | **9,081** | 8,373 sku + 708 facility | |
+
+### 11.6 Still recognized-but-unverified (documented, not added)
+
+ConsumerLab (paywalled — cannot freely verify), Clean Label Project, ISURA,
+USDA Organic, Non-GMO Project. Lower priority / lower weight; left as label-claim
+only. ConsumerLab is intentionally skipped (no free public registry to verify
+against).
