@@ -85,6 +85,147 @@ def test_manuka_unspecified_does_not_outrank_disclosed_ungraded_form(iqm: dict) 
 
 
 @pytest.mark.parametrize(
+    "parent",
+    [
+        "ahcc",
+        "auricularia",
+        "button_mushroom",
+        "chaga",
+        "cordyceps",
+        "lions_mane",
+        "maitake",
+        "reishi",
+        "shiitake",
+        "turkey_tail",
+    ],
+)
+def test_mushroom_parents_use_fungal_category_contract(iqm: dict, parent: str) -> None:
+    entry = iqm[parent]
+    assert entry["category"] == "mushroom_extracts"
+    assert entry["category_enum"] == "mushroom_extracts"
+    assert entry["source_origin"] == "fungal"
+    assert entry["ingredient_domain"] == "fungal_mushroom"
+    assert entry["local_matrix_active"] is True
+
+
+@pytest.mark.parametrize(
+    "parent,form_name,bio,natural,score",
+    [
+        ("turkey_tail", "turkey tail standardized extract", 11, True, 14),
+        ("turkey_tail", "turkey tail fruiting body", 9, True, 12),
+        ("turkey_tail", "turkey tail (unspecified)", 5, False, 5),
+        ("chaga", "chaga extract", 11, True, 14),
+        ("chaga", "chaga sclerotium", 9, True, 12),
+        ("chaga", "chaga (unspecified)", 5, False, 5),
+        ("maitake", "maitake d-fraction", 11, True, 14),
+        ("maitake", "maitake fruiting body", 9, True, 12),
+        ("maitake", "maitake (unspecified)", 5, False, 5),
+        ("shiitake", "shiitake extract", 11, True, 14),
+        ("shiitake", "shiitake fruiting body", 9, True, 12),
+        ("shiitake", "shiitake (unspecified)", 5, False, 5),
+        ("button_mushroom", "button mushroom fruiting body extract", 8, True, 11),
+        ("button_mushroom", "button mushroom (unspecified)", 5, False, 5),
+        ("auricularia", "auricularia fruiting body extract", 9, True, 12),
+        ("auricularia", "auricularia (unspecified)", 5, False, 5),
+        ("lions_mane", "lions mane standardized extract", 11, True, 14),
+        ("lions_mane", "lions mane fruiting body", 9, True, 12),
+        ("lions_mane", "lion's mane (unspecified)", 5, False, 5),
+        ("reishi", "reishi standardized extract", 11, True, 14),
+        ("reishi", "reishi fruiting body", 9, True, 12),
+        ("reishi", "reishi (unspecified)", 5, False, 5),
+        ("cordyceps", "cordyceps militaris", 11, True, 14),
+        ("cordyceps", "cordyceps sinensis mycelium", 8, True, 11),
+        ("cordyceps", "cordyceps (unspecified)", 5, False, 5),
+        ("ahcc", "AHCC (unspecified)", 10, False, 10),
+    ],
+)
+def test_mushroom_local_matrix_form_gradient_locked(
+    iqm: dict,
+    parent: str,
+    form_name: str,
+    bio: int,
+    natural: bool,
+    score: int,
+) -> None:
+    form = iqm[parent]["forms"][form_name]
+    assert form["bio_score"] == bio
+    assert form["natural"] is natural
+    assert form["score"] == score
+
+
+def test_dihydroberberine_routes_to_dedicated_form_not_berberine_hcl(iqm: dict) -> None:
+    forms = iqm["berberine_supplement"]["forms"]
+    hcl = forms["berberine hcl"]
+    hcl_aliases = {
+        str(alias).strip().lower()
+        for alias in hcl["aliases"]
+    }
+    dhb = forms["dihydroberberine"]
+    dhb_aliases = {str(alias).strip().lower() for alias in dhb["aliases"]}
+
+    assert {"dihydroberberine", "dhb", "glucovantage"} <= dhb_aliases
+    assert {"dihydroberberine", "glucovantage"}.isdisjoint(hcl_aliases)
+    assert dhb["bio_score"] == 11
+    assert dhb["natural"] is False
+    assert dhb["score"] == 11
+    assert hcl["absorption_structured"]["quality"] == "poor"
+
+
+def test_berbevis_routes_to_phytosome_not_berberine_hcl(iqm: dict) -> None:
+    forms = iqm["berberine_supplement"]["forms"]
+    hcl_aliases = {
+        str(alias).strip().lower()
+        for alias in forms["berberine hcl"]["aliases"]
+    }
+    phytosome = forms["berberine phytosome (berbevis)"]
+    phytosome_aliases = {
+        str(alias).strip().lower()
+        for alias in phytosome["aliases"]
+    }
+
+    assert {"berbevis", "berberine phytosome", "berbevis berberine phytosome"} <= (
+        phytosome_aliases
+    )
+    assert {"berbevis", "berberine phytosome"}.isdisjoint(hcl_aliases)
+    assert phytosome["bio_score"] == 10
+    assert phytosome["natural"] is False
+    assert phytosome["score"] == 10
+
+
+def test_branded_lutein_routes_to_dedicated_form_not_unspecified(iqm: dict) -> None:
+    forms = iqm["lutein"]["forms"]
+    unspecified_aliases = {
+        str(alias).strip().lower()
+        for alias in forms["lutein (unspecified)"]["aliases"]
+    }
+    premium = forms["free lutein (floraglo / lutemax, marigold)"]
+    premium_aliases = {str(alias).strip().lower() for alias in premium["aliases"]}
+
+    branded_aliases = {
+        "floraglo",
+        "flora glo",
+        "floraglo lutein",
+        "floraglo brand lutein",
+        "lutemax 2020",
+        "lutemax",
+        "lutigold",
+        "lutigold lutein",
+        "lutigold brand lutein",
+        "marigold lutein",
+        "non-esterified lutein",
+        "non esterified lutein",
+        "lutein 2020 marigold",
+    }
+    assert branded_aliases <= premium_aliases
+    assert branded_aliases.isdisjoint(unspecified_aliases)
+    assert forms["lutein (unspecified)"]["natural"] is False
+    assert forms["lutein (unspecified)"]["absorption_structured"]["quality"] == "low"
+    assert premium["bio_score"] == 10
+    assert premium["natural"] is True
+    assert premium["score"] == 13
+
+
+@pytest.mark.parametrize(
     "parent,unspecified,specific_forms",
     [
         ("dha", "dha (unspecified)", ["DHA fish oil ethyl ester"]),

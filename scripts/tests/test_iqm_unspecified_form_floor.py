@@ -108,6 +108,7 @@ _UNDISCLOSED_OIL_PEER_MIN_EXEMPTIONS = {
 _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS = {
     'english_ivy',           # hederacoside C marker (Hedera helix saponin)
     'horse_chestnut_seed',   # aescin marker (Aesculus hippocastanum triterpene)
+    'lutein',                # disclosed FloraGLO/Lutemax/free-lutein form
 }
 
 # Locked spread for standardization-marker exemptions. (unspec_score,
@@ -130,12 +131,21 @@ _STANDARDIZATION_MARKER_LOCKED_SPREAD = {
         'marker_bio':        10,
         'marker_score':      13,
     },
+    'lutein': {
+        'unspec_form':       'lutein (unspecified)',
+        'unspec_bio':        8,
+        'unspec_score':      8,
+        'marker_form':       'free lutein (floraglo / lutemax, marigold)',
+        'marker_bio':        10,
+        'marker_score':      13,
+    },
 }
 
 _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
     'lions_mane',
     'reishi',
     'cordyceps',
+    'chaga',
     'shiitake',
     'maitake',
     'turkey_tail',
@@ -145,14 +155,15 @@ _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
 }
 
 _LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD = {
-    'lions_mane': ("lion's mane (unspecified)", 7, 7, 8),
-    'reishi': ('reishi (unspecified)', 8, 8, 9),
-    'cordyceps': ('cordyceps (unspecified)', 8, 8, 9),
-    'shiitake': ('shiitake (unspecified)', 7, 7, 8),
-    'maitake': ('maitake (unspecified)', 7, 7, 8),
-    'turkey_tail': ('turkey tail (unspecified)', 7, 7, 8),
-    'button_mushroom': ('button mushroom (unspecified)', 6, 6, 7),
-    'auricularia': ('auricularia (unspecified)', 6, 6, 7),
+    'lions_mane': ("lion's mane (unspecified)", 5, 5, 9),
+    'reishi': ('reishi (unspecified)', 5, 5, 9),
+    'cordyceps': ('cordyceps (unspecified)', 5, 5, 8),
+    'chaga': ('chaga (unspecified)', 5, 5, 9),
+    'shiitake': ('shiitake (unspecified)', 5, 5, 9),
+    'maitake': ('maitake (unspecified)', 5, 5, 9),
+    'turkey_tail': ('turkey tail (unspecified)', 5, 5, 9),
+    'button_mushroom': ('button mushroom (unspecified)', 5, 5, 8),
+    'auricularia': ('auricularia (unspecified)', 5, 5, 9),
     'manuka_honey': ('manuka honey (unspecified)', 8, 8, 9),
 }
 

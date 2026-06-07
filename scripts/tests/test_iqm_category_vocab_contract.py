@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Contract tests for `data/iqm_category_vocab.json` (locked v1.0.0, 2026-05-01)."""
+"""Contract tests for `data/iqm_category_vocab.json`."""
 
 import json
 import os
@@ -25,13 +25,13 @@ def cats(vocab):
 
 def test_metadata(vocab):
     md = vocab["_metadata"]
-    assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 12
+    assert md["schema_version"] == "1.1.0"
+    assert md["total_entries"] == 13
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_12(cats):
-    assert len(cats) == 12
+def test_exactly_13(cats):
+    assert len(cats) == 13
 
 
 REQUIRED = {"id", "name", "notes", "examples"}
@@ -43,11 +43,11 @@ def test_required_fields(cats):
         assert set(c.keys()) == REQUIRED
 
 
-def test_canonical_12_ids(cats):
+def test_canonical_13_ids(cats):
     expected = {
         "amino_acids", "antioxidants", "enzymes", "fatty_acids",
         "fibers", "functional_foods", "herbs", "minerals",
-        "other", "probiotics", "proteins", "vitamins",
+        "mushroom_extracts", "other", "probiotics", "proteins", "vitamins",
     }
     assert {c["id"] for c in cats} == expected
 

@@ -39,8 +39,8 @@
     },
     "statistics": {
       "total_parents": 627,
-      "total_forms": 1413,
-      "total_form_aliases": 12236,
+      "total_forms": 1416,
+      "total_form_aliases": 12244,
       "parents_with_parent_aliases": 183,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -52,15 +52,16 @@
       "fatty_acids": 64,
       "fibers": 17,
       "functional_foods": 27,
-      "herbs": 203,
+      "herbs": 193,
       "minerals": 29,
+      "mushroom_extracts": 10,
       "other": 25,
       "probiotics": 47,
       "proteins": 16,
       "vitamins": 22
     },
-    "schema_version": "5.4.4",
-    "last_updated": "2026-06-06",
+    "schema_version": "5.4.5",
+    "last_updated": "2026-06-07",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1618,6 +1619,18 @@
           "Deliberately retained current broad RxCUIs for choline, glucosamine, L-carnitine, L-lysine, selenium, and vitamin B6 because live RxNav confirms valid broad ingredient concepts on current main."
         ],
         "regression_tests": "scripts/tests/test_iqm_identifier_integrity.py"
+      },
+      "5.4.5": {
+        "date": "2026-06-07",
+        "audit": "IQM replay from claude/eloquent-ride-Bq8cO, applied selectively onto current main",
+        "changes": [
+          "Moved fungal mushroom parents to mushroom_extracts and added source_origin/ingredient_domain/local_matrix_active fields.",
+          "Recalibrated mushroom local-matrix form gradients so disclosed extract/fruiting-body forms outrank unspecified labels without treating poor systemic absorption as zero quality.",
+          "Split dihydroberberine/GlucoVantage aliases into a dedicated berberine form instead of routing them to berberine HCl.",
+          "Split FloraGLO/Lutemax/marigold lutein aliases into a dedicated free-lutein form and removed the natural bonus from unspecified lutein.",
+          "Split Berbevis/berberine-phytosome aliases into a dedicated delivery-enhanced berberine form instead of routing them to berberine HCl."
+        ],
+        "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
       }
     },
     "category_enum": [
@@ -1669,7 +1682,7 @@
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
     "total_entries": 627,
-    "total_ingredients": 1411,
+    "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
     },
@@ -18971,29 +18984,15 @@
     "forms": {
       "lutein (unspecified)": {
         "bio_score": 8,
-        "natural": true,
-        "score": 11,
+        "natural": false,
+        "score": 8,
         "absorption": "variable, fat-dependent (~10-50% with dietary fat; <5% fasted)",
         "notes": "Xanthophyll carotenoid for macular and eye health, extracted from marigold (Tagetes erecta). Absorption is highly fat-dependent: <5% fasted, 10-50% with dietary fat (PMC5306026, PMC6054194). Free lutein and lutein esters show clinically equivalent bioavailability — conflicting 17% AUC difference across studies (Norkus 2010, PMID:21677121 vs Bowen 2002, PMID:12134711). FloraGLO (free lutein, used in AREDS2 NIH trial) and Lutemax 2020 are well-studied branded forms but not chemically distinct. Must be taken with fat-containing meal for meaningful absorption.",
         "aliases": [
           "lutein",
-          "FloraGLO",
-          "Flora GLO",
-          "flora-glo",
-          "Lutemax 2020",
           "lutein esters",
-          "lutigold lutein",
-          "Lutigold",
-          "lutigold brand lutein",
-          "free lutein",
-          "non-esterified lutein",
-          "non esterified lutein",
-          "FloraGLO Lutein",
-          "floraglo brand lutein",
           "lutein extract",
-          "marigold lutein",
           "lutein 20%",
-          "Lutemax 2020 Lutein",
           "Trans-Lutein",
           "all-trans lutein",
           "organic Lutein",
@@ -19001,7 +19000,6 @@
           "macular synergy complex",
           "macularsynergy",
           "lutein 2020",
-          "lutein 2020 marigold",
           "lutein 2020 marigold flower extract"
         ],
         "dosage_importance": 1.0,
@@ -19010,6 +19008,41 @@
           "range_low": 0.1,
           "range_high": 0.5,
           "quality": "low"
+        },
+        "audit_trail": [
+          "D3.6 (2026-04-20): added marigold-source lutein variants (Doctor's Best Lutein 2020 product line)."
+        ]
+      },
+      "free lutein (floraglo / lutemax, marigold)": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "variable, fat-dependent (~10-50% with dietary fat; <5% fasted)",
+        "notes": "Xanthophyll carotenoid for macular and eye health, extracted from marigold (Tagetes erecta). Absorption is highly fat-dependent: <5% fasted, 10-50% with dietary fat (PMC5306026, PMC6054194). Free lutein and lutein esters show clinically equivalent bioavailability — conflicting 17% AUC difference across studies (Norkus 2010, PMID:21677121 vs Bowen 2002, PMID:12134711). FloraGLO (free lutein, used in AREDS2 NIH trial) and Lutemax 2020 are well-studied branded forms but not chemically distinct. Must be taken with fat-containing meal for meaningful absorption. Dedicated branded/free lutein form; separated from unspecified lutein so FloraGLO/Lutemax labels receive the disclosed-form signal.",
+        "aliases": [
+          "FloraGLO",
+          "Flora GLO",
+          "flora-glo",
+          "Lutemax 2020",
+          "lutemax",
+          "Lutigold",
+          "lutigold lutein",
+          "marigold lutein",
+          "free lutein",
+          "lutigold brand lutein",
+          "non-esterified lutein",
+          "non esterified lutein",
+          "FloraGLO Lutein",
+          "floraglo brand lutein",
+          "Lutemax 2020 Lutein",
+          "lutein 2020 marigold"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.25,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "good"
         },
         "audit_trail": [
           "D3.6 (2026-04-20): added marigold-source lutein variants (Doctor's Best Lutein 2020 product line)."
@@ -35605,13 +35638,9 @@
           "natural berberine",
           "berberine supplement",
           "berberine",
-          "Berbevis",
-          "glucovantage",
-          "dihydroberberine",
           "berberpur",
           "berberpure",
           "Super Berberine",
-          "berberine phytosome",
           "Indian Barberry root extract",
           "Berberis aristata"
         ],
@@ -35657,6 +35686,49 @@
           "range_low": 0.003,
           "range_high": 0.01,
           "quality": "poor"
+        }
+      },
+      "dihydroberberine": {
+        "bio_score": 11,
+        "natural": false,
+        "score": 11,
+        "absorption": "very poor (~0.37-0.68% absolute F); P-gp efflux substrate",
+        "notes": "Plant alkaloid (Berberis, Coptis, Phellodendron). Absolute oral bioavailability ~0.37% in animal models (PMC8964367). P-glycoprotein efflux is major limiting factor; heavily ionized at physiological pH. Despite abysmal systemic F, clinically effective for glucose/lipid metabolism — effects likely gut-mediated (microbiome modulation, intestinal AMPK activation, bile acid pathway). Enhanced formulations (LipoMicel, phytosome) achieve ~6x improvement but still <5% F (PMC10675484). 500-1500 mg/day standard dose. Dedicated reduced-berberine form; separated from berberine HCl so branded DHB labels do not route to the standard salt.",
+        "aliases": [
+          "dihydroberberine",
+          "DHB",
+          "reduced berberine",
+          "berberine reduced",
+          "glucovantage",
+          "glucovantage dihydroberberine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.005,
+          "range_low": 0.003,
+          "range_high": 0.01,
+          "quality": "good"
+        }
+      },
+      "berberine phytosome (berbevis)": {
+        "bio_score": 10,
+        "natural": false,
+        "score": 10,
+        "absorption": "enhanced phytosome delivery; human PK suggests materially higher exposure than standard berberine salts, but still treated as delivery-enhanced berberine rather than a distinct active.",
+        "notes": "Berberine phytosome form (Berbevis/Indena-style phospholipid complex). Separated from berberine HCl so phytosome labels route to a delivery-enhanced form rather than the standard salt. Assigned a conservative enhanced-form bio_score below dihydroberberine pending broader berberine canary review.",
+        "aliases": [
+          "Berbevis",
+          "berberine phytosome",
+          "Berbevis berberine phytosome",
+          "phytosome berberine",
+          "berberine phospholipid complex"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.06,
+          "quality": "good"
         }
       }
     },
@@ -36600,11 +36672,11 @@
   },
   "lions_mane": {
     "standard_name": "Lion's Mane",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C6049163",
     "forms": {
       "lions mane fruiting body": {
-        "bio_score": 8,
+        "bio_score": 9,
         "natural": true,
         "absorption": "low-moderate (~12%); hericenones lipophilic (better F) but no human PK; polysaccharides poor",
         "notes": "Lion's mane fruiting body (Hericium erinaceus). Contains hericenones (lipophilic, fruiting body-specific) and beta-glucans. No published PK for hericenones. Beta-glucans interact with gut immune receptors rather than being absorbed systemically. Fruiting body provides different bioactive profile than mycelium (which contains erinacines). Clinical cognitive benefits demonstrated in RCTs but mechanism poorly understood. 2025 Nutrients review explicitly flags PK data gap: \"elucidation of pharmacokinetics\" needed (PMID:40284172); hericenones are lipophilic aromatics predicted to absorb better than the β-glucans but never quantified in humans.",
@@ -36622,17 +36694,17 @@
           "hericenone D",
           "lion's mane hericenones"
         ],
-        "score": 11,
+        "score": 12,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.12,
           "range_low": 0.08,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "good"
         }
       },
       "lions mane standardized extract": {
-        "bio_score": 9,
+        "bio_score": 11,
         "natural": true,
         "absorption": "poor (~15% for erinacines in rats; polysaccharides not absorbed intact)",
         "notes": "Standardized lion's mane extract (typically to polysaccharides/beta-glucans, or hericenones from fruiting body). The only published bioavailability data: erinacine S had 15.13% oral F in rats (PMID 31022946). No human PK exists. Beta-glucans are not absorbed intact — they interact with gut immune receptors (GALT/Peyer's patches) and are fermented. The nootropic compounds (hericenones, erinacines) have limited and poorly characterized PK. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
@@ -36649,19 +36721,19 @@
           "lions mane mushroom extract",
           "hericium erinaceus mushroom extract"
         ],
-        "score": 12,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.15,
           "range_low": 0.1,
           "range_high": 0.25,
-          "quality": "poor"
+          "quality": "excellent"
         }
       },
       "lion's mane (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 5,
         "natural": false,
-        "score": 7,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -36672,7 +36744,7 @@
           "value": 0.13,
           "range_low": 0.1,
           "range_high": 0.18,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -36683,7 +36755,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -36693,7 +36765,10 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "bacopa": {
     "standard_name": "Bacopa Monnieri",
@@ -36822,7 +36897,7 @@
   },
   "reishi": {
     "standard_name": "Reishi",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C0752326",
     "forms": {
       "reishi fruiting body": {
@@ -36843,11 +36918,11 @@
           "value": 0.65,
           "range_low": 0.52,
           "range_high": 0.78,
-          "quality": "good"
+          "quality": "moderate"
         }
       },
       "reishi standardized extract": {
-        "bio_score": 13,
+        "bio_score": 11,
         "natural": true,
         "absorption": "excellent (~85%)",
         "notes": "Ganoderma lucidum extract standardized to polysaccharides (typically >30%) and/or triterpenes. Dual extraction (hot water + ethanol) captures both bioactive fractions. Clinical evidence for immune modulation, sleep quality, and adaptogenic stress support. Host Defense and Real Mushrooms are quality brands. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
@@ -36858,19 +36933,19 @@
           "reishi mushroom extract",
           "ganoderma lucidum mushroom extract"
         ],
-        "score": 16,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.85,
           "range_low": 0.68,
           "range_high": 1.0,
-          "quality": "very_good"
+          "quality": "excellent"
         }
       },
       "reishi (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 5,
         "natural": false,
-        "score": 8,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B33 audit 2026-04-25: reishi triterpene class (higher than standard mushroom B1 framework due to lipid-soluble actives). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -36881,7 +36956,7 @@
           "value": 0.75,
           "range_low": 0.65,
           "range_high": 0.85,
-          "quality": "good"
+          "quality": "unknown"
         }
       }
     },
@@ -36892,7 +36967,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -36915,15 +36990,18 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "maitake": {
     "standard_name": "Maitake",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C3486792",
     "forms": {
       "maitake fruiting body": {
-        "bio_score": 8,
+        "bio_score": 9,
         "natural": true,
         "absorption": "poor for polysaccharides (GI-local immune interaction; beta-glucans not absorbed systemically)",
         "notes": "Whole fruiting body powder; contains beta-glucans and D-fraction polysaccharides supporting immune function.",
@@ -36941,17 +37019,17 @@
           "maitake mushroom mycelia powder",
           "maitake fruiting body hot water extract"
         ],
-        "score": 11,
+        "score": 12,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.12,
           "range_low": 0.08,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "maitake d-fraction": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": true,
         "absorption": "poor for polysaccharides; D-fraction is a purified beta-glucan extract",
         "notes": "Patented maitake beta-glucan extract (Maitake Products Inc). D-fraction is a protein-bound polysaccharide (~30% protein, ~70% polysaccharide). Beta-glucans are NOT absorbed systemically — they interact with gut-associated lymphoid tissue (GALT), dendritic cells, and macrophages via Dectin-1 receptor. Clinical studies show immune modulation effects. Nanba et al. research. Score reflects purified form quality, not systemic bioavailability. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
@@ -36966,19 +37044,19 @@
           "maitake mushroom extract",
           "grifola frondosa mushroom extract"
         ],
-        "score": 13,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.1,
           "range_low": 0.05,
           "range_high": 0.15,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "maitake (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 5,
         "natural": false,
-        "score": 7,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied. B32 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -36989,7 +37067,7 @@
           "value": 0.11,
           "range_low": 0.08,
           "range_high": 0.15,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -37000,7 +37078,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -37023,15 +37101,18 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "shiitake": {
     "standard_name": "Shiitake",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C3826070",
     "forms": {
       "shiitake fruiting body": {
-        "bio_score": 8,
+        "bio_score": 9,
         "natural": true,
         "absorption": "low systemic (~12%); high-MW β-1,3/1,6-glucan poorly absorbed; gut immune signaling",
         "notes": "Whole fruiting body; contains lentinan (beta-1,3-glucan), eritadenine, and B vitamins. β-1,3/1,6-glucans in the fruiting body act via gut-associated immune receptors; systemic F is low per analog polysaccharide PK (PMID:18680305).",
@@ -37043,17 +37124,17 @@
           "shiitake fruiting body supplement",
           "Shiitake Mushroom Fruiting Body Extract"
         ],
-        "score": 11,
+        "score": 12,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.12,
           "range_low": 0.08,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "shiitake extract": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": true,
         "absorption": "low systemic (~12%); lentinan is an IV drug — oral F inadequate; acts via M-cells",
         "notes": "Standardized extract; concentrated lentinan and AHCC (Active Hexose Correlated Compound) fractions for enhanced bioavailability. Evidence: lentinan is approved clinically only as IV therapy; its use as a formulation excipient to improve other drugs' absorption implicitly confirms its own poor oral F (PMID:41943369; PMID:34119545).",
@@ -37065,19 +37146,19 @@
           "shiitake beta-glucan extract",
           "shiitake extract supplement"
         ],
-        "score": 13,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.12,
           "range_low": 0.08,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "shiitake (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 5,
         "natural": false,
-        "score": 7,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied. B33 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -37088,7 +37169,7 @@
           "value": 0.12,
           "range_low": 0.1,
           "range_high": 0.15,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -37099,7 +37180,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -37109,17 +37190,20 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "turkey_tail": {
     "standard_name": "Turkey Tail",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": null,
     "cui_status": "no_confirmed_umls_match",
     "cui_note": "Wave 6.Y Batch 2B (2026-05-27): C6011676 was a branded clinical-drug CUI (Clinical Drug, rejected by strict-mode branded guard). UMLS exact-search for 'Turkey Tail' returns no atom linking the common name to the species. Species-level candidates C0319805 (Coriolus versicolor, Fungus) and C4282635 (Trametes versicolor preparation) exist but UMLS does not list 'Turkey Tail' as a synonym of either, so the species mapping cannot be auto-verified. Deferred to ontology review — taxonomy synonyms (Coriolus ↔ Trametes versicolor) are clinician decisions, not automated picks.",
     "forms": {
       "turkey tail fruiting body": {
-        "bio_score": 8,
+        "bio_score": 9,
         "natural": true,
         "absorption": "low systemic (~12%); high-MW β-glucans poorly absorbed; gut-associated lymphoid tissue activity",
         "notes": "Whole fruiting body; contains PSK (polysaccharide-K/Krestin) and PSP polysaccharopeptides. Mushroom β-glucans absorb via M-cell/Peyer's-patch uptake in the low-ng/mL range (PMID:18680305, matsutake analog); not systemically bioavailable in percentage terms.",
@@ -37134,17 +37218,17 @@
           "turkey tails fruiting body extract",
           "Coriolus versicolor Fruiting Body Extract"
         ],
-        "score": 11,
+        "score": 12,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.12,
           "range_low": 0.08,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "turkey tail standardized extract": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": true,
         "absorption": "low systemic (~10%); acts via gut immune cells (M-cell uptake); PSK given IV clinically",
         "notes": "Standardized extract of Trametes versicolor, typically to polysaccharopeptides (PSK/PSP). PSK (Krestin) and PSP are protein-bound polysaccharides used as cancer adjuvant therapy in Japan. They modulate immune function via Toll-like receptors and complement activation in gut-associated lymphoid tissue. Not absorbed intact systemically. Strong clinical evidence base in oncology (meta-analyses show survival benefit as adjuvant). Evidence: PSK/PSP are clinically used as IV/intraperitoneal agents because oral bioavailability is inadequate for systemic effect (PMID:41943369, 2026 review). B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
@@ -37160,19 +37244,19 @@
           "trametes versicolor mushroom extract",
           "coriolus versicolor mushroom extract"
         ],
-        "score": 13,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.1,
           "range_low": 0.05,
           "range_high": 0.15,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "turkey tail (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 5,
         "natural": false,
-        "score": 7,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified. B33 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -37183,7 +37267,7 @@
           "value": 0.11,
           "range_low": 0.1,
           "range_high": 0.13,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -37194,7 +37278,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -37204,15 +37288,18 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "chaga": {
     "standard_name": "Chaga",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C0697125",
     "forms": {
       "chaga sclerotium": {
-        "bio_score": 7,
+        "bio_score": 9,
         "natural": true,
         "absorption": "low systemic (~10%); raw polysaccharide + triterpene matrix; no human PK data",
         "notes": "Whole sclerotium (conk); contains betulinic acid, melanin, beta-glucans. Moderately bioavailable. No human PK data; triterpenoid fraction (inotodiol, betulinic acid) absorbs ~0.5% in rodent PK (PMID:34451676); polysaccharide fraction lower still.",
@@ -37224,17 +37311,17 @@
           "chaga sclerotium supplement",
           "Chaga Mushroom fruiting body extract"
         ],
-        "score": 10,
+        "score": 12,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.1,
           "range_low": 0.05,
           "range_high": 0.15,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "chaga extract": {
-        "bio_score": 9,
+        "bio_score": 11,
         "natural": true,
         "absorption": "low systemic (~15%); triterpenes (inotodiol) absorbed ~0.5% in animals; β-glucan fraction lower",
         "notes": "Concentrated extract; enriched in inotodiol, triterpenoids, and beta-glucans for enhanced bioavailability. Inotodiol rat absolute oral F = 0.45% (PMID:34451676); ethanol/solvent extraction enriches the lipophilic triterpene fraction which absorbs marginally better than the β-glucan fraction — but still in the low-single-digit percent range.",
@@ -37245,19 +37332,19 @@
           "chaga beta-glucan extract",
           "chaga extract supplement"
         ],
-        "score": 12,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.15,
           "range_low": 0.08,
           "range_high": 0.2,
-          "quality": "poor"
+          "quality": "variable"
         }
       },
       "chaga (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 5,
         "natural": false,
-        "score": 10,
+        "score": 5,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Inonotus obliquus mushroom (chaga); rich in betulinic acid, melanin, and polysaccharides. Traditional Siberian medicine for immune and GI support. Limited human clinical data; most evidence preclinical. Form not specified. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -37268,7 +37355,7 @@
           "value": 0.12,
           "range_low": 0.08,
           "range_high": 0.15,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -37279,7 +37366,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -37290,16 +37377,19 @@
     },
     "cui_note": "",
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "cordyceps": {
     "standard_name": "Cordyceps",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C1011843",
     "rxcui": "283554",
     "forms": {
       "cordyceps militaris": {
-        "bio_score": 13,
+        "bio_score": 11,
         "natural": true,
         "absorption": "very low (intact cordycepin not detected in plasma; rapid ADA deamination)",
         "notes": "Cordyceps militaris fruiting body (cultivated). Contains cordycepin (3'-deoxyadenosine), adenosine, and polysaccharides. Cordycepin is well-absorbed but rapidly deaminated by adenosine deaminase (short t1/2). Polysaccharide beta-glucans act via gut immune receptors. Clinical studies support exercise performance, fatigue reduction, and immune modulation at 1-3 g/day. CS-4 strain is most studied. Evidence update 2026-04-24: PMID:31673018 (Lee 2019) demonstrates intact cordycepin is NOT orally absorbed in rats — only the deaminated metabolite 3'-deoxyinosine reaches circulation. PMID:37329165 (Chen 2023 review) confirms rapid ADA deamination truncates systemic cordycepin half-life. Prior struct.value=0.6 was inconsistent with this PK evidence; corrected to 0.15. B43 2026-06-06: added exact mushroom-extract label aliases so common labels with the word mushroom route to this disclosed extract form instead of dropping out of IQM scoring.",
@@ -37314,17 +37404,17 @@
           "cordyceps militaris mycelium",
           "cordyceps mushroom extract"
         ],
-        "score": 16,
+        "score": 14,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.15,
           "range_low": 0.05,
           "range_high": 0.25,
-          "quality": "low"
+          "quality": "good"
         }
       },
       "cordyceps sinensis mycelium": {
-        "bio_score": 9,
+        "bio_score": 8,
         "natural": true,
         "absorption": "very low (grain-grown mycelium; cordycepin orally non-absorbable)",
         "notes": "CS-4 strain mycelium (Paecilomyces hepiali) grown on grain substrate. NOT true wild Cordyceps sinensis (which costs $20,000+/kg). Contains cordycepin and polysaccharides but at lower concentration than C. militaris fruiting body. Traditional use for fatigue and kidney yang support. Verify mycelium vs fruiting body on label. Evidence update 2026-04-24: Same cordycepin PK limitation as C. militaris — intact compound not absorbed orally (PMID:31673018). CS-4 mycelium contains lower cordycepin than fruiting body; systemic F approaches zero for parent compound.",
@@ -37334,19 +37424,19 @@
           "cs-4",
           "Ophiocordyceps sinensis"
         ],
-        "score": 12,
+        "score": 11,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.12,
           "range_low": 0.05,
           "range_high": 0.2,
-          "quality": "low"
+          "quality": "moderate"
         }
       },
       "cordyceps (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 5,
         "natural": false,
-        "score": 8,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B31 audit 2026-04-25: cordyceps class baseline. Cordycepin metabolite-only absorption (PMID:31673018). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -37362,13 +37452,13 @@
           "value": 0.13,
           "range_low": 0.1,
           "range_high": 0.18,
-          "quality": "low"
+          "quality": "unknown"
         }
       },
       "cordycepsprime extract": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": true,
-        "score": 15,
+        "score": 13,
         "absorption": "low (Crominex pattern; class-equiv to militaris)",
         "notes": "Enhanced cordyceps bioavailability formula with improved absorption technology. Branded cordyceps extract with superior cellular uptake. B31 audit 2026-04-25: Crominex relapse — class-equiv militaris, no branded PK premium (PMID:31673018).",
         "aliases": [
@@ -37381,7 +37471,7 @@
           "value": 0.15,
           "range_low": 0.1,
           "range_high": 0.2,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -37392,7 +37482,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -37415,7 +37505,10 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "maca": {
     "standard_name": "Maca",
@@ -46585,13 +46678,13 @@
   },
   "ahcc": {
     "standard_name": "AHCC (Active Hexose Correlated Compound)",
-    "category": "herbs",
+    "category": "mushroom_extracts",
     "cui": "C5557556",
     "rxcui": "",
     "forms": {
       "AHCC (unspecified)": {
-        "bio_score": 7,
-        "natural": true,
+        "bio_score": 10,
+        "natural": false,
         "score": 10,
         "absorption": "good",
         "notes": "Proprietary mushroom extract from shiitake mycelium. Alpha-glucan rich. Studied for immune support, particularly NK cell activity. B34 audit 2026-04-25: bulk class-application (good class) — mechanical mapping from absorption + bio_score.",
@@ -46623,7 +46716,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "category_enum": "herbs",
+    "category_enum": "mushroom_extracts",
     "external_ids": {
       "unii": "S1W5KTD68Y"
     },
@@ -46638,7 +46731,10 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "arachidonic_acid": {
     "standard_name": "Arachidonic Acid",
@@ -56944,8 +57040,8 @@
   "button_mushroom": {
     "standard_name": "Button Mushroom",
     "severity_level": "none",
-    "category": "herbs",
-    "category_enum": "herbs",
+    "category": "mushroom_extracts",
+    "category_enum": "mushroom_extracts",
     "source": "botanical_extract",
     "priority": "low",
     "description": "White button mushroom (Agaricus bisporus). Rich in beta-glucans, ergothioneine, glutathione, and polysaccharides. Supports immune function via Dectin-1 receptor activation. Antioxidant and prebiotic effects. Primarily culinary; more modest medicinal evidence than reishi or maitake.",
@@ -56955,9 +57051,9 @@
     "rxcui": "901369",
     "forms": {
       "button mushroom fruiting body extract": {
-        "bio_score": 7,
+        "bio_score": 8,
         "natural": true,
-        "score": 10,
+        "score": 11,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Extract from Agaricus bisporus fruiting bodies. Beta-glucans activate macrophages and NK cells. Ergothioneine and glutathione provide antioxidant protection. Emerging oncology research (PMID 32653808, 22113068). Less medicinal evidence than reishi/maitake/shiitake. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -56976,9 +57072,9 @@
         }
       },
       "button mushroom (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 5,
         "natural": false,
-        "score": 6,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -56993,7 +57089,7 @@
           "value": 0.08,
           "range_low": 0.03,
           "range_high": 0.12,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -57024,13 +57120,16 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "auricularia": {
     "standard_name": "Wood Ear Mushroom",
     "severity_level": "none",
-    "category": "herbs",
-    "category_enum": "herbs",
+    "category": "mushroom_extracts",
+    "category_enum": "mushroom_extracts",
     "source": "botanical_extract",
     "priority": "low",
     "description": "Black fungus / wood ear mushroom (Auricularia auricula-judae). Traditional Chinese medicine mushroom rich in polysaccharides and melanin. Animal models show antioxidant, anti-aging (extends nematode lifespan ~20%), and metabolic effects. Limited human clinical trials. DISTINCT from Auricularia polytricha (Cloud Ear / Hairy Wood Ear, CUI C1081597) — different species in the same genus, often used interchangeably in commerce but pharmacology and TCM indications differ. Old CUI C0997521 was the genus-level concept; corrected 2026-05-01 audit to species-specific C1002916.",
@@ -57040,9 +57139,9 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "auricularia fruiting body extract": {
-        "bio_score": 7,
+        "bio_score": 9,
         "natural": true,
-        "score": 10,
+        "score": 12,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Extract from Auricularia auricula-judae fruiting bodies. TCM mushroom with polysaccharide-rich profile. Animal studies show antioxidant and metabolic benefits (PMID 39968271). Limited human clinical evidence — conservative scoring applied. B30 audit 2026-04-25: mushroom class-poor (B1 framework).",
         "aliases": [
@@ -57060,13 +57159,13 @@
           "value": 0.1,
           "range_low": 0.05,
           "range_high": 0.15,
-          "quality": "low"
+          "quality": "variable"
         }
       },
       "auricularia (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 5,
         "natural": false,
-        "score": 6,
+        "score": 5,
         "absorption": "low/unspecified mushroom form quality; disclosed fruiting-body or standardized extract required for higher confidence",
         "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1). B43 2026-06-06: unspecified mushroom form set below disclosed mushroom forms and natural bonus removed. For local/matrix fungal actives, bio_score is used as active-form quality/delivery-to-site confidence; unspecified labels should not outrank disclosed fruiting-body or standardized extracts.",
         "aliases": [
@@ -57084,7 +57183,7 @@
           "value": 0.08,
           "range_low": 0.03,
           "range_high": 0.12,
-          "quality": "low"
+          "quality": "unknown"
         }
       }
     },
@@ -57106,7 +57205,10 @@
       "Auricularia auricula-judae",
       "Auricularia auricula"
     ],
-    "external_ids": {}
+    "external_ids": {},
+    "source_origin": "fungal",
+    "ingredient_domain": "fungal_mushroom",
+    "local_matrix_active": true
   },
   "andrographis": {
     "standard_name": "Andrographis",
