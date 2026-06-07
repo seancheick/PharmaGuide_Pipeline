@@ -1086,21 +1086,20 @@ def test_omega_rubric_form_tier_table_locked() -> None:
     assert form_tier["undefined"] == 2
 
 
-def test_omega_rubric_dose_bands_match_v3_legacy_thresholds() -> None:
-    """EPA+DHA dose-band thresholds are lifted from
-    scoring_config.section_A_ingredient_quality.omega3_dose_bonus.bands.
-    Thresholds (250/500/1000/2000/4000) are evidence-grounded
-    (EFSA/FDA/AHA/ACC); they must not drift unless the underlying
-    guidance changes. Scores are rescaled to /20 for the omega Dose
-    sub-component."""
+def test_omega_rubric_dose_bands_match_configured_thresholds() -> None:
+    """EPA+DHA dose-band thresholds lock evidence-grounded high-dose bands
+    plus purpose-fit low-dose partial-credit bands. They must not drift
+    without an explicit rubric change."""
     rubric = json.loads((SCRIPTS_ROOT / "data" / "omega_rubric.json").read_text())
     bands = rubric["dose"]["epa_dha_bands"]
 
     thresholds = [b["min_mg_day"] for b in bands]
-    assert thresholds == [4000, 2000, 1000, 500, 250, 0]
+    assert thresholds == [4000, 2000, 1000, 500, 250, 200, 100, 0]
 
     # Top of band reaches the dim cap of 20.
     assert bands[0]["score"] == 20  # 4000+ prescription
+    assert bands[5]["score"] == 4.0  # near EFSA AI
+    assert bands[6]["score"] == 2.5  # low disclosed EPA/DHA
     assert bands[-1]["score"] == 0  # below_efsa_ai
 
 

@@ -179,11 +179,36 @@ def test_band_efsa_ai_zone() -> None:
     assert payload["metadata"]["epa_dha_band_label"] == "efsa_ai_zone"
 
 
-def test_band_below_efsa_ai() -> None:
-    """<250 mg/day → below_efsa_ai (0). No band credit."""
+def test_band_near_efsa_ai_partial_credit() -> None:
+    """200-250 mg/day → near_efsa_ai (4).
+
+    Purpose-fit calibration 2026-06-07: a disclosed 200-249 mg/day EPA/DHA
+    product is below the EFSA adequate-intake threshold, but it is not the
+    same as no EPA/DHA. Award small partial dose credit and keep full EFSA AI
+    credit at 250 mg/day."""
+    from scoring_v4.modules.omega_dose import score_dose
+
+    product = _omega_product(epa=125, dha=100)  # 225 mg/day
+    payload = score_dose(product)
+    assert payload["components"]["epa_dha_band"] == 4.0
+    assert payload["metadata"]["epa_dha_band_label"] == "near_efsa_ai"
+
+
+def test_band_low_disclosed_epa_dha_partial_credit() -> None:
+    """100-200 mg/day → low_disclosed_epa_dha (2.5)."""
     from scoring_v4.modules.omega_dose import score_dose
 
     product = _omega_product(epa=100, dha=50)  # 150 mg/day
+    payload = score_dose(product)
+    assert payload["components"]["epa_dha_band"] == 2.5
+    assert payload["metadata"]["epa_dha_band_label"] == "low_disclosed_epa_dha"
+
+
+def test_band_trace_epa_dha_still_zero() -> None:
+    """<100 mg/day → below_efsa_ai (0). Trace-dose gummies stay zero."""
+    from scoring_v4.modules.omega_dose import score_dose
+
+    product = _omega_product(epa=30, dha=20)  # 50 mg/day
     payload = score_dose(product)
     assert "epa_dha_band" not in payload["components"]
     assert payload["metadata"]["epa_dha_band_label"] == "below_efsa_ai"
@@ -407,7 +432,16 @@ def test_dose_cap_25() -> None:
 # --- Real canary integration ---------------------------------------------
 
 
-_CANARY_DOSE_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
+_CANARY_DOSE_IDS = {
+    "327776",
+    "326270",
+    "288740",
+    "273630",
+    "239592",
+    "182968",
+    "261863",
+    "267461",
+}
 _canary_cache = None
 
 
@@ -449,8 +483,10 @@ def _load_canaries(ids):
     ("326270", 21.0, "aha_cvd"),    # Sports Research alt SKU: same EPA/DHA
     ("288740", 21.0, "aha_cvd"),    # Nordic Ultimate Omega + CoQ10: 1100 mg
     ("273630", 21.0, "aha_cvd"),    # Garden of Life Advanced Omega: 1160 mg
-    ("239592", 5.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day
-    ("182968", 5.0, "below_efsa_ai"),  # Pure Encap Krill-Plex: only 240 mg/day
+    ("239592", 5.0, "below_efsa_ai"),  # CVS Krill 350: only 74 mg/day, ratio-only
+    ("182968", 9.0, "near_efsa_ai"),  # Pure Encap Krill-Plex: 240 mg/day + ratio
+    ("261863", 4.0, "near_efsa_ai"),  # Pro-Resolve: EPA 225 mg + DHA 200 mcg
+    ("267461", 0.0, "below_efsa_ai"),  # Vitafusion gummy: only 50 mg aggregate
 ])
 def test_canary_dose_scores(dsld_id, expected_score, expected_band):
     """Real-catalog dose scoring lock — protects against silent regressions
@@ -539,11 +575,13 @@ def test_dose_weights_match_rubric_config() -> None:
 
     # Thresholds in descending order
     thresholds = [b["min_mg_day"] for b in bands]
-    assert thresholds == [4000, 2000, 1000, 500, 250, 0]
+    assert thresholds == [4000, 2000, 1000, 500, 250, 200, 100, 0]
 
     # Scores at boundaries
     assert bands[0]["score"] == 20  # prescription
     assert bands[2]["score"] == 16  # aha_cvd
+    assert bands[5]["score"] == 4.0  # near_efsa_ai
+    assert bands[6]["score"] == 2.5  # low_disclosed_epa_dha
     assert bands[-1]["score"] == 0  # below_efsa_ai
 
     # Ratio sanity
