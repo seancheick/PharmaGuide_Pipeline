@@ -362,16 +362,23 @@ honest at 2026-05-19.
 
 ### 11.4 NSF Sport — lot-number fidelity
 
-NSF Sport records carry an empty `lot_numbers_tested: []` because the base
-refresh skips the per-product detail pages. `--with-lots` backfills them, but
-it is **fidelity-only**: lot numbers are informational and are **not used by the
-resolver** (which matches by brand + product, never lot). The enrichment is
-~1,282 NSF detail-page GETs at NSF's ~3–4 s/page latency (≈ 90 min), so it is run
-**out-of-band** rather than inline with scoring refreshes. It was kicked off in
-this session; if it completed it was merged as a follow-up commit (NSF Sport
-record count and brand coverage are unchanged — only `lot_numbers_tested`
-populates). Recommended cadence: with the maintainer's quarterly NSF refresh
-(`--source live-nsf-sport --with-lots`), not on every run.
+NSF Sport records carried an empty `lot_numbers_tested: []`. Backfilling them
+surfaced a **latent bug**: `--with-lots` was silently capturing **zero** lots on
+every product because the detail-page parser required a `:`/`-` separator after
+the `Lot #` label, but the live page is a table —
+`<tr><th>Lot #</th><td>48715<br/>49759<br/>…</td></tr>` — with the lots in the
+adjacent cell. Fixed with a table-aware parser (`parse_nsf_sport_detail_html`,
+now pure + unit-tested).
+
+After the fix, the `--with-lots` re-fetch (1,282 NSF detail-page GETs, ~21 min)
+populated **1,282 / 1,282 records (100%) with lot numbers — 6,188 lots total**.
+Record count and brand coverage are unchanged; only `lot_numbers_tested` filled.
+Verified: the merged record for Ketone-IQ (listing 1798073) carries
+`48715, 49759, 49038, 51019B, 51447A, …` — an exact match to the live detail
+page. (Lots remain **informational** — the resolver matches by brand + product,
+never lot — but the data and the fetcher are now correct.) Recommended cadence:
+with the maintainer's quarterly NSF refresh (`--source live-nsf-sport
+--with-lots`), not every run.
 
 ### 11.5 Registry state after expansion
 
