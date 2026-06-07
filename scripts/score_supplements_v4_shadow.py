@@ -62,6 +62,7 @@ from scoring_v4.modules.omega import score_omega
 from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.modules.sports import score_sports
 from scoring_v4.router import class_for_product
+from scoring_v4.display_calibration import calibrate_display
 
 
 # Schema lock — these are the six shadow fields documented in §14 of
@@ -75,6 +76,9 @@ SHADOW_KEYS = (
     "shadow_score_v4_confidence",
     "shadow_score_v4_breakdown",
     "shadow_score_v4_anchored",
+    # Display-layer top-band calibration (raw is never mutated; this is the
+    # consumer-facing score). breakdown["display_calibration"] carries provenance.
+    "shadow_score_v4_display_100",
 )
 
 # Scoring-engine provenance (Phase 0 config-driven calibration). Stamped into
@@ -383,5 +387,11 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         )
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
+
+    # Layer 5 — display-layer top-band calibration. Adds shadow_score_v4_display_100
+    # (consumer score) + breakdown["display_calibration"] provenance. raw
+    # (shadow_score_v4_100) is NEVER modified; gated so only SAFE, well-disclosed,
+    # raw>=80 products lift. No-op for null/blocked scores.
+    shadow = calibrate_display(shadow)
 
     return shadow

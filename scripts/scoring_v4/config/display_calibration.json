@@ -1,0 +1,32 @@
+{
+  "_metadata": {
+    "config_name": "display_calibration",
+    "version": "1.0.0-experiment",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-06-07",
+    "description": "Display-layer, archetype-anchored top-band normalization. Corrects unreachable structural dimension ceilings so each archetype's best-in-class reads ~95 for consumers, WITHOUT mutating raw_score_100 (the audit/math score). Conservative k=3 convex lift, gated by top_band_eligibility. Anchors R_a are frozen best-in-class raw scores (derived 2026-06-07), not corpus percentiles.",
+    "notes": "raw_score_100 is NEVER changed. display only. confidence band is NOT a gate (artifact-prone for omega/probiotic) — informational only."
+  },
+  "transform": {
+    "k": 3,
+    "floor": 80.0,
+    "target": 95.0,
+    "ceiling": 96.0
+  },
+  "eligibility": {
+    "min_raw": 80.0,
+    "require_verdict_safe": true,
+    "require_evidence_gt": 0.0,
+    "min_transparency_fraction": 0.5,
+    "require_dose_gt": 0.0,
+    "require_no_safety_signals": true
+  },
+  "archetypes": {
+    "sports_single": { "R_a": 93.0 },
+    "omega": { "R_a": 89.3 },
+    "probiotic": { "R_a": 86.5 },
+    "prenatal_multi": { "R_a": 87.9 },
+    "generic_single_molecule": { "R_a": 87.5 },
+    "generic_botanical_branded": { "R_a": 88.5 }
+  }
+}
