@@ -766,6 +766,77 @@ def test_blend_header_mass_does_not_create_mass_anchor_for_probiotic_strain():
     assert result.rows[0]["is_proprietary_blend"] is False
 
 
+def test_iqm_blend_anchor_mass_carries_conservative_form_quality():
+    product = _product(
+        [],
+        activeIngredients=[
+            {
+                "name": "Pancreatin",
+                "standardName": "Digestive Enzymes",
+                "canonical_id": "digestive_enzymes",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1.0,
+                "unit": "Gram(s)",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "score_eligible_by_cleaner": False,
+                "dose_class": "blend_total_weight",
+                "raw_taxonomy": {
+                    "category": "blend",
+                    "ingredientGroup": "Blend (non-nutrient/non-botanical)",
+                    "forms": [{"name": "Porcine"}],
+                },
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 1
+    row = result.rows[0]
+    assert row["evidence_type"] == "blend_anchor_mass"
+    assert row["canonical_id"] == "digestive_enzymes"
+    assert row["bio_score"] == 11
+    assert row["score"] == 14
+    assert row["matched_form"] == "pancreatic enzymes (animal-derived)"
+    assert row["generic_form_quality_credit"] is True
+
+
+def test_unmapped_blend_anchor_mass_does_not_get_iqm_form_quality_credit():
+    product = _product(
+        [],
+        activeIngredients=[
+            {
+                "name": "Relora Patented Proprietary Blend",
+                "standardName": "Relora Patented Proprietary Blend",
+                "canonical_id": None,
+                "canonical_source_db": "unmapped",
+                "quantity": 250.0,
+                "unit": "mg",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "score_eligible_by_cleaner": False,
+                "dose_class": "blend_total_weight",
+                "raw_taxonomy": {
+                    "category": "blend",
+                    "ingredientGroup": "Proprietary Blend (Herb/Botanical)",
+                },
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert len(result.rows) == 1
+    row = result.rows[0]
+    assert row["evidence_type"] == "blend_anchor_mass"
+    assert row["canonical_id"] == "relora_patented_proprietary_blend"
+    assert row.get("bio_score") is None
+    assert row["generic_form_quality_credit"] is False
+
+
 def test_nutrition_only_uses_explicit_contract_not_keywords_by_default():
     assert is_nutrition_only_product({"product_name": "Whey Protein Powder"}) is False
     assert is_nutrition_only_product({"product_scoring_class": "nutrition_only"}) is True

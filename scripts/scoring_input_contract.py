@@ -22,6 +22,7 @@ from scoring_reference_resolver import has_therapeutic_reference, is_known_botan
 
 
 _DATA_DIR = Path(__file__).resolve().parent / "data"
+_IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
 LEGACY_IQD_SOURCE = "ingredient_quality_data.ingredients"
 PRODUCT_EVIDENCE_SOURCE = "product_scoring_evidence"
@@ -293,6 +294,81 @@ def _slug(value: Any) -> str:
     text = _norm(value)
     text = re.sub(r"[^a-z0-9]+", "_", text).strip("_")
     return text
+
+
+@lru_cache(maxsize=1)
+def _iqm_index() -> Dict[str, Dict[str, Any]]:
+    try:
+        raw = json.loads(_IQM_PATH.read_text())
+    except Exception:  # pragma: no cover - missing data degrades to empty
+        return {}
+    return {str(key): value for key, value in raw.items() if isinstance(value, dict)}
+
+
+def _form_quality_from_iqm(canonical_id: Any, context: Dict[str, Any]) -> Dict[str, Any]:
+    """Resolve conservative form-quality fields for product evidence rows.
+
+    Blend-anchor evidence is the compatibility bridge for current enriched
+    blobs: dose can be known at a parent/blend level while no IQD scorable row
+    exists. When the anchor canonical maps to IQM, carry label-supported form
+    quality into the scoring row so Formulation does not see a false zero.
+    Unmapped/generic blend headers return no credit.
+    """
+    entry = _iqm_index().get(_slug(canonical_id))
+    forms = _safe_dict(entry.get("forms")) if entry else {}
+    if not forms:
+        return {}
+
+    text = _norm(_row_text(context))
+    candidates: List[tuple[int, int, float, str, Dict[str, Any]]] = []
+    fallback: List[tuple[float, str, Dict[str, Any]]] = []
+    for form_name, form in forms.items():
+        if not isinstance(form, dict):
+            continue
+        bio = _as_float(form.get("bio_score"), None)
+        score = _as_float(form.get("score"), bio)
+        quality = bio if bio is not None else score
+        if quality is None:
+            continue
+        fallback.append((float(quality), str(form_name), form))
+        aliases = [form_name] + [
+            str(alias)
+            for alias in _safe_list(form.get("aliases") or form.get("form_aliases"))
+            if alias
+        ]
+        for alias in aliases:
+            alias_norm = _norm(alias)
+            if alias_norm and alias_norm in text:
+                specificity = 0 if "unspecified" in _norm(form_name) else 1
+                candidates.append((specificity, len(alias_norm), float(quality), str(form_name), form))
+
+    chosen_name = ""
+    chosen: Dict[str, Any] = {}
+    if candidates:
+        _, _, _, chosen_name, chosen = sorted(candidates, key=lambda row: (row[0], row[1], row[2]), reverse=True)[0]
+    elif len(fallback) == 1:
+        _, chosen_name, chosen = fallback[0]
+    elif fallback:
+        _, chosen_name, chosen = sorted(fallback, key=lambda row: row[0])[0]
+    if not chosen:
+        return {}
+
+    bio = _as_float(chosen.get("bio_score"), None)
+    score = _as_float(chosen.get("score"), bio)
+    out: Dict[str, Any] = {
+        "matched_form": chosen_name,
+        "generic_form_quality_credit": True,
+    }
+    if bio is not None:
+        out["bio_score"] = bio
+    if score is not None:
+        out["score"] = score
+    if "natural" in chosen:
+        out["natural"] = bool(chosen.get("natural"))
+    category = entry.get("category_enum") or entry.get("category")
+    if category:
+        out["category"] = category
+    return out
 
 
 def _anchor_identity(row: Dict[str, Any]) -> tuple[str, Optional[str]]:
@@ -1279,6 +1355,10 @@ def _product_scoring_evidence_rows(
             "section_support": PRODUCT_EVIDENCE_SECTION_SUPPORT[evidence_type],
             "generic_form_quality_credit": bool(item.get("generic_form_quality_credit", False)),
         }
+        if evidence_type == "blend_anchor_mass" and not row.get("bio_score"):
+            quality = _form_quality_from_iqm(row.get("canonical_id"), row)
+            if quality:
+                row.update(quality)
         dedupe_key = (
             row.get("evidence_type"),
             row.get("canonical_id"),

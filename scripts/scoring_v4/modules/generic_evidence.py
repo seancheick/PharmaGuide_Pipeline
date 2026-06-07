@@ -14,6 +14,9 @@ contract so shadow comparisons stay explainable.
 from __future__ import annotations
 
 from collections import defaultdict
+from functools import lru_cache
+import json
+from pathlib import Path
 import re
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -30,6 +33,9 @@ from scoring_v4.modules.collagen_profile import is_collagen_product
 
 
 PHASE_MARKER = "P1.3.3_evidence_pipeline"
+
+_DATA_DIR = Path(__file__).resolve().parents[2] / "data"
+_BACKED_CLINICAL_STUDIES_PATH = _DATA_DIR / "backed_clinical_studies.json"
 
 CAP_TOTAL = 20.0
 CAP_PER_INGREDIENT = 7.0
@@ -333,19 +339,144 @@ def _recover_contract_evidence_matches(
     """Recover evidence when the scoring input contract has a clear primary
     identity but enrichment failed to copy the corresponding clinical match.
 
-    Keep this deliberately narrow. It currently only handles collagen because
-    the project has verified collagen-peptide evidence in
-    backed_clinical_studies.json and the collagen profile already proves product
-    ownership via mass/intent. Token collagen add-ons stay excluded by
-    is_collagen_product().
+    Keep this deliberately narrow. It recovers verified evidence only when the
+    scoring contract has already produced a dose-bearing primary row and the row
+    has an exact branded/product-level identity in backed_clinical_studies.json.
+    Token collagen add-ons stay excluded by is_collagen_product().
     """
-    if not _has_primary_collagen_peptide_identity(product):
-        return []
-    if _has_match_for_identity(matches, "collagen"):
-        return []
-    if not is_collagen_product(product):
-        return []
-    return [dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH)]
+    recovered: List[Dict[str, Any]] = []
+    recovered_ids: set[str] = set()
+
+    if (
+        _has_primary_collagen_peptide_identity(product)
+        and not _has_match_for_identity(matches, "collagen")
+        and is_collagen_product(product)
+    ):
+        recovered.append(dict(_RECOVERED_COLLAGEN_PEPTIDES_MATCH))
+        recovered_ids.add(_RECOVERED_COLLAGEN_PEPTIDES_MATCH["id"])
+
+    for entry in _recover_verified_product_level_matches(product, matches):
+        entry_id = _entry_id(entry)
+        if entry_id and entry_id not in recovered_ids:
+            recovered.append(entry)
+            recovered_ids.add(entry_id)
+
+    return recovered
+
+
+def _recover_verified_product_level_matches(
+    product: Dict[str, Any],
+    matches: List[Any],
+) -> List[Dict[str, Any]]:
+    existing_ids = {
+        _entry_id(entry)
+        for entry in matches
+        if isinstance(entry, dict)
+    }
+    recovered: List[Dict[str, Any]] = []
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        if (row.get("evidence_type") or "") != "blend_anchor_mass":
+            continue
+        mass = _mass_mg(row) or 0.0
+        if mass <= 0.0:
+            continue
+        row_text = _row_identity_text(product, row)
+        if not row_text:
+            continue
+        for entry in _verified_product_level_evidence_entries():
+            entry_id = _entry_id(entry)
+            if entry_id in existing_ids:
+                continue
+            if not _verified_product_entry_matches_text(entry, row_text):
+                continue
+            recovered_entry = dict(entry)
+            recovered_entry["evidence_origin"] = "scoring_contract_recovery"
+            recovered_entry["source_data"] = f"backed_clinical_studies:{entry_id}"
+            # Link the recovered study back to the exact mass-bearing row so
+            # the primary-floor gate can prove this is not trace evidence.
+            recovered_entry["matched_term"] = row.get("name") or row.get("standard_name")
+            recovered_entry["matched_canonical_id"] = row.get("canonical_id")
+            recovered.append(recovered_entry)
+            existing_ids.add(entry_id)
+    return recovered
+
+
+@lru_cache(maxsize=1)
+def _verified_product_level_evidence_entries() -> Tuple[Dict[str, Any], ...]:
+    try:
+        raw = json.loads(_BACKED_CLINICAL_STUDIES_PATH.read_text())
+    except Exception:  # pragma: no cover
+        return tuple()
+    entries = raw.get("backed_clinical_studies") if isinstance(raw, dict) else raw
+    out: List[Dict[str, Any]] = []
+    for entry in _safe_list(entries):
+        if not isinstance(entry, dict):
+            continue
+        if not _is_verified_product_level_entry(entry):
+            continue
+        out.append(dict(entry))
+    return tuple(out)
+
+
+def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
+    if _norm_text(entry.get("study_type")) == "reference":
+        return False
+    if _norm_text(entry.get("evidence_level")) == "reference":
+        return False
+    if not _safe_list(entry.get("references_structured")):
+        return False
+    evidence_level = _norm_text(entry.get("evidence_level"))
+    entry_id = _norm_text(entry.get("id"))
+    return (
+        evidence_level in {"product-human", "product_human", "product-rct", "product_rct", "branded-rct", "branded_rct"}
+        or entry_id.startswith("brand_")
+    )
+
+
+def _row_identity_text(product: Dict[str, Any], row: Dict[str, Any]) -> str:
+    values = [
+        product.get("product_name"),
+        product.get("full_name"),
+        product.get("name"),
+        row.get("name"),
+        row.get("standard_name"),
+        row.get("raw_source_text"),
+        row.get("canonical_id"),
+        row.get("scoring_parent_id"),
+        row.get("evidence_canonical_id"),
+    ]
+    return " ".join(_canonical_text(value) for value in values if _canonical_text(value))
+
+
+def _verified_product_entry_matches_text(entry: Dict[str, Any], row_text: str) -> bool:
+    """Exact phrase matching only; no fuzzy clinical-evidence recovery.
+
+    Use branded/product-level identifiers from the verified evidence entry. Broad
+    descriptive aliases are deliberately excluded unless the entry itself is not
+    branded; this prevents a generic magnolia-phellodendron label from borrowing
+    Relora's product-specific RCT unless the label actually says Relora.
+    """
+    if not row_text:
+        return False
+    keys: List[str] = []
+    entry_id = _norm_text(entry.get("id"))
+    if entry_id.startswith("brand_"):
+        keys.append(entry_id.removeprefix("brand_").replace("_", " "))
+        keys.append(entry_id.removeprefix("brand_"))
+        keys.append(_canonical_text(entry.get("standard_name")))
+    else:
+        keys.extend([_canonical_text(entry.get("standard_name"))])
+        keys.extend(_canonical_text(alias) for alias in _safe_list(entry.get("aliases")))
+
+    for key in keys:
+        key = _canonical_text(key)
+        if not key or len(key) < 4:
+            continue
+        if re.search(rf"(?<![a-z0-9]){re.escape(key)}(?![a-z0-9])", row_text):
+            return True
+    return False
 
 
 def _has_primary_collagen_peptide_identity(product: Dict[str, Any]) -> bool:

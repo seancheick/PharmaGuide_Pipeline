@@ -417,3 +417,28 @@ def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
     out = score_botanical_dose(product)
     assert out["band"] == "blend_total_only"
     assert out["score"] == 10.0  # calibration v2 (was 7)
+
+
+def test_botanical_formulation_prefers_recognized_anchor_over_unmapped_blend_header():
+    """Relora/Seditol shape: a parent proprietary-blend total and a recognized
+    nested botanical anchor can carry the same mass. The botanical formulation
+    selector must choose the recognized botanical anchor, not the unmapped
+    parent header, otherwise formulation collapses to 0."""
+    product = {
+        "product_name": "Relora",
+        "primary_type": "general_supplement",
+        "ingredient_quality_data": {"ingredients_scorable": [], "ingredients": []},
+        "product_scoring_evidence": [
+            _blend_anchor_evidence("relora_patented_proprietary_blend", "Relora Patented Proprietary Blend", 250.0),
+            _blend_anchor_evidence("magnolia_bark", "Magnolia (Magnolia officinalis) extract", 250.0),
+        ],
+    }
+    product["product_scoring_evidence"][0]["canonical_source_db"] = "unmapped"
+    product["product_scoring_evidence"][0]["clean_identity_id"] = None
+
+    out = score_botanical_formulation(product)
+
+    assert out["metadata"]["recognized"] is True
+    assert out["components"]["recognized_botanical_identity"] == 6.0
+    assert out["components"]["quantified_dose_present"] == 2.0
+    assert out["score"] > 0.0

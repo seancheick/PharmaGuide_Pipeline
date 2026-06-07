@@ -344,8 +344,24 @@ def _primary_botanical_active(product: Dict[str, Any]) -> Optional[Dict[str, Any
     botanicals = [r for r in _scoring_actives(product) if _is_botanical_active(r)]
     if not botanicals:
         return None
-    # highest comparable mass wins; fall back to first
-    return max(botanicals, key=lambda r: (_mass_mg(r) or 0.0))
+    # Highest comparable mass wins; when multiple rows share the same blend
+    # total, prefer a recognized botanical anchor over the generic/unmapped
+    # blend header. This keeps opaque blend headers conservative without
+    # suppressing the known child identity carried by blend_anchor_mass.
+    return max(botanicals, key=lambda r: (
+        _mass_mg(r) or 0.0,
+        _recognized_botanical_identity(r),
+        _as_float(r.get("bio_score")) or 0.0,
+    ))
+
+
+def _recognized_botanical_identity(row: Dict[str, Any]) -> bool:
+    keys = set(_ingredient_identity_keys(row))
+    return bool(keys & _known_botanical_identity_set()) or (
+        bool(_norm(row.get("canonical_id"))) and _norm(
+            (row.get("raw_taxonomy") or {}).get("category")) == "botanical"
+        and not str(row.get("canonical_id")).startswith("blend")
+    )
 
 
 def _role_by_identity(product: Dict[str, Any]) -> Dict[str, str]:
@@ -619,11 +635,7 @@ def score_botanical_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "metadata": {"reason": "no_botanical_active"}}
 
     keys = set(_ingredient_identity_keys(row))
-    recognized = bool(keys & _known_botanical_identity_set()) or (
-        bool(_norm(row.get("canonical_id"))) and _norm(
-            (row.get("raw_taxonomy") or {}).get("category")) == "botanical"
-        and not str(row.get("canonical_id")).startswith("blend")
-    )
+    recognized = _recognized_botanical_identity(row)
 
     if not recognized:
         components["weak_or_unidentified_botanical"] = -4.0

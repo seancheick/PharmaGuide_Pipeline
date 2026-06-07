@@ -366,6 +366,88 @@ def test_gelatin_does_not_recover_hydrolyzed_collagen_peptides_evidence() -> Non
     assert payload["metadata"]["recovered_matches"] == []
 
 
+def test_blend_anchor_brand_row_recovers_verified_product_level_evidence() -> None:
+    """Relora-style products can have a dose-bearing branded blend anchor while
+    enrichment missed the matching clinical-evidence row. Recovery must use the
+    exact verified brand identity from backed_clinical_studies, not fuzzy text.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(ingredients=[], matches=[])
+    product["product_name"] = "Relora"
+    product["product_scoring_evidence"] = [
+        {
+            "name": "Relora Patented Proprietary Blend",
+            "canonical_id": "relora_patented_proprietary_blend",
+            "clean_identity_id": "relora_patented_proprietary_blend",
+            "scoring_parent_id": "relora_patented_proprietary_blend",
+            "evidence_canonical_id": "relora_patented_proprietary_blend",
+            "canonical_source_db": "product_scoring_evidence",
+            "evidence_origin": "compatibility_derived",
+            "evidence_type": "blend_anchor_mass",
+            "scoreable": True,
+            "scoreable_identity": True,
+            "score_eligible_by_cleaner": True,
+            "dose_class": "therapeutic_mass",
+            "dose_value": 250,
+            "dose_unit": "mg",
+            "source": "activeIngredients",
+            "raw_source_path": "ingredientRows[0]",
+            "evidence_scope": "blend_level",
+            "linked_rows": ["ingredientRows[0]"],
+            "confidence": "medium",
+            "reason": "identity_bearing_blend_header_mass",
+        }
+    ]
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["recovered_matches"] == ["BRAND_RELORA"]
+    assert payload["metadata"]["matched_entries"] == 1
+    assert payload["components"]["primary_evidence_floor"] == 17.0
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "relora"
+    assert payload["score"] == 17.0
+
+
+def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() -> None:
+    """Relora's product-specific RCT must not float a generic
+    magnolia-phellodendron blend that does not say Relora on the label.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(ingredients=[], matches=[])
+    product["product_name"] = "Magnolia Phellodendron Extract"
+    product["product_scoring_evidence"] = [
+        {
+            "name": "Magnolia Phellodendron Extract Proprietary Blend",
+            "canonical_id": "magnolia_phellodendron_extract",
+            "clean_identity_id": "magnolia_phellodendron_extract",
+            "scoring_parent_id": "magnolia_phellodendron_extract",
+            "evidence_canonical_id": "magnolia_phellodendron_extract",
+            "canonical_source_db": "product_scoring_evidence",
+            "evidence_origin": "compatibility_derived",
+            "evidence_type": "blend_anchor_mass",
+            "scoreable": True,
+            "scoreable_identity": True,
+            "score_eligible_by_cleaner": True,
+            "dose_class": "therapeutic_mass",
+            "dose_value": 250,
+            "dose_unit": "mg",
+            "source": "activeIngredients",
+            "raw_source_path": "ingredientRows[0]",
+            "evidence_scope": "blend_level",
+            "linked_rows": ["ingredientRows[0]"],
+            "confidence": "medium",
+            "reason": "identity_bearing_blend_header_mass",
+        }
+    ]
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["recovered_matches"] == []
+
+
 def test_no_matches_scores_zero_not_none() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 

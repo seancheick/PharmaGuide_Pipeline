@@ -997,6 +997,43 @@ def test_enzyme_recognition_requires_single_ingredient_type() -> None:
     assert payload["components"]["enzyme_recognition"] == 0.0
 
 
+def test_blend_anchor_pancreatin_gets_iqm_formulation_credit() -> None:
+    """Pancreatin-style enzyme products can have the dose on a blend/header
+    row while no IQD scorable row exists. The scoring input contract derives a
+    blend_anchor_mass row; generic formulation should use its conservative IQM
+    form quality instead of reporting a false 0/30 formulation."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            ingredients=[],
+            activeIngredients=[
+                {
+                    "name": "Pancreatin",
+                    "standardName": "Digestive Enzymes",
+                    "canonical_id": "digestive_enzymes",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "quantity": 1.0,
+                    "unit": "Gram(s)",
+                    "source_section": "active",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "blend_header_total",
+                    "score_eligible_by_cleaner": False,
+                    "dose_class": "blend_total_weight",
+                    "raw_taxonomy": {
+                        "category": "blend",
+                        "ingredientGroup": "Blend (non-nutrient/non-botanical)",
+                        "forms": [{"name": "Porcine"}],
+                    },
+                }
+            ],
+        )
+    )
+
+    assert payload["components"]["A1_bio_score"] == 11.0
+    assert payload["score"] > 0.0
+
+
 # --- P1.3.1b safety/additive penalties -----------------------------------
 
 
