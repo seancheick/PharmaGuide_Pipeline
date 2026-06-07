@@ -27,6 +27,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
     get_active_ingredients,
+    is_scorable,
 )
 from scoring_v4.modules.botanical_profile import _mass_mg
 from scoring_v4.modules.collagen_profile import is_collagen_product
@@ -189,11 +190,18 @@ _RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
     "source_data": "backed_clinical_studies:INGR_COLLAGEN_PEPTIDES",
 }
 
-_RECOVERABLE_GENERIC_INGREDIENT_CANONICALS = frozenset({
-    # Exact, dose-bearing single-active recovery for backed ingredient-human
-    # entries whose enrichment match is known to drop. Additions require a
-    # canary test and verified references in backed_clinical_studies.json.
-    "nac",
+_MODULE_OWNED_EVIDENCE_CANONICALS = frozenset({
+    # These are handled by purpose-built profile/module evidence paths. Generic
+    # ingredient-human recovery must not borrow their entries as a fallback.
+    "collagen",
+    "dha",
+    "epa",
+    "epa_dha",
+    "fish_oil",
+    "omega_3",
+    "probiotics",
+    "probiotic_unspecified",
+    "prebiotics",
 })
 
 
@@ -431,7 +439,8 @@ def _recover_verified_primary_ingredient_matches(
     - only verified ingredient-human entries with structured references;
     - only structured identity equality (canonical_id/standard_name/alias), no
       fuzzy substring matching;
-    - only the mass-dominant active, so trace add-ons never borrow evidence.
+    - only the clear primary active, so trace/co-active add-ons never borrow
+      evidence.
     """
     if matches:
         return []
@@ -456,12 +465,16 @@ def _recover_verified_primary_ingredient_matches(
         if mass < threshold:
             continue
         row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
-        if row_canonical_id not in _RECOVERABLE_GENERIC_INGREDIENT_CANONICALS:
-            continue
         row_keys = _row_identity_keys(row)
-        if row_canonical_id == "collagen" or _keys_include_dri_essential(row_keys):
-            continue
         if not row_keys:
+            continue
+        if (
+            row_canonical_id == "collagen"
+            or _keys_include_dri_essential(row_keys)
+            or _keys_include_module_owned_evidence(row_keys)
+        ):
+            continue
+        if not _is_clear_primary_recovery_row(product, row_keys):
             continue
 
         for entry in _verified_ingredient_human_evidence_entries():
@@ -641,6 +654,31 @@ def _existing_match_identity_keys(matches: List[Any]) -> set[str]:
     return keys
 
 
+def _is_clear_primary_recovery_row(product: Dict[str, Any], row_keys: set[str]) -> bool:
+    scorable = [
+        ing
+        for ing in get_active_ingredients(product)
+        if isinstance(ing, dict) and is_scorable(ing)
+    ]
+    if len(scorable) == 1:
+        return True
+
+    title_text = _canonical_text(
+        " ".join(
+            str(product.get(field) or "")
+            for field in ("product_name", "fullName", "full_name", "name")
+        )
+    )
+    if not title_text:
+        return False
+    for key in row_keys:
+        if len(key) < 3:
+            continue
+        if re.search(rf"(?<![a-z0-9]){re.escape(key)}(?![a-z0-9])", title_text):
+            return True
+    return False
+
+
 @lru_cache(maxsize=1)
 def _dri_essential_identity_keys() -> frozenset[str]:
     return frozenset(
@@ -655,6 +693,24 @@ def _keys_include_dri_essential(keys: set[str]) -> bool:
             if not essential:
                 continue
             if key == essential or key.startswith(f"{essential} ") or key.endswith(f" {essential}"):
+                return True
+    return False
+
+
+@lru_cache(maxsize=1)
+def _module_owned_evidence_identity_keys() -> frozenset[str]:
+    return frozenset(
+        _canonical_text(canonical.replace("_", " "))
+        for canonical in _MODULE_OWNED_EVIDENCE_CANONICALS
+    )
+
+
+def _keys_include_module_owned_evidence(keys: set[str]) -> bool:
+    for key in keys:
+        for owned in _module_owned_evidence_identity_keys():
+            if not owned:
+                continue
+            if key == owned or key.startswith(f"{owned} ") or key.endswith(f" {owned}"):
                 return True
     return False
 

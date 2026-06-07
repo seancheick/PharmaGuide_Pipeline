@@ -342,11 +342,18 @@ def test_shadow_caution_verdict_overrides_safe_score_band() -> None:
 def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
-    # P5 (2026-06): use a NON-essential filler (ashwagandha). The default magnesium
-    # is a DRI-essential nutrient and now earns the +10 nutrition-authority evidence
-    # floor, which would lift this contrived -25-violation product above the 40-line.
+    # Use a NON-essential filler with no backed clinical evidence. The default
+    # magnesium is a DRI-essential nutrient and ashwagandha now recovers verified
+    # ingredient-human evidence, either of which would lift this contrived
+    # -25-violation product above the 40-line.
     # This test verifies the POOR-threshold *mechanic*, not magnesium specifically.
-    product = _base_product(ingredient=_ingredient(name="Ashwagandha"))
+    product = _base_product(
+        ingredient=_ingredient(
+            name="Unverified Filler",
+            standard_name="Unverified Filler",
+            canonical_id="unverified_filler",
+        )
+    )
     product["manufacturer_data"] = {
         "violations": {"total_deduction_applied": -25.0, "violations": []}
     }

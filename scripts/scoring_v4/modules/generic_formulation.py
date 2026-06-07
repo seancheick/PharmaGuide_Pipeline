@@ -43,7 +43,10 @@ A1-A6/B1 logic by re-implementation, not by import.
 
 from __future__ import annotations
 
+from functools import lru_cache
+import json
 import math
+from pathlib import Path
 import re
 from typing import Any, Dict
 
@@ -99,11 +102,26 @@ FORMULATION_PRESENCE_FLOOR = 2.0
 PREMIUM_SINGLE_FLOOR_SOLID = 22.0
 PREMIUM_SINGLE_FLOOR_ELITE = 24.0
 STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO = 13.0
-_VALIDATED_LOW_BIO_STANDARD_SINGLE_CANONICALS = frozenset({
-    # Standard oral NAC is the clinically studied supplement form despite
-    # intrinsically poor oral bioavailability. Do not inflate it to premium, but
-    # do keep a focused, dose-bearing NAC single out of weak-form territory.
-    "nac",
+_MODULE_OWNED_STANDARD_SINGLE_CANONICALS = frozenset({
+    "collagen",
+    "dha",
+    "epa",
+    "epa_dha",
+    "fish_oil",
+    "omega_3",
+    "probiotics",
+    "probiotic_unspecified",
+    "prebiotics",
+})
+_DRI_LIKE_STANDARD_SINGLE_CANONICALS = frozenset({
+    "copper", "zinc", "selenium", "iodine", "chromium", "molybdenum", "manganese",
+    "iron", "calcium", "magnesium", "potassium", "phosphorus", "chloride", "sodium",
+    "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e",
+    "vitamin_k", "vitamin_k1", "vitamin_k2",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b5_pantothenic",
+    "vitamin_b6_pyridoxine", "vitamin_b7_biotin",
+    "vitamin_b9_folate", "vitamin_b12_cobalamin", "choline",
 })
 
 PREMIUM_FORM_THRESHOLD = 12.0           # v3.6.0 A2 threshold on bio_score scale
@@ -174,6 +192,8 @@ DIETARY_SUGAR_HIGH_PENALTY = 1.5
 DIETARY_SUGAR_CAP = 1.5
 
 PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
+_DATA_DIR = Path(__file__).resolve().parents[2] / "data"
+_BACKED_CLINICAL_STUDIES_PATH = _DATA_DIR / "backed_clinical_studies.json"
 
 
 # --- A1 bio_score ---------------------------------------------------------
@@ -420,7 +440,12 @@ def _standard_single_floor_target(
     if row is None:
         return 0.0
     canonical_id = str(row.get("canonical_id") or "").strip().lower()
-    if canonical_id not in _VALIDATED_LOW_BIO_STANDARD_SINGLE_CANONICALS:
+    if canonical_id in _MODULE_OWNED_STANDARD_SINGLE_CANONICALS:
+        return 0.0
+    row_keys = _row_identity_keys(row)
+    if canonical_id in _DRI_LIKE_STANDARD_SINGLE_CANONICALS or _keys_include_dri_like(row_keys):
+        return 0.0
+    if not _has_verified_ingredient_human_evidence_for_row(row, row_keys):
         return 0.0
     return STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO
 
@@ -435,6 +460,106 @@ def _single_scorable_active(product: Dict[str, Any]) -> Dict[str, Any] | None:
     if bool(row.get("is_proprietary_blend")):
         return None
     return row
+
+
+def _has_verified_ingredient_human_evidence_for_row(
+    row: Dict[str, Any],
+    row_keys: set[str] | None = None,
+) -> bool:
+    row_keys = row_keys or _row_identity_keys(row)
+    if not row_keys:
+        return False
+    for entry in _verified_ingredient_human_evidence_entries():
+        if row_keys & _entry_identity_keys(entry):
+            return True
+    return False
+
+
+@lru_cache(maxsize=1)
+def _verified_ingredient_human_evidence_entries() -> tuple[Dict[str, Any], ...]:
+    try:
+        raw = json.loads(_BACKED_CLINICAL_STUDIES_PATH.read_text())
+    except Exception:  # pragma: no cover
+        return tuple()
+    entries = raw.get("backed_clinical_studies") if isinstance(raw, dict) else raw
+    out: list[Dict[str, Any]] = []
+    for entry in _safe_list(entries):
+        if not isinstance(entry, dict):
+            continue
+        if _norm_text(entry.get("study_type")) == "reference":
+            continue
+        if _norm_text(entry.get("evidence_level")) not in {
+            "ingredient-human",
+            "ingredient_human",
+        }:
+            continue
+        if not _safe_list(entry.get("references_structured")):
+            continue
+        out.append(dict(entry))
+    return tuple(out)
+
+
+def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
+    keys: set[str] = set()
+    for value in (
+        row.get("canonical_id"),
+        row.get("scoring_parent_id"),
+        row.get("evidence_canonical_id"),
+        row.get("standard_name"),
+        row.get("name"),
+        row.get("matched_form"),
+    ):
+        key = _canonical_text(value)
+        if key:
+            keys.add(key)
+    return keys
+
+
+def _entry_identity_keys(entry: Dict[str, Any]) -> set[str]:
+    keys: set[str] = set()
+    for value in (
+        entry.get("canonical_id"),
+        entry.get("ingredient_canonical_id"),
+        entry.get("standard_name"),
+        entry.get("ingredient"),
+        entry.get("study_name"),
+        entry.get("matched_term"),
+    ):
+        key = _canonical_text(value)
+        if key:
+            keys.add(key)
+    for alias in _safe_list(entry.get("aliases")):
+        key = _canonical_text(alias)
+        if key:
+            keys.add(key)
+    entry_id = str(entry.get("id") or entry.get("study_id") or "")
+    if entry_id.upper().startswith("INGR_"):
+        key = _canonical_text(entry_id[5:].replace("_", " "))
+        if key:
+            keys.add(key)
+    return keys
+
+
+def _canonical_text(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", _norm_text(value)).strip()
+
+
+@lru_cache(maxsize=1)
+def _dri_like_identity_keys() -> frozenset[str]:
+    return frozenset(
+        _canonical_text(canonical.replace("_", " "))
+        for canonical in _DRI_LIKE_STANDARD_SINGLE_CANONICALS
+    )
+
+
+def _keys_include_dri_like(keys: set[str]) -> bool:
+    for key in keys:
+        for essential in _dri_like_identity_keys():
+            if not essential:
+                continue
+            if key == essential or key.startswith(f"{essential} ") or key.endswith(f" {essential}"):
+                return True
+    return False
 
 
 def _score_enzyme_recognition(product: Dict[str, Any]) -> float:

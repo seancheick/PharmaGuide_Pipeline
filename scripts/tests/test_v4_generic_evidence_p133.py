@@ -449,8 +449,8 @@ def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() ->
 
 
 def test_exact_single_active_recovers_verified_ingredient_human_evidence() -> None:
-    """NAC canary: an exact, dose-bearing single active should recover its
-    verified ingredient-human backed entry when enrichment omitted the match.
+    """Exact, dose-bearing single actives should recover their verified
+    ingredient-human backed entries when enrichment omitted the match.
 
     This must stay exact and primary-active gated; generic ingredient recovery
     is not fuzzy text matching and must not borrow evidence for trace add-ons.
@@ -478,6 +478,30 @@ def test_exact_single_active_recovers_verified_ingredient_human_evidence() -> No
     assert payload["components"]["primary_evidence_floor"] == 8.4
     assert payload["metadata"]["primary_evidence_floor_canonical"] == "n acetylcysteine"
     assert payload["score"] == 8.4
+
+
+def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() -> None:
+    """The recovery is a contract fix, not an NAC patch."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Ashwagandha Root 600 mg",
+                standard_name="Ashwagandha",
+                canonical_id="ashwagandha",
+                quantity=600,
+                unit="mg",
+            )
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["recovered_matches"] == ["INGR_ASHWAGANDHA"]
+    assert payload["components"]["primary_evidence_floor"] == 14.0
+    assert payload["score"] == 14.0
 
 
 def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
@@ -511,6 +535,40 @@ def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
     assert payload["metadata"]["recovered_matches"] == []
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
     assert payload["score"] == 10.0
+
+
+def test_hidden_coactive_does_not_recover_generic_ingredient_evidence() -> None:
+    """A mass-dominant co-active still needs to be clear from the product title
+    unless it is the only scorable active.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Lithium Orotate",
+                standard_name="Lithium",
+                canonical_id="lithium",
+                quantity=5,
+                unit="mg",
+            ),
+            _ingredient(
+                name="NAC",
+                standard_name="N-Acetylcysteine",
+                canonical_id="nac",
+                quantity=200,
+                unit="mg",
+            ),
+        ],
+        matches=[],
+    )
+    product["product_name"] = "Lithium Orotate 5 mg"
+    product["fullName"] = "Lithium Orotate 5 mg"
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["recovered_matches"] == []
+    assert payload["score"] == 0.0
 
 
 def test_no_matches_scores_zero_not_none() -> None:
