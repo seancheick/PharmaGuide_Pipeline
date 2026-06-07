@@ -41,7 +41,7 @@
       "total_parents": 627,
       "total_forms": 1413,
       "total_form_aliases": 12236,
-      "parents_with_parent_aliases": 186,
+      "parents_with_parent_aliases": 183,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -59,7 +59,7 @@
       "proteins": 16,
       "vitamins": 22
     },
-    "schema_version": "5.4.3",
+    "schema_version": "5.4.4",
     "last_updated": "2026-06-06",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -1608,6 +1608,16 @@
           "Removed natural-source bonus from manufactured delivery forms: liposomal saw palmetto, quercetin phytosome, liposomal probiotics, silymarin phytosome, and micellized K1."
         ],
         "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
+      },
+      "5.4.4": {
+        "date": "2026-06-06",
+        "audit": "IQM identifier replay from claude/eloquent-ride-Bq8cO audit artifacts, verified against live UMLS/RxNav on current main",
+        "changes": [
+          "Corrected wrong UMLS CUIs where current main resolved to a branded product, shampoo, enzyme, salt/combination, or overly narrow extract instead of the ingredient parent.",
+          "Filled or narrowed RxCUIs for exact/base ingredient concepts verified by live RxNav, including 5-HTP, chondroitin, GABA, phosphatidylserine, policosanol, psyllium, vitamin E/K1, taurine, SOD, zinc, and several botanicals.",
+          "Deliberately retained current broad RxCUIs for choline, glucosamine, L-carnitine, L-lysine, selenium, and vitamin B6 because live RxNav confirms valid broad ingredient concepts on current main."
+        ],
+        "regression_tests": "scripts/tests/test_iqm_identifier_integrity.py"
       }
     },
     "category_enum": [
@@ -5907,10 +5917,10 @@
       "unii": null,
       "unii_note": "Cleared 2026-05-27: KP2MW85SSQ resolves to TOCOTRIENOLS, which is not an exact UNII for Vitamin E. Vitamin E spans tocopherols and tocotrienols; tocotrienols are a narrower subclass. Leave UNII null until GSRS exposes an exact approved record."
     },
-    "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": [
       "C0949647"
-    ]
+    ],
+    "rxcui": "11256"
   },
   "vitamin_k": {
     "standard_name": "Vitamin K",
@@ -6309,7 +6319,8 @@
       "K2VITAL Delta"
     ],
     "external_ids": {},
-    "rxcui_note": "Generic vitamin K entry spans K1 and K2 vitamers; keep RxNorm null unless the record is split to a specific vitamer."
+    "rxcui_note": "Generic vitamin K entry spans K1 and K2 vitamers; keep RxNorm null unless the record is split to a specific vitamer.",
+    "rxcui": null
   },
   "calcium": {
     "standard_name": "Calcium",
@@ -8171,7 +8182,7 @@
     "standard_name": "Zinc",
     "category": "minerals",
     "cui": "C0043481",
-    "rxcui": "253210",
+    "rxcui": "11416",
     "rda_ul_ref": "Zinc",
     "forms": {
       "zinc carnosine": {
@@ -11328,7 +11339,7 @@
     "standard_name": "Saw Palmetto",
     "category": "herbs",
     "cui": "C0771607",
-    "rxcui": "350488",
+    "rxcui": "236344",
     "forms": {
       "liposomal saw palmetto": {
         "bio_score": 12,
@@ -16275,8 +16286,8 @@
     "external_ids": {
       "unii": "394XK0IH40"
     },
-    "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "aliases": []
+    "aliases": [],
+    "rxcui": "89959"
   },
   "phosphatidylinositol": {
     "standard_name": "Phosphatidylinositol",
@@ -16327,7 +16338,7 @@
     "standard_name": "Taurine",
     "category": "amino_acids",
     "cui": "C0039350",
-    "rxcui": "1431306",
+    "rxcui": "10337",
     "forms": {
       "taurine (generic)": {
         "bio_score": 14,
@@ -16538,7 +16549,7 @@
   "l_carnitine": {
     "standard_name": "L-Carnitine",
     "category": "amino_acids",
-    "cui": "C1295543",
+    "cui": "C0087163",
     "rxcui": "42955",
     "forms": {
       "liposomal l-carnitine": {
@@ -16800,7 +16811,6 @@
       ]
     },
     "aliases": [
-      "C0087163",
       "C0007258",
       "C1337234"
     ]
@@ -18432,7 +18442,7 @@
   "l_ornithine": {
     "standard_name": "L-Ornithine",
     "category": "amino_acids",
-    "cui": "C0125069",
+    "cui": "C0029277",
     "rxcui": "314709",
     "forms": {
       "l-ornithine standard": {
@@ -18526,9 +18536,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0029277"
-    ]
+    "aliases": []
   },
   "d_aspartic_acid": {
     "standard_name": "D-Aspartic Acid",
@@ -18700,7 +18708,7 @@
     "standard_name": "GABA (Gamma-Aminobutyric Acid)",
     "category": "amino_acids",
     "cui": "C0016904",
-    "rxcui": "618257",
+    "rxcui": "4617",
     "forms": {
       "gaba powder": {
         "bio_score": 6,
@@ -19956,8 +19964,8 @@
   "alpha_lipoic_acid": {
     "standard_name": "Alpha Lipoic Acid",
     "category": "antioxidants",
-    "cui": "C5763195",
-    "rxcui": "618060",
+    "cui": "C0023791",
+    "rxcui": "6417",
     "forms": {
       "R-alpha-lipoic acid": {
         "bio_score": 11,
@@ -20225,9 +20233,7 @@
       ],
       "metabolites": []
     },
-    "aliases": [
-      "C0023791"
-    ]
+    "aliases": []
   },
   "msm": {
     "standard_name": "MSM (Methylsulfonylmethane)",
@@ -20783,7 +20789,7 @@
     "standard_name": "Ginkgo",
     "category": "herbs",
     "cui": "C0772125",
-    "rxcui": "259265",
+    "rxcui": "236809",
     "forms": {
       "liposomal ginkgo": {
         "bio_score": 12,
@@ -20949,8 +20955,8 @@
   "milk_thistle": {
     "standard_name": "Milk Thistle",
     "category": "herbs",
-    "cui": "C0937640",
-    "rxcui": "350520",
+    "cui": "C0331428",
+    "rxcui": "259274",
     "forms": {
       "silymarin phytosome": {
         "bio_score": 12,
@@ -22025,8 +22031,8 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "aliases": []
+    "aliases": [],
+    "rxcui": "2473"
   },
   "green_tea_extract": {
     "standard_name": "Green Tea Extract",
@@ -22613,7 +22619,7 @@
     "standard_name": "Ginseng",
     "category": "herbs",
     "cui": "C1119918",
-    "rxcui": "1370774",
+    "rxcui": "325526",
     "forms": {
       "fermented red ginseng": {
         "bio_score": 12,
@@ -23246,7 +23252,7 @@
     "standard_name": "Garlic",
     "category": "herbs",
     "cui": "C0993630",
-    "rxcui": "899414",
+    "rxcui": "265647",
     "forms": {
       "aged garlic extract": {
         "bio_score": 12,
@@ -23608,8 +23614,7 @@
     "standard_name": "Bilberry",
     "category": "herbs",
     "cui": "C0453269",
-    "rxcui": null,
-    "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '11155' returns no record in RxNav (/REST/rxcui/11155/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
+    "rxcui": "125929",
     "forms": {
       "bilberry extract (25% anthocyanins)": {
         "bio_score": 8,
@@ -24489,7 +24494,7 @@
   "d_limonene": {
     "standard_name": "D-Limonene",
     "category": "antioxidants",
-    "cui": "C0308856",
+    "cui": "C0064992",
     "rxcui": "28730",
     "forms": {
       "d-limonene standard": {
@@ -25724,7 +25729,7 @@
     "standard_name": "Superoxide Dismutase (SOD)",
     "category": "enzymes",
     "cui": "C0038838",
-    "rxcui": "1804845",
+    "rxcui": "10245",
     "forms": {
       "sod supplement": {
         "bio_score": 6,
@@ -26197,8 +26202,8 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "aliases": []
+    "aliases": [],
+    "rxcui": "69440"
   },
   "eriocitrin": {
     "standard_name": "Eriocitrin",
@@ -26404,7 +26409,7 @@
   "cryptoxanthin": {
     "standard_name": "Cryptoxanthin",
     "category": "antioxidants",
-    "cui": "C3850081",
+    "cui": "C0896117",
     "rxcui": null,
     "rxcui_note": "Wave 6.Y Batch 3 (2026-05-27): prior rxcui '1116063' returns no record in RxNav (/REST/rxcui/1116063/properties.json → 404). Deprecated or withdrawn from RxNorm. Cleared to null.",
     "forms": {
@@ -26482,9 +26487,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0896117"
-    ]
+    "aliases": []
   },
   "flavones": {
     "standard_name": "Flavones",
@@ -36032,7 +36035,7 @@
     "standard_name": "Vitamin K1",
     "category": "vitamins",
     "cui": "C0031862",
-    "rxcui": "11258",
+    "rxcui": "8308",
     "forms": {
       "phylloquinone": {
         "bio_score": 9,
@@ -36191,8 +36194,8 @@
     "external_ids": {
       "unii": "9181P3OI6N"
     },
-    "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "aliases": []
+    "aliases": [],
+    "rxcui": "94"
   },
   "acetyl_l_carnitine": {
     "standard_name": "Acetyl-L-Carnitine",
@@ -37810,8 +37813,8 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "aliases": []
+    "aliases": [],
+    "rxcui": "8928"
   },
   "beta_glucan": {
     "standard_name": "Beta-Glucan",
@@ -44714,7 +44717,7 @@
   "dandelion": {
     "standard_name": "Dandelion",
     "category": "herbs",
-    "cui": "C0440015",
+    "cui": "C0877851",
     "forms": {
       "dandelion extract": {
         "bio_score": 6,
@@ -47290,7 +47293,7 @@
   "common_bean_extract": {
     "standard_name": "Common Bean Extract",
     "category": "herbs",
-    "cui": "",
+    "cui": "C4321296",
     "forms": {
       "white kidney bean extract": {
         "bio_score": 7,
@@ -47337,8 +47340,6 @@
       "research_status": "validated"
     },
     "category_enum": "herbs",
-    "cui_status": "no_confirmed_umls_match",
-    "cui_note": "No confirmed exact UMLS concept found for common bean extract.",
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
@@ -47409,7 +47410,7 @@
   "horsetail": {
     "standard_name": "Horsetail",
     "category": "herbs",
-    "cui": "C5564703",
+    "cui": "C0331746",
     "forms": {
       "horsetail extract (unspecified)": {
         "bio_score": 7,
@@ -47610,7 +47611,7 @@
   "brown_kelp": {
     "standard_name": "Brown Kelp",
     "category": "herbs",
-    "cui": "",
+    "cui": "C0022980",
     "forms": {
       "brown kelp powder": {
         "bio_score": 7,
@@ -47654,8 +47655,6 @@
       "research_status": "validated"
     },
     "category_enum": "herbs",
-    "cui_status": "no_confirmed_umls_match",
-    "cui_note": "No confirmed exact UMLS concept found for brown kelp.",
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []

@@ -455,12 +455,11 @@ _STALE_NOTE_TOKENS = (
 # --------------------------------------------------------------------------- #
 
 
-def test_bilberry_rxcui_cleared_to_null(iqm):
-    """Prior rxcui '11155' returns no record in RxNav (deprecated/withdrawn).
-    Cleared to null with rxcui_note."""
+def test_bilberry_rxcui_replayed_to_verified_extract_concept(iqm):
+    """Prior rxcui '11155' returned no record in RxNav and was cleared.
+    The 2026-06-06 replay found a live bilberry-extract RxCUI."""
     entry = iqm["bilberry"]
-    assert entry["rxcui"] is None, "bilberry.rxcui must be null (RxNav 404)."
-    assert entry.get("rxcui_note"), "bilberry must have an rxcui_note explaining the null."
+    assert entry["rxcui"] == "125929", "bilberry.rxcui must be RxCUI 125929 (bilberry extract)."
 
 
 def test_cryptoxanthin_rxcui_cleared_to_null(iqm):
@@ -589,6 +588,24 @@ def test_no_entry_with_valid_cui_carries_stale_no_umls_note(iqm):
     )
 
 
+def test_no_entry_with_valid_rxcui_carries_stale_no_rxnorm_note(iqm):
+    """If an RxCUI is present, notes may document verification, but they must
+    not still claim that no RxNorm concept was found."""
+    offenders = []
+    for cid, entry in iqm.items():
+        if cid.startswith("_") or not isinstance(entry, dict):
+            continue
+        if not entry.get("rxcui"):
+            continue
+        note = (entry.get("rxcui_note") or "").strip().lower()
+        if "no rxnorm concept found" in note or "no rxnorm concept" in note:
+            offenders.append((cid, entry.get("rxcui"), note[:80]))
+    assert not offenders, (
+        f"{len(offenders)} IQM entries have valid `rxcui` but stale no-RxNorm "
+        f"notes. Examples: {offenders[:5]}"
+    )
+
+
 # --------------------------------------------------------------------------- #
 # Batch 4 — Clinician-adjudicated species/taxonomy mappings (defer_ambiguous)
 # --------------------------------------------------------------------------- #
@@ -678,4 +695,93 @@ def test_batch_5_keep_verified_alias_cui_locked(
         f"'{umls_preferred_name}'; clinician-approved {rationale}). If a "
         f"sweep agent wants to change this, escalate to clinician review — "
         f"do not rely on the strict-mode guard."
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Batch 6 — 2026-06-06 Claude-branch identifier replay onto current main
+# --------------------------------------------------------------------------- #
+#
+# Source: scripts/audit/iqm_cui_changes.csv and iqm_rxcui_changes.csv from
+# claude/eloquent-ride-Bq8cO, replayed selectively after live UMLS/RxNav
+# verification on current main. This intentionally does NOT replay stale null
+# recommendations where current RxNav resolves a broad ingredient concept.
+
+_BATCH_6_CUI_REPLAY = [
+    ("alpha_lipoic_acid", "C0023791", "thioctic acid", "replaces meglumine-specific C5763195"),
+    ("brown_kelp", "C0022980", "Laminaria", "fills missing kelp parent concept"),
+    ("common_bean_extract", "C4321296", "Phaseolus vulgaris whole extract", "fills missing extract concept"),
+    ("cryptoxanthin", "C0896117", "Beta-Cryptoxanthin", "replaces broad cryptoxanthins plural class"),
+    ("d_limonene", "C0064992", "limonene", "replaces D-limonene shampoo concept"),
+    ("dandelion", "C0877851", "Taraxacum officinale", "locks the plant parent rather than extract-only concept"),
+    ("horsetail", "C0331746", "Equisetum arvense", "locks the plant parent rather than herb-only concept"),
+    ("l_carnitine", "C0087163", "levocarnitine", "replaces L-carnitine dehydratase enzyme"),
+    ("l_ornithine", "C0029277", "ornithine", "replaces L-ornithine L-aspartate combination"),
+    ("milk_thistle", "C0331428", "Milk Thistle", "locks the plant parent rather than extract-only concept"),
+]
+
+
+@pytest.mark.parametrize("canonical_id,expected_cui,umls_name,rationale", _BATCH_6_CUI_REPLAY)
+def test_batch_6_replayed_cui_corrections_are_locked(
+    iqm, canonical_id, expected_cui, umls_name, rationale
+):
+    entry = iqm[canonical_id]
+    assert entry["cui"] == expected_cui, (
+        f"{canonical_id}.cui must be {expected_cui} ({umls_name}); {rationale}."
+    )
+    assert expected_cui not in (entry.get("aliases") or []), (
+        f"{canonical_id}.aliases must not keep promoted canonical CUI {expected_cui}."
+    )
+
+
+_BATCH_6_RXCUI_REPLAY = [
+    ("5_htp", "94", "5-hydroxytryptophan"),
+    ("alpha_lipoic_acid", "6417", "thioctic acid"),
+    ("bilberry", "125929", "bilberry extract"),
+    ("chondroitin", "2473", "chondroitin sulfates"),
+    ("gaba", "4617", "gamma-aminobutyric acid"),
+    ("garlic", "265647", "garlic preparation"),
+    ("ginkgo", "236809", "Ginkgo biloba extract"),
+    ("ginseng", "325526", "ginseng preparation"),
+    ("milk_thistle", "259274", "milk thistle seed extract"),
+    ("phosphatidylserine", "89959", "phosphatidylserine"),
+    ("policosanol", "69440", "policosanol"),
+    ("psyllium", "8928", "psyllium"),
+    ("saw_palmetto", "236344", "saw palmetto extract"),
+    ("superoxide_dismutase", "10245", "superoxide dismutase"),
+    ("taurine", "10337", "taurine"),
+    ("vitamin_e", "11256", "vitamin E"),
+    ("vitamin_k1", "8308", "vitamin K1"),
+    ("zinc", "11416", "zinc"),
+]
+
+
+@pytest.mark.parametrize("canonical_id,expected_rxcui,rxnorm_name", _BATCH_6_RXCUI_REPLAY)
+def test_batch_6_replayed_rxcui_corrections_are_locked(
+    iqm, canonical_id, expected_rxcui, rxnorm_name
+):
+    assert iqm[canonical_id]["rxcui"] == expected_rxcui, (
+        f"{canonical_id}.rxcui must be {expected_rxcui} ({rxnorm_name}), "
+        "verified via live RxNav during the 2026-06-06 replay."
+    )
+
+
+_BATCH_6_RETAINED_BROAD_RXCUIS = [
+    ("choline", "2449", "choline"),
+    ("glucosamine", "4845", "glucosamine"),
+    ("l_carnitine", "42955", "levocarnitine"),
+    ("l_lysine", "6536", "lysine"),
+    ("selenium", "9641", "selenium"),
+    ("vitamin_b6_pyridoxine", "42954", "vitamin B6"),
+]
+
+
+@pytest.mark.parametrize("canonical_id,expected_rxcui,rxnorm_name", _BATCH_6_RETAINED_BROAD_RXCUIS)
+def test_batch_6_rejects_stale_null_recommendations_for_current_broad_rxcuis(
+    iqm, canonical_id, expected_rxcui, rxnorm_name
+):
+    assert iqm[canonical_id]["rxcui"] == expected_rxcui, (
+        f"{canonical_id}.rxcui must remain {expected_rxcui} ({rxnorm_name}); "
+        "Claude's stale branch recommended null, but live RxNav on current main "
+        "confirmed a valid broad ingredient concept."
     )
