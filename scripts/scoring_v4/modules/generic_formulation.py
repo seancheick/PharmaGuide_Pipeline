@@ -646,8 +646,18 @@ def _clamp(lo: float, hi: float, value: float) -> float:
 def _has_mapped_formulation_active(product: Dict[str, Any]) -> bool:
     """True when the product has a mapped, dose-bearing active eligible for
     formulation scoring. The presence floor only protects a real positive form
-    signal from being erased by unrelated penalties."""
-    for ing in scorable_ingredients(product, allow_sole_mapped_blend=True):
+    signal from being erased by unrelated penalties.
+
+    Use the cleaner-promoted ``ingredients_scorable`` rows directly here. The
+    broader scoring contract may synthesize product-level evidence rows for
+    blend/dose support; those are legitimate for profile scoring, but they do
+    not prove the cleaner identified a concrete active form for this display
+    hygiene floor.
+    """
+    iqd = _safe_dict((product or {}).get("ingredient_quality_data"))
+    for ing in _safe_list(iqd.get("ingredients_scorable")):
+        if not is_scorable(ing):
+            continue
         if bool(ing.get("mapped", False)) or canonical_key(ing):
             return True
     return False

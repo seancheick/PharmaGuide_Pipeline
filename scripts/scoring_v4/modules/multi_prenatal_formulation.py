@@ -80,7 +80,10 @@ def _round(value: float) -> float:
 
 
 def _has_mapped_formulation_active(product: Dict[str, Any]) -> bool:
-    for ing in _scorable_ingredients(product):
+    iqd = _safe_dict((product or {}).get("ingredient_quality_data"))
+    for ing in _safe_list(iqd.get("ingredients_scorable")):
+        if not is_scorable(ing):
+            continue
         if bool(ing.get("mapped", False)) or canonical_key(ing):
             return True
     return False

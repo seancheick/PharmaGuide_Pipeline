@@ -294,6 +294,74 @@ def test_presence_floor_does_not_apply_without_mapped_active() -> None:
     assert payload["components"]["A2_premium_forms"] == 0.0
 
 
+def test_presence_floor_does_not_apply_to_product_level_evidence_without_cleaner_active() -> None:
+    """Product-level evidence can support dose/blend scoring, but it should not
+    satisfy the formulation presence floor unless the cleaner promoted a real
+    scorable active row."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    evidence_base = {
+        "evidence_type": "blend_anchor_mass",
+        "scoreable": True,
+        "scoreable_identity": True,
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "source": "active",
+        "evidence_scope": "blend_level",
+        "evidence_origin": "compatibility_derived",
+        "linked_rows": ["ingredientRows[0]"],
+        "confidence": "medium",
+        "reason": "identity_bearing_blend_header_mass",
+        "canonical_id": "phytosterols",
+        "clean_identity_id": "phytosterols",
+        "scoring_parent_id": "phytosterols",
+        "evidence_canonical_id": "phytosterols",
+        "canonical_source_db": "ingredient_quality_map",
+        "raw_taxonomy": {
+            "category": "blend",
+            "ingredientGroup": "Blend (Fatty Acid or Fat/Oil Supplement)",
+            "forms": [{"name": "Pine", "category": "botanical"}],
+        },
+        "anchor_risk_class": "botanical_or_standardized",
+    }
+    product = _product(
+        supp_type="targeted",
+        ingredients=[],
+        product_name="Moducare",
+        product_scoring_evidence=[
+            {
+                **evidence_base,
+                "name": "Sterols",
+                "raw_source_path": "ingredientRows[0]",
+                "dose_value": 20.0,
+                "dose_unit": "mg",
+                "raw_source_text": "Sterols",
+            },
+            {
+                **evidence_base,
+                "name": "Sterolins",
+                "raw_source_path": "ingredientRows[1]",
+                "dose_value": 200.0,
+                "dose_unit": "mcg",
+                "raw_source_text": "Sterolins",
+                "linked_rows": ["ingredientRows[1]"],
+            },
+        ],
+        contaminant_data={
+            "harmful_additives": {
+                "additives": [{"additive_id": "one", "severity_level": "moderate"}]
+            }
+        },
+    )
+
+    payload = score_formulation(product)
+
+    assert payload["components"]["A5e_natural_source"] == 1.0
+    assert payload["metadata"]["botanical_formulation"]["weak_or_unidentified_botanical"] == -4.0
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["presence_floor"]["applied"] is False
+
+
 # --- A3 delivery system ---------------------------------------------------
 
 
