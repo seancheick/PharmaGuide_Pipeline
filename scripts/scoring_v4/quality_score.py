@@ -88,12 +88,68 @@ def _pillar_from_bonuses(name: str, module_bd: Dict[str, Any],
     }
 
 
+def _pillar_verification(module_bd: Dict[str, Any], weight: float,
+                         cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """Verification / quality pillar (/15). Hard third-party signals SATURATE the
+    cap (over-provisioned, clamps) so a subset maxes it. Self-asserted cGMP is table
+    stakes. FAIL OPEN: no cert AND no COA = data-unknown → neutral baseline (not 0),
+    so the ~62% of the catalog we lack cert data on is not cratered. Soft reputation/
+    region capped; physician/sustainability/prestige dropped."""
+    sub = cfg["verification_subscale"]
+    cap = sub["cap"]
+    vb = (module_bd.get("verification_bonus") or {}).get("components") or {}
+    mt = (module_bd.get("manufacturer_trust") or {}).get("components") or {}
+    b4a = _num(vb.get("B4a_verified_certifications"))
+    b4b = _num(vb.get("B4b_gmp"))
+    b4c = _num(vb.get("B4c_batch_traceability"))
+    b4d = _num(vb.get("B4d_brand_testing_posture"))
+
+    cert = 0.0
+    for tier in sub["cert_tiers"]:  # ordered high→low
+        if b4a >= tier["min_b4a"]:
+            cert = tier["points"]
+            break
+    coa_batch = round(min(sub["coa_batch_max"], (b4c / 2.0) * sub["coa_batch_max"]), 2) if b4c else 0.0
+    gmp = (sub["gmp_certified_points"] if b4b >= 4.0
+           else sub["gmp_registered_points"] if b4b >= 2.0 else 0.0)
+    testing = sub["brand_testing_points"] if b4d > 0 else 0.0
+    hard = cert + coa_batch + gmp + testing
+    # soft: only reputation + region, capped; physician/sustainability/disclosure excluded
+    soft = min(sub["soft_cap"],
+               _num(mt.get("D1_manufacturer_reputation")) + _num(mt.get("D4_high_standard_region")))
+
+    has_third_party_signal = (b4a > 0) or (b4c > 0)
+    if has_third_party_signal:
+        total = hard + soft
+        reason = (f"Verification {round(min(cap, total), 1):g}/15 — third-party signals: "
+                  f"cert {cert:g} + COA/batch {coa_batch:g} + GMP {gmp:g} + testing {testing:g}, "
+                  f"soft {soft:g}")
+        fail_open = False
+    else:
+        base = max(sub["neutral_baseline"], hard)
+        total = base + soft
+        reason = (f"Verification {round(min(cap, total), 1):g}/15 — no third-party cert/COA on file "
+                  f"(data unknown → neutral baseline {sub['neutral_baseline']:g}), soft {soft:g}")
+        fail_open = True
+
+    val = round(max(0.0, min(cap, total)), 1)
+    return {
+        "score": val,
+        "max": weight,
+        "reason": reason,
+        "components": {"cert": cert, "coa_batch": coa_batch, "gmp": gmp,
+                       "brand_testing": testing, "soft": soft, "fail_open_neutral": fail_open},
+    }
+
+
 def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> Dict[str, Any]:
     dims = module_bd.get("dimensions") or {}
     pillars: Dict[str, Any] = {}
     for name, spec in cfg["pillars"].items():
         weight = spec["weight"]
-        if "source_dim" in spec:
+        if spec.get("assembler") == "verification":
+            pillars[name] = _pillar_verification(module_bd, weight, cfg)
+        elif "source_dim" in spec:
             pillars[name] = _pillar_from_dim(name, dims.get(spec["source_dim"]) or {},
                                              weight, spec["source_dim"])
         else:

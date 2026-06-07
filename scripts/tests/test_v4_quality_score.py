@@ -81,13 +81,6 @@ def test_evidence_pillar_is_identity_when_caps_match() -> None:
     assert out["quality_pillars_v4"]["evidence"]["score"] == 18.0  # (18/20)*20
 
 
-def test_verification_pillar_merges_bonus_and_trust() -> None:
-    from scoring_v4.quality_score import assemble_quality_score
-    # (verification 8 + trust 5) / (8+5=13) * 15 == 15
-    out = assemble_quality_score(_shadow(bd=_module_bd(verification=8, manuf_trust=5)))
-    assert out["quality_pillars_v4"]["verification"]["score"] == 15.0
-
-
 def test_safety_hygiene_pillar_scales_to_10() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow(bd=_module_bd(hygiene=4)))
@@ -170,3 +163,69 @@ def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
     assert "phase1" in out["quality_score_version"] or "1.0.0" in out["quality_score_version"]
+
+
+# ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------
+
+def _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=2.0, d1=2.0, d4=1.0):
+    """module breakdown with verification + trust components for the verification pillar."""
+    bd = _module_bd()
+    bd["verification_bonus"]["components"] = {
+        "B4a_verified_certifications": b4a, "B4b_gmp": b4b,
+        "B4c_batch_traceability": b4c, "B4d_brand_testing_posture": b4d,
+    }
+    bd["manufacturer_trust"]["components"] = {
+        "D1_manufacturer_reputation": d1, "D2_disclosure_quality": 1.0,
+        "D3_physician_formulated": 0.5, "D4_high_standard_region": d4,
+        "D5_sustainability": 0.5,
+    }
+    return bd
+
+
+def _verif(bd):
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(bd=bd))
+    return out["quality_pillars_v4"]["verification"]
+
+
+def test_gold_cert_saturates_verification() -> None:
+    # one gold third-party cert (B4a=12) saturates the pillar near max
+    v = _verif(_bd_verif(b4a=12.0))
+    assert v["score"] >= 14.0
+
+
+def test_strong_cert_scores_high() -> None:
+    v = _verif(_bd_verif(b4a=8.0))
+    assert v["score"] >= 11.0
+
+
+def test_fail_open_neutral_when_no_cert_no_coa() -> None:
+    # self-asserted cGMP only (B4a=0, B4c=0) = data-UNKNOWN -> neutral baseline, NOT zero
+    v = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0))
+    assert 6.0 <= v["score"] <= 10.0  # neutral 6 + soft, not cratered
+    assert "neutral" in v["reason"].lower() or "unknown" in v["reason"].lower()
+
+
+def test_self_cgmp_does_not_carry_verification() -> None:
+    # a product with ONLY self-cGMP must not score like a certified one
+    cert = _verif(_bd_verif(b4a=12.0))["score"]
+    self_cgmp = _verif(_bd_verif(b4a=0.0, b4b=4.0))["score"]
+    assert self_cgmp < cert - 4.0
+
+
+def test_coa_counts_as_real_signal_not_fail_open() -> None:
+    # COA present (B4c) is a hard signal -> NOT the fail-open path
+    v = _verif(_bd_verif(b4a=0.0, b4c=2.0))
+    assert "neutral" not in v["reason"].lower()
+
+
+def test_soft_signals_capped_at_3() -> None:
+    # huge soft (reputation+region) cannot exceed the 3-point soft cap
+    low = _verif(_bd_verif(b4a=12.0, d1=0.0, d4=0.0))["score"]
+    high = _verif(_bd_verif(b4a=12.0, d1=2.0, d4=1.0))["score"]
+    assert high - low <= 3.0 + 1e-9
+
+
+def test_verification_never_exceeds_15() -> None:
+    v = _verif(_bd_verif(b4a=12.0, b4c=2.0, d1=2.0, d4=1.0))
+    assert v["score"] <= 15.0
