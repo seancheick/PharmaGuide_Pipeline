@@ -80,6 +80,39 @@ def _has_meaningful_disclosed_dose(product: Dict[str, Any]) -> bool:
     return False
 
 
+def _has_meaningful_probiotic_dose(product: Dict[str, Any]) -> bool:
+    pdata = product.get("probiotic_data") or product.get("probiotic_detail")
+    pdata = pdata if isinstance(pdata, dict) else {}
+    if _as_float(pdata.get("total_billion_count"), 0.0) > 0.0:
+        return True
+    if _as_float(pdata.get("total_cfu"), 0.0) > 0.0:
+        return True
+    for blend in _safe_list(pdata.get("probiotic_blends")):
+        if not isinstance(blend, dict):
+            continue
+        cfu_data = blend.get("cfu_data") if isinstance(blend.get("cfu_data"), dict) else {}
+        if _as_float(cfu_data.get("billion_count"), 0.0) > 0.0:
+            return True
+        if _as_float(cfu_data.get("cfu_count"), 0.0) > 0.0:
+            return True
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        if _norm_text(row.get("dose_class")) == "probiotic_cfu" and has_usable_individual_dose(row):
+            return True
+    for evidence in _safe_list(product.get("product_scoring_evidence")):
+        if not isinstance(evidence, dict):
+            continue
+        if evidence.get("scoreable") is False:
+            continue
+        if _norm_text(evidence.get("dose_class")) != "probiotic_cfu":
+            continue
+        dose_value = _as_float(evidence.get("dose_value"), None)
+        if dose_value is not None and dose_value > 0:
+            return True
+    return False
+
+
 def _omega_mid_mg(dose_payload: Dict[str, Any]) -> Optional[float]:
     metadata = dose_payload.get("metadata") if isinstance(dose_payload, dict) else {}
     if not isinstance(metadata, dict):
@@ -109,6 +142,11 @@ def classify_dose_zero(
         classification, reason = "valid_zero", "unsafe_overdose_zero"
     elif route == "omega" and (_omega_mid_mg(dose_payload) or 0.0) < OMEGA_TRACE_THRESHOLD_MG_DAY:
         classification, reason = "valid_zero", "trace_omega_dose_below_threshold"
+    elif route == "probiotic":
+        if _has_meaningful_probiotic_dose(product):
+            classification, reason = "bug_candidate", "meaningful_disclosed_dose_scored_zero"
+        else:
+            classification, reason = "valid_zero", "no_meaningful_probiotic_dose"
     elif not _has_meaningful_disclosed_dose(product):
         classification, reason = "valid_zero", "no_meaningful_disclosed_dose"
     else:

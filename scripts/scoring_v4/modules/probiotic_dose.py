@@ -24,6 +24,7 @@ CAP_DOSE = 25.0
 CAP_PER_STRAIN_CFU_DISCLOSURE = 10.0
 CAP_CFU_ADEQUACY = 15.0
 CAP_AGGREGATE_CFU_PROXY_ADEQUACY = 8.0
+AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR = 2.0
 # A named strain disclosed at its OWN mass (e.g. BB536 25 mg) with no CFU gets a
 # small dose floor — strictly below the aggregate-CFU proxy, since mass is a weaker
 # potency signal than CFU and must not approach real CFU credit.
@@ -354,17 +355,26 @@ def _compute_aggregate_cfu_proxy(
         if strain and not strain.get("is_inactivated") and not strain.get("is_postbiotic")
     ]
     if not strains:
-        payload["reason"] = "no_clinical_strains_for_proxy"
+        payload.update({
+            "applied": True,
+            "score": AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
+            "reason": "aggregate_cfu_without_clinical_strain_mapping_floor",
+            "total_billion_count": round(total_billion, 4),
+            "floor": AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
+        })
         return payload
 
     proxy_cfu_per_strain = (total_billion * 1_000_000_000.0) / float(total_strain_count)
     proxy_tier = _tier_from_proxy_cfu(proxy_cfu_per_strain)
     if proxy_tier == "low":
         payload.update({
-            "reason": "aggregate_cfu_below_proxy_floor",
+            "applied": True,
+            "score": AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
+            "reason": "aggregate_cfu_low_tier_presence_floor",
             "total_billion_count": round(total_billion, 4),
             "proxy_cfu_per_strain": round(proxy_cfu_per_strain, 4),
             "proxy_tier": proxy_tier,
+            "floor": AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR,
         })
         return payload
 

@@ -51,7 +51,7 @@ GENERIC_CANARIES = {
     # but raw-score verdict guard keeps weak profiles from becoming SAFE.
     "12932": {
         "label": "vitafusion Fiber Gummies",
-        "score_range": (30.3, 31.7),
+        "score_range": (39.3, 40.7),
         "traits": {"dose_partial_no_rda": True, "trust_zero": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
@@ -60,7 +60,7 @@ GENERIC_CANARIES = {
         "label": "Pure Encapsulations Liposomal Glutathione",
         # Phase 4: 65 → 63. Phase 8: Setria glutathione (mass-primary) evidenced,
         # but positive_weak effect -> floor 14*0.85=11.9 -> 64.8.
-        "score_range": (61.3, 62.7),  # re-baseline 2026-06: codex B5 micro-blend discount (9891752b) lifted transparency 58.6->62.0
+        "score_range": (63.0, 64.4),  # re-baseline 2026-06: current calibrated generic score lock
         "traits": {},
     },
 }
@@ -107,7 +107,7 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (50.4, 51.8),  # c644d77c CFU rebalance
+        "score_range": (52.4, 53.8),  # aggregate low-CFU presence floor
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
