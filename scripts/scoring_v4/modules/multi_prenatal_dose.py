@@ -254,9 +254,10 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
         key = _nutrient_key(row.get("nutrient") or row.get("standard_name"))
         if not key:
             continue
+        pct_rda, pct_ul = _normalized_pct_values(row, key)
         credit = _coverage_unit_credit(
-            _as_float(row.get("pct_rda"), None),
-            _as_float(row.get("pct_ul"), None),
+            pct_rda,
+            pct_ul,
         )
         if credit is None:
             continue
@@ -267,6 +268,46 @@ def _coverage_scores(product: Dict[str, Any]) -> Dict[str, float]:
         # not overweight the average. Keep the best row-level coverage signal.
         scores[key] = max(scores.get(key, 0.0), _round(_clamp(0.0, 1.0, credit)))
     return scores
+
+
+def _unit_text(row: Dict[str, Any]) -> str:
+    return _norm_text(row.get("unit") or row.get("original_unit"))
+
+
+def _normalized_pct_values(row: Dict[str, Any], nutrient_key: str) -> tuple[Optional[float], Optional[float]]:
+    """Return pct_rda/pct_ul, correcting stale folate mg-DFE enriched rows.
+
+    Older enriched artifacts treated `1.7 mg DFE` as `1.7 mcg DFE` when
+    computing pct_rda/pct_ul because `unit_conversions.json` lacked
+    mg_DFE -> mcg_DFE conversion rules. The converter fix prevents this on the
+    next pipeline run; this guard keeps v4 scoring correct on already-enriched
+    blobs. It is deliberately limited to folate rows with tiny percent values
+    and mg-like units.
+    """
+    pct_rda = _as_float(row.get("pct_rda"), None)
+    pct_ul = _as_float(row.get("pct_ul"), None)
+    if nutrient_key != "folate":
+        return pct_rda, pct_ul
+
+    amount = _as_float(row.get("amount") or row.get("original_quantity"), None)
+    if amount is None or amount <= 0:
+        return pct_rda, pct_ul
+
+    unit = _unit_text(row)
+    if not unit.startswith("mg"):
+        return pct_rda, pct_ul
+
+    # Only correct the known stale shape. A properly enriched 1.7 mg DFE row
+    # should already be ~425% RDA / ~102% UL, not sub-1%.
+    if (pct_rda is not None and pct_rda >= 10.0) or (pct_ul is not None and pct_ul >= 10.0):
+        return pct_rda, pct_ul
+
+    amount_mcg_dfe = amount * (1000.0 if "dfe" in unit else 1700.0)
+    rda_ai = _as_float(row.get("rda_ai"), None)
+    ul = _as_float(row.get("ul"), None)
+    corrected_rda = (amount_mcg_dfe / rda_ai) * 100.0 if rda_ai and rda_ai > 0 else pct_rda
+    corrected_ul = (amount_mcg_dfe / ul) * 100.0 if ul and ul > 0 else pct_ul
+    return corrected_rda, corrected_ul
 
 
 def _critical_threshold_scores(product: Dict[str, Any]) -> Dict[str, float]:
@@ -290,7 +331,7 @@ def _critical_threshold_scores(product: Dict[str, Any]) -> Dict[str, float]:
         min_pct = CRITICAL_MIN_PCT_RDA.get(key)
         if min_pct is None:
             continue
-        pct_rda = _as_float(row.get("pct_rda"), None)
+        pct_rda, _ = _normalized_pct_values(row, key)
         if pct_rda is None or pct_rda <= 0:
             credit = 0.0
         elif pct_rda >= min_pct:

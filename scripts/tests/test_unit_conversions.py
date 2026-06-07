@@ -16,10 +16,47 @@ import sys
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
+import pytest
+
 # Add scripts directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from constants import UNIT_CONVERSIONS_DB
+from unit_converter import UnitConverter
+
+
+def test_folate_mg_dfe_converts_to_mcg_dfe() -> None:
+    """Labels can disclose folate as mg DFE (Thorne Basic Prenatal: 1.7 mg
+    DFE). This must be scaled to mcg DFE before RDA/UL math; treating 1.7 mg as
+    1.7 mcg makes a fully dosed prenatal look folate-deficient."""
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin B9 (Folate)",
+        amount=1.7,
+        from_unit="mg DFE",
+        ingredient_name="Folate",
+    )
+
+    assert result.success is True
+    assert result.converted_unit == "mcg DFE"
+    assert result.converted_value == pytest.approx(1700.0)
+
+
+def test_methylfolate_mg_converts_to_mcg_dfe() -> None:
+    """Methylfolate mg rows need the same DFE target unit as mcg rows."""
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Vitamin B9 (Folate)",
+        amount=1.0,
+        from_unit="mg",
+        ingredient_name="L-5-Methyltetrahydrofolate",
+    )
+
+    assert result.success is True
+    assert result.converted_unit == "mcg DFE"
+    assert result.converted_value == pytest.approx(1700.0)
 
 
 class UnitConversionTester:

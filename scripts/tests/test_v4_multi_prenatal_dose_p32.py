@@ -209,6 +209,46 @@ def test_b7_ignores_folate_parent_total_plus_form_breakdown_duplicate() -> None:
     assert ignored[0]["reason"] == "folate_parent_total_plus_form_breakdown_duplicate"
 
 
+def test_folate_mg_dfe_stale_pct_rows_are_corrected_for_prenatal_core() -> None:
+    """Existing enriched artifacts can contain stale folate pct_rda values when
+    the label unit was `mg DFE` (1.7 mg DFE computed as 0.425% RDA instead of
+    ~425%). The scorer defensively corrects that shape until the next pipeline
+    run regenerates the enriched RDA rows with fixed conversion rules."""
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    product = _product(
+        name="Basic Prenatal",
+        adequacy_results=[
+            {
+                "nutrient": "Vitamin B9 (Folate)",
+                "amount": 1.7,
+                "unit": "mg DFE",
+                "rda_ai": 400,
+                "ul": 1667,
+                "pct_rda": 0.425,
+                "pct_ul": 0.10198,
+                "scoring_eligible": True,
+            },
+            _adequacy("Iron", pct_rda=100, pct_ul=50),
+            _adequacy("Iodine", pct_rda=100, pct_ul=30),
+            _adequacy("Vitamin D", pct_rda=100, pct_ul=25),
+            _adequacy("Vitamin B12", pct_rda=100, pct_ul=None),
+        ],
+        ingredients=[
+            _ingredient("vitamin_b9_folate", name="Folate", bio_score=14),
+            _ingredient("iron", name="Iron", bio_score=12),
+            _ingredient("iodine", name="Iodine", bio_score=12),
+            _ingredient("vitamin_d", name="Vitamin D", bio_score=12),
+            _ingredient("vitamin_b12", name="Vitamin B12", bio_score=12),
+        ],
+    )
+
+    payload = score_dose(product)
+
+    assert payload["metadata"]["critical_nutrient_scores"]["folate"] == 1.0
+    assert payload["metadata"]["coverage_nutrient_scores"]["folate"] > 0.45
+
+
 def test_panel_breadth_scales_to_five_points_at_eighteen_nutrients() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 

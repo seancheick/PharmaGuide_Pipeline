@@ -4,14 +4,14 @@
     "purpose": "dosing_normalization",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_unit_conversions_contract.py",
-    "last_updated": "2026-02-16",
+    "last_updated": "2026-06-06",
     "version": "1.0.0",
     "statistics": {
       "vitamin_conversions": 20,
       "form_detection_categories": 2,
-      "total_conversion_rules": 37,
+      "total_conversion_rules": 42,
       "mcg_only_nutrients": 7,
-      "notes": "Added B12, Selenium, Chromium, Biotin, Iodine, Molybdenum for AC4 compliance"
+      "notes": "Added folate mg/mg DFE conversion rules so mg-scale DFE labels normalize before RDA/UL scoring"
     },
     "total_entries": 20,
     "total_entries_note": "Count of vitamin_conversions rules; mass_conversions has 6 rules, probiotic_conversions is 1 section, form_detection_patterns has 2 vitamin patterns"
@@ -154,7 +154,10 @@
       "standard_name": "Folate (as Folic Acid)",
       "aliases": ["folic acid", "pteroylmonoglutamic acid"],
       "conversions": {
+        "mg_to_mcg_dfe": 1700,
+        "mg_dfe_to_mcg_dfe": 1000,
         "mcg_to_mcg_dfe": 1.7,
+        "mcg_dfe_to_mcg_dfe": 1,
         "mcg_dfe_to_mcg": 0.588
       },
       "canonical_unit": "mcg DFE",
@@ -173,6 +176,8 @@
         "Quatrefolic"
       ],
       "conversions": {
+        "mg_to_mcg_dfe": 1700,
+        "mg_dfe_to_mcg_dfe": 1000,
         "mcg_to_mcg_dfe": 1.7
       },
       "canonical_unit": "mcg DFE",
@@ -184,6 +189,8 @@
       "standard_name": "Folate (from food)",
       "aliases": ["food folate", "natural folate"],
       "conversions": {
+        "mg_to_mcg_dfe": 1000,
+        "mg_dfe_to_mcg_dfe": 1000,
         "mcg_to_mcg_dfe": 1.0
       },
       "canonical_unit": "mcg DFE",
