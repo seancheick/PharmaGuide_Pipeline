@@ -52,12 +52,16 @@ from scoring_v4.modules.generic_transparency import (
 )
 from scoring_v4.modules.omega_formulation import (
     _detect_form,
+    _epa_dha_and_oil_mass_mg,
     _source_disclosed,
+    _verified_quality_programs,
 )
 
 
 PHASE_MARKER = "P1.6.5_omega_transparency"
 CAP_TRANSPARENCY = 15.0
+DATA_LIMITED_TRANSPARENCY_FLOOR = 12.0
+DATA_LIMITED_TRANSPARENCY_MIN_EPA_DHA_MG = 750.0
 
 
 # Oxidation-signal keys checked on the product blob. Future-ready: when
@@ -218,6 +222,12 @@ def score_transparency(product: Any) -> Dict[str, Any]:
     positive_total = sum(components.values())
     penalty_total = sum(abs(v) for v in penalties.values())
     raw_total = positive_total - penalty_total
+    data_limited_floor = _data_limited_transparency_floor(product, raw_total, components)
+    if data_limited_floor["applied"]:
+        adjustment = round(float(data_limited_floor["adjustment"]), 4)
+        components["data_limited_transparency_floor"] = adjustment
+        positive_total = sum(components.values())
+        raw_total = positive_total - penalty_total
     score = max(0.0, min(CAP_TRANSPARENCY, raw_total))
 
     metadata: Dict[str, Any] = {
@@ -235,6 +245,8 @@ def score_transparency(product: Any) -> Dict[str, Any]:
         "flags": sorted(set(flags)),
         "b2_seen_allergens": b2_meta.get("seen_allergens", {}),
         "b5_blend_count": len(b5_evidence),
+        "data_limited_transparency_floor_applied": bool(data_limited_floor["applied"]),
+        "data_limited_transparency_floor": data_limited_floor,
     }
 
     return {
@@ -244,3 +256,39 @@ def score_transparency(product: Any) -> Dict[str, Any]:
         "penalties": penalties,
         "metadata": metadata,
     }
+
+
+def _data_limited_transparency_floor(
+    product: Dict[str, Any],
+    raw_total: float,
+    components: Dict[str, float],
+) -> Dict[str, Any]:
+    """Floor transparency for verified, high-disclosure omega products.
+
+    A product with itemized EPA/DHA, named source, high EPA+DHA dose, and
+    third-party quality verification has disclosed the consumer-critical omega
+    facts. Missing molecular form / lot oxidation remains a data limitation, so
+    it cannot reach full transparency, but it should not sit at 9/15 beside
+    commodity labels. This is deliberately gated by the same quality-program
+    evidence used by the formulation data-limited floor.
+    """
+    masses = _epa_dha_and_oil_mass_mg(product)
+    quality_programs = _verified_quality_programs(product)
+    payload: Dict[str, Any] = {
+        "applied": False,
+        "floor": DATA_LIMITED_TRANSPARENCY_FLOOR,
+        "min_epa_dha_mg": DATA_LIMITED_TRANSPARENCY_MIN_EPA_DHA_MG,
+        "epa_dha_mg": round(masses["epa_dha_mg"], 4),
+        "quality_programs": quality_programs,
+    }
+    if (
+        _detect_form(product) == "undefined"
+        and "epa_or_dha_disclosed" in components
+        and "source_disclosed" in components
+        and masses["epa_dha_mg"] >= DATA_LIMITED_TRANSPARENCY_MIN_EPA_DHA_MG
+        and quality_programs
+        and raw_total < DATA_LIMITED_TRANSPARENCY_FLOOR
+    ):
+        payload["applied"] = True
+        payload["adjustment"] = round(DATA_LIMITED_TRANSPARENCY_FLOOR - raw_total, 4)
+    return payload

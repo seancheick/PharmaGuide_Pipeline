@@ -182,7 +182,9 @@ def _has_verifiable_mid_tier_manufacturer_evidence(product: Dict[str, Any]) -> b
 def _has_full_disclosure(product: Dict[str, Any]) -> bool:
     ingredients = get_active_ingredients(product)
     has_missing_dose = any(
-        (not bool(i.get("is_proprietary_blend"))) and (not has_usable_individual_dose(i))
+        (not bool(i.get("is_proprietary_blend")))
+        and (not _is_redundant_omega_source_row(i, ingredients))
+        and (not has_usable_individual_dose(i))
         for i in ingredients
     )
     blends = _safe_list(product.get("proprietary_blends"))
@@ -194,6 +196,34 @@ def _has_full_disclosure(product: Dict[str, Any]) -> bool:
         if isinstance(b, dict)
     )
     return (not has_missing_dose) and (not has_hidden_blends)
+
+
+def _is_redundant_omega_source_row(row: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> bool:
+    """True for a dose-less omega source row when EPA/DHA are itemized.
+
+    Enriched omega labels often carry both:
+      - `DHA 650 mg`, `EPA 200 mg` (consumer-relevant actives), and
+      - `Fish Oil` with quantity 0/unspecified (source identity row).
+
+    The source row is not an under-disclosed primary active when EPA/DHA (or an
+    EPA+DHA aggregate) has a usable dose. Treating it as missing disclosure
+    suppresses the small D2 manufacturer-disclosure credit for otherwise fully
+    itemized omega products.
+    """
+    canon = _norm_text(row.get("canonical_id"))
+    if canon not in {"fish_oil", "krill_oil", "algae_oil", "algal_oil", "cod_liver_oil"}:
+        text = " ".join(
+            _norm_text(row.get(key))
+            for key in ("name", "standard_name", "raw_source_text")
+        )
+        if not any(token in text for token in ("fish oil", "krill oil", "algae oil", "algal oil", "cod liver oil")):
+            return False
+    return any(
+        _norm_text(item.get("canonical_id")) in {"epa", "dha", "epa_dha"}
+        and has_usable_individual_dose(item)
+        for item in ingredients
+        if isinstance(item, dict)
+    )
 
 
 def _extract_violation_deduction(product: Dict[str, Any]) -> Tuple[Optional[float], List[Dict[str, Any]]]:

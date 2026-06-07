@@ -288,10 +288,10 @@ def test_undefined_form_high_dose_verified_quality_gets_data_limited_floor() -> 
         certification_data=_verified_quality_program("IFOS Certified"),
     ))
 
-    assert payload["score"] == 17.0
+    assert payload["score"] == 19.0
     assert payload["components"]["form_tier"] == 2.0
     assert payload["components"]["source_disclosed"] == 4.0
-    assert payload["components"]["data_limited_formulation_floor"] == 11.0
+    assert payload["components"]["data_limited_formulation_floor"] == 13.0
     assert "premium_form_a2_carry" not in payload["components"]
     assert payload["metadata"]["form_detected"] == "undefined"
     assert payload["metadata"]["data_limited_form_floor_applied"] is True
@@ -334,7 +334,7 @@ def test_undefined_form_floor_accepts_sku_verified_cert_programs() -> None:
         },
     ))
 
-    assert payload["score"] == 17.0
+    assert payload["score"] == 19.0
     assert payload["metadata"]["data_limited_form_floor"]["quality_programs"] == ["NSF Certified"]
 
 

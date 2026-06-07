@@ -253,6 +253,52 @@ def test_oxidation_not_disclosed_no_signals() -> None:
     assert "oxidation_disclosed" not in payload["components"]
 
 
+# --- Data-limited transparency floor ------------------------------------
+
+
+def test_undefined_form_high_dose_verified_quality_gets_transparency_floor() -> None:
+    """Itemized EPA/DHA + source + verified quality discloses the
+    consumer-critical omega facts. Missing molecular form / oxidation remains a
+    limitation, so the floor stops at 12/15 rather than granting full
+    transparency."""
+    from scoring_v4.modules.omega_transparency import score_transparency
+
+    product = _omega_product(
+        name="Prenatal DHA Fish Oil",
+        epa=200,
+        dha=650,
+        certification_data={
+            "verified_cert_programs": [
+                {"program": "NSF Certified", "scope": "sku", "match_confidence": 1.0},
+            ],
+            "evidence_based": {"third_party_programs": []},
+        },
+    )
+    payload = score_transparency(product)
+
+    assert payload["score"] == 12.0
+    assert payload["components"]["epa_or_dha_disclosed"] == 5.0
+    assert payload["components"]["source_disclosed"] == 3.0
+    assert "form_disclosed" not in payload["components"]
+    assert payload["components"]["data_limited_transparency_floor"] == 4.0
+    assert payload["metadata"]["data_limited_transparency_floor_applied"] is True
+    assert payload["metadata"]["data_limited_transparency_floor"]["quality_programs"] == ["NSF Certified"]
+
+
+def test_undefined_form_high_dose_without_verified_quality_stays_label_only() -> None:
+    from scoring_v4.modules.omega_transparency import score_transparency
+
+    payload = score_transparency(_omega_product(
+        name="Prenatal DHA Fish Oil",
+        epa=200,
+        dha=650,
+    ))
+
+    assert payload["score"] == 8.0
+    assert "data_limited_transparency_floor" not in payload["components"]
+    assert payload["metadata"]["data_limited_transparency_floor_applied"] is False
+
+
 # --- B3 claim_compliance (reused from generic) --------------------------
 
 

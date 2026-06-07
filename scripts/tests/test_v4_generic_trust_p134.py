@@ -421,6 +421,39 @@ def test_dimension_hard_clamps_b4a_b4b_b4c_to_15() -> None:
     assert payload["score"] == 15.0
 
 
+def test_manufacturer_disclosure_ignores_redundant_omega_source_row_when_epa_dha_itemized() -> None:
+    """Dose-less source rows are not under-disclosed actives when EPA/DHA are
+    itemized. Otherwise omega products with clear EPA/DHA labels lose D2
+    solely because enrichment preserves a 0-dose Fish Oil provenance row."""
+    from scoring_v4.modules.generic_manufacturer import score_manufacturer_trust
+
+    payload = score_manufacturer_trust(
+        _product(
+            ingredients=[
+                {"name": "DHA", "canonical_id": "dha", "quantity": 650, "unit": "mg"},
+                {"name": "EPA", "canonical_id": "epa", "quantity": 200, "unit": "mg"},
+                {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 0, "unit": "unspecified"},
+            ]
+        )
+    )
+
+    assert payload["components"]["D2_disclosure_quality"] == 1.0
+
+
+def test_manufacturer_disclosure_still_rejects_omega_source_row_without_epa_dha_dose() -> None:
+    from scoring_v4.modules.generic_manufacturer import score_manufacturer_trust
+
+    payload = score_manufacturer_trust(
+        _product(
+            ingredients=[
+                {"name": "Fish Oil", "canonical_id": "fish_oil", "quantity": 0, "unit": "unspecified"},
+            ]
+        )
+    )
+
+    assert payload["components"]["D2_disclosure_quality"] == 0.0
+
+
 def test_shadow_wires_verification_bonus() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
