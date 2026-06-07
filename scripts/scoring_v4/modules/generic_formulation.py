@@ -98,6 +98,13 @@ DIMENSION_CAP = 30.0
 FORMULATION_PRESENCE_FLOOR = 2.0
 PREMIUM_SINGLE_FLOOR_SOLID = 22.0
 PREMIUM_SINGLE_FLOOR_ELITE = 24.0
+STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO = 13.0
+_VALIDATED_LOW_BIO_STANDARD_SINGLE_CANONICALS = frozenset({
+    # Standard oral NAC is the clinically studied supplement form despite
+    # intrinsically poor oral bioavailability. Do not inflate it to premium, but
+    # do keep a focused, dose-bearing NAC single out of weak-form territory.
+    "nac",
+})
 
 PREMIUM_FORM_THRESHOLD = 12.0           # v3.6.0 A2 threshold on bio_score scale
 PREMIUM_FORM_POINTS_PER_ADDITIONAL = 0.5
@@ -396,6 +403,40 @@ def _premium_single_floor_target(
     return 0.0
 
 
+def _standard_single_floor_target(
+    product: Dict[str, Any],
+    effective_quality: float | None,
+) -> float:
+    """Modest floor for clinically validated standard-form simple molecules.
+
+    Some oral actives have low systemic bioavailability but are still the
+    clinically validated supplement form. This is not a premium-form bonus; it
+    prevents the formulation dimension from miscommunicating "weak form" when
+    the label is a focused, standard, dose-bearing single.
+    """
+    if effective_quality is None or effective_quality < 6.0:
+        return 0.0
+    row = _single_scorable_active(product)
+    if row is None:
+        return 0.0
+    canonical_id = str(row.get("canonical_id") or "").strip().lower()
+    if canonical_id not in _VALIDATED_LOW_BIO_STANDARD_SINGLE_CANONICALS:
+        return 0.0
+    return STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO
+
+
+def _single_scorable_active(product: Dict[str, Any]) -> Dict[str, Any] | None:
+    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+        return None
+    scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
+    if len(scorable) != 1:
+        return None
+    row = scorable[0]
+    if bool(row.get("is_proprietary_blend")):
+        return None
+    return row
+
+
 def _score_enzyme_recognition(product: Dict[str, Any]) -> float:
     """Named-enzyme recognition for single-ingredient generic products.
     Dedupes enzyme families and caps at 2 points in v4."""
@@ -585,12 +626,29 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         + components["enzyme_recognition"]
     )
     premium_single_floor = _premium_single_floor_target(product, components["A1_bio_score"])
-    premium_single_floor_adjustment = max(0.0, premium_single_floor - positive)
+    standard_single_floor = _standard_single_floor_target(product, components["A1_bio_score"])
+    single_floor = max(premium_single_floor, standard_single_floor)
+    single_floor_adjustment = max(0.0, single_floor - positive)
+    premium_single_floor_adjustment = (
+        single_floor_adjustment
+        if premium_single_floor >= standard_single_floor
+        else 0.0
+    )
+    standard_single_floor_adjustment = (
+        single_floor_adjustment
+        if standard_single_floor > premium_single_floor
+        else 0.0
+    )
     if premium_single_floor_adjustment > 0:
         components["premium_single_ingredient_floor_adjustment"] = round(
             premium_single_floor_adjustment, 4
         )
-        positive += premium_single_floor_adjustment
+    if standard_single_floor_adjustment > 0:
+        components["standard_single_ingredient_floor_adjustment"] = round(
+            standard_single_floor_adjustment, 4
+        )
+    if single_floor_adjustment > 0:
+        positive += single_floor_adjustment
     penalty_total = _sum_penalty_magnitudes(penalties)
 
     pre_floor_score = positive - penalty_total
@@ -626,6 +684,11 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "target": round(premium_single_floor, 4),
                 "adjustment": round(premium_single_floor_adjustment, 4),
                 "applied": premium_single_floor_adjustment > 0,
+            },
+            "standard_single_ingredient_floor": {
+                "target": round(standard_single_floor, 4),
+                "adjustment": round(standard_single_floor_adjustment, 4),
+                "applied": standard_single_floor_adjustment > 0,
             },
             "presence_floor": {
                 "target": FORMULATION_PRESENCE_FLOOR,

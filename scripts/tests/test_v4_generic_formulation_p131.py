@@ -579,6 +579,47 @@ def test_premium_single_formulation_floor_does_not_lift_weak_single() -> None:
     assert payload["score"] == 11.0
 
 
+def test_standard_single_formulation_floor_lifts_validated_low_bio_simple_molecule() -> None:
+    """NAC has poor oral bioavailability, but standard oral NAC is still the
+    clinically validated supplement form. A focused NAC product should not be
+    treated like a weak formulation solely because no premium form exists.
+    """
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        supp_type="single_nutrient",
+        ingredients=[
+            _ingredient(
+                name="N-Acetyl Cysteine",
+                canonical_id="nac",
+                bio_score=6,
+                quantity=600,
+                unit="mg",
+            )
+        ],
+    )
+    payload = score_formulation(product)
+
+    assert payload["score"] == 13.0
+    assert payload["components"]["standard_single_ingredient_floor_adjustment"] == 7.0
+    assert payload["metadata"]["standard_single_ingredient_floor"]["target"] == 13.0
+    assert payload["metadata"]["premium_single_ingredient_floor"]["target"] == 0.0
+
+
+def test_standard_single_formulation_floor_does_not_lift_unknown_low_bio_single() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        supp_type="single_nutrient",
+        ingredients=[_ingredient(name="Unknown Low Bio", canonical_id="unknown_low_bio", bio_score=6)],
+    )
+    payload = score_formulation(product)
+
+    assert payload["score"] == 6.0
+    assert "standard_single_ingredient_floor_adjustment" not in payload["components"]
+    assert payload["metadata"]["standard_single_ingredient_floor"]["target"] == 0.0
+
+
 def test_premium_single_formulation_floor_does_not_lift_multi() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 

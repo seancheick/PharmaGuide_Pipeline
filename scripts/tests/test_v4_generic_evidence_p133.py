@@ -448,6 +448,71 @@ def test_branded_recovery_does_not_borrow_relora_for_generic_magnolia_blend() ->
     assert payload["metadata"]["recovered_matches"] == []
 
 
+def test_exact_single_active_recovers_verified_ingredient_human_evidence() -> None:
+    """NAC canary: an exact, dose-bearing single active should recover its
+    verified ingredient-human backed entry when enrichment omitted the match.
+
+    This must stay exact and primary-active gated; generic ingredient recovery
+    is not fuzzy text matching and must not borrow evidence for trace add-ons.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="NAC 600 mg",
+                standard_name="N-Acetylcysteine",
+                canonical_id="nac",
+                quantity=600,
+                unit="mg",
+            )
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["recovered_matches"] == ["INGR_NAC"]
+    assert payload["metadata"]["matched_entries"] == 1
+    assert payload["components"]["clinical_evidence_pipeline"] == 3.888
+    assert payload["components"]["primary_evidence_floor"] == 8.4
+    assert payload["metadata"]["primary_evidence_floor_canonical"] == "n acetylcysteine"
+    assert payload["score"] == 8.4
+
+
+def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
+    """A trace NAC add-on should not float an unrelated mass-primary product on
+    NAC's generic ingredient evidence.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Vitamin C",
+                standard_name="Vitamin C",
+                canonical_id="vitamin_c",
+                quantity=500,
+                unit="mg",
+            ),
+            _ingredient(
+                name="NAC",
+                standard_name="N-Acetylcysteine",
+                canonical_id="nac",
+                quantity=5,
+                unit="mg",
+            ),
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["recovered_matches"] == []
+    assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_c"
+    assert payload["score"] == 10.0
+
+
 def test_no_matches_scores_zero_not_none() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 

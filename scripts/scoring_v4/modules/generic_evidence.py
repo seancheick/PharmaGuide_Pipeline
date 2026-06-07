@@ -189,6 +189,13 @@ _RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
     "source_data": "backed_clinical_studies:INGR_COLLAGEN_PEPTIDES",
 }
 
+_RECOVERABLE_GENERIC_INGREDIENT_CANONICALS = frozenset({
+    # Exact, dose-bearing single-active recovery for backed ingredient-human
+    # entries whose enrichment match is known to drop. Additions require a
+    # canary test and verified references in backed_clinical_studies.json.
+    "nac",
+})
+
 
 def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False) -> Dict[str, Any]:
     """Compute the generic-module Evidence dimension.
@@ -361,6 +368,12 @@ def _recover_contract_evidence_matches(
             recovered.append(entry)
             recovered_ids.add(entry_id)
 
+    for entry in _recover_verified_primary_ingredient_matches(product, matches):
+        entry_id = _entry_id(entry)
+        if entry_id and entry_id not in recovered_ids:
+            recovered.append(entry)
+            recovered_ids.add(entry_id)
+
     return recovered
 
 
@@ -403,6 +416,76 @@ def _recover_verified_product_level_matches(
     return recovered
 
 
+def _recover_verified_primary_ingredient_matches(
+    product: Dict[str, Any],
+    matches: List[Any],
+) -> List[Dict[str, Any]]:
+    """Recover exact ingredient-human evidence for the mass-primary active.
+
+    This closes the NAC-style contract gap: the cleaner/scoring contract has a
+    dose-bearing, exact canonical active row, backed_clinical_studies has a
+    PubMed-verified ingredient-human entry, but enrichment omitted
+    evidence_data.clinical_matches. Keep the recovery intentionally stricter
+    than label text matching:
+
+    - only verified ingredient-human entries with structured references;
+    - only structured identity equality (canonical_id/standard_name/alias), no
+      fuzzy substring matching;
+    - only the mass-dominant active, so trace add-ons never borrow evidence.
+    """
+    if matches:
+        return []
+
+    existing_ids = {
+        _entry_id(entry)
+        for entry in matches
+        if isinstance(entry, dict)
+    }
+    existing_identity_keys = _existing_match_identity_keys(matches)
+
+    _, max_mass = _active_mass_index(product)
+    if max_mass <= 0.0:
+        return []
+    threshold = PRIMARY_MASS_FRACTION * max_mass
+
+    recovered: List[Dict[str, Any]] = []
+    for row in get_active_ingredients(product):
+        if not isinstance(row, dict):
+            continue
+        mass = _mass_mg(row) or 0.0
+        if mass < threshold:
+            continue
+        row_canonical_id = str(row.get("canonical_id") or "").strip().lower()
+        if row_canonical_id not in _RECOVERABLE_GENERIC_INGREDIENT_CANONICALS:
+            continue
+        row_keys = _row_identity_keys(row)
+        if row_canonical_id == "collagen" or _keys_include_dri_essential(row_keys):
+            continue
+        if not row_keys:
+            continue
+
+        for entry in _verified_ingredient_human_evidence_entries():
+            entry_id = _entry_id(entry)
+            if entry_id in existing_ids:
+                continue
+            entry_keys = _entry_identity_keys(entry)
+            matched_keys = row_keys & entry_keys
+            if not matched_keys:
+                continue
+            if existing_identity_keys & entry_keys:
+                continue
+
+            recovered_entry = dict(entry)
+            recovered_entry["evidence_origin"] = "scoring_contract_recovery"
+            recovered_entry["source_data"] = f"backed_clinical_studies:{entry_id}"
+            recovered_entry["matched_term"] = row.get("standard_name") or row.get("name")
+            recovered_entry["matched_canonical_id"] = row.get("canonical_id")
+            recovered.append(recovered_entry)
+            existing_ids.add(entry_id)
+            existing_identity_keys.update(entry_keys)
+    return recovered
+
+
 @lru_cache(maxsize=1)
 def _verified_product_level_evidence_entries() -> Tuple[Dict[str, Any], ...]:
     try:
@@ -415,6 +498,23 @@ def _verified_product_level_evidence_entries() -> Tuple[Dict[str, Any], ...]:
         if not isinstance(entry, dict):
             continue
         if not _is_verified_product_level_entry(entry):
+            continue
+        out.append(dict(entry))
+    return tuple(out)
+
+
+@lru_cache(maxsize=1)
+def _verified_ingredient_human_evidence_entries() -> Tuple[Dict[str, Any], ...]:
+    try:
+        raw = json.loads(_BACKED_CLINICAL_STUDIES_PATH.read_text())
+    except Exception:  # pragma: no cover
+        return tuple()
+    entries = raw.get("backed_clinical_studies") if isinstance(raw, dict) else raw
+    out: List[Dict[str, Any]] = []
+    for entry in _safe_list(entries):
+        if not isinstance(entry, dict):
+            continue
+        if not _is_verified_ingredient_human_entry(entry):
             continue
         out.append(dict(entry))
     return tuple(out)
@@ -433,6 +533,19 @@ def _is_verified_product_level_entry(entry: Dict[str, Any]) -> bool:
         evidence_level in {"product-human", "product_human", "product-rct", "product_rct", "branded-rct", "branded_rct"}
         or entry_id.startswith("brand_")
     )
+
+
+def _is_verified_ingredient_human_entry(entry: Dict[str, Any]) -> bool:
+    if _norm_text(entry.get("study_type")) == "reference":
+        return False
+    if _norm_text(entry.get("evidence_level")) == "reference":
+        return False
+    if not _safe_list(entry.get("references_structured")):
+        return False
+    return _norm_text(entry.get("evidence_level")) in {
+        "ingredient-human",
+        "ingredient_human",
+    }
 
 
 def _row_identity_text(product: Dict[str, Any], row: Dict[str, Any]) -> str:
@@ -476,6 +589,73 @@ def _verified_product_entry_matches_text(entry: Dict[str, Any], row_text: str) -
             continue
         if re.search(rf"(?<![a-z0-9]){re.escape(key)}(?![a-z0-9])", row_text):
             return True
+    return False
+
+
+def _row_identity_keys(row: Dict[str, Any]) -> set[str]:
+    keys: set[str] = set()
+    for value in (
+        row.get("canonical_id"),
+        row.get("scoring_parent_id"),
+        row.get("evidence_canonical_id"),
+        row.get("standard_name"),
+        row.get("name"),
+        row.get("matched_form"),
+    ):
+        key = _canonical_text(value)
+        if key:
+            keys.add(key)
+    return keys
+
+
+def _entry_identity_keys(entry: Dict[str, Any]) -> set[str]:
+    keys: set[str] = set()
+    for value in (
+        entry.get("canonical_id"),
+        entry.get("ingredient_canonical_id"),
+        entry.get("standard_name"),
+        entry.get("ingredient"),
+        entry.get("study_name"),
+        entry.get("matched_term"),
+    ):
+        key = _canonical_text(value)
+        if key:
+            keys.add(key)
+    for alias in _safe_list(entry.get("aliases")):
+        key = _canonical_text(alias)
+        if key:
+            keys.add(key)
+    entry_id = str(entry.get("id") or entry.get("study_id") or "")
+    if entry_id.upper().startswith("INGR_"):
+        key = _canonical_text(entry_id[5:].replace("_", " "))
+        if key:
+            keys.add(key)
+    return keys
+
+
+def _existing_match_identity_keys(matches: List[Any]) -> set[str]:
+    keys: set[str] = set()
+    for entry in matches:
+        if isinstance(entry, dict):
+            keys.update(_entry_identity_keys(entry))
+    return keys
+
+
+@lru_cache(maxsize=1)
+def _dri_essential_identity_keys() -> frozenset[str]:
+    return frozenset(
+        _canonical_text(canonical.replace("_", " "))
+        for canonical in _DRI_ESSENTIAL_NUTRIENTS
+    )
+
+
+def _keys_include_dri_essential(keys: set[str]) -> bool:
+    for key in keys:
+        for essential in _dri_essential_identity_keys():
+            if not essential:
+                continue
+            if key == essential or key.startswith(f"{essential} ") or key.endswith(f" {essential}"):
+                return True
     return False
 
 
