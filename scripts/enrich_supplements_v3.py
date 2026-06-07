@@ -10791,6 +10791,12 @@ class SupplementEnricherV3:
         inactive_ingredients = product.get('inactiveIngredients', [])
         total_active = len(active_ingredients)
 
+        # Chemical-identity resolution handles for the branded single-active
+        # escape below (same databases the scorer's skip logic trusts via
+        # `_is_known_therapeutic`).
+        quality_map = self.databases.get('ingredient_quality_map', {})
+        botanicals_db = self.databases.get('standardized_botanicals', {})
+
         def _looks_like_blend_label(value: str) -> bool:
             text = (value or "").strip().lower()
             if not text:
@@ -10938,6 +10944,31 @@ class SupplementEnricherV3:
                 if name_is_non_proprietary_aggregate:
                     continue
                 if not has_nested_children and not has_parent and not name_looks_like_blend:
+                    continue
+
+                # Branded single-active escape (B5 opacity root fix).
+                # A marketing suffix token ("Complex"/"Matrix"/"Formula"/...) in
+                # an ingredient name is not, by itself, evidence of a proprietary
+                # blend. When the entry lists NO sub-ingredients, is NOT a member
+                # of a blend, and RESOLVES TO ONE known canonical therapeutic
+                # ingredient (the chemical-identity test), it is a branded single
+                # active (EpiCor=yeast fermentate, Curcumin C3 Complex=curcumin,
+                # Clarinol CLA, Boron Complex=boron, Citrus Bioflavonoid Complex)
+                # that hides nothing — not an opaque blend. Genuine multi-
+                # ingredient blends ("Proprietary Blend", "Super Greens Blend",
+                # "Probiotic & Microbiome Blend") do NOT resolve to a single
+                # canonical ingredient, so they fall through and keep the B5
+                # opacity penalty.
+                if (
+                    not has_nested_children
+                    and not has_parent
+                    and self._is_known_therapeutic(
+                        name,
+                        (ingredient.get('standardName', '') or name),
+                        quality_map,
+                        botanicals_db,
+                    )
+                ):
                     continue
 
                 # Roll nested rows under parent blend key when available.
