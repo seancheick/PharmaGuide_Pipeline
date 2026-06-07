@@ -125,6 +125,26 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     }
 
 
+def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
+                 cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """Category-aware purpose-fit dose. Normalize to the archetype's APPROPRIATE-dose
+    ceiling (a single nutrient/botanical in its clinical window caps ~22; the top 3 is
+    multi-form/completion). Megadose-safe: an overdosed product already has low raw
+    dose (overdose half-credit), a sub-clinical one is proportional-low — normalizing
+    only lifts appropriately-dosed products, never rewards excess."""
+    sub = cfg["dose_subscale"]
+    ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
+    score = _num(dim.get("score"))
+    val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    return {
+        "score": val,
+        "max": weight,
+        "reason": f"Dose adequacy {_g(score)}/{_g(ref)} for {archetype.replace('_', ' ')} "
+                  f"(appropriate-dose ceiling, no megadose reward → {_g(val)}/{_g(weight)})",
+        "components": {"raw_dose": score, "archetype": archetype, "reference": ref},
+    }
+
+
 def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                          cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Verification / quality pillar (/15). Hard third-party signals SATURATE the
@@ -192,6 +212,8 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
         elif assembler == "formulation":
             pillars[name] = _pillar_formulation(dims.get("formulation") or {},
                                                 weight, archetype, cfg)
+        elif assembler == "dose":
+            pillars[name] = _pillar_dose(dims.get("dose") or {}, weight, archetype, cfg)
         elif "source_dim" in spec:
             pillars[name] = _pillar_from_dim(name, dims.get(spec["source_dim"]) or {},
                                              weight, spec["source_dim"])

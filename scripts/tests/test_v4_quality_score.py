@@ -68,6 +68,35 @@ def test_pillars_use_six_pillar_weights() -> None:
     assert p["safety_hygiene"]["max"] == 10
 
 
+# ---- PR5 category-aware dose pillar ----------------------------------------
+
+def test_dose_well_dosed_single_reaches_near_full() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    # KSM-66-like botanical: dose 21/25 raw -> 21/22*20 ~= 19.1
+    out = assemble_quality_score(_shadow(module="generic",
+                                         bd=_module_bd(dose=21, evidence=18)))
+    assert out["quality_pillars_v4"]["dose"]["score"] >= 19.0
+
+
+def test_dose_megadose_or_underdose_stays_low() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    # an overdosed/sub-clinical product already has LOW raw dose -> must NOT be lifted
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(dose=8)))
+    assert out["quality_pillars_v4"]["dose"]["score"] < 9.0
+
+
+def test_dose_sports_full_dose_maxes() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(module="sports", bd=_module_bd(dose=25)))
+    assert out["quality_pillars_v4"]["dose"]["score"] == 20.0
+
+
+def test_dose_never_exceeds_20() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(dose=25)))
+    assert out["quality_pillars_v4"]["dose"]["score"] <= 20.0
+
+
 # ---- PR4 category-aware formulation pillar ---------------------------------
 
 def test_formulation_single_ingredient_best_reaches_elite_band() -> None:

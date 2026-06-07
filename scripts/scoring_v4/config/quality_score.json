@@ -9,11 +9,23 @@
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
-    "dose":           { "weight": 20, "source_dim": "dose" },
+    "dose":           { "weight": 20, "assembler": "dose" },
     "evidence":       { "weight": 20, "source_dim": "evidence" },
     "transparency":   { "weight": 15, "source_dim": "transparency" },
     "verification":   { "weight": 15, "assembler": "verification" },
     "safety_hygiene": { "weight": 10, "source_bonuses": ["safety_hygiene_base"] }
+  },
+  "dose_subscale": {
+    "_doc": "PR5: category-aware purpose-fit dose. The raw dose dimension caps a single nutrient/botanical in its supplemental/clinical window at ~22 (CAP_SUPPLEMENTAL_WINDOW); the top 3 (→25) is multi-form/completion that single-purpose products can't earn — the same structural pattern as formulation. Normalize each archetype to its achievable APPROPRIATE-dose ceiling so a well-dosed product earns ~19-20. MEGADOSE-SAFE: an overdosed product already gets low raw dose (overdose → half credit) and a sub-clinical one gets proportional-low; normalizing only lifts appropriately-dosed products, never rewards excess.",
+    "archetype_reference": {
+      "sports_single": 25.0,
+      "generic_single_molecule": 22.0,
+      "generic_botanical_branded": 22.0,
+      "omega": 23.0,
+      "probiotic": 22.0,
+      "prenatal_multi": 23.0
+    },
+    "default_reference": 22.0
   },
   "formulation_subscale": {
     "_doc": "PR4: category-aware purpose-fit formulation. The raw formulation dimension is scored out of a breadth-dependent max (30 for generic/sports) that a SINGLE ingredient structurally cannot reach (A2-A5 = premium-form stacking, synergy, absorption enhancers are multi-ingredient features). Normalize each archetype to its ACHIEVABLE form ceiling so a best-in-class product earns ~19-20 by being the OPTIMAL FORM, not by faking breadth. Computed from the real form-quality components, so a cheap form (magnesium oxide, low A1) still scores low. This is purpose-fit, not premium-form dominance.",
