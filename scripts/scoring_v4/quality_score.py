@@ -88,6 +88,43 @@ def _pillar_from_bonuses(name: str, module_bd: Dict[str, Any],
     }
 
 
+def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
+    if module == "sports":
+        return "sports_single"
+    if module == "omega":
+        return "omega"
+    if module == "probiotic":
+        return "probiotic"
+    if module == "multi_or_prenatal":
+        return "prenatal_multi"
+    form = (module_bd.get("dimensions", {}) or {}).get("formulation") or {}
+    meta = form.get("metadata") or {}
+    if meta.get("botanical_profile_applied") or meta.get("collagen_profile_applied"):
+        return "generic_botanical_branded"
+    return "generic_single_molecule"
+
+
+def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
+                        cfg: Dict[str, Any]) -> Dict[str, Any]:
+    """Category-aware purpose-fit formulation. Normalize to the archetype's ACHIEVABLE
+    form ceiling (single ingredients can't earn breadth components A2-A5), so a
+    best-in-class form earns ~19-20 by being optimal, not by faking breadth. A cheap
+    form (low raw formulation) still scores low — this discriminates within the
+    archetype, it does not anchor on corpus best-in-class."""
+    sub = cfg["formulation_subscale"]
+    ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
+    score = _num(dim.get("score"))
+    val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    return {
+        "score": val,
+        "max": weight,
+        "reason": f"Purpose-fit formulation {_g(score)}/{_g(ref)} for "
+                  f"{archetype.replace('_', ' ')} (archetype form ceiling, not breadth-30 "
+                  f"→ {_g(val)}/{_g(weight)})",
+        "components": {"raw_formulation": score, "archetype": archetype, "reference": ref},
+    }
+
+
 def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                          cfg: Dict[str, Any]) -> Dict[str, Any]:
     """Verification / quality pillar (/15). Hard third-party signals SATURATE the
@@ -142,13 +179,19 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     }
 
 
-def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> Dict[str, Any]:
+def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
+                   module: Optional[str]) -> Dict[str, Any]:
     dims = module_bd.get("dimensions") or {}
+    archetype = _archetype(module, module_bd)
     pillars: Dict[str, Any] = {}
     for name, spec in cfg["pillars"].items():
         weight = spec["weight"]
-        if spec.get("assembler") == "verification":
+        assembler = spec.get("assembler")
+        if assembler == "verification":
             pillars[name] = _pillar_verification(module_bd, weight, cfg)
+        elif assembler == "formulation":
+            pillars[name] = _pillar_formulation(dims.get("formulation") or {},
+                                                weight, archetype, cfg)
         elif "source_dim" in spec:
             pillars[name] = _pillar_from_dim(name, dims.get(spec["source_dim"]) or {},
                                              weight, spec["source_dim"])
@@ -164,6 +207,7 @@ def assemble_quality_score(shadow: Dict[str, Any]) -> Dict[str, Any]:
     cfg = _config()
     raw = shadow.get("shadow_score_v4_100")
     verdict = str(shadow.get("shadow_score_v4_verdict") or "")
+    module = shadow.get("shadow_score_v4_module")
     breakdown = shadow.get("shadow_score_v4_breakdown") or {}
     module_bd = breakdown.get("module") or {}
     supp = cfg["suppression"]
@@ -177,7 +221,7 @@ def assemble_quality_score(shadow: Dict[str, Any]) -> Dict[str, Any]:
     # Suppress the public number; keep pillars if a breakdown exists (audit trail).
     if verdict in supp["suppressed_safety_verdicts"]:
         shadow["quality_score_v4_100"] = None
-        shadow["quality_pillars_v4"] = _build_pillars(module_bd, cfg) if module_bd.get("dimensions") else None
+        shadow["quality_pillars_v4"] = _build_pillars(module_bd, cfg, module) if module_bd.get("dimensions") else None
         shadow["quality_tier"] = None
         shadow["quality_score_status"] = "suppressed_safety"
         shadow["quality_score_suppressed_reason"] = blocking_reason or verdict
@@ -192,7 +236,7 @@ def assemble_quality_score(shadow: Dict[str, Any]) -> Dict[str, Any]:
         shadow["quality_score_suppressed_reason"] = blocking_reason or (verdict or None)
         return shadow
 
-    pillars = _build_pillars(module_bd, cfg)
+    pillars = _build_pillars(module_bd, cfg, module)
     total = max(0.0, min(100.0, round(sum(p["score"] for p in pillars.values()), 1)))
 
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)

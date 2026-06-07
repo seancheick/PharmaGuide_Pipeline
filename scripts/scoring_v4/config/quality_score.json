@@ -8,12 +8,24 @@
     "phase": "1_linear_mapping"
   },
   "pillars": {
-    "formulation":    { "weight": 20, "source_dim": "formulation" },
+    "formulation":    { "weight": 20, "assembler": "formulation" },
     "dose":           { "weight": 20, "source_dim": "dose" },
     "evidence":       { "weight": 20, "source_dim": "evidence" },
     "transparency":   { "weight": 15, "source_dim": "transparency" },
     "verification":   { "weight": 15, "assembler": "verification" },
     "safety_hygiene": { "weight": 10, "source_bonuses": ["safety_hygiene_base"] }
+  },
+  "formulation_subscale": {
+    "_doc": "PR4: category-aware purpose-fit formulation. The raw formulation dimension is scored out of a breadth-dependent max (30 for generic/sports) that a SINGLE ingredient structurally cannot reach (A2-A5 = premium-form stacking, synergy, absorption enhancers are multi-ingredient features). Normalize each archetype to its ACHIEVABLE form ceiling so a best-in-class product earns ~19-20 by being the OPTIMAL FORM, not by faking breadth. Computed from the real form-quality components, so a cheap form (magnesium oxide, low A1) still scores low. This is purpose-fit, not premium-form dominance.",
+    "archetype_reference": {
+      "sports_single": 25.0,
+      "generic_single_molecule": 25.0,
+      "generic_botanical_branded": 25.0,
+      "omega": 23.0,
+      "probiotic": 22.0,
+      "prenatal_multi": 23.0
+    },
+    "default_reference": 25.0
   },
   "verification_subscale": {
     "_doc": "PR2: hard third-party signals saturate the cap (over-provisioned, internal sum clamps at 15) so a SUBSET (e.g. one gold cert) maxes it. Self-asserted cGMP is table stakes (near-zero). FAIL OPEN: a product with no third-party cert AND no COA is data-UNKNOWN, not uncertified — it floors at a neutral baseline so the ~62% of the catalog we lack cert data on is not cratered (confidence carries the gap). Soft reputation/region capped at 3; physician/sustainability dropped. The wall truly lifts only when real cert data is sourced (cert_registry task).",

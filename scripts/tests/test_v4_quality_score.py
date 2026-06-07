@@ -68,11 +68,45 @@ def test_pillars_use_six_pillar_weights() -> None:
     assert p["safety_hygiene"]["max"] == 10
 
 
-def test_formulation_pillar_linear_remap() -> None:
+# ---- PR4 category-aware formulation pillar ---------------------------------
+
+def test_formulation_single_ingredient_best_reaches_elite_band() -> None:
     from scoring_v4.quality_score import assemble_quality_score
-    # formulation 24/30 -> (24/30)*20 = 16.0
-    out = assemble_quality_score(_shadow(bd=_module_bd(form=24, form_max=30)))
-    assert out["quality_pillars_v4"]["formulation"]["score"] == 16.0
+    # creatine-like: formulation 24/30 raw, sports single -> ~19-20/20 (purpose-fit,
+    # normalized to the single-purpose achievable ceiling of 25, not breadth-30).
+    out = assemble_quality_score(_shadow(module="sports", bd=_module_bd(form=24, form_max=30)))
+    assert out["quality_pillars_v4"]["formulation"]["score"] >= 19.0
+
+
+def test_formulation_cheap_form_stays_low() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    # magnesium-oxide-like cheap form (low raw formulation) must NOT be lifted
+    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(form=2, form_max=30)))
+    assert out["quality_pillars_v4"]["formulation"]["score"] < 4.0
+
+
+def test_formulation_multi_uses_panel_reference() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    # multi/prenatal raw formulation is out of 25 (panel-aware already); ref 23
+    out = assemble_quality_score(_shadow(module="multi_or_prenatal", bd=_module_bd(form=21, form_max=25)))
+    f = out["quality_pillars_v4"]["formulation"]["score"]
+    assert 17.0 <= f <= 19.0  # 21/23*20 ~= 18.3
+
+
+def test_formulation_never_exceeds_20() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    out = assemble_quality_score(_shadow(module="sports", bd=_module_bd(form=30, form_max=30)))
+    assert out["quality_pillars_v4"]["formulation"]["score"] <= 20.0
+
+
+def test_archetype_classification() -> None:
+    from scoring_v4.quality_score import _archetype
+    assert _archetype("sports", {}) == "sports_single"
+    assert _archetype("omega", {}) == "omega"
+    assert _archetype("multi_or_prenatal", {}) == "prenatal_multi"
+    botan = {"dimensions": {"formulation": {"metadata": {"botanical_profile_applied": True}}}}
+    assert _archetype("generic", botan) == "generic_botanical_branded"
+    assert _archetype("generic", {}) == "generic_single_molecule"
 
 
 def test_evidence_pillar_is_identity_when_caps_match() -> None:
