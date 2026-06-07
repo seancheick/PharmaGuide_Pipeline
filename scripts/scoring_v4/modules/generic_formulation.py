@@ -175,7 +175,11 @@ _KNOWN_ENZYMES = frozenset(
 B0_HIGH_RISK_PENALTY = 10.0
 B0_WATCHLIST_PENALTY = 5.0
 B0_MODERATE_PENALTY = 10.0
-B0_CAP = 10.0
+# B0 safety-signal penalties ACCUMULATE per substance (2 high_risk = -20, a
+# high_risk + watchlist mix = -15) so a product carrying more risk is tanked more.
+# Bounded by the formulation dimension itself (a B0 of 30 can fully consume the
+# 30-pt dimension, not exceed it). Was 10.0 (which collapsed 2 high_risk into 1).
+B0_CAP = DIMENSION_CAP  # 30.0
 
 B1_HARMFUL_ADDITIVE_CAP = 15.0
 B1_HARMFUL_ADDITIVE_POINTS = {

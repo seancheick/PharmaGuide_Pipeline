@@ -1202,7 +1202,9 @@ def test_blend_anchor_pancreatin_gets_iqm_formulation_credit() -> None:
 # --- P1.3.1b safety/additive penalties -----------------------------------
 
 
-def test_b0_high_risk_exact_match_penalty_caps_at_ten() -> None:
+def test_b0_high_risk_plus_watchlist_accumulate() -> None:
+    # Multiple safety signals ACCUMULATE (was capped at -10). A high_risk (10) +
+    # watchlist (5) now totals -15 so a product carrying more risk is tanked more.
     from scoring_v4.modules.generic_formulation import score_formulation
 
     payload = score_formulation(
@@ -1218,7 +1220,48 @@ def test_b0_high_risk_exact_match_penalty_caps_at_ten() -> None:
         )
     )
 
-    assert payload["penalties"]["B0_moderate_watchlist"] == -10.0
+    assert payload["penalties"]["B0_moderate_watchlist"] == -15.0
+
+
+def test_b0_two_high_risk_substances_penalize_as_two() -> None:
+    # User directive: 2 high_risk must NOT score as 1. They accumulate to -20.
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "banned_substances": {
+                    "substances": [
+                        {"name": "A", "status": "high_risk", "match_type": "exact"},
+                        {"name": "B", "status": "high_risk", "match_type": "exact"},
+                    ]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B0_moderate_watchlist"] == -20.0
+
+
+def test_b0_accumulation_bounded_by_dimension_cap() -> None:
+    # Accumulation is bounded by the 30-pt formulation dimension (can fully eat it,
+    # not exceed it). 4 high_risk would be -40 but clamps to -30.
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "banned_substances": {
+                    "substances": [
+                        {"name": f"H{i}", "status": "high_risk", "match_type": "exact"}
+                        for i in range(4)
+                    ]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B0_moderate_watchlist"] == -30.0
 
 
 def test_b0_watchlist_exact_penalty_five() -> None:
