@@ -223,11 +223,14 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates():
             encoding="utf-8",
         )
 
+        # Build-mechanics test (last-write-wins dedup, manifest counts) on the
+        # stable v3 fixtures; pin v3 so it doesn't depend on the v4 completeness gate.
         result = build_final_db(
             [str(enriched_dir)],
             [str(scored_dir)],
             str(output_dir),
             str(Path(__file__).parent.parent),
+            score_model="v3",
         )
 
         assert result["product_count"] == 1
@@ -1723,10 +1726,12 @@ def test_build_final_db_default_mode_allows_enriched_scored_mismatch():
             json.dumps([scored1]), encoding="utf-8"
         )
 
-        # Default mode should NOT raise
+        # Default (non-strict) mode should NOT raise. Build-mechanics test on the
+        # stable v3 fixtures; pin v3 so it doesn't depend on the v4 completeness gate.
         result = build_final_db(
             [str(enriched_dir)], [str(scored_dir)], str(output_dir),
             str(Path(__file__).parent.parent),
+            score_model="v3",
         )
         assert result["product_count"] == 1  # only the matched one exported
 
@@ -2118,3 +2123,170 @@ class TestDetailBlobNutritionAndUnmapped:
         # Blob unmapped_actives check
         assert blob["unmapped_actives"]["names"] == ["Mystery Herb"]
         assert blob["unmapped_actives"]["total"] == 1
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# v4 cutover — export wiring integration (export schema v2.0.0)
+#
+# build_final_db(score_model="v4") runs the export adapter, which calls
+# score_product_v4_shadow. We monkeypatch that scorer with canned, per-dsld_id
+# results so the test deterministically exercises the FULL wiring (flag → overlay
+# → review-queue gate → build_core_row → build_detail_blob → dedup) without
+# depending on whether a synthetic fixture happens to be v4-complete.
+# ─────────────────────────────────────────────────────────────────────────────
+
+from scoring_v4 import export_adapter as _v4_export_adapter  # noqa: E402
+
+
+def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
+               safety_verdict=None, blocking_reason=None, suppressed_reason=None):
+    return {
+        "shadow_score_v4_100": quality_100 if quality_100 is not None else 88.0,
+        "shadow_score_v4_module": "generic",
+        "shadow_score_v4_verdict": verdict,
+        "shadow_score_v4_confidence": "high",
+        "shadow_score_v4_anchored": False,
+        "shadow_score_v4_display_100": 92.0,  # experimental — must be IGNORED
+        "shadow_score_v4_breakdown": {
+            "provenance": {
+                "scoring_engine_version": "4.0.0",
+                "classification_schema_version": "5.3.0",
+                "config_versions": {"quality_score": "1.0.0"},
+                "module_route": "generic",
+                "mode": "shadow",
+            },
+            "safety_gate": {"verdict": safety_verdict, "blocking_reason": blocking_reason,
+                            "clean_label_hits": []},
+            "completeness_gate": {"module": "generic", "is_live_eligible": status != "not_scored"},
+            "module": {"dimensions": {"formulation": {"score": 18}}},
+        },
+        "raw_score_v4_100": quality_100,
+        "quality_score_v4_100": quality_100,
+        "quality_pillars_v4": (
+            {"formulation": {"score": 18.0, "max": 20, "reason": "good purpose-fit"},
+             "evidence": {"score": 10.0, "max": 20, "reason": "moderate evidence"}}
+            if status == "scored" else None
+        ),
+        "quality_tier": tier,
+        "quality_score_status": status,
+        "quality_score_suppressed_reason": suppressed_reason,
+        "clean_label_flags_v4": None,
+        "quality_score_version": "1.0.0-test",
+    }
+
+
+def _patch_v4_by_id(monkeypatch, by_id):
+    """Make the export adapter's v4 scorer return canned results keyed by dsld_id."""
+    def fake(enriched):
+        return by_id[str(enriched.get("dsld_id"))]
+    monkeypatch.setattr(_v4_export_adapter, "score_product_v4_shadow", fake)
+
+
+def _run_build(tmp, enriched_list, scored_list, score_model="v4"):
+    root = Path(tmp)
+    enriched_dir = root / "enriched"; enriched_dir.mkdir()
+    scored_dir = root / "scored"; scored_dir.mkdir()
+    output_dir = root / "out"
+    (enriched_dir / "batch.json").write_text(json.dumps(enriched_list), encoding="utf-8")
+    (scored_dir / "batch.json").write_text(json.dumps(scored_list), encoding="utf-8")
+    result = build_final_db([str(enriched_dir)], [str(scored_dir)], str(output_dir),
+                            str(Path(__file__).parent.parent), score_model=score_model)
+    return result, output_dir
+
+
+def _core_rows(output_dir, cols):
+    """Return {dsld_id: {col: value}} for the selected columns (cols[0] must be dsld_id)."""
+    conn = sqlite3.connect(output_dir / "pharmaguide_core.db")
+    try:
+        rows = conn.execute(f"SELECT {', '.join(cols)} FROM products_core").fetchall()
+    finally:
+        conn.close()
+    return {r[0]: dict(zip(cols, r)) for r in rows}
+
+
+def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
+    e1 = make_enriched()  # dsld_id 999
+    e2 = make_enriched(); e2["dsld_id"] = "888"; e2["product_name"] = "Blocked P"
+    e3 = make_enriched(); e3["dsld_id"] = "777"; e3["product_name"] = "NotScored P"
+    # Distinct UPCs so the three are not collapsed by UPC dedup.
+    e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"; e3["upcSku"] = "333333333333"
+    s1 = make_scored(); s1["dsld_id"] = "999"
+    s2 = make_scored(); s2["dsld_id"] = "888"
+    s3 = make_scored(); s3["dsld_id"] = "777"
+    _patch_v4_by_id(monkeypatch, {
+        "999": _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong"),
+        "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
+                          tier=None, safety_verdict="BLOCKED",
+                          blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
+        "777": _canned_v4(status="not_scored", quality_100=None, verdict="NOT_SCORED", tier=None),
+    })
+    with tempfile.TemporaryDirectory() as tmp:
+        _result, out = _run_build(tmp, [e1, e2, e3], [s1, s2, s3], score_model="v4")
+        cols = ["dsld_id", "quality_score_v4_100", "quality_score_status", "quality_tier",
+                "score_model_version", "verdict", "score_100_equivalent",
+                "scoring_engine_version", "raw_score_v4_100"]
+        rows = _core_rows(out, cols)
+
+        # NOT_SCORED is quarantined; SAFE (scored) and BLOCKED (reason is the data) ship.
+        assert set(rows) == {"999", "888"}
+
+        scored = rows["999"]
+        assert scored["quality_score_v4_100"] == 88.0
+        assert scored["quality_score_status"] == "scored"
+        assert scored["quality_tier"] == "Strong"
+        assert scored["score_model_version"] == "v4"
+        assert scored["score_100_equivalent"] == 88.0  # /100 compat mirror
+        assert scored["scoring_engine_version"] == "4.0.0"
+        assert scored["raw_score_v4_100"] == 88.0
+        # a profile-gated hard-safety warning may flip SAFE→CAUTION; both are non-suppressed.
+        assert scored["verdict"] in {"SAFE", "CAUTION"}
+
+        blocked = rows["888"]
+        assert blocked["quality_score_v4_100"] is None
+        assert blocked["quality_score_status"] == "suppressed_safety"
+        assert blocked["verdict"] == "BLOCKED"
+        assert blocked["score_100_equivalent"] is None
+
+        # The scored product's detail blob carries the six pillars + provenance + explanation.
+        blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
+        assert blob["quality_pillars_v4"]
+        assert blob["v4_score_provenance"]["score_model_version"] == "v4"
+        assert "v4_score_explanation" in blob
+        assert blob["raw_score_v4_100"] == 88.0
+
+
+def test_v4_dedup_keeps_scored_over_blocked_same_upc(monkeypatch):
+    e_scored = make_enriched()  # 999
+    e_blocked = make_enriched(); e_blocked["dsld_id"] = "888"
+    upc = "012345678905"
+    e_scored["upcSku"] = upc; e_scored["status"] = "active"
+    e_blocked["upcSku"] = upc; e_blocked["status"] = "active"
+    s1 = make_scored(); s1["dsld_id"] = "999"
+    s2 = make_scored(); s2["dsld_id"] = "888"
+    _patch_v4_by_id(monkeypatch, {
+        "999": _canned_v4(status="scored", quality_100=70.0, verdict="SAFE", tier="Acceptable"),
+        "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
+                          tier=None, safety_verdict="BLOCKED", blocking_reason="banned_ingredient"),
+    })
+    with tempfile.TemporaryDirectory() as tmp:
+        _result, out = _run_build(tmp, [e_scored, e_blocked], [s1, s2], score_model="v4")
+        rows = _core_rows(out, ["dsld_id"])
+        # The scored product wins the UPC group; the BLOCKED twin is deduped away.
+        assert set(rows) == {"999"}
+
+
+def test_v3_fallback_build_leaves_v4_columns_null():
+    e = make_enriched()
+    s = make_scored(verdict="SAFE"); s["dsld_id"] = "999"
+    with tempfile.TemporaryDirectory() as tmp:
+        result, out = _run_build(tmp, [e], [s], score_model="v3")
+        assert result["product_count"] == 1
+        rows = _core_rows(out, ["dsld_id", "score_model_version", "quality_score_v4_100",
+                                "quality_score_status", "score_100_equivalent", "verdict"])
+        r = rows["999"]
+        # No overlay under v3 → all v4 columns NULL; headline comes from the v3 scored blob.
+        assert r["score_model_version"] is None
+        assert r["quality_score_v4_100"] is None
+        assert r["quality_score_status"] is None
+        assert r["score_100_equivalent"] is not None
+        assert r["verdict"] == "SAFE"

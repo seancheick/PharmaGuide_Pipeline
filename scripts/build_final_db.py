@@ -1146,6 +1146,25 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     verdict = safe_str(scored.get("verdict")).upper()
     score_optional = verdict in {"BLOCKED", "UNSAFE"}
 
+    # v4 cutover: under --score-model v4 the export adapter stamps
+    # _v4_quality_status; it is authoritative for the ship/quarantine decision.
+    #   scored           → require a finite quality_score_v4_100 (asserted here);
+    #   suppressed_safety → BLOCKED/UNSAFE, null score is legitimate (score_optional below);
+    #   not_scored        → verdict is NOT_SCORED, quarantined by the block below.
+    # The verdict-keyed checks still apply because the adapter overlays `verdict`.
+    v4_status = scored.get("_v4_quality_status")
+    if v4_status == "scored":
+        q = scored.get("_v4_quality_score_100")
+        try:
+            q_ok = q is not None and math.isfinite(float(q))
+        except (TypeError, ValueError):
+            q_ok = False
+        if not q_ok:
+            issues.append(
+                f"review_queue: v4 quality_score_status=scored requires a finite "
+                f"quality_score_v4_100 but got {q!r} (v4 data integrity gate)."
+            )
+
     if verdict == "NOT_SCORED":
         issues.append(
             "review_queue: NOT_SCORED verdict — mapping/dosage gate "
@@ -3384,6 +3403,31 @@ def has_recalled_ingredient(enriched: Dict) -> bool:
 
 # ─── Detail Blob Builder ───
 
+def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
+    """Top strength / drag pillar reasons — the consumer "how it scored X".
+
+    Ranks the six v4 pillars by their (score - max) delta: the fullest pillars
+    are strengths, the largest gaps are drags. Returns None for a non-scored
+    product (no pillars)."""
+    if not isinstance(pillars, dict) or not pillars:
+        return None
+    ranked = []
+    for name, p in pillars.items():
+        if not isinstance(p, dict):
+            continue
+        try:
+            delta = float(p.get("score")) - float(p.get("max"))
+        except (TypeError, ValueError):
+            continue
+        ranked.append((delta, name, p.get("reason")))
+    if not ranked:
+        return None
+    ranked.sort(key=lambda r: r[0])  # ascending: biggest drags first
+    drags = [{"pillar": n, "reason": rs} for d, n, rs in ranked if d < -1e-9][:3]
+    strengths = [{"pillar": n, "reason": rs} for d, n, rs in reversed(ranked)][:3]
+    return {"strengths": strengths, "drags": drags}
+
+
 def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     """Build the per-product detail blob for caching/Supabase."""
     non_gmo_audit = derive_non_gmo_audit(enriched)
@@ -4762,6 +4806,31 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     blob["proprietary_blend"] = bool(_is_opaque and _has_blend)
     blob["unverified_ingredient"] = bool(_is_opaque and not _has_blend)
 
+    # ── v4 cutover: detail-blob fields (only under --score-model v4) ─────────
+    # The export adapter stashes the v4 public contract under _v4_* keys. Surface
+    # the six pillars (with reasons), clean-label flags, the audit raw score, the
+    # gate breakdowns, and a provenance/explanation trail ("why did this score X?").
+    if scored.get("_v4_quality_status") is not None:
+        pillars = scored.get("_v4_pillars")
+        blob["quality_pillars_v4"] = pillars
+        blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
+        blob["raw_score_v4_100"] = scored.get("_v4_raw_score_100")
+        blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
+        blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
+        blob["v4_score_provenance"] = {
+            "score_model_version": scored.get("_score_model_version"),
+            "quality_score_status": scored.get("_v4_quality_status"),
+            "quality_tier": scored.get("_v4_quality_tier"),
+            "quality_score_version": scored.get("_v4_quality_version"),
+            "scoring_engine_version": scored.get("_v4_scoring_engine_version"),
+            "classification_schema_version": scored.get("_v4_classification_schema_version"),
+            "module": scored.get("_v4_module"),
+            "confidence": scored.get("_v4_confidence"),
+            "config_fingerprint": scored.get("_v4_config_fingerprint"),
+            "suppressed_reason": scored.get("_v4_suppressed_reason"),
+        }
+        blob["v4_score_explanation"] = _build_v4_score_explanation(pillars)
+
     return blob
 
 
@@ -6078,7 +6147,16 @@ def build_final_db(
     output_dir: str,
     script_dir: str,
     strict: bool = False,
+    score_model: str = "v4",
 ):
+    # v4 (default) overlays the production six-pillar /100 score onto each product
+    # via the export adapter; v3 is the legacy fallback. Imported lazily so the v3
+    # path never pulls in the scoring_v4 stack.
+    overlay_v4_scored = None
+    if score_model == "v4":
+        from scoring_v4.export_adapter import overlay_v4_scored as overlay_v4_scored
+    logger.info("Scoring model for export: %s", score_model)
+
     os.makedirs(output_dir, exist_ok=True)
     detail_dir = os.path.join(output_dir, "detail_blobs")
     os.makedirs(detail_dir, exist_ok=True)
@@ -6148,6 +6226,12 @@ def build_final_db(
                 if len(enriched_only_samples) < 5:
                     enriched_only_samples.append(pid)
                 continue
+
+            # v4 cutover: overlay the production six-pillar /100 score/verdict onto
+            # the v3 scored blob (keeping its scaffolding) and stash the v4 contract
+            # under _v4_* keys. One call makes every downstream consumer v4-aware.
+            if overlay_v4_scored is not None:
+                scored = overlay_v4_scored(enriched, scored)
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
             products_with_warnings_count, contract_failures_count = update_audit_state(
@@ -6364,6 +6448,7 @@ def build_final_db(
         ("product_count", str(inserted)),
         ("min_app_version", MIN_APP_VERSION),
         ("schema_version", str(EXPORT_SCHEMA_VERSION)),
+        ("score_model", str(score_model)),
     ]
     for key, value in local_manifest_rows:
         c.execute("INSERT OR REPLACE INTO export_manifest VALUES (?,?)", (key, value))
@@ -6419,6 +6504,7 @@ def build_final_db(
         "detail_index_checksum": f"sha256:{detail_index_checksum}",
         "min_app_version": MIN_APP_VERSION,
         "schema_version": EXPORT_SCHEMA_VERSION,
+        "score_model": score_model,
         "scoring_config_checksum": scoring_config_checksum,
         # Pipeline integrity signals
         "integrity": {
@@ -6506,6 +6592,10 @@ def main():
                               "writes to /tmp)."))
     parser.add_argument("--strict", action="store_true",
                         help="Fail build if any enriched/scored mismatch (production mode)")
+    parser.add_argument("--score-model", choices=["v3", "v4"], default="v4",
+                        help="Scoring model for the export headline. v4 (default) ships "
+                             "the production six-pillar /100 score via the export adapter; "
+                             "v3 is the legacy fallback (v4 columns left NULL).")
     args = parser.parse_args()
 
     # 2026-05-14 — emit a loud warning when the legacy default is used.
@@ -6530,7 +6620,7 @@ def main():
     script_dir = str(Path(__file__).parent)
     result = build_final_db(
         args.enriched_dir, args.scored_dir, args.output_dir, script_dir,
-        strict=args.strict,
+        strict=args.strict, score_model=args.score_model,
     )
 
     print(f"\nDone. {result['product_count']} products, {result['error_count']} errors.")
