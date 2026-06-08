@@ -1,0 +1,103 @@
+"""v4 → final-DB export adapter.
+
+The single seam between the v4 scorer (`score_supplements_v4_shadow`) and the
+frozen `products_core` export. `build_final_db.py` calls `overlay_v4_scored(
+enriched, scored_v3)` once per product under `--score-model v4`.
+
+Design (see docs/plans/V4_CUTOVER_HANDOFF.md and the approved cutover plan):
+  - The export still consumes v3 *scaffolding* off the scored blob (section_scores
+    for the review-queue gate, badges, flags, category_percentile,
+    breakdown.B.B8_caers_evidence, strict_scoring_contract, scoring_metadata).
+    v4 scores the SAME enriched corpus but produces a /100 six-pillar public score.
+  - So we OVERLAY v4's public score/verdict onto a *shallow copy* of the v3 scored
+    dict (keeping the scaffolding by reference) and STASH the full v4 public
+    contract under reserved ``_v4_*`` keys. Downstream readers (`build_core_row`,
+    `build_detail_blob`, `validate_export_contract`) pick them up with the same
+    ``scored.get(...)`` idiom they already use — no signature churn, one channel.
+  - Inputs are NEVER mutated. The v4 scorer runs exactly once per product here.
+
+Suppression contract (honors ``quality_score_status``):
+  - ``scored``           → finite /100 score; all fields populated.
+  - ``suppressed_safety`` (BLOCKED/UNSAFE) → null score, ``display_100="N/A"``,
+    reason set. This null is LEGITIMATE — the gate must not quarantine it.
+  - ``not_scored``       → verdict ``NOT_SCORED``, null score — quarantined by the gate.
+
+``raw_score_v4_100`` is exported for audit/debug only and is NEVER the shipped score.
+"""
+
+from __future__ import annotations
+
+import json
+from typing import Any, Dict
+
+from score_supplements_v4_shadow import score_product_v4_shadow
+
+SCORE_MODEL_V4 = "v4"
+SCORE_MODEL_V3 = "v3"
+
+
+def _fmt_display_100(quality_score: Any) -> str:
+    """Render the consumer-facing ``NN/100`` display string, or ``N/A``."""
+    try:
+        return f"{round(float(quality_score))}/100"
+    except (TypeError, ValueError):
+        return "N/A"
+
+
+def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
+    """Run v4 on ``enriched`` and overlay its public contract onto a copy of
+    ``scored_v3``. Returns the new dict; never mutates either input."""
+    v4 = score_product_v4_shadow(enriched if isinstance(enriched, dict) else {})
+    scored = dict(scored_v3) if isinstance(scored_v3, dict) else {}
+
+    breakdown = v4.get("shadow_score_v4_breakdown") or {}
+    safety_gate = breakdown.get("safety_gate") or {}
+    completeness_gate = breakdown.get("completeness_gate") or {}
+    provenance = breakdown.get("provenance") or {}
+
+    status = v4.get("quality_score_status")
+    quality_100 = v4.get("quality_score_v4_100")
+    verdict = v4.get("shadow_score_v4_verdict")
+    is_scored = status == "scored"
+
+    config_versions = provenance.get("config_versions")
+    config_fingerprint = (
+        json.dumps(config_versions, sort_keys=True, ensure_ascii=False)
+        if config_versions is not None
+        else None
+    )
+    v3_blocking = scored_v3.get("blocking_reason") if isinstance(scored_v3, dict) else None
+
+    # ── Overlay the legacy keys the frozen export already reads ──────────────
+    # v4 is authoritative under v4. score_100_equivalent / score_display_100_equivalent
+    # become honest /100 compat mirrors of the public six-pillar score.
+    scored["verdict"] = verdict
+    scored["safety_verdict"] = safety_gate.get("verdict") or "SAFE"
+    scored["score_100_equivalent"] = quality_100  # None when suppressed/not_scored
+    scored["display_100"] = _fmt_display_100(quality_100) if is_scored else "N/A"
+    scored["grade"] = v4.get("quality_tier")  # legacy `grade` column now carries the v4 tier
+    scored["blocking_reason"] = safety_gate.get("blocking_reason") or v3_blocking
+    # NOTE: `score_80` is intentionally left as the v3 scorer wrote it — the shallow
+    # copy preserves it so build_decision_highlights keeps working off v3 scaffolding.
+    # The /80 export column is dropped; only the /100 mirrors ship.
+
+    # ── Stash the full v4 public contract under reserved keys ────────────────
+    scored["_score_model_version"] = SCORE_MODEL_V4
+    scored["_v4_quality_score_100"] = quality_100
+    scored["_v4_quality_status"] = status
+    scored["_v4_quality_tier"] = v4.get("quality_tier")
+    scored["_v4_suppressed_reason"] = v4.get("quality_score_suppressed_reason")
+    scored["_v4_raw_score_100"] = v4.get("raw_score_v4_100")
+    scored["_v4_module"] = v4.get("shadow_score_v4_module")
+    scored["_v4_confidence"] = v4.get("shadow_score_v4_confidence")
+    scored["_v4_quality_version"] = v4.get("quality_score_version")
+    scored["_v4_pillars"] = v4.get("quality_pillars_v4")
+    scored["_v4_clean_label_flags"] = v4.get("clean_label_flags_v4")
+    scored["_v4_safety_gate"] = safety_gate or None
+    scored["_v4_completeness_gate"] = completeness_gate or None
+    scored["_v4_provenance"] = provenance or None
+    scored["_v4_scoring_engine_version"] = provenance.get("scoring_engine_version")
+    scored["_v4_classification_schema_version"] = provenance.get("classification_schema_version")
+    scored["_v4_config_fingerprint"] = config_fingerprint
+
+    return scored
