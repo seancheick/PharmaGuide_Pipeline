@@ -853,7 +853,10 @@ def audit_product(
         "core_db": {
             "row_present": core_row is not None,
             "verdict": (core_row or {}).get("verdict"),
-            "score_quality_80": (core_row or {}).get("score_quality_80"),
+            # v2.0.0: the headline is the v4 /100 score; the legacy /80 column was dropped.
+            "quality_score_v4_100": (core_row or {}).get("quality_score_v4_100"),
+            "quality_score_status": (core_row or {}).get("quality_score_status"),
+            "score_model_version": (core_row or {}).get("score_model_version"),
         },
     }
 
