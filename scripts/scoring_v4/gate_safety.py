@@ -156,6 +156,46 @@ def _ingredient_name_terms(ingredient: Dict[str, Any]) -> tuple[str, Optional[st
     return str(raw_name or ""), str(standard_name) if standard_name else None
 
 
+def _ingredient_safety_terms(
+    ingredient: Dict[str, Any],
+) -> tuple[str, Optional[str], List[str]]:
+    """Banned/recalled evidence terms for the resolver, aligned with the export.
+
+    Returns (raw_name, standard_name, additional_terms). The additional terms
+    add ``raw_source_text`` AND every ``forms[].name`` / ``forms[].prefix`` —
+    mirroring ``build_final_db._active_banned_recall_evidence_terms`` so the v4
+    gate sees the SAME banned signal as the export's ``has_banned_substance``.
+
+    Why this exists: a banned *form* of a generic active (Boron carrying the
+    banned salt ``Sodium Tetraborate``) or a banned substance the cleaner moved
+    into ``raw_source_text`` while leaving a generic ``name`` (Partially
+    Hydrogenated Soybean Oil) lives ONLY in forms/raw_source_text. The earlier
+    name-only path missed them, so export-banned products scored SAFE/CAUTION
+    under v4. The resolver's banned index and the export's index are built from
+    the same filtered entries with the same normalizer, so feeding the same
+    terms yields parity. Purely additive — no existing term is dropped.
+
+    NOTE: kept in sync with the export term builder by intent. If the export's
+    evidence-term policy changes (e.g. the mapped-active standardName rule),
+    revisit this helper and the parity coverage in
+    test_v4_banned_form_evidence_gate.py / test_v4_safety_parity_release.py.
+    """
+    raw_name, standard_name = _ingredient_name_terms(ingredient)
+    extra: List[str] = []
+    raw_source_text = ingredient.get("raw_source_text")
+    if raw_source_text:
+        extra.append(str(raw_source_text))
+    for form in _safe_list(ingredient.get("forms")):
+        if isinstance(form, dict):
+            for key in ("name", "prefix"):
+                value = form.get(key)
+                if value:
+                    extra.append(str(value))
+        elif form:
+            extra.append(str(form))
+    return raw_name, standard_name, extra
+
+
 def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Return banned_recalled resolver hits from active + inactive rows.
 
@@ -177,13 +217,14 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
         for ingredient in _safe_list((product or {}).get(source_key)):
             if not isinstance(ingredient, dict):
                 continue
-            raw_name, standard_name = _ingredient_name_terms(ingredient)
-            if not raw_name:
+            raw_name, standard_name, extra_terms = _ingredient_safety_terms(ingredient)
+            if not raw_name and not extra_terms:
                 continue
             try:
                 resolution = resolver.resolve(
                     raw_name=raw_name,
                     standard_name=standard_name,
+                    additional_terms=extra_terms,
                 )
             except Exception:
                 continue
