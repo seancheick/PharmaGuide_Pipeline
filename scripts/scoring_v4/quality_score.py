@@ -296,12 +296,16 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     region capped; physician/sustainability/prestige dropped."""
     sub = cfg["verification_subscale"]
     cap = sub["cap"]
-    vb = (module_bd.get("verification_bonus") or {}).get("components") or {}
+    vb_payload = module_bd.get("verification_bonus") or {}
+    vb = vb_payload.get("components") or {}
+    trust_meta = ((vb_payload.get("metadata") or {}).get("trust_metadata") or {})
     mt = (module_bd.get("manufacturer_trust") or {}).get("components") or {}
     b4a = _num(vb.get("B4a_verified_certifications"))
     b4b = _num(vb.get("B4b_gmp"))
     b4c = _num(vb.get("B4c_batch_traceability"))
     b4d = _num(vb.get("B4d_brand_testing_posture"))
+    unscored_scopes = trust_meta.get("verified_unscored_scope_counts") or {}
+    brand_only_count = int(_num(unscored_scopes.get("brand_only")))
 
     cert = 0.0
     for tier in sub["cert_tiers"]:  # ordered high→low
@@ -312,17 +316,36 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     gmp = (sub["gmp_certified_points"] if b4b >= 4.0
            else sub["gmp_registered_points"] if b4b >= 2.0 else 0.0)
     testing = sub["brand_testing_points"] if b4d > 0 else 0.0
-    hard = cert + coa_batch + gmp + testing
+    # PR2.1: a verified brand/facility scoped cert is a real third-party
+    # verification signal, but weaker than sku/product_line certification and
+    # not evidence for this SKU. It fills the unknown-data gap only; it does not
+    # stack on top of product-level cert/COA and never changes raw B4a.
+    brand_only_cert = (
+        _num(sub.get("brand_only_cert_points"))
+        if brand_only_count > 0 and b4a <= 0 and b4c <= 0
+        else 0.0
+    )
+    hard = cert + coa_batch + gmp + testing + brand_only_cert
     # soft: only reputation + region, capped; physician/sustainability/disclosure excluded
     soft = min(sub["soft_cap"],
                _num(mt.get("D1_manufacturer_reputation")) + _num(mt.get("D4_high_standard_region")))
 
-    has_third_party_signal = (b4a > 0) or (b4c > 0)
-    if has_third_party_signal:
+    has_product_third_party_signal = (b4a > 0) or (b4c > 0)
+    has_third_party_signal = has_product_third_party_signal or (brand_only_cert > 0)
+    if has_product_third_party_signal:
         total = hard + soft
-        reason = (f"Verification {round(min(cap, total), 1):g}/15 — third-party signals: "
-                  f"cert {cert:g} + COA/batch {coa_batch:g} + GMP {gmp:g} + testing {testing:g}, "
-                  f"soft {soft:g}")
+        signal_label = "third-party signals"
+        reason = (f"Verification {round(min(cap, total), 1):g}/15 — {signal_label}: "
+                  f"cert {cert:g} + brand/facility cert {brand_only_cert:g} + "
+                  f"COA/batch {coa_batch:g} + GMP {gmp:g} + testing {testing:g}, soft {soft:g}")
+        fail_open = False
+    elif brand_only_cert > 0:
+        base = max(sub["neutral_baseline"], cert + coa_batch + gmp + testing)
+        total = base + brand_only_cert + soft
+        signal_label = "brand/facility cert signal"
+        reason = (f"Verification {round(min(cap, total), 1):g}/15 — {signal_label}: "
+                  f"cert {cert:g} + brand/facility cert {brand_only_cert:g} + "
+                  f"COA/batch {coa_batch:g} + GMP {gmp:g} + testing {testing:g}, soft {soft:g}")
         fail_open = False
     else:
         base = max(sub["neutral_baseline"], hard)
@@ -344,7 +367,8 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         "max": weight,
         "reason": reason,
         "components": {"cert": cert, "coa_batch": coa_batch, "gmp": gmp,
-                       "brand_testing": testing, "soft": soft, "fail_open_neutral": fail_open,
+                       "brand_testing": testing, "brand_only_cert": brand_only_cert,
+                       "soft": soft, "fail_open_neutral": fail_open,
                        "quality_system_violation_penalty": qs_pen},
     }
 

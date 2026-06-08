@@ -116,12 +116,25 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     marine_tokens = _get_marine_cert_tokens()
     omega_like = _is_omega_like(product)
     best_scope_by_program: Dict[str, str] = {}
+    unscored_scope_counts: Dict[str, int] = defaultdict(int)
+    brand_only_programs: set[str] = set()
 
     for entry in verified:
         if not isinstance(entry, dict):
             continue
         scope = entry.get("scope") or ""
         if scope not in ("sku", "product_line", "label_asserted_product"):
+            if scope in ("brand_only", "needs_review", "claimed_only"):
+                if entry.get("scoring_blocked_reason"):
+                    continue
+                program = _norm_text(entry.get("program") or "")
+                if not program:
+                    continue
+                if any(token in program for token in marine_tokens) and not omega_like:
+                    continue
+                unscored_scope_counts[scope] += 1
+                if scope == "brand_only":
+                    brand_only_programs.add(program)
             continue
         if entry.get("scoring_blocked_reason"):
             continue
@@ -163,6 +176,12 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
         "verified_scope_counts": {
             key: value for key, value in sorted(scope_counts.items()) if value > 0
         },
+        "verified_unscored_scope_counts": {
+            key: value
+            for key, value in sorted(unscored_scope_counts.items())
+            if value > 0
+        },
+        "verified_brand_only_programs": sorted(brand_only_programs),
     }
     return score, metadata
 

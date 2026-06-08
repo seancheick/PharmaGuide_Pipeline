@@ -331,6 +331,17 @@ def _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=2.0, d1=2.0, d4=1.0):
     return bd
 
 
+def _bd_verif_with_brand_only_cert() -> dict:
+    bd = _bd_verif(b4a=0.0, b4b=0.0, b4c=0.0, b4d=0.0)
+    bd["verification_bonus"]["metadata"] = {
+        "trust_metadata": {
+            "verified_unscored_scope_counts": {"brand_only": 1},
+            "verified_brand_only_programs": ["usp verified"],
+        }
+    }
+    return bd
+
+
 def _verif(bd):
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow(bd=bd))
@@ -353,6 +364,39 @@ def test_fail_open_neutral_when_no_cert_no_coa() -> None:
     v = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0))
     assert 6.0 <= v["score"] <= 10.0  # neutral 6 + soft, not cratered
     assert "neutral" in v["reason"].lower() or "unknown" in v["reason"].lower()
+
+
+def test_brand_only_verified_cert_lifts_above_unknown_without_b4a_credit() -> None:
+    unknown = _verif(_bd_verif(b4a=0.0, b4b=0.0, b4c=0.0, b4d=0.0))["score"]
+    v = _verif(_bd_verif_with_brand_only_cert())
+
+    assert v["score"] == unknown + 2.0
+    assert v["components"]["cert"] == 0.0
+    assert v["components"]["brand_only_cert"] == 2.0
+    assert v["components"]["fail_open_neutral"] is False
+    assert "brand/facility cert" in v["reason"].lower()
+    assert "no third-party cert/coa" not in v["reason"].lower()
+
+
+def test_brand_only_cert_does_not_stack_with_product_cert() -> None:
+    product_cert = _verif(_bd_verif(b4a=8.0, b4b=0.0, b4c=0.0, b4d=0.0))
+    bd = _bd_verif_with_brand_only_cert()
+    bd["verification_bonus"]["components"]["B4a_verified_certifications"] = 8.0
+    stacked = _verif(bd)
+
+    assert stacked["score"] == product_cert["score"]
+    assert stacked["components"]["brand_only_cert"] == 0.0
+
+
+def test_brand_only_cert_does_not_unlock_gmp_and_testing_stack() -> None:
+    unknown = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=2.0))
+    bd = _bd_verif_with_brand_only_cert()
+    bd["verification_bonus"]["components"]["B4b_gmp"] = 4.0
+    bd["verification_bonus"]["components"]["B4d_brand_testing_posture"] = 2.0
+    lifted = _verif(bd)
+
+    assert lifted["score"] == unknown["score"] + 2.0
+    assert lifted["components"]["brand_only_cert"] == 2.0
 
 
 def test_self_cgmp_does_not_carry_verification() -> None:

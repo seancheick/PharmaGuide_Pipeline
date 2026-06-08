@@ -134,6 +134,12 @@ def test_brand_only_needs_review_and_claimed_only_score_zero() -> None:
 
     assert payload["components"]["B4a_verified_certifications"] == 0.0
     assert payload["metadata"]["verified_programs_scored"] == []
+    assert payload["metadata"]["verified_unscored_scope_counts"] == {
+        "brand_only": 1,
+        "claimed_only": 1,
+        "needs_review": 1,
+    }
+    assert payload["metadata"]["verified_brand_only_programs"] == ["nsf sport"]
 
 
 def test_brand_level_testing_posture_scores_low_trust_without_b4a_credit() -> None:

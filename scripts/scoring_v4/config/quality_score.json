@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.0-clean-label-step3a",
+    "version": "1.0.0-pr2.1-brand-only-verification",
     "schema_version": "1.0.0",
     "last_updated": "2026-06-08",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2); safety_hygiene is a product-level pillar that routes a maker's Class I recall here and quality-system violations to verification (PR3). Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 (the audit/math score) is NEVER changed. v4 is SHADOW-ONLY until app cutover.",
-    "phase": "pr3_safety_hygiene_split"
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here and quality-system violations to verification (PR3). Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 (the audit/math score) is NEVER changed. v4 is SHADOW-ONLY until app cutover.",
+    "phase": "pr2.1_brand_only_verification"
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
@@ -62,7 +62,7 @@
     "default_reference": 25.0
   },
   "verification_subscale": {
-    "_doc": "PR2: hard third-party signals saturate the cap (over-provisioned, internal sum clamps at 15) so a SUBSET (e.g. one gold cert) maxes it. Self-asserted cGMP is table stakes (near-zero). FAIL OPEN: a product with no third-party cert AND no COA is data-UNKNOWN, not uncertified — it floors at a neutral baseline so the ~62% of the catalog we lack cert data on is not cratered (confidence carries the gap). Soft reputation/region capped at 3; physician/sustainability dropped. The wall truly lifts only when real cert data is sourced (cert_registry task).",
+    "_doc": "PR2/PR2.1: hard third-party signals saturate the cap (over-provisioned, internal sum clamps at 15) so a SUBSET (e.g. one gold cert) maxes it. Self-asserted cGMP is table stakes (near-zero). FAIL OPEN: a product with no third-party cert AND no COA is data-UNKNOWN, not uncertified — it floors at a neutral baseline so the catalog we lack cert data on is not cratered (confidence carries the gap). PR2.1 recognizes verified brand/facility-scoped third-party certs as a small hard signal, weaker than sku/product_line and non-stacking with product-level cert/COA; claimed_only and needs_review stay zero. Soft reputation/region capped at 3; physician/sustainability dropped. The wall truly lifts only when real cert data is sourced (cert_registry task).",
     "cap": 15.0,
     "neutral_baseline": 6.0,
     "soft_cap": 3.0,
@@ -74,7 +74,8 @@
     "coa_batch_max": 5.0,
     "gmp_certified_points": 2.0,
     "gmp_registered_points": 1.0,
-    "brand_testing_points": 2.0
+    "brand_testing_points": 2.0,
+    "brand_only_cert_points": 2.0
   },
   "tiers": [
     { "min": 95.0, "name": "Elite" },
