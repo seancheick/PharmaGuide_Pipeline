@@ -1,9 +1,9 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.0-pr3",
+    "version": "1.0.0-clean-label-step3a",
     "schema_version": "1.0.0",
-    "last_updated": "2026-06-07",
+    "last_updated": "2026-06-08",
     "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2); safety_hygiene is a product-level pillar that routes a maker's Class I recall here and quality-system violations to verification (PR3). Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 (the audit/math score) is NEVER changed. v4 is SHADOW-ONLY until app cutover.",
     "phase": "pr3_safety_hygiene_split"
   },
@@ -18,6 +18,12 @@
   "safety_hygiene_subscale": {
     "_doc": "PR3: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Manufacturer violations were previously absent from EVERY pillar, so the public score was blind to them (a violation product scored identical to a clean one). B1 harmful additive and B7 overdose are NOT here — they already lower the formulation/dose pillars, so re-deducting would double-count >50% of the catalog.",
     "base_max": 10.0
+  },
+  "clean_label_subscale": {
+    "_doc": "STEP 3a: clean-label additive penalty (titanium dioxide / E171 + future EU-banned additives). A flagged additive INFORMS (clean_label_flags_v4) AND takes a SMALL graduated safety_hygiene penalty WITHOUT forcing a CAUTION verdict (CAUTION is the safety gate's lane). penalty = penalty_base (per-additive, from banned_recalled_ingredients.json clean_label.penalty_base) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); a flagged additive present as an active is penalized harder (×1.5). MAGNITUDES HERE ARE CONSERVATIVE DEFAULTS PENDING USER/ADVISOR SIGN-OFF (spec §7, reports/v4_clean_label_flag_design.md): titanium dioxide as a coating = 2.0 × 0.5 = −1.0 on the /10 pillar. tier_base is a FALLBACK base used only when an entry omits penalty_base.",
+    "role_multiplier": { "active": 1.5, "major": 1.5, "claim_prominent": 1.0, "adjunct": 0.5, "inactive": 0.5 },
+    "tier_base": { "elevated": 2.0, "informational": 0.5 },
+    "max_total_penalty": 5.0
   },
   "evidence_subscale": {
     "_doc": "PR6: category-aware evidence fit. The raw evidence dimension's branded-RCT/consensus floor caps a SINGLE ingredient at 18, reserving 19-20 for multi-active breadth. The spec explicitly forbids this ('do not cap single-ingredient evidence just because it is single; a focused product can have better evidence than a blend'). Normalize single-purpose archetypes to an evidence ceiling of 19 so a strong branded/consensus single (KSM-66, creatine, EPA/DHA) earns ~19 by HAVING the evidence — a weak single (low raw evidence) still scores low. 19 not 20 keeps a sliver for the rare perfect-evidence case; multi/breadth archetypes keep 20.",

@@ -3,12 +3,11 @@
 The public consumer score, separate from the raw v4 audit/math score. Six pillars:
 formulation/20, dose/20, evidence/20, transparency/15, verification/15, safety_hygiene/10.
 
-PHASE 1 (this scaffold): each pillar is a LINEAR remap of the corresponding existing v4
-module dimension/bonus into the new frame. This is deliberately faithful to current
-signals so the side-by-side number ships immediately AND the structural bias (e.g.
-single-ingredient products reading low on a breadth-dependent formulation dim) is visible
-as a diagnostic. Category-aware pillar adapters that let a category's best-in-class EARN
-the 90s land in later PRs.
+Current state: the public score is assembled from category-aware pillar adapters,
+not a post-hoc display stretch. Formulation, dose, and evidence normalize against
+archetype-specific achievable ceilings; verification uses hard quality signals with
+a soft-signal cap; transparency remains a faithful source-dimension map because it
+does not have the same structural ceiling problem.
 
 INVARIANTS:
 - ``raw_score_v4_100`` (== existing ``shadow_score_v4_100``) is NEVER changed.
@@ -111,33 +110,98 @@ def _pillar_from_bonuses(name: str, module_bd: Dict[str, Any],
     }
 
 
+def _clean_label_penalty(hits: Any, cfg: Dict[str, Any]) -> tuple[float, List[Dict[str, Any]]]:
+    """Graduated clean-label additive penalty + per-hit enrichment.
+
+    penalty = penalty_base (per-additive, from the entry's clean_label.penalty_base;
+    falls back to config tier_base) × role_multiplier[role]. Summed across flagged
+    additives and clamped to the per-product cap. Pure function of the gate's
+    clean_label_hits + config. Returns (total_penalty, enriched_hits) where each
+    enriched hit carries `penalty_applied` (its own pre-cap contribution) for the flag.
+
+    Magnitudes are config-driven (clean_label_subscale) and PENDING user/advisor
+    sign-off (spec §7). The raw shadow score is never touched by this.
+    """
+    sub = cfg.get("clean_label_subscale") or {}
+    if not sub or not isinstance(hits, list) or not hits:
+        return 0.0, []
+    role_mult = sub.get("role_multiplier") or {}
+    tier_base = sub.get("tier_base") or {}
+    cap = _num(sub.get("max_total_penalty"))
+    enriched: List[Dict[str, Any]] = []
+    running = 0.0
+    for h in hits:
+        if not isinstance(h, dict):
+            continue
+        base = h.get("penalty_base")
+        if base is None:
+            base = tier_base.get(str(h.get("tier") or "").lower())
+        mult = role_mult.get(str(h.get("role") or "").lower())
+        if mult is None:
+            mult = 0.5  # conservative default for an unmapped role
+        pen = round(_num(base) * _num(mult), 1)
+        enriched.append({**h, "penalty_applied": pen})
+        running += pen
+    total = round(min(running, cap) if cap else running, 1)
+    return total, enriched
+
+
+def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Public Flutter-facing clean_label_flags_v4 (the 'inform' half). All fields are
+    data-sourced from the resolved entry — no invented status strings."""
+    flags: List[Dict[str, Any]] = []
+    for h in enriched_hits:
+        flags.append({
+            "additive": h.get("name"),
+            "standard_name": h.get("standard_name"),
+            "role": h.get("role"),
+            "tier": h.get("tier"),
+            "consumer_note": h.get("consumer_note"),
+            "status": h.get("status"),
+            "penalty_applied": h.get("penalty_applied"),
+            "matched_rule_id": h.get("matched_rule_id"),
+        })
+    return flags
+
+
 def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
-                           cfg: Dict[str, Any]) -> Dict[str, Any]:
+                           cfg: Dict[str, Any],
+                           clean_label_penalty: float = 0.0) -> Dict[str, Any]:
     """Product-level safety pillar (/10). Clean base (no banned/recalled/watchlist) maps
     to full credit; banned/recalled/watchlist present already zeroes the raw base. PR3:
     a Class I (critical) manufacturer recall deducts the raw violation magnitude here (the
-    safety/contamination half of the violation split). B1 harmful additive and B7 overdose
-    are intentionally absent — they already lower the formulation/dose pillars, so crediting
-    or re-deducting them here would double-count (>50% of the catalog carries a B1)."""
+    safety/contamination half of the violation split). Step 3a: a clean-label additive
+    (titanium dioxide / E171) deducts a SMALL graduated penalty here (inform + penalize,
+    no forced CAUTION). B1 harmful additive and B7 overdose are intentionally absent —
+    they already lower the formulation/dose pillars, so re-deducting would double-count."""
     base = module_bd.get("safety_hygiene_base") or {}
     bscore = _num(base.get("score"))
     bmax = _num(base.get("max"))
     clean = round((bscore / bmax) * weight, 1) if bmax else 0.0
     clean = max(0.0, min(float(weight), clean))
     safety_pen = _manuf_violation_split(module_bd)["safety"]
-    val = round(max(0.0, min(float(weight), clean - safety_pen)), 1)
+    cl_pen = max(0.0, _num(clean_label_penalty))
+    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen)), 1)
+    deductions = []
     if safety_pen > 0:
+        deductions.append(f"Class I recall {_g(safety_pen)}")
+    if cl_pen > 0:
+        deductions.append(f"clean-label additive {_g(cl_pen)}")
+    if deductions:
         reason = (f"Safety {_g(val)}/{_g(weight)} — clean base {_g(clean)} "
-                  f"− Class I recall {_g(safety_pen)} (critical safety violation)")
+                  f"− {', '.join(deductions)}")
     elif bscore <= 0:
         reason = f"Safety {_g(val)}/{_g(weight)} — banned/recalled/watchlist signal present"
     else:
         reason = f"Safety {_g(val)}/{_g(weight)} — no banned/recalled/watchlist, no safety recall"
+    components = {"clean_base": clean, "class_i_recall_penalty": safety_pen}
+    if cl_pen > 0:
+        components["clean_label_penalty"] = cl_pen
     return {
         "score": val,
         "max": weight,
         "reason": reason,
-        "components": {"clean_base": clean, "class_i_recall_penalty": safety_pen},
+        "components": components,
     }
 
 
@@ -281,7 +345,8 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
 
 
 def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
-                   module: Optional[str]) -> Dict[str, Any]:
+                   module: Optional[str],
+                   clean_label_penalty: float = 0.0) -> Dict[str, Any]:
     dims = module_bd.get("dimensions") or {}
     archetype = _archetype(module, module_bd)
     pillars: Dict[str, Any] = {}
@@ -291,7 +356,8 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
         if assembler == "verification":
             pillars[name] = _pillar_verification(module_bd, weight, cfg)
         elif assembler == "safety_hygiene":
-            pillars[name] = _pillar_safety_hygiene(module_bd, weight, cfg)
+            pillars[name] = _pillar_safety_hygiene(module_bd, weight, cfg,
+                                                   clean_label_penalty)
         elif assembler == "formulation":
             pillars[name] = _pillar_formulation(dims.get("formulation") or {},
                                                 weight, archetype, cfg)
@@ -323,6 +389,12 @@ def assemble_quality_score(shadow: Dict[str, Any]) -> Dict[str, Any]:
     # Public-contract aliases / provenance (always emitted)
     shadow["raw_score_v4_100"] = raw
     shadow["quality_score_version"] = cfg["_metadata"]["version"]
+    # Clean-label additive flags (titanium dioxide / E171). Emit the consumer
+    # "inform" flag for every status, including BLOCKED/UNSAFE suppressed rows;
+    # the numeric penalty only applies on the scored path below.
+    clean_label_hits = (breakdown.get("safety_gate") or {}).get("clean_label_hits") or []
+    cl_penalty, cl_enriched = _clean_label_penalty(clean_label_hits, cfg)
+    shadow["clean_label_flags_v4"] = _build_clean_label_flags(cl_enriched) or None
 
     # Hard safety failure FIRST (BLOCKED/UNSAFE have raw=None but are NOT "not_scored").
     # Suppress the public number; keep pillars if a breakdown exists (audit trail).
@@ -343,7 +415,7 @@ def assemble_quality_score(shadow: Dict[str, Any]) -> Dict[str, Any]:
         shadow["quality_score_suppressed_reason"] = blocking_reason or (verdict or None)
         return shadow
 
-    pillars = _build_pillars(module_bd, cfg, module)
+    pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty)
     total = max(0.0, min(100.0, round(sum(p["score"] for p in pillars.values()), 1)))
 
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)

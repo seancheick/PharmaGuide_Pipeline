@@ -131,6 +131,10 @@ def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
         "safety_signals": list(safety_result.safety_signals),
         "needs_review": safety_result.needs_review,
         "short_circuits_scoring": safety_result.short_circuits_scoring,
+        # Clean-label additive flags (e.g. titanium dioxide). Verdict-independent;
+        # consumed by quality_score for the graduated safety_hygiene penalty +
+        # clean_label_flags_v4 emit. Empty for the vast majority of products.
+        "clean_label_hits": list(getattr(safety_result, "clean_label_hits", []) or []),
     }
 
 

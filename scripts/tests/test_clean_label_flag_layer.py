@@ -116,3 +116,141 @@ def test_gate_eu_banned_active_still_caution_without_clean_label_hit() -> None:
     result = evaluate_safety_gate(product)
     assert result.verdict == "CAUTION"
     assert result.clean_label_hits == []
+
+
+def test_safety_gate_breakdown_carries_clean_label_hits() -> None:
+    """The shadow scorer must serialize clean_label_hits into the breakdown so
+    the six-pillar quality_score can consume them."""
+    from score_supplements_v4_shadow import _safety_gate_breakdown
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    result = evaluate_safety_gate({
+        "dsld_id": "TEST", "fullName": "x",
+        "inactiveIngredients": [{"name": "titanium dioxide"}],
+    })
+    bd = _safety_gate_breakdown(result)
+    assert "clean_label_hits" in bd
+    assert any("titanium" in str(h.get("name", "")).lower() for h in bd["clean_label_hits"])
+
+
+# ---------------------------------------------------------------------------
+# STEP 3a: quality_score applies a GRADUATED safety_hygiene penalty from
+# clean_label_hits and emits clean_label_flags_v4. Raw is never touched.
+# penalty = penalty_base (data) × role_multiplier (config), clamped.
+# ---------------------------------------------------------------------------
+
+TI_HIT = {
+    "name": "Titanium Dioxide (E171)",
+    "standard_name": "titanium dioxide",
+    "role": "inactive",
+    "tier": "elevated",
+    "consumer_note": "Contains titanium dioxide (E171) — banned as a food additive in the EU.",
+    "penalty_base": 2.0,
+    "status": "high_risk",
+}
+
+
+def _shadow_for_quality(clean_label_hits, *, hygiene=4, hygiene_max=4,
+                        raw=70.0, verdict="SAFE", module="generic"):
+    bd = {
+        "dimensions": {
+            "formulation": {"score": 18, "max": 30},
+            "dose": {"score": 18, "max": 25},
+            "evidence": {"score": 14, "max": 20},
+            "transparency": {"score": 10, "max": 10},
+        },
+        "verification_bonus": {"score": 4, "max": 8},
+        "manufacturer_trust": {"score": 3, "max": 5},
+        "safety_hygiene_base": {"score": hygiene, "max": hygiene_max},
+    }
+    return {
+        "shadow_score_v4_100": raw,
+        "shadow_score_v4_verdict": verdict,
+        "shadow_score_v4_module": module,
+        "shadow_score_v4_breakdown": {
+            "module": bd,
+            "safety_gate": {"clean_label_hits": list(clean_label_hits)},
+        },
+    }
+
+
+def _expected_penalty(hit):
+    from scoring_v4.quality_score import _config
+    mult = _config()["clean_label_subscale"]["role_multiplier"]
+    return round(hit["penalty_base"] * mult[hit["role"]], 1)
+
+
+def test_quality_titanium_dioxide_penalizes_safety_hygiene() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    base = assemble_quality_score(_shadow_for_quality([]))
+    pen = assemble_quality_score(_shadow_for_quality([TI_HIT]))
+    b = base["quality_pillars_v4"]["safety_hygiene"]["score"]
+    p = pen["quality_pillars_v4"]["safety_hygiene"]["score"]
+    exp = _expected_penalty(TI_HIT)
+    assert exp > 0, "titanium dioxide must carry a non-zero penalty"
+    assert round(b - p, 1) == exp, f"expected −{exp} on safety_hygiene, got {b}→{p}"
+
+
+def test_quality_clean_label_lowers_total_but_not_raw() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    base = assemble_quality_score(_shadow_for_quality([]))
+    pen = assemble_quality_score(_shadow_for_quality([TI_HIT]))
+    assert pen["quality_score_v4_100"] < base["quality_score_v4_100"]
+    # raw is byte-identical
+    assert pen["raw_score_v4_100"] == 70.0
+    assert pen["shadow_score_v4_100"] == 70.0
+
+
+def test_quality_no_clean_label_hits_no_penalty_no_flags() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    out = assemble_quality_score(_shadow_for_quality([]))
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 10.0
+    assert out.get("clean_label_flags_v4") in (None, [])
+
+
+def test_quality_emits_clean_label_flags() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    out = assemble_quality_score(_shadow_for_quality([TI_HIT]))
+    flags = out["clean_label_flags_v4"]
+    assert flags, "expected a clean_label_flags_v4 list"
+    f = flags[0]
+    assert f["tier"] == "elevated"
+    assert "titanium" in f["additive"].lower()
+    assert f.get("consumer_note") and "EU" in f["consumer_note"]
+    assert f["penalty_applied"] == _expected_penalty(TI_HIT)
+    assert f["role"] == "inactive"
+
+
+def test_quality_clean_label_role_active_penalizes_more() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    inactive = dict(TI_HIT, role="inactive")
+    active = dict(TI_HIT, role="active")
+    p_inact = assemble_quality_score(_shadow_for_quality([inactive]))["quality_pillars_v4"]["safety_hygiene"]["score"]
+    p_act = assemble_quality_score(_shadow_for_quality([active]))["quality_pillars_v4"]["safety_hygiene"]["score"]
+    assert p_act < p_inact, "an active flagged additive must be penalized harder than a coating"
+
+
+def test_quality_clean_label_penalty_clamped_at_zero() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    huge = [dict(TI_HIT, penalty_base=50.0, role="active") for _ in range(5)]
+    out = assemble_quality_score(_shadow_for_quality(huge))
+    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] >= 0.0
+
+
+def test_quality_suppressed_safety_still_emits_clean_label_flags() -> None:
+    """A hard safety verdict suppresses the quality score, but it should not drop
+    the consumer-facing clean-label note. Suppression and "inform" are separate."""
+    from scoring_v4.quality_score import assemble_quality_score
+
+    out = assemble_quality_score(_shadow_for_quality([TI_HIT], raw=None, verdict="BLOCKED"))
+
+    assert out["quality_score_status"] == "suppressed_safety"
+    assert out["quality_score_v4_100"] is None
+    assert out["clean_label_flags_v4"], "suppressed rows should still carry clean-label flags"
+    assert out["clean_label_flags_v4"][0]["penalty_applied"] == _expected_penalty(TI_HIT)
