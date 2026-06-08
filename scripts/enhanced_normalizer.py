@@ -130,6 +130,57 @@ def _normalize_unii(value):
     return canon
 
 
+_UNII_IDENTITY_DESCRIPTOR_TOKENS = frozenset({
+    "botanical",
+    "std",
+    "bot",
+    "iqm",
+    "root",
+    "roots",
+    "fruit",
+    "fruits",
+    "herb",
+    "herbs",
+    "mushroom",
+    "mushrooms",
+    "powder",
+    "extract",
+    "extracts",
+    "leaf",
+    "leaves",
+    "flower",
+    "flowers",
+    "bark",
+    "seed",
+    "seeds",
+    "whole",
+})
+
+
+def _unii_identity_tokens(label: Any) -> Set[str]:
+    text = str(label or "").lower().replace("_", " ")
+    tokens = {
+        tok for tok in re.split(r"[^a-z0-9]+", text)
+        if tok and tok not in _UNII_IDENTITY_DESCRIPTOR_TOKENS
+    }
+    return tokens
+
+
+def _is_same_unii_identity_variant(existing_name: Any, incoming_name: Any) -> bool:
+    """Return True for benign same-UNII parent/part duplicate labels.
+
+    Examples: "Turmeric" vs "botanical:turmeric_root_powder",
+    "Shiitake" vs "botanical:shiitake_mushroom". This only changes log
+    severity; first-write lookup behavior is unchanged. Distinct branded
+    extracts with the same source UNII (e.g. Cran-Max vs Pacran) still warn.
+    """
+    left = _unii_identity_tokens(existing_name)
+    right = _unii_identity_tokens(incoming_name)
+    if not left or not right:
+        return False
+    return left <= right or right <= left
+
+
 _VARIATION_ABBREVIATIONS = {
     'vitamin': 'vit',
     'alpha': 'a',
@@ -1416,11 +1467,21 @@ class EnhancedDSLDNormalizer:
                 return
             # SAME tier, different entries — likely data-quality bug. Warn.
             if existing is not payload:
-                logger.warning(
+                same_identity_variant = _is_same_unii_identity_variant(
+                    existing.get("standard_name", "?"),
+                    entry_id_for_log,
+                )
+                log = logger.debug if same_identity_variant else logger.warning
+                log(
                     "UNII same-tier conflict: %s mapped to BOTH %r and %r (tier %d) — "
-                    "first-write wins. Likely data-quality bug; review with audit.",
+                    "%s",
                     unii, existing.get("standard_name", "?"),
                     entry_id_for_log, incoming_priority,
+                    (
+                        "same identity variant; first-write wins."
+                        if same_identity_variant
+                        else "first-write wins. Likely data-quality bug; review with audit."
+                    ),
                 )
 
         def add_group_exact(key: str, payload: Dict[str, Any]) -> None:
@@ -1758,11 +1819,21 @@ class EnhancedDSLDNormalizer:
                 )
                 return
             if existing is not payload:
-                logger.warning(
+                same_identity_variant = _is_same_unii_identity_variant(
+                    existing.get("standard_name", "?"),
+                    entry_id_for_log,
+                )
+                log = logger.debug if same_identity_variant else logger.warning
+                log(
                     "UNII same-tier conflict: %s mapped to BOTH %r and %r (tier %d) — "
-                    "first-write wins. Likely data-quality bug; review with audit.",
+                    "%s",
                     unii, existing.get("standard_name", "?"),
                     entry_id_for_log, incoming_priority,
+                    (
+                        "same identity variant; first-write wins."
+                        if same_identity_variant
+                        else "first-write wins. Likely data-quality bug; review with audit."
+                    ),
                 )
 
         def _extract_unii(entry: Dict[str, Any]) -> Optional[str]:

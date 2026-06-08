@@ -180,6 +180,33 @@ def test_known_unii_resolves(normalizer_instance, unii, name_substring):
     )
 
 
+def test_shatavari_root_unii_does_not_resolve_to_shatavarin_marker(normalizer_instance):
+    """Shatavari plant labels must not be hijacked by the isolated Shatavarin IV marker.
+
+    Y8P1YR4920 is the reviewed Asparagus racemosus root identity used by the
+    botanical/standardized Shatavari rows. The isolated marker parent
+    `shatavarin_iv` has a different UNII and should only match explicit
+    shatavarin label text.
+    """
+    payload = normalizer_instance._unii_to_payload_lookup.get("Y8P1YR4920")
+    assert payload is not None
+
+    std_name = (payload.get("standard_name") or "").lower()
+    assert "shatavari" in std_name
+    assert "shatavarin iv" not in std_name
+
+
+def test_same_unii_identity_variant_suppresses_only_parent_part_noise():
+    from enhanced_normalizer import _is_same_unii_identity_variant
+
+    assert _is_same_unii_identity_variant("Turmeric", "botanical:turmeric_root_powder")
+    assert _is_same_unii_identity_variant("Shiitake", "botanical:shiitake_mushroom")
+    assert _is_same_unii_identity_variant("Tart Cherry", "botanical:tart_cherry_fruit")
+
+    assert not _is_same_unii_identity_variant("Cran-Max", "std_bot:pacran")
+    assert not _is_same_unii_identity_variant("Black Cherry", "botanical:tart_cherry_fruit")
+
+
 # ============================================================================
 # Section 4 — _try_unii_match precedence + match_method
 # ============================================================================

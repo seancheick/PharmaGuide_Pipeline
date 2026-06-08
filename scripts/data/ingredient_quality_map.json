@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1416,
-      "total_form_aliases": 12244,
+      "total_form_aliases": 12237,
       "parents_with_parent_aliases": 183,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,8 +60,8 @@
       "proteins": 16,
       "vitamins": 22
     },
-    "schema_version": "5.4.5",
-    "last_updated": "2026-06-07",
+    "schema_version": "5.4.6",
+    "last_updated": "2026-06-08",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1631,6 +1631,15 @@
           "Split Berbevis/berberine-phytosome aliases into a dedicated delivery-enhanced berberine form instead of routing them to berberine HCl."
         ],
         "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
+      },
+      "5.4.6": {
+        "date": "2026-06-08",
+        "audit": "UNII same-tier conflict triage — Shatavari plant identity hijack fix",
+        "changes": [
+          "Removed plant/root/extract aliases from shatavarin_iv::shatavarin iv (unspecified) so Shatavari labels and UNII Y8P1YR4920 resolve to the botanical/standardized Shatavari root identity instead of the isolated Shatavarin IV marker compound.",
+          "Kept explicit shatavarin marker aliases on shatavarin_iv; marker UNII Z905922Y1P remains distinct from Shatavari root UNII Y8P1YR4920."
+        ],
+        "regression_tests": "scripts/tests/test_unii_match_path.py::test_shatavari_root_unii_does_not_resolve_to_shatavarin_marker"
       }
     },
     "category_enum": [
@@ -33601,14 +33610,7 @@
         "notes": "Primary steroidal saponin marker of Shatavari (Asparagus racemosus), a central Ayurvedic rasayana adaptogen. No published human PK for shatavarin IV; steroidal saponins undergo gut bacterial deglycosylation to sarsasapogenin aglycone before absorption (PMID 40334116). Human RCTs for whole root as galactagogue and adaptogen. Conservative scoring applied.",
         "aliases": [
           "shatavarin iv",
-          "shatavari",
-          "shatavari extract",
-          "asparagus racemosus extract",
-          "asparagus racemosus root extract",
-          "shatavari root extract",
-          "shatavari root",
-          "shatavarins",
-          "wild asparagus root"
+          "shatavarins"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
