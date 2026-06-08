@@ -54,18 +54,20 @@ SHADOW_CANARIES = {
         "safety_verdict": "CAUTION",
     },
     # Conservative blend evidence is audit-visible, but does not force a
-    # CAUTION ceiling. Phase 9 makes production score equal raw, so this stays
-    # POOR via the single 40-line rather than a blend-driven CAUTION.
+    # CAUTION ceiling. Phase 9 makes production score equal raw.
     "241684": {
         "label": "HUM Flatter Me",
         "module": "generic",
-        # Route-aware botanical hardening: this is an enzyme/proprietary-blend
-        # product, not a botanical hero product, so it stays on the generic path.
-        # It remains POOR; the canary invariant is that blend visibility does not
-        # force CAUTION and weak enzyme evidence does not auto-earn SAFE.
-        "verdict": "POOR",
+        # Re-baseline 2026-06-08: real clinical-evidence-pipeline credit for
+        # bromelain + digestive proteases (content-verified as genuinely earned,
+        # NOT the essential-nutrient floor) lifted raw ~36 -> 46.1, crossing the
+        # 40 SAFE cutoff. SAFE = no safety concern; the weak quality is conveyed
+        # by the score (46 = Weak six-pillar tier), not the verdict. Blend
+        # visibility still does NOT force CAUTION (transparency dim = 0, correctly
+        # penalized). Mirrors the 241707 re-baseline precedent.
+        "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (35.4, 36.8),
+        "score_range": (45.4, 46.8),
     },
     # Probiotic with named strains but no total CFU: scoreable with low
     # confidence; dose/transparency dimensions keep it weak without a forced
@@ -99,13 +101,32 @@ SHADOW_CANARIES = {
         "confidence": "moderate",
         "score_range": (82.3, 83.7),  # Phase 4: 88 → 84.6; cert→GMP: +2.2 (Informed Choice sku implies GMP)
     },
-    # Typed confidence low + POOR verdict.
+    # Boundary case: a well-labeled fiber gummy with no clinical evidence.
+    # Re-baseline 2026-06-08: dose + transparency credit lifted raw ~31 -> 40.0,
+    # landing exactly on the POOR/SAFE cutoff (POOR if raw < 40 else SAFE → SAFE).
+    # SAFE = not dangerous; weak quality is the score (40 = Poor six-pillar tier).
+    # Intentional sensitive tripwire at the 40-line: if a change pushes it back
+    # under 40 the verdict assertion flags it. The robust POOR diversity anchor is
+    # held by 2266 below, not this knife-edge product.
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "generic",
+        "verdict": "SAFE",
+        "confidence": "low",
+        "score_range": (39.4, 40.6),
+    },
+    # Stable POOR diversity anchor (added 2026-06-08 when 241684 + 12932 both
+    # legitimately crossed the 40 line into SAFE). Single-ingredient chlorophyll
+    # commodity: no clinical evidence, minimal formulation → raw 26.4, ~14 pts
+    # below the cutoff so it will not drift across it. Clean SAFE gate (not
+    # dangerous); POOR comes purely from the score band. Also a documented weak/
+    # junk control in the display-calibration tests.
+    "2266": {
+        "label": "Triple Chlorophyll (GNC)",
+        "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (30.3, 31.7),
+        "score_range": (25.7, 27.1),
     },
     # Typed confidence high on the probiotic module.
     "230149": {
