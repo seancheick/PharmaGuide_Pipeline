@@ -2288,8 +2288,7 @@
       "standard_name": "SerinAid Phosphatidylserine",
       "aliases": [
         "serinaid",
-        "phosphatidylserine",
-        "ps"
+        "phosphatidylserine"
       ],
       "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
@@ -3900,7 +3899,6 @@
       "standard_name": "Niagen Nicotinamide Riboside",
       "aliases": [
         "niagen",
-        "nr",
         "chromadex niagen"
       ],
       "category": "aging_longevity",
@@ -14626,8 +14624,7 @@
       "aliases": [
         "nitrosigine",
         "inositol-stabilized arginine silicate",
-        "arginine silicate",
-        "ASI"
+        "arginine silicate"
       ],
       "category": "sports_performance",
       "evidence_level": "branded-rct",
