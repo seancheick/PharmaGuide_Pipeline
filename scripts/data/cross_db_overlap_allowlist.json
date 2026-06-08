@@ -290,6 +290,132 @@
         "harmful:botanical"
       ],
       "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "e143",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "fast green",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "fast green fcf",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "fd and c green 3",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "fd c green 3",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "fd c green no 3",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "green 3",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "green 3 lake",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "FD&C Green No. 3 (Fast Green FCF) intentional dual-listing: EU-non-permitted food colour in banned_recalled (status=high_risk -> CAUTION safety verdict) AND artificial-colorant B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "4 hydroxybenzoic acid propyl ester",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "e216",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "nipasol p",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propyl 4 hydroxybenzoate",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propyl p hydroxybenzoate",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propyl paraben",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propyl parahydroxybenzoate",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propylparaben",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propylparaben sodium",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
+    },
+    {
+      "term_normalized": "propylparabens",
+      "db_pairs": [
+        "banned:harmful"
+      ],
+      "reason": "Propylparaben intentional dual-listing: EU-prohibited paraben preservative in banned_recalled (status=high_risk -> CAUTION safety verdict) AND preservative B1 quality penalty in harmful_additives. Both lanes are deliberate. Added 2026-06-08 (EU-additive reconciliation)."
     }
   ]
 }
