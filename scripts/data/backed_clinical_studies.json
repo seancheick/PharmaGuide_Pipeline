@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.3.0",
-    "last_updated": "2026-04-30",
+    "last_updated": "2026-06-08",
     "total_entries": 197,
     "changelog": [
       "auto (2026-04-02): backfill-auditability updated 47 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
@@ -4794,7 +4794,15 @@
       "standard_name": "Hydrolyzed Collagen Peptides",
       "aliases": [
         "collagen hydrolysate",
-        "collagen powder"
+        "collagen powder",
+        "collagen peptides",
+        "hydrolyzed collagen",
+        "bovine collagen peptides",
+        "marine collagen peptides",
+        "collagen peptides powder",
+        "grass fed collagen",
+        "collagen type i and iii",
+        "collagen 1 and 3"
       ],
       "category": "joint_bone",
       "evidence_level": "ingredient-human",
