@@ -126,8 +126,15 @@ def check_banned_in_inactives_have_safety_signal(
 
         # Expected severity by status:
         if matched_status == "watchlist":
+            # Contract fix (2026-06-08, commit 70a20157): watchlist is a NON-BLOCKING
+            # safety/regulatory concern → is_safety_concern=True (it drives CAUTION + a
+            # -5 B0 penalty via the contaminant snapshot), severity_status stays the
+            # soft 'informational' tier, is_banned=False (never hard-BLOCKs). The prior
+            # expectation (is_safety_concern=False) was the very mislabel this fix
+            # corrected — and it contradicted CHECK 1's own principle that every
+            # banned_recalled match must surface a safety signal.
             expected_severity = "informational"
-            expected_safety_concern = False
+            expected_safety_concern = True
         else:
             # banned / high_risk / recalled
             expected_severity = "critical"
