@@ -600,6 +600,14 @@ def validate_manufacturer_violations_file(path: Path, strict: bool) -> Validatio
 # reading their stack should feel informed, not alarmed.
 # ---------------------------------------------------------------------------
 
+VALID_DEPLETION_TYPES = {
+    "depletion",
+    "functional_antagonism",
+    "monitoring_stability",
+    "condition_related",
+    "supplement_interaction",
+}
+
 
 ONSET_FRAMING = re.compile(
     r"(over time|long-term|chronic|gradually|may develop|years|months|"
@@ -781,6 +789,16 @@ def validate_depletion_entry(
     ab = entry.get("alert_body")
     ack = entry.get("acknowledgement_note")
     tip = entry.get("monitoring_tip_short")
+    depletion_type = entry.get("depletion_type")
+
+    if depletion_type is None:
+        msg = f"{dep_id}: missing depletion_type"
+        (res.fail if strict else res.warn)(msg)
+    elif depletion_type not in VALID_DEPLETION_TYPES:
+        res.fail(
+            f"{dep_id}: invalid depletion_type={depletion_type!r} "
+            f"(allowed: {sorted(VALID_DEPLETION_TYPES)})"
+        )
 
     # alert_headline contract.
     if ah is None:

@@ -18,6 +18,13 @@ VALID_EVIDENCE_LEVELS = {"established", "probable", "possible"}
 VALID_ONSET_TIMELINES = {"weeks", "months", "years"}
 VALID_DRUG_REF_TYPES = {"class", "drug"}
 VALID_SOURCE_TYPES = {"pubmed", "reference", "nih_ods", "fda", "nccih"}
+VALID_DEPLETION_TYPES = {
+    "depletion",
+    "functional_antagonism",
+    "monitoring_stability",
+    "condition_related",
+    "supplement_interaction",
+}
 
 
 @pytest.fixture(scope="module")
@@ -76,9 +83,10 @@ class TestDepletionSchema:
             assert d["id"].startswith("DEP_"), f"ID must start with 'DEP_': {d['id']}"
 
     def test_required_fields_present(self, depletions):
-        required = {"id", "drug_ref", "depleted_nutrient", "severity", "mechanism",
-                     "clinical_impact", "recommendation", "onset_timeline",
-                     "evidence_level", "sources"}
+        required = {"id", "drug_ref", "depleted_nutrient", "depletion_type",
+                    "severity", "mechanism", "clinical_impact",
+                    "recommendation", "onset_timeline", "evidence_level",
+                    "sources"}
         for d in depletions:
             missing = required - set(d.keys())
             assert not missing, f"Entry {d['id']} missing fields: {missing}"
@@ -108,6 +116,12 @@ class TestDepletionSchema:
     def test_onset_timeline_valid(self, depletions):
         for d in depletions:
             assert d["onset_timeline"] in VALID_ONSET_TIMELINES, f"Entry {d['id']} invalid onset_timeline"
+
+    def test_depletion_type_valid(self, depletions):
+        for d in depletions:
+            assert d["depletion_type"] in VALID_DEPLETION_TYPES, (
+                f"Entry {d['id']} invalid depletion_type: {d['depletion_type']}"
+            )
 
 
 # ── Cross-reference validation ─────────────────────────────────────
@@ -195,6 +209,32 @@ class TestDepletionDataQuality:
         )
         assert found, "PPIs/Antacids → Magnesium depletion must be present"
 
+    def test_high_value_expansion_rows_exist(self, depletions):
+        expected = {
+            ("6038", "vitamin_b6", "depletion"),
+            ("6851", "folate", "functional_antagonism"),
+            ("37925", "vitamin_a", "depletion"),
+            ("37925", "vitamin_d", "depletion"),
+            ("37925", "vitamin_e", "depletion"),
+            ("37925", "vitamin_k", "depletion"),
+            ("9524", "folate", "depletion"),
+            ("2683", "vitamin_b12", "depletion"),
+            ("2447", "vitamin_a", "depletion"),
+            ("2447", "vitamin_d", "depletion"),
+            ("2447", "vitamin_e", "depletion"),
+            ("2447", "vitamin_k", "depletion"),
+        }
+        observed = {
+            (
+                d["drug_ref"]["id"],
+                d["depleted_nutrient"]["canonical_id"],
+                d["depletion_type"],
+            )
+            for d in depletions
+        }
+        missing = expected - observed
+        assert not missing, f"Missing high-value expansion rows: {missing}"
+
     def test_recommendation_is_consumer_friendly(self, depletions):
         for d in depletions:
             assert len(d["recommendation"]) >= 20, f"Entry {d['id']} recommendation too short"
@@ -202,3 +242,28 @@ class TestDepletionDataQuality:
     def test_mechanism_is_not_empty(self, depletions):
         for d in depletions:
             assert len(d["mechanism"]) >= 20, f"Entry {d['id']} mechanism too short"
+
+    def test_taxonomy_decisions_for_non_depletion_rows(self, depletions):
+        """Lock the 2026-06-08 row-by-row audit decisions.
+
+        These rows are easy to mislabel as simple "drug lowered nutrient"
+        depletions, but their mechanisms are different enough that Flutter
+        needs the taxonomy to choose the right user-facing framing.
+        """
+        by_id = {d["id"]: d for d in depletions}
+        expected = {
+            "DEP_ANTICOAGULANTS_VITAMINK": "functional_antagonism",
+            "DEP_SSRIS_SODIUM": "monitoring_stability",
+            "DEP_LEVOTHYROXINE_CALCIUM": "supplement_interaction",
+            "DEP_LEVOTHYROXINE_IRON": "supplement_interaction",
+            "DEP_STIMULANTS_VITAMINC": "supplement_interaction",
+            "DEP_BVITAMINS_INTERACTIONS": "supplement_interaction",
+            "DEP_SSRIS_VITAMIND": "condition_related",
+            "DEP_ANTIPSYCHOTICS_VITAMIND": "condition_related",
+            "DEP_HIVPI_ZINC": "condition_related",
+            "DEP_DIABETESMEDS_MAGNESIUM": "condition_related",
+            "DEP_INSULINS_MAGNESIUM": "condition_related",
+            "DEP_SEDATIVES_VITAMIND": "condition_related",
+        }
+        for dep_id, depletion_type in expected.items():
+            assert by_id[dep_id]["depletion_type"] == depletion_type
