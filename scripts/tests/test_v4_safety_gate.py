@@ -417,7 +417,8 @@ def test_top_level_has_recalled_ingredient_flag_returns_unsafe() -> None:
     ("inactive_name", "expected_name"),
     [
         ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
-        ("FD&C Red #3", "FD&C Red No. 3"),
+        # FD&C Red #3 moved to high_risk/CAUTION 2026-06-08 — see
+        # test_red3_high_risk_drives_caution_not_blocked below.
     ],
 )
 def test_inactive_banned_resolver_hits_return_blocked(
@@ -450,6 +451,26 @@ def test_inactive_banned_resolver_hits_return_blocked(
     assert result.short_circuits_scoring is True
     assert result.blocking_reason == "banned_ingredient"
     assert expected_name in (result.matched_substance or "")
+
+
+@pytest.mark.parametrize("src", ["inactiveIngredients", "activeIngredients"])
+@pytest.mark.parametrize("name", ["FD&C Red No. 3", "Red 3", "erythrosine", "E127"])
+def test_red3_high_risk_drives_caution_not_blocked(src: str, name: str) -> None:
+    """FD&C Red No. 3 / Erythrosine: FDA REVOKED its US authorization (Jan 2025,
+    Delaney) but it is legal until the 2027 reformulation deadline. Treated as
+    status=high_risk + inactive_policy=penalize_anyway → CAUTION (warn + penalize),
+    NOT a hard BLOCK — matching FD&C Green No. 3. is_banned is intentionally False.
+    (Reconciled 2026-06-08; v3 deprecating in favor of v4.)"""
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    res = InactiveIngredientResolver().resolve("erythrosine")
+    assert res.is_banned is False, "Red 3 is no longer a hard ban"
+    assert res.is_safety_concern is True, "Red 3 stays a safety concern (high_risk)"
+
+    result = evaluate_safety_gate({"dsld_id": "T", "fullName": "x", src: [{"name": name}]})
+    assert result.verdict == "CAUTION", f"{name} as {src} should be CAUTION, got {result.verdict}"
+    assert result.short_circuits_scoring is False, "CAUTION must not hard short-circuit"
 
 
 # --- Robustness -----------------------------------------------------------

@@ -46,6 +46,16 @@ def _load_json_records(pattern: str) -> dict[str, dict]:
     return rows
 
 
+# Intentional 2026-06-08 reclassification: FD&C Red No. 3 / Erythrosine was moved
+# from status=banned (hard BLOCK) to high_risk + penalize_anyway (CAUTION) in
+# banned_recalled_ingredients.json — FDA federally REVOKED it (Jan 2025, Delaney)
+# but it is legal until the 2027 reformulation deadline, matching FD&C Green No. 3.
+# These release products were v3-BLOCKED SOLELY by Red 3 and now correctly read
+# v4 CAUTION. They must still WARN (CAUTION) — never silently become SAFE/POOR.
+# (Diagnostic 2026-06-08: of 83 v3-BLOCKED, exactly these 4 downgrade, all Red-3-only.)
+RED3_RECLASSIFIED_TO_CAUTION = {"315819", "315092", "306181", "312638"}
+
+
 def test_v3_blocked_release_products_remain_v4_blocked() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
@@ -67,12 +77,19 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
             failures.append((dsld_id, "missing enriched blob", None))
             continue
         out = score_product_v4_shadow(product)
-        if out.get("shadow_score_v4_verdict") != "BLOCKED":
+        verdict = out.get("shadow_score_v4_verdict")
+        if dsld_id in RED3_RECLASSIFIED_TO_CAUTION:
+            # Intentional Red 3 reclassification: BLOCK → CAUTION. Still must WARN,
+            # never silently downgrade to SAFE/POOR/None.
+            if verdict != "CAUTION":
+                failures.append((dsld_id, "red3-reclassified must remain CAUTION", verdict))
+            continue
+        if verdict != "BLOCKED":
             failures.append((
                 dsld_id,
                 product.get("brandName") or product.get("brand_name"),
                 product.get("productName") or product.get("product_name") or product.get("fullName"),
-                out.get("shadow_score_v4_verdict"),
+                verdict,
                 out.get("shadow_score_v4_100"),
             ))
 

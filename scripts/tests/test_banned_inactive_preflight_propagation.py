@@ -59,8 +59,9 @@ def resolver():
     "raw_name,expected_substance",
     [
         ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
-        ("FD&C Red #3",              "FD&C Red No. 3"),
-        ("Red 3",                    "FD&C Red No. 3"),
+        # FD&C Red #3 moved to status=high_risk (CAUTION, is_banned=False) 2026-06-08
+        # — no longer a hard-banned blocker; CAUTION behavior covered by
+        # test_v4_safety_gate::test_red3_high_risk_drives_caution_not_blocked.
         ("Sodium Tetraborate",       "Sodium Tetraborate"),
         ("Simethicone",              "Simethicone"),
         ("Polydimethylsiloxane",     "Simethicone"),
@@ -181,7 +182,7 @@ def _make_synthetic_enriched(
     "ingredient_name,expected_substance_in_title",
     [
         ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
-        ("FD&C Red #3",              "Red"),
+        # FD&C Red #3 → high_risk/CAUTION 2026-06-08 (no longer is_banned)
         ("Sodium Tetraborate",       "Sodium Tetraborate"),
         ("Simethicone",              "Simethicone"),
     ],
@@ -287,7 +288,8 @@ def test_emitter_writes_banned_substance_warning_with_authored_copy(
 
 @pytest.mark.parametrize(
     "ingredient_name",
-    ["Brominated Vegetable Oil", "FD&C Red #3", "Sodium Tetraborate", "Simethicone"],
+    # FD&C Red #3 removed 2026-06-08 → status=high_risk/CAUTION, no longer is_banned
+    ["Brominated Vegetable Oil", "Sodium Tetraborate", "Simethicone"],
 )
 def test_build_banned_substance_detail_finds_authored_copy_for_resolver_hit(
     ingredient_name,
