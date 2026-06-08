@@ -93,6 +93,12 @@ class SafetyResult:
         needs_review: True when any fuzzy/partial match fired without
             crossing the exact/alias threshold; routes the product to
             the cert/safety review queue rather than auto-blocking.
+        clean_label_hits: Flagged additives (e.g. titanium dioxide) that
+            INFORM + carry a small graduated penalty but do NOT drive the
+            verdict. Orthogonal to the safety-verdict lane: a product can
+            be SAFE and still carry clean_label_hits. Consumed by the
+            six-pillar quality_score (safety_hygiene penalty) and emitted
+            to Flutter as clean_label_flags_v4. NEVER touches the verdict.
     """
 
     verdict: Optional[str] = None
@@ -101,6 +107,7 @@ class SafetyResult:
     matched_substance: Optional[str] = None
     safety_signals: List[str] = field(default_factory=list)
     needs_review: bool = False
+    clean_label_hits: List[Dict[str, Any]] = field(default_factory=list)
 
 
 # NOTE: match-type → trust mapping moved to the SafetySignal v1 kernel
@@ -189,6 +196,59 @@ def _iter_resolver_safety_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
                 "status": resolution.regulatory_status,
                 "inactive_policy": resolution.inactive_policy,
                 "role": role,
+                "matched_rule_id": resolution.matched_rule_id,
+            })
+    return hits
+
+
+def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Collect clean-label additive concerns (e.g. titanium dioxide / E171).
+
+    A SEPARATE pass from `_iter_resolver_safety_hits` on purpose: clean-label
+    concerns are orthogonal to the safety verdict. Titanium dioxide as an
+    `excipient_acceptable` coating resolves with `is_safety_concern=True` yet
+    is exempted from CAUTION downstream — but it is ALSO an
+    `is_clean_label_concern`, which this lane surfaces for the six-pillar
+    penalty + the Flutter flag. Keeping this independent guarantees the
+    verdict path (`_iter_resolver_safety_hits`) stays byte-identical.
+
+    Never raises. Returns one hit per flagged additive row with enough fields
+    for the graduated safety_hygiene penalty (tier, penalty_base, role) and
+    the consumer-facing flag (consumer_note, status).
+    """
+    try:
+        resolver = _inactive_resolver()
+    except Exception:
+        return []
+
+    hits: List[Dict[str, Any]] = []
+    for source_key, role in (
+        ("activeIngredients", "active"),
+        ("inactiveIngredients", "inactive"),
+    ):
+        for ingredient in _safe_list((product or {}).get(source_key)):
+            if not isinstance(ingredient, dict):
+                continue
+            raw_name, standard_name = _ingredient_name_terms(ingredient)
+            if not raw_name:
+                continue
+            try:
+                resolution = resolver.resolve(
+                    raw_name=raw_name,
+                    standard_name=standard_name,
+                )
+            except Exception:
+                continue
+            if not resolution.is_clean_label_concern:
+                continue
+            hits.append({
+                "name": resolution.display_label or raw_name,
+                "standard_name": standard_name or resolution.display_label or raw_name,
+                "role": role,
+                "tier": resolution.clean_label_tier,
+                "consumer_note": resolution.clean_label_note,
+                "penalty_base": resolution.clean_label_penalty_base,
+                "status": resolution.regulatory_status,
                 "matched_rule_id": resolution.matched_rule_id,
             })
     return hits
@@ -439,6 +499,11 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
         result.verdict = _max_verdict(result.verdict, "CAUTION")
         if "DISEASE_CLAIM_DETECTED" not in result.safety_signals:
             result.safety_signals.append("DISEASE_CLAIM_DETECTED")
+
+    # Clean-label additive flags (e.g. titanium dioxide). Collected on a
+    # SEPARATE lane that never touches the verdict — inform + small graduated
+    # penalty, applied later by the six-pillar quality_score. Verdict-independent.
+    result.clean_label_hits = _iter_resolver_clean_label_hits(product)
 
     # short_circuits_scoring is purely a function of verdict severity.
     result.short_circuits_scoring = result.verdict in {"BLOCKED", "UNSAFE"}

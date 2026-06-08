@@ -48,3 +48,71 @@ def test_default_resolution_has_no_clean_label() -> None:
     res = InactiveIngredientResolver().resolve("microcrystalline cellulose")
     assert res.is_clean_label_concern is False
     assert res.clean_label_penalty_base is None
+
+
+# ---------------------------------------------------------------------------
+# STEP 2: the safety gate collects clean_label_hits WITHOUT touching the
+# verdict. A clean-label additive (titanium dioxide coating) must surface a
+# hit AND keep the verdict SAFE (no CAUTION). The clean-label lane and the
+# safety-verdict lane are independent.
+# ---------------------------------------------------------------------------
+
+
+def test_gate_collects_titanium_dioxide_clean_label_hit() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "TEST",
+        "fullName": "Coated tablet with titanium dioxide",
+        "inactiveIngredients": [{"name": "titanium dioxide"}],
+    }
+    result = evaluate_safety_gate(product)
+    hits = result.clean_label_hits
+    assert hits, "titanium dioxide must surface as a clean-label hit"
+    hit = next((h for h in hits if "titanium" in str(h.get("name", "")).lower()), None)
+    assert hit is not None, f"no titanium hit in {hits!r}"
+    assert hit["tier"] == "elevated"
+    assert hit["penalty_base"] == 2.0
+    assert hit["role"] == "inactive"
+    assert hit.get("consumer_note") and "EU" in hit["consumer_note"]
+
+
+def test_gate_clean_label_does_not_force_caution() -> None:
+    # An excipient_acceptable coating must inform, never force CAUTION.
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "TEST",
+        "fullName": "x",
+        "inactiveIngredients": [{"name": "titanium dioxide"}],
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict != "CAUTION", "clean-label hit must not force CAUTION"
+    assert result.short_circuits_scoring is False
+
+
+def test_gate_no_clean_label_hit_when_absent() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "TEST",
+        "fullName": "clean product",
+        "inactiveIngredients": [{"name": "microcrystalline cellulose"}],
+    }
+    result = evaluate_safety_gate(product)
+    assert result.clean_label_hits == []
+
+
+def test_gate_eu_banned_active_still_caution_without_clean_label_hit() -> None:
+    # propylparaben (penalize_anyway high_risk, NO clean_label block) → CAUTION,
+    # and it is NOT a clean-label hit. The two lanes are independent.
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {
+        "dsld_id": "TEST",
+        "fullName": "x",
+        "inactiveIngredients": [{"name": "propylparaben"}],
+    }
+    result = evaluate_safety_gate(product)
+    assert result.verdict == "CAUTION"
+    assert result.clean_label_hits == []
