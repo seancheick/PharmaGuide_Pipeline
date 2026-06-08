@@ -254,3 +254,57 @@ def test_quality_suppressed_safety_still_emits_clean_label_flags() -> None:
     assert out["quality_score_v4_100"] is None
     assert out["clean_label_flags_v4"], "suppressed rows should still carry clean-label flags"
     assert out["clean_label_flags_v4"][0]["penalty_applied"] == _expected_penalty(TI_HIT)
+
+
+# ---------------------------------------------------------------------------
+# STEP 3b: the clean-label flag carries the STRUCTURED, clickable regulation
+# citation (surfaced from the entry's already-verified references — no new
+# claims), so the consumer "inform" half meets the clinical-citation rule.
+# ---------------------------------------------------------------------------
+
+
+def test_resolver_titanium_dioxide_carries_structured_citation() -> None:
+    from inactive_ingredient_resolver import InactiveIngredientResolver
+
+    res = InactiveIngredientResolver().resolve("titanium dioxide")
+    assert res.clean_label_citation and "2022/63" in res.clean_label_citation
+    assert res.clean_label_url and "eur-lex" in res.clean_label_url.lower()
+    assert res.clean_label_eu_status  # short machine-readable status, e.g. "banned_food_additive"
+
+
+def test_gate_clean_label_hit_carries_citation() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    product = {"dsld_id": "T", "fullName": "x",
+               "inactiveIngredients": [{"name": "titanium dioxide"}]}
+    hit = evaluate_safety_gate(product).clean_label_hits[0]
+    assert "2022/63" in (hit.get("regulation_citation") or "")
+    assert "eur-lex" in (hit.get("regulation_url") or "").lower()
+    assert hit.get("eu_status")
+
+
+def test_quality_flag_emits_structured_citation() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    hit = dict(
+        TI_HIT,
+        regulation_citation="Commission Regulation (EU) 2022/63",
+        regulation_url="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R0063",
+        eu_status="banned_food_additive",
+    )
+    out = assemble_quality_score(_shadow_for_quality([hit]))
+    f = out["clean_label_flags_v4"][0]
+    assert "2022/63" in f["regulation_citation"]
+    assert "eur-lex" in f["regulation_url"].lower()
+    assert f["eu_status"] == "banned_food_additive"
+
+
+def test_quality_flag_citation_null_when_absent() -> None:
+    # A clean-label hit WITHOUT citation fields must still emit a flag, with
+    # citation keys present but null (stable Flutter contract).
+    from scoring_v4.quality_score import assemble_quality_score
+
+    out = assemble_quality_score(_shadow_for_quality([TI_HIT]))  # TI_HIT has no citation
+    f = out["clean_label_flags_v4"][0]
+    assert "regulation_citation" in f and f["regulation_citation"] is None
+    assert "regulation_url" in f and f["regulation_url"] is None

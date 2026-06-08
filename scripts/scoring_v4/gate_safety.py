@@ -250,6 +250,10 @@ def _iter_resolver_clean_label_hits(product: Dict[str, Any]) -> List[Dict[str, A
                 "penalty_base": resolution.clean_label_penalty_base,
                 "status": resolution.regulatory_status,
                 "matched_rule_id": resolution.matched_rule_id,
+                # Step 3b: structured citation (surfaced from the entry's verified refs)
+                "eu_status": resolution.clean_label_eu_status,
+                "regulation_citation": resolution.clean_label_citation,
+                "regulation_url": resolution.clean_label_url,
             })
     return hits
 

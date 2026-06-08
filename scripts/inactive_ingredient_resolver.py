@@ -178,6 +178,11 @@ class InactiveResolution:
     clean_label_tier: Optional[str] = None        # "elevated" | "informational"
     clean_label_note: Optional[str] = None        # consumer-facing one-liner
     clean_label_penalty_base: Optional[float] = None
+    # Step 3b: structured, clickable citation surfaced from the entry's verified
+    # references (no new claims) so the consumer flag meets the clinical-citation rule.
+    clean_label_eu_status: Optional[str] = None       # e.g. "banned_food_additive"
+    clean_label_citation: Optional[str] = None        # e.g. "Commission Regulation (EU) 2022/63"
+    clean_label_url: Optional[str] = None             # authoritative source URL
 
 
 # ---------------------------------------------------------------------------
@@ -403,6 +408,9 @@ class InactiveIngredientResolver:
             clean_label_tier=(clean_label.get("tier") or None),
             clean_label_note=(clean_label.get("consumer_note") or None),
             clean_label_penalty_base=clean_label.get("penalty_base"),
+            clean_label_eu_status=(clean_label.get("eu_status") or None),
+            clean_label_citation=(clean_label.get("regulation_citation") or None),
+            clean_label_url=(clean_label.get("regulation_url") or None),
         )
 
     @staticmethod

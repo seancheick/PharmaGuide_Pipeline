@@ -160,6 +160,11 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
             "status": h.get("status"),
             "penalty_applied": h.get("penalty_applied"),
             "matched_rule_id": h.get("matched_rule_id"),
+            # Step 3b: clickable regulation citation (null when the entry has none).
+            # Stable keys so Flutter can rely on the contract.
+            "eu_status": h.get("eu_status"),
+            "regulation_citation": h.get("regulation_citation"),
+            "regulation_url": h.get("regulation_url"),
         })
     return flags
 
