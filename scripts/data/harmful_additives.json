@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-25",
+    "last_updated": "2026-06-08",
     "total_entries": 116,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -1511,7 +1511,7 @@
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "dose_thresholds": [
         {
           "value": 6,
@@ -1680,7 +1680,7 @@
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "dose_thresholds": [
         {
           "value": 5,
@@ -5670,7 +5670,7 @@
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "high",
       "dose_thresholds": {
         "value": 25,
         "unit": "mg/kg/day",
@@ -16186,7 +16186,7 @@
         "substance_name": "BUTYLATED HYDROXYANISOLE",
         "substance_class": "mixture",
         "cfr_sections": [
-          "21 CFR 171.110"
+          "21 CFR 172.110"
         ],
         "dsld_count": null,
         "dsld_info_raw": null,
@@ -16238,7 +16238,7 @@
         "butylated hydroxytoluene (bht)"
       ],
       "category": "preservative",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "reason": "A petroleum-derived preservative that is a potential allergen and has been linked to liver, kidney, and thyroid issues in animal studies. Often used in combination with BHA for synergistic antioxidant effects. 2024 research continues to raise concerns about long-term exposure.",
       "match_rules": {
         "exclusions": [],
