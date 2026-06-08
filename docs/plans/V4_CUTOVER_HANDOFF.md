@@ -12,6 +12,37 @@ then `docs/plans/SCORING_V4_PROPOSAL.md` (§19 P5 = cutover-as-config), `.planni
 
 ---
 
+## 0. Codex review (2026-06-08) — plan APPROVED with 3 cautions + a concrete sequence
+
+A second-opinion review (codex) approved this plan as "directionally right and much more accurate
+than 'just flip a flag'" and confirmed the core finding: **v4 is not production-wired; the export
+still ships v3 fields, so cutover is a plumbing/export migration + validation, not a scorer rewrite.**
+Three cautions to honor (they refine §3-§4):
+
+1. **The consumer score is `quality_score_v4_100` (the six-pillar public score) — NOT the raw.**
+   Keep `raw_score_v4_100` as audit/debug only. Do not make the raw the main shipped score unless
+   you intentionally abandon the six-pillar public model (you should not).
+2. **Map into existing Flutter fields, but stamp the model version LOUDLY.** Add `score_model_version
+   = "v4"` to the export, plus `quality_score_status`, `quality_pillars_v4`, `raw_score_v4_100`,
+   `clean_label_flags_v4`. Otherwise Flutter may render a v4 score as if it were old v3 math.
+3. **Do not delete v3 immediately.** Keep v3 as rollback for ≥1 release/canary cycle. ORDER:
+   remove dead display-calibration code FIRST → rename shadow fields LATER → retire v3 ONLY after
+   the production export + Flutter + Supabase are all proven green.
+
+**Codex's concrete cutover sequence (use this as the Phase-A/B checklist):**
+1. Commit the handoff. ✅ (done — `051641ba`)
+2. Commit/park the dirty depletion changes. ✅ (done — medication_depletions `b7b4594f`)
+3. Add an export flag `--score-model v3|v4`, **default v3**.
+4. Wire v4 into `build_final_db.py` behind that flag.
+5. Export BOTH the audit fields and the public fields (incl. the §3/caution-2 stamp + extras).
+6. Build a GHOST v4 final DB (full release candidate, not touching production).
+7. Run: contract sync, raw-to-final, inactive safety, Step 10 cohort, **Flutter bundle parity**.
+8. ONLY THEN switch the release scripts / Supabase sync to v4.
+
+User decides; this is an approved recommendation, not a directive.
+
+---
+
 ## 1. Current architecture (VERIFIED 2026-06-08, do not assume — re-verify before editing)
 
 There are TWO parallel paths and they DO NOT currently connect:
@@ -81,9 +112,13 @@ Decide ONE mapping and write it down (this is the heart of Step 11):
   the app reads `score_quality_80`, `score_display_100_equivalent`, `verdict`. Either keep names
   (recommended) or do a coordinated nullable-column migration (precedent:
   `reference_flutter_food_advisory_consumption_pattern`). Do NOT silently change the contract.
-- New v4-only fields worth surfacing to the app (additive, nullable): `quality_pillars_v4`
-  (the explainable breakdown), `quality_tier`, `clean_label_flags_v4`. Ship as new nullable
-  columns/blob fields, not by overloading existing ones.
+- **The shipped consumer score MUST be `quality_score_v4_100` (six-pillar public), never
+  `raw_score_v4_100`** (raw is audit/debug only — codex caution 1).
+- **Stamp the model version loudly (codex caution 2):** export `score_model_version = "v4"` so
+  Flutter can never render a v4 score as v3 math. Also export these v4-only fields (additive,
+  nullable): `quality_score_status`, `quality_pillars_v4` (the explainable breakdown),
+  `quality_tier`, `raw_score_v4_100` (audit), `clean_label_flags_v4`. New nullable columns/blob
+  fields — do NOT overload existing ones.
 
 ---
 
@@ -98,10 +133,15 @@ Decide ONE mapping and write it down (this is the heart of Step 11):
 - Lock the field-mapping decision (§3) in writing.
 
 **Phase A — Wire v4 into the export (the actual cutover; reversible):**
-- In `build_final_db.py`, for each product compute the v4 result
-  (`assemble_quality_score(score_product_v4_shadow(enriched))`) and write the mapped fields
-  (§3) into the export columns — behind a config switch (`SCORING_MODE` / a build flag) so a
-  single flag flips back to v3. Keep v3 reachable until Phase C.
+- Add an export flag **`--score-model v3|v4` (default v3)** to `build_final_db.py` (codex sequence
+  step 3). Behind it, for each product compute `assemble_quality_score(score_product_v4_shadow(
+  enriched))` and write the mapped fields (§3) into the export columns. Default-v3 means the flag
+  is a no-op until you opt in — fully reversible, single switch back.
+- **Export BOTH audit + public fields** (codex step 5): the public score (`quality_score_v4_100`
+  → display fields), the version stamp `score_model_version`, and the v4-only audit/explainability
+  fields from §3. Keep v3 reachable until Phase C.
+- Build a **ghost v4 final DB** (codex step 6) — a full release candidate that does NOT touch
+  production Supabase.
 - Confirm `run_pipeline.py` produces an enriched corpus the v4 scorer consumes (today it runs v3
   scoring; the v4 scorer takes the SAME enriched input contract — you may drop the v3 score stage
   or run v4 in its place).
@@ -118,6 +158,9 @@ Decide ONE mapping and write it down (this is the heart of Step 11):
   Supabase until explicit go (memory `reference_supabase_project`).
 
 **Phase C — Remove the shadow scaffolding + dead code (the "single clean path"):**
+> **ORDER MATTERS (codex caution 3):** (1) delete dead display-calibration code FIRST →
+> (2) rename shadow fields LATER → (3) retire v3 ONLY after the production export + Flutter +
+> Supabase are all proven green across ≥1 release/canary cycle. Do not collapse these into one step.
 - Rename the v4 surface from `shadow_*`/`*_v4_shadow` to production semantics. Suggested:
   `score_supplements_v4_shadow.py` → `score_supplements_v4.py`; `shadow_score_v4_*` columns →
   the production field names; drop the `SCORING_MODE='shadow'` provenance.
