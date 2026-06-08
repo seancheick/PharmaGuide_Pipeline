@@ -37,7 +37,10 @@ Severity contract
   banned_recalled.status='banned'    → severity_status='critical', is_banned=True
   banned_recalled.status='high_risk' → severity_status='critical', is_banned=False
   banned_recalled.status='recalled'  → severity_status='critical', is_banned=False
-  banned_recalled.status='watchlist' → severity_status='informational', is_banned=False
+  banned_recalled.status='watchlist' → severity_status='informational', is_safety_concern=True, is_banned=False
+                                        (a NON-BLOCKING safety/regulatory concern: surfaces a CAUTION-eligible
+                                        signal on the live path consistent with the contaminant snapshot,
+                                        drives a -5 B0 penalty, but never BLOCKS)
   harmful_additives.severity={high,critical,moderate} → severity_status='critical'
   harmful_additives.severity='low'   → severity_status='suppress'   (transparency)
   other_ingredients (role match)     → severity_status='n/a'         (no safety concern)
@@ -335,8 +338,16 @@ class InactiveIngredientResolver:
         status = (entry.get("status") or "").strip().lower()
         is_banned = status == "banned"
         if status == "watchlist":
+            # A NON-BLOCKING safety/regulatory concern (FDA enforcement watch /
+            # EFSA flag). is_safety_concern=True so the LIVE resolver path surfaces
+            # it CONSISTENTLY with the contaminant snapshot path (both already drive
+            # CAUTION + a -5 B0 penalty); is_banned=False — it never hard-BLOCKs.
+            # Verified 0 verdict change: every live watchlist hit in the corpus was
+            # already CAUTION via the snapshot path, so this only aligns the contract
+            # (was is_safety_concern=False — the resolver mislabeled a real concern
+            # as 'informational only', a clinical-grade contract violation).
             severity_status = SEVERITY_INFORMATIONAL
-            is_safety_concern = False
+            is_safety_concern = True
         else:
             # banned / high_risk / recalled all surface as critical
             severity_status = SEVERITY_CRITICAL

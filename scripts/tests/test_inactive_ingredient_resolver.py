@@ -20,7 +20,7 @@ Severity precedence:
     banned_recalled.status='banned'       → severity_status='critical', is_banned=True,  is_safety_concern=True
     banned_recalled.status='high_risk'    → severity_status='critical', is_banned=False, is_safety_concern=True
     banned_recalled.status='recalled'     → severity_status='critical', is_banned=False, is_safety_concern=True
-    banned_recalled.status='watchlist'    → severity_status='informational', is_banned=False, is_safety_concern=False
+    banned_recalled.status='watchlist'    → severity_status='informational', is_banned=False, is_safety_concern=True  (non-blocking concern; CAUTION + -5 B0, never BLOCK)
     harmful_additives.severity={high|critical|moderate}  → severity_status='critical', is_safety_concern=True
     harmful_additives.severity='low'      → severity_status='suppress',  is_safety_concern=False
     other_ingredients (excipient match)   → severity_status='n/a',       is_safety_concern=False, with role label
@@ -113,6 +113,21 @@ def test_talc_resolves_to_critical_high_risk(resolver) -> None:
     assert r.is_safety_concern is True
     assert r.is_banned is False  # high_risk ≠ banned
     assert r.matched_rule_id and "TALC" in r.matched_rule_id.upper()
+
+
+def test_watchlist_is_a_nonblocking_safety_concern(resolver) -> None:
+    """CONTRACT FIX (2026-06-08): a watchlist substance is a NON-BLOCKING
+    safety/regulatory concern, not 'informational only'. The actual scoring
+    already drives CAUTION + a -5 B0 penalty for watchlist (via the contaminant
+    snapshot), so the resolver must report is_safety_concern=True to be consistent
+    with that — while keeping is_banned=False (never hard-BLOCKs). Verified 0
+    verdict change across the corpus (the live + snapshot paths agree)."""
+    r = resolver.resolve(raw_name="Anatabine")  # banned_recalled status='watchlist'
+    assert r.matched_source == "banned_recalled"
+    assert r.regulatory_status == "watchlist"
+    assert r.is_safety_concern is True   # corrected contract (was False)
+    assert r.is_banned is False          # non-blocking — CAUTION, not BLOCK
+    assert r.severity_status == "informational"  # soft severity tier retained
 
 
 def test_mica_pearlescent_pigment_does_not_falsely_match_titanium_dioxide(resolver) -> None:
