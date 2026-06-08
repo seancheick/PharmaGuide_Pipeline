@@ -184,41 +184,44 @@ def _brand_from_nsf_sport_img(img_src: str) -> str:
     return ""
 
 
-def _fetch_nsf_sport_detail(listing_id: str) -> dict:
-    """Fetch lot numbers and manufacturer from a single NSF Sport detail page."""
+def parse_nsf_sport_detail_html(html_text: str) -> dict:
+    """Parse an NSF Sport listing-detail page for lot numbers + facility metadata.
+
+    The page is a ``<tr><th>Field</th><td>value<br>value…</td></tr>`` table, e.g.
+    ``<tr><th>Lot #</th><td>48715<br/>49759<br/>…</td></tr>`` — so the values are
+    in the cell adjacent to a header label, NOT on the same text line with a
+    ``:``/``-`` separator. (The previous same-line regex required a separator the
+    live page never emits, so lot capture silently returned nothing.)
+    """
     from bs4 import BeautifulSoup
 
+    soup = BeautifulSoup(html_text, "lxml")
+    out: dict = {}
+    for th in soup.find_all("th"):
+        label = th.get_text(" ", strip=True).lower()
+        td = th.find_next("td")
+        if td is None:
+            continue
+        values = [ln.strip() for ln in td.get_text("\n", strip=True).split("\n") if ln.strip()]
+        if not values:
+            continue
+        if label.startswith("lot"):
+            out["lot_numbers"] = values
+        elif "manufacturer" in label or label in ("company", "brand"):
+            out.setdefault("manufacturer", values[0])
+        elif "date" in label and ("certif" in label or "registered" in label):
+            out.setdefault("cert_date", values[0])
+        elif label.startswith("facility"):
+            out.setdefault("facility", values[0])
+    return out
+
+
+def _fetch_nsf_sport_detail(listing_id: str) -> dict:
+    """Fetch lot numbers and facility metadata from one NSF Sport detail page."""
     url = f"{NSF_SPORT_DETAIL_URL}?id={listing_id}"
     r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
     r.raise_for_status()
-    soup = BeautifulSoup(r.text, "lxml")
-    text = soup.get_text("\n", strip=True)
-
-    out: dict = {}
-    # Manufacturer/Company — pattern varies; try a few label patterns
-    for label in ("Manufacturer", "Company", "Brand"):
-        m = re.search(rf"{label}\s*[:\-]\s*(.+)", text, re.IGNORECASE)
-        if m:
-            out["manufacturer"] = m.group(1).strip().split("\n")[0]
-            break
-
-    # Lot numbers — comma/whitespace separated under "Lot" label
-    m = re.search(r"Lot\s*(?:Numbers?|#s?)\s*[:\-]\s*(.+)", text, re.IGNORECASE)
-    if m:
-        raw = m.group(1).split("\n")[0]
-        out["lot_numbers"] = [lot.strip() for lot in re.split(r"[\s,;]+", raw) if lot.strip()]
-
-    # Cert date — "Certified Date" / "Date Certified"
-    m = re.search(r"(Certified\s*Date|Date\s*Certified)\s*[:\-]\s*([0-9/\-A-Za-z, ]+)", text, re.IGNORECASE)
-    if m:
-        out["cert_date"] = m.group(2).strip()
-
-    # Facility
-    m = re.search(r"Facility\s*[:\-]\s*(.+)", text, re.IGNORECASE)
-    if m:
-        out["facility"] = m.group(1).split("\n")[0].strip()
-
-    return out
+    return parse_nsf_sport_detail_html(r.text)
 
 
 # ============================================================================
@@ -323,6 +326,85 @@ def fetch_nsf_173_live() -> tuple[list[dict], str]:
             )
 
     print(f"NSF/ANSI 173: {company_count} companies → {len(records)} product records", file=sys.stderr)
+    return records, snapshot_date
+
+
+# ============================================================================
+# NSF/ANSI 455-2 GMP (live) — info.nsf.org/Certified/455GMP/Listings.asp
+# ============================================================================
+
+NSF_455_GMP_URL = "https://info.nsf.org/Certified/455GMP/Listings.asp"
+# 455-2 is the Dietary Supplements GMP standard (facility audit). 455-1 covers
+# label claims; 455-3 the sport/banned-substance annex. We snapshot 455-2 only.
+NSF_455_2_STANDARD = "455-2GMP"
+
+
+def parse_nsf_455_listing(
+    html_text: str, snapshot_date: str, standard_label: str = "NSF/ANSI 455-2"
+) -> list[dict]:
+    """Parse the NSF/ANSI 455-2 GMP facility-registration listing.
+
+    These are FACILITY registrations (company + facility, no finished products),
+    so each record carries ``scope='facility'`` and an empty ``product`` — the
+    resolver brand-matches them to ``brand_only`` (manufacturer-trust signal),
+    never B4a. Structure mirrors the NSF/ANSI 173 page: companies split by
+    ``<hr noshade>``, name in ``<font size='+2'>``, NSF company id embedded in
+    the logo image path (``/logo/C0006061.gif``) → a verifiable per-company URL.
+    """
+    from bs4 import BeautifulSoup
+
+    records: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+    chunks = re.split(r"<hr\s+noshade\s*>", html_text, flags=re.IGNORECASE)
+    for chunk_html in chunks:
+        chunk = BeautifulSoup(chunk_html, "lxml")
+        name_el = chunk.find("font", attrs={"size": "+2"})
+        if not name_el:
+            continue
+        company = name_el.get_text(strip=True).rstrip("\xa0").strip()
+        if not company or company.upper().startswith("NSF"):
+            continue
+        cid_match = re.search(r"/logo/(C\d+)\.gif", chunk_html, re.IGNORECASE)
+        cid = cid_match.group(1) if cid_match else ""
+        source_url = (
+            f"{NSF_455_GMP_URL}?Company={cid}&Standard={NSF_455_2_STANDARD}"
+            if cid
+            else f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}"
+        )
+        key = (normalize_brand(company), cid)
+        if key in seen:
+            continue
+        seen.add(key)
+        records.append(
+            {
+                "record_id": _make_record_id("NSF/ANSI 455", company, "", [], cid),
+                "program": "NSF/ANSI 455",
+                "brand": company,
+                "product": "",
+                "brand_normalized": normalize_brand(company),
+                "product_normalized": "",
+                "scope": "facility",
+                "lot_numbers_tested": [],
+                "verified_at": snapshot_date,
+                "source_url": source_url,
+                "evidence_band": "strong",
+                "standard": standard_label,
+                "company_id": cid or None,
+            }
+        )
+    return records
+
+
+def fetch_nsf_455_live() -> tuple[list[dict], str]:
+    """Fetch NSF/ANSI 455-2 (Dietary Supplements GMP) facility registrations."""
+    snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    url = f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}"
+    print(f"GET {url}", file=sys.stderr)
+    r = requests.get(url, headers=HTTP_HEADERS, timeout=REQUEST_TIMEOUT)
+    r.raise_for_status()
+    r.encoding = "utf-8"
+    records = parse_nsf_455_listing(r.text, snapshot_date)
+    print(f"NSF/ANSI 455-2: {len(records)} facility registrations", file=sys.stderr)
     return records, snapshot_date
 
 
@@ -827,6 +909,166 @@ def _clean_nutrasource_text(value: str) -> str:
 
 
 # ============================================================================
+# BSCG Certified Drug Free (live) — bscg.org/certified-drug-free-database
+# ============================================================================
+
+BSCG_DATABASE_URL = "https://www.bscg.org/certified-drug-free-database"
+BSCG_AJAX_URL = "https://www.bscg.org/selected_program"
+# `program` is a comma-separated set of numeric program codes; '1' == Certified
+# Drug Free, the per-SKU banned-substance (anti-doping) program. Other codes
+# (4=CBD, 5=animal supplements) are intentionally excluded here.
+BSCG_DRUG_FREE_CODE = "1"
+# The /selected_program endpoint sits behind a GoDaddy/Sucuri WAF that 403s plain
+# requests. A browser-like UA + a seeding GET (captures the WAF cookie) + the
+# Referer/Origin/X-Requested-With headers the page's own AJAX sends get accepted.
+BSCG_BROWSER_UA = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    "(KHTML, like Gecko) Chrome/124.0 Safari/537.36"
+)
+
+
+def _clean_bscg_text(value: object) -> str:
+    return re.sub(r"\s+", " ", html.unescape(str(value or ""))).strip()
+
+
+def _parse_bscg_report_date(value: str) -> "datetime | None":
+    """BSCG report dates look like '30 July 2022'. Tolerant parse for max()."""
+    value = (value or "").strip()
+    for fmt in ("%d %B %Y", "%d %b %Y", "%B %d, %Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(value, fmt)
+        except ValueError:
+            continue
+    return None
+
+
+def parse_bscg_products_payload(payload: list[dict], snapshot_date: str) -> list[dict]:
+    """Collapse the BSCG /selected_program JSON into one SKU record per product.
+
+    The endpoint returns every BSCG program; we keep only Certified-Drug-Free
+    rows (program code '1'). BSCG certifies by lot, so a single product appears
+    in many rows (one per tested lot). We group by (brand, product) and carry
+    every tested lot in ``lot_numbers_tested`` plus the most-recent report date —
+    matching the registry's per-SKU shape (cf. NSF Sport) instead of emitting one
+    redundant record per lot.
+    """
+    groups: dict[tuple[str, str], dict] = {}
+    for item in payload:
+        codes = {c.strip() for c in str(item.get("program", "")).split(",") if c.strip()}
+        if BSCG_DRUG_FREE_CODE not in codes:
+            continue
+        company = _clean_bscg_text(item.get("company"))
+        product = _clean_bscg_text(item.get("product"))
+        if not company or not product:
+            continue
+        key = (normalize_brand(company), normalize_product(product))
+        grp = groups.get(key)
+        if grp is None:
+            company_slug = str(item.get("company_slug") or "").strip()
+            product_slug = str(item.get("product_slug") or "").strip()
+            source_url = (
+                f"{BSCG_DATABASE_URL}/{company_slug}/{product_slug}"
+                if company_slug and product_slug
+                else BSCG_DATABASE_URL
+            )
+            grp = groups[key] = {
+                "company": company,
+                "product": product,
+                "lots": [],
+                "categories": set(),
+                "countries": set(),
+                "report_dates": [],
+                "source_url": source_url,
+                "product_id": str(item.get("product_id") or ""),
+            }
+        lot = _clean_bscg_text(item.get("product_lot"))
+        if lot and lot not in grp["lots"]:
+            grp["lots"].append(lot)
+        category = _clean_bscg_text(item.get("category"))
+        if category:
+            grp["categories"].add(category)
+        country = _clean_bscg_text(item.get("countries_sold"))
+        if country:
+            grp["countries"].add(country)
+        report_date = _clean_bscg_text(item.get("report_date"))
+        if report_date:
+            grp["report_dates"].append(report_date)
+
+    records: list[dict] = []
+    for grp in groups.values():
+        latest_report = max(
+            grp["report_dates"],
+            key=lambda d: _parse_bscg_report_date(d) or datetime.min,
+            default="",
+        )
+        records.append(
+            {
+                "record_id": _make_record_id(
+                    "BSCG", grp["company"], grp["product"], grp["lots"], grp["product_id"]
+                ),
+                "program": "BSCG",
+                "brand": grp["company"],
+                "product": grp["product"],
+                "brand_normalized": normalize_brand(grp["company"]),
+                "product_normalized": normalize_product(grp["product"]),
+                "scope": "sku",
+                "lot_numbers_tested": grp["lots"],
+                "verified_at": snapshot_date,
+                "source_url": grp["source_url"],
+                "evidence_band": "strong",
+                "report_date": latest_report or None,
+                "category": "; ".join(sorted(grp["categories"])) or None,
+                "countries_sold": "; ".join(sorted(grp["countries"])) or None,
+            }
+        )
+    return records
+
+
+def fetch_bscg_live() -> tuple[list[dict], str]:
+    """Fetch BSCG Certified Drug Free products from the public database.
+
+    Data feeds a DataTables grid via POST /selected_program (JSON, program/cat/
+    type filters; all-zero == everything). We seed a session GET to clear the WAF
+    and filter to the Certified-Drug-Free program in the parser.
+    """
+    snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    session = requests.Session()
+    base_headers = {"User-Agent": BSCG_BROWSER_UA, "Accept-Language": "en-US,en;q=0.9"}
+
+    print(f"GET {BSCG_DATABASE_URL} (seed WAF session)", file=sys.stderr)
+    seed = session.get(BSCG_DATABASE_URL, headers=base_headers, timeout=REQUEST_TIMEOUT)
+    seed.raise_for_status()
+
+    post_headers = {
+        **base_headers,
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Referer": BSCG_DATABASE_URL,
+        "Origin": "https://www.bscg.org",
+    }
+    print(f"POST {BSCG_AJAX_URL} (all programs)", file=sys.stderr)
+    r = session.post(
+        BSCG_AJAX_URL,
+        headers=post_headers,
+        data={"program_id": 0, "cat_id": 0, "type_id": 0},
+        timeout=REQUEST_TIMEOUT,
+    )
+    r.raise_for_status()
+    payload = r.json()
+    if not isinstance(payload, list):
+        raise ValueError(f"unexpected BSCG payload type: {type(payload).__name__}")
+
+    records = parse_bscg_products_payload(payload, snapshot_date)
+    print(
+        f"BSCG Certified Drug Free: {len(records)} product records "
+        f"(collapsed from {len(payload)} program rows)",
+        file=sys.stderr,
+    )
+    return records, snapshot_date
+
+
+# ============================================================================
 # PDF (fixture only, marked stale via recency gate)
 # ============================================================================
 
@@ -1000,10 +1242,12 @@ def main() -> None:
         choices=[
             "live-nsf-sport",
             "live-nsf-173",
+            "live-nsf-455",
             "live-usp",
             "live-informed-choice",
             "live-informed-sport",
             "live-ifos",
+            "live-bscg",
             "pdf",
             "all",
         ],
@@ -1057,6 +1301,17 @@ def main() -> None:
             }
         )
 
+    if args.source in ("live-nsf-455", "all"):
+        records, snapshot = fetch_nsf_455_live()
+        sources.append(
+            {
+                "program": "NSF/ANSI 455",
+                "url": f"{NSF_455_GMP_URL}?Standard={NSF_455_2_STANDARD}",
+                "snapshot_date": snapshot,
+                "records": records,
+            }
+        )
+
     if args.source in ("live-usp", "all"):
         records, snapshot = fetch_usp_verified_live(max_pages=args.max_pages)
         sources.append(
@@ -1096,6 +1351,17 @@ def main() -> None:
             {
                 "program": "IFOS",
                 "url": NUTRASOURCE_CERTIFIED_PRODUCTS_URL,
+                "snapshot_date": snapshot,
+                "records": records,
+            }
+        )
+
+    if args.source in ("live-bscg", "all"):
+        records, snapshot = fetch_bscg_live()
+        sources.append(
+            {
+                "program": "BSCG",
+                "url": BSCG_DATABASE_URL,
                 "snapshot_date": snapshot,
                 "records": records,
             }
