@@ -2290,3 +2290,75 @@ def test_v3_fallback_build_leaves_v4_columns_null():
         assert r["quality_score_status"] is None
         assert r["score_100_equivalent"] is not None
         assert r["verdict"] == "SAFE"
+
+
+def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypatch):
+    """SAFETY INVARIANT (regression for the full-corpus cutover divergence):
+
+    A product the export's banned-substance gate flags (``has_banned_substance``)
+    must NEVER ship a finite v4 consumer score, even when the v4 *scoring* safety
+    gate did not block it (the v4 gate is narrower — e.g. it does not block Boron /
+    partially-hydrogenated-oils that ``banned_recalled_ingredients.json`` flags). The
+    full v3→v4 build leaked 8 such products (Boron/PHO banned, v4-scored 58.9–70.5),
+    which would then rank by ``quality_score_v4_100`` in the catalog index/dedup.
+
+    The export must force these into the v4 ``suppressed_safety`` state — null score,
+    BLOCKED verdict — preserving the v3 invariant that a banned product ships no
+    consumer score. Both the catalog ROW and the detail BLOB must agree.
+    """
+    e = make_enriched()  # dsld_id 999
+    e["upcSku"] = "111111111111"
+    # Real banned-substance fixture (same shape as the active-safety-flag tests):
+    # has_banned_substance(enriched) → True and the blob gets banned_substance_detail.
+    e["activeIngredients"] = [
+        {
+            "name": "Red Yeast Rice powder",
+            "raw_source_text": "Red Yeast Rice powder",
+            "standardName": "Red Yeast Rice powder",
+            "mapped": False,
+            "safety_flags": [
+                {
+                    "entry_id": "BANNED_RED_YEAST_RICE",
+                    "source_db": "banned_recalled_ingredients",
+                    "status": "banned",
+                    "severity": "critical",
+                    "match_type": "token_bounded",
+                    "matched_variant": "red yeast rice",
+                    "evidence_text": "Red Yeast Rice powder",
+                    "confidence": "medium",
+                }
+            ],
+        }
+    ]
+    e["ingredient_quality_data"]["ingredients"] = []
+    e["contaminant_data"]["banned_substances"] = {
+        "found": True,
+        "substances": [],
+        "safety_flags": e["activeIngredients"][0]["safety_flags"],
+    }
+    s = make_scored(); s["dsld_id"] = "999"
+    # v4 *scoring* gate did NOT block it — it returns a finite scored result
+    # (the real divergence: v4's gate is narrower than the export banned signal).
+    _patch_v4_by_id(monkeypatch, {
+        "999": _canned_v4(status="scored", quality_100=70.5, verdict="SAFE", tier="Acceptable"),
+    })
+    with tempfile.TemporaryDirectory() as tmp:
+        _result, out = _run_build(tmp, [e], [s], score_model="v4")
+        rows = _core_rows(out, ["dsld_id", "quality_score_v4_100", "quality_score_status",
+                                "quality_tier", "verdict", "score_100_equivalent",
+                                "has_banned_substance", "raw_score_v4_100"])
+        r = rows["999"]
+        assert r["has_banned_substance"] == 1
+        assert r["verdict"] == "BLOCKED"
+        # THE INVARIANT — no finite consumer score ships for a banned product:
+        assert r["quality_score_v4_100"] is None, \
+            f"banned product leaked a finite v4 score: {r['quality_score_v4_100']}"
+        assert r["quality_score_status"] == "suppressed_safety"
+        assert r["quality_tier"] is None
+        assert r["score_100_equivalent"] is None
+        # raw_score_v4_100 stays as an audit trail (never the shipped score).
+        assert r["raw_score_v4_100"] == 70.5
+
+        # The detail BLOB must agree — no "scored" v4 breakdown for a banned product.
+        blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
+        assert blob["v4_score_provenance"]["quality_score_status"] == "suppressed_safety"

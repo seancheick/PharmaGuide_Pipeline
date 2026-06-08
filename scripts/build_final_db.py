@@ -6153,8 +6153,12 @@ def build_final_db(
     # via the export adapter; v3 is the legacy fallback. Imported lazily so the v3
     # path never pulls in the scoring_v4 stack.
     overlay_v4_scored = None
+    suppress_v4_for_hard_block = None
     if score_model == "v4":
-        from scoring_v4.export_adapter import overlay_v4_scored as overlay_v4_scored
+        from scoring_v4.export_adapter import (
+            overlay_v4_scored as overlay_v4_scored,
+            suppress_v4_for_hard_block as suppress_v4_for_hard_block,
+        )
     logger.info("Scoring model for export: %s", score_model)
 
     os.makedirs(output_dir, exist_ok=True)
@@ -6232,6 +6236,14 @@ def build_final_db(
             # under _v4_* keys. One call makes every downstream consumer v4-aware.
             if overlay_v4_scored is not None:
                 scored = overlay_v4_scored(enriched, scored)
+                # The export's banned-substance gate is broader than the v4 scoring
+                # safety gate (v4 doesn't block every banned_recalled substance, e.g.
+                # Boron / PHOs). When the export will hard-block a banned product, the
+                # v4 public contract MUST be suppressed to match — else the catalog
+                # ranks a banned product by a finite quality_score_v4_100. Done here,
+                # before build_detail_blob / build_core_row, so both surfaces agree.
+                if has_banned_substance(enriched):
+                    scored = suppress_v4_for_hard_block(scored, reason="banned_substance")
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
             products_with_warnings_count, contract_failures_count = update_audit_state(

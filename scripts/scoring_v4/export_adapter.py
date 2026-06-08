@@ -101,3 +101,34 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["_v4_config_fingerprint"] = config_fingerprint
 
     return scored
+
+
+def suppress_v4_for_hard_block(scored: Dict[str, Any], reason: str) -> Dict[str, Any]:
+    """Force an already-overlaid ``scored`` dict into the v4 ``suppressed_safety`` +
+    BLOCKED state. Mutates & returns ``scored``.
+
+    The export's banned-substance gate (``banned_recalled_ingredients.json`` via
+    ``has_banned_substance``) is BROADER than the v4 *scoring* safety gate — v4 does
+    not block every substance the regulatory data flags (e.g. Boron / Sodium
+    Tetraborate, partially-hydrogenated oils). When the two diverge, v4 hands back a
+    finite ``scored`` result for a product the export will hard-block as BLOCKED. The
+    v3 invariant — *a banned product ships no consumer score* — must hold under v4, or
+    the catalog index/dedup would rank that product by a live ``quality_score_v4_100``.
+
+    This collapses the overlaid contract to look exactly like a natively v4-suppressed
+    (BLOCKED) product across BOTH export surfaces (``build_core_row`` reads the row
+    fields, ``build_detail_blob`` reads the ``_v4_*`` keys). ``_v4_pillars`` and
+    ``_v4_raw_score_100`` are kept as an audit trail, matching the v4 scorer's own
+    ``suppressed_safety`` contract (see ``quality_score.assemble_quality_score``).
+    """
+    scored["verdict"] = "BLOCKED"
+    scored["safety_verdict"] = "BLOCKED"
+    scored["score_100_equivalent"] = None
+    scored["display_100"] = "N/A"
+    scored["grade"] = None
+    scored["blocking_reason"] = scored.get("blocking_reason") or reason
+    scored["_v4_quality_score_100"] = None
+    scored["_v4_quality_status"] = "suppressed_safety"
+    scored["_v4_quality_tier"] = None
+    scored["_v4_suppressed_reason"] = scored.get("_v4_suppressed_reason") or reason
+    return scored
