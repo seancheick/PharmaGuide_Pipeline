@@ -1526,6 +1526,34 @@ def test_watchlist_is_exported_as_warning_but_not_blocking_reason():
     assert any(w["type"] == "watchlist_substance" for w in blob["warnings"])
 
 
+def test_resolver_only_watchlist_warning_keeps_watchlist_semantics():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = []
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Phthalates",
+            "raw_source_text": "Phthalates",
+            "standardName": "Phthalates",
+        }
+    ]
+    enriched["contaminant_data"]["banned_substances"]["substances"] = []
+    scored = make_scored(verdict="CAUTION")
+
+    blob = build_detail_blob(enriched, scored)
+
+    warnings = [
+        w for w in blob["warnings_profile_gated"]
+        if w.get("source") == "inactive_ingredient_resolver"
+    ]
+    assert any(
+        w.get("matched_rule_id") == "BANNED_ADD_PHTHALATES"
+        and w.get("type") == "watchlist_substance"
+        and w.get("severity") == "moderate"
+        and w.get("display_mode_default") == "informational"
+        for w in warnings
+    )
+
+
 def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
     enriched = make_enriched()
     enriched["status"] = "discontinued"

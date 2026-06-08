@@ -4083,10 +4083,17 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 dm_default = "critical"
             else:
                 inactive_policy = normalize_text(ing.get("inactive_policy"))
-                if role == "inactive" and inactive_policy == "excipient_acceptable":
+                regulatory_status = normalize_text(ing.get("regulatory_status"))
+                if regulatory_status == "watchlist" or (
+                    role == "inactive" and inactive_policy == "excipient_acceptable"
+                ):
                     w_type = "watchlist_substance"
                     w_severity = "moderate"
-                    w_title = f"Excipient watchlist: {name}"
+                    w_title = (
+                        f"Excipient watchlist: {name}"
+                        if role == "inactive" and inactive_policy == "excipient_acceptable"
+                        else f"Watchlist ingredient: {name}"
+                    )
                     dm_default = "informational"
                 else:
                     # high_risk / recalled — both surface as high_risk_ingredient
