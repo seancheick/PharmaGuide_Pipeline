@@ -2,6 +2,14 @@
 
 > Scoring version: **3.5.2** / Data schema: **5.4.1** / Last updated: **2026-06-02**
 > Aligned to current `score_supplements.py` and `config/scoring_config.json`.
+>
+> **v4 cutover (export schema v2.0.0):** the **shipped** score is now the v4 six-pillar
+> /100 model (`scoring_v4/` + `score_supplements_v4_shadow.py`), exported as
+> `quality_score_v4_100` — `build_final_db.py` defaults to `--score-model v4`. The
+> 80-point arithmetic model below (`score_supplements.py` v3) still RUNS to produce the
+> enrichment/scaffolding the export overlays, and remains the v3 fallback, but it is no
+> longer the consumer headline. See `FINAL_EXPORT_SCHEMA_V1.md` (v2.0.0) for the export
+> contract and `scoring_v4/config/quality_score.json` for the six-pillar rubric.
 
 ## Data schema 5.4.1 note (2026-06-02)
 

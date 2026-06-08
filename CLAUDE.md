@@ -179,7 +179,7 @@ them against `scripts/final_db_output` or a fresh
 ## Conventions
 
 - **Data schema version:** 5.0.0 – 5.3.0 (with 6.0.0 for `user_goals_to_clusters.json`) — every JSON data file has a `_metadata` block
-- **Score field naming is FROZEN:** use `score_quality_80`, `score_display_100_equivalent`, NOT "sections A-E" in exports
+- **Score field naming (export schema v2.0.0, v4 cutover):** the canonical shipped score is `quality_score_v4_100` (six-pillar /100); `score_100_equivalent` / `score_display_100_equivalent` are honest /100 compat mirrors. The legacy `score_quality_80` (/80) column was **DROPPED** at v2.0.0 — do not reintroduce it. `build_final_db.py` defaults to `--score-model v4` (v3 is a selectable fallback). Use the /100 names, NOT "sections A-E" or the old /80, in exports
 - **Safety distinction:** `has_banned_substance` / `has_recalled_ingredient` for ingredient-level. Never use `is_recalled` (implies product-level recall, not supported in v1)
 - **Tests are mandatory:** every data file change, scoring logic change, or enrichment change must have test coverage
 - **No linter configured** — follow existing code style (snake_case, type hints encouraged but not enforced)

@@ -1,8 +1,10 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.6.1 — 2026-05-12
-> Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
-> Status: ACTIVE — v1.6.1 lands the unified inactive-ingredient resolver + Vitamin A IU→mcg RAE form-aware conversion + canonical_id / delivers_markers propagation.
+> Version: 2.0.0 — 2026-06-08
+> Consumes: v4 six-pillar scorer (`score_supplements_v4_shadow` + `scoring_v4/`) via the export adapter; enrichment schema v5.1.0+
+> Status: ACTIVE — **v2.0.0 BREAKING (v4 cutover):** `build_final_db.py` defaults to `--score-model v4` (v3 selectable as fallback). The legacy /80 columns `score_quality_80` + `score_display_80` are **DROPPED**; the canonical shipped score is `quality_score_v4_100` (/100), with `score_100_equivalent` / `score_display_100_equivalent` as honest /100 compat mirrors. New `products_core` columns: `quality_score_v4_100`, `quality_score_status` (scored/suppressed_safety/not_scored), `quality_tier`, `quality_score_suppressed_reason`, `raw_score_v4_100` (audit only), `v4_module`, `v4_confidence`, `score_model_version`, `quality_score_version`, `scoring_engine_version`, `classification_schema_version`, `v4_config_fingerprint`. New detail-blob keys: `quality_pillars_v4`, `clean_label_flags_v4`, `raw_score_v4_100`, `v4_safety_gate`, `v4_completeness_gate`, `v4_score_provenance`, `v4_score_explanation`. Ranking/dedup/index move to `quality_score_v4_100`. **Flutter migration required:** queries must read `quality_score_v4_100` (not `score_quality_80`), rank/exclude on `quality_score_status`, and render the six `quality_pillars_v4` (not the legacy A/B/C/D `section_breakdown`, which is retained for back-compat). `score_supplements.py` (v3) + `scoring_v4/display_calibration.py` are NOT yet removed — that teardown is a later phase gated on Flutter + Supabase proven green.
+>
+> Status (v1 history): v1.6.1 landed the unified inactive-ingredient resolver + Vitamin A IU→mcg RAE form-aware conversion + canonical_id / delivers_markers propagation.
 > Updated: **v1.6.1 adds (2026-05-12): (a) unified inactive-ingredient resolver via `scripts/inactive_ingredient_resolver.py` — consults `banned_recalled_ingredients.json`, `harmful_additives.json`, `other_ingredients.json` in priority order with strict standard_name+aliases-only matching; (b) four new fields on every inactive blob entry: `is_banned`, `safety_reason`, `matched_source`, `matched_rule_id` — closes the TiO2/Talc silent-ship gap (1,178+311 occurrences now correctly flagged is_safety_concern=true / severity_status=critical); (c) `canonical_id` + `delivers_markers` now emitted on every active blob entry — was 0% emit pre-fix, 100% post-fix on mapped actives. Foundational for interaction rules, stack-checking, evidence routing, biomarker scoring; (d) `display_label` for branded botanicals now preserves brand + species + plant-part + form (e.g. "Capsimax(TM) Capsicum Fruit Extract" → "Capsimax Capsicum Fruit Extract", trademark stripped); (e) Vitamin A IU labels now normalize form-aware to mcg RAE (β-carotene factor 0.1, retinol 0.3) — pregnancy UL gate now evaluable. v1.6.0 added `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries. v1.5.0 introduced the canonical active + inactive ingredient contract (`display_form_label` / `form_status` / `form_match_status` / `dose_status` on actives; `display_label` / `display_role_label` / `severity_status` / `is_safety_concern` on inactives). Legacy fields (`form`, `is_harmful`) kept for back-compat and documented as deprecated. v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (now 145 per `scripts/data/interaction_rules.json` schema 6.1.0). v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns; `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
 > **Build coverage gate (v1.6.0):** Products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate ("product cannot ship without a coherent score"). This realises the audit rule "no product marked as fully scored if required ingredient data was silently dropped." The `unmapped_actives` detail-blob subkey remains present (always emitted, even when empty) as the contract for any pre-gate / partial-coverage future surface; in practice every shipped blob today has `unmapped_actives.total == 0`.
@@ -75,14 +77,27 @@ CREATE TABLE products_core (
     form_factor                   TEXT,    -- tablet, capsule, powder, gummy, liquid, etc.
     supplement_type               TEXT,    -- e.g. single_nutrient, targeted, specialty, probiotic
 
-    score_quality_80              REAL,    -- canonical pipeline score
-    score_display_80              TEXT,    -- e.g. "71.1/80"
-    score_display_100_equivalent  TEXT,    -- e.g. "88.8/100"
-    score_100_equivalent          REAL,    -- display convenience only; derived from quality_80
-    grade                         TEXT,    -- Exceptional, Excellent, Good, Fair, Below Avg, Low, Very Poor
+    score_display_100_equivalent  TEXT,    -- e.g. "88/100" (mirror of quality_score_v4_100)
+    score_100_equivalent          REAL,    -- /100 compat mirror of quality_score_v4_100
+    grade                         TEXT,    -- v2.0.0: derived from quality_tier
     verdict                       TEXT,    -- SAFE, CAUTION, POOR, UNSAFE, BLOCKED, NOT_SCORED
     safety_verdict                TEXT,    -- backward-compatible safety label
     mapped_coverage               REAL,
+
+    -- V4 SCORING (export schema v2.0.0) — canonical /100 six-pillar contract.
+    -- Legacy /80 columns (score_quality_80, score_display_80) were DROPPED at v2.0.0.
+    quality_score_v4_100            REAL,   -- canonical shipped score (/100); NULL when suppressed/not_scored
+    quality_score_status            TEXT,   -- scored | suppressed_safety | not_scored
+    quality_tier                    TEXT,   -- Elite/Excellent/Strong/Acceptable/Weak/Poor
+    quality_score_suppressed_reason TEXT,
+    raw_score_v4_100                REAL,   -- audit/debug only; NEVER the shipped score
+    v4_module                       TEXT,   -- generic/probiotic/omega/multi_or_prenatal/sports
+    v4_confidence                   TEXT,
+    score_model_version             TEXT,   -- loud stamp: "v4"
+    quality_score_version           TEXT,
+    scoring_engine_version          TEXT,
+    classification_schema_version   TEXT,
+    v4_config_fingerprint           TEXT,
 
     score_ingredient_quality      REAL,    -- max 25
     score_ingredient_quality_max  REAL,
@@ -183,7 +198,7 @@ CREATE INDEX idx_products_core_upc ON products_core(upc_sku);
 CREATE INDEX idx_products_core_name ON products_core(product_name);
 CREATE INDEX idx_products_core_brand ON products_core(brand_name);
 CREATE INDEX idx_products_core_verdict ON products_core(verdict);
-CREATE INDEX idx_products_core_score ON products_core(score_quality_80);
+CREATE INDEX idx_core_score ON products_core(quality_score_v4_100);
 CREATE INDEX idx_products_core_type ON products_core(supplement_type);
 CREATE INDEX idx_products_core_status ON products_core(product_status);
 
@@ -214,11 +229,14 @@ CREATE INDEX idx_products_core_contains_nootropics ON products_core(contains_noo
 | `discontinued_date`            | `enriched.discontinuedDate`                               | ISO date or NULL                                                                        |
 | `form_factor`                  | `enriched.form_factor`                                    |                                                                                         |
 | `supplement_type`              | `enriched.supplement_type.type`                           | Current observed values include `single_nutrient`, `targeted`, `specialty`, `probiotic` |
-| `score_quality_80`             | `scored.score_80`                                         | NULL if not scored                                                                      |
-| `score_display_80`             | `scored.display`                                          | Pre-formatted: "71.1/80"                                                                |
-| `score_display_100_equivalent` | `scored.display_100`                                      | Pre-formatted: "88.8/100"                                                               |
-| `score_100_equivalent`         | `scored.score_100_equivalent`                             | Display convenience                                                                     |
-| `grade`                        | `scored.grade`                                            |                                                                                         |
+| `quality_score_v4_100`         | `quality_score_v4_100` (export adapter)                   | **Canonical shipped score** (/100); NULL when suppressed/not_scored                     |
+| `quality_score_status`         | adapter `quality_score_status`                            | scored / suppressed_safety / not_scored                                                 |
+| `quality_tier`                 | adapter `quality_tier`                                    | Elite/Excellent/Strong/Acceptable/Weak/Poor                                             |
+| `raw_score_v4_100`             | adapter `raw_score_v4_100`                                | Audit/debug only — NEVER the shipped score                                              |
+| `score_model_version`          | adapter (`"v4"`)                                          | Loud model stamp                                                                        |
+| `score_display_100_equivalent` | `quality_score_v4_100` → "NN/100"                         | /100 compat mirror (was `scored.display_100`)                                           |
+| `score_100_equivalent`         | `quality_score_v4_100`                                    | /100 compat mirror                                                                      |
+| `grade`                        | derived from `quality_tier`                               | v2.0.0 (legacy /80 `score_quality_80`/`score_display_80` columns dropped)               |
 | `verdict`                      | `scored.verdict`                                          | SAFE/CAUTION/POOR/UNSAFE/BLOCKED/NOT_SCORED                                             |
 | `safety_verdict`               | `scored.safety_verdict`                                   | Backward-compat                                                                         |
 | `mapped_coverage`              | `scored.mapped_coverage`                                  | 0.0-1.0                                                                                 |

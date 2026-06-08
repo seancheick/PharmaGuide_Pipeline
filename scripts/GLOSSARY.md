@@ -31,10 +31,14 @@ one or the other; never let them disagree silently.
 | `absorption_structured` | object | `{value, range_low, range_high, quality, notes}`. `quality` enum: `{excellent, very_good, good, moderate, low, poor, variable, unknown}`. |
 | `dosage_importance` | enum | How much dosing precision matters for this form's effect. |
 
-## Scoring fields (product-level export — FROZEN names)
+## Scoring fields (product-level export — v2.0.0 v4 cutover)
 
-- `score_quality_80` — primary 80-point quality score. **Never** name this "sections A–E" in exports.
-- `score_display_100_equivalent` — `(score_quality_80 / 80) * 100` for UX display.
+- `quality_score_v4_100` — **canonical shipped score** (six-pillar /100). The primary export/ranking field.
+- `quality_score_status` — `scored` | `suppressed_safety` | `not_scored`.
+- `quality_tier` — Elite/Excellent/Strong/Acceptable/Weak/Poor.
+- `raw_score_v4_100` — audit/debug only; **never** the shipped score.
+- `score_100_equivalent` / `score_display_100_equivalent` — honest /100 compat mirrors of `quality_score_v4_100`.
+- `score_quality_80` — **DROPPED at v2.0.0** (legacy /80 column). Do not reintroduce; use `quality_score_v4_100`.
 - `has_banned_substance` / `has_recalled_ingredient` — ingredient-level safety flags.
 - **Never** use `is_recalled` — implies product-level recall, unsupported in v1.
 - **Verdict precedence (deterministic):** BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.

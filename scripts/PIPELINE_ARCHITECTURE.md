@@ -1,6 +1,8 @@
 # PIPELINE_ARCHITECTURE.md
 
-> Last updated: 2026-05-22 | Export schema: v1.6.1 (91 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`; concept ownership source of truth: `scripts/contracts/source_of_truth_matrix.json`.
+> Last updated: 2026-06-08 | Export schema: **v2.0.0** (v4 cutover; 102 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`; concept ownership source of truth: `scripts/contracts/source_of_truth_matrix.json`.
+>
+> **v4 cutover:** `build_final_db.py` defaults to `--score-model v4`, overlaying the six-pillar /100 score (`quality_score_v4_100`) onto each product via `scoring_v4/export_adapter.py`. The legacy /80 export columns were dropped. The Clean→Enrich→Score(v3) stages below are UNCHANGED — the v3 score stage still produces the scaffolding the v4 export adapter overlays. See `FINAL_EXPORT_SCHEMA_V1.md` (v2.0.0).
 
 ## Overview
 
