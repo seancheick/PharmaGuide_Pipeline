@@ -169,6 +169,15 @@ class InactiveResolution:
     safety_warning_one_liner: Optional[str] = None
     safety_warning: Optional[str] = None
     safety_flags: list[dict] = field(default_factory=list)
+    # Clean-label flag layer (2026-06): EU-banned / flagged additives that should
+    # INFORM + apply a small graduated penalty WITHOUT forcing a CAUTION verdict
+    # (titanium dioxide as a coating, etc.). Populated from the source entry's
+    # optional `clean_label` block. Distinct from the safety contract above —
+    # `is_safety_concern` stays False, so the verdict never changes.
+    is_clean_label_concern: bool = False
+    clean_label_tier: Optional[str] = None        # "elevated" | "informational"
+    clean_label_note: Optional[str] = None        # consumer-facing one-liner
+    clean_label_penalty_base: Optional[float] = None
 
 
 # ---------------------------------------------------------------------------
@@ -332,6 +341,9 @@ class InactiveIngredientResolver:
             or entry.get("reason")
             or f"Listed as {status} in banned_recalled_ingredients.json"
         )
+        # Clean-label flag block (inform + small graduated penalty, no CAUTION).
+        clean_label = entry.get("clean_label")
+        clean_label = clean_label if isinstance(clean_label, dict) else {}
         functional_roles = list(entry.get("functional_roles") or [])
         display_role_label = (
             _pretty_role(functional_roles[0]) if functional_roles else None
@@ -387,6 +399,10 @@ class InactiveIngredientResolver:
             references=list(entry.get("references_structured") or []),
             regulatory_status=status or None,
             inactive_policy=entry.get("inactive_policy") or None,
+            is_clean_label_concern=bool(clean_label),
+            clean_label_tier=(clean_label.get("tier") or None),
+            clean_label_note=(clean_label.get("consumer_note") or None),
+            clean_label_penalty_base=clean_label.get("penalty_base"),
         )
 
     @staticmethod

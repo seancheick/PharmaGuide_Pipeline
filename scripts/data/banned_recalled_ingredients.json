@@ -16791,7 +16791,12 @@
       "safety_warning": "A white-pigment additive EFSA ruled in 2021 could no longer be considered safe due to possible genotoxicity. Banned in EU food since 2022; still permitted in US supplements. Avoid when possible.",
       "safety_warning_one_liner": "EU-banned white pigment. Avoid when possible.",
       "inactive_policy": "excipient_acceptable",
-      "inactive_policy_reason": "FDA-approved white pigment 21 CFR §73.575; EU food ban (E171) does not extend to US supplements"
+      "inactive_policy_reason": "FDA-approved white pigment 21 CFR §73.575; EU food ban (E171) does not extend to US supplements",
+      "clean_label": {
+        "tier": "elevated",
+        "consumer_note": "Contains titanium dioxide (E171) — banned as a food additive in the EU (EFSA could not rule out genotoxicity); still permitted in US supplements as a coating/colorant.",
+        "penalty_base": 2.0
+      }
     },
     {
       "id": "BANNED_ADD_TALC",
