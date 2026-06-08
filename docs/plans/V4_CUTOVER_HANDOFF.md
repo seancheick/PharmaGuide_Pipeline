@@ -122,6 +122,94 @@ Decide ONE mapping and write it down (this is the heart of Step 11):
 
 ---
 
+## 3B. Flutter ↔ final-DB contract gaps (codex audit, VERIFIED 2026-06-08 — THE missing bridge)
+
+**Bottom line: v4 is NOT Flutter-ready.** The pipeline can produce v4 fields, but `build_final_db.py`
+exports the v3 contract and the Flutter app (`/Users/seancheick/PharmaGuide ai`, memory
+`reference_flutter_repo`) reads / ranks / displays v3 fields. **If you cut over without Flutter
+changes, the app shows the old score, or a v4 score through misleading v3 names.** Every claim
+below was re-verified in-repo on 2026-06-08 (pipeline line refs + Flutter file reads).
+
+### A. Hard contract gaps (pipeline export side — VERIFIED)
+1. `build_final_db.py` products_core schema (~line 1514) exports v3 only: `score_quality_80`,
+   `score_100_equivalent`, `score_display_100_equivalent`, `grade` + old A/B/C/D `section_scores`.
+   **No v4 public fields.** (`grep -c quality_score_v4|clean_label_flags build_final_db.py` → 0.)
+2. `test_build_final_db.py::test_products_core_does_not_export_v4_shadow_columns` (line 1919/1922)
+   asserts NO `shadow_score_v4_` columns. Correct for shadow; cutover needs a NEW v4 PUBLIC export
+   contract (not the shadow columns blindly) and this test updated to assert the public columns.
+3. UPC dedup keeps the best row by `score_quality_80` (lines 1696/1737). v4 must dedup by
+   `quality_score_v4_100` for scored products and exclude/suppress BLOCKED/UNSAFE.
+4. Score index is `idx_core_score ON products_core(score_quality_80)` (line 1661). Needs a v4
+   quality-score index if Flutter search/ranking uses v4.
+5. Detail blob exports old `section_scores` (A_ingredient_quality / B_safety_purity / ... line 1186)
+   — NOT the six v4 pillars. Flutter's breakdown will not explain v4.
+6. `clean_label_flags_v4` is produced (`quality_score.py` line ~426, incl. titanium-dioxide notes +
+   EU citation) but NOT carried into the final DB.
+7. v4 provenance (raw score, quality version, module, confidence, config fingerprint) lives only in
+   `shadow_score_v4_breakdown` — Flutter has no access. Matters for "why did this score change?".
+8. Share/highlight metadata is built from old `score_100_equivalent`/`grade` paths — must be made
+   v4-aware or share cards show v3 semantics.
+
+### B. Fields to ADD to products_core for v4 (explicit v4 columns, do not overload old ones first)
+`quality_score_v4_100` · `quality_score_status` (scored / suppressed_safety / not_scored) ·
+`quality_tier` · `raw_score_v4_100` (audit) · `v4_module` · `v4_confidence` ·
+`quality_score_version` · `scoring_engine_version` · `classification_schema_version` ·
+`v4_config_fingerprint` (provenance hash) · `score_model_version="v4"` (the loud stamp, §0 caution 2).
+Temporary compat aliases: `score_100_equivalent` may MIRROR `quality_score_v4_100` only AFTER cutover;
+`grade` deprecated or derived from `quality_tier`; **`score_quality_80` must NOT remain the ranking source.**
+
+### C. Fields to ADD to the detail blob for v4
+`quality_pillars_v4` (all six pillars WITH their reason/components) · `clean_label_flags_v4` ·
+`raw_score_v4_100` · `v4_safety_gate` · `v4_completeness_gate` · `v4_score_provenance` ·
+`v4_score_explanation` (top positive/negative score reasons — the "how it scored X"). KEEP existing
+`interaction_summary`, `warnings_profile_gated`; KEEP `decision_highlights` but REGENERATE from v4 logic.
+
+### D. Flutter is reading the WRONG field schema (VERIFIED — it is a v3 consumer)
+- `data/database/products_core_table.dart` (~line 51) defines `scoreQuality80`,
+  `scoreDisplay100Equivalent`, `score100Equivalent`, `grade`, `scoreBrandTrust`.
+- `data/database/core_database.dart` ranks + searches by `score_quality_80` (lines 284, 303, 484).
+- `services/recommendations/better_alternatives_ranker.dart` (~136-148) ranks alternatives by
+  `scoreQuality80` + `score_brand_trust`.
+- `features/product_detail/v2/product_detail_v2_connected.dart` reads `score100Equivalent` (~228)
+  and renders old `section_breakdown` (~490); `score_breakdown_section.dart` renders old sections.
+
+### E. Flutter changes needed (coordinate in `/Users/seancheick/PharmaGuide ai`)
+- Add Drift columns for the v4 public fields (§B); update DB import/mapping to read them.
+- Hero score: show `quality_score_v4_100` when `quality_score_status==scored`; NO score when
+  `suppressed_safety`; "Not scored / insufficient label data" when `not_scored`.
+- Search/ranking: use `quality_score_v4_100`, not `score_quality_80`.
+- Better-alternatives: exclude `suppressed_safety` / BLOCKED / UNSAFE (and likely NOT_SCORED).
+- Score breakdown UI: render the SIX pillars (with reasons), not old A/B/C/D.
+- Verification/trust UI: use the v4 verification pillar, NOT old `score_brand_trust` (5-pt field).
+- Keep LABEL confidence separate from v4 score confidence (`mapped_coverage` = label completeness,
+  not score confidence).
+- Add clean-label UI for `clean_label_flags_v4`. Share cards/descriptions use `quality_tier` +
+  v4 score status.
+
+### F. Already mostly OK (interactions / warnings side — lower risk)
+Flutter already consumes `interaction_summary` + `warnings_profile_gated`; Review-Before-Use and
+condition/drug interaction gating are wired; inactive-ingredient row severity display exists. BUT
+v4 clean-label notes are a SEPARATE export/render path that does not exist yet (see §C).
+
+### G. Flags — things that look off (decide before cutover)
+- `display_calibration` still exists though the six-pillar score supersedes it — do NOT export both
+  as public scores (delete per §5 Phase C, order-first).
+- `quality_score.json` already hard-codes public tier bands — if the final bands aren't a locked
+  product decision yet, that config is ahead of the decision. Confirm before shipping tiers.
+- NOT_SCORED handling is inconsistent: the final DB defensively DROPS NOT_SCORED rows from
+  products_core while Flutter has some fallback. Decide: do v4 not-scored products appear in the
+  catalog or stay hidden?
+- Old `grade` should probably die (confuses the new tier semantics).
+- `score_brand_trust` must NOT drive alternatives under v4 (verification is now a fuller pillar).
+
+### Codex recommendation (endorsed)
+Do NOT cut over until there is a FORMAL `products_core` v4 + detail-blob contract AND Flutter is
+updated to consume it directly. The current app is still a v3-score consumer. Treat "Flutter
+bundle parity" (codex sequence step 7) as a hard gate: the app must render a v4 build correctly
+before the Supabase sync flips (step 8).
+
+---
+
 ## 4. Best-practice staged cutover plan
 
 **Phase 0 — Pre-flight (no code changes):**
