@@ -51,14 +51,25 @@ PRODUCTS_CORE_COLUMNS = [
     "discontinued_date",
     "form_factor",
     "supplement_type",
-    "score_quality_80",
-    "score_display_80",
     "score_display_100_equivalent",
     "score_100_equivalent",
     "grade",
     "verdict",
     "safety_verdict",
     "mapped_coverage",
+    # v2.0.0 V4 scoring contract (dropped legacy score_quality_80, score_display_80)
+    "quality_score_v4_100",
+    "quality_score_status",
+    "quality_tier",
+    "quality_score_suppressed_reason",
+    "raw_score_v4_100",
+    "v4_module",
+    "v4_confidence",
+    "score_model_version",
+    "quality_score_version",
+    "scoring_engine_version",
+    "classification_schema_version",
+    "v4_config_fingerprint",
     "score_ingredient_quality",
     "score_ingredient_quality_max",
     "score_safety_purity",
@@ -768,8 +779,8 @@ def test_banned_inactive_forces_blocked_core_verdict_when_scorer_says_safe():
     assert row["verdict"] == "BLOCKED"
     assert row["safety_verdict"] == "BLOCKED"
     assert row["blocking_reason"] == "banned_ingredient"
-    assert row["score_quality_80"] is None
-    assert row["score_display_80"] == "N/A"
+    assert row["score_100_equivalent"] is None
+    assert row["score_display_100_equivalent"] == "N/A"
     assert row["score_safety_purity"] == 0.0
     assert any(
         w.get("type") == "banned_substance" and w.get("severity") == "critical"
@@ -1895,8 +1906,8 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_92_columns():
-    # Tuple emitted by build_core_row must match the 92-column schema (v1.6.x).
+def test_final_db_has_102_columns():
+    # Tuple emitted by build_core_row must match the 102-column schema (v2.0.0).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -1912,8 +1923,8 @@ def test_final_db_has_92_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 92
-    assert len(PRODUCTS_CORE_COLUMNS) == 92
+    assert len(row) == 102
+    assert len(PRODUCTS_CORE_COLUMNS) == 102
 
 
 def test_products_core_does_not_export_v4_shadow_columns():
@@ -2041,13 +2052,13 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_92(self):
+    def test_core_row_column_count_is_102(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 92
-        assert CORE_COLUMN_COUNT == 92
+        assert len(row) == 102
+        assert CORE_COLUMN_COUNT == 102
 
-    def test_schema_version_bumped_to_160(self):
-        assert EXPORT_SCHEMA_VERSION == "1.6.0"
+    def test_schema_version_bumped_to_200(self):
+        assert EXPORT_SCHEMA_VERSION == "2.0.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces

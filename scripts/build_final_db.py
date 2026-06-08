@@ -66,7 +66,7 @@ from identity.safety import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "1.6.0"  # v1.6.0 adds profile_gate passthrough on warnings (interaction + drug_interaction); v1.5.0 added canonical form/dose/severity contract on active+inactive rows
+EXPORT_SCHEMA_VERSION = "2.0.0"  # v2.0.0 BREAKING: v4 is the default scoring model — drop legacy /80 cols (score_quality_80, score_display_80), add the v4 /100 six-pillar contract + provenance cols; ranking/dedup move to quality_score_v4_100. v1.6.0 added profile_gate passthrough on warnings
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -1511,14 +1511,29 @@ CREATE TABLE IF NOT EXISTS products_core (
     form_factor                   TEXT,
     supplement_type               TEXT,
 
-    score_quality_80              REAL,
-    score_display_80              TEXT,
     score_display_100_equivalent  TEXT,
     score_100_equivalent          REAL,
     grade                         TEXT,
     verdict                       TEXT,
     safety_verdict                TEXT,
     mapped_coverage               REAL,
+
+    -- V4 SCORING (export schema v2.0.0) — canonical /100 six-pillar contract.
+    -- quality_score_v4_100 is the shipped score; score_100_equivalent mirrors it.
+    -- raw_score_v4_100 is audit/debug only and is NEVER the shipped score.
+    -- The legacy /80 fields (score_quality_80, score_display_80) were dropped at v2.0.0.
+    quality_score_v4_100            REAL,
+    quality_score_status            TEXT,
+    quality_tier                    TEXT,
+    quality_score_suppressed_reason TEXT,
+    raw_score_v4_100                REAL,
+    v4_module                       TEXT,
+    v4_confidence                   TEXT,
+    score_model_version             TEXT,
+    quality_score_version           TEXT,
+    scoring_engine_version          TEXT,
+    classification_schema_version   TEXT,
+    v4_config_fingerprint           TEXT,
 
     score_ingredient_quality      REAL,
     score_ingredient_quality_max  REAL,
@@ -1658,7 +1673,7 @@ CREATE INDEX IF NOT EXISTS idx_core_upc ON products_core(upc_sku);
 CREATE INDEX IF NOT EXISTS idx_core_name ON products_core(product_name);
 CREATE INDEX IF NOT EXISTS idx_core_brand ON products_core(brand_name);
 CREATE INDEX IF NOT EXISTS idx_core_verdict ON products_core(verdict);
-CREATE INDEX IF NOT EXISTS idx_core_score ON products_core(score_quality_80);
+CREATE INDEX IF NOT EXISTS idx_core_score ON products_core(quality_score_v4_100);
 CREATE INDEX IF NOT EXISTS idx_core_status ON products_core(product_status);
 CREATE INDEX IF NOT EXISTS idx_core_type ON products_core(supplement_type);
 -- New indexes for v1.1.0 enhancements
@@ -1692,8 +1707,10 @@ def dedup_by_upc(
 
     Strategy:
       1. GROUP BY normalised UPC (spaces stripped).
-      2. Keep the **best** row per group: active > discontinued, then
-         highest score_quality_80, then newest dsld_id (lexicographic).
+      2. Keep the **best** row per group: active > discontinued, then a
+         scored product over a suppressed/not-scored one, then highest
+         quality_score_v4_100 (falling back to score_100_equivalent for the
+         v3 path), then newest dsld_id (lexicographic).
       3. DELETE the losers from products_core, remove them from the
          detail_index dict, and unlink the corresponding blob file from
          detail_blobs_dir if provided — so the downstream sync never sees
@@ -1734,7 +1751,8 @@ def dedup_by_upc(
         for did in dsld_ids:
             row = c.execute(
                 "SELECT dsld_id, product_status, "
-                "       COALESCE(score_quality_80, 0) "
+                "       COALESCE(quality_score_v4_100, score_100_equivalent, 0), "
+                "       quality_score_status "
                 "  FROM products_core WHERE dsld_id = ?",
                 (did,),
             ).fetchone()
@@ -1744,12 +1762,15 @@ def dedup_by_upc(
         if len(candidates) < 2:
             continue
 
-        # Sort: active first, highest score, newest dsld_id.
+        # Sort: active first, a scored product over a suppressed/not-scored one,
+        # highest /100 score, newest dsld_id. A BLOCKED/UNSAFE twin (null score,
+        # status != 'scored') always loses to a scored sibling.
         candidates.sort(
             key=lambda r: (
-                1 if r[1] == "active" else 0,  # active wins
-                r[2],                           # highest score
-                r[0],                           # newest dsld_id (lexicographic)
+                1 if r[1] == "active" else 0,        # active wins
+                1 if r[3] == "scored" else 0,        # scored beats suppressed/not_scored
+                r[2],                                 # highest /100 score
+                r[0],                                 # newest dsld_id (lexicographic)
             ),
             reverse=True,
         )
@@ -5641,7 +5662,6 @@ def build_core_row(
                 "safety_verdict": "CAUTION",
             })
 
-    score_80 = safe_float(effective_scored.get("score_80"))
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
     ss = safe_dict(effective_scored.get("section_scores"))
 
@@ -5751,15 +5771,27 @@ def build_core_row(
             else enriched.get("form_factor")
         ),
         st_str,
-        # Scores
-        score_80,
-        safe_str(effective_scored.get("display")),
+        # Scores (export schema v2.0.0 — canonical /100; legacy /80 columns dropped)
         safe_str(effective_scored.get("display_100")),
         score_100,
         safe_str(effective_scored.get("grade")),
         safe_str(effective_scored.get("verdict")),
         safe_str(effective_scored.get("safety_verdict")),
         safe_float(effective_scored.get("mapped_coverage")),
+        # V4 scoring contract — populated by the export adapter under --score-model v4;
+        # all NULL under --score-model v3 (the _v4_* keys are absent on a raw v3 blob).
+        safe_float(effective_scored.get("_v4_quality_score_100")),
+        safe_str(effective_scored.get("_v4_quality_status")) or None,
+        safe_str(effective_scored.get("_v4_quality_tier")) or None,
+        safe_str(effective_scored.get("_v4_suppressed_reason")) or None,
+        safe_float(effective_scored.get("_v4_raw_score_100")),
+        safe_str(effective_scored.get("_v4_module")) or None,
+        safe_str(effective_scored.get("_v4_confidence")) or None,
+        safe_str(effective_scored.get("_score_model_version")) or None,
+        safe_str(effective_scored.get("_v4_quality_version")) or None,
+        safe_str(effective_scored.get("_v4_scoring_engine_version")) or None,
+        safe_str(effective_scored.get("_v4_classification_schema_version")) or None,
+        safe_str(effective_scored.get("_v4_config_fingerprint")) or None,
         # Section scores
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("score")),
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("max")),
@@ -5849,7 +5881,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 92  # Must match the tuple above and SCHEMA_SQL (2026-05-12: +ingredients_text)
+CORE_COLUMN_COUNT = 102  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols)
 
 
 # ─── Reference Data Loader ───

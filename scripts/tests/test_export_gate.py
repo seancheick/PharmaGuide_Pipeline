@@ -164,8 +164,13 @@ COLUMNS = [
     "dsld_id", "product_name", "brand_name", "upc_sku", "image_url", "image_is_pdf", "thumbnail_key",
     "detail_blob_sha256", "interaction_summary_hint", "decision_highlights",
     "product_status", "discontinued_date", "form_factor", "supplement_type",
-    "score_quality_80", "score_display_80", "score_display_100_equivalent",
+    "score_display_100_equivalent",
     "score_100_equivalent", "grade", "verdict", "safety_verdict", "mapped_coverage",
+    # v2.0.0 V4 scoring contract (dropped legacy score_quality_80, score_display_80)
+    "quality_score_v4_100", "quality_score_status", "quality_tier",
+    "quality_score_suppressed_reason", "raw_score_v4_100", "v4_module", "v4_confidence",
+    "score_model_version", "quality_score_version", "scoring_engine_version",
+    "classification_schema_version", "v4_config_fingerprint",
     "score_ingredient_quality", "score_ingredient_quality_max",
     "score_safety_purity", "score_safety_purity_max",
     "score_evidence_research", "score_evidence_research_max",
@@ -678,7 +683,7 @@ class TestMedicalSafetyDefaults:
                          score_100_equivalent=None, grade=None)
         row = _row_dict(_base_enriched(), s)
         assert row["verdict"] == "NOT_SCORED"
-        assert row["score_quality_80"] is None
+        assert row["score_100_equivalent"] is None
         assert row["blocking_reason"] is None
 
 
@@ -767,12 +772,13 @@ class TestGoldenProducts:
         e = _base_enriched(dsld_id="GOLDEN_UNMAPPED")
         e["ingredient_quality_data"]["ingredients"] = []
         e["activeIngredients"] = []
-        s = _base_scored(verdict="NOT_SCORED", score_80=None, mapped_coverage=0.0)
+        s = _base_scored(verdict="NOT_SCORED", score_80=None, score_100_equivalent=None,
+                         mapped_coverage=0.0)
         # No IQD ingredients means contract validator won't flag (empty list is valid)
         issues = validate_export_contract(e, s)
         assert not any("ingredient_quality_data" in i for i in issues)
         row = _row_dict(e, s)
-        assert row["score_quality_80"] is None
+        assert row["score_100_equivalent"] is None
         assert row["mapped_coverage"] == 0.0
 
     def test_golden_multi_safety_product(self):

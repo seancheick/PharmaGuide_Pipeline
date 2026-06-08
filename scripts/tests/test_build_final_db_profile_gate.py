@@ -18,12 +18,12 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from build_final_db import EXPORT_SCHEMA_VERSION, build_detail_blob
 
 
-def test_export_schema_version_bumped_to_v6_compatible():
-    """Schema version must reflect the profile_gate addition."""
-    # v1.6.0 indicates profile_gate is now in detail blobs
-    assert EXPORT_SCHEMA_VERSION == "1.6.0", (
-        f"EXPORT_SCHEMA_VERSION={EXPORT_SCHEMA_VERSION!r}; expected '1.6.0' for v6.0 "
-        f"profile_gate passthrough"
+def test_export_schema_version_is_v4_cutover():
+    """Schema version must reflect the v4 cutover (v2.0.0)."""
+    # v2.0.0 indicates v4 is the default scoring model: legacy /80 columns dropped,
+    # v4 /100 six-pillar contract + provenance columns added.
+    assert EXPORT_SCHEMA_VERSION == "2.0.0", (
+        f"EXPORT_SCHEMA_VERSION={EXPORT_SCHEMA_VERSION!r}; expected '2.0.0' for the v4 cutover"
     )
 
 

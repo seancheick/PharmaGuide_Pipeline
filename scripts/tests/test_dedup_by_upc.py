@@ -17,15 +17,18 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from build_final_db import dedup_by_upc
 
-# Minimal schema — only the columns dedup_by_upc reads/writes.
+# Minimal schema — only the columns dedup_by_upc reads/writes (v2.0.0: ranks by
+# quality_score_v4_100, falling back to score_100_equivalent, scored-status tiebreak).
 _MINI_SCHEMA = """
 CREATE TABLE products_core (
-    dsld_id          TEXT PRIMARY KEY,
-    product_name     TEXT NOT NULL,
-    brand_name       TEXT,
-    upc_sku          TEXT,
-    product_status   TEXT,
-    score_quality_80 REAL
+    dsld_id              TEXT PRIMARY KEY,
+    product_name         TEXT NOT NULL,
+    brand_name           TEXT,
+    upc_sku              TEXT,
+    product_status       TEXT,
+    quality_score_v4_100 REAL,
+    score_100_equivalent REAL,
+    quality_score_status TEXT
 );
 """
 
@@ -34,19 +37,21 @@ def _make_db(rows):
     """Create an in-memory DB with the given rows.
 
     Each row is (dsld_id, product_name, brand_name, upc_sku,
-                 product_status, score_quality_80).
+                 product_status, score). `score` populates quality_score_v4_100
+    (mirrored to score_100_equivalent) with quality_score_status='scored'.
     Returns (connection, detail_index_dict).
     """
     conn = sqlite3.connect(":memory:")
     conn.executescript(_MINI_SCHEMA)
     c = conn.cursor()
     for row in rows:
+        score = row[5]
         c.execute(
             "INSERT INTO products_core "
-            "(dsld_id, product_name, brand_name, upc_sku, "
-            " product_status, score_quality_80) "
-            "VALUES (?,?,?,?,?,?)",
-            row,
+            "(dsld_id, product_name, brand_name, upc_sku, product_status, "
+            " quality_score_v4_100, score_100_equivalent, quality_score_status) "
+            "VALUES (?,?,?,?,?,?,?,?)",
+            (row[0], row[1], row[2], row[3], row[4], score, score, "scored"),
         )
     conn.commit()
     # Build a detail_index keyed by dsld_id (mirrors real build flow)
@@ -205,7 +210,7 @@ class TestDedupByUpc:
         assert _remaining_ids(conn) == ["A"]
 
     def test_null_score_treated_as_zero(self):
-        """Products with NULL score_quality_80 don't crash the sort."""
+        """Products with NULL quality_score_v4_100 don't crash the sort."""
         conn, idx = _make_db([
             ("100", "A", "X", "111", "active", None),
             ("200", "A", "X", "111", "active", 40.0),
