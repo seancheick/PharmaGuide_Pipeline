@@ -344,6 +344,54 @@ def _is_stimulant_context(product: Dict[str, Any]) -> bool:
     return False
 
 
+# Opaque-blend stimulant detection (P0 fix). A proprietary blend with
+# disclosure_level in {none, partial} HIDES its per-ingredient doses, so a
+# stimulant inside it is undisclosed — the user cannot judge safe use.
+_STRONG_STIM_BLEND_NAMES = (
+    "stimulant", "thermogenic", "fat burner", "fat-burner",
+    "pre workout", "pre-workout", "preworkout",
+)
+_ENERGY_BLEND_NAMES = ("energy", "metabolism", "metabolic", "weight loss", "weight-loss")
+_HIDDEN_STIMULANT_TOKENS = (
+    "guarana", "yerba mate", "synephrine", "green tea", "green coffee",
+    "kola nut", "kola seed", "theacrine", "dmaa", "bitter orange", "ephedra",
+)
+
+
+def _blend_children_text(blend: Dict[str, Any]) -> str:
+    parts = []
+    for child in _safe_list(blend.get("child_ingredients")):
+        if isinstance(child, dict):
+            parts.append(_norm(child.get("name") or child.get("ingredient")
+                               or child.get("standard_name") or child.get("raw_source_text")))
+        else:
+            parts.append(_norm(child))
+    return " ".join(parts)
+
+
+def _has_undisclosed_stimulant_blend(product: Dict[str, Any]) -> bool:
+    """True when an OPAQUE proprietary blend (disclosure none/partial) hides a
+    stimulant whose dose the consumer cannot see. Precise (no over-warning on
+    benign B-vitamin 'energy' blends): fires only when the blend is named for a
+    stimulant, OR caffeine is among its hidden children, OR an energy/metabolism
+    blend hides another stimulant (guarana/green tea/synephrine/...)."""
+    for blend in _safe_list(product.get("proprietary_blends")):
+        if not isinstance(blend, dict):
+            continue
+        if _norm(blend.get("disclosure_level") or blend.get("disclosure")) not in ("none", "partial"):
+            continue
+        name = _norm(blend.get("name") or blend.get("raw_name"))
+        kids = _blend_children_text(blend)
+        if any(token in name for token in _STRONG_STIM_BLEND_NAMES):
+            return True
+        if "caffeine" in kids:
+            return True
+        if any(token in name for token in _ENERGY_BLEND_NAMES) and \
+                any(token in kids for token in _HIDDEN_STIMULANT_TOKENS):
+            return True
+    return False
+
+
 def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
     """Surface caffeine safety only when it is a consumer-action issue.
 
@@ -353,6 +401,14 @@ def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> No
     """
     caffeine_rows = [row for row in _iter_active_rows(product) if _is_caffeine_row(row)]
     if not caffeine_rows:
+        # No SURFACED caffeine row — but a stimulant may be HIDDEN inside an
+        # opaque proprietary blend (undisclosed dose). That is exactly the
+        # consumer-action concern the stimulant policy exists to catch. P0 fix:
+        # close the false-negative where hidden-in-blend caffeine read SAFE.
+        if _has_undisclosed_stimulant_blend(product):
+            result.verdict = _max_verdict(result.verdict, "CAUTION")
+            result.needs_review = True
+            _append_signal(result, "STIMULANT_UNDISCLOSED_BLEND")
         return
 
     doses = [_dose_mg(row) for row in caffeine_rows]
