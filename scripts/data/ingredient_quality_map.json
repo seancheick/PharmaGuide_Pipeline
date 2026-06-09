@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1416,
-      "total_form_aliases": 12222,
+      "total_form_aliases": 12213,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -10202,25 +10202,15 @@
     "rxcui": "318",
     "forms": {
       "atp disodium salt": {
-        "bio_score": 11,
-        "natural": true,
-        "score": 14,
-        "absorption": "moderate (~40-60%)",
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "poor — oral ATP is dephosphorylated in the gut, not absorbed intact (Arts 2012 PMID:22429945); benefits attributed to indirect/erythrocyte mechanisms",
         "notes": "Oral ATP as a disodium salt — branded as Peak ATP. While intact ATP is mostly degraded in the gut, the breakdown products (adenosine, AMP) still activate purinergic receptors that dilate blood vessels and increase blood flow. A 400 mg/day dose showed improved strength, power output, and lean body mass in resistance-trained athletes (Wilson 2013, Rathmacher 2012). Score reflects moderate but real ergogenic benefit despite limited intact-molecule absorption.",
         "aliases": [
-          "atp",
-          "adenosine triphosphate",
-          "adenosine 5'-triphosphate",
           "atp disodium",
-          "cellular energy",
-          "energy currency",
-          "atp supplement",
-          "adenosine triphosphate supplement",
-          "adenosine 5'-triphosphate supplement",
           "atp disodium supplement",
           "atp disodium salt supplement",
-          "cellular energy supplement",
-          "energy currency supplement",
           "Peak ATP",
           "Peak ATP Adenosine 5'-Triphosphate Disodium",
           "adenosine 5' triphosphate disodium",
@@ -10236,15 +10226,21 @@
         }
       },
       "atp (adenosine triphosphate) (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 6,
         "natural": false,
-        "score": 14,
+        "score": 6,
         "absorption": "unknown",
         "notes": "Generic ATP listing without a specified salt form. Cannot determine bioavailability or purity. Conservative score applied — look for Peak ATP (disodium salt) for the clinically studied version. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
           "atp (adenosine triphosphate)",
           "atp energy supplement",
-          "cellular atp"
+          "cellular atp",
+          "atp",
+          "adenosine triphosphate",
+          "adenosine 5'-triphosphate",
+          "atp supplement",
+          "adenosine triphosphate supplement",
+          "adenosine 5'-triphosphate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10475,7 +10471,6 @@
         "notes": "Acid- or alkali-precipitated casein bound to calcium for solubility. Loses native micellar structure and slow-release kinetics — performs more like an intermediate-rate protein. Common in mass-market protein blends.",
         "aliases": [
           "calcium caseinate",
-          "milk caseinate",
           "calcium-caseinate"
         ],
         "dosage_importance": 1.0,
@@ -10495,7 +10490,8 @@
         "aliases": [
           "casein",
           "milk casein",
-          "casein protein"
+          "casein protein",
+          "milk caseinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10510,7 +10506,6 @@
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
-      "parent_id": "casein_hydrolysate",
       "confidence": "high"
     },
     "category_enum": "proteins",
@@ -10549,7 +10544,7 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "moderate (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
+        "absorption": "low (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
         "notes": "Concentrate / juice extract from Prunus avium (sweet black cherry) — botanically distinct from tart cherry / Montmorency (Prunus cerasus). Marketed primarily for gout / uric acid management based on anthocyanin (cyanidin-3-glucoside, cyanidin-3-rutinoside) inhibition of xanthine oxidase. Pilot RCT evidence for serum urate reduction (Zhang 2012, n=633 cohort study; small RCTs at 8 oz juice/day equivalent show acute urate reduction). Anti-inflammatory and antioxidant via anthocyanin and chlorogenic acid content. Anthocyanin oral PK is poor (~1-2% appears intact in plasma) but metabolites have measurable activity. Score reflects moderate evidence base with characterised mechanism; sits below tart cherry forms because most published RCTs use tart-cherry specifically.",
         "aliases": [
           "black cherry",
@@ -10558,11 +10553,11 @@
           "black cherry fruit extract",
           "black cherry juice concentrate",
           "black cherry juice extract",
-          "sweet cherry extract",
-          "sweet cherry concentrate",
-          "prunus avium",
           "prunus avium extract",
-          "prunus avium fruit extract"
+          "prunus avium fruit extract",
+          "prunus avium",
+          "sweet cherry extract",
+          "sweet cherry concentrate"
         ],
         "dosage_importance": 0.85,
         "absorption_structured": {
@@ -10619,10 +10614,7 @@
         "absorption": "good (lecithin-derived; hydrolysed and re-synthesised in enterocytes)",
         "notes": "Most abundant cell-membrane phospholipid and the major lecithin component (~20-25% of soy lecithin). Major dietary choline source — supports acetylcholine synthesis (cognitive), VLDL assembly (liver/lipid metabolism), and lung surfactant. Soy-derived form is the most extensively studied; oral PC is hydrolysed to lyso-PC and free fatty acids in the gut, then re-esterified to PC in enterocytes — meaning intact PC is delivered to the bloodstream. Strong clinical evidence for liver health (NAFLD support, alcohol-related liver injury) at 1-3 g/day. Polyenylphosphatidylcholine (PPC) is a clinical-grade enriched form used in NAFLD trials.",
         "aliases": [
-          "phosphatidylcholine",
           "phosphatidyl-choline",
-          "phosphatidyl choline complex",
-          "phosphatidylcholine complex",
           "soy phosphatidylcholine",
           "soybean phosphatidylcholine",
           "soy-derived phosphatidylcholine",
@@ -10662,13 +10654,16 @@
       },
       "phosphatidylcholine (unspecified)": {
         "bio_score": 11,
-        "natural": true,
-        "score": 14,
+        "natural": false,
+        "score": 11,
         "absorption": "good (estimated; default for unsourced PC)",
         "notes": "Unspecified phosphatidylcholine (label does not declare soy / sunflower / synthetic source). Slightly lower default score because source-specific bioavailability and allergen profile cannot be confirmed.",
         "aliases": [
           "phosphatidyl choline (unspecified)",
-          "pc (unspecified)"
+          "pc (unspecified)",
+          "phosphatidylcholine",
+          "phosphatidylcholine complex",
+          "phosphatidyl choline complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10954,8 +10949,6 @@
           "muramidase",
           "lysozyme chloride",
           "egg white lysozyme",
-          "antimicrobial enzyme",
-          "immune enzyme",
           "lysozyme supplement",
           "lysozyme enzyme supplement",
           "muramidase supplement",
@@ -11142,12 +11135,7 @@
           "resvida",
           "resvinol-25",
           "resveratrol 50% extract",
-          "hu zhang",
-          "hu zhang extract",
-          "hu zhang root extract",
-          "hu zhang hydroethanolic extract",
           "Veri-te resveratrol",
-          "Reynoutria japonica root extract",
           "BioVin",
           "biovin advanced red wine extract",
           "biovin advanced"
@@ -11172,7 +11160,12 @@
           "Total Resveratrol",
           "resveratrol supplement",
           "grape resveratrol",
-          "MicroActive Resveratrol"
+          "MicroActive Resveratrol",
+          "hu zhang",
+          "hu zhang extract",
+          "hu zhang root extract",
+          "hu zhang hydroethanolic extract",
+          "Reynoutria japonica root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11283,9 +11276,9 @@
     "rxcui": "236344",
     "forms": {
       "liposomal saw palmetto": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
+        "score": 8,
         "absorption": "liposomal saw palmetto; mechanistic claim; lipid baseline already good (oral lipid)",
         "technology": "Phospholipid encapsulation technology",
         "notes": "Saw palmetto's active fatty acids (lauric, oleic, myristic) wrapped in phospholipid liposomes for enhanced gut absorption — claimed 2–3x greater bioavailability than conventional extracts. Liposomal delivery protects the lipophilic compounds from bile salt disruption. Limited head-to-head trials vs CO2 extract specifically, but the delivery technology is well-established for fat-soluble botanicals. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
@@ -11415,17 +11408,14 @@
           "liposterolic serenoa",
           "saw palmetto berry extract",
           "fatty acid-rich saw palmetto",
-          "prostate health extract",
           "USP-grade saw palmetto",
           "hexane-extracted saw palmetto",
           "ethanol-extracted saw palmetto",
           "concentrated saw palmetto",
           "active compound saw palmetto",
           "sabal serrulata extract",
-          "herbal prostate formula",
           "BP/EP compliant extract",
           "phytosterol-rich saw palmetto",
-          "lauric acid saw palmetto",
           "myristic acid saw palmetto",
           "oleic acid saw palmetto",
           "palmitic acid saw palmetto",
@@ -11597,16 +11587,10 @@
           "urtica dioica root",
           "urtica root",
           "nettle root",
-          "urtica dioica extract",
-          "stinging and dwarf nettle extracts",
-          "stinging nettles extract",
           "urtica dioca",
           "nettle urtica dioica root aqueous extract",
-          "standardized nettle extract",
           "standardized nettle root extract",
           "stinging netter aqueous extract",
-          "nettle extract 10:1",
-          "nettles",
           "stinging nettle urtica dioica root extract 10:1",
           "stinging nettle (urtica dioica) root 10:1 extract",
           "Stinging Nettle (Urtica dioica) Root Extract 10:1",
@@ -11643,9 +11627,9 @@
         }
       },
       "stinging nettle (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "good (stinging nettle phenolic + lectin class)",
         "notes": "Generic nettle listing without specifying root or leaf. This matters because the root and leaf have different active compounds and clinical uses — root for prostate/BPH, leaf for allergies and minerals. Conservative score applied since the specific plant part cannot be determined. B33 audit 2026-04-25: stinging nettle class.",
         "aliases": [
@@ -11655,7 +11639,13 @@
           "urtica",
           "stinging nettle freeze-dried",
           "stinging nettle, freeze-dried",
-          "Stinging & Dwarf Nettle Extracts"
+          "Stinging & Dwarf Nettle Extracts",
+          "urtica dioica extract",
+          "stinging and dwarf nettle extracts",
+          "stinging nettles extract",
+          "standardized nettle extract",
+          "nettle extract 10:1",
+          "nettles"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11735,9 +11725,9 @@
         }
       },
       "pygeum (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 8,
         "natural": false,
-        "score": 14,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Generic pygeum listing without specifying standardization or extraction method. Look for products standardized to 14% triterpenes and 0.5% n-docosanol for clinical-grade potency. Conservative score applied. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -11801,13 +11791,11 @@
           "vanadium sulfate",
           "VOSO4",
           "VOSO₄",
-          "vanadyl",
           "vanadyl sulfate hydrate",
           "vanadyl sulfate supplement",
           "vanadium sulfate supplement",
           "VOSO4 supplement",
-          "VOSO₄ supplement",
-          "vanadyl supplement"
+          "VOSO₄ supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -11821,7 +11809,7 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "high (~10–15%)",
+        "absorption": "low (vanadium class baseline; BMOV human PK is research-grade/thin, not a proven absorption advantage over vanadyl sulfate)",
         "notes": "An organovanadium chelate designed for better oral absorption — 3–5x more bioavailable than vanadyl sulfate and with a wider safety margin. BMOV showed stronger insulin-mimetic activity in diabetic animal models (Thompson 2009). Still primarily research-grade and rarely found in consumer supplements. Higher score reflects the improved pharmacokinetics over inorganic vanadium. Dr Pham C12 sign-off: bio_score 12 → 7, struct.value 0.125 → 0.02. Speciation difference, NOT absorption miracle.",
         "aliases": [
           "bis maltolato oxovanadium",
@@ -11898,7 +11886,9 @@
           "vanadium glycinate",
           "Vanadium Nicotinate Glycinate Chelate",
           "Vanadium Krebs Cycle Chelates",
-          "Bis-Glycinato Oxo Vanadium"
+          "Bis-Glycinato Oxo Vanadium",
+          "vanadyl",
+          "vanadyl supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
