@@ -1407,7 +1407,7 @@ def test_key_ingredient_tags_emit_vinpocetine_identity_when_safety_active_lacks_
 
     categories = classify_product_categories(enriched, make_scored())
 
-    assert categories["key_ingredient_tags"] == ["nootropic_vinpocetine"]
+    assert categories["key_ingredient_tags"] == ["vinpocetine"]
 
 
 def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():

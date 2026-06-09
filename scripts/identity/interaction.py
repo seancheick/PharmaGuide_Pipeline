@@ -12,7 +12,7 @@ INTERACTION_CANONICAL_ALIASES: dict[str, str] = {
     "banned_red_yeast_rice": "red_yeast_rice",
     "BANNED_CBD_US": "cbd",
     "banned_cbd_us": "cbd",
-    "NOOTROPIC_VINPOCETINE": "nootropic_vinpocetine",
+    "NOOTROPIC_VINPOCETINE": "vinpocetine",
 }
 
 INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
@@ -24,7 +24,7 @@ INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
         "red_yeast_rice",
     ),
     (re.compile(r"\b(cbd|cannabidiol)\b", re.I), "cbd"),
-    (re.compile(r"\bvinpocetine\b", re.I), "nootropic_vinpocetine"),
+    (re.compile(r"\bvinpocetine\b", re.I), "vinpocetine"),
 )
 
 

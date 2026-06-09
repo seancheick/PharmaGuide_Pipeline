@@ -356,7 +356,7 @@ def test_builder_normalizes_safety_canonicals_to_catalog_interaction_identities(
 
     assert rows == {
         "DDI_ANTICOAG_CBD": "cbd",
-        "DDI_ANTICOAG_VINPOCETINE": "nootropic_vinpocetine",
+        "DDI_ANTICOAG_VINPOCETINE": "vinpocetine",
         "DDI_STATINS_RYR": "red_yeast_rice",
     }
 
