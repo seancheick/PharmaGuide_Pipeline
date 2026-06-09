@@ -41,7 +41,7 @@
       "total_parents": 627,
       "total_forms": 1416,
       "total_form_aliases": 12222,
-      "parents_with_parent_aliases": 182,
+      "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -2107,9 +2107,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0073115"
-    ]
+    "aliases": []
   },
   "vitamin_b1_thiamine": {
     "standard_name": "Vitamin B1 (Thiamine)",
@@ -2490,10 +2488,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0039848",
-      "C0770309"
-    ]
+    "aliases": []
   },
   "vitamin_b2_riboflavin": {
     "standard_name": "Vitamin B2 (Riboflavin)",
@@ -3081,9 +3076,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0063584"
-    ]
+    "aliases": []
   },
   "vitamin_b5_pantothenic": {
     "standard_name": "Vitamin B5 (Pantothenic Acid)",
@@ -3299,8 +3292,7 @@
     },
     "aliases": [
       "panthothenic acid",
-      "pantothenic acid",
-      "C0070034"
+      "pantothenic acid"
     ],
     "match_rules": {
       "priority": 0,
@@ -3632,9 +3624,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0087162"
-    ]
+    "aliases": []
   },
   "vitamin_b7_biotin": {
     "standard_name": "Vitamin B7 (Biotin)",
@@ -4226,8 +4216,7 @@
       "folate and folic acid",
       "folic acid",
       "Folate",
-      "folate",
-      "C0178638"
+      "folate"
     ],
     "match_rules": {
       "priority": 0,
@@ -4466,8 +4455,7 @@
       "adenosylcobalamin",
       "hydroxocobalamin",
       "methyl b12",
-      "methyl b-12",
-      "C0020316"
+      "methyl b-12"
     ],
     "match_rules": {
       "priority": 0,
@@ -4961,11 +4949,7 @@
       "PureWay-C",
       "PureWay C",
       "Vitamin C, Natural",
-      "Natural Vitamin C",
-      "C0887557",
-      "C0049690",
-      "C0011177",
-      "C0178487"
+      "Natural Vitamin C"
     ],
     "external_ids": {
       "unii": "PQ6CK8PD0R"
@@ -5928,9 +5912,7 @@
       "unii": null,
       "unii_note": "Cleared 2026-05-27: KP2MW85SSQ resolves to TOCOTRIENOLS, which is not an exact UNII for Vitamin E. Vitamin E spans tocopherols and tocotrienols; tocotrienols are a narrower subclass. Leave UNII null until GSRS exposes an exact approved record."
     },
-    "aliases": [
-      "C0949647"
-    ],
+    "aliases": [],
     "rxcui": "11256"
   },
   "vitamin_k": {
@@ -6859,17 +6841,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C3540037",
-      "C0006711",
-      "C0006681",
-      "C0006686",
-      "C0108101",
-      "C0108121",
-      "C0717537",
-      "C0556252",
-      "C0949222"
-    ]
+    "aliases": []
   },
   "phosphorus": {
     "standard_name": "Phosphorus",
@@ -6954,8 +6926,7 @@
     "aliases": [
       "orgen-p",
       "plant phosphorus",
-      "organic phosphorus",
-      "C0080014"
+      "organic phosphorus"
     ],
     "match_rules": {
       "priority": 0,
@@ -7623,16 +7594,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Magnesium Chelate",
-      "C2346927",
-      "C0024472",
-      "C0024477",
-      "C0543448",
-      "C0126774",
-      "C0065527",
-      "C0982266",
-      "C1958566",
-      "C3855809"
+      "Magnesium Chelate"
     ],
     "external_ids": {
       "unii": "I38ZP9992A"
@@ -8140,13 +8102,7 @@
         }
       }
     },
-    "aliases": [
-      "C0376520",
-      "C3848561",
-      "C0060282",
-      "C0060276",
-      "C2346592"
-    ],
+    "aliases": [],
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -8744,11 +8700,7 @@
       }
     },
     "aliases": [
-      "zinc chelate",
-      "C0078794",
-      "C0149368",
-      "C0149381",
-      "C2346521"
+      "zinc chelate"
     ],
     "match_rules": {
       "priority": 0,
@@ -9384,13 +9336,7 @@
       "last_reviewed_at": "2026-02-26",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0142923",
-      "C0036584",
-      "C0074765",
-      "C0074289",
-      "C0074299"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "H6241UJ22B"
     },
@@ -9744,9 +9690,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0019392"
-    ]
+    "aliases": []
   },
   "creatine_monohydrate": {
     "standard_name": "Creatine Monohydrate",
@@ -10036,9 +9980,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0010286"
-    ]
+    "aliases": []
   },
   "hmb": {
     "standard_name": "β-Hydroxy β-Methylbutyrate",
@@ -10047,8 +9989,7 @@
     "aliases": [
       "HMB",
       "beta-hydroxy-beta-methylbutyrate",
-      "hydroxy-beta-methylbutyrate",
-      "C3640807"
+      "hydroxy-beta-methylbutyrate"
     ],
     "forms": {
       "hmb calcium salt (hmb-ca)": {
@@ -11176,8 +11117,7 @@
     },
     "aliases": [
       "DIM",
-      "diindolylmethane",
-      "C0163151"
+      "diindolylmethane"
     ]
   },
   "resveratrol": {
@@ -11756,9 +11696,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0600609"
-    ]
+    "aliases": []
   },
   "pygeum": {
     "standard_name": "Pygeum",
@@ -12399,11 +12337,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2347872",
-      "C0009975",
-      "C1177210"
-    ]
+    "aliases": []
   },
   "chromium": {
     "standard_name": "Chromium",
@@ -12682,11 +12616,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0163657",
-      "C0055617",
-      "C2700605"
-    ]
+    "aliases": []
   },
   "iodine": {
     "standard_name": "Iodine",
@@ -12844,9 +12774,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0021966"
-    ]
+    "aliases": []
   },
   "manganese": {
     "standard_name": "Manganese",
@@ -13219,10 +13147,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2347051",
-      "C2828272"
-    ]
+    "aliases": []
   },
   "molybdenum": {
     "standard_name": "Molybdenum",
@@ -13463,9 +13388,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0074747"
-    ]
+    "aliases": []
   },
   "boron": {
     "standard_name": "Boron",
@@ -13929,9 +13852,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "potassium sulfate",
-      "C0071778",
-      "C0032823"
+      "potassium sulfate"
     ],
     "external_ids": {
       "unii": "RWP5GA015D"
@@ -14358,8 +14279,7 @@
       "Coenzyme Q10",
       "coenzyme q-10",
       "co-enzyme q-10",
-      "coq-10",
-      "C0041536"
+      "coq-10"
     ],
     "match_rules": {
       "priority": 0,
@@ -14805,8 +14725,7 @@
     "aliases": [
       "curcumin",
       "Curcumin",
-      "full spectrum curcumin",
-      "C0010467"
+      "full spectrum curcumin"
     ],
     "external_ids": {
       "unii": "IT942ZTH98"
@@ -16094,9 +16013,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0008409"
-    ]
+    "aliases": []
   },
   "phosphatidylserine": {
     "standard_name": "Phosphatidylserine",
@@ -16811,10 +16728,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0007258",
-      "C1337234"
-    ]
+    "aliases": []
   },
   "tmg_betaine": {
     "standard_name": "TMG (Trimethylglycine)",
@@ -17119,9 +17033,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0051080"
-    ]
+    "aliases": []
   },
   "l_arginine": {
     "standard_name": "L-Arginine",
@@ -17791,9 +17703,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0067794"
-    ]
+    "aliases": []
   },
   "l_cysteine": {
     "standard_name": "L-Cysteine",
@@ -19301,10 +19211,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0163159",
-      "C1707048"
-    ]
+    "aliases": []
   },
   "spermidine": {
     "standard_name": "Spermidine",
@@ -20627,8 +20534,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Withania somnifera",
-      "C2698186"
+      "Withania somnifera"
     ],
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
@@ -20968,10 +20874,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C3531686",
-      "C1095795"
-    ]
+    "aliases": []
   },
   "milk_thistle": {
     "standard_name": "Milk Thistle",
@@ -21221,8 +21124,6 @@
       "metabolites": []
     },
     "aliases": [
-      "C1873062",
-      "C0037135",
       "silymarin"
     ]
   },
@@ -21520,9 +21421,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0017237"
-    ]
+    "aliases": []
   },
   "melatonin": {
     "standard_name": "Melatonin",
@@ -21950,9 +21849,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2697504"
-    ]
+    "aliases": []
   },
   "chondroitin": {
     "standard_name": "Chondroitin",
@@ -22244,9 +22141,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C1881340"
-    ]
+    "aliases": []
   },
   "grape_seed_extract": {
     "standard_name": "Grape Seed Extract",
@@ -22261,8 +22156,7 @@
       "vitis vinifera grape seed",
       "Grape (Vitis vinifera) extract",
       "grape extract",
-      "grape vitis vinifera extract",
-      "C0967936"
+      "grape vitis vinifera extract"
     ],
     "forms": {
       "grape seed phytosome": {
@@ -22632,9 +22526,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C4283948"
-    ]
+    "aliases": []
   },
   "ginseng": {
     "standard_name": "Ginseng",
@@ -23031,9 +22923,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1095869"
-    ]
+    "aliases": []
   },
   "turmeric": {
     "standard_name": "Turmeric",
@@ -23265,9 +23155,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0950101"
-    ]
+    "aliases": []
   },
   "garlic": {
     "standard_name": "Garlic",
@@ -24574,9 +24462,7 @@
         }
       ]
     },
-    "aliases": [
-      "C1880232"
-    ]
+    "aliases": []
   },
   "d_mannose": {
     "standard_name": "D-Mannose",
@@ -28218,9 +28104,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0056650"
-    ]
+    "aliases": []
   },
   "anthraquinones": {
     "standard_name": "Anthraquinones",
@@ -30012,10 +29896,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0032615",
-      "C0015687"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "ferulic_acid": {
@@ -30168,9 +30049,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0012173"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "flavonoids": {
@@ -31365,9 +31244,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C4076257"
-    ]
+    "aliases": []
   },
   "isothiocyanates": {
     "standard_name": "Isothiocyanates",
@@ -31421,9 +31298,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0124209"
-    ]
+    "aliases": []
   },
   "kavalactones": {
     "standard_name": "Kavalactones",
@@ -32592,11 +32467,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0106127",
-      "C0038329",
-      "C0054560"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": null,
       "unii_note": "Cleared 2026-05-27: S347WMO6M4 resolves to beta-sitosterol, which is not an exact UNII for Phytosterols. Phytosterols is a plant-sterol class; beta-sitosterol is one narrower member. Leave UNII null until GSRS exposes an exact approved record."
@@ -32713,9 +32584,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1709545"
-    ]
+    "aliases": []
   },
   "polyphenols": {
     "standard_name": "Polyphenols",
@@ -33389,9 +33258,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1081320"
-    ]
+    "aliases": []
   },
   "sesamin": {
     "standard_name": "Sesamin",
@@ -33741,9 +33608,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0997193"
-    ]
+    "aliases": []
   },
   "tannins": {
     "standard_name": "Tannins",
@@ -33791,9 +33656,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0039294"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "theobromine": {
@@ -33971,9 +33834,7 @@
       "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
-    "aliases": [
-      "C0007271"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "triterpene_glycosides": {
@@ -34975,9 +34836,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0939803"
-    ]
+    "aliases": []
   },
   "sarsaparilla": {
     "standard_name": "Sarsaparilla",
@@ -35814,9 +35673,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0873019"
-    ]
+    "aliases": []
   },
   "alpha_amylase": {
     "standard_name": "Alpha-Amylase",
@@ -35927,8 +35784,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "dicalcium phosphate",
-      "C1451733"
+      "dicalcium phosphate"
     ],
     "external_ids": {},
     "unii_note": "No parent-level exact UNII: GSRS UNII L11K75P92J is dicalcium phosphate and is owned by calcium.forms[dicalcium phosphate] for active mineral-source context. Inactive filler context is represented by other_ingredients PII_DICALCIUM_PHOSPHATE.",
@@ -39206,9 +39062,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C3640820"
-    ]
+    "aliases": []
   },
   "lactobacillus_paracasei": {
     "standard_name": "Lactobacillus Paracasei",
@@ -39492,9 +39346,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0697198"
-    ]
+    "aliases": []
   },
   "grass_fed_butter_powder": {
     "standard_name": "Grass-Fed Butter Powder",
@@ -40687,9 +40539,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0873038"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "X7B7P649WQ"
     },
@@ -41274,9 +41124,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0060207"
-    ]
+    "aliases": []
   },
   "black_cohosh": {
     "standard_name": "Black Cohosh",
@@ -41627,9 +41475,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0993600"
-    ]
+    "aliases": []
   },
   "chasteberry": {
     "standard_name": "Chasteberry (Vitex)",
@@ -41739,9 +41585,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0872889"
-    ]
+    "aliases": []
   },
   "citrus_bergamot": {
     "standard_name": "Citrus Bergamot",
@@ -41949,8 +41793,7 @@
       "algal dha",
       "dha from algae",
       "dha from fish oil",
-      "dha omega-3",
-      "C0556150"
+      "dha omega-3"
     ],
     "forms": {
       "algal triglyceride": {
@@ -44980,9 +44823,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0070325"
-    ]
+    "aliases": []
   },
   "cinnamon": {
     "standard_name": "Cinnamon",
@@ -45069,9 +44910,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0301249"
-    ]
+    "aliases": []
   },
   "blueberry": {
     "standard_name": "Blueberry",
@@ -45146,9 +44985,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C3273825"
-    ]
+    "aliases": []
   },
   "black_currant": {
     "standard_name": "Black Currant",
@@ -48034,9 +47871,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2698852"
-    ]
+    "aliases": []
   },
   "mustard_seed": {
     "standard_name": "Mustard Seed",
@@ -48846,9 +48681,7 @@
     },
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
-    "aliases": [
-      "C1483721"
-    ]
+    "aliases": []
   },
   "chinese_skullcap": {
     "standard_name": "Chinese Skullcap",
@@ -49254,9 +49087,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0053396"
-    ]
+    "aliases": []
   },
   "guarana": {
     "standard_name": "Guarana",
@@ -49791,9 +49622,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0085217"
-    ]
+    "aliases": []
   },
   "alpha_ketoglutarate": {
     "standard_name": "Alpha-Ketoglutarate",
@@ -50556,9 +50385,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0304095"
-    ]
+    "aliases": []
   },
   "guggul": {
     "standard_name": "Guggul (Commiphora mukul)",
@@ -53436,9 +53263,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0718405"
-    ]
+    "aliases": []
   },
   "wild_yam": {
     "category": "herbs",
@@ -53571,9 +53396,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C4520706"
-    ]
+    "aliases": []
   },
   "juniper": {
     "category": "herbs",
@@ -55534,8 +55357,7 @@
     },
     "cui_note": "",
     "aliases": [
-      "coffee fruit preparation",
-      "C2937579"
+      "coffee fruit preparation"
     ],
     "external_ids": {
       "unii": "HOX6BEK27Q"
@@ -56121,9 +55943,7 @@
     },
     "cui_note": "",
     "external_ids": {},
-    "aliases": [
-      "C1366263"
-    ]
+    "aliases": []
   },
   "mung_bean": {
     "standard_name": "Mung Bean Extract",
@@ -56793,8 +56613,7 @@
       "senna extract",
       "alexandrian senna extract",
       "senna leaf extract",
-      "cassia angustifolia extract",
-      "C3489575"
+      "cassia angustifolia extract"
     ]
   },
   "tart_cherry": {
@@ -57292,9 +57111,7 @@
       "research_status": "unverified"
     },
     "external_ids": {},
-    "aliases": [
-      "C0051821"
-    ]
+    "aliases": []
   },
   "sage": {
     "standard_name": "Sage",
@@ -57526,9 +57343,7 @@
     "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Endogenous trace amine neuromodulator; dopamine/norepinephrine efflux via TAAR1",
-    "aliases": [
-      "C0031399"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "yohimbe": {
@@ -57584,9 +57399,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0724441"
-    ]
+    "aliases": []
   },
   "garcinia_cambogia": {
     "standard_name": "Garcinia Cambogia (Hydroxycitric Acid)",
@@ -58816,9 +58629,7 @@
       "confidence": "high"
     },
     "cui_status": "no_confirmed_umls_match",
-    "aliases": [
-      "C0069449"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "olive_fruit_extract": {
@@ -60310,9 +60121,7 @@
       "last_reviewed_at": "2026-04-03",
       "research_status": "validated"
     },
-    "aliases": [
-      "C1457892"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "Y05PC4JZRH",
       "pubchem_cid": null,
@@ -62019,8 +61828,7 @@
     "aliases": [
       "chloride",
       "chloride ion",
-      "Cl-",
-      "C0596019"
+      "Cl-"
     ]
   },
   "bacteriophages": {
@@ -62094,8 +61902,7 @@
     },
     "aliases": [
       "bacteriophages",
-      "phages",
-      "C0004651"
+      "phages"
     ],
     "rxcui_note": "No RxCUI assigned — specialty/botanical, not a pharmaceutical formulation."
   },
@@ -62165,8 +61972,7 @@
     },
     "aliases": [
       "palmitic acid",
-      "hexadecanoic acid",
-      "C0030234"
+      "hexadecanoic acid"
     ]
   },
   "sodium": {
@@ -62236,8 +62042,7 @@
     },
     "aliases": [
       "sodium",
-      "Na",
-      "C0037473"
+      "Na"
     ]
   },
   "lactobacillus_brevis": {
@@ -62309,8 +62114,7 @@
     },
     "aliases": [
       "L. brevis",
-      "Levilactobacillus brevis",
-      "C0317604"
+      "Levilactobacillus brevis"
     ]
   },
   "lactobacillus_kefiranofaciens": {
@@ -62372,8 +62176,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Lactobacillus Kefiranofaciens",
-      "C0317649"
+      "Lactobacillus Kefiranofaciens"
     ]
   },
   "lactobacillus_kefirgranum": {
@@ -62558,8 +62361,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Lactococcus Cremoris",
-      "C0544170"
+      "Lactococcus Cremoris"
     ]
   },
   "leuconostoc_mesenteroides": {
@@ -62798,8 +62600,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Kluyveromyces Marxianus",
-      "C0319600"
+      "Kluyveromyces Marxianus"
     ]
   },
   "brettanomyces_anomalus": {
@@ -62859,8 +62660,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Brettanomyces Anomalus",
-      "C3900228"
+      "Brettanomyces Anomalus"
     ]
   },
   "debaryomyces_hansenii": {
@@ -62919,8 +62719,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Debaryomyces Hansenii",
-      "C5754204"
+      "Debaryomyces Hansenii"
     ]
   },
   "saccharomyces_unisporus": {
@@ -62980,8 +62779,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Saccharomyces Unisporus",
-      "C1001399"
+      "Saccharomyces Unisporus"
     ]
   },
   "saccharomyces_turicensis": {
@@ -63163,8 +62961,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Torulaspora Delbrueckii",
-      "C0997372"
+      "Torulaspora Delbrueckii"
     ]
   },
   "leuconostoc_dextranicum": {
@@ -63224,8 +63021,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Leuconostoc Dextranicum",
-      "C0317711"
+      "Leuconostoc Dextranicum"
     ]
   },
   "lactobacillus_kefir": {
@@ -63285,8 +63081,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Lactobacillus Kefir",
-      "C0317632"
+      "Lactobacillus Kefir"
     ]
   },
   "lactobacillus_bulgaricus": {
@@ -63353,8 +63148,7 @@
     },
     "aliases": [
       "L. bulgaricus",
-      "Lactobacillus delbrueckii bulgaricus",
-      "C0317591"
+      "Lactobacillus delbrueckii bulgaricus"
     ]
   },
   "bromelain": {
@@ -63704,9 +63498,7 @@
       "last_reviewed_at": "2026-05-23",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0795585"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "3729L8MA2C",
       "rxcui": "253157"
@@ -63995,9 +63787,7 @@
       "last_reviewed_at": "2026-05-24",
       "research_status": "validated"
     },
-    "aliases": [
-      "C3460451"
-    ],
+    "aliases": [],
     "external_ids": {},
     "rxcui_note": "No RxNorm entry for Garcinia indica / kokum. Verified absent via RxNorm REST API search 2026-05-25 for 'Garcinia indica', 'kokum', 'Garcinia indica fruit rind'. Distinct from Garcinia cambogia which DOES have RxCUI 1311595 ('Garcinia cambogia fruit extract', TTY=IN, verified same date). Identity verified via UMLS CUI C3460451."
   }
