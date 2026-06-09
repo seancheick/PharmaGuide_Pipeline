@@ -13,6 +13,13 @@ INTERACTION_CANONICAL_ALIASES: dict[str, str] = {
     "BANNED_CBD_US": "cbd",
     "banned_cbd_us": "cbd",
     "NOOTROPIC_VINPOCETINE": "vinpocetine",
+    # Kava is canonicalized to its active-compound id `kavalactones` (used by
+    # DSI_SEDATIVES_KAVA, the ingredient_interaction_rules.json subject, and
+    # the catalog key_ingredient_tags). Normalize the risk-flavored
+    # SSI_KAVA_ACETAMINOPHEN id onto it so both kava interactions join the
+    # same product identity.
+    "RISK_KAVA": "kavalactones",
+    "risk_kava": "kavalactones",
 }
 
 INTERACTION_TEXT_TAG_PATTERNS: tuple[tuple[re.Pattern[str], str], ...] = (
