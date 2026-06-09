@@ -220,6 +220,58 @@ def test_b1_harmful_additive_does_not_touch_safety_pillar() -> None:
     assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 10.0
 
 
+def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd()
+    bd["verification_bonus"] = {
+        "score": 8.0,
+        "max": 8.0,
+        "components": {
+            "b4a_verified_certifications": 10.0,
+            "b4b_gmp": 4.0,
+            "b4d_brand_testing_posture": 2.0,
+        },
+    }
+
+    out = assemble_quality_score(_shadow(module="omega", bd=bd))
+    verification = out["quality_pillars_v4"]["verification"]
+
+    assert verification["score"] > 9.0
+    assert verification["components"]["cert"] > 0.0
+    assert verification["components"]["gmp"] > 0.0
+    assert verification["components"]["brand_testing"] > 0.0
+    assert verification["components"]["fail_open_neutral"] is False
+
+
+def test_active_simethicone_is_caution_not_blocked() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    result = evaluate_safety_gate({
+        "activeIngredients": [{"name": "Simethicone"}],
+        "inactiveIngredients": [],
+    })
+
+    assert result.verdict == "CAUTION"
+    assert result.short_circuits_scoring is False
+    assert result.blocking_reason is None
+    assert "B0_WATCHLIST_SUBSTANCE" in result.safety_signals
+
+
+def test_inactive_polydimethylsiloxane_is_warning_only() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+
+    result = evaluate_safety_gate({
+        "activeIngredients": [],
+        "inactiveIngredients": [{"name": "Polydimethylsiloxane"}],
+    })
+
+    assert result.verdict is None
+    assert result.short_circuits_scoring is False
+    assert result.blocking_reason is None
+    assert "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY" in result.safety_signals
+
+
 def test_violation_makes_quality_reflect_it_and_sum_holds() -> None:
     # the gap PR3 fixes: a violation product used to score IDENTICAL to a clean one
     from scoring_v4.quality_score import assemble_quality_score

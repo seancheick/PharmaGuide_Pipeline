@@ -40,6 +40,13 @@ def _num(value: Any, default: float = 0.0) -> float:
         return default
 
 
+def _component_num(components: Dict[str, Any], *keys: str) -> float:
+    for key in keys:
+        if key in components:
+            return _num(components.get(key))
+    return 0.0
+
+
 def _g(value: float) -> str:
     return f"{value:g}"
 
@@ -371,10 +378,10 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     vb = vb_payload.get("components") or {}
     trust_meta = ((vb_payload.get("metadata") or {}).get("trust_metadata") or {})
     mt = (module_bd.get("manufacturer_trust") or {}).get("components") or {}
-    b4a = _num(vb.get("B4a_verified_certifications"))
-    b4b = _num(vb.get("B4b_gmp"))
-    b4c = _num(vb.get("B4c_batch_traceability"))
-    b4d = _num(vb.get("B4d_brand_testing_posture"))
+    b4a = _component_num(vb, "B4a_verified_certifications", "b4a_verified_certifications")
+    b4b = _component_num(vb, "B4b_gmp", "b4b_gmp")
+    b4c = _component_num(vb, "B4c_batch_traceability", "b4c_batch_traceability")
+    b4d = _component_num(vb, "B4d_brand_testing_posture", "b4d_brand_testing_posture")
     unscored_scopes = trust_meta.get("verified_unscored_scope_counts") or {}
     brand_only_count = int(_num(unscored_scopes.get("brand_only")))
 

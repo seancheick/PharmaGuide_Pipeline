@@ -16523,11 +16523,14 @@
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
-      "status": "banned",
-      "reason": "Simethicone is an OTC drug active ingredient under FDA monograph. While generally safe, its presence in supplements indicates regulatory non-compliance. Not absorbed systemically; works mechanically on gas bubbles in GI tract.",
+      "status": "watchlist",
+      "reason": "Simethicone is an OTC drug active ingredient under FDA monograph. As an active supplement ingredient it signals regulatory non-compliance, but it is generally low clinical risk and not absorbed systemically. Inactive silicone antifoaming excipient use is warning-only.",
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "low",
       "source_category": "otc_drug_ingredient",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "Silicone antifoaming excipient use is common and low systemic risk; active simethicone remains a regulatory watchlist signal.",
+      "inactive_policy_reviewed_on": "2026-06-09",
       "class_tags": [],
       "match_rules": {
         "regex": null,
@@ -16559,6 +16562,11 @@
             "date": "2026-03-01",
             "change": "Moved from other_ingredients.json — does not belong in safe excipient DB",
             "by": "other_ingredients_deep_audit"
+          },
+          {
+            "date": "2026-06-09",
+            "change": "Changed from banned to watchlist and marked inactive excipient use acceptable. FDA monograph supports simethicone as an OTC antiflatulent active; clinical risk is low and inactive polydimethylsiloxane should not hard-block products.",
+            "by": "codex_v4_cohort_review"
           }
         ]
       },

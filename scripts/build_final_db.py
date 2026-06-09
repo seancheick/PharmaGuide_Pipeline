@@ -3341,6 +3341,13 @@ def blob_has_profile_gated_hard_safety_warning(detail_blob: Optional[Dict]) -> b
             if not isinstance(warning, dict):
                 continue
             warning_type = safe_str(warning.get("type"))
+            if (
+                warning_type == "watchlist_substance"
+                and safe_str(warning.get("ingredient_role")).lower() == "inactive"
+                and safe_str(warning.get("inactive_policy")).lower() == "excipient_acceptable"
+                and safe_str(warning.get("display_mode_default")).lower() == "informational"
+            ):
+                continue
             if warning_type in _HARD_SAFETY_TYPES_ALWAYS_DISQUALIFY:
                 return True
             if warning_type in _HARD_SAFETY_TYPES_SEVERITY_GATED:

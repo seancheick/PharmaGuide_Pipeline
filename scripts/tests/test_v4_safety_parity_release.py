@@ -55,6 +55,12 @@ def _load_json_records(pattern: str) -> dict[str, dict]:
 # (Diagnostic 2026-06-08: of 83 v3-BLOCKED, exactly these 4 downgrade, all Red-3-only.)
 RED3_RECLASSIFIED_TO_CAUTION = {"315819", "315092", "306181", "312638"}
 
+# Intentional 2026-06-09 reclassification: Simethicone / polydimethylsiloxane
+# moved from banned hard-block to watchlist with inactive excipient acceptable.
+# These GNC Re-Feed products contain it as an inactive silicone antifoaming
+# excipient, so v4 should keep scoring while carrying a warning-only signal.
+SIMETHICONE_RECLASSIFIED_TO_WARNING_ONLY = {"33233", "33246", "37250"}
+
 
 def test_v3_blocked_release_products_remain_v4_blocked() -> None:
     from score_supplements_v4 import score_product_v4
@@ -84,6 +90,15 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
             if verdict != "CAUTION":
                 failures.append((dsld_id, "red3-reclassified must remain CAUTION", verdict))
             continue
+        if dsld_id in SIMETHICONE_RECLASSIFIED_TO_WARNING_ONLY:
+            safety_gate = (out.get("v4_breakdown") or {}).get("safety_gate") or {}
+            signals = set(safety_gate.get("safety_signals") or [])
+            if (
+                safety_gate.get("short_circuits_scoring")
+                or "B0_WATCHLIST_EXCIPIENT_WARNING_ONLY" not in signals
+            ):
+                failures.append((dsld_id, "simethicone inactive must be warning-only", safety_gate))
+            continue
         if verdict != "BLOCKED":
             failures.append((
                 dsld_id,
@@ -94,6 +109,38 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
             ))
 
     assert failures == []
+
+
+def test_excipient_acceptable_watchlist_warning_does_not_disqualify_safe() -> None:
+    from build_final_db import blob_has_profile_gated_hard_safety_warning
+
+    blob = {
+        "warnings": [{
+            "type": "watchlist_substance",
+            "severity": "moderate",
+            "ingredient_role": "inactive",
+            "inactive_policy": "excipient_acceptable",
+            "display_mode_default": "informational",
+        }]
+    }
+
+    assert blob_has_profile_gated_hard_safety_warning(blob) is False
+
+
+def test_active_watchlist_warning_still_disqualifies_safe() -> None:
+    from build_final_db import blob_has_profile_gated_hard_safety_warning
+
+    blob = {
+        "warnings": [{
+            "type": "watchlist_substance",
+            "severity": "moderate",
+            "ingredient_role": "active",
+            "inactive_policy": "penalize_anyway",
+            "display_mode_default": "informational",
+        }]
+    }
+
+    assert blob_has_profile_gated_hard_safety_warning(blob) is True
 
 
 # --------------------------------------------------------------------------- #
