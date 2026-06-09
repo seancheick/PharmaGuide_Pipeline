@@ -1,10 +1,10 @@
-"""v4 shadow scorer entry point.
+"""v4 production scorer entry point.
 
 Per the architecture lock in `docs/plans/SCORING_V4_PROPOSAL.md` §13:
-this is a SEPARATE scoring entry point from `score_supplements.py`. v3
-remains production truth through the entire v4 build; this module
-emits `shadow_score_v4_*` columns side-by-side. Cutover to v4 happens
-at §19 P5 as a config decision, not a scorer rewrite.
+this is a separate scoring entry point from the legacy `score_supplements.py`
+scaffolding. The shipped catalog contract is v4: this module emits the
+production v4 scorer result and the final DB export projects it to
+`quality_score_v4_100` plus the six-pillar quality metadata.
 
 Shared with v3: the enriched input contract from `enrich_supplements_v3.py`,
 plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
@@ -19,13 +19,13 @@ Current P3.6 / P2.6 / P1.6.6 state:
   - Generic, probiotic, omega, sports, and multi_or_prenatal modules emit
     populated dimensions plus manufacturer trust / violations and final 0-100
     rubric scores.
-  - shadow_score_v4_100 mirrors the module result for complete products in
+  - raw_score_v4_100 mirrors the module result for complete products in
     all four online modules.
-  - shadow_score_v4_confidence = top-level typed confidence band for
+  - v4_confidence = top-level typed confidence band for
     complete scoreable rows; blocked_by_* for gate failures.
-  - shadow_score_v4_breakdown.confidence contains typed sub-category
+  - v4_breakdown.confidence contains typed sub-category
     levels / drivers for evidence, label_completeness, verification, identity.
-  - shadow_score_v4_anchored = False (canary-set membership lands later).
+  - v4_anchored = False (canary-set membership lands later).
 
 Subsequent phases (per §19 P1.x slices):
   P1.1 — safety gate (Layer 1) short-circuits BLOCKED/UNSAFE/CAUTION.   [done]
@@ -45,7 +45,7 @@ Subsequent phases (per §19 P1.x slices):
            canary set; omega-vs-generic decision gate.
 
 This module never mutates the input product dict. It returns a fresh
-shadow-column dict that the caller (build_final_db.py or the scoring
+v4 scorer dict that the caller (build_final_db.py or the scoring
 batch driver) merges into the scored output.
 """
 
@@ -66,20 +66,18 @@ from scoring_v4.display_calibration import calibrate_display
 from scoring_v4.quality_score import assemble_quality_score
 
 
-# Schema lock — these are the six shadow fields documented in §14 of
-# SCORING_V4_PROPOSAL.md. They are a pipeline/audit contract while v3 remains
-# production truth; they are not exported into products_core until an explicit
-# P5 cutover decision.
-SHADOW_KEYS = (
-    "shadow_score_v4_100",
-    "shadow_score_v4_module",
-    "shadow_score_v4_verdict",
-    "shadow_score_v4_confidence",
-    "shadow_score_v4_breakdown",
-    "shadow_score_v4_anchored",
+# Schema lock — these are the v4 scorer result fields consumed by
+# scoring_v4/export_adapter.py before projection into products_core.
+V4_SCORER_KEYS = (
+    "raw_score_v4_100",
+    "v4_module",
+    "v4_verdict",
+    "v4_confidence",
+    "v4_breakdown",
+    "v4_anchored",
     # Display-layer top-band calibration (raw is never mutated; this is the
     # consumer-facing score). breakdown["display_calibration"] carries provenance.
-    "shadow_score_v4_display_100",
+    "v4_display_100",
 )
 
 # Scoring-engine provenance (Phase 0 config-driven calibration). Stamped into
@@ -88,9 +86,8 @@ SHADOW_KEYS = (
 # classification-schema version, and the version+fingerprint of every config
 # rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
 # config-value changes are captured by the per-rubric fingerprints, not here.
-# SCORING_MODE stays 'shadow' until the §P5 cutover decision flips it.
 SCORING_ENGINE_VERSION = "4.0.0"
-SCORING_MODE = "shadow"
+SCORING_MODE = "production"
 
 
 def _provenance_block(module: str) -> Dict[str, Any]:
@@ -107,22 +104,22 @@ def _provenance_block(module: str) -> Dict[str, Any]:
     }
 
 
-def _empty_shadow(module: str) -> Dict[str, Any]:
-    """Skeleton shadow output — module routed, but no scoring math yet.
+def _empty_v4_result(module: str) -> Dict[str, Any]:
+    """Skeleton v4 output — module routed, but no scoring math yet.
     Subsequent slices fill the score/breakdown in.
     """
     return {
-        "shadow_score_v4_100": None,
-        "shadow_score_v4_module": module,
-        "shadow_score_v4_verdict": None,
-        "shadow_score_v4_confidence": "skeleton",
-        "shadow_score_v4_breakdown": {},
-        "shadow_score_v4_anchored": False,
+        "raw_score_v4_100": None,
+        "v4_module": module,
+        "v4_verdict": None,
+        "v4_confidence": "skeleton",
+        "v4_breakdown": {},
+        "v4_anchored": False,
     }
 
 
 def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
-    """Render the safety-gate result into the shadow breakdown dict.
+    """Render the safety-gate result into the v4 breakdown dict.
     Carries explainability fields for the Flutter UI + audit reports."""
     return {
         "verdict": safety_result.verdict,
@@ -139,7 +136,7 @@ def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
 
 
 def _completeness_gate_breakdown(completeness_result) -> Dict[str, Any]:
-    """Render the completeness-gate result into the shadow breakdown."""
+    """Render the completeness-gate result into the v4 breakdown."""
     return {
         "module": completeness_result.module,
         "is_live_eligible": completeness_result.is_live_eligible,
@@ -195,18 +192,18 @@ def _score_after_completeness_policy(score_100: Any, completeness_result: Any) -
     return min(score, cap_value)
 
 
-def _carried_verdict_with_completeness_policy(shadow: Dict[str, Any], completeness_result: Any) -> Any:
-    carried = shadow.get("shadow_score_v4_verdict")
+def _carried_verdict_with_completeness_policy(result: Dict[str, Any], completeness_result: Any) -> Any:
+    carried = result.get("v4_verdict")
     ceiling = getattr(completeness_result, "verdict_ceiling", None)
     if ceiling == "CAUTION":
         return "CAUTION"
     return carried
 
 
-def _score_v4_shadow_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
-    """Score an enriched product against the v4 shadow scorer.
+def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
+    """Score an enriched product against the v4 scorer.
 
-    Returns a dict of the six shadow columns. Never raises on malformed
+    Returns a dict of the six v4 result fields. Never raises on malformed
     input — robustly falls back to the generic module + skeleton shape.
 
     Pipeline (per §4 of SCORING_V4_PROPOSAL.md):
@@ -222,7 +219,7 @@ def _score_v4_shadow_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
       5. Layer 4 Confidence. Complete scoreable rows get typed confidence
          metadata plus a top-level band. Gate failures retain blocked_by_*.
 
-    Note on `shadow_score_v4_anchored`: per §14, this flag means the
+    Note on `v4_anchored`: per §14, this flag means the
     product is in the §12 canary set — NOT that the safety gate is
     final. Safety-gate finality is captured by
     `breakdown.safety_gate.short_circuits_scoring` + the
@@ -236,172 +233,171 @@ def _score_v4_shadow_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
             `SupplementScorer.score_product()` consumes.
 
     Returns:
-        Dict with exactly the six SHADOW_KEYS. Audit tools consume this
-        contract for v3-v4 comparisons; the final app catalog still ships one
-        production score contract at a time.
+        Dict with exactly the six V4_SCORER_KEYS. Audit tools consume this
+        contract for the production export adapter.
     """
     if not isinstance(enriched_product, dict):
         enriched_product = {}
 
     module = class_for_product(enriched_product)
-    shadow = _empty_shadow(module)
+    result = _empty_v4_result(module)
     # Provenance stamped before any early return, so BLOCKED / NOT_SCORED
     # artifacts carry the same engine+config fingerprint as fully scored ones.
-    shadow["shadow_score_v4_breakdown"]["provenance"] = _provenance_block(module)
+    result["v4_breakdown"]["provenance"] = _provenance_block(module)
 
     # Layer 1 — Safety Gate.
     safety = evaluate_safety_gate(enriched_product)
-    shadow["shadow_score_v4_breakdown"]["safety_gate"] = _safety_gate_breakdown(safety)
+    result["v4_breakdown"]["safety_gate"] = _safety_gate_breakdown(safety)
 
     if safety.short_circuits_scoring:
         # BLOCKED / UNSAFE — final decision, no scoring math runs.
         # `anchored` stays False — per §14 it's reserved for canary-set
         # membership; safety-gate finality lives in the breakdown
         # (`safety_gate.short_circuits_scoring`) + the confidence value.
-        shadow["shadow_score_v4_verdict"] = safety.verdict
-        shadow["shadow_score_v4_confidence"] = "blocked_by_safety_gate"
-        return shadow
+        result["v4_verdict"] = safety.verdict
+        result["v4_confidence"] = "blocked_by_safety_gate"
+        return result
 
     if safety.verdict == "CAUTION":
         # CAUTION carries forward but does not short-circuit. Scoring
         # math still runs in P1.3+; the verdict will be reconciled with
         # the score-band rules (CAUTION > POOR > SAFE) at output time.
-        shadow["shadow_score_v4_verdict"] = "CAUTION"
+        result["v4_verdict"] = "CAUTION"
 
     # Layer 2 — Completeness Gate.
     completeness = evaluate_completeness_gate(enriched_product, module)
-    shadow["shadow_score_v4_breakdown"]["completeness_gate"] = (
+    result["v4_breakdown"]["completeness_gate"] = (
         _completeness_gate_breakdown(completeness)
     )
     if not completeness.is_live_eligible:
         # Archive / QA verdict only. Live catalog excludes these rows
         # entirely; safety signals remain available in safety_gate.
-        shadow["shadow_score_v4_verdict"] = "NOT_SCORED"
-        shadow["shadow_score_v4_confidence"] = "blocked_by_completeness_gate"
-        return shadow
+        result["v4_verdict"] = "NOT_SCORED"
+        result["v4_confidence"] = "blocked_by_completeness_gate"
+        return result
 
     # Layer 3 — Per-class module dispatch. Generic, probiotic, omega,
     # sports, and multi_or_prenatal are wired as complete score-producing
     # modules.
     if module == "generic":
         module_result = score_generic(enriched_product)
-        shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
+        result["v4_breakdown"]["module"] = module_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
             module_result.score_100,
             completeness,
         )
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
-            shadow["shadow_score_v4_100"],
-            _carried_verdict_with_completeness_policy(shadow, completeness),
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
             module_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
-            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
-            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
         )
-        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
-        shadow["shadow_score_v4_confidence"] = confidence["band"]
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
     elif module == "probiotic":
         # P2.6: full probiotic pipeline online — all 5 dimensions populate,
         # manufacturer trust/violations apply, and score_100 is the rubric
         # production score with verdict + typed confidence band.
         probiotic_result = score_probiotic(enriched_product)
-        shadow["shadow_score_v4_breakdown"]["module"] = probiotic_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
+        result["v4_breakdown"]["module"] = probiotic_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
             probiotic_result.score_100,
             completeness,
         )
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
-            shadow["shadow_score_v4_100"],
-            _carried_verdict_with_completeness_policy(shadow, completeness),
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
             probiotic_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
-            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
-            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
         )
-        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
-        shadow["shadow_score_v4_confidence"] = confidence["band"]
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
     elif module == "multi_or_prenatal":
         # P3.6: full multi/prenatal pipeline online — all 5 dimensions
         # populate, manufacturer trust/violations apply, and score_100 is
         # the rubric production score with verdict + typed confidence.
         multi_result = score_multi_prenatal(enriched_product)
-        shadow["shadow_score_v4_breakdown"]["module"] = multi_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
+        result["v4_breakdown"]["module"] = multi_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
             multi_result.score_100,
             completeness,
         )
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
-            shadow["shadow_score_v4_100"],
-            _carried_verdict_with_completeness_policy(shadow, completeness),
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
             multi_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
-            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
-            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
         )
-        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
-        shadow["shadow_score_v4_confidence"] = confidence["band"]
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
     elif module == "omega":
         # P1.6.6: full omega pipeline online — all 5 dimensions populate,
         # manufacturer trust/violations apply, and score_100 is the rubric
         # production score with verdict + typed confidence.
         omega_result = score_omega(enriched_product)
-        shadow["shadow_score_v4_breakdown"]["module"] = omega_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
+        result["v4_breakdown"]["module"] = omega_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
             omega_result.score_100,
             completeness,
         )
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
-            shadow["shadow_score_v4_100"],
-            _carried_verdict_with_completeness_policy(shadow, completeness),
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
             omega_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
-            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
-            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
         )
-        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
-        shadow["shadow_score_v4_confidence"] = confidence["band"]
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
     elif module == "sports":
         sports_result = score_sports(enriched_product)
-        shadow["shadow_score_v4_breakdown"]["module"] = sports_result.to_breakdown()
-        shadow["shadow_score_v4_100"] = _score_after_completeness_policy(
+        result["v4_breakdown"]["module"] = sports_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
             sports_result.score_100,
             completeness,
         )
-        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
-            shadow["shadow_score_v4_100"],
-            _carried_verdict_with_completeness_policy(shadow, completeness),
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
             sports_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,
-            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
-            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
-            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
         )
-        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
-        shadow["shadow_score_v4_confidence"] = confidence["band"]
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
 
-    return shadow
+    return result
 
 
-def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
-    """Public v4 shadow scorer. Runs the core pipeline, then the two display/score
+def score_product_v4(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
+    """Public v4 scorer. Runs the core pipeline, then the two display/score
     finalizers on EVERY return path (including early BLOCKED / NOT_SCORED returns),
     so the public contract fields are always present:
 
-      - Layer 5 (display calibration, superseded): shadow_score_v4_display_100.
+      - Layer 5 (display calibration, superseded): v4_display_100.
         raw is never modified; gated; no-op for null/blocked. Experimental, removed
         at the app switch once the quality score is cohort-validated.
       - Layer 6 (public six-pillar Quality Score): quality_score_v4_100 +
@@ -409,7 +405,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         from the module breakdown (Phase-1 linear map). raw never modified;
         BLOCKED/UNSAFE suppress the public number; NOT_SCORED yields not_scored.
     """
-    shadow = _score_v4_shadow_core(enriched_product)
-    shadow = calibrate_display(shadow)
-    shadow = assemble_quality_score(shadow)
-    return shadow
+    result = _score_v4_core(enriched_product)
+    result = calibrate_display(result)
+    result = assemble_quality_score(result)
+    return result

@@ -23,10 +23,10 @@ _REQUIRED = {
 
 
 def _provenance(product):
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(product)
-    return out["shadow_score_v4_breakdown"]["provenance"]
+    out = score_product_v4(product)
+    return out["v4_breakdown"]["provenance"]
 
 
 def test_scored_product_has_provenance_block():
@@ -40,7 +40,7 @@ def test_scored_product_has_provenance_block():
     }
     prov = _provenance(product)
     assert _REQUIRED <= set(prov.keys())
-    assert prov["mode"] == "shadow"
+    assert prov["mode"] == "production"
     assert prov["scoring_engine_version"]
     assert prov["classification_schema_version"]
     # config fingerprint present + 16-hex
@@ -53,7 +53,7 @@ def test_empty_product_still_carries_provenance():
     """A malformed/empty product (NOT_SCORED path) must still be auditable."""
     prov = _provenance({})
     assert _REQUIRED <= set(prov.keys())
-    assert prov["mode"] == "shadow"
+    assert prov["mode"] == "production"
 
 
 def test_blocked_product_still_carries_provenance():
@@ -68,13 +68,13 @@ def test_blocked_product_still_carries_provenance():
             }
         },
     }
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    prov = out["shadow_score_v4_breakdown"]["provenance"]
+    out = score_product_v4(product)
+    assert out["v4_verdict"] == "BLOCKED"
+    prov = out["v4_breakdown"]["provenance"]
     assert _REQUIRED <= set(prov.keys())
-    assert prov["mode"] == "shadow"
+    assert prov["mode"] == "production"
 
 
 def test_module_route_recorded_in_provenance():

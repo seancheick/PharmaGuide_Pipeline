@@ -9,11 +9,11 @@ own rubric, weighted across the shared 5-dimension spine:
   - multi_or_prenatal (P3)  — multivitamin, prenatal multi, men's/women's complete
 
 Modules read enriched product fields directly + the safety/completeness
-gate results passed by the shadow entry point. They MUST NOT import the
-v3 scorer (§13 architecture lock).
+gate results passed by the v4 entry point. They MUST NOT import the
+legacy scorer (§13 architecture lock).
 
 Each module emits a normalized breakdown shape compatible with
-`shadow_score_v4_breakdown["module"]`. See `generic.GenericModuleResult`,
+`v4_breakdown["module"]`. See `generic.GenericModuleResult`,
 `probiotic.ProbioticModuleResult`, and `omega.OmegaModuleResult` for the
 canonical contract.
 """

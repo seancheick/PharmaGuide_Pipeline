@@ -6,7 +6,7 @@ probiotic/multi can't max dose-adequacy). So creatine-93 reads as "perfect for
 type" while a premium multivitamin caps ~88 — cross-category-unfair for consumers.
 
 WHAT: a DISPLAY-ONLY transform. ``raw_score_100`` (the audit/math score) is NEVER
-changed. We add ``shadow_score_v4_display_100`` + a ``display_calibration``
+changed. We add ``v4_display_100`` + a ``display_calibration``
 provenance block. Each archetype has a FROZEN reference best-in-class raw ``R_a``
 (curated constant, not a corpus percentile, so it doesn't drift). For a product
 that passes ``top_band_eligibility``, the display score is lifted toward ~95 via a
@@ -132,20 +132,20 @@ def _eligible(
     return True, "eligible"
 
 
-def calibrate_display(shadow: Dict[str, Any]) -> Dict[str, Any]:
-    """Add ``shadow_score_v4_display_100`` + a provenance block. Mutates & returns
-    ``shadow``. ``shadow_score_v4_100`` (raw) is never modified."""
-    raw = shadow.get("shadow_score_v4_100")
+def calibrate_display(result: Dict[str, Any]) -> Dict[str, Any]:
+    """Add ``v4_display_100`` + a provenance block. Mutates & returns
+    ``result``. ``raw_score_v4_100`` (raw) is never modified."""
+    raw = result.get("raw_score_v4_100")
     if raw is None:
-        shadow["shadow_score_v4_display_100"] = None
-        return shadow
+        result["v4_display_100"] = None
+        return result
 
     cfg = _config()
-    module = shadow.get("shadow_score_v4_module")
-    breakdown = shadow.get("shadow_score_v4_breakdown") or {}
+    module = result.get("v4_module")
+    breakdown = result.get("v4_breakdown") or {}
     module_bd = breakdown.get("module") or {}
     dims = module_bd.get("dimensions") or {}
-    verdict = shadow.get("shadow_score_v4_verdict")
+    verdict = result.get("v4_verdict")
     safety_signals = (breakdown.get("safety_gate") or {}).get("safety_signals") or []
 
     archetype = _archetype(module, module_bd)
@@ -161,7 +161,7 @@ def calibrate_display(shadow: Dict[str, Any]) -> Dict[str, Any]:
         display = raw_f
 
     applied = bool(eligible and R_a and display > raw_f)
-    shadow["shadow_score_v4_display_100"] = display
+    result["v4_display_100"] = display
     breakdown["display_calibration"] = {
         "applied": applied,
         "archetype": archetype,
@@ -173,5 +173,5 @@ def calibrate_display(shadow: Dict[str, Any]) -> Dict[str, Any]:
         "version": cfg["_metadata"]["version"],
         "reason": "top_band_lift" if applied else reason,
     }
-    shadow["shadow_score_v4_breakdown"] = breakdown
-    return shadow
+    result["v4_breakdown"] = breakdown
+    return result

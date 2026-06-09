@@ -500,18 +500,18 @@ def test_malformed_contaminant_data_does_not_crash() -> None:
 
 
 def test_shadow_entry_point_short_circuits_on_blocked() -> None:
-    """When safety gate returns BLOCKED, the shadow scorer emits:
-      shadow_score_v4_verdict     = 'BLOCKED'
-      shadow_score_v4_100         = None
-      shadow_score_v4_confidence  = 'blocked_by_safety_gate'
-      shadow_score_v4_anchored    = False   (anchored is canary-set
+    """When safety gate returns BLOCKED, the v4 scorer emits:
+      v4_verdict     = 'BLOCKED'
+      raw_score_v4_100         = None
+      v4_confidence  = 'blocked_by_safety_gate'
+      v4_anchored    = False   (anchored is canary-set
                                              membership per §14, NOT
                                              safety-gate finality)
     No scoring math runs.
 
     Safety-gate finality lives in the breakdown:
-      shadow_score_v4_breakdown.safety_gate.short_circuits_scoring = True"""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+      v4_breakdown.safety_gate.short_circuits_scoring = True"""
+    from score_supplements_v4 import score_product_v4
     product = {
         "supplement_type": {"type": "single_nutrient"},
         "contaminant_data": {
@@ -522,15 +522,15 @@ def test_shadow_entry_point_short_circuits_on_blocked() -> None:
             }
         },
     }
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    assert out["shadow_score_v4_100"] is None
-    assert out["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
-    assert out["shadow_score_v4_anchored"] is False, (
+    out = score_product_v4(product)
+    assert out["v4_verdict"] == "BLOCKED"
+    assert out["raw_score_v4_100"] is None
+    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_anchored"] is False, (
         "anchored is reserved for canary-set membership per §14; "
         "safety-gate finality belongs in the breakdown"
     )
-    bd = out["shadow_score_v4_breakdown"]
+    bd = out["v4_breakdown"]
     assert "safety_gate" in bd
     assert bd["safety_gate"]["verdict"] == "BLOCKED"
     assert bd["safety_gate"]["short_circuits_scoring"] is True
@@ -540,7 +540,7 @@ def test_shadow_entry_point_short_circuits_on_unsafe() -> None:
     """Same anchored=False rule as BLOCKED — safety-gate finality is
     represented by confidence='blocked_by_safety_gate' + breakdown
     short_circuits_scoring=True, not by anchored."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
     product = {
         "supplement_type": {"type": "single_nutrient"},
         "contaminant_data": {
@@ -551,21 +551,21 @@ def test_shadow_entry_point_short_circuits_on_unsafe() -> None:
             }
         },
     }
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "UNSAFE"
-    assert out["shadow_score_v4_100"] is None
-    assert out["shadow_score_v4_anchored"] is False
-    assert out["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
-    assert out["shadow_score_v4_breakdown"]["safety_gate"]["short_circuits_scoring"] is True
+    out = score_product_v4(product)
+    assert out["v4_verdict"] == "UNSAFE"
+    assert out["raw_score_v4_100"] is None
+    assert out["v4_anchored"] is False
+    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_breakdown"]["safety_gate"]["short_circuits_scoring"] is True
 
 
 def test_anchored_stays_false_until_canary_membership_lands() -> None:
-    """Regression for Codex's P1.1 review catch: `shadow_score_v4_anchored`
+    """Regression for Codex's P1.1 review catch: `v4_anchored`
     is canary-set membership per §14, NOT safety-gate finality. Until the
     canary-lookup slice lands, every product (clean, CAUTION, UNSAFE,
     BLOCKED) emits anchored=False. The flag flips to True only when the
     product matches the §12 canary set."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
     cases = [
         {"supplement_type": {"type": "single_nutrient"}},  # clean
         {
@@ -600,8 +600,8 @@ def test_anchored_stays_false_until_canary_membership_lands() -> None:
         },  # BLOCKED
     ]
     for p in cases:
-        out = score_product_v4_shadow(p)
-        assert out["shadow_score_v4_anchored"] is False, (
+        out = score_product_v4(p)
+        assert out["v4_anchored"] is False, (
             f"anchored should be False (not in canary set yet) — "
             f"got True on {p}"
         )
@@ -611,7 +611,7 @@ def test_shadow_caution_continues_to_next_layer() -> None:
     """CAUTION sets the verdict but does NOT short-circuit. With a
     complete product at P1.3.6, score math runs and the CAUTION verdict
     is carried forward over the score band."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
     product = {
         **COMPLETE_GENERIC_PRODUCT,
         "contaminant_data": {
@@ -622,23 +622,23 @@ def test_shadow_caution_continues_to_next_layer() -> None:
             }
         },
     }
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "CAUTION"
-    assert out["shadow_score_v4_anchored"] is False
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
-    assert out["shadow_score_v4_100"] is not None
+    out = score_product_v4(product)
+    assert out["v4_verdict"] == "CAUTION"
+    assert out["v4_anchored"] is False
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
+    assert out["raw_score_v4_100"] is not None
 
 
 def test_shadow_clean_product_gets_score_band_verdict() -> None:
     """A clean, complete product with no safety trigger gets SAFE/POOR
     from the P1.3.6 score-band reconciliation."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
-    out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
-    assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR"}
-    assert out["shadow_score_v4_anchored"] is False
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
+    from score_supplements_v4 import score_product_v4
+    out = score_product_v4(COMPLETE_GENERIC_PRODUCT)
+    assert out["v4_verdict"] in {"SAFE", "POOR"}
+    assert out["v4_anchored"] is False
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
 
 
 # --- Architecture lock (extends the P1.0 invariant) -----------------------

@@ -33,8 +33,8 @@ from scoring_input_contract import build_scoring_classification  # noqa: E402
 from scoring_v4.modules.botanical_profile import is_botanical_product  # noqa: E402
 from scoring_v4.modules.collagen_profile import is_collagen_product  # noqa: E402
 from scoring_v4.router import _legacy_class_for_product, class_for_product  # noqa: E402
-from score_supplements_v4_shadow import score_product_v4_shadow  # noqa: E402
-import v4_shadow_canary_report as canary  # noqa: E402
+from score_supplements_v4 import score_product_v4  # noqa: E402
+import v4_canary_report as canary  # noqa: E402
 
 
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"
@@ -152,10 +152,10 @@ def _allowlist_signed(row: Dict[str, Any], allowlist: Dict[str, Dict[str, str]])
 
 def _score_verdict(product: Dict[str, Any]) -> tuple[str | None, float | None]:
     try:
-        scored = score_product_v4_shadow(product)
+        scored = score_product_v4(product)
     except Exception:
         return None, None
-    return scored.get("shadow_score_v4_verdict"), canary._num(scored.get("shadow_score_v4_100"))
+    return scored.get("v4_verdict"), canary._num(scored.get("raw_score_v4_100"))
 
 
 def _contract_profile(contract: Dict[str, Any], profile: str) -> bool:

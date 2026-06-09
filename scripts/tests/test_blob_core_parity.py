@@ -20,7 +20,7 @@ Cross-source consistency (different shapes, same underlying truth):
     type='banned_substance' entry
 
 Fields the blob does NOT duplicate (queryable scalars; core-only):
-  score_quality_80, score_display_100_equivalent, image_url,
+  quality_score_v4_100, score_display_100_equivalent, image_url,
   has_recalled_ingredient. Nothing to drift, nothing to assert.
 """
 

@@ -521,14 +521,14 @@ def test_dimension_score_handles_malformed_input() -> None:
 
 
 def test_shadow_wires_dose_dimension() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(
+    out = score_product_v4(
         _product(
             adequacy_results=[_adequacy(nutrient="Magnesium", pct_rda=50.0, pct_ul=57.0)],
         )
     )
-    dose_dim = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["dose"]
+    dose_dim = out["v4_breakdown"]["module"]["dimensions"]["dose"]
     assert dose_dim["score"] == 22.0
     assert dose_dim["max"] == 25.0
     assert "supplemental_window_proxy" in dose_dim["components"]
@@ -539,13 +539,13 @@ def test_shadow_wires_dose_dimension() -> None:
 
 
 def test_shadow_top_level_score_populated_at_p136() -> None:
-    """P1.3.6 final assembly populates top-level shadow_score_v4_100."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    """P1.3.6 final assembly populates top-level raw_score_v4_100."""
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_product())
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
+    out = score_product_v4(_product())
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
 
 
 # --- Architecture lock ---------------------------------------------------

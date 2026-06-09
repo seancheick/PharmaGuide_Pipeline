@@ -48,10 +48,10 @@ def _shadow(raw=86.0, verdict="SAFE", module="sports", bd=None, suppressed_reaso
     if suppressed_reason:
         breakdown["safety_gate"] = {"blocking_reason": suppressed_reason}
     return {
-        "shadow_score_v4_100": raw,
-        "shadow_score_v4_verdict": verdict,
-        "shadow_score_v4_module": module,
-        "shadow_score_v4_breakdown": breakdown,
+        "raw_score_v4_100": raw,
+        "v4_verdict": verdict,
+        "v4_module": module,
+        "v4_breakdown": breakdown,
     }
 
 
@@ -241,7 +241,7 @@ def test_violation_does_not_change_raw_score() -> None:
 def test_raw_score_never_changes() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow(raw=86.0))
-    assert out["shadow_score_v4_100"] == 86.0
+    assert out["raw_score_v4_100"] == 86.0
     assert out["raw_score_v4_100"] == 86.0  # explicit public-contract alias
 
 

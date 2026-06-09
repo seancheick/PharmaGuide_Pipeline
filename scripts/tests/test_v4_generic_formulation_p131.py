@@ -10,7 +10,7 @@ A5c synergy 4-tier, A5d non-GMO, enzyme recognition, B0 moderate /
 watchlist, and B1 harmful-additive penalties.
 
 Tests target the module API (`score_formulation`) directly AND verify
-the shadow scorer wires the dimension score through.
+the v4 scorer wires the dimension score through.
 """
 
 from __future__ import annotations
@@ -798,7 +798,7 @@ def test_greek_mu_microgram_unit_is_dose_eligible_alias() -> None:
 
 def test_ml_unit_is_not_dose_eligible_for_formulation_quality() -> None:
     """v3 does not accept volume-only liquid amounts for A1 form quality.
-    Keep v4 shadow parity until a documented dose-policy change lands."""
+    Keep v4 parity until a documented dose-policy change lands."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(ingredients=[_ingredient(bio_score=12, quantity=5, unit="ml")])
@@ -1532,16 +1532,16 @@ def test_thorne_mg_bisglycinate_formulation_band() -> None:
 
 
 def test_shadow_populates_formulation_when_generic() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(
         supp_type="single_nutrient",
         delivery_tier=2,
         ingredients=[_ingredient(bio_score=14)],
     )
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    module_block = out["shadow_score_v4_breakdown"]["module"]
+    module_block = out["v4_breakdown"]["module"]
     assert module_block["module"] == "generic"
     formulation = module_block["dimensions"]["formulation"]
     assert formulation["score"] is not None
@@ -1558,15 +1558,15 @@ def test_shadow_populates_formulation_when_generic() -> None:
 
 
 def test_shadow_top_level_score_populated_at_p136() -> None:
-    """P1.3.6 final assembly populates top-level shadow_score_v4_100."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    """P1.3.6 final assembly populates top-level raw_score_v4_100."""
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(
+    out = score_product_v4(
         _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
     )
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
 
 
 def test_shadow_transparency_populated_at_p135() -> None:
@@ -1574,12 +1574,12 @@ def test_shadow_transparency_populated_at_p135() -> None:
     skeleton after formulation lands. After P1.3.2a, dose is online via
     the RDA/UL proxy. After P1.3.3, evidence is also online. After
     P1.3.4, Trust is online; after P1.3.5 transparency is online."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(
+    out = score_product_v4(
         _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
     )
-    module_block = out["shadow_score_v4_breakdown"]["module"]
+    module_block = out["v4_breakdown"]["module"]
     for name in ("transparency",):
         dim = module_block["dimensions"][name]
         assert dim["score"] == 9.0

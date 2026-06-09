@@ -73,7 +73,7 @@ class MultiPrenatalModuleResult:
     """Container for the multi/prenatal-module breakdown.
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
-    can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
+    can read `v4_breakdown["module"]` uniformly regardless of
     class. P3.6 populates all five dimensions, manufacturer adjustments,
     and final score math.
     """
@@ -91,7 +91,7 @@ class MultiPrenatalModuleResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_breakdown(self) -> Dict[str, Any]:
-        """Render as the public shadow-breakdown dict contract."""
+        """Render as the public v4-breakdown dict contract."""
         return {
             "module": self.module,
             "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},

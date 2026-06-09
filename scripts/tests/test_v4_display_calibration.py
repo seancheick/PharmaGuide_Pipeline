@@ -145,10 +145,10 @@ def test_archetype_generic_split() -> None:
 
 def _shadow(raw, verdict="SAFE", module="probiotic", dims=None, safety_signals=None):
     return {
-        "shadow_score_v4_100": raw,
-        "shadow_score_v4_verdict": verdict,
-        "shadow_score_v4_module": module,
-        "shadow_score_v4_breakdown": {
+        "raw_score_v4_100": raw,
+        "v4_verdict": verdict,
+        "v4_module": module,
+        "v4_breakdown": {
             "module": {"dimensions": dims or _dims()},
             "safety_gate": {"safety_signals": safety_signals or []},
         },
@@ -159,18 +159,18 @@ def test_calibrate_preserves_raw() -> None:
     from scoring_v4.display_calibration import calibrate_display
     sh = _shadow(86.5)
     out = calibrate_display(sh)
-    assert out["shadow_score_v4_100"] == 86.5  # raw NEVER changes
-    assert out["shadow_score_v4_display_100"] == 95.0  # best-in-class probiotic
+    assert out["raw_score_v4_100"] == 86.5  # raw NEVER changes
+    assert out["v4_display_100"] == 95.0  # best-in-class probiotic
 
 
 def test_calibrate_emits_provenance() -> None:
     from scoring_v4.display_calibration import calibrate_display
     out = calibrate_display(_shadow(85.0))
-    cal = out["shadow_score_v4_breakdown"]["display_calibration"]
+    cal = out["v4_breakdown"]["display_calibration"]
     assert cal["applied"] is True
     assert cal["archetype"] == "probiotic"
     assert cal["raw_score_100"] == 85.0
-    assert cal["display_score_100"] == out["shadow_score_v4_display_100"]
+    assert cal["display_score_100"] == out["v4_display_100"]
     assert "version" in cal and "reason" in cal
 
 
@@ -179,19 +179,19 @@ def test_calibrate_gated_product_display_equals_raw() -> None:
     # CAUTION product (e.g. stimulant) — never lifted
     out = calibrate_display(_shadow(88.0, verdict="CAUTION",
                                     safety_signals=["STIMULANT_CAFFEINE_HIGH_DOSE"]))
-    assert out["shadow_score_v4_display_100"] == 88.0
-    assert out["shadow_score_v4_breakdown"]["display_calibration"]["applied"] is False
+    assert out["v4_display_100"] == 88.0
+    assert out["v4_breakdown"]["display_calibration"]["applied"] is False
 
 
 def test_calibrate_below_80_display_equals_raw() -> None:
     from scoring_v4.display_calibration import calibrate_display
     out = calibrate_display(_shadow(72.0))
-    assert out["shadow_score_v4_display_100"] == 72.0
+    assert out["v4_display_100"] == 72.0
 
 
 def test_calibrate_null_score_is_noop() -> None:
     from scoring_v4.display_calibration import calibrate_display
-    sh = {"shadow_score_v4_100": None, "shadow_score_v4_verdict": "BLOCKED",
-          "shadow_score_v4_module": "generic", "shadow_score_v4_breakdown": {}}
+    sh = {"raw_score_v4_100": None, "v4_verdict": "BLOCKED",
+          "v4_module": "generic", "v4_breakdown": {}}
     out = calibrate_display(sh)
-    assert out["shadow_score_v4_display_100"] is None
+    assert out["v4_display_100"] is None

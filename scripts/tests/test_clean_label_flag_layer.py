@@ -119,9 +119,9 @@ def test_gate_eu_banned_active_still_caution_without_clean_label_hit() -> None:
 
 
 def test_safety_gate_breakdown_carries_clean_label_hits() -> None:
-    """The shadow scorer must serialize clean_label_hits into the breakdown so
+    """The v4 scorer must serialize clean_label_hits into the breakdown so
     the six-pillar quality_score can consume them."""
-    from score_supplements_v4_shadow import _safety_gate_breakdown
+    from score_supplements_v4 import _safety_gate_breakdown
     from scoring_v4.gate_safety import evaluate_safety_gate
 
     result = evaluate_safety_gate({
@@ -164,10 +164,10 @@ def _shadow_for_quality(clean_label_hits, *, hygiene=4, hygiene_max=4,
         "safety_hygiene_base": {"score": hygiene, "max": hygiene_max},
     }
     return {
-        "shadow_score_v4_100": raw,
-        "shadow_score_v4_verdict": verdict,
-        "shadow_score_v4_module": module,
-        "shadow_score_v4_breakdown": {
+        "raw_score_v4_100": raw,
+        "v4_verdict": verdict,
+        "v4_module": module,
+        "v4_breakdown": {
             "module": bd,
             "safety_gate": {"clean_label_hits": list(clean_label_hits)},
         },
@@ -200,7 +200,7 @@ def test_quality_clean_label_lowers_total_but_not_raw() -> None:
     assert pen["quality_score_v4_100"] < base["quality_score_v4_100"]
     # raw is byte-identical
     assert pen["raw_score_v4_100"] == 70.0
-    assert pen["shadow_score_v4_100"] == 70.0
+    assert pen["raw_score_v4_100"] == 70.0
 
 
 def test_quality_no_clean_label_hits_no_penalty_no_flags() -> None:

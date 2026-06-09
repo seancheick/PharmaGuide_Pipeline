@@ -7,8 +7,8 @@ preserves the Section C multiplicative pipeline:
     → cap per ingredient → top-N diminishing returns → depth bonus → cap 20
 
 This is a v4-owned implementation. It intentionally does not import the
-v3 scorer, but it reads the same enriched `evidence_data.clinical_matches`
-contract so shadow comparisons stay explainable.
+legacy scorer, but it reads the same enriched `evidence_data.clinical_matches`
+contract so before/after score comparisons stay explainable.
 """
 
 from __future__ import annotations

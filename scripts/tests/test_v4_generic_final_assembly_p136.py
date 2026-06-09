@@ -314,33 +314,33 @@ def test_rubric_score_policy_preserves_retired_affine_for_audit() -> None:
 
 
 def test_shadow_top_level_score_and_verdict_are_populated_for_complete_generic() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_high_quality_product())
+    out = score_product_v4(_high_quality_product())
 
-    assert out["shadow_score_v4_100"] == out["shadow_score_v4_breakdown"]["module"]["score_100"]
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR"}
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
+    assert out["raw_score_v4_100"] == out["v4_breakdown"]["module"]["score_100"]
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_verdict"] in {"SAFE", "POOR"}
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
 
 
 def test_shadow_caution_verdict_overrides_safe_score_band() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _high_quality_product()
     product["contaminant_data"]["banned_substances"]["substances"] = [
         {"name": "Watchlist Ingredient", "status": "watchlist", "match_type": "exact"}
     ]
 
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_verdict"] == "CAUTION"
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_verdict"] == "CAUTION"
 
 
 def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     # Use a NON-essential filler with no backed clinical evidence. The default
     # magnesium is a DRI-essential nutrient and ashwagandha now recovers verified
@@ -358,16 +358,16 @@ def test_shadow_poor_threshold_is_40_on_v4_100_scale() -> None:
         "violations": {"total_deduction_applied": -25.0, "violations": []}
     }
 
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
     # A -25 manufacturer violation is a weak profile: POOR. Phase 9 makes
     # production score equal raw, so the POOR threshold is a single 40-line.
-    assert out["shadow_score_v4_breakdown"]["module"]["raw_score_100"] < 40.0
-    assert out["shadow_score_v4_verdict"] == "POOR"
+    assert out["v4_breakdown"]["module"]["raw_score_100"] < 40.0
+    assert out["v4_verdict"] == "POOR"
 
 
 def test_shadow_verdict_uses_raw_floor_not_affine_lift_alone() -> None:
-    from score_supplements_v4_shadow import _verdict_from_score
+    from score_supplements_v4 import _verdict_from_score
 
     assert _verdict_from_score(48.2, raw_score_100=31.0) == "POOR"
     assert _verdict_from_score(48.2, raw_score_100=40.0) == "SAFE"

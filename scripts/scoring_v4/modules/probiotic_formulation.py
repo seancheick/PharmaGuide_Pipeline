@@ -177,7 +177,7 @@ def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
     """Read enriched-input `probiotic_data` and final-blob `probiotic_detail`.
 
-    The shadow pipeline scores enriched rows, but canary/debug tools often
+    The v4 pipeline scores enriched rows, but canary/debug tools often
     call the module directly against shipped detail blobs.
     """
     return _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))

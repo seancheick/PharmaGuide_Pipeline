@@ -30,9 +30,9 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from score_supplements_v4_shadow import score_product_v4_shadow  # noqa: E402
+from score_supplements_v4 import score_product_v4  # noqa: E402
 from scoring_v4.modules.generic_helpers import get_active_ingredients  # noqa: E402
-import v4_shadow_canary_report as canary  # noqa: E402
+import v4_canary_report as canary  # noqa: E402
 
 
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"
@@ -239,15 +239,15 @@ def _expected_band(brand_tier: str, cohorts: List[str]) -> str:
 def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     for product in products:
-        shadow = score_product_v4_shadow(product)
-        module_name = str(shadow.get("shadow_score_v4_module") or "")
+        shadow = score_product_v4(product)
+        module_name = str(shadow.get("v4_module") or "")
         if module_name != "generic":
             continue
 
-        breakdown = _safe_dict(shadow.get("shadow_score_v4_breakdown"))
+        breakdown = _safe_dict(shadow.get("v4_breakdown"))
         module = _safe_dict(breakdown.get("module"))
-        confidence = str(shadow.get("shadow_score_v4_confidence") or "")
-        score = _num(shadow.get("shadow_score_v4_100"))
+        confidence = str(shadow.get("v4_confidence") or "")
+        score = _num(shadow.get("raw_score_v4_100"))
         cohorts = _cohorts_for(product)
         brand_tier = _brand_tier(product.get("brand_name") or product.get("brandName"))
 
@@ -257,7 +257,7 @@ def build_rows(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             "product_name": product.get("product_name") or product.get("fullName"),
             "score": score,
             "quality_band": _quality_band(score),
-            "safety_verdict": shadow.get("shadow_score_v4_verdict"),
+            "safety_verdict": shadow.get("v4_verdict"),
             "confidence": confidence,
             "brand_tier": brand_tier,
             "expected_market_band": _expected_band(brand_tier, cohorts),

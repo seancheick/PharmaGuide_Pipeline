@@ -625,10 +625,10 @@ def test_b5_trivial_micro_blend_discount_does_not_apply_to_stimulants() -> None:
 
 
 def test_shadow_wires_transparency_dimension_when_generic_module_runs() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_product())
-    dim = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["transparency"]
+    out = score_product_v4(_product())
+    dim = out["v4_breakdown"]["module"]["dimensions"]["transparency"]
 
     assert dim["score"] == 6.0
     assert dim["components"]["clear_disclosure_base"] == 6.0

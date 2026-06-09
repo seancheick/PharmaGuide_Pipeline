@@ -1,5 +1,5 @@
 """SP-2 adoption regression test — locks the inventory of legacy-classification
-reads in the v4 + shadow scorer + build_final_db surface.
+reads in the v4 + v4 scorer + build_final_db surface.
 
 Source: `scripts/audits/sp2_adoption_audit.py` enumerates every line that
 reads `supplement_type`, `primary_category`, or `category_breakdown` in the
@@ -133,10 +133,10 @@ def test_sp2_router_legacy_read_is_only_themed_multi_broad_panel_fallback():
 
 
 def test_sp2_shadow_scorer_delegates_to_router():
-    """The shadow scorer must use router.class_for_product, not its own
+    """The v4 scorer must use router.class_for_product, not its own
     classification logic."""
     import pathlib
-    shadow = pathlib.Path(__file__).resolve().parents[1] / "score_supplements_v4_shadow.py"
+    shadow = pathlib.Path(__file__).resolve().parents[1] / "score_supplements_v4.py"
     src = shadow.read_text()
     assert "from scoring_v4.router import class_for_product" in src, (
         "Shadow scorer must import class_for_product from the router."

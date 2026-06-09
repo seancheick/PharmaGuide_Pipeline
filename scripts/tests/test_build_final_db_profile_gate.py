@@ -19,11 +19,11 @@ from build_final_db import EXPORT_SCHEMA_VERSION, build_detail_blob
 
 
 def test_export_schema_version_is_v4_cutover():
-    """Schema version must reflect the v4 cutover (v2.0.0)."""
+    """Schema version must reflect the v4 production contract (v2.0.0)."""
     # v2.0.0 indicates v4 is the default scoring model: legacy /80 columns dropped,
     # v4 /100 six-pillar contract + provenance columns added.
     assert EXPORT_SCHEMA_VERSION == "2.0.0", (
-        f"EXPORT_SCHEMA_VERSION={EXPORT_SCHEMA_VERSION!r}; expected '2.0.0' for the v4 cutover"
+        f"EXPORT_SCHEMA_VERSION={EXPORT_SCHEMA_VERSION!r}; expected '2.0.0' for v4"
     )
 
 
@@ -35,7 +35,7 @@ def _scored_skeleton(dsld_id: str = "p_pg_test") -> dict:
         "scoring": {
             "total_score": 50,
             "max_possible": 80,
-            "score_quality_80": 50,
+            "quality_score_v4_100": 50,
             "score_display_100_equivalent": "62",
             "verdict": "CAUTION",
         },

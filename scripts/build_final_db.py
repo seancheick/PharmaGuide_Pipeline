@@ -70,7 +70,7 @@ from identity.interaction import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.0.0"  # v2.0.0 BREAKING: v4 is the default scoring model — drop legacy /80 cols (score_quality_80, score_display_80), add the v4 /100 six-pillar contract + provenance cols; ranking/dedup move to quality_score_v4_100. v1.6.0 added profile_gate passthrough on warnings
+EXPORT_SCHEMA_VERSION = "2.0.0"  # v4 /100 six-pillar contract + provenance cols; ranking/dedup use quality_score_v4_100. v1.6.0 added profile_gate passthrough on warnings
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -1150,8 +1150,8 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     verdict = safe_str(scored.get("verdict")).upper()
     score_optional = verdict in {"BLOCKED", "UNSAFE"}
 
-    # v4 cutover: under --score-model v4 the export adapter stamps
-    # _v4_quality_status; it is authoritative for the ship/quarantine decision.
+    # The v4 export adapter stamps _v4_quality_status; it is authoritative
+    # for the ship/quarantine decision.
     #   scored           → require a finite quality_score_v4_100 (asserted here);
     #   suppressed_safety → BLOCKED/UNSAFE, null score is legitimate (score_optional below);
     #   not_scored        → verdict is NOT_SCORED, quarantined by the block below.
@@ -1544,7 +1544,6 @@ CREATE TABLE IF NOT EXISTS products_core (
     -- V4 SCORING (export schema v2.0.0) — canonical /100 six-pillar contract.
     -- quality_score_v4_100 is the shipped score; score_100_equivalent mirrors it.
     -- raw_score_v4_100 is audit/debug only and is NEVER the shipped score.
-    -- The legacy /80 fields (score_quality_80, score_display_80) were dropped at v2.0.0.
     quality_score_v4_100            REAL,
     quality_score_status            TEXT,
     quality_tier                    TEXT,
@@ -4810,8 +4809,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     blob["proprietary_blend"] = bool(_is_opaque and _has_blend)
     blob["unverified_ingredient"] = bool(_is_opaque and not _has_blend)
 
-    # ── v4 cutover: detail-blob fields (only under --score-model v4) ─────────
-    # The export adapter stashes the v4 public contract under _v4_* keys. Surface
+    # ── v4 detail-blob fields ────────────────────────────────────────────────
+    # The export adapter stashes the public v4 contract under _v4_* keys. Surface
     # the six pillars (with reasons), clean-label flags, the audit raw score, the
     # gate breakdowns, and a provenance/explanation trail ("why did this score X?").
     if scored.get("_v4_quality_status") is not None:
@@ -5873,8 +5872,7 @@ def build_core_row(
         safe_str(effective_scored.get("verdict")),
         safe_str(effective_scored.get("safety_verdict")),
         safe_float(effective_scored.get("mapped_coverage")),
-        # V4 scoring contract — populated by the export adapter under --score-model v4;
-        # all NULL under --score-model v3 (the _v4_* keys are absent on a raw v3 blob).
+        # V4 scoring contract — populated by the export adapter.
         safe_float(effective_scored.get("_v4_quality_score_100")),
         safe_str(effective_scored.get("_v4_quality_status")) or None,
         safe_str(effective_scored.get("_v4_quality_tier")) or None,
@@ -6173,19 +6171,14 @@ def build_final_db(
     output_dir: str,
     script_dir: str,
     strict: bool = False,
-    score_model: str = "v4",
 ):
-    # v4 (default) overlays the production six-pillar /100 score onto each product
-    # via the export adapter; v3 is the legacy fallback. Imported lazily so the v3
-    # path never pulls in the scoring_v4 stack.
-    overlay_v4_scored = None
-    suppress_v4_for_hard_block = None
-    if score_model == "v4":
-        from scoring_v4.export_adapter import (
-            overlay_v4_scored as overlay_v4_scored,
-            suppress_v4_for_hard_block as suppress_v4_for_hard_block,
-        )
-    logger.info("Scoring model for export: %s", score_model)
+    from scoring_v4.export_adapter import (
+        overlay_v4_scored,
+        suppress_v4_for_hard_block,
+    )
+
+    score_model = "v4"
+    logger.info("Scoring model for export: v4")
 
     os.makedirs(output_dir, exist_ok=True)
     detail_dir = os.path.join(output_dir, "detail_blobs")
@@ -6257,19 +6250,18 @@ def build_final_db(
                     enriched_only_samples.append(pid)
                 continue
 
-            # v4 cutover: overlay the production six-pillar /100 score/verdict onto
-            # the v3 scored blob (keeping its scaffolding) and stash the v4 contract
-            # under _v4_* keys. One call makes every downstream consumer v4-aware.
-            if overlay_v4_scored is not None:
-                scored = overlay_v4_scored(enriched, scored)
-                # The export's banned-substance gate is broader than the v4 scoring
-                # safety gate (v4 doesn't block every banned_recalled substance, e.g.
-                # Boron / PHOs). When the export will hard-block a banned product, the
-                # v4 public contract MUST be suppressed to match — else the catalog
-                # ranks a banned product by a finite quality_score_v4_100. Done here,
-                # before build_detail_blob / build_core_row, so both surfaces agree.
-                if has_banned_substance(enriched):
-                    scored = suppress_v4_for_hard_block(scored, reason="banned_substance")
+            # Overlay the production six-pillar /100 score/verdict and stash
+            # the public v4 contract under _v4_* keys. One call makes every
+            # downstream consumer v4-aware.
+            scored = overlay_v4_scored(enriched, scored)
+            # The export's banned-substance gate is broader than the v4 scoring
+            # safety gate (v4 doesn't block every banned_recalled substance, e.g.
+            # Boron / PHOs). When the export will hard-block a banned product, the
+            # v4 public contract MUST be suppressed to match — else the catalog
+            # ranks a banned product by a finite quality_score_v4_100. Done here,
+            # before build_detail_blob / build_core_row, so both surfaces agree.
+            if has_banned_substance(enriched):
+                scored = suppress_v4_for_hard_block(scored, reason="banned_substance")
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
             products_with_warnings_count, contract_failures_count = update_audit_state(
@@ -6630,10 +6622,6 @@ def main():
                               "writes to /tmp)."))
     parser.add_argument("--strict", action="store_true",
                         help="Fail build if any enriched/scored mismatch (production mode)")
-    parser.add_argument("--score-model", choices=["v3", "v4"], default="v4",
-                        help="Scoring model for the export headline. v4 (default) ships "
-                             "the production six-pillar /100 score via the export adapter; "
-                             "v3 is the legacy fallback (v4 columns left NULL).")
     args = parser.parse_args()
 
     # 2026-05-14 — emit a loud warning when the legacy default is used.
@@ -6658,7 +6646,7 @@ def main():
     script_dir = str(Path(__file__).parent)
     result = build_final_db(
         args.enriched_dir, args.scored_dir, args.output_dir, script_dir,
-        strict=args.strict, score_model=args.score_model,
+        strict=args.strict,
     )
 
     print(f"\nDone. {result['product_count']} products, {result['error_count']} errors.")

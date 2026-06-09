@@ -1,8 +1,8 @@
 # PIPELINE_ARCHITECTURE.md
 
-> Last updated: 2026-06-08 | Export schema: **v2.0.0** (v4 cutover; 102 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`; concept ownership source of truth: `scripts/contracts/source_of_truth_matrix.json`.
+> Last updated: 2026-06-08 | Export schema: **v2.0.0** (v4 production; 102 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`; concept ownership source of truth: `scripts/contracts/source_of_truth_matrix.json`.
 >
-> **v4 cutover:** `build_final_db.py` defaults to `--score-model v4`, overlaying the six-pillar /100 score (`quality_score_v4_100`) onto each product via `scoring_v4/export_adapter.py`. The legacy /80 export columns were dropped. The Clean→Enrich→Score(v3) stages below are UNCHANGED — the v3 score stage still produces the scaffolding the v4 export adapter overlays. See `FINAL_EXPORT_SCHEMA_V1.md` (v2.0.0).
+> **v4 production:** `build_final_db.py` always emits the six-pillar /100 score (`quality_score_v4_100`) via `scoring_v4/export_adapter.py`. The legacy /80 export columns were dropped. The Clean→Enrich→legacy-score stages below still provide review-queue and detail-blob scaffolding used by the v4 export adapter; the shipped score contract is v4. See `FINAL_EXPORT_SCHEMA_V1.md` (v2.0.0).
 
 ## Overview
 
@@ -214,7 +214,6 @@ the per-field contract. CI gate: `scripts/audit_inactive_safety.py`.
 From `config/scoring_config.json`:
 - `require_full_mapping: true`
 - `probiotic_extended_scoring: false`
-- `shadow_mode: true`
 
 Operational effect:
 - Full mapping gate is enforced.

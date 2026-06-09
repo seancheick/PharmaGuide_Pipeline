@@ -32,21 +32,21 @@ def _canned_v4(
     blocking_reason=None,
     suppressed_reason=None,
 ):
-    """A minimal but structurally-faithful v4 shadow result."""
+    """A minimal but structurally-faithful v4 result."""
     return {
-        "shadow_score_v4_100": 87.5,
-        "shadow_score_v4_module": "generic",
-        "shadow_score_v4_verdict": verdict,
-        "shadow_score_v4_confidence": "high",
-        "shadow_score_v4_anchored": False,
-        "shadow_score_v4_display_100": 92.0,  # experimental — must be IGNORED by the adapter
-        "shadow_score_v4_breakdown": {
+        "raw_score_v4_100": 87.5,
+        "v4_module": "generic",
+        "v4_verdict": verdict,
+        "v4_confidence": "high",
+        "v4_anchored": False,
+        "v4_display_100": 92.0,  # experimental — must be IGNORED by the adapter
+        "v4_breakdown": {
             "provenance": {
                 "scoring_engine_version": "4.0.0",
                 "classification_schema_version": "5.3.0",
                 "config_versions": {"quality_score": "1.0.0", "gate_safety": "2.1.0"},
                 "module_route": "generic",
-                "mode": "shadow",
+                "mode": "production",
             },
             "safety_gate": {
                 "verdict": safety_verdict,
@@ -101,7 +101,7 @@ def _v3_scored():
 
 
 def _patch(monkeypatch, v4_result):
-    monkeypatch.setattr(export_adapter, "score_product_v4_shadow", lambda enriched: v4_result)
+    monkeypatch.setattr(export_adapter, "score_product_v4", lambda enriched: v4_result)
 
 
 def test_scored_overlays_v4_headline(monkeypatch):
@@ -212,5 +212,5 @@ def test_detail_blob_provenance_keys_present(monkeypatch):
 
     assert out["_v4_safety_gate"] is not None
     assert out["_v4_completeness_gate"] is not None
-    assert out["_v4_provenance"]["mode"] == "shadow"
+    assert out["_v4_provenance"]["mode"] == "production"
     assert out["_v4_pillars"] is not None

@@ -89,7 +89,7 @@ class ProbioticModuleResult:
     """Container for the probiotic-module breakdown.
 
     Mirrors `GenericModuleResult` shape so audit / score-delta / Flutter
-    tooling can read a single `shadow_score_v4_breakdown["module"]`
+    tooling can read a single `v4_breakdown["module"]`
     contract regardless of which class scored the product.
 
     Final assembly (Phase 4) uses the shared generic._assemble_score: core
@@ -112,7 +112,7 @@ class ProbioticModuleResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_breakdown(self) -> Dict[str, Any]:
-        """Render as the dict shape used in `shadow_score_v4_breakdown["module"]`.
+        """Render as the dict shape used in `v4_breakdown["module"]`.
         This is the public contract for audit / score-delta tooling and the
         Flutter score-detail view. Matches `GenericModuleResult.to_breakdown`
         shape so consumers don't need class-aware unpacking."""
@@ -143,7 +143,7 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     manufacturer adjustments, raw score, and production score populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
-    handles real input validation upstream in the shadow pipeline.
+    handles real input validation upstream in the v4 pipeline.
 
     Args:
         product: Enriched product dict (same contract as v3 consumes).

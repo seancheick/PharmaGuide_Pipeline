@@ -33,12 +33,12 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
 
 from scoring_input_contract import build_scoring_classification  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
-from score_supplements_v4_shadow import score_product_v4_shadow  # noqa: E402
+from score_supplements_v4 import score_product_v4  # noqa: E402
 import scoring_v4.modules.botanical_profile as botanical_profile  # noqa: E402
 import scoring_v4.modules.collagen_profile as collagen_profile  # noqa: E402
 import scoring_v4.modules.generic_dose as generic_dose  # noqa: E402
 import scoring_v4.modules.generic_formulation as generic_formulation  # noqa: E402
-import v4_shadow_canary_report as canary  # noqa: E402
+import v4_canary_report as canary  # noqa: E402
 from audit_v4_profile_consistency import _profile_divergence_reason  # noqa: E402
 
 
@@ -66,12 +66,12 @@ def _num(value: Any) -> float | None:
 
 
 def _score(product: Dict[str, Any]) -> Dict[str, Any]:
-    scored = score_product_v4_shadow(product)
+    scored = score_product_v4(product)
     return {
-        "score": _num(scored.get("shadow_score_v4_100")),
-        "verdict": scored.get("shadow_score_v4_verdict"),
-        "confidence": scored.get("shadow_score_v4_confidence"),
-        "module": scored.get("shadow_score_v4_module"),
+        "score": _num(scored.get("raw_score_v4_100")),
+        "verdict": scored.get("v4_verdict"),
+        "confidence": scored.get("v4_confidence"),
+        "module": scored.get("v4_module"),
     }
 
 

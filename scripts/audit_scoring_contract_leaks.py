@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Audit the v4 scoring surface for raw-field reads that bypass the contract.
 
-Scans Python files under scripts/scoring_v4/ plus the v4 shadow entrypoint using
+Scans Python files under scripts/scoring_v4/ plus the v4 entrypoint using
 the AST to find both .get("field") and row["field"] reads where the field is in
 the forbidden set. Known violations are allowlisted by stable finding id with a
 justification; new violations cause a non-zero exit.
@@ -24,7 +24,7 @@ from pathlib import Path
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 V4_DIR = SCRIPTS_DIR / "scoring_v4"
-V4_ENTRYPOINTS = (SCRIPTS_DIR / "score_supplements_v4_shadow.py",)
+V4_ENTRYPOINTS = (SCRIPTS_DIR / "score_supplements_v4.py",)
 REPORT_DIR = SCRIPTS_DIR.parent / "reports"
 
 FORBIDDEN_FIELDS: dict[str, str] = {

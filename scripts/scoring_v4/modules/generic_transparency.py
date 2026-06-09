@@ -12,7 +12,7 @@ Transparency (10) is the user-facing home for disclosure quality:
 Final: clamp(0, 10, base + B3 - penalty magnitudes).
 
 This module re-implements the mature v3 B2/B3/B5/B6 logic without
-importing `score_supplements.py`, preserving the v4 shadow architecture
+importing `score_supplements.py`, preserving the v4 architecture
 lock while keeping arithmetic parity with production v3 inputs.
 """
 

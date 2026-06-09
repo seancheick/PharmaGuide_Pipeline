@@ -6,7 +6,7 @@ Closes the multi/prenatal module by wiring:
   - Manufacturer Violations (0..negative cap)
   - raw_score_100 assembly
   - Phase 9 rubric-is-score policy (`score_100 = raw`)
-  - shadow scorer score / verdict / confidence output
+  - v4 scorer score / verdict / confidence output
 """
 
 from __future__ import annotations
@@ -251,28 +251,28 @@ def test_multi_prenatal_score_clamps_between_zero_and_100() -> None:
 
 
 def test_shadow_emits_real_score_verdict_and_confidence_for_multi_prenatal() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_multi_product())
+    out = score_product_v4(_multi_product())
 
-    assert out["shadow_score_v4_module"] == "multi_or_prenatal"
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert "confidence" in out["shadow_score_v4_breakdown"]
+    assert out["v4_module"] == "multi_or_prenatal"
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert "confidence" in out["v4_breakdown"]
 
 
 def test_shadow_caution_carried_from_safety_gate_overrides_score_band() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_multi_product(has_disease_claims=True))
+    out = score_product_v4(_multi_product(has_disease_claims=True))
 
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_verdict"] == "CAUTION"
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_verdict"] == "CAUTION"
 
 
 def test_shadow_blocked_safety_short_circuits_before_p36() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _multi_product()
     product["contaminant_data"] = {
@@ -282,11 +282,11 @@ def test_shadow_blocked_safety_short_circuits_before_p36() -> None:
             ]
         }
     }
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    assert out["shadow_score_v4_100"] is None
-    assert out["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
+    assert out["v4_verdict"] == "BLOCKED"
+    assert out["raw_score_v4_100"] is None
+    assert out["v4_confidence"] == "blocked_by_safety_gate"
 
 
 def test_multi_prenatal_final_assembly_does_not_import_v3_scorer() -> None:

@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from score_supplements_v4_shadow import score_product_v4_shadow
+from score_supplements_v4 import score_product_v4
 from scoring_v4.modules.sports import score_sports
 
 
@@ -79,17 +79,17 @@ def test_score_sports_requests_primary_evidence_floor(monkeypatch) -> None:
 
 
 def test_shadow_dispatch_scores_sports_module() -> None:
-    shadow = score_product_v4_shadow(_sports_product())
+    shadow = score_product_v4(_sports_product())
 
-    assert shadow["shadow_score_v4_module"] == "sports"
-    assert shadow["shadow_score_v4_100"] is not None
-    assert shadow["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
-    assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "sports"
-    assert shadow["shadow_score_v4_breakdown"]["module"]["dimensions"]["dose"]["metadata"]["method"] == "sports_active_dose_bands_v1"
+    assert shadow["v4_module"] == "sports"
+    assert shadow["raw_score_v4_100"] is not None
+    assert shadow["v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
+    assert shadow["v4_breakdown"]["module"]["module"] == "sports"
+    assert shadow["v4_breakdown"]["module"]["dimensions"]["dose"]["metadata"]["method"] == "sports_active_dose_bands_v1"
 
 
 def test_shadow_completeness_gate_preserves_sports_module_name() -> None:
-    shadow = score_product_v4_shadow(_sports_product())
+    shadow = score_product_v4(_sports_product())
 
-    assert shadow["shadow_score_v4_breakdown"]["completeness_gate"]["module"] == "sports"
-    assert shadow["shadow_score_v4_breakdown"]["completeness_gate"]["is_live_eligible"] is True
+    assert shadow["v4_breakdown"]["completeness_gate"]["module"] == "sports"
+    assert shadow["v4_breakdown"]["completeness_gate"]["is_live_eligible"] is True

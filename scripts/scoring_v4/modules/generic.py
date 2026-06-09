@@ -211,7 +211,7 @@ class GenericModuleResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_breakdown(self) -> Dict[str, Any]:
-        """Render as the dict shape used in `shadow_score_v4_breakdown["module"]`.
+        """Render as the dict shape used in `v4_breakdown["module"]`.
         This is the public contract for audit / score-delta tooling and the
         Flutter score-detail view."""
         return {
@@ -242,7 +242,7 @@ def score_generic(product: Any) -> GenericModuleResult:
     production score_100 are populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
-    handles real input validation upstream in the shadow pipeline.
+    handles real input validation upstream in the v4 pipeline.
 
     Args:
         product: Enriched product dict (same contract as v3 consumes).

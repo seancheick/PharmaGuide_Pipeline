@@ -320,12 +320,12 @@ def test_omega_orchestrator_does_not_import_v3_scorer() -> None:
 
 
 def test_shadow_scorer_emits_omega_production_score() -> None:
-    """Through the shadow scorer entry point, omega-routed products
-    emit shadow_score_v4_100 = the production rubric score."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    """Through the v4 scorer entry point, omega-routed products
+    emit raw_score_v4_100 = the production rubric score."""
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_premium_omega())
-    assert out["shadow_score_v4_module"] == "omega"
-    assert out["shadow_score_v4_100"] is not None
-    assert 0 <= out["shadow_score_v4_100"] <= 100
-    assert out["shadow_score_v4_verdict"] in ("SAFE", "POOR")
+    out = score_product_v4(_premium_omega())
+    assert out["v4_module"] == "omega"
+    assert out["raw_score_v4_100"] is not None
+    assert 0 <= out["raw_score_v4_100"] <= 100
+    assert out["v4_verdict"] in ("SAFE", "POOR")

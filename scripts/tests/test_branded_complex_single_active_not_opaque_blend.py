@@ -2,7 +2,7 @@
 """Branded SINGLE-active ingredients whose name ends in "Complex"/"Matrix"
 must NOT be emitted as fully-opaque proprietary blends (v4 B5 root fix).
 
-Bug (v4 shadow scoring): the cleaner (`enhanced_normalizer`) stamps
+Bug (v4 scoring): the cleaner (`enhanced_normalizer`) stamps
 ``proprietaryBlend=True`` + ``disclosureLevel='none'`` on ANY single
 ingredient whose name merely *contains* a marketing suffix token
 ("complex"/"matrix"/"formula"/...). The enricher's

@@ -49,10 +49,6 @@
 #     # Custom Flutter repo location:
 #     bash scripts/release_full.sh --flutter-repo /path/to/PharmaGuide_ai
 #
-# For v4 catalog builds (schema_version >= 2 or score_model="v4"), this script
-# verifies the Flutter dual-schema reader before Supabase sync and then passes
-# sync_to_supabase.py's explicit --allow-v4-cutover acknowledgement.
-#
 # Legacy flags (still accepted for backward compat; redundant now):
 #     --skip-assemble    same effect as auto-detection when dist/ is fresh
 #
@@ -222,68 +218,6 @@ with open(sys.argv[1], 'rb') as f:
         h.update(chunk)
 print(h.hexdigest())
 " "$path" 2>/dev/null
-}
-
-is_v4_catalog_build() {
-  "$PG_PYTHON" - "$DIST_DIR/export_manifest.json" <<'PY'
-import json
-import sys
-
-path = sys.argv[1]
-try:
-    with open(path) as fh:
-        manifest = json.load(fh)
-except FileNotFoundError:
-    sys.exit(1)
-
-schema = str(manifest.get("schema_version") or "")
-score_model = str(manifest.get("score_model") or "")
-try:
-    major = int(schema.split(".")[0])
-except (ValueError, IndexError):
-    major = 0
-
-sys.exit(0 if score_model == "v4" or major >= 2 else 1)
-PY
-}
-
-flutter_cmd() {
-  if [[ -n "${FLUTTER_BIN:-}" && -x "${FLUTTER_BIN:-}" ]]; then
-    printf '%s\n' "$FLUTTER_BIN"
-  elif [[ -x "/Users/seancheick/development/flutter/bin/flutter" ]]; then
-    printf '%s\n' "/Users/seancheick/development/flutter/bin/flutter"
-  else
-    command -v flutter
-  fi
-}
-
-run_flutter_v4_cutover_gate() {
-  local import_script="$FLUTTER_REPO/scripts/import_catalog_artifact.sh"
-  local dual_schema_test="$FLUTTER_REPO/test/release_gate/dual_schema_reader_test.dart"
-  local flutter
-
-  [[ -x "$import_script" ]] || {
-    err "Flutter import script missing or not executable: $import_script"
-    exit 1
-  }
-  if ! grep -q '"2.0.0"' "$import_script"; then
-    err "Flutter import script does not list schema 2.0.0 as supported."
-    err "Refusing v4 Supabase sync until Flutter can import the v4 catalog."
-    exit 1
-  fi
-  [[ -f "$dual_schema_test" ]] || {
-    err "Flutter v4 cutover release-gate test missing: $dual_schema_test"
-    exit 1
-  }
-
-  flutter="$(flutter_cmd)" || {
-    err "Flutter executable not found. Set FLUTTER_BIN or add flutter to PATH."
-    exit 1
-  }
-
-  info "Strict gate: Flutter v4 dual-schema reader"
-  (cd "$FLUTTER_REPO" && "$flutter" test test/release_gate/dual_schema_reader_test.dart)
-  ok "Strict gate passed: Flutter v4 dual-schema reader"
 }
 
 run_strict_gate() {
@@ -531,16 +465,6 @@ if (( SKIP_SUPABASE == 0 )); then
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
     info "Step 5/7: Syncing dist/ to Supabase (with --cleanup, content-checksum-aware)..."
-    SYNC_ARGS=(
-      "$DIST_DIR"
-      --cleanup
-      --cleanup-keep "$KEEP_VERSIONS"
-      --flutter-repo "$FLUTTER_REPO"
-    )
-    if is_v4_catalog_build; then
-      run_flutter_v4_cutover_gate
-      SYNC_ARGS+=(--allow-v4-cutover)
-    fi
     # P1.6 commit 2 (2026-05-13): orphan-blob cleanup is ON by default in
     # sync_to_supabase, gated by the P1+P2+P3 release-safety stack. The
     # gate requires both --flutter-repo and --dist-dir to compute the
@@ -549,7 +473,10 @@ if (( SKIP_SUPABASE == 0 )); then
     # --flutter-repo. To skip the orphan sweep (incident response, etc.)
     # rerun this script with --skip-supabase and call sync_to_supabase
     # manually with --no-allow-destructive-orphan-cleanup.
-    "$PG_PYTHON" scripts/sync_to_supabase.py "${SYNC_ARGS[@]}"
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
+        --cleanup \
+        --cleanup-keep "$KEEP_VERSIONS" \
+        --flutter-repo "$FLUTTER_REPO"
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else

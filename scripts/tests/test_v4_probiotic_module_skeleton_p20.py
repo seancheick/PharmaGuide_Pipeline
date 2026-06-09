@@ -207,15 +207,15 @@ def test_score_probiotic_does_not_mutate_input() -> None:
 
 def test_shadow_wires_probiotic_module_when_route_is_probiotic() -> None:
     """After Layer 1 + Layer 2 pass for a probiotic-routed product, the
-    shadow scorer must call score_probiotic and stash its breakdown under
-    `shadow_score_v4_breakdown["module"]`."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    v4 scorer must call score_probiotic and stash its breakdown under
+    `v4_breakdown["module"]`."""
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(COMPLETE_PROBIOTIC_PRODUCT)
+    out = score_product_v4(COMPLETE_PROBIOTIC_PRODUCT)
 
-    assert out["shadow_score_v4_module"] == "probiotic"
-    assert "module" in out["shadow_score_v4_breakdown"]
-    module_block = out["shadow_score_v4_breakdown"]["module"]
+    assert out["v4_module"] == "probiotic"
+    assert "module" in out["v4_breakdown"]
+    module_block = out["v4_breakdown"]["module"]
     assert module_block["module"] == "probiotic"
     assert set(module_block["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
     # P2.6: score_100 is a real number after final assembly.
@@ -225,7 +225,7 @@ def test_shadow_wires_probiotic_module_when_route_is_probiotic() -> None:
 
 def test_shadow_does_not_wire_probiotic_module_when_safety_short_circuits() -> None:
     """BLOCKED/UNSAFE finality precedes module scoring entirely."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = {
         **COMPLETE_PROBIOTIC_PRODUCT,
@@ -237,14 +237,14 @@ def test_shadow_does_not_wire_probiotic_module_when_safety_short_circuits() -> N
             }
         },
     }
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    assert "module" not in out["shadow_score_v4_breakdown"]
+    assert out["v4_verdict"] == "BLOCKED"
+    assert "module" not in out["v4_breakdown"]
 
 
 def test_shadow_does_not_wire_probiotic_module_when_completeness_fails() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     incomplete = {
         "supplement_taxonomy": {"primary_type": "probiotic"},
@@ -254,16 +254,16 @@ def test_shadow_does_not_wire_probiotic_module_when_completeness_fails() -> None
             "ingredients_scorable": [],
         },
     }
-    out = score_product_v4_shadow(incomplete)
+    out = score_product_v4(incomplete)
 
-    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert "module" not in out["shadow_score_v4_breakdown"]
+    assert out["v4_verdict"] == "NOT_SCORED"
+    assert "module" not in out["v4_breakdown"]
 
 
 def test_shadow_does_not_route_generic_product_to_probiotic_module() -> None:
     """A single-nutrient product still routes to generic. P2.0 must not
     leak probiotic-module breakdown onto generic-routed rows."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     generic = {
         "status": "active", "form_factor": "capsule",
@@ -277,10 +277,10 @@ def test_shadow_does_not_route_generic_product_to_probiotic_module() -> None:
             ],
         },
     }
-    out = score_product_v4_shadow(generic)
+    out = score_product_v4(generic)
 
-    assert out["shadow_score_v4_module"] == "generic"
-    module_block = out["shadow_score_v4_breakdown"].get("module")
+    assert out["v4_module"] == "generic"
+    module_block = out["v4_breakdown"].get("module")
     assert module_block is not None
     assert module_block["module"] == "generic"
 

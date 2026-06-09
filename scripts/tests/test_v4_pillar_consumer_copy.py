@@ -118,10 +118,10 @@ def _shadow(raw=86.0, verdict="SAFE", module="sports", bd=None,
     if clean_label_hits is not None:
         breakdown.setdefault("safety_gate", {})["clean_label_hits"] = clean_label_hits
     return {
-        "shadow_score_v4_100": raw,
-        "shadow_score_v4_verdict": verdict,
-        "shadow_score_v4_module": module,
-        "shadow_score_v4_breakdown": breakdown,
+        "raw_score_v4_100": raw,
+        "v4_verdict": verdict,
+        "v4_module": module,
+        "v4_breakdown": breakdown,
     }
 
 

@@ -461,14 +461,14 @@ def test_manufacturer_disclosure_still_rejects_omega_source_row_without_epa_dha_
 
 
 def test_shadow_wires_verification_bonus() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_product(verified_cert_programs=[_cert("NSF Sport", "sku")]))
+    out = score_product_v4(_product(verified_cert_programs=[_cert("NSF Sport", "sku")]))
 
     # Phase 4: trust is wired as the additive verification_bonus (0-8). The
     # bonus is the 0-15 source score rescaled x8/15; the source + B4 components
     # remain auditable in the bonus payload.
-    verification = out["shadow_score_v4_breakdown"]["module"]["verification_bonus"]
+    verification = out["v4_breakdown"]["module"]["verification_bonus"]
     # NSF Sport at sku scope: B4a(8) + B4b(4, inferred cert->GMP) = 12 source trust.
     assert verification["metadata"]["source_trust_score_0_15"] == 12.0
     assert verification["score"] == round(12.0 * 8.0 / 15.0, 4)

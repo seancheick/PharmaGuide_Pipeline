@@ -291,7 +291,7 @@ def test_corpus_boron_and_pho_products_are_v4_native_blocked() -> None:
         pytest.skip("enriched corpus not present (scripts/products/*_enriched/)")
 
     from inactive_ingredient_resolver import InactiveIngredientResolver
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     resolver = InactiveIngredientResolver()
     matched = 0
@@ -301,11 +301,11 @@ def test_corpus_boron_and_pho_products_are_v4_native_blocked() -> None:
         if not rule:
             continue
         matched += 1
-        out = score_product_v4_shadow(product)
-        verdict = out.get("shadow_score_v4_verdict")
+        out = score_product_v4(product)
+        verdict = out.get("v4_verdict")
         if verdict != "BLOCKED":
             failures.append(
-                (dsld_id, rule, verdict, out.get("shadow_score_v4_100"),
+                (dsld_id, rule, verdict, out.get("raw_score_v4_100"),
                  product.get("fullName") or product.get("product_name"))
             )
 

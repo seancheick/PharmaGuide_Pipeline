@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""P1.5 v4 shadow canary comparator.
+"""P1.5 v4 canary comparator.
 
-Audit-only tool. It runs the v4 shadow scorer against the curated canary
+Audit-only tool. It runs the v4 scorer against the curated canary
 set, compares v4 rank order to the v3 shipped-score baseline inside each
 primary class, and emits an omega decision signal:
 
@@ -36,7 +36,7 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from score_supplements_v4_shadow import score_product_v4_shadow
+from score_supplements_v4 import score_product_v4
 
 
 OMEGA_CLASSES = {"fish_oil", "omega", "omega_3", "omega-3"}
@@ -119,8 +119,8 @@ def score_canaries(
             )
             continue
 
-        shadow = score_product_v4_shadow(product)
-        breakdown = shadow.get("shadow_score_v4_breakdown", {})
+        shadow = score_product_v4(product)
+        breakdown = shadow.get("v4_breakdown", {})
         module = _safe_dict(breakdown.get("module"))
         module_metadata = _safe_dict(module.get("metadata"))
         dimensions = _safe_dict(module.get("dimensions"))
@@ -132,13 +132,13 @@ def score_canaries(
         rows.append(
             {
                 **base,
-                "status": "scored" if shadow.get("shadow_score_v4_100") is not None else "shadow_unscored",
-                "v4_score": shadow.get("shadow_score_v4_100"),
+                "status": "scored" if shadow.get("raw_score_v4_100") is not None else "shadow_unscored",
+                "v4_score": shadow.get("raw_score_v4_100"),
                 "v4_raw_score": module.get("raw_score_100"),
                 "v4_score_policy": module_metadata.get("score_policy"),
-                "v4_verdict": shadow.get("shadow_score_v4_verdict"),
-                "v4_confidence": shadow.get("shadow_score_v4_confidence"),
-                "v4_module": shadow.get("shadow_score_v4_module"),
+                "v4_verdict": shadow.get("v4_verdict"),
+                "v4_confidence": shadow.get("v4_confidence"),
+                "v4_module": shadow.get("v4_module"),
                 "v4_dimensions": {
                     name: _safe_dict(payload).get("score")
                     for name, payload in dimensions.items()
@@ -334,8 +334,8 @@ def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 def write_reports(rows: List[Dict[str, Any]], summary: Dict[str, Any], out_dir: Path) -> tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
-    json_path = out_dir / "v4_shadow_canary_report.json"
-    md_path = out_dir / "v4_shadow_canary_report.md"
+    json_path = out_dir / "v4_canary_report.json"
+    md_path = out_dir / "v4_canary_report.md"
     payload = {
         "metadata": {
             "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -467,7 +467,7 @@ def main(argv: list[str] | None = None) -> int:
     out_dir = args.out_dir
     if out_dir is None:
         stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-        out_dir = DEFAULT_REPORT_ROOT / f"v4_shadow_canary_{stamp}"
+        out_dir = DEFAULT_REPORT_ROOT / f"v4_canary_{stamp}"
     json_path, md_path = write_reports(rows, summary, out_dir)
     print(f"Wrote {json_path}")
     print(f"Wrote {md_path}")

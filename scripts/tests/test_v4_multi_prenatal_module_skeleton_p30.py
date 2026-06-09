@@ -212,51 +212,51 @@ def test_multi_prenatal_module_exported_from_modules_package() -> None:
 
 
 def test_shadow_scorer_wires_complete_multivitamin_to_p3_module() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    shadow = score_product_v4_shadow(COMPLETE_MULTI_PRODUCT)
+    shadow = score_product_v4(COMPLETE_MULTI_PRODUCT)
 
-    assert shadow["shadow_score_v4_module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_100"] is not None
-    assert shadow["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
-    assert shadow["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_breakdown"]["module"]["phase"].startswith("P3.")
+    assert shadow["v4_module"] == "multi_or_prenatal"
+    assert shadow["raw_score_v4_100"] is not None
+    assert shadow["v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
+    assert shadow["v4_confidence"] in {"high", "moderate", "low"}
+    assert shadow["v4_breakdown"]["module"]["module"] == "multi_or_prenatal"
+    assert shadow["v4_breakdown"]["module"]["phase"].startswith("P3.")
 
 
 def test_shadow_scorer_wires_prenatal_dha_to_omega_not_p3() -> None:
     # A single-purpose prenatal DHA (DHA-only) routes OMEGA, not multi_or_prenatal
     # — it has no prenatal nutrient panel for the multi module to score, and the
     # omega module credits it against the prenatal DHA target.
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    shadow = score_product_v4_shadow(COMPLETE_PRENATAL_DHA_PRODUCT)
+    shadow = score_product_v4(COMPLETE_PRENATAL_DHA_PRODUCT)
 
-    assert shadow["shadow_score_v4_module"] == "omega"
-    assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "omega"
+    assert shadow["v4_module"] == "omega"
+    assert shadow["v4_breakdown"]["module"]["module"] == "omega"
 
 
 def test_shadow_scorer_incomplete_disclosure_still_scores_with_low_confidence() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     incomplete = json.loads(json.dumps(COMPLETE_MULTI_PRODUCT))
     for ingredient in incomplete["ingredient_quality_data"]["ingredients_scorable"]:
         ingredient.pop("unit", None)
 
-    shadow = score_product_v4_shadow(incomplete)
+    shadow = score_product_v4(incomplete)
 
-    assert shadow["shadow_score_v4_module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_verdict"] != "NOT_SCORED"
-    assert shadow["shadow_score_v4_confidence"] == "low"
-    assert "module" in shadow["shadow_score_v4_breakdown"]
-    gate = shadow["shadow_score_v4_breakdown"]["completeness_gate"]
+    assert shadow["v4_module"] == "multi_or_prenatal"
+    assert shadow["v4_verdict"] != "NOT_SCORED"
+    assert shadow["v4_confidence"] == "low"
+    assert "module" in shadow["v4_breakdown"]
+    gate = shadow["v4_breakdown"]["completeness_gate"]
     assert "micronutrient_panel_dose_coverage_low" in gate["soft_missing"]
     assert gate["score_cap"] is None
     assert gate["verdict_ceiling"] is None
 
 
 def test_shadow_scorer_safety_short_circuits_before_p3_module() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     unsafe = json.loads(json.dumps(COMPLETE_MULTI_PRODUCT))
     unsafe["contaminant_data"] = {
@@ -271,8 +271,8 @@ def test_shadow_scorer_safety_short_circuits_before_p3_module() -> None:
         }
     }
 
-    shadow = score_product_v4_shadow(unsafe)
+    shadow = score_product_v4(unsafe)
 
-    assert shadow["shadow_score_v4_verdict"] == "BLOCKED"
-    assert shadow["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
-    assert "module" not in shadow["shadow_score_v4_breakdown"]
+    assert shadow["v4_verdict"] == "BLOCKED"
+    assert shadow["v4_confidence"] == "blocked_by_safety_gate"
+    assert "module" not in shadow["v4_breakdown"]

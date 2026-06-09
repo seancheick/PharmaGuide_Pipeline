@@ -6,8 +6,8 @@ derived by worst-case across four typed sub-categories from the v4 spec:
 
     evidence, label_completeness, verification, identity
 
-This module intentionally does not import the v3 scorer. It reads the v4
-shadow breakdown plus the enriched product contract.
+This module intentionally does not import the legacy scorer. It reads the v4
+breakdown plus the enriched product contract.
 """
 
 from __future__ import annotations
@@ -45,11 +45,11 @@ def evaluate_confidence(
     safety_gate: Dict[str, Any],
     completeness_gate: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """Build the typed confidence object for a scoreable shadow row.
+    """Build the typed confidence object for a scoreable v4 row.
 
     Args:
         product: Enriched product dict.
-        module_breakdown: `shadow_score_v4_breakdown["module"]`.
+        module_breakdown: `v4_breakdown["module"]`.
         safety_gate: rendered safety-gate breakdown.
         completeness_gate: rendered completeness-gate breakdown.
 

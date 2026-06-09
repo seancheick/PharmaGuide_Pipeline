@@ -31,7 +31,7 @@ one or the other; never let them disagree silently.
 | `absorption_structured` | object | `{value, range_low, range_high, quality, notes}`. `quality` enum: `{excellent, very_good, good, moderate, low, poor, variable, unknown}`. |
 | `dosage_importance` | enum | How much dosing precision matters for this form's effect. |
 
-## Scoring fields (product-level export — v2.0.0 v4 cutover)
+## Scoring fields (product-level export — v2.0.0 v4 production)
 
 - `quality_score_v4_100` — **canonical shipped score** (six-pillar /100). The primary export/ranking field.
 - `quality_score_status` — `scored` | `suppressed_safety` | `not_scored`.

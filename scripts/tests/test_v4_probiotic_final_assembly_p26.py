@@ -14,8 +14,8 @@ Closes the probiotic module by:
   3. Applying the Phase 9 rubric-is-score policy:
        score_100 = clamp(0, 100, 25 + 0.75 * raw_score_100)
 
-  4. Wiring shadow scorer dispatch so probiotic now emits a real
-     `shadow_score_v4_100`, verdict, and typed confidence band (matching
+  4. Wiring v4 scorer dispatch so probiotic now emits a real
+     `raw_score_v4_100`, verdict, and typed confidence band (matching
      the pattern P1.4 added for generic).
 
   5. Extending `_label_completeness_confidence` to recognize probiotic
@@ -236,22 +236,22 @@ def test_probiotic_assembly_metadata_carries_audit_fields() -> None:
 
 
 def test_shadow_emits_real_score_for_probiotic_at_p26() -> None:
-    """The shadow scorer now emits shadow_score_v4_100 + verdict +
+    """The v4 scorer now emits raw_score_v4_100 + verdict +
     confidence band for probiotic products — matching the generic
     P1.4 pattern."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_probiotic_product())
+    out = score_product_v4(_probiotic_product())
 
-    assert out["shadow_score_v4_module"] == "probiotic"
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
+    assert out["v4_module"] == "probiotic"
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
     # Probiotic confidence now goes through evaluate_confidence
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
 
 
 def test_shadow_verdict_safe_when_score_above_40() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     # Strong probiotic with SKU certs → production score well above 40
     product = _probiotic_product(
@@ -259,26 +259,26 @@ def test_shadow_verdict_safe_when_score_above_40() -> None:
             {"program": "nsf certified for sport", "scope": "sku", "evidence_source": "registry"}
         ],
     )
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_100"] > 40.0
-    assert out["shadow_score_v4_verdict"] == "SAFE"
+    out = score_product_v4(product)
+    assert out["raw_score_v4_100"] > 40.0
+    assert out["v4_verdict"] == "SAFE"
 
 
 def test_shadow_verdict_caution_overrides_score_band() -> None:
     """A disease-claim CAUTION carried from Layer 1 wins over the SAFE
     score band."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _probiotic_product(has_disease_claims=True)
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
     # Score may still be SAFE-range but the verdict is CAUTION (carried).
-    assert out["shadow_score_v4_verdict"] == "CAUTION"
+    assert out["v4_verdict"] == "CAUTION"
 
 
 def test_shadow_blocked_safety_short_circuits_before_p26() -> None:
     """A banned-substance probiotic still short-circuits at Layer 1.
     No module scoring runs, no score_100 assembled."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _probiotic_product()
     product["contaminant_data"] = {
@@ -286,10 +286,10 @@ def test_shadow_blocked_safety_short_circuits_before_p26() -> None:
             {"name": "Vinpocetine", "status": "banned", "match_type": "exact"}
         ]}
     }
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    assert out["shadow_score_v4_100"] is None
-    assert out["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
+    out = score_product_v4(product)
+    assert out["v4_verdict"] == "BLOCKED"
+    assert out["raw_score_v4_100"] is None
+    assert out["v4_confidence"] == "blocked_by_safety_gate"
 
 
 # --- Confidence wiring ----------------------------------------------------
@@ -299,10 +299,10 @@ def test_confidence_label_completeness_flags_per_strain_cfu_gap() -> None:
     """Probiotic with aggregate-CFU-only (no per-strain CFU) should
     surface as a label_completeness driver: not-final-window but a
     probiotic-specific signal."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_probiotic_product())  # aggregate CFU only
-    conf = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(_probiotic_product())  # aggregate CFU only
+    conf = out["v4_breakdown"]["confidence"]
     drivers = conf["label_completeness"]["drivers"]
 
     # The driver name we plan to emit:
@@ -314,7 +314,7 @@ def test_confidence_label_completeness_flags_per_strain_cfu_gap() -> None:
 def test_confidence_high_when_full_per_strain_disclosure() -> None:
     """A probiotic that DOES disclose per-strain CFU shouldn't get the
     aggregate-only label-completeness penalty."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _probiotic_product()
     # Replace blends with per-strain CFU disclosure
@@ -331,8 +331,8 @@ def test_confidence_high_when_full_per_strain_disclosure() -> None:
          "adequacy_tier": "adequate", "cfu_per_day": 1e10}
         for i in range(5)
     ]
-    out = score_product_v4_shadow(product)
-    conf = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(product)
+    conf = out["v4_breakdown"]["confidence"]
     drivers = conf["label_completeness"]["drivers"]
     # No per-strain-CFU driver expected
     assert not any("per_strain_cfu" in d.lower() for d in drivers)
@@ -344,7 +344,7 @@ def test_confidence_high_when_full_per_strain_disclosure() -> None:
 def test_canary_spring_valley_probiotic_50b_scoreable_at_p26() -> None:
     """Real DSLD canary 178346 — should now emit a real score_100."""
     import json
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     products_root = Path("/Users/seancheick/Downloads/dsld_clean/scripts/products")
     for p in products_root.glob("output_*_enriched/enriched/enriched_cleaned_batch_*.json"):
@@ -362,10 +362,10 @@ def test_canary_spring_valley_probiotic_50b_scoreable_at_p26() -> None:
                             "Spring Valley 50B canary artifact lacks strict v4 scoring inputs; "
                             "rerun enrichment before using as canary"
                         )
-                    out = score_product_v4_shadow(item)
-                assert out["shadow_score_v4_module"] == "probiotic"
-                assert out["shadow_score_v4_100"] is not None
-                assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
+                    out = score_product_v4(item)
+                assert out["v4_module"] == "probiotic"
+                assert out["raw_score_v4_100"] is not None
+                assert out["v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
                 return
     # If the canary isn't in the enriched dirs, skip gracefully
     import pytest

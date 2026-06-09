@@ -419,7 +419,6 @@ From current config (`feature_gates` block):
 - `require_full_mapping = true` — any unmapped active returns `NOT_SCORED`
 - `probiotic_extended_scoring = false`
 - `allow_non_probiotic_probiotic_bonus_with_strict_gate = true`
-- `shadow_mode = true` *(DEPRECATED — present for historical reasons, never read by the scorer)*
 - `enable_non_gmo_bonus = true` — A5d: +0.5 for Non-GMO Project Verified
 - `enable_hypoallergenic_bonus = false`
 - `enable_d1_middle_tier = true` — D1 middle-tier reputation (+1) for verifiable NSF GMP / FDA registered / USP / named GMP evidence

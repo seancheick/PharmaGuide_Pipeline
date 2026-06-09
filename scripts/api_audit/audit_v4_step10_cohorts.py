@@ -2,7 +2,7 @@
 
 Single runnable harness for the v4-finalization Step 10 exit gate. Consumes the
 v3↔v4 comparison rows from `v4_full_corpus_delta.build_rows` (shipped v3 scored
-artifacts as baseline, fresh v4 shadow scores) and produces:
+artifacts as baseline, fresh v4 scores) and produces:
 
   1. The 4 AUTOMATED cutover gates (GREEN/RED):
        G1  shipped_safety_downgrades == 0   (v3 CAUTION+ → v4 more permissive)
@@ -47,7 +47,7 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit"), str(SCRIPTS_ROOT 
         sys.path.insert(0, _p)
 
 import v4_full_corpus_delta as delta  # noqa: E402
-import v4_shadow_canary_report as canary  # noqa: E402  (index builders + helpers)
+import v4_canary_report as canary  # noqa: E402  (index builders + helpers)
 
 DEFAULT_OUT_DIR = REPO_ROOT / "reports" / "v4_step10_validation"
 

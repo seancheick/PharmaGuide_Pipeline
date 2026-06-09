@@ -25,7 +25,7 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
         sys.path.insert(0, _p)
 
 from scoring_input_contract import build_scoring_classification  # noqa: E402
-import v4_shadow_canary_report as canary  # noqa: E402
+import v4_canary_report as canary  # noqa: E402
 
 
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"

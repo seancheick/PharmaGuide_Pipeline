@@ -598,11 +598,11 @@ def test_reference_only_evidence_level_scores_zero() -> None:
 
 
 def test_shadow_wires_evidence_dimension() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_product())
+    out = score_product_v4(_product())
 
-    evidence = out["shadow_score_v4_breakdown"]["module"]["dimensions"]["evidence"]
+    evidence = out["v4_breakdown"]["module"]["dimensions"]["evidence"]
     # Phase 8: the generic module opts into the primary-ingredient floor. The
     # default product's mass-primary magnesium has a systematic_review_meta
     # positive match -> floored to 14.0 (non-branded strong; 3-lane model 2026-06-06:

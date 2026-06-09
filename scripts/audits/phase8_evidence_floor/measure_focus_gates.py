@@ -4,7 +4,7 @@ import json, glob, sys
 from collections import Counter, defaultdict
 sys.path.insert(0, "/Users/seancheick/Downloads/dsld_clean/scripts")
 import scoring_v4.modules.generic_evidence as ge
-from score_supplements_v4_shadow import score_product_v4_shadow
+from score_supplements_v4 import score_product_v4
 
 # load corpus once
 products = []
@@ -24,10 +24,10 @@ def run(enabled, focus_max):
     out = {}
     for it in products:
         try:
-            o = score_product_v4_shadow(it)
+            o = score_product_v4(it)
         except Exception:
             continue
-        out[str(it.get("dsld_id"))] = (o["shadow_score_v4_verdict"], o["shadow_score_v4_100"], o["shadow_score_v4_module"])
+        out[str(it.get("dsld_id"))] = (o["v4_verdict"], o["raw_score_v4_100"], o["v4_module"])
     return out
 
 base = run(False, 0)

@@ -1,4 +1,4 @@
-"""P1.5 v4 shadow canary comparator tests."""
+"""P1.5 v4 canary comparator tests."""
 
 from __future__ import annotations
 
@@ -12,7 +12,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 
 
 def test_assign_rank_deltas_compares_v4_rank_to_v3_baseline_within_group() -> None:
-    from api_audit.v4_shadow_canary_report import assign_rank_deltas
+    from api_audit.v4_canary_report import assign_rank_deltas
 
     rows = [
         {"dsld_id": "a", "primary_class": "single_nutrient", "v3_shipped_score": 90, "v4_score": 80},
@@ -35,7 +35,7 @@ def test_assign_rank_deltas_compares_v4_rank_to_v3_baseline_within_group() -> No
 
 
 def test_summarize_flags_omega_review_when_rank_drift_exceeds_one() -> None:
-    from api_audit.v4_shadow_canary_report import summarize_records
+    from api_audit.v4_canary_report import summarize_records
 
     rows = [
         {
@@ -84,7 +84,7 @@ def test_summarize_flags_omega_review_when_rank_drift_exceeds_one() -> None:
 
 
 def test_summarize_passes_omega_when_rank_order_is_within_one() -> None:
-    from api_audit.v4_shadow_canary_report import summarize_records
+    from api_audit.v4_canary_report import summarize_records
 
     rows = [
         {
@@ -115,13 +115,13 @@ def test_summarize_passes_omega_when_rank_order_is_within_one() -> None:
     # shipped the omega module (S1211), the no-drift decision now names what
     # it actually tracks — drift vs the shipped omega module baseline, not
     # tolerance against a generic-tier fallback. See
-    # scripts/api_audit/v4_shadow_canary_report.py docstring.
+    # scripts/api_audit/v4_canary_report.py docstring.
     assert summary["omega"]["decision"] == "omega_module_no_drift"
     assert summary["score_policy_counts"] == {"rubric_raw_is_production_score": 2}
 
 
 def test_summarize_flags_omega_review_on_large_score_drop_even_when_rank_is_stable() -> None:
-    from api_audit.v4_shadow_canary_report import summarize_records
+    from api_audit.v4_canary_report import summarize_records
 
     rows = [
         {
@@ -157,7 +157,7 @@ def test_summarize_flags_omega_review_on_large_score_drop_even_when_rank_is_stab
 
 
 def test_summarize_flags_omega_review_on_safe_to_poor_transition() -> None:
-    from api_audit.v4_shadow_canary_report import summarize_records
+    from api_audit.v4_canary_report import summarize_records
 
     rows = [
         {
@@ -193,7 +193,7 @@ def test_summarize_flags_omega_review_on_safe_to_poor_transition() -> None:
 
 
 def test_mark_missing_canary_when_no_enriched_product_exists() -> None:
-    from api_audit.v4_shadow_canary_report import score_canaries
+    from api_audit.v4_canary_report import score_canaries
 
     rows = score_canaries(
         [{"dsld_id": "missing", "primary_class": "single_nutrient", "v3_shipped_score": 50}],
@@ -206,7 +206,7 @@ def test_mark_missing_canary_when_no_enriched_product_exists() -> None:
 
 
 def test_score_canaries_extracts_top_level_shadow_fields() -> None:
-    from api_audit.v4_shadow_canary_report import score_canaries
+    from api_audit.v4_canary_report import score_canaries
 
     product = {
         "status": "active",
@@ -248,7 +248,7 @@ def test_score_canaries_extracts_top_level_shadow_fields() -> None:
 
 
 def test_score_canaries_routes_sports_canary_to_sports_module() -> None:
-    from api_audit.v4_shadow_canary_report import score_canaries
+    from api_audit.v4_canary_report import score_canaries
 
     product = {
         "status": "active",
@@ -292,7 +292,7 @@ def test_score_canaries_routes_sports_canary_to_sports_module() -> None:
 
 
 def test_diagnose_compression_flags_sports_generic_routing_regression() -> None:
-    from api_audit.v4_shadow_canary_report import diagnose_compression
+    from api_audit.v4_canary_report import diagnose_compression
 
     row = {
         "primary_class": "sports_transparent",
@@ -307,7 +307,7 @@ def test_diagnose_compression_flags_sports_generic_routing_regression() -> None:
 
 
 def test_diagnose_compression_flags_sports_dose_not_evaluable() -> None:
-    from api_audit.v4_shadow_canary_report import diagnose_compression
+    from api_audit.v4_canary_report import diagnose_compression
 
     row = {
         "primary_class": "sports_opaque",
@@ -326,7 +326,7 @@ def test_diagnose_compression_flags_sports_dose_not_evaluable() -> None:
 
 
 def test_extract_v3_sections_from_scored_breakdown() -> None:
-    from api_audit.v4_shadow_canary_report import extract_v3_sections
+    from api_audit.v4_canary_report import extract_v3_sections
 
     sections = extract_v3_sections(
         {
@@ -353,7 +353,7 @@ def test_extract_v3_sections_from_scored_breakdown() -> None:
 
 
 def test_diagnose_compression_flags_missing_v3_safety_base() -> None:
-    from api_audit.v4_shadow_canary_report import diagnose_compression
+    from api_audit.v4_canary_report import diagnose_compression
 
     row = {
         "score_delta_vs_v3": -26.5,
@@ -370,7 +370,7 @@ def test_diagnose_compression_flags_missing_v3_safety_base() -> None:
 
 
 def test_diagnose_compression_flags_not_evaluable_dose_plus_large_drop() -> None:
-    from api_audit.v4_shadow_canary_report import diagnose_compression
+    from api_audit.v4_canary_report import diagnose_compression
 
     row = {
         "score_delta_vs_v3": -26.5,
@@ -388,7 +388,7 @@ def test_diagnose_compression_flags_not_evaluable_dose_plus_large_drop() -> None
 
 
 def test_score_canaries_attaches_v3_sections_and_compression_flags() -> None:
-    from api_audit.v4_shadow_canary_report import score_canaries
+    from api_audit.v4_canary_report import score_canaries
 
     product = {
         "status": "active",

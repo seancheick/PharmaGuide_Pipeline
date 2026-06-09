@@ -39,7 +39,7 @@ in v4 routing, scoring, gates, confidence, and final export.
 
 | File:Line | Site | Reads | Verdict |
 |---|---|---|---|
-| `score_supplements_v4_shadow.py:63,176` | Imports + calls `router.class_for_product` | (delegates) | ✅ COMPLIANT |
+| `score_supplements_v4.py:63,176` | Imports + calls `router.class_for_product` | (delegates) | ✅ COMPLIANT |
 
 ## v3 score_supplements surface (out of SP-2 v4 scope but inventoried)
 

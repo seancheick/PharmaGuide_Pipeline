@@ -6,8 +6,8 @@ contract:
   raw DSLD JSON
     → clean_dsld_data normalizes
     → enrich_supplements_v3 attaches taxonomy + form_factor_canonical
-    → score_supplements computes the score + verdict
-    → score_supplements_v4_shadow attaches shadow_score_v4 fields
+    → score_supplements computes legacy review/detail scaffolding
+    → score_supplements_v4 attaches production v4 result fields
     → build_final_db builds the products_core row
 
 If any stage breaks because of recent SP-2 / SP-3 changes, this test
@@ -201,13 +201,13 @@ def test_v3_scorer_percentile_reads_taxonomy():
 
 
 # ============================================================================
-# Stage 4 — v4 shadow scorer end-to-end on a fully-formed enriched blob
+# Stage 4 — v4 scorer end-to-end on a fully-formed enriched blob
 # ============================================================================
 
-def test_v4_shadow_scorer_produces_breakdown():
-    """The shadow scorer chain: router decision → safety/completeness gates
+def test_v4_scorer_produces_breakdown():
+    """The v4 scorer chain: router decision → safety/completeness gates
     → module dispatch → final breakdown."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     enriched_blob = {
         "dsld_id": "999001",
@@ -252,10 +252,10 @@ def test_v4_shadow_scorer_produces_breakdown():
         "servingSizes": SYNTHETIC_RAW_PRODUCT["servingSizes"],
         "verified_cert_programs": [],
     }
-    result = score_product_v4_shadow(enriched_blob)
-    assert "shadow_score_v4_breakdown" in result
-    assert "shadow_score_v4_verdict" in result
-    breakdown = result["shadow_score_v4_breakdown"]
+    result = score_product_v4(enriched_blob)
+    assert "v4_breakdown" in result
+    assert "v4_verdict" in result
+    breakdown = result["v4_breakdown"]
     assert breakdown.get("module", {}).get("module") == "omega", (
         f"Smoke omega-3 must use omega module, got module={breakdown.get('module')!r}"
     )

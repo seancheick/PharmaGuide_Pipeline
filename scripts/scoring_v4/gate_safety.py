@@ -79,7 +79,7 @@ class SafetyResult:
             module.
         short_circuits_scoring: True when verdict is BLOCKED or UNSAFE.
             Caller must skip the scoring math entirely and emit the
-            shadow score with score=None. The shadow `anchored` flag is
+            v4 score with score=None. The v4 `anchored` flag is
             reserved for canary-set membership, not safety finality.
         blocking_reason: A stable code for explainability and Flutter
             UI ('banned_ingredient' / 'recalled_ingredient' / etc.) when
@@ -559,7 +559,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
     Never raises. Resilient to missing / malformed fields. Returns a
-    SafetyResult — the caller (shadow entry point) decides how to apply
+    SafetyResult — the caller (v4 entry point) decides how to apply
     the verdict and short-circuit logic.
     """
     if not isinstance(product, dict):

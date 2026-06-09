@@ -507,8 +507,7 @@ class TestFeatureGates:
                     "enable_claims_scoring": False,
                     "enable_certification_scoring": False,
                     "enable_gmp_scoring": False,
-                    "enable_batch_traceability_scoring": False,
-                    "shadow_mode": True
+                    "enable_batch_traceability_scoring": False
                 }
             }
             scorer = SupplementScorer.__new__(SupplementScorer)
@@ -536,8 +535,7 @@ class TestFeatureGates:
                     "enable_claims_scoring": True,
                     "enable_certification_scoring": True,
                     "enable_gmp_scoring": True,
-                    "enable_batch_traceability_scoring": True,
-                    "shadow_mode": True
+                    "enable_batch_traceability_scoring": True
                 }
             }
             scorer = SupplementScorer.__new__(SupplementScorer)

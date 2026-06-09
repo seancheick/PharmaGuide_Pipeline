@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Phase A1 — Full-corpus v4-vs-shipped-v3 delta runner.
 
-Audit-only. Scores every enriched product with the v4 shadow scorer and
+Audit-only. Scores every enriched product with the v4 v4 scorer and
 compares to the **shipped v3 scored output** (NOT a fresh re-score). The
 cutover question is "does v4 preserve what shipped?", not "does v4 match
 today's local v3 code/config?" — so the baseline is the scored artifacts
@@ -17,7 +17,7 @@ Outputs (under reports/v4_corpus_delta/):
   - provenance.json    baseline artifact paths, mtimes, count, hash +
                        products_core reconciliation
 
-Reuses helpers from v4_shadow_canary_report.py (no duplication):
+Reuses helpers from v4_canary_report.py (no duplication):
   build_enriched_index, build_scored_index, extract_v3_sections,
   diagnose_compression, _iter_products, _dsld_id, _num, _safe_dict.
 
@@ -43,8 +43,8 @@ for _p in (str(SCRIPTS_ROOT), str(SCRIPTS_ROOT / "api_audit")):
     if _p not in sys.path:
         sys.path.insert(0, _p)
 
-from score_supplements_v4_shadow import score_product_v4_shadow  # noqa: E402
-import v4_shadow_canary_report as canary  # noqa: E402
+from score_supplements_v4 import score_product_v4  # noqa: E402
+import v4_canary_report as canary  # noqa: E402
 
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"
 DEFAULT_DIST_DB = SCRIPTS_ROOT / "dist" / "pharmaguide_core.db"
@@ -129,8 +129,8 @@ def build_rows(
                          "v4_confidence_detail": None, "compression_flags": []})
             continue
 
-        shadow = score_product_v4_shadow(enriched)
-        breakdown = canary._safe_dict(shadow.get("shadow_score_v4_breakdown"))
+        shadow = score_product_v4(enriched)
+        breakdown = canary._safe_dict(shadow.get("v4_breakdown"))
         completeness_gate = canary._safe_dict(breakdown.get("completeness_gate"))
         module = canary._safe_dict(breakdown.get("module"))
         module_metadata = canary._safe_dict(module.get("metadata"))
@@ -141,7 +141,7 @@ def build_rows(
         }
         confidence = breakdown.get("confidence")
 
-        v4_score = canary._num(shadow.get("shadow_score_v4_100"))
+        v4_score = canary._num(shadow.get("raw_score_v4_100"))
         v4_raw = canary._num(module.get("raw_score_100"))
 
         row = {
@@ -149,8 +149,8 @@ def build_rows(
             "status": "scored" if v4_score is not None else "shadow_unscored",
             "v4_score": v4_score,
             "v4_raw_score": v4_raw,
-            "v4_verdict": shadow.get("shadow_score_v4_verdict"),
-            "v4_module": shadow.get("shadow_score_v4_module"),
+            "v4_verdict": shadow.get("v4_verdict"),
+            "v4_module": shadow.get("v4_module"),
             "v4_dimensions": {n: canary._safe_dict(p).get("score") for n, p in dimensions.items()},
             "v4_dimension_metadata": dimension_metadata,
             # Phase 4: verification is an additive bonus (0-8), no longer a core

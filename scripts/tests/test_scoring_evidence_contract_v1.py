@@ -9,7 +9,7 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from score_supplements_v4_shadow import score_product_v4_shadow  # noqa: E402
+from score_supplements_v4 import score_product_v4  # noqa: E402
 from scoring_input_contract import get_scoring_ingredients  # noqa: E402
 from scoring_input_contract import derive_product_scoring_evidence  # noqa: E402
 from scoring_v4.router import class_for_product  # noqa: E402
@@ -41,8 +41,8 @@ def test_protein_macro_reaches_v4_as_sports_primary_dose_evidence() -> None:
     assert rows, "Protein macro dose must be normalized into ScoringEvidence v1"
     assert max(float(row["quantity"]) for row in rows) >= 19.0
 
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
+    out = score_product_v4(product)
+    assert out["v4_verdict"] != "NOT_SCORED"
 
 
 def test_omega_aggregate_and_forms_reach_v4_as_epa_dha_evidence() -> None:
@@ -53,8 +53,8 @@ def test_omega_aggregate_and_forms_reach_v4_as_epa_dha_evidence() -> None:
         assert rows, f"{dsld_id} must emit omega EPA/DHA aggregate evidence"
         assert max(float(row["quantity"]) for row in rows) >= minimum
 
-        out = score_product_v4_shadow(product)
-        assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
+        out = score_product_v4(product)
+        assert out["v4_verdict"] != "NOT_SCORED"
 
 
 def test_vitamin_carried_in_fish_oil_does_not_emit_omega_evidence() -> None:
@@ -102,8 +102,8 @@ def test_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
     assert rows, "PPI/ALU/BLGU activity units must be scoring evidence"
     assert any(str(row.get("unit")).lower() == "ppi" for row in rows)
 
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
+    out = score_product_v4(product)
+    assert out["v4_verdict"] != "NOT_SCORED"
 
 
 def test_galu_enzyme_activity_reaches_v4_as_non_mass_dose_evidence() -> None:
@@ -222,9 +222,9 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
     assert rows[0]["canonical_id"] == "quercetin"
     assert float(rows[0]["quantity"]) >= 300.0
 
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] == "SAFE"
-    completeness = out["shadow_score_v4_breakdown"]["completeness_gate"]
+    out = score_product_v4(product)
+    assert out["v4_verdict"] == "SAFE"
+    completeness = out["v4_breakdown"]["completeness_gate"]
     assert "conservative_blend_anchor_mass" in completeness["soft_missing"]
     assert completeness["score_cap"] is None
     assert completeness["verdict_ceiling"] is None
@@ -233,8 +233,8 @@ def test_identity_bearing_blend_total_reaches_v4_as_anchor_mass_evidence() -> No
 def test_percent_dv_only_dose_counts_as_conservative_dose_evidence() -> None:
     product = _load_product("76510")
 
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
+    out = score_product_v4(product)
+    assert out["v4_verdict"] != "NOT_SCORED"
 
 
 def test_cod_liver_oil_in_forms_does_not_emit_omega_evidence() -> None:

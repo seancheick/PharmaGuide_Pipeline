@@ -10,7 +10,7 @@ a soft-signal cap; transparency remains a faithful source-dimension map because 
 does not have the same structural ceiling problem.
 
 INVARIANTS:
-- ``raw_score_v4_100`` (== existing ``shadow_score_v4_100``) is NEVER changed.
+- ``raw_score_v4_100`` (== existing ``raw_score_v4_100``) is NEVER changed.
 - BLOCKED / UNSAFE suppress the public quality score (show verdict + reasons instead).
 - NOT_SCORED / null raw → ``not_scored`` status, null score.
 - Every pillar carries a one-line human-readable reason (white box, no black box).
@@ -195,7 +195,7 @@ def _clean_label_penalty(hits: Any, cfg: Dict[str, Any]) -> tuple[float, List[Di
     enriched hit carries `penalty_applied` (its own pre-cap contribution) for the flag.
 
     Magnitudes are config-driven (clean_label_subscale) and PENDING user/advisor
-    sign-off (spec §7). The raw shadow score is never touched by this.
+    sign-off (spec §7). The raw v4 score is never touched by this.
     """
     sub = cfg.get("clean_label_subscale") or {}
     if not sub or not isinstance(hits, list) or not hits:
@@ -485,54 +485,54 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
     return pillars
 
 
-def assemble_quality_score(shadow: Dict[str, Any]) -> Dict[str, Any]:
-    """Add public six-pillar quality fields. Mutates & returns ``shadow``.
-    ``shadow_score_v4_100`` (raw) is never modified."""
+def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
+    """Add public six-pillar quality fields. Mutates & returns ``result``.
+    ``raw_score_v4_100`` (raw) is never modified."""
     cfg = _config()
-    raw = shadow.get("shadow_score_v4_100")
-    verdict = str(shadow.get("shadow_score_v4_verdict") or "")
-    module = shadow.get("shadow_score_v4_module")
-    breakdown = shadow.get("shadow_score_v4_breakdown") or {}
+    raw = result.get("raw_score_v4_100")
+    verdict = str(result.get("v4_verdict") or "")
+    module = result.get("v4_module")
+    breakdown = result.get("v4_breakdown") or {}
     module_bd = breakdown.get("module") or {}
     supp = cfg["suppression"]
     blocking_reason = (breakdown.get("safety_gate") or {}).get("blocking_reason")
 
     # Public-contract aliases / provenance (always emitted)
-    shadow["raw_score_v4_100"] = raw
-    shadow["quality_score_version"] = cfg["_metadata"]["version"]
+    result["raw_score_v4_100"] = raw
+    result["quality_score_version"] = cfg["_metadata"]["version"]
     # Clean-label additive flags (titanium dioxide / E171). Emit the consumer
     # "inform" flag for every status, including BLOCKED/UNSAFE suppressed rows;
     # the numeric penalty only applies on the scored path below.
     clean_label_hits = (breakdown.get("safety_gate") or {}).get("clean_label_hits") or []
     cl_penalty, cl_enriched = _clean_label_penalty(clean_label_hits, cfg)
-    shadow["clean_label_flags_v4"] = _build_clean_label_flags(cl_enriched) or None
+    result["clean_label_flags_v4"] = _build_clean_label_flags(cl_enriched) or None
 
     # Hard safety failure FIRST (BLOCKED/UNSAFE have raw=None but are NOT "not_scored").
     # Suppress the public number; keep pillars if a breakdown exists (audit trail).
     if verdict in supp["suppressed_safety_verdicts"]:
-        shadow["quality_score_v4_100"] = None
-        shadow["quality_pillars_v4"] = _build_pillars(module_bd, cfg, module) if module_bd.get("dimensions") else None
-        shadow["quality_tier"] = None
-        shadow["quality_score_status"] = "suppressed_safety"
-        shadow["quality_score_suppressed_reason"] = blocking_reason or verdict
-        return shadow
+        result["quality_score_v4_100"] = None
+        result["quality_pillars_v4"] = _build_pillars(module_bd, cfg, module) if module_bd.get("dimensions") else None
+        result["quality_tier"] = None
+        result["quality_score_status"] = "suppressed_safety"
+        result["quality_score_suppressed_reason"] = blocking_reason or verdict
+        return result
 
     # NOT_SCORED / no usable score
     if raw is None or verdict in supp["not_scored_verdicts"]:
-        shadow["quality_score_v4_100"] = None
-        shadow["quality_pillars_v4"] = None
-        shadow["quality_tier"] = None
-        shadow["quality_score_status"] = "not_scored"
-        shadow["quality_score_suppressed_reason"] = blocking_reason or (verdict or None)
-        return shadow
+        result["quality_score_v4_100"] = None
+        result["quality_pillars_v4"] = None
+        result["quality_tier"] = None
+        result["quality_score_status"] = "not_scored"
+        result["quality_score_suppressed_reason"] = blocking_reason or (verdict or None)
+        return result
 
     pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty)
     total = max(0.0, min(100.0, round(sum(p["score"] for p in pillars.values()), 1)))
 
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)
-    shadow["quality_score_v4_100"] = total
-    shadow["quality_pillars_v4"] = pillars
-    shadow["quality_tier"] = _tier(total)
-    shadow["quality_score_status"] = "scored"
-    shadow["quality_score_suppressed_reason"] = None
-    return shadow
+    result["quality_score_v4_100"] = total
+    result["quality_pillars_v4"] = pillars
+    result["quality_tier"] = _tier(total)
+    result["quality_score_status"] = "scored"
+    result["quality_score_suppressed_reason"] = None
+    return result

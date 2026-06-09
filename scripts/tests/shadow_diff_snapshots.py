@@ -10,7 +10,7 @@ each diff as:
   - EXPECTED    — drift on a Phase 3 target product (Silybin/Phosphorus) in
                   the intended direction (score correctness improved).
   - UNEXPECTED  — drift on any other product. These block release.
-  - MISSING     — product not found in the shadow output (brand may not
+  - MISSING     — product not found in the v4 output (brand may not
                   have been re-run).
 
 Exit codes:

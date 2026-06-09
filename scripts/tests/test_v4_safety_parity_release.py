@@ -1,7 +1,7 @@
 """v4 safety parity gate against released artifacts.
 
 Clinical invariant: a product that v3 marks BLOCKED must not become scoreable
-or SAFE/POOR in v4 shadow. This catches missing safety-signal propagation
+or SAFE/POOR in v4. This catches missing safety-signal propagation
 between enrichment, scoring, final DB, and v4 module dispatch.
 """
 
@@ -57,7 +57,7 @@ RED3_RECLASSIFIED_TO_CAUTION = {"315819", "315092", "306181", "312638"}
 
 
 def test_v3_blocked_release_products_remain_v4_blocked() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     release_ids = _load_release_ids()
     scored = _load_json_records("scripts/products/output_*_scored/scored/*.json")
@@ -76,8 +76,8 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
         if not product:
             failures.append((dsld_id, "missing enriched blob", None))
             continue
-        out = score_product_v4_shadow(product)
-        verdict = out.get("shadow_score_v4_verdict")
+        out = score_product_v4(product)
+        verdict = out.get("v4_verdict")
         if dsld_id in RED3_RECLASSIFIED_TO_CAUTION:
             # Intentional Red 3 reclassification: BLOCK → CAUTION. Still must WARN,
             # never silently downgrade to SAFE/POOR/None.
@@ -90,7 +90,7 @@ def test_v3_blocked_release_products_remain_v4_blocked() -> None:
                 product.get("brandName") or product.get("brand_name"),
                 product.get("productName") or product.get("product_name") or product.get("fullName"),
                 verdict,
-                out.get("shadow_score_v4_100"),
+                out.get("raw_score_v4_100"),
             ))
 
     assert failures == []

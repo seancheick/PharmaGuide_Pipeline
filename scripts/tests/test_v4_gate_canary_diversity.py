@@ -1,4 +1,4 @@
-"""Real-catalog canaries for v4 shared gates and shadow precedence.
+"""Real-catalog canaries for v4 shared gates and verdict precedence.
 
 Module-level canaries catch dimension math regressions. These canaries
 exercise the shared path every product goes through:
@@ -6,7 +6,7 @@ exercise the shared path every product goes through:
 router -> safety gate -> completeness gate -> module dispatch -> confidence.
 
 The chosen rows are real enriched catalog products discovered by a
-2026-05-20 full-catalog shadow sweep. They intentionally cover verdict
+2026-05-20 full-catalog v4 sweep. They intentionally cover verdict
 precedence and confidence bands rather than exact per-dimension math.
 """
 
@@ -24,7 +24,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
 
-SHADOW_CANARIES = {
+V4_CANARIES = {
     # Safety short-circuit: no module block, confidence uses gate string.
     "246324": {
         "label": "vitafusion CBD Mixed Berry",
@@ -148,7 +148,7 @@ def _load_canaries() -> dict[str, dict]:
         return _CACHE
 
     found: dict[str, dict] = {}
-    target_ids = set(SHADOW_CANARIES)
+    target_ids = set(V4_CANARIES)
     products_root = SCRIPTS_ROOT / "products"
     if not products_root.exists():
         _CACHE = {}
@@ -173,13 +173,13 @@ def _load_canaries() -> dict[str, dict]:
     return found
 
 
-@pytest.mark.parametrize("dsld_id,expected", list(SHADOW_CANARIES.items()))
-def test_shadow_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict) -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+@pytest.mark.parametrize("dsld_id,expected", list(V4_CANARIES.items()))
+def test_v4_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: dict) -> None:
+    from score_supplements_v4 import score_product_v4
 
     product = _load_canaries().get(dsld_id)
     if product is None:
-        pytest.skip(f"shadow canary {dsld_id} not found: {expected['label']}")
+        pytest.skip(f"v4 canary {dsld_id} not found: {expected['label']}")
     if expected["verdict"] not in {"BLOCKED", "UNSAFE"}:
         from scoring_input_contract import get_scoring_ingredients
         scoring_input = get_scoring_ingredients(product, strict=True)
@@ -189,18 +189,18 @@ def test_shadow_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: 
                 "rerun enrichment before using as canary"
             )
 
-    out = score_product_v4_shadow(product)
-    assert out["shadow_score_v4_module"] == expected["module"]
-    assert out["shadow_score_v4_verdict"] == expected["verdict"]
-    assert out["shadow_score_v4_confidence"] == expected["confidence"]
+    out = score_product_v4(product)
+    assert out["v4_module"] == expected["module"]
+    assert out["v4_verdict"] == expected["verdict"]
+    assert out["v4_confidence"] == expected["confidence"]
 
     if "score" in expected:
-        assert out["shadow_score_v4_100"] == expected["score"]
+        assert out["raw_score_v4_100"] == expected["score"]
     if "score_range" in expected:
         lo, hi = expected["score_range"]
-        assert lo <= out["shadow_score_v4_100"] <= hi
+        assert lo <= out["raw_score_v4_100"] <= hi
 
-    breakdown = out["shadow_score_v4_breakdown"]
+    breakdown = out["v4_breakdown"]
     if expected.get("safety_short_circuit"):
         assert breakdown["safety_gate"]["short_circuits_scoring"] is True
         assert "module" not in breakdown
@@ -214,9 +214,9 @@ def test_shadow_real_catalog_gate_and_confidence_canary(dsld_id: str, expected: 
         assert "module" not in breakdown
 
 
-def test_shadow_canaries_cover_gate_and_confidence_bands() -> None:
-    verdicts = {c["verdict"] for c in SHADOW_CANARIES.values()}
-    confidences = {c["confidence"] for c in SHADOW_CANARIES.values()}
+def test_v4_canaries_cover_gate_and_confidence_bands() -> None:
+    verdicts = {c["verdict"] for c in V4_CANARIES.values()}
+    confidences = {c["confidence"] for c in V4_CANARIES.values()}
 
     assert {"BLOCKED", "CAUTION", "POOR", "SAFE"}.issubset(verdicts)
     assert {

@@ -88,12 +88,12 @@ def _product(**extra) -> dict:
 
 
 def test_confidence_high_when_evidence_identity_label_and_verification_are_strong() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(_product())
-    confidence = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(_product())
+    confidence = out["v4_breakdown"]["confidence"]
 
-    assert out["shadow_score_v4_confidence"] == "high"
+    assert out["v4_confidence"] == "high"
     assert confidence["band"] == "high"
     assert confidence["score_uncertainty_pts"] == 1
     for key in ("evidence", "label_completeness", "verification", "identity"):
@@ -102,26 +102,26 @@ def test_confidence_high_when_evidence_identity_label_and_verification_are_stron
 
 
 def test_confidence_worst_case_rule_lowers_band_for_no_clinical_evidence() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(evidence_data={"clinical_matches": []})
-    out = score_product_v4_shadow(product)
-    confidence = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
 
     assert confidence["evidence"]["level"] == "low"
     assert "no_clinical_evidence_matched" in confidence["evidence"]["drivers"]
-    assert out["shadow_score_v4_confidence"] == "low"
+    assert out["v4_confidence"] == "low"
 
 
 def test_missing_primary_dose_scores_but_lowers_label_confidence() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(ingredient=_ingredient(quantity=0.0, unit="NP"))
-    out = score_product_v4_shadow(product)
-    confidence = out["shadow_score_v4_breakdown"]["confidence"]
-    completeness = out["shadow_score_v4_breakdown"]["completeness_gate"]
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+    completeness = out["v4_breakdown"]["completeness_gate"]
 
-    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
+    assert out["v4_verdict"] != "NOT_SCORED"
     assert "dose_not_disclosed" in completeness["soft_missing"]
     assert completeness["score_cap"] is None
     assert completeness["verdict_ceiling"] is None
@@ -136,7 +136,7 @@ def test_ingredient_human_underscore_study_types_are_moderate_not_absent() -> No
     systematic_review_meta and rct_multiple. The confidence layer must not
     normalize those into dash forms and then treat human evidence as absent.
     """
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     for study_type in ("systematic_review_meta", "rct_multiple", "rct_single"):
         product = _product(
@@ -154,8 +154,8 @@ def test_ingredient_human_underscore_study_types_are_moderate_not_absent() -> No
                 ]
             }
         )
-        out = score_product_v4_shadow(product)
-        confidence = out["shadow_score_v4_breakdown"]["confidence"]
+        out = score_product_v4(product)
+        confidence = out["v4_breakdown"]["confidence"]
 
         assert confidence["evidence"]["level"] == "moderate"
         assert "product_specific_nct_absent" in confidence["evidence"]["drivers"]
@@ -163,7 +163,7 @@ def test_ingredient_human_underscore_study_types_are_moderate_not_absent() -> No
 
 
 def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     # Non-botanical no-RDA ingredient (CoQ10): exercises the GENERIC
     # supplemental-window proxy + its confidence downgrade. Botanicals now
@@ -181,9 +181,9 @@ def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None
             "safety_flags": [],
         },
     )
-    out = score_product_v4_shadow(product)
-    module = out["shadow_score_v4_breakdown"]["module"]
-    confidence = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(product)
+    module = out["v4_breakdown"]["module"]
+    confidence = out["v4_breakdown"]["confidence"]
 
     assert module["dimensions"]["dose"]["score"] == 16.0
     assert "dose" not in module["metadata"]["excluded_dimensions"]
@@ -192,39 +192,39 @@ def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None
 
 
 def test_claimed_cert_without_registry_match_lowers_verification_confidence() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(
         verified_cert_programs=[
             {"program": "USP Verified", "scope": "claimed_only", "evidence_source": "product_label"}
         ]
     )
-    out = score_product_v4_shadow(product)
-    confidence = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
 
     assert confidence["verification"]["level"] == "low"
     assert "cert_claimed_only_no_registry_match" in confidence["verification"]["drivers"]
-    assert out["shadow_score_v4_confidence"] == "low"
+    assert out["v4_confidence"] == "low"
 
 
 def test_mapped_coverage_between_gate_and_perfect_is_moderate_identity_confidence() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     rows = [_ingredient(name=f"Nutrient {i}", canonical_id=f"nutrient_{i}") for i in range(9)]
     rows.append(_ingredient(name="Unmapped", canonical_id=""))
     product = _product(mapped_coverage=0.9)
     product["ingredient_quality_data"]["ingredients_scorable"] = rows
     product["ingredient_quality_data"]["ingredients"] = rows
-    out = score_product_v4_shadow(product)
-    confidence = out["shadow_score_v4_breakdown"]["confidence"]
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
 
     assert confidence["identity"]["level"] == "moderate"
     assert "mapped_coverage_below_95_percent" in confidence["identity"]["drivers"]
-    assert out["shadow_score_v4_confidence"] == "moderate"
+    assert out["v4_confidence"] == "moderate"
 
 
 def test_blocked_paths_keep_gate_confidence_string_and_skip_confidence_block() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(
         contaminant_data={
@@ -235,10 +235,10 @@ def test_blocked_paths_keep_gate_confidence_string_and_skip_confidence_block() -
             }
         }
     )
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
-    assert "confidence" not in out["shadow_score_v4_breakdown"]
+    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert "confidence" not in out["v4_breakdown"]
 
 
 def test_confidence_layer_does_not_import_v3_scorer() -> None:

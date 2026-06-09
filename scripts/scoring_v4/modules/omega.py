@@ -31,7 +31,7 @@ Plus two SEPARATE adjustments (§6 line 390, module-agnostic):
                                           + severity/recency; reuses generic)
 
 P1.6.6 state: all 5 dimensions, manufacturer adjustments, and final
-rubric-score assembly are online. Router, completeness gate, and shadow
+rubric-score assembly are online. Router, completeness gate, and the v4
 scorer dispatch the omega class into a complete module result.
 
 Per §13 architecture lock, this module does not import from
@@ -96,7 +96,7 @@ class OmegaModuleResult:
 
     Mirrors `GenericModuleResult` / `ProbioticModuleResult` shape so audit /
     score-delta / Flutter tooling can read a single
-    `shadow_score_v4_breakdown["module"]` contract regardless of which
+    `v4_breakdown["module"]` contract regardless of which
     class scored the product.
 
     Final assembly (Phase 4) uses the shared generic._assemble_score: core
@@ -119,7 +119,7 @@ class OmegaModuleResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_breakdown(self) -> Dict[str, Any]:
-        """Render as the dict shape used in `shadow_score_v4_breakdown["module"]`.
+        """Render as the dict shape used in `v4_breakdown["module"]`.
         Matches `GenericModuleResult.to_breakdown` /
         `ProbioticModuleResult.to_breakdown` so consumers don't need
         class-aware unpacking."""

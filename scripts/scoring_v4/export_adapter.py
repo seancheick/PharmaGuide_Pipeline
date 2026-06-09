@@ -1,8 +1,8 @@
 """v4 → final-DB export adapter.
 
-The single seam between the v4 scorer (`score_supplements_v4_shadow`) and the
+The single seam between the v4 scorer (`score_supplements_v4`) and the
 frozen `products_core` export. `build_final_db.py` calls `overlay_v4_scored(
-enriched, scored_v3)` once per product under `--score-model v4`.
+enriched, scored_v3)` once per product for the production v4 catalog.
 
 Design (see docs/plans/V4_CUTOVER_HANDOFF.md and the approved cutover plan):
   - The export still consumes v3 *scaffolding* off the scored blob (section_scores
@@ -30,10 +30,9 @@ from __future__ import annotations
 import json
 from typing import Any, Dict
 
-from score_supplements_v4_shadow import score_product_v4_shadow
+from score_supplements_v4 import score_product_v4
 
 SCORE_MODEL_V4 = "v4"
-SCORE_MODEL_V3 = "v3"
 
 
 def _fmt_display_100(quality_score: Any) -> str:
@@ -47,17 +46,17 @@ def _fmt_display_100(quality_score: Any) -> str:
 def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
     """Run v4 on ``enriched`` and overlay its public contract onto a copy of
     ``scored_v3``. Returns the new dict; never mutates either input."""
-    v4 = score_product_v4_shadow(enriched if isinstance(enriched, dict) else {})
+    v4 = score_product_v4(enriched if isinstance(enriched, dict) else {})
     scored = dict(scored_v3) if isinstance(scored_v3, dict) else {}
 
-    breakdown = v4.get("shadow_score_v4_breakdown") or {}
+    breakdown = v4.get("v4_breakdown") or {}
     safety_gate = breakdown.get("safety_gate") or {}
     completeness_gate = breakdown.get("completeness_gate") or {}
     provenance = breakdown.get("provenance") or {}
 
     status = v4.get("quality_score_status")
     quality_100 = v4.get("quality_score_v4_100")
-    verdict = v4.get("shadow_score_v4_verdict")
+    verdict = v4.get("v4_verdict")
     is_scored = status == "scored"
 
     config_versions = provenance.get("config_versions")
@@ -88,8 +87,8 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["_v4_quality_tier"] = v4.get("quality_tier")
     scored["_v4_suppressed_reason"] = v4.get("quality_score_suppressed_reason")
     scored["_v4_raw_score_100"] = v4.get("raw_score_v4_100")
-    scored["_v4_module"] = v4.get("shadow_score_v4_module")
-    scored["_v4_confidence"] = v4.get("shadow_score_v4_confidence")
+    scored["_v4_module"] = v4.get("v4_module")
+    scored["_v4_confidence"] = v4.get("v4_confidence")
     scored["_v4_quality_version"] = v4.get("quality_score_version")
     scored["_v4_pillars"] = v4.get("quality_pillars_v4")
     scored["_v4_clean_label_flags"] = v4.get("clean_label_flags_v4")

@@ -521,23 +521,23 @@ def test_malformed_product_never_raises_and_is_not_scored() -> None:
 
 
 def test_shadow_entry_point_marks_incomplete_clean_product_not_scored() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(
+    out = score_product_v4(
         _product(ingredients=[_ingredient(canonical_id="", dose=None, unit=None)])
     )
 
-    assert out["shadow_score_v4_100"] is None
-    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert out["shadow_score_v4_confidence"] == "blocked_by_completeness_gate"
-    assert out["shadow_score_v4_anchored"] is False
-    gate = out["shadow_score_v4_breakdown"]["completeness_gate"]
+    assert out["raw_score_v4_100"] is None
+    assert out["v4_verdict"] == "NOT_SCORED"
+    assert out["v4_confidence"] == "blocked_by_completeness_gate"
+    assert out["v4_anchored"] is False
+    gate = out["v4_breakdown"]["completeness_gate"]
     assert gate["is_live_eligible"] is False
     assert "active_identity" in gate["missing_fields"]
 
 
 def test_shadow_entry_point_preserves_safety_short_circuit_before_completeness() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(ingredients=[_ingredient(canonical_id="", dose=None, unit=None)])
     product["contaminant_data"] = {
@@ -548,24 +548,24 @@ def test_shadow_entry_point_preserves_safety_short_circuit_before_completeness()
         }
     }
 
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    assert out["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
-    assert "safety_gate" in out["shadow_score_v4_breakdown"]
-    assert "completeness_gate" not in out["shadow_score_v4_breakdown"]
+    assert out["v4_verdict"] == "BLOCKED"
+    assert out["v4_confidence"] == "blocked_by_safety_gate"
+    assert "safety_gate" in out["v4_breakdown"]
+    assert "completeness_gate" not in out["v4_breakdown"]
 
 
 def test_completeness_fail_overrides_caution_but_keeps_safety_breakdown() -> None:
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = _product(
         ingredients=[_ingredient(canonical_id="", dose=None, unit=None)],
         has_disease_claims=True,
     )
 
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert out["shadow_score_v4_breakdown"]["safety_gate"]["verdict"] == "CAUTION"
-    assert out["shadow_score_v4_breakdown"]["completeness_gate"]["is_live_eligible"] is False
+    assert out["v4_verdict"] == "NOT_SCORED"
+    assert out["v4_breakdown"]["safety_gate"]["verdict"] == "CAUTION"
+    assert out["v4_breakdown"]["completeness_gate"]["is_live_eligible"] is False

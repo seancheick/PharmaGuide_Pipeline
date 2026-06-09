@@ -36,10 +36,10 @@ def test_leak_audit_detects_get_and_subscript_access(tmp_path: Path) -> None:
     assert all(item["function"] == "score" for item in findings)
 
 
-def test_leak_audit_scans_v4_shadow_entrypoint() -> None:
+def test_leak_audit_scans_v4_entrypoint() -> None:
     scanned = {path.name for path in audit.iter_scan_files()}
 
-    assert "score_supplements_v4_shadow.py" in scanned
+    assert "score_supplements_v4.py" in scanned
 
 
 def test_profile_selector_audit_detects_raw_routing_fields(tmp_path: Path) -> None:

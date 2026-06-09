@@ -214,25 +214,25 @@ def test_score_generic_does_not_mutate_input() -> None:
 
 
 def test_shadow_wires_generic_module_breakdown_when_both_gates_pass() -> None:
-    """After Layer 1 + Layer 2 pass, the shadow scorer must call the
+    """After Layer 1 + Layer 2 pass, the v4 scorer must call the
     generic module and stash its breakdown under
-    `shadow_score_v4_breakdown["module"]`. Score is online at P1.3.6."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    `v4_breakdown["module"]`. Score is online at P1.3.6."""
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
+    out = score_product_v4(COMPLETE_GENERIC_PRODUCT)
 
-    assert out["shadow_score_v4_module"] == "generic"
-    assert out["shadow_score_v4_100"] is not None
-    assert "module" in out["shadow_score_v4_breakdown"]
-    module_block = out["shadow_score_v4_breakdown"]["module"]
+    assert out["v4_module"] == "generic"
+    assert out["raw_score_v4_100"] is not None
+    assert "module" in out["v4_breakdown"]
+    module_block = out["v4_breakdown"]["module"]
     assert module_block["module"] == "generic"
     assert set(module_block["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-    assert module_block["score_100"] == out["shadow_score_v4_100"]
+    assert module_block["score_100"] == out["raw_score_v4_100"]
 
 
 def test_shadow_does_not_wire_module_when_safety_short_circuits() -> None:
     """BLOCKED/UNSAFE finality precedes module scoring entirely."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = {
         **COMPLETE_GENERIC_PRODUCT,
@@ -245,17 +245,17 @@ def test_shadow_does_not_wire_module_when_safety_short_circuits() -> None:
         },
     }
 
-    out = score_product_v4_shadow(product)
+    out = score_product_v4(product)
 
-    assert out["shadow_score_v4_verdict"] == "BLOCKED"
-    assert "module" not in out["shadow_score_v4_breakdown"], (
+    assert out["v4_verdict"] == "BLOCKED"
+    assert "module" not in out["v4_breakdown"], (
         "Layer 1 short-circuit must NOT run module scoring"
     )
 
 
 def test_shadow_does_not_wire_module_when_completeness_fails() -> None:
     """NOT_SCORED rows skip module scoring entirely — they are archive only."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     incomplete = {
         "supplement_type": {"type": "single_nutrient"},
@@ -267,16 +267,16 @@ def test_shadow_does_not_wire_module_when_completeness_fails() -> None:
         },
     }
 
-    out = score_product_v4_shadow(incomplete)
+    out = score_product_v4(incomplete)
 
-    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert "module" not in out["shadow_score_v4_breakdown"]
+    assert out["v4_verdict"] == "NOT_SCORED"
+    assert "module" not in out["v4_breakdown"]
 
 
 def test_shadow_does_not_wire_generic_module_for_probiotic_route() -> None:
     """Probiotic products route to a different (P2) module; the generic
     module breakdown must not leak onto them."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     probiotic = {
         "status": "active",
@@ -303,23 +303,23 @@ def test_shadow_does_not_wire_generic_module_for_probiotic_route() -> None:
         },
     }
 
-    out = score_product_v4_shadow(probiotic)
+    out = score_product_v4(probiotic)
 
-    assert out["shadow_score_v4_module"] == "probiotic"
+    assert out["v4_module"] == "probiotic"
     # At P1.3.0 the generic-module breakdown is not emitted for non-generic
     # routes. P2 will land probiotic's own module block.
-    module_block = out["shadow_score_v4_breakdown"].get("module")
+    module_block = out["v4_breakdown"].get("module")
     assert module_block is None or module_block.get("module") != "generic"
 
 
 def test_shadow_module_score_and_typed_confidence_are_online_at_p14() -> None:
     """P1.4 adds typed confidence after P1.3.6 score assembly."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
-    assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
-    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
+    out = score_product_v4(COMPLETE_GENERIC_PRODUCT)
+    assert out["raw_score_v4_100"] is not None
+    assert out["v4_confidence"] in {"high", "moderate", "low"}
+    assert out["v4_breakdown"]["confidence"]["band"] == out["v4_confidence"]
 
 
 # --- Architecture lock ----------------------------------------------------

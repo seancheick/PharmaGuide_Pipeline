@@ -3,9 +3,9 @@
 > Scoring version: **3.5.2** / Data schema: **5.4.1** / Last updated: **2026-06-02**
 > Aligned to current `score_supplements.py` and `config/scoring_config.json`.
 >
-> **v4 cutover (export schema v2.0.0):** the **shipped** score is now the v4 six-pillar
-> /100 model (`scoring_v4/` + `score_supplements_v4_shadow.py`), exported as
-> `quality_score_v4_100` — `build_final_db.py` defaults to `--score-model v4`. The
+> **v4 production (export schema v2.0.0):** the **shipped** score is the v4 six-pillar
+> /100 model (`scoring_v4/` + `score_supplements_v4.py`), exported as
+> `quality_score_v4_100`; `build_final_db.py` emits v4 without a fallback score-model flag. The
 > 80-point arithmetic model below (`score_supplements.py` v3) still RUNS to produce the
 > enrichment/scaffolding the export overlays, and remains the v3 fallback, but it is no
 > longer the consumer headline. See `FINAL_EXPORT_SCHEMA_V1.md` (v2.0.0) for the export
@@ -1053,7 +1053,6 @@ Section scores shorthand (`section_scores`):
 | `require_full_mapping` | **true** | Any unmapped active returns `NOT_SCORED` |
 | `probiotic_extended_scoring` | false | Use extended probiotic bonus module (max +10 instead of +3) |
 | `allow_non_probiotic_probiotic_bonus_with_strict_gate` | true | Non-probiotic products may earn probiotic bonus if strict evidence gates pass |
-| `shadow_mode` | true | **DEPRECATED / UNUSED.** Present in `scoring_config.json.feature_gates` for historical reasons but never read by the scoring engine. If shadow-mode publication gating is needed in the future, enforce it in `sync_to_supabase.py` or `build_final_db.py`, not here. |
 | `enable_non_gmo_bonus` | true | A5d: +0.5 for Non-GMO Project Verified products |
 | `enable_hypoallergenic_bonus` | false | B bonus pool: +0.5 for hypoallergenic products with zero allergen penalty |
 | `enable_d1_middle_tier` | **true** | D1: +1 for manufacturers with verifiable mid-tier evidence (NSF GMP, FDA registered, USP, named GMP cert) |

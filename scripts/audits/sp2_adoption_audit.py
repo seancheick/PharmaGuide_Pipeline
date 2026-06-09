@@ -1,6 +1,6 @@
 """SP-2 adoption audit — enumerates every consumer of legacy classification
 fields (`supplement_type`, `primary_category`, `category_breakdown`) in the
-v4 surface + shadow scorer + build_final_db.
+v4 surface + v4 scorer + build_final_db.
 
 Produces a deterministic list of (file, line, snippet) for the regression
 test in `scripts/tests/test_v4_taxonomy_adoption.py`. Any new legacy read
@@ -32,7 +32,7 @@ SCOPED_FILES = [
     SCRIPTS_ROOT / "scoring_v4" / "modules" / "generic_helpers.py",
     SCRIPTS_ROOT / "scoring_v4" / "modules" / "generic_trust.py",
     SCRIPTS_ROOT / "scoring_v4" / "modules" / "generic_transparency.py",
-    SCRIPTS_ROOT / "score_supplements_v4_shadow.py",
+    SCRIPTS_ROOT / "score_supplements_v4.py",
     SCRIPTS_ROOT / "build_final_db.py",
 ]
 

@@ -830,7 +830,7 @@ def test_completeness_gate_omega_rejects_non_omega_identity_only() -> None:
 
 def test_shadow_omega_name_with_only_non_omega_identity_is_not_scored() -> None:
     """Final v4 output must not score a title-only omega claim from glucose."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     product = {
         "status": "active",
@@ -851,11 +851,11 @@ def test_shadow_omega_name_with_only_non_omega_identity_is_not_scored() -> None:
             ],
         },
     }
-    result = score_product_v4_shadow(product)
+    result = score_product_v4(product)
 
-    assert result["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert result["shadow_score_v4_100"] is None
-    assert result["shadow_score_v4_breakdown"]["completeness_gate"]["missing_fields"] == ["active_identity"]
+    assert result["v4_verdict"] == "NOT_SCORED"
+    assert result["raw_score_v4_100"] is None
+    assert result["v4_breakdown"]["completeness_gate"]["missing_fields"] == ["active_identity"]
 
 
 def test_completeness_gate_omega_rejects_epa_without_quantity() -> None:
@@ -935,15 +935,15 @@ def test_completeness_gate_omega_rejects_epa_with_np_unit() -> None:
 
 def test_shadow_wires_omega_module_when_route_is_omega() -> None:
     """After Layer 1 + Layer 2 pass for an omega-routed product, the
-    shadow scorer must call score_omega and stash its breakdown under
-    `shadow_score_v4_breakdown["module"]`."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    v4 scorer must call score_omega and stash its breakdown under
+    `v4_breakdown["module"]`."""
+    from score_supplements_v4 import score_product_v4
 
-    out = score_product_v4_shadow(COMPLETE_OMEGA_PRODUCT)
+    out = score_product_v4(COMPLETE_OMEGA_PRODUCT)
 
-    assert out["shadow_score_v4_module"] == "omega"
-    assert "module" in out["shadow_score_v4_breakdown"]
-    module_block = out["shadow_score_v4_breakdown"]["module"]
+    assert out["v4_module"] == "omega"
+    assert "module" in out["v4_breakdown"]
+    module_block = out["v4_breakdown"]["module"]
     assert module_block["module"] == "omega"
     assert set(module_block["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
     # P1.6.6: score_100 is a real production number after final assembly.
@@ -953,7 +953,7 @@ def test_shadow_wires_omega_module_when_route_is_omega() -> None:
 
 def test_shadow_wires_omega_module_with_parent_only_soft_debt() -> None:
     """A fish-oil-parent-only product scores through omega with soft debt."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     incomplete = {
         "status": "active",
@@ -968,22 +968,22 @@ def test_shadow_wires_omega_module_with_parent_only_soft_debt() -> None:
             ],
         },
     }
-    out = score_product_v4_shadow(incomplete)
+    out = score_product_v4(incomplete)
 
-    assert out["shadow_score_v4_verdict"] != "NOT_SCORED"
-    assert out["shadow_score_v4_module"] == "omega"
-    assert out["shadow_score_v4_breakdown"]["completeness_gate"]["module"] == "omega"
-    gate = out["shadow_score_v4_breakdown"]["completeness_gate"]
+    assert out["v4_verdict"] != "NOT_SCORED"
+    assert out["v4_module"] == "omega"
+    assert out["v4_breakdown"]["completeness_gate"]["module"] == "omega"
+    gate = out["v4_breakdown"]["completeness_gate"]
     assert "epa_or_dha_not_disclosed" in gate["soft_missing"]
     assert gate["score_cap"] is None
     assert gate["verdict_ceiling"] is None
-    assert "module" in out["shadow_score_v4_breakdown"]
+    assert "module" in out["v4_breakdown"]
 
 
 def test_shadow_does_not_route_generic_product_to_omega_module() -> None:
     """A magnesium single-nutrient still routes to generic — omega routing must
     not leak omega routing onto non-omega rows."""
-    from score_supplements_v4_shadow import score_product_v4_shadow
+    from score_supplements_v4 import score_product_v4
 
     generic = {
         "status": "active", "form_factor": "capsule",
@@ -997,10 +997,10 @@ def test_shadow_does_not_route_generic_product_to_omega_module() -> None:
             ],
         },
     }
-    out = score_product_v4_shadow(generic)
+    out = score_product_v4(generic)
 
-    assert out["shadow_score_v4_module"] == "generic"
-    module_block = out["shadow_score_v4_breakdown"].get("module")
+    assert out["v4_module"] == "generic"
+    module_block = out["v4_breakdown"].get("module")
     assert module_block is not None
     assert module_block["module"] == "generic"
 
