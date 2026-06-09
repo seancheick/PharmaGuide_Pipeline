@@ -284,6 +284,15 @@ _SKU_FLAVOR_TOKENS = {
     "watermelon",
 }
 
+_MARINE_CERT_PROGRAMS = {"IFOS", "IKOS", "IAOS"}
+_MARINE_PRODUCT_RE = re.compile(
+    r"\b("
+    r"omega\s*3|omega[-\s]?3|fish\s*oil|krill\s*oil|algae\s*oil|algal\s*oil|"
+    r"epa|dha|docosahexaenoic|eicosapentaenoic|marine\s*oil"
+    r")\b",
+    re.IGNORECASE,
+)
+
 
 def normalize_product(text: str) -> str:
     if not text:
@@ -328,6 +337,14 @@ def _sku_flavor_tokens(text: str) -> set[str]:
     normalized = _strip_accents(text).lower()
     normalized = re.sub(r"[^a-z0-9\s]", " ", normalized)
     return {token for token in normalized.split() if token in _SKU_FLAVOR_TOKENS}
+
+
+def _program_requires_marine_context(program: str) -> bool:
+    return normalize_program(program) in _MARINE_CERT_PROGRAMS
+
+
+def _has_marine_product_context(text: str) -> bool:
+    return bool(_MARINE_PRODUCT_RE.search(text or ""))
 
 
 def _sku_stim_nonstim_conflict(product_a: str, product_b: str) -> bool:
@@ -547,6 +564,16 @@ def resolve(
                 brand_matches.append(c)
         if not brand_matches:
             out.append(CertResolution(program=program_canon, scope="claimed_only"))
+            continue
+
+        if _program_requires_marine_context(program_canon) and not _has_marine_product_context(product):
+            out.append(
+                CertResolution(
+                    program=program_canon,
+                    scope="claimed_only",
+                    notes="marine certification requires omega/fatty-acid product context",
+                )
+            )
             continue
 
         # Stage 3: product-level matching within brand-matched candidates

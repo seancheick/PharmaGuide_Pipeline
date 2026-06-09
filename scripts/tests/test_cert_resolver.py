@@ -204,6 +204,42 @@ class TestRegistryDiscovery:
 
         assert out == []
 
+    def test_ifos_discovery_requires_marine_product_context(self) -> None:
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "IFOS",
+                    "brand": "GNC Hong Kong Limited",
+                    "product": "GNC EPA& Algae DHA& CoQ-10 3in 1",
+                    "record_id": "IFOS_GNC_EPA_DHA_COQ10",
+                }
+            ]
+        )
+
+        plain_coq10 = discover_verified_programs("GNC", "CoQ-10 100 mg", registry)
+        b_complex = discover_verified_programs("GNC", "B-Complex 50", registry)
+
+        assert plain_coq10 == []
+        assert b_complex == []
+
+    def test_ifos_discovery_keeps_real_marine_product_match(self) -> None:
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "IFOS",
+                    "brand": "GNC Hong Kong Limited",
+                    "product": "Triple Strength Fish Oil Mini",
+                    "record_id": "IFOS_GNC_FISH_OIL",
+                }
+            ]
+        )
+
+        out = discover_verified_programs("GNC", "Triple Strength Fish Oil Mini", registry)
+
+        assert len(out) == 1
+        assert out[0].scope == "sku"
+        assert out[0].record_id == "IFOS_GNC_FISH_OIL"
+
 
 class TestResolverConservativeThresholds:
     def test_borderline_product_match_lands_needs_review(self) -> None:
