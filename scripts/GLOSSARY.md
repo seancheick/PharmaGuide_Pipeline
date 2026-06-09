@@ -36,24 +36,29 @@ one or the other; never let them disagree silently.
 - `quality_score_v4_100` — **canonical shipped score** (six-pillar /100). The primary export/ranking field.
 - `quality_score_status` — `scored` | `suppressed_safety` | `not_scored`.
 - `quality_tier` — Elite/Excellent/Strong/Acceptable/Weak/Poor.
-- `raw_score_v4_100` — audit/debug only; **never** the shipped score.
+- `raw_score_v4_100` — audit/debug only; **never** the shipped score and never shown when `quality_score_status` suppresses display.
 - `score_100_equivalent` / `score_display_100_equivalent` — honest /100 compat mirrors of `quality_score_v4_100`.
 - `score_quality_80` — **DROPPED at v2.0.0** (legacy /80 column). Do not reintroduce; use `quality_score_v4_100`.
 - `has_banned_substance` / `has_recalled_ingredient` — ingredient-level safety flags.
 - **Never** use `is_recalled` — implies product-level recall, unsupported in v1.
 - **Verdict precedence (deterministic):** BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.
 
-## Scoring sections (80-point arithmetic model, v3.4.0)
+## Production scoring pillars (v4)
 
-| Section | Max | What it measures |
+| Pillar | Max | What it measures |
 |---|---|---|
-| Ingredient Quality | 25 | Bioavailability, premium forms, delivery, absorption |
-| Safety & Purity | 30 | Banned/recalled gate, contaminants, allergens, dose safety (B7: 150%+ UL) |
-| Evidence & Research | 20 | Clinical backing, strength of evidence |
-| Brand Trust | 5 | Manufacturer reputation, certifications |
-| Dose Adequacy | 2 (additive) | EPA/DHA dosing for omega-3 |
+| Formulation | 20 | Ingredient form quality, delivery, formulation fit |
+| Dose | 20 | Category-aware dosing adequacy and excess-dose handling |
+| Evidence | 20 | Verified clinical support and category fit |
+| Transparency | 15 | Label disclosure, proprietary blend opacity, completeness |
+| Verification | 15 | Verified third-party testing, COA, GMP/certification signals |
+| Safety/Hygiene | 10 | Product-level safety hygiene and clean-label penalties |
 
-Config: `scripts/config/scoring_config.json` (~100 tunable parameters).
+Config: `scripts/scoring_v4/config/quality_score.json`.
+
+The legacy `score_supplements.py` 80-point model still runs for review queues,
+detail-blob scaffolding, verdict history, and audits. It is not the shipped score
+contract.
 
 ## Audit terminology (used during IQM batches)
 
@@ -75,8 +80,8 @@ Config: `scripts/config/scoring_config.json` (~100 tunable parameters).
 |---|---|---|
 | **Clean** | `clean_dsld_data.py` | Raw DSLD JSON → normalized records |
 | **Enrich** | `enrich_supplements_v3.py` | Cleaned records → matched / classified / enriched ingredients (~13K lines) |
-| **Score** | `score_supplements.py` | Enriched records → 80-point quality scores + verdicts (~4K lines) |
-| **Build** | `build_final_db.py` | Scored records → Flutter MVP SQLite blob |
+| **Score** | `score_supplements.py` | Enriched records → legacy scaffolding + verdicts (~4K lines) |
+| **Build** | `build_final_db.py` | Scored records + V4 adapter → Flutter SQLite blob |
 | **Sync** | `sync_to_supabase.py` | Build output → Supabase (offline-first cache) |
 
 ## External identifier types

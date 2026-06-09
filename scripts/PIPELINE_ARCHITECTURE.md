@@ -10,7 +10,7 @@ PharmaGuide runs a cleaner-first pipeline with 3 compute stages plus snapshot/re
 
 1. `clean_dsld_data.py` (Clean)
 2. `enrich_supplements_v3.py` (Enrich)
-3. `score_supplements.py` (Score)
+3. `score_supplements.py` (legacy score scaffolding + safety gates)
 4. `rebuild_dashboard_snapshot.sh` (Build Final DB + stage catalog snapshot)
 5. `release_full.sh` (catalog staging, product images, interaction DB, Supabase, Flutter bundle)
 
@@ -23,15 +23,15 @@ output_*/cleaned/*.json
   -> [ENRICH] enrich_supplements_v3.py
 output_*_enriched/enriched/*.json
   -> [COVERAGE GATE] coverage_gate.py (optional, can block scoring)
-  -> [SCORE] score_supplements.py
+  -> [SCORE] score_supplements.py  (legacy scaffolding)
 output_*_scored/scored/*.json
   -> [SNAPSHOT] rebuild_dashboard_snapshot.sh
   -> [BUILD FINAL DB] build_final_db.py
 final_db_output/
-  ├── pharmaguide_core.db        (SQLite, 91-col products_core)
+  ├── pharmaguide_core.db        (SQLite, 102-col products_core)
   ├── detail_blobs/*.json        (per-product JSON blobs)
   ├── detail_index.json
-  ├── export_manifest.json       (schema_version="1.6.0")
+  ├── export_manifest.json       (schema_version="2.0.0")
   └── export_audit_report.json
   -> [STRICT GATES] audit_source_of_truth_contract.py
   -> [RELEASE] release_full.sh
@@ -125,9 +125,14 @@ Primary script: `score_supplements.py`
 Config: `config/scoring_config.json`
 
 What it does:
-- Arithmetic-only scoring and verdict assignment.
+- Legacy arithmetic scoring, review-queue scaffolding, and verdict assignment.
 - Reads enriched product fields and scorer config.
 - Does not perform fuzzy matching or database matching.
+
+Production V4 scoring is applied during final export through
+`scoring_v4/quality_score.py` and `scoring_v4/export_adapter.py`. The shipped
+Flutter contract reads `quality_score_v4_100`, `quality_score_status`, and
+`quality_pillars_v4`; legacy /80 export columns are no longer present.
 
 What it reads directly:
 - Enriched JSON input files

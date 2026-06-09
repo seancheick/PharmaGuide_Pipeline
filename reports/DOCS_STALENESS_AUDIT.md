@@ -1,5 +1,8 @@
 # Docs Staleness Audit — 2026-05-12
 
+> Historical audit. For the current V4 production cleanup and delete/archive
+> list, use `reports/V4_DOCS_CLEANUP_AUDIT.md`.
+
 This audit catalogs every tracked markdown file in the repository (excluding agent skill files, per-condition data views, per-batch audit research, and `safety_copy_exemplars` working dirs) and classifies it into one of five buckets so future agents and humans know what to trust.
 
 ---

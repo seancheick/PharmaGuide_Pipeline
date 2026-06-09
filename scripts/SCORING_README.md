@@ -1,14 +1,32 @@
-# PharmaGuide Scoring README (v3.6.0 / Data Schema 5.4.1)
+# PharmaGuide Scoring README (v4 production / v3 scaffolding)
 
-> Last updated: 2026-06-02
+> Last updated: 2026-06-09
 
-This document is the implementation-facing guide for the current scorer:
+## Production scoring contract
+
+The shipped catalog score is V4:
+
+- Code: `scripts/score_supplements_v4.py`, `scripts/scoring_v4/quality_score.py`,
+  `scripts/scoring_v4/export_adapter.py`
+- Config: `scripts/scoring_v4/config/quality_score.json`
+- Export fields: `quality_score_v4_100`, `quality_score_status`, `quality_pillars_v4`
+- Contract: `scripts/FINAL_EXPORT_SCHEMA_V1.md` v2.0.0
+
+The legacy `/80` export columns (`score_quality_80`, `score_display_80`) are
+dropped. Flutter must read the V4 fields only.
+
+## Legacy scorer scaffolding
+
+The rest of this document describes the legacy deterministic scorer that still
+runs for review queues, verdict history, detail-blob scaffolding, and audit
+compatibility:
 
 - Code: `scripts/score_supplements.py`
 - Config: `scripts/config/scoring_config.json`
 - Spec: `scripts/SCORING_ENGINE_SPEC.md`
 
-It is aligned to the current `v3.6.0` behavior in code and config.
+It is aligned to the current `v3.6.0` legacy-scaffolding behavior in code and
+config. Do not use the `/80` formulas below as the production app score.
 
 ## v3.6.0 changes (2026-05-04) — bio_score / score honesty pass
 
@@ -146,7 +164,7 @@ For each product:
 7. Apply manufacturer violation penalty.
 8. Derive final verdict and output payload.
 
-## 4) Score Model (v3.4)
+## 4) Legacy Score Model (v3.4 / v3.6 scaffolding)
 
 Final score:
 

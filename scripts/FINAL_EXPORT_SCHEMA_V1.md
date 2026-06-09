@@ -7,7 +7,7 @@
 > Status (v1 history): v1.6.1 landed the unified inactive-ingredient resolver + Vitamin A IU→mcg RAE form-aware conversion + canonical_id / delivers_markers propagation.
 > Updated: **v1.6.1 adds (2026-05-12): (a) unified inactive-ingredient resolver via `scripts/inactive_ingredient_resolver.py` — consults `banned_recalled_ingredients.json`, `harmful_additives.json`, `other_ingredients.json` in priority order with strict standard_name+aliases-only matching; (b) four new fields on every inactive blob entry: `is_banned`, `safety_reason`, `matched_source`, `matched_rule_id` — closes the TiO2/Talc silent-ship gap (1,178+311 occurrences now correctly flagged is_safety_concern=true / severity_status=critical); (c) `canonical_id` + `delivers_markers` now emitted on every active blob entry — was 0% emit pre-fix, 100% post-fix on mapped actives. Foundational for interaction rules, stack-checking, evidence routing, biomarker scoring; (d) `display_label` for branded botanicals now preserves brand + species + plant-part + form (e.g. "Capsimax(TM) Capsicum Fruit Extract" → "Capsimax Capsicum Fruit Extract", trademark stripped); (e) Vitamin A IU labels now normalize form-aware to mcg RAE (β-carotene factor 0.1, retinol 0.3) — pregnancy UL gate now evaluable. v1.6.0 added `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries. v1.5.0 introduced the canonical active + inactive ingredient contract (`display_form_label` / `form_status` / `form_match_status` / `dose_status` on actives; `display_label` / `display_role_label` / `severity_status` / `is_safety_concern` on inactives). Legacy fields (`form`, `is_harmful`) kept for back-compat and documented as deprecated. v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (now 145 per `scripts/data/interaction_rules.json` schema 6.1.0). v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns; `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
-> **Build coverage gate (v1.6.0):** Products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate ("product cannot ship without a coherent score"). This realises the audit rule "no product marked as fully scored if required ingredient data was silently dropped." The `unmapped_actives` detail-blob subkey remains present (always emitted, even when empty) as the contract for any pre-gate / partial-coverage future surface; in practice every shipped blob today has `unmapped_actives.total == 0`.
+> **Score visibility gate (v2.0.0):** `quality_score_status` controls whether Flutter may show a quality score. `scored` rows expose `quality_score_v4_100`; `suppressed_safety` rows ship with a null display score plus a hard safety verdict; `not_scored` rows ship without a product-quality score. V4 may still emit audit/provenance fields for diagnostics, but Flutter must never display `raw_score_v4_100` as product quality when display is suppressed. `unmapped_actives` remains present in detail blobs as a coverage/provenance surface; final export and route-readiness gates decide score visibility rather than blindly treating every unmapped active as a shipped score.
 >
 > Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 
@@ -21,8 +21,14 @@ This contract is frozen. Field renames after the app ships are expensive.
 
 Assumptions:
 
-- Omega-3 dose adequacy is folded into ingredient quality in pipeline scoring.
-- Detail blobs expose omega-3 scoring context under `section_breakdown.ingredient_quality.sub.omega3_breakdown`.
+- `quality_score_v4_100` is the canonical shipped quality score; `score_100_equivalent`
+  and `score_display_100_equivalent` are /100 compatibility mirrors.
+- `quality_pillars_v4` is the canonical score-detail surface for Flutter. Legacy
+  `section_breakdown` fields may still exist in detail blobs for audit/history but
+  must not be treated as the production score model.
+- `key_ingredient_tags` is safe for Flutter product-row parsing: mapped actives use
+  canonical IDs, and unmapped active rows fall back to cleaner `normalized_key` so
+  product cards/search/stack intelligence are not empty while waiting for detail blobs.
 - User personalization (`score_fit_20`) is computed locally on the phone.
 - V1 does not claim true product-level recall support; only ingredient-level
   recalled/banned safety logic is exported.

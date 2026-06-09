@@ -1547,13 +1547,13 @@ These are the main scripts that make up the 3-stage pipeline (Clean → Enrich �
 | `run_pipeline.py`          | Orchestrator | Runs Clean → Enrich → Score in sequence. Use `--raw-dir` and `--output-prefix`.                         |
 | `clean_dsld_data.py`       | Stage 1      | Normalizes raw DSLD JSON labels. Strips dead fields, normalizes units, extracts ingredients.            |
 | `enrich_supplements_v3.py` | Stage 2      | Matches ingredients against IQM, classifies forms, resolves aliases, adds clinical data. ~12K lines.    |
-| `score_supplements.py`     | Stage 3      | 80-point arithmetic scoring engine. Reads enriched JSON, writes scored output with verdicts. ~3K lines. |
+| `score_supplements.py`     | Stage 3      | Legacy arithmetic scaffolding plus safety verdicts. Production V4 scoring is applied in final export through `scoring_v4/`. |
 
 ### 11.2 Build & Release
 
 | Script                            | What it does                                                                                                                                           |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `build_final_db.py`               | Converts scored JSON → SQLite `pharmaguide_core.db` + detail blobs + manifest.                                                                         |
+| `build_final_db.py`               | Converts scored JSON + V4 adapter output → SQLite `pharmaguide_core.db` + detail blobs + manifest.                                                    |
 | `build_all_final_dbs.py`          | Auto-discovers enriched/scored pairs, builds all or selected brands. Supports `--changed-only`, `--per-pair-output-root`, `--assemble-release-output`. |
 | `assemble_final_db_release.py`    | Merges per-pair build outputs into one combined release artifact.                                                                                      |
 | `release_catalog_artifact.py`     | Validates final DB + manifest, stages to `scripts/dist/` atomically.                                                                                   |

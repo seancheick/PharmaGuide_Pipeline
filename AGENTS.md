@@ -126,20 +126,34 @@ Verification scripts that call external APIs to validate data accuracy:
 - `audit_banned_recalled_accuracy.py` — Release gate for banned/recalled data
 - `audit_clinical_evidence_strength.py` — Evidence strength classification
 
-## Scoring System (v3.4.0)
+## Production Scoring System (v4)
 
-80-point arithmetic model with section breakdown:
+The shipped catalog score is the v4 six-pillar /100 model emitted through
+`scripts/scoring_v4/` and `scripts/scoring_v4/export_adapter.py`.
 
-- **Ingredient Quality** (max 25): bioavailability, premium forms, delivery, absorption
-- **Safety & Purity** (max 30): banned/recalled gate, contaminants, allergens, dose safety (B7: 150%+ UL)
-- **Evidence & Research** (max 20): clinical backing, strength of evidence
-- **Brand Trust** (max 5): manufacturer reputation, certifications
-- **Dose Adequacy** (max 2): EPA/DHA dosing for omega-3 (additive)
+- **Formulation** (20): ingredient form quality, delivery, formulation fit
+- **Dose** (20): category-aware dosing adequacy and excess-dose handling
+- **Evidence** (20): verified clinical support and category fit
+- **Transparency** (15): disclosure, proprietary blend opacity, label completeness
+- **Verification** (15): verified third-party testing, COA, GMP/certification signals
+- **Safety/Hygiene** (10): product-level safety hygiene and clean-label penalties
 
-Final: `score_100_equivalent = (quality_score / 80) * 100`
+Canonical exported fields:
+
+- `quality_score_v4_100` — shipped /100 score
+- `quality_score_status` — `scored`, `suppressed_safety`, or `not_scored`
+- `quality_pillars_v4` — six-pillar detail surface for Flutter
+- `score_100_equivalent` and `score_display_100_equivalent` — compatibility mirrors of the v4 score
+
+The legacy `score_supplements.py` /80 scorer still runs as deterministic
+scaffolding for review queues, detail blobs, verdict history, and audit
+compatibility. It is not the production score contract. Do not reintroduce
+`score_quality_80` or `score_display_80` into final exports.
+
 Verdicts: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE (deterministic precedence)
 
-Config: `scripts/config/scoring_config.json` (100+ tunable parameters)
+Config: `scripts/scoring_v4/config/quality_score.json` for production v4 scoring;
+`scripts/config/scoring_config.json` for legacy scaffolding.
 
 ## Key Documentation
 
@@ -194,7 +208,7 @@ them against `scripts/final_db_output` or a fresh
 ## Conventions
 
 - **Data schema version:** 5.0.0 – 5.3.0 (with 6.0.0 for `user_goals_to_clusters.json`) — every JSON data file has a `_metadata` block
-- **Score field naming is FROZEN:** use `score_quality_80`, `score_display_100_equivalent`, NOT "sections A-E" in exports
+- **Score field naming is FROZEN:** use `quality_score_v4_100`, `quality_score_status`, and `quality_pillars_v4`; do not reintroduce `score_quality_80` or `score_display_80`
 - **Safety distinction:** `has_banned_substance` / `has_recalled_ingredient` for ingredient-level. Never use `is_recalled` (implies product-level recall, not supported in v1)
 - **Tests are mandatory:** every data file change, scoring logic change, or enrichment change must have test coverage
 - **No linter configured** — follow existing code style (snake_case, type hints encouraged but not enforced)

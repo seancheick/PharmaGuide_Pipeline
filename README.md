@@ -1,7 +1,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tests-3906+-4CAF50?style=for-the-badge&logo=pytest&logoColor=white" />
-  <img src="https://img.shields.io/badge/Scoring-v3.4-FF6B35?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Tests-5100+-4CAF50?style=for-the-badge&logo=pytest&logoColor=white" />
+  <img src="https://img.shields.io/badge/Scoring-v4-FF6B35?style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" />
 </p>
 
@@ -36,12 +36,12 @@ The dietary supplement market is a **$60B industry** with minimal consumer trans
                        |
                        v
             +--------------------+
-            |   Stage 3: SCORE   |   80-point arithmetic model, safety gates
+            |   Stage 3: SCORE   |   Legacy score scaffolding + safety gates
             +--------------------+
                        |
                        v
             +--------------------+
-            |   Final DB Build   |   Flutter-ready export + Supabase sync
+            |   Final DB Build   |   V4 six-pillar export + Supabase sync
             +--------------------+
                        |
                   +----+----+
@@ -55,23 +55,35 @@ Each stage is independently testable, resumable, and produces a well-defined out
 
 ---
 
-## Scoring System (v3.4)
+## Scoring System (v4)
 
-An 80-point arithmetic model with deterministic, auditable scoring:
+The production catalog score is a deterministic six-pillar /100 model. Every
+point is traceable to pipeline data, verified references, or explicit fail-open
+unknown-data policy.
 
-| Section | Max Points | What It Measures |
-|---------|-----------|------------------|
-| **Ingredient Quality** | 25 | Bioavailability, premium forms, delivery systems, absorption enhancers |
-| **Safety & Purity** | 30 | Banned/recalled gates, contaminant penalties, allergens, dose safety |
-| **Evidence & Research** | 20 | PMID-backed clinical studies, strength of evidence classification |
-| **Brand Trust** | 5 | Manufacturer violations, FDA warning letters, certifications |
+| Pillar | Max Points | What It Measures |
+|--------|-----------:|------------------|
+| **Formulation** | 20 | Ingredient form quality, delivery, formulation fit |
+| **Dose** | 20 | Category-aware dose adequacy and excess-dose handling |
+| **Evidence** | 20 | Verified clinical support and category fit |
+| **Transparency** | 15 | Label disclosure, proprietary blend opacity, completeness |
+| **Verification** | 15 | Verified third-party testing, COA, GMP/certification signals |
+| **Safety/Hygiene** | 10 | Product-level safety hygiene and clean-label penalties |
 
-**Final Score:** `(raw_80 / 80) * 100` displayed as a 0-100 scale
+**Canonical shipped score:** `quality_score_v4_100`
+
+**Status:** `quality_score_status` is `scored`, `suppressed_safety`, or `not_scored`.
+Safety-suppressed products may keep audit scores internally, but Flutter must not
+display those audit numbers as product quality.
 
 **Verdicts** (deterministic precedence):
 `BLOCKED` > `UNSAFE` > `NOT_SCORED` > `CAUTION` > `POOR` > `SAFE`
 
 A product with a banned substance is **always** BLOCKED -- no amount of quality points overrides safety.
+
+The legacy /80 scorer still runs for review queues, detail-blob scaffolding, and
+audit compatibility. It is not the shipped score contract; final exports do not
+contain `score_quality_80` or `score_display_80`.
 
 ---
 
@@ -141,7 +153,7 @@ python3 scripts/sync_to_supabase.py scripts/dist --dry-run
 ### Run Tests
 
 ```bash
-# All 3906+ tests
+# All 5100+ tests
 python3 -m pytest scripts/tests/
 
 # Specific module
@@ -162,7 +174,8 @@ scripts/
   contracts/source_of_truth_matrix.json # Owner map for clinical/data concepts
   clean_dsld_data.py           # Stage 1: normalize raw DSLD JSON
   enrich_supplements_v3.py     # Stage 2: ingredient matching & enrichment (12K lines)
-  score_supplements.py         # Stage 3: arithmetic scoring engine (3.3K lines)
+  score_supplements.py         # Stage 3: legacy arithmetic scaffolding + safety gates
+  scoring_v4/                  # Production six-pillar /100 scoring model
   enhanced_normalizer.py       # Core NLP normalization engine (6K lines)
   build_final_db.py            # Flutter-ready export builder
   sync_to_supabase.py          # Cloud sync with upsert logic
@@ -174,7 +187,7 @@ scripts/
   extract_product_images.py    # Product image extraction and upload
   build_interaction_db.py      # Interaction rules DB assembly
   unii_cache.py                # FDA UNII offline cache management
-  shadow_score_comparison.py   # Shadow scoring comparison tool
+  shadow_score_comparison.py   # Historical comparison tool; v4 is now production
   regression_snapshot.py       # Scoring regression snapshots
   preflight.py                 # Pre-pipeline validation checks
   unmapped_ingredient_tracker.py # Unmapped ingredient diagnostics
@@ -191,7 +204,7 @@ scripts/
     verify_rda_uls.py          # RDA/UL verification against DRI tables
     verify_clinical_trials.py  # ClinicalTrials.gov NCT verification
     fda_weekly_sync.py         # FDA recall tracking (openFDA, RSS, DEA)
-  tests/                       # 81 test files, 3906+ test functions
+  tests/                       # 169 test files, 5100+ tests
   logs/                        # Runtime logs
   reports/                     # Generated audit reports
 docs/                          # Technical documentation
