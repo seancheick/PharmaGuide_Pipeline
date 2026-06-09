@@ -5135,7 +5135,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         name = safe_str(ing.get("standardName") or ing.get("name")).lower().replace(" ", "_")
         if name:
             ingredient_names.add(name)
-        add_interaction_tag(ing.get("canonical_id"))
+        add_interaction_tag(ing.get("canonical_id") or ing.get("normalized_key"))
         add_interaction_tags_from_text(
             ing.get("name"),
             ing.get("standardName"),

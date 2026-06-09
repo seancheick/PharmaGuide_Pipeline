@@ -1270,6 +1270,7 @@ def test_detail_blob_allergens_empty_when_no_hits():
 
 def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
     enriched = make_enriched()
+    enriched["activeIngredients"] = []
     enriched["ingredient_quality_data"]["ingredients"] = [
         {
             "name": "Potassium",
@@ -1406,6 +1407,28 @@ def test_key_ingredient_tags_emit_vinpocetine_identity_when_safety_active_lacks_
     categories = classify_product_categories(enriched, make_scored())
 
     assert categories["key_ingredient_tags"] == ["vinpocetine"]
+
+
+def test_key_ingredient_tags_fall_back_to_cleaner_normalized_key_for_unmapped_active():
+    enriched = make_enriched()
+    enriched["product_name"] = "Ultra Soya Lecithin 1200 mg"
+    enriched["activeIngredients"] = [
+        {
+            "name": "Soya Lecithin",
+            "standardName": "Soya Lecithin",
+            "normalized_key": "soya_lecithin",
+            "canonical_id": None,
+            "raw_source_text": "Soya Lecithin",
+            "quantity": 1200,
+            "unit": "mg",
+            "mapped": False,
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["key_ingredient_tags"] == ["soya_lecithin"]
 
 
 def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():
