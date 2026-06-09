@@ -55,7 +55,7 @@ def summarize(name, rows, suppressed=0):
         if r["t"] in tc:
             tc[r["t"]] += 1
     n = len(rows)
-    out.append("- **tiers**: " + " · ".join(f"{t} {tc[t]} ({100*tc[t]//n}%)" for t in TIERS if tc[t]))
+    out.append("- **tiers**: " + " · ".join(f"{t} {tc[t]} ({100*tc[t]/n:.1f}%)" for t in TIERS if tc[t]))
     top = sorted(rows, key=lambda r: r["s"], reverse=True)[:8]
     bot = sorted(rows, key=lambda r: r["s"])[:8]
     out.append("\n| ▲ Highest | score | tier | | ▼ Lowest | score | tier |")
@@ -102,7 +102,7 @@ def main():
     L.append("\n| Tier | n | % of scored |\n|---|---|---|")
     for t in TIERS:
         n = q("SELECT count(*) n FROM products_core WHERE quality_score_status='scored' AND quality_tier=?", (t,))[0]["n"]
-        L.append(f"| {t} | {n} | {100*n//max(scored,1)}% |")
+        L.append(f"| {t} | {n} | {100*n/max(scored,1):.1f}% |")
 
     # By scoring module
     L.append("\n## 2. By scoring module (`v4_module` — the scoring path)")
@@ -110,18 +110,27 @@ def main():
     for m in mods:
         L.append("\n" + summarize(f"module: `{m}`", cohort_rows(conn, "v4_module=?", (m,))))
 
-    # By consumer category (the review list)
-    L.append("\n## 3. By consumer category")
+    # By consumer category (the review list).
+    # PRIMARY-category definitions: a product is in a cohort because it *is* that
+    # category, NOT merely because it *contains* that ingredient — otherwise a
+    # prenatal+DHA multi pollutes the omega cohort. "contains" counts are shown
+    # alongside for context. (Collagen has no primary category, so it is an
+    # explicit contains-view.)
+    L.append("\n## 3. By consumer category (primary category — what the product IS)")
     cats = [
-        ("Prenatal", "lower(product_name) LIKE '%prenatal%' OR lower(coalesce(supplement_type,'')) LIKE '%prenatal%'"),
-        ("Omega-3 / fish oil", "contains_omega3=1 OR primary_category='omega_3'"),
-        ("Probiotic", "is_probiotic=1 OR contains_probiotics=1 OR primary_category='probiotic'"),
-        ("Sports / performance", "v4_module='sports' OR primary_category='protein_powder'"),
-        ("Herbal / botanical", "primary_category='herbal_botanical'"),
-        ("Collagen", "contains_collagen=1"),
-        ("Multivitamin", "primary_category='multivitamin'"),
+        ("Prenatal", "lower(product_name) LIKE '%prenatal%' OR lower(coalesce(supplement_type,'')) LIKE '%prenatal%'", "contains_omega3=1"),
+        ("Omega-3 / fish oil", "primary_category='omega_3'", "contains_omega3=1"),
+        ("Probiotic", "primary_category='probiotic'", "contains_probiotics=1 OR is_probiotic=1"),
+        ("Sports / performance", "v4_module='sports' OR primary_category='protein_powder'", None),
+        ("Herbal / botanical", "primary_category='herbal_botanical'", "contains_adaptogens=1"),
+        ("Collagen (contains — no primary category)", "contains_collagen=1", None),
+        ("Multivitamin", "primary_category='multivitamin'", None),
     ]
-    for label, where in cats:
+    for label, where, contains in cats:
+        if contains:
+            prim = q(f"SELECT count(*) n FROM products_core WHERE quality_score_status='scored' AND ({where})")[0]["n"]
+            cont = q(f"SELECT count(*) n FROM products_core WHERE quality_score_status='scored' AND ({contains})")[0]["n"]
+            label = f"{label}  (primary n={prim}; products that merely *contain* it: {cont})"
         s = q(f"SELECT count(*) n FROM products_core WHERE quality_score_status='suppressed_safety' AND ({where})")[0]["n"]
         L.append("\n" + summarize(label, cohort_rows(conn, where), s))
 
@@ -135,7 +144,7 @@ def main():
         hi = sum(1 for r in rows if r["t"] in ("Elite", "Excellent"))
         po = sum(1 for r in rows if r["t"] == "Poor")
         L.append(f"| {br['b'][:28]} | {len(rows)} | {fmt(sum(scores)/len(scores))} | "
-                 f"{fmt(pctile(scores,50))} | {100*hi//len(rows)}% | {100*po//len(rows)}% |")
+                 f"{fmt(pctile(scores,50))} | {100*hi/len(rows):.1f}% | {100*po/len(rows):.1f}% |")
 
     # Outliers to spot-check
     L.append("\n## 5. Outliers to spot-check (does the extreme make sense?)")
