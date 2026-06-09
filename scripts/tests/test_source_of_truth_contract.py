@@ -808,6 +808,51 @@ def test_interaction_parity_catches_orphan_supplement_canonical_id(tmp_path):
     )
 
 
+def test_live_interaction_db_has_no_orphan_canonicals():
+    """Root-cause guard against the recurring INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL
+    release failures (the red_yeast_rice / cbd / vinpocetine / kava whack-a-mole).
+
+    Supplement canonical placeholders (``BANNED_*`` / ``RISK_*`` / ``NOOTROPIC_*``)
+    are assigned during the interaction-DB BUILD, not in committed curated source,
+    so a source-only check can't see them. This runs the REAL parity audit against
+    the freshly built interaction DB in ``scripts/dist/`` — so an unmapped
+    placeholder fails HERE (pytest, seconds) instead of at the end of a ~25-minute
+    ``release_full.sh`` run, which was the patch-per-patch pain.
+
+    To fix a failure: add the placeholder -> clean-identity mapping to
+    ``scripts/identity/interaction.py::INTERACTION_CANONICAL_ALIASES`` (preferred —
+    use the canonical the catalog ``key_ingredient_tags`` + the rules file already
+    use), or add an entry to ``scripts/data/interaction_orphan_allowlist.json`` for
+    a genuinely pairwise-only signal. Then rebuild the interaction DB.
+
+    Skips only when no build artifact exists (e.g. a clean CI checkout that has not
+    run ``scripts/rebuild_interaction_db.sh``).
+    """
+    import pytest
+
+    dist = REPO_ROOT / "scripts" / "dist"
+    if not (dist / "interaction_db.sqlite").exists():
+        pytest.skip(
+            "no built scripts/dist/interaction_db.sqlite — "
+            "run scripts/rebuild_interaction_db.sh first"
+        )
+    data = REPO_ROOT / "scripts" / "data"
+    args = argparse.Namespace(
+        dist_dir=str(dist),
+        source_rules=str(data / "ingredient_interaction_rules.json"),
+        severity_vocab=str(data / "severity_vocab.json"),
+        orphan_allowlist=str(data / "interaction_orphan_allowlist.json"),
+    )
+    findings = audit.audit_interaction(args)
+    assert findings == [], (
+        "Live interaction-DB source-of-truth audit FAILED in pytest — this is the "
+        "SAME gate that blocks release_full.sh, caught early. Fix at the root: add "
+        "a clean-identity alias in scripts/identity/interaction.py "
+        "(INTERACTION_CANONICAL_ALIASES) or an allowlist entry, then rebuild.\n"
+        + "\n".join(f"  {f.code}: {f.message}" for f in findings)
+    )
+
+
 def test_interaction_parity_respects_orphan_allowlist(tmp_path):
     """Allowlisted orphans must NOT trigger INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL.
 
