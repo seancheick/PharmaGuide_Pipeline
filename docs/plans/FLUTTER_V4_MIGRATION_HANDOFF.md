@@ -7,6 +7,32 @@
 
 ---
 
+## ✅ IMPLEMENTATION UPDATE (2026-06-08) — built as a DUAL-READER, not a v4-only swap
+
+This migration is **implemented and tested** in the Flutter repo. The approach changed from the original "drop /80, read v4 only" spec (below) to a **dual v3/v4 reader**, per a release-ordering review (Codex): a v4-only reader would crash during the cutover window — on the v3 bundle it still ships with (missing `quality_score_v4_100`) **and** on an already-cached v3 catalog (missing the dropped `score_quality_80`). Sections §1–§6 still describe the v4 *contract* correctly; where they say "remove the /80 columns from Drift" or "read v4 only", the **dual-reader rules here supersede them.**
+
+### What was built (`flutter analyze` clean; full suite 1562 passing, 0 introduced failures)
+- **Drift table declares the v3 ∪ v4 column union** (`products_core_table.dart`) — KEEPS `score_quality_80`/`score_display_80` (nullable) **and** adds the 8 v4 columns. Nothing is dropped in this PR.
+- **`CoreDatabase.beforeOpen` backfills the missing side** (`_ensureCompatColumns`, `schemaVersion` 2→3): on a v3 bundle it ADDs the v4 columns as NULL; on a v4 build it ADDs the dropped /80 columns as NULL. The same app build opens **either** schema with no "no such column".
+- **Rank/display on `CoreDatabase.effectiveScoreSql` = `COALESCE(quality_score_v4_100, score_100_equivalent)`** — the v4 score when present, the v3-compatible /100 mirror otherwise, NULL for suppressed rows. Applied to `findByUpc`, `searchProducts`, `fetchBetterAlternativesPool`, `filterProducts`, and the pure `better_alternatives_ranker`.
+- **Recommendations exclude `quality_score_status` ∉ {`scored`, NULL}** — never recommend a BLOCKED/UNSAFE product. **Search & barcode scan still RESOLVE** suppressed products (so the detail screen can explain the block). This corrects §5's "search must filter to scored" — findability is a safety feature.
+- **Six-pillar "how it scores"** (`score_breakdown_section.dart`): renders `quality_pillars_v4` from the blob when present (Formulation/20 · Dose/20 · Evidence/20 · Transparency/15 · Verification/15 · Safety Hygiene/10), else falls back to the v3 four-section UI. Fixes the **headline-vs-breakdown mismatch** (stale v3 sections imply ~73/100 under a 98.1 v4 hero).
+- **Hero score** already reads `score_100_equivalent` (the v4 mirror) — no change needed; suppressed products are gated out of the breakdown by the existing `shouldShowScoreBreakdown`.
+- **Consumer copy:** the v4 pillar `reason` strings (developer jargon — §5's blocker) were rewritten to consumer copy **pipeline-side** in `scripts/scoring_v4/quality_score.py` (TDD'd; **no scoring logic changed**, verified). ⚠️ Detail blobs must be **rebuilt** (`build_final_db.py`) AFTER this fix for clean copy to reach the app.
+- **Tests:** `test/release_gate/dual_schema_reader_test.dart`, `test/services/recommendations/better_alternatives_ranker_v4_test.dart`, `test/features/product_detail/v2/sections/score_breakdown_section_v4_test.dart`; fixtures built by `test/fixtures/db/build_dual_schema_fixtures.py` from a real v4 build.
+
+### Revised release ordering (the dual-reader makes the bundle regen NOT a pre-ship blocker)
+1. Ship the **dual-reader** app (this PR) — it reads the current v3 bundle safely.
+2. Rebuild detail blobs + the v4 bundle via `build_final_db.py` (AFTER the consumer-copy fix).
+3. Cohort review of v4 score quality.
+4. OTA the v4 bundle; gate by `min_app_version`; sync with `--allow-v4-cutover`.
+5. **Later PR:** once v4 is proven live, drop the v3 read paths + `score_quality_80` from Drift (the original §1/§4 cleanup).
+
+### Deferred (additive features, NOT migration blockers)
+- **Clean-label flags** (`clean_label_flags_v4`) + **strengths/drags summary** (`v4_score_explanation`) UI — deferred because `clean_label_flags_v4` overlaps the existing additive / tradeoffs / warnings surfaces; needs a dedup design pass before shipping (else titanium-dioxide-type callouts double-display — a mismatch).
+
+---
+
 ## 0. TL;DR
 
 - The downloaded **SQLite catalog bundle now ships v4 fields** and **dropped the legacy `/80` columns**. A v3-reading app will query `score_quality_80` (gone) → break.

@@ -44,6 +44,83 @@ def _g(value: float) -> str:
     return f"{value:g}"
 
 
+# ── Consumer-facing reason copy ──────────────────────────────────────────────
+# The pillar ``reason`` strings ship to end users in the app's "How it scores"
+# UI, so they must read as plain English a supplement shopper understands — no
+# internal scoring vocabulary (archetype/breadth/phase names, raw fractions,
+# arrows, module names). Each pillar maps its score → a short, honest sentence
+# banded on how full the pillar is. The numeric score itself is unchanged and
+# still shown separately; these strings only EXPLAIN it. When a pillar is low
+# because the underlying signal is weak, the copy says so plainly (honesty over
+# flattery — under-warning is the worse failure for a health product).
+
+def _band(score: float, weight: float) -> str:
+    """Coarse fullness band for a pillar's score → {high, mid, low}."""
+    if weight <= 0:
+        return "low"
+    ratio = score / weight
+    if ratio >= 0.8:
+        return "high"
+    if ratio >= 0.5:
+        return "mid"
+    return "low"
+
+
+def _reason_formulation(band: str) -> str:
+    return {
+        "high": "Well-formulated — uses high-quality, well-absorbed ingredient forms.",
+        "mid": "Uses reasonable ingredient forms, with room for more premium options.",
+        "low": "Uses basic or low-cost ingredient forms.",
+    }[band]
+
+
+def _reason_dose(band: str) -> str:
+    return {
+        "high": "Doses land in the clinically studied range.",
+        "mid": "Doses are reasonable but not fully in the studied range.",
+        "low": "Doses fall short of the amounts shown to work.",
+    }[band]
+
+
+def _reason_evidence(band: str) -> str:
+    return {
+        "high": "Backed by strong human research.",
+        "mid": "Some human research supports these ingredients.",
+        "low": "Limited human evidence for these ingredients.",
+    }[band]
+
+
+def _reason_transparency(band: str) -> str:
+    return {
+        "high": "Fully transparent label — every amount is disclosed.",
+        "mid": "Mostly transparent, but some amounts aren't fully disclosed.",
+        "low": "Key amounts are hidden in a proprietary blend.",
+    }[band]
+
+
+# Generic dispatcher for any pillar that routes through the plain linear builders
+# (only ``transparency`` does today). Keeps a jargon-free fallback so a future
+# reconfigured pillar can never leak internal copy to consumers.
+_BANDED_REASON = {
+    "formulation": _reason_formulation,
+    "dose": _reason_dose,
+    "evidence": _reason_evidence,
+    "transparency": _reason_transparency,
+}
+
+
+def _reason_generic(name: str, band: str) -> str:
+    fn = _BANDED_REASON.get(name)
+    if fn is not None:
+        return fn(band)
+    label = name.replace("_", " ")
+    return {
+        "high": f"Strong {label}.",
+        "mid": f"Moderate {label}.",
+        "low": f"Limited {label}.",
+    }[band]
+
+
 def _tier(score: float) -> str:
     bands = _config()["tiers"]  # ordered high→low min
     for band in bands:
@@ -83,8 +160,7 @@ def _pillar_from_dim(name: str, dim: Dict[str, Any], weight: float, src: str) ->
     return {
         "score": val,
         "max": weight,
-        "reason": f"{name.replace('_', ' ').title()} {_g(score)}/{_g(mx)} "
-                  f"(Phase-1 linear map → {_g(val)}/{_g(weight)})",
+        "reason": _reason_generic(name, _band(val, weight)),
         "components": {"source_dim": src, "raw_score": score, "raw_max": mx},
     }
 
@@ -104,8 +180,7 @@ def _pillar_from_bonuses(name: str, module_bd: Dict[str, Any],
     return {
         "score": val,
         "max": weight,
-        "reason": f"{name.replace('_', ' ').title()} {_g(total_score)}/{_g(total_max)} "
-                  f"from {'+'.join(sources)} (Phase-1 → {_g(val)}/{_g(weight)})",
+        "reason": _reason_generic(name, _band(val, weight)),
         "components": parts,
     }
 
@@ -189,16 +264,16 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen)), 1)
     deductions = []
     if safety_pen > 0:
-        deductions.append(f"Class I recall {_g(safety_pen)}")
+        deductions.append("the maker had a serious product recall")
     if cl_pen > 0:
-        deductions.append(f"clean-label additive {_g(cl_pen)}")
+        deductions.append("it contains a restricted additive")
     if deductions:
-        reason = (f"Safety {_g(val)}/{_g(weight)} — clean base {_g(clean)} "
-                  f"− {', '.join(deductions)}")
+        # Plain-English join: "A and B" rather than a comma list.
+        reason = "Safety concern: " + " and ".join(deductions) + "."
     elif bscore <= 0:
-        reason = f"Safety {_g(val)}/{_g(weight)} — banned/recalled/watchlist signal present"
+        reason = "Contains a banned, recalled, or watchlisted ingredient."
     else:
-        reason = f"Safety {_g(val)}/{_g(weight)} — no banned/recalled/watchlist, no safety recall"
+        reason = "No banned, recalled, or watchlisted ingredients."
     components = {"clean_base": clean, "class_i_recall_penalty": safety_pen}
     if cl_pen > 0:
         components["clean_label_penalty"] = cl_pen
@@ -240,9 +315,7 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     return {
         "score": val,
         "max": weight,
-        "reason": f"Purpose-fit formulation {_g(score)}/{_g(ref)} for "
-                  f"{archetype.replace('_', ' ')} (archetype form ceiling, not breadth-30 "
-                  f"→ {_g(val)}/{_g(weight)})",
+        "reason": _reason_formulation(_band(val, weight)),
         "components": {"raw_formulation": score, "archetype": archetype, "reference": ref},
     }
 
@@ -261,8 +334,7 @@ def _pillar_evidence(dim: Dict[str, Any], weight: float, archetype: str,
     return {
         "score": val,
         "max": weight,
-        "reason": f"Evidence fit {_g(score)}/{_g(ref)} for {archetype.replace('_', ' ')} "
-                  f"(single-ingredient evidence not capped → {_g(val)}/{_g(weight)})",
+        "reason": _reason_evidence(_band(val, weight)),
         "components": {"raw_evidence": score, "archetype": archetype, "reference": ref},
     }
 
@@ -281,8 +353,7 @@ def _pillar_dose(dim: Dict[str, Any], weight: float, archetype: str,
     return {
         "score": val,
         "max": weight,
-        "reason": f"Dose adequacy {_g(score)}/{_g(ref)} for {archetype.replace('_', ' ')} "
-                  f"(appropriate-dose ceiling, no megadose reward → {_g(val)}/{_g(weight)})",
+        "reason": _reason_dose(_band(val, weight)),
         "components": {"raw_dose": score, "archetype": archetype, "reference": ref},
     }
 
@@ -334,24 +405,35 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     has_third_party_signal = has_product_third_party_signal or (brand_only_cert > 0)
     if has_product_third_party_signal:
         total = hard + soft
-        signal_label = "third-party signals"
-        reason = (f"Verification {round(min(cap, total), 1):g}/15 — {signal_label}: "
-                  f"cert {cert:g} + brand/facility cert {brand_only_cert:g} + "
-                  f"COA/batch {coa_batch:g} + GMP {gmp:g} + testing {testing:g}, soft {soft:g}")
+        # Name the actual third-party signals present, in plain English. No raw
+        # numbers — "neutral" is intentionally absent (this is the real-signal
+        # path, not the unknown fail-open path).
+        signals = []
+        if cert > 0:
+            signals.append("third-party certified")
+        if coa_batch > 0:
+            signals.append("publishes batch test results")
+        if testing > 0:
+            signals.append("does its own purity testing")
+        if not signals and gmp > 0:
+            signals.append("made in a GMP-registered facility")
+        if signals:
+            reason = "Independently verified — " + ", ".join(signals) + "."
+        else:
+            reason = "Independently verified for quality."
         fail_open = False
     elif brand_only_cert > 0:
         base = max(sub["neutral_baseline"], cert + coa_batch + gmp + testing)
         total = base + brand_only_cert + soft
-        signal_label = "brand/facility cert signal"
-        reason = (f"Verification {round(min(cap, total), 1):g}/15 — {signal_label}: "
-                  f"cert {cert:g} + brand/facility cert {brand_only_cert:g} + "
-                  f"COA/batch {coa_batch:g} + GMP {gmp:g} + testing {testing:g}, soft {soft:g}")
+        # Keep the literal "brand/facility cert" wording the contract relies on.
+        reason = "Holds a brand/facility certification verified by a third party."
         fail_open = False
     else:
         base = max(sub["neutral_baseline"], hard)
         total = base + soft
-        reason = (f"Verification {round(min(cap, total), 1):g}/15 — no third-party cert/COA on file "
-                  f"(data unknown → neutral baseline {sub['neutral_baseline']:g}), soft {soft:g}")
+        # Fail-open: no testing data on file. Say it's unknown, not that the
+        # product failed — and make clear it isn't penalized for the gap.
+        reason = "No third-party testing on file — treated as unknown, not penalized."
         fail_open = True
 
     # PR3: a quality-system (non-critical) manufacturer violation lowers verification.
@@ -361,7 +443,7 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     positive = min(cap, total)
     val = round(max(0.0, positive - qs_pen), 1)
     if qs_pen > 0:
-        reason += f"; − quality-system violation {qs_pen:g}"
+        reason += " Maker has an open quality-system violation."
     return {
         "score": val,
         "max": weight,
