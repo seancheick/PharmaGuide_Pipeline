@@ -1,11 +1,11 @@
 """Tripwire: ``sync_to_supabase`` must REFUSE to upload a v4-schema build to
 Supabase unless ``--allow-v4-cutover`` is passed.
 
-The Flutter app ranks/renders on ``score_quality_80``, which the v4 export schema
-(2.0.0) drops in favour of ``quality_score_v4_100`` + the six pillars. Pushing a
-v4 build to Supabase before Flutter migrates breaks the live app. This guard makes
-that footgun impossible to fire by accident. Dry-run is a safe preview and never
-blocks.
+The v4 export schema (2.0.0) drops ``score_quality_80`` /
+``score_display_80`` in favour of ``quality_score_v4_100`` + the six pillars.
+Pushing a v4 build to Supabase before Flutter proves v4-reader support can
+break older app builds. This guard makes that footgun impossible to fire by
+accident. Dry-run is a safe preview and never blocks.
 """
 from __future__ import annotations
 
@@ -67,3 +67,4 @@ def test_error_message_names_flutter_and_the_flag():
     msg = str(exc.value)
     assert "Flutter" in msg
     assert "--allow-v4-cutover" in msg
+    assert "still reads" not in msg

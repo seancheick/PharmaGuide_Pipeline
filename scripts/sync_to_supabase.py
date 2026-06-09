@@ -841,10 +841,10 @@ def assert_cutover_sync_allowed(manifest, allow_v4_cutover=False, dry_run=False)
     (export schema 2.0.0+) build, False for v3. Raises RuntimeError for a REAL
     sync of a v4 build unless ``allow_v4_cutover`` is set.
 
-    The live Flutter app ranks/renders on ``score_quality_80``, which the v4
-    export schema (2.0.0) drops in favour of ``quality_score_v4_100`` + the six
-    pillars. Pushing a v4 build to Supabase before Flutter migrates BREAKS the
-    live app, so a real sync of a v4 build requires the explicit
+    The v4 export schema (2.0.0) drops the legacy ``score_quality_80`` /
+    ``score_display_80`` fields in favour of ``quality_score_v4_100`` + the six
+    pillars. Pushing a v4 build before Flutter has proven v4-reader support
+    breaks older app builds, so a real sync requires the explicit
     ``--allow-v4-cutover`` acknowledgement. Dry-run is a safe preview (uploads
     nothing) and never blocks.
     """
@@ -859,10 +859,10 @@ def assert_cutover_sync_allowed(manifest, allow_v4_cutover=False, dry_run=False)
         raise RuntimeError(
             "Refusing to sync a v4 build to Supabase.\n"
             f"  build: schema_version={schema!r}, score_model={score_model!r}\n"
-            "  The live Flutter app still reads `score_quality_80`, which the v4 export\n"
-            "  schema (2.0.0) dropped for `quality_score_v4_100` + six pillars. Syncing a\n"
-            "  v4 build before Flutter migrates BREAKS the live app.\n"
-            "  Once Flutter reads the v4 fields, re-run with --allow-v4-cutover."
+            "  v4 schema 2.0.0 drops `score_quality_80` / `score_display_80` for\n"
+            "  `quality_score_v4_100` + six pillars. Syncing before Flutter proves\n"
+            "  v4-reader support can break older app builds.\n"
+            "  Re-run with --allow-v4-cutover only after the Flutter v4 cutover gate passes."
         )
     return is_v4
 
@@ -894,8 +894,9 @@ def sync(
 
     print(f"Loading manifest from {build_dir}...")
     local = load_local_manifest(build_dir)
-    # Cutover tripwire: refuse to push a v4 build to Supabase until Flutter is
-    # migrated (it still reads the dropped score_quality_80). Dry-run previews fine.
+    # Cutover tripwire: refuse to push a v4 build to Supabase until the caller
+    # explicitly acknowledges that Flutter's v4-reader gate has passed. Dry-run
+    # previews fine.
     is_v4_build = assert_cutover_sync_allowed(
         local, allow_v4_cutover=allow_v4_cutover, dry_run=dry_run
     )
@@ -904,7 +905,7 @@ def sync(
             print("  [v4 cutover] schema 2.0.0 build — --allow-v4-cutover set; proceeding.")
         elif dry_run:
             print("  [WARNING] v4 build (schema 2.0.0) — a REAL sync needs --allow-v4-cutover "
-                  "(Flutter must read quality_score_v4_100 first).")
+                  "after the Flutter v4 cutover gate passes.")
     version = local["db_version"]
     product_count = local["product_count"]
     checksum = local["checksum"]
@@ -1108,7 +1109,7 @@ def parse_args(argv=None):
     parser.add_argument("--allow-v4-cutover", action="store_true", dest="allow_v4_cutover",
                         help="Acknowledge that this is a v4 (schema 2.0.0) build and Flutter has been "
                              "migrated to read quality_score_v4_100. REQUIRED to sync a v4 build "
-                             "(the live app reads the dropped score_quality_80 without it).")
+                             "because older app builds read the dropped score_quality_80 fields.")
     parser.add_argument("--max-workers", type=int, default=DEFAULT_MAX_WORKERS,
                         help=f"Max concurrent detail-blob uploads (default: {DEFAULT_MAX_WORKERS})")
     parser.add_argument("--retry-count", type=int, default=DEFAULT_UPLOAD_RETRIES,
