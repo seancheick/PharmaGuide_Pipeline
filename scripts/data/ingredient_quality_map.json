@@ -40,8 +40,8 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1416,
-      "total_form_aliases": 12237,
-      "parents_with_parent_aliases": 183,
+      "total_form_aliases": 12222,
+      "parents_with_parent_aliases": 182,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -61,7 +61,7 @@
       "vitamins": 22
     },
     "schema_version": "5.4.6",
-    "last_updated": "2026-06-08",
+    "last_updated": "2026-06-09",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1757,13 +1757,8 @@
           "Betatene",
           "pro-vitamin A",
           "pro vitamin A",
-          "gamma-carotene",
-          "dunaliella salina",
-          "dunaliella",
           "natural algae carotene",
-          "dunaliella salina extract",
           "marine beta-carotene",
-          "D. salina",
           "mixed algal carotenoids",
           "dunaliella beta-carotene",
           "beta carotene",
@@ -2507,11 +2502,11 @@
     "rxcui": "9346",
     "forms": {
       "riboflavin-5-phosphate": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": false,
-        "score": 14,
+        "score": 10,
         "absorption": "dephosphorylated to riboflavin in gut; oral F ≈ riboflavin (Zempleni 1996)",
-        "notes": "The active coenzyme form of B2 (also called FMN — flavin mononucleotide). Your body uses this form directly without conversion. Ideal for people with impaired riboflavin metabolism or who want the most bioavailable form. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Zempleni 1996 riboflavin PMID:8604671.",
+        "notes": "The active coenzyme form of B2 (also called FMN — flavin mononucleotide). Oral FMN is dephosphorylated to free riboflavin in the gut before absorption, so systemic bioavailability equals standard riboflavin; the coenzyme advantage is intracellular, not absorptive. May suit people with impaired riboflavin metabolism. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Zempleni 1996 riboflavin PMID:8604671.",
         "aliases": [
           "R5P",
           "riboflavin 5-phosphate",
@@ -2608,9 +2603,9 @@
         }
       },
       "flavin adenine dinucleotide (FAD)": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": false,
-        "score": 13,
+        "score": 10,
         "absorption": "hydrolyzed to riboflavin pre-absorption; oral F ≈ riboflavin",
         "notes": "An active coenzyme form of B2 involved in hundreds of metabolic reactions. However, oral FAD is broken down (dephosphorylated) in the gut before absorption and must be reconverted in your cells, reducing its theoretical advantage. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
@@ -2752,9 +2747,9 @@
     "rxcui": "7393",
     "forms": {
       "inositol hexanicotinate": {
-        "bio_score": 12,
+        "bio_score": 5,
         "natural": false,
-        "score": 12,
+        "score": 5,
         "absorption": "NO measurable niacin release in 6-wk human trial (Keenan 2013)",
         "notes": "A flush-free niacin form made of six niacin molecules bound to inositol. Releases niacin slowly, avoiding the uncomfortable vasodilation ('niacin flush'). Supports lipid metabolism without skin flushing. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
@@ -2788,10 +2783,7 @@
         "aliases": [
           "b3 amide",
           "b3 amide supplement",
-          "niacin & niacinamide",
-          "niacin and niacinamide",
           "niacin/niacinamide",
-          "niacinamide & niacin",
           "niacinamide supplement",
           "Niacinamide USP",
           "Niacinamide USP supplement",
@@ -2804,7 +2796,10 @@
           "non-flushing niacin supplement",
           "vit b3 amide",
           "vitamin b3 amide",
-          "vitamin b3 amide supplement"
+          "vitamin b3 amide supplement",
+          "poten-zyme niacinamide",
+          "poten zyme niacinamide",
+          "fermented niacinamide"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2948,9 +2943,9 @@
           "Niacinamide and Niacin",
           "Niacina",
           "vit b3",
-          "poten-zyme niacinamide",
-          "poten zyme niacinamide",
-          "fermented niacinamide"
+          "niacin & niacinamide",
+          "niacin and niacinamide",
+          "niacinamide & niacin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -3131,16 +3126,13 @@
         }
       },
       "pantethine": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "hydrolyzed to pantothenate + cysteamine pre-absorption (Wittwer 1985)",
-        "notes": "The active, reduced form of pantothenic acid — a direct precursor to Coenzyme A (CoA). Superior to standard pantothenic acid for supporting lipid metabolism. Clinical studies show it can help maintain healthy cholesterol levels. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Wittwer 1985 pantethine PMID:4056044.",
+        "notes": "The active, reduced form of pantothenic acid — a direct precursor to Coenzyme A (CoA). Hydrolyzed to pantothenic acid + cysteamine before absorption, so pantothenate bioavailability equals calcium pantothenate; its cholesterol-supporting effect is attributed to the cysteamine moiety, not superior B5 delivery. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Wittwer 1985 pantethine PMID:4056044.",
         "aliases": [
-          "active b5",
-          "coenzyme a precursor",
           "pantetheine dimer",
-          "lipid-supporting b5",
           "Pantethine USP",
           "pantethine supplement",
           "active b5 supplement",
@@ -3383,11 +3375,11 @@
     "rxcui": "42954",
     "forms": {
       "pyridoxal-5-phosphate (P5P)": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": false,
-        "score": 14,
+        "score": 10,
         "absorption": "P5P dephosphorylated to pyridoxal pre-absorption; F equals pyridoxine class",
-        "notes": "The biologically active coenzyme form of B6. Your body uses P5P directly in over 100 enzymatic reactions. Bypasses the liver conversion step required by other B6 forms — ideal for people with impaired conversion or liver issues. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "The biologically active coenzyme form of B6. Oral P5P is dephosphorylated to pyridoxal before absorption, so systemic bioavailability equals pyridoxine; the coenzyme advantage is intracellular (bypasses cellular conversion), relevant mainly for impaired-conversion states rather than gut absorption. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "P5P",
           "P-5-P",
@@ -3416,7 +3408,10 @@
           "plp supplement",
           "active b6 supplement",
           "Coenzyme Pyridoxal-5-Phosphate",
-          "Pyridoxal 5-Phosphate Monohydrate"
+          "Pyridoxal 5-Phosphate Monohydrate",
+          "activated vitamin b6",
+          "vitamin b6, activated",
+          "vitamin b6 activated"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3564,9 +3559,6 @@
         "aliases": [
           "Vitamin B6 (Pyridoxine)",
           "Vitamin B6",
-          "vitamin b6, activated",
-          "vitamin b6 activated",
-          "activated vitamin b6",
           "vitamin b-6",
           "vit b6",
           "poten-zyme vitamin b6",
@@ -3652,8 +3644,8 @@
     "forms": {
       "d-biotin": {
         "bio_score": 12,
-        "natural": true,
-        "score": 15,
+        "natural": false,
+        "score": 12,
         "absorption": "excellent (~100% F at pharmacologic oral doses)",
         "notes": "The natural, biologically active form of biotin (the D-enantiomer). This is what your body actually uses for metabolizing fats, carbohydrates, and proteins. The vast majority of commercial biotin supplements contain d-biotin. Top-tier B7 form. B26 audit 2026-04-25: d-biotin ~100% F at pharmacologic doses (PMID:10075337); SMVT saturable (PMID:19056639).",
         "aliases": [
@@ -3928,7 +3920,8 @@
           "5-Methyltetrahydrofolate Calcium Salt",
           "L-Methylfolate Calcium Salt",
           "L-5-Methylfolate Glucosamine Salt",
-          "L-Methylfolate Magnesium, Molar"
+          "L-Methylfolate Magnesium, Molar",
+          "methylated folate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4231,7 +4224,6 @@
     },
     "aliases": [
       "folate and folic acid",
-      "methylated folate",
       "folic acid",
       "Folate",
       "folate",
@@ -4384,8 +4376,7 @@
           "hydroxy b12",
           "hydroxo b12",
           "vitamin b12a",
-          "hydroxycobalamin",
-          "injectable b12"
+          "hydroxycobalamin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -4556,7 +4547,6 @@
         "aliases": [
           "ester-c",
           "ester-c complex",
-          "vitamin c ester",
           "patented vitamin c",
           "Ester-C Calcium Ascorbate",
           "Proprietary Esterified Complex",
@@ -4565,7 +4555,6 @@
           "ester-c supplement",
           "ester-c complex supplement",
           "vitamin c ester supplement",
-          "vit c ester",
           "patented vitamin c supplement",
           "patented vit c",
           "calcium ascorbate threonate supplement",
@@ -5179,9 +5168,9 @@
         }
       },
       "micellized D3": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "micellar emulsion; modest improvement over standard D3 in low-fat conditions",
         "notes": "D3 processed into water-soluble micelles for enhanced absorption without requiring dietary fat. Especially important for people with fat malabsorption (Crohn's, celiac, cystic fibrosis, post-bariatric surgery) who struggle to absorb standard fat-soluble D3. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -5207,9 +5196,9 @@
         }
       },
       "liposomal D3": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "liposomal carrier; claims of enhanced uptake — limited human PK data",
         "notes": "D3 encapsulated in phospholipid liposomes for improved cellular uptake. Protects the vitamin through the GI tract and delivers it efficiently. A premium delivery format, though head-to-head data vs standard D3-in-oil is limited. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -5606,9 +5595,9 @@
         }
       },
       "tocotrienols": {
-        "bio_score": 12,
+        "bio_score": 9,
         "natural": true,
-        "score": 15,
+        "score": 12,
         "absorption": "lipid-dependent F; minimal α-TTP retention; short plasma half-life vs tocopherols",
         "notes": "A distinct class of vitamin E found in palm oil, rice bran, and annatto. Emerging research shows tocotrienols (especially delta and gamma forms) have potent antioxidant, neuroprotective, and cholesterol-lowering properties that tocopherols lack. A cutting-edge vitamin E category. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper. Cited evidence: Yap & Yuen 2004 tocotrienol PMID:15288344.",
         "aliases": [
@@ -6022,7 +6011,9 @@
           "trans mk7 supplement",
           "active mk7 supplement",
           "all trans menaquinone-7 supplement",
-          "bioactive mk7 supplement"
+          "bioactive mk7 supplement",
+          "K2 Vital Delta",
+          "K2VITAL Delta"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6033,9 +6024,9 @@
         }
       },
       "menaquinone-4 (MK-4)": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "MK-4 at 420 μg nutritional dose: NOT detectable in serum (Sato 2012)",
         "notes": "The short-chain form of vitamin K2, naturally produced in human tissues from K1. Rapidly absorbed but has a very short half-life (~1-2 hours), requiring multiple daily doses or high single doses (typically 15-45 mg in Japanese studies). Best studied for bone density. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -6336,10 +6327,7 @@
       "last_reviewed_at": "2026-02-26",
       "research_status": "validated"
     },
-    "aliases": [
-      "K2 Vital Delta",
-      "K2VITAL Delta"
-    ],
+    "aliases": [],
     "external_ids": {},
     "rxcui_note": "Generic vitamin K entry spans K1 and K2 vitamers; keep RxNorm null unless the record is split to a specific vitamer.",
     "rxcui": null
@@ -6474,7 +6462,8 @@
           "microcrystalline hydroxyapatite supplement",
           "bone calcium supplement",
           "hydroxyapatite calcium supplement",
-          "MCHC supplement"
+          "MCHC supplement",
+          "hydroxyapatite"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6603,7 +6592,6 @@
           "oyster shell calcium supplement",
           "cal carbonate supplement",
           "tums calcium supplement",
-          "dolomite",
           "eggshell calcium",
           "calcium from eggshell"
         ],
@@ -6892,8 +6880,8 @@
     "forms": {
       "phosphate salts": {
         "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "natural": false,
+        "score": 10,
         "absorption": "good (depends on salt, ~40–60%)",
         "notes": "Phosphorus delivered via common phosphate salts (mono/di/tricalcium phosphate, sodium phosphate, potassium phosphate). Essential for bone structure, ATP energy production, and DNA synthesis. Well-absorbed at ~40-60% depending on the specific salt and dietary context.",
         "aliases": [
@@ -6906,9 +6894,6 @@
           "tricalcium phosphate",
           "tribasic calcium phosphate",
           "TCP",
-          "microcrystalline hydroxyapatite",
-          "calcium hydroxyapatite",
-          "hydroxyapatite",
           "phosphorus from calcium phosphate",
           "phosphorus from tricalcium phosphate",
           "phosphorus from hydroxyapatite"
@@ -7015,7 +7000,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "80%+",
+        "absorption": "well-absorbed chelate; class-typical soluble-Mg F, not proven superior to citrate/lactate/aspartate (no head-to-head human PK; NIH ODS)",
         "notes": "Magnesium glycinate/bisglycinate is a plausible premium, gentle chelated form, but the clinician/API pass did not verify direct human comparative evidence proving it is superior to citrate/aspartate/chloride/lactate. Scored as good/solid bioavailability rather than top-tier. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
         "aliases": [
           "magnesium bisglycinate",
@@ -7766,9 +7751,7 @@
           "heme iron",
           "proferrin",
           "hip",
-          "animal-source iron",
-          "beef liver iron",
-          "liver iron"
+          "animal-source iron"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7860,7 +7843,8 @@
           "elemental iron",
           "pure iron powder",
           "Ferronyl Iron",
-          "Ferronyl"
+          "Ferronyl",
+          "ferronyl carbonyl iron"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8157,7 +8141,6 @@
       }
     },
     "aliases": [
-      "ferronyl carbonyl iron",
       "C0376520",
       "C3848561",
       "C0060282",
@@ -8245,7 +8228,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high (87%)",
+        "absorption": "soluble chelate; good absorption but human comparator data thin; not proven superior to citrate/gluconate (~61%, NIH ODS)",
         "notes": "Zinc picolinate is a strong premium candidate, but PubMed/API-verified evidence does not justify a unique max score over all other soluble zinc forms. Clinician recalibration 2026-06-02: excellent, but not proven best. Barrie 1987 (PMID:3630857) remains historical support, while modern zinc form reviews and direct human data keep it below the reserved top score.",
         "aliases": [
           "picolinate zinc",
@@ -8455,8 +8438,7 @@
           "zinc",
           "zn",
           "zinc supplement",
-          "zinmax",
-          "zinc arginate"
+          "zinmax"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8524,7 +8506,8 @@
           "zinc protein chelate",
           "zinc proteinate",
           "amino acid chelated zinc",
-          "hydrolyzed protein zinc chelate"
+          "hydrolyzed protein zinc chelate",
+          "zinc arginate"
         ],
         "dosage_importance": 0.7,
         "absorption_structured": {
@@ -8814,9 +8797,7 @@
         "notes": "The highest-quality slippery elm preparation, made from the inner bark which contains the highest concentration of mucilage — a gel-forming fiber that coats and soothes irritated mucous membranes. Traditionally used for sore throat, cough, acid reflux, and inflammatory bowel conditions. The demulcent coating protects tissue from irritation. B23 audit 2026-04-25: CATEGORY ERROR — mucilage local action.",
         "aliases": [
           "slippery elm inner bark",
-          "slippery elm bark powder",
           "ulmus rubra inner bark",
-          "slippery elm powder",
           "inner slippery elm bark",
           "slippery elm inner bark supplement",
           "slippery elm bark powder supplement",
@@ -8883,7 +8864,9 @@
           "red elm",
           "indian elm",
           "moose elm",
-          "Ulmus fulva, Powder"
+          "Ulmus fulva, Powder",
+          "slippery elm bark powder",
+          "slippery elm powder"
         ],
         "dosage_importance": 1.0,
         "absorption": "category_error (mucilage; not systemic)",
@@ -8964,7 +8947,6 @@
         "absorption": "90%+",
         "notes": "The premium organic selenium form — an amino acid (methionine) with selenium replacing sulfur. Your body incorporates it directly into proteins, creating a selenium reserve that's released as needed. ~90% absorbed. The form used in the landmark SELECT and NPC cancer prevention trials.",
         "aliases": [
-          "organic selenium",
           "l-selenomethionine",
           "methionine-bound selenium",
           "selenomethionine supplement",
@@ -9070,7 +9052,7 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "50%",
+        "absorption": "well absorbed in humans (~85%+, NIH ODS); lower selenoprotein retention than organic Se forms",
         "notes": "The most common inorganic selenium form in supplements. An inorganic salt (Na2SeO3) that must be reduced and then converted to organic selenium species in your body. ~50% absorbed, but poorly retained compared to organic forms. Can generate oxidative stress during metabolism at high doses.",
         "aliases": [
           "selenious acid sodium",
@@ -9096,7 +9078,7 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "45%",
+        "absorption": "well absorbed in humans (~90%+, NIH ODS); lower tissue retention than organic Se (selenomethionine/yeast)",
         "notes": "An inorganic selenium salt (Na2SeO4) similar to selenite but even less efficiently retained. Must undergo multiple conversion steps to become biologically active. Higher toxicity risk at elevated doses than organic forms. Used in some water treatment and food fortification applications.",
         "aliases": [
           "selenic acid sodium",
@@ -9403,7 +9385,6 @@
       "research_status": "validated"
     },
     "aliases": [
-      "SelenoExcell",
       "C0142923",
       "C0036584",
       "C0074765",
@@ -9455,7 +9436,6 @@
           "bioastin",
           "astareal",
           "zanthin",
-          "natural carotenoid",
           "algae-based astaxanthin",
           "astaxanthin algae",
           "h. pluvialis extract",
@@ -9467,7 +9447,6 @@
           "bioastin supplement",
           "astareal supplement",
           "zanthin supplement",
-          "natural carotenoid supplement",
           "algae-based astaxanthin supplement",
           "astaxanthin algae supplement",
           "h. pluvialis extract supplement",
@@ -9530,9 +9509,9 @@
         }
       },
       "unspecified astaxanthin": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "low/variable when fat-matrix unknown; reference Cmax ~3.86 µg/mL (Khayyal 2024)",
         "notes": "The supplement label says astaxanthin but does not specify natural (algae-derived) or synthetic. This distinction matters — natural astaxanthin from Haematococcus pluvialis has far more clinical support. If the source isn't specified, it may be the cheaper synthetic version. Evidence update 2026-04-24: Khayyal 2024 (PMID:38748358, n=12 males, 8mg crossover) reference (non-micellar) astaxanthin gave Cmax only 3.86 µg/mL vs 7.21 µg/mL for micellar formulation, confirming unformulated/unspecified astaxanthin defaults to lower bioavailability than fat-optimized forms.",
         "aliases": [
@@ -9812,9 +9791,9 @@
         }
       },
       "buffered creatine monohydrate": {
-        "bio_score": 12,
+        "bio_score": 13,
         "natural": false,
-        "score": 12,
+        "score": 13,
         "absorption": "same F as monohydrate; buffering claim unsupported (Jagim 2012)",
         "notes": "Buffered with alkaline compounds to resist stomach acid breakdown. Marketed as Kre-Alkalyn. Head-to-head trials (Jagim 2012) found no advantage over standard monohydrate in strength, body composition, or muscle creatine levels. Scores lower because the added cost brings no proven benefit. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9834,9 +9813,9 @@
         }
       },
       "creatine nitrate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "salt dissociates to creatine ion; F equivalent to monohydrate",
         "notes": "Creatine bonded to a nitrate group. Theoretically combines creatine's ATP-regeneration benefits with nitrate-driven nitric oxide vasodilation. Limited independent research; most evidence comes from multi-ingredient pre-workouts, making it hard to isolate creatine nitrate's specific contribution. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9858,9 +9837,9 @@
         }
       },
       "creatine hydrochloride": {
-        "bio_score": 10,
+        "bio_score": 13,
         "natural": false,
-        "score": 10,
+        "score": 13,
         "absorption": "higher solubility, same F; no human PK advantage shown (Jäger 2007)",
         "notes": "Creatine bonded to hydrochloric acid, making it extremely water-soluble — roughly 40x more soluble than monohydrate. Marketed as Con-Cret. This means smaller doses dissolve fully, reducing bloating. However, no published trial shows it loads muscles faster or produces greater strength gains than monohydrate at equivalent creatine doses. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9886,9 +9865,9 @@
         }
       },
       "creatine ethyl ester": {
-        "bio_score": 8,
+        "bio_score": 4,
         "natural": false,
-        "score": 8,
+        "score": 4,
         "absorption": "hydrolyzes to creatinine pre-absorption; near-zero functional F (Giese 2009)",
         "notes": "An esterified creatine designed to cross cell membranes without a transporter. In practice, studies (Spillane 2009) show it rapidly converts to creatinine (an inactive waste product) in the stomach, delivering far less creatine to muscles than standard monohydrate. Not recommended — low score reflects poor real-world effectiveness. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9912,9 +9891,9 @@
         }
       },
       "creatine citrate": {
-        "bio_score": 10,
+        "bio_score": 13,
         "natural": false,
-        "score": 10,
+        "score": 13,
         "absorption": "same F as monohydrate, faster Tmax only (Jäger 2007)",
         "notes": "Creatine bonded to citric acid for improved water solubility. Dissolves more easily than monohydrate, which can help with mixing. However, the citrate salt adds molecular weight, meaning you get less actual creatine per gram (~40% creatine by weight vs ~88% for monohydrate). No trials show superior efficacy to monohydrate. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9930,9 +9909,9 @@
         }
       },
       "creatine magnesium chelate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "chelate dissociates; F equivalent to monohydrate",
         "notes": "Creatine chelated with magnesium — marketed as MagnaPower. The magnesium may help creatine convert to phosphocreatine more efficiently, and one study (Brilla 2003) showed comparable strength gains to monohydrate at a lower dose. Provides both creatine and magnesium in one compound. Limited research compared to monohydrate keeps the score moderate. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9952,9 +9931,9 @@
         }
       },
       "dicreatine malate": {
-        "bio_score": 6,
+        "bio_score": 12,
         "natural": false,
-        "score": 6,
+        "score": 12,
         "absorption": "no human PK; theoretical F equivalent via salt dissociation",
         "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -10116,7 +10095,8 @@
           "calcium hydroxymethyl butyrate monohydrate",
           "Calcium Beta-Hydroxy Beta-Methylbutyrate Monohydrate",
           "Calcium B-hydroxy-B-methylbutyrate",
-          "calcium beta-hydroxy-beta-methylbutyrate"
+          "calcium beta-hydroxy-beta-methylbutyrate",
+          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10127,9 +10107,9 @@
         }
       },
       "hmb free acid (hmb-fa)": {
-        "bio_score": 15,
+        "bio_score": 13,
         "natural": false,
-        "score": 15,
+        "score": 13,
         "absorption": "excellent (~90-95%)",
         "notes": "The free acid (liquid gel) form of HMB — absorbs roughly twice as fast as the calcium salt, reaching peak blood levels in 30–60 minutes vs 2–3 hours. Bioavailability is 90–95%, the highest of any HMB form. Ideal for pre-workout timing when rapid anti-catabolic protection is needed. Marketed as MyHMB Clear. Higher score reflects the superior pharmacokinetics.",
         "aliases": [
@@ -10164,8 +10144,7 @@
           "free form hmb supplement",
           "3-hydroxy-3-methylbutyrate free acid supplement",
           "Beta-Hydroxy Beta-Methylbutyric",
-          "beta-hydroxy beta-methylbutyric acid",
-          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
+          "beta-hydroxy beta-methylbutyric acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10203,10 +10182,10 @@
     "forms": {
       "d-ribose powder": {
         "bio_score": 14,
-        "natural": true,
-        "score": 17,
+        "natural": false,
+        "score": 14,
         "absorption": "excellent (~95%+)",
-        "notes": "A naturally occurring 5-carbon sugar that is the backbone of ATP, the cell's energy molecule. Your body makes ribose, but production is slow in heart and skeletal muscle after exertion. Supplementing 5 g/day replenishes ATP stores faster — clinical trials show improved cardiac output in heart failure patients and reduced post-exercise fatigue. BioEnergy Ribose is the leading branded source. High score reflects strong absorption (95%+) and well-documented clinical benefits.",
+        "notes": "A naturally occurring 5-carbon sugar that is the backbone of ATP, the cell's energy molecule. Your body makes ribose, but production is slow in heart and skeletal muscle after exertion. Supplementing 5 g/day replenishes ATP stores faster — clinical trials show improved cardiac output in heart failure patients and reduced post-exercise fatigue. BioEnergy Ribose is the leading branded source. Score reflects high oral absorption (~95%, Thompson 2014 PMID:24272966); ATP/cardiac/fatigue effects are indication context, not absorption inputs.",
         "aliases": [
           "d-ribose",
           "ribose",
