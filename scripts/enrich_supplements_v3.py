@@ -9839,9 +9839,17 @@ class SupplementEnricherV3:
         scope_violation = False
 
         if scope_rule == 'product_level_only' and '*' not in approved_fields:
-            # Check if source_field base is in approved group
-            field_base = source_field.split('[')[0].split('.')[0]
-            if field_base not in approved_fields:
+            # Match the full source path so nested product-label fields such as
+            # labelText.parsed.certifications[0] can satisfy their explicit
+            # product-level allowlist entry. Root-only matching incorrectly
+            # reduced those paths to "labelText" and marked them out of scope.
+            normalized_source = re.sub(r'\[[^\]]+\]', '', source_field or '')
+            in_approved_scope = any(
+                normalized_source == field
+                or normalized_source.startswith(f'{field}.')
+                for field in approved_fields
+            )
+            if not in_approved_scope:
                 scope_violation = True
 
         # 3. Check negative patterns with evidence capture

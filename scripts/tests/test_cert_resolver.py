@@ -147,8 +147,7 @@ class TestResolverHappyPath:
         assert out[0].record_id == "TEST_001"
 
     def test_brand_fuzzy_matches_thorne_short_form(self) -> None:
-        """Thorne vs Thorne Research must match — this was the bug that the
-        partial_ratio fallback fixed."""
+        """Thorne vs Thorne Research must match via token-subset aliasing."""
         registry = _make_registry(
             records=[
                 {
@@ -161,6 +160,50 @@ class TestResolverHappyPath:
         out = resolve("Thorne", "Magnesium Bisglycinate", ["NSF Certified for Sport"], registry)
         assert len(out) == 1
         assert out[0].scope == "sku"
+
+    def test_brand_match_blocks_short_substring_collision(self) -> None:
+        """LTH must not verify CVS Health just because it appears inside
+        "Health"; registry cert false positives are worse than missed bonuses."""
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "NSF Sport",
+                    "brand": "LTH",
+                    "product": "GLOW Omega-3 Fish Oil",
+                }
+            ]
+        )
+        out = resolve("CVS Health", "Fish Oil 1000 mg", ["NSF Sport"], registry)
+        assert len(out) == 1
+        assert out[0].scope == "claimed_only"
+
+    def test_brand_match_blocks_partial_word_collision(self) -> None:
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "Informed Sport",
+                    "brand": "VITAL",
+                    "product": "Energy",
+                }
+            ]
+        )
+        out = resolve("vitafusion", "B Complex Energy Wild Strawberry", ["Informed Sport"], registry)
+        assert len(out) == 1
+        assert out[0].scope == "claimed_only"
+
+    def test_brand_match_blocks_shared_generic_token_collision(self) -> None:
+        registry = _make_registry(
+            records=[
+                {
+                    "program": "NSF Sport",
+                    "brand": "OIAM Performance",
+                    "product": "Protein - Vanilla",
+                }
+            ]
+        )
+        out = resolve("GNC Pro Performance", "100% Whey Protein Vanilla", ["NSF Sport"], registry)
+        assert len(out) == 1
+        assert out[0].scope == "claimed_only"
 
 
 class TestRegistryDiscovery:

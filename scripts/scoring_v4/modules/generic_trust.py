@@ -23,6 +23,7 @@ from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
     _safe_dict,
+    _safe_list,
     get_active_ingredients,
 )
 from scoring_v4.modules.brand_testing_posture import (
@@ -54,9 +55,23 @@ B4A_SCOPE_STRENGTH = {
 }
 
 LABEL_ASSERTED_WHITELIST = frozenset(
-    {"usp verified", "informed choice", "informed sport", "bscg"}
+    {
+        "usp verified",
+        "informed choice",
+        "informed sport",
+        "bscg",
+        "bscg certified drug free",
+        "nsf certified",
+        "nsf contents certified",
+        "nsf sport",
+        "nsf certified for sport",
+        "labdoor tested",
+    }
 )
-LABEL_ASSERTED_OMEGA_ONLY_WHITELIST = frozenset({"ifos"})
+LABEL_ASSERTED_OMEGA_ONLY_WHITELIST = frozenset({"ifos", "ifos certified"})
+SUSTAINABILITY_ONLY_CERTS = frozenset(
+    {"friend of the sea", "msc", "msc certified", "goed", "goed certified"}
+)
 MARINE_CERTS_FALLBACK = frozenset({"ifos", "friend of the sea", "msc", "goed"})
 
 B4B_GMP_CERTIFIED = 4.0
@@ -117,6 +132,7 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
     omega_like = _is_omega_like(product)
     best_scope_by_program: Dict[str, str] = {}
     unscored_scope_counts: Dict[str, int] = defaultdict(int)
+    skipped_reasons: Dict[str, int] = defaultdict(int)
     brand_only_programs: set[str] = set()
 
     for entry in verified:
@@ -137,9 +153,14 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
                     brand_only_programs.add(program)
             continue
         if entry.get("scoring_blocked_reason"):
+            skipped_reasons["scoring_blocked"] += 1
             continue
         program = _norm_text(entry.get("program") or "")
         if not program:
+            continue
+
+        if scope in ("sku", "product_line") and not _cert_entry_brand_matches_product(product, entry):
+            skipped_reasons["brand_mismatch"] += 1
             continue
 
         if scope == "label_asserted_product":
@@ -158,6 +179,15 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
         existing = best_scope_by_program.get(program)
         if existing is None or B4A_SCOPE_STRENGTH[scope] > B4A_SCOPE_STRENGTH[existing]:
             best_scope_by_program[program] = scope
+
+    for program in _label_asserted_quality_programs(product, omega_like):
+        existing = best_scope_by_program.get(program)
+        if (
+            existing is None
+            or B4A_SCOPE_STRENGTH["label_asserted_product"]
+            > B4A_SCOPE_STRENGTH[existing]
+        ):
+            best_scope_by_program[program] = "label_asserted_product"
 
     scope_counts: Dict[str, int] = defaultdict(int)
     for scope in best_scope_by_program.values():
@@ -181,9 +211,71 @@ def _score_b4a(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
             for key, value in sorted(unscored_scope_counts.items())
             if value > 0
         },
+        "verified_skipped_reasons": {
+            key: value for key, value in sorted(skipped_reasons.items()) if value > 0
+        },
         "verified_brand_only_programs": sorted(brand_only_programs),
     }
     return score, metadata
+
+
+def _label_asserted_quality_programs(product: Dict[str, Any], omega_like: bool) -> list[str]:
+    """Return rules-db/product-label quality programs eligible for small B4a.
+
+    This fills the registry-incomplete gap: a product can have a score-eligible
+    label/rules evidence row even when no live SKU registry row was loaded. It
+    remains low-weight and never credits sustainability-only programs.
+    """
+    cert = _safe_dict(product.get("certification_data"))
+    evidence = _safe_dict(cert.get("evidence_based"))
+    programs: list[str] = []
+    seen: set[str] = set()
+    for entry in _safe_list(evidence.get("third_party_programs")):
+        if not isinstance(entry, dict) or not entry.get("score_eligible"):
+            continue
+        display = _norm_text(entry.get("display_name") or entry.get("program") or "")
+        rule_id = _norm_text(entry.get("rule_id") or "")
+        program = display or rule_id
+        if not program or not _is_label_asserted_quality_program(display, rule_id, omega_like):
+            continue
+        program = _label_asserted_program_key(display, rule_id)
+        if program in seen:
+            continue
+        seen.add(program)
+        programs.append(program)
+    return programs
+
+
+def _is_label_asserted_quality_program(display: str, rule_id: str, omega_like: bool) -> bool:
+    haystack = f"{display} {rule_id}"
+    if any(token in haystack for token in SUSTAINABILITY_ONLY_CERTS):
+        return False
+    if any(token in haystack for token in LABEL_ASSERTED_WHITELIST):
+        return True
+    return omega_like and any(
+        token in haystack for token in LABEL_ASSERTED_OMEGA_ONLY_WHITELIST
+    )
+
+
+def _label_asserted_program_key(display: str, rule_id: str) -> str:
+    haystack = f"{display} {rule_id}"
+    if "ifos" in haystack:
+        return "ifos"
+    if "usp" in haystack:
+        return "usp verified"
+    if "informed choice" in haystack:
+        return "informed choice"
+    if "informed sport" in haystack:
+        return "informed sport"
+    if "bscg" in haystack:
+        return "bscg"
+    if "labdoor" in haystack:
+        return "labdoor tested"
+    if "nsf" in haystack and "sport" in haystack:
+        return "nsf sport"
+    if "nsf" in haystack:
+        return "nsf certified"
+    return display or rule_id
 
 
 def _score_b4b(product: Dict[str, Any]) -> tuple[float, Dict[str, Any]]:
@@ -240,9 +332,46 @@ def _gmp_implied_by_verified_cert(product: Dict[str, Any]) -> str | None:
             continue
         if entry.get("scoring_blocked_reason"):
             continue
+        if not _cert_entry_brand_matches_product(product, entry):
+            continue
         if _norm_text(entry.get("program") or "") in gmp_programs:
             return entry.get("program")
     return None
+
+
+def _cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    matched_brand = _brand_key(entry.get("matched_brand"))
+    if not matched_brand:
+        return True
+    product_brand = _brand_key(
+        product.get("brandName")
+        or product.get("brand_name")
+        or product.get("brand")
+        or ""
+    )
+    if not product_brand:
+        return True
+    product_tokens = _brand_tokens(product_brand)
+    matched_tokens = _brand_tokens(matched_brand)
+    if not product_tokens or not matched_tokens:
+        return False
+    return product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens)
+
+
+def _brand_key(value: Any) -> str:
+    text = str(value or "").lower().strip()
+    text = re.sub(r"[®™©]", " ", text)
+    text = re.sub(
+        r"\b(inc|incorporated|llc|ltd|limited|corp|corporation|company|co|gmbh|holdings|group|brands|brand)\b",
+        " ",
+        text,
+    )
+    text = re.sub(r"[^a-z0-9\s]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _brand_tokens(value: str) -> set[str]:
+    return {token for token in value.split() if len(token) >= 2}
 
 
 _GMP_IMPLYING_PROGRAMS_CACHE: frozenset[str] | None = None

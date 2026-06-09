@@ -12,6 +12,7 @@ breakdown plus the enriched product contract.
 
 from __future__ import annotations
 
+import re
 from typing import Any, Dict, Iterable, List, Tuple
 
 from scoring_input_contract import get_scoring_ingredients
@@ -94,6 +95,9 @@ def _evidence_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tup
     clinical_matches = _clinical_matches(product)
 
     if matched_entries <= 0 and not clinical_matches:
+        module_owned = _module_owned_evidence_drivers(metadata, score)
+        if module_owned:
+            return "moderate", module_owned
         return "low", ["no_clinical_evidence_matched"]
 
     drivers: List[str] = []
@@ -119,8 +123,13 @@ def _evidence_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tup
         level = "moderate"
         drivers.extend(["limited_human_evidence", "product_specific_nct_absent"])
     else:
-        level = "low"
-        drivers.append("human_clinical_evidence_absent")
+        module_owned = _module_owned_evidence_drivers(metadata, score)
+        if module_owned:
+            level = "moderate"
+            drivers.extend(module_owned)
+        else:
+            level = "low"
+            drivers.append("human_clinical_evidence_absent")
 
     flags = [str(f) for f in _safe_list(metadata.get("flags"))]
     if "SUB_CLINICAL_DOSE_DETECTED" in flags:
@@ -128,6 +137,39 @@ def _evidence_confidence(product: Dict[str, Any], module: Dict[str, Any]) -> Tup
         if level == "high":
             level = "moderate"
     return level, drivers
+
+
+def _module_owned_evidence_drivers(metadata: Dict[str, Any], score: float) -> List[str]:
+    """Recognize evidence recovered by v4 modules after enrichment.
+
+    Some v4 modules restore evidence from scoped contracts: DRI authority floors,
+    backed-clinical-study recovery, collagen profiles, and probiotic native
+    strain evidence. Those are lower confidence than product-specific evidence,
+    but not "no evidence"; the confidence label should mirror the module's own
+    scored evidence instead of looking only at the raw enriched matches array.
+    """
+    if score < 4.0:
+        return []
+
+    drivers: List[str] = ["product_specific_nct_absent"]
+    if metadata.get("nutrition_authority_floor_applied") is True:
+        drivers.append("nutrition_authority_evidence_floor")
+    if _safe_list(metadata.get("recovered_matches")):
+        drivers.append("v4_evidence_recovered_from_contract")
+    if (_as_float(metadata.get("primary_evidence_floor"), 0.0) or 0.0) > 0.0:
+        drivers.append("primary_evidence_floor")
+    if (_as_float(metadata.get("native_clinical_strain_evidence_score"), 0.0) or 0.0) >= 4.0:
+        drivers.append("native_clinical_strain_evidence")
+
+    nested_generic = _safe_dict(metadata.get("generic_evidence_metadata"))
+    if nested_generic:
+        nested = _module_owned_evidence_drivers(
+            nested_generic,
+            _as_float(metadata.get("generic_evidence_score"), 0.0) or 0.0,
+        )
+        drivers.extend(d for d in nested if d != "product_specific_nct_absent")
+
+    return sorted(dict.fromkeys(drivers)) if len(drivers) > 1 else []
 
 
 def _label_completeness_confidence(
@@ -182,7 +224,7 @@ def _label_completeness_confidence(
 
     soft_missing = set(str(f) for f in _safe_list(completeness_gate.get("soft_missing")))
     if "conservative_blend_anchor_mass" in soft_missing:
-        level = "low"
+        level = _min_level(level, "moderate")
         drivers.append("conservative_blend_anchor_mass")
     if "active_anchor_mass_evidence" in soft_missing:
         level = _min_level(level, "moderate")
@@ -267,23 +309,37 @@ def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) ->
 
     cert_entries = _verified_cert_entries(product)
     drivers: List[str] = []
-    level = "moderate"
     if not cert_entries:
         return "moderate", ["no_verified_third_party_certification"]
 
+    has_sku = False
+    has_product_line = False
+    has_label_asserted = False
+    has_low_unresolved = False
+    has_claimed_only = False
     for entry in cert_entries:
         if not isinstance(entry, dict):
             continue
         scope = _norm(entry.get("scope")).replace("-", "_")
-        if entry.get("scoring_blocked_reason"):
+        if scope in {"sku", "product_line"} and not _cert_entry_brand_matches_product(product, entry):
+            drivers.append("cert_brand_mismatch_ignored")
+            continue
+        blocked = bool(entry.get("scoring_blocked_reason"))
+        if blocked:
             drivers.append("cert_registry_stale_or_blocked")
-            level = "low"
+            has_low_unresolved = True
+        elif scope == "sku":
+            has_sku = True
+        elif scope == "product_line":
+            has_product_line = True
+        elif scope == "label_asserted_product":
+            has_label_asserted = True
         elif scope == "needs_review":
             drivers.append("cert_match_needs_review")
-            level = "low"
+            has_low_unresolved = True
         elif scope == "claimed_only":
             drivers.append("cert_claimed_only_no_registry_match")
-            level = "low"
+            has_claimed_only = True
         elif scope == "brand_only":
             drivers.append("brand_cert_not_sku_verified")
         elif scope:
@@ -293,7 +349,52 @@ def _verification_confidence(product: Dict[str, Any], module: Dict[str, Any]) ->
     if isinstance(signals, list) and signals:
         drivers.append("manufacturer_signal_present_no_sku_match")
 
-    return level, drivers or ["third_party_verification_unresolved"]
+    if has_sku:
+        return "high", ["cert_sku_verified", *drivers]
+    if has_product_line:
+        return "high", ["cert_product_line_verified", *drivers]
+    if has_label_asserted:
+        return "moderate", ["cert_label_asserted_product", *drivers]
+    if has_low_unresolved:
+        return "low", drivers
+    if has_claimed_only:
+        return "moderate", drivers
+    return "moderate", drivers or ["third_party_verification_unresolved"]
+
+
+def _cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    matched_brand = _brand_key(entry.get("matched_brand"))
+    if not matched_brand:
+        return True
+    product_brand = _brand_key(
+        product.get("brandName")
+        or product.get("brand_name")
+        or product.get("brand")
+        or ""
+    )
+    if not product_brand:
+        return True
+    product_tokens = _brand_tokens(product_brand)
+    matched_tokens = _brand_tokens(matched_brand)
+    if not product_tokens or not matched_tokens:
+        return False
+    return product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens)
+
+
+def _brand_key(value: Any) -> str:
+    text = str(value or "").lower().strip()
+    text = re.sub(r"[®™©]", " ", text)
+    text = re.sub(
+        r"\b(inc|incorporated|llc|ltd|limited|corp|corporation|company|co|gmbh|holdings|group|brands|brand)\b",
+        " ",
+        text,
+    )
+    text = re.sub(r"[^a-z0-9\s]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _brand_tokens(value: str) -> set[str]:
+    return {token for token in value.split() if len(token) >= 2}
 
 
 def _identity_confidence(
@@ -379,11 +480,24 @@ def _ingredient_identity_confidences(product: Dict[str, Any]) -> Iterable[float]
     for row in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(row, dict):
             continue
+        if _is_non_contributory_epa_dha_placeholder(row):
+            continue
         for key in ("identity_confidence", "match_confidence", "canonical_confidence"):
             value = _as_float(row.get(key), None)
             if value is not None:
                 yield value
                 break
+
+
+def _is_non_contributory_epa_dha_placeholder(row: Dict[str, Any]) -> bool:
+    canonical = str(row.get("canonical_id") or "").strip().lower().replace("-", "_")
+    if canonical not in {"epa", "dha"}:
+        return False
+    quantity = _as_float(row.get("quantity"), None)
+    unit = str(row.get("unit") or "").strip().lower().replace("_", " ")
+    if quantity is not None and quantity <= 0:
+        return True
+    return unit in {"", "np", "not provided", "unspecified"}
 
 
 def _dimension(module: Dict[str, Any], name: str) -> Dict[str, Any]:

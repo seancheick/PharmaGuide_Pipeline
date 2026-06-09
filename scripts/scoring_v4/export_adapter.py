@@ -89,6 +89,7 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["_v4_raw_score_100"] = v4.get("raw_score_v4_100")
     scored["_v4_module"] = v4.get("v4_module")
     scored["_v4_confidence"] = v4.get("v4_confidence")
+    scored["_v4_confidence_detail"] = breakdown.get("confidence") or None
     scored["_v4_quality_version"] = v4.get("quality_score_version")
     scored["_v4_pillars"] = v4.get("quality_pillars_v4")
     scored["_v4_clean_label_flags"] = v4.get("clean_label_flags_v4")

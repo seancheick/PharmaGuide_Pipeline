@@ -232,6 +232,9 @@ def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:
             "b4b_gmp": 4.0,
             "b4d_brand_testing_posture": 2.0,
         },
+        "metadata": {
+            "trust_metadata": {"verified_scope_counts": {"sku": 1}},
+        },
     }
 
     out = assemble_quality_score(_shadow(module="omega", bd=bd))
@@ -368,12 +371,25 @@ def test_version_emitted() -> None:
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------
 
-def _bd_verif(b4a=0.0, b4b=4.0, b4c=0.0, b4d=2.0, d1=2.0, d4=1.0):
+def _bd_verif(
+    b4a=0.0,
+    b4b=4.0,
+    b4c=0.0,
+    b4d=2.0,
+    d1=2.0,
+    d4=1.0,
+    scope_counts=None,
+):
     """module breakdown with verification + trust components for the verification pillar."""
     bd = _module_bd()
     bd["verification_bonus"]["components"] = {
         "B4a_verified_certifications": b4a, "B4b_gmp": b4b,
         "B4c_batch_traceability": b4c, "B4d_brand_testing_posture": b4d,
+    }
+    if scope_counts is None:
+        scope_counts = {"sku": 1} if b4a > 0 else {}
+    bd["verification_bonus"]["metadata"] = {
+        "trust_metadata": {"verified_scope_counts": scope_counts}
     }
     bd["manufacturer_trust"]["components"] = {
         "D1_manufacturer_reputation": d1, "D2_disclosure_quality": 1.0,
@@ -411,6 +427,38 @@ def test_strong_cert_scores_high() -> None:
     assert v["score"] >= 11.0
 
 
+def test_label_asserted_cert_stays_small_in_public_pillar() -> None:
+    v = _verif(_bd_verif(
+        b4a=2.0,
+        b4b=0.0,
+        b4c=0.0,
+        b4d=0.0,
+        scope_counts={"label_asserted_product": 1},
+    ))
+
+    assert v["components"]["cert"] == 2.0
+    assert "label claims third-party certification" in v["reason"].lower()
+    assert v["score"] < _verif(_bd_verif(b4a=8.0, b4b=0.0, b4c=0.0, b4d=0.0))["score"]
+
+
+def test_omega_b4a_scored_entries_scope_counts_as_registry_cert() -> None:
+    bd = _bd_verif(b4a=10.0, b4b=0.0, b4c=0.0, b4d=2.0, scope_counts={})
+    bd["verification_bonus"]["metadata"] = {
+        "trust_metadata": {
+            "b4a": {
+                "B4a_scored_entries": [
+                    {"program": "IFOS", "scope": "product_line", "pts": 10.0}
+                ]
+            }
+        }
+    }
+
+    v = _verif(bd)
+
+    assert v["components"]["cert"] == 12.0
+    assert v["components"]["brand_testing"] == 2.0
+
+
 def test_fail_open_neutral_when_no_cert_no_coa() -> None:
     # self-asserted cGMP only (B4a=0, B4c=0) = data-UNKNOWN -> neutral baseline, NOT zero
     v = _verif(_bd_verif(b4a=0.0, b4b=4.0, b4c=0.0))
@@ -434,6 +482,7 @@ def test_brand_only_cert_does_not_stack_with_product_cert() -> None:
     product_cert = _verif(_bd_verif(b4a=8.0, b4b=0.0, b4c=0.0, b4d=0.0))
     bd = _bd_verif_with_brand_only_cert()
     bd["verification_bonus"]["components"]["B4a_verified_certifications"] = 8.0
+    bd["verification_bonus"]["metadata"]["trust_metadata"]["verified_scope_counts"] = {"sku": 1}
     stacked = _verif(bd)
 
     assert stacked["score"] == product_cert["score"]

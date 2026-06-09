@@ -4,12 +4,11 @@ Scores omega-3 Testing & Trust against the 15-point rubric in
 omega_rubric.json:
 
     b4a_certifications  /10   IFOS / NSF / USP / Informed at sku or
-                              curated product_line scope ONLY. needs_review,
-                              brand_only, claimed_only, rejected ALL stay 0.
-                              No diminishing returns — each verified cert
-                              awards the policy value (10) and the total
-                              caps at 10. Multiple SKU certs don't stack
-                              beyond the cap.
+                              curated product_line scope get full credit.
+                              Product-label/rules-db quality claims get small
+                              provisional credit. needs_review, brand_only,
+                              claimed_only, rejected stay 0. No diminishing
+                              returns — total caps at 10.
     b4b_gmp             /4    nsf_gmp (NSF/ANSI 173 audit) = 4.
                               Verified sku/product_line certs that imply GMP
                               per cert_claim_rules.json = 4. fda_registered
@@ -21,16 +20,9 @@ omega_rubric.json:
 
   Hard-clamped at dimension_cap = 15.
 
-POLICY LOCK (per Sean 2026-05-20):
-  "Choose Hold off for brand_only and needs_review scoring credit.
-   In the omega module, sku and curated product_line IFOS can score.
-   needs_review and brand_only stay 0 until P1.7 triage converts
-   specific rows into product_line or rejected. Do not reintroduce
-   uncertainty as score credit."
-
-The brand-level IFOS / manufacturer-cert signals go to Manufacturer
-Trust D1 (P1.6.6), NOT this dimension. That separation is exactly the
-P0.1b discipline P0.1c hardened.
+The brand-level IFOS / manufacturer-cert signals go to Manufacturer Trust D1
+(P1.6.6), NOT this dimension. Sustainability programs such as Friend of the
+Sea / MSC stay in formulation sustainability, not purity/testing trust.
 
 Per §13 architecture lock — no v3 imports.
 """
@@ -38,6 +30,7 @@ Per §13 architecture lock — no v3 imports.
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -52,6 +45,26 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 
 PHASE_MARKER = "P1.6.4_omega_trust"
 CAP_TRUST = 15.0
+
+LABEL_ASSERTED_QUALITY_PROGRAMS = frozenset(
+    {
+        "ifos",
+        "ifos certified",
+        "usp verified",
+        "informed choice",
+        "informed sport",
+        "bscg",
+        "bscg certified drug free",
+        "nsf certified",
+        "nsf contents certified",
+        "nsf sport",
+        "nsf certified for sport",
+        "labdoor tested",
+    }
+)
+SUSTAINABILITY_ONLY_PROGRAMS = frozenset(
+    {"friend of the sea", "msc", "msc certified", "goed", "goed certified"}
+)
 
 
 def _load_rubric() -> Dict[str, Any]:
@@ -100,6 +113,7 @@ def _score_b4a(
     """
     scored_entries: List[Dict[str, Any]] = []
     skipped_entries: List[Dict[str, Any]] = []
+    scored_programs: set[str] = set()
     raw = 0.0
 
     for entry in _get_verified_cert_programs(product):
@@ -123,10 +137,37 @@ def _score_b4a(
                 "reason": "scope_not_in_verified_set",
             })
             continue
+        if scope in {"sku", "product_line"} and not _cert_entry_brand_matches_product(product, entry):
+            skipped_entries.append({
+                "program": entry.get("program"),
+                "scope": scope,
+                "reason": "brand_mismatch",
+            })
+            continue
         raw += pts
+        scored_programs.add(_cert_program_key(_norm(entry.get("program")), ""))
         scored_entries.append({
             "program": entry.get("program"),
             "scope": scope,
+            "pts": pts,
+        })
+
+    for program in _label_asserted_quality_programs(product):
+        if program in scored_programs:
+            continue
+        pts = float(scope_policy.get("label_asserted_product", 0) or 0)
+        if pts <= 0:
+            skipped_entries.append({
+                "program": program,
+                "scope": "label_asserted_product",
+                "reason": "scope_not_in_verified_set",
+            })
+            continue
+        raw += pts
+        scored_programs.add(program)
+        scored_entries.append({
+            "program": program,
+            "scope": "label_asserted_product",
             "pts": pts,
         })
 
@@ -138,6 +179,56 @@ def _score_b4a(
         "B4a_skipped_entries": skipped_entries,
     }
     return score, metadata
+
+
+def _label_asserted_quality_programs(product: Dict[str, Any]) -> List[str]:
+    cert_data = _safe_dict(product.get("certification_data"))
+    evidence = _safe_dict(cert_data.get("evidence_based"))
+    programs: List[str] = []
+    seen: set[str] = set()
+    for entry in _safe_list(evidence.get("third_party_programs")):
+        if not isinstance(entry, dict) or not entry.get("score_eligible"):
+            continue
+        display = _norm(entry.get("display_name") or entry.get("program") or "")
+        rule_id = _norm(entry.get("rule_id") or "")
+        program = _cert_program_key(display, rule_id)
+        if not program:
+            continue
+        if not _is_label_asserted_quality_program(display, rule_id):
+            continue
+        if program in seen:
+            continue
+        seen.add(program)
+        programs.append(program)
+    return programs
+
+
+def _is_label_asserted_quality_program(display: str, rule_id: str) -> bool:
+    haystack = f"{display} {rule_id}"
+    if any(program in haystack for program in SUSTAINABILITY_ONLY_PROGRAMS):
+        return False
+    return any(program in haystack for program in LABEL_ASSERTED_QUALITY_PROGRAMS)
+
+
+def _cert_program_key(display: str, rule_id: str) -> str:
+    haystack = f"{display} {rule_id}"
+    if "ifos" in haystack:
+        return "ifos"
+    if "usp" in haystack:
+        return "usp verified"
+    if "informed choice" in haystack:
+        return "informed choice"
+    if "informed sport" in haystack:
+        return "informed sport"
+    if "bscg" in haystack:
+        return "bscg"
+    if "labdoor" in haystack:
+        return "labdoor tested"
+    if "nsf" in haystack and "sport" in haystack:
+        return "nsf sport"
+    if "nsf" in haystack:
+        return "nsf certified"
+    return display or rule_id
 
 
 def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
@@ -205,10 +296,47 @@ def _gmp_implied_by_verified_cert(product: Dict[str, Any]) -> str | None:
         scope = _norm(entry.get("scope"))
         if scope not in {"sku", "product_line"}:
             continue
+        if not _cert_entry_brand_matches_product(product, entry):
+            continue
         program = _norm(entry.get("program"))
         if program in gmp_programs:
             return entry.get("program") or program
     return None
+
+
+def _cert_entry_brand_matches_product(product: Dict[str, Any], entry: Dict[str, Any]) -> bool:
+    matched_brand = _brand_key(entry.get("matched_brand"))
+    if not matched_brand:
+        return True
+    product_brand = _brand_key(
+        product.get("brandName")
+        or product.get("brand_name")
+        or product.get("brand")
+        or ""
+    )
+    if not product_brand:
+        return True
+    product_tokens = _brand_tokens(product_brand)
+    matched_tokens = _brand_tokens(matched_brand)
+    if not product_tokens or not matched_tokens:
+        return False
+    return product_tokens.issubset(matched_tokens) or matched_tokens.issubset(product_tokens)
+
+
+def _brand_key(value: Any) -> str:
+    text = str(value or "").lower().strip()
+    text = re.sub(r"[®™©]", " ", text)
+    text = re.sub(
+        r"\b(inc|incorporated|llc|ltd|limited|corp|corporation|company|co|gmbh|holdings|group|brands|brand)\b",
+        " ",
+        text,
+    )
+    text = re.sub(r"[^a-z0-9\s]", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _brand_tokens(value: str) -> set[str]:
+    return {token for token in value.split() if len(token) >= 2}
 
 
 _GMP_IMPLYING_PROGRAMS_CACHE: frozenset[str] | None = None

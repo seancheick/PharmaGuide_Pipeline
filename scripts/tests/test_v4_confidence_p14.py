@@ -101,16 +101,60 @@ def test_confidence_high_when_evidence_identity_label_and_verification_are_stron
         assert isinstance(confidence[key]["drivers"], list)
 
 
-def test_confidence_worst_case_rule_lowers_band_for_no_clinical_evidence() -> None:
+def test_confidence_worst_case_rule_lowers_band_for_no_scored_evidence() -> None:
     from score_supplements_v4 import score_product_v4
 
-    product = _product(evidence_data={"clinical_matches": []})
+    product = _product(
+        ingredient=_ingredient(name="MSM", canonical_id="msm"),
+        evidence_data={"clinical_matches": []},
+        rda_ul_data={
+            "adequacy_results": [{"nutrient": "MSM", "pct_rda": None, "pct_ul": None}],
+            "safety_flags": [],
+        },
+    )
     out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 
     assert confidence["evidence"]["level"] == "low"
     assert "no_clinical_evidence_matched" in confidence["evidence"]["drivers"]
     assert out["v4_confidence"] == "low"
+
+
+def test_module_owned_evidence_floor_is_moderate_not_absent() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    product = _product(evidence_data={"clinical_matches": []})
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+
+    assert out["v4_breakdown"]["module"]["dimensions"]["evidence"]["score"] == 10.0
+    assert confidence["evidence"]["level"] == "moderate"
+    assert "nutrition_authority_evidence_floor" in confidence["evidence"]["drivers"]
+    assert "no_clinical_evidence_matched" not in confidence["evidence"]["drivers"]
+    assert out["v4_confidence"] == "moderate"
+
+
+def test_module_recovered_clinical_contract_evidence_is_moderate_not_absent() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    product = _product(
+        ingredient=_ingredient(name="Coenzyme Q10", canonical_id="coq10"),
+        evidence_data={"clinical_matches": []},
+        rda_ul_data={
+            "adequacy_results": [
+                {"nutrient": "Coenzyme Q10", "pct_rda": None, "pct_ul": None}
+            ],
+            "safety_flags": [],
+        },
+    )
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+
+    assert out["v4_breakdown"]["module"]["dimensions"]["evidence"]["score"] >= 14.0
+    assert confidence["evidence"]["level"] == "moderate"
+    assert "v4_evidence_recovered_from_contract" in confidence["evidence"]["drivers"]
+    assert "human_clinical_evidence_absent" not in confidence["evidence"]["drivers"]
+    assert out["v4_confidence"] == "moderate"
 
 
 def test_missing_primary_dose_scores_but_lowers_label_confidence() -> None:
@@ -191,7 +235,7 @@ def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None
     assert "dose_window_partial_without_rda_reference" in confidence["label_completeness"]["drivers"]
 
 
-def test_claimed_cert_without_registry_match_lowers_verification_confidence() -> None:
+def test_claimed_cert_without_registry_match_is_moderate_verification_confidence() -> None:
     from score_supplements_v4 import score_product_v4
 
     product = _product(
@@ -202,9 +246,53 @@ def test_claimed_cert_without_registry_match_lowers_verification_confidence() ->
     out = score_product_v4(product)
     confidence = out["v4_breakdown"]["confidence"]
 
-    assert confidence["verification"]["level"] == "low"
+    assert confidence["verification"]["level"] == "moderate"
     assert "cert_claimed_only_no_registry_match" in confidence["verification"]["drivers"]
-    assert out["v4_confidence"] == "low"
+    assert out["v4_confidence"] == "moderate"
+
+
+def test_cross_brand_sku_cert_is_ignored_for_verification_confidence() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    product = _product(
+        brand_name="CVS Health",
+        verified_cert_programs=[
+            {
+                "program": "NSF Sport",
+                "scope": "sku",
+                "recency_status": "fresh",
+                "matched_brand": "LTH",
+                "matched_product": "GLOW Omega-3 Fish Oil",
+            }
+        ],
+    )
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+
+    assert confidence["verification"]["level"] == "moderate"
+    assert "cert_brand_mismatch_ignored" in confidence["verification"]["drivers"]
+    assert "cert_sku_verified" not in confidence["verification"]["drivers"]
+    assert out["v4_confidence"] == "moderate"
+
+
+def test_verified_cert_dominates_secondary_claimed_only_cert_confidence() -> None:
+    """Regression: products can carry one real SKU cert plus another label claim
+    whose registry match was absent. The unresolved secondary claim must not drag
+    a genuinely SKU-verified product's verification confidence to low."""
+    from score_supplements_v4 import score_product_v4
+
+    product = _product(
+        verified_cert_programs=[
+            {"program": "NSF Sport", "scope": "sku", "recency_status": "fresh"},
+            {"program": "USP Verified", "scope": "claimed_only"},
+        ]
+    )
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+
+    assert confidence["verification"]["level"] == "high"
+    assert "cert_sku_verified" in confidence["verification"]["drivers"]
+    assert out["v4_confidence"] == "high"
 
 
 def test_mapped_coverage_between_gate_and_perfect_is_moderate_identity_confidence() -> None:
@@ -221,6 +309,41 @@ def test_mapped_coverage_between_gate_and_perfect_is_moderate_identity_confidenc
     assert confidence["identity"]["level"] == "moderate"
     assert "mapped_coverage_below_95_percent" in confidence["identity"]["drivers"]
     assert out["v4_confidence"] == "moderate"
+
+
+def test_zero_dose_epa_dha_placeholders_do_not_lower_identity_confidence() -> None:
+    from score_supplements_v4 import score_product_v4
+
+    rows = [
+        _ingredient(name="Fish Oil", canonical_id="fish_oil", quantity=2000, unit="mg"),
+        _ingredient(name="EPA", canonical_id="epa", quantity=0, unit="NP", bio_score=0),
+        _ingredient(name="DHA", canonical_id="dha", quantity=0, unit="NP", bio_score=0),
+    ]
+    rows[1]["identity_confidence"] = 0.0
+    rows[2]["identity_confidence"] = 0.0
+    product = _product(ingredient=rows[0])
+    product["ingredient_quality_data"]["ingredients_scorable"] = rows
+    product["ingredient_quality_data"]["ingredients"] = rows
+
+    out = score_product_v4(product)
+    confidence = out["v4_breakdown"]["confidence"]
+
+    assert confidence["identity"]["level"] == "high"
+    assert "ingredient_identity_confidence_below_80_percent" not in confidence["identity"]["drivers"]
+
+
+def test_conservative_blend_anchor_mass_is_moderate_label_confidence() -> None:
+    from scoring_v4.confidence import evaluate_confidence
+
+    confidence = evaluate_confidence(
+        _product(),
+        module_breakdown={"dimensions": {}},
+        safety_gate={},
+        completeness_gate={"soft_missing": ["conservative_blend_anchor_mass"]},
+    )
+
+    assert confidence["label_completeness"]["level"] == "moderate"
+    assert "conservative_blend_anchor_mass" in confidence["label_completeness"]["drivers"]
 
 
 def test_blocked_paths_keep_gate_confidence_string_and_skip_confidence_block() -> None:

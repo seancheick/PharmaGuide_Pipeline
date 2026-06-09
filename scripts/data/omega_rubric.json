@@ -98,16 +98,17 @@
     }
   },
   "trust": {
-    "_doc": "Per Sean 2026-05-20: only sku and curated product_line scopes score IFOS. needs_review and brand_only stay 0 to preserve P0.1b/P1.7 cleanup discipline. Uncertainty resolves via P1.7 curated overrides, NOT partial credit.",
+    "_doc": "SKU and curated product_line scopes get full trust credit. Product-label/rules-db quality claims can earn a small provisional credit. needs_review and brand_only stay 0 to preserve P0.1b/P1.7 cleanup discipline. Sustainability-only programs (Friend of the Sea / MSC / GOED) remain formulation/source signals, not trust/purity certs.",
     "b4a_scope_policy": {
       "sku": 10,
       "product_line": 10,
+      "label_asserted_product": 2,
       "needs_review": 0,
       "brand_only": 0,
       "claimed_only": 0,
       "rejected": 0
     },
-    "_b4a_policy_rationale": "IFOS is omega-specific, but it is still product/lot/registry evidence, not generic brand reputation. If a registry match is real, curate it into product_line via the P1.7.3 review CLI. If it is not product-specific, it can appear in display or manufacturer trust, not product Trust.",
+    "_b4a_policy_rationale": "Registry SKU/product-line evidence stays strongest. A product-label/rules-db quality claim is weaker but still useful when the registry dataset is incomplete, so it gets 2 points. Brand-only/manufacturer-only signals stay in manufacturer trust. Friend of the Sea, MSC, and GOED are sourcing/sustainability signals and are scored in formulation where eligible.",
     "b4a_cap": 10,
     "b4b_gmp": {
       "_doc": "B4b GMP credit. nsf_gmp (NSF/ANSI 173 facility audit) = 4. fda_registered = 2. self-attested gmp.claimed without nsf/fda backing = 0 (per P1.8 enricher hardening).",

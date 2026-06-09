@@ -233,6 +233,31 @@ def normalize_brand(text: str) -> str:
     return text
 
 
+def _brand_tokens(brand_norm: str) -> set[str]:
+    """Meaningful normalized brand tokens for registry matching.
+
+    Short substring matches are unsafe for cert registries: e.g. ``LTH`` can
+    appear inside ``Health`` and ``VITAL`` can partially match ``vitafusion``.
+    Token-set subset matching keeps accepted aliases like ``Thorne`` →
+    ``Thorne Research`` without letting unrelated brands inherit SKU certs.
+    """
+    return {token for token in (brand_norm or "").split() if len(token) >= 2}
+
+
+def _brands_likely_same(product_brand_norm: str, registry_brand_norm: str) -> bool:
+    if not product_brand_norm or not registry_brand_norm:
+        return False
+    if product_brand_norm == registry_brand_norm:
+        return True
+
+    product_tokens = _brand_tokens(product_brand_norm)
+    registry_tokens = _brand_tokens(registry_brand_norm)
+    if not product_tokens or not registry_tokens:
+        return False
+
+    return product_tokens.issubset(registry_tokens) or registry_tokens.issubset(product_tokens)
+
+
 _DOSE_NUMERIC_PATTERN = re.compile(
     r"\b\d+(?:\.\d+)?\s*(?:mg|mcg|µg|g|kg|iu|ml|fl\s*oz|oz|billion|cfu|cfus)\b\.?",
     re.IGNORECASE,
@@ -543,24 +568,13 @@ def resolve(
         # Stage 2: registry lookup
         candidates = registry.candidates_for(program_canon)
 
-        # Brand match: try exact normalized first, fall back to fuzzy.
-        # Use partial_ratio so "Thorne" matches "Thorne Research" (substring),
-        # and require >=88 to keep brand-matching conservative.
-        BRAND_FUZZY_FLOOR = 88
+        # Brand match is token-subset conservative. Do not use fuzzy substring
+        # matching here: false-positive registry certs are worse than missed
+        # bonuses, and short brands like LTH/VITAL collide with unrelated names.
         brand_matches: list[dict[str, Any]] = []
         for c in candidates:
             c_brand = normalize_brand(c.get("brand_normalized", c.get("brand", "")))
-            if not c_brand:
-                continue
-            if c_brand == brand_norm:
-                brand_matches.append(c)
-                continue
-            # Fuzzy fallback. partial_ratio handles legal-entity suffixes
-            # ("Thorne Research, Inc." → "thorne research" vs "thorne") that
-            # token_set_ratio under-scores when one side is a single token.
-            partial = fuzz.partial_ratio(brand_norm, c_brand)
-            tokenset = fuzz.token_set_ratio(brand_norm, c_brand)
-            if max(partial, tokenset) >= BRAND_FUZZY_FLOOR:
+            if _brands_likely_same(brand_norm, c_brand):
                 brand_matches.append(c)
         if not brand_matches:
             out.append(CertResolution(program=program_canon, scope="claimed_only"))

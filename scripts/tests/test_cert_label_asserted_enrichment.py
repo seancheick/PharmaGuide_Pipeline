@@ -13,6 +13,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from cert_resolver import CertRegistry  # noqa: E402
 from cert_resolver import normalize_brand, normalize_product  # noqa: E402
 from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
+import json  # noqa: E402
 
 
 def _enricher_with_registry(registry: CertRegistry) -> SupplementEnricherV3:
@@ -62,6 +63,46 @@ def test_enricher_emits_label_asserted_for_unscraped_product_label_cert() -> Non
             "claim_source": "rules_db",
         }
     ]
+
+
+def test_nested_label_text_certification_path_is_product_level_scope() -> None:
+    enricher = _enricher_with_registry(CertRegistry())
+    rules_path = REPO_ROOT / "scripts" / "data" / "cert_claim_rules.json"
+    rules = json.loads(rules_path.read_text())
+    field_groups = rules["config"]["source_field_groups"]
+    rule = rules["rules"]["third_party_programs"]["usp_verified"]
+
+    evidence = enricher._check_claim_with_validation(
+        "USP-Verified",
+        "labelText.parsed.certifications[0]",
+        rule,
+        field_groups,
+    )
+
+    assert evidence is not None
+    assert evidence["scope_violation"] is False
+    assert evidence["score_eligible"] is True
+
+
+def test_nested_label_text_testing_path_is_product_level_scope() -> None:
+    enricher = _enricher_with_registry(CertRegistry())
+    rules_path = REPO_ROOT / "scripts" / "data" / "cert_claim_rules.json"
+    rules = json.loads(rules_path.read_text())
+    field_groups = rules["config"]["source_field_groups"]
+    rule = rules["rules"]["third_party_programs"]["third_party_generic"]
+
+    evidence = enricher._check_claim_with_validation(
+        "Third-party tested",
+        "labelText.parsed.testing[0]",
+        rule,
+        field_groups,
+    )
+
+    assert evidence is not None
+    assert evidence["scope_violation"] is False
+    assert evidence["score_eligible"] is False
+    assert evidence["ineligibility_reason"] == "weak_evidence"
+    assert evidence["points_if_eligible"] == 0
 
 
 def test_enricher_does_not_label_assert_manufacturer_only_cert() -> None:

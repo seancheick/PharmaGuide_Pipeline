@@ -382,14 +382,23 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
     b4b = _component_num(vb, "B4b_gmp", "b4b_gmp")
     b4c = _component_num(vb, "B4c_batch_traceability", "b4c_batch_traceability")
     b4d = _component_num(vb, "B4d_brand_testing_posture", "b4d_brand_testing_posture")
+    scored_scopes = _verification_scope_counts(trust_meta)
+    has_registry_cert = (
+        _num(scored_scopes.get("sku")) > 0
+        or _num(scored_scopes.get("product_line")) > 0
+    )
+    has_label_asserted_cert = _num(scored_scopes.get("label_asserted_product")) > 0
     unscored_scopes = trust_meta.get("verified_unscored_scope_counts") or {}
     brand_only_count = int(_num(unscored_scopes.get("brand_only")))
 
     cert = 0.0
-    for tier in sub["cert_tiers"]:  # ordered high→low
-        if b4a >= tier["min_b4a"]:
-            cert = tier["points"]
-            break
+    if has_registry_cert:
+        for tier in sub["cert_tiers"]:  # ordered high→low
+            if b4a >= tier["min_b4a"]:
+                cert = tier["points"]
+                break
+    elif has_label_asserted_cert:
+        cert = _num(sub.get("label_asserted_cert_points"))
     coa_batch = round(min(sub["coa_batch_max"], (b4c / 2.0) * sub["coa_batch_max"]), 2) if b4c else 0.0
     gmp = (sub["gmp_certified_points"] if b4b >= 4.0
            else sub["gmp_registered_points"] if b4b >= 2.0 else 0.0)
@@ -417,7 +426,10 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
         # path, not the unknown fail-open path).
         signals = []
         if cert > 0:
-            signals.append("third-party certified")
+            if has_registry_cert:
+                signals.append("third-party certified")
+            elif has_label_asserted_cert:
+                signals.append("label claims third-party certification")
         if coa_batch > 0:
             signals.append("publishes batch test results")
         if testing > 0:
@@ -460,6 +472,28 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
                        "soft": soft, "fail_open_neutral": fail_open,
                        "quality_system_violation_penalty": qs_pen},
     }
+
+
+def _verification_scope_counts(trust_meta: Dict[str, Any]) -> Dict[str, int]:
+    """Return B4a scope counts across generic and omega trust metadata shapes."""
+    direct = trust_meta.get("verified_scope_counts")
+    if isinstance(direct, dict) and direct:
+        return {str(key): int(_num(value)) for key, value in direct.items()}
+
+    b4a = trust_meta.get("b4a")
+    entries = (b4a or {}).get("B4a_scored_entries") if isinstance(b4a, dict) else None
+    if not isinstance(entries, list):
+        return {}
+
+    counts: Dict[str, int] = {}
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        scope = str(entry.get("scope") or "")
+        if not scope:
+            continue
+        counts[scope] = counts.get(scope, 0) + 1
+    return counts
 
 
 def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],

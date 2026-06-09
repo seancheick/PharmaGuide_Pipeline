@@ -61,6 +61,7 @@
         "certifications",
         "claims",
         "labelText.parsed.certifications",
+        "labelText.parsed.testing",
         "labelText.parsed.qualityFeatures",
         "labelText.raw"
       ],

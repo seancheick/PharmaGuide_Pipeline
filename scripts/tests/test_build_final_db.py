@@ -2220,6 +2220,14 @@ def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
             "safety_gate": {"verdict": safety_verdict, "blocking_reason": blocking_reason,
                             "clean_label_hits": []},
             "completeness_gate": {"module": "generic", "is_live_eligible": status != "not_scored"},
+            "confidence": {
+                "band": "high",
+                "evidence": {"level": "high", "drivers": []},
+                "label_completeness": {"level": "high", "drivers": []},
+                "verification": {"level": "high", "drivers": []},
+                "identity": {"level": "high", "drivers": []},
+                "score_uncertainty_pts": 1,
+            },
             "module": {"dimensions": {"formulation": {"score": 18}}},
         },
         "raw_score_v4_100": quality_100,
@@ -2313,6 +2321,8 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
         assert blob["quality_pillars_v4"]
         assert blob["v4_score_provenance"]["score_model_version"] == "v4"
+        assert blob["v4_confidence_detail"]["band"] == "high"
+        assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
         assert "v4_score_explanation" in blob
         assert blob["raw_score_v4_100"] == 88.0
 

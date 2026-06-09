@@ -4827,6 +4827,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         blob["raw_score_v4_100"] = scored.get("_v4_raw_score_100")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
         blob["v4_completeness_gate"] = scored.get("_v4_completeness_gate")
+        blob["v4_confidence_detail"] = scored.get("_v4_confidence_detail")
         blob["v4_score_provenance"] = {
             "score_model_version": scored.get("_score_model_version"),
             "quality_score_status": scored.get("_v4_quality_status"),

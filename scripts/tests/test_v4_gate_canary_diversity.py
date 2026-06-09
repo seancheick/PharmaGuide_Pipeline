@@ -82,14 +82,17 @@ V4_CANARIES = {
         "confidence": "low",
         "score_range": (46.5, 47.9),
     },
-    # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as
-    # low-confidence aggregate evidence, with no score cap or CAUTION ceiling.
+    # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
+    # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
+    # Re-baseline 2026-06-09: stricter cert brand matching rejected a stale
+    # cross-brand NSF registry false positive (CVS Health product matched to
+    # LTH GLOW Omega-3), removing unearned verification credit.
     "239467": {
         "label": "CVS Health Fish Oil 1000 mg",
         "module": "omega",
         "verdict": "SAFE",
-        "confidence": "low",
-        "score_range": (65.8, 67.2),
+        "confidence": "moderate",
+        "score_range": (58.3, 59.7),
     },
     # Typed confidence moderate: strong evidence/label/verification, but
     # taxonomy-first identity confidence correctly surfaces that this is a
@@ -120,13 +123,15 @@ V4_CANARIES = {
     # commodity: no clinical evidence, minimal formulation → raw 26.4, ~14 pts
     # below the cutoff so it will not drift across it. Clean SAFE gate (not
     # dangerous); POOR comes purely from the score band. Also a documented weak/
-    # junk control in the display-calibration tests.
+    # junk control in the display-calibration tests. Re-baseline 2026-06-09:
+    # product-label USP claim gets the intentional small provisional +2 trust
+    # credit, while still staying POOR.
     "2266": {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (25.7, 27.1),
+        "score_range": (26.8, 28.2),
     },
     # Typed confidence high on the probiotic module.
     "230149": {

@@ -3,6 +3,7 @@
 Locks the Testing & Trust sub-component math:
 
     b4a_certifications  /10   sku and curated product_line → 10 per cert.
+                              label_asserted_product quality claim → 2.
                               needs_review, brand_only, claimed_only,
                               rejected → 0. Cap 10. No diminishing returns.
     b4b_gmp             /4    nsf_gmp → 4. fda_registered → 2.
@@ -95,6 +96,28 @@ def test_b4a_product_line_scope_awards_10_pts() -> None:
     assert payload["components"]["b4a_verified_certifications"] == 10.0
 
 
+def test_b4a_cross_brand_sku_cert_scores_zero() -> None:
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "brandName": "CVS Health",
+        "verified_cert_programs": [
+            {
+                "program": "NSF Sport",
+                "scope": "sku",
+                "matched_brand": "LTH",
+                "matched_product": "GLOW Omega-3 Fish Oil",
+            }
+        ],
+    }
+    payload = score_trust(product)
+
+    assert "b4a_verified_certifications" not in payload["components"]
+    assert payload["metadata"]["b4a"]["B4a_skipped_entries"] == [
+        {"program": "NSF Sport", "scope": "sku", "reason": "brand_mismatch"}
+    ]
+
+
 def test_b4a_needs_review_scope_scores_zero() -> None:
     """POLICY LOCK: needs_review IFOS does NOT score. Sports Research case
     (327776) has IFOS at needs_review and must produce Trust 0 until
@@ -149,13 +172,60 @@ def test_brand_level_omega_testing_posture_scores_without_b4a_credit() -> None:
 
 
 def test_b4a_claimed_only_scope_scores_zero() -> None:
-    """POLICY LOCK: claimed_only (label text without registry verification)
-    does NOT score. Same discipline as P0.1b enforced."""
+    """claimed_only rows still do not score directly."""
     from scoring_v4.modules.omega_trust import score_trust
 
-    product = {"verified_cert_programs": [{"program": "Friend of the Sea", "scope": "claimed_only"}]}
+    product = {"verified_cert_programs": [{"program": "IFOS", "scope": "claimed_only"}]}
     payload = score_trust(product)
     assert "b4a_verified_certifications" not in payload["components"]
+
+
+def test_b4a_rules_db_quality_label_claim_awards_2_pts() -> None:
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "certification_data": {
+            "evidence_based": {
+                "third_party_programs": [
+                    {
+                        "display_name": "IFOS Certified",
+                        "rule_id": "CERT_IFOS",
+                        "score_eligible": True,
+                    }
+                ]
+            }
+        }
+    }
+
+    payload = score_trust(product)
+
+    assert payload["components"]["b4a_verified_certifications"] == 2.0
+    assert payload["metadata"]["b4a"]["B4a_scored_entries"] == [
+        {"program": "ifos", "scope": "label_asserted_product", "pts": 2.0}
+    ]
+
+
+def test_b4a_friend_of_the_sea_rules_db_label_stays_out_of_trust() -> None:
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "certification_data": {
+            "evidence_based": {
+                "third_party_programs": [
+                    {
+                        "display_name": "Friend of the Sea",
+                        "rule_id": "CERT_FRIEND_OF_THE_SEA",
+                        "score_eligible": True,
+                    }
+                ]
+            }
+        }
+    }
+
+    payload = score_trust(product)
+
+    assert "b4a_verified_certifications" not in payload["components"]
+    assert payload["metadata"]["b4a"]["B4a_scored_entries"] == []
 
 
 def test_b4a_rejected_scope_scores_zero() -> None:
@@ -277,6 +347,27 @@ def test_b4b_verified_nsf_contents_sku_cert_infers_gmp() -> None:
     assert payload["components"]["b4b_gmp"] == 4.0
     assert payload["metadata"]["b4b"]["source"] == "verified_cert_implies_gmp"
     assert payload["metadata"]["b4b"]["program"] == "NSF Certified"
+
+
+def test_b4b_cross_brand_cert_does_not_infer_gmp() -> None:
+    from scoring_v4.modules.omega_trust import score_trust
+
+    product = {
+        "brandName": "CVS Health",
+        "verified_cert_programs": [
+            {
+                "program": "NSF Certified",
+                "scope": "sku",
+                "matched_brand": "LTH",
+                "matched_product": "GLOW Omega-3 Fish Oil",
+            },
+        ],
+        "certification_data": {"gmp": {"claimed": False}},
+    }
+    payload = score_trust(product)
+
+    assert "b4b_gmp" not in payload["components"]
+    assert payload["metadata"]["b4b"]["source"] is None
 
 
 def test_b4b_brand_only_cert_does_not_infer_gmp() -> None:
@@ -549,6 +640,7 @@ def test_trust_policy_matches_rubric_config() -> None:
     # POLICY LOCK — these values must never silently drift.
     assert policy["sku"] == 10
     assert policy["product_line"] == 10
+    assert policy["label_asserted_product"] == 2
     assert policy["needs_review"] == 0
     assert policy["brand_only"] == 0
     assert policy["claimed_only"] == 0

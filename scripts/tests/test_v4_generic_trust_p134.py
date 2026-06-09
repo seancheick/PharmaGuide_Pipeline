@@ -103,6 +103,29 @@ def test_two_sku_verified_certs_score_12_b4a() -> None:
     assert payload["metadata"]["verified_scope_counts"] == {"sku": 2}
 
 
+def test_cross_brand_sku_cert_does_not_score_or_imply_gmp() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(
+            top_level={"brandName": "CVS Health"},
+            verified_cert_programs=[
+                _cert(
+                    "NSF Sport",
+                    "sku",
+                    matched_brand="LTH",
+                    matched_product="GLOW Omega-3 Fish Oil",
+                )
+            ],
+        )
+    )
+
+    assert payload["components"]["B4a_verified_certifications"] == 0.0
+    assert payload["components"]["B4b_gmp"] == 0.0
+    assert payload["metadata"]["verified_scope_counts"] == {}
+    assert payload["metadata"]["verified_skipped_reasons"] == {"brand_mismatch": 1}
+
+
 def test_three_sku_certs_clamp_b4a_at_12() -> None:
     from scoring_v4.modules.generic_trust import score_trust
 
@@ -140,6 +163,63 @@ def test_brand_only_needs_review_and_claimed_only_score_zero() -> None:
         "needs_review": 1,
     }
     assert payload["metadata"]["verified_brand_only_programs"] == ["nsf sport"]
+
+
+def test_rules_db_quality_label_claim_gets_small_b4a_credit() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    product = _product(
+        top_level={
+            "certification_data": {
+                "gmp": {},
+                "batch_traceability": {},
+                "evidence_based": {
+                    "third_party_programs": [
+                        {
+                            "display_name": "USP Verified",
+                            "rule_id": "CERT_USP_VERIFIED",
+                            "score_eligible": True,
+                        }
+                    ]
+                },
+            }
+        }
+    )
+
+    payload = score_trust(product)
+
+    assert payload["components"]["B4a_verified_certifications"] == 2.0
+    assert payload["metadata"]["verified_scope_counts"] == {"label_asserted_product": 1}
+    assert payload["metadata"]["verified_programs_scored"] == ["usp verified"]
+
+
+def test_rules_db_sustainability_label_claim_does_not_score_b4a_trust() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    product = _product(
+        supp_type="specialty",
+        ingredients=[_ingredient(name="Fish Oil")],
+        top_level={
+            "certification_data": {
+                "gmp": {},
+                "batch_traceability": {},
+                "evidence_based": {
+                    "third_party_programs": [
+                        {
+                            "display_name": "Friend of the Sea",
+                            "rule_id": "CERT_FRIEND_OF_THE_SEA",
+                            "score_eligible": True,
+                        }
+                    ]
+                },
+            }
+        },
+    )
+
+    payload = score_trust(product)
+
+    assert payload["components"]["B4a_verified_certifications"] == 0.0
+    assert payload["metadata"]["verified_programs_scored"] == []
 
 
 def test_brand_level_testing_posture_scores_low_trust_without_b4a_credit() -> None:
