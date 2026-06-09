@@ -2,21 +2,36 @@
   "_metadata": {
     "description": "Allowlist of supplement canonical_ids tolerated as referential orphans in the interaction pipeline. Each entry covers a pairwise interaction surfaced in interaction_db.sqlite that does not yet have a matching ingredient_interaction_rules.json rule. Entries here are tracked, time-bound backlog items — not silent exceptions — and each MUST carry a reason and a TODO so the gate stays meaningful.",
     "schema_version": "1.0.0",
-    "last_updated": "2026-05-29",
+    "last_updated": "2026-06-09",
     "purpose": "Allowlist for supplement canonical_ids that appear in pairwise interactions (interaction_db.sqlite) but do NOT have a corresponding entry in ingredient_interaction_rules.json. Used by audit_source_of_truth_contract.py::audit_interaction's INTERACTION_ORPHAN_SUPPLEMENT_CANONICAL referential-integrity check. Each entry MUST cite a reason and a TODO for clearing the backlog. Entries here are tolerated but tracked.",
-    "total_entries": 1,
+    "total_entries": 3,
     "review_owner": "Lead Clinician (PharmaGuide)",
     "note": "DO NOT add entries here to silence the gate. Add only when (a) the orphan is intentional (pairwise-only signal) or (b) the orphan is a known data bug pending fix. Each entry must include a reason and a tracking note.",
     "migration_notes": [
-      "2026-05-27: Removed phosphatidylserine entry. Root cause fixed in source — DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY agent2_canonical_id reassigned to genistein (correct canonical for soy isoflavones)."
+      "2026-05-27: Removed phosphatidylserine entry. Root cause fixed in source — DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY agent2_canonical_id reassigned to genistein (correct canonical for soy isoflavones).",
+      "2026-06-09: Interaction identities normalized to clean ingredient ids (BANNED_RED_YEAST_RICE->red_yeast_rice, BANNED_CBD_US->cbd, NOOTROPIC_VINPOCETINE->vinpocetine) so catalog key_ingredient_tags join the curated pairwise rules. These three are blocked/banned supplements: they carry real drug-pairwise interactions but no ingredient-scoring rule, so they are tracked here as pairwise-only orphans. Replaced the old NOOTROPIC_VINPOCETINE entry; added red_yeast_rice and cbd."
     ]
   },
   "allowlist": [
     {
-      "canonical_id": "NOOTROPIC_VINPOCETINE",
-      "reason": "Vinpocetine has a real pharmacokinetic interaction with anticoagulants (CYP/P-gp pathways) recorded in DSI_ANTICOAG_VINPOCETINE pairwise interaction, but no standalone ingredient_interaction_rules.json entry yet.",
-      "todo": "Add RULE_NOOTROPIC_VINPOCETINE_BLEEDING entry to ingredient_interaction_rules.json with bleeding_disorders and surgery_scheduled condition_rules.",
+      "canonical_id": "vinpocetine",
+      "reason": "Vinpocetine has a real pharmacokinetic interaction with anticoagulants (CYP/P-gp pathways, antiplatelet effect) recorded in DSI_ANTICOAG_VINPOCETINE, but no standalone ingredient_interaction_rules.json entry yet. Blocked/banned supplement — surfaced in pairwise interactions only.",
+      "todo": "Add RULE_VINPOCETINE_BLEEDING entry to ingredient_interaction_rules.json with bleeding_disorders and surgery_scheduled condition_rules.",
       "added": "2026-05-27",
+      "category": "missing_rule_backlog"
+    },
+    {
+      "canonical_id": "red_yeast_rice",
+      "reason": "Red yeast rice contains monacolin K (chemically identical to lovastatin); combined with statins it compounds statin exposure (myopathy/rhabdomyolysis risk), recorded in DSI_STATINS_RYR. Blocked/banned supplement with no standalone ingredient_interaction_rules.json scoring rule — surfaced in pairwise interactions only.",
+      "todo": "Add RULE_RED_YEAST_RICE_STATIN entry to ingredient_interaction_rules.json (additive statin myopathy risk).",
+      "added": "2026-06-09",
+      "category": "missing_rule_backlog"
+    },
+    {
+      "canonical_id": "cbd",
+      "reason": "CBD inhibits CYP2C9/CYP3A4 with documented pairwise interactions: anticoagulants (raised exposure/bleeding, DSI_ANTICOAG_CBD), antihypertensives (additive hypotension, DSI_ANTIHYP_CBD), and statins (raised exposure, DSI_STATINS_CBD). Blocked/banned supplement with no standalone ingredient_interaction_rules.json scoring rule — surfaced in pairwise interactions only.",
+      "todo": "Add RULE_CBD_CYP_INTERACTIONS entry to ingredient_interaction_rules.json (CYP2C9/CYP3A4-mediated interactions).",
+      "added": "2026-06-09",
       "category": "missing_rule_backlog"
     }
   ]
