@@ -63,6 +63,8 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from identity.interaction import normalize_interaction_canonical_id
+
 SCHEMA_VERSION = "1.0.0"
 SCHEMA_USER_VERSION = 1
 
@@ -412,12 +414,16 @@ def build_interaction_row(
         "agent1_type": draft.get("agent1_type") or "unknown",
         "agent1_name": draft["agent1_name"],
         "agent1_id": agent1_id,
-        "agent1_canonical_id": draft.get("agent1_canonical_id"),
+        "agent1_canonical_id": normalize_interaction_canonical_id(
+            draft.get("agent1_canonical_id")
+        ),
         "agent1_drug_class": agent1_drug_class,
         "agent2_type": draft.get("agent2_type") or "unknown",
         "agent2_name": draft["agent2_name"],
         "agent2_id": agent2_id,
-        "agent2_canonical_id": draft.get("agent2_canonical_id"),
+        "agent2_canonical_id": normalize_interaction_canonical_id(
+            draft.get("agent2_canonical_id")
+        ),
         "agent2_drug_class": agent2_drug_class,
         "severity": draft["severity"],
         "effect_type": effect_type,

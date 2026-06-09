@@ -1310,7 +1310,7 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
     assert categories["key_ingredient_tags"] == ["potassium", "magnesium"]
 
 
-def test_key_ingredient_tags_include_active_canonicals_when_iqm_is_empty():
+def test_key_ingredient_tags_use_clean_identity_for_red_yeast_rice_safety_canonical():
     enriched = make_enriched()
     enriched["activeIngredients"] = [
         {
@@ -1327,10 +1327,10 @@ def test_key_ingredient_tags_include_active_canonicals_when_iqm_is_empty():
 
     categories = classify_product_categories(enriched, make_scored())
 
-    assert categories["key_ingredient_tags"] == ["banned_red_yeast_rice"]
+    assert categories["key_ingredient_tags"] == ["red_yeast_rice"]
 
 
-def test_key_ingredient_tags_merge_iqm_and_active_canonicals_without_dropping_safety_ids():
+def test_key_ingredient_tags_merge_iqm_and_active_canonicals_without_dropping_clean_safety_identities():
     enriched = make_enriched()
     enriched["activeIngredients"] = [
         {
@@ -1367,7 +1367,47 @@ def test_key_ingredient_tags_merge_iqm_and_active_canonicals_without_dropping_sa
 
     categories = classify_product_categories(enriched, make_scored())
 
-    assert categories["key_ingredient_tags"] == ["coq10", "banned_red_yeast_rice"]
+    assert categories["key_ingredient_tags"] == ["coq10", "red_yeast_rice"]
+
+
+def test_key_ingredient_tags_emit_cbd_identity_from_cannabidiol_label_text():
+    enriched = make_enriched()
+    enriched["product_name"] = "CBD 10 mg Softgels"
+    enriched["activeIngredients"] = [
+        {
+            "name": "Hemp Extract",
+            "standardName": "Broad Spectrum Hemp Extract Blend",
+            "normalized_key": "hemp_extract",
+            "canonical_id": "nha_hemp_extract",
+            "raw_source_text": "Broad Spectrum Hemp Extract Blend with Cannabidiol",
+            "quantity": 10,
+            "unit": "mg",
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert "cbd" in categories["key_ingredient_tags"]
+
+
+def test_key_ingredient_tags_emit_vinpocetine_identity_when_safety_active_lacks_canonical():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Vinpocetine",
+            "standardName": "Vinpocetine",
+            "normalized_key": "vinpocetine",
+            "raw_source_text": "Vinpocetine 20 mg",
+            "quantity": 20,
+            "unit": "mg",
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["key_ingredient_tags"] == ["nootropic_vinpocetine"]
 
 
 def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():

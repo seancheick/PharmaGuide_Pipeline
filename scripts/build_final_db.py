@@ -59,6 +59,10 @@ from identity.safety import (
     safety_flag_matches_status,
     top_safety_flag as _canonical_top_safety_flag,
 )
+from identity.interaction import (
+    interaction_tags_from_text,
+    normalize_catalog_interaction_tag,
+)
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
 # The import remains available for backward-compat callers but is unused.
@@ -5080,7 +5084,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     seen_key_tags = set()
 
     def normalize_interaction_tag(value: Any) -> str:
-        return safe_str(value).lower().replace(" ", "_")
+        return normalize_catalog_interaction_tag(value) or ""
 
     def add_interaction_tag(value: Any) -> None:
         canonical_id = normalize_interaction_tag(value)
@@ -5091,12 +5095,28 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
             seen_key_tags.add(canonical_id)
             key_tags.append(canonical_id)
 
+    def add_interaction_tags_from_text(*values: Any) -> None:
+        for canonical_id in interaction_tags_from_text(*values):
+            add_interaction_tag(canonical_id)
+
+    add_interaction_tags_from_text(
+        enriched.get("product_name"),
+        enriched.get("label_text"),
+        enriched.get("search_text"),
+    )
+
     for ing in ingredients:
         if isinstance(ing, dict):
             name = safe_str(ing.get("standard_name") or ing.get("name")).lower().replace(" ", "_")
             if name:
                 ingredient_names.add(name)
             add_interaction_tag(ing.get("canonical_id") or ing.get("parent_key"))
+            add_interaction_tags_from_text(
+                ing.get("name"),
+                ing.get("standard_name"),
+                ing.get("raw_source_text"),
+                ing.get("normalized_key"),
+            )
 
     # Some safety/resolver canonicals live only on activeIngredients when the
     # active is recognized but not IQM-scorable (for example CBD, red yeast
@@ -5110,6 +5130,12 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
         if name:
             ingredient_names.add(name)
         add_interaction_tag(ing.get("canonical_id"))
+        add_interaction_tags_from_text(
+            ing.get("name"),
+            ing.get("standardName"),
+            ing.get("raw_source_text"),
+            ing.get("normalized_key"),
+        )
 
     # Primary category — sourced from supplement_taxonomy (single source of truth)
     taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}

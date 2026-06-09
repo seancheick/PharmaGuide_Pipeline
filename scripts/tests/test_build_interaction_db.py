@@ -122,6 +122,66 @@ CURATED_ROW_SSRI_STJOHNS = {
     "agent2_canonical_id": "st_johns_wort",
 }
 
+CURATED_ROW_SAFETY_CANONICALS = [
+    {
+        "id": "DDI_STATINS_RYR",
+        "type": "Med-Sup",
+        "agent1_name": "Statins",
+        "agent1_id": "class:statins",
+        "agent2_name": "Red Yeast Rice",
+        "agent2_id": "C0763533",
+        "severity": "avoid",
+        "interaction_effect_type": "Additive",
+        "mechanism": "Red yeast rice acts like a statin.",
+        "management": "Avoid combining red yeast rice with statins.",
+        "source_urls": ["https://www.nccih.nih.gov/health/red-yeast-rice"],
+        "type_authored": "Med-Sup",
+        "agent1_type": "drug_class",
+        "agent2_type": "supplement",
+        "source_pmids": [],
+        "agent1_canonical_id": None,
+        "agent2_canonical_id": "BANNED_RED_YEAST_RICE",
+    },
+    {
+        "id": "DDI_ANTICOAG_CBD",
+        "type": "Med-Sup",
+        "agent1_name": "Anticoagulants",
+        "agent1_id": "class:anticoagulants",
+        "agent2_name": "CBD",
+        "agent2_id": "C4704022",
+        "severity": "caution",
+        "interaction_effect_type": "Enhancer",
+        "mechanism": "CBD may affect anticoagulant exposure.",
+        "management": "Use CBD only with clinician guidance while anticoagulated.",
+        "source_urls": ["https://www.fda.gov/"],
+        "type_authored": "Med-Sup",
+        "agent1_type": "drug_class",
+        "agent2_type": "supplement",
+        "source_pmids": [],
+        "agent1_canonical_id": None,
+        "agent2_canonical_id": "BANNED_CBD_US",
+    },
+    {
+        "id": "DDI_ANTICOAG_VINPOCETINE",
+        "type": "Med-Sup",
+        "agent1_name": "Anticoagulants",
+        "agent1_id": "class:anticoagulants",
+        "agent2_name": "Vinpocetine",
+        "agent2_id": "C0059752",
+        "severity": "caution",
+        "interaction_effect_type": "Enhancer",
+        "mechanism": "Vinpocetine may affect bleeding risk.",
+        "management": "Avoid starting vinpocetine without prescriber guidance.",
+        "source_urls": ["https://www.fda.gov/"],
+        "type_authored": "Med-Sup",
+        "agent1_type": "drug_class",
+        "agent2_type": "supplement",
+        "source_pmids": [],
+        "agent1_canonical_id": None,
+        "agent2_canonical_id": "NOOTROPIC_VINPOCETINE",
+    },
+]
+
 MIN_DRUG_CLASSES = {
     "_metadata": {"schema_version": "1.0.0"},
     "classes": {
@@ -268,6 +328,37 @@ def _conn(db: Path) -> sqlite3.Connection:
     c = sqlite3.connect(db)
     c.row_factory = sqlite3.Row
     return c
+
+
+def test_builder_normalizes_safety_canonicals_to_catalog_interaction_identities(
+    build_ctx,
+    normalized_drafts,
+):
+    """Catalog key_ingredient_tags carry clean ingredient identity, while banned
+    status lives in verdict/safety fields. The interaction DB must key to the
+    same clean identities or Quick Check silently misses safety warnings.
+    """
+    normalized_drafts["interactions"] = CURATED_ROW_SAFETY_CANONICALS
+    build_ctx.normalized_drafts_path.write_text(json.dumps(normalized_drafts))
+
+    _build(build_ctx)
+
+    con = _conn(build_ctx.output_db)
+    try:
+        rows = {
+            row["id"]: row["agent2_canonical_id"]
+            for row in con.execute(
+                "SELECT id, agent2_canonical_id FROM interactions ORDER BY id"
+            )
+        }
+    finally:
+        con.close()
+
+    assert rows == {
+        "DDI_ANTICOAG_CBD": "cbd",
+        "DDI_ANTICOAG_VINPOCETINE": "nootropic_vinpocetine",
+        "DDI_STATINS_RYR": "red_yeast_rice",
+    }
 
 
 # --------------------------------------------------------------------------- #
