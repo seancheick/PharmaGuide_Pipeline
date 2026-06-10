@@ -60867,8 +60867,8 @@
     "forms": {
       "l-glutamate": {
         "bio_score": 6,
-        "natural": true,
-        "score": 9,
+        "natural": false,
+        "score": 6,
         "absorption": "high (~85%)",
         "notes": "Abundant amino acid absorbed efficiently in the gut. Supplemental glutamate primarily supports gut mucosal health and as a flavor enhancer. Most dietary intake is from protein-rich foods.",
         "aliases": [
@@ -60880,7 +60880,7 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.85,
+          "value": 0.1,
           "range_low": 0.75,
           "range_high": 0.95,
           "quality": "very_good"
