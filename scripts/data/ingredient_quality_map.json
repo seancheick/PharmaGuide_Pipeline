@@ -18827,9 +18827,7 @@
           "lutein 20%",
           "Trans-Lutein",
           "all-trans lutein",
-          "organic Lutein",
-          "lutein 2020",
-          "lutein 2020 marigold flower extract"
+          "organic Lutein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18864,7 +18862,9 @@
           "FloraGLO Lutein",
           "floraglo brand lutein",
           "Lutemax 2020 Lutein",
-          "lutein 2020 marigold"
+          "lutein 2020 marigold",
+          "lutein 2020",
+          "lutein 2020 marigold flower extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19001,8 +19001,8 @@
     "forms": {
       "stabilized sulforaphane": {
         "bio_score": 13,
-        "natural": true,
-        "score": 16,
+        "natural": false,
+        "score": 13,
         "absorption": "good-to-excellent (~60-80% urinary excretion of metabolites)",
         "notes": "Pre-formed, stabilized sulforaphane that bypasses glucoraphanin→sulforaphane conversion. Egner 2011 (PMC3076202): mean 70% urinary excretion of sulforaphane metabolites from SFR beverage in Qidong trial (n=200). Vermeulen 2008 (PMID:18950181): 37% from raw broccoli with myrosinase. SFX-01 (alpha-cyclodextrin complex) confirmed rapid absorption in Phase 1 (PMC11782309). The 70% figure is urinary metabolite recovery, not true absolute bioavailability — actual systemic F% is likely somewhat lower.",
         "aliases": [
