@@ -41,9 +41,9 @@ PINNED = {
     "tudca":                     "fatty_acids",
     # amino_acids
     "creatine_monohydrate":      "amino_acids",
-    "choline":                   "amino_acids",
     "paba":                      "amino_acids",
     # vitamins
+    "choline":                   "vitamins",
     "nicotinamide_riboside":     "vitamins",
     "nmn":                       "vitamins",
     # antioxidants

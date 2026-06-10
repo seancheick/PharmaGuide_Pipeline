@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
-    "last_updated": "2026-05-30",
-    "total_entries": 164,
+    "last_updated": "2026-06-09",
+    "total_entries": 165,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -20031,6 +20031,121 @@
             "by": "opus_eu_additive_pass"
           }
         ]
+      }
+    },
+    {
+      "id": "WATCH_BOVINE_BRAIN_PHOSPHATIDYLSERINE",
+      "standard_name": "Bovine Brain-Sourced Phosphatidylserine",
+      "aliases": [
+        "bovine brain phosphatidylserine",
+        "bovine brain ps",
+        "bovine cortex phosphatidylserine",
+        "bovine cortex ps",
+        "phosphatidylserine from bovine brain",
+        "phosphatidylserine from bovine cortex"
+      ],
+      "reason": "Explicit bovine-brain/cortex phosphatidylserine source. Absorption is not the issue; the concern is BSE/prion source-material policy. FDA rules prohibit defined cattle risk materials in human food, dietary supplements, and cosmetics. Plant-derived PS should not match this entry.",
+      "status": "watchlist",
+      "class_tags": [
+        "animal_source",
+        "prion_bse_precaution",
+        "phospholipid_source"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": [
+          "soy",
+          "soy-derived",
+          "sunflower",
+          "plant",
+          "plant-based",
+          "lecithin-derived",
+          "sharp-ps green",
+          "vegan"
+        ]
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "moderate",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "restricted",
+          "effective_date": "2016-03-17",
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA final rule on BSE prohibits defined prohibited cattle materials in human food, dietary supplements, and cosmetics.",
+            "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-announces-final-rule-bovine-spongiform-encephalopathy",
+            "accessed_date": "2026-06-09"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-06-09"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_final_rule",
+          "title": "FDA Announces Final Rule on Bovine Spongiform Encephalopathy",
+          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-announces-final-rule-bovine-spongiform-encephalopathy",
+          "date": "2016-03-17",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_action",
+            "source_material_risk"
+          ],
+          "evidence_summary": "FDA final rule prohibits defined prohibited cattle materials in human food, dietary supplements, and cosmetics to reduce BSE risk."
+        },
+        {
+          "type": "federal_regulation",
+          "title": "21 CFR 189.5 - Prohibited cattle materials",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-189/subpart-B/section-189.5",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_action",
+            "source_material_risk"
+          ],
+          "evidence_summary": "Federal regulation defining prohibited cattle materials for human food/dietary-supplement context."
+        },
+        {
+          "type": "fda_compliance_program",
+          "title": "FDA Compliance Program 7321.008 - Dietary Supplements",
+          "url": "https://www.fda.gov/media/116340/download",
+          "date": "2025-08-18",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "inspection_policy",
+            "source_material_risk"
+          ],
+          "evidence_summary": "FDA inspection program instructs evidence collection when bovine-derived dietary supplement ingredients may be prohibited cattle material under 21 CFR 189.5(a)."
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-09",
+        "next_review_due": "2026-12-09",
+        "reviewed_by": "codex_open_decisions_20260609",
+        "change_log": [
+          {
+            "date": "2026-06-09",
+            "change": "Added active-only watchlist entry for explicit bovine-brain/cortex phosphatidylserine source-material concern.",
+            "by": "codex"
+          }
+        ]
+      },
+      "source_category": "high_risk_ingredients",
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "ban_context": "watchlist",
+      "safety_warning_one_liner": "Avoid bovine-brain PS unless source controls are documented.",
+      "safety_warning": "Avoid explicit bovine brain/cortex phosphatidylserine unless source controls are documented; FDA BSE rules restrict cattle risk materials.",
+      "functional_roles": [],
+      "verification": {
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json"
       }
     }
   ]

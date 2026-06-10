@@ -38,16 +38,16 @@
       }
     },
     "statistics": {
-      "total_parents": 627,
-      "total_forms": 1416,
-      "total_form_aliases": 12165,
+      "total_parents": 628,
+      "total_forms": 1417,
+      "total_form_aliases": 12179,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
     "categories": {
-      "amino_acids": 57,
-      "antioxidants": 110,
+      "amino_acids": 56,
+      "antioxidants": 111,
       "enzymes": 10,
       "fatty_acids": 64,
       "fibers": 17,
@@ -58,7 +58,7 @@
       "other": 25,
       "probiotics": 47,
       "proteins": 16,
-      "vitamins": 22
+      "vitamins": 23
     },
     "schema_version": "5.4.6",
     "last_updated": "2026-06-09",
@@ -1591,14 +1591,16 @@
         "verification_report": "scripts/audits/vitamin_a_20260602/api_verification.json"
       },
       "5.4.2": {
-        "date": "2026-06-06",
-        "audit": "IQM v4 defensibility audit — mechanical routing/scoring fixes",
+        "date": "2026-06-09",
+        "audit": "Open IQM audit decisions after batch 6",
         "changes": [
-          "Removed over-broad generic amino-acid aliases from branched_chain_amino_acids::bcaa 2:1:1 so generic amino-acid/EAA labels do not resolve to a premium BCAA ratio.",
-          "Removed natural-source bonus from branched_chain_amino_acids::branched chain amino acids (standard).",
-          "Lowered dha/epa/fish_oil/ceramides/hemp_seed_oil unspecified forms to bio_score 8, natural=false, score=8 so unspecified labels do not outscore disclosed lower-quality specific forms."
+          "CoQ10 crystal-free ubiquinol bio_score lowered 15->13; bio_score has no clinical-utility exception.",
+          "black_cherry reconciled to Prunus serotina/FDA BLACK CHERRY identifiers; sweet-cherry aliases removed.",
+          "dark_sweet_cherry parent added for Prunus avium/SWEET CHERRY labels with verified UNII/CUI/RxCUI.",
+          "HydroCurc lowered 10->9 and BCM-95 lowered 10->8 to stay within the signed enhanced-curcumin ladder.",
+          "Choline reclassified from amino_acids to vitamins; router impact checked against canonical choline behavior."
         ],
-        "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json"
       },
       "5.4.3": {
         "date": "2026-06-06",
@@ -1690,7 +1692,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 627,
+    "total_entries": 628,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -10537,15 +10539,15 @@
   "black_cherry": {
     "standard_name": "Black Cherry",
     "category": "antioxidants",
-    "cui": "C5551209",
-    "rxcui_note": "No RxNorm concept for whole-fruit botanical concentrate (Prunus avium); UNII A77056YJ4K and UMLS CUI C5551209 are the canonical identifiers.",
+    "cui": "C0330655",
+    "rxcui_note": "No RxNorm ingredient concept for Prunus serotina fruit/black cherry botanical concentrate; GSRS BLACK CHERRY carries UNII A77056YJ4K and CAS 84604-07-9.",
     "forms": {
       "black cherry concentrate": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
         "absorption": "low (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
-        "notes": "Concentrate / juice extract from Prunus avium (sweet black cherry) — botanically distinct from tart cherry / Montmorency (Prunus cerasus). Marketed primarily for gout / uric acid management based on anthocyanin (cyanidin-3-glucoside, cyanidin-3-rutinoside) inhibition of xanthine oxidase. Pilot RCT evidence for serum urate reduction (Zhang 2012, n=633 cohort study; small RCTs at 8 oz juice/day equivalent show acute urate reduction). Anti-inflammatory and antioxidant via anthocyanin and chlorogenic acid content. Anthocyanin oral PK is poor (~1-2% appears intact in plasma) but metabolites have measurable activity. Score reflects moderate evidence base with characterised mechanism; sits below tart cherry forms because most published RCTs use tart-cherry specifically.",
+        "notes": "Concentrate / juice extract from Prunus serotina (wild black cherry), matching the FDA/GSRS BLACK CHERRY substance and botanical_ingredients.black_cherry identity. Botanically distinct from sweet/dark sweet cherry (Prunus avium) and tart cherry (Prunus cerasus). Anthocyanin oral PK is low (~1-2% intact; metabolites detectable), so score remains conservative. Sweet-cherry aliases moved to dark_sweet_cherry to avoid species and identifier conflation.",
         "aliases": [
           "black cherry",
           "black cherry concentrate",
@@ -10553,11 +10555,12 @@
           "black cherry fruit extract",
           "black cherry juice concentrate",
           "black cherry juice extract",
-          "prunus avium extract",
-          "prunus avium fruit extract",
-          "prunus avium",
-          "sweet cherry extract",
-          "sweet cherry concentrate"
+          "black cherry fruit",
+          "wild black cherry",
+          "wild cherry fruit",
+          "prunus serotina",
+          "prunus serotina extract",
+          "prunus serotina fruit extract"
         ],
         "dosage_importance": 0.85,
         "absorption_structured": {
@@ -10586,7 +10589,7 @@
     "external_ids": {
       "unii": "A77056YJ4K",
       "cas": "84604-07-9",
-      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record A77056YJ4K (BLACK CHERRY) lists CAS 84604-07-9."
+      "cas_note": "Verified 2026-06-09: GSRS exact BLACK CHERRY record lists UNII A77056YJ4K and CAS 84604-07-9. PubChem has no single compound CID for this botanical/mixture CAS. UMLS botanical identity Prunus serotina is C0330655. Sweet cherry/Prunus avium is separated to dark_sweet_cherry."
     },
     "gsrs": {
       "substance_name": "BLACK CHERRY",
@@ -10599,7 +10602,22 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "rxcui": null,
+    "api_verification": {
+      "identity_reconciled_20260609": {
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json",
+        "gsrs_exact": {
+          "name": "BLACK CHERRY",
+          "unii": "A77056YJ4K",
+          "cas": "84604-07-9"
+        },
+        "umls_exact": {
+          "name": "Prunus serotina",
+          "cui": "C0330655"
+        }
+      }
+    }
   },
   "phosphatidylcholine": {
     "standard_name": "Phosphatidylcholine",
@@ -14011,11 +14029,11 @@
     "rxcui": "21406",
     "forms": {
       "ubiquinol crystal-free": {
-        "bio_score": 15,
+        "bio_score": 13,
         "natural": false,
-        "score": 15,
+        "score": 13,
         "absorption": "Highest CoQ10 absorption (~6% absolute F); Kaneka CoQH-CF crystal-free dispersion",
-        "notes": "The top-tier CoQ10 form — Kaneka's crystal-free ubiquinol (CoQH-CF). Ubiquinol is the reduced (active) form your body actually uses, and the crystal-free dispersion technology prevents the molecule from re-crystallizing, which is what normally tanks absorption. The gold standard. Citation correction 2026-04-25: prior \"~2-4× standard CoQ10\" fold-change attributed to López-Lluch 2019 is not present in PMID:30153575 (verified via efetch). Hosoe 2007 (PMID:16919858) is the proper Kaneka CoQH-CF PK reference; absolute F not stated but Cmax/AUC are highest of the CoQ10 class. Class baseline ~6% absolute F per Mantle 2020 (PMID:32380795) + Bhagavan 2006 (PMID:16551570). Dr Pham C1 sign-off (PD-respect): bio_score=15 RETAINED for clinical-utility reasons despite low absolute F (~6%). CoQ10 RCTs at high doses show real efficacy; PK and PD decoupled per Dr Pham clinical review.",
+        "notes": "Kaneka crystal-free ubiquinol (CoQH-CF) is the best-supported CoQ10 delivery identity in this map, but bio_score has no clinical-utility exception: it remains an absorption/form-quality score, not an outcomes or indication score. Hosoe 2007 (PMID:16919858) supports higher plasma CoQ10 exposure versus standard preparations, while absolute oral absorption remains low (~6%). Scored at the top of the CoQ10 cluster without using the reserved perfect/15 tier. C1/PD-respect note: prior audit kept this form high for pharmacodynamic respect, but the 2026-06-09 decision removes any clinical-utility exception from bio_score and keeps clinical utility outside absorption scoring.",
         "aliases": [
           "kaneka ubiquinol",
           "kaneka qh",
@@ -14453,11 +14471,11 @@
         }
       },
       "hydrocurc": {
-        "bio_score": 10,
+        "bio_score": 9,
         "natural": false,
-        "score": 10,
+        "score": 9,
         "absorption": "~2.5x total curcuminoids vs raw (Briskey 2019); free fraction unmeasured",
-        "notes": "Gencor's LipiSperse technology makes curcumin water-dispersible using food-grade lipid carriers. Sports nutrition research shows positive results for exercise recovery (PMID:32858046). However, Briskey 2019 (PMID:29974228, Eur J Nutr) measured 807 ng/mL Cmax for HydroCurc vs 318 ng/mL for raw curcumin (n=18) — ~2.5× total curcuminoids. Good clinical evidence base but lacks rigorous comparative PK data. Uses food-grade ingredients (no synthetic surfactants). Evidence update 2026-04-25: prior note saying \"no head-to-head PK study published\" was incorrect — Briskey 2019 (PMID:29974228, Eur J Nutr) is a verified n=18 crossover comparing LipiSperse-formulated HydroCurc to raw curcumin. Like other enhanced forms, measured TOTAL curcuminoids (free fraction not separately quantified); fold-change reflects conjugate-dominated AUC per Kroon 2025 (PMID:40487425) framework.",
+        "notes": "Gencor's LipiSperse/HydroCurc technology makes curcumin water-dispersible using food-grade lipid carriers. Evidence supports improved exposure versus raw curcumin, but it is not signed above the enhanced-curcumin ladder; capped to the signed curcumin ladder at the NovaSol tier (bio_score 9). Clinical utility claims belong outside bio_score.",
         "aliases": [
           "hydrocurc curcumin",
           "LipiSperse curcumin",
@@ -14552,11 +14570,11 @@
         }
       },
       "bcm-95 curcumin": {
-        "bio_score": 10,
+        "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "~6.9x total curcuminoids vs plain (Antony 2008, pilot); free fraction unmeasured",
-        "notes": "Curcumin combined with turmeric essential oils (ar-turmerone) for natural synergy — about 6.9x better absorption than plain curcumin. Sold as CurcuGreen (formerly BCM-95) by DolCas Biotech. A good mid-tier option that keeps the whole-plant synergy without synthetic delivery systems. Evidence update 2026-04-25: Antony 2008 PMID:20046768 (Indian J Pharm Sci) verified 6.93× total curcuminoids vs plain curcumin in pilot crossover. Methodology weaker than Cuomo/Sasaki — small n, less rigorous design. Total curcuminoids only; fold-change reflects conjugate-dominated AUC per Kroon 2025 framework.",
+        "notes": "BCM-95/CurcuGreen combines curcumin with turmeric essential oils. Antony 2008 (PMID:20046768) supports improved total curcuminoid exposure versus plain curcumin, but the evidence base is smaller/weaker than signed higher-tier enhanced forms and its absorption_structured value remains low. Capped below HydroCurc on the signed curcumin ladder rather than carrying a premium bio_score.",
         "aliases": [
           "bcm-95",
           "bcm95",
@@ -15625,7 +15643,7 @@
   },
   "choline": {
     "standard_name": "Choline",
-    "category": "amino_acids",
+    "category": "vitamins",
     "cui": "C0008405",
     "rxcui": "2449",
     "rda_ul_ref": "Choline",
@@ -15784,7 +15802,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "amino_acids",
+    "category_enum": "vitamins",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -15954,7 +15972,8 @@
         }
       ]
     },
-    "aliases": []
+    "aliases": [],
+    "category_note": "Reclassified 2026-06-09: choline is an essential vitamin-like nutrient/quaternary ammonium compound, not an amino acid. V4 classification already treats canonical choline as vitamin-domain/multi-prenatal support."
   },
   "phosphatidylserine": {
     "standard_name": "Phosphatidylserine",
@@ -63726,5 +63745,81 @@
     "aliases": [],
     "external_ids": {},
     "rxcui_note": "No RxNorm entry for Garcinia indica / kokum. Verified absent via RxNorm REST API search 2026-05-25 for 'Garcinia indica', 'kokum', 'Garcinia indica fruit rind'. Distinct from Garcinia cambogia which DOES have RxCUI 1311595 ('Garcinia cambogia fruit extract', TTY=IN, verified same date). Identity verified via UMLS CUI C3460451."
+  },
+  "dark_sweet_cherry": {
+    "standard_name": "Dark Sweet Cherry",
+    "category": "antioxidants",
+    "cui": "C0946748",
+    "rxcui": "901303",
+    "forms": {
+      "dark sweet cherry powder": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
+        "notes": "Powder or concentrate from Prunus avium (sweet/dark sweet cherry), matching the GSRS SWEET CHERRY substance and botanical_ingredients.dark_sweet_cherry identity. Kept separate from black_cherry (Prunus serotina) and tart_cherry (Prunus cerasus). Score is conservative because anthocyanin intact oral bioavailability is low even when downstream metabolites may be active.",
+        "aliases": [
+          "dark sweet cherry",
+          "dark sweet cherry powder",
+          "dark sweet cherry extract",
+          "dark sweet cherry concentrate",
+          "sweet cherry",
+          "sweet cherry powder",
+          "sweet cherry extract",
+          "sweet cherry concentrate",
+          "sweet cherry fruit extract",
+          "sweet cherry juice concentrate",
+          "prunus avium",
+          "prunus avium extract",
+          "prunus avium fruit extract"
+        ],
+        "dosage_importance": 0.85,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.15,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "tart cherry",
+        "sour cherry",
+        "montmorency",
+        "black cherry",
+        "prunus serotina"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "external_ids": {
+      "unii": "93T4562ZI3"
+    },
+    "api_verification": {
+      "identity_reconciled_20260609": {
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json",
+        "gsrs_exact": {
+          "name": "SWEET CHERRY",
+          "unii": "93T4562ZI3",
+          "rxcui": "901303"
+        },
+        "umls_exact": {
+          "name": "Prunus avium",
+          "cui": "C0946748"
+        }
+      }
+    },
+    "aliases": [],
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-06-09",
+      "research_status": "validated"
+    }
   }
 }

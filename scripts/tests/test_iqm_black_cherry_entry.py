@@ -2,20 +2,18 @@
 """
 IQM coverage: Black Cherry (Batch 5 IQM gap fill #6).
 
-Black cherry concentrate (typically Prunus avium fruit) is used in 5+
-supplement products for gout/uric-acid management and anthocyanin-mediated
-anti-inflammatory effects. Previously skipped as `recognized_non_scorable`
-because IQM only had `tart_cherry` (Prunus cerasus — botanically distinct).
+Black cherry concentrate is Prunus serotina in FDA/GSRS and in
+botanical_ingredients.json. Sweet/dark sweet cherry (Prunus avium) is a
+separate parent (`dark_sweet_cherry`) so sweet-cherry labels remain scoreable
+without corrupting black_cherry identifiers.
 
 Identifiers verified via:
 - FDA GSRS: UNII A77056YJ4K ("BLACK CHERRY"), CAS 84604-07-9
-- UMLS: CUI C5551209 (Black Cherry, MTH; classification=Food)
+- UMLS: CUI C0330655 (Prunus serotina, MTH; classification=Plant)
 - DSLD: 3 product references under "botanical|Black cherry"
 
-Distinct from `tart_cherry` (Prunus cerasus / Montmorency) — same family
-(Rosaceae/Prunus genus) but different species with different anthocyanin
-levels and different label terminology. The `tart_cherry` IQM entry stays
-intact; this entry adds Prunus avium coverage.
+Distinct from `tart_cherry` (Prunus cerasus / Montmorency) and
+`dark_sweet_cherry` (Prunus avium).
 """
 
 import json
@@ -37,8 +35,16 @@ def test_black_cherry_iqm_entry_exists(iqm):
 
 def test_black_cherry_identifiers(iqm):
     e = iqm["black_cherry"]
-    assert e.get("cui") == "C5551209"
+    assert e.get("cui") == "C0330655"
     assert e.get("external_ids", {}).get("unii") == "A77056YJ4K"
+    assert e.get("external_ids", {}).get("cas") == "84604-07-9"
+
+
+def test_dark_sweet_cherry_identifiers(iqm):
+    e = iqm["dark_sweet_cherry"]
+    assert e.get("cui") == "C0946748"
+    assert e.get("rxcui") == "901303"
+    assert e.get("external_ids", {}).get("unii") == "93T4562ZI3"
 
 
 def test_black_cherry_score_formula(iqm):
@@ -63,31 +69,49 @@ def test_black_cherry_aliases(iqm):
         "black cherry",
         "black cherry concentrate",
         "black cherry extract",
+        "prunus serotina",
+    }
+    missing = needed - all_aliases
+    assert not missing, f"Missing aliases: {missing}"
+    assert "prunus avium" not in all_aliases
+    assert "sweet cherry extract" not in all_aliases
+
+
+def test_dark_sweet_cherry_aliases(iqm):
+    e = iqm["dark_sweet_cherry"]
+    all_aliases = set()
+    for f in e.get("forms", {}).values():
+        if isinstance(f, dict):
+            all_aliases |= {a.lower().strip() for a in f.get("aliases", []) or []}
+    needed = {
+        "dark sweet cherry",
+        "sweet cherry powder",
+        "sweet cherry extract",
         "prunus avium",
     }
     missing = needed - all_aliases
     assert not missing, f"Missing aliases: {missing}"
+    assert "black cherry" not in all_aliases
 
 
 def test_black_cherry_does_not_collide_with_tart_cherry(iqm):
-    """Tart cherry (Prunus cerasus) and black cherry (Prunus avium) are
-    botanically distinct species. Their alias lists must not overlap."""
-    bc = iqm["black_cherry"]
-    tc = iqm.get("tart_cherry", {})
+    """Cherry species entries must not share form aliases."""
+    parents = ("black_cherry", "dark_sweet_cherry", "tart_cherry")
 
-    bc_aliases = set()
-    for f in bc.get("forms", {}).values():
-        if isinstance(f, dict):
-            bc_aliases |= {a.lower().strip() for a in f.get("aliases", []) or []}
-    tc_aliases = set()
-    for f in tc.get("forms", {}).values():
-        if isinstance(f, dict):
-            tc_aliases |= {a.lower().strip() for a in f.get("aliases", []) or []}
+    alias_sets = {}
+    for parent in parents:
+        aliases = set()
+        for f in iqm[parent].get("forms", {}).values():
+            if isinstance(f, dict):
+                aliases |= {a.lower().strip() for a in f.get("aliases", []) or []}
+        alias_sets[parent] = aliases
 
-    overlap = bc_aliases & tc_aliases
-    assert not overlap, (
-        f"black_cherry and tart_cherry aliases must not overlap: {overlap}"
-    )
+    for left in parents:
+        for right in parents:
+            if left >= right:
+                continue
+            overlap = alias_sets[left] & alias_sets[right]
+            assert not overlap, f"{left} and {right} aliases overlap: {overlap}"
 
 
 def test_black_cherry_category_matches_tart(iqm):
