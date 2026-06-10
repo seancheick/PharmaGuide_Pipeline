@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12179,
+      "total_form_aliases": 12164,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -16243,9 +16243,6 @@
         "absorption": "very good",
         "notes": "Liposome-encapsulated taurine. Taurine already absorbs ~95-100%, so liposomal delivery adds no demonstrated benefit. Products exist commercially but no clinical evidence of improved absorption.",
         "aliases": [
-          "nano taurine",
-          "encapsulated taurine",
-          "advanced delivery taurine",
           "liposome-encapsulated taurine"
         ],
         "dosage_importance": 1.0,
@@ -16361,11 +16358,7 @@
         "aliases": [
           "ergothioneine",
           "ergothionine",
-          "longevity vitamin",
-          "mitochondrial antioxidant",
-          "cellular protector",
           "ergothioneine sulfur amino acid",
-          "thiol antioxidant",
           "ergothioneine powder",
           "pure ergothioneine",
           "ergothioneine crystals",
@@ -16448,15 +16441,14 @@
         }
       },
       "acetyl-l-carnitine (alcar)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "natural": false,
-        "score": 11,
+        "score": 10,
         "absorption": "low-moderate (likely higher than L-carnitine base ~14-18%, but no published oral bioavailability for ALCAR specifically)",
         "notes": "Acetylated form that crosses the blood-brain barrier. Well-studied for cognitive function, memory, and neuroprotection. Preferred form for brain health. Oral bioavailability not formally measured for ALCAR but likely modestly above L-carnitine base (~14-18%). The BBB-crossing property is the key differentiator. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
         "aliases": [
           "ALC",
           "n-acetyl-l-carnitine",
-          "brain carnitine",
           "acetyl carnitine",
           "acetyl-l-carnitine supplement",
           "n-acetyl l-carnitine hydrochloride",
@@ -16827,7 +16819,6 @@
     "aliases": [
       "betaine",
       "Betaine",
-      "trimethylglycerine hydrochloride",
       "trimethylglycine"
     ],
     "cui_note": "Corrected from unrelated TMG shorthand code to betaine / trimethylglycine concept.",
@@ -16893,17 +16884,11 @@
           "micronized glutamine",
           "l-glutamine hydrochloride",
           "l-glutamine hcl",
-          "Glutamine & Glutamic Acid",
-          "L-Glutamine & Glutamic Acid",
           "l-glutamine, micronized",
           "glutamine, micronized",
-          "glutamic acid and glutamine",
-          "glutamic acid & glutamine",
           "l-glutamine ot2",
           "l-glutamine, ot2",
-          "glutamine ot2",
-          "pepform glutamine peptides",
-          "pepform glutamine"
+          "glutamine ot2"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16922,7 +16907,6 @@
         "aliases": [
           "sustamine",
           "dipeptide glutamine",
-          "glutamine peptides",
           "sustamine glutamine",
           "l-alanine-l-glutamine",
           "stable glutamine",
