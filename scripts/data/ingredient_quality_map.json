@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12089,
+      "total_form_aliases": 12085,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -19440,7 +19440,6 @@
           "cell wall disrupted chlorella",
           "cracked chlorella",
           "disrupted cell chlorella",
-          "broken wall algae",
           "high omega-9 cracked-wall chlorella",
           "chlorella cracked cell",
           "shattered cell wall chlorella",
@@ -19465,8 +19464,6 @@
         "notes": "Standard whole-cell chlorella powder with intact cell walls. 2024 human RCT (PMID:39610880): whole cell chlorella showed NEGATIVE postprandial amino acid iAUC (-4.1 mmol/L) — essentially no net amino acid appearance above baseline over 5 hours. In vitro digestibility (~50-60%) dramatically overestimates true human absorption. Cell wall is sporopollenin/algaenan (PMC8759652), resistant to human digestive enzymes. C. vulgaris and C. pyrenoidosa. Broken cell wall form vastly superior.",
         "aliases": [
           "whole chlorella",
-          "chlorella vulgaris",
-          "chlorella pyrenoidosa",
           "dried chlorella",
           "powdered chlorella",
           "raw chlorella powder",
@@ -19515,7 +19512,9 @@
         "notes": "Chlorella form not specified on label. Scored conservatively. Human data (PMID:39610880): intact cell chlorella has near-zero amino acid absorption; broken/split cell achieves ~64% of milk protein. Cell wall is sporopollenin/algaenan, NOT cellulose (PMC8759652). Cell wall disruption status is the single most important factor. B33 audit 2026-04-25: cell-wall-dependent class baseline.",
         "aliases": [
           "chlorella",
-          "Japanese Chlorella"
+          "Japanese Chlorella",
+          "chlorella vulgaris",
+          "chlorella pyrenoidosa"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19563,8 +19562,6 @@
           "ultra-low molecular weight HA",
           "ULMW-HA",
           "micro hyaluronic acid",
-          "short-chain HA",
-          "nano HA",
           "ultra-low MW HA",
           "hyabest hyaluronic acid",
           "hyabest"
@@ -19639,7 +19636,9 @@
           "short-chain hyaluronic acid",
           "injuv",
           "small molecule HA",
-          "low MW hyaluronic acid"
+          "low MW hyaluronic acid",
+          "short-chain HA",
+          "nano HA"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19811,9 +19810,7 @@
         "notes": "The biologically active R-enantiomer of ALA. Breithaupt-Grogler 1999: 38% absolute bioavailability for R-enantiomer (vs 28% for S-enantiomer) from aqueous solution. Free R-ALA is prone to polymerization and poor aqueous solubility, reducing real-world bioavailability from solid dosage forms below the 38% figure. Keith 2012 (PMC4084596): in young adults, racemic ALA actually showed higher AUC than pure R-ALA, complicating the 'R is always better' narrative. R is the endogenous enantiomer but supplement R-ALA is synthetically produced.",
         "aliases": [
           "R-ALA",
-          "bio-enhanced ALA",
           "alpha-lipoic acid R-form",
-          "active ALA",
           "R-lipoic acid",
           "pure R-ALA",
           "Alpha R-Lipoic Acid",
@@ -19942,8 +19939,7 @@
           "mixed ALA",
           "DL-ALA",
           "synthetic ALA",
-          "racemic lipoic acid",
-          "Thiotic Acid"
+          "racemic lipoic acid"
         ],
         "context_include": [
           "lipoic",
