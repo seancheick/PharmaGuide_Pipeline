@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12146,
+      "total_form_aliases": 12124,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -19416,7 +19416,6 @@
           "predigested chlorella",
           "enzymatically treated chlorella",
           "bioactive chlorella",
-          "fermented green algae",
           "pre-digested chlorella",
           "enzyme-processed chlorella",
           "chlorella ferment",
@@ -19438,15 +19437,12 @@
         "notes": "Chlorella with mechanically broken/split cell walls. 2024 human RCT (PMID:39610880, PMC11602285): split cell chlorella amino acid iAUC was 55.7 mmol/L vs milk at 86.6 mmol/L (~64% of milk). Dramatically better than intact cells which showed near-zero postprandial amino acid response. Cell wall is sporopollenin/algaenan-based (NOT cellulose; PMC8759652) — mechanical disruption is essential for human nutrient access.",
         "aliases": [
           "cracked cell chlorella",
-          "processed chlorella",
           "cell wall disrupted chlorella",
           "cracked chlorella",
           "disrupted cell chlorella",
-          "bioavailable chlorella",
           "broken wall algae",
           "high omega-9 cracked-wall chlorella",
           "chlorella cracked cell",
-          "high-absorption chlorella",
           "shattered cell wall chlorella",
           "shattered cell wall chlorella powder",
           "cracked-wall chlorella",
@@ -19474,15 +19470,12 @@
           "dried chlorella",
           "powdered chlorella",
           "raw chlorella powder",
-          "chlorella extract powder",
           "dehydrated chlorella",
           "pure chlorella powder",
           "chlorella superfood",
           "yaeyama chlorella",
           "certified organic chlorella powder",
-          "Chlorella Protein",
-          "chlorella protein concentrate",
-          "chlorella protein powder"
+          "Chlorella Protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19569,7 +19562,6 @@
           "nano hyaluronic acid",
           "ultra-low molecular weight HA",
           "ULMW-HA",
-          "low MW hyaluronic acid",
           "micro hyaluronic acid",
           "short-chain HA",
           "nano HA",
@@ -19593,13 +19585,9 @@
         "notes": "Liposome-encapsulated HA for theoretical enhanced oral delivery. Zero published human oral PK studies exist for liposomal HA. Liposomal HA literature in PubMed is about injectable drug delivery (PMC7384933), not oral supplements. Claims of 2-3x improved absorption are extrapolated from liposomal delivery of other compounds and have no direct evidence for oral HA. B28 audit 2026-04-25: liposomal-thin pattern; no human PK for any oral HA form.",
         "aliases": [
           "liposomal hyaluronic acid",
-          "encapsulated HA",
-          "advanced delivery HA",
           "liposome hyaluronic acid",
-          "nano-encapsulated HA",
           "lipid-bound HA",
-          "liposomal HA complex",
-          "high-absorption HA"
+          "liposomal HA complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19650,7 +19638,8 @@
           "bioavailable HA",
           "short-chain hyaluronic acid",
           "injuv",
-          "small molecule HA"
+          "small molecule HA",
+          "low MW hyaluronic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19753,8 +19742,8 @@
     "forms": {
       "alpha-carotene (unspecified)": {
         "bio_score": 5,
-        "natural": true,
-        "score": 8,
+        "natural": false,
+        "score": 5,
         "absorption": "variable, fat-dependent (~5-20% from food, likely 20-50% from oil-based supplements)",
         "notes": "Standalone alpha-carotene identity. Alpha-carotene is a provitamin A carotenoid and is linked to the Vitamin A family, but it has lower retinol activity than beta-carotene and lacks strong isolated supplement PK evidence. Exact identifiers remain here, not duplicated under vitamin_a context forms; live API verification found UMLS CUI C0051336 and no exact GSRS UNII.",
         "aliases": [
@@ -19905,14 +19894,8 @@
         "absorption": "evidence-thin (no human PK comparison)",
         "notes": "Liposome-encapsulated ALA for theoretical enhanced oral delivery. No published human oral PK study exists for liposomal ALA. Claims of 2-3x improved absorption are extrapolated from liposomal delivery principles applied to other compounds. Scored above racemic but below forms with actual human PK data (Na-RALA, free R-ALA). B24 audit 2026-04-25: liposomal evidence-thin pattern (5th application) — no head-to-head human PK PMID exists.",
         "aliases": [
-          "nano ALA",
-          "encapsulated ALA",
-          "advanced delivery ALA",
           "liposome ALA",
-          "nano-encapsulated lipoic acid",
-          "lipid-bound ALA",
-          "nano lipoic acid",
-          "high-absorption ALA"
+          "lipid-bound ALA"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19953,18 +19936,13 @@
         "absorption": "moderate (~25-35% absolute bioavailability; Breithaupt-Grogler 1999)",
         "notes": "Racemic (50:50 R+S) alpha-lipoic acid, the most common and cheapest form. Breithaupt-Grogler 1999: absolute bioavailability ~30% overall (R-component 38%, S-component 28%). Linus Pauling Institute review: 30-40%. Short half-life ~0.3-0.4 hours. Keith 2012 (PMC4084596): in young adults, racemic ALA actually showed higher AUC (1,772 ng-h/mL) than pure R-ALA (1,070 ng-h/mL). Thioctic acid is the pharmaceutical name.",
         "aliases": [
-          "alpha-lipoic acid",
-          "ALA",
           "racemic ALA",
           "standard lipoic acid",
-          "thioctic acid",
           "DL-alpha-lipoic acid",
           "mixed ALA",
           "DL-ALA",
           "synthetic ALA",
           "racemic lipoic acid",
-          "natural lipoic acid",
-          "natural ALA",
           "Thiotic Acid"
         ],
         "context_include": [
@@ -20003,7 +19981,10 @@
           "alpha-lipoic acid & r-lipoic acid",
           "alpha-lipoic acid and r-lipoic acid",
           "nutri-nano alpha lipoic acid",
-          "Nutri Alpha Lipoic Acid"
+          "Nutri Alpha Lipoic Acid",
+          "alpha-lipoic acid",
+          "ALA",
+          "thioctic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20099,12 +20080,9 @@
           "methylsulfonylmethane",
           "methysulfonylmethane",
           "dimethyl sulfone",
-          "organic sulfur",
           "DMSO2",
           "methyl sulfonyl methane",
-          "MSM sulfur",
           "pure MSM",
-          "sulfur MSM",
           "methylsulfonylmethane powder",
           "optimsm",
           "opti-msm",
@@ -20152,7 +20130,7 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.2,
+          "value": 0.86,
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
