@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1416,
-      "total_form_aliases": 12177,
+      "total_form_aliases": 12165,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -15178,11 +15178,9 @@
         "aliases": [
           "freeze-dried probiotics",
           "probiotics with prebiotics",
-          "synbiotics",
           "prebiotic probiotics",
           "lyophilized probiotics",
-          "probiotic + prebiotic blend",
-          "symbiotic formulation"
+          "probiotic + prebiotic blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15255,9 +15253,9 @@
         }
       },
       "multi-strain blend (10+ strains)": {
-        "bio_score": 13,
+        "bio_score": 11,
         "natural": true,
-        "score": 16,
+        "score": 14,
         "absorption": "strain-dependent",
         "notes": "Broad-spectrum blend with 10+ different strains targeting diverse gut regions. Look for formulas that list individual strain CFU counts rather than just a total blend count.",
         "aliases": [
@@ -15307,11 +15305,8 @@
           "lactic acid bacterium",
           "probiotic cultures",
           "probiotics",
-          "lactococcus lactis strain plasma",
           "l lactis",
           "lab4 probiotics",
-          "l acidophilus la-5(r) and bifidobacterium bb-12(r)",
-          "l-acidophilus la-5(r) and bifidobacterium bb-12(r)",
           "ultra probiotics",
           "Probiotic",
           "Probiotic Bacteria"
@@ -15541,7 +15536,6 @@
         "notes": "Combination of multiple prebiotics (typically FOS, GOS, inulin). Quality depends entirely on components. Scored conservatively — a blend should not outscore its individual constituents.",
         "aliases": [
           "prebiotic complex",
-          "synbiotic blend",
           "multi-prebiotic formula",
           "FOS+GOS+inulin blend"
         ],
@@ -15554,9 +15548,9 @@
         }
       },
       "prebiotics (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "category_error (default to fermentation framework)",
         "notes": "Type not specified on label. Conservative score — different prebiotics feed different bacterial populations. Look for specific types (FOS, GOS, inulin, HMO) for a more accurate score. B28 audit 2026-04-25: CATEGORY ERROR default (B22 framework).",
         "aliases": [
@@ -15643,7 +15637,6 @@
         "absorption": "plasma choline AUC equivalent to bitartrate/chloride (Böckmann 2021, n=6 crossover)",
         "notes": "Brain-targeted choline form that crosses the blood-brain barrier. 40% choline by weight. Plasma choline AUC is equivalent to bitartrate (Böckmann 2021 (PMID:34287673) crossover), but BBB penetration is better. Rx drug in some EU countries for cognitive decline. Citation corrected 2026-04-24: \"Stoll 2021\" was a misattribution; the actual paper is Böckmann 2021 (PMID:34287673, Eur J Nutr) — n=6 healthy-adult-men crossover at 550mg choline equivalent showed no difference in plasma choline AUC among chloride, bitartrate, alpha-GPC, or egg-PC. Alpha-GPC dose-response confirmed by Kawamura 2012 (PMID:22673596, single 1000mg dose, plasma free choline rise at 60-120 min).",
         "aliases": [
-          "brain choline",
           "GPC"
         ],
         "dosage_importance": 1.0,
@@ -15725,9 +15718,9 @@
         }
       },
       "choline citrate": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "free-choline salt; assumed equivalent to bitartrate (no citrate-specific PK)",
         "notes": "Citrate salt — 40% choline by weight. Good solubility for liquid formulas. Adequate for daily choline needs but no brain-crossing advantage over bitartrate. Evidence update 2026-04-24: no citrate-specific human PK located. Extrapolated from bitartrate/chloride evidence (PMID:34287673 Böckmann 2021): free-choline-releasing salts all deliver equivalent plasma choline AUC. struct.value revised 0.825 → 0.875 for class-consistency.",
         "aliases": [
@@ -15744,9 +15737,9 @@
         }
       },
       "choline chloride": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "plasma choline AUC equivalent to bitartrate and alpha-GPC (Böckmann 2021)",
         "notes": "Chloride salt — 52% choline by weight (highest elemental content). Mostly used in animal feed and industrial applications. Uncommon in human supplements. Evidence update 2026-04-24: PMID:34287673 (Böckmann 2021) direct comparator arm — equivalent plasma choline AUC to bitartrate and alpha-GPC at 550mg choline equivalent (n=6 crossover).",
         "aliases": [
@@ -16017,7 +16010,6 @@
           "serinaid phosphatidylserine",
           "leci-ps phosphatidyl serine",
           "leci-ps(r) phosphatidyl serine",
-          "soy-derived",
           "soy derived phosphatidylserine",
           "soy lecithin phosphatidylserine"
         ],
@@ -16049,9 +16041,9 @@
         }
       },
       "liposomal phosphatidylserine": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": false,
-        "score": 13,
+        "score": 12,
         "absorption": "good to excellent — no PK study showing liposomal advantage for PS",
         "notes": "Liposome-encapsulated PS. PS already absorbs well orally (itself a phospholipid), so liposomal encapsulation provides limited additional benefit. No published PK data demonstrating superior absorption over standard PS.",
         "aliases": [
@@ -16068,9 +16060,9 @@
         }
       },
       "Actiserine (enhanced PS blend)": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": false,
-        "score": 14,
+        "score": 10,
         "absorption": "Actiserine branded PS blend; PS hydrolyzed to PA + serine pre-absorption",
         "notes": "Proprietary PS blend with catechins and arabinose nanocarrier system (Shankar/SD Head USA). Industry PK study showed Cmax 2.8x and AUC 3.7x vs conventional PS. Peer-reviewed publication pending — preliminary data. NOT the same as Sharp-PS Gold. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -16089,19 +16081,16 @@
         }
       },
       "phosphatidylserine (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate (PS class baseline; form-dependent)",
         "notes": "PS form not specified on label. Scored conservatively — soy-derived PS and Sharp-PS forms score higher with better clinical data. B33 audit 2026-04-25: PS class baseline.",
         "aliases": [
           "phosphatidylserine",
-          "SHARPS PS 20 D",
-          "Sharp-PS 20 D",
           "phosphatidyl l-serine",
           "phosphatidyl-l-serine",
-          "phosphatidyl serine",
-          "SHARP PS 20 D Phosphatidylserine"
+          "phosphatidyl serine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16169,8 +16158,7 @@
         "aliases": [
           "phosphatidylinositol",
           "phosphatidyl inositol",
-          "phospatidylinositol",
-          "phosphoinositides"
+          "phospatidylinositol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
