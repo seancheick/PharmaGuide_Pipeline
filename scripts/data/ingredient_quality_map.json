@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12164,
+      "total_form_aliases": 12163,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -16990,7 +16990,6 @@
           "arginine akg",
           "aakg",
           "arginine alpha-ketoglutarate",
-          "a-ketoglutarate",
           "l-arginine alpha-ketoglutarate",
           "aakg powder",
           "l-arginine akg 2:1 extract",
@@ -17286,16 +17285,12 @@
           "lysine hcl",
           "lysine hydrochloride",
           "l-lysine hydrochloride monohydrate",
-          "pure l-lysine",
-          "lysine powder",
           "l-lysine monohydrochloride",
           "l lysine monohydrochloride",
           "L-Lysine Chloride",
           "lysine chloride",
           "l-lysine hydrochloride",
-          "L-Lysine Hydrochloride, Powder",
-          "Lysine, Micronized",
-          "micronized lysine"
+          "L-Lysine Hydrochloride, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17315,7 +17310,11 @@
           "l-lysine",
           "lysine",
           "free-form lysine",
-          "pure lysine"
+          "pure lysine",
+          "pure l-lysine",
+          "lysine powder",
+          "Lysine, Micronized",
+          "micronized lysine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17566,8 +17565,7 @@
         "notes": "AVOID: D-tyrosine is the biologically inactive stereoisomer. Does not serve as a neurotransmitter precursor and may interfere with L-tyrosine uptake. B32 audit 2026-04-25: D-isomer biological inactivity (B26 parallel). Absorbed but inactive.",
         "aliases": [
           "d-form tyrosine",
-          "inactive tyrosine",
-          "racemic tyrosine mix"
+          "inactive tyrosine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -49582,7 +49580,8 @@
           "alpha-ketoglutaric acid",
           "alpha ketoglutaric acid",
           "akg",
-          "calcium alpha-ketoglutarate"
+          "calcium alpha-ketoglutarate",
+          "a-ketoglutarate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
