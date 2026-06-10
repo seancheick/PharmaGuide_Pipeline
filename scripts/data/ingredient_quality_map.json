@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12160,
+      "total_form_aliases": 12146,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 23
     },
     "schema_version": "5.4.6",
-    "last_updated": "2026-06-09",
+    "last_updated": "2026-06-10",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -18828,9 +18828,6 @@
           "Trans-Lutein",
           "all-trans lutein",
           "organic Lutein",
-          "MacularSynergy Complex",
-          "macular synergy complex",
-          "macularsynergy",
           "lutein 2020",
           "lutein 2020 marigold flower extract"
         ],
@@ -18925,8 +18922,8 @@
     "forms": {
       "zeaxanthin (unspecified)": {
         "bio_score": 8,
-        "natural": true,
-        "score": 11,
+        "natural": false,
+        "score": 8,
         "absorption": "variable, fat-dependent (~10-50% with dietary fat)",
         "notes": "Xanthophyll carotenoid concentrated in the macula, from marigold or paprika oleoresin. (3R,3’R)-zeaxanthin (dietary/trans) and meso-zeaxanthin (3R,3’S) are stereoisomers with equivalent oral absorption but different retinal deposition — meso-zeaxanthin preferentially targets the central fovea (PMC4706936). All three macular carotenoids together (lutein + zeaxanthin + meso-zeaxanthin) produce the strongest MPOD response (PMID:27420092, Ma 2016, n=1764). Absorption is fat-dependent, same pathway as lutein (PMC6770730). Must be taken with fat-containing meal.",
         "aliases": [
@@ -19030,7 +19027,6 @@
         "aliases": [
           "sulforaphane precursor",
           "GR",
-          "glucosinolate",
           "Sulforaphane Glucosinolate",
           "Sulforaphane Glucosinate",
           "TrueBroc",
@@ -19059,8 +19055,7 @@
           "dual broccoli complex",
           "sulforaphane activation blend",
           "BroccoVital Myrosinase Broccoli extract",
-          "avmacol",
-          "myrosinase"
+          "avmacol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19085,10 +19080,7 @@
           "BroccoPlus Brassica concentrate",
           "Broccoli Aerial Parts, Plant, Seed Extract Concentrate",
           "Broccoli Plant, Seed Extract Concentrate",
-          "watercress (nasturtium officinale) aerial parts 4:1 extract",
-          "liposomal sulforaphane",
-          "nano sulforaphane",
-          "encapsulated sulforaphane"
+          "watercress (nasturtium officinale) aerial parts 4:1 extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19273,12 +19265,8 @@
         "aliases": [
           "certified organic spirulina",
           "non-gmo spirulina",
-          "clean spirulina",
           "pure organic spirulina",
-          "organic blue-green algae",
-          "natural spirulina",
-          "eco-friendly spirulina",
-          "green spirulina"
+          "organic blue-green algae"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19295,14 +19283,11 @@
         "absorption": "category_error (composite food; nutrient matrix)",
         "notes": "Standard dried spirulina powder (Arthrospira platensis). Mean indispensable amino acid digestibility = 85.2% in humans via dual-tracer ileal method (PMC6179135). PDCAAS = 84%. Spirulina has a peptidoglycan cell wall (not cellulose), making it more digestible than chlorella without cell-wall cracking (PMC94402). Rich in protein (~60%), phycocyanin, and B-vitamins. Spray drying causes ~20% phycocyanin loss vs fresh (PMC10144176). Dr Pham E2 sign-off: 9TH CATEGORY ERROR. 0.85 → null.",
         "aliases": [
-          "blue-green algae",
           "arthrospira platensis",
           "spirulina platensis",
           "spirulina maxima",
           "dried spirulina",
           "powdered spirulina",
-          "green algae powder",
-          "spirulina extract powder",
           "dehydrated spirulina",
           "pure spirulina powder",
           "spirulina superfood"
@@ -30652,7 +30637,8 @@
           "cruciferous glucosinolates",
           "broccoli glucosinolates",
           "glucosinolate complex",
-          "indole glucosinolates"
+          "indole glucosinolates",
+          "glucosinolate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
