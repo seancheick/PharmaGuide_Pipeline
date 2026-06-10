@@ -18294,11 +18294,11 @@
     "rxcui": "314709",
     "forms": {
       "l-ornithine standard": {
-        "bio_score": 12,
+        "bio_score": 11,
         "natural": false,
-        "score": 12,
-        "absorption": "good (~80-90%)",
-        "notes": "Non-proteinogenic amino acid; key urea cycle intermediate. Oral bioavailability ~82% (LOLA pharmacokinetics in healthy volunteers; peaks 30-60 min). Reduces blood ammonia and elevates urea output during prolonged exercise (Sugino et al., 2008, 2-6g/day). 400mg before sleep improved sleep quality and lowered cortisol/DHEA ratio in 8-week RCT (Torii et al., 2014). Partially converted to citrulline/arginine in liver.",
+        "score": 11,
+        "absorption": "amino-acid-class (cationic AA transport); plasma ornithine rises after oral dosing (Sugino 2008) but absolute oral F unmeasured",
+        "notes": "Non-proteinogenic amino acid; key urea cycle intermediate. Cationic amino-acid-class oral absorption: oral L-ornithine HCl reliably raises plasma ornithine and lowers exercise ammonia (Sugino et al. 2008, PMID:19083482), and 400mg before sleep improved sleep quality (Torii et al. 2014) — but absolute oral bioavailability (F%) is unmeasured for free L-ornithine. The commonly cited ~82% figure is LOLA (L-ornithine L-aspartate)-specific (Kircheis & Lüth 2019, PMID:30706424) and is NOT transferable to free ornithine. Partially converted to citrulline/arginine in liver.",
         "aliases": [
           "l-ornithine",
           "ornithine",
@@ -18307,10 +18307,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.82,
-          "range_low": 0.75,
-          "range_high": 0.9,
-          "quality": "very_good"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate"
         }
       }
     },
