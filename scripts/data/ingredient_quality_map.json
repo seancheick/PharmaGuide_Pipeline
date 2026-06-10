@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12163,
+      "total_form_aliases": 12160,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -18444,9 +18444,9 @@
     "rxcui": "10898",
     "forms": {
       "l-tryptophan powder": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "intestinal ~90%; systemic lower due to hepatic TDO first-pass and BBB LNAA competition",
         "notes": "Essential amino acid, precursor to serotonin and melatonin. Intestinal absorption ~90% via LAT1/ASCT2 transporters, but hepatic tryptophan 2,3-dioxygenase (TDO) causes 50-70% first-pass extraction (Millson 1985, PMC1400876). Brain uptake further limited by competition with 5 other large neutral amino acids (LNAAs) at the BBB LAT1 transporter. Best taken with carbohydrate (drives competing BCAAs into muscle via insulin) and without protein. TryptoPure (Ajinomoto) is a pharmaceutical-grade fermented form — purity advantage is safety-relevant (EMS crisis 1989) but does not change PK.",
         "aliases": [
@@ -18603,15 +18603,13 @@
         }
       },
       "liposomal gaba": {
-        "bio_score": 7,
+        "bio_score": 6,
         "natural": false,
-        "score": 7,
+        "score": 6,
         "absorption": "evidence-thin (no human PK; BBB barrier unproven)",
         "notes": "Liposome-encapsulated GABA designed to improve BBB crossing. Theoretical rationale is sound (liposomes may shield from enzymatic degradation and improve lymphatic absorption), but zero oral human clinical trials exist. Only published liposomal GABA data is IV animal studies (Loeb et al. — epileptic activity reduction via intravenous delivery, not oral). Scored above unspecified but well below forms with actual human clinical data. B24 audit 2026-04-25: liposomal-thin + BBB barrier.",
         "aliases": [
-          "nano gaba",
-          "encapsulated gaba",
-          "advanced delivery gaba"
+          "liposome-encapsulated gaba"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18705,16 +18703,15 @@
     "rxcui": "61",
     "forms": {
       "carnosyn beta-alanine": {
-        "bio_score": 15,
+        "bio_score": 14,
         "natural": false,
-        "score": 15,
+        "score": 14,
         "absorption": "excellent (<5% urinary loss; Harris 2006)",
         "notes": "Patented, NSF Certified for Sport beta-alanine from Natural Alternatives International. Harris 2006 (PubMed 16554972): <5% urinary loss at 10-40 mg/kg doses, confirming near-complete absorption. Muscle carnosine increased +58.8% at 4 weeks and +80.1% at 10 weeks at 3.2-6.4 g/day. Virtually all human RCT evidence for beta-alanine used CarnoSyn specifically. May cause harmless paresthesia (tingling) at doses >800 mg in a single bolus.",
         "aliases": [
           "carnosyn",
           "beta-alanine carnosyn",
-          "patented beta-alanine",
-          "carnosine precursor"
+          "patented beta-alanine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
