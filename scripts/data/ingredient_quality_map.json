@@ -40,8 +40,8 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12124,
-      "parents_with_parent_aliases": 116,
+      "total_form_aliases": 12089,
+      "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
@@ -20182,11 +20182,6 @@
         "aliases": [
           "KSM-66",
           "ksm66",
-          "full-spectrum ashwagandha",
-          "root-only extract",
-          "standardized root extract",
-          "high-potency ashwagandha",
-          "standardized ashwagandha",
           "pure KSM-66",
           "ashwagandha KSM-66 extract",
           "ashwagandha ksm-66",
@@ -20267,13 +20262,7 @@
         "absorption": "evidence-thin (no human PK comparison)",
         "notes": "Lipid-encapsulated ashwagandha. NooGandha (Specnova) is a branded liposomal form with clinical outcome data (PMID:38931168, 225mg/day improved cognition and cortisol in 59 subjects) but NO plasma withanolide PK comparison vs conventional extracts. Claims of enhanced bioavailability lack pharmacokinetic evidence. B30 audit 2026-04-25: liposomal evidence-thin (5th application).",
         "aliases": [
-          "nano ashwagandha",
-          "encapsulated ashwagandha",
-          "advanced delivery ashwagandha",
           "liposome ashwagandha",
-          "nano-encapsulated ashwagandha",
-          "lipid-bound ashwagandha",
-          "high-absorption ashwagandha",
           "NooGandha"
         ],
         "dosage_importance": 1.0,
@@ -20343,12 +20332,6 @@
           "ashwagandha (withania somnifera) root 15:1 extract",
           "Ashwagandha root & leaf extract",
           "Ashwagandha 7% extract",
-          "withaferin A",
-          "withaferin-A",
-          "withaferin a content",
-          "withanolide A",
-          "withanolide-A",
-          "withanolide A content",
           "withanolides",
           "total withanolides",
           "withanolide content",
@@ -20356,7 +20339,13 @@
           "glycowithanolides",
           "Withanolides/Alkaloids",
           "withanolides alkaloids",
-          "withanolides and alkaloids"
+          "withanolides and alkaloids",
+          "full-spectrum ashwagandha",
+          "root-only extract",
+          "standardized root extract",
+          "high-potency ashwagandha",
+          "standardized ashwagandha",
+          "ashwagandha leaf root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20382,7 +20371,8 @@
           "ashwagandha herb powder",
           "pure ashwagandha powder",
           "traditional ashwagandha powder",
-          "organic full-spectrum ashwagandha root powder"
+          "organic full-spectrum ashwagandha root powder",
+          "ashwaganda root powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20400,8 +20390,6 @@
         "notes": "Form not specified on the label. Ashwagandha (Withania somnifera) products range from raw root powder to highly concentrated extracts like KSM-66 and Sensoril. Withanolide content and bioavailability vary widely. Scored conservatively until the exact form is identified. B30 audit 2026-04-25: ashwagandha withanolide class baseline (B21).",
         "aliases": [
           "ashwagandha",
-          "ashwagandha leaf root extract",
-          "ashwaganda root powder",
           "ashwagandha leaf, root extract",
           "ashwaganda",
           "Sendara"
@@ -20448,8 +20436,7 @@
         "absorption": "moderate",
         "notes": "Concentrated rice protein (≥80% protein). DIAAS 0.42-0.50 (lysine-limited) vs whey at 1.09 (PMID:28382889). At 48g dose, comparable to whey for lean mass gains in trained males (PMID:23782948, Joy 2013) — but this is dose-compensated. Hypoallergenic and vegan-friendly. Low lysine is the primary limitation.",
         "aliases": [
-          "isolated rice protein",
-          "rice protein powder"
+          "isolated rice protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20468,7 +20455,8 @@
         "aliases": [
           "brown rice protein",
           "organic rice protein",
-          "sprouted rice protein"
+          "sprouted rice protein",
+          "rice protein powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20512,9 +20500,6 @@
         "notes": "Standardized to 3% rosavins and 1% salidroside (clinical gold-standard ratio, SHR-5). Salidroside well-absorbed (75-90% rat F, Panossian 2010; human plasma ~587 ng/mL at 1h). Rosavin poorly absorbed (20-26% rat F, 3x lower AUC than salidroside). Strong evidence for fatigue reduction and stress resilience. EGb-761-level standardization ensures consistent bioactive content. Evidence update 2026-04-24: PMID:18088572 (Yu 2008) measured salidroside absolute oral F=32.1% in rats — lower than the previously cited 75-90% Panossian 2010 figure (which reflected a different PK metric). Rosavin is an inactive disaccharide per PMID:18054474 (Panossian 2010 Porsolt assay). Weighted struct.value revised 0.45 → 0.35.",
         "aliases": [
           "rhodiola rosea extract",
-          "arctic root",
-          "golden root",
-          "roseroot",
           "3% rosavins 1% salidroside",
           "standardized rhodiola",
           "rhodiola extract",
@@ -20525,14 +20510,9 @@
           "rhodiola (rhodiola rosea l.) rhizome extract",
           "rhodiola rosea 3% extract",
           "Rhodiola rosea root 3% extract",
-          "rosavin",
-          "rosavins",
           "rosavin extract",
           "rhodiola rosavin",
-          "salidroside",
-          "salidrosides",
           "rhodiola salidroside",
-          "tyrosol glucoside",
           "Rhodiola rosea Root Extract"
         ],
         "dosage_importance": 1.0,
@@ -20569,9 +20549,9 @@
         }
       },
       "rhodiola (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "low-moderate (rosavin + salidroside class)",
         "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified. B33 audit 2026-04-25: rosavin/salidroside class.",
         "aliases": [
@@ -20579,7 +20559,10 @@
           "siberian rhodiola root extract",
           "Rhodiola crenulata (root) Extract",
           "Rhodiola sp.",
-          "rhodiola species"
+          "rhodiola species",
+          "arctic root",
+          "golden root",
+          "roseroot"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20616,9 +20599,9 @@
     "rxcui": "236809",
     "forms": {
       "liposomal ginkgo": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "liposomal carrier; evidence-thin (no human PK comparator); ginkgo terpene class",
         "notes": "Liposome-encapsulated ginkgo (Ginkgosome). Human crossover PK (PMID:35922794, Ried 2022, n=13): ginkgolide B AUC 1.9x higher, ginkgolide C AUC 2.2x higher, Cmax 1.7x higher vs standard GBE. One of few liposomal forms with real human PK support. Sustained-release profile. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -20628,9 +20611,7 @@
           "liposome ginkgo",
           "nano-encapsulated ginkgo",
           "lipid-bound ginkgo",
-          "high-absorption ginkgo",
-          "Ginkgo Phytosome",
-          "Ginkgo biloba, Phosphatidylserine Complex"
+          "high-absorption ginkgo"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20660,7 +20641,6 @@
           "standardized ginkgo extract",
           "ginkgo biloba standardized extract",
           "gingko extract",
-          "ginkgo flavone glycosides",
           "ginkgo biloba leaves extract",
           "ginkgo bilboa extract",
           "ginkgold ginkgo biloba extract",
@@ -20675,19 +20655,9 @@
           "Ginkgo biloba 24% extract",
           "Ginkgo (Ginkgo biloba) leaf std. extract",
           "european ginkgo biloba extract",
-          "bilobalide",
-          "ginkgo bilobalide",
-          "ginkgo terpene lactones",
-          "flavone glycosides",
           "flavonoid glycosides",
-          "ginkgolides",
-          "ginkgolide A",
-          "ginkgolide B",
-          "ginkgolide C",
-          "terpene lactones",
           "ginkgo flavonol glycosides",
-          "ginkgo flavone glycoside",
-          "terpene lactone"
+          "gingko biloba extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20723,14 +20693,13 @@
         }
       },
       "ginkgo (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "moderate (flavonoid + terpene lactone class)",
         "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed. B33 audit 2026-04-25: ginkgo class baseline.",
         "aliases": [
-          "ginkgo",
-          "gingko biloba extract"
+          "ginkgo"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20800,7 +20769,9 @@
           "milk thistle silybum marianum fruit phytosome",
           "Milk Thistle fruit extract Phytosome",
           "Siliphos Silybin Phytosome",
-          "Milk Thistle (Silybum marianum) fruit Phytosome"
+          "Milk Thistle (Silybum marianum) fruit Phytosome",
+          "Silybin Phytosome Complex",
+          "silybum phytosome"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20817,14 +20788,10 @@
         "absorption": "11-19x higher vs standard silymarin (PMID:40733088)",
         "notes": "Micelle-encapsulated silymarin (LipoMicel). Human crossover PK (PMID:40733088, 2025, n=16, 130mg): Cmax 18.9x higher, AUC0-24 11.4x higher vs standard silymarin. Tmax 0.5h vs 2.5h for standard. Superior to phytosome (3.4x) by a wide margin. Limited long-term clinical data vs phytosome.",
         "aliases": [
-          "nano silymarin",
-          "encapsulated milk thistle",
-          "advanced delivery silymarin",
           "micelle silymarin",
-          "nano-encapsulated silymarin",
           "micellar milk thistle",
-          "high-absorption silymarin",
-          "micellar silymarin complex"
+          "micellar silymarin complex",
+          "LipoMicel"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20866,9 +20833,7 @@
           "silymarin 80%",
           "silymarin standardized extract",
           "Milk Thistle seed extract",
-          "silybum marianum extract",
-          "Silybin Phytosome Complex",
-          "silybum phytosome"
+          "silybum marianum extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21020,9 +20985,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "silymarin"
-    ]
+    "aliases": []
   },
   "l_theanine": {
     "standard_name": "L-Theanine",
