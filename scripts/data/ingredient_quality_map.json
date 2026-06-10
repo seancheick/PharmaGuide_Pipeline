@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 627,
       "total_forms": 1416,
-      "total_form_aliases": 12198,
+      "total_form_aliases": 12177,
       "parents_with_parent_aliases": 116,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -14305,14 +14305,10 @@
           "pyrroloquinoline quinone disodium",
           "biopqq",
           "biopqq pyrroloquinoline quinone disodium salt",
-          "pyrroloquinoline quinone",
           "pyrroloquinoline quinone disodium salt",
           "pureqq",
           "PQQ (BioPQQ(TM)) Pyrroloquinoline quinone disodium salt",
           "Providing Pyrroloquinoline quinone",
-          "pqq acid",
-          "pyrroloquinoline quinone acid",
-          "free acid pqq",
           "pureqq pyrroloquinoline quinone"
         ],
         "dosage_importance": 1.0,
@@ -14352,13 +14348,9 @@
         "aliases": [
           "pqq (pyrroloquinoline quinone)",
           "PQQ",
-          "pqq with coq10",
-          "pqq coq10 complex",
-          "mitochondrial complex",
-          "pqq + coq10",
-          "liposomal pqq",
-          "nano pqq",
-          "encapsulated pqq"
+          "pqq acid",
+          "pyrroloquinoline quinone acid",
+          "free acid pqq"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14770,9 +14762,9 @@
     "rxcui": "9060",
     "forms": {
       "quercetin phytosome": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": false,
-        "score": 13,
+        "score": 10,
         "absorption": "phytosome lipid carrier; modest 2-4× over rutin baseline; still class-poor",
         "notes": "Indena's Quercefit — quercetin bound to sunflower lecithin (phospholipid phytosome). About 20x better absorption than standard quercetin (Riva 2019). The best-studied enhanced quercetin form with clinical data for respiratory health and antioxidant support. If you want quercetin that actually gets absorbed, this is the top choice. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -14803,7 +14795,6 @@
           "EMIQ",
           "isoquercetin",
           "enzymatically modified isoquercetin",
-          "quercetin glycoside",
           "alpha-glycosyl isoquercitrin",
           "EMIQ quercetin"
         ],
@@ -14817,14 +14808,13 @@
       },
       "quercetin dihydrate": {
         "bio_score": 6,
-        "natural": true,
-        "score": 9,
+        "natural": false,
+        "score": 6,
         "absorption": "~2%",
         "notes": "The standard unenhanced quercetin form — a yellow crystalline powder with notoriously poor absorption (~2% per Hollman 1995). Most of it passes through your gut unabsorbed. Still the most widely sold form because it's cheap. Works better when taken with fat or paired with bromelain/vitamin C, but even then absorption is limited compared to enhanced forms.",
         "aliases": [
           "quercetin",
           "quercetin bioflavonoid",
-          "Quercetin Anhydrous",
           "quercetin powder",
           "d.r.-quercetin",
           "dr quercetin",
@@ -14844,15 +14834,15 @@
       },
       "quercetin (unspecified)": {
         "bio_score": 6,
-        "natural": true,
-        "score": 9,
+        "natural": false,
+        "score": 6,
         "absorption": "poor (quercetin class-poor; <10% F)",
         "notes": "The label doesn't specify which quercetin form is used. Standard quercetin absorbs very poorly (~2%), so this gets a conservative score. Look for 'Quercefit,' 'Phytosome,' or 'EMIQ' on your label — those forms absorb 17-40x better. B33 audit 2026-04-25: quercetin class-poor (B19).",
         "aliases": [
           "quercetin complex",
           "quercetin blend",
           "quercetin extract",
-          "quercetin dihydrate"
+          "Quercetin Anhydrous"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14928,9 +14918,9 @@
         }
       },
       "s-acetyl glutathione": {
-        "bio_score": 12,
+        "bio_score": 9,
         "natural": false,
-        "score": 12,
+        "score": 9,
         "absorption": "acetylated GSH; resists γ-GT hydrolysis; modest F improvement claimed",
         "notes": "An acetylated prodrug of glutathione — the acetyl group protects the molecule from stomach acid breakdown. Once absorbed, it's rapidly deacetylated to active GSH inside cells. Clinical crossover studies show higher peak plasma GSH levels vs standard reduced GSH. The '80-90% absorption' sometimes claimed has no peer-reviewed source. A good option for people who want better-than-standard oral GSH delivery. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -14965,15 +14955,10 @@
           "opitac",
           "opitac glutathione",
           "opitac reduced glutathione",
-          "gamma-glutamylcysteines",
-          "gamma-glutamylcysteine",
           "setria l-glutathione",
           "setria l-glutathione tripeptide",
           "setria glutathione",
           "Setria",
-          "reduced glutathione with vitamin c",
-          "GSH with vitamin c",
-          "glutathione plus vitamin c",
           "reduced glutathione with vit c",
           "GSH with vit c",
           "glutathione plus vit c",
@@ -14997,10 +14982,7 @@
         "notes": "The label doesn't specify which glutathione form is used — could be standard reduced GSH (<10% absorbed), liposomal, or S-acetyl. Conservative score. Standard oral GSH is poorly absorbed, so look for 'liposomal,' 'S-acetyl,' or 'Setria' on your label. B33 audit 2026-04-25: GSH class-poor.",
         "aliases": [
           "glutathione complex",
-          "glutathione blend",
-          "oxidized glutathione",
-          "GSSG",
-          "glutathione disulfide"
+          "glutathione blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15057,18 +15039,15 @@
     "forms": {
       "glutathione peroxidase enzyme": {
         "bio_score": 4,
-        "natural": true,
-        "score": 7,
+        "natural": false,
+        "score": 4,
         "absorption": "negligible — protein enzyme (~84 kDa) degraded by GI proteolysis; no PK data exists",
         "notes": "Selenium-dependent enzyme. Oral enzyme supplementation has no clinical support — the protein is destroyed by stomach acid and intestinal proteases before absorption. Endogenous GPx production is driven by selenium intake, not oral enzyme delivery. Not commercially available as a standalone supplement.",
         "aliases": [
           "glutathione peroxidase",
           "gpx enzyme",
-          "cellular peroxidase",
-          "antioxidant enzyme gpx",
           "selenium glutathione peroxidase",
-          "glutathione peroxidase complex",
-          "gpx antioxidant enzyme"
+          "glutathione peroxidase complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15095,13 +15074,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "relationships": [
-      {
-        "type": "form_of",
-        "target_id": "glutathione",
-        "notes": "Enzyme that uses glutathione"
-      }
-    ],
+    "relationships": [],
     "external_ids": {},
     "aliases": []
   },
