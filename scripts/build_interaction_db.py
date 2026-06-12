@@ -334,6 +334,12 @@ CREATE INDEX idx_int_a1_class ON interactions(agent1_drug_class)
     WHERE agent1_drug_class IS NOT NULL;
 CREATE INDEX idx_int_a2_class ON interactions(agent2_drug_class)
     WHERE agent2_drug_class IS NOT NULL;
+-- App hot-path expression indexes: the Flutter app queries with
+-- lower(agent*_canonical_id) (defensive against mixed-case ids), which
+-- plain column indexes cannot serve. Expressions must stay char-identical
+-- to lib/data/database/interaction_database.dart _ensureAppIndexes.
+CREATE INDEX idx_int_a1_canon_lower ON interactions (lower(agent1_canonical_id));
+CREATE INDEX idx_int_a2_canon_lower ON interactions (lower(agent2_canonical_id));
 
 CREATE VIRTUAL TABLE interactions_fts USING fts5(
     id UNINDEXED,
@@ -380,6 +386,9 @@ CREATE INDEX idx_rp_cui_a   ON research_pairs(cui_a);
 CREATE INDEX idx_rp_cui_b   ON research_pairs(cui_b);
 CREATE INDEX idx_rp_rxcui_a ON research_pairs(rxcui_a) WHERE rxcui_a IS NOT NULL;
 CREATE INDEX idx_rp_rxcui_b ON research_pairs(rxcui_b) WHERE rxcui_b IS NOT NULL;
+-- App hot-path expression indexes (see interactions DDL note above).
+CREATE INDEX idx_rp_canon_a_lower ON research_pairs (lower(canonical_id_a));
+CREATE INDEX idx_rp_canon_b_lower ON research_pairs (lower(canonical_id_b));
 
 CREATE TABLE interaction_db_metadata (
     key     TEXT PRIMARY KEY,

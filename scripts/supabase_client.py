@@ -103,18 +103,35 @@ def insert_manifest(client, manifest_data):
 
 def upload_file(client, bucket, remote_path, local_path,
                 content_type="application/octet-stream",
-                upsert=True):
+                upsert=True,
+                cache_control=None):
     """Upload a file to Supabase Storage.
 
     Streams the file to avoid loading large .db files into memory.
     Returns the storage response.
+
+    `cache_control` is the max-age in seconds (as int or str). Pass
+    CACHE_CONTROL_IMMUTABLE for content-addressed / versioned paths so the
+    Supabase CDN serves them from edge instead of origin.
     """
+    file_options = {
+        "content-type": content_type,
+        "upsert": "true" if upsert else "false",
+    }
+    if cache_control is not None:
+        file_options["cache-control"] = str(cache_control)
     with open(local_path, "rb") as f:
         return client.storage.from_(bucket).upload(
             path=remote_path,
             file=f,
-            file_options={"content-type": content_type, "upsert": "true" if upsert else "false"},
+            file_options=file_options,
         )
+
+
+# One year — for immutable artifacts only: sha256-addressed detail blobs and
+# version-stamped catalog paths (v{db_version}/...). Never use for "current"
+# pointers like the manifest.
+CACHE_CONTROL_IMMUTABLE = 31536000
 
 
 def storage_object_exists(client, bucket, remote_path):

@@ -1705,6 +1705,15 @@ CREATE INDEX IF NOT EXISTS idx_core_contains_probiotics ON products_core(contain
 CREATE INDEX IF NOT EXISTS idx_core_contains_collagen ON products_core(contains_collagen) WHERE contains_collagen = 1;
 CREATE INDEX IF NOT EXISTS idx_core_contains_adaptogens ON products_core(contains_adaptogens) WHERE contains_adaptogens = 1;
 CREATE INDEX IF NOT EXISTS idx_core_contains_nootropics ON products_core(contains_nootropics) WHERE contains_nootropics = 1;
+-- App hot-path indexes (mirror Flutter _ensureAppIndexes in
+-- lib/data/database/core_database.dart — the expressions must stay
+-- char-identical or SQLite will not match them to the app's queries).
+-- findByUpc wraps upc_sku in this REPLACE chain; without the expression
+-- index the lookup is a full table scan (verified via EXPLAIN QUERY PLAN).
+CREATE INDEX IF NOT EXISTS idx_core_upc_normalized ON products_core (REPLACE(REPLACE(REPLACE(REPLACE(upc_sku, ' ', ''), '-', ''), '.', ''), '/', ''));
+-- fetchBetterAlternativesPool: partial composite so the category branch
+-- resolves via SEARCH with the score range folded into the same index.
+CREATE INDEX IF NOT EXISTS idx_core_cat_score ON products_core (primary_category, quality_score_v4_100 DESC) WHERE quality_score_status = 'scored';
 """
 
 FTS_SQL = """
@@ -6459,6 +6468,18 @@ def build_final_db(
     # FTS sync
     c.executescript(FTS_SQL)
     c.execute("INSERT INTO products_fts(products_fts) VALUES ('rebuild')")
+
+    # FTS release gate: the Flutter app's primary search path is products_fts;
+    # a catalog shipped without a populated FTS table silently degrades every
+    # client to the prefix-LIKE fallback. Fail the build, never ship it.
+    fts_count = c.execute("SELECT count(*) FROM products_fts").fetchone()[0]
+    core_count = c.execute("SELECT count(*) FROM products_core").fetchone()[0]
+    if core_count > 0 and fts_count != core_count:
+        raise RuntimeError(
+            f"products_fts row count {fts_count} != products_core {core_count} "
+            "— FTS rebuild incomplete; refusing to ship a catalog without "
+            "full-text search."
+        )
 
     # Reference data
     ref_rows = load_reference_data(script_dir)
