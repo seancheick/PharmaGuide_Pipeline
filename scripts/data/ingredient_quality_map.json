@@ -38,16 +38,16 @@
       }
     },
     "statistics": {
-      "total_parents": 627,
-      "total_forms": 1416,
-      "total_form_aliases": 12237,
-      "parents_with_parent_aliases": 183,
+      "total_parents": 628,
+      "total_forms": 1417,
+      "total_form_aliases": 12085,
+      "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
     },
     "categories": {
-      "amino_acids": 57,
-      "antioxidants": 110,
+      "amino_acids": 56,
+      "antioxidants": 111,
       "enzymes": 10,
       "fatty_acids": 64,
       "fibers": 17,
@@ -58,10 +58,10 @@
       "other": 25,
       "probiotics": 47,
       "proteins": 16,
-      "vitamins": 22
+      "vitamins": 23
     },
     "schema_version": "5.4.6",
-    "last_updated": "2026-06-08",
+    "last_updated": "2026-06-10",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1591,14 +1591,16 @@
         "verification_report": "scripts/audits/vitamin_a_20260602/api_verification.json"
       },
       "5.4.2": {
-        "date": "2026-06-06",
-        "audit": "IQM v4 defensibility audit — mechanical routing/scoring fixes",
+        "date": "2026-06-09",
+        "audit": "Open IQM audit decisions after batch 6",
         "changes": [
-          "Removed over-broad generic amino-acid aliases from branched_chain_amino_acids::bcaa 2:1:1 so generic amino-acid/EAA labels do not resolve to a premium BCAA ratio.",
-          "Removed natural-source bonus from branched_chain_amino_acids::branched chain amino acids (standard).",
-          "Lowered dha/epa/fish_oil/ceramides/hemp_seed_oil unspecified forms to bio_score 8, natural=false, score=8 so unspecified labels do not outscore disclosed lower-quality specific forms."
+          "CoQ10 crystal-free ubiquinol bio_score lowered 15->13; bio_score has no clinical-utility exception.",
+          "black_cherry reconciled to Prunus serotina/FDA BLACK CHERRY identifiers; sweet-cherry aliases removed.",
+          "dark_sweet_cherry parent added for Prunus avium/SWEET CHERRY labels with verified UNII/CUI/RxCUI.",
+          "HydroCurc lowered 10->9 and BCM-95 lowered 10->8 to stay within the signed enhanced-curcumin ladder.",
+          "Choline reclassified from amino_acids to vitamins; router impact checked against canonical choline behavior."
         ],
-        "regression_tests": "scripts/tests/test_iqm_report_mechanical_fixes.py"
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json"
       },
       "5.4.3": {
         "date": "2026-06-06",
@@ -1690,7 +1692,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 627,
+    "total_entries": 628,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -1757,13 +1759,8 @@
           "Betatene",
           "pro-vitamin A",
           "pro vitamin A",
-          "gamma-carotene",
-          "dunaliella salina",
-          "dunaliella",
           "natural algae carotene",
-          "dunaliella salina extract",
           "marine beta-carotene",
-          "D. salina",
           "mixed algal carotenoids",
           "dunaliella beta-carotene",
           "beta carotene",
@@ -2112,9 +2109,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0073115"
-    ]
+    "aliases": []
   },
   "vitamin_b1_thiamine": {
     "standard_name": "Vitamin B1 (Thiamine)",
@@ -2495,10 +2490,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0039848",
-      "C0770309"
-    ]
+    "aliases": []
   },
   "vitamin_b2_riboflavin": {
     "standard_name": "Vitamin B2 (Riboflavin)",
@@ -2507,11 +2499,11 @@
     "rxcui": "9346",
     "forms": {
       "riboflavin-5-phosphate": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": false,
-        "score": 14,
+        "score": 10,
         "absorption": "dephosphorylated to riboflavin in gut; oral F ≈ riboflavin (Zempleni 1996)",
-        "notes": "The active coenzyme form of B2 (also called FMN — flavin mononucleotide). Your body uses this form directly without conversion. Ideal for people with impaired riboflavin metabolism or who want the most bioavailable form. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Zempleni 1996 riboflavin PMID:8604671.",
+        "notes": "The active coenzyme form of B2 (also called FMN — flavin mononucleotide). Oral FMN is dephosphorylated to free riboflavin in the gut before absorption, so systemic bioavailability equals standard riboflavin; the coenzyme advantage is intracellular, not absorptive. May suit people with impaired riboflavin metabolism. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Zempleni 1996 riboflavin PMID:8604671.",
         "aliases": [
           "R5P",
           "riboflavin 5-phosphate",
@@ -2608,9 +2600,9 @@
         }
       },
       "flavin adenine dinucleotide (FAD)": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": false,
-        "score": 13,
+        "score": 10,
         "absorption": "hydrolyzed to riboflavin pre-absorption; oral F ≈ riboflavin",
         "notes": "An active coenzyme form of B2 involved in hundreds of metabolic reactions. However, oral FAD is broken down (dephosphorylated) in the gut before absorption and must be reconverted in your cells, reducing its theoretical advantage. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
@@ -2752,9 +2744,9 @@
     "rxcui": "7393",
     "forms": {
       "inositol hexanicotinate": {
-        "bio_score": 12,
+        "bio_score": 5,
         "natural": false,
-        "score": 12,
+        "score": 5,
         "absorption": "NO measurable niacin release in 6-wk human trial (Keenan 2013)",
         "notes": "A flush-free niacin form made of six niacin molecules bound to inositol. Releases niacin slowly, avoiding the uncomfortable vasodilation ('niacin flush'). Supports lipid metabolism without skin flushing. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
@@ -2788,10 +2780,7 @@
         "aliases": [
           "b3 amide",
           "b3 amide supplement",
-          "niacin & niacinamide",
-          "niacin and niacinamide",
           "niacin/niacinamide",
-          "niacinamide & niacin",
           "niacinamide supplement",
           "Niacinamide USP",
           "Niacinamide USP supplement",
@@ -2804,7 +2793,10 @@
           "non-flushing niacin supplement",
           "vit b3 amide",
           "vitamin b3 amide",
-          "vitamin b3 amide supplement"
+          "vitamin b3 amide supplement",
+          "poten-zyme niacinamide",
+          "poten zyme niacinamide",
+          "fermented niacinamide"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -2948,9 +2940,9 @@
           "Niacinamide and Niacin",
           "Niacina",
           "vit b3",
-          "poten-zyme niacinamide",
-          "poten zyme niacinamide",
-          "fermented niacinamide"
+          "niacin & niacinamide",
+          "niacin and niacinamide",
+          "niacinamide & niacin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -3086,9 +3078,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0063584"
-    ]
+    "aliases": []
   },
   "vitamin_b5_pantothenic": {
     "standard_name": "Vitamin B5 (Pantothenic Acid)",
@@ -3131,16 +3121,13 @@
         }
       },
       "pantethine": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "hydrolyzed to pantothenate + cysteamine pre-absorption (Wittwer 1985)",
-        "notes": "The active, reduced form of pantothenic acid — a direct precursor to Coenzyme A (CoA). Superior to standard pantothenic acid for supporting lipid metabolism. Clinical studies show it can help maintain healthy cholesterol levels. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Wittwer 1985 pantethine PMID:4056044.",
+        "notes": "The active, reduced form of pantothenic acid — a direct precursor to Coenzyme A (CoA). Hydrolyzed to pantothenic acid + cysteamine before absorption, so pantothenate bioavailability equals calcium pantothenate; its cholesterol-supporting effect is attributed to the cysteamine moiety, not superior B5 delivery. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x. Cited evidence: Wittwer 1985 pantethine PMID:4056044.",
         "aliases": [
-          "active b5",
-          "coenzyme a precursor",
           "pantetheine dimer",
-          "lipid-supporting b5",
           "Pantethine USP",
           "pantethine supplement",
           "active b5 supplement",
@@ -3307,8 +3294,7 @@
     },
     "aliases": [
       "panthothenic acid",
-      "pantothenic acid",
-      "C0070034"
+      "pantothenic acid"
     ],
     "match_rules": {
       "priority": 0,
@@ -3383,11 +3369,11 @@
     "rxcui": "42954",
     "forms": {
       "pyridoxal-5-phosphate (P5P)": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": false,
-        "score": 14,
+        "score": 10,
         "absorption": "P5P dephosphorylated to pyridoxal pre-absorption; F equals pyridoxine class",
-        "notes": "The biologically active coenzyme form of B6. Your body uses P5P directly in over 100 enzymatic reactions. Bypasses the liver conversion step required by other B6 forms — ideal for people with impaired conversion or liver issues. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "The biologically active coenzyme form of B6. Oral P5P is dephosphorylated to pyridoxal before absorption, so systemic bioavailability equals pyridoxine; the coenzyme advantage is intracellular (bypasses cellular conversion), relevant mainly for impaired-conversion states rather than gut absorption. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "P5P",
           "P-5-P",
@@ -3416,7 +3402,10 @@
           "plp supplement",
           "active b6 supplement",
           "Coenzyme Pyridoxal-5-Phosphate",
-          "Pyridoxal 5-Phosphate Monohydrate"
+          "Pyridoxal 5-Phosphate Monohydrate",
+          "activated vitamin b6",
+          "vitamin b6, activated",
+          "vitamin b6 activated"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3564,9 +3553,6 @@
         "aliases": [
           "Vitamin B6 (Pyridoxine)",
           "Vitamin B6",
-          "vitamin b6, activated",
-          "vitamin b6 activated",
-          "activated vitamin b6",
           "vitamin b-6",
           "vit b6",
           "poten-zyme vitamin b6",
@@ -3640,9 +3626,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0087162"
-    ]
+    "aliases": []
   },
   "vitamin_b7_biotin": {
     "standard_name": "Vitamin B7 (Biotin)",
@@ -3652,8 +3636,8 @@
     "forms": {
       "d-biotin": {
         "bio_score": 12,
-        "natural": true,
-        "score": 15,
+        "natural": false,
+        "score": 12,
         "absorption": "excellent (~100% F at pharmacologic oral doses)",
         "notes": "The natural, biologically active form of biotin (the D-enantiomer). This is what your body actually uses for metabolizing fats, carbohydrates, and proteins. The vast majority of commercial biotin supplements contain d-biotin. Top-tier B7 form. B26 audit 2026-04-25: d-biotin ~100% F at pharmacologic doses (PMID:10075337); SMVT saturable (PMID:19056639).",
         "aliases": [
@@ -3928,7 +3912,8 @@
           "5-Methyltetrahydrofolate Calcium Salt",
           "L-Methylfolate Calcium Salt",
           "L-5-Methylfolate Glucosamine Salt",
-          "L-Methylfolate Magnesium, Molar"
+          "L-Methylfolate Magnesium, Molar",
+          "methylated folate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4231,11 +4216,9 @@
     },
     "aliases": [
       "folate and folic acid",
-      "methylated folate",
       "folic acid",
       "Folate",
-      "folate",
-      "C0178638"
+      "folate"
     ],
     "match_rules": {
       "priority": 0,
@@ -4384,8 +4367,7 @@
           "hydroxy b12",
           "hydroxo b12",
           "vitamin b12a",
-          "hydroxycobalamin",
-          "injectable b12"
+          "hydroxycobalamin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -4475,8 +4457,7 @@
       "adenosylcobalamin",
       "hydroxocobalamin",
       "methyl b12",
-      "methyl b-12",
-      "C0020316"
+      "methyl b-12"
     ],
     "match_rules": {
       "priority": 0,
@@ -4556,7 +4537,6 @@
         "aliases": [
           "ester-c",
           "ester-c complex",
-          "vitamin c ester",
           "patented vitamin c",
           "Ester-C Calcium Ascorbate",
           "Proprietary Esterified Complex",
@@ -4565,7 +4545,6 @@
           "ester-c supplement",
           "ester-c complex supplement",
           "vitamin c ester supplement",
-          "vit c ester",
           "patented vitamin c supplement",
           "patented vit c",
           "calcium ascorbate threonate supplement",
@@ -4972,11 +4951,7 @@
       "PureWay-C",
       "PureWay C",
       "Vitamin C, Natural",
-      "Natural Vitamin C",
-      "C0887557",
-      "C0049690",
-      "C0011177",
-      "C0178487"
+      "Natural Vitamin C"
     ],
     "external_ids": {
       "unii": "PQ6CK8PD0R"
@@ -5179,9 +5154,9 @@
         }
       },
       "micellized D3": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "micellar emulsion; modest improvement over standard D3 in low-fat conditions",
         "notes": "D3 processed into water-soluble micelles for enhanced absorption without requiring dietary fat. Especially important for people with fat malabsorption (Crohn's, celiac, cystic fibrosis, post-bariatric surgery) who struggle to absorb standard fat-soluble D3. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -5207,9 +5182,9 @@
         }
       },
       "liposomal D3": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "liposomal carrier; claims of enhanced uptake — limited human PK data",
         "notes": "D3 encapsulated in phospholipid liposomes for improved cellular uptake. Protects the vitamin through the GI tract and delivers it efficiently. A premium delivery format, though head-to-head data vs standard D3-in-oil is limited. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -5606,9 +5581,9 @@
         }
       },
       "tocotrienols": {
-        "bio_score": 12,
+        "bio_score": 9,
         "natural": true,
-        "score": 15,
+        "score": 12,
         "absorption": "lipid-dependent F; minimal α-TTP retention; short plasma half-life vs tocopherols",
         "notes": "A distinct class of vitamin E found in palm oil, rice bran, and annatto. Emerging research shows tocotrienols (especially delta and gamma forms) have potent antioxidant, neuroprotective, and cholesterol-lowering properties that tocopherols lack. A cutting-edge vitamin E category. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper. Cited evidence: Yap & Yuen 2004 tocotrienol PMID:15288344.",
         "aliases": [
@@ -5939,9 +5914,7 @@
       "unii": null,
       "unii_note": "Cleared 2026-05-27: KP2MW85SSQ resolves to TOCOTRIENOLS, which is not an exact UNII for Vitamin E. Vitamin E spans tocopherols and tocotrienols; tocotrienols are a narrower subclass. Leave UNII null until GSRS exposes an exact approved record."
     },
-    "aliases": [
-      "C0949647"
-    ],
+    "aliases": [],
     "rxcui": "11256"
   },
   "vitamin_k": {
@@ -6022,7 +5995,9 @@
           "trans mk7 supplement",
           "active mk7 supplement",
           "all trans menaquinone-7 supplement",
-          "bioactive mk7 supplement"
+          "bioactive mk7 supplement",
+          "K2 Vital Delta",
+          "K2VITAL Delta"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6033,9 +6008,9 @@
         }
       },
       "menaquinone-4 (MK-4)": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "MK-4 at 420 μg nutritional dose: NOT detectable in serum (Sato 2012)",
         "notes": "The short-chain form of vitamin K2, naturally produced in human tissues from K1. Rapidly absorbed but has a very short half-life (~1-2 hours), requiring multiple daily doses or high single doses (typically 15-45 mg in Japanese studies). Best studied for bone density. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -6336,10 +6311,7 @@
       "last_reviewed_at": "2026-02-26",
       "research_status": "validated"
     },
-    "aliases": [
-      "K2 Vital Delta",
-      "K2VITAL Delta"
-    ],
+    "aliases": [],
     "external_ids": {},
     "rxcui_note": "Generic vitamin K entry spans K1 and K2 vitamers; keep RxNorm null unless the record is split to a specific vitamer.",
     "rxcui": null
@@ -6474,7 +6446,8 @@
           "microcrystalline hydroxyapatite supplement",
           "bone calcium supplement",
           "hydroxyapatite calcium supplement",
-          "MCHC supplement"
+          "MCHC supplement",
+          "hydroxyapatite"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -6603,7 +6576,6 @@
           "oyster shell calcium supplement",
           "cal carbonate supplement",
           "tums calcium supplement",
-          "dolomite",
           "eggshell calcium",
           "calcium from eggshell"
         ],
@@ -6871,17 +6843,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C3540037",
-      "C0006711",
-      "C0006681",
-      "C0006686",
-      "C0108101",
-      "C0108121",
-      "C0717537",
-      "C0556252",
-      "C0949222"
-    ]
+    "aliases": []
   },
   "phosphorus": {
     "standard_name": "Phosphorus",
@@ -6892,8 +6854,8 @@
     "forms": {
       "phosphate salts": {
         "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "natural": false,
+        "score": 10,
         "absorption": "good (depends on salt, ~40–60%)",
         "notes": "Phosphorus delivered via common phosphate salts (mono/di/tricalcium phosphate, sodium phosphate, potassium phosphate). Essential for bone structure, ATP energy production, and DNA synthesis. Well-absorbed at ~40-60% depending on the specific salt and dietary context.",
         "aliases": [
@@ -6906,9 +6868,6 @@
           "tricalcium phosphate",
           "tribasic calcium phosphate",
           "TCP",
-          "microcrystalline hydroxyapatite",
-          "calcium hydroxyapatite",
-          "hydroxyapatite",
           "phosphorus from calcium phosphate",
           "phosphorus from tricalcium phosphate",
           "phosphorus from hydroxyapatite"
@@ -6969,8 +6928,7 @@
     "aliases": [
       "orgen-p",
       "plant phosphorus",
-      "organic phosphorus",
-      "C0080014"
+      "organic phosphorus"
     ],
     "match_rules": {
       "priority": 0,
@@ -7015,7 +6973,7 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "80%+",
+        "absorption": "well-absorbed chelate; class-typical soluble-Mg F, not proven superior to citrate/lactate/aspartate (no head-to-head human PK; NIH ODS)",
         "notes": "Magnesium glycinate/bisglycinate is a plausible premium, gentle chelated form, but the clinician/API pass did not verify direct human comparative evidence proving it is superior to citrate/aspartate/chloride/lactate. Scored as good/solid bioavailability rather than top-tier. API evidence trail: scripts/audits/mineral_forms_20260602/api_verification.json.",
         "aliases": [
           "magnesium bisglycinate",
@@ -7638,16 +7596,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Magnesium Chelate",
-      "C2346927",
-      "C0024472",
-      "C0024477",
-      "C0543448",
-      "C0126774",
-      "C0065527",
-      "C0982266",
-      "C1958566",
-      "C3855809"
+      "Magnesium Chelate"
     ],
     "external_ids": {
       "unii": "I38ZP9992A"
@@ -7766,9 +7715,7 @@
           "heme iron",
           "proferrin",
           "hip",
-          "animal-source iron",
-          "beef liver iron",
-          "liver iron"
+          "animal-source iron"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7860,7 +7807,8 @@
           "elemental iron",
           "pure iron powder",
           "Ferronyl Iron",
-          "Ferronyl"
+          "Ferronyl",
+          "ferronyl carbonyl iron"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8156,14 +8104,7 @@
         }
       }
     },
-    "aliases": [
-      "ferronyl carbonyl iron",
-      "C0376520",
-      "C3848561",
-      "C0060282",
-      "C0060276",
-      "C2346592"
-    ],
+    "aliases": [],
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -8245,7 +8186,7 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high (87%)",
+        "absorption": "soluble chelate; good absorption but human comparator data thin; not proven superior to citrate/gluconate (~61%, NIH ODS)",
         "notes": "Zinc picolinate is a strong premium candidate, but PubMed/API-verified evidence does not justify a unique max score over all other soluble zinc forms. Clinician recalibration 2026-06-02: excellent, but not proven best. Barrie 1987 (PMID:3630857) remains historical support, while modern zinc form reviews and direct human data keep it below the reserved top score.",
         "aliases": [
           "picolinate zinc",
@@ -8455,8 +8396,7 @@
           "zinc",
           "zn",
           "zinc supplement",
-          "zinmax",
-          "zinc arginate"
+          "zinmax"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8524,7 +8464,8 @@
           "zinc protein chelate",
           "zinc proteinate",
           "amino acid chelated zinc",
-          "hydrolyzed protein zinc chelate"
+          "hydrolyzed protein zinc chelate",
+          "zinc arginate"
         ],
         "dosage_importance": 0.7,
         "absorption_structured": {
@@ -8761,11 +8702,7 @@
       }
     },
     "aliases": [
-      "zinc chelate",
-      "C0078794",
-      "C0149368",
-      "C0149381",
-      "C2346521"
+      "zinc chelate"
     ],
     "match_rules": {
       "priority": 0,
@@ -8814,9 +8751,7 @@
         "notes": "The highest-quality slippery elm preparation, made from the inner bark which contains the highest concentration of mucilage — a gel-forming fiber that coats and soothes irritated mucous membranes. Traditionally used for sore throat, cough, acid reflux, and inflammatory bowel conditions. The demulcent coating protects tissue from irritation. B23 audit 2026-04-25: CATEGORY ERROR — mucilage local action.",
         "aliases": [
           "slippery elm inner bark",
-          "slippery elm bark powder",
           "ulmus rubra inner bark",
-          "slippery elm powder",
           "inner slippery elm bark",
           "slippery elm inner bark supplement",
           "slippery elm bark powder supplement",
@@ -8883,7 +8818,9 @@
           "red elm",
           "indian elm",
           "moose elm",
-          "Ulmus fulva, Powder"
+          "Ulmus fulva, Powder",
+          "slippery elm bark powder",
+          "slippery elm powder"
         ],
         "dosage_importance": 1.0,
         "absorption": "category_error (mucilage; not systemic)",
@@ -8964,7 +8901,6 @@
         "absorption": "90%+",
         "notes": "The premium organic selenium form — an amino acid (methionine) with selenium replacing sulfur. Your body incorporates it directly into proteins, creating a selenium reserve that's released as needed. ~90% absorbed. The form used in the landmark SELECT and NPC cancer prevention trials.",
         "aliases": [
-          "organic selenium",
           "l-selenomethionine",
           "methionine-bound selenium",
           "selenomethionine supplement",
@@ -9070,7 +9006,7 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "50%",
+        "absorption": "well absorbed in humans (~85%+, NIH ODS); lower selenoprotein retention than organic Se forms",
         "notes": "The most common inorganic selenium form in supplements. An inorganic salt (Na2SeO3) that must be reduced and then converted to organic selenium species in your body. ~50% absorbed, but poorly retained compared to organic forms. Can generate oxidative stress during metabolism at high doses.",
         "aliases": [
           "selenious acid sodium",
@@ -9096,7 +9032,7 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "45%",
+        "absorption": "well absorbed in humans (~90%+, NIH ODS); lower tissue retention than organic Se (selenomethionine/yeast)",
         "notes": "An inorganic selenium salt (Na2SeO4) similar to selenite but even less efficiently retained. Must undergo multiple conversion steps to become biologically active. Higher toxicity risk at elevated doses than organic forms. Used in some water treatment and food fortification applications.",
         "aliases": [
           "selenic acid sodium",
@@ -9402,14 +9338,7 @@
       "last_reviewed_at": "2026-02-26",
       "research_status": "validated"
     },
-    "aliases": [
-      "SelenoExcell",
-      "C0142923",
-      "C0036584",
-      "C0074765",
-      "C0074289",
-      "C0074299"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "H6241UJ22B"
     },
@@ -9455,7 +9384,6 @@
           "bioastin",
           "astareal",
           "zanthin",
-          "natural carotenoid",
           "algae-based astaxanthin",
           "astaxanthin algae",
           "h. pluvialis extract",
@@ -9467,7 +9395,6 @@
           "bioastin supplement",
           "astareal supplement",
           "zanthin supplement",
-          "natural carotenoid supplement",
           "algae-based astaxanthin supplement",
           "astaxanthin algae supplement",
           "h. pluvialis extract supplement",
@@ -9530,9 +9457,9 @@
         }
       },
       "unspecified astaxanthin": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "low/variable when fat-matrix unknown; reference Cmax ~3.86 µg/mL (Khayyal 2024)",
         "notes": "The supplement label says astaxanthin but does not specify natural (algae-derived) or synthetic. This distinction matters — natural astaxanthin from Haematococcus pluvialis has far more clinical support. If the source isn't specified, it may be the cheaper synthetic version. Evidence update 2026-04-24: Khayyal 2024 (PMID:38748358, n=12 males, 8mg crossover) reference (non-micellar) astaxanthin gave Cmax only 3.86 µg/mL vs 7.21 µg/mL for micellar formulation, confirming unformulated/unspecified astaxanthin defaults to lower bioavailability than fat-optimized forms.",
         "aliases": [
@@ -9765,9 +9692,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0019392"
-    ]
+    "aliases": []
   },
   "creatine_monohydrate": {
     "standard_name": "Creatine Monohydrate",
@@ -9812,9 +9737,9 @@
         }
       },
       "buffered creatine monohydrate": {
-        "bio_score": 12,
+        "bio_score": 13,
         "natural": false,
-        "score": 12,
+        "score": 13,
         "absorption": "same F as monohydrate; buffering claim unsupported (Jagim 2012)",
         "notes": "Buffered with alkaline compounds to resist stomach acid breakdown. Marketed as Kre-Alkalyn. Head-to-head trials (Jagim 2012) found no advantage over standard monohydrate in strength, body composition, or muscle creatine levels. Scores lower because the added cost brings no proven benefit. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9834,9 +9759,9 @@
         }
       },
       "creatine nitrate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "salt dissociates to creatine ion; F equivalent to monohydrate",
         "notes": "Creatine bonded to a nitrate group. Theoretically combines creatine's ATP-regeneration benefits with nitrate-driven nitric oxide vasodilation. Limited independent research; most evidence comes from multi-ingredient pre-workouts, making it hard to isolate creatine nitrate's specific contribution. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9858,9 +9783,9 @@
         }
       },
       "creatine hydrochloride": {
-        "bio_score": 10,
+        "bio_score": 13,
         "natural": false,
-        "score": 10,
+        "score": 13,
         "absorption": "higher solubility, same F; no human PK advantage shown (Jäger 2007)",
         "notes": "Creatine bonded to hydrochloric acid, making it extremely water-soluble — roughly 40x more soluble than monohydrate. Marketed as Con-Cret. This means smaller doses dissolve fully, reducing bloating. However, no published trial shows it loads muscles faster or produces greater strength gains than monohydrate at equivalent creatine doses. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9886,9 +9811,9 @@
         }
       },
       "creatine ethyl ester": {
-        "bio_score": 8,
+        "bio_score": 4,
         "natural": false,
-        "score": 8,
+        "score": 4,
         "absorption": "hydrolyzes to creatinine pre-absorption; near-zero functional F (Giese 2009)",
         "notes": "An esterified creatine designed to cross cell membranes without a transporter. In practice, studies (Spillane 2009) show it rapidly converts to creatinine (an inactive waste product) in the stomach, delivering far less creatine to muscles than standard monohydrate. Not recommended — low score reflects poor real-world effectiveness. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9912,9 +9837,9 @@
         }
       },
       "creatine citrate": {
-        "bio_score": 10,
+        "bio_score": 13,
         "natural": false,
-        "score": 10,
+        "score": 13,
         "absorption": "same F as monohydrate, faster Tmax only (Jäger 2007)",
         "notes": "Creatine bonded to citric acid for improved water solubility. Dissolves more easily than monohydrate, which can help with mixing. However, the citrate salt adds molecular weight, meaning you get less actual creatine per gram (~40% creatine by weight vs ~88% for monohydrate). No trials show superior efficacy to monohydrate. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9930,9 +9855,9 @@
         }
       },
       "creatine magnesium chelate": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": false,
-        "score": 11,
+        "score": 13,
         "absorption": "chelate dissociates; F equivalent to monohydrate",
         "notes": "Creatine chelated with magnesium — marketed as MagnaPower. The magnesium may help creatine convert to phosphocreatine more efficiently, and one study (Brilla 2003) showed comparable strength gains to monohydrate at a lower dose. Provides both creatine and magnesium in one compound. Limited research compared to monohydrate keeps the score moderate. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -9952,9 +9877,9 @@
         }
       },
       "dicreatine malate": {
-        "bio_score": 6,
+        "bio_score": 12,
         "natural": false,
-        "score": 6,
+        "score": 12,
         "absorption": "no human PK; theoretical F equivalent via salt dissociation",
         "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -10057,9 +9982,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0010286"
-    ]
+    "aliases": []
   },
   "hmb": {
     "standard_name": "β-Hydroxy β-Methylbutyrate",
@@ -10068,8 +9991,7 @@
     "aliases": [
       "HMB",
       "beta-hydroxy-beta-methylbutyrate",
-      "hydroxy-beta-methylbutyrate",
-      "C3640807"
+      "hydroxy-beta-methylbutyrate"
     ],
     "forms": {
       "hmb calcium salt (hmb-ca)": {
@@ -10116,7 +10038,8 @@
           "calcium hydroxymethyl butyrate monohydrate",
           "Calcium Beta-Hydroxy Beta-Methylbutyrate Monohydrate",
           "Calcium B-hydroxy-B-methylbutyrate",
-          "calcium beta-hydroxy-beta-methylbutyrate"
+          "calcium beta-hydroxy-beta-methylbutyrate",
+          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10127,9 +10050,9 @@
         }
       },
       "hmb free acid (hmb-fa)": {
-        "bio_score": 15,
+        "bio_score": 13,
         "natural": false,
-        "score": 15,
+        "score": 13,
         "absorption": "excellent (~90-95%)",
         "notes": "The free acid (liquid gel) form of HMB — absorbs roughly twice as fast as the calcium salt, reaching peak blood levels in 30–60 minutes vs 2–3 hours. Bioavailability is 90–95%, the highest of any HMB form. Ideal for pre-workout timing when rapid anti-catabolic protection is needed. Marketed as MyHMB Clear. Higher score reflects the superior pharmacokinetics.",
         "aliases": [
@@ -10164,8 +10087,7 @@
           "free form hmb supplement",
           "3-hydroxy-3-methylbutyrate free acid supplement",
           "Beta-Hydroxy Beta-Methylbutyric",
-          "beta-hydroxy beta-methylbutyric acid",
-          "Beta-Hydroxy Beta-Methylbutyrate Monohydrate"
+          "beta-hydroxy beta-methylbutyric acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10203,10 +10125,10 @@
     "forms": {
       "d-ribose powder": {
         "bio_score": 14,
-        "natural": true,
-        "score": 17,
+        "natural": false,
+        "score": 14,
         "absorption": "excellent (~95%+)",
-        "notes": "A naturally occurring 5-carbon sugar that is the backbone of ATP, the cell's energy molecule. Your body makes ribose, but production is slow in heart and skeletal muscle after exertion. Supplementing 5 g/day replenishes ATP stores faster — clinical trials show improved cardiac output in heart failure patients and reduced post-exercise fatigue. BioEnergy Ribose is the leading branded source. High score reflects strong absorption (95%+) and well-documented clinical benefits.",
+        "notes": "A naturally occurring 5-carbon sugar that is the backbone of ATP, the cell's energy molecule. Your body makes ribose, but production is slow in heart and skeletal muscle after exertion. Supplementing 5 g/day replenishes ATP stores faster — clinical trials show improved cardiac output in heart failure patients and reduced post-exercise fatigue. BioEnergy Ribose is the leading branded source. Score reflects high oral absorption (~95%, Thompson 2014 PMID:24272966); ATP/cardiac/fatigue effects are indication context, not absorption inputs.",
         "aliases": [
           "d-ribose",
           "ribose",
@@ -10282,25 +10204,15 @@
     "rxcui": "318",
     "forms": {
       "atp disodium salt": {
-        "bio_score": 11,
-        "natural": true,
-        "score": 14,
-        "absorption": "moderate (~40-60%)",
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "poor — oral ATP is dephosphorylated in the gut, not absorbed intact (Arts 2012 PMID:22429945); benefits attributed to indirect/erythrocyte mechanisms",
         "notes": "Oral ATP as a disodium salt — branded as Peak ATP. While intact ATP is mostly degraded in the gut, the breakdown products (adenosine, AMP) still activate purinergic receptors that dilate blood vessels and increase blood flow. A 400 mg/day dose showed improved strength, power output, and lean body mass in resistance-trained athletes (Wilson 2013, Rathmacher 2012). Score reflects moderate but real ergogenic benefit despite limited intact-molecule absorption.",
         "aliases": [
-          "atp",
-          "adenosine triphosphate",
-          "adenosine 5'-triphosphate",
           "atp disodium",
-          "cellular energy",
-          "energy currency",
-          "atp supplement",
-          "adenosine triphosphate supplement",
-          "adenosine 5'-triphosphate supplement",
           "atp disodium supplement",
           "atp disodium salt supplement",
-          "cellular energy supplement",
-          "energy currency supplement",
           "Peak ATP",
           "Peak ATP Adenosine 5'-Triphosphate Disodium",
           "adenosine 5' triphosphate disodium",
@@ -10316,15 +10228,21 @@
         }
       },
       "atp (adenosine triphosphate) (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 6,
         "natural": false,
-        "score": 14,
+        "score": 6,
         "absorption": "unknown",
         "notes": "Generic ATP listing without a specified salt form. Cannot determine bioavailability or purity. Conservative score applied — look for Peak ATP (disodium salt) for the clinically studied version. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
           "atp (adenosine triphosphate)",
           "atp energy supplement",
-          "cellular atp"
+          "cellular atp",
+          "atp",
+          "adenosine triphosphate",
+          "adenosine 5'-triphosphate",
+          "atp supplement",
+          "adenosine triphosphate supplement",
+          "adenosine 5'-triphosphate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10555,7 +10473,6 @@
         "notes": "Acid- or alkali-precipitated casein bound to calcium for solubility. Loses native micellar structure and slow-release kinetics — performs more like an intermediate-rate protein. Common in mass-market protein blends.",
         "aliases": [
           "calcium caseinate",
-          "milk caseinate",
           "calcium-caseinate"
         ],
         "dosage_importance": 1.0,
@@ -10575,7 +10492,8 @@
         "aliases": [
           "casein",
           "milk casein",
-          "casein protein"
+          "casein protein",
+          "milk caseinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10590,7 +10508,6 @@
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
-      "parent_id": "casein_hydrolysate",
       "confidence": "high"
     },
     "category_enum": "proteins",
@@ -10622,15 +10539,15 @@
   "black_cherry": {
     "standard_name": "Black Cherry",
     "category": "antioxidants",
-    "cui": "C5551209",
-    "rxcui_note": "No RxNorm concept for whole-fruit botanical concentrate (Prunus avium); UNII A77056YJ4K and UMLS CUI C5551209 are the canonical identifiers.",
+    "cui": "C0330655",
+    "rxcui_note": "No RxNorm ingredient concept for Prunus serotina fruit/black cherry botanical concentrate; GSRS BLACK CHERRY carries UNII A77056YJ4K and CAS 84604-07-9.",
     "forms": {
       "black cherry concentrate": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "moderate (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
-        "notes": "Concentrate / juice extract from Prunus avium (sweet black cherry) — botanically distinct from tart cherry / Montmorency (Prunus cerasus). Marketed primarily for gout / uric acid management based on anthocyanin (cyanidin-3-glucoside, cyanidin-3-rutinoside) inhibition of xanthine oxidase. Pilot RCT evidence for serum urate reduction (Zhang 2012, n=633 cohort study; small RCTs at 8 oz juice/day equivalent show acute urate reduction). Anti-inflammatory and antioxidant via anthocyanin and chlorogenic acid content. Anthocyanin oral PK is poor (~1-2% appears intact in plasma) but metabolites have measurable activity. Score reflects moderate evidence base with characterised mechanism; sits below tart cherry forms because most published RCTs use tart-cherry specifically.",
+        "absorption": "low (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
+        "notes": "Concentrate / juice extract from Prunus serotina (wild black cherry), matching the FDA/GSRS BLACK CHERRY substance and botanical_ingredients.black_cherry identity. Botanically distinct from sweet/dark sweet cherry (Prunus avium) and tart cherry (Prunus cerasus). Anthocyanin oral PK is low (~1-2% intact; metabolites detectable), so score remains conservative. Sweet-cherry aliases moved to dark_sweet_cherry to avoid species and identifier conflation.",
         "aliases": [
           "black cherry",
           "black cherry concentrate",
@@ -10638,11 +10555,12 @@
           "black cherry fruit extract",
           "black cherry juice concentrate",
           "black cherry juice extract",
-          "sweet cherry extract",
-          "sweet cherry concentrate",
-          "prunus avium",
-          "prunus avium extract",
-          "prunus avium fruit extract"
+          "black cherry fruit",
+          "wild black cherry",
+          "wild cherry fruit",
+          "prunus serotina",
+          "prunus serotina extract",
+          "prunus serotina fruit extract"
         ],
         "dosage_importance": 0.85,
         "absorption_structured": {
@@ -10671,7 +10589,7 @@
     "external_ids": {
       "unii": "A77056YJ4K",
       "cas": "84604-07-9",
-      "cas_note": "Clinician-adjudicated 2026-05-27: PubChem has no single compound CID for this botanical/protein/enzyme/mixture CAS; GSRS exact record A77056YJ4K (BLACK CHERRY) lists CAS 84604-07-9."
+      "cas_note": "Verified 2026-06-09: GSRS exact BLACK CHERRY record lists UNII A77056YJ4K and CAS 84604-07-9. PubChem has no single compound CID for this botanical/mixture CAS. UMLS botanical identity Prunus serotina is C0330655. Sweet cherry/Prunus avium is separated to dark_sweet_cherry."
     },
     "gsrs": {
       "substance_name": "BLACK CHERRY",
@@ -10684,7 +10602,22 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "rxcui": null,
+    "api_verification": {
+      "identity_reconciled_20260609": {
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json",
+        "gsrs_exact": {
+          "name": "BLACK CHERRY",
+          "unii": "A77056YJ4K",
+          "cas": "84604-07-9"
+        },
+        "umls_exact": {
+          "name": "Prunus serotina",
+          "cui": "C0330655"
+        }
+      }
+    }
   },
   "phosphatidylcholine": {
     "standard_name": "Phosphatidylcholine",
@@ -10699,10 +10632,7 @@
         "absorption": "good (lecithin-derived; hydrolysed and re-synthesised in enterocytes)",
         "notes": "Most abundant cell-membrane phospholipid and the major lecithin component (~20-25% of soy lecithin). Major dietary choline source — supports acetylcholine synthesis (cognitive), VLDL assembly (liver/lipid metabolism), and lung surfactant. Soy-derived form is the most extensively studied; oral PC is hydrolysed to lyso-PC and free fatty acids in the gut, then re-esterified to PC in enterocytes — meaning intact PC is delivered to the bloodstream. Strong clinical evidence for liver health (NAFLD support, alcohol-related liver injury) at 1-3 g/day. Polyenylphosphatidylcholine (PPC) is a clinical-grade enriched form used in NAFLD trials.",
         "aliases": [
-          "phosphatidylcholine",
           "phosphatidyl-choline",
-          "phosphatidyl choline complex",
-          "phosphatidylcholine complex",
           "soy phosphatidylcholine",
           "soybean phosphatidylcholine",
           "soy-derived phosphatidylcholine",
@@ -10742,13 +10672,16 @@
       },
       "phosphatidylcholine (unspecified)": {
         "bio_score": 11,
-        "natural": true,
-        "score": 14,
+        "natural": false,
+        "score": 11,
         "absorption": "good (estimated; default for unsourced PC)",
         "notes": "Unspecified phosphatidylcholine (label does not declare soy / sunflower / synthetic source). Slightly lower default score because source-specific bioavailability and allergen profile cannot be confirmed.",
         "aliases": [
           "phosphatidyl choline (unspecified)",
-          "pc (unspecified)"
+          "pc (unspecified)",
+          "phosphatidylcholine",
+          "phosphatidylcholine complex",
+          "phosphatidyl choline complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11034,8 +10967,6 @@
           "muramidase",
           "lysozyme chloride",
           "egg white lysozyme",
-          "antimicrobial enzyme",
-          "immune enzyme",
           "lysozyme supplement",
           "lysozyme enzyme supplement",
           "muramidase supplement",
@@ -11197,8 +11128,7 @@
     },
     "aliases": [
       "DIM",
-      "diindolylmethane",
-      "C0163151"
+      "diindolylmethane"
     ]
   },
   "resveratrol": {
@@ -11223,12 +11153,7 @@
           "resvida",
           "resvinol-25",
           "resveratrol 50% extract",
-          "hu zhang",
-          "hu zhang extract",
-          "hu zhang root extract",
-          "hu zhang hydroethanolic extract",
           "Veri-te resveratrol",
-          "Reynoutria japonica root extract",
           "BioVin",
           "biovin advanced red wine extract",
           "biovin advanced"
@@ -11253,7 +11178,12 @@
           "Total Resveratrol",
           "resveratrol supplement",
           "grape resveratrol",
-          "MicroActive Resveratrol"
+          "MicroActive Resveratrol",
+          "hu zhang",
+          "hu zhang extract",
+          "hu zhang root extract",
+          "hu zhang hydroethanolic extract",
+          "Reynoutria japonica root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11364,9 +11294,9 @@
     "rxcui": "236344",
     "forms": {
       "liposomal saw palmetto": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
+        "score": 8,
         "absorption": "liposomal saw palmetto; mechanistic claim; lipid baseline already good (oral lipid)",
         "technology": "Phospholipid encapsulation technology",
         "notes": "Saw palmetto's active fatty acids (lauric, oleic, myristic) wrapped in phospholipid liposomes for enhanced gut absorption — claimed 2–3x greater bioavailability than conventional extracts. Liposomal delivery protects the lipophilic compounds from bile salt disruption. Limited head-to-head trials vs CO2 extract specifically, but the delivery technology is well-established for fat-soluble botanicals. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
@@ -11496,17 +11426,14 @@
           "liposterolic serenoa",
           "saw palmetto berry extract",
           "fatty acid-rich saw palmetto",
-          "prostate health extract",
           "USP-grade saw palmetto",
           "hexane-extracted saw palmetto",
           "ethanol-extracted saw palmetto",
           "concentrated saw palmetto",
           "active compound saw palmetto",
           "sabal serrulata extract",
-          "herbal prostate formula",
           "BP/EP compliant extract",
           "phytosterol-rich saw palmetto",
-          "lauric acid saw palmetto",
           "myristic acid saw palmetto",
           "oleic acid saw palmetto",
           "palmitic acid saw palmetto",
@@ -11616,8 +11543,6 @@
           "Saw Palmetto (Serenoa repens) Fruit Extract 12:1",
           "Fatty Acids and Sterols",
           "saw palmetto fatty acids and sterols",
-          "mytosterone(r) saw palmetto berries (serenoa repens) and astaxanthin",
-          "mytosterone saw palmetto",
           "Serenoa repens"
         ],
         "dosage_importance": 1.0,
@@ -11678,16 +11603,10 @@
           "urtica dioica root",
           "urtica root",
           "nettle root",
-          "urtica dioica extract",
-          "stinging and dwarf nettle extracts",
-          "stinging nettles extract",
           "urtica dioca",
           "nettle urtica dioica root aqueous extract",
-          "standardized nettle extract",
           "standardized nettle root extract",
           "stinging netter aqueous extract",
-          "nettle extract 10:1",
-          "nettles",
           "stinging nettle urtica dioica root extract 10:1",
           "stinging nettle (urtica dioica) root 10:1 extract",
           "Stinging Nettle (Urtica dioica) Root Extract 10:1",
@@ -11724,9 +11643,9 @@
         }
       },
       "stinging nettle (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "good (stinging nettle phenolic + lectin class)",
         "notes": "Generic nettle listing without specifying root or leaf. This matters because the root and leaf have different active compounds and clinical uses — root for prostate/BPH, leaf for allergies and minerals. Conservative score applied since the specific plant part cannot be determined. B33 audit 2026-04-25: stinging nettle class.",
         "aliases": [
@@ -11736,7 +11655,13 @@
           "urtica",
           "stinging nettle freeze-dried",
           "stinging nettle, freeze-dried",
-          "Stinging & Dwarf Nettle Extracts"
+          "Stinging & Dwarf Nettle Extracts",
+          "urtica dioica extract",
+          "stinging and dwarf nettle extracts",
+          "stinging nettles extract",
+          "standardized nettle extract",
+          "nettle extract 10:1",
+          "nettles"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11777,9 +11702,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0600609"
-    ]
+    "aliases": []
   },
   "pygeum": {
     "standard_name": "Pygeum",
@@ -11818,9 +11741,9 @@
         }
       },
       "pygeum (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 8,
         "natural": false,
-        "score": 14,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Generic pygeum listing without specifying standardization or extraction method. Look for products standardized to 14% triterpenes and 0.5% n-docosanol for clinical-grade potency. Conservative score applied. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -11884,13 +11807,11 @@
           "vanadium sulfate",
           "VOSO4",
           "VOSO₄",
-          "vanadyl",
           "vanadyl sulfate hydrate",
           "vanadyl sulfate supplement",
           "vanadium sulfate supplement",
           "VOSO4 supplement",
-          "VOSO₄ supplement",
-          "vanadyl supplement"
+          "VOSO₄ supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -11904,7 +11825,7 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "high (~10–15%)",
+        "absorption": "low (vanadium class baseline; BMOV human PK is research-grade/thin, not a proven absorption advantage over vanadyl sulfate)",
         "notes": "An organovanadium chelate designed for better oral absorption — 3–5x more bioavailable than vanadyl sulfate and with a wider safety margin. BMOV showed stronger insulin-mimetic activity in diabetic animal models (Thompson 2009). Still primarily research-grade and rarely found in consumer supplements. Higher score reflects the improved pharmacokinetics over inorganic vanadium. Dr Pham C12 sign-off: bio_score 12 → 7, struct.value 0.125 → 0.02. Speciation difference, NOT absorption miracle.",
         "aliases": [
           "bis maltolato oxovanadium",
@@ -11981,7 +11902,9 @@
           "vanadium glycinate",
           "Vanadium Nicotinate Glycinate Chelate",
           "Vanadium Krebs Cycle Chelates",
-          "Bis-Glycinato Oxo Vanadium"
+          "Bis-Glycinato Oxo Vanadium",
+          "vanadyl",
+          "vanadyl supplement"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -12070,8 +11993,8 @@
     "forms": {
       "myo-inositol": {
         "bio_score": 10,
-        "natural": true,
-        "score": 13,
+        "natural": false,
+        "score": 10,
         "absorption": "good (~70–90%)",
         "notes": "The most abundant naturally occurring inositol isomer — your body makes it and it's found in fruits, beans, and grains. Myo-inositol is a second messenger in insulin signaling and plays a critical role in ovarian follicle maturation. Strong clinical evidence for PCOS (improves ovulation and insulin sensitivity at 2–4 g/day), anxiety, and OCD (up to 18 g/day). Often combined with D-chiro-inositol in a 40:1 ratio to mimic the body's natural balance.",
         "aliases": [
@@ -12107,14 +12030,13 @@
         }
       },
       "d-chiro-inositol": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
+        "bio_score": 10,
+        "natural": false,
+        "score": 10,
         "absorption": "sugar alcohol; passive + SMIT2 absorption; class-equivalent to myo-inositol",
         "notes": "The less common inositol isomer, found naturally in buckwheat and carob. D-chiro-inositol (DCI) is the downstream metabolite your body converts from myo-inositol via an epimerase enzyme. It directly enhances insulin-stimulated glycogen synthesis in muscle tissue. Used at 50–600 mg/day for insulin resistance and PCOS, typically combined with myo-inositol in a 40:1 ratio. Higher score reflects stronger insulin-sensitizing action per milligram. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
           "DCI",
-          "d-pinitol",
           "chiro-inositol",
           "d-chiro-inositol supplement",
           "DCI supplement",
@@ -12174,15 +12096,13 @@
     "rda_ul_ref": "Copper",
     "forms": {
       "copper bisglycinate": {
-        "bio_score": 14,
+        "bio_score": 11,
         "natural": false,
-        "score": 14,
-        "absorption": "excellent (~75–90%)",
+        "score": 11,
+        "absorption": "amino-acid chelate; ODS: no human data compare copper-form bioavailability — not a proven premium over generic copper",
         "notes": "Copper chelated to two glycine molecules — the Albion TRAACS form. The amino acid shield protects copper from binding to dietary inhibitors (phytates, fiber) and allows it to slip through intestinal transporters intact, yielding 75–90% absorption. Extremely gentle on the stomach. Highest-quality copper form available in supplements.",
         "aliases": [
           "copper glycinate",
-          "chelated copper",
-          "albion copper",
           "glycine-bound copper",
           "copper bisglycinate supplement",
           "copper glycinate supplement",
@@ -12190,7 +12110,6 @@
           "albion copper supplement",
           "glycine-bound copper supplement",
           "Copper Bisglycinate Chelate",
-          "TRAACS Copper",
           "TRAACS Copper Bisglycinate Chelate",
           "Copper Bisglycinate Chelate supplement",
           "TRAACS Copper Bisglycinate Chelate supplement",
@@ -12338,7 +12257,10 @@
           "copper protein complex supplement",
           "Copper Chelate",
           "copper aac",
-          "aac copper"
+          "aac copper",
+          "chelated copper",
+          "albion copper",
+          "TRAACS Copper"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -12368,9 +12290,9 @@
         }
       },
       "copper picolinate": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "no human PK; extrapolated from Cr/Zn picolinate; class-equivalent ~30-55% F",
         "notes": "Copper(II) chelated with picolinic acid. The picolinate carrier employs the same intestinal mucosal transport enhancement as zinc picolinate and chromium picolinate, with bidentate coordination protecting copper(II) through gastric transit. Animal model and in vitro data (Ashmead, Albion Research Notes series) indicate picolinate chelates improve mineral mucosal uptake vs. inorganic salts. Human copper picolinate RCT data are limited; estimated absorption 40–60% places it between bisglycinate (top) and generic amino acid chelate. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
@@ -12420,11 +12342,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2347872",
-      "C0009975",
-      "C1177210"
-    ]
+    "aliases": []
   },
   "chromium": {
     "standard_name": "Chromium",
@@ -12703,11 +12621,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0163657",
-      "C0055617",
-      "C2700605"
-    ]
+    "aliases": []
   },
   "iodine": {
     "standard_name": "Iodine",
@@ -12790,16 +12704,12 @@
         "absorption": "unknown (distinct NIS-independent mechanism)",
         "notes": "Elemental iodine (I₂) — a distinct form from iodide salts like KI. Used in Lugol's solution (a mix of I₂ + KI) and studied for breast tissue health (Ghent 1993). Absorption depends on the formulation. Nascent iodine is a marketing term for atomic iodine (I⁻) in an 'energized' state — no peer-reviewed evidence supports claims of superior absorption. Dosing can be trickier than standard KI. B28 audit 2026-04-25: I2 NIS-independent (PMID:22576883), NOT class-equivalent to KI; no human F estimate.",
         "aliases": [
-          "nascent iodine",
           "elemental iodine",
           "I2",
           "diatomic iodine",
           "Lugol's iodine",
           "Lugol's solution",
-          "Lugols iodine",
-          "detoxified iodine",
-          "atomic iodine",
-          "transformative nano iodine"
+          "Lugols iodine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12865,9 +12775,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0021966"
-    ]
+    "aliases": []
   },
   "manganese": {
     "standard_name": "Manganese",
@@ -12877,9 +12785,9 @@
     "rda_ul_ref": "Manganese",
     "forms": {
       "manganese bisglycinate": {
-        "bio_score": 14,
+        "bio_score": 11,
         "natural": false,
-        "score": 14,
+        "score": 11,
         "absorption": "Albion chelate; class estimate, no published human Mn-isotopic PK",
         "notes": "The premium manganese form — two glycine molecules wrap around the mineral, protecting it through your stomach and delivering it efficiently to your intestinal wall. The TRAACS/Albion branded version is found in most high-end formulas. Excellent absorption with minimal GI upset. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
@@ -12904,9 +12812,9 @@
         }
       },
       "manganese amino acid chelate": {
-        "bio_score": 13,
+        "bio_score": 11,
         "natural": false,
-        "score": 13,
+        "score": 11,
         "absorption": "generic chelate; assumed superior to inorganic, no isotopic confirmation",
         "notes": "Manganese bound to amino acids, but the label doesn't say which ones. This catch-all chelate form absorbs well — better than inorganic salts, though not as well-documented as bisglycinate specifically. Includes protein-hydrolysate (proteinate) chelates, which use the same absorption mechanism. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
@@ -13240,10 +13148,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2347051",
-      "C2828272"
-    ]
+    "aliases": []
   },
   "molybdenum": {
     "standard_name": "Molybdenum",
@@ -13253,9 +13158,9 @@
     "rda_ul_ref": "Molybdenum",
     "forms": {
       "molybdenum glycinate": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": false,
-        "score": 13,
+        "score": 12,
         "absorption": "88-93% (estimated)",
         "notes": "Premium glycine-chelated form (TRAACS/Albion branded). Estimated 88-93% absorption — extrapolated from Turnlund 1995 dietary molybdenum data, as no form-specific human study exists for glycinate. The chelation may help in the presence of dietary inhibitors. Still the top-tier choice for molybdenum supplementation.",
         "aliases": [
@@ -13311,8 +13216,7 @@
           "Na₂MoO₄",
           "molybdate salt",
           "Sodium Molybdate Dihydrate",
-          "Na2MoO4",
-          "ammonium molybdate"
+          "Na2MoO4"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -13484,9 +13388,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0074747"
-    ]
+    "aliases": []
   },
   "boron": {
     "standard_name": "Boron",
@@ -13504,7 +13406,6 @@
         "aliases": [
           "FruiteX-B",
           "fructose boron complex",
-          "natural boron",
           "fruitex-b phytoboron",
           "Calcium Fructo-Borate",
           "fruitex b osteoboron",
@@ -13886,9 +13787,9 @@
         }
       },
       "potassium glycinate": {
-        "bio_score": 13,
+        "bio_score": 11,
         "natural": false,
-        "score": 13,
+        "score": 11,
         "absorption_structured": {
           "value": 0.8,
           "range_low": 0.75,
@@ -13950,9 +13851,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "potassium sulfate",
-      "C0071778",
-      "C0032823"
+      "potassium sulfate"
     ],
     "external_ids": {
       "unii": "RWP5GA015D"
@@ -14051,9 +13950,6 @@
           "17-Hydroxy-Docosahexaenoic Acid",
           "17-HDHA",
           "17-HDoHE",
-          "Resolvins",
-          "Protectins",
-          "specialized pro-resolving mediators",
           "SPMs",
           "SPM precursors"
         ],
@@ -14133,19 +14029,15 @@
     "rxcui": "21406",
     "forms": {
       "ubiquinol crystal-free": {
-        "bio_score": 15,
+        "bio_score": 13,
         "natural": false,
-        "score": 15,
+        "score": 13,
         "absorption": "Highest CoQ10 absorption (~6% absolute F); Kaneka CoQH-CF crystal-free dispersion",
-        "notes": "The top-tier CoQ10 form — Kaneka's crystal-free ubiquinol (CoQH-CF). Ubiquinol is the reduced (active) form your body actually uses, and the crystal-free dispersion technology prevents the molecule from re-crystallizing, which is what normally tanks absorption. The gold standard. Citation correction 2026-04-25: prior \"~2-4× standard CoQ10\" fold-change attributed to López-Lluch 2019 is not present in PMID:30153575 (verified via efetch). Hosoe 2007 (PMID:16919858) is the proper Kaneka CoQH-CF PK reference; absolute F not stated but Cmax/AUC are highest of the CoQ10 class. Class baseline ~6% absolute F per Mantle 2020 (PMID:32380795) + Bhagavan 2006 (PMID:16551570). Dr Pham C1 sign-off (PD-respect): bio_score=15 RETAINED for clinical-utility reasons despite low absolute F (~6%). CoQ10 RCTs at high doses show real efficacy; PK and PD decoupled per Dr Pham clinical review.",
+        "notes": "Kaneka crystal-free ubiquinol (CoQH-CF) is the best-supported CoQ10 delivery identity in this map, but bio_score has no clinical-utility exception: it remains an absorption/form-quality score, not an outcomes or indication score. Hosoe 2007 (PMID:16919858) supports higher plasma CoQ10 exposure versus standard preparations, while absolute oral absorption remains low (~6%). Scored at the top of the CoQ10 cluster without using the reserved perfect/15 tier. C1/PD-respect note: prior audit kept this form high for pharmacodynamic respect, but the 2026-06-09 decision removes any clinical-utility exception from bio_score and keeps clinical utility outside absorption scoring.",
         "aliases": [
           "kaneka ubiquinol",
           "kaneka qh",
           "qh ubiquinol",
-          "active coq10",
-          "reduced coq10",
-          "ubiquinol qh",
-          "coqh2",
           "ubiquinol kaneka",
           "crystal-free ubiquinol",
           "CoQH-CF",
@@ -14186,7 +14078,11 @@
           "natural coenzyme q10 qh-ubiquonal",
           "co-qh2",
           "co-qh",
-          "natural coenzyme q10 ubiquonal-qh"
+          "natural coenzyme q10 ubiquonal-qh",
+          "active coq10",
+          "reduced coq10",
+          "coqh2",
+          "ubiquinol qh"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14288,8 +14184,6 @@
         "notes": "The basic oxidized form of CoQ10 in a standard capsule or tablet. Your body converts it to active ubiquinol after absorption. Well-studied and affordable, but the crystalline structure limits how much dissolves in your gut. Taking it with a fat-containing meal significantly improves absorption. Produced by Kaneka (the world's largest CoQ10 manufacturer). Evidence update 2026-04-25: Bhagavan & Chopra 2006 (PMID:16551570) established the class baseline — oral CoQ10 absorption is slow (Tmax ~6 h, t½ ~33 h) and limited (~2% absolute F) due to lipophilicity and large molecular weight (863 Da).",
         "aliases": [
           "ubiquinone",
-          "coenzyme q10",
-          "coq10",
           "co q10",
           "coq 10",
           "q10",
@@ -14308,7 +14202,6 @@
           "Ubidicarenone",
           "Coenzyme Q-10",
           "Co-Enzyme Q-10",
-          "CoQ-10",
           "co-q10",
           "Co Q-10"
         ],
@@ -14379,8 +14272,7 @@
       "Coenzyme Q10",
       "coenzyme q-10",
       "co-enzyme q-10",
-      "coq-10",
-      "C0041536"
+      "coq-10"
     ],
     "match_rules": {
       "priority": 0,
@@ -14431,14 +14323,10 @@
           "pyrroloquinoline quinone disodium",
           "biopqq",
           "biopqq pyrroloquinoline quinone disodium salt",
-          "pyrroloquinoline quinone",
           "pyrroloquinoline quinone disodium salt",
           "pureqq",
           "PQQ (BioPQQ(TM)) Pyrroloquinoline quinone disodium salt",
           "Providing Pyrroloquinoline quinone",
-          "pqq acid",
-          "pyrroloquinoline quinone acid",
-          "free acid pqq",
           "pureqq pyrroloquinoline quinone"
         ],
         "dosage_importance": 1.0,
@@ -14478,13 +14366,9 @@
         "aliases": [
           "pqq (pyrroloquinoline quinone)",
           "PQQ",
-          "pqq with coq10",
-          "pqq coq10 complex",
-          "mitochondrial complex",
-          "pqq + coq10",
-          "liposomal pqq",
-          "nano pqq",
-          "encapsulated pqq"
+          "pqq acid",
+          "pyrroloquinoline quinone acid",
+          "free acid pqq"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14587,11 +14471,11 @@
         }
       },
       "hydrocurc": {
-        "bio_score": 10,
+        "bio_score": 9,
         "natural": false,
-        "score": 10,
+        "score": 9,
         "absorption": "~2.5x total curcuminoids vs raw (Briskey 2019); free fraction unmeasured",
-        "notes": "Gencor's LipiSperse technology makes curcumin water-dispersible using food-grade lipid carriers. Sports nutrition research shows positive results for exercise recovery (PMID:32858046). However, Briskey 2019 (PMID:29974228, Eur J Nutr) measured 807 ng/mL Cmax for HydroCurc vs 318 ng/mL for raw curcumin (n=18) — ~2.5× total curcuminoids. Good clinical evidence base but lacks rigorous comparative PK data. Uses food-grade ingredients (no synthetic surfactants). Evidence update 2026-04-25: prior note saying \"no head-to-head PK study published\" was incorrect — Briskey 2019 (PMID:29974228, Eur J Nutr) is a verified n=18 crossover comparing LipiSperse-formulated HydroCurc to raw curcumin. Like other enhanced forms, measured TOTAL curcuminoids (free fraction not separately quantified); fold-change reflects conjugate-dominated AUC per Kroon 2025 (PMID:40487425) framework.",
+        "notes": "Gencor's LipiSperse/HydroCurc technology makes curcumin water-dispersible using food-grade lipid carriers. Evidence supports improved exposure versus raw curcumin, but it is not signed above the enhanced-curcumin ladder; capped to the signed curcumin ladder at the NovaSol tier (bio_score 9). Clinical utility claims belong outside bio_score.",
         "aliases": [
           "hydrocurc curcumin",
           "LipiSperse curcumin",
@@ -14686,11 +14570,11 @@
         }
       },
       "bcm-95 curcumin": {
-        "bio_score": 10,
+        "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "~6.9x total curcuminoids vs plain (Antony 2008, pilot); free fraction unmeasured",
-        "notes": "Curcumin combined with turmeric essential oils (ar-turmerone) for natural synergy — about 6.9x better absorption than plain curcumin. Sold as CurcuGreen (formerly BCM-95) by DolCas Biotech. A good mid-tier option that keeps the whole-plant synergy without synthetic delivery systems. Evidence update 2026-04-25: Antony 2008 PMID:20046768 (Indian J Pharm Sci) verified 6.93× total curcuminoids vs plain curcumin in pilot crossover. Methodology weaker than Cuomo/Sasaki — small n, less rigorous design. Total curcuminoids only; fold-change reflects conjugate-dominated AUC per Kroon 2025 framework.",
+        "notes": "BCM-95/CurcuGreen combines curcumin with turmeric essential oils. Antony 2008 (PMID:20046768) supports improved total curcuminoid exposure versus plain curcumin, but the evidence base is smaller/weaker than signed higher-tier enhanced forms and its absorption_structured value remains low. Capped below HydroCurc on the signed curcumin ladder rather than carrying a premium bio_score.",
         "aliases": [
           "bcm-95",
           "bcm95",
@@ -14826,8 +14710,7 @@
     "aliases": [
       "curcumin",
       "Curcumin",
-      "full spectrum curcumin",
-      "C0010467"
+      "full spectrum curcumin"
     ],
     "external_ids": {
       "unii": "IT942ZTH98"
@@ -14897,9 +14780,9 @@
     "rxcui": "9060",
     "forms": {
       "quercetin phytosome": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": false,
-        "score": 13,
+        "score": 10,
         "absorption": "phytosome lipid carrier; modest 2-4× over rutin baseline; still class-poor",
         "notes": "Indena's Quercefit — quercetin bound to sunflower lecithin (phospholipid phytosome). About 20x better absorption than standard quercetin (Riva 2019). The best-studied enhanced quercetin form with clinical data for respiratory health and antioxidant support. If you want quercetin that actually gets absorbed, this is the top choice. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -14930,7 +14813,6 @@
           "EMIQ",
           "isoquercetin",
           "enzymatically modified isoquercetin",
-          "quercetin glycoside",
           "alpha-glycosyl isoquercitrin",
           "EMIQ quercetin"
         ],
@@ -14944,14 +14826,13 @@
       },
       "quercetin dihydrate": {
         "bio_score": 6,
-        "natural": true,
-        "score": 9,
+        "natural": false,
+        "score": 6,
         "absorption": "~2%",
         "notes": "The standard unenhanced quercetin form — a yellow crystalline powder with notoriously poor absorption (~2% per Hollman 1995). Most of it passes through your gut unabsorbed. Still the most widely sold form because it's cheap. Works better when taken with fat or paired with bromelain/vitamin C, but even then absorption is limited compared to enhanced forms.",
         "aliases": [
           "quercetin",
           "quercetin bioflavonoid",
-          "Quercetin Anhydrous",
           "quercetin powder",
           "d.r.-quercetin",
           "dr quercetin",
@@ -14971,15 +14852,15 @@
       },
       "quercetin (unspecified)": {
         "bio_score": 6,
-        "natural": true,
-        "score": 9,
+        "natural": false,
+        "score": 6,
         "absorption": "poor (quercetin class-poor; <10% F)",
         "notes": "The label doesn't specify which quercetin form is used. Standard quercetin absorbs very poorly (~2%), so this gets a conservative score. Look for 'Quercefit,' 'Phytosome,' or 'EMIQ' on your label — those forms absorb 17-40x better. B33 audit 2026-04-25: quercetin class-poor (B19).",
         "aliases": [
           "quercetin complex",
           "quercetin blend",
           "quercetin extract",
-          "quercetin dihydrate"
+          "Quercetin Anhydrous"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15055,9 +14936,9 @@
         }
       },
       "s-acetyl glutathione": {
-        "bio_score": 12,
+        "bio_score": 9,
         "natural": false,
-        "score": 12,
+        "score": 9,
         "absorption": "acetylated GSH; resists γ-GT hydrolysis; modest F improvement claimed",
         "notes": "An acetylated prodrug of glutathione — the acetyl group protects the molecule from stomach acid breakdown. Once absorbed, it's rapidly deacetylated to active GSH inside cells. Clinical crossover studies show higher peak plasma GSH levels vs standard reduced GSH. The '80-90% absorption' sometimes claimed has no peer-reviewed source. A good option for people who want better-than-standard oral GSH delivery. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -15092,15 +14973,10 @@
           "opitac",
           "opitac glutathione",
           "opitac reduced glutathione",
-          "gamma-glutamylcysteines",
-          "gamma-glutamylcysteine",
           "setria l-glutathione",
           "setria l-glutathione tripeptide",
           "setria glutathione",
           "Setria",
-          "reduced glutathione with vitamin c",
-          "GSH with vitamin c",
-          "glutathione plus vitamin c",
           "reduced glutathione with vit c",
           "GSH with vit c",
           "glutathione plus vit c",
@@ -15124,10 +15000,7 @@
         "notes": "The label doesn't specify which glutathione form is used — could be standard reduced GSH (<10% absorbed), liposomal, or S-acetyl. Conservative score. Standard oral GSH is poorly absorbed, so look for 'liposomal,' 'S-acetyl,' or 'Setria' on your label. B33 audit 2026-04-25: GSH class-poor.",
         "aliases": [
           "glutathione complex",
-          "glutathione blend",
-          "oxidized glutathione",
-          "GSSG",
-          "glutathione disulfide"
+          "glutathione blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15184,18 +15057,15 @@
     "forms": {
       "glutathione peroxidase enzyme": {
         "bio_score": 4,
-        "natural": true,
-        "score": 7,
+        "natural": false,
+        "score": 4,
         "absorption": "negligible — protein enzyme (~84 kDa) degraded by GI proteolysis; no PK data exists",
         "notes": "Selenium-dependent enzyme. Oral enzyme supplementation has no clinical support — the protein is destroyed by stomach acid and intestinal proteases before absorption. Endogenous GPx production is driven by selenium intake, not oral enzyme delivery. Not commercially available as a standalone supplement.",
         "aliases": [
           "glutathione peroxidase",
           "gpx enzyme",
-          "cellular peroxidase",
-          "antioxidant enzyme gpx",
           "selenium glutathione peroxidase",
-          "glutathione peroxidase complex",
-          "gpx antioxidant enzyme"
+          "glutathione peroxidase complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15222,13 +15092,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "relationships": [
-      {
-        "type": "form_of",
-        "target_id": "glutathione",
-        "notes": "Enzyme that uses glutathione"
-      }
-    ],
+    "relationships": [],
     "external_ids": {},
     "aliases": []
   },
@@ -15332,11 +15196,9 @@
         "aliases": [
           "freeze-dried probiotics",
           "probiotics with prebiotics",
-          "synbiotics",
           "prebiotic probiotics",
           "lyophilized probiotics",
-          "probiotic + prebiotic blend",
-          "symbiotic formulation"
+          "probiotic + prebiotic blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -15409,9 +15271,9 @@
         }
       },
       "multi-strain blend (10+ strains)": {
-        "bio_score": 13,
+        "bio_score": 11,
         "natural": true,
-        "score": 16,
+        "score": 14,
         "absorption": "strain-dependent",
         "notes": "Broad-spectrum blend with 10+ different strains targeting diverse gut regions. Look for formulas that list individual strain CFU counts rather than just a total blend count.",
         "aliases": [
@@ -15461,11 +15323,8 @@
           "lactic acid bacterium",
           "probiotic cultures",
           "probiotics",
-          "lactococcus lactis strain plasma",
           "l lactis",
           "lab4 probiotics",
-          "l acidophilus la-5(r) and bifidobacterium bb-12(r)",
-          "l-acidophilus la-5(r) and bifidobacterium bb-12(r)",
           "ultra probiotics",
           "Probiotic",
           "Probiotic Bacteria"
@@ -15695,7 +15554,6 @@
         "notes": "Combination of multiple prebiotics (typically FOS, GOS, inulin). Quality depends entirely on components. Scored conservatively — a blend should not outscore its individual constituents.",
         "aliases": [
           "prebiotic complex",
-          "synbiotic blend",
           "multi-prebiotic formula",
           "FOS+GOS+inulin blend"
         ],
@@ -15708,9 +15566,9 @@
         }
       },
       "prebiotics (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "category_error (default to fermentation framework)",
         "notes": "Type not specified on label. Conservative score — different prebiotics feed different bacterial populations. Look for specific types (FOS, GOS, inulin, HMO) for a more accurate score. B28 audit 2026-04-25: CATEGORY ERROR default (B22 framework).",
         "aliases": [
@@ -15785,7 +15643,7 @@
   },
   "choline": {
     "standard_name": "Choline",
-    "category": "amino_acids",
+    "category": "vitamins",
     "cui": "C0008405",
     "rxcui": "2449",
     "rda_ul_ref": "Choline",
@@ -15797,7 +15655,6 @@
         "absorption": "plasma choline AUC equivalent to bitartrate/chloride (Böckmann 2021, n=6 crossover)",
         "notes": "Brain-targeted choline form that crosses the blood-brain barrier. 40% choline by weight. Plasma choline AUC is equivalent to bitartrate (Böckmann 2021 (PMID:34287673) crossover), but BBB penetration is better. Rx drug in some EU countries for cognitive decline. Citation corrected 2026-04-24: \"Stoll 2021\" was a misattribution; the actual paper is Böckmann 2021 (PMID:34287673, Eur J Nutr) — n=6 healthy-adult-men crossover at 550mg choline equivalent showed no difference in plasma choline AUC among chloride, bitartrate, alpha-GPC, or egg-PC. Alpha-GPC dose-response confirmed by Kawamura 2012 (PMID:22673596, single 1000mg dose, plasma free choline rise at 60-120 min).",
         "aliases": [
-          "brain choline",
           "GPC"
         ],
         "dosage_importance": 1.0,
@@ -15879,9 +15736,9 @@
         }
       },
       "choline citrate": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "free-choline salt; assumed equivalent to bitartrate (no citrate-specific PK)",
         "notes": "Citrate salt — 40% choline by weight. Good solubility for liquid formulas. Adequate for daily choline needs but no brain-crossing advantage over bitartrate. Evidence update 2026-04-24: no citrate-specific human PK located. Extrapolated from bitartrate/chloride evidence (PMID:34287673 Böckmann 2021): free-choline-releasing salts all deliver equivalent plasma choline AUC. struct.value revised 0.825 → 0.875 for class-consistency.",
         "aliases": [
@@ -15898,9 +15755,9 @@
         }
       },
       "choline chloride": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "plasma choline AUC equivalent to bitartrate and alpha-GPC (Böckmann 2021)",
         "notes": "Chloride salt — 52% choline by weight (highest elemental content). Mostly used in animal feed and industrial applications. Uncommon in human supplements. Evidence update 2026-04-24: PMID:34287673 (Böckmann 2021) direct comparator arm — equivalent plasma choline AUC to bitartrate and alpha-GPC at 550mg choline equivalent (n=6 crossover).",
         "aliases": [
@@ -15945,7 +15802,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "amino_acids",
+    "category_enum": "vitamins",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -16115,9 +15972,8 @@
         }
       ]
     },
-    "aliases": [
-      "C0008409"
-    ]
+    "aliases": [],
+    "category_note": "Reclassified 2026-06-09: choline is an essential vitamin-like nutrient/quaternary ammonium compound, not an amino acid. V4 classification already treats canonical choline as vitamin-domain/multi-prenatal support."
   },
   "phosphatidylserine": {
     "standard_name": "Phosphatidylserine",
@@ -16173,7 +16029,6 @@
           "serinaid phosphatidylserine",
           "leci-ps phosphatidyl serine",
           "leci-ps(r) phosphatidyl serine",
-          "soy-derived",
           "soy derived phosphatidylserine",
           "soy lecithin phosphatidylserine"
         ],
@@ -16205,9 +16060,9 @@
         }
       },
       "liposomal phosphatidylserine": {
-        "bio_score": 13,
+        "bio_score": 12,
         "natural": false,
-        "score": 13,
+        "score": 12,
         "absorption": "good to excellent — no PK study showing liposomal advantage for PS",
         "notes": "Liposome-encapsulated PS. PS already absorbs well orally (itself a phospholipid), so liposomal encapsulation provides limited additional benefit. No published PK data demonstrating superior absorption over standard PS.",
         "aliases": [
@@ -16224,9 +16079,9 @@
         }
       },
       "Actiserine (enhanced PS blend)": {
-        "bio_score": 14,
+        "bio_score": 10,
         "natural": false,
-        "score": 14,
+        "score": 10,
         "absorption": "Actiserine branded PS blend; PS hydrolyzed to PA + serine pre-absorption",
         "notes": "Proprietary PS blend with catechins and arabinose nanocarrier system (Shankar/SD Head USA). Industry PK study showed Cmax 2.8x and AUC 3.7x vs conventional PS. Peer-reviewed publication pending — preliminary data. NOT the same as Sharp-PS Gold. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -16245,19 +16100,16 @@
         }
       },
       "phosphatidylserine (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "moderate (PS class baseline; form-dependent)",
         "notes": "PS form not specified on label. Scored conservatively — soy-derived PS and Sharp-PS forms score higher with better clinical data. B33 audit 2026-04-25: PS class baseline.",
         "aliases": [
           "phosphatidylserine",
-          "SHARPS PS 20 D",
-          "Sharp-PS 20 D",
           "phosphatidyl l-serine",
           "phosphatidyl-l-serine",
-          "phosphatidyl serine",
-          "SHARP PS 20 D Phosphatidylserine"
+          "phosphatidyl serine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16325,8 +16177,7 @@
         "aliases": [
           "phosphatidylinositol",
           "phosphatidyl inositol",
-          "phospatidylinositol",
-          "phosphoinositides"
+          "phospatidylinositol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16392,9 +16243,6 @@
         "absorption": "very good",
         "notes": "Liposome-encapsulated taurine. Taurine already absorbs ~95-100%, so liposomal delivery adds no demonstrated benefit. Products exist commercially but no clinical evidence of improved absorption.",
         "aliases": [
-          "nano taurine",
-          "encapsulated taurine",
-          "advanced delivery taurine",
           "liposome-encapsulated taurine"
         ],
         "dosage_importance": 1.0,
@@ -16510,11 +16358,7 @@
         "aliases": [
           "ergothioneine",
           "ergothionine",
-          "longevity vitamin",
-          "mitochondrial antioxidant",
-          "cellular protector",
           "ergothioneine sulfur amino acid",
-          "thiol antioxidant",
           "ergothioneine powder",
           "pure ergothioneine",
           "ergothioneine crystals",
@@ -16597,15 +16441,14 @@
         }
       },
       "acetyl-l-carnitine (alcar)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "natural": false,
-        "score": 11,
+        "score": 10,
         "absorption": "low-moderate (likely higher than L-carnitine base ~14-18%, but no published oral bioavailability for ALCAR specifically)",
         "notes": "Acetylated form that crosses the blood-brain barrier. Well-studied for cognitive function, memory, and neuroprotection. Preferred form for brain health. Oral bioavailability not formally measured for ALCAR but likely modestly above L-carnitine base (~14-18%). The BBB-crossing property is the key differentiator. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
         "aliases": [
           "ALC",
           "n-acetyl-l-carnitine",
-          "brain carnitine",
           "acetyl carnitine",
           "acetyl-l-carnitine supplement",
           "n-acetyl l-carnitine hydrochloride",
@@ -16832,10 +16675,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0007258",
-      "C1337234"
-    ]
+    "aliases": []
   },
   "tmg_betaine": {
     "standard_name": "TMG (Trimethylglycine)",
@@ -16979,7 +16819,6 @@
     "aliases": [
       "betaine",
       "Betaine",
-      "trimethylglycerine hydrochloride",
       "trimethylglycine"
     ],
     "cui_note": "Corrected from unrelated TMG shorthand code to betaine / trimethylglycine concept.",
@@ -17045,17 +16884,11 @@
           "micronized glutamine",
           "l-glutamine hydrochloride",
           "l-glutamine hcl",
-          "Glutamine & Glutamic Acid",
-          "L-Glutamine & Glutamic Acid",
           "l-glutamine, micronized",
           "glutamine, micronized",
-          "glutamic acid and glutamine",
-          "glutamic acid & glutamine",
           "l-glutamine ot2",
           "l-glutamine, ot2",
-          "glutamine ot2",
-          "pepform glutamine peptides",
-          "pepform glutamine"
+          "glutamine ot2"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17074,7 +16907,6 @@
         "aliases": [
           "sustamine",
           "dipeptide glutamine",
-          "glutamine peptides",
           "sustamine glutamine",
           "l-alanine-l-glutamine",
           "stable glutamine",
@@ -17140,9 +16972,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0051080"
-    ]
+    "aliases": []
   },
   "l_arginine": {
     "standard_name": "L-Arginine",
@@ -17160,7 +16990,6 @@
           "arginine akg",
           "aakg",
           "arginine alpha-ketoglutarate",
-          "a-ketoglutarate",
           "l-arginine alpha-ketoglutarate",
           "aakg powder",
           "l-arginine akg 2:1 extract",
@@ -17456,16 +17285,12 @@
           "lysine hcl",
           "lysine hydrochloride",
           "l-lysine hydrochloride monohydrate",
-          "pure l-lysine",
-          "lysine powder",
           "l-lysine monohydrochloride",
           "l lysine monohydrochloride",
           "L-Lysine Chloride",
           "lysine chloride",
           "l-lysine hydrochloride",
-          "L-Lysine Hydrochloride, Powder",
-          "Lysine, Micronized",
-          "micronized lysine"
+          "L-Lysine Hydrochloride, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17485,7 +17310,11 @@
           "l-lysine",
           "lysine",
           "free-form lysine",
-          "pure lysine"
+          "pure lysine",
+          "pure l-lysine",
+          "lysine powder",
+          "Lysine, Micronized",
+          "micronized lysine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17736,8 +17565,7 @@
         "notes": "AVOID: D-tyrosine is the biologically inactive stereoisomer. Does not serve as a neurotransmitter precursor and may interfere with L-tyrosine uptake. B32 audit 2026-04-25: D-isomer biological inactivity (B26 parallel). Absorbed but inactive.",
         "aliases": [
           "d-form tyrosine",
-          "inactive tyrosine",
-          "racemic tyrosine mix"
+          "inactive tyrosine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -17812,9 +17640,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0067794"
-    ]
+    "aliases": []
   },
   "l_cysteine": {
     "standard_name": "L-Cysteine",
@@ -18468,11 +18294,11 @@
     "rxcui": "314709",
     "forms": {
       "l-ornithine standard": {
-        "bio_score": 12,
+        "bio_score": 11,
         "natural": false,
-        "score": 12,
-        "absorption": "good (~80-90%)",
-        "notes": "Non-proteinogenic amino acid; key urea cycle intermediate. Oral bioavailability ~82% (LOLA pharmacokinetics in healthy volunteers; peaks 30-60 min). Reduces blood ammonia and elevates urea output during prolonged exercise (Sugino et al., 2008, 2-6g/day). 400mg before sleep improved sleep quality and lowered cortisol/DHEA ratio in 8-week RCT (Torii et al., 2014). Partially converted to citrulline/arginine in liver.",
+        "score": 11,
+        "absorption": "amino-acid-class (cationic AA transport); plasma ornithine rises after oral dosing (Sugino 2008) but absolute oral F unmeasured",
+        "notes": "Non-proteinogenic amino acid; key urea cycle intermediate. Cationic amino-acid-class oral absorption: oral L-ornithine HCl reliably raises plasma ornithine and lowers exercise ammonia (Sugino et al. 2008, PMID:19083482), and 400mg before sleep improved sleep quality (Torii et al. 2014) — but absolute oral bioavailability (F%) is unmeasured for free L-ornithine. The commonly cited ~82% figure is LOLA (L-ornithine L-aspartate)-specific (Kircheis & Lüth 2019, PMID:30706424) and is NOT transferable to free ornithine. Partially converted to citrulline/arginine in liver.",
         "aliases": [
           "l-ornithine",
           "ornithine",
@@ -18481,10 +18307,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.82,
-          "range_low": 0.75,
-          "range_high": 0.9,
-          "quality": "very_good"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate"
         }
       }
     },
@@ -18618,9 +18444,9 @@
     "rxcui": "10898",
     "forms": {
       "l-tryptophan powder": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "intestinal ~90%; systemic lower due to hepatic TDO first-pass and BBB LNAA competition",
         "notes": "Essential amino acid, precursor to serotonin and melatonin. Intestinal absorption ~90% via LAT1/ASCT2 transporters, but hepatic tryptophan 2,3-dioxygenase (TDO) causes 50-70% first-pass extraction (Millson 1985, PMC1400876). Brain uptake further limited by competition with 5 other large neutral amino acids (LNAAs) at the BBB LAT1 transporter. Best taken with carbohydrate (drives competing BCAAs into muscle via insulin) and without protein. TryptoPure (Ajinomoto) is a pharmaceutical-grade fermented form — purity advantage is safety-relevant (EMS crisis 1989) but does not change PK.",
         "aliases": [
@@ -18777,15 +18603,13 @@
         }
       },
       "liposomal gaba": {
-        "bio_score": 7,
+        "bio_score": 6,
         "natural": false,
-        "score": 7,
+        "score": 6,
         "absorption": "evidence-thin (no human PK; BBB barrier unproven)",
         "notes": "Liposome-encapsulated GABA designed to improve BBB crossing. Theoretical rationale is sound (liposomes may shield from enzymatic degradation and improve lymphatic absorption), but zero oral human clinical trials exist. Only published liposomal GABA data is IV animal studies (Loeb et al. — epileptic activity reduction via intravenous delivery, not oral). Scored above unspecified but well below forms with actual human clinical data. B24 audit 2026-04-25: liposomal-thin + BBB barrier.",
         "aliases": [
-          "nano gaba",
-          "encapsulated gaba",
-          "advanced delivery gaba"
+          "liposome-encapsulated gaba"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18879,16 +18703,15 @@
     "rxcui": "61",
     "forms": {
       "carnosyn beta-alanine": {
-        "bio_score": 15,
+        "bio_score": 14,
         "natural": false,
-        "score": 15,
+        "score": 14,
         "absorption": "excellent (<5% urinary loss; Harris 2006)",
         "notes": "Patented, NSF Certified for Sport beta-alanine from Natural Alternatives International. Harris 2006 (PubMed 16554972): <5% urinary loss at 10-40 mg/kg doses, confirming near-complete absorption. Muscle carnosine increased +58.8% at 4 weeks and +80.1% at 10 weeks at 3.2-6.4 g/day. Virtually all human RCT evidence for beta-alanine used CarnoSyn specifically. May cause harmless paresthesia (tingling) at doses >800 mg in a single bolus.",
         "aliases": [
           "carnosyn",
           "beta-alanine carnosyn",
-          "patented beta-alanine",
-          "carnosine precursor"
+          "patented beta-alanine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19004,12 +18827,7 @@
           "lutein 20%",
           "Trans-Lutein",
           "all-trans lutein",
-          "organic Lutein",
-          "MacularSynergy Complex",
-          "macular synergy complex",
-          "macularsynergy",
-          "lutein 2020",
-          "lutein 2020 marigold flower extract"
+          "organic Lutein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19044,7 +18862,9 @@
           "FloraGLO Lutein",
           "floraglo brand lutein",
           "Lutemax 2020 Lutein",
-          "lutein 2020 marigold"
+          "lutein 2020 marigold",
+          "lutein 2020",
+          "lutein 2020 marigold flower extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19102,8 +18922,8 @@
     "forms": {
       "zeaxanthin (unspecified)": {
         "bio_score": 8,
-        "natural": true,
-        "score": 11,
+        "natural": false,
+        "score": 8,
         "absorption": "variable, fat-dependent (~10-50% with dietary fat)",
         "notes": "Xanthophyll carotenoid concentrated in the macula, from marigold or paprika oleoresin. (3R,3’R)-zeaxanthin (dietary/trans) and meso-zeaxanthin (3R,3’S) are stereoisomers with equivalent oral absorption but different retinal deposition — meso-zeaxanthin preferentially targets the central fovea (PMC4706936). All three macular carotenoids together (lutein + zeaxanthin + meso-zeaxanthin) produce the strongest MPOD response (PMID:27420092, Ma 2016, n=1764). Absorption is fat-dependent, same pathway as lutein (PMC6770730). Must be taken with fat-containing meal.",
         "aliases": [
@@ -19181,8 +19001,8 @@
     "forms": {
       "stabilized sulforaphane": {
         "bio_score": 13,
-        "natural": true,
-        "score": 16,
+        "natural": false,
+        "score": 13,
         "absorption": "good-to-excellent (~60-80% urinary excretion of metabolites)",
         "notes": "Pre-formed, stabilized sulforaphane that bypasses glucoraphanin→sulforaphane conversion. Egner 2011 (PMC3076202): mean 70% urinary excretion of sulforaphane metabolites from SFR beverage in Qidong trial (n=200). Vermeulen 2008 (PMID:18950181): 37% from raw broccoli with myrosinase. SFX-01 (alpha-cyclodextrin complex) confirmed rapid absorption in Phase 1 (PMC11782309). The 70% figure is urinary metabolite recovery, not true absolute bioavailability — actual systemic F% is likely somewhat lower.",
         "aliases": [
@@ -19207,7 +19027,6 @@
         "aliases": [
           "sulforaphane precursor",
           "GR",
-          "glucosinolate",
           "Sulforaphane Glucosinolate",
           "Sulforaphane Glucosinate",
           "TrueBroc",
@@ -19236,8 +19055,7 @@
           "dual broccoli complex",
           "sulforaphane activation blend",
           "BroccoVital Myrosinase Broccoli extract",
-          "avmacol",
-          "myrosinase"
+          "avmacol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19262,10 +19080,7 @@
           "BroccoPlus Brassica concentrate",
           "Broccoli Aerial Parts, Plant, Seed Extract Concentrate",
           "Broccoli Plant, Seed Extract Concentrate",
-          "watercress (nasturtium officinale) aerial parts 4:1 extract",
-          "liposomal sulforaphane",
-          "nano sulforaphane",
-          "encapsulated sulforaphane"
+          "watercress (nasturtium officinale) aerial parts 4:1 extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19322,10 +19137,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0163159",
-      "C1707048"
-    ]
+    "aliases": []
   },
   "spermidine": {
     "standard_name": "Spermidine",
@@ -19453,12 +19265,8 @@
         "aliases": [
           "certified organic spirulina",
           "non-gmo spirulina",
-          "clean spirulina",
           "pure organic spirulina",
-          "organic blue-green algae",
-          "natural spirulina",
-          "eco-friendly spirulina",
-          "green spirulina"
+          "organic blue-green algae"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19475,14 +19283,11 @@
         "absorption": "category_error (composite food; nutrient matrix)",
         "notes": "Standard dried spirulina powder (Arthrospira platensis). Mean indispensable amino acid digestibility = 85.2% in humans via dual-tracer ileal method (PMC6179135). PDCAAS = 84%. Spirulina has a peptidoglycan cell wall (not cellulose), making it more digestible than chlorella without cell-wall cracking (PMC94402). Rich in protein (~60%), phycocyanin, and B-vitamins. Spray drying causes ~20% phycocyanin loss vs fresh (PMC10144176). Dr Pham E2 sign-off: 9TH CATEGORY ERROR. 0.85 → null.",
         "aliases": [
-          "blue-green algae",
           "arthrospira platensis",
           "spirulina platensis",
           "spirulina maxima",
           "dried spirulina",
           "powdered spirulina",
-          "green algae powder",
-          "spirulina extract powder",
           "dehydrated spirulina",
           "pure spirulina powder",
           "spirulina superfood"
@@ -19611,7 +19416,6 @@
           "predigested chlorella",
           "enzymatically treated chlorella",
           "bioactive chlorella",
-          "fermented green algae",
           "pre-digested chlorella",
           "enzyme-processed chlorella",
           "chlorella ferment",
@@ -19633,15 +19437,11 @@
         "notes": "Chlorella with mechanically broken/split cell walls. 2024 human RCT (PMID:39610880, PMC11602285): split cell chlorella amino acid iAUC was 55.7 mmol/L vs milk at 86.6 mmol/L (~64% of milk). Dramatically better than intact cells which showed near-zero postprandial amino acid response. Cell wall is sporopollenin/algaenan-based (NOT cellulose; PMC8759652) — mechanical disruption is essential for human nutrient access.",
         "aliases": [
           "cracked cell chlorella",
-          "processed chlorella",
           "cell wall disrupted chlorella",
           "cracked chlorella",
           "disrupted cell chlorella",
-          "bioavailable chlorella",
-          "broken wall algae",
           "high omega-9 cracked-wall chlorella",
           "chlorella cracked cell",
-          "high-absorption chlorella",
           "shattered cell wall chlorella",
           "shattered cell wall chlorella powder",
           "cracked-wall chlorella",
@@ -19664,20 +19464,15 @@
         "notes": "Standard whole-cell chlorella powder with intact cell walls. 2024 human RCT (PMID:39610880): whole cell chlorella showed NEGATIVE postprandial amino acid iAUC (-4.1 mmol/L) — essentially no net amino acid appearance above baseline over 5 hours. In vitro digestibility (~50-60%) dramatically overestimates true human absorption. Cell wall is sporopollenin/algaenan (PMC8759652), resistant to human digestive enzymes. C. vulgaris and C. pyrenoidosa. Broken cell wall form vastly superior.",
         "aliases": [
           "whole chlorella",
-          "chlorella vulgaris",
-          "chlorella pyrenoidosa",
           "dried chlorella",
           "powdered chlorella",
           "raw chlorella powder",
-          "chlorella extract powder",
           "dehydrated chlorella",
           "pure chlorella powder",
           "chlorella superfood",
           "yaeyama chlorella",
           "certified organic chlorella powder",
-          "Chlorella Protein",
-          "chlorella protein concentrate",
-          "chlorella protein powder"
+          "Chlorella Protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19717,7 +19512,9 @@
         "notes": "Chlorella form not specified on label. Scored conservatively. Human data (PMID:39610880): intact cell chlorella has near-zero amino acid absorption; broken/split cell achieves ~64% of milk protein. Cell wall is sporopollenin/algaenan, NOT cellulose (PMC8759652). Cell wall disruption status is the single most important factor. B33 audit 2026-04-25: cell-wall-dependent class baseline.",
         "aliases": [
           "chlorella",
-          "Japanese Chlorella"
+          "Japanese Chlorella",
+          "chlorella vulgaris",
+          "chlorella pyrenoidosa"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19764,10 +19561,7 @@
           "nano hyaluronic acid",
           "ultra-low molecular weight HA",
           "ULMW-HA",
-          "low MW hyaluronic acid",
           "micro hyaluronic acid",
-          "short-chain HA",
-          "nano HA",
           "ultra-low MW HA",
           "hyabest hyaluronic acid",
           "hyabest"
@@ -19788,13 +19582,9 @@
         "notes": "Liposome-encapsulated HA for theoretical enhanced oral delivery. Zero published human oral PK studies exist for liposomal HA. Liposomal HA literature in PubMed is about injectable drug delivery (PMC7384933), not oral supplements. Claims of 2-3x improved absorption are extrapolated from liposomal delivery of other compounds and have no direct evidence for oral HA. B28 audit 2026-04-25: liposomal-thin pattern; no human PK for any oral HA form.",
         "aliases": [
           "liposomal hyaluronic acid",
-          "encapsulated HA",
-          "advanced delivery HA",
           "liposome hyaluronic acid",
-          "nano-encapsulated HA",
           "lipid-bound HA",
-          "liposomal HA complex",
-          "high-absorption HA"
+          "liposomal HA complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19845,7 +19635,10 @@
           "bioavailable HA",
           "short-chain hyaluronic acid",
           "injuv",
-          "small molecule HA"
+          "small molecule HA",
+          "low MW hyaluronic acid",
+          "short-chain HA",
+          "nano HA"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19948,8 +19741,8 @@
     "forms": {
       "alpha-carotene (unspecified)": {
         "bio_score": 5,
-        "natural": true,
-        "score": 8,
+        "natural": false,
+        "score": 5,
         "absorption": "variable, fat-dependent (~5-20% from food, likely 20-50% from oil-based supplements)",
         "notes": "Standalone alpha-carotene identity. Alpha-carotene is a provitamin A carotenoid and is linked to the Vitamin A family, but it has lower retinol activity than beta-carotene and lacks strong isolated supplement PK evidence. Exact identifiers remain here, not duplicated under vitamin_a context forms; live API verification found UMLS CUI C0051336 and no exact GSRS UNII.",
         "aliases": [
@@ -20017,9 +19810,7 @@
         "notes": "The biologically active R-enantiomer of ALA. Breithaupt-Grogler 1999: 38% absolute bioavailability for R-enantiomer (vs 28% for S-enantiomer) from aqueous solution. Free R-ALA is prone to polymerization and poor aqueous solubility, reducing real-world bioavailability from solid dosage forms below the 38% figure. Keith 2012 (PMC4084596): in young adults, racemic ALA actually showed higher AUC than pure R-ALA, complicating the 'R is always better' narrative. R is the endogenous enantiomer but supplement R-ALA is synthetically produced.",
         "aliases": [
           "R-ALA",
-          "bio-enhanced ALA",
           "alpha-lipoic acid R-form",
-          "active ALA",
           "R-lipoic acid",
           "pure R-ALA",
           "Alpha R-Lipoic Acid",
@@ -20100,14 +19891,8 @@
         "absorption": "evidence-thin (no human PK comparison)",
         "notes": "Liposome-encapsulated ALA for theoretical enhanced oral delivery. No published human oral PK study exists for liposomal ALA. Claims of 2-3x improved absorption are extrapolated from liposomal delivery principles applied to other compounds. Scored above racemic but below forms with actual human PK data (Na-RALA, free R-ALA). B24 audit 2026-04-25: liposomal evidence-thin pattern (5th application) — no head-to-head human PK PMID exists.",
         "aliases": [
-          "nano ALA",
-          "encapsulated ALA",
-          "advanced delivery ALA",
           "liposome ALA",
-          "nano-encapsulated lipoic acid",
-          "lipid-bound ALA",
-          "nano lipoic acid",
-          "high-absorption ALA"
+          "lipid-bound ALA"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20148,19 +19933,13 @@
         "absorption": "moderate (~25-35% absolute bioavailability; Breithaupt-Grogler 1999)",
         "notes": "Racemic (50:50 R+S) alpha-lipoic acid, the most common and cheapest form. Breithaupt-Grogler 1999: absolute bioavailability ~30% overall (R-component 38%, S-component 28%). Linus Pauling Institute review: 30-40%. Short half-life ~0.3-0.4 hours. Keith 2012 (PMC4084596): in young adults, racemic ALA actually showed higher AUC (1,772 ng-h/mL) than pure R-ALA (1,070 ng-h/mL). Thioctic acid is the pharmaceutical name.",
         "aliases": [
-          "alpha-lipoic acid",
-          "ALA",
           "racemic ALA",
           "standard lipoic acid",
-          "thioctic acid",
           "DL-alpha-lipoic acid",
           "mixed ALA",
           "DL-ALA",
           "synthetic ALA",
-          "racemic lipoic acid",
-          "natural lipoic acid",
-          "natural ALA",
-          "Thiotic Acid"
+          "racemic lipoic acid"
         ],
         "context_include": [
           "lipoic",
@@ -20198,7 +19977,10 @@
           "alpha-lipoic acid & r-lipoic acid",
           "alpha-lipoic acid and r-lipoic acid",
           "nutri-nano alpha lipoic acid",
-          "Nutri Alpha Lipoic Acid"
+          "Nutri Alpha Lipoic Acid",
+          "alpha-lipoic acid",
+          "ALA",
+          "thioctic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20294,12 +20076,9 @@
           "methylsulfonylmethane",
           "methysulfonylmethane",
           "dimethyl sulfone",
-          "organic sulfur",
           "DMSO2",
           "methyl sulfonyl methane",
-          "MSM sulfur",
           "pure MSM",
-          "sulfur MSM",
           "methylsulfonylmethane powder",
           "optimsm",
           "opti-msm",
@@ -20347,7 +20126,7 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.2,
+          "value": 0.86,
           "range_low": 0.1,
           "range_high": 0.3,
           "quality": "low"
@@ -20399,11 +20178,6 @@
         "aliases": [
           "KSM-66",
           "ksm66",
-          "full-spectrum ashwagandha",
-          "root-only extract",
-          "standardized root extract",
-          "high-potency ashwagandha",
-          "standardized ashwagandha",
           "pure KSM-66",
           "ashwagandha KSM-66 extract",
           "ashwagandha ksm-66",
@@ -20484,13 +20258,7 @@
         "absorption": "evidence-thin (no human PK comparison)",
         "notes": "Lipid-encapsulated ashwagandha. NooGandha (Specnova) is a branded liposomal form with clinical outcome data (PMID:38931168, 225mg/day improved cognition and cortisol in 59 subjects) but NO plasma withanolide PK comparison vs conventional extracts. Claims of enhanced bioavailability lack pharmacokinetic evidence. B30 audit 2026-04-25: liposomal evidence-thin (5th application).",
         "aliases": [
-          "nano ashwagandha",
-          "encapsulated ashwagandha",
-          "advanced delivery ashwagandha",
           "liposome ashwagandha",
-          "nano-encapsulated ashwagandha",
-          "lipid-bound ashwagandha",
-          "high-absorption ashwagandha",
           "NooGandha"
         ],
         "dosage_importance": 1.0,
@@ -20560,12 +20328,6 @@
           "ashwagandha (withania somnifera) root 15:1 extract",
           "Ashwagandha root & leaf extract",
           "Ashwagandha 7% extract",
-          "withaferin A",
-          "withaferin-A",
-          "withaferin a content",
-          "withanolide A",
-          "withanolide-A",
-          "withanolide A content",
           "withanolides",
           "total withanolides",
           "withanolide content",
@@ -20573,7 +20335,13 @@
           "glycowithanolides",
           "Withanolides/Alkaloids",
           "withanolides alkaloids",
-          "withanolides and alkaloids"
+          "withanolides and alkaloids",
+          "full-spectrum ashwagandha",
+          "root-only extract",
+          "standardized root extract",
+          "high-potency ashwagandha",
+          "standardized ashwagandha",
+          "ashwagandha leaf root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20599,7 +20367,8 @@
           "ashwagandha herb powder",
           "pure ashwagandha powder",
           "traditional ashwagandha powder",
-          "organic full-spectrum ashwagandha root powder"
+          "organic full-spectrum ashwagandha root powder",
+          "ashwaganda root powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20617,8 +20386,6 @@
         "notes": "Form not specified on the label. Ashwagandha (Withania somnifera) products range from raw root powder to highly concentrated extracts like KSM-66 and Sensoril. Withanolide content and bioavailability vary widely. Scored conservatively until the exact form is identified. B30 audit 2026-04-25: ashwagandha withanolide class baseline (B21).",
         "aliases": [
           "ashwagandha",
-          "ashwagandha leaf root extract",
-          "ashwaganda root powder",
           "ashwagandha leaf, root extract",
           "ashwaganda",
           "Sendara"
@@ -20648,8 +20415,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "Withania somnifera",
-      "C2698186"
+      "Withania somnifera"
     ],
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
@@ -20666,8 +20432,7 @@
         "absorption": "moderate",
         "notes": "Concentrated rice protein (≥80% protein). DIAAS 0.42-0.50 (lysine-limited) vs whey at 1.09 (PMID:28382889). At 48g dose, comparable to whey for lean mass gains in trained males (PMID:23782948, Joy 2013) — but this is dose-compensated. Hypoallergenic and vegan-friendly. Low lysine is the primary limitation.",
         "aliases": [
-          "isolated rice protein",
-          "rice protein powder"
+          "isolated rice protein"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20686,7 +20451,8 @@
         "aliases": [
           "brown rice protein",
           "organic rice protein",
-          "sprouted rice protein"
+          "sprouted rice protein",
+          "rice protein powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20730,9 +20496,6 @@
         "notes": "Standardized to 3% rosavins and 1% salidroside (clinical gold-standard ratio, SHR-5). Salidroside well-absorbed (75-90% rat F, Panossian 2010; human plasma ~587 ng/mL at 1h). Rosavin poorly absorbed (20-26% rat F, 3x lower AUC than salidroside). Strong evidence for fatigue reduction and stress resilience. EGb-761-level standardization ensures consistent bioactive content. Evidence update 2026-04-24: PMID:18088572 (Yu 2008) measured salidroside absolute oral F=32.1% in rats — lower than the previously cited 75-90% Panossian 2010 figure (which reflected a different PK metric). Rosavin is an inactive disaccharide per PMID:18054474 (Panossian 2010 Porsolt assay). Weighted struct.value revised 0.45 → 0.35.",
         "aliases": [
           "rhodiola rosea extract",
-          "arctic root",
-          "golden root",
-          "roseroot",
           "3% rosavins 1% salidroside",
           "standardized rhodiola",
           "rhodiola extract",
@@ -20743,14 +20506,9 @@
           "rhodiola (rhodiola rosea l.) rhizome extract",
           "rhodiola rosea 3% extract",
           "Rhodiola rosea root 3% extract",
-          "rosavin",
-          "rosavins",
           "rosavin extract",
           "rhodiola rosavin",
-          "salidroside",
-          "salidrosides",
           "rhodiola salidroside",
-          "tyrosol glucoside",
           "Rhodiola rosea Root Extract"
         ],
         "dosage_importance": 1.0,
@@ -20787,9 +20545,9 @@
         }
       },
       "rhodiola (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "low-moderate (rosavin + salidroside class)",
         "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified. B33 audit 2026-04-25: rosavin/salidroside class.",
         "aliases": [
@@ -20797,7 +20555,10 @@
           "siberian rhodiola root extract",
           "Rhodiola crenulata (root) Extract",
           "Rhodiola sp.",
-          "rhodiola species"
+          "rhodiola species",
+          "arctic root",
+          "golden root",
+          "roseroot"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20834,9 +20595,9 @@
     "rxcui": "236809",
     "forms": {
       "liposomal ginkgo": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "liposomal carrier; evidence-thin (no human PK comparator); ginkgo terpene class",
         "notes": "Liposome-encapsulated ginkgo (Ginkgosome). Human crossover PK (PMID:35922794, Ried 2022, n=13): ginkgolide B AUC 1.9x higher, ginkgolide C AUC 2.2x higher, Cmax 1.7x higher vs standard GBE. One of few liposomal forms with real human PK support. Sustained-release profile. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
@@ -20846,9 +20607,7 @@
           "liposome ginkgo",
           "nano-encapsulated ginkgo",
           "lipid-bound ginkgo",
-          "high-absorption ginkgo",
-          "Ginkgo Phytosome",
-          "Ginkgo biloba, Phosphatidylserine Complex"
+          "high-absorption ginkgo"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20878,7 +20637,6 @@
           "standardized ginkgo extract",
           "ginkgo biloba standardized extract",
           "gingko extract",
-          "ginkgo flavone glycosides",
           "ginkgo biloba leaves extract",
           "ginkgo bilboa extract",
           "ginkgold ginkgo biloba extract",
@@ -20893,19 +20651,9 @@
           "Ginkgo biloba 24% extract",
           "Ginkgo (Ginkgo biloba) leaf std. extract",
           "european ginkgo biloba extract",
-          "bilobalide",
-          "ginkgo bilobalide",
-          "ginkgo terpene lactones",
-          "flavone glycosides",
           "flavonoid glycosides",
-          "ginkgolides",
-          "ginkgolide A",
-          "ginkgolide B",
-          "ginkgolide C",
-          "terpene lactones",
           "ginkgo flavonol glycosides",
-          "ginkgo flavone glycoside",
-          "terpene lactone"
+          "gingko biloba extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20941,14 +20689,13 @@
         }
       },
       "ginkgo (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 8,
         "natural": false,
-        "score": 10,
+        "score": 8,
         "absorption": "moderate (flavonoid + terpene lactone class)",
         "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed. B33 audit 2026-04-25: ginkgo class baseline.",
         "aliases": [
-          "ginkgo",
-          "gingko biloba extract"
+          "ginkgo"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20989,10 +20736,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C3531686",
-      "C1095795"
-    ]
+    "aliases": []
   },
   "milk_thistle": {
     "standard_name": "Milk Thistle",
@@ -21021,7 +20765,9 @@
           "milk thistle silybum marianum fruit phytosome",
           "Milk Thistle fruit extract Phytosome",
           "Siliphos Silybin Phytosome",
-          "Milk Thistle (Silybum marianum) fruit Phytosome"
+          "Milk Thistle (Silybum marianum) fruit Phytosome",
+          "Silybin Phytosome Complex",
+          "silybum phytosome"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21038,14 +20784,10 @@
         "absorption": "11-19x higher vs standard silymarin (PMID:40733088)",
         "notes": "Micelle-encapsulated silymarin (LipoMicel). Human crossover PK (PMID:40733088, 2025, n=16, 130mg): Cmax 18.9x higher, AUC0-24 11.4x higher vs standard silymarin. Tmax 0.5h vs 2.5h for standard. Superior to phytosome (3.4x) by a wide margin. Limited long-term clinical data vs phytosome.",
         "aliases": [
-          "nano silymarin",
-          "encapsulated milk thistle",
-          "advanced delivery silymarin",
           "micelle silymarin",
-          "nano-encapsulated silymarin",
           "micellar milk thistle",
-          "high-absorption silymarin",
-          "micellar silymarin complex"
+          "micellar silymarin complex",
+          "LipoMicel"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21087,9 +20829,7 @@
           "silymarin 80%",
           "silymarin standardized extract",
           "Milk Thistle seed extract",
-          "silybum marianum extract",
-          "Silybin Phytosome Complex",
-          "silybum phytosome"
+          "silybum marianum extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21241,11 +20981,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1873062",
-      "C0037135",
-      "silymarin"
-    ]
+    "aliases": []
   },
   "l_theanine": {
     "standard_name": "L-Theanine",
@@ -21541,9 +21277,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0017237"
-    ]
+    "aliases": []
   },
   "melatonin": {
     "standard_name": "Melatonin",
@@ -21971,9 +21705,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2697504"
-    ]
+    "aliases": []
   },
   "chondroitin": {
     "standard_name": "Chondroitin",
@@ -22265,9 +21997,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C1881340"
-    ]
+    "aliases": []
   },
   "grape_seed_extract": {
     "standard_name": "Grape Seed Extract",
@@ -22282,8 +22012,7 @@
       "vitis vinifera grape seed",
       "Grape (Vitis vinifera) extract",
       "grape extract",
-      "grape vitis vinifera extract",
-      "C0967936"
+      "grape vitis vinifera extract"
     ],
     "forms": {
       "grape seed phytosome": {
@@ -22653,9 +22382,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C4283948"
-    ]
+    "aliases": []
   },
   "ginseng": {
     "standard_name": "Ginseng",
@@ -23052,9 +22779,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1095869"
-    ]
+    "aliases": []
   },
   "turmeric": {
     "standard_name": "Turmeric",
@@ -23286,9 +23011,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0950101"
-    ]
+    "aliases": []
   },
   "garlic": {
     "standard_name": "Garlic",
@@ -24595,9 +24318,7 @@
         }
       ]
     },
-    "aliases": [
-      "C1880232"
-    ]
+    "aliases": []
   },
   "d_mannose": {
     "standard_name": "D-Mannose",
@@ -28239,9 +27960,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0056650"
-    ]
+    "aliases": []
   },
   "anthraquinones": {
     "standard_name": "Anthraquinones",
@@ -30033,10 +29752,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0032615",
-      "C0015687"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "ferulic_acid": {
@@ -30189,9 +29905,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0012173"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "flavonoids": {
@@ -30860,7 +30574,8 @@
           "cruciferous glucosinolates",
           "broccoli glucosinolates",
           "glucosinolate complex",
-          "indole glucosinolates"
+          "indole glucosinolates",
+          "glucosinolate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -31386,9 +31101,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C4076257"
-    ]
+    "aliases": []
   },
   "isothiocyanates": {
     "standard_name": "Isothiocyanates",
@@ -31442,9 +31155,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0124209"
-    ]
+    "aliases": []
   },
   "kavalactones": {
     "standard_name": "Kavalactones",
@@ -32613,11 +32324,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0106127",
-      "C0038329",
-      "C0054560"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": null,
       "unii_note": "Cleared 2026-05-27: S347WMO6M4 resolves to beta-sitosterol, which is not an exact UNII for Phytosterols. Phytosterols is a plant-sterol class; beta-sitosterol is one narrower member. Leave UNII null until GSRS exposes an exact approved record."
@@ -32734,9 +32441,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1709545"
-    ]
+    "aliases": []
   },
   "polyphenols": {
     "standard_name": "Polyphenols",
@@ -33410,9 +33115,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C1081320"
-    ]
+    "aliases": []
   },
   "sesamin": {
     "standard_name": "Sesamin",
@@ -33762,9 +33465,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0997193"
-    ]
+    "aliases": []
   },
   "tannins": {
     "standard_name": "Tannins",
@@ -33812,9 +33513,7 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0039294"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "theobromine": {
@@ -33992,9 +33691,7 @@
       "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
-    "aliases": [
-      "C0007271"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "triterpene_glycosides": {
@@ -34996,9 +34693,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0939803"
-    ]
+    "aliases": []
   },
   "sarsaparilla": {
     "standard_name": "Sarsaparilla",
@@ -35835,9 +35530,7 @@
         }
       ]
     },
-    "aliases": [
-      "C0873019"
-    ]
+    "aliases": []
   },
   "alpha_amylase": {
     "standard_name": "Alpha-Amylase",
@@ -35948,8 +35641,7 @@
       "research_status": "validated"
     },
     "aliases": [
-      "dicalcium phosphate",
-      "C1451733"
+      "dicalcium phosphate"
     ],
     "external_ids": {},
     "unii_note": "No parent-level exact UNII: GSRS UNII L11K75P92J is dicalcium phosphate and is owned by calcium.forms[dicalcium phosphate] for active mineral-source context. Inactive filler context is represented by other_ingredients PII_DICALCIUM_PHOSPHATE.",
@@ -39227,9 +38919,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C3640820"
-    ]
+    "aliases": []
   },
   "lactobacillus_paracasei": {
     "standard_name": "Lactobacillus Paracasei",
@@ -39513,9 +39203,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0697198"
-    ]
+    "aliases": []
   },
   "grass_fed_butter_powder": {
     "standard_name": "Grass-Fed Butter Powder",
@@ -40708,9 +40396,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0873038"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "X7B7P649WQ"
     },
@@ -41295,9 +40981,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0060207"
-    ]
+    "aliases": []
   },
   "black_cohosh": {
     "standard_name": "Black Cohosh",
@@ -41648,9 +41332,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0993600"
-    ]
+    "aliases": []
   },
   "chasteberry": {
     "standard_name": "Chasteberry (Vitex)",
@@ -41760,9 +41442,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0872889"
-    ]
+    "aliases": []
   },
   "citrus_bergamot": {
     "standard_name": "Citrus Bergamot",
@@ -41970,8 +41650,7 @@
       "algal dha",
       "dha from algae",
       "dha from fish oil",
-      "dha omega-3",
-      "C0556150"
+      "dha omega-3"
     ],
     "forms": {
       "algal triglyceride": {
@@ -45001,9 +44680,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0070325"
-    ]
+    "aliases": []
   },
   "cinnamon": {
     "standard_name": "Cinnamon",
@@ -45090,9 +44767,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0301249"
-    ]
+    "aliases": []
   },
   "blueberry": {
     "standard_name": "Blueberry",
@@ -45167,9 +44842,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C3273825"
-    ]
+    "aliases": []
   },
   "black_currant": {
     "standard_name": "Black Currant",
@@ -48055,9 +47728,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C2698852"
-    ]
+    "aliases": []
   },
   "mustard_seed": {
     "standard_name": "Mustard Seed",
@@ -48867,9 +48538,7 @@
     },
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
-    "aliases": [
-      "C1483721"
-    ]
+    "aliases": []
   },
   "chinese_skullcap": {
     "standard_name": "Chinese Skullcap",
@@ -49275,9 +48944,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0053396"
-    ]
+    "aliases": []
   },
   "guarana": {
     "standard_name": "Guarana",
@@ -49812,9 +49479,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0085217"
-    ]
+    "aliases": []
   },
   "alpha_ketoglutarate": {
     "standard_name": "Alpha-Ketoglutarate",
@@ -49835,7 +49500,8 @@
           "alpha-ketoglutaric acid",
           "alpha ketoglutaric acid",
           "akg",
-          "calcium alpha-ketoglutarate"
+          "calcium alpha-ketoglutarate",
+          "a-ketoglutarate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50577,9 +50243,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C0304095"
-    ]
+    "aliases": []
   },
   "guggul": {
     "standard_name": "Guggul (Commiphora mukul)",
@@ -53457,9 +53121,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0718405"
-    ]
+    "aliases": []
   },
   "wild_yam": {
     "category": "herbs",
@@ -53592,9 +53254,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": [
-      "C4520706"
-    ]
+    "aliases": []
   },
   "juniper": {
     "category": "herbs",
@@ -55555,8 +55215,7 @@
     },
     "cui_note": "",
     "aliases": [
-      "coffee fruit preparation",
-      "C2937579"
+      "coffee fruit preparation"
     ],
     "external_ids": {
       "unii": "HOX6BEK27Q"
@@ -56142,9 +55801,7 @@
     },
     "cui_note": "",
     "external_ids": {},
-    "aliases": [
-      "C1366263"
-    ]
+    "aliases": []
   },
   "mung_bean": {
     "standard_name": "Mung Bean Extract",
@@ -56814,8 +56471,7 @@
       "senna extract",
       "alexandrian senna extract",
       "senna leaf extract",
-      "cassia angustifolia extract",
-      "C3489575"
+      "cassia angustifolia extract"
     ]
   },
   "tart_cherry": {
@@ -57313,9 +56969,7 @@
       "research_status": "unverified"
     },
     "external_ids": {},
-    "aliases": [
-      "C0051821"
-    ]
+    "aliases": []
   },
   "sage": {
     "standard_name": "Sage",
@@ -57547,9 +57201,7 @@
     "cui_note": "",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Endogenous trace amine neuromodulator; dopamine/norepinephrine efflux via TAAR1",
-    "aliases": [
-      "C0031399"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "yohimbe": {
@@ -57605,9 +57257,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": [
-      "C0724441"
-    ]
+    "aliases": []
   },
   "garcinia_cambogia": {
     "standard_name": "Garcinia Cambogia (Hydroxycitric Acid)",
@@ -58837,9 +58487,7 @@
       "confidence": "high"
     },
     "cui_status": "no_confirmed_umls_match",
-    "aliases": [
-      "C0069449"
-    ],
+    "aliases": [],
     "external_ids": {}
   },
   "olive_fruit_extract": {
@@ -60331,9 +59979,7 @@
       "last_reviewed_at": "2026-04-03",
       "research_status": "validated"
     },
-    "aliases": [
-      "C1457892"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "Y05PC4JZRH",
       "pubchem_cid": null,
@@ -61141,8 +60787,8 @@
     "forms": {
       "l-glutamate": {
         "bio_score": 6,
-        "natural": true,
-        "score": 9,
+        "natural": false,
+        "score": 6,
         "absorption": "high (~85%)",
         "notes": "Abundant amino acid absorbed efficiently in the gut. Supplemental glutamate primarily supports gut mucosal health and as a flavor enhancer. Most dietary intake is from protein-rich foods.",
         "aliases": [
@@ -61154,7 +60800,7 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.85,
+          "value": 0.1,
           "range_low": 0.75,
           "range_high": 0.95,
           "quality": "very_good"
@@ -62040,8 +61686,7 @@
     "aliases": [
       "chloride",
       "chloride ion",
-      "Cl-",
-      "C0596019"
+      "Cl-"
     ]
   },
   "bacteriophages": {
@@ -62115,8 +61760,7 @@
     },
     "aliases": [
       "bacteriophages",
-      "phages",
-      "C0004651"
+      "phages"
     ],
     "rxcui_note": "No RxCUI assigned — specialty/botanical, not a pharmaceutical formulation."
   },
@@ -62186,8 +61830,7 @@
     },
     "aliases": [
       "palmitic acid",
-      "hexadecanoic acid",
-      "C0030234"
+      "hexadecanoic acid"
     ]
   },
   "sodium": {
@@ -62257,8 +61900,7 @@
     },
     "aliases": [
       "sodium",
-      "Na",
-      "C0037473"
+      "Na"
     ]
   },
   "lactobacillus_brevis": {
@@ -62330,8 +61972,7 @@
     },
     "aliases": [
       "L. brevis",
-      "Levilactobacillus brevis",
-      "C0317604"
+      "Levilactobacillus brevis"
     ]
   },
   "lactobacillus_kefiranofaciens": {
@@ -62393,8 +62034,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Lactobacillus Kefiranofaciens",
-      "C0317649"
+      "Lactobacillus Kefiranofaciens"
     ]
   },
   "lactobacillus_kefirgranum": {
@@ -62579,8 +62219,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Lactococcus Cremoris",
-      "C0544170"
+      "Lactococcus Cremoris"
     ]
   },
   "leuconostoc_mesenteroides": {
@@ -62819,8 +62458,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Kluyveromyces Marxianus",
-      "C0319600"
+      "Kluyveromyces Marxianus"
     ]
   },
   "brettanomyces_anomalus": {
@@ -62880,8 +62518,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Brettanomyces Anomalus",
-      "C3900228"
+      "Brettanomyces Anomalus"
     ]
   },
   "debaryomyces_hansenii": {
@@ -62940,8 +62577,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Debaryomyces Hansenii",
-      "C5754204"
+      "Debaryomyces Hansenii"
     ]
   },
   "saccharomyces_unisporus": {
@@ -63001,8 +62637,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Saccharomyces Unisporus",
-      "C1001399"
+      "Saccharomyces Unisporus"
     ]
   },
   "saccharomyces_turicensis": {
@@ -63184,8 +62819,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Torulaspora Delbrueckii",
-      "C0997372"
+      "Torulaspora Delbrueckii"
     ]
   },
   "leuconostoc_dextranicum": {
@@ -63245,8 +62879,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Leuconostoc Dextranicum",
-      "C0317711"
+      "Leuconostoc Dextranicum"
     ]
   },
   "lactobacillus_kefir": {
@@ -63306,8 +62939,7 @@
       "metabolites": []
     },
     "aliases": [
-      "Lactobacillus Kefir",
-      "C0317632"
+      "Lactobacillus Kefir"
     ]
   },
   "lactobacillus_bulgaricus": {
@@ -63374,8 +63006,7 @@
     },
     "aliases": [
       "L. bulgaricus",
-      "Lactobacillus delbrueckii bulgaricus",
-      "C0317591"
+      "Lactobacillus delbrueckii bulgaricus"
     ]
   },
   "bromelain": {
@@ -63725,9 +63356,7 @@
       "last_reviewed_at": "2026-05-23",
       "research_status": "validated"
     },
-    "aliases": [
-      "C0795585"
-    ],
+    "aliases": [],
     "external_ids": {
       "unii": "3729L8MA2C",
       "rxcui": "253157"
@@ -64016,10 +63645,84 @@
       "last_reviewed_at": "2026-05-24",
       "research_status": "validated"
     },
-    "aliases": [
-      "C3460451"
-    ],
+    "aliases": [],
     "external_ids": {},
     "rxcui_note": "No RxNorm entry for Garcinia indica / kokum. Verified absent via RxNorm REST API search 2026-05-25 for 'Garcinia indica', 'kokum', 'Garcinia indica fruit rind'. Distinct from Garcinia cambogia which DOES have RxCUI 1311595 ('Garcinia cambogia fruit extract', TTY=IN, verified same date). Identity verified via UMLS CUI C3460451."
+  },
+  "dark_sweet_cherry": {
+    "standard_name": "Dark Sweet Cherry",
+    "category": "antioxidants",
+    "cui": "C0946748",
+    "rxcui": "901303",
+    "forms": {
+      "dark sweet cherry powder": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "low (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
+        "notes": "Powder or concentrate from Prunus avium (sweet/dark sweet cherry), matching the GSRS SWEET CHERRY substance and botanical_ingredients.dark_sweet_cherry identity. Kept separate from black_cherry (Prunus serotina) and tart_cherry (Prunus cerasus). Score is conservative because anthocyanin intact oral bioavailability is low even when downstream metabolites may be active.",
+        "aliases": [
+          "dark sweet cherry",
+          "dark sweet cherry powder",
+          "dark sweet cherry extract",
+          "dark sweet cherry concentrate",
+          "sweet cherry",
+          "sweet cherry powder",
+          "sweet cherry extract",
+          "sweet cherry concentrate",
+          "sweet cherry fruit extract",
+          "sweet cherry juice concentrate",
+          "prunus avium",
+          "prunus avium extract",
+          "prunus avium fruit extract"
+        ],
+        "dosage_importance": 0.85,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.15,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "tart cherry",
+        "sour cherry",
+        "montmorency",
+        "black cherry",
+        "prunus serotina"
+      ],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "external_ids": {
+      "unii": "93T4562ZI3"
+    },
+    "api_verification": {
+      "identity_reconciled_20260609": {
+        "verification_report": "scripts/audits/open_decisions_20260609/verification.json",
+        "gsrs_exact": {
+          "name": "SWEET CHERRY",
+          "unii": "93T4562ZI3",
+          "rxcui": "901303"
+        },
+        "umls_exact": {
+          "name": "Prunus avium",
+          "cui": "C0946748"
+        }
+      }
+    },
+    "aliases": [],
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-06-09",
+      "research_status": "validated"
+    }
   }
 }

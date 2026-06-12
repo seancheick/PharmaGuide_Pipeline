@@ -1,0 +1,65 @@
+{
+  "verified_at": "2026-06-09",
+  "method": "Live API/official-source verification: scripts/api_audit/verify_unii.py, scripts/api_audit/verify_cui.py, and official FDA/eCFR source lookup for BSE/prohibited cattle material policy.",
+  "identity_verification": {
+    "black_cherry": {
+      "gsrs": {
+        "query": "Black Cherry",
+        "name": "BLACK CHERRY",
+        "unii": "A77056YJ4K",
+        "cas": "84604-07-9",
+        "dsld_count": 3
+      },
+      "umls": {
+        "query": "Prunus serotina",
+        "exact_cui": "C0330655",
+        "name": "Prunus serotina"
+      },
+      "decision": "Use black_cherry for the FDA/GSRS BLACK CHERRY substance and Prunus serotina botanical identity; remove Prunus avium/sweet-cherry aliases."
+    },
+    "dark_sweet_cherry": {
+      "gsrs": {
+        "query": "Sweet Cherry",
+        "name": "SWEET CHERRY",
+        "unii": "93T4562ZI3",
+        "rxcui": "901303",
+        "dsld_count": 287
+      },
+      "umls": {
+        "query": "Prunus avium",
+        "exact_cui": "C0946748",
+        "name": "Prunus avium"
+      },
+      "decision": "Add IQM parent for Prunus avium/sweet cherry so sweet-cherry labels remain scoreable without corrupting black_cherry."
+    }
+  },
+  "safety_verification": {
+    "bovine_brain_phosphatidylserine": {
+      "decision": "Keep bovine phosphatidylserine bio_score unchanged; model explicit bovine/brain-source concern as active-only watchlist safety signal.",
+      "official_sources": [
+        {
+          "title": "FDA Announces Final Rule on Bovine Spongiform Encephalopathy",
+          "url": "https://www.fda.gov/food/hfp-constituent-updates/fda-announces-final-rule-bovine-spongiform-encephalopathy",
+          "date": "2016-03-17",
+          "summary": "FDA final rule prohibits defined prohibited cattle materials in human food, dietary supplements, and cosmetics to reduce BSE risk."
+        },
+        {
+          "title": "21 CFR 189.5 Prohibited cattle materials",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-189/subpart-B/section-189.5",
+          "summary": "Federal regulation defining prohibited cattle materials for human food, including dietary-supplement context."
+        },
+        {
+          "title": "FDA Compliance Program 7321.008 Dietary Supplements",
+          "url": "https://www.fda.gov/media/116340/download",
+          "date": "2025-08-18",
+          "summary": "FDA inspection program instructs collection of evidence when bovine-derived ingredients may be prohibited cattle material under 21 CFR 189.5(a)."
+        }
+      ]
+    }
+  },
+  "score_policy": {
+    "coq10": "bio_score is strict absorption/form-quality. Crystal-free ubiquinol loses the undocumented clinical-utility exception: 15 -> 13.",
+    "curcumin": "HydroCurc and BCM-95 are capped to the signed enhanced-curcumin ladder: HydroCurc 10 -> 9, BCM-95 10 -> 8.",
+    "choline": "Choline is vitamin-like in the scoring contract and taxonomy canonical sets, not amino_acids; IQM category changed to vitamins."
+  }
+}

@@ -34,6 +34,7 @@ DEFAULT_PROGRESS_EVERY = 500
 # Ensure scripts/ is on the path for sibling imports (supabase_client)
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
+from supabase_client import CACHE_CONTROL_IMMUTABLE
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 
@@ -501,6 +502,9 @@ def _upload_blob_task(client, upload_fn, bucket, local_path, remote_blob_path, r
                 remote_blob_path,
                 local_path,
                 content_type="application/json",
+                # sha256-addressed path — content never changes; let the
+                # CDN serve it from edge forever.
+                cache_control=CACHE_CONTROL_IMMUTABLE,
             ),
             retries=retries,
             base_delay=base_delay,
@@ -924,7 +928,8 @@ def sync(
     remote_db_path = f"v{version}/pharmaguide_core.db"
     print(f"\nUploading {remote_db_path}...")
     start = time.time()
-    upload_file(client, bucket, remote_db_path, db_path)
+    upload_file(client, bucket, remote_db_path, db_path,
+                cache_control=CACHE_CONTROL_IMMUTABLE)
     db_time = time.time() - start
     db_size_mb = build_stats["db_size_mb"]
     print(f"  Done ({db_size_mb:.1f} MB in {db_time:.1f}s)")
@@ -933,7 +938,8 @@ def sync(
     remote_detail_index_path = f"v{version}/detail_index.json"
     print(f"\nUploading {remote_detail_index_path}...")
     start = time.time()
-    upload_file(client, bucket, remote_detail_index_path, detail_index_path, content_type="application/json")
+    upload_file(client, bucket, remote_detail_index_path, detail_index_path,
+                content_type="application/json", cache_control=CACHE_CONTROL_IMMUTABLE)
     detail_index_time = time.time() - start
     print(f"  Done ({detail_index_time:.1f}s)")
 
