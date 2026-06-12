@@ -92,7 +92,7 @@ from constants import (
     PROMOTE_REASON_ABSORPTION_ENHANCER,
     BRANDED_INGREDIENT_TOKENS,
 )
-from supplement_type_utils import infer_supplement_type
+from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
 from scoring_input_contract import build_scoring_classification, derive_product_scoring_evidence
@@ -3339,6 +3339,10 @@ class SupplementEnricherV3:
         # Mark top-level nutrient totals when nested child forms of the same
         # canonical ingredient are present in active rows.
         self._mark_parent_total_rows(ingredients_scorable)
+        # Mark dual-declaration compound rows ("Magnesium Glycinate" 400 mg
+        # restating the bare "Magnesium" 60 mg elemental row) so scoring's
+        # single-ingredient detection and floors see one active, not two.
+        mark_compound_duplicate_rows(ingredients_scorable)
 
         # =================================================================
         # SPRINT E1.23 — ABSORPTION-ENHANCER SUB-THRESHOLD DEMOTION
@@ -13508,6 +13512,75 @@ class SupplementEnricherV3:
             "total_sugars_g": _amount("sugars"),
         }
 
+    def _normalize_serving_unit_label(self, unit: Any) -> str:
+        """Canonicalize dose-form unit labels used in serving-size math."""
+        raw = str(unit or '').lower().strip()
+        raw = raw.replace('(ies)', '')
+        raw = raw.replace('(s)', '')
+        raw = raw.replace('(es)', '')
+        raw = re.sub(r'\([^)]*$', '', raw).strip()
+        mapped = SERVING_UNIT_NORMALIZATION_MAP.get(raw)
+        if mapped:
+            return mapped
+        for token in (
+            'capsule', 'tablet', 'gummy', 'softgel', 'lozenge',
+            'scoop', 'drop', 'packet', 'stick', 'spray', 'teaspoon',
+        ):
+            if token in raw:
+                return token
+        return raw
+
+    def _derive_serving_size_from_container(self, product: Dict, basis_unit: Any) -> Optional[float]:
+        """Use net contents / servings per container when DSLD split the dose row.
+
+        Example: 30 capsules and 10 servings means the Supplement Facts serving
+        is 3 capsules, even if servingSizes[] exposes a one-capsule row.
+        """
+        try:
+            servings_per_container = float(
+                product.get('servingsPerContainer') or product.get('servings_per_container')
+            )
+        except (TypeError, ValueError):
+            return None
+        if servings_per_container <= 0:
+            return None
+
+        canonical_basis_unit = self._normalize_serving_unit_label(basis_unit)
+        net_contents = product.get('netContents') or product.get('net_contents') or []
+        if isinstance(net_contents, dict):
+            net_contents = [net_contents]
+        if not isinstance(net_contents, list):
+            return None
+
+        for item in net_contents:
+            if not isinstance(item, dict):
+                continue
+            try:
+                quantity = float(item.get('quantity'))
+            except (TypeError, ValueError):
+                continue
+            if quantity <= 0:
+                continue
+            net_unit = self._normalize_serving_unit_label(
+                item.get('unit') or item.get('display') or item.get('name')
+            )
+            if canonical_basis_unit and net_unit and canonical_basis_unit != net_unit:
+                continue
+            derived = quantity / servings_per_container
+            if 0 < derived <= 24:
+                return derived
+        return None
+
+    def _serving_units_to_servings(self, units: Any, basis_count: Any) -> Optional[float]:
+        try:
+            unit_count = float(units)
+            serving_size = float(basis_count)
+        except (TypeError, ValueError):
+            return None
+        if unit_count <= 0 or serving_size <= 0:
+            return None
+        return unit_count / serving_size
+
     def _collect_serving_basis_data(self, product: Dict) -> Dict:
         """
         P0.4: Extract serving basis information for deterministic prescore
@@ -13547,6 +13620,7 @@ class SupplementEnricherV3:
         min_servings_per_day = None
         max_servings_per_day = None
         servings_per_day_source = "default"
+        basis_reason = "default"
 
         if serving_sizes and isinstance(serving_sizes, list):
             # Look for adult/primary serving size
@@ -13569,17 +13643,7 @@ class SupplementEnricherV3:
 
                 # Normalize unit using deterministic map (not heuristics)
                 if basis_unit:
-                    basis_unit_raw = basis_unit.lower().strip()
-                    # Clean up parenthetical variants like "(ies)", "(s)", "(es)"
-                    basis_unit_raw = basis_unit_raw.replace('(ies)', '')
-                    basis_unit_raw = basis_unit_raw.replace('(s)', '')
-                    basis_unit_raw = basis_unit_raw.replace('(es)', '')
-                    # Remove any unclosed parens
-                    basis_unit_raw = re.sub(r'\([^)]*$', '', basis_unit_raw).strip()
-                    # Use deterministic map for canonical form
-                    basis_unit = SERVING_UNIT_NORMALIZATION_MAP.get(
-                        basis_unit_raw, basis_unit_raw
-                    )
+                    basis_unit = self._normalize_serving_unit_label(basis_unit)
 
                 # Extract daily servings if provided by DSLD
                 min_servings_per_day = (
@@ -13594,6 +13658,30 @@ class SupplementEnricherV3:
                 )
                 if min_servings_per_day is not None or max_servings_per_day is not None:
                     servings_per_day_source = "servingSizes"
+
+                derived_basis_count = self._derive_serving_size_from_container(product, basis_unit)
+                try:
+                    current_basis_count = float(basis_count) if basis_count is not None else None
+                except (TypeError, ValueError):
+                    current_basis_count = None
+                if (
+                    derived_basis_count is not None
+                    and (
+                        current_basis_count is None
+                        or derived_basis_count > current_basis_count
+                    )
+                ):
+                    basis_count = derived_basis_count
+                    canonical_serving_size_qty = derived_basis_count
+                    basis_reason = "net_contents_servings_per_container"
+                    if min_servings_per_day is not None:
+                        min_servings_per_day = self._serving_units_to_servings(
+                            min_servings_per_day, basis_count
+                        )
+                    if max_servings_per_day is not None:
+                        max_servings_per_day = self._serving_units_to_servings(
+                            max_servings_per_day, basis_count
+                        )
 
         # Parse directions for min/max recommended
         min_recommended = None
@@ -13632,14 +13720,17 @@ class SupplementEnricherV3:
 
         if min_servings_per_day is None and max_servings_per_day is None and parsed_from_directions:
             if min_recommended is not None or max_recommended is not None:
-                min_servings_per_day = min_recommended
-                max_servings_per_day = max_recommended
+                min_servings_per_day = self._serving_units_to_servings(
+                    min_recommended, basis_count
+                )
+                max_servings_per_day = self._serving_units_to_servings(
+                    max_recommended, basis_count
+                )
                 servings_per_day_source = "directions"
 
         # Determine selection policy
         selection_policy = "first_serving"
         selected_from = "servingSizes"
-        basis_reason = "default"
 
         if user_groups:
             # Check if we have adult-specific groups
@@ -13658,7 +13749,8 @@ class SupplementEnricherV3:
                 if 'adult' in group_text.lower() or 'children 4' in group_text.lower():
                     selection_policy = "adult_primary"
                     selected_from = "userGroups"
-                    basis_reason = "adult_default_from_userGroups"
+                    if basis_reason == "default":
+                        basis_reason = "adult_default_from_userGroups"
                     break
 
         # SP-3 (2026-05-21): canonical form_factor for downstream consumers.
@@ -13787,6 +13879,18 @@ class SupplementEnricherV3:
         for word, num in self.WORD_TO_NUM.items():
             text_lower = re.sub(rf'\b{word}\b', str(num), text_lower)
 
+        frequency = 1
+        frequency_patterns = [
+            (r'\btwice\s+(?:daily|a day|per day)\b', 2),
+            (r'\bonce\s+(?:daily|a day|per day)\b', 1),
+            (r'\b(\d+)\s+times\s+(?:daily|a day|per day)\b', None),
+        ]
+        for pattern, fixed in frequency_patterns:
+            match = re.search(pattern, text_lower)
+            if match:
+                frequency = fixed if fixed is not None else int(match.group(1))
+                break
+
         # Look for adult dosage specifically (prioritize adult instructions)
         adult_patterns = [
             r'adults[^:]*:\s*(?:chew|take)\s+(\d+)',  # "Adults: chew 2"
@@ -13812,8 +13916,8 @@ class SupplementEnricherV3:
                         break
 
                 if child_dose and child_dose < adult_dose:
-                    return {"min": child_dose, "max": adult_dose}
-                return {"min": adult_dose, "max": adult_dose}
+                    return {"min": child_dose * frequency, "max": adult_dose * frequency}
+                return {"min": adult_dose * frequency, "max": adult_dose * frequency}
 
         # Fallback patterns for simpler directions
         patterns = [
@@ -13828,9 +13932,9 @@ class SupplementEnricherV3:
             if match:
                 groups = match.groups()
                 if len(groups) >= 2 and groups[1]:
-                    return {"min": int(groups[0]), "max": int(groups[1])}
+                    return {"min": int(groups[0]) * frequency, "max": int(groups[1]) * frequency}
                 elif len(groups) >= 1:
-                    return {"min": int(groups[0]), "max": int(groups[0])}
+                    return {"min": int(groups[0]) * frequency, "max": int(groups[0]) * frequency}
 
         return None
 
@@ -14850,6 +14954,10 @@ class SupplementEnricherV3:
         - Full evidence tracking
         """
         active_ingredients = product.get('activeIngredients', [])
+        # Dual-declaration dedupe: the compound-weight restatement of a bare
+        # elemental row must not contribute to UL totals (60+400=460 mg
+        # would falsely breach the 350 mg magnesium UL).
+        mark_compound_duplicate_rows(active_ingredients)
         rda_data = []
         adequacy_results = []
         safety_flags = []
@@ -14958,7 +15066,12 @@ class SupplementEnricherV3:
                             conversion_failed = False
                     skip_ul_check = False
                     skip_ul_reason = None
-                    if unknown_form:
+                    if ingredient.get('is_compound_duplicate'):
+                        # The bare elemental sibling row carries the true
+                        # dose; checking/summing this row double-counts.
+                        skip_ul_check = True
+                        skip_ul_reason = "compound_duplicate_row"
+                    elif unknown_form:
                         skip_ul_check = True
                         skip_ul_reason = "unknown_vitamin_form"
                     elif conversion_failed:
