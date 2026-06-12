@@ -113,6 +113,12 @@ def is_scorable(ingredient: Dict[str, Any]) -> bool:
         return False
     if ingredient.get("is_parent_total"):
         return False
+    if ingredient.get("is_compound_duplicate"):
+        # Dual-declaration compound-weight row (e.g. "Magnesium Glycinate"
+        # 400 mg restating the bare "Magnesium" 60 mg elemental row). The
+        # bare row carries the score-bearing dose; counting both would
+        # break single-ingredient detection and the premium-single floors.
+        return False
     return has_usable_individual_dose(ingredient)
 
 

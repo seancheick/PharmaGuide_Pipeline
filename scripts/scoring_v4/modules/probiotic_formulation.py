@@ -10,6 +10,8 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
+
 
 PHASE_MARKER = "P2.1_probiotic_formulation"
 CAP_FORMULATION = 25.0
@@ -68,21 +70,27 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "delivery_survivability": _score_delivery_survivability(product, pdata),
         "prebiotic_complement": 1.0 if pdata.get("prebiotic_present") else 0.0,
     }
+    shared_penalties = shared_formulation_penalty_detail(product)
+    penalties = dict(shared_penalties["penalties"])
+    penalty_magnitude = sum(abs(float(value or 0.0)) for value in penalties.values())
     raw_score = sum(components.values())
-    score = max(0.0, min(CAP_FORMULATION, raw_score))
+    score = max(0.0, min(CAP_FORMULATION, raw_score - penalty_magnitude))
+    metadata = {
+        "phase": PHASE_MARKER,
+        "raw_score": round(raw_score, 4),
+        "pre_penalty_score": round(raw_score, 4),
+        "total_billion_count": total_billion,
+        "total_strain_count": strain_count,
+        "clinical_strain_count": clinical_count,
+        "cap_applied": raw_score > CAP_FORMULATION,
+    }
+    metadata.update(shared_penalties["metadata"])
     return {
         "score": round(score, 2),
         "max": CAP_FORMULATION,
         "components": components,
-        "penalties": {},
-        "metadata": {
-            "phase": PHASE_MARKER,
-            "raw_score": round(raw_score, 4),
-            "total_billion_count": total_billion,
-            "total_strain_count": strain_count,
-            "clinical_strain_count": clinical_count,
-            "cap_applied": raw_score > CAP_FORMULATION,
-        },
+        "penalties": penalties,
+        "metadata": metadata,
     }
 
 

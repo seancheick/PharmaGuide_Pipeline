@@ -29,6 +29,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 
 
 CAP_FORMULATION = 25.0
@@ -326,6 +327,8 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     if _is_gummy(product):
         penalties["gummy_formulation_limit"] = -GUMMY_FORMULATION_PENALTY
+    shared_penalties = shared_formulation_penalty_detail(product)
+    penalties.update(shared_penalties["penalties"])
 
     positive = sum(components.values())
     penalty_magnitude = sum(abs(value) for value in penalties.values())
@@ -345,6 +348,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "pre_floor_score": _round(pre_floor_score),
         "applied": presence_floor_applied,
     }
+    metadata.update(shared_penalties["metadata"])
 
     return {
         "score": score,

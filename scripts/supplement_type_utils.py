@@ -131,6 +131,94 @@ def _ingredient_name(row: dict[str, Any]) -> str:
     )
 
 
+# Canonicals where the dual-declaration pattern applies: DRI vitamins and
+# minerals, whose Supplement Facts row is the FDA-mandated ELEMENTAL amount
+# while a sibling row may restate the source compound's weight ("Magnesium
+# Glycinate 400 mg"). Outside this set — probiotic strains ("Lactobacillus
+# Acidophilus LA-14" beside a bare species row), botanicals ("Turmeric
+# Extract" beside "Turmeric") — name-extension siblings can be genuinely
+# additive and must NOT be marked.
+_DRI_DUAL_DECLARATION_CANONICALS = frozenset({
+    "copper", "zinc", "selenium", "iodine", "chromium", "molybdenum",
+    "manganese", "iron", "calcium", "magnesium", "potassium", "phosphorus",
+    "chloride", "sodium", "boron",
+    "vitamin_a", "vitamin_c", "vitamin_d", "vitamin_d3", "vitamin_e",
+    "vitamin_k", "vitamin_k1", "vitamin_k2",
+    "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5", "vitamin_b6",
+    "vitamin_b12", "folate", "biotin", "choline",
+})
+
+
+def mark_compound_duplicate_rows(rows: list[Any]) -> list[dict[str, Any]]:
+    """Mark dual-declaration compound rows with ``is_compound_duplicate=True``.
+
+    Mineral labels frequently declare the same nutrient twice: once as the
+    bare elemental nutrient ("Magnesium" 60 mg — the Supplement Facts
+    elemental value) and once as compound weight ("Magnesium Glycinate"
+    400 mg — the source material restated). These are ONE ingredient stated
+    two ways, not two additive sources. Without this marker downstream
+    consumers double-count: UL aggregation sums 60+400=460 mg (false
+    over-UL flag), supplement-type counting sees 2 actives (demoting a
+    single to 'targeted'), and formulation scoring loses its
+    single-ingredient floors/A6.
+
+    A compound row is marked only when the canonical is a DRI vitamin or
+    mineral (``_DRI_DUAL_DECLARATION_CANONICALS``) and, within the same
+    ``canonical_id`` group of top-level non-blend rows:
+      - a bare row exists whose normalized label name equals the canonical
+        nutrient name AND carries a positive quantity (the elemental row
+        must be able to "win"), and
+      - the row's normalized label name extends the canonical name
+        (``startswith(canonical + " ")``).
+    Genuinely additive multi-form labels with no bare elemental row
+    (e.g. beta-carotene + retinyl palmitate) are untouched.
+
+    Idempotent. Returns the rows that are marked.
+    """
+    groups: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        if bool(row.get("is_nested_ingredient")) or bool(row.get("is_parent_total")):
+            continue
+        if bool(row.get("is_proprietary_blend")) or bool(row.get("is_blend_header")):
+            continue
+        canonical_id = str(row.get("canonical_id") or "").strip().lower()
+        if not canonical_id:
+            continue
+        groups.setdefault(canonical_id, []).append(row)
+
+    marked: list[dict[str, Any]] = []
+    for canonical_id, group in groups.items():
+        if canonical_id not in _DRI_DUAL_DECLARATION_CANONICALS:
+            continue
+        if len(group) < 2:
+            continue
+        canonical_name = _normalize_text(canonical_id.replace("_", " "))
+        if not canonical_name:
+            continue
+
+        def _row_qty(row: dict[str, Any]) -> float:
+            try:
+                return float(row.get("quantity") or 0)
+            except (TypeError, ValueError):
+                return 0.0
+
+        bare_rows = [
+            row for row in group
+            if _normalize_text(row.get("name")) == canonical_name
+            and _row_qty(row) > 0
+        ]
+        if not bare_rows:
+            continue
+        for row in group:
+            name = _normalize_text(row.get("name"))
+            if name.startswith(canonical_name + " "):
+                row["is_compound_duplicate"] = True
+                marked.append(row)
+    return marked
+
+
 def _iter_classification_rows(product: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
     iqd_rows = _safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))
     if iqd_rows:
@@ -142,6 +230,7 @@ def _iter_classification_rows(product: dict[str, Any]) -> tuple[list[dict[str, A
 
 def infer_supplement_type(product: dict[str, Any]) -> dict[str, Any]:
     rows, source = _iter_classification_rows(product)
+    mark_compound_duplicate_rows(rows)
     inactive_count = len(_safe_list(product.get("inactiveIngredients")))
 
     scorable_rows: list[dict[str, Any]] = []
@@ -156,6 +245,8 @@ def infer_supplement_type(product: dict[str, Any]) -> dict[str, Any]:
         if role in {"recognized_non_scorable", "inactive_non_scorable"}:
             continue
         if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
+            continue
+        if bool(row.get("is_compound_duplicate")):
             continue
 
         name = _ingredient_name(row)

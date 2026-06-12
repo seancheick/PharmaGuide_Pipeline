@@ -736,6 +736,31 @@ def test_high_risk_exact_match_sets_caution_blocking_reason_without_banned_flag(
     assert row["blocking_reason"] == "high_risk_ingredient"
 
 
+def test_dietary_sugar_penalty_exports_to_tradeoffs():
+    enriched = make_enriched()
+    enriched["dietary_sensitivity_data"]["sugar"] = {
+        "amount_g": 0.0,
+        "level": "low",
+        "level_display": "Low Sugar",
+        "contains_sugar": True,
+        "has_added_sugar": True,
+        "sugar_sources": ["Glucose Syrup"],
+    }
+    enriched["dietary_sensitivity_data"]["sweeteners"] = {
+        "high_glycemic": ["Glucose Syrup"],
+        "sugar_alcohols": [],
+    }
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    sugar_penalty = next(
+        item for item in blob["score_penalties"] if item["id"] == "B1_dietary_sugar"
+    )
+    assert sugar_penalty["score"] == -2.0
+    assert sugar_penalty["severity"] == "moderate"
+    assert sugar_penalty["reason"] == "high_glycemic_syrup_or_sugar_alcohol"
+
+
 def test_recalled_exact_match_sets_recalled_flag_but_not_banned_flag():
     enriched = make_enriched()
     enriched["contaminant_data"]["banned_substances"]["substances"] = [
@@ -837,15 +862,17 @@ def test_excipient_acceptable_inactive_uses_calibrated_warning_posture():
         if w.get("matched_rule_id") == "BANNED_ADD_TITANIUM_DIOXIDE"
     )
 
-    # Verdict posture updated 2026-05-29 (commit 3f1e5b82): the watchlist gate
-    # widening means a watchlist_substance (Titanium Dioxide E171, FDA-allowed
-    # but EU-banned) can no longer ship as a base SAFE verdict — per the
-    # "no product containing high-risk/banned/recalled/watchlist shows SAFE"
-    # directive. The base verdict downgrades to CAUTION (a clear non-SAFE
-    # signal short of a hard block), while the WARNING posture stays calibrated
-    # and informational. blocking_reason remains None — CAUTION is not a block.
-    assert row["verdict"] == "CAUTION"
-    assert row["safety_verdict"] == "CAUTION"
+    # Verdict posture updated 2026-06-09 (commit e22c7286, supersedes the
+    # 2026-05-29 watchlist-widening posture): a watchlist substance whose
+    # entry says inactive_policy=excipient_acceptable (Titanium Dioxide E171
+    # as a capsule excipient, simethicone as antifoam) is warning-only — it
+    # does NOT downgrade the base verdict. The user-visible warning persists
+    # (never silent), but ubiquitous low-risk excipient use is not a CAUTION.
+    # Active-role watchlist matches still disqualify SAFE — locked by
+    # test_v4_safety_parity_release::test_active_watchlist_warning_still_
+    # disqualifies_safe.
+    assert row["verdict"] == "SAFE"
+    assert row["safety_verdict"] == "SAFE"
     assert row["blocking_reason"] is None
     # Warning copy stays calibrated/informational — only the verdict moved.
     assert warning["type"] == "watchlist_substance"
@@ -2435,3 +2462,53 @@ def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypat
         # The detail BLOB must agree — no "scored" v4 breakdown for a banned product.
         blob = json.loads((out / "detail_blobs" / "999.json").read_text(encoding="utf-8"))
         assert blob["v4_score_provenance"]["quality_score_status"] == "suppressed_safety"
+
+
+def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):
+    """2026-06-09 badge-inversion fix: a registry-verified (sku/product_line)
+    cert must light has_third_party_testing and appear in cert_programs even
+    when the label carries no parseable cert claim. Before this fix, Thorne
+    Super EPA (two NSF SKU registry matches) shipped cert_programs=[] and
+    has_third_party_testing=0 while a label-claim-only product showed the
+    badge — the most-verified products displayed as least-verified.
+
+    Cross-brand registry rows must NOT light the badge (same token-subset
+    brand guard as the scoring layer; deliberately duplicated per the
+    stale-artifact defense doctrine)."""
+    e1 = make_enriched()  # dsld_id 999 — registry-verified only, no label claims
+    e1["named_cert_programs"] = []
+    e1["verified_cert_programs"] = [
+        {"program": "NSF Certified", "scope": "sku", "matched_brand": "Test Brand"},
+        {"program": "NSF Sport", "scope": "sku", "matched_brand": "Unrelated Megacorp"},  # cross-brand: excluded
+        {"program": "USP Verified", "scope": "claimed_only"},  # unverified: excluded
+    ]
+    e2 = make_enriched(); e2["dsld_id"] = "888"; e2["product_name"] = "No Cert P"
+    e2["upcSku"] = "0123456789888"  # distinct UPC — make_enriched's default collides in dedup
+    e2["named_cert_programs"] = []
+    e2["verified_cert_programs"] = []
+    e3 = make_enriched(); e3["dsld_id"] = "777"; e3["product_name"] = "Label+Registry P"
+    e3["upcSku"] = "0123456789777"
+    e3["named_cert_programs"] = ["NSF Certified"]  # label names it too — no dupe
+    e3["verified_cert_programs"] = [
+        {"program": "NSF Certified", "scope": "product_line", "matched_brand": "Test Brand, Inc."},
+    ]
+    scored = []
+    for d in ("999", "888", "777"):
+        s = make_scored(); s["dsld_id"] = d; scored.append(s)
+    _patch_v4_by_id(monkeypatch, {d: _canned_v4() for d in ("999", "888", "777")})
+    with tempfile.TemporaryDirectory() as tmp:
+        _result, out = _run_build(tmp, [e1, e2, e3], scored)
+        rows = _core_rows(out, ["dsld_id", "has_third_party_testing", "cert_programs"])
+        r1 = rows["999"]
+        assert r1["has_third_party_testing"] == 1, (
+            "registry-verified sku cert must light has_third_party_testing"
+        )
+        assert json.loads(r1["cert_programs"]) == ["NSF Certified"], (
+            "cert_programs must list the registry-verified program and exclude "
+            "cross-brand and claimed_only rows"
+        )
+        assert rows["888"]["has_third_party_testing"] == 0
+        assert json.loads(rows["888"]["cert_programs"]) == []
+        assert json.loads(rows["777"]["cert_programs"]) == ["NSF Certified"], (
+            "label-named + registry-verified same program must not duplicate"
+        )

@@ -63,6 +63,7 @@ from identity.interaction import (
     interaction_tags_from_text,
     normalize_catalog_interaction_tag,
 )
+from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
 # The import remains available for backward-compat callers but is unused.
@@ -4637,6 +4638,37 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "severity": safe_str(h.get("severity_level")),
                     "reason": safe_str(h.get("mechanism_of_harm") or h.get("notes") or h.get("category"))[:200],
                 })
+    sugar_penalty = _dietary_sugar_penalty_detail(enriched)
+    sugar_penalty_score = safe_float(sugar_penalty.get("penalty"), 0)
+    if sugar_penalty_score > 0:
+        sugar_reason = safe_str(sugar_penalty.get("reason"))
+        sugar = safe_dict(safe_dict(enriched.get("dietary_sensitivity_data")).get("sugar"))
+        sources = safe_list(sugar_penalty.get("sugar_sources"))
+        high_glycemic = safe_list(sugar_penalty.get("high_glycemic_sweeteners"))
+        sugar_alcohols = safe_list(sugar_penalty.get("sugar_alcohols"))
+        if sugar_reason == "high_sugar_grams":
+            label = "High sugar content"
+        elif sugar_reason == "moderate_sugar_grams":
+            label = "Moderate sugar content"
+        elif sugar_reason == "high_glycemic_syrup_or_sugar_alcohol":
+            label = "High-glycemic sweetener or sugar alcohol"
+        else:
+            label = "Added sugar source"
+        detail_parts = []
+        amount_g = safe_float(sugar.get("amount_g"))
+        if amount_g:
+            detail_parts.append(f"{amount_g:g}g sugar per serving")
+        named_sources = high_glycemic or sugar_alcohols or sources
+        if named_sources:
+            detail_parts.append(", ".join(safe_str(source) for source in named_sources if safe_str(source)))
+        penalties.append({
+            "id": "B1_dietary_sugar",
+            "label": label,
+            "score": -sugar_penalty_score,
+            "severity": "high" if sugar_penalty_score >= 4 else ("moderate" if sugar_penalty_score >= 2 else "low"),
+            "reason": sugar_reason,
+            "detail": "; ".join(detail_parts),
+        })
     if safe_float(b_sub.get("B2_penalty"), 0) > 0:
         for a in safe_list(enriched.get("allergen_hits")):
             if isinstance(a, dict):
@@ -5705,6 +5737,38 @@ def generate_allergen_summary(enriched: Dict) -> str:
     return f"Contains: {', '.join(allergen_names)}"
 
 
+def registry_verified_cert_display_programs(enriched: Dict) -> List[str]:
+    """Registry-verified (sku/product_line) cert program names whose
+    matched_brand agrees with the product brand.
+
+    Mirrors the scoring-layer brand guard in scoring_v4 trust modules —
+    deliberately duplicated per the stale-artifact defense doctrine, so a
+    stale enriched artifact carrying a cross-brand registry row can light
+    neither score nor display badge. claimed_only / needs_review /
+    brand_only rows never reach display: a claim is not verification.
+    """
+    from scoring_v4.modules.generic_trust import _brand_key, _brand_tokens
+
+    out: List[str] = []
+    product_brand = _brand_key(
+        enriched.get("brandName") or enriched.get("brand_name") or enriched.get("brand") or ""
+    )
+    for entry in safe_list(enriched.get("verified_cert_programs")):
+        if not isinstance(entry, dict) or entry.get("scoring_blocked_reason"):
+            continue
+        if str(entry.get("scope") or "").strip().lower() not in ("sku", "product_line"):
+            continue
+        matched_brand = _brand_key(entry.get("matched_brand"))
+        if matched_brand and product_brand:
+            mt, pt = _brand_tokens(matched_brand), _brand_tokens(product_brand)
+            if not (mt and pt and (mt <= pt or pt <= mt)):
+                continue
+        name = str(entry.get("program") or "").strip()
+        if name and name not in out:
+            out.append(name)
+    return out
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -5718,6 +5782,18 @@ def build_core_row(
     cp = safe_dict(scored.get("category_percentile"))
     st_str = resolve_export_supplement_type(enriched, scored)
     sm = safe_dict(scored.get("scoring_metadata"))
+
+    # cert_programs / has_third_party_testing: union of label-named programs
+    # and registry-verified (sku/product_line) certs. Label-only sourcing
+    # inverted the badge — Thorne Super EPA (two NSF SKU registry matches)
+    # shipped has_third_party_testing=0 while label-claim-only products
+    # showed the badge (2026-06-09 audit).
+    cert_display_programs = [
+        str(p) for p in safe_list(enriched.get("named_cert_programs")) if str(p).strip()
+    ]
+    for _prog in registry_verified_cert_display_programs(enriched):
+        if _prog not in cert_display_programs:
+            cert_display_programs.append(_prog)
 
     disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
     has_export_banned_signal = (
@@ -5938,10 +6014,10 @@ def build_core_row(
         safe_bool(ds.get("diabetes_friendly", False)),
         safe_bool(ds.get("hypertension_friendly", False)),
         safe_bool(enriched.get("is_trusted_manufacturer")),
-        safe_bool(enriched.get("named_cert_programs")),
+        safe_bool(cert_display_programs),
         safe_bool(enriched.get("has_full_disclosure")),
         # JSON columns
-        json.dumps(enriched.get("named_cert_programs", []), ensure_ascii=False),
+        json.dumps(cert_display_programs, ensure_ascii=False),
         json.dumps(scored.get("badges", []), ensure_ascii=False),
         json.dumps(top_warnings, ensure_ascii=False),
         json.dumps(scored.get("flags", []), ensure_ascii=False),

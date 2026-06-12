@@ -536,7 +536,14 @@ CERTIFICATION_PATTERNS = {
     "NSF-Contents-Certified": r"NSF\s*(Contents\s*Certified|/ANSI\s*173)",
     "NSF-Certified-Sport": r"NSF\s*(Certified\s*for\s*Sport|Sport)",
     "NSF-General": r"NSF\s*(Certified|International)",
-    "USP-Verified": r"USP\s*(Verified|Grade|<\d+>|\s+standards)",
+    # Program claims ONLY. "USP grade", "USP <2091>" (weight variation),
+    # "meets USP standards" are pharmacopeia references, not the USP
+    # Verified(TM) certification — the old loose pattern coined false
+    # certs on 858 GNC SKUs (test_usp_cert_parse_integrity.py).
+    "USP-Verified": (
+        r"USP[\s-]+Verified"
+        r"|USP[\s-]+(Dietary[\s-]+Supplement[\s-]+)?Verification[\s-]+Program"
+    ),
     "ConsumerLab-Approved": r"ConsumerLab\s*(Tested|Approved|CL\s*Approved)",
     "Informed-Choice": r"Informed[\s-]*Choice",
     "Informed-Sport": r"Informed[\s-]*Sport",

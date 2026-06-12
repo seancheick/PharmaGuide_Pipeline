@@ -436,10 +436,22 @@ def _pillar_verification(module_bd: Dict[str, Any], weight: float,
             signals.append("does its own purity testing")
         if not signals and gmp > 0:
             signals.append("made in a GMP-registered facility")
+        # "Independently verified" only when an independent party actually
+        # verified the product (registry-matched cert or batch COA). A
+        # label-asserted claim or self-run testing gets a neutral header —
+        # the old prefix contradicted its own clause ("Independently
+        # verified — label claims third-party certification").
+        independently_verified = has_registry_cert or coa_batch > 0
+        prefix = (
+            "Independently verified — " if independently_verified
+            else "Quality signals on file — "
+        )
         if signals:
-            reason = "Independently verified — " + ", ".join(signals) + "."
-        else:
+            reason = prefix + ", ".join(signals) + "."
+        elif independently_verified:
             reason = "Independently verified for quality."
+        else:
+            reason = "Quality signals on file."
         fail_open = False
     elif brand_only_cert > 0:
         base = max(sub["neutral_baseline"], cert + coa_batch + gmp + testing)

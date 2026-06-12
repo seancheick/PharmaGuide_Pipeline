@@ -821,20 +821,89 @@ def test_percent_unit_is_not_dose_eligible_for_formulation_quality() -> None:
 # --- B1 dietary sugar penalty ---------------------------------------------
 
 
-def test_b1_dietary_sugar_high_penalty_1_5() -> None:
+def test_b1_dietary_sugar_high_penalty_4() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(dietary_sensitivity_data={"sugar": {"level": "high"}})
     payload = score_formulation(product)
-    assert payload["penalties"]["B1_dietary_sugar"] == -1.5
+    assert payload["penalties"]["B1_dietary_sugar"] == -4.0
 
 
-def test_b1_dietary_sugar_moderate_penalty_0_5() -> None:
+def test_b1_dietary_sugar_moderate_penalty_3() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(dietary_sensitivity_data={"sugar": {"level": "moderate"}})
     payload = score_formulation(product)
-    assert payload["penalties"]["B1_dietary_sugar"] == -0.5
+    assert payload["penalties"]["B1_dietary_sugar"] == -3.0
+
+
+def test_b1_dietary_sugar_low_added_source_penalty_1() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        dietary_sensitivity_data={
+            "sugar": {
+                "level": "low",
+                "contains_sugar": True,
+                "has_added_sugar": True,
+                "sugar_sources": ["Sugar"],
+            }
+        }
+    )
+    payload = score_formulation(product)
+    assert payload["penalties"]["B1_dietary_sugar"] == -1.0
+    assert payload["metadata"]["dietary_sugar"]["reason"] == "low_added_sugar_source"
+
+
+def test_b1_dietary_sugar_syrup_or_sugar_alcohol_penalty_2() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    syrup_product = _product(
+        dietary_sensitivity_data={
+            "sugar": {
+                "level": "low",
+                "contains_sugar": True,
+                "sugar_sources": ["Glucose Syrup"],
+            },
+            "sweeteners": {
+                "high_glycemic": ["Glucose Syrup"],
+            },
+        }
+    )
+    alcohol_product = _product(
+        dietary_sensitivity_data={
+            "sugar": {
+                "level": "low",
+                "contains_sugar": True,
+                "sugar_sources": ["Maltitol Syrup"],
+            },
+            "sweeteners": {
+                "sugar_alcohols": ["Maltitol Syrup"],
+            },
+        }
+    )
+
+    assert score_formulation(syrup_product)["penalties"]["B1_dietary_sugar"] == -2.0
+    assert score_formulation(alcohol_product)["penalties"]["B1_dietary_sugar"] == -2.0
+
+
+def test_b1_dietary_sugar_syrup_source_penalty_does_not_depend_on_sweetener_copy() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        dietary_sensitivity_data={
+            "sugar": {
+                "level": "low",
+                "contains_sugar": True,
+                "has_added_sugar": True,
+                "sugar_sources": ["Corn Syrup"],
+            },
+            "sweeteners": {},
+        }
+    )
+
+    payload = score_formulation(product)
+    assert payload["penalties"]["B1_dietary_sugar"] == -2.0
 
 
 def test_b1_dietary_sugar_clean_returns_zero() -> None:
@@ -1338,7 +1407,7 @@ def test_b1_harmful_additives_severity_points_and_sugar_stays_separate() -> None
     )
 
     assert payload["penalties"]["B1_harmful_additives"] == -6.5
-    assert payload["penalties"]["B1_dietary_sugar"] == -1.5
+    assert payload["penalties"]["B1_dietary_sugar"] == -4.0
 
 
 def test_b1_harmful_additives_suppresses_low_and_moderate_actives_only() -> None:

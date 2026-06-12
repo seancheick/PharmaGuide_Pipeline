@@ -63,8 +63,13 @@ def resolver():
         # — no longer a hard-banned blocker; CAUTION behavior covered by
         # test_v4_safety_gate::test_red3_high_risk_drives_caution_not_blocked.
         ("Sodium Tetraborate",       "Sodium Tetraborate"),
-        ("Simethicone",              "Simethicone"),
-        ("Polydimethylsiloxane",     "Simethicone"),
+        # Simethicone / Polydimethylsiloxane moved to status=watchlist with
+        # inactive_policy=excipient_acceptable (warning-only, is_banned=False)
+        # 2026-06-09 — ubiquitous low-risk antifoam excipient; the "OTC drug
+        # in supplements" flag is regulatory, not a safety block. Verdict
+        # behavior covered by test_v4_safety_parity_release; authored-copy
+        # propagation covered below by
+        # test_resolver_watchlist_excipient_still_carries_authored_copy.
     ],
 )
 def test_resolver_banned_inactive_carries_authored_copy(
@@ -95,6 +100,29 @@ def test_resolver_banned_inactive_carries_authored_copy(
     assert isinstance(r.safety_warning, str)
     assert r.safety_warning_one_liner.strip()
     assert r.safety_warning.strip()
+
+
+@pytest.mark.parametrize("raw_name", ["Simethicone", "Polydimethylsiloxane"])
+def test_resolver_watchlist_excipient_still_carries_authored_copy(
+    resolver, raw_name
+) -> None:
+    """Simethicone's 2026-06-09 banned→watchlist downgrade must stay
+    warning-PRESERVING, never silent. The resolver still matches the
+    banned_recalled entry, no longer flags it banned, and the authored
+    one-liner ("OTC drug found in supplements...") must keep propagating
+    so the user-facing warning survives the reclassification.
+    """
+    r = resolver.resolve(raw_name=raw_name)
+    assert r.is_banned is False, (
+        f"{raw_name!r} is watchlist+excipient_acceptable as of 2026-06-09 — "
+        f"is_banned must be False (got severity_status={r.severity_status!r})"
+    )
+    assert r.matched_source == "banned_recalled"
+    assert r.severity_status == "informational"
+    assert r.safety_warning_one_liner and r.safety_warning_one_liner.strip(), (
+        f"{raw_name!r} downgrade must not silence the authored warning copy"
+    )
+    assert r.safety_warning and r.safety_warning.strip()
 
 
 def test_resolver_harmful_additive_does_not_carry_banned_copy(resolver) -> None:
@@ -183,8 +211,9 @@ def _make_synthetic_enriched(
     [
         ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
         # FD&C Red #3 → high_risk/CAUTION 2026-06-08 (no longer is_banned)
+        # Simethicone → watchlist/excipient_acceptable 2026-06-09 (no longer
+        # is_banned; warning-only path, not a banned_substance warning)
         ("Sodium Tetraborate",       "Sodium Tetraborate"),
-        ("Simethicone",              "Simethicone"),
     ],
 )
 def test_emitter_writes_banned_substance_warning_with_authored_copy(
@@ -289,7 +318,10 @@ def test_emitter_writes_banned_substance_warning_with_authored_copy(
 @pytest.mark.parametrize(
     "ingredient_name",
     # FD&C Red #3 removed 2026-06-08 → status=high_risk/CAUTION, no longer is_banned
-    ["Brominated Vegetable Oil", "Sodium Tetraborate", "Simethicone"],
+    # Simethicone removed 2026-06-09 → status=watchlist/excipient_acceptable,
+    # no longer is_banned (warning-only; resolver copy lock lives in
+    # test_resolver_watchlist_excipient_still_carries_authored_copy)
+    ["Brominated Vegetable Oil", "Sodium Tetraborate"],
 )
 def test_build_banned_substance_detail_finds_authored_copy_for_resolver_hit(
     ingredient_name,
