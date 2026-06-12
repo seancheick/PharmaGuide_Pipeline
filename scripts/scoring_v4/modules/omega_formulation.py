@@ -38,6 +38,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
+from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 from scoring_v4.modules.generic_helpers import get_active_ingredients
 
 
@@ -514,6 +515,10 @@ def score_formulation(product: Any) -> Dict[str, Any]:
     if sustainability_match:
         components["sustainability_cert"] = sustainability_pts
 
+    shared_penalties = shared_formulation_penalty_detail(product)
+    penalties = dict(shared_penalties["penalties"])
+    penalty_magnitude = sum(abs(float(value or 0.0)) for value in penalties.values())
+
     raw_score = sum(components.values())
     masses = _epa_dha_and_oil_mass_mg(product)
     quality_programs = _verified_quality_programs(product)
@@ -537,11 +542,13 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         data_limited_form_floor["applied"] = True
         data_limited_form_floor["adjustment"] = round(floor_adjustment, 4)
 
-    score = max(0.0, min(CAP_FORMULATION, raw_score))
+    pre_penalty_score = raw_score
+    score = max(0.0, min(CAP_FORMULATION, raw_score - penalty_magnitude))
 
     metadata: Dict[str, Any] = {
         "phase": PHASE_MARKER,
         "raw_score": round(raw_score, 4),
+        "pre_penalty_score": round(pre_penalty_score, 4),
         "cap_applied": raw_score > CAP_FORMULATION,
         "form_detected": form_detected,
         "source_disclosed": "source_disclosed" in components,
@@ -556,11 +563,12 @@ def score_formulation(product: Any) -> Dict[str, Any]:
             "a 23/25 score as a cap-applied event."
         ),
     }
+    metadata.update(shared_penalties["metadata"])
 
     return {
         "score": round(score, 2),
         "max": CAP_FORMULATION,
         "components": components,
-        "penalties": {},
+        "penalties": penalties,
         "metadata": metadata,
     }

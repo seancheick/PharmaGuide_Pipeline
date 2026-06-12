@@ -14,7 +14,7 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric — Formulation 30:
     |                                       |     |                          |
     | B0 immediate_fail (moderate/watchlist)| -10 | safety_signals           |
     | B1 harmful_additives                  | -15 | contaminant_data         |
-    | B1 dietary_sugar                      |-1.5 | dietary_sensitivity_data |
+    | B1 dietary_sugar                      |  -4 | dietary_sensitivity_data |
 
 Final: clamp(0, 30, sum(components) − sum(|penalties|)).
 
@@ -190,10 +190,14 @@ B1_HARMFUL_ADDITIVE_POINTS = {
     "none": 0.0,
 }
 
-# B1 dietary-sugar penalty bands (mirrors scoring_config.B1_dietary_sugar_penalty).
-DIETARY_SUGAR_MODERATE_PENALTY = 0.5
-DIETARY_SUGAR_HIGH_PENALTY = 1.5
-DIETARY_SUGAR_CAP = 1.5
+# B1 dietary-sugar penalty bands. Uses the strongest applicable band rather
+# than summing, so one gummy with syrup and 4g sugar is a high-sugar penalty,
+# not three separate sugar penalties.
+DIETARY_SUGAR_LOW_ADDED_PENALTY = 1.0
+DIETARY_SUGAR_HIGH_GLYCEMIC_OR_ALCOHOL_PENALTY = 2.0
+DIETARY_SUGAR_MODERATE_PENALTY = 3.0
+DIETARY_SUGAR_HIGH_PENALTY = 4.0
+DIETARY_SUGAR_CAP = 4.0
 
 PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
@@ -582,18 +586,56 @@ def _score_enzyme_recognition(product: Dict[str, Any]) -> float:
 # --- B1 dietary sugar (penalty) -------------------------------------------
 
 
-def _penalty_dietary_sugar(product: Dict[str, Any]) -> float:
-    """Returns a NON-NEGATIVE magnitude — caller subtracts. Reads
-    `dietary_sensitivity_data.sugar.level` (moderate / high)."""
-    sugar = _safe_dict(
-        _safe_dict((product or {}).get("dietary_sensitivity_data")).get("sugar")
-    )
+def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Classify added sugar/syrup/sugar-alcohol formulation drag."""
+    dietary = _safe_dict((product or {}).get("dietary_sensitivity_data"))
+    sugar = _safe_dict(dietary.get("sugar"))
+    sweeteners = _safe_dict(dietary.get("sweeteners"))
     level = _norm_text(sugar.get("level"))
+    sugar_sources = _safe_list(sugar.get("sugar_sources"))
+    high_glycemic = _safe_list(
+        sweeteners.get("high_glycemic") or sweeteners.get("high_glycemic_sweeteners")
+    )
+    sugar_alcohols = _safe_list(sweeteners.get("sugar_alcohols"))
+    syrup_sources = [
+        source for source in sugar_sources
+        if "syrup" in _norm_text(source)
+    ]
+
+    penalty = 0.0
+    reason = None
     if level == "high":
-        return min(DIETARY_SUGAR_CAP, DIETARY_SUGAR_HIGH_PENALTY)
-    if level == "moderate":
-        return min(DIETARY_SUGAR_CAP, DIETARY_SUGAR_MODERATE_PENALTY)
-    return 0.0
+        penalty = DIETARY_SUGAR_HIGH_PENALTY
+        reason = "high_sugar_grams"
+    elif level == "moderate":
+        penalty = DIETARY_SUGAR_MODERATE_PENALTY
+        reason = "moderate_sugar_grams"
+    elif high_glycemic or sugar_alcohols or syrup_sources:
+        penalty = DIETARY_SUGAR_HIGH_GLYCEMIC_OR_ALCOHOL_PENALTY
+        reason = "high_glycemic_syrup_or_sugar_alcohol"
+    elif bool(sugar.get("has_added_sugar")) or (
+        bool(sugar.get("contains_sugar")) and sugar_sources
+    ):
+        penalty = DIETARY_SUGAR_LOW_ADDED_PENALTY
+        reason = "low_added_sugar_source"
+
+    penalty = min(DIETARY_SUGAR_CAP, penalty)
+    return {
+        "penalty": penalty,
+        "reason": reason,
+        "level": level,
+        "contains_sugar": bool(sugar.get("contains_sugar")),
+        "has_added_sugar": bool(sugar.get("has_added_sugar")),
+        "sugar_sources": sugar_sources,
+        "high_glycemic_sweeteners": high_glycemic,
+        "sugar_alcohols": sugar_alcohols,
+        "syrup_sources": syrup_sources,
+    }
+
+
+def _penalty_dietary_sugar(product: Dict[str, Any]) -> float:
+    """Returns a NON-NEGATIVE magnitude — caller subtracts."""
+    return float(_dietary_sugar_penalty_detail(product).get("penalty") or 0.0)
 
 
 def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
@@ -647,6 +689,27 @@ def _penalty_b1_harmful_additives(product: Dict[str, Any]) -> float:
         key = str(additive.get("additive_id") or additive.get("id") or f"_anon_{idx}").strip().lower()
         best_by_key[key] = max(best_by_key.get(key, 0.0), points)
     return _clamp(0.0, B1_HARMFUL_ADDITIVE_CAP, sum(best_by_key.values()))
+
+
+def shared_formulation_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Shared B0/B1 formulation penalties for every v4 module.
+
+    Generic, sports, omega, probiotic, and multi/prenatal products all read the
+    same enriched safety/sugar contracts. Keep the penalty math here so
+    module-specific formulation scorers cannot drift on watchlist additives,
+    harmful additives, or dietary sugar.
+    """
+    dietary_sugar_detail = _dietary_sugar_penalty_detail(product)
+    return {
+        "penalties": {
+            "B1_dietary_sugar": round(-float(dietary_sugar_detail["penalty"]), 4),
+            "B0_moderate_watchlist": round(-_penalty_b0_moderate_watchlist(product), 4),
+            "B1_harmful_additives": round(-_penalty_b1_harmful_additives(product), 4),
+        },
+        "metadata": {
+            "dietary_sugar": dietary_sugar_detail,
+        },
+    }
 
 
 # --- Public entry point ---------------------------------------------------
@@ -724,14 +787,11 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         _score_single_ingredient_efficiency(product, components["A1_bio_score"]), 4
     )
 
-    penalties: Dict[str, float] = {
-        # Stored as negatives for ergonomic JSON inspection — the score
-        # math subtracts |abs| values explicitly via _sum_penalty_magnitudes
-        # so any sign convention error here can't silently inflate scores.
-        "B1_dietary_sugar":           round(-_penalty_dietary_sugar(product), 4),
-        "B0_moderate_watchlist":       round(-_penalty_b0_moderate_watchlist(product), 4),
-        "B1_harmful_additives":        round(-_penalty_b1_harmful_additives(product), 4),
-    }
+    shared_penalty_detail = shared_formulation_penalty_detail(product)
+    # Stored as negatives for ergonomic JSON inspection — the score math
+    # subtracts |abs| values explicitly via _sum_penalty_magnitudes so any sign
+    # convention error here can't silently inflate scores.
+    penalties: Dict[str, float] = dict(shared_penalty_detail["penalties"])
 
     # A5 rollup hard-clamp at CAP_EXCELLENCE (4).
     a5_sum = (
@@ -824,6 +884,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "pre_floor_score": round(pre_floor_score, 4),
                 "applied": presence_floor_applied,
             },
+            "dietary_sugar": shared_penalty_detail["metadata"]["dietary_sugar"],
         },
     }
 

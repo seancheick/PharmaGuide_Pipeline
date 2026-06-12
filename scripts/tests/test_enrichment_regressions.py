@@ -394,6 +394,92 @@ class TestServingBasis:
         assert result['min'] == 2
         assert result['max'] == 4
 
+    def test_net_contents_serving_size_converts_daily_units_to_servings(self, enricher):
+        """Daily capsule directions must be divided by the Supplement Facts serving."""
+        product = {
+            'id': 'garden_raw_prenatal_regression',
+            'physicalState': {},
+            'servingSizes': [
+                {
+                    'quantity': 1,
+                    'servingSizeUnitOfMeasure': 'Capsule(s)',
+                    'minDailyServings': 3,
+                    'maxDailyServings': 3,
+                }
+            ],
+            'servingsPerContainer': 10,
+            'netContents': [
+                {'quantity': 30, 'unit': 'Vegetarian Capsule(s)'}
+            ],
+            'labelText': {
+                'parsed': {
+                    'directions': 'Adults take 1 capsule 3 times daily.'
+                }
+            },
+            'statements': [],
+            'userGroups': [],
+        }
+
+        result = enricher._collect_serving_basis_data(product)
+        serving = result['serving_basis']
+
+        assert serving['basis_count'] == 3
+        assert serving['canonical_serving_size_quantity'] == 3
+        assert serving['min_recommended'] == 3
+        assert serving['max_recommended'] == 3
+        assert serving['min_servings_per_day'] == 1
+        assert serving['max_servings_per_day'] == 1
+
+    def test_directions_frequency_converts_units_to_servings(self, enricher):
+        """Two tablets twice daily with a two-tablet serving is two servings/day."""
+        product = {
+            'id': 'twice_daily_regression',
+            'physicalState': {},
+            'servingSizes': [
+                {'quantity': 2, 'servingSizeUnitOfMeasure': 'Tablet(s)'}
+            ],
+            'labelText': {
+                'parsed': {
+                    'directions': 'Take 2 tablets twice daily.'
+                }
+            },
+            'statements': [],
+            'userGroups': [],
+        }
+
+        result = enricher._collect_serving_basis_data(product)
+        serving = result['serving_basis']
+
+        assert serving['min_recommended'] == 4
+        assert serving['max_recommended'] == 4
+        assert serving['min_servings_per_day'] == 2
+        assert serving['max_servings_per_day'] == 2
+
+    def test_directions_frequency_preserves_one_serving_when_units_match_serving_size(self, enricher):
+        """One capsule twice daily with a two-capsule serving is one serving/day."""
+        product = {
+            'id': 'split_serving_regression',
+            'physicalState': {},
+            'servingSizes': [
+                {'quantity': 2, 'servingSizeUnitOfMeasure': 'Capsule(s)'}
+            ],
+            'labelText': {
+                'parsed': {
+                    'directions': 'Take 1 capsule twice daily.'
+                }
+            },
+            'statements': [],
+            'userGroups': [],
+        }
+
+        result = enricher._collect_serving_basis_data(product)
+        serving = result['serving_basis']
+
+        assert serving['min_recommended'] == 2
+        assert serving['max_recommended'] == 2
+        assert serving['min_servings_per_day'] == 1
+        assert serving['max_servings_per_day'] == 1
+
 
 class TestQuantityVariants:
     """P0.3: Multi-serving quantity variants"""
