@@ -3,7 +3,7 @@
     "description": "Explicit exoneration allowlist for SAME_UNII_DIFFERENT_NAMES audit findings. Each entry documents a UNII that maps to multiple reference entries which are legitimately the same FDA-cataloged compound (common vs Latin name, branded form vs generic, active vs inactive role, etc.). Listed here, the audit emits 'review' severity instead of 'critical', and the Sprint 1 UNII-first matching path is safe to land because runtime priority order (banned > IQM > standardized > botanical > other) resolves correctly.",
     "purpose": "audit_exoneration",
     "schema_version": "1.0.0",
-    "last_updated": "2026-05-14",
+    "last_updated": "2026-06-14",
     "total_entries": 12,
     "field_contract": {
       "unii": "10-character FDA UNII identifier (uppercase alphanumeric)",
@@ -103,7 +103,7 @@
     },
     {
       "unii": "G199I91G4B",
-      "fda_canonical_name": "CONJUGATED LINOLEIC ACID",
+      "fda_canonical_name": "ISOMERIZED LINOLEIC ACID",
       "entries": [
         {"file": "ingredient_quality_map.json", "entry_id": "cla"},
         {"file": "other_ingredients.json", "entry_id": "OI_CLA_OIL_INACTIVE"}
