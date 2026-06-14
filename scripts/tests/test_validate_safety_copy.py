@@ -312,6 +312,7 @@ def _good_depletion_entry() -> dict:
         "id": "DEP_METFORMIN_VITAMINB12",
         "drug_ref": {"display_name": "Metformin"},
         "depleted_nutrient": {"standard_name": "Vitamin B12", "canonical_id": "vitamin_b12"},
+        "depletion_type": "depletion",
         "severity": "significant",
         "alert_headline": "May lower vitamin B12 over time",
         "alert_body": (
@@ -705,6 +706,7 @@ def test_depletion_exemplars_pass_strict():
     for draft in doc["drafts"]:
         entry = {
             "id": draft["_target"],
+            "depletion_type": draft["depletion_type"],
             "drug_ref": {"display_name": draft.get("drug_display_name", "")},
             "depleted_nutrient": {
                 "standard_name": draft.get("nutrient_name", "")

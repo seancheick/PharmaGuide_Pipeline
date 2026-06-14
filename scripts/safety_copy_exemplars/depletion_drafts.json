@@ -22,6 +22,7 @@
   "drafts": [
     {
       "_target": "DEP_METFORMIN_VITAMINB12",
+      "depletion_type": "depletion",
       "drug_display_name": "Metformin",
       "nutrient_name": "Vitamin B12",
       "severity": "significant",
@@ -35,6 +36,7 @@
     },
     {
       "_target": "DEP_PPI_VITAMINB12",
+      "depletion_type": "depletion",
       "drug_display_name": "PPIs",
       "nutrient_name": "Vitamin B12",
       "severity": "moderate",
@@ -48,6 +50,7 @@
     },
     {
       "_target": "DEP_PPI_MAGNESIUM",
+      "depletion_type": "depletion",
       "drug_display_name": "PPIs",
       "nutrient_name": "Magnesium",
       "severity": "moderate",
@@ -61,6 +64,7 @@
     },
     {
       "_target": "DEP_STATINS_COQ10",
+      "depletion_type": "depletion",
       "drug_display_name": "Statins",
       "nutrient_name": "Coenzyme Q10",
       "severity": "moderate",
@@ -74,6 +78,7 @@
     },
     {
       "_target": "DEP_DIURETICS_POTASSIUM",
+      "depletion_type": "depletion",
       "drug_display_name": "Diuretics",
       "nutrient_name": "Potassium",
       "severity": "significant",
@@ -86,6 +91,7 @@
     },
     {
       "_target": "DEP_CORTICOSTEROIDS_CALCIUM",
+      "depletion_type": "depletion",
       "drug_display_name": "Corticosteroids",
       "nutrient_name": "Calcium",
       "severity": "significant",
@@ -99,6 +105,7 @@
     },
     {
       "_target": "DEP_ORAL_CONTRACEPTIVES_FOLATE",
+      "depletion_type": "depletion",
       "drug_display_name": "Oral contraceptives",
       "nutrient_name": "Folate (B9)",
       "severity": "mild",
@@ -112,6 +119,7 @@
     },
     {
       "_target": "DEP_ANTICOAGULANTS_VITAMINK",
+      "depletion_type": "functional_antagonism",
       "drug_display_name": "Warfarin (anticoagulant / blood thinner)",
       "nutrient_name": "Vitamin K",
       "severity": "significant",
@@ -124,6 +132,7 @@
     },
     {
       "_target": "DEP_SSRI_MAGNESIUM",
+      "depletion_type": "depletion",
       "drug_display_name": "SSRIs",
       "nutrient_name": "Magnesium",
       "severity": "mild",
