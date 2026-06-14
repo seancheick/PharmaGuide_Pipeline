@@ -7,3 +7,6 @@ jsonschema>=4,<5    # v4 scoring-config rubric validation (Phase 0 config regist
 supabase>=2.0,<3
 PyMuPDF>=1.24,<2
 Pillow>=10.0,<11
+tqdm>=4.66,<5       # progress bars for batch_processor / enrich / score pipeline stages
+beautifulsoup4>=4.12,<5  # HTML parsing for api_audit/verify_certifications.py (NSF registries)
+lxml>=5.0,<6        # parser backend BeautifulSoup(..., "lxml") used by cert fetchers
