@@ -26,19 +26,80 @@ CREATE TABLE IF NOT EXISTS export_manifest (
 -- 2. User Tables (App-facing)
 -- =============================================================================
 
+-- The Flutter client is AUTHORITATIVE for `id`: it generates a string
+-- "<dsldId>_<microseconds>" and upserts with onConflict:'id'. `id` MUST be
+-- text, NOT uuid — a uuid column rejects every client id with 22P02 and the
+-- dirty row retries forever (the 2026-06 sync outage). `type` is hard-pinned
+-- to 'supplement' (column CHECK + RLS WITH CHECK) so medication PHI can never
+-- reach the cloud — medications stay device-local. See the reconciliation
+-- block below, which heals pre-existing deployments on re-run.
 CREATE TABLE IF NOT EXISTS user_stacks (
-  id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id           uuid REFERENCES auth.users NOT NULL,
-  dsld_id           text NOT NULL,
+  id                text PRIMARY KEY,                                  -- client-generated "<dsldId>_<microseconds>"; NOT uuid
+  user_id           uuid REFERENCES auth.users ON DELETE CASCADE NOT NULL,
+  type              text NOT NULL DEFAULT 'supplement'                 -- PHI guard: medications never sync here
+                    CHECK (type = 'supplement'),
+  name              text,
+  dsld_id           text,                                             -- nullable: medication entries (local-only) have none
+  ingredient_keys   text,                                             -- JSON-encoded canonical ingredient ids
   dosage            text,
-  timing            text,
+  frequency         text,
   supply_count      integer,
   source_device_id  text,
   client_updated_at timestamptz,
   deleted_at        timestamptz,
   added_at          timestamptz DEFAULT now(),
-  updated_at        timestamptz DEFAULT now()
+  updated_at        timestamptz DEFAULT now(),
+  CONSTRAINT user_stacks_user_id_id_unique UNIQUE (user_id, id)        -- cross-user id-collision guard
 );
+
+-- Reconcile pre-existing deployments to the contract above (idempotent).
+-- CREATE TABLE IF NOT EXISTS is a no-op on an existing table, so these ALTERs
+-- are how a live DB that predates the corrected definition gets healed when
+-- supabase_schema.sql is re-run. Safe to run repeatedly.
+DO $$
+BEGIN
+  -- id uuid -> text (lossless widening; the 2026-06 sync-crash fix)
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema='public' AND table_name='user_stacks'
+               AND column_name='id' AND data_type='uuid') THEN
+    ALTER TABLE public.user_stacks ALTER COLUMN id TYPE text USING id::text;
+  END IF;
+
+  -- legacy 'timing' -> 'frequency' (matches the Flutter column name)
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema='public' AND table_name='user_stacks' AND column_name='timing')
+     AND NOT EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema='public' AND table_name='user_stacks' AND column_name='frequency') THEN
+    ALTER TABLE public.user_stacks RENAME COLUMN timing TO frequency;
+  END IF;
+
+  -- columns the Flutter client sends
+  ALTER TABLE public.user_stacks ADD COLUMN IF NOT EXISTS type text;
+  ALTER TABLE public.user_stacks ADD COLUMN IF NOT EXISTS name text;
+  ALTER TABLE public.user_stacks ADD COLUMN IF NOT EXISTS ingredient_keys text;
+
+  -- dsld_id must be nullable (medication entries have none)
+  ALTER TABLE public.user_stacks ALTER COLUMN dsld_id DROP NOT NULL;
+
+  -- type backstop: default + not null + supplement-only CHECK
+  UPDATE public.user_stacks SET type='supplement' WHERE type IS NULL;
+  ALTER TABLE public.user_stacks ALTER COLUMN type SET DEFAULT 'supplement';
+  ALTER TABLE public.user_stacks ALTER COLUMN type SET NOT NULL;
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                 WHERE conrelid='public.user_stacks'::regclass
+                   AND conname='user_stacks_type_supplement_check') THEN
+    ALTER TABLE public.user_stacks
+      ADD CONSTRAINT user_stacks_type_supplement_check CHECK (type='supplement');
+  END IF;
+
+  -- cross-user id-collision guard
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                 WHERE conrelid='public.user_stacks'::regclass
+                   AND conname='user_stacks_user_id_id_unique') THEN
+    ALTER TABLE public.user_stacks
+      ADD CONSTRAINT user_stacks_user_id_id_unique UNIQUE (user_id, id);
+  END IF;
+END$$;
 
 CREATE TABLE IF NOT EXISTS user_usage (
     id                uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -97,7 +158,9 @@ BEGIN
   NEW.updated_at = now();
   RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+-- Fixed search_path prevents search_path-injection (advisor 0011). public is
+-- listed so the body's unqualified table refs resolve; pg_catalog for now() etc.
+$$ LANGUAGE plpgsql SET search_path = public, pg_catalog;
 
 CREATE TRIGGER user_stacks_updated_at
   BEFORE UPDATE ON user_stacks
@@ -112,10 +175,28 @@ ALTER TABLE export_manifest ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read manifest" ON export_manifest
   FOR SELECT USING (true);
 
--- user_stacks: users own their rows (SELECT auth.uid() pattern for performance)
+-- user_stacks: users own their rows. INSERT/UPDATE additionally enforce
+-- type='supplement' (WITH CHECK) — the DB-level half of the belt-and-suspenders
+-- that keeps medication PHI out of the cloud (the client filters too). Granular
+-- per-command policies REPLACE the old catch-all "Users manage own stacks"
+-- FOR ALL policy, which had no WITH CHECK and so let a client write a
+-- type='medication' row for its own user_id. DROP IF EXISTS heals existing
+-- deployments on re-run. (SELECT auth.uid()) is kept for per-statement caching.
 ALTER TABLE user_stacks ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own stacks" ON user_stacks
-  FOR ALL USING ((SELECT auth.uid()) = user_id);
+DROP POLICY IF EXISTS "Users manage own stacks"          ON user_stacks;
+DROP POLICY IF EXISTS "users_can_read_own_stack"         ON user_stacks;
+DROP POLICY IF EXISTS "users_can_insert_own_supplements" ON user_stacks;
+DROP POLICY IF EXISTS "users_can_update_own_supplements" ON user_stacks;
+DROP POLICY IF EXISTS "users_can_delete_own_stack"       ON user_stacks;
+CREATE POLICY "users_can_read_own_stack" ON user_stacks
+  FOR SELECT USING ((SELECT auth.uid()) = user_id);
+CREATE POLICY "users_can_insert_own_supplements" ON user_stacks
+  FOR INSERT WITH CHECK ((SELECT auth.uid()) = user_id AND type = 'supplement');
+CREATE POLICY "users_can_update_own_supplements" ON user_stacks
+  FOR UPDATE USING ((SELECT auth.uid()) = user_id)
+  WITH CHECK ((SELECT auth.uid()) = user_id AND type = 'supplement');
+CREATE POLICY "users_can_delete_own_stack" ON user_stacks
+  FOR DELETE USING ((SELECT auth.uid()) = user_id);
 
 -- user_usage: users can read their counters, but writes go through increment_usage
 ALTER TABLE user_usage ENABLE ROW LEVEL SECURITY;
@@ -173,7 +254,10 @@ BEGIN
 
   RETURN new_id;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- SECURITY DEFINER + fixed search_path (advisor 0011): public so unqualified
+-- export_manifest refs resolve; pg_catalog for built-ins. Prevents a caller
+-- from shadowing objects via an attacker-controlled search_path.
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_catalog;
 
 -- Restrict rotate_manifest to service_role only
 REVOKE EXECUTE ON FUNCTION rotate_manifest(text, text, text, text, integer, text, timestamptz, text) FROM PUBLIC;
@@ -251,7 +335,10 @@ BEGIN
     'reset_day_utc', v_reset_day_utc
   );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+-- SECURITY DEFINER + fixed search_path (advisor 0011): public so unqualified
+-- user_usage refs resolve; pg_catalog for built-ins. Prevents a caller from
+-- shadowing objects via an attacker-controlled search_path.
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public, pg_catalog;
 
 -- Grant increment_usage to authenticated users only (not anon)
 REVOKE EXECUTE ON FUNCTION increment_usage(uuid, text) FROM PUBLIC;

@@ -17,6 +17,57 @@ def test_user_stacks_supports_local_first_sync_metadata():
     assert "source_device_id" in sql
 
 
+def _user_stacks_create_block(sql: str) -> str:
+    """The CREATE TABLE body for user_stacks (up to its closing paren)."""
+    start = sql.index("CREATE TABLE IF NOT EXISTS user_stacks")
+    end = sql.index(");", start) + 2
+    return sql[start:end]
+
+
+def test_user_stacks_id_is_text_not_uuid():
+    """REGRESSION GUARD (2026-06 sync outage). The Flutter client is
+    authoritative for `id` ("<dsldId>_<microseconds>") and upserts with
+    onConflict:'id'. A uuid column rejects every client id with 22P02 and the
+    dirty row retries forever. `id` MUST be text."""
+    block = _user_stacks_create_block(_schema_sql())
+    assert "text PRIMARY KEY" in block, "user_stacks.id must be text PRIMARY KEY"
+    assert "uuid PRIMARY KEY DEFAULT gen_random_uuid()" not in block, (
+        "user_stacks.id must NOT be a server-issued uuid — the client owns ids"
+    )
+
+
+def test_user_stacks_type_check_blocks_medication_phi():
+    """PHI guard: medications (type='medication') must NEVER reach the cloud.
+    The column-level CHECK is the DB half of the belt-and-suspenders."""
+    block = _user_stacks_create_block(_schema_sql())
+    assert "CHECK (type = 'supplement')" in block, (
+        "user_stacks must CHECK (type = 'supplement') so medication PHI cannot sync"
+    )
+
+
+def test_user_stacks_rls_enforces_supplement_on_write():
+    """RLS WITH CHECK is the third line of PHI defense. The old catch-all
+    `FOR ALL` policy had no WITH CHECK and let a client write a
+    type='medication' row for its own user_id. Granular policies replace it."""
+    sql = _schema_sql()
+    assert 'CREATE POLICY "users_can_insert_own_supplements"' in sql
+    assert 'CREATE POLICY "users_can_update_own_supplements"' in sql
+    assert "WITH CHECK ((SELECT auth.uid()) = user_id AND type = 'supplement')" in sql
+    # The unguarded catch-all must be dropped, never recreated.
+    assert 'DROP POLICY IF EXISTS "Users manage own stacks"' in sql
+    assert 'CREATE POLICY "Users manage own stacks"' not in sql
+
+
+def test_security_definer_functions_pin_search_path():
+    """Advisor 0011: SECURITY DEFINER / trigger functions with a mutable
+    search_path are a privilege-escalation vector. set_updated_at,
+    rotate_manifest, and increment_usage must each pin a fixed search_path."""
+    sql = _schema_sql()
+    assert sql.count("SET search_path = public, pg_catalog") >= 3, (
+        "set_updated_at, rotate_manifest, increment_usage must each pin search_path"
+    )
+
+
 def test_user_usage_reset_policy_is_explicitly_utc():
     sql = _schema_sql()
     assert "reset_day_utc" in sql
