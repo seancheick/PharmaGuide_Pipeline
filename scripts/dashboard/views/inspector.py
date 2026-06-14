@@ -6,8 +6,45 @@ from pathlib import Path
 from scripts.dashboard.components import _safe_columns, _safe_tabs
 from scripts.dashboard.components.data_table import data_table
 from scripts.dashboard.components.product_header import product_header
-from scripts.dashboard.components.score_breakdown import score_breakdown
+from scripts.dashboard.components.score_breakdown import (
+    score_breakdown,
+    score_breakdown_v4,
+    V4_PILLARS,
+)
 from scripts.dashboard.components.score_trace import score_trace
+
+
+def _render_v4_pillars(product_row, blob):
+    """V4 six-pillar breakdown + per-pillar reason/components — the 'why' a
+    product scored as it did. Sources from the detail blob's quality_pillars_v4
+    (has reasons), falling back to the projected pillar_*_v4 columns."""
+    st.write("### 📊 V4 Quality Pillars")
+    pillars = (blob or {}).get("quality_pillars_v4") or {}
+    if pillars:
+        ordered = []
+        for _lbl, col, _mx in V4_PILLARS:
+            key = col[len("pillar_"):-len("_v4")]  # pillar_formulation_v4 -> formulation
+            ordered.append((pillars.get(key) or {}).get("score"))
+        score_breakdown_v4(*ordered, height=260)
+        st.markdown("**Why each pillar scored this way**")
+        for _lbl, col, mx in V4_PILLARS:
+            key = col[len("pillar_"):-len("_v4")]
+            p = pillars.get(key) or {}
+            score = p.get("score")
+            score_str = f"{score:.1f}" if isinstance(score, (int, float)) else "n/a"
+            st.markdown(f"- **{_lbl}: {score_str}/{mx}** — {p.get('reason', '(no reason recorded)')}")
+            comps = p.get("components") or {}
+            if comps:
+                st.caption("    " + " · ".join(f"{k}={v}" for k, v in comps.items()))
+        return
+    # Fallback: projected pillar columns (no reasons), else nothing to show.
+    pr = dict(product_row)
+    col_vals = [pr.get(col) for _lbl, col, _mx in V4_PILLARS]
+    if any(v is not None for v in col_vals):
+        score_breakdown_v4(*col_vals, height=260)
+        st.caption("Per-pillar reasons need the detail blob (not found for this product).")
+    else:
+        st.info("V4 pillar breakdown unavailable — rebuild the catalog and ensure the detail blob exists.")
 
 
 def render_inspector(data):
@@ -115,15 +152,18 @@ def render_drill_down(dsld_id, data):
         percentile=product_row["percentile_label"] if "percentile_label" in product_row.keys() else None
     )
 
-    # 3. Score Pillar Bars
-    st.write("### 📊 Performance Pillars")
-    score_breakdown(
-        ingredient=product_row["score_ingredient_quality"],
-        safety=product_row["score_safety_purity"],
-        evidence=product_row["score_evidence_research"],
-        brand=product_row["score_brand_trust"],
-        height=250
-    )
+    # 3. V4 score context + six-pillar breakdown
+    _pr = dict(product_row)
+    _ctx = []
+    if _pr.get("v4_module"):
+        _ctx.append(f"module **{_pr['v4_module']}**")
+    if _pr.get("v4_confidence"):
+        _ctx.append(f"confidence **{_pr['v4_confidence']}**")
+    if _pr.get("quality_score_status"):
+        _ctx.append(f"status **{_pr['quality_score_status']}**")
+    if _ctx:
+        st.caption("V4: " + " · ".join(_ctx))
+    _render_v4_pillars(product_row, blob)
 
     # 4. Pros & Cons (Bonuses & Penalties)
     st.write("### ✅ Pros & ❌ Cons")

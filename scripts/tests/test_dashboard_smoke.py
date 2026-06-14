@@ -104,3 +104,20 @@ def test_all_dashboard_views_smoke_render():
 
     for slug, renderer in view_renderers:
         render_page_frame(get_page_meta(slug, data), renderer)
+
+
+def test_inspector_drilldown_renders_v4_for_real_product():
+    """The smoke test above can't reach the Inspector drill-down (empty search
+    short-circuits), so exercise it directly against a real product to cover the
+    V4 six-pillar rendering path."""
+    from scripts.dashboard.views.inspector import render_drill_down
+
+    config = DashboardConfig(
+        scan_dir=Path("scripts/products").resolve(),
+        build_root=Path("scripts/final_db_output").resolve(),
+    )
+    data = load_dashboard_data(config)
+    if data.product_catalog.empty:
+        return
+    dsld_id = str(data.product_catalog.iloc[0]["dsld_id"])
+    render_drill_down(dsld_id, data)  # must not raise
