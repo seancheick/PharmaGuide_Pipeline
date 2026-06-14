@@ -482,9 +482,28 @@ def audit_matrix(args: argparse.Namespace) -> list[Finding]:
     return findings
 
 
+# Regenerable, gitignored build outputs. Export/flutter concepts legitimately
+# document these as their source_data_files, but they don't exist on a fresh
+# clone / pre-build. Their existence is enforced by the post-build export and
+# flutter release gates — not by this structural matrix-completeness audit — so
+# their absence here is expected, not a broken reference.
+_REGENERABLE_REFERENCE_PREFIXES = (
+    "scripts/final_db_output/",
+    "scripts/dist/",
+    "scripts/products/",
+    "scripts/output_",
+    "scripts/smoke_enriched/",
+    "scripts/.cache/",
+    "scripts/interaction_db_output/",
+)
+
+
 def check_repo_reference(ref: str, findings: list[Finding], concept_id: str, ref_key: str, path: str) -> None:
+    ref_path = ref.split()[0]
+    if ref_path.startswith(_REGENERABLE_REFERENCE_PREFIXES):
+        return
     if ref.startswith(("scripts/", "README.md", "AGENTS.md", "docs/")):
-        target = repo_path(ref.split()[0])
+        target = repo_path(ref_path)
         if not target.exists():
             findings.append(Finding("MATRIX_BROKEN_REFERENCE", f"{concept_id}.{ref_key} references missing file {ref}", path))
 
