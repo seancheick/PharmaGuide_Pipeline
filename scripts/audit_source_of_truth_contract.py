@@ -880,6 +880,83 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
     return findings
 
 
+# V4 six-pillar contract. Maxes: formulation/dose/evidence 20, transparency/
+# verification 15, safety_hygiene 10 (= 100). Every scored product must carry all
+# six (populated, in-range, summing to quality_score_v4_100); suppressed products
+# carry none. Gating the shipped DB here closes the 2026-06-14 hole, where a DB
+# built before the pillar-projection commit shipped with the columns absent and
+# the checksum/freshness gates (which compare hashes/timestamps) didn't notice.
+V4_PILLAR_MAXES = {
+    "pillar_formulation_v4": 20.0,
+    "pillar_dose_v4": 20.0,
+    "pillar_evidence_v4": 20.0,
+    "pillar_transparency_v4": 15.0,
+    "pillar_verification_v4": 15.0,
+    "pillar_safety_hygiene_v4": 10.0,
+}
+V4_PILLAR_RECON_TOLERANCE = 0.1
+
+
+def check_v4_pillar_contract(db_path: str | Path) -> list[Finding]:
+    """Assert products_core honors the V4 six-pillar contract; one Finding per breach."""
+    findings: list[Finding] = []
+    pillar_cols = list(V4_PILLAR_MAXES)
+    try:
+        with sqlite3.connect(str(db_path)) as conn:
+            have = {row[1] for row in conn.execute("PRAGMA table_info(products_core)")}
+            missing = [c for c in pillar_cols if c not in have]
+            if missing:
+                return [Finding(
+                    "EXPORT_V4_PILLAR_COLS_MISSING",
+                    f"products_core missing pillar columns: {missing}",
+                    str(db_path),
+                )]
+            cols_csv = ", ".join(pillar_cols)
+            rows = conn.execute(
+                "SELECT dsld_id, quality_score_status, quality_score_v4_100, "
+                f"{cols_csv} FROM products_core"
+            ).fetchall()
+    except sqlite3.DatabaseError as exc:
+        return [Finding(
+            "EXPORT_V4_DB_UNREADABLE",
+            f"pharmaguide_core.db is not a readable SQLite catalog: {exc}",
+            str(db_path),
+        )]
+
+    for row in rows:
+        dsld_id, status, total = row[0], row[1], row[2]
+        pillars = dict(zip(pillar_cols, row[3:]))
+        ref = f"dsld_id={dsld_id}"
+        if status == "scored":
+            nulls = [c for c, v in pillars.items() if v is None]
+            if nulls:
+                findings.append(Finding(
+                    "EXPORT_V4_PILLAR_NULL_ON_SCORED",
+                    f"scored product has NULL pillar(s): {nulls}", ref))
+                continue  # range/recon are meaningless with NULLs present
+            for col, val in pillars.items():
+                if val < 0 or val > V4_PILLAR_MAXES[col]:
+                    findings.append(Finding(
+                        "EXPORT_V4_PILLAR_OUT_OF_RANGE",
+                        f"{col}={val} outside [0, {V4_PILLAR_MAXES[col]}]", ref))
+            if total is None or total < 0 or total > 100:
+                findings.append(Finding(
+                    "EXPORT_V4_TOTAL_OUT_OF_RANGE",
+                    f"quality_score_v4_100={total} outside [0, 100] on scored product", ref))
+            elif abs(sum(pillars.values()) - total) > V4_PILLAR_RECON_TOLERANCE:
+                findings.append(Finding(
+                    "EXPORT_V4_PILLAR_RECON_MISMATCH",
+                    f"sum(pillars)={round(sum(pillars.values()), 3)} != "
+                    f"quality_score_v4_100={total}", ref))
+        else:  # suppressed / not v4-scored — pillars must be NULL
+            populated = [c for c, v in pillars.items() if v is not None]
+            if populated:
+                findings.append(Finding(
+                    "EXPORT_V4_PILLAR_ON_UNSCORED",
+                    f"{status} product has populated pillar(s): {populated}", ref))
+    return findings
+
+
 def audit_export(args: argparse.Namespace) -> list[Finding]:
     dist_dir = repo_path(args.dist_dir)
     manifest_path = dist_dir / "export_manifest.json"
@@ -918,6 +995,9 @@ def audit_export(args: argparse.Namespace) -> list[Finding]:
         ):
             if key not in manifest:
                 findings.append(Finding("EXPORT_MANIFEST_CONTRACT_FIELD", f"stamped export manifest missing {key}", str(manifest_path)))
+
+    # V4 six-pillar contract on the actual shipped DB (schema + per-row).
+    findings.extend(check_v4_pillar_contract(db_path))
     return findings
 
 

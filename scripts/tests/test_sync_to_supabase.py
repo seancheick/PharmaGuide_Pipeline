@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import sqlite3
 import sys
 import tempfile
 import pytest
@@ -31,12 +32,30 @@ def _make_manifest(tmp_dir, db_version="2026.03.27.5", product_count=100, checks
     return path
 
 
+def _write_minimal_catalog_db(db_path):
+    """Write a tiny valid, clean products_core honoring the V4 pillar contract,
+    so validate_build_output's pillar preflight passes on a realistic catalog."""
+    conn = sqlite3.connect(db_path)
+    try:
+        conn.execute(
+            "CREATE TABLE products_core ("
+            "dsld_id TEXT, quality_score_status TEXT, quality_score_v4_100 REAL, "
+            "pillar_formulation_v4 REAL, pillar_dose_v4 REAL, pillar_evidence_v4 REAL, "
+            "pillar_transparency_v4 REAL, pillar_verification_v4 REAL, pillar_safety_hygiene_v4 REAL)"
+        )
+        # 11.2+20+18.9+15+6+10 = 81.1 reconciles with the total.
+        conn.execute(
+            "INSERT INTO products_core VALUES ('1', 'scored', 81.1, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0)"
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+
 def _make_build_output(tmp_dir, db_version="2026.03.27.5", product_count=3):
     """Helper: create a fake build output directory with manifest, db, and blobs."""
-    # Fake SQLite file
     db_path = os.path.join(tmp_dir, "pharmaguide_core.db")
-    with open(db_path, "wb") as f:
-        f.write(b"FAKE_SQLITE_DATA")
+    _write_minimal_catalog_db(db_path)
 
     # Fake detail blobs
     detail_dir = os.path.join(tmp_dir, "detail_blobs")
@@ -59,7 +78,8 @@ def _make_build_output(tmp_dir, db_version="2026.03.27.5", product_count=3):
     with open(detail_index_path, "w") as f:
         json.dump(detail_index, f)
 
-    checksum = "sha256:" + hashlib.sha256(b"FAKE_SQLITE_DATA").hexdigest()
+    with open(db_path, "rb") as f:
+        checksum = "sha256:" + hashlib.sha256(f.read()).hexdigest()
     _make_manifest(tmp_dir, db_version, product_count, checksum=checksum)
     manifest_path = os.path.join(tmp_dir, "export_manifest.json")
     with open(manifest_path) as f:
@@ -162,6 +182,34 @@ def test_validate_build_output_accepts_matching_manifest():
         stats = validate_build_output(tmp, manifest)
         assert stats["blob_count"] == 3
         assert os.path.basename(stats["db_path"]) == "pharmaguide_core.db"
+
+
+def test_validate_build_output_rejects_pillar_contract_violation():
+    """A DB missing the V4 pillar columns must block the sync (the 2026-06-14
+    stale-DB shape), even when the manifest checksum matches the bad DB."""
+    from sync_to_supabase import load_local_manifest, validate_build_output
+
+    with tempfile.TemporaryDirectory() as tmp:
+        _make_build_output(tmp, product_count=3)
+        db_path = os.path.join(tmp, "pharmaguide_core.db")
+        # Simulate a stale DB built before the pillar-projection commit.
+        conn = sqlite3.connect(db_path)
+        try:
+            for col in ("pillar_formulation_v4", "pillar_dose_v4", "pillar_evidence_v4",
+                        "pillar_transparency_v4", "pillar_verification_v4", "pillar_safety_hygiene_v4"):
+                conn.execute(f"ALTER TABLE products_core DROP COLUMN {col}")
+            conn.commit()
+        finally:
+            conn.close()
+        # Re-stamp the checksum so the checksum gate passes and the pillar gate fires.
+        manifest_path = os.path.join(tmp, "export_manifest.json")
+        manifest = load_local_manifest(tmp)
+        with open(db_path, "rb") as f:
+            manifest["checksum"] = "sha256:" + hashlib.sha256(f.read()).hexdigest()
+        with open(manifest_path, "w") as f:
+            json.dump(manifest, f)
+        with pytest.raises(ValueError, match="pillar"):
+            validate_build_output(tmp, manifest)
 
 
 def test_validate_build_output_rejects_checksum_mismatch():

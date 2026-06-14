@@ -35,6 +35,7 @@ DEFAULT_PROGRESS_EVERY = 500
 sys.path.insert(0, os.path.dirname(__file__))
 import env_loader  # noqa: F401
 from supabase_client import CACHE_CONTROL_IMMUTABLE
+from audit_source_of_truth_contract import check_v4_pillar_contract
 
 DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 
@@ -650,6 +651,16 @@ def validate_build_output(build_dir, manifest):
         raise ValueError(
             "Build output checksum mismatch: "
             f"manifest={expected_checksum}, actual={actual_checksum}"
+        )
+
+    # V4 six-pillar contract on the checksum-verified DB. Defense-in-depth for the
+    # 2026-06-14 stale-DB incident: blocks a sync of a dist built before the
+    # pillar-projection commit even if it never went through the rebuild gate.
+    pillar_findings = check_v4_pillar_contract(db_path)
+    if pillar_findings:
+        raise ValueError(
+            "Build output violates the V4 pillar contract; refusing to sync: "
+            + "; ".join(f.render() for f in pillar_findings[:5])
         )
 
     blobs = collect_detail_blobs(build_dir)
