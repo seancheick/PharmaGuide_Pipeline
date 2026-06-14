@@ -9,6 +9,29 @@ import streamlit as st
 from scripts.dashboard.components import _safe_columns, _safe_tabs
 from scripts.dashboard.components.data_table import data_table
 
+# V4 pillar columns for per-pillar release deltas (label, column).
+_PILLAR_DIFF = [
+    ("Formulation", "pillar_formulation_v4"),
+    ("Dose", "pillar_dose_v4"),
+    ("Evidence", "pillar_evidence_v4"),
+    ("Transparency", "pillar_transparency_v4"),
+    ("Verification", "pillar_verification_v4"),
+    ("Safety & Hygiene", "pillar_safety_hygiene_v4"),
+]
+
+
+def _release_diff_query(conn: sqlite3.Connection) -> str:
+    """SELECT base columns + V4 pillars, NULL-filling pillar columns that an
+    older release snapshot predates (so the diff never errors)."""
+    have = {row[1] for row in conn.execute("PRAGMA table_info(products_core)")}
+    extra = []
+    for col in ["quality_score_v4_100"] + [c for _l, c in _PILLAR_DIFF]:
+        extra.append(col if col in have else f"NULL AS {col}")
+    return (
+        "SELECT dsld_id, product_name, brand_name, score_100_equivalent AS score, "
+        "verdict, " + ", ".join(extra) + " FROM products_core"
+    )
+
 
 def render_diff(data):
     history = data.build_history
@@ -41,14 +64,8 @@ def render_release_comparison(path_a: Path | None, path_b: Path | None, delta_on
     conn_a = sqlite3.connect(f"file:{path_a}?mode=ro", uri=True)
     conn_b = sqlite3.connect(f"file:{path_b}?mode=ro", uri=True)
     try:
-        df_a = pd.read_sql_query(
-            "SELECT dsld_id, product_name, brand_name, score_100_equivalent AS score, verdict FROM products_core",
-            conn_a,
-        )
-        df_b = pd.read_sql_query(
-            "SELECT dsld_id, product_name, brand_name, score_100_equivalent AS score, verdict FROM products_core",
-            conn_b,
-        )
+        df_a = pd.read_sql_query(_release_diff_query(conn_a), conn_a)
+        df_b = pd.read_sql_query(_release_diff_query(conn_b), conn_b)
     finally:
         conn_a.close()
         conn_b.close()
@@ -69,6 +86,28 @@ def render_release_comparison(path_a: Path | None, path_b: Path | None, delta_on
         ]
     )
     st.dataframe(summary, width="stretch", hide_index=True)
+
+    # Per-pillar mean shift (V4) — regression detection. Needs pillar data in
+    # BOTH releases; older snapshots NULL-fill and are skipped gracefully.
+    both_rows = merged[merged["_merge"] == "both"]
+    pillar_rows = []
+    for label, col in _PILLAR_DIFF:
+        a_col, b_col = f"{col}_A", f"{col}_B"
+        if a_col in both_rows.columns and b_col in both_rows.columns:
+            a_vals, b_vals = both_rows[a_col].dropna(), both_rows[b_col].dropna()
+            if not a_vals.empty and not b_vals.empty:
+                mean_a, mean_b = both_rows[a_col].mean(), both_rows[b_col].mean()
+                pillar_rows.append({
+                    "pillar": label,
+                    "mean_A": round(mean_a, 2),
+                    "mean_B": round(mean_b, 2),
+                    "delta": round(mean_b - mean_a, 2),
+                })
+    st.markdown("#### Per-pillar mean shift (V4)")
+    if pillar_rows:
+        st.dataframe(pd.DataFrame(pillar_rows), width="stretch", hide_index=True)
+    else:
+        st.caption("Per-pillar deltas appear once both compared releases carry V4 pillar columns (rebuild required).")
 
     shifts = merged[merged["_merge"] == "both"].copy()
     if delta_only:

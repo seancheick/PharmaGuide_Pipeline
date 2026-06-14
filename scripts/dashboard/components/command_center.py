@@ -69,6 +69,37 @@ def render_command_center(data) -> None:
             attention.append({"priority": "High", "issue": "Banned substances present in current release snapshot", "go_to": "Data Quality"})
         if data.shared_metrics.get("enriched_only_count", 0) or data.shared_metrics.get("scored_only_count", 0):
             attention.append({"priority": "Medium", "issue": "Mismatch counts detected across pipeline stages", "go_to": "Observability"})
+        # V4 scoring anomalies — proactively surface scorer bugs (pillars not
+        # summing, impossible values, zero-pillar spikes). Guarded: the home
+        # page must never crash on the probe; quiet pre-rebuild (no pillar data).
+        try:
+            from scripts.dashboard.views.scoring_integrity import (
+                find_reconciliation_mismatches,
+                find_out_of_range,
+                find_zero_pillars,
+                pillars_present,
+            )
+            cat = getattr(data, "product_catalog", None)
+            thr = getattr(data, "alert_thresholds", {}) or {}
+            if cat is not None and not cat.empty:
+                recon_n = len(find_reconciliation_mismatches(cat))
+                oor_n = len(find_out_of_range(cat))
+                if recon_n > int(thr.get("max_recon_mismatches", 0)):
+                    attention.append({"priority": "High", "issue": f"{recon_n} products: V4 pillars don't sum to the total score", "go_to": "Scoring Integrity"})
+                if oor_n > int(thr.get("max_out_of_range", 0)):
+                    attention.append({"priority": "High", "issue": f"{oor_n} products: out-of-range / impossible V4 scores", "go_to": "Scoring Integrity"})
+                if pillars_present(cat):
+                    zeros = find_zero_pillars(cat)
+                    if "quality_score_status" in cat.columns:
+                        scored_n = int((cat["quality_score_status"].fillna("scored") == "scored").sum())
+                    else:
+                        scored_n = len(cat)
+                    zero_products = zeros["dsld_id"].nunique() if not zeros.empty else 0
+                    zero_pct = (zero_products / scored_n * 100.0) if scored_n else 0.0
+                    if zero_pct > float(thr.get("max_zero_pillar_pct", 5.0)):
+                        attention.append({"priority": "Medium", "issue": f"{zero_pct:.1f}% of scored products have a 0-valued V4 pillar", "go_to": "Scoring Integrity"})
+        except Exception:
+            pass
         if not attention:
             attention.append({"priority": "Normal", "issue": "No urgent blockers under current thresholds", "go_to": "Pipeline Health"})
         st.dataframe(pd.DataFrame(attention), width="stretch", hide_index=True)

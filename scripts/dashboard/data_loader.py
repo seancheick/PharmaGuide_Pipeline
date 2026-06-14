@@ -21,6 +21,10 @@ DEFAULT_ALERT_THRESHOLDS = {
     "max_unmapped": 100,
     "max_build_age_days": 7,
     "max_sync_lag_hours": 24,
+    # V4 scoring-anomaly thresholds (surfaced in Command Center → Scoring Integrity).
+    "max_recon_mismatches": 0,    # pillars must always sum to quality_score_v4_100
+    "max_out_of_range": 0,        # impossible values are always bugs
+    "max_zero_pillar_pct": 5.0,   # % of scored products carrying any 0-valued pillar
 }
 
 VERDICT_ORDER = ["SAFE", "CAUTION", "POOR", "UNSAFE", "BLOCKED", "NOT_SCORED"]

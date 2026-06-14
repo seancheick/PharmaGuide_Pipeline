@@ -4,5 +4,8 @@
   "ban_increase_alert": true,
   "max_unmapped": 100,
   "max_build_age_days": 7,
-  "max_sync_lag_hours": 24
+  "max_sync_lag_hours": 24,
+  "max_recon_mismatches": 0,
+  "max_out_of_range": 0,
+  "max_zero_pillar_pct": 5.0
 }
