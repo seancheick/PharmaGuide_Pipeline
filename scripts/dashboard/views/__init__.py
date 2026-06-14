@@ -11,3 +11,4 @@ from .audit_section_c import render_audit_section_c
 from .audit_section_d import render_audit_section_d
 from .audit_caers import render_audit_caers
 from .safety_copy import render_safety_copy
+from .audit_pillars import render_pillar_audit, render_suppression_audit

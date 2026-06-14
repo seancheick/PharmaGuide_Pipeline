@@ -72,7 +72,9 @@ from scripts.dashboard.views import (
     render_inspector,
     render_intelligence,
     render_observability,
+    render_pillar_audit,
     render_quality,
+    render_suppression_audit,
 )
 
 
@@ -92,6 +94,8 @@ def test_all_dashboard_views_smoke_render():
         ("release-diff", lambda: render_diff(data)),
         ("batch-diff", lambda: render_batch_diff(data)),
         ("intelligence", lambda: render_intelligence(data)),
+        ("pillar-audit", lambda: render_pillar_audit(data)),
+        ("suppression-audit", lambda: render_suppression_audit(data)),
     ]
 
     for slug, renderer in view_renderers:

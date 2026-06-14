@@ -481,7 +481,17 @@ def _load_product_catalog(db_conn: sqlite3.Connection | None) -> pd.DataFrame:
             {is_trusted_manufacturer},
             {has_third_party_testing},
             {has_full_disclosure},
-            {blocking_reason}
+            {blocking_reason},
+            {quality_score_v4_100},
+            {quality_score_status},
+            {v4_module},
+            {v4_confidence},
+            {pillar_formulation_v4},
+            {pillar_dose_v4},
+            {pillar_evidence_v4},
+            {pillar_transparency_v4},
+            {pillar_verification_v4},
+            {pillar_safety_hygiene_v4}
         FROM products_core
     """.format(
         dsld_id=select_expr("dsld_id"),
@@ -511,6 +521,17 @@ def _load_product_catalog(db_conn: sqlite3.Connection | None) -> pd.DataFrame:
         has_third_party_testing=select_expr("has_third_party_testing"),
         has_full_disclosure=select_expr("has_full_disclosure"),
         blocking_reason=select_expr("blocking_reason"),
+        # V4 canonical score, status, routing + six pillar component scores.
+        quality_score_v4_100=select_expr("quality_score_v4_100", "score_v4"),
+        quality_score_status=select_expr("quality_score_status"),
+        v4_module=select_expr("v4_module"),
+        v4_confidence=select_expr("v4_confidence"),
+        pillar_formulation_v4=select_expr("pillar_formulation_v4"),
+        pillar_dose_v4=select_expr("pillar_dose_v4"),
+        pillar_evidence_v4=select_expr("pillar_evidence_v4"),
+        pillar_transparency_v4=select_expr("pillar_transparency_v4"),
+        pillar_verification_v4=select_expr("pillar_verification_v4"),
+        pillar_safety_hygiene_v4=select_expr("pillar_safety_hygiene_v4"),
     )
     frame = pd.read_sql_query(query, db_conn)
     if frame.empty:
@@ -549,14 +570,6 @@ def filter_product_catalog(data: DashboardData) -> pd.DataFrame:
     min_score = float(st.session_state.get("min_score_filter", 0.0) or 0.0)
     frame = frame[frame["score"].fillna(0.0) >= min_score]
 
-    min_section_a = float(st.session_state.get("min_section_a_filter", 0.0) or 0.0)
-    frame = frame[frame["section_a_score"].fillna(0.0) >= min_section_a]
-
-    if st.session_state.get("only_section_a_ceiling", False):
-        frame = frame[
-            frame["section_a_score"].fillna(0.0) >= frame["section_a_max"].fillna(0.0)
-        ]
-
     if st.session_state.get("only_harmful_flags", False):
         frame = frame[frame["has_harmful_additives"] == 1]
 
@@ -565,6 +578,20 @@ def filter_product_catalog(data: DashboardData) -> pd.DataFrame:
 
     if st.session_state.get("only_non_gmo_verified", False):
         frame = frame[frame["is_non_gmo"] == 1]
+
+    # Mirror production: safety-suppressed products are hidden from users, so
+    # exclude them from scored views by default. The Suppression Audit view
+    # reads the unfiltered catalog (data.product_catalog) to inspect them.
+    if not st.session_state.get("include_suppressed", False) and "quality_score_status" in frame.columns:
+        frame = frame[frame["quality_score_status"].fillna("scored") != "suppressed_safety"]
+
+    module_filter = st.session_state.get("v4_module_filter") or []
+    if module_filter and "v4_module" in frame.columns:
+        frame = frame[frame["v4_module"].isin(module_filter)]
+
+    confidence_filter = st.session_state.get("v4_confidence_filter") or []
+    if confidence_filter and "v4_confidence" in frame.columns:
+        frame = frame[frame["v4_confidence"].isin(confidence_filter)]
 
     return frame.reset_index(drop=True)
 

@@ -29,10 +29,8 @@ from scripts.dashboard.views import (
     render_diff,
     render_batch_diff,
     render_intelligence,
-    render_audit_section_a,
-    render_audit_section_b,
-    render_audit_section_c,
-    render_audit_section_d,
+    render_pillar_audit,
+    render_suppression_audit,
     render_audit_caers,
     render_safety_copy,
 )
@@ -83,7 +81,6 @@ st.sidebar.selectbox(
 
 catalog = data.product_catalog
 score_cap = float(catalog["score"].max()) if not catalog.empty else 100.0
-section_a_cap = float(catalog["section_a_max"].fillna(catalog["section_a_score"]).max()) if not catalog.empty else 25.0
 
 st.sidebar.divider()
 st.sidebar.caption("Audit filters")
@@ -92,14 +89,17 @@ brand_options = sorted([value for value in catalog.get("brand_name", []).dropna(
 supplement_type_options = sorted([value for value in catalog.get("supplement_type", []).dropna().unique().tolist()]) if not catalog.empty else []
 primary_category_options = sorted([value for value in catalog.get("primary_category", []).dropna().unique().tolist()]) if not catalog.empty else []
 verdict_options = [value for value in ["SAFE", "CAUTION", "POOR", "UNSAFE", "BLOCKED", "NOT_SCORED"] if not catalog.empty and value in set(catalog["verdict"].dropna().tolist())]
+module_options = sorted(catalog.get("v4_module", []).dropna().unique().tolist()) if not catalog.empty else []
+confidence_options = sorted(catalog.get("v4_confidence", []).dropna().unique().tolist()) if not catalog.empty else []
 
 st.sidebar.multiselect("Brand", brand_options, key="brand_filter")
 st.sidebar.multiselect("Supplement Type", supplement_type_options, key="supplement_type_filter")
 st.sidebar.multiselect("Primary Category", primary_category_options, key="primary_category_filter")
 st.sidebar.multiselect("Verdict", verdict_options, key="verdict_filter")
+st.sidebar.multiselect("V4 Module", module_options, key="v4_module_filter")
+st.sidebar.multiselect("V4 Confidence", confidence_options, key="v4_confidence_filter")
 st.sidebar.slider("Minimum Score", 0.0, max(score_cap, 100.0), 0.0, 1.0, key="min_score_filter")
-st.sidebar.slider("Minimum Section A", 0.0, max(section_a_cap, 25.0), 0.0, 0.5, key="min_section_a_filter")
-st.sidebar.checkbox("Section A ceiling only", key="only_section_a_ceiling")
+st.sidebar.checkbox("Include safety-suppressed", key="include_suppressed")
 st.sidebar.checkbox("Only harmful findings", key="only_harmful_flags")
 st.sidebar.checkbox("Only omega-3 products", key="only_omega_bonus_candidates")
 st.sidebar.checkbox("Only verified Non-GMO", key="only_non_gmo_verified")
@@ -160,14 +160,10 @@ def _render_current_view() -> None:
         render_health(data)
     elif view == "Data Quality":
         render_quality(data)
-    elif view == "Section A Audit":
-        render_audit_section_a(data)
-    elif view == "Section B Audit":
-        render_audit_section_b(data)
-    elif view == "Section C Audit":
-        render_audit_section_c(data)
-    elif view == "Section D Audit":
-        render_audit_section_d(data)
+    elif view == "Pillar Audit":
+        render_pillar_audit(data)
+    elif view == "Suppression Audit":
+        render_suppression_audit(data)
     elif view == "CAERS Audit":
         render_audit_caers(data)
     elif view == "Clinical Copy":

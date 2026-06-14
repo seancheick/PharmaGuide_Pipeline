@@ -163,6 +163,32 @@ PAGE_META: dict[str, dict[str, Any]] = {
             "Compare evidence coverage across supplement types to prioritize research investment.",
         ],
     },
+    "pillar-audit": {
+        "page_title": "V4 Six-Pillar Audit",
+        "page_summary": "Audit each V4 quality pillar (formulation, dose, evidence, transparency, verification, safety & hygiene): score distribution, ceiling hits, and the lowest scorers. Replaces the legacy V3 Section A/B/C/D audits.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Data Quality", "Suppression Audit", "Product Inspector"],
+        "usage_notes": [
+            "Pillar columns (pillar_*_v4) are populated by build_final_db — rebuild the catalog if a pillar shows no data.",
+            "Safety-suppressed products are excluded here; see the Suppression Audit.",
+        ],
+    },
+    "suppression-audit": {
+        "page_title": "Suppression Audit",
+        "page_summary": "Products safety-suppressed by the V4 gate (quality_score_status='suppressed_safety'). Hidden from users in the app and excluded from every scored view — surfaced here for review only.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Pillar Audit", "Data Quality", "Product Inspector"],
+        "usage_notes": [
+            "These products render NOWHERE for end users — the dashboard must match that, so they appear only on this page.",
+            "Cross-check blocking_reason to confirm the safety gate fired for the right reason.",
+        ],
+    },
     "caers-audit": {
         "page_title": "CAERS Audit",
         "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns, cross-reference with banned/recalled, and B8 scoring impact.",
