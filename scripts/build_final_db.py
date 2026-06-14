@@ -1558,6 +1558,16 @@ CREATE TABLE IF NOT EXISTS products_core (
     classification_schema_version   TEXT,
     v4_config_fingerprint           TEXT,
 
+    -- V4 six-pillar component scores (bulk-audit projection of quality_pillars_v4).
+    -- Maxes: formulation 20, dose 20, evidence 20, transparency 15, verification 15,
+    -- safety_hygiene 10 (= 100). Nullable: NULL when a product is not v4-scored.
+    pillar_formulation_v4           REAL,
+    pillar_dose_v4                  REAL,
+    pillar_evidence_v4              REAL,
+    pillar_transparency_v4          REAL,
+    pillar_verification_v4          REAL,
+    pillar_safety_hygiene_v4        REAL,
+
     score_ingredient_quality      REAL,
     score_ingredient_quality_max  REAL,
     score_safety_purity           REAL,
@@ -5851,6 +5861,7 @@ def build_core_row(
 
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
     ss = safe_dict(effective_scored.get("section_scores"))
+    v4_pillars = safe_dict(effective_scored.get("_v4_pillars"))
 
     top_warnings = build_top_warnings(enriched)
 
@@ -5978,6 +5989,13 @@ def build_core_row(
         safe_str(effective_scored.get("_v4_scoring_engine_version")) or None,
         safe_str(effective_scored.get("_v4_classification_schema_version")) or None,
         safe_str(effective_scored.get("_v4_config_fingerprint")) or None,
+        # V4 six-pillar component scores (from _v4_pillars; NULL when not scored).
+        safe_float(safe_dict(v4_pillars.get("formulation")).get("score")),
+        safe_float(safe_dict(v4_pillars.get("dose")).get("score")),
+        safe_float(safe_dict(v4_pillars.get("evidence")).get("score")),
+        safe_float(safe_dict(v4_pillars.get("transparency")).get("score")),
+        safe_float(safe_dict(v4_pillars.get("verification")).get("score")),
+        safe_float(safe_dict(v4_pillars.get("safety_hygiene")).get("score")),
         # Section scores
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("score")),
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("max")),
@@ -6067,7 +6085,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 102  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols)
+CORE_COLUMN_COUNT = 108  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols, +6 v4 pillar cols)
 
 
 # ─── Reference Data Loader ───

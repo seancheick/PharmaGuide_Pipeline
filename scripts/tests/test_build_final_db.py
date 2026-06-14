@@ -70,6 +70,12 @@ PRODUCTS_CORE_COLUMNS = [
     "scoring_engine_version",
     "classification_schema_version",
     "v4_config_fingerprint",
+    "pillar_formulation_v4",
+    "pillar_dose_v4",
+    "pillar_evidence_v4",
+    "pillar_transparency_v4",
+    "pillar_verification_v4",
+    "pillar_safety_hygiene_v4",
     "score_ingredient_quality",
     "score_ingredient_quality_max",
     "score_safety_purity",
@@ -1998,8 +2004,9 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_102_columns():
-    # Tuple emitted by build_core_row must match the 102-column schema (v2.0.0).
+def test_final_db_has_108_columns():
+    # Tuple emitted by build_core_row must match the 108-column schema
+    # (v2.0.0 + 6 v4 pillar component columns).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -2015,8 +2022,8 @@ def test_final_db_has_102_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 102
-    assert len(PRODUCTS_CORE_COLUMNS) == 102
+    assert len(row) == 108
+    assert len(PRODUCTS_CORE_COLUMNS) == 108
 
 
 def test_products_core_exports_production_v4_columns():
@@ -2146,10 +2153,10 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_102(self):
+    def test_core_row_column_count_is_108(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 102
-        assert CORE_COLUMN_COUNT == 102
+        assert len(row) == 108
+        assert CORE_COLUMN_COUNT == 108
 
     def test_schema_version_bumped_to_200(self):
         assert EXPORT_SCHEMA_VERSION == "2.0.0"
