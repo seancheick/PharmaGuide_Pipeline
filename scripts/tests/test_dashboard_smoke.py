@@ -75,6 +75,8 @@ from scripts.dashboard.views import (
     render_pillar_audit,
     render_quality,
     render_suppression_audit,
+    render_scoring_integrity,
+    render_module_health,
 )
 
 
@@ -96,6 +98,8 @@ def test_all_dashboard_views_smoke_render():
         ("intelligence", lambda: render_intelligence(data)),
         ("pillar-audit", lambda: render_pillar_audit(data)),
         ("suppression-audit", lambda: render_suppression_audit(data)),
+        ("scoring-integrity", lambda: render_scoring_integrity(data)),
+        ("module-health", lambda: render_module_health(data)),
     ]
 
     for slug, renderer in view_renderers:

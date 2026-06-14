@@ -31,6 +31,8 @@ from scripts.dashboard.views import (
     render_intelligence,
     render_pillar_audit,
     render_suppression_audit,
+    render_scoring_integrity,
+    render_module_health,
     render_audit_caers,
     render_safety_copy,
 )
@@ -160,8 +162,12 @@ def _render_current_view() -> None:
         render_health(data)
     elif view == "Data Quality":
         render_quality(data)
+    elif view == "Scoring Integrity":
+        render_scoring_integrity(data)
     elif view == "Pillar Audit":
         render_pillar_audit(data)
+    elif view == "Module Health":
+        render_module_health(data)
     elif view == "Suppression Audit":
         render_suppression_audit(data)
     elif view == "CAERS Audit":

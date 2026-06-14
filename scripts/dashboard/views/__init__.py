@@ -12,3 +12,5 @@ from .audit_section_d import render_audit_section_d
 from .audit_caers import render_audit_caers
 from .safety_copy import render_safety_copy
 from .audit_pillars import render_pillar_audit, render_suppression_audit
+from .scoring_integrity import render_scoring_integrity
+from .module_health import render_module_health

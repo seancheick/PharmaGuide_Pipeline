@@ -163,6 +163,31 @@ PAGE_META: dict[str, dict[str, Any]] = {
             "Compare evidence coverage across supplement types to prioritize research investment.",
         ],
     },
+    "scoring-integrity": {
+        "page_title": "Scoring Integrity",
+        "page_summary": "Automated V4 anomaly detection: pillar↔total reconciliation, pillars scoring exactly 0, and out-of-range / impossible values. Green = no anomalies; any row here is a scorer/data bug to investigate.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Pillar Audit", "Module Health", "Product Inspector"],
+        "usage_notes": [
+            "Reconciliation is the strongest signal — the six pillars must sum to quality_score_v4_100.",
+            "A spike in zero-pillar hits usually means a data gap or scorer bug (most pillars fail-open neutral, not 0).",
+        ],
+    },
+    "module-health": {
+        "page_title": "Module Health",
+        "page_summary": "Per-module (generic / omega / probiotic / sports / multi_or_prenatal) pillar means side by side. A systematic scorer bug shows up as one module's pillar collapsing vs the others.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Scoring Integrity", "Pillar Audit", "Product Inspector"],
+        "usage_notes": [
+            "Compare a module's column against the others — an outlier mean is a routing/scoring regression signal.",
+        ],
+    },
     "pillar-audit": {
         "page_title": "V4 Six-Pillar Audit",
         "page_summary": "Audit each V4 quality pillar (formulation, dose, evidence, transparency, verification, safety & hygiene): score distribution, ceiling hits, and the lowest scorers. Replaces the legacy V3 Section A/B/C/D audits.",
