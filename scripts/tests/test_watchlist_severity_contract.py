@@ -6,21 +6,27 @@ Watchlist severity contract — regression guard.
 The clinical-risk semantic: "track this ingredient but DO NOT block or
 escalate to user-visible safety concern."
 
-Both the inactive resolver and the active path must classify watchlist
-hits as:
+Watchlist is a NON-BLOCKING regulatory/safety concern: surface it, but never
+hard-BLOCK or escalate to 'critical'. Across both paths:
 
-  severity_status = "informational"
-  is_safety_concern = False
-  is_banned = False
-  matched_source = "banned_recalled"
+  severity_status = "informational"   (never 'critical' = over-escalation,
+                                        never 'n/a' = silent drop)
+  is_banned       = False             (only status='banned' sets is_banned)
+  matched_source  = "banned_recalled"
   matched_rule_id = the entry's id
 
-A future agent could accidentally:
-  - Over-escalate watchlist → critical (lights up Flutter's RBU gate
-    on something that shouldn't fire)
-  - Suppress watchlist → "n/a" (silently drops a track-only marker)
+is_safety_concern differs by path, intentionally:
+  - inactive resolver path → True. Commit 70a2015 ("watchlist is a non-blocking
+    safety concern") surfaces it consistently with the contaminant snapshot
+    path (CAUTION + -5 B0); the canonical test_inactive_ingredient_resolver
+    suite pins the same value.
+  - active contaminant path → False. The IQM quality score is the correct
+    signal for an active Supplement-Facts ingredient; the snapshot drives
+    CAUTION via severity, not this flag.
 
-These tests pin the watchlist contract on both paths.
+A future agent could accidentally over-escalate watchlist → critical (lights up
+Flutter's RBU gate) or suppress it → "n/a" (silent drop). These tests pin the
+watchlist contract on both paths.
 """
 
 from __future__ import annotations
@@ -75,8 +81,11 @@ def test_inactive_watchlist_resolves_to_informational(resolver, raw_name, expect
         f"{raw_name!r} severity_status={r.severity_status!r} — watchlist must be 'informational' "
         "(NOT 'critical' = over-escalation; NOT 'n/a' = silent drop)"
     )
-    assert r.is_safety_concern is False, (
-        f"{raw_name!r} is_safety_concern={r.is_safety_concern!r} — watchlist must not light up RBU"
+    assert r.is_safety_concern is True, (
+        f"{raw_name!r} is_safety_concern={r.is_safety_concern!r} — on the inactive "
+        "resolver path watchlist is a non-blocking safety concern (commit 70a2015): "
+        "is_safety_concern=True, surfaced consistently with the contaminant snapshot "
+        "path (CAUTION + -5 B0), but is_banned=False so it never hard-BLOCKs"
     )
     assert r.is_banned is False, (
         f"{raw_name!r} is_banned={r.is_banned!r} — only status='banned' sets is_banned"
