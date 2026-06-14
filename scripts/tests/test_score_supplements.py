@@ -3637,10 +3637,13 @@ class TestBannedRecalledVerdictLock:
     @pytest.mark.parametrize("inactive_name,standard_name", [
         ("Sodium Tetraborate", "Sodium Tetraborate"),
         ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
-        # FD&C Red #3 moved to status=high_risk/CAUTION 2026-06-08 (no longer a
-        # hard-banned blocker; revoked-but-legal-until-2027). Still blocks here are
-        # the genuine hard bans.
-        ("Dimethylpolysiloxane", "Simethicone"),
+        # Only genuine hard bans (status='banned') belong here. Ingredients
+        # reclassified to non-blocking statuses were intentionally removed:
+        #   - FD&C Red #3 → high_risk/CAUTION 2026-06-08 (revoked-but-legal
+        #     until 2027).
+        #   - Simethicone (Dimethylpolysiloxane) → status=watchlist (commit
+        #     e22c728, "align ... simethicone policy"). Non-blocking; its
+        #     behavior is covered by test_watchlist_severity_contract.
     ])
     def test_banned_inactive_resolver_hit_blocks_at_scoring_source(
         self,
