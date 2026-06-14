@@ -68,6 +68,36 @@ def test_zero_pillars_empty_when_none_zero():
     assert find_zero_pillars(df).empty
 
 
+def test_zero_pillars_flags_verification_zero_as_anomaly():
+    # Verification is the only fail-open pillar (neutral_baseline 6.0), so it can
+    # never legitimately reach 0 — a 0 here is a true anomaly.
+    df = _frame([_row("1", 65.1, 11.2, 20.0, 18.9, 15.0, 0.0, 10.0)])  # verification 0
+    zeros = find_zero_pillars(df)
+    assert len(zeros) == 1
+    assert zeros.iloc[0]["pillar"] == "Verification"
+    assert bool(zeros.iloc[0]["is_anomaly"]) is True
+
+
+def test_zero_pillars_marks_non_failopen_zero_as_legitimate_low():
+    # formulation/dose/evidence/transparency/safety_hygiene legitimately reach 0
+    # (basic forms, off-range dose, no clinical evidence, opaque blend, flagged
+    # ingredient) — these are low scores, not bugs.
+    df = _frame([_row("1", 71.1, 0.0, 20.0, 18.9, 15.0, 6.0, 10.0)])  # formulation 0
+    zeros = find_zero_pillars(df)
+    assert len(zeros) == 1
+    assert zeros.iloc[0]["pillar"] == "Formulation"
+    assert bool(zeros.iloc[0]["is_anomaly"]) is False
+
+
+def test_zero_pillars_safety_hygiene_zero_is_legitimate_low():
+    # safety_hygiene == 0 is a real safety signal (flagged ingredient), not a bug.
+    df = _frame([_row("1", 71.1, 11.2, 20.0, 18.9, 15.0, 6.0, 0.0)])  # safety_hygiene 0
+    zeros = find_zero_pillars(df)
+    assert len(zeros) == 1
+    assert zeros.iloc[0]["pillar"] == "Safety & Hygiene"
+    assert bool(zeros.iloc[0]["is_anomaly"]) is False
+
+
 def test_out_of_range_flags_pillar_over_max():
     df = _frame([_row("1", 85.0, 25.0, 20.0, 18.9, 15.0, 6.0, 10.0)])  # formulation 25 > 20
     out = find_out_of_range(df)
