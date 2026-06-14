@@ -1,123 +1,51 @@
-import sys
+"""Headless smoke tests: every dashboard view must render without raising.
+
+The Streamlit dashboard is exercised against a hermetic mock provided by the
+``dashboard_app`` fixture (see conftest.py), which makes the import-time
+streamlit swap robust regardless of test order. These tests don't assert on
+rendered output — they guard against a view crashing on real data shapes (e.g.
+NULL pillar columns), so they must keep rendering all views, not skip them.
+"""
 from pathlib import Path
-from unittest.mock import MagicMock
 
 
-class MockStreamlit(MagicMock):
-    def __getattr__(self, name):
-        if name in {"sidebar", "expander"}:
-            return MockStreamlit()
-        return super().__getattr__(name)
-
-    def columns(self, spec):
-        n = spec if isinstance(spec, int) else len(spec)
-        return [MockStreamlit() for _ in range(n)]
-
-    def tabs(self, labels):
-        return [MockStreamlit() for _ in labels]
-
-    def selectbox(self, label, options=None, **kwargs):
-        if options:
-            return options[0]
-        return None
-
-    def radio(self, label, options=None, **kwargs):
-        if options:
-            return options[0]
-        return None
-
-    def text_input(self, *args, **kwargs):
-        return kwargs.get("value", "") or ""
-
-    def button(self, *args, **kwargs):
-        return False
-
-    def toggle(self, *args, **kwargs):
-        return False
-
-    def checkbox(self, *args, **kwargs):
-        return False
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, *args):
-        return None
-
-
-mock_st = MockStreamlit()
-mock_st.session_state = {}
-mock_st.query_params = {}
-
-
-def passthrough(func=None, **kwargs):
-    if func is not None:
-        return func
-    return lambda f: f
-
-
-mock_st.cache_resource = passthrough
-mock_st.cache_data = passthrough
-sys.modules["streamlit"] = mock_st
-
-from scripts.dashboard.config import DashboardConfig
-from scripts.dashboard.components.command_center import render_command_center
-from scripts.dashboard.components.page_frame import render_page_frame
-from scripts.dashboard.data_loader import load_dashboard_data
-from scripts.dashboard.page_meta import get_page_meta
-from scripts.dashboard.views import (
-    render_batch_diff,
-    render_diff,
-    render_health,
-    render_inspector,
-    render_intelligence,
-    render_observability,
-    render_pillar_audit,
-    render_quality,
-    render_suppression_audit,
-    render_scoring_integrity,
-    render_module_health,
-)
-
-
-def test_all_dashboard_views_smoke_render():
-    config = DashboardConfig(
+def test_all_dashboard_views_smoke_render(dashboard_app):
+    config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
         build_root=Path("scripts/final_db_output").resolve(),
     )
-    data = load_dashboard_data(config)
+    data = dashboard_app.load_dashboard_data(config)
 
+    views = dashboard_app.views
     view_renderers = [
-        ("command-center", lambda: render_command_center(data)),
-        ("product-inspector", lambda: render_inspector(data)),
-        ("pipeline-health", lambda: render_health(data)),
-        ("data-quality", lambda: render_quality(data)),
-        ("observability", lambda: render_observability(data)),
-        ("release-diff", lambda: render_diff(data)),
-        ("batch-diff", lambda: render_batch_diff(data)),
-        ("intelligence", lambda: render_intelligence(data)),
-        ("pillar-audit", lambda: render_pillar_audit(data)),
-        ("suppression-audit", lambda: render_suppression_audit(data)),
-        ("scoring-integrity", lambda: render_scoring_integrity(data)),
-        ("module-health", lambda: render_module_health(data)),
+        ("command-center", lambda: dashboard_app.render_command_center(data)),
+        ("product-inspector", lambda: views.render_inspector(data)),
+        ("pipeline-health", lambda: views.render_health(data)),
+        ("data-quality", lambda: views.render_quality(data)),
+        ("observability", lambda: views.render_observability(data)),
+        ("release-diff", lambda: views.render_diff(data)),
+        ("batch-diff", lambda: views.render_batch_diff(data)),
+        ("intelligence", lambda: views.render_intelligence(data)),
+        ("pillar-audit", lambda: views.render_pillar_audit(data)),
+        ("suppression-audit", lambda: views.render_suppression_audit(data)),
+        ("scoring-integrity", lambda: views.render_scoring_integrity(data)),
+        ("module-health", lambda: views.render_module_health(data)),
     ]
 
     for slug, renderer in view_renderers:
-        render_page_frame(get_page_meta(slug, data), renderer)
+        dashboard_app.render_page_frame(dashboard_app.get_page_meta(slug, data), renderer)
 
 
-def test_inspector_drilldown_renders_v4_for_real_product():
+def test_inspector_drilldown_renders_v4_for_real_product(dashboard_app):
     """The smoke test above can't reach the Inspector drill-down (empty search
     short-circuits), so exercise it directly against a real product to cover the
     V4 six-pillar rendering path."""
-    from scripts.dashboard.views.inspector import render_drill_down
-
-    config = DashboardConfig(
+    config = dashboard_app.DashboardConfig(
         scan_dir=Path("scripts/products").resolve(),
         build_root=Path("scripts/final_db_output").resolve(),
     )
-    data = load_dashboard_data(config)
+    data = dashboard_app.load_dashboard_data(config)
     if data.product_catalog.empty:
         return
     dsld_id = str(data.product_catalog.iloc[0]["dsld_id"])
-    render_drill_down(dsld_id, data)  # must not raise
+    dashboard_app.render_drill_down(dsld_id, data)  # must not raise

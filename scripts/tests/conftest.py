@@ -11,8 +11,11 @@ This file is auto-discovered by pytest. No imports needed in test files.
 """
 from __future__ import annotations
 
+import importlib
 import sys
+import types
 from pathlib import Path
+from unittest.mock import MagicMock
 
 import pytest
 
@@ -74,3 +77,163 @@ def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
             item.add_marker(pytest.mark.release)
         if filename in ARTIFACT_TEST_FILES:
             item.add_marker(pytest.mark.artifact)
+
+
+# ---------------------------------------------------------------------------
+# Dashboard smoke-test isolation
+#
+# The Streamlit dashboard views capture `import streamlit as st` at *import*
+# time. The smoke tests render those views headlessly by swapping a MagicMock
+# into sys.modules["streamlit"] in place of the real package.
+#
+# That swap is only safe if it happens before any dashboard view module is
+# imported. When another test imports the real streamlit (and, transitively,
+# the dashboard — e.g. `from scripts.dashboard.views.scoring_integrity import …`)
+# *first*, the view modules' module-level `st` stays bound to the real package.
+# Replacing sys.modules["streamlit"] with a non-package MagicMock afterwards then
+# makes real code paths such as `st.info()` -> `extract_leading_emoji()` ->
+# `from streamlit.emojis import …` raise:
+#
+#     ModuleNotFoundError: No module named 'streamlit.emojis';
+#     'streamlit' is not a package
+#
+# i.e. the lazy submodule import can't find its parent because the parent in
+# sys.modules is now the mock. Whether this fires depends purely on test order
+# (and pytest-xdist makes order nondeterministic), so it can silently mask real
+# dashboard regressions during a full-suite run.
+#
+# The `dashboard_app` fixture below makes the dashboard tests order-independent:
+# it snapshots and purges the dashboard package, installs the mock, re-imports
+# the dashboard fresh (so every view binds st=mock uniformly), yields the import
+# surface the tests need, then restores sys.modules so no later test inherits
+# the mock.
+# ---------------------------------------------------------------------------
+
+
+class _DashboardStreamlitMock(MagicMock):
+    """Headless Streamlit stand-in for dashboard smoke tests.
+
+    Returns deterministic values for the widget calls the views make so the
+    render functions exercise their real logic without a Streamlit runtime.
+    This is the superset of the mocks the dashboard test files previously
+    defined inline (widgets + container managers + ``__format__``).
+    """
+
+    def __getattr__(self, name):
+        if name in {"sidebar", "expander"}:
+            return _DashboardStreamlitMock()
+        return super().__getattr__(name)
+
+    def columns(self, spec):
+        n = spec if isinstance(spec, int) else len(spec)
+        return [_DashboardStreamlitMock() for _ in range(n)]
+
+    def tabs(self, labels):
+        return [_DashboardStreamlitMock() for _ in labels]
+
+    def selectbox(self, label, options=None, **kwargs):
+        return options[0] if options else None
+
+    def radio(self, label, options=None, **kwargs):
+        return options[0] if options else None
+
+    def text_input(self, *args, **kwargs):
+        return kwargs.get("value", "") or ""
+
+    def button(self, *args, **kwargs):
+        return False
+
+    def toggle(self, *args, **kwargs):
+        return False
+
+    def checkbox(self, *args, **kwargs):
+        return False
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return None
+
+    def __format__(self, format_spec):
+        return "MockValue"
+
+
+def _build_dashboard_streamlit_mock() -> _DashboardStreamlitMock:
+    def passthrough(func=None, **kwargs):
+        # Mirror @st.cache_data / @st.cache_resource used with or without args.
+        if func is not None:
+            return func
+        return lambda f: f
+
+    mock = _DashboardStreamlitMock()
+    mock.session_state = {}
+    mock.query_params = {}
+    mock.cache_resource = passthrough
+    mock.cache_data = passthrough
+    return mock
+
+
+def _is_streamlit_or_dashboard(name: str) -> bool:
+    return (
+        name == "streamlit"
+        or name.startswith("streamlit.")
+        or name == "scripts.dashboard"
+        or name.startswith("scripts.dashboard.")
+    )
+
+
+@pytest.fixture
+def dashboard_app():
+    """Import the Streamlit dashboard against a hermetic mock, order-independent.
+
+    Yields a namespace of the dashboard entry points the smoke tests render. The
+    dashboard package is (re)imported while the mock is installed so every view's
+    module-level ``import streamlit as st`` binds to the mock — never to a real
+    streamlit a prior test may have left in sys.modules. The original sys.modules
+    state is restored on teardown so the mock never leaks to other tests.
+    """
+    # Snapshot everything we are about to mutate so teardown can fully restore.
+    saved = {
+        name: module
+        for name, module in sys.modules.items()
+        if _is_streamlit_or_dashboard(name)
+    }
+    # Drop any already-imported dashboard modules so they re-bind to the mock.
+    # (Dashboard modules only do `import streamlit as st`, never submodule
+    # imports, so the real streamlit.* entries can stay cached untouched.)
+    for name in list(sys.modules):
+        if name == "scripts.dashboard" or name.startswith("scripts.dashboard."):
+            del sys.modules[name]
+
+    mock_st = _build_dashboard_streamlit_mock()
+    sys.modules["streamlit"] = mock_st
+    try:
+        views = importlib.import_module("scripts.dashboard.views")
+        yield types.SimpleNamespace(
+            st=mock_st,
+            DashboardConfig=importlib.import_module(
+                "scripts.dashboard.config"
+            ).DashboardConfig,
+            load_dashboard_data=importlib.import_module(
+                "scripts.dashboard.data_loader"
+            ).load_dashboard_data,
+            get_page_meta=importlib.import_module(
+                "scripts.dashboard.page_meta"
+            ).get_page_meta,
+            render_page_frame=importlib.import_module(
+                "scripts.dashboard.components.page_frame"
+            ).render_page_frame,
+            render_command_center=importlib.import_module(
+                "scripts.dashboard.components.command_center"
+            ).render_command_center,
+            render_drill_down=importlib.import_module(
+                "scripts.dashboard.views.inspector"
+            ).render_drill_down,
+            views=views,
+        )
+    finally:
+        for name in list(sys.modules):
+            if _is_streamlit_or_dashboard(name):
+                del sys.modules[name]
+        sys.modules.update(saved)
