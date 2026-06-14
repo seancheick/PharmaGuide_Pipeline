@@ -171,6 +171,11 @@ COLUMNS = [
     "quality_score_suppressed_reason", "raw_score_v4_100", "v4_module", "v4_confidence",
     "score_model_version", "quality_score_version", "scoring_engine_version",
     "classification_schema_version", "v4_config_fingerprint",
+    # V4 six-pillar component scores (schema v2.0.0) — must match SCHEMA_SQL /
+    # build_core_row order: formulation, dose, evidence, transparency,
+    # verification, safety_hygiene.
+    "pillar_formulation_v4", "pillar_dose_v4", "pillar_evidence_v4",
+    "pillar_transparency_v4", "pillar_verification_v4", "pillar_safety_hygiene_v4",
     "score_ingredient_quality", "score_ingredient_quality_max",
     "score_safety_purity", "score_safety_purity_max",
     "score_evidence_research", "score_evidence_research_max",

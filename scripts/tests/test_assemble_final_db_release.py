@@ -31,6 +31,9 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
                 "88/100", 88.0, "Good", "SAFE", "SAFE", 1.0,
                 # v4 scoring contract (export schema v2.0.0; legacy /80 cols dropped)
                 88.0, "scored", "Strong", None, 88.0, "generic", "high", "v4", "1.0.0", "4.0.0", "5.3.0", None,
+                # V4 six-pillar component scores (schema v2.0.0): formulation, dose,
+                # evidence, transparency, verification, safety_hygiene (sum = 88).
+                18.0, 18.0, 16.0, 13.0, 13.0, 10.0,
                 20.0, 25.0, 20.0, 30.0, 15.0, 20.0, 4.0, 5.0,
                 90.0, 10.0, "targeted_capsule", "Top 10%", 100,
                 1, 0, 0, 0, 1, 0, 0,
