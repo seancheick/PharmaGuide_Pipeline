@@ -14569,6 +14569,7 @@
         "absorption": "~2%",
         "notes": "The standard unenhanced quercetin form — a yellow crystalline powder with notoriously poor absorption (~2% per Hollman 1995). Most of it passes through your gut unabsorbed. Still the most widely sold form because it's cheap. Works better when taken with fat or paired with bromelain/vitamin C, but even then absorption is limited compared to enhanced forms.",
         "aliases": [
+          "quercetin dihydrate",
           "quercetin",
           "quercetin bioflavonoid",
           "quercetin powder",
@@ -16142,9 +16143,9 @@
         }
       },
       "acetyl-l-carnitine (alcar)": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": false,
-        "score": 10,
+        "score": 11,
         "absorption": "low-moderate (likely higher than L-carnitine base ~14-18%, but no published oral bioavailability for ALCAR specifically)",
         "notes": "Acetylated form that crosses the blood-brain barrier. Well-studied for cognitive function, memory, and neuroprotection. Preferred form for brain health. Oral bioavailability not formally measured for ALCAR but likely modestly above L-carnitine base (~14-18%). The BBB-crossing property is the key differentiator. B42 structural merge 2026-06-06: exact acetyl-L-carnitine/ALCAR aliases and existing ALCAR UNII moved here from deprecated acetyl_l_carnitine parent so new labels route through the canonical l_carnitine parent.",
         "aliases": [
@@ -19555,7 +19556,9 @@
           "mixed ALA",
           "DL-ALA",
           "synthetic ALA",
-          "racemic lipoic acid"
+          "racemic lipoic acid",
+          "thioctic acid",
+          "thiotic acid"
         ],
         "context_include": [
           "lipoic",
