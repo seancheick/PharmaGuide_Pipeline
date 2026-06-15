@@ -1319,22 +1319,14 @@
         "fruit flavoring",
         "taste masking"
       ],
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-06-15",
       "external_ids": {
-        "unii": "B423VGH5S9"
+        "unii": null
       },
-      "rxcui": "891771",
-      "gsrs": {
-        "substance_name": "APPLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 899,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Apple | 1043 (Number of products:899)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "unii_note": "Flavor-system row; no single exact GSRS/UNII substance. Prior representative UNII B423VGH5S9 resolves to APPLE and is retained on apple-material rows such as NHA_APPLE_PUREE_CONCENTRATE.",
+      "rxcui": null,
+      "rxcui_note": "Cleared generic apple RxCUI 891771 because this row models apple flavoring, not whole apple material.",
+      "gsrs": null,
       "cui": "C0475653",
       "functional_roles": [
         "flavor_natural"
@@ -12260,22 +12252,14 @@
         "flavoring",
         "taste enhancement"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-06-15",
       "external_ids": {
-        "unii": "B423VGH5S9"
+        "unii": null
       },
-      "rxcui": "891771",
-      "gsrs": {
-        "substance_name": "APPLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 899,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Apple | 1043 (Number of products:899)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "unii_note": "Flavor-system row; no single exact GSRS/UNII substance. Prior representative UNII B423VGH5S9 resolves to APPLE and is retained on apple-material rows such as NHA_APPLE_PUREE_CONCENTRATE.",
+      "rxcui": null,
+      "rxcui_note": "Cleared generic apple RxCUI 891771 because this row models apple flavoring, not whole apple material.",
+      "gsrs": null,
       "functional_roles": [
         "flavor_natural"
       ]

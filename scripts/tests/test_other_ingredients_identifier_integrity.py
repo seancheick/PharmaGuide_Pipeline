@@ -123,6 +123,22 @@ def test_class_or_blend_rows_do_not_claim_representative_unii(other_ingredients)
     assert (glycerol_monostearate.get("external_ids") or {}).get("unii") == "230OU9XXE4"
 
 
+def test_flavor_rows_do_not_claim_whole_food_unii(other_ingredients):
+    """Flavor-system rows are not the same identity as the underlying whole food."""
+    apple_flavor = _find(other_ingredients, "PII_APPLE_FLAVOR")
+    natural_apple_flavor = _find(other_ingredients, "NHA_NATURAL_APPLE_FLAVOR")
+    apple_puree = _find(other_ingredients, "NHA_APPLE_PUREE_CONCENTRATE")
+
+    for entry in (apple_flavor, natural_apple_flavor):
+        assert (entry.get("external_ids") or {}).get("unii") is None
+        assert entry.get("rxcui") is None
+        assert entry.get("gsrs") is None
+        assert entry.get("unii_note")
+        assert entry.get("rxcui_note")
+
+    assert (apple_puree.get("external_ids") or {}).get("unii") == "B423VGH5S9"
+
+
 def test_nha_vegetable_fruit_juice_colors_cui_nulled(other_ingredients):
     """C4042943 resolved to 'Fruit and Vegetable Juices' (multi-compound
     combo). The entry is a natural-colorant class; no single UMLS concept.

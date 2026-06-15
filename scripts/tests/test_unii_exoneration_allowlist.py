@@ -61,9 +61,17 @@ def ref_entries():
             blob = json.load(f)
         if list_key is None:
             # IQM: top-level dict-of-dicts, skip _-prefixed keys
-            out[file_label] = {
-                k: v for k, v in blob.items() if not k.startswith("_") and isinstance(v, dict)
-            }
+            out[file_label] = {}
+            for entry_id, entry in blob.items():
+                if entry_id.startswith("_") or not isinstance(entry, dict):
+                    continue
+                out[file_label][entry_id] = entry
+                forms = entry.get("forms") or {}
+                if not isinstance(forms, dict):
+                    continue
+                for form_name, form_entry in forms.items():
+                    if isinstance(form_entry, dict):
+                        out[file_label][f"{entry_id}.forms[{form_name}]"] = form_entry
         else:
             out[file_label] = {}
             for entry in blob.get(list_key, []):

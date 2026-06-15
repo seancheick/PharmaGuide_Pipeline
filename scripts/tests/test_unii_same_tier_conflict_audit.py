@@ -49,6 +49,40 @@ def test_same_tier_grouping_excludes_cross_tier_collision():
     assert audit.find_same_tier_groups(records) == []
 
 
+def test_shadowed_lower_tier_duplicates_do_not_report_runtime_conflict():
+    records = [
+        audit.UniiRecord(
+            tier=4,
+            tier_name="ingredient_quality_map",
+            source="iqm_parent",
+            file="ingredient_quality_map.json",
+            entry_id="cranberry",
+            standard_name="Cranberry",
+            unii="0MVO31Q3QS",
+        ),
+        audit.UniiRecord(
+            tier=5,
+            tier_name="standardized_botanicals",
+            source="standardized_botanical",
+            file="standardized_botanicals.json",
+            entry_id="cran_max",
+            standard_name="Cran-Max",
+            unii="0MVO31Q3QS",
+        ),
+        audit.UniiRecord(
+            tier=5,
+            tier_name="standardized_botanicals",
+            source="standardized_botanical",
+            file="standardized_botanicals.json",
+            entry_id="pacran",
+            standard_name="Pacran",
+            unii="0MVO31Q3QS",
+        ),
+    ]
+
+    assert audit.find_same_tier_groups(records) == []
+
+
 def test_iqm_same_parent_parent_form_collision_is_info():
     records = [
         audit.UniiRecord(
@@ -107,6 +141,68 @@ def test_iqm_same_unii_different_parents_is_high_review():
     assert group.classification == "iqm_cross_parent_same_unii"
     assert group.severity == "high_review"
     assert group.action == "review_data_model_or_exonerate"
+
+
+def test_allowlisted_same_tier_group_is_info():
+    records = [
+        audit.UniiRecord(
+            tier=5,
+            tier_name="standardized_botanicals",
+            source="standardized_botanical",
+            file="standardized_botanicals.json",
+            entry_id="astaxanthin_haematococcus_pluvialis",
+            standard_name="Astaxanthin (Haematococcus pluvialis)",
+            unii="31T0FF0472",
+        ),
+        audit.UniiRecord(
+            tier=5,
+            tier_name="standardized_botanicals",
+            source="standardized_botanical",
+            file="standardized_botanicals.json",
+            entry_id="astazine",
+            standard_name="AstaZine",
+            unii="31T0FF0472",
+        ),
+    ]
+    allowlist_refs = {
+        "31T0FF0472": {
+            ("standardized_botanicals.json", "astaxanthin_haematococcus_pluvialis"),
+            ("standardized_botanicals.json", "astazine"),
+        }
+    }
+
+    [group] = audit.find_same_tier_groups(records, allowlist_refs=allowlist_refs)
+    assert group.classification == "allowlisted_same_unii_identity"
+    assert group.severity == "info"
+    assert group.action == "no_action_reviewed_same_fda_substance"
+
+
+def test_runtime_same_identity_variant_group_is_info():
+    records = [
+        audit.UniiRecord(
+            tier=5,
+            tier_name="standardized_botanicals",
+            source="botanical",
+            file="botanical_ingredients.json",
+            entry_id="shiitake_mushroom",
+            standard_name="Shiitake Mushroom",
+            unii="1A64QN2D2F",
+        ),
+        audit.UniiRecord(
+            tier=5,
+            tier_name="standardized_botanicals",
+            source="standardized_botanical",
+            file="standardized_botanicals.json",
+            entry_id="shiitake",
+            standard_name="Shiitake",
+            unii="1A64QN2D2F",
+        ),
+    ]
+
+    [group] = audit.find_same_tier_groups(records)
+    assert group.classification == "runtime_same_identity_variant"
+    assert group.severity == "info"
+    assert group.action == "no_action_runtime_logs_debug"
 
 
 def test_same_tier_exact_duplicate_name_is_review_not_high_review():
