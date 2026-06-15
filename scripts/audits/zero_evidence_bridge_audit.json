@@ -1,5 +1,5 @@
 {
-  "zero_evidence_products": 1259,
+  "zero_evidence_products": 1263,
   "summary": {
     "no_entry": 442,
     "matched": 18,
@@ -36,15 +36,15 @@
         "how": null
       },
       {
-        "canonical": "ginkgo",
-        "label": "Ginkgo",
-        "products": 38,
+        "canonical": "mct oil",
+        "label": "MCT Oil",
+        "products": 41,
         "matched_entry": null,
         "how": null
       },
       {
-        "canonical": "mct oil",
-        "label": "MCT Oil",
+        "canonical": "ginkgo",
+        "label": "Ginkgo",
         "products": 38,
         "matched_entry": null,
         "how": null
@@ -253,6 +253,13 @@
         "how": null
       },
       {
+        "canonical": "nha coconut derivatives",
+        "label": "Coconut Oil Derivatives",
+        "products": 11,
+        "matched_entry": null,
+        "how": null
+      },
+      {
         "canonical": "hawthorn",
         "label": "Hawthorn (Crataegus)",
         "products": 11,
@@ -283,13 +290,6 @@
       {
         "canonical": "tribulus",
         "label": "Tribulus Terrestris",
-        "products": 10,
-        "matched_entry": null,
-        "how": null
-      },
-      {
-        "canonical": "nha coconut derivatives",
-        "label": "Coconut Oil Derivatives",
         "products": 10,
         "matched_entry": null,
         "how": null
@@ -430,6 +430,13 @@
       {
         "canonical": "cayenne pepper",
         "label": "Cayenne Pepper",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lauric acid",
+        "label": "Lauric Acid",
         "products": 8,
         "matched_entry": null,
         "how": null
@@ -605,13 +612,6 @@
       {
         "canonical": "phosphatidylcholine",
         "label": "Phosphatidylcholine",
-        "products": 6,
-        "matched_entry": null,
-        "how": null
-      },
-      {
-        "canonical": "lauric acid",
-        "label": "Lauric Acid",
         "products": 6,
         "matched_entry": null,
         "how": null
@@ -820,6 +820,13 @@
         "how": null
       },
       {
+        "canonical": "pii extra virgin coconut oil",
+        "label": "Extra Virgin Coconut Oil",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
         "canonical": "forskolin",
         "label": "Forskolin",
         "products": 4,
@@ -976,13 +983,6 @@
       {
         "canonical": "soybean",
         "label": "Soybean (Glycine Max)",
-        "products": 3,
-        "matched_entry": null,
-        "how": null
-      },
-      {
-        "canonical": "pii extra virgin coconut oil",
-        "label": "Extra Virgin Coconut Oil",
         "products": 3,
         "matched_entry": null,
         "how": null
@@ -3132,6 +3132,13 @@
         "how": null
       },
       {
+        "canonical": "dha",
+        "label": "DHA (Docosahexaenoic Acid)",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
         "canonical": "piperine",
         "label": "Piperine (Black Pepper Extract)",
         "products": 4,
@@ -3211,13 +3218,6 @@
       {
         "canonical": "pea",
         "label": "Pea",
-        "products": 1,
-        "matched_entry": null,
-        "how": null
-      },
-      {
-        "canonical": "l glycine",
-        "label": "L-Glycine",
         "products": 1,
         "matched_entry": null,
         "how": null

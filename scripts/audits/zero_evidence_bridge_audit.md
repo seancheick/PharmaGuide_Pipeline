@@ -1,6 +1,6 @@
 # Zero-evidence bridge audit
 
-Zero-evidence scored products: **1259**
+Zero-evidence scored products: **1263**
 Distinct zero-evidence canonicals: **464**
 Classification: manual_review=4, matched=18, no_entry=442
 
@@ -21,6 +21,7 @@ These rows have string overlap with a verified entry, but overlap is not identit
 - digestive enzymes (Digestive Enzymes) — 12 products
 - copper (Copper) — 9 products
 - rhodiola (Rhodiola) — 5 products
+- dha (DHA (Docosahexaenoic Acid)) — 5 products
 - piperine (Piperine (Black Pepper Extract)) — 4 products
 - phosphatidylserine (Phosphatidylserine) — 3 products
 - fenugreek (Fenugreek) — 2 products
@@ -33,7 +34,6 @@ These rows have string overlap with a verified entry, but overlap is not identit
 - astragalus (Astragalus) — 1 products
 - beetroot (Beetroot Powder) — 1 products
 - pea (Pea) — 1 products
-- l glycine (L-Glycine) — 1 products
 - caffeine (Caffeine) — 1 products
 
 ## no_entry: 442 canonicals (correctly 0 unless a real PMID is added)
