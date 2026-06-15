@@ -9276,9 +9276,9 @@
         }
       },
       "unspecified astaxanthin": {
-        "bio_score": 10,
+        "bio_score": 12,
         "natural": false,
-        "score": 10,
+        "score": 12,
         "absorption": "low/variable when fat-matrix unknown; reference Cmax ~3.86 µg/mL (Khayyal 2024)",
         "notes": "The supplement label says astaxanthin but does not specify natural (algae-derived) or synthetic. This distinction matters — natural astaxanthin from Haematococcus pluvialis has far more clinical support. If the source isn't specified, it may be the cheaper synthetic version. Evidence update 2026-04-24: Khayyal 2024 (PMID:38748358, n=12 males, 8mg crossover) reference (non-micellar) astaxanthin gave Cmax only 3.86 µg/mL vs 7.21 µg/mL for micellar formulation, confirming unformulated/unspecified astaxanthin defaults to lower bioavailability than fat-optimized forms.",
         "aliases": [
@@ -10041,9 +10041,9 @@
         }
       },
       "atp (adenosine triphosphate) (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": false,
-        "score": 6,
+        "score": 7,
         "absorption": "unknown",
         "notes": "Generic ATP listing without a specified salt form. Cannot determine bioavailability or purity. Conservative score applied — look for Peak ATP (disodium salt) for the clinically studied version. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -10473,9 +10473,9 @@
         }
       },
       "phosphatidylcholine (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 14,
         "natural": false,
-        "score": 11,
+        "score": 14,
         "absorption": "good (estimated; default for unsourced PC)",
         "notes": "Unspecified phosphatidylcholine (label does not declare soy / sunflower / synthetic source). Slightly lower default score because source-specific bioavailability and allergen profile cannot be confirmed.",
         "aliases": [
@@ -11437,9 +11437,9 @@
         }
       },
       "stinging nettle (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 13,
         "natural": false,
-        "score": 9,
+        "score": 13,
         "absorption": "good (stinging nettle phenolic + lectin class)",
         "notes": "Generic nettle listing without specifying root or leaf. This matters because the root and leaf have different active compounds and clinical uses — root for prostate/BPH, leaf for allergies and minerals. Conservative score applied since the specific plant part cannot be determined. B33 audit 2026-04-25: stinging nettle class.",
         "aliases": [
@@ -11535,9 +11535,9 @@
         }
       },
       "pygeum (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 14,
         "natural": false,
-        "score": 8,
+        "score": 14,
         "absorption": "unknown",
         "notes": "Generic pygeum listing without specifying standardization or extraction method. Look for products standardized to 14% triterpenes and 0.5% n-docosanol for clinical-grade potency. Conservative score applied. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": ["pygeum", "african cherry bark"],
@@ -15292,9 +15292,9 @@
         }
       },
       "prebiotics (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 13,
         "natural": false,
-        "score": 9,
+        "score": 13,
         "absorption": "category_error (default to fermentation framework)",
         "notes": "Type not specified on label. Conservative score — different prebiotics feed different bacterial populations. Look for specific types (FOS, GOS, inulin, HMO) for a more accurate score. B28 audit 2026-04-25: CATEGORY ERROR default (B22 framework).",
         "aliases": ["prebiotics", "prebiotic", "prebiotic fiber"],
@@ -15490,9 +15490,9 @@
         }
       },
       "choline (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "very_good (choline class baseline; PC ~95%)",
         "notes": "Form not specified on label. Conservative score — big difference between budget bitartrate and premium Alpha-GPC/citicoline. Look for a specific form name for an accurate score. B33 audit 2026-04-25: choline class baseline.",
         "aliases": ["choline", "vitacholine", "Colina"],
@@ -20151,9 +20151,9 @@
         }
       },
       "rhodiola (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "low-moderate (rosavin + salidroside class)",
         "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified. B33 audit 2026-04-25: rosavin/salidroside class.",
         "aliases": [
@@ -20295,9 +20295,9 @@
         }
       },
       "ginkgo (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 10,
         "natural": false,
-        "score": 8,
+        "score": 10,
         "absorption": "moderate (flavonoid + terpene lactone class)",
         "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed. B33 audit 2026-04-25: ginkgo class baseline.",
         "aliases": ["ginkgo"],
