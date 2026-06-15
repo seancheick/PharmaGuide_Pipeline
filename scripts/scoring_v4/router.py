@@ -523,13 +523,21 @@ def _number(value: Any) -> float:
         return 0.0
 
 
-def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
+def _non_probiotic_scorable_count(
+    product: Dict[str, Any], *, require_disclosed: bool = False
+) -> int:
     """Count scorable active rows that are NOT probiotic strains.
 
     A large non-probiotic panel (a multivitamin's micronutrients, a protein's
     macros) means an accompanying strain is an adjunct, not the product identity.
     Count the scoring contract rows, not only IQD rows, so recovered actives and
     product-level enzyme/protein evidence participate in the route decision.
+
+    When ``require_disclosed`` is True, rows without a positive disclosed amount
+    (quantity == 0 / undisclosed) are excluded. Undisclosed blend children
+    otherwise inflate the panel and demote a genuine probiotic, so the disclosed
+    count gates the pure-strain promotion paths while the full count still
+    governs strain-vs-panel dominance.
     """
     count = 0
     for row in _scoring_rows(product):
@@ -565,6 +573,8 @@ def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
         ):
             continue
         if any(term in text for term in ("dietary fiber", "prebiotic", "inulin", "fructooligosaccharide")):
+            continue
+        if require_disclosed and not _positive_quantity(row):
             continue
         count += 1
     return count
@@ -630,6 +640,14 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         return False
 
     non_probiotic_panel = _non_probiotic_scorable_count(product)
+    # Disclosed (positive-quantity) panel for the pure-strain promotion paths and
+    # the small-adjunct-with-name gate. Undisclosed (quantity == 0) blend rows
+    # must not demote a genuine probiotic (Kids 5 Billion CFU: 5 strains buried
+    # under ~23 zero-qty superfood rows; Probiotic GX: 1 strain + a disclosed
+    # enzyme-blend header whose enzyme children are zero-qty). The FULL count
+    # still governs strain-vs-panel dominance below, so a real multivitamin with
+    # a few undisclosed rows is not promoted by its strains.
+    disclosed_non_probiotic_panel = _non_probiotic_scorable_count(product, require_disclosed=True)
 
     # Pure multi-strain products are unambiguously probiotic even without CFU
     # disclosure or a "probiotic" name token. panel==0 means the strains are the
@@ -638,7 +656,7 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     # blocks a product that advertises a non-probiotic identity (zinc/protein/fiber
     # title or specific taxonomy) but whose real panel was lost upstream.
     if (
-        non_probiotic_panel == 0
+        disclosed_non_probiotic_panel == 0
         and strain_count >= _PROBIOTIC_PURE_STRAIN_MIN
         and not _has_non_probiotic_hero(product, name_text)
     ):
@@ -646,7 +664,7 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
 
     if (
         primary_type == "probiotic"
-        and non_probiotic_panel == 0
+        and disclosed_non_probiotic_panel == 0
         and strain_count >= 1
         and not _has_non_probiotic_hero(product, name_text)
     ):
@@ -678,7 +696,7 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
 
     if strain_count >= non_probiotic_panel:
         return True
-    if non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
+    if disclosed_non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
         return True
     return False
 

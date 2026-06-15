@@ -2240,7 +2240,17 @@ def _route_probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
     return payload if isinstance(payload, dict) else {}
 
 
-def _route_non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
+def _route_non_probiotic_scorable_count(
+    product: Dict[str, Any], *, require_disclosed: bool = False
+) -> int:
+    """Count scorable active rows that are NOT probiotic strains.
+
+    When ``require_disclosed`` is True, rows without a positive disclosed amount
+    (quantity == 0 / undisclosed) are excluded. Undisclosed blend children
+    otherwise inflate the panel and demote a genuine probiotic, so the disclosed
+    count gates the pure-strain promotion paths while the full count still
+    governs strain-vs-panel dominance.
+    """
     count = 0
     for row in _route_scoring_rows(product):
         if not isinstance(row, dict):
@@ -2256,6 +2266,8 @@ def _route_non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
         if _has_probiotic_identity_text(row):
             continue
         if _is_probiotic_support_row(row):
+            continue
+        if require_disclosed and not _route_has_positive_quantity(row):
             continue
         count += 1
     return count
@@ -2303,8 +2315,18 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         return False
 
     non_probiotic_panel = _route_non_probiotic_scorable_count(product)
+    # Disclosed (positive-quantity) panel for the pure-strain promotion paths and
+    # the small-adjunct-with-name gate. Undisclosed (quantity == 0) blend rows
+    # must not demote a genuine probiotic (Kids 5 Billion CFU: 5 strains buried
+    # under ~23 zero-qty superfood rows; Probiotic GX: 1 strain + a disclosed
+    # enzyme-blend header whose enzyme children are zero-qty). The FULL count
+    # still governs strain-vs-panel dominance below, so a real multivitamin with
+    # a few undisclosed rows is not promoted by its strains.
+    disclosed_non_probiotic_panel = _route_non_probiotic_scorable_count(
+        product, require_disclosed=True
+    )
     if (
-        non_probiotic_panel == 0
+        disclosed_non_probiotic_panel == 0
         and strain_count >= _ROUTE_PROBIOTIC_PURE_STRAIN_MIN
         and not _route_has_non_probiotic_hero(product, name_text)
     ):
@@ -2312,7 +2334,7 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
 
     if (
         primary_type == "probiotic"
-        and non_probiotic_panel == 0
+        and disclosed_non_probiotic_panel == 0
         and strain_count >= 1
         and not _route_has_non_probiotic_hero(product, name_text)
     ):
@@ -2336,7 +2358,7 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
 
     if strain_count >= non_probiotic_panel:
         return True
-    if non_probiotic_panel <= _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
+    if disclosed_non_probiotic_panel <= _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX and name_signal:
         return True
     return False
 
