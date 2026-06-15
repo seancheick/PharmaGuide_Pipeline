@@ -912,6 +912,59 @@ def test_safety_source_inactive_does_not_export_safety_standard_name_as_identity
     )
 
 
+def test_inactive_display_label_preserves_label_wording_with_resolved_identity_metadata():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Ascorbyl Palmitate",
+            "raw_source_text": "Ascorbyl Palmitate",
+            "standardName": "Natural Preservatives",
+        }
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+    inactive = blob["inactive_ingredients"][0]
+
+    assert inactive["name"] == "Ascorbyl Palmitate"
+    assert inactive["display_label"] == "Ascorbyl Palmitate"
+    assert inactive["label_display"] == "Ascorbyl Palmitate"
+    assert inactive["resolved_display_label"] == "Natural Preservatives"
+    assert inactive["standardName"] == "Natural Preservatives"
+    assert inactive["display_role_label"] == "Preservative natural"
+    assert inactive["label_row_disposition"] == "standard"
+
+
+def test_label_descriptor_inactive_row_stays_visible_but_marked_nonstandard():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Phospholipids",
+            "raw_source_text": "Phospholipids",
+            "standardName": "Phospholipid Descriptor",
+            "forms": [
+                {
+                    "name": "purified Sunflower seed Lecithin",
+                    "prefix": "from",
+                }
+            ],
+        }
+    ]
+    enriched["raw_inactives_count"] = 1
+
+    blob = build_detail_blob(enriched, make_scored())
+    inactive = blob["inactive_ingredients"][0]
+
+    assert inactive["name"] == "Phospholipids"
+    assert inactive["display_label"] == "Phospholipids"
+    assert inactive["label_display"] == "Phospholipids"
+    assert inactive["standardName"] == "Phospholipid Descriptor"
+    assert inactive["resolved_display_label"] == "Phospholipid Descriptor"
+    assert inactive["matched_rule_id"] == "PII_PHOSPHOLIPID_DESCRIPTOR"
+    assert inactive["label_row_disposition"] == "label_descriptor"
+    assert inactive["is_label_descriptor"] is True
+    assert inactive["functional_roles"] == []
+
+
 def test_safety_source_active_without_canonical_keeps_label_identity():
     enriched = make_enriched()
     enriched["activeIngredients"] = [

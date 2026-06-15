@@ -2729,6 +2729,31 @@ class EnhancedDSLDNormalizer:
 
         return False
 
+    def _has_curated_other_ingredient_identity(self, name: str) -> bool:
+        """Return True when an inactive label row resolves to a known excipient.
+
+        `_should_skip_ingredient` is shared by active and inactive paths and
+        intentionally contains broad label/nutrition exclusions. Some real
+        inactive ingredients use similar language ("Water, Purified"), so the
+        inactive path gets this stricter override: preserve the row only when
+        the curated other-ingredients index already recognizes it.
+        """
+        if not name:
+            return False
+        exact_name = name.strip().lower()
+        if exact_name in self.other_ingredients_exact_lookup:
+            return True
+        processed_name = self.matcher.preprocess_text(name)
+        if processed_name in self.other_ingredients_lookup:
+            return True
+        return False
+
+    def _should_skip_inactive_ingredient(self, name: str) -> bool:
+        """Inactive-specific skip decision that preserves mapped label rows."""
+        if not self._should_skip_ingredient(name):
+            return False
+        return not self._has_curated_other_ingredient_identity(name)
+
     def _build_hierarchy_lookup(self) -> Dict[str, Dict[str, str]]:
         """
         Build fast lookup dict for hierarchy classification.
@@ -4987,7 +5012,7 @@ class EnhancedDSLDNormalizer:
                     return False
                 if self._is_label_header(nm_s):
                     return False
-                if self._should_skip_ingredient(nm_s):
+                if self._should_skip_inactive_ingredient(nm_s):
                     return False
                 if self.matcher.preprocess_text(nm_s) in active_tokens:
                     return False
@@ -6629,7 +6654,7 @@ class EnhancedDSLDNormalizer:
             return (None, None)
 
         # SKIP ENFORCEMENT: Check skip list FIRST before any processing
-        if self._should_skip_ingredient(name):
+        if self._should_skip_inactive_ingredient(name):
             logger.debug(f"Skipping other ingredient from skip list: {name}")
             return (None, None)  # Tuple format for consistency with normal return
 
@@ -6886,7 +6911,7 @@ class EnhancedDSLDNormalizer:
 
             # SKIP ENFORCEMENT: Check skip list after header extraction so structural
             # containers with child forms are not lost before they can unwrap.
-            if self._should_skip_ingredient(name):
+            if self._should_skip_inactive_ingredient(name):
                 logger.debug(f"Skipping ingredient from skip list: {name}")
                 continue
 

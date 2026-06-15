@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Phase 4a — flag-based suppression contract tests.
+Phase 4a — flag-based inactive disposition contract tests.
 
 Asserts:
   - retire entries carry is_label_descriptor: true
   - move-to-actives entries carry is_active_only: true
-  - Build pipeline (build_final_db.py:2272) skips both flag classes
-    from inactive_ingredients[] blob
+  - resolver/export code can surface both flag classes as disposition
+    metadata on label-facing inactive_ingredients[] rows
 """
 
 import json
@@ -77,9 +77,8 @@ def test_unflagged_entries_have_populated_roles(entries):
     )
 
 
-def test_build_blob_suppresses_label_descriptor(entries):
-    """End-to-end: when an inactive ingredient maps to a flagged entry,
-    build_final_db.py must skip it from inactive_ingredients[]."""
+def test_resolver_surfaces_label_descriptor_flag(entries):
+    """Resolver reference lookup must surface label-descriptor metadata."""
     # Pick a known label-descriptor entry to test against
     label_entries = [e for e in entries if e.get("is_label_descriptor")]
     assert label_entries, "no label_descriptor entries found in fixture"
@@ -98,8 +97,8 @@ def test_build_blob_suppresses_label_descriptor(entries):
     )
 
 
-def test_build_blob_suppresses_active_only(entries):
-    """End-to-end: same for is_active_only flag."""
+def test_resolver_surfaces_active_only_flag(entries):
+    """Resolver reference lookup must surface active-only metadata."""
     active_entries = [e for e in entries if e.get("is_active_only")]
     assert active_entries
     sample = active_entries[0]

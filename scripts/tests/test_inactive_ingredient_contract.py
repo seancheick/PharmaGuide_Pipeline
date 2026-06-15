@@ -139,7 +139,9 @@ def test_silicon_dioxide_suppresses_to_tradeoffs_only():
     because it's a risk."""
     blob = build_detail_blob(_enriched_with_thorne_inactives(), _scored_minimal())
     sio2 = _find_inactive(blob, "Silicon Dioxide")
-    assert sio2["display_label"] == "Silicon Dioxide (E551)"
+    assert sio2["display_label"] == "Silicon Dioxide"
+    assert sio2["label_display"] == "Silicon Dioxide"
+    assert sio2["resolved_display_label"] == "Silicon Dioxide (E551)"
     assert sio2["display_role_label"] == "Anti-caking agent"
     assert sio2["severity_status"] == "suppress"
     assert sio2["harmful_severity"] == "low"
@@ -154,7 +156,9 @@ def test_hypromellose_renders_as_neutral_excipient():
     in Other Ingredients only (severity_status='n/a')."""
     blob = build_detail_blob(_enriched_with_thorne_inactives(), _scored_minimal())
     hpmc = _find_inactive(blob, "Hypromellose")
-    assert hpmc["display_label"] == "Hydroxypropyl Methylcellulose"
+    assert hpmc["display_label"] == "Hypromellose"
+    assert hpmc["label_display"] == "Hypromellose"
+    assert hpmc["resolved_display_label"] == "Hydroxypropyl Methylcellulose"
     assert hpmc["display_role_label"] == "Capsule coating"
     assert hpmc["severity_status"] == "n/a"
     assert hpmc["is_safety_concern"] is False

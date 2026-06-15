@@ -194,6 +194,45 @@ def test_normalizer_counts_real_inactives_excluding_none() -> None:
     assert cleaned.get("raw_inactives_count") == 2
 
 
+def test_normalizer_preserves_mapped_inactive_that_looks_like_label_phrase() -> None:
+    """`Water, Purified` is a real inactive solvent, not label noise.
+
+    Regression source: the shared skip machinery preprocesses this to
+    ``water purified`` and used to drop it before enrichment, even though
+    other_ingredients.json has an exact curated alias for the row.
+    """
+    import sys
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from enhanced_normalizer import EnhancedDSLDNormalizer  # noqa: E402
+
+    normalizer = EnhancedDSLDNormalizer()
+    raw_product = {
+        "id": "TEST-WATER-PURIFIED",
+        "ingredientRows": [],
+        "otheringredients": {
+            "ingredients": [
+                {
+                    "order": 1,
+                    "ingredientId": 286588,
+                    "name": "Water, Purified",
+                    "category": "other",
+                    "ingredientGroup": "Water",
+                    "uniiCode": "059QF0KO0R",
+                    "forms": [],
+                }
+            ],
+        },
+    }
+
+    cleaned = normalizer.normalize_product(raw_product)
+    inactives = cleaned.get("inactiveIngredients") or []
+
+    assert cleaned.get("raw_inactives_count") == 1
+    assert [ing.get("name") for ing in inactives] == ["Water, Purified"]
+    assert inactives[0]["standardName"] == "Purified Water"
+    assert inactives[0]["canonical_id"] == "PII_PURIFIED_WATER"
+
+
 # ---------------------------------------------------------------------------
 # 2026-05-14 — Phase 4a intentional_drops reconciliation
 # ---------------------------------------------------------------------------

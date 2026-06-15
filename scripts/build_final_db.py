@@ -2410,9 +2410,8 @@ def _validate_active_count_reconciliation(
 # The cleaner (enhanced_normalizer) stashes the pre-filter count of
 # real raw inactives (excluding DSLD's "None" placeholder) as
 # `raw_inactives_count` on its output. Build emits it on the blob and
-# a validator asserts: if raw_inactives_count > 0, blob
-# inactive_ingredients[] must be non-empty. Detects any future filter
-# regression that silently drops real excipients.
+# a validator asserts that the blob does not silently drop the entire
+# label-facing inactive surface. Row-level canaries cover partial loss.
 _NONE_PLACEHOLDER_NAMES = {"none", "n/a", "na", ""}
 
 
@@ -2426,12 +2425,10 @@ def _validate_inactive_preservation(
     blob emits an empty inactive_ingredients list. Also enforces: the
     literal "None" placeholder must never leak into a blob entry.
 
-    ``intentional_drops`` accounts for the Phase 4a filter that
-    intentionally drops `is_label_descriptor=True` / `is_active_only=True`
-    entries during blob construction (e.g., "Coconut" source-descriptor
-    on an MCT-oil product). These drops are policy, not a filter
-    regression — they subtract from the effective raw count before the
-    preservation invariant is checked. Source: bucket 2 closure 2026-05-14.
+    ``intentional_drops`` is retained for backwards-compatible tests and
+    historical blobs. Current export keeps descriptor / active-only rows
+    visible in `inactive_ingredients[]` and marks their disposition instead
+    of dropping them from the label-facing surface.
     """
     blob_inactives = blob.get("inactive_ingredients") or []
 
@@ -3751,27 +3748,24 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             additional_terms=_form_match_terms(ing.get("forms")),
         )
 
-        # Phase 4a (2026-04-30): suppress label-noise + move-to-actives
-        # entries from the Flutter inactive_ingredients[] blob. Entries
-        # flagged is_label_descriptor=true are descriptive label fragments
-        # (marketing copy, source descriptors, phytochemical markers).
-        # Entries flagged is_active_only=true are bioactives that physically
-        # relocate to the active-ingredient pipeline in V1.1. Either way,
-        # do not render as inactive chips.
-        if res.is_label_descriptor or res.is_active_only:
-            intentional_inactive_drops += 1
-            continue
+        # Label fidelity contract (2026-06-15): inactive_ingredients[] is
+        # the user-visible "Other Ingredients" surface, so resolver flags
+        # must not delete rows that appeared on the label. Keep the row and
+        # expose disposition metadata for scoring / secondary UI decisions.
+        if res.is_label_descriptor:
+            label_row_disposition = "label_descriptor"
+        elif res.is_active_only:
+            label_row_disposition = "active_only"
+        else:
+            label_row_disposition = "standard"
         inactive_standard_name = _inactive_identity_name_for_export(
             name=name,
             upstream_standard_name=std_name_ing,
             resolver_standard_name=safe_str(res.standard_name),
             matched_source=safe_str(res.matched_source),
         )
-        inactive_display_label = (
-            name
-            if safe_str(res.matched_source) in _BANNED_RECALLED_SOURCES
-            else res.display_label
-        )
+        resolved_display_label = safe_str(res.display_label)
+        inactive_display_label = name or raw or resolved_display_label
         inactive_contract = {
             "is_safety_concern": res.is_safety_concern,
             "is_banned": res.is_banned,
@@ -3783,6 +3777,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         inactive.append({
             "raw_source_text": raw,
             "name": name,
+            "label_display": inactive_display_label,
             "standardName": inactive_standard_name,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
@@ -3805,9 +3800,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # Canonical inactive contract (v1.5.0+) — Flutter renders
             # these directly without local inference.
             "display_label": inactive_display_label,
+            "resolved_display_label": resolved_display_label,
             "display_role_label": res.display_role_label,
             "severity_status": res.severity_status,
             "is_safety_concern": res.is_safety_concern,
+            "label_row_disposition": label_row_disposition,
+            "is_label_descriptor": res.is_label_descriptor,
+            "is_active_only": res.is_active_only,
             # v1.6.0+ unified contract additions:
             "is_banned": res.is_banned,
             "safety_reason": res.safety_reason,
