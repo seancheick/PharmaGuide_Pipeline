@@ -77,6 +77,23 @@ def test_vegandha_dha_plus_dpa_routes_omega():
     assert class_for_product(p) == "omega"
 
 
+def test_algal_dha_with_astaxanthin_adjunct_routes_omega():
+    # Real Minami VeganDHA (dsld 28661): DHA 400 + DPA 140 + a trace 1.5 mg
+    # astaxanthin antioxidant adjunct. Astaxanthin is a soft omega adjunct, so the
+    # product stays an omega-3 product, not generic.
+    p = {
+        "product_name": "VeganDHA",
+        "brand_name": "Minami Nutrition",
+        "primary_type": "omega_3",
+        **_rows([
+            {"canonical_id": "dha", "name": "DHA", "quantity": 400, "unit": "mg"},
+            {"canonical_id": "docosapentaenoic_acid_dpa", "name": "DPA", "quantity": 140, "unit": "mg"},
+            {"canonical_id": "astaxanthin", "name": "Astaxanthin", "quantity": 1.5, "unit": "mg"},
+        ]),
+    }
+    assert class_for_product(p) == "omega"
+
+
 # --- guards: the fix must NOT broaden routing for these ---
 
 def test_incidental_dha_in_multivitamin_does_not_route_omega():

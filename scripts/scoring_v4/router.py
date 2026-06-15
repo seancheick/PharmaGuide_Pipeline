@@ -221,6 +221,8 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
 _OMEGA_SOFT_ADJUNCT_CANONICALS = {
     "vitamin_d", "vitamin_d3", "cholecalciferol",
     "vitamin_e", "mixed_tocopherols", "d_alpha_tocopherol",
+    # Astaxanthin: trace antioxidant adjunct in krill/algal/fish oil (parity).
+    "astaxanthin",
 }
 _OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
 _EPA_DHA_SOURCE_RE = re.compile(
@@ -414,7 +416,11 @@ def _has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
     return False
 
 
-def _has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
+def _has_non_omega_product_level_evidence(
+    product: Dict[str, Any],
+    *,
+    allow_omega_companions: bool = False,
+) -> bool:
     """Return True for conservative product evidence that is not EPA/DHA.
 
     Name-only omega routing is useful for pure fish-oil labels, but it should
@@ -429,6 +435,14 @@ def _has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
         if evidence_type == "omega_epa_dha_aggregate":
             continue
         if canonical in _OMEGA_INGREDIENT_CANONICALS or canonical in _OMEGA_PARENT_CANONICALS:
+            continue
+        # Companion fatty acids (oleic/omega-9, GLA) and oxidation-protector
+        # adjuncts (vitamin D/E) of a marine fish oil are not disqualifying
+        # non-omega evidence — parity with the scoring_input_contract helper.
+        if allow_omega_companions and (
+            canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS
+            or canonical in _OMEGA_SOFT_ADJUNCT_CANONICALS
+        ):
             continue
         return True
     return False
@@ -482,7 +496,7 @@ def _has_omega_taxonomy_with_trustworthy_epa_dha_panel(product: Dict[str, Any]) 
         return False
     if not _has_any_epa_dha_row(product):
         return False
-    if _has_non_omega_product_level_evidence(product):
+    if _has_non_omega_product_level_evidence(product, allow_omega_companions=True):
         return False
     return not _has_non_omega_positive_scorable_panel(
         product,

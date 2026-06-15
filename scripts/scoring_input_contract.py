@@ -1930,6 +1930,11 @@ _ROUTE_OMEGA_SOFT_ADJUNCT_CANONICALS = {
     "vitamin_e",
     "mixed_tocopherols",
     "d_alpha_tocopherol",
+    # Astaxanthin is a trace carotenoid antioxidant naturally present in krill oil
+    # and routinely added to algal/fish oil to protect EPA/DHA from oxidation; it
+    # is an adjunct, not a competing identity (e.g. Minami VeganDHA: DHA 400 +
+    # DPA 140 + astaxanthin 1.5 mg).
+    "astaxanthin",
 }
 _ROUTE_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
 _ROUTE_SPORTS_PROTEIN_CANONICALS = {
@@ -2153,7 +2158,11 @@ def _route_has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
     return False
 
 
-def _route_has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
+def _route_has_non_omega_product_level_evidence(
+    product: Dict[str, Any],
+    *,
+    allow_omega_companions: bool = False,
+) -> bool:
     for row in _route_rows(product):
         if row.get("scoring_input_kind") != "product_level_evidence":
             continue
@@ -2162,6 +2171,15 @@ def _route_has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool
         if evidence_type == "omega_epa_dha_aggregate":
             continue
         if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS or canonical in _ROUTE_OMEGA_PARENT_CANONICALS:
+            continue
+        # A marine fish oil's own companion fatty acids (oleic/omega-9, GLA, etc.)
+        # and oxidation-protector adjuncts (vitamin D/E) often surface as blend-
+        # anchor product evidence; they must not count as disqualifying non-omega
+        # evidence when the taxonomy already says omega_3 with a real EPA/DHA row.
+        if allow_omega_companions and (
+            canonical in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS
+            or canonical in _ROUTE_OMEGA_SOFT_ADJUNCT_CANONICALS
+        ):
             continue
         return True
     return False
@@ -2209,7 +2227,7 @@ def _route_has_omega_taxonomy_with_trustworthy_epa_dha_panel(product: Dict[str, 
         return False
     if not _route_has_any_epa_dha_row(product):
         return False
-    if _route_has_non_omega_product_level_evidence(product):
+    if _route_has_non_omega_product_level_evidence(product, allow_omega_companions=True):
         return False
     return not _route_has_non_omega_positive_scorable_panel(
         product,
