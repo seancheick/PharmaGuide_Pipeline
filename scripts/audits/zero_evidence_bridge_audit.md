@@ -2,11 +2,13 @@
 
 Zero-evidence scored products: **1259**
 Distinct zero-evidence canonicals: **464**
-Classification: bridgeable=4, matched=18, no_entry=442
+Classification: manual_review=4, matched=18, no_entry=442
 
-## BRIDGEABLE (4) — add safe aliases, ranked by products unlocked
+## MANUAL REVIEW (4) — do not bridge automatically
 
-| canonical (key) | label | products | → verified entry | how |
+These rows have string overlap with a verified entry, but overlap is not identity. Treat them as evidence-canonicalization follow-ups unless a human verifies the ingredient identity and evidence level.
+
+| canonical (key) | label | products | overlapping verified entry | why review |
 |---|---|---|---|---|
 | calcium d glucarate | Calcium D-Glucarate | 2 | INGR_CALCIUM | branded/descriptive |
 | indolplex diindolylmethane br dim complex | Indolplex Diindolylmethane (BR-DIM) Complex | 2 | PRECLIN_DIM | branded/descriptive |

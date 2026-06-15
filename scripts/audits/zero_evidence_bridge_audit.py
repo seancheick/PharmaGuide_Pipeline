@@ -5,13 +5,15 @@ For every scored product whose V4 evidence pillar == 0, collect the active
 ingredient canonicals, then classify each distinct canonical against the verified
 evidence corpus (`backed_clinical_studies.json`) as:
 
-  - matched            : key already matches a verified entry (should NOT be 0 — anomaly)
-  - bridgeable         : no direct match, but a deterministic normalization
-                         (L-/D-/DL-/acetyl- prefix strip, or verified standard_name
-                         tokens ⊆ canonical tokens, e.g. branded EGb761 → ginkgo)
-                         resolves to a verified entry → add a safe alias
-  - no_entry           : no verified entry exists under any safe normalization
-                         (correctly unsupported unless a real PMID is added)
+  - matched            : key already matches a verified entry; a 0 here usually
+                         means primary-anchor gating, preclinical-only evidence,
+                         or another scorer policy to inspect.
+  - manual_review      : no direct match, but a heuristic normalization overlaps
+                         a verified entry. These are NOT safe aliases by
+                         default; examples like calcium D-glucarate -> calcium
+                         are false evidence if bridged automatically.
+  - no_entry           : no verified entry exists under these normalizations
+                         (correctly unsupported unless a real PMID is added).
 
 Reuses the production matcher's `_canonical_text` / `_entry_identity_keys`, so the
 key space matches the scorer exactly. Data source defaults to the base checkout
@@ -65,13 +67,13 @@ def _classify(canon_key, keyset, std_tokens):
         return "matched", None, None
     stripped = _strip_stereo(canon_key)
     if stripped != canon_key and stripped in keyset:
-        return "bridgeable", std_tokens.get(stripped, stripped), "stereoisomer/prefix"
+        return "manual_review", std_tokens.get(stripped, stripped), "stereoisomer/prefix"
     # branded/descriptive: a verified standard_name's tokens are a subset of ours
     ctoks = set(canon_key.split())
     for std, eid in std_tokens.items():
         stoks = set(std.split())
         if stoks and stoks < ctoks:  # strict subset → canonical is std + extra (brand/form)
-            return "bridgeable", eid, "branded/descriptive"
+            return "manual_review", eid, "branded/descriptive"
     return "no_entry", None, None
 
 
@@ -133,11 +135,17 @@ def main():
              f"Zero-evidence scored products: **{zero_products}**",
              f"Distinct zero-evidence canonicals: **{sum(len(v) for v in buckets.values())}**",
              f"Classification: " + ", ".join(f"{k}={len(v)}" for k, v in sorted(buckets.items())) + "\n"]
-    bridge = buckets.get("bridgeable", [])
-    lines.append(f"## BRIDGEABLE ({len(bridge)}) — add safe aliases, ranked by products unlocked\n")
-    lines.append("| canonical (key) | label | products | → verified entry | how |")
+    review = buckets.get("manual_review", [])
+    lines.append(f"## MANUAL REVIEW ({len(review)}) — do not bridge automatically\n")
+    lines.append(
+        "These rows have string overlap with a verified entry, but overlap is not "
+        "identity. Treat them as evidence-canonicalization follow-ups unless a "
+        "human verifies the ingredient identity and evidence level."
+    )
+    lines.append("")
+    lines.append("| canonical (key) | label | products | overlapping verified entry | why review |")
     lines.append("|---|---|---|---|---|")
-    for c, l, f, m, h in sorted(bridge, key=lambda x: -x[2]):
+    for c, l, f, m, h in sorted(review, key=lambda x: -x[2]):
         lines.append(f"| {c} | {l} | {f} | {m} | {h} |")
     anomaly = buckets.get("matched", [])
     if anomaly:
@@ -148,8 +156,8 @@ def main():
     out_md.write_text("\n".join(lines) + "\n")
 
     print("\n".join(lines[:6]))
-    print(f"\nBRIDGEABLE (top 25):")
-    for c, l, f, m, h in sorted(bridge, key=lambda x: -x[2])[:25]:
+    print(f"\nMANUAL REVIEW (top 25, not safe aliases):")
+    for c, l, f, m, h in sorted(review, key=lambda x: -x[2])[:25]:
         print(f"  {f:4d}  {c:32s} -> {m}  [{h}]")
     print(f"\nWrote {out_md}\nWrote {out_json}")
 

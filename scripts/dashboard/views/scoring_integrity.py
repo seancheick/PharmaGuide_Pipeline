@@ -34,6 +34,33 @@ PILLAR_COLS = [col for _lbl, col, _mx in V4_PILLARS]
 FAIL_OPEN_PILLAR_COLS = {"pillar_verification_v4"}
 
 
+def classify_zero_pillar(pillar: str, row: dict | None = None) -> str:
+    """Stable reason bucket for a V4 pillar score of exactly 0.
+
+    Keep this helper in sync with find_zero_pillars so command-line audits and
+    dashboard rendering use the same zero-pillar semantics.
+    """
+    p = str(pillar or "").strip().lower().replace("_", " ")
+    verdict = str((row or {}).get("verdict") or (row or {}).get("safety_verdict") or "").strip().upper()
+    status = str((row or {}).get("quality_score_status") or "").strip().lower()
+
+    if p == "verification":
+        return "verification_zero_anomaly"
+    if p == "evidence":
+        return "evidence_no_entry_or_unmatched"
+    if p == "dose":
+        return "dose_missing_or_below_studied_range"
+    if p == "transparency":
+        return "proprietary_blend_opacity"
+    if p in {"safety/hygiene", "safety hygiene", "safety & hygiene"}:
+        if status == "suppressed_safety" or verdict in {"BLOCKED", "UNSAFE"}:
+            return "suppressed_safety_signal"
+        return "scored_safety_signal"
+    if p == "formulation":
+        return "formulation_low_or_mapping_gap"
+    return "zero_pillar_unclassified"
+
+
 def pillars_present(df: pd.DataFrame) -> bool:
     """True when at least one pillar column carries data (post-rebuild)."""
     return any(c in df.columns and df[c].notna().any() for c in PILLAR_COLS)
@@ -75,6 +102,7 @@ def find_zero_pillars(df: pd.DataFrame) -> pd.DataFrame:
                 "max": mx,
                 "total_v4": r.get("score_v4", r.get("score")),
                 "is_anomaly": col in FAIL_OPEN_PILLAR_COLS,
+                "classification": classify_zero_pillar(lbl, r.to_dict()),
             })
     return pd.DataFrame(rows)
 
