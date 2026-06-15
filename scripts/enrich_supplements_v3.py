@@ -6755,6 +6755,17 @@ class SupplementEnricherV3:
             if "concentrated fish oil" in blob:
                 return "fish_oil"
 
+            if "alpha linolenic" in blob or re.search(r"\bala\b", blob):
+                return "alpha_linolenic_acid"
+            if "flaxseed" in blob or "flax seed" in blob or "linseed" in blob:
+                return "flaxseed"
+            if "evening primrose" in blob:
+                return "evening_primrose_oil"
+            if "gamma linolenic" in blob or re.search(r"\bgla\b", blob):
+                return "gamma_linolenic_acid"
+            if "hemp seed" in blob:
+                return "hemp_seed_oil"
+
             return None
 
         # Phase 3: the cleaner's authoritative IQM parent (resolved up-front
@@ -6789,6 +6800,32 @@ class SupplementEnricherV3:
 
         candidates = []
         seen = set()
+        _non_epa_dha_source_re = re.compile(
+            r"\b("
+            r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
+            r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
+            r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
+            r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
+            r"fiber|fibre|seed\s+blend|super\s+seed"
+            r")\b",
+            re.IGNORECASE,
+        )
+        _epa_dha_source_re = re.compile(
+            r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
+            re.IGNORECASE,
+        )
+        _false_omega_source_blob = " ".join(
+            str(value or "")
+            for value in (ing_name, std_name, base_name, ing_norm, std_norm, base_norm)
+        )
+
+        def _blocks_false_omega_parent(parent_key: str) -> bool:
+            if parent_key not in {"epa", "dha", "epa_dha", "fish_oil", "omega_3"}:
+                return False
+            return (
+                bool(_non_epa_dha_source_re.search(_false_omega_source_blob))
+                and not bool(_epa_dha_source_re.search(_false_omega_source_blob))
+            )
 
         def _strip_parenthesis_chars(value: str) -> str:
             # Keep parenthetical content but remove bracket characters.
@@ -7031,6 +7068,8 @@ class SupplementEnricherV3:
             )
 
         def add_candidate(candidate: Dict):
+            if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
+                return
             key = (
                 candidate["parent_key"],
                 candidate["form_key"],

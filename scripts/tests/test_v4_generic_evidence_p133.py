@@ -504,6 +504,34 @@ def test_non_nac_primary_active_recovers_verified_ingredient_human_evidence() ->
     assert payload["score"] == 14.0
 
 
+def test_l_glycine_alias_recovers_existing_glycine_evidence() -> None:
+    """L-glycine products should match the existing verified glycine entry.
+
+    This is a deterministic identity bridge: it does not add a new study or
+    borrow evidence from an unrelated ingredient.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="L-Glycine",
+                standard_name="L-Glycine",
+                canonical_id="l_glycine",
+                quantity=3000,
+                unit="mg",
+            )
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["recovered_matches"] == ["INGR_GLYCINE"]
+    assert payload["metadata"]["matched_entries"] == 1
+    assert payload["score"] > 0.0
+
+
 def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
     """A trace NAC add-on should not float an unrelated mass-primary product on
     NAC's generic ingredient evidence.

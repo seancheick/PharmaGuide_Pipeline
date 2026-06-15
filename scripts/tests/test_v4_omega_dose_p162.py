@@ -214,6 +214,33 @@ def test_band_trace_epa_dha_still_zero() -> None:
     assert payload["metadata"]["epa_dha_band_label"] == "below_efsa_ai"
 
 
+def test_mct_miscanonicalized_as_dha_does_not_count_as_epa_dha() -> None:
+    """Defense-in-depth for stale enriched rows: MCT is not DHA even if an
+    upstream canonical field says so."""
+    from scoring_v4.modules.omega_dose import score_dose
+
+    product = _omega_product(
+        epa=None,
+        dha=None,
+        extra_ingredients=[
+            {
+                "name": "Medium Chain Triglyceride Oil",
+                "raw_source_text": "Medium Chain Triglyceride Oil",
+                "standard_name": "DHA (Docosahexaenoic Acid)",
+                "canonical_id": "dha",
+                "quantity": 3000,
+                "unit": "mg",
+                "mapped": True,
+            }
+        ],
+    )
+
+    payload = score_dose(product)
+
+    assert payload["score"] == 0.0
+    assert payload["metadata"]["reason"] == "no_disclosed_epa_dha"
+
+
 # --- Ratio sanity -------------------------------------------------------
 
 

@@ -101,6 +101,7 @@ PRODUCTS_CORE_COLUMNS = [
     "has_harmful_additives",
     "has_allergen_risks",
     "blocking_reason",
+    "safety_signal_reason",
     "is_probiotic",
     "contains_sugar",
     "contains_sodium",
@@ -1092,6 +1093,18 @@ def test_core_row_honors_scorer_emitted_high_risk_blocking_reason():
     )
 
 
+def test_core_row_exports_scored_caution_safety_signal_reason_separately():
+    enriched = make_enriched()
+    scored = make_scored(verdict="CAUTION")
+    scored["safety_signal_reason"] = "B0_HIGH_RISK_SUBSTANCE"
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-03-17T19:00:00Z"))
+
+    assert row["verdict"] == "CAUTION"
+    assert row["blocking_reason"] is None
+    assert row["safety_signal_reason"] == "B0_HIGH_RISK_SUBSTANCE"
+
+
 def test_detail_blob_includes_optional_rda_and_evidence_sections_when_present():
     blob = build_detail_blob(make_enriched(), make_scored())
 
@@ -2004,9 +2017,9 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_108_columns():
-    # Tuple emitted by build_core_row must match the 108-column schema
-    # (v2.0.0 + 6 v4 pillar component columns).
+def test_final_db_has_109_columns():
+    # Tuple emitted by build_core_row must match the 109-column schema
+    # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -2022,8 +2035,8 @@ def test_final_db_has_108_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 108
-    assert len(PRODUCTS_CORE_COLUMNS) == 108
+    assert len(row) == 109
+    assert len(PRODUCTS_CORE_COLUMNS) == 109
 
 
 def test_products_core_exports_production_v4_columns():
@@ -2153,10 +2166,10 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_108(self):
+    def test_core_row_column_count_is_109(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 108
-        assert CORE_COLUMN_COUNT == 108
+        assert len(row) == 109
+        assert CORE_COLUMN_COUNT == 109
 
     def test_schema_version_bumped_to_200(self):
         assert EXPORT_SCHEMA_VERSION == "2.0.0"

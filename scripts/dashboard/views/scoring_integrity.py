@@ -4,9 +4,13 @@ Three checks, each catching a class of scoring bug:
 
   1. Reconciliation — the six pillars must sum to quality_score_v4_100.
      A deviation means calibration/anchoring/scorer drift.
-  2. Zero pillars — most V4 pillars fail-open *neutral* (verification ~6 when
-     testing is unknown, safety_hygiene 10 when clean), so a pillar at exactly
-     0 is usually a bug or a real data gap, not a legitimately low score.
+  2. Zero pillars — verification is the ONLY fail-open pillar (neutral_baseline
+     6.0), so a verification == 0 is a true anomaly worth alerting on. The other
+     five pillars (formulation, dose, evidence, transparency, safety_hygiene)
+     legitimately reach 0 — basic forms, off-range dose, no clinical evidence,
+     an opaque blend, or a flagged ingredient — so those zeros are low scores,
+     not bugs. The view splits the two so the catalog's genuinely-low products
+     don't read as false alarms.
   3. Out-of-range / impossible — pillar > max, pillar < 0, total outside
      [0,100], or status='scored' while a pillar is NULL.
 
@@ -23,6 +27,11 @@ from scripts.dashboard.data_loader import filter_product_catalog
 
 RECON_TOLERANCE = 0.1
 PILLAR_COLS = [col for _lbl, col, _mx in V4_PILLARS]
+
+# Verification is the only pillar that fails open to a neutral non-zero baseline
+# (6.0), so a verification == 0 is a true anomaly. Every other pillar can
+# legitimately score 0 (a real low score), so a 0 there is not a bug.
+FAIL_OPEN_PILLAR_COLS = {"pillar_verification_v4"}
 
 
 def pillars_present(df: pd.DataFrame) -> bool:
@@ -47,7 +56,11 @@ def find_reconciliation_mismatches(df: pd.DataFrame, tolerance: float = RECON_TO
 
 
 def find_zero_pillars(df: pd.DataFrame) -> pd.DataFrame:
-    """Long-form (product, pillar) frame where a pillar == 0 exactly."""
+    """Long-form (product, pillar) frame where a pillar == 0 exactly.
+
+    Each row carries `is_anomaly`: True only for fail-open pillars (verification),
+    where 0 should never occur; False for pillars that legitimately reach 0.
+    """
     rows = []
     for lbl, col, mx in V4_PILLARS:
         if col not in df.columns:
@@ -61,6 +74,7 @@ def find_zero_pillars(df: pd.DataFrame) -> pd.DataFrame:
                 "pillar": lbl,
                 "max": mx,
                 "total_v4": r.get("score_v4", r.get("score")),
+                "is_anomaly": col in FAIL_OPEN_PILLAR_COLS,
             })
     return pd.DataFrame(rows)
 
@@ -129,9 +143,17 @@ def render_scoring_integrity(data):
     zeros = find_zero_pillars(frame)
     oor = find_out_of_range(frame)
 
+    # Split zeros: verification-0 is a true anomaly; every other pillar-0 is a
+    # legitimately low score (not a bug), so they must not read as false alarms.
+    if zeros.empty:
+        verif_zeros, low_zeros = zeros, zeros
+    else:
+        verif_zeros = zeros[zeros["is_anomaly"]]
+        low_zeros = zeros[~zeros["is_anomaly"]]
+
     c1, c2, c3 = st.columns(3)
     c1.metric("Reconciliation mismatches", f"{len(recon):,}", help="sum(pillars) != quality_score_v4_100")
-    c2.metric("Zero-pillar hits", f"{len(zeros):,}", help="a pillar scoring exactly 0")
+    c2.metric("Verification = 0 (anomaly)", f"{len(verif_zeros):,}", help="verification fails open to 6.0, so 0 should never occur")
     c3.metric("Out-of-range / impossible", f"{len(oor):,}", help="pillar>max, <0, total off-range, or scored-but-NULL")
 
     st.divider()
@@ -146,14 +168,33 @@ def render_scoring_integrity(data):
 
     st.divider()
     st.markdown("#### 2. Pillars scoring exactly 0")
-    if zeros.empty:
-        st.success("No pillar scored exactly 0. ✅")
+
+    st.markdown("**Verification = 0 — anomaly**")
+    if verif_zeros.empty:
+        st.success("No product scored 0 on verification — none expected (it fails open to 6.0). ✅")
     else:
-        by_pillar = zeros.groupby("pillar").size().reset_index(name="count")
-        st.caption("Count by pillar (a spike here usually means a data gap or scorer bug, since most pillars fail-open neutral):")
+        st.error(
+            f"{len(verif_zeros):,} products scored 0 on verification — this should never happen "
+            "(verification fails open to 6.0). Investigate a large quality-system violation "
+            "penalty or a scorer bug."
+        )
+        vcols = [c for c in ["dsld_id", "product_name", "brand_name", "v4_module", "total_v4"] if c in verif_zeros.columns]
+        st.dataframe(verif_zeros[vcols], width="stretch", hide_index=True)
+
+    st.markdown("**Other pillars = 0 — legitimately low, not bugs**")
+    if low_zeros.empty:
+        st.info("No formulation / dose / evidence / transparency / safety-hygiene pillar scored 0.")
+    else:
+        by_pillar = low_zeros.groupby("pillar").size().reset_index(name="count")
+        st.caption(
+            "These pillars legitimately reach 0 — basic forms, off-range dose, no clinical "
+            "evidence, an opaque blend, or a flagged ingredient. This is a weakest-pillar "
+            "investigation list, not a bug list. Count by pillar:"
+        )
         st.dataframe(by_pillar, width="stretch", hide_index=True)
-        st.caption("Affected products:")
-        st.dataframe(zeros, width="stretch", hide_index=True)
+        with st.expander(f"Affected products ({len(low_zeros):,})"):
+            lcols = [c for c in ["dsld_id", "product_name", "brand_name", "v4_module", "pillar", "max", "total_v4"] if c in low_zeros.columns]
+            st.dataframe(low_zeros[lcols], width="stretch", hide_index=True)
 
     st.divider()
     st.markdown("#### 3. Out-of-range / impossible values")

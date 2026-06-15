@@ -15,6 +15,7 @@ if str(SCRIPTS_ROOT) not in sys.path:
 from scoring_input_contract import (  # noqa: E402
     SCORING_CLASSIFICATION_SCHEMA_VERSION,
     build_scoring_classification,
+    derive_product_scoring_evidence,
 )
 from scoring_v4.router import _legacy_class_for_product, class_for_product  # noqa: E402
 
@@ -586,6 +587,103 @@ def test_content_evidence_beats_title_for_omega_positive_and_negative():
     )
     assert build_scoring_classification(generic_title_with_epa)["route_module"] == "omega"
     assert build_scoring_classification(omega_title_without_epa)["route_module"] == "generic"
+
+
+def test_mct_miscanonicalized_as_dha_does_not_route_omega():
+    """Catalog regression: MCT/coconut rows were enriched as DHA and then
+    inherited EPA/DHA dose + evidence. Source identity wins over the polluted
+    canonical when the label clearly says MCT."""
+    product = _product(
+        "MCT Oil 3,000 mg Softgels",
+        [
+            _row(
+                "dha",
+                "Medium Chain Triglyceride Oil",
+                3000,
+                "mg",
+                standardName="DHA (Docosahexaenoic Acid)",
+                raw_source_text="Medium Chain Triglyceride Oil",
+            )
+        ],
+        primary_type="general_supplement",
+    )
+
+    assert build_scoring_classification(product)["route_module"] == "generic"
+
+
+def test_ala_omega3_parent_text_does_not_emit_epa_dha_aggregate_or_route_omega():
+    """Catalog regression: ALA/flax rows labeled as omega-3 fatty acids were
+    mapped to fish_oil and inherited marine EPA/DHA evidence."""
+    row = _row(
+        "fish_oil",
+        "Omega-3 Fatty Acids",
+        8,
+        "Gram(s)",
+        standardName="Fish Oil",
+        display_label="Omega-3 Fatty Acids (Alpha-Linolenic Acid)",
+        raw_source_text="Omega-3 Fatty Acids (Alpha-Linolenic Acid)",
+    )
+    product = _product(
+        "Organic Flax Oil",
+        [row],
+        primary_type="omega_3",
+        activeIngredients=[row],
+    )
+
+    assert build_scoring_classification(product)["route_module"] == "generic"
+    evidence = derive_product_scoring_evidence(product)
+    assert all(row.get("evidence_type") != "omega_epa_dha_aggregate" for row in evidence)
+
+
+def test_flax_oil_name_only_signal_routes_generic():
+    """Real-catalog pattern (dsld 293406): the ALA signal is ONLY in the product
+    NAME ('Organic Flax Oil') — the mis-canonicalized row text is bare 'Omega-3
+    Fatty Acids' with no ALA/flax token. The row-level guard misses it; the
+    product-level guard must route it generic. (Codex's earlier flax test passed
+    only because its synthetic row text included 'Alpha-Linolenic'.)"""
+    row = _row(
+        "epa_dha",
+        "Omega-3 Fatty Acids",
+        8,
+        "Gram(s)",
+        standardName="Omega-3 Fatty Acids",
+        raw_source_text="Omega-3 Fatty Acids",
+    )
+    product = _product(
+        "Organic Flax Oil",
+        [row],
+        primary_type="omega_3",
+        activeIngredients=[row],
+    )
+    assert build_scoring_classification(product)["route_module"] == "generic"
+
+
+def test_fiber_and_super_seed_name_signal_routes_generic():
+    """Real-catalog patterns (dsld 299755 'Raw Organic Fiber', 274833 'Super
+    Seed'): plant/seed omega_3 products with bare 'Omega-3 Fatty Acids' rows."""
+    for name in ("Raw Organic Fiber", "Super Seed", "MCT Oil 3,000 mg"):
+        row = _row(
+            "epa_dha",
+            "Omega-3 Fatty Acids",
+            1,
+            "Gram(s)",
+            standardName="Omega-3 Fatty Acids",
+            raw_source_text="Omega-3 Fatty Acids",
+        )
+        product = _product(
+            name, [row], primary_type="omega_3", activeIngredients=[row]
+        )
+        assert build_scoring_classification(product)["route_module"] == "generic", name
+
+
+def test_true_fish_oil_parent_still_routes_omega_without_epa_dha_dose_invention():
+    product = _product(
+        "Fish Oil 1000 mg",
+        [_row("fish_oil", "Fish Oil", 1000, "mg", raw_source_text="Fish Oil")],
+        primary_type="omega_3",
+    )
+
+    assert build_scoring_classification(product)["route_module"] == "omega"
 
 
 def test_low_confidence_malformed_input_defaults_generic_not_not_scored():

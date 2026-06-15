@@ -204,6 +204,20 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "cla", "conjugated_linoleic_acid", "oleic_acid",
 }
 _OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
+_EPA_DHA_SOURCE_RE = re.compile(
+    r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
+    re.IGNORECASE,
+)
+_NON_EPA_DHA_SOURCE_RE = re.compile(
+    r"\b("
+    r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
+    r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
+    r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
+    r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
+    r"fiber|fibre|seed\s+blend|super\s+seed"
+    r")\b",
+    re.IGNORECASE,
+)
 _SPORTS_PROTEIN_CANONICALS = {
     "whey_protein",
     "casein",
@@ -258,6 +272,39 @@ def _positive_quantity(row: Dict[str, Any]) -> bool:
     return False
 
 
+def _row_source_text(row: Dict[str, Any]) -> str:
+    return " ".join(
+        str(row.get(key) or "")
+        for key in (
+            "name",
+            "raw_source_text",
+            "display_label",
+            "normalized_key",
+            "parent_key",
+            "matched_candidate",
+        )
+    )
+
+
+def _source_has_epa_dha_identity(row: Dict[str, Any]) -> bool:
+    return bool(_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
+
+
+def _source_is_non_epa_dha_oil(row: Dict[str, Any]) -> bool:
+    return bool(_NON_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
+
+
+def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
+    canonical = str(row.get("canonical_id") or "").strip().lower()
+    if canonical not in _OMEGA_INGREDIENT_CANONICALS:
+        return False
+    if not _positive_quantity(row):
+        return False
+    if _source_is_non_epa_dha_oil(row) and not _source_has_epa_dha_identity(row):
+        return False
+    return True
+
+
 def _omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
     """Return (positive EPA/DHA rows, positive scorable rows).
 
@@ -277,7 +324,7 @@ def _omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
         if not canonical or not _positive_quantity(ing):
             continue
         total_rows += 1
-        if canonical in _OMEGA_INGREDIENT_CANONICALS:
+        if canonical in _OMEGA_INGREDIENT_CANONICALS and _trustworthy_epa_dha_row(ing):
             omega_rows += 1
     return omega_rows, total_rows
 
@@ -306,10 +353,7 @@ def _has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
     for ing in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(ing, dict):
             continue
-        canonical = str(ing.get("canonical_id") or "").strip().lower()
-        if canonical not in _OMEGA_INGREDIENT_CANONICALS:
-            continue
-        if _positive_quantity(ing):
+        if _trustworthy_epa_dha_row(ing):
             return True
     return False
 
@@ -358,6 +402,12 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
             continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
         if canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS:
+            return True
+        if (
+            canonical in (_OMEGA_PARENT_CANONICALS | _OMEGA_INGREDIENT_CANONICALS)
+            and _source_is_non_epa_dha_oil(ing)
+            and not _source_has_epa_dha_identity(ing)
+        ):
             return True
     return False
 
@@ -546,6 +596,40 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     return False
 
 
+_MARINE_OMEGA_SOURCE_RE = re.compile(
+    r"\b("
+    r"fish\s*oil|fish\s+body\s+oil|salmon|anchovy|sardine|mackerel|menhaden|"
+    r"herring|cod\s+liver|krill|algae?\s*oil|algal|calamari|squid|marine"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def _omega_product_source_text(product: Dict[str, Any]) -> str:
+    parts = [
+        str(product.get(k) or "")
+        for k in ("product_name", "fullName", "brand_name", "bundleName")
+    ]
+    rows = product.get("ingredient_quality_data") or product.get("active_ingredients") or []
+    for row in rows if isinstance(rows, list) else []:
+        if isinstance(row, dict):
+            parts.append(_row_source_text(row))
+    return " ".join(parts)
+
+
+def _product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
+    """True when the product source is an explicit non-EPA/DHA plant/seed/MCT oil
+    (flax/ALA/chia/hemp/fiber/seed/MCT/coconut) with NO marine source and NO
+    explicit EPA/DHA token — i.e. plant 'omega-3' (ALA), which must route generic,
+    not the EPA/DHA omega module, even if a row was mis-canonicalized upstream."""
+    src = _omega_product_source_text(product)
+    return bool(
+        _NON_EPA_DHA_SOURCE_RE.search(src)
+        and not _EPA_DHA_SOURCE_RE.search(src)
+        and not _MARINE_OMEGA_SOURCE_RE.search(src)
+    )
+
+
 def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     """Detect omega-class routing signals.
 
@@ -569,6 +653,15 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     generic (where ALA gets the IOM AI when the rda_optimal_uls fix
     lands), not omega.
     """
+    # 0. Hard guard: an explicit non-EPA/DHA plant/seed/MCT source (ALA/flax/
+    #    chia/hemp/fiber/seed/MCT/coconut) with NO marine source and NO explicit
+    #    EPA/DHA token is plant 'omega-3' (ALA) — it must route generic, never the
+    #    EPA/DHA omega module, even if a panel row was mis-canonicalized to
+    #    epa/dha/fish_oil upstream (the row-level checks below run too late because
+    #    _has_omega_ingredient short-circuits on the polluted canonical).
+    if _product_lacks_epa_dha_identity(product):
+        return False
+
     # 1. Strongest signal: EPA/DHA is a primary panel identity.
     if _has_omega_ingredient(product):
         return True

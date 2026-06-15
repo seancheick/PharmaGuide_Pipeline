@@ -1,0 +1,3264 @@
+{
+  "zero_evidence_products": 1259,
+  "summary": {
+    "no_entry": 442,
+    "matched": 18,
+    "bridgeable": 4
+  },
+  "buckets": {
+    "no_entry": [
+      {
+        "canonical": "fiber",
+        "label": "Fiber",
+        "products": 66,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l carnitine",
+        "label": "L-Carnitine",
+        "products": 58,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cla",
+        "label": "CLA",
+        "products": 45,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l glutamine",
+        "label": "L-Glutamine",
+        "products": 43,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ginkgo",
+        "label": "Ginkgo",
+        "products": 38,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mct oil",
+        "label": "MCT Oil",
+        "products": 38,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l arginine",
+        "label": "L-Arginine",
+        "products": 35,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "gamma linolenic acid",
+        "label": "Gamma-Linolenic Acid",
+        "products": 34,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l lysine",
+        "label": "L-Lysine",
+        "products": 29,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "evening primrose oil",
+        "label": "Evening Primrose Oil",
+        "products": 25,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "dhea",
+        "label": "DHEA (Dehydroepiandrosterone)",
+        "products": 24,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "maca",
+        "label": "Maca",
+        "products": 23,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "linoleic acid",
+        "label": "Linoleic Acid",
+        "products": 22,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pomegranate",
+        "label": "Pomegranate",
+        "products": 21,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "olive leaf",
+        "label": "Olive Leaf",
+        "products": 20,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l leucine",
+        "label": "L-Leucine",
+        "products": 19,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l tyrosine",
+        "label": "L-Tyrosine",
+        "products": 18,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "prebiotics",
+        "label": "Prebiotics",
+        "products": 17,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "protein",
+        "label": "Protein",
+        "products": 15,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "collagen",
+        "label": "Collagen",
+        "products": 15,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "reishi",
+        "label": "Reishi",
+        "products": 15,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "inositol",
+        "label": "Inositol",
+        "products": 14,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lycopene",
+        "label": "Lycopene",
+        "products": 14,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lecithin",
+        "label": "Lecithin",
+        "products": 14,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "shiitake",
+        "label": "Shiitake",
+        "products": 13,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "glutathione",
+        "label": "Glutathione",
+        "products": 13,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l isoleucine",
+        "label": "L-Isoleucine",
+        "products": 13,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "goldenseal",
+        "label": "Goldenseal",
+        "products": 13,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "apple cider vinegar",
+        "label": "Apple Cider Vinegar",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "d ribose",
+        "label": "D-Ribose",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l valine",
+        "label": "L-Valine",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l phenylalanine",
+        "label": "L-Phenylalanine",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "bacillus subtilis",
+        "label": "Bacillus Subtilis",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "horny goat weed",
+        "label": "Horny Goat Weed Aerial Parts Extract",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "iron",
+        "label": "Iron",
+        "products": 11,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "hawthorn",
+        "label": "Hawthorn (Crataegus)",
+        "products": 11,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chlorophyll",
+        "label": "Chlorophyll",
+        "products": 11,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "gotu kola",
+        "label": "Gotu Kola",
+        "products": 11,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lions mane",
+        "label": "Lion's Mane",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tribulus",
+        "label": "Tribulus Terrestris",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha coconut derivatives",
+        "label": "Coconut Oil Derivatives",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lithium",
+        "label": "Lithium",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "superoxide dismutase",
+        "label": "Superoxide Dismutase (SOD)",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "guarana",
+        "label": "Guarana",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "activated charcoal",
+        "label": "Activated Charcoal",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "acai berry",
+        "label": "Acai Berry",
+        "products": 10,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "isoflavones",
+        "label": "Isoflavones",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l tryptophan",
+        "label": "L-Tryptophan",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "d aspartic acid",
+        "label": "D-Aspartic Acid",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yohimbe",
+        "label": "Yohimbe",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "beta glucan",
+        "label": "Beta-Glucan",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cordyceps",
+        "label": "Cordyceps",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "methionine",
+        "label": "L-Methionine",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cat s claw",
+        "label": "Cat's Claw",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oregano",
+        "label": "Oregano",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "omega 9 fatty acids",
+        "label": "Omega-9 Fatty Acids",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nattokinase",
+        "label": "Nattokinase",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "citrus bioflavonoids",
+        "label": "Citrus Bioflavonoids",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "borage seed oil",
+        "label": "Borage Seed Oil",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lignans",
+        "label": "Lignans",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cayenne pepper",
+        "label": "Cayenne Pepper",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l carnosine",
+        "label": "L-Carnosine",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pregnenolone",
+        "label": "Pregnenolone",
+        "products": 8,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "dong quai",
+        "label": "Dong Quai (Angelica sinensis)",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "common bean extract",
+        "label": "Common Bean Extract",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "feverfew",
+        "label": "Feverfew",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "maitake",
+        "label": "Maitake",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "stinging nettle",
+        "label": "Stinging Nettle",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pine bark extract",
+        "label": "Pine Bark Extract",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii fatty acid profile component",
+        "label": "Fatty Acid Profile Component",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "aloe vera",
+        "label": "Aloe Vera",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blend superfood",
+        "label": "Superfood, Greens & Herbal Blends",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ginkgo biloba",
+        "label": "Ginkgo Biloba",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "garcinia cambogia",
+        "label": "Garcinia Cambogia (Hydroxycitric Acid)",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l ornithine",
+        "label": "L-Ornithine",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "7 keto dhea",
+        "label": "7-Keto DHEA",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chasteberry",
+        "label": "Chasteberry (Vitex)",
+        "products": 7,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tongkat ali",
+        "label": "Tongkat Ali",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "dandelion",
+        "label": "Dandelion",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "d mannose",
+        "label": "D-Mannose",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "amla",
+        "label": "Amla (Phyllanthus emblica)",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blueberry",
+        "label": "Blueberry",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "strontium",
+        "label": "Strontium",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yerba mate leaf",
+        "label": "Yerba Mate Leaf",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "alfalfa",
+        "label": "Alfalfa",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phosphatidylcholine",
+        "label": "Phosphatidylcholine",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lauric acid",
+        "label": "Lauric Acid",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "heart healthy fiber blend",
+        "label": "Heart Healthy Fiber Blend",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oat generic",
+        "label": "Oat (Generic)",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oi guar gum",
+        "label": "Guar Gum",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha xanthan gum",
+        "label": "Xanthan Gum",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chlorogenic acids",
+        "label": "Chlorogenic Acids",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "flaxseed",
+        "label": "Flaxseed",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "peppermint",
+        "label": "Peppermint",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chinese skullcap",
+        "label": "Chinese Skullcap",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "olive fruit extract",
+        "label": "Olive Fruit Extract",
+        "products": 6,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "vitamin b9 folate",
+        "label": "Vitamin B9 (Folate)",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chaga",
+        "label": "Chaga",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "turkey tail",
+        "label": "Turkey Tail",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "horse chestnut seed",
+        "label": "Horse Chestnut Seed",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l threonine",
+        "label": "L-Threonine",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blend general",
+        "label": "General Proprietary Blends",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "colostrum",
+        "label": "Colostrum",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "bee pollen",
+        "label": "Bee Pollen",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "noni",
+        "label": "Noni",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "white willow bark",
+        "label": "White Willow Bark",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "policosanol",
+        "label": "Policosanol",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tudca",
+        "label": "TUDCA",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha hemp extract",
+        "label": "Hemp Extract",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "entourage effect blend",
+        "label": "Entourage Effect Blend",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rosemary",
+        "label": "Rosemary",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cascara sagrada",
+        "label": "Cascara Sagrada",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "palmitic acid",
+        "label": "Palmitic Acid",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pumpkin",
+        "label": "Pumpkin",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blood orange extract",
+        "label": "Blood Orange Extract",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "organ extracts",
+        "label": "Organ Extracts (Glandulars)",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "forskolin",
+        "label": "Forskolin",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "gymnema sylvestre",
+        "label": "Gymnema Sylvestre",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l histidine",
+        "label": "L-Histidine",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l cysteine",
+        "label": "L-Cysteine",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "marshmallow root",
+        "label": "Marshmallow Root",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "extra virgin olive oil",
+        "label": "Extra Virgin Olive Oil",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ginkgo flavone glycosides",
+        "label": "Ginkgo Flavone Glycosides",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "omega 6 fatty acids",
+        "label": "Omega-6 Fatty Acids",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fennel",
+        "label": "Fennel",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "sweet orange",
+        "label": "Sweet Orange",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha allulose",
+        "label": "Allulose",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mediterranean diet plant based protein blend",
+        "label": "Mediterranean Diet Plant Based Protein Blend",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rice protein",
+        "label": "Rice Protein",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "other fatty acids",
+        "label": "Other Fatty Acids",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "burdock root powder",
+        "label": "Burdock Root",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "burdock root",
+        "label": "Burdock root extract",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "goji berry",
+        "label": "Goji Berry",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "xanthigen proprietary blend",
+        "label": "Xanthigen Proprietary Blend",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fucoxanthin",
+        "label": "Fucoxanthin",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "african mango",
+        "label": "African Mango",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "broccoli",
+        "label": "Broccoli",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l serine",
+        "label": "L-Serine",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "soybean",
+        "label": "Soybean (Glycine Max)",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii extra virgin coconut oil",
+        "label": "Extra Virgin Coconut Oil",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "spinach",
+        "label": "Spinach",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "king trumpet",
+        "label": "King Trumpet Mushroom",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "saffron",
+        "label": "Saffron",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chrysin",
+        "label": "Chrysin",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "eyebright",
+        "label": "Eyebright",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "black cherry",
+        "label": "Black Cherry",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "silica",
+        "label": "Silica",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "horsetail",
+        "label": "Horsetail",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "flavonoids",
+        "label": "Flavonoids",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "andrographis",
+        "label": "Andrographis",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii brand complex descriptor",
+        "label": "Brand Complex Descriptor",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "choline",
+        "label": "Choline",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "aloe ferox",
+        "label": "Aloe Ferox",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fucoidan",
+        "label": "Fucoidan",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "green coffee bean",
+        "label": "Green Coffee Bean",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "uva ursi leaf",
+        "label": "Uva-Ursi Leaf",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "artemisinin",
+        "label": "Artemisinin",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yarrow aerial parts",
+        "label": "Yarrow Aerial Parts",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "flavones",
+        "label": "Flavones",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "orange essential oil",
+        "label": "Orange Essential Oil",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lavandin",
+        "label": "Lavandin",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "essence of organic frankincense resin oil",
+        "label": "Essence of organic Frankincense (resin) oil",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "belleric myrobalan",
+        "label": "Belleric Myrobalan",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "brewers yeast",
+        "label": "Brewer's Yeast",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "agmatine",
+        "label": "Agmatine Sulfate",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "juniper",
+        "label": "Juniper",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "uva ursi",
+        "label": "Uva Ursi",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "acacia catechu",
+        "label": "Acacia Catechu",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cloves",
+        "label": "Cloves",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "butterbur",
+        "label": "Butterbur (Petasites hybridus)",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "bile extract",
+        "label": "Bile Extract",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mastic gum",
+        "label": "Mastic Gum",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha univestin",
+        "label": "Univestin",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "hops",
+        "label": "Hops (Humulus lupulus)",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "red clover",
+        "label": "Red Clover",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "soya lecithin",
+        "label": "Soya Lecithin",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cabbage extract",
+        "label": "Cabbage Extract",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "senna",
+        "label": "Senna",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "corn silk",
+        "label": "Corn Silk",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yucca",
+        "label": "Yucca",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "licorice",
+        "label": "Licorice",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mucuna pruriens",
+        "label": "Mucuna Pruriens (Velvet Bean)",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "black tea leaf",
+        "label": "Black Tea Leaf",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "wild yam",
+        "label": "Wild Yam",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "medicinal mushroom blend",
+        "label": "Medicinal Mushroom Blend",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "d limonene",
+        "label": "D-Limonene",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chicory root",
+        "label": "Chicory Root",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "vitamin b5 pantothenic",
+        "label": "Vitamin B5 (Pantothenic Acid)",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "royal jelly",
+        "label": "Royal Jelly",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ipriflavone",
+        "label": "Ipriflavone",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "papaya",
+        "label": "Papaya",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rna dna",
+        "label": "RNA/DNA (Nucleic Acids)",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "aescin",
+        "label": "Aescin",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cistanche",
+        "label": "Cistanche",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mediterranean diet salmon protein blend",
+        "label": "Mediterranean Diet Salmon Protein Blend",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pea protein",
+        "label": "Pea Protein",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "english ivy",
+        "label": "English Ivy",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oat bran",
+        "label": "Oat Bran",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "parsley",
+        "label": "Parsley",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "polysaccharides",
+        "label": "Polysaccharides",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "perilla oil",
+        "label": "Perilla Oil",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "larch arabinogalactan",
+        "label": "Larch Arabinogalactan",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "dmae",
+        "label": "DMAE (Dimethylaminoethanol)",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tinospora",
+        "label": "Tinospora",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "dihydromyricetin",
+        "label": "Dihydromyricetin",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "holy basil",
+        "label": "Holy Basil",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ecdysterones",
+        "label": "Ecdysterones",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "bis beta carboxyethyl germanium sesquioxide",
+        "label": "Bis-Beta Carboxyethyl Germanium Sesquioxide",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "elaeis guineensis extract",
+        "label": "Elaeis guineensis extract",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "atp",
+        "label": "ATP (Adenosine Triphosphate)",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "thyme",
+        "label": "Thyme",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "dark sweet cherry",
+        "label": "Dark Sweet Cherry",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "myristic acid",
+        "label": "Myristic Acid",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha stearic acid",
+        "label": "Stearic Acid",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha mushroom extracts",
+        "label": "Mushroom Extracts",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "apple polyphenols",
+        "label": "Apple Polyphenols",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "organic apple cider vinegar diet blend",
+        "label": "organic Apple Cider Vinegar diet blend",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "irish sea moss",
+        "label": "Irish Sea Moss",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "linalool",
+        "label": "Linalool",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "sphaeranthus indicus",
+        "label": "Meratrim",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mangosteen",
+        "label": "Mangosteen",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mesembrine",
+        "label": "Mesembrine",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "gypenosides",
+        "label": "Gypenosides",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rose hips",
+        "label": "Rose Hips",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "omega 3",
+        "label": "Minor Omega-3 Fatty Acids & SPM Precursors",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "devils claw",
+        "label": "Devil's Claw (Harpagophytum procumbens)",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "barley grass",
+        "label": "Barley Grass",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "hemp seed oil",
+        "label": "Hemp Seed Oil",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rye pollen",
+        "label": "Rye Pollen Extract",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l glutamic acid",
+        "label": "L-Glutamic Acid",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nicotinamide riboside",
+        "label": "Nicotinamide Riboside",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "polypodium vulgare",
+        "label": "Polypodium vulgare",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "myrrh resin",
+        "label": "Myrrh Resin",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "damiana",
+        "label": "Damiana",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "protectamins vegetable blend",
+        "label": "Protectamins Vegetable Blend",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "insoluble fiber",
+        "label": "Insoluble Fiber",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "palmitoleic acid",
+        "label": "Palmitoleic Acid",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "milk basic protein",
+        "label": "Milk Basic Protein",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lumbrokinase",
+        "label": "Lumbrokinase",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pau darco",
+        "label": "Pau D'Arco",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "genistein",
+        "label": "Genistein",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "flavone glycosides",
+        "label": "Flavone Glycosides",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "diosmin",
+        "label": "Diosmin",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "grapefruit seed",
+        "label": "Grapefruit Seed",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "moringa",
+        "label": "Moringa",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "citric acid",
+        "label": "Citric Acid",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "silicon",
+        "label": "Silicon",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "uridine monophosphate",
+        "label": "Uridine-5'-Monophosphate",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blend enzyme",
+        "label": "Digestive Enzyme Blends",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "icariin",
+        "label": "Icariin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "winged treebine",
+        "label": "Cissus quadrangularis extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fadogia agrestis",
+        "label": "Fadogia agrestis Stem Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii gelatin capsule",
+        "label": "Gelatin Capsule",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cran max",
+        "label": "Cran-Max",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "capsaicin",
+        "label": "Capsaicin (Capsicum)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chinese rhubarb",
+        "label": "Chinese Rhubarb",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "prune",
+        "label": "Prune",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "three defenders mushroom complex proprietary blend",
+        "label": "Three Defenders Mushroom Complex Proprietary Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phytomemory proprietary blend",
+        "label": "PhytoMemory Proprietary Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oi natural strawberry flavor",
+        "label": "Natural Strawberry Flavor",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "essential mushroom blend",
+        "label": "Essential Mushroom Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "antrodia camphorata",
+        "label": "Antrodia camphorata",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "royal sun blazei",
+        "label": "Royal Sun Blazei",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "silver",
+        "label": "Silver",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "muira puama",
+        "label": "Muira Puama",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "centrophenoxine",
+        "label": "Centrophenoxine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cranrx",
+        "label": "CranRx",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cat s claw bark",
+        "label": "Cat's Claw Bark",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "standardized eleuthero extract",
+        "label": "standardized Eleuthero extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "trisynex tm complex",
+        "label": "TRISYNEX(TM) Complex",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "octacosanol",
+        "label": "Octacosanol",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "inositol hexaphosphate",
+        "label": "Inositol Hexaphosphate (IP6)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rhaponticin",
+        "label": "Rhaponticin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oi annatto extract",
+        "label": "Annatto Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "marigold",
+        "label": "Marigold",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "squalene",
+        "label": "Squalene",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "alkylglycerols",
+        "label": "Alkylglycerols",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "aloelax blend",
+        "label": "Aloelax Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yerba mate",
+        "label": "Yerba Mate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "suma",
+        "label": "Suma",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tea trio r blend",
+        "label": "Tea Trio(R) Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "citrus bergamot",
+        "label": "Citrus Bergamot",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mullein",
+        "label": "Mullein",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fo ti",
+        "label": "Fo-Ti (Polygonum multiflorum)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "flower pollen",
+        "label": "Flower Pollen Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rice bran",
+        "label": "Rice Bran",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "epicor",
+        "label": "EpiCor",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lactobacillus fermentum",
+        "label": "Lactobacillus Fermentum",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "purple corn extract",
+        "label": "Purple Corn Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rg3",
+        "label": "Ginsenoside Rg3",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "withaferin a",
+        "label": "Withaferin A",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "greek mountain tea aerial parts",
+        "label": "Greek Mountain Tea Aerial Parts",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "diamine oxidase",
+        "label": "Diamine Oxidase",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "keratin",
+        "label": "Keratin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "immunoglobulin",
+        "label": "Immunoglobulin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "optimized fucoxanthin slim blend",
+        "label": "Optimized Fucoxanthin-Slim Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "xanthigen",
+        "label": "Xanthigen",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "buckthorn bark",
+        "label": "Buckthorn Bark",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "kavalactones",
+        "label": "Kavalactones",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "purple tea",
+        "label": "Purple Tea Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "monolaurin",
+        "label": "Monolaurin (Glycerol Monolaurate)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blessed thistle",
+        "label": "Blessed Thistle",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha raspberry natural",
+        "label": "Natural Raspberry Powder",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "wheat germ oil",
+        "label": "Wheat Germ Oil",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "raspberry ketones",
+        "label": "Raspberry Ketones",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pumpkin seed oil",
+        "label": "Pumpkin Seed Oil",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "joint health herb blend",
+        "label": "Joint Health Herb Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii cyclodextrin",
+        "label": "Cyclodextrin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "chamomile essential oil",
+        "label": "Chamomile Essential Oil",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii medium chain fatty acids",
+        "label": "Medium Chain Fatty Acids",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blend",
+        "label": "Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha stevia",
+        "label": "Stevia & Stevia Extracts",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "catnip leaf",
+        "label": "Catnip",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "blend metabolaid",
+        "label": "Metabolaid (Lemon Verbena-Hibiscus Blend)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha fruit vegetable juice",
+        "label": "Fruit & Vegetable Juice",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha sugar sweeteners",
+        "label": "Sugar & Natural Sweeteners",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "bladderwrack",
+        "label": "Bladderwrack",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "sodzyme proprietary phytoenzyme blend",
+        "label": "SODzyme Proprietary Phytoenzyme Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii corn source descriptor",
+        "label": "Corn (Source Descriptor)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "wheat sprout concentrate",
+        "label": "Wheat sprout concentrate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "schisandra",
+        "label": "Schisandra extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "casein hydrolysate",
+        "label": "Casein Hydrolysate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "aurorablue wildcrafted blueberry complex",
+        "label": "AuroraBlue Wildcrafted Blueberry Complex",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "alpine blueberry",
+        "label": "Alpine Blueberry",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "indian sphaeranthus flower head extract",
+        "label": "Indian Sphaeranthus Flower Head Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "puerarin",
+        "label": "Puerarin (Kudzu Extract)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "polyphenols",
+        "label": "Polyphenols",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "schisandrin",
+        "label": "Schisandrin (Schisandra chinensis)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fenu thyme blend",
+        "label": "Fenu-Thyme Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "litesse polydextrose",
+        "label": "Litesse Polydextrose",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "caralluma",
+        "label": "Caralluma",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "slimvance patented blend",
+        "label": "Slimvance Patented Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "salacia",
+        "label": "Salacia",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha resolvin d5",
+        "label": "Resolvin D5",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha protectin dx",
+        "label": "Protectin DX",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "triterpene glycosides",
+        "label": "Triterpene Glycosides",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "urox proprietary blend",
+        "label": "Urox Proprietary Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "wu yao",
+        "label": "Wu Yao",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "crateva nurvala",
+        "label": "Crateva nurvala",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "d phenylalanine",
+        "label": "D-Phenylalanine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "black walnut",
+        "label": "Black Walnut (Juglans nigra)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "white oak",
+        "label": "White Oak",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "aronia",
+        "label": "Aronia",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha total bile acids",
+        "label": "Total Bile Acids",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha conjugated bile acid",
+        "label": "Conjugated Bile Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "glycocholic acid",
+        "label": "Glycocholic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "taurocholic acid",
+        "label": "Taurocholic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "taurodeoxycholic acid",
+        "label": "Taurodeoxycholic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "glycodeoxycholic acid",
+        "label": "Glycodeoxycholic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "glycochenodeoxycholic acid",
+        "label": "Glycochenodeoxycholic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "taurochenodeoxycholic acid",
+        "label": "Taurochenodeoxycholic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pumpkin seed",
+        "label": "Pumpkin Seed Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ginkgolic acid",
+        "label": "Ginkgolic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha pomegranate juice",
+        "label": "Pomegranate Juice Concentrate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "theobromine",
+        "label": "Theobromine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii estrog100 branded blend",
+        "label": "EstroG-100",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "butcher s broom",
+        "label": "Butcher's Broom",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "arjuna",
+        "label": "Arjuna",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "opc",
+        "label": "OPCs (Oligomeric Proanthocyanidins)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "celadrin",
+        "label": "Celadrin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "eatless peptide complex",
+        "label": "Eatless Peptide Complex",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phosphatidylethanolamine",
+        "label": "Phosphatidylethanolamine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phosphatidylinositol",
+        "label": "Phosphatidylinositol",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fast acting comfort blend",
+        "label": "Fast-Acting Comfort Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yeast fermentate",
+        "label": "Yeast Fermentate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "lycium goji berry fruit juice powder",
+        "label": "Lycium (Goji) Berry fruit juice powder",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "oi whole adrenal",
+        "label": "Whole Adrenal",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "raw decaffeinated green coffee bean extract blend",
+        "label": "RAW decaffeinated Green Coffee bean extract Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "eugenol",
+        "label": "Eugenol",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "delphinidin",
+        "label": "Delphinidin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "bovine adrenal",
+        "label": "Bovine Adrenal",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "litesse polydextrose fiber",
+        "label": "Litesse Polydextrose Fiber",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "shatavari",
+        "label": "Shatavari",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "soy germ isoflavones concentrate",
+        "label": "Soy Germ Isoflavones Concentrate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "saponins",
+        "label": "Saponins",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "typical isoflavone composition",
+        "label": "Typical Isoflavone Composition:",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "daidzein",
+        "label": "Daidzein",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "glycitein",
+        "label": "Glycitein",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "40 mcts",
+        "label": "40% MCTs",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "estrog 100 proprietary blend herb botanical",
+        "label": "EstroG-100 Proprietary Blend (Herb/Botanical)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "angelica gigas",
+        "label": "Angelica Gigas",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cynanchum wilfordii",
+        "label": "Cynanchum wilfordii",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phlomoides umbrosa",
+        "label": "Phlomoides umbrosa",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "hyssop",
+        "label": "Hyssop",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "garden veggies powder blend",
+        "label": "Garden Veggies Powder Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha fruit veg powders",
+        "label": "Fruit & Vegetable Powders",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha carrot extract color",
+        "label": "Carrot Extract Color",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tomato",
+        "label": "Tomato",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cauliflower",
+        "label": "Cauliflower",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "asparagus",
+        "label": "Asparagus",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "brussels sprout",
+        "label": "Brussels Sprout",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cucumber",
+        "label": "Cucumber",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "has original blend",
+        "label": "HAS Original Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mormon tea",
+        "label": "Mormon Tea",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "elecampane",
+        "label": "Elecampane (Inula helenium)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "cleavers herb",
+        "label": "Cleavers",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "go less powder blend",
+        "label": "Go Less Powder Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "soylife soy extract",
+        "label": "SoyLife Soy extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "hydrangea root",
+        "label": "Hydrangea",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yacon root",
+        "label": "Yacon",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "yellow dock root",
+        "label": "Yellow Dock Root",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "keraglo",
+        "label": "KeraGLO",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "paeonia lactiflora",
+        "label": "Paeonia lactiflora",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "paeoniflorin",
+        "label": "Paeoniflorin",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "wild oregano blend herb botanical",
+        "label": "Wild Oregano Blend (Herb/Botanical)",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "raw fitbiotic blend",
+        "label": "RAW Fitbiotic Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha white thyme oil",
+        "label": "White Thyme Oil",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "theacrine",
+        "label": "Theacrine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "neumentix phenolic complex k110 42",
+        "label": "Neumentix Phenolic Complex K110-42",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "7 oxo dehydroepiandrosterone 3beta acetate",
+        "label": "7-Oxo-Dehydroepiandrosterone-3Beta-Acetate",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "maqui berry",
+        "label": "Maqui Berry",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "mimosa pudica",
+        "label": "Mimosa pudica",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nopal",
+        "label": "Nopal",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "red raspberry fruit",
+        "label": "Red Raspberry Fruit",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rosmarinic acid",
+        "label": "Rosmarinic Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "kaempferia parviflora",
+        "label": "Kaempferia Parviflora",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nha alpha glucan oligosaccharide",
+        "label": "Alpha-Glucan Oligosaccharide",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "korean pine",
+        "label": "Korean Pine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "muira puama bark",
+        "label": "Muira Puama",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ecklonia cava",
+        "label": "Ecklonia Cava",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "butyric acid",
+        "label": "Butyric Acid",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "glucomannan root extract",
+        "label": "Glucomannan root extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "triphala powder",
+        "label": "Triphala Powder",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "tropical almond",
+        "label": "Tropical Almond",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "garcinia indica",
+        "label": "Garcinia indica",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "presveratrol proprietary blend",
+        "label": "Presveratrol Proprietary Blend",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "passion fruit extract",
+        "label": "Passion Fruit extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "japanese knotweed",
+        "label": "Japanese Knotweed",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "sarsaparilla",
+        "label": "Sarsaparilla",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pii seditol branded blend",
+        "label": "Seditol",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "magnolia bark",
+        "label": "Magnolia Bark",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "jujube",
+        "label": "Jujube",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "wheatgrass",
+        "label": "Wheatgrass",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "organic enokitake flammulina velutipes mushroom",
+        "label": "organic Enokitake (Flammulina velutipes) Mushroom",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "organic himematsutake agaricus brasiliensis blazei mushroom",
+        "label": "organic Himematsutake (Agaricus brasiliensis/blazei) Mushroom",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "neem",
+        "label": "Neem",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "7 keto",
+        "label": "7-Keto",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l proline",
+        "label": "L-Proline",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "typical fatty acid profile per capsule",
+        "label": "Typical Fatty Acid Profile Per Capsule",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "french oak",
+        "label": "French Oak Wood Extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "streptococcus salivarius",
+        "label": "Streptococcus Salivarius",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "celery seed",
+        "label": "Celery3nB Celery seed extract",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      }
+    ],
+    "matched": [
+      {
+        "canonical": "ginseng",
+        "label": "Ginseng",
+        "products": 22,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "digestive enzymes",
+        "label": "Digestive Enzymes",
+        "products": 12,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "copper",
+        "label": "Copper",
+        "products": 9,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "rhodiola",
+        "label": "Rhodiola",
+        "products": 5,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "piperine",
+        "label": "Piperine (Black Pepper Extract)",
+        "products": 4,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phosphatidylserine",
+        "label": "Phosphatidylserine",
+        "products": 3,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fenugreek",
+        "label": "Fenugreek",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "phosphorus",
+        "label": "Phosphorus",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "nac",
+        "label": "N-Acetyl Cysteine",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "fish oil",
+        "label": "Fish Oil",
+        "products": 2,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "valerian",
+        "label": "Valerian",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "passionflower",
+        "label": "Passionflower",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "ashwagandha",
+        "label": "Ashwagandha",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "astragalus",
+        "label": "Astragalus",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "beetroot",
+        "label": "Beetroot Powder",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "pea",
+        "label": "Pea",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "l glycine",
+        "label": "L-Glycine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      },
+      {
+        "canonical": "caffeine",
+        "label": "Caffeine",
+        "products": 1,
+        "matched_entry": null,
+        "how": null
+      }
+    ],
+    "bridgeable": [
+      {
+        "canonical": "calcium d glucarate",
+        "label": "Calcium D-Glucarate",
+        "products": 2,
+        "matched_entry": "INGR_CALCIUM",
+        "how": "branded/descriptive"
+      },
+      {
+        "canonical": "indolplex diindolylmethane br dim complex",
+        "label": "Indolplex Diindolylmethane (BR-DIM) Complex",
+        "products": 2,
+        "matched_entry": "PRECLIN_DIM",
+        "how": "branded/descriptive"
+      },
+      {
+        "canonical": "dwarf bilberry",
+        "label": "Dwarf Bilberry",
+        "products": 1,
+        "matched_entry": "INGR_BILBERRY",
+        "how": "branded/descriptive"
+      },
+      {
+        "canonical": "l tauro acetyl l carnitine taurinate hydrochloride",
+        "label": "L-Tauro Acetyl-L-Carnitine Taurinate Hydrochloride",
+        "products": 1,
+        "matched_entry": "PRECLIN_ALCAR",
+        "how": "branded/descriptive"
+      }
+    ]
+  }
+}

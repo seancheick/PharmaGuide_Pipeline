@@ -66,6 +66,13 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
         else None
     )
     v3_blocking = scored_v3.get("blocking_reason") if isinstance(scored_v3, dict) else None
+    safety_signals = safety_gate.get("safety_signals") or []
+    safety_signal_reason = None
+    if is_scored and verdict == "CAUTION":
+        if isinstance(safety_signals, list) and safety_signals:
+            safety_signal_reason = str(safety_signals[0])
+        else:
+            safety_signal_reason = safety_gate.get("blocking_reason") or v3_blocking
 
     # ── Overlay the legacy keys the frozen export already reads ──────────────
     # v4 is authoritative under v4. score_100_equivalent / score_display_100_equivalent
@@ -76,6 +83,7 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["display_100"] = _fmt_display_100(quality_100) if is_scored else "N/A"
     scored["grade"] = v4.get("quality_tier")  # legacy `grade` column now carries the v4 tier
     scored["blocking_reason"] = safety_gate.get("blocking_reason") or v3_blocking
+    scored["safety_signal_reason"] = safety_signal_reason
     # NOTE: `score_80` is intentionally left as the v3 scorer wrote it — the shallow
     # copy preserves it so build_decision_highlights keeps working off v3 scaffolding.
     # The /80 export column is dropped; only the /100 mirrors ship.
@@ -94,6 +102,7 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["_v4_pillars"] = v4.get("quality_pillars_v4")
     scored["_v4_clean_label_flags"] = v4.get("clean_label_flags_v4")
     scored["_v4_safety_gate"] = safety_gate or None
+    scored["_v4_safety_signal_reason"] = safety_signal_reason
     scored["_v4_completeness_gate"] = completeness_gate or None
     scored["_v4_provenance"] = provenance or None
     scored["_v4_scoring_engine_version"] = provenance.get("scoring_engine_version")
@@ -127,8 +136,10 @@ def suppress_v4_for_hard_block(scored: Dict[str, Any], reason: str) -> Dict[str,
     scored["display_100"] = "N/A"
     scored["grade"] = None
     scored["blocking_reason"] = scored.get("blocking_reason") or reason
+    scored["safety_signal_reason"] = scored.get("safety_signal_reason") or reason
     scored["_v4_quality_score_100"] = None
     scored["_v4_quality_status"] = "suppressed_safety"
     scored["_v4_quality_tier"] = None
     scored["_v4_suppressed_reason"] = scored.get("_v4_suppressed_reason") or reason
+    scored["_v4_safety_signal_reason"] = scored.get("_v4_safety_signal_reason") or reason
     return scored
