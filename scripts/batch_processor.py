@@ -505,14 +505,26 @@ class BatchProcessor:
         A7: Get checksum of file manifest for resume validation.
         This ensures resume won't skip/reprocess wrong files if file list changes.
 
-        Includes: path, size, and a fast content fingerprint (head/tail chunks)
-        This is a best-effort integrity check, not cryptographic.
+        By default this uses metadata only: path, size, and nanosecond mtime.
+        Set processing.manifest_content_fingerprint=true to include head/tail
+        content samples for stricter resume validation at the cost of opening
+        every input file during startup.
         """
+        use_content_fingerprint = bool(
+            self.config.get("processing", {}).get("manifest_content_fingerprint", False)
+        )
         manifest_entries = []
         for f in sorted(files, key=str):
             try:
                 stat_info = os.stat(f)
-                entry = f"{f}|{stat_info.st_size}|{self._fast_file_fingerprint(Path(f))}"
+                modified_ns = getattr(
+                    stat_info,
+                    "st_mtime_ns",
+                    int(stat_info.st_mtime * 1_000_000_000),
+                )
+                entry = f"{f}|{stat_info.st_size}|{modified_ns}"
+                if use_content_fingerprint:
+                    entry = f"{entry}|{self._fast_file_fingerprint(Path(f))}"
                 manifest_entries.append(entry)
             except OSError as e:
                 # File doesn't exist or is inaccessible - include error marker

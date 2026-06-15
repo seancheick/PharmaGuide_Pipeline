@@ -123,8 +123,29 @@ def test_unmapped_tracker_save_receives_real_processed_file_count(tmp_path, monk
     assert seen["processed_count_override"] == 5
 
 
-def test_manifest_checksum_changes_when_same_size_and_mtime_content_changes(tmp_path):
+def test_manifest_checksum_uses_metadata_without_opening_files_by_default(tmp_path, monkeypatch):
     cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+
+    path = tmp_path / "same.json"
+    path.write_text(json.dumps({"id": 1, "ingredientRows": [{"name": "AAAA"}]}), encoding="utf-8")
+    os.utime(path, (1_700_000_000, 1_700_000_000))
+
+    def fail_if_called(_path):
+        raise AssertionError("default manifest should not read file content")
+
+    monkeypatch.setattr(processor, "_fast_file_fingerprint", fail_if_called)
+
+    before = processor._get_file_manifest_checksum([path])
+    os.utime(path, (1_700_000_001, 1_700_000_001))
+    after = processor._get_file_manifest_checksum([path])
+
+    assert before != after
+
+
+def test_strict_manifest_checksum_changes_when_same_size_and_mtime_content_changes(tmp_path):
+    cfg = _make_config(tmp_path)
+    cfg["processing"]["manifest_content_fingerprint"] = True
     processor = BatchProcessor(cfg)
 
     path = tmp_path / "same.json"
