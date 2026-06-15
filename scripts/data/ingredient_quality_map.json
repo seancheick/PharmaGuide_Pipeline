@@ -14782,7 +14782,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": ["gamma-glutamylcysteines", "gamma-glutamylcysteine"]
   },
   "glutathione_peroxidase": {
     "standard_name": "Glutathione Peroxidase",
@@ -15099,7 +15099,7 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": ["Lactococcus lactis strain plasma"]
   },
   "prebiotics": {
     "standard_name": "Prebiotics",
@@ -16503,7 +16503,7 @@
       "last_reviewed_at": "2026-02-27",
       "research_status": "validated"
     },
-    "aliases": ["betaine", "Betaine", "trimethylglycine"],
+    "aliases": ["betaine", "Betaine", "trimethylglycine", "Trimethylglycerine Hydrochloride"],
     "cui_note": "Corrected from unrelated TMG shorthand code to betaine / trimethylglycine concept.",
     "external_ids": {
       "unii": "3SCV180C9W"
@@ -56594,7 +56594,7 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": ["Pylopass Lactobacillus reuteri", "Pylopass"]
   },
   "lactobacillus_gasseri": {
     "standard_name": "Lactobacillus Gasseri",
