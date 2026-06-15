@@ -128,6 +128,11 @@ def upload_file(client, bucket, remote_path, local_path,
         )
 
 
+def download_file(client, bucket, remote_path):
+    """Download a file from Supabase Storage and return its bytes."""
+    return client.storage.from_(bucket).download(remote_path)
+
+
 # One year — for immutable artifacts only: sha256-addressed detail blobs and
 # version-stamped catalog paths (v{db_version}/...). Never use for "current"
 # pointers like the manifest.

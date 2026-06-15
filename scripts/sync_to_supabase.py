@@ -260,6 +260,41 @@ def needs_update(local_manifest, remote_manifest, force=False):
     return False
 
 
+def detail_index_blob_paths(detail_index):
+    """Return content-addressed blob storage paths referenced by a detail index."""
+    paths = set()
+    for dsld_id, entry in detail_index.items():
+        if not isinstance(entry, dict):
+            raise ValueError(f"detail_index entry for dsld_id={dsld_id} is not an object")
+        storage_path = entry.get("storage_path")
+        if not storage_path:
+            raise ValueError(f"detail_index entry for dsld_id={dsld_id} is missing storage_path")
+        paths.add(storage_path)
+    return paths
+
+
+def load_remote_detail_index_blob_paths(client, bucket, db_version, download_fn):
+    """Download an active remote detail index and return its referenced blob paths."""
+    remote_path = f"v{db_version}/detail_index.json"
+    payload = download_fn(client, bucket, remote_path)
+    if isinstance(payload, bytes):
+        text = payload.decode("utf-8")
+    elif isinstance(payload, bytearray):
+        text = bytes(payload).decode("utf-8")
+    elif isinstance(payload, str):
+        text = payload
+    else:
+        raise TypeError(
+            "Supabase detail_index download returned unsupported payload type: "
+            f"{type(payload).__name__}"
+        )
+
+    detail_index = json.loads(text)
+    if not isinstance(detail_index, dict):
+        raise ValueError(f"Remote detail_index at {remote_path} is not a JSON object")
+    return detail_index_blob_paths(detail_index)
+
+
 def collect_detail_blobs(build_dir):
     """Return sorted list of detail blob file paths."""
     detail_dir = os.path.join(build_dir, "detail_blobs")
@@ -423,23 +458,30 @@ def discover_existing_remote_blob_paths(
     if max_workers <= 1 or len(grouped) == 1:
         existing = set()
         for directory, expected_paths in grouped.items():
-            existing.update(
-                _discover_existing_remote_paths_for_directory(
-                    client,
-                    bucket,
-                    directory,
-                    expected_paths,
-                    list_fn,
-                    page_size,
+            try:
+                existing.update(
+                    _discover_existing_remote_paths_for_directory(
+                        client,
+                        bucket,
+                        directory,
+                        expected_paths,
+                        list_fn,
+                        page_size,
+                    )
                 )
-            )
+            except Exception as exc:
+                raise RuntimeError(
+                    "Failed listing remote detail-blob shard "
+                    f"{directory}: {type(exc).__name__}: {exc}"
+                ) from exc
         return existing
 
     client_getter = make_thread_local_client_factory(client_factory) if client_factory else (lambda: client)
     existing = set()
     with ThreadPoolExecutor(max_workers=min(max_workers, len(grouped))) as executor:
-        futures = [
-            executor.submit(
+        futures = {}
+        for directory, expected_paths in grouped.items():
+            future = executor.submit(
                 _discover_existing_remote_paths_for_directory_with_factory,
                 client_getter,
                 bucket,
@@ -448,10 +490,16 @@ def discover_existing_remote_blob_paths(
                 list_fn,
                 page_size,
             )
-            for directory, expected_paths in grouped.items()
-        ]
+            futures[future] = directory
         for future in as_completed(futures):
-            existing.update(future.result())
+            directory = futures[future]
+            try:
+                existing.update(future.result())
+            except Exception as exc:
+                raise RuntimeError(
+                    "Failed listing remote detail-blob shard "
+                    f"{directory}: {type(exc).__name__}: {exc}"
+                ) from exc
     return existing
 
 
@@ -879,6 +927,7 @@ def sync(
     5. Insert new manifest row
     """
     from supabase_client import (
+        download_file,
         get_supabase_client,
         fetch_current_manifest,
         insert_manifest,
@@ -932,10 +981,35 @@ def sync(
         print("Already up to date. Nothing to upload.")
         return {"status": "up_to_date", "version": version}
 
+    bucket = "pharmaguide"
+    active_remote_blob_paths = set()
+    active_index_time = 0.0
+    remote_version = remote.get("db_version") if remote else None
+    if remote_version and remote_version != version:
+        print(f"\nLoading active remote detail index for blob reuse ({remote_version})...")
+        start = time.time()
+        try:
+            active_remote_blob_paths = load_remote_detail_index_blob_paths(
+                client,
+                bucket,
+                remote_version,
+                download_file,
+            )
+            active_index_time = time.time() - start
+            print(
+                f"  Found {len(active_remote_blob_paths)} active hashed blob paths "
+                f"in {active_index_time:.1f}s"
+            )
+        except Exception as exc:
+            active_index_time = time.time() - start
+            print(
+                "  [warn] Could not load active remote detail index "
+                f"(will fall back to storage discovery): {type(exc).__name__}: {exc}"
+            )
+
     # Upload SQLite DB
     db_path = build_stats["db_path"]
 
-    bucket = "pharmaguide"
     remote_db_path = f"v{version}/pharmaguide_core.db"
     print(f"\nUploading {remote_db_path}...")
     start = time.time()
@@ -958,18 +1032,33 @@ def sync(
     uploads = build_stats["unique_blob_uploads"]
     blob_count = build_stats["blob_count"]
     unique_blob_count = build_stats["unique_blob_count"]
-    print("\nDiscovering existing remote hashed blobs...")
-    start = time.time()
-    existing_remote_paths = discover_existing_remote_blob_paths(
-        client,
-        bucket,
-        uploads,
-        list_storage_paths,
-        max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
-        client_factory=get_supabase_client,
-    )
-    discover_time = time.time() - start
-    print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
+    expected_remote_paths = {upload["remote_path"] for upload in uploads}
+    if active_remote_blob_paths:
+        print("\nReusing existing hashed blobs from active detail index...")
+        existing_remote_paths = expected_remote_paths & active_remote_blob_paths
+        discover_time = active_index_time
+        print(f"  Found {len(existing_remote_paths)} reusable active-version blobs")
+    else:
+        print("\nDiscovering existing remote hashed blobs...")
+        start = time.time()
+        try:
+            existing_remote_paths = discover_existing_remote_blob_paths(
+                client,
+                bucket,
+                uploads,
+                list_storage_paths,
+                max_workers=min(max_workers, DEFAULT_DISCOVERY_WORKERS),
+                client_factory=get_supabase_client,
+            )
+        except Exception as exc:
+            raise RuntimeError(
+                "Failed discovering existing remote hashed blobs. "
+                "The DB and detail_index uploads are upsert-safe; rerun after "
+                "the Supabase Storage listing issue clears. "
+                f"Root error: {type(exc).__name__}: {exc}"
+            ) from exc
+        discover_time = time.time() - start
+        print(f"  Found {len(existing_remote_paths)} existing hashed blobs in {discover_time:.1f}s")
     print(
         f"\nUploading {unique_blob_count} unique detail blobs "
         f"(from {blob_count} product mappings) with max_workers={max_workers}, retries={retry_count}..."

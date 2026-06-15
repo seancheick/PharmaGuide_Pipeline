@@ -158,6 +158,48 @@ def test_needs_update_true_when_forced():
     assert needs_update(local, remote, force=True) is True
 
 
+def test_detail_index_blob_paths_extracts_storage_paths():
+    """detail_index_blob_paths returns the content-addressed blob paths."""
+    from sync_to_supabase import detail_index_blob_paths
+
+    assert detail_index_blob_paths({
+        "1000": {"storage_path": "shared/details/sha256/aa/aa.json"},
+        "1001": {"storage_path": "shared/details/sha256/bb/bb.json"},
+    }) == {
+        "shared/details/sha256/aa/aa.json",
+        "shared/details/sha256/bb/bb.json",
+    }
+
+
+def test_load_remote_detail_index_blob_paths_downloads_and_parses_bytes():
+    """Active remote detail_index.json can be used as the release blob reuse set."""
+    from sync_to_supabase import load_remote_detail_index_blob_paths
+
+    client = object()
+    calls = []
+    payload = json.dumps({
+        "1000": {"storage_path": "shared/details/sha256/aa/aa.json"},
+        "1001": {"storage_path": "shared/details/sha256/bb/bb.json"},
+    }).encode("utf-8")
+
+    def fake_download(_client, bucket, remote_path):
+        calls.append((_client, bucket, remote_path))
+        return payload
+
+    paths = load_remote_detail_index_blob_paths(
+        client=client,
+        bucket="pharmaguide",
+        db_version="2026.06.15.145720",
+        download_fn=fake_download,
+    )
+
+    assert paths == {
+        "shared/details/sha256/aa/aa.json",
+        "shared/details/sha256/bb/bb.json",
+    }
+    assert calls == [(client, "pharmaguide", "v2026.06.15.145720/detail_index.json")]
+
+
 def test_collect_detail_blobs():
     """collect_detail_blobs returns sorted list of blob file paths."""
     from sync_to_supabase import collect_detail_blobs
@@ -451,6 +493,28 @@ def test_discover_existing_remote_blob_paths_lists_by_directory():
     assert existing == {"shared/details/sha256/aa/" + ("a" * 64) + ".json"}
     assert ("shared/details/sha256/aa", 1000, 0) in calls
     assert ("shared/details/sha256/bb", 1000, 0) in calls
+
+
+def test_discover_existing_remote_blob_paths_reports_failed_shard():
+    """Shard-list failures include the exact remote directory for release debugging."""
+    from sync_to_supabase import discover_existing_remote_blob_paths
+
+    uploads = [
+        {"remote_path": "shared/details/sha256/aa/" + ("a" * 64) + ".json"},
+    ]
+
+    def fake_list(_client, _bucket, _prefix, limit=1000, offset=0):
+        raise RuntimeError("storage list failed")
+
+    with pytest.raises(RuntimeError, match=r"shared/details/sha256/aa.*storage list failed"):
+        discover_existing_remote_blob_paths(
+            client=object(),
+            bucket="pharmaguide",
+            uploads=uploads,
+            list_fn=fake_list,
+            page_size=1000,
+            max_workers=1,
+        )
 
 
 # ---------------------------------------------------------------------------
