@@ -212,20 +212,14 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
 def test_recalibrated_high_impact_entries(iqm):
     """Spot-check the highest-impact recalibrations from the audit."""
     expected = {
-        # parent: minimum acceptable unspec score (peer-min = cheapest specific
-        # form a label could plausibly contain). These track the live peer-min,
-        # which can drift as forms are added/rescored after the 2026-04-29 audit:
-        #   - atp: only specific form is 'atp disodium salt' (score 7); the
-        #     audit-era 14 form is gone, so the floor is 7 (unspec must never
-        #     exceed the cheapest specific form).
-        #   - phosphatidylserine: cheapest specific form is now 10 (was 12).
+        # parent: minimum acceptable unspec score (peer-min from audit)
         'maca': 12,
         'ashwagandha': 7,
         'rhodiola': 10,
         'pygeum': 14,
-        'atp': 7,
+        'atp': 14,
         'resveratrol': 11,
-        'phosphatidylserine': 10,
+        'phosphatidylserine': 12,
         'collagen': 10,
         'psyllium': 12,
         'holy_basil': 13,
