@@ -18,6 +18,14 @@ def _ambiguity_warnings(caplog):
     ]
 
 
+def _duplicate_path_debugs(caplog):
+    return [
+        record.getMessage()
+        for record in caplog.records
+        if "duplicate match paths resolved" in record.getMessage()
+    ]
+
+
 @pytest.mark.parametrize(
     ("raw_label", "standard_name", "expected_parent", "expected_form"),
     [
@@ -27,6 +35,12 @@ def _ambiguity_warnings(caplog):
             "Yeast Fermentate Dried",
             "yeast_fermentate",
             "yeast fermentate (unspecified)",
+        ),
+        (
+            "Chondroitin Sulfate, Sodium",
+            "Chondroitin Sulfate, Sodium",
+            "chondroitin",
+            "chondroitin sulfate",
         ),
     ],
 )
@@ -41,7 +55,7 @@ def test_same_resolution_quality_map_duplicates_do_not_warn(
     quality_map = enricher.databases.get("ingredient_quality_map", {})
     caplog.clear()
 
-    with caplog.at_level(logging.WARNING, logger="enrich_supplements_v3"):
+    with caplog.at_level(logging.DEBUG, logger="enrich_supplements_v3"):
         result = enricher._match_quality_map(raw_label, standard_name, quality_map)
 
     assert result is not None
@@ -49,3 +63,4 @@ def test_same_resolution_quality_map_duplicates_do_not_warn(
     assert result["form_id"] == expected_form
     assert result["match_ambiguity_candidates"] == []
     assert _ambiguity_warnings(caplog) == []
+    assert _duplicate_path_debugs(caplog) == []

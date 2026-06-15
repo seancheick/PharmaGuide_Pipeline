@@ -6810,7 +6810,7 @@ class SupplementEnricherV3:
             preferred_parent = _resolve_compound_parent_override(ing_norm, std_norm, base_norm)
 
         candidates = []
-        seen = set()
+        candidate_by_resolution: Dict[Tuple[str, Optional[str]], Dict] = {}
         _non_epa_dha_source_re = re.compile(
             r"\b("
             r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
@@ -7078,20 +7078,56 @@ class SupplementEnricherV3:
                 None
             )
 
+        def _resolved_candidate_form_id(candidate: Dict) -> Optional[str]:
+            return (
+                candidate.get("form_key")
+                or candidate.get("fallback_form_name")
+                or (candidate.get("match_data") or {}).get("form_id")
+            )
+
+        def _candidate_sort_key(candidate: Dict) -> Tuple:
+            # Prefer candidate whose parent matches the base ingredient context.
+            # This resolves compound forms like "calcium ascorbate" appearing under
+            # both vitamin_c and calcium — when the base ingredient is "Vitamin C",
+            # vitamin_c wins; when it's "Calcium", calcium wins.
+            parent_pref = 0 if (preferred_parent and candidate["parent_key"] == preferred_parent) else 1
+            return (
+                candidate["tier"],                      # 1. Tier (exact > normalized > contains/pattern)
+                candidate.get("match_source", 1),       # 2. Match source (raw > std > base)
+                candidate.get("priority", 1),           # 3. Priority from match_rules (0 > 1 > 2)
+                parent_pref,                            # 4. Prefer parent matching base ingredient
+                -candidate["alias_len"],                # 5. Longer alias wins within same priority
+                0 if candidate["form_key"] else 1,      # 6. Form-level beats parent-level
+                candidate["parent_key"],                # 7. Alphabetical parent key
+                candidate["form_key"] or "",            # 8. Alphabetical form key
+            )
+
+        def _candidate_resolution_key(candidate: Dict) -> Tuple[str, Optional[str]]:
+            return (
+                str(candidate.get("parent_key") or ""),
+                _resolved_candidate_form_id(candidate),
+            )
+
         def add_candidate(candidate: Dict):
             if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
-            key = (
-                candidate["parent_key"],
-                candidate["form_key"],
-                candidate["matched_alias"],
-                candidate["match_type"],
-                candidate["tier"],
-            )
-            if key in seen:
+
+            # Multiple aliases often describe the same scoring identity
+            # (canonical parent + resolved form). Collapse those paths here so
+            # alias duplication cannot become warning-level ambiguity later.
+            key = _candidate_resolution_key(candidate)
+            existing = candidate_by_resolution.get(key)
+            if existing is None:
+                candidate_by_resolution[key] = candidate
+                candidates.append(candidate)
                 return
-            seen.add(key)
-            candidates.append(candidate)
+
+            if _candidate_sort_key(candidate) < _candidate_sort_key(existing):
+                candidate_by_resolution[key] = candidate
+                for idx, current in enumerate(candidates):
+                    if current is existing:
+                        candidates[idx] = candidate
+                        break
 
         def collect_alias_matches(
             candidate_values: List[Tuple[str, int]],
@@ -7479,24 +7515,7 @@ class SupplementEnricherV3:
                 return branded_match
             return None
 
-        def candidate_sort_key(candidate: Dict) -> Tuple:
-            # Prefer candidate whose parent matches the base ingredient context.
-            # This resolves compound forms like "calcium ascorbate" appearing under
-            # both vitamin_c and calcium — when the base ingredient is "Vitamin C",
-            # vitamin_c wins; when it's "Calcium", calcium wins.
-            parent_pref = 0 if (preferred_parent and candidate["parent_key"] == preferred_parent) else 1
-            return (
-                candidate["tier"],                      # 1. Tier (exact > normalized > contains/pattern)
-                candidate.get("match_source", 1),       # 2. Match source (raw > std > base)
-                candidate.get("priority", 1),           # 3. Priority from match_rules (0 > 1 > 2)
-                parent_pref,                            # 4. Prefer parent matching base ingredient
-                -candidate["alias_len"],                # 5. Longer alias wins within same priority
-                0 if candidate["form_key"] else 1,      # 6. Form-level beats parent-level
-                candidate["parent_key"],                # 7. Alphabetical parent key
-                candidate["form_key"] or "",            # 8. Alphabetical form key
-            )
-
-        candidates.sort(key=candidate_sort_key)
+        candidates.sort(key=_candidate_sort_key)
         best = candidates[0]
 
         winning_tier = best["tier"]
@@ -7508,26 +7527,6 @@ class SupplementEnricherV3:
                 match_tier = "contains"
             elif best["matched_on"].endswith("_pattern"):
                 match_tier = "pattern"
-
-        def _resolved_candidate_form_id(candidate: Dict) -> Optional[str]:
-            return (
-                candidate.get("form_key")
-                or candidate.get("fallback_form_name")
-                or (candidate.get("match_data") or {}).get("form_id")
-            )
-
-        def _same_quality_resolution(candidate_group: List[Dict]) -> bool:
-            """True when duplicate match paths land on identical scoring identity."""
-            if len(candidate_group) < 2:
-                return False
-            resolutions = {
-                (
-                    candidate.get("parent_key"),
-                    _resolved_candidate_form_id(candidate),
-                )
-                for candidate in candidate_group
-            }
-            return len(resolutions) == 1
 
         ambiguity_candidates = []
         if len(winning_candidates) > 1:
@@ -7591,16 +7590,10 @@ class SupplementEnricherV3:
                 "preferred_parent": preferred_parent,
                 "reason": reasons,
             }
-            same_resolution = _same_quality_resolution(winning_candidates)
-            ambiguity_candidates = [] if same_resolution else payload["candidates"]
+            ambiguity_candidates = payload["candidates"]
             # Only warn if not resolved cleanly by source precedence or context parent preference.
             # Set ENRICH_DEBUG_AMBIGUITY=1 to see all ambiguity warnings
-            if same_resolution:
-                self.logger.debug(
-                    f"Quality-map duplicate match paths resolved to same canonical/form: "
-                    f"{json.dumps(payload, sort_keys=True)}"
-                )
-            elif (
+            if (
                 ("raw_name_priority" not in reasons and "parent_context_preference" not in reasons)
                 or os.environ.get("ENRICH_DEBUG_AMBIGUITY")
             ):
