@@ -5974,6 +5974,40 @@ class SupplementEnricherV3:
         generic_form_tokens = []
         cleaner_canonical_enforced_by_form = False
         cleaner_canonical_fallback_by_form = False
+        _non_epa_dha_source_re = re.compile(
+            r"\b("
+            r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
+            r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
+            r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
+            r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
+            r"fiber|fibre|seed\s+blend|super\s+seed"
+            r")\b",
+            re.IGNORECASE,
+        )
+        _epa_dha_source_re = re.compile(
+            r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
+            re.IGNORECASE,
+        )
+        _omega_form_parent_keys = {"epa", "dha", "epa_dha", "fish_oil", "omega_3"}
+        _source_identity_blob = " ".join(
+            str(value or "")
+            for value in (
+                form_info.get("original"),
+                form_info.get("base_name"),
+            )
+        )
+        _has_non_epa_dha_source_context = bool(_non_epa_dha_source_re.search(_source_identity_blob))
+        _has_epa_dha_source_context = bool(_epa_dha_source_re.search(_source_identity_blob))
+
+        def _reject_false_omega_form_match(form_match: Optional[Dict]) -> bool:
+            if not form_match:
+                return False
+            parent_key = str(form_match.get("canonical_id") or "").strip().lower()
+            return (
+                parent_key in _omega_form_parent_keys
+                and _has_non_epa_dha_source_context
+                and not _has_epa_dha_source_context
+            )
 
         for form_data in extracted_forms:
             match_candidates = form_data.get('match_candidates', [])
@@ -6034,6 +6068,9 @@ class SupplementEnricherV3:
                         cleaner_canonical_enforced_by_form = True
                     if form_match.get("cleaner_canonical_fallback"):
                         cleaner_canonical_fallback_by_form = True
+                    if _reject_false_omega_form_match(form_match):
+                        form_match = None
+                        continue
                     form_id = form_match.get('form_id', '')
                     # Accept if it's a specific form (not unspecified)
                     if form_id and 'unspecified' not in form_id.lower():

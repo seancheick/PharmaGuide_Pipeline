@@ -2228,6 +2228,13 @@ def test_pure_encapsulations_form_fallback_aliases_map_without_fallback():
             "mct_oil",
             "c8 mct oil (pure caprylic)",
         ),
+        (
+            "Medium Chain Triglyceride",
+            "Medium Chain Triglycerides",
+            [{"name": "triglyceride", "source": "name_extraction"}],
+            "mct_oil",
+            "mct oil c8/c10",
+        ),
     ]
 
     for label, std_name, cleaned_forms, expected_canonical, expected_form in cases:
