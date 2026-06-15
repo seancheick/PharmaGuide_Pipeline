@@ -3,7 +3,7 @@
   "summary": {
     "no_entry": 442,
     "matched": 18,
-    "bridgeable": 4
+    "manual_review": 4
   },
   "buckets": {
     "no_entry": [
@@ -3230,7 +3230,7 @@
         "how": null
       }
     ],
-    "bridgeable": [
+    "manual_review": [
       {
         "canonical": "calcium d glucarate",
         "label": "Calcium D-Glucarate",
