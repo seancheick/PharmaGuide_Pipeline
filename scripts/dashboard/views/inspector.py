@@ -4,7 +4,7 @@ import sqlite3
 import json
 from pathlib import Path
 from scripts.dashboard.components import _safe_columns, _safe_tabs
-from scripts.dashboard.components.data_table import data_table
+from scripts.dashboard.components.data_table import data_table, arrow_safe
 from scripts.dashboard.components.product_header import product_header
 from scripts.dashboard.components.score_breakdown import (
     score_breakdown,
@@ -201,14 +201,14 @@ def render_drill_down(dsld_id, data):
                 # Column selection and styling
                 cols = ["name", "bio_score", "form", "dosage", "flags"]
                 available_cols = [c for c in cols if c in active_df.columns]
-                st.dataframe(active_df[available_cols], width="stretch")
+                st.dataframe(arrow_safe(active_df[available_cols]), width="stretch")
             else:
                 st.caption("No active ingredients listed.")
                 
         with tab_inactive:
             inactive_df = pd.DataFrame(blob.get("inactive_ingredients", []))
             if not inactive_df.empty:
-                st.dataframe(inactive_df, width="stretch")
+                st.dataframe(arrow_safe(inactive_df), width="stretch")
             else:
                 st.caption("No inactive ingredients listed.")
     else:
