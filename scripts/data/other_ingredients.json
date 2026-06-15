@@ -3,7 +3,7 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-29",
+    "last_updated": "2026-06-15",
     "total_entries": 693,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -7232,10 +7232,11 @@
         "flavor enhancement",
         "nutrient addition"
       ],
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-06-15",
       "external_ids": {
-        "unii": "6PQP1V1B6O"
+        "unii": null
       },
+      "unii_note": "Class-level fruit/vegetable powder bucket; no single exact GSRS/UNII substance. Prior representative UNII 6PQP1V1B6O resolves to ANNATTO and is retained only on annatto-specific rows.",
       "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Wave 9.E.2 (2026-05-28): cleared from C1145672 ('Bixa orellana (plant)' — annatto, unrelated). This is a multi-source fruit/vegetable powder class (berry/carrot/cherry/etc.); UMLS has no single concept for the mixture. Null per null-CUI policy for class entries.",
@@ -11144,22 +11145,14 @@
         "flavor enhancement",
         "mineral content"
       ],
-      "last_updated": "2025-11-11",
+      "last_updated": "2026-06-15",
       "external_ids": {
-        "unii": "LSU3YX0KZO"
+        "unii": null
       },
-      "rxcui": "1307820",
-      "gsrs": {
-        "substance_name": "MOLASSES",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 23,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Molasses | 1208 (Number of products:23)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "unii_note": "Blend bucket for maple syrup and molasses; no single exact GSRS/UNII substance. Prior representative UNII LSU3YX0KZO resolves to MOLASSES and is retained on molasses-specific rows.",
+      "rxcui": null,
+      "rxcui_note": "Cleared generic molasses RxCUI 1307820 because this row spans maple syrup and molasses.",
+      "gsrs": null,
       "cui": "C0458181",
       "functional_roles": [
         "sweetener_natural"
@@ -12010,10 +12003,11 @@
         "texture improvement",
         "stability enhancement"
       ],
-      "last_updated": "2026-03-17",
+      "last_updated": "2026-06-15",
       "external_ids": {
-        "unii": "230OU9XXE4"
+        "unii": null
       },
+      "unii_note": "Class-level mono-/diglyceride emulsifier bucket; no single exact GSRS/UNII substance. Prior representative UNII 230OU9XXE4 resolves to GLYCERYL MONOSTEARATE and is retained on glycerol-monostearate-specific rows.",
       "cui": "C0026481",
       "functional_roles": [
         "emulsifier"
