@@ -134,3 +134,15 @@ def test_same_tier_exact_duplicate_name_is_review_not_high_review():
     [group] = audit.find_same_tier_groups(records)
     assert group.classification == "same_tier_duplicate_name"
     assert group.severity == "review"
+
+
+def test_collect_unii_records_includes_harmful_additive_tier():
+    records = audit.collect_unii_records(REPO_ROOT)
+    harmful_corn_syrup = [
+        record for record in records
+        if record.source == "harmful" and record.entry_id == "ADD_CORN_SYRUP_SOLIDS"
+    ]
+
+    assert harmful_corn_syrup
+    assert harmful_corn_syrup[0].tier == 3
+    assert harmful_corn_syrup[0].unii == "9G5L16BK6N"

@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-06-08",
+    "last_updated": "2026-06-15",
     "total_entries": 116,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -14634,6 +14634,11 @@
             "date": "2026-03-28",
             "change": "Deep audit batch 9: CUI null (class entry, added cui_status/cui_note). Added rice syrup arsenic warning. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch9"
+          },
+          {
+            "date": "2026-06-15",
+            "change": "Cleared representative UNII 9G5L16BK6N from this class-level syrup umbrella. Live GSRS resolves that UNII to CORN SYRUP, so exact ownership stays with ADD_CORN_SYRUP_SOLIDS while this row continues matching syrup aliases by text.",
+            "reason": "unii_same_tier_conflict_cleanup"
           }
         ]
       },
@@ -14644,8 +14649,9 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": "9G5L16BK6N"
+        "unii": null
       },
+      "unii_note": "Class-level syrup umbrella; no single exact GSRS/UNII substance. Prior representative UNII 9G5L16BK6N resolves to CORN SYRUP and is retained only on ADD_CORN_SYRUP_SOLIDS.",
       "safety_summary": "Concentrated liquid added sugars (rice syrup, brown rice syrup, etc.). Rice syrups in particular can carry trace arsenic — worth limiting daily intake.",
       "safety_summary_one_liner": "Concentrated added sugar, some can carry trace arsenic.",
       "audit_trail": [
@@ -17165,6 +17171,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI null (specific PHO variant, added cui_status/cui_note). GSRS matches generic corn oil. Added population warnings. Fixed jurisdictional dates to PHO ban date.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-06-15",
+            "change": "Cleared generic CORN OIL UNII/RxCUI/GSRS payload from this partially hydrogenated variant. Live GSRS verifies 8470G57WFM as CORN OIL and does not expose an exact partially-hydrogenated-corn-oil substance.",
+            "reason": "unii_same_tier_conflict_cleanup"
           }
         ]
       },
@@ -17184,20 +17195,12 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": "8470G57WFM"
+        "unii": null
       },
-      "rxcui": "2854",
-      "gsrs": {
-        "substance_name": "CORN OIL",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "unii_note": "Specific partially hydrogenated corn oil variant; no exact GSRS/UNII substance found. Generic CORN OIL UNII 8470G57WFM remains on ADD_CORN_OIL only.",
+      "rxcui": null,
+      "rxcui_note": "Cleared generic corn oil RxCUI 2854 because this row models the partially hydrogenated variant.",
+      "gsrs": null,
       "population_warnings": [
         "Cardiovascular disease — trans fats raise LDL and lower HDL cholesterol",
         "All consumers — FDA banned all PHOs; presence in a supplement indicates non-compliance or pre-ban inventory"

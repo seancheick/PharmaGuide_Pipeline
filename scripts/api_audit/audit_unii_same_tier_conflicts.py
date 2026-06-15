@@ -242,6 +242,18 @@ def collect_unii_records(repo_root: Path) -> list[UniiRecord]:
     preprocess_text, fast_exact_lookup = _load_runtime_priority_context(repo_root)
     records: list[UniiRecord] = []
     records.extend(_iter_banned_records(repo_root, preprocess_text, fast_exact_lookup))
+    records.extend(
+        _iter_list_records(
+            repo_root,
+            "harmful_additives.json",
+            "harmful_additives",
+            tier=3,
+            source="harmful",
+            preprocess_text=preprocess_text,
+            fast_exact_lookup=fast_exact_lookup,
+            use_effective_priority=False,
+        )
+    )
     records.extend(_iter_iqm_records(repo_root, preprocess_text, fast_exact_lookup))
     records.extend(
         _iter_list_records(
