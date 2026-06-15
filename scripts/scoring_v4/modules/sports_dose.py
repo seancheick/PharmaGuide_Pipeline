@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional, Tuple
 
-from scoring_v4.modules.generic_helpers import _norm_text, _safe_list
+from scoring_v4.modules.generic_helpers import _norm_text, _safe_list, get_active_ingredients
 from scoring_v4.modules.sports_helpers import (
     ALPHA_GPC_CANONICALS,
     ATP_CANONICALS,
@@ -21,6 +21,7 @@ from scoring_v4.modules.sports_helpers import (
     CREATINE_CANONICALS,
     EAA_CANONICALS,
     HMB_CANONICALS,
+    SPORTS_BAND_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
     TAURINE_CANONICALS,
     canonical,
@@ -44,6 +45,7 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         product = {}
 
     identity, primary, basis = _best_primary_score(product)
+    identity, primary, basis = _apply_offlist_dose_floor(product, identity, primary, basis)
     support = _score_stack_support(product, identity)
     completeness = _score_ratio_or_completeness(product, identity)
     focused_single = _score_focused_single_completion(product, identity, primary)
@@ -89,6 +91,53 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
         "phase": PHASE_MARKER,
         "metadata": metadata,
     }
+
+
+def _dominant_disclosed_active_is_offlist(product: Dict[str, Any]) -> bool:
+    """True when the product's mass-dominant disclosed active has no sports dose band.
+
+    Such a product (e.g. L-carnitine 1 g + a token BCAA) would otherwise have its
+    real primary ignored by the band rubric and crater to a trace accessory.
+    """
+    best_row: Optional[Dict[str, Any]] = None
+    best_g = 0.0
+    for row in get_active_ingredients(product or {}):
+        if not isinstance(row, dict):
+            continue
+        grams = dose_g(row)
+        if grams is not None and grams > best_g:
+            best_g = grams
+            best_row = row
+    if best_row is None:
+        return False
+    return canonical(best_row) not in SPORTS_BAND_CANONICALS
+
+
+def _apply_offlist_dose_floor(
+    product: Dict[str, Any],
+    identity: Optional[str],
+    primary: float,
+    basis: Optional[str],
+) -> Tuple[Optional[str], float, Optional[str]]:
+    """Coverage-gap floor for sports products whose primary has no sports band.
+
+    Routing a product to sports must not DISCARD a disclosed active the band rubric
+    does not recognise. When the mass-dominant disclosed active is off-list, credit
+    it via the generic dose-adequacy proxy (the same scorer the generic module uses)
+    and take the better of the two. On-list sports actives keep their strict bands,
+    so an under-dosed creatine / BCAA is never rescued by this floor.
+    """
+    if not _dominant_disclosed_active_is_offlist(product):
+        return identity, primary, basis
+    try:
+        from scoring_v4.modules.generic_dose import score_dose as _generic_dose
+
+        proxy = float((_generic_dose(product) or {}).get("score") or 0.0)
+    except Exception:
+        proxy = 0.0
+    if proxy > primary:
+        return None, proxy, "generic_dose_proxy_for_offlist_primary"
+    return identity, primary, basis
 
 
 def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[float, Optional[str]]:

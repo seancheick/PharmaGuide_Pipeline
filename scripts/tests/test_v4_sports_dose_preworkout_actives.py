@@ -112,6 +112,33 @@ def test_undisclosed_alpha_gpc_earns_no_dose_credit() -> None:
     assert primary == 0.0
 
 
+# --- off-list dominant active: generic dose proxy instead of crater ---------
+
+def test_offlist_dominant_active_uses_generic_dose_proxy() -> None:
+    # 67304 shape: L-carnitine 1 g (mass-dominant, no sports band) + a token BCAA.
+    # The sports rubric must NOT discard the carnitine and crater to the token BCAA;
+    # it falls back to the generic dose-adequacy proxy so the disclosed primary is
+    # credited (proxy ~16, not the ~1 token-BCAA band).
+    res = score_dose(
+        _product(
+            _row("l_carnitine", 1, "Gram(s)"),
+            _row("branched_chain_amino_acids", 250, "mg"),
+            name="Carnitine 1000 + BCAA",
+            primary_type="amino_acid",
+        )
+    )
+    assert res["score"] >= 12.0
+    assert res["metadata"]["dose_basis"] == "generic_dose_proxy_for_offlist_primary"
+
+
+def test_onlist_underdosed_active_is_not_rescued_by_proxy() -> None:
+    # An under-dosed creatine (1 g, on-list) keeps its strict sports band (8.0); the
+    # off-list proxy floor must NOT rescue it, because creatine has a sports band.
+    res = score_dose(_product(_row("creatine_monohydrate", 1, "Gram(s)"), primary_type="general_supplement"))
+    assert res["components"]["sports_primary_active_dose"] == 8.0
+    assert res["metadata"]["dose_basis"] == "creatine_under_2_g"
+
+
 # --- real Thorne Pre-Workout Elite shape: best disclosed primary wins -------
 
 def test_thorne_preworkout_alpha_gpc_atp_takes_alpha_gpc_primary() -> None:

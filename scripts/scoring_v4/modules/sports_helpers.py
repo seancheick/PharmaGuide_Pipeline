@@ -70,6 +70,25 @@ SPORTS_CANONICALS = (
     | BCAA_AGGREGATE_CANONICALS
     | frozenset({"agmatine", "l_tyrosine", "l_carnitine"})
 )
+# Canonicals the sports DOSE rubric has an explicit band for. When a product's
+# mass-dominant disclosed active is NOT in this set (e.g. L-carnitine), the sports
+# dose dimension falls back to the generic dose-adequacy proxy instead of ignoring
+# it, so routing to sports never discards a disclosed primary.
+SPORTS_BAND_CANONICALS = (
+    SPORTS_PROTEIN_CANONICALS
+    | CREATINE_CANONICALS
+    | BETA_ALANINE_CANONICALS
+    | CITRULLINE_CANONICALS
+    | HMB_CANONICALS
+    | BCAA_CANONICALS
+    | EAA_CANONICALS
+    | ALPHA_GPC_CANONICALS
+    | ATP_CANONICALS
+    | CAFFEINE_CANONICALS
+    | BETAINE_CANONICALS
+    | TAURINE_CANONICALS
+    | BCAA_AGGREGATE_CANONICALS
+)
 
 
 def canonical(row: Dict[str, Any]) -> str:
