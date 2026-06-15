@@ -214,6 +214,13 @@ _NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
     "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
     "cla", "conjugated_linoleic_acid", "oleic_acid",
+    "docosapentaenoic_acid_dpa", "dpa",
+    "omega_6_fatty_acids", "omega_9_fatty_acids",
+    "borage_seed_oil", "evening_primrose_oil",
+}
+_OMEGA_SOFT_ADJUNCT_CANONICALS = {
+    "vitamin_d", "vitamin_d3", "cholecalciferol",
+    "vitamin_e", "mixed_tocopherols", "d_alpha_tocopherol",
 }
 _OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
 _EPA_DHA_SOURCE_RE = re.compile(
@@ -275,6 +282,34 @@ def _scoring_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
         row for row in get_scoring_ingredients(product or {}, strict=True).rows
         if isinstance(row, dict)
     ]
+
+
+def _raw_routing_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
+    rows: list[Dict[str, Any]] = []
+    ingredient_quality_data = (product or {}).get("ingredient_quality_data")
+    if isinstance(ingredient_quality_data, dict):
+        for key in ("ingredients_scorable", "ingredients"):
+            value = ingredient_quality_data.get(key)
+            if isinstance(value, list):
+                rows.extend(row for row in value if isinstance(row, dict))
+    elif isinstance(ingredient_quality_data, list):
+        rows.extend(row for row in ingredient_quality_data if isinstance(row, dict))
+
+    active_ingredients = (product or {}).get("active_ingredients")
+    if isinstance(active_ingredients, list):
+        rows.extend(row for row in active_ingredients if isinstance(row, dict))
+    return rows
+
+
+def _routing_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
+    """Rows used for module routing, including raw enriched fixtures."""
+    rows = _scoring_rows(product)
+    seen = {id(row) for row in rows}
+    for row in _raw_routing_rows(product):
+        if id(row) not in seen:
+            rows.append(row)
+            seen.add(id(row))
+    return rows
 
 
 def _positive_quantity(row: Dict[str, Any]) -> bool:
@@ -366,18 +401,14 @@ def _has_omega_ingredient(product: Dict[str, Any]) -> bool:
 
 def _has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
     """Return True for any positive EPA/DHA row, even if incidental."""
-    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
-        if not isinstance(ing, dict):
-            continue
+    for ing in _routing_rows(product):
         if _trustworthy_epa_dha_row(ing):
             return True
     return False
 
 
 def _has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
-    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
-        if not isinstance(ing, dict):
-            continue
+    for ing in _routing_rows(product):
         if str(ing.get("evidence_type") or "").strip().lower() == "omega_epa_dha_aggregate":
             return True
     return False
@@ -390,9 +421,7 @@ def _has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
     not pull mixed formulas into the omega module when the scoring contract
     already says the usable evidence is a non-omega blend/header anchor.
     """
-    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
-        if not isinstance(ing, dict):
-            continue
+    for ing in _routing_rows(product):
         if ing.get("scoring_input_kind") != "product_level_evidence":
             continue
         evidence_type = str(ing.get("evidence_type") or "").strip().lower()
@@ -413,9 +442,7 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     """
     if _has_any_epa_dha_row(product):
         return False
-    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
-        if not isinstance(ing, dict):
-            continue
+    for ing in _routing_rows(product):
         canonical = str(ing.get("canonical_id") or "").strip().lower()
         if canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS:
             return True
@@ -428,10 +455,12 @@ def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     return False
 
 
-def _has_non_omega_positive_scorable_panel(product: Dict[str, Any]) -> bool:
-    for ing in get_scoring_ingredients(product or {}, strict=True).rows:
-        if not isinstance(ing, dict):
-            continue
+def _has_non_omega_positive_scorable_panel(
+    product: Dict[str, Any],
+    *,
+    allow_soft_omega_adjuvants: bool = False,
+) -> bool:
+    for ing in _routing_rows(product):
         if ing.get("scoring_input_kind") == "product_level_evidence":
             continue
         canonical = str(ing.get("canonical_id") or "").strip().lower()
@@ -441,8 +470,24 @@ def _has_non_omega_positive_scorable_panel(product: Dict[str, Any]) -> bool:
             continue
         if canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS:
             continue
+        if allow_soft_omega_adjuvants and canonical in _OMEGA_SOFT_ADJUNCT_CANONICALS:
+            continue
         return True
     return False
+
+
+def _has_omega_taxonomy_with_trustworthy_epa_dha_panel(product: Dict[str, Any]) -> bool:
+    """True for omega_3 products where EPA/DHA is real but diluted by companions."""
+    if _read_primary_type(product) != "omega_3":
+        return False
+    if not _has_any_epa_dha_row(product):
+        return False
+    if _has_non_omega_product_level_evidence(product):
+        return False
+    return not _has_non_omega_positive_scorable_panel(
+        product,
+        allow_soft_omega_adjuvants=True,
+    )
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -692,6 +737,13 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
 
     # 1. Strongest signal: EPA/DHA is a primary panel identity.
     if _has_omega_ingredient(product):
+        return True
+
+    # 1b. A true omega_3 product can disclose EPA/DHA plus companion fatty
+    # acids (GLA, DPA, omega-6/9) or vitamin D/E oil adjuncts. Those rows
+    # dilute the EPA/DHA ratio, but they are still part of an omega product,
+    # not a broad mixed formula with incidental DHA.
+    if _has_omega_taxonomy_with_trustworthy_epa_dha_panel(product):
         return True
 
     # ALA / GLA / CLA / 3-6-9 products may use omega marketing language,

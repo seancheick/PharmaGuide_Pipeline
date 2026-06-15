@@ -1916,6 +1916,20 @@ _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS = {
     "cla",
     "conjugated_linoleic_acid",
     "oleic_acid",
+    "docosapentaenoic_acid_dpa",
+    "dpa",
+    "omega_6_fatty_acids",
+    "omega_9_fatty_acids",
+    "borage_seed_oil",
+    "evening_primrose_oil",
+}
+_ROUTE_OMEGA_SOFT_ADJUNCT_CANONICALS = {
+    "vitamin_d",
+    "vitamin_d3",
+    "cholecalciferol",
+    "vitamin_e",
+    "mixed_tocopherols",
+    "d_alpha_tocopherol",
 }
 _ROUTE_OMEGA_PARENT_CANONICALS = {"fish_oil", "krill_oil", "cod_liver_oil", "algal_oil", "algae_oil", "omega_3"}
 _ROUTE_SPORTS_PROTEIN_CANONICALS = {
@@ -2033,6 +2047,33 @@ def _route_scoring_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
         return []
 
 
+def _route_raw_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    ingredient_quality_data = (product or {}).get("ingredient_quality_data")
+    if isinstance(ingredient_quality_data, dict):
+        for key in ("ingredients_scorable", "ingredients"):
+            value = ingredient_quality_data.get(key)
+            if isinstance(value, list):
+                rows.extend(row for row in value if isinstance(row, dict))
+    elif isinstance(ingredient_quality_data, list):
+        rows.extend(row for row in ingredient_quality_data if isinstance(row, dict))
+
+    active_ingredients = (product or {}).get("active_ingredients")
+    if isinstance(active_ingredients, list):
+        rows.extend(row for row in active_ingredients if isinstance(row, dict))
+    return rows
+
+
+def _route_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    rows = _route_scoring_rows(product)
+    seen = {id(row) for row in rows}
+    for row in _route_raw_rows(product):
+        if id(row) not in seen:
+            rows.append(row)
+            seen.add(id(row))
+    return rows
+
+
 def _route_name_text(product: Dict[str, Any]) -> str:
     return " ".join(
         str((product or {}).get(k) or "")
@@ -2064,7 +2105,7 @@ def _route_number(value: Any) -> float:
 
 def _route_positive_canonicals(product: Dict[str, Any]) -> set[str]:
     canonicals: set[str] = set()
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         if row.get("scoring_input_kind") == "product_level_evidence":
             continue
         canonical = _norm(row.get("canonical_id"))
@@ -2076,7 +2117,7 @@ def _route_positive_canonicals(product: Dict[str, Any]) -> set[str]:
 def _route_omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
     omega_rows = 0
     total_rows = 0
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         if (
             row.get("scoring_input_kind") == "product_level_evidence"
             and _norm(row.get("evidence_type")) != "omega_epa_dha_aggregate"
@@ -2099,21 +2140,21 @@ def _route_has_primary_omega_panel(product: Dict[str, Any]) -> bool:
 
 
 def _route_has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         if _trustworthy_epa_dha_row(row):
             return True
     return False
 
 
 def _route_has_omega_scoring_evidence(product: Dict[str, Any]) -> bool:
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         if _norm(row.get("evidence_type")) == "omega_epa_dha_aggregate":
             return True
     return False
 
 
 def _route_has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool:
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         if row.get("scoring_input_kind") != "product_level_evidence":
             continue
         evidence_type = _norm(row.get("evidence_type"))
@@ -2129,7 +2170,7 @@ def _route_has_non_omega_product_level_evidence(product: Dict[str, Any]) -> bool
 def _route_has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     if _route_has_any_epa_dha_row(product):
         return False
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         canonical = _norm(row.get("canonical_id"))
         if canonical in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS:
             return True
@@ -2142,8 +2183,12 @@ def _route_has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     return False
 
 
-def _route_has_non_omega_positive_scorable_panel(product: Dict[str, Any]) -> bool:
-    for row in _route_scoring_rows(product):
+def _route_has_non_omega_positive_scorable_panel(
+    product: Dict[str, Any],
+    *,
+    allow_soft_omega_adjuvants: bool = False,
+) -> bool:
+    for row in _route_rows(product):
         if row.get("scoring_input_kind") == "product_level_evidence":
             continue
         canonical = _norm(row.get("canonical_id"))
@@ -2153,8 +2198,23 @@ def _route_has_non_omega_positive_scorable_panel(product: Dict[str, Any]) -> boo
             continue
         if canonical in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS:
             continue
+        if allow_soft_omega_adjuvants and canonical in _ROUTE_OMEGA_SOFT_ADJUNCT_CANONICALS:
+            continue
         return True
     return False
+
+
+def _route_has_omega_taxonomy_with_trustworthy_epa_dha_panel(product: Dict[str, Any]) -> bool:
+    if _primary_type(product) != "omega_3":
+        return False
+    if not _route_has_any_epa_dha_row(product):
+        return False
+    if _route_has_non_omega_product_level_evidence(product):
+        return False
+    return not _route_has_non_omega_positive_scorable_panel(
+        product,
+        allow_soft_omega_adjuvants=True,
+    )
 
 
 def _route_probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
@@ -2269,7 +2329,7 @@ def _route_product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
     explicit EPA/DHA token — plant 'omega-3' (ALA), which must route generic even
     if a panel row was mis-canonicalized to epa/dha/fish_oil upstream."""
     parts = [_route_product_label_text(product)]
-    for row in _route_scoring_rows(product):
+    for row in _route_rows(product):
         if isinstance(row, dict):
             parts.append(_row_source_text(row))
     probe = {"name": " ".join(p for p in parts if p)}
@@ -2289,6 +2349,12 @@ def _route_is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     if _route_product_lacks_epa_dha_identity(product):
         return False
     if _route_has_primary_omega_panel(product):
+        return True
+    # A confident omega_3 taxonomy with a trustworthy EPA/DHA row can still be
+    # omega when companion fatty acids (omega-6/9, GLA, DPA) dilute EPA/DHA below
+    # the primary-panel count gate. Broad non-omega stacks with incidental DHA
+    # stay generic via the non-omega-panel check inside this predicate.
+    if _route_has_omega_taxonomy_with_trustworthy_epa_dha_panel(product):
         return True
     if _ROUTE_OMEGA_369_RE.search(name_text or "") and not _route_has_any_epa_dha_row(product):
         return False
