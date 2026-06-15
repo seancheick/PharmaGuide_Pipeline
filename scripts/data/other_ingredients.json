@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-15",
-    "total_entries": 693,
+    "total_entries": 694,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -176,6 +176,7 @@
         "arabic gum",
         "e414",
         "gum acacia",
+        "gum acacia fiber",
         "gum arabic"
       ],
       "category": "filler",
@@ -6103,7 +6104,9 @@
       "id": "NHA_EGG_ALBUMIN",
       "standard_name": "Egg Albumin",
       "aliases": [
-        "egg albumin"
+        "egg albumin",
+        "egg white",
+        "egg whites"
       ],
       "category": "filler",
       "is_additive": false,
@@ -11983,6 +11986,7 @@
         "Mono-di-acyglycerol",
         "Diglyceride",
         "Mono & Di-Glycerides",
+        "Palm Oil Glycerides",
         "polyglycerol fatty acid ester"
       ],
       "category": "emulsifier",
@@ -12543,6 +12547,7 @@
         "fruit and vegetable concentrate",
         "fruit and vegetable juice color concentrates",
         "fruit and vegetable juice colors",
+        "fruit blend color",
         "fruit extracts for color",
         "grape color extract",
         "natural caramel colour",
@@ -12560,6 +12565,7 @@
         "red radish color",
         "safflower lemon extract",
         "spirulina blue",
+        "vegetable blend color",
         "vegetable colors",
         "vegetable juice colors",
         "violet",
@@ -16056,6 +16062,7 @@
       "standard_name": "PreforPro",
       "aliases": [
         "preforpro",
+        "PreforPro Prebiotic Blend",
         "preforpro bacteriophage blend"
       ],
       "category": "filler",
@@ -16928,6 +16935,7 @@
         "saccharomyces cerevisiae",
         "saccharomyces cereviseiae",
         "Saccharomyces cerevisae",
+        "baker's yeast",
         "nutritional yeast",
         "yeast extract",
         "yeast extracts"
@@ -17266,7 +17274,8 @@
         "natural resin",
         "pharmaceutical glaze",
         "Shellac glaze",
-        "Aqueous Shellac"
+        "Aqueous Shellac",
+        "Dewaxed Bleached Shellac"
       ],
       "category": "coating",
       "is_additive": true,
@@ -17437,7 +17446,11 @@
       "standard_name": "Skim Milk Powder",
       "aliases": [
         "dried skim milk",
+        "non-fat dry milk",
+        "non-fat dried milk",
+        "non-fat milk powder",
         "nonfat dry milk",
+        "nonfat dried milk",
         "nonfat milk powder",
         "skim milk powder"
       ],
@@ -17893,6 +17906,59 @@
       ]
     },
     {
+      "id": "NHA_SODIUM_GLUCONATE",
+      "standard_name": "Sodium Gluconate",
+      "aliases": [
+        "sodium gluconate",
+        "sodium d-gluconate",
+        "gluconate sodium",
+        "monosodium gluconate",
+        "d-gluconic acid monosodium salt",
+        "d-gluconic acid, sodium salt"
+      ],
+      "category": "ph_regulator",
+      "is_additive": true,
+      "additive_type": "acidity_regulator",
+      "allergen": false,
+      "notes": "Sodium salt of gluconic acid used as a sequestrant, chelator, and pH-control excipient in food and supplement formulations. Identity verified via live GSRS, PubChem, and UMLS lookup on 2026-06-15.",
+      "common_uses": [
+        "pH adjustment",
+        "chelating agent",
+        "sequestrant"
+      ],
+      "last_updated": "2026-06-15",
+      "external_ids": {
+        "unii": "R6Q3791S76",
+        "cas": "527-07-1",
+        "pubchem_cid": 23672301
+      },
+      "rxcui": "56476",
+      "gsrs": {
+        "substance_name": "Sodium gluconate",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 1,
+        "dsld_info_raw": "Dietary Supplement Label Database|other|Sodium Gluconate | 3141 (Number of products:1)",
+        "active_moiety": {
+          "name": "Gluconic Acid",
+          "unii": "R4R8J0Q44B"
+        },
+        "salt_parents": [
+          {
+            "type": "PARENT->SALT/SOLVATE",
+            "name": "Gluconic Acid",
+            "unii": "R4R8J0Q44B"
+          }
+        ],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "cui": "C0142853",
+      "functional_roles": [
+        "ph_regulator"
+      ]
+    },
+    {
       "id": "NHA_CHLOROPHYLLIN",
       "standard_name": "Sodium Magnesium Chlorophyllin",
       "aliases": [
@@ -18107,8 +18173,10 @@
       "standard_name": "Sodium Starch Glycolate",
       "aliases": [
         "carboxymethyl starch",
+        "carboxymethylstarch sodium",
         "explotab",
         "sodium carboxymethyl starch",
+        "sodium carboxymethylstarch",
         "sodium starch glyconate",
         "SSG"
       ],
@@ -18589,6 +18657,7 @@
       "id": "PII_SOY_BEAN_OIL",
       "standard_name": "Soy Bean Oil",
       "aliases": [
+        "hydrogenated soy oil",
         "hydrogenated soybean oil",
         "non-GMO Soybean Oil",
         "refined Soybean Oil",
@@ -19115,6 +19184,7 @@
         "stevia rebaudiana leaf",
         "steviol glycoside",
         "steviol glycosides",
+        "high-purity steviol glycosides",
         "stevioside",
         "truvia",
         "stevia rebaudioside a",
@@ -21574,6 +21644,7 @@
         "hypo-allergenic plant fiber",
         "hypoallergenic plant fiber",
         "plant fiber",
+        "soluble vegetable fiber",
         "vegetable fiber"
       ],
       "category": "filler",
@@ -21981,7 +22052,10 @@
         "multivitamin premix",
         "vitamin blend",
         "vitamin mix",
-        "Vitamin premix"
+        "Vitamin premix",
+        "vitamin and mineral blend",
+        "vitamin & mineral blend",
+        "vitamin/mineral blend"
       ],
       "category": "active_pending_relocation",
       "is_additive": true,

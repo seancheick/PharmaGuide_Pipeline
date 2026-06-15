@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12095,
+      "total_form_aliases": 12111,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,7 +60,7 @@
       "proteins": 16,
       "vitamins": 23
     },
-    "schema_version": "5.4.7",
+    "schema_version": "5.4.8",
     "last_updated": "2026-06-15",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -1644,6 +1644,17 @@
           "Added LC-Plasma / IMMUSE label aliases to lactococcus_lactis::lactococcus lactis (unspecified), keeping the identity species-specific rather than broad probiotics."
         ],
         "regression_tests": "scripts/tests/test_clean_unmapped_alias_regressions.py"
+      },
+      "5.4.8": {
+        "date": "2026-06-15",
+        "audit": "Unmapped active identity alias cleanup for beta readiness",
+        "changes": [
+          "Added exact Ginkgo Flavone Glycosides label alias to ginkgo::ginkgo biloba extract (24% flavone glycosides).",
+          "Added Supro/Solae soy protein isolate label aliases to protein::protein (unspecified), matching the existing soy protein isolate routing.",
+          "Added micronized/free-form BCAA label aliases to branched_chain_amino_acids::branched chain amino acids (standard).",
+          "Added deterministic aliases for soluble vegetable fiber, B. animalis lactis BL-04/BI-07 abbreviation labels, Lignamax flaxseed fiber, and Himematsutake Mushroom."
+        ],
+        "regression_tests": "scripts/tests/test_clean_unmapped_alias_regressions.py -k 2026_06_15_unmapped"
       }
     },
     "category_enum": [
@@ -20268,6 +20279,7 @@
           "european ginkgo biloba extract",
           "flavonoid glycosides",
           "ginkgo flavonol glycosides",
+          "ginkgo flavone glycosides",
           "gingko biloba extract"
         ],
         "dosage_importance": 1.0,
@@ -29362,6 +29374,7 @@
           "fiber",
           "dietary fiber",
           "soluble fiber",
+          "soluble vegetable fiber",
           "fiber blend",
           "total dietary fiber",
           "Soluable Fiber"
@@ -32114,6 +32127,9 @@
           "soy protein isolate protein",
           "soy peptide",
           "soy peptides",
+          "Supro Soy Protein Isolate",
+          "Supro(R) Brand Soy Protein Isolate",
+          "Solae(R) Brand Isolated Soy Protein",
           "egg white albumin"
         ],
         "dosage_importance": 1.0,
@@ -37305,6 +37321,8 @@
           "b. lactis bl-04",
           "bl-04",
           "bifido bl-04",
+          "B. animalis lactis BL-04",
+          "B. animalis subsp. lactis BL-04",
           "Bifidobacterium lactis (Bl-04)",
           "Bifidobacterium animalis lactis BL-04",
           "Bifidobacterium animalis lactis Bi-04",
@@ -37334,6 +37352,8 @@
           "Bifidobacterium lactis (BI07)",
           "bifido bi-07",
           "B. lactis Bi-07",
+          "B. animalis lactis BI-07",
+          "B. animalis subsp. lactis BI-07",
           "Bi-07",
           "BI07",
           "Bifidobacterium animalis Bi-07",
@@ -39063,7 +39083,15 @@
         "score": 10,
         "absorption": "BCAAs; LAT1/B0AT1 small-intestine transport; class F~90% as free or peptide-bound",
         "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Specify ratio (2:1:1 or 4:1:1) for accurate scoring. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
-        "aliases": ["Branch Chain Amino Acids", "Branched Chain Amino Acids"],
+        "aliases": [
+          "Branch Chain Amino Acids",
+          "Branched Chain Amino Acids",
+          "Micronized BCAA",
+          "Micronized BCAAs",
+          "Free-form BCAA's",
+          "free-form BCAAs",
+          "free-form BCAA’s"
+        ],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.9,
@@ -42964,6 +42992,7 @@
           "flaxseed hulls extract",
           "flaxseed protein",
           "ground flax",
+          "Lignamax Lignan Flaxseed Fiber",
           "flax seed particulate lignans"
         ],
         "absorption_structured": {
@@ -50658,6 +50687,7 @@
           "agaricus blazei",
           "agaricus blazei murill",
           "himematsutake",
+          "Himematsutake Mushroom",
           "agaricus brasiliensis",
           "blazei mushroom",
           "agaricus blazei murill mushroom",
