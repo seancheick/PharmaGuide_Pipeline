@@ -107,14 +107,13 @@ def test_creatine_variants_route_to_sports() -> None:
         assert class_for_product(product) == "sports", canonical
 
 
-def test_pre_workout_without_sports_dose_anchor_routes_generic() -> None:
-    """Pre-workout intent alone is not enough for sports dose scoring.
-
-    Products like Thorne Pre-Workout Elite can contain mapped performance
-    actives (Alpha-GPC, ATP, stimulant botanicals) but no creatine/protein/
-    BCAA/EAA/HMB/beta-alanine/citrulline anchor. Those should still score,
-    but through generic + transparency/safety policy rather than becoming
-    NOT_SCORED in the sports completeness gate.
+def test_pre_workout_taxonomy_with_alpha_gpc_atp_routes_to_sports() -> None:
+    """A confident pre_workout taxonomy routes to sports by IDENTITY even when the
+    actives are non-classic (alpha-GPC / ATP / stimulant botanicals) with no
+    creatine/protein/BCAA/EAA/HMB anchor. The completeness gate now fails OPEN for
+    these (soft debt, not NOT_SCORED) and the dose rubric credits the disclosed
+    alpha-GPC/ATP, so routing them sports is net-positive (Thorne Pre-Workout Elite
+    323126: generic 50.5 -> sports 58.5).
     """
     product = _product(
         primary_type="pre_workout",
@@ -127,26 +126,22 @@ def test_pre_workout_without_sports_dose_anchor_routes_generic() -> None:
         ],
     )
 
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "sports"
 
 
-def test_stale_native_sports_classification_without_anchor_is_ignored() -> None:
+def test_stale_native_sports_classification_without_identity_is_ignored() -> None:
     """Native classification cannot pin an obsolete sports route.
 
-    Fresh enriched artifacts can carry a persisted native route. Compatibility
-    scoring must still reject that route when it no longer matches the current
-    derived contract; otherwise old pre-workout blobs stay NOT_SCORED until a
-    full re-enrich.
+    A product with no sports identity or name (here a plain vitamin C) must route
+    generic even when a persisted native enrichment blob still claims sports;
+    otherwise stale blobs would mis-score until a full re-enrich. (The Thorne
+    pre-workout shape now legitimately routes sports via the derived contract, so
+    this guard uses a non-sports product to isolate the native-override behavior.)
     """
     product = _product(
-        primary_type="pre_workout",
-        name="Pre-Workout Elite Citrus Berry Flavored",
-        rows=[
-            _row("alpha_gpc", 600, "mg"),
-            _row("adenosine_triphosphate", 450, "mg"),
-            _row("guayusa_leaf", 350, "mg"),
-            _row("mango_leaf_extract", 140, "mg"),
-        ],
+        primary_type="single_nutrient",
+        name="Vitamin C 500 mg Ascorbic Acid",
+        rows=[_row("vitamin_c", 500, "mg")],
     )
     product["product_scoring_classification"] = {
         "classification_schema_version": SCORING_CLASSIFICATION_SCHEMA_VERSION,
@@ -161,6 +156,52 @@ def test_stale_native_sports_classification_without_anchor_is_ignored() -> None:
     }
 
     assert class_for_product(product) == "generic"
+
+
+def test_creatine_name_with_undisclosed_blend_routes_to_sports() -> None:
+    """GNC Amplified Creatine XXX (18538): the name says creatine but the actives sit
+    in a proprietary "Micronized Creatine Matrix Blend" with no disclosed creatine
+    canonical (only arginine/glutamine blend anchors). The unambiguous creatine name
+    routes it sports by identity; the opaque blend then correctly craters the dose
+    dimension (transparency penalty), not the route.
+    """
+    product = _product(
+        primary_type="general_supplement",
+        name="Amplified Creatine XXX Blue Raspberry",
+        rows=[_row("l_arginine", 10, "g"), _row("l_glutamine", 7, "g")],
+    )
+
+    assert class_for_product(product) == "sports"
+
+
+def test_bcaa_plus_name_with_aggregate_routes_to_sports() -> None:
+    """Nutricost BCAA+ (306183/307773): an unambiguous BCAA product whose BCAAs are
+    disclosed as a single branched_chain_amino_acids aggregate (7 g) rather than the
+    leu/iso/val trio. The BCAA name + aggregate identity route it sports.
+    """
+    product = _product(
+        primary_type="amino_acid",
+        name="BCAA+ Peach Mango",
+        rows=[_row("branched_chain_amino_acids", 7000, "mg"), _row("potassium", 92, "mg")],
+    )
+
+    assert class_for_product(product) == "sports"
+
+
+def test_carnitine_with_bcaa_routes_to_sports_and_is_dose_proxied() -> None:
+    """GNC Carnitine 1000 + BCAA (67304): a fitness product with a 'BCAA' name token
+    routes sports. Its L-carnitine primary has no sports dose band, but the sports
+    dose dimension falls back to the generic dose-adequacy proxy (see
+    test_offlist_dominant_active_uses_generic_dose_proxy) rather than discarding it,
+    so routing sports is net-neutral. No carnitine routing guard is needed.
+    """
+    product = _product(
+        primary_type="amino_acid",
+        name="Carnitine 1000 + BCAA Orange Cream",
+        rows=[_row("l_carnitine", 1, "Gram(s)")],
+    )
+
+    assert class_for_product(product) == "sports"
 
 
 def test_whey_protein_powder_routes_to_sports() -> None:

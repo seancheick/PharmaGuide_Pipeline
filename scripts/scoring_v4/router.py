@@ -1040,6 +1040,21 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     if _has_sports_primary_dose_evidence(product):
         return True
 
+    # Parity with scoring_input_contract._route_is_sports_class: route by sports
+    # IDENTITY (confident pre_workout taxonomy, or an unambiguous sports-hero name)
+    # even when ergogenic actives are in a proprietary blend / aggregate. The
+    # NAC/theanine/sleep/collagen exclusion applies; the name path must not hijack a
+    # genuine multivitamin. Parts 2-3 make this net-positive (was reverted when
+    # routing-only).
+    if not _SPORTS_NAME_EXCLUSION_RE.search(name_text or ""):
+        if primary_type == "pre_workout":
+            return True
+        if (
+            _SPORTS_PREWORKOUT_RE.search(name_text or "")
+            or _SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or "")
+        ) and not _is_multivitamin_route_eligible(product, name_text):
+            return True
+
     canonicals = _positive_canonicals(product)
     lowered = name_text or ""
 

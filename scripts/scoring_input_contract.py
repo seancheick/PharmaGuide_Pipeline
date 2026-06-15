@@ -2602,6 +2602,23 @@ def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     if _route_has_sports_primary_dose_evidence(product):
         return True
 
+    # Route by sports IDENTITY, like omega: a confident pre_workout taxonomy, or an
+    # unambiguous sports-hero name (creatine / beta-alanine / citrulline / HMB / BCAA /
+    # EAA / pre-workout), is a sports product even when the ergogenic actives are
+    # undisclosed in a proprietary blend or listed only as an aggregate. The existing
+    # NAC/theanine/sleep/collagen exclusion still applies, and the name-only path must
+    # not hijack a genuine multivitamin. Parts 2-3 (gate fail-open + dose credit for
+    # disclosed non-classic actives) make this net-positive, which is why the earlier
+    # routing-only version was reverted.
+    if not _ROUTE_SPORTS_NAME_EXCLUSION_RE.search(name_text or ""):
+        if primary_type == "pre_workout":
+            return True
+        if (
+            _ROUTE_SPORTS_PREWORKOUT_RE.search(name_text or "")
+            or _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or "")
+        ) and not _route_is_multivitamin_eligible(product, name_text):
+            return True
+
     canonicals = _route_positive_canonicals(product)
     if canonicals & _ROUTE_SPORTS_PROTEIN_CANONICALS:
         return primary_type == "protein_powder" or bool(_ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""))
