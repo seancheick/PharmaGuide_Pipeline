@@ -55,6 +55,8 @@ if str(SCRIPTS_ROOT) not in sys.path:
 DEFAULT_PRODUCTS_ROOT = SCRIPTS_ROOT / "products"
 DEFAULT_OUT_DIR = SCRIPTS_ROOT / "api_audit" / "reports"
 
+from cert_resolver import CertRegistry, resolve  # noqa: E402
+
 
 # --- IO -----------------------------------------------------------------
 
@@ -91,9 +93,18 @@ def load_enriched_products(
 # --- Clustering ---------------------------------------------------------
 
 
-def build_clusters(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def build_clusters(
+    products: Iterable[Dict[str, Any]],
+    *,
+    registry: CertRegistry | None = None,
+) -> List[Dict[str, Any]]:
     """Return clusters of `needs_review` cert entries grouped by
-    (program, record_id). Returns a sorted list for stable output."""
+    (program, record_id). Returns a sorted list for stable output.
+
+    When a current registry is supplied, re-run the resolver before reporting
+    each embedded needs_review entry. This prevents stale enriched blobs from
+    keeping already-reviewed overrides in the triage queue.
+    """
     raw_groups: Dict[Tuple[str, str], Dict[str, Any]] = defaultdict(
         lambda: {
             "program": "",
@@ -115,6 +126,11 @@ def build_clusters(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 continue
             if entry.get("scope") != "needs_review":
                 continue
+            if registry is not None:
+                refreshed_entry = _refresh_needs_review_entry(product, entry, registry)
+                if refreshed_entry is None:
+                    continue
+                entry = refreshed_entry
             program = str(entry.get("program") or "").strip()
             record_id = str(entry.get("record_id") or "").strip()
             if not program and not record_id:
@@ -166,6 +182,42 @@ def build_clusters(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
         c["member_count"] = len(c["members"])
         c["suggested_action"] = _aggregate_cluster_action(c["members"])
     return clusters
+
+
+def _refresh_needs_review_entry(
+    product: Dict[str, Any],
+    entry: Dict[str, Any],
+    registry: CertRegistry,
+) -> Dict[str, Any] | None:
+    """Return the current needs_review entry for a stale embedded candidate.
+
+    The enriched artifact is only a snapshot. The resolver + override file are
+    the current source of truth for whether a candidate still needs review.
+    """
+    brand_name = product.get("brand_name") or product.get("brandName") or ""
+    product_name = product.get("product_name") or product.get("fullName") or product.get("name") or ""
+    program = str(entry.get("program") or "").strip()
+    if not brand_name or not product_name or not program:
+        return entry
+
+    dsld_id = str(product.get("dsld_id") or product.get("id") or "") or None
+    current = resolve(
+        str(brand_name),
+        str(product_name),
+        [program],
+        registry,
+        dsld_id=dsld_id,
+    )
+    if not current or current[0].scope != "needs_review":
+        return None
+
+    refreshed = current[0].to_dict()
+    # Preserve the embedded registry-row context if the current resolver carries
+    # a sparse needs_review response.
+    for key in ("record_id", "matched_brand", "matched_product", "match_confidence"):
+        if not refreshed.get(key) and entry.get(key):
+            refreshed[key] = entry.get(key)
+    return refreshed
 
 
 def _aggregate_cluster_action(members: List[Dict[str, Any]]) -> str:
@@ -352,6 +404,8 @@ def summarize(clusters: List[Dict[str, Any]]) -> Dict[str, Any]:
 def write_reports(
     clusters: List[Dict[str, Any]],
     out_dir: Path,
+    *,
+    source: str = "verified_cert_programs[scope=needs_review]",
 ) -> Tuple[Path, Path]:
     out_dir.mkdir(parents=True, exist_ok=True)
     summary = summarize(clusters)
@@ -359,7 +413,7 @@ def write_reports(
         "metadata": {
             "generated_at": datetime.now(timezone.utc).isoformat(),
             "phase": "P1.7.1_cert_needs_review_cluster",
-            "source": "verified_cert_programs[scope=needs_review]",
+            "source": source,
         },
         "summary": summary,
         "clusters": clusters,
@@ -435,14 +489,25 @@ def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         "--limit", type=int, default=None,
         help="Cap number of products read (useful for testing).",
     )
+    parser.add_argument(
+        "--no-current-resolver-refresh",
+        action="store_true",
+        help="Report embedded needs_review entries without re-checking current registry/overrides.",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: List[str] | None = None) -> int:
     args = _parse_args(argv)
     products = list(load_enriched_products(args.products_root, limit=args.limit))
-    clusters = build_clusters(products)
-    json_path, md_path = write_reports(clusters, args.out_dir)
+    registry = None if args.no_current_resolver_refresh else CertRegistry.load()
+    clusters = build_clusters(products, registry=registry)
+    source = (
+        "verified_cert_programs[scope=needs_review] refreshed through current cert_resolver"
+        if registry is not None
+        else "verified_cert_programs[scope=needs_review]"
+    )
+    json_path, md_path = write_reports(clusters, args.out_dir, source=source)
     summary = summarize(clusters)
     print(f"Inspected {len(products)} products → {summary['cluster_count']} clusters")
     print(f"  json: {json_path}")

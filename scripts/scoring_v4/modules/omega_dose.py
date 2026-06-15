@@ -79,6 +79,20 @@ _UNIT_TO_MG: Dict[str, float] = {
 
 
 _OMEGA_CANONICALS = {"epa", "dha", "epa_dha"}
+_EPA_DHA_SOURCE_RE = re.compile(
+    r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
+    re.IGNORECASE,
+)
+_NON_EPA_DHA_SOURCE_RE = re.compile(
+    r"\b("
+    r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
+    r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
+    r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
+    r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
+    r"fiber|fibre|seed\s+blend|super\s+seed"
+    r")\b",
+    re.IGNORECASE,
+)
 
 
 def _load_rubric() -> Dict[str, Any]:
@@ -128,6 +142,61 @@ def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     return get_active_ingredients(product)
 
 
+def _row_source_text(row: Dict[str, Any]) -> str:
+    return " ".join(
+        str(row.get(key) or "")
+        for key in (
+            "name",
+            "raw_source_text",
+            "display_label",
+            "normalized_key",
+            "parent_key",
+            "matched_candidate",
+        )
+    )
+
+
+def _product_source_text(product: Dict[str, Any]) -> str:
+    row_text = " ".join(_row_source_text(row) for row in _ingredient_rows(product))
+    label_text = " ".join(
+        str(product.get(key) or "")
+        for key in ("product_name", "fullName", "brand_name", "bundleName")
+    )
+    return f"{label_text} {row_text}".strip()
+
+
+# Marine EPA/DHA sources — the only oils that legitimately carry EPA/DHA. A
+# product whose source is an explicit non-EPA/DHA plant oil (flax/ALA/chia/hemp/
+# fiber/seed/MCT/coconut) with NO marine source and NO explicit EPA/DHA token has
+# no real EPA/DHA, even if a row was mis-canonicalized to epa/dha/fish_oil.
+_MARINE_OMEGA_SOURCE_RE = re.compile(
+    r"\b("
+    r"fish\s*oil|fish\s+body\s+oil|salmon|anchovy|sardine|mackerel|menhaden|"
+    r"herring|cod\s+liver|krill|algae?\s*oil|algal|calamari|squid|marine"
+    r")\b",
+    re.IGNORECASE,
+)
+
+
+def _product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
+    """True when the product is an explicit non-EPA/DHA source (plant/seed/MCT)
+    with no marine source and no explicit EPA/DHA token — i.e. ALA/plant 'omega-3'
+    that must NOT receive marine EPA/DHA dose credit."""
+    src = _product_source_text(product)
+    return bool(
+        _NON_EPA_DHA_SOURCE_RE.search(src)
+        and not _EPA_DHA_SOURCE_RE.search(src)
+        and not _MARINE_OMEGA_SOURCE_RE.search(src)
+    )
+
+
+def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
+    text = _row_source_text(row)
+    if _NON_EPA_DHA_SOURCE_RE.search(text) and not _EPA_DHA_SOURCE_RE.search(text):
+        return False
+    return True
+
+
 def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, float]:
     """Return (epa_mg_per_serving, dha_mg_per_serving, combined_mg_per_serving).
 
@@ -139,9 +208,17 @@ def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, flo
     epa_total = 0.0
     dha_total = 0.0
     combined_total = 0.0
+    # Product-level guard FIRST: an explicit plant/seed/MCT 'omega-3' (ALA) with
+    # no marine source carries no real EPA/DHA, even if a row was mis-canonicalized
+    # to epa/dha. This catches "Organic Flax Oil" / "Raw Organic Fiber" / "Super
+    # Seed" whose mis-canonicalized rows pass the row-level text check.
+    if _product_lacks_epa_dha_identity(product):
+        return 0.0, 0.0, 0.0
     for ing in _ingredient_rows(product):
         canon = str(ing.get("canonical_id") or "").strip().lower()
         if canon not in _OMEGA_CANONICALS:
+            continue
+        if not _trustworthy_epa_dha_row(ing):
             continue
         # Try all the dose field names the enricher emits.
         mg: Optional[float] = None
@@ -158,6 +235,9 @@ def _sum_epa_dha_per_serving(product: Dict[str, Any]) -> Tuple[float, float, flo
         elif canon == "epa_dha":
             combined_total += mg
     if epa_total <= 0 and dha_total <= 0 and combined_total <= 0:
+        source_text = _product_source_text(product)
+        if _NON_EPA_DHA_SOURCE_RE.search(source_text) and not _EPA_DHA_SOURCE_RE.search(source_text):
+            return 0.0, 0.0, 0.0
         detail = _safe_dict(product.get("omega3_detail"))
         epa_total = _as_float(detail.get("epa_mg_per_unit"), 0.0)
         dha_total = _as_float(detail.get("dha_mg_per_unit"), 0.0)

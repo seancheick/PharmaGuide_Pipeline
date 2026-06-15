@@ -101,6 +101,7 @@ PRODUCTS_CORE_COLUMNS = [
     "has_harmful_additives",
     "has_allergen_risks",
     "blocking_reason",
+    "safety_signal_reason",
     "is_probiotic",
     "contains_sugar",
     "contains_sodium",
@@ -1092,6 +1093,18 @@ def test_core_row_honors_scorer_emitted_high_risk_blocking_reason():
     )
 
 
+def test_core_row_exports_scored_caution_safety_signal_reason_separately():
+    enriched = make_enriched()
+    scored = make_scored(verdict="CAUTION")
+    scored["safety_signal_reason"] = "B0_HIGH_RISK_SUBSTANCE"
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-03-17T19:00:00Z"))
+
+    assert row["verdict"] == "CAUTION"
+    assert row["blocking_reason"] is None
+    assert row["safety_signal_reason"] == "B0_HIGH_RISK_SUBSTANCE"
+
+
 def test_detail_blob_includes_optional_rda_and_evidence_sections_when_present():
     blob = build_detail_blob(make_enriched(), make_scored())
 
@@ -2004,9 +2017,9 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_108_columns():
-    # Tuple emitted by build_core_row must match the 108-column schema
-    # (v2.0.0 + 6 v4 pillar component columns).
+def test_final_db_has_109_columns():
+    # Tuple emitted by build_core_row must match the 109-column schema
+    # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -2022,8 +2035,8 @@ def test_final_db_has_108_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 108
-    assert len(PRODUCTS_CORE_COLUMNS) == 108
+    assert len(row) == 109
+    assert len(PRODUCTS_CORE_COLUMNS) == 109
 
 
 def test_products_core_exports_production_v4_columns():
@@ -2153,10 +2166,10 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_108(self):
+    def test_core_row_column_count_is_109(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 108
-        assert CORE_COLUMN_COUNT == 108
+        assert len(row) == 109
+        assert CORE_COLUMN_COUNT == 109
 
     def test_schema_version_bumped_to_200(self):
         assert EXPORT_SCHEMA_VERSION == "2.0.0"
@@ -2359,6 +2372,69 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
         assert "v4_score_explanation" in blob
         assert blob["raw_score_v4_100"] == 88.0
+
+
+def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypatch):
+    """Contract: build_final_db projects every quality_pillars_v4 score into the
+    products_core pillar_*_v4 columns for scored products (each within [0, max]),
+    and leaves all six NULL for suppressed products.
+
+    Regression guard for the 2026-06-14 stale-DB incident: the shipped DB was
+    built *before* the pillar-projection commit (6f02c4f8) and went out with the
+    six pillar columns absent — invisible to the dashboard's six-pillar audits.
+    Selecting the pillar columns below also fails loudly ("no such column") if a
+    future schema change drops them, so this guards both projection and schema.
+    """
+    pillar_cols = [
+        "pillar_formulation_v4", "pillar_dose_v4", "pillar_evidence_v4",
+        "pillar_transparency_v4", "pillar_verification_v4", "pillar_safety_hygiene_v4",
+    ]
+    pillar_max = dict(zip(pillar_cols, [20, 20, 20, 15, 15, 10]))
+
+    e1 = make_enriched()  # dsld_id 999 — scored
+    e2 = make_enriched(); e2["dsld_id"] = "888"; e2["product_name"] = "Blocked P"
+    e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"
+    s1 = make_scored(); s1["dsld_id"] = "999"
+    s2 = make_scored(); s2["dsld_id"] = "888"
+
+    # The real scorer always emits all six pillars for a scored product; the
+    # shared _canned_v4 only carries two, so build a six-pillar result here.
+    scored_v4 = _canned_v4(status="scored", quality_100=88.0)
+    scored_v4["quality_pillars_v4"] = {
+        "formulation": {"score": 18.0, "max": 20},
+        "dose": {"score": 16.0, "max": 20},
+        "evidence": {"score": 10.0, "max": 20},
+        "transparency": {"score": 12.0, "max": 15},
+        "verification": {"score": 9.0, "max": 15},
+        "safety_hygiene": {"score": 10.0, "max": 10},
+    }
+    _patch_v4_by_id(monkeypatch, {
+        "999": scored_v4,
+        "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
+                          tier=None, safety_verdict="BLOCKED",
+                          blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
+    })
+
+    with tempfile.TemporaryDirectory() as tmp:
+        _result, out = _run_build(tmp, [e1, e2], [s1, s2])
+        rows = _core_rows(out, ["dsld_id"] + pillar_cols)
+
+        # Scored: all six columns populated, each within [0, max], matching scores.
+        scored = rows["999"]
+        assert scored["pillar_formulation_v4"] == 18.0
+        assert scored["pillar_dose_v4"] == 16.0
+        assert scored["pillar_evidence_v4"] == 10.0
+        assert scored["pillar_transparency_v4"] == 12.0
+        assert scored["pillar_verification_v4"] == 9.0
+        assert scored["pillar_safety_hygiene_v4"] == 10.0
+        for col in pillar_cols:
+            assert scored[col] is not None, f"scored product missing {col}"
+            assert 0 <= scored[col] <= pillar_max[col], f"{col}={scored[col]} out of [0,{pillar_max[col]}]"
+
+        # Suppressed: no _v4_pillars overlaid → every pillar column NULL.
+        blocked = rows["888"]
+        for col in pillar_cols:
+            assert blocked[col] is None, f"suppressed product should have NULL {col}, got {blocked[col]}"
 
 
 def test_v4_dedup_keeps_scored_over_blocked_same_upc(monkeypatch):

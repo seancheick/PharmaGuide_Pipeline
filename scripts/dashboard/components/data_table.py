@@ -3,6 +3,31 @@ from __future__ import annotations
 import streamlit as st
 import pandas as pd
 
+
+def arrow_safe(df: pd.DataFrame) -> pd.DataFrame:
+    """Make a display DataFrame serializable by Streamlit/pyarrow.
+
+    Blob-derived tables (e.g. the Inspector's ingredient rows) have object
+    columns with mixed types across products — `is_additive` is bool on some
+    rows and absent (NaN) on others, other columns mix int/bool or carry
+    lists/dicts. pyarrow then raises e.g. 'Expected integer, got bool' and
+    Streamlit logs a traceback before falling back. Stringifying object columns
+    (None/NaN -> "") sidesteps it entirely. Display-only; numeric/bool dtype
+    columns are left untouched so they still render natively.
+    """
+    out = df.copy()
+    for col in out.columns:
+        if out[col].dtype == object:
+            def _cell(v):
+                if v is None:
+                    return ""
+                if isinstance(v, float) and pd.isna(v):
+                    return ""
+                return v if isinstance(v, str) else str(v)
+            out[col] = out[col].map(_cell)
+    return out
+
+
 def data_table(
     df: pd.DataFrame, 
     color_columns: dict[str, dict[str, str]] | None = None, 
@@ -17,8 +42,8 @@ def data_table(
         st.info("No records to display")
         return
 
-    display_df = df.head(max_rows)
-    
+    display_df = arrow_safe(df.head(max_rows))
+
     if len(df) > max_rows:
         st.caption(f"Showing top {max_rows} of {len(df)} results")
         

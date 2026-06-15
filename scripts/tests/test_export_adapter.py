@@ -30,6 +30,7 @@ def _canned_v4(
     tier="Strong",
     safety_verdict=None,
     blocking_reason=None,
+    safety_signals=None,
     suppressed_reason=None,
 ):
     """A minimal but structurally-faithful v4 result."""
@@ -52,7 +53,7 @@ def _canned_v4(
                 "verdict": safety_verdict,
                 "blocking_reason": blocking_reason,
                 "matched_substance": None,
-                "safety_signals": [],
+                "safety_signals": safety_signals or [],
                 "needs_review": False,
                 "short_circuits_scoring": verdict in ("BLOCKED", "UNSAFE"),
                 "clean_label_hits": [],
@@ -167,7 +168,7 @@ def test_caution_keeps_score(monkeypatch):
     _patch(
         monkeypatch,
         _canned_v4(status="scored", quality_100=72.0, verdict="CAUTION", tier="Acceptable",
-                   safety_verdict="CAUTION"),
+                   safety_verdict="CAUTION", safety_signals=["B0_HIGH_RISK_SUBSTANCE"]),
     )
     out = overlay_v4_scored({"dsld_id": "4"}, _v3_scored())
 
@@ -175,6 +176,7 @@ def test_caution_keeps_score(monkeypatch):
     assert out["safety_verdict"] == "CAUTION"
     assert out["score_100_equivalent"] == 72.0
     assert out["_v4_quality_status"] == "scored"
+    assert out["_v4_safety_signal_reason"] == "B0_HIGH_RISK_SUBSTANCE"
 
 
 def test_inputs_are_never_mutated(monkeypatch):

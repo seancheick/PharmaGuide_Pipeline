@@ -8665,7 +8665,11 @@
       "standard_name": "Glycine",
       "aliases": [
         "aminoacetic acid",
-        "glycine powder"
+        "glycine powder",
+        "l-glycine",
+        "l glycine",
+        "dl-glycine",
+        "dl glycine"
       ],
       "category": "sleep_mood",
       "evidence_level": "ingredient-human",

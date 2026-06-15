@@ -1596,6 +1596,7 @@ CREATE TABLE IF NOT EXISTS products_core (
     has_harmful_additives         INTEGER DEFAULT 0,
     has_allergen_risks            INTEGER DEFAULT 0,
     blocking_reason               TEXT,
+    safety_signal_reason          TEXT,
 
     is_probiotic                  INTEGER DEFAULT 0,
     contains_sugar                INTEGER DEFAULT 0,
@@ -4890,6 +4891,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "confidence": scored.get("_v4_confidence"),
             "config_fingerprint": scored.get("_v4_config_fingerprint"),
             "suppressed_reason": scored.get("_v4_suppressed_reason"),
+            "safety_signal_reason": scored.get("_v4_safety_signal_reason"),
         }
         blob["v4_score_explanation"] = _build_v4_score_explanation(pillars)
 
@@ -5884,6 +5886,11 @@ def build_core_row(
 
     derived_blocking = derive_blocking_reason(enriched, scored)
     scored_blocking = safe_str(scored.get("blocking_reason"))
+    safety_signal_reason = (
+        safe_str(effective_scored.get("safety_signal_reason"))
+        or safe_str(effective_scored.get("_v4_safety_signal_reason"))
+        or None
+    )
     stale_safety_blocking = (
         scored_blocking in {"banned_ingredient", "recalled_ingredient", "high_risk_ingredient"}
         and derived_blocking is None
@@ -6025,6 +6032,7 @@ def build_core_row(
         safe_bool(safe_list(enriched.get("harmful_additives"))),
         safe_bool(safe_list(enriched.get("allergen_hits"))),
         blocking,
+        safety_signal_reason,
         # Quick info
         safe_bool(safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product")),
         safe_bool(ds.get("contains_sugar")),
@@ -6085,7 +6093,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 108  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols, +6 v4 pillar cols)
+CORE_COLUMN_COUNT = 109  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols, +6 v4 pillar cols, + safety signal reason)
 
 
 # ─── Reference Data Loader ───

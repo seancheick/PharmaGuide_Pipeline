@@ -294,6 +294,62 @@ class TestClaimValidationLogic:
             for ev in cert_data["evidence_based"]["batch_traceability"]
         )
 
+    def test_lab_report_available_by_lot_scores_as_coa(self, enricher):
+        """Actionable lab-report wording should feed the COA traceability path."""
+        enricher._compile_patterns()
+        product = {
+            "brandName": "Traceable Brand",
+            "fullName": "Traceable Magnesium",
+            "statements": [
+                {
+                    "notes": (
+                        "Third-party lab reports are available by lot number "
+                        "on our website."
+                    )
+                }
+            ],
+            "claims": [],
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+        }
+
+        with patch.object(enricher, "_resolve_verified_cert_programs", return_value=[]):
+            cert_data = enricher._collect_certification_data(product)
+
+        trace = cert_data["batch_traceability"]
+        assert trace["has_coa"] is True
+        assert trace["qualifies"] is True
+        assert any(
+            ev["rule_id"] == "TRACE_COA" and ev["score_eligible"] is True
+            for ev in cert_data["evidence_based"]["batch_traceability"]
+        )
+
+    def test_lot_number_test_result_lookup_scores_as_batch_lookup(self, enricher):
+        """Lot-number result lookup should score as traceability without COA text."""
+        enricher._compile_patterns()
+        product = {
+            "brandName": "Traceable Brand",
+            "fullName": "Traceable Magnesium",
+            "statements": [
+                {"notes": "Enter your lot number online to view test results."}
+            ],
+            "claims": [],
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+        }
+
+        with patch.object(enricher, "_resolve_verified_cert_programs", return_value=[]):
+            cert_data = enricher._collect_certification_data(product)
+
+        trace = cert_data["batch_traceability"]
+        assert trace["has_coa"] is False
+        assert trace["has_batch_lookup"] is True
+        assert trace["qualifies"] is True
+        assert any(
+            ev["rule_id"] == "TRACE_TRANSPARENCY" and ev["score_eligible"] is True
+            for ev in cert_data["evidence_based"]["batch_traceability"]
+        )
+
     def test_rules_db_batch_tested_weak_signal_does_not_score_as_lookup(self, enricher):
         """Batch-tested claims without lookup/COA remain display-only weak evidence."""
         enricher._compile_patterns()

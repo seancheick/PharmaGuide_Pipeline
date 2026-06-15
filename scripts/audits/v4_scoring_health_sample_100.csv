@@ -1,0 +1,101 @@
+dsld_id,product_name,brand_name,verdict,safety_verdict,quality_score_v4_100,quality_score_status,v4_module,v4_confidence,pillar_evidence_v4,weakest_pillar,assessment,assessment_note
+175321,Creatine Monohydrate 5000 mg,GNC Pro Performance,SAFE,SAFE,98.1,scored,sports,moderate,18.9,Evidence 18.9/20: Backed by strong human research.,normal,pillars coherent
+298066,Creatine,Thorne,SAFE,SAFE,98.1,scored,sports,moderate,18.9,Evidence 18.9/20: Backed by strong human research.,normal,pillars coherent
+336326,Creatine,Thorne,SAFE,SAFE,98.1,scored,sports,moderate,18.9,Evidence 18.9/20: Backed by strong human research.,normal,pillars coherent
+69400,Creatine Monohydrate 3500 mg,GNC Pro Performance,SAFE,SAFE,98.1,scored,sports,moderate,18.9,Evidence 18.9/20: Backed by strong human research.,normal,pillars coherent
+322238,Creatine Monohydrate,GNC Pro Performance,SAFE,SAFE,97.7,scored,sports,moderate,18.9,"Formulation 18.8/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+336362,Creatine,Thorne,SAFE,SAFE,97.7,scored,sports,moderate,18.9,"Formulation 18.8/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+179791,Astaxanthin 4 mg,Nature Made,SAFE,SAFE,97.2,scored,generic,high,18.9,Evidence 18.9/20: Backed by strong human research.,normal,pillars coherent
+180110,D3 50 mcg (2000 IU),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+271449,D3 2000 IU (50 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+287806,D3 1000 IU (25 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+313818,D3 1000 IU (25 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+313819,D3 1000 IU (25 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+313822,D3 1000 IU (25 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+313825,D3 2000 IU (50 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+313826,D3 2000 IU (50 mcg),Nature Made,SAFE,SAFE,96.5,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+328825,Curcumin Phytosome 1000 mg,Thorne,SAFE,SAFE,96.0,scored,generic,high,18.9,"Formulation 18.0/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+328826,Curcumin Phytosome 1000 mg,Thorne,SAFE,SAFE,96.0,scored,generic,high,18.9,"Formulation 18.0/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+337856,Curcumin Phytosome 500 mg,Thorne,SAFE,SAFE,96.0,scored,generic,high,18.9,"Formulation 18.0/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+336330,"D-1,000",Thorne,SAFE,SAFE,95.7,scored,generic,moderate,18.9,"Formulation 16.8/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+305203,KSM-66,Transparent Labs,SAFE,SAFE,95.3,scored,generic,high,18.9,Transparency 13.5/15: Fully transparent label — every amount is disclosed.,normal,pillars coherent
+298102,Vitamin D,Thorne,SAFE,SAFE,95.0,scored,generic,moderate,18.9,"Formulation 17.6/20: Well-formulated — uses high-quality, well-absorbed ingredient forms.",normal,pillars coherent
+274365,D3 Gummies 2000 IU (50 mcg),Nature Made,SAFE,SAFE,94.5,scored,generic,moderate,18.9,"Formulation 15.6/20: Uses reasonable ingredient forms, with room for more premium options.",normal,pillars coherent
+271651,Vitamin D3 Gummies 50 mcg,Nature Made,SAFE,SAFE,94.1,scored,generic,moderate,18.9,"Formulation 15.2/20: Uses reasonable ingredient forms, with room for more premium options.",normal,pillars coherent
+179948,Magnesium Citrate,Nature Made,SAFE,SAFE,93.9,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+270965,Magnesium Citrate 250 mg,Nature Made,SAFE,SAFE,93.9,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+279878,Magnesium Citrate 250 mg,Nature Made,SAFE,SAFE,93.9,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+223163,Nordic CoQ10 Ubiquinol Sport,Nordic Naturals,CAUTION,CAUTION,92.3,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+183513,Creatine Monohydrate 5000 mg Unflavored,GNC Pro Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: Quality signals on file — label claims third-party certification, does its own purity testing.",normal,pillars coherent
+184096,Creatine Powder,Pure Encapsulations,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+184702,Creatine Powder,Pure Encapsulations,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+270330,Creatine Monohydrate 5 g Unflavored,Nutricost,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+307784,Creatine Monohydrate 5 g Unflavored,Nutricost Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+309604,Creatine Monohydrate 5 g Unflavored,Nutricost Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+315598,Creatine Monohydrate 5g Unflavored,Double Wood Supplements,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+319643,Creatine Monohydrate 5g Unflavored,Nutricost Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+66885,Creatine Monohydrate 5000 Unflavored,GNC Pro Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+66888,Creatine Monohydrate 3500,GNC Pro Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+74452,Creatine Monohydrate 5000 Unflavored,GNC Pro Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: Quality signals on file — label claims third-party certification, does its own purity testing.",normal,pillars coherent
+77130,Creatine Monohydrate 5 g Unflavored,Nutricost,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+78468,Creatine Monohydrate Unflavored,GNC Pro Performance,SAFE,SAFE,92.1,scored,sports,moderate,18.9,"Verification 9.0/15: Quality signals on file — label claims third-party certification, does its own purity testing.",normal,pillars coherent
+336311,Calcium,Thorne,SAFE,SAFE,91.9,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+336333,Selenium 200 mcg,Thorne,SAFE,SAFE,91.9,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+269425,Creatine Monohydrate 3 g,Nutricost,SAFE,SAFE,91.7,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+315323,Creatine Monohydrate 5000 mg Unflavored,GNC Pro Performance,SAFE,SAFE,91.7,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+315324,Creatine Monohydrate 5000 mg Unflavored,GNC Pro Performance,SAFE,SAFE,91.7,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+328780,Creatine Monohydrate 5 Grams Unflavored,GNC Pro Performance,SAFE,SAFE,91.7,scored,sports,moderate,18.9,"Verification 9.0/15: Quality signals on file — label claims third-party certification, does its own purity testing.",normal,pillars coherent
+336332,Zinc Picolinate 15 mg,Thorne,SAFE,SAFE,91.5,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+337878,Zinc Bisglycinate 15 mg,Thorne,SAFE,SAFE,91.5,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+326266,Marine Collagen Unflavored,Sports Research,SAFE,SAFE,91.4,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+307782,Creatine Monohydrate 5 g Blue Raspberry,Nutricost Performance,SAFE,SAFE,91.3,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+183770,Astaxanthin,Pure Encapsulations,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+183837,Astaxanthin,Pure Encapsulations,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+185123,CurcumaSorb,Pure Encapsulations,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+306060,Astaxanthin 12 mg,Nutricost,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+306061,Astaxanthin 12 mg,Nutricost,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+315588,Astaxanthin 12 mg,Double Wood Supplements,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+326236,Astaxanthin 6 mg,Sports Research,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+326237,Astaxanthin 12 mg,Sports Research,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+81021,Natural Astaxanthin 5 mg,Solgar,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+81374,Natural Astaxanthin 5 mg,Solgar,SAFE,SAFE,91.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+260270,Zinc 30 mg,GNC,SAFE,SAFE,91.1,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+310116,Magnesium Glycinate 200 mg,Nature Made,SAFE,SAFE,91.1,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+322551,Magnesium Glycinate 200 mg,Nature Made,SAFE,SAFE,91.1,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+2717,Creatine Monohydrate Blue Raspberry,GNC Pro Performance,SAFE,SAFE,90.9,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+298031,FloraSport 20B,Thorne,SAFE,SAFE,90.9,scored,probiotic,moderate,20.0,"Formulation 15.0/20: Uses reasonable ingredient forms, with room for more premium options.",normal,pillars coherent
+306247,FloraSport 20B,Thorne,SAFE,SAFE,90.9,scored,probiotic,moderate,20.0,"Formulation 15.0/20: Uses reasonable ingredient forms, with room for more premium options.",normal,pillars coherent
+328830,Basic Prenatal,Thorne,SAFE,SAFE,90.8,scored,multi_or_prenatal,moderate,16.7,Evidence 16.7/20: Backed by strong human research.,normal,pillars coherent
+59360,Ultimate Omega-D3 Sport,Nordic Naturals,SAFE,SAFE,90.8,scored,omega,moderate,15.3,Evidence 15.3/20: Some human research supports these ingredients.,normal,pillars coherent
+2697,Creatine 5 grams,GNC Pro Performance,SAFE,SAFE,90.6,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+323104,Grape Seed Extract,Thorne,SAFE,SAFE,90.6,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+204684,Kre-Alkalyn,Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+223165,Vitamin D3 1000 Orange Flavor,Nordic Naturals,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+223174,Plant-Based Vitamin D3 Liquid,Nordic Naturals,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+232016,Vitamin D3 25 mcg (1000 IU),Life Extension,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+232342,Vitamin D3 25 mcg (1000 IU),Life Extension,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+240689,"D3 50 mcg (2,000 IU)",Nature's Bounty,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+253094,D3 50 mcg (2000 IU),Nature's Bounty,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+261950,"Vitamin D3 25 mcg (1,000 IU)",Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+2716,Creatine Monohydrate Fruit Punch,GNC Pro Performance,SAFE,SAFE,90.5,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+278373,Ubiquinol-QH 100 mg,Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+278374,Ubiquinol-QH 50 mg,Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+294067,Vitamin D3 (Vegan) Liquid,Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+294072,Vitamin D3 Liquid,Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+317970,Ubiquinol-QH 200 mg,Pure Encapsulations,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+328085,"Vitamin D3 2,000 IU (50 mcg)",Nature's Way,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+332952,"Vitamin D3 2,000 IU (50 mcg)",Nature's Way,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+69277,Creatine HCl 4 grams,GNC Beyond Raw Chemistry Labs,SAFE,SAFE,90.5,scored,sports,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+73328,D3 25 mcg (1000 IU),Nature's Bounty,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+73330,D3 25 mcg (1000 IU),Nature's Bounty,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+74398,D3 25 mcg (1000 IU),Nature's Bounty,SAFE,SAFE,90.5,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+260139,Zinc 30 mg,GNC,SAFE,SAFE,90.3,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+280361,Zinc 30 mg,Nature Made,SAFE,SAFE,90.3,scored,generic,moderate,14.7,Evidence 14.7/20: Some human research supports these ingredients.,normal,pillars coherent
+326270,Omega-3 1055 mg Fish Oil 1250 mg,Sports Research,SAFE,SAFE,90.3,scored,omega,moderate,15.0,Evidence 15.0/20: Some human research supports these ingredients.,normal,pillars coherent
+326271,Omega-3 1055 mg Fish Oil 1250 mg,Sports Research,SAFE,SAFE,90.3,scored,omega,moderate,15.0,Evidence 15.0/20: Some human research supports these ingredients.,normal,pillars coherent
+326273,Omega-3 1055 mg Fish Oil 1250 mg,Sports Research,SAFE,SAFE,90.3,scored,omega,moderate,15.0,Evidence 15.0/20: Some human research supports these ingredients.,normal,pillars coherent
+327776,Omega-3 1055 mg Fish Oil 1250 mg,Sports Research,SAFE,SAFE,90.3,scored,omega,moderate,15.0,Evidence 15.0/20: Some human research supports these ingredients.,normal,pillars coherent
+336340,Theanine,Thorne,SAFE,SAFE,90.2,scored,generic,moderate,18.9,Dose 14.5/20: Doses are reasonable but not fully in the studied range.,normal,pillars coherent
+336350,Phosphatidylserine,Thorne,SAFE,SAFE,90.2,scored,generic,moderate,18.9,Dose 14.5/20: Doses are reasonable but not fully in the studied range.,normal,pillars coherent
+7091,Astaxanthin 4 mg,GNC Preventive Nutrition,SAFE,SAFE,90.2,scored,generic,moderate,18.9,"Verification 9.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent
+73764,Astaxanthin 10 mg,Solgar,SAFE,SAFE,90.2,scored,generic,moderate,18.9,"Verification 8.0/15: No third-party testing on file — treated as unknown, not penalized.",normal,pillars coherent

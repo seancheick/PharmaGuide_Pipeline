@@ -142,6 +142,43 @@ def test_cluster_ignores_scoring_scopes():
     assert clusters[0]["record_id"] == "NSF_002"
 
 
+def test_cluster_skips_stale_needs_review_after_current_override():
+    """A curated reject in the current resolver removes stale embedded
+    needs_review rows from the triage report."""
+    from api_audit.cert_needs_review_cluster import build_clusters
+    from cert_resolver import CertRegistry
+
+    registry = CertRegistry(
+        overrides_by_brand_product={
+            ("nature s bounty", "d3 125 mcg 5000 iu"): [
+                {
+                    "program": "USP Verified",
+                    "status": "rejected",
+                    "scope": "claimed_only",
+                    "reason": "dose_mismatch",
+                    "dsld_id": "240732",
+                }
+            ]
+        }
+    )
+
+    products = [
+        _enriched_product(
+            dsld_id="240732",
+            brand="Nature's Bounty",
+            name="D3 125 mcg (5000 IU)",
+            cert_entries=[{
+                "program": "USP Verified", "scope": "needs_review",
+                "record_id": "USP_VERIFIED_0604E8F6CA5F",
+                "matched_brand": "Nature's Bounty",
+                "matched_product": "Nature's Bounty Vitamin D3 125 mcg Softgels",
+            }],
+        )
+    ]
+
+    assert build_clusters(products, registry=registry) == []
+
+
 def test_cluster_handles_products_with_no_certs():
     """A product with empty verified_cert_programs contributes nothing."""
     from api_audit.cert_needs_review_cluster import build_clusters

@@ -24,6 +24,33 @@ from pathlib import Path
 from typing import Any, Iterable
 
 PLACEHOLDER_UNIIS = frozenset({"", "0", "1"})
+IDENTITY_DESCRIPTOR_TOKENS = frozenset({
+    "botanical",
+    "std",
+    "bot",
+    "iqm",
+    "root",
+    "roots",
+    "fruit",
+    "fruits",
+    "herb",
+    "herbs",
+    "mushroom",
+    "mushrooms",
+    "powder",
+    "extract",
+    "extracts",
+    "leaf",
+    "leaves",
+    "flower",
+    "flowers",
+    "bark",
+    "seed",
+    "seeds",
+    "whole",
+    "forms",
+    "form",
+})
 
 TIER_NAMES = {
     1: "banned_recalled",
@@ -94,9 +121,63 @@ def _norm_name(value: str | None) -> str:
     return re.sub(r"\s+", " ", value).strip()
 
 
+def _identity_tokens(value: Any) -> set[str]:
+    text = str(value or "").lower().replace("_", " ")
+    if ":" in text:
+        text = text.split(":", 1)[1]
+    return {
+        token for token in re.split(r"[^a-z0-9]+", text)
+        if token and token not in IDENTITY_DESCRIPTOR_TOKENS
+    }
+
+
+def _tokens_overlap_as_identity(left: set[str], right: set[str]) -> bool:
+    return bool(left and right and (left <= right or right <= left))
+
+
+def _is_runtime_same_identity_variant(records: tuple[UniiRecord, ...]) -> bool:
+    token_sets = [
+        _identity_tokens(record.entry_id) or _identity_tokens(record.standard_name)
+        for record in records
+    ]
+    token_sets = [tokens for tokens in token_sets if tokens]
+    if len(token_sets) != len(records):
+        return False
+    return any(
+        all(_tokens_overlap_as_identity(anchor, tokens) for tokens in token_sets)
+        for anchor in token_sets
+    )
+
+
 def _load_json(path: Path) -> dict[str, Any]:
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def _load_unii_exoneration_refs(repo_root: Path) -> dict[str, set[tuple[str, str]]]:
+    """Load reviewed same-substance UNII exonerations.
+
+    The scanner remains read-only. This only lets the report classify groups
+    that are already documented in reference data as low-noise informational
+    findings instead of fresh high-review work.
+    """
+    path = repo_root / "scripts/data/unii_exoneration_allowlist.json"
+    if not path.exists():
+        return {}
+    payload = _load_json(path)
+    out: dict[str, set[tuple[str, str]]] = defaultdict(set)
+    for exoneration in payload.get("exonerations", []) or []:
+        unii = normalize_unii(exoneration.get("unii"))
+        if not unii:
+            continue
+        for ref in exoneration.get("entries", []) or []:
+            if not isinstance(ref, dict):
+                continue
+            file_label = ref.get("file")
+            entry_id = ref.get("entry_id")
+            if file_label and entry_id:
+                out[unii].add((str(file_label), str(entry_id)))
+    return dict(out)
 
 
 def _load_runtime_priority_context(repo_root: Path):
@@ -161,6 +242,8 @@ def _iter_iqm_records(repo_root: Path, preprocess_text, fast_exact_lookup) -> It
     blob = _load_json(path)
     for parent_id, parent_data in blob.items():
         if parent_id.startswith("_") or not isinstance(parent_data, dict):
+            continue
+        if (parent_data.get("match_rules") or {}).get("deprecated_in_favor_of"):
             continue
         parent_standard_name = parent_data.get("standard_name") or parent_id
         priority = _effective_priority(str(parent_standard_name), 4, preprocess_text, fast_exact_lookup)
@@ -242,6 +325,18 @@ def collect_unii_records(repo_root: Path) -> list[UniiRecord]:
     preprocess_text, fast_exact_lookup = _load_runtime_priority_context(repo_root)
     records: list[UniiRecord] = []
     records.extend(_iter_banned_records(repo_root, preprocess_text, fast_exact_lookup))
+    records.extend(
+        _iter_list_records(
+            repo_root,
+            "harmful_additives.json",
+            "harmful_additives",
+            tier=3,
+            source="harmful",
+            preprocess_text=preprocess_text,
+            fast_exact_lookup=fast_exact_lookup,
+            use_effective_priority=False,
+        )
+    )
     records.extend(_iter_iqm_records(repo_root, preprocess_text, fast_exact_lookup))
     records.extend(
         _iter_list_records(
@@ -280,11 +375,34 @@ def collect_unii_records(repo_root: Path) -> list[UniiRecord]:
     return records
 
 
-def _classify_group(records: tuple[UniiRecord, ...]) -> tuple[str, str, str, str]:
+def _is_allowlisted_group(
+    records: tuple[UniiRecord, ...],
+    allowlist_refs: dict[str, set[tuple[str, str]]] | None,
+) -> bool:
+    if not records or not allowlist_refs:
+        return False
+    unii = records[0].unii
+    refs = allowlist_refs.get(unii)
+    if not refs:
+        return False
+    return all((record.file, record.entry_id) in refs for record in records)
+
+
+def _classify_group(
+    records: tuple[UniiRecord, ...],
+    allowlist_refs: dict[str, set[tuple[str, str]]] | None = None,
+) -> tuple[str, str, str, str]:
     tier = records[0].tier
     parent_ids = {record.parent_id for record in records if record.parent_id}
     names = {_norm_name(record.standard_name) for record in records if _norm_name(record.standard_name)}
 
+    if _is_allowlisted_group(records, allowlist_refs):
+        return (
+            "info",
+            "allowlisted_same_unii_identity",
+            "no_action_reviewed_same_fda_substance",
+            "Every same-tier record in this group is documented in unii_exoneration_allowlist.json.",
+        )
     if tier == 4 and len(parent_ids) == 1:
         return (
             "info",
@@ -298,6 +416,13 @@ def _classify_group(records: tuple[UniiRecord, ...]) -> tuple[str, str, str, str
             "iqm_cross_parent_same_unii",
             "review_data_model_or_exonerate",
             "Same UNII appears under different IQM parents/forms at the same priority tier.",
+        )
+    if _is_runtime_same_identity_variant(records):
+        return (
+            "info",
+            "runtime_same_identity_variant",
+            "no_action_runtime_logs_debug",
+            "Record labels share a parent/source token pattern that runtime classifies as a same-identity variant.",
         )
     if len(names) == 1:
         return (
@@ -314,17 +439,38 @@ def _classify_group(records: tuple[UniiRecord, ...]) -> tuple[str, str, str, str
     )
 
 
-def find_same_tier_groups(records: list[UniiRecord]) -> list[SameTierGroup]:
-    grouped: dict[tuple[int, str], list[UniiRecord]] = defaultdict(list)
+def _runtime_context(record: UniiRecord) -> str:
+    if record.source in {"banned", "harmful"}:
+        return "safety"
+    return "identity"
+
+
+def find_same_tier_groups(
+    records: list[UniiRecord],
+    allowlist_refs: dict[str, set[tuple[str, str]]] | None = None,
+) -> list[SameTierGroup]:
+    grouped: dict[tuple[str, str], list[UniiRecord]] = defaultdict(list)
     for record in records:
-        grouped[(record.tier, record.unii)].append(record)
+        grouped[(_runtime_context(record), record.unii)].append(record)
 
     out: list[SameTierGroup] = []
-    for (tier, unii), members in sorted(grouped.items()):
+    for (_context, unii), members in sorted(grouped.items()):
         if len(members) < 2:
             continue
-        records_tuple = tuple(sorted(members, key=lambda r: (r.source, r.entry_id)))
-        severity, classification, action, reason = _classify_group(records_tuple)
+        # Runtime only warns among records that tie at the winning priority
+        # for a UNII. Lower-priority same-tier duplicates are skipped as
+        # cross-tier collisions once a higher-priority record already owns the
+        # UNII in that identity/safety map.
+        winning_tier = min(record.tier for record in members)
+        winning_members = [record for record in members if record.tier == winning_tier]
+        if len(winning_members) < 2:
+            continue
+        tier = winning_tier
+        records_tuple = tuple(sorted(winning_members, key=lambda r: (r.source, r.entry_id)))
+        severity, classification, action, reason = _classify_group(
+            records_tuple,
+            allowlist_refs=allowlist_refs,
+        )
         out.append(
             SameTierGroup(
                 tier=tier,
@@ -466,7 +612,8 @@ def main() -> int:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     records = collect_unii_records(repo_root)
-    groups = find_same_tier_groups(records)
+    allowlist_refs = _load_unii_exoneration_refs(repo_root)
+    groups = find_same_tier_groups(records, allowlist_refs=allowlist_refs)
     timestamp = args.timestamp or datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
     md_path = output_dir / f"unii_same_tier_conflicts_{timestamp}.md"
     json_path = output_dir / f"unii_same_tier_conflicts_{timestamp}.json"

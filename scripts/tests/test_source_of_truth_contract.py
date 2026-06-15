@@ -957,11 +957,28 @@ def test_interaction_parity_skips_referential_check_when_schema_lacks_canonical_
     )
 
 
+def _minimal_catalog_db(path: Path):
+    """Write a tiny valid, clean products_core. audit_export now inspects the DB
+    via the V4 pillar contract gate, so manifest-focused tests need a real
+    catalog rather than a placeholder byte string."""
+    with sqlite3.connect(str(path)) as conn:
+        conn.execute(
+            "CREATE TABLE products_core ("
+            "dsld_id TEXT, quality_score_status TEXT, quality_score_v4_100 REAL, "
+            "pillar_formulation_v4 REAL, pillar_dose_v4 REAL, pillar_evidence_v4 REAL, "
+            "pillar_transparency_v4 REAL, pillar_verification_v4 REAL, pillar_safety_hygiene_v4 REAL)"
+        )
+        # 11.2+20+18.9+15+6+10 = 81.1 reconciles with the total.
+        conn.execute(
+            "INSERT INTO products_core VALUES ('1', 'scored', 81.1, 11.2, 20.0, 18.9, 15.0, 6.0, 10.0)"
+        )
+
+
 def test_export_contract_requires_stamped_manifest_when_requested(tmp_path):
     dist = tmp_path / "dist"
     dist.mkdir()
     db_path = dist / "pharmaguide_core.db"
-    db_path.write_bytes(b"catalog")
+    _minimal_catalog_db(db_path)
     write_json(dist / "export_manifest.json", {"schema_version": "1.0.0", "product_count": 1, "checksum_sha256": sha256(db_path)})
 
     args = argparse.Namespace(dist_dir=str(dist), require_stamped_manifest=True)
@@ -974,7 +991,7 @@ def test_stamp_manifest_accepts_working_build_checksum_field(tmp_path):
     dist = tmp_path / "final_db_output"
     dist.mkdir()
     db_path = dist / "pharmaguide_core.db"
-    db_path.write_bytes(b"catalog")
+    _minimal_catalog_db(db_path)
     write_json(
         dist / "export_manifest.json",
         {

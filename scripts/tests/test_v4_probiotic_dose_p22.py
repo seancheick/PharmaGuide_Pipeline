@@ -112,9 +112,9 @@ def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() 
         _product(total_strain_count=3, blends=[aggregate_blend], clinical_strains=clinical_strains)
     )
 
-    assert payload["score"] == 8.0
+    assert payload["score"] == 11.0
     assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
-    assert payload["components"]["cfu_adequacy"] == 8.0
+    assert payload["components"]["cfu_adequacy"] == 11.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 0
     assert payload["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_modeled_proxy"
@@ -147,6 +147,41 @@ def test_low_aggregate_cfu_gets_small_numeric_total_cfu_floor() -> None:
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
     assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_low_tier_presence_floor"
     assert payload["metadata"]["aggregate_cfu_proxy"]["proxy_tier"] == "low"
+
+
+def test_named_strain_low_aggregate_cfu_gets_modest_total_cfu_floor() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+
+    aggregate_blend = {
+        "name": "Probiotic Blend",
+        "strains": [
+            "Lactobacillus acidophilus",
+            "Bifidobacterium lactis",
+            "Lactobacillus rhamnosus",
+            "Lactobacillus plantarum",
+            "Bifidobacterium longum",
+            "Lactobacillus reuteri",
+        ],
+        "cfu_data": {"has_cfu": True, "billion_count": 2.0, "cfu_count": 2_000_000_000},
+    }
+    clinical_strains = [
+        _strain("Lactobacillus acidophilus", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Bifidobacterium lactis", cfu_per_day=None, adequacy_tier=None, support="high"),
+        _strain("Lactobacillus rhamnosus", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("Lactobacillus plantarum", cfu_per_day=None, adequacy_tier=None, support="moderate"),
+        _strain("Bifidobacterium longum", cfu_per_day=None, adequacy_tier=None, support="weak"),
+        _strain("Lactobacillus reuteri", cfu_per_day=None, adequacy_tier=None, support="weak"),
+    ]
+
+    product = _product(total_strain_count=6, blends=[aggregate_blend], clinical_strains=clinical_strains)
+    product["probiotic_data"]["total_billion_count"] = 2.0
+
+    payload = score_dose(product)
+
+    assert payload["score"] == 4.0
+    assert payload["components"]["per_strain_cfu_disclosure"] == 0.0
+    assert payload["components"]["cfu_adequacy"] == 4.0
+    assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_low_named_strain_total_floor"
 
 
 def test_missing_aggregate_cfu_still_gets_zero_dose_credit() -> None:
@@ -285,7 +320,7 @@ def test_incomplete_per_strain_cfu_still_uses_aggregate_cfu_adequacy_proxy() -> 
     payload = score_dose(product)
 
     assert payload["components"]["per_strain_cfu_disclosure"] == 1.25
-    assert payload["components"]["cfu_adequacy"] == 8.0
+    assert payload["components"]["cfu_adequacy"] == 11.0
     assert payload["metadata"]["per_strain_cfu_disclosed_count"] == 1
     assert payload["metadata"]["aggregate_cfu_proxy"]["applied"] is True
     assert payload["metadata"]["aggregate_cfu_proxy"]["reason"] == "aggregate_cfu_even_split_proxy"
@@ -485,7 +520,7 @@ def test_aggregate_cfu_proxy_still_wins_over_direct_mass_floor() -> None:
         total_billion=20.0,
     )
     payload = score_dose(product)
-    assert payload["components"]["cfu_adequacy"] == 8.0  # aggregate proxy, not 5
+    assert payload["components"]["cfu_adequacy"] == 11.0  # aggregate proxy, not 5
     assert payload["metadata"]["cfu_adequacy_basis"] == "aggregate_cfu_modeled_proxy"
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is False
 

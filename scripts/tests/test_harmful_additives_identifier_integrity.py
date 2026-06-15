@@ -223,9 +223,6 @@ _BUCKET_3_CLASS_ENTRY_REPRESENTATIVE_UNII = [
     ("ADD_SYNTHETIC_ANTIOXIDANTS", "9T1410R4OR", "<antioxidant representative>",
      "Synthetic Antioxidants (class) — UNII points at a representative "
      "synthetic antioxidant for class enforcement. Same pattern."),
-    ("ADD_SYRUPS", "9G5L16BK6N", "<syrup representative>",
-     "Syrups (class) — UNII points at a representative syrup compound. "
-     "Same pattern."),
 ]
 
 
@@ -245,3 +242,27 @@ def test_wave_9d3_class_entry_unii_policy_locked(
         f"{canonical_id}.external_ids.unii must remain {locked_unii} "
         f"({gsrs_target}; policy-accepted: {reason})."
     )
+
+
+def test_class_or_variant_rows_do_not_claim_exact_unii_owned_by_atomic_rows(harmful_additives):
+    """Representative UNII values are not safe when another same-tier harmful
+    row owns the exact FDA/GSRS identity. The broader/variant rows still match by
+    label aliases; the exact UNII stays on the exact substance row only."""
+    corn_syrup = _find(harmful_additives, "ADD_CORN_SYRUP_SOLIDS")
+    syrups = _find(harmful_additives, "ADD_SYRUPS")
+    corn_oil = _find(harmful_additives, "ADD_CORN_OIL")
+    partially_hydrogenated = _find(
+        harmful_additives,
+        "ADD_PARTIALLY_HYDROGENATED_CORN_OIL",
+    )
+
+    assert (corn_syrup.get("external_ids") or {}).get("unii") == "9G5L16BK6N"
+    assert (syrups.get("external_ids") or {}).get("unii") is None
+    assert syrups.get("unii_note")
+
+    assert (corn_oil.get("external_ids") or {}).get("unii") == "8470G57WFM"
+    assert (partially_hydrogenated.get("external_ids") or {}).get("unii") is None
+    assert partially_hydrogenated.get("rxcui") is None
+    assert partially_hydrogenated.get("gsrs") is None
+    assert partially_hydrogenated.get("unii_note")
+    assert partially_hydrogenated.get("rxcui_note")

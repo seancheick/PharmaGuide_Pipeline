@@ -19,7 +19,8 @@
   "processing": {
     "_comment": "batch_size controls files per batch, max_workers controls parallel processes",
     "batch_size": 500,
-    "max_workers": 4
+    "max_workers": 4,
+    "manifest_content_fingerprint": false
   },
   "output_format": {
     "_comment": "JSON formatting - pretty_print=true for development, false for production",

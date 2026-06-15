@@ -1524,9 +1524,20 @@ class SupplementEnricherV3:
             'fda_registered': re.compile(r'\bFDA[\s-]?(registered|inspected)[\s-]+facility\b', re.I),
 
             # Batch traceability
-            'coa': re.compile(r'\b(certificate\s+of\s+analysis|COA)\b', re.I),
+            'coa': re.compile(
+                r'\b('
+                r'COAs?|certificates?\s+of\s+analysis|analysis\s+certificates?|'
+                r'(?:third[-\s]?party\s+)?lab\s+(?:test\s+)?reports?'
+                r')\b',
+                re.I,
+            ),
             'qr_code': re.compile(r'\bQR\s*code\b', re.I),
-            'batch_lookup': re.compile(r'\b(batch|lot)\s+(lookup|search|verify)\b', re.I),
+            'batch_lookup': re.compile(
+                r'\b(batch|lot)\s+(lookup|look\s*up|search|verify|verification|trace|tracking)\b|'
+                r'\b(enter|submit|scan)\s+(?:your\s+|the\s+)?(batch|lot)\s+(number|code)\b|'
+                r'\b(batch|lot)\s+(number|code)\b.{0,80}\b(test\s+results?|lab\s+reports?|COA|certificate\s+of\s+analysis)\b',
+                re.I,
+            ),
 
             # Country of origin
             'made_usa': re.compile(r'\b(made|manufactured|produced)\s+in\s+(the\s+)?USA\b', re.I),
@@ -6755,6 +6766,17 @@ class SupplementEnricherV3:
             if "concentrated fish oil" in blob:
                 return "fish_oil"
 
+            if "alpha linolenic" in blob or re.search(r"\bala\b", blob):
+                return "alpha_linolenic_acid"
+            if "flaxseed" in blob or "flax seed" in blob or "linseed" in blob:
+                return "flaxseed"
+            if "evening primrose" in blob:
+                return "evening_primrose_oil"
+            if "gamma linolenic" in blob or re.search(r"\bgla\b", blob):
+                return "gamma_linolenic_acid"
+            if "hemp seed" in blob:
+                return "hemp_seed_oil"
+
             return None
 
         # Phase 3: the cleaner's authoritative IQM parent (resolved up-front
@@ -6788,7 +6810,33 @@ class SupplementEnricherV3:
             preferred_parent = _resolve_compound_parent_override(ing_norm, std_norm, base_norm)
 
         candidates = []
-        seen = set()
+        candidate_by_resolution: Dict[Tuple[str, Optional[str]], Dict] = {}
+        _non_epa_dha_source_re = re.compile(
+            r"\b("
+            r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
+            r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
+            r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
+            r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
+            r"fiber|fibre|seed\s+blend|super\s+seed"
+            r")\b",
+            re.IGNORECASE,
+        )
+        _epa_dha_source_re = re.compile(
+            r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
+            re.IGNORECASE,
+        )
+        _false_omega_source_blob = " ".join(
+            str(value or "")
+            for value in (ing_name, std_name, base_name, ing_norm, std_norm, base_norm)
+        )
+
+        def _blocks_false_omega_parent(parent_key: str) -> bool:
+            if parent_key not in {"epa", "dha", "epa_dha", "fish_oil", "omega_3"}:
+                return False
+            return (
+                bool(_non_epa_dha_source_re.search(_false_omega_source_blob))
+                and not bool(_epa_dha_source_re.search(_false_omega_source_blob))
+            )
 
         def _strip_parenthesis_chars(value: str) -> str:
             # Keep parenthetical content but remove bracket characters.
@@ -7030,18 +7078,56 @@ class SupplementEnricherV3:
                 None
             )
 
-        def add_candidate(candidate: Dict):
-            key = (
-                candidate["parent_key"],
-                candidate["form_key"],
-                candidate["matched_alias"],
-                candidate["match_type"],
-                candidate["tier"],
+        def _resolved_candidate_form_id(candidate: Dict) -> Optional[str]:
+            return (
+                candidate.get("form_key")
+                or candidate.get("fallback_form_name")
+                or (candidate.get("match_data") or {}).get("form_id")
             )
-            if key in seen:
+
+        def _candidate_sort_key(candidate: Dict) -> Tuple:
+            # Prefer candidate whose parent matches the base ingredient context.
+            # This resolves compound forms like "calcium ascorbate" appearing under
+            # both vitamin_c and calcium — when the base ingredient is "Vitamin C",
+            # vitamin_c wins; when it's "Calcium", calcium wins.
+            parent_pref = 0 if (preferred_parent and candidate["parent_key"] == preferred_parent) else 1
+            return (
+                candidate["tier"],                      # 1. Tier (exact > normalized > contains/pattern)
+                candidate.get("match_source", 1),       # 2. Match source (raw > std > base)
+                candidate.get("priority", 1),           # 3. Priority from match_rules (0 > 1 > 2)
+                parent_pref,                            # 4. Prefer parent matching base ingredient
+                -candidate["alias_len"],                # 5. Longer alias wins within same priority
+                0 if candidate["form_key"] else 1,      # 6. Form-level beats parent-level
+                candidate["parent_key"],                # 7. Alphabetical parent key
+                candidate["form_key"] or "",            # 8. Alphabetical form key
+            )
+
+        def _candidate_resolution_key(candidate: Dict) -> Tuple[str, Optional[str]]:
+            return (
+                str(candidate.get("parent_key") or ""),
+                _resolved_candidate_form_id(candidate),
+            )
+
+        def add_candidate(candidate: Dict):
+            if _blocks_false_omega_parent(str(candidate.get("parent_key") or "")):
                 return
-            seen.add(key)
-            candidates.append(candidate)
+
+            # Multiple aliases often describe the same scoring identity
+            # (canonical parent + resolved form). Collapse those paths here so
+            # alias duplication cannot become warning-level ambiguity later.
+            key = _candidate_resolution_key(candidate)
+            existing = candidate_by_resolution.get(key)
+            if existing is None:
+                candidate_by_resolution[key] = candidate
+                candidates.append(candidate)
+                return
+
+            if _candidate_sort_key(candidate) < _candidate_sort_key(existing):
+                candidate_by_resolution[key] = candidate
+                for idx, current in enumerate(candidates):
+                    if current is existing:
+                        candidates[idx] = candidate
+                        break
 
         def collect_alias_matches(
             candidate_values: List[Tuple[str, int]],
@@ -7429,24 +7515,7 @@ class SupplementEnricherV3:
                 return branded_match
             return None
 
-        def candidate_sort_key(candidate: Dict) -> Tuple:
-            # Prefer candidate whose parent matches the base ingredient context.
-            # This resolves compound forms like "calcium ascorbate" appearing under
-            # both vitamin_c and calcium — when the base ingredient is "Vitamin C",
-            # vitamin_c wins; when it's "Calcium", calcium wins.
-            parent_pref = 0 if (preferred_parent and candidate["parent_key"] == preferred_parent) else 1
-            return (
-                candidate["tier"],                      # 1. Tier (exact > normalized > contains/pattern)
-                candidate.get("match_source", 1),       # 2. Match source (raw > std > base)
-                candidate.get("priority", 1),           # 3. Priority from match_rules (0 > 1 > 2)
-                parent_pref,                            # 4. Prefer parent matching base ingredient
-                -candidate["alias_len"],                # 5. Longer alias wins within same priority
-                0 if candidate["form_key"] else 1,      # 6. Form-level beats parent-level
-                candidate["parent_key"],                # 7. Alphabetical parent key
-                candidate["form_key"] or "",            # 8. Alphabetical form key
-            )
-
-        candidates.sort(key=candidate_sort_key)
+        candidates.sort(key=_candidate_sort_key)
         best = candidates[0]
 
         winning_tier = best["tier"]
@@ -7504,12 +7573,14 @@ class SupplementEnricherV3:
                         "match_type": c["match_type"],
                         "tier": c["tier"],
                         "alias_len": c["alias_len"],
+                        "resolved_form_id": _resolved_candidate_form_id(c),
                     }
                     for c in winning_candidates
                 ],
                 "chosen": {
                     "canonical_id": best["parent_key"],
                     "form_key": best["form_key"],
+                    "resolved_form_id": _resolved_candidate_form_id(best),
                     "matched_alias": best["matched_alias"],
                     "matched_on": best["matched_on"],
                     "match_type": best["match_type"],

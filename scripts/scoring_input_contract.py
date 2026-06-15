@@ -143,6 +143,28 @@ _NON_EPA_DHA_OMEGA_CANONICALS = {
     "conjugated_linoleic_acid",
     "oleic_acid",
 }
+_EPA_DHA_SOURCE_RE = re.compile(
+    r"\b(epa|dha|eicosapentaenoic|docosahexaenoic)\b",
+    re.IGNORECASE,
+)
+_MARINE_OMEGA_SOURCE_RE = re.compile(
+    r"\b("
+    r"fish\s+oil|fish\s+body\s+oil|salmon\s+oil|anchovy\s+oil|sardine\s+oil|"
+    r"mackerel\s+oil|tuna\s+oil|menhaden\s+oil|herring\s+oil|cod\s+liver|"
+    r"krill|algae\s+oil|algal\s+oil|calamari\s+oil|squid\s+oil|marine\s+oil"
+    r")\b",
+    re.IGNORECASE,
+)
+_NON_EPA_DHA_SOURCE_RE = re.compile(
+    r"\b("
+    r"mct|medium\s+chain\s+triglycerides?|coconut|caprylic|capric|palm|"
+    r"flax(?:seed)?|linseed|alpha[-\s]?linolenic|ala|chia|hemp|"
+    r"evening\s+primrose|borage|gamma[-\s]?linolenic|gla|"
+    r"conjugated\s+linoleic|cla|omega[-\s]?6|omega[-\s]?9|"
+    r"fiber|fibre|seed\s+blend|super\s+seed"
+    r")\b",
+    re.IGNORECASE,
+)
 _ENZYME_UNITS = {
     "alu", "ppi", "blgu", "hut", "sapu", "fip", "cu", "gdu", "dppiv", "dpp-iv",
     "lacu", "fccpu", "galu", "au", "skb", "mwu", "pu", "dp", "ckpu", "aju", "usp",
@@ -288,6 +310,58 @@ def _row_identity_text(row: Dict[str, Any]) -> str:
         raw_taxonomy.get("ingredientGroup"),
     ])
     return " ".join(str(piece or "") for piece in pieces).strip()
+
+
+def _row_source_text(row: Dict[str, Any]) -> str:
+    """Label/source identity excluding canonicalized standard names.
+
+    Standard names can already be polluted by a bad parent match. For example,
+    current false positives contain ``name=Medium Chain Triglyceride`` while
+    ``standardName`` has become DHA. Trust the label/source fields when deciding
+    whether an EPA/DHA canonical is biologically plausible.
+    """
+    pieces = [
+        row.get("name"),
+        row.get("raw_source_text"),
+        row.get("display_label"),
+        row.get("normalized_key"),
+        row.get("parent_key"),
+        row.get("matched_candidate"),
+    ]
+    return " ".join(str(piece or "") for piece in pieces).strip()
+
+
+def _source_has_epa_dha_identity(row: Dict[str, Any]) -> bool:
+    return bool(_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
+
+
+def _source_is_marine_omega_parent(row: Dict[str, Any]) -> bool:
+    return bool(_MARINE_OMEGA_SOURCE_RE.search(_row_source_text(row)))
+
+
+def _source_is_non_epa_dha_oil(row: Dict[str, Any]) -> bool:
+    return bool(_NON_EPA_DHA_SOURCE_RE.search(_row_source_text(row)))
+
+
+def _trustworthy_epa_dha_row(row: Dict[str, Any]) -> bool:
+    canonical = _norm(row.get("canonical_id"))
+    if canonical not in {"epa", "dha", "epa_dha"}:
+        return False
+    if _positive_quantity(row) is None:
+        return False
+    if not _unit_is_mass(row.get("unit") or row.get("unit_normalized") or row.get("dose_unit")):
+        return False
+    if _source_is_non_epa_dha_oil(row) and not _source_has_epa_dha_identity(row):
+        return False
+    return True
+
+
+def _trustworthy_omega_parent_row(row: Dict[str, Any], canonical: str) -> bool:
+    if canonical not in _OMEGA_EVIDENCE_CANONICALS:
+        return False
+    if _source_is_non_epa_dha_oil(row) and not _source_has_epa_dha_identity(row):
+        return False
+    return _source_is_marine_omega_parent(row) or _source_has_epa_dha_identity(row)
 
 
 def _slug(value: Any) -> str:
@@ -494,9 +568,9 @@ def _can_emit_omega_aggregate_evidence(row: Dict[str, Any], canonical: str) -> b
     """True when the row identity itself can support EPA/DHA aggregate evidence."""
     if canonical.startswith("vitamin_") or canonical.startswith("mineral_"):
         return False
-    if canonical in _OMEGA_EVIDENCE_CANONICALS:
+    if _trustworthy_omega_parent_row(row, canonical):
         return True
-    return not canonical and _is_omega_aggregate_row(row)
+    return not canonical and _is_omega_aggregate_row(row) and not _source_is_non_epa_dha_oil(row)
 
 
 def _extract_enzyme_activity(row: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
@@ -881,12 +955,7 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         )
     }
     special_evidence_paths: set[str] = set()
-    has_explicit_epa_dha_row = any(
-        _norm(row.get("canonical_id")) in {"epa", "dha", "epa_dha"}
-        and _positive_quantity(row) is not None
-        and _unit_is_mass(row.get("unit") or row.get("unit_normalized") or row.get("dose_unit"))
-        for row in active_rows
-    )
+    has_explicit_epa_dha_row = any(_trustworthy_epa_dha_row(row) for row in active_rows)
 
     for row in active_rows:
         quantity = _positive_quantity(row)
@@ -2001,7 +2070,7 @@ def _route_omega_panel_counts(product: Dict[str, Any]) -> tuple[int, int]:
         if not canonical or not _route_has_positive_quantity(row):
             continue
         total_rows += 1
-        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS:
+        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS and _trustworthy_epa_dha_row(row):
             omega_rows += 1
     return omega_rows, total_rows
 
@@ -2015,8 +2084,7 @@ def _route_has_primary_omega_panel(product: Dict[str, Any]) -> bool:
 
 def _route_has_any_epa_dha_row(product: Dict[str, Any]) -> bool:
     for row in _route_scoring_rows(product):
-        canonical = _norm(row.get("canonical_id"))
-        if canonical in _ROUTE_OMEGA_INGREDIENT_CANONICALS and _route_has_positive_quantity(row):
+        if _trustworthy_epa_dha_row(row):
             return True
     return False
 
@@ -2046,7 +2114,14 @@ def _route_has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
     if _route_has_any_epa_dha_row(product):
         return False
     for row in _route_scoring_rows(product):
-        if _norm(row.get("canonical_id")) in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS:
+        canonical = _norm(row.get("canonical_id"))
+        if canonical in _ROUTE_NON_EPA_DHA_FATTY_ACID_CANONICALS:
+            return True
+        if (
+            canonical in _ROUTE_OMEGA_PARENT_CANONICALS | _ROUTE_OMEGA_INGREDIENT_CANONICALS
+            and _source_is_non_epa_dha_oil(row)
+            and not _source_has_epa_dha_identity(row)
+        ):
             return True
     return False
 
@@ -2160,7 +2235,31 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
     return False
 
 
+def _route_product_lacks_epa_dha_identity(product: Dict[str, Any]) -> bool:
+    """True when the product source is an explicit non-EPA/DHA plant/seed/MCT oil
+    (flax/ALA/chia/hemp/fiber/seed/MCT/coconut) with NO marine source and NO
+    explicit EPA/DHA token — plant 'omega-3' (ALA), which must route generic even
+    if a panel row was mis-canonicalized to epa/dha/fish_oil upstream."""
+    parts = [_route_product_label_text(product)]
+    for row in _route_scoring_rows(product):
+        if isinstance(row, dict):
+            parts.append(_row_source_text(row))
+    probe = {"name": " ".join(p for p in parts if p)}
+    return bool(
+        _NON_EPA_DHA_SOURCE_RE.search(_row_source_text(probe))
+        and not _source_has_epa_dha_identity(probe)
+        and not _source_is_marine_omega_parent(probe)
+    )
+
+
 def _route_is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
+    # Hard guard: plant 'omega-3' (ALA: flax/chia/hemp/fiber/seed/MCT/coconut) with
+    # no marine source and no explicit EPA/DHA token must route generic, never the
+    # EPA/DHA omega module — even when primary_type=='omega_3' or a row was
+    # mis-canonicalized upstream (the row-level checks below run too late because
+    # _route_has_primary_omega_panel short-circuits on the polluted canonical).
+    if _route_product_lacks_epa_dha_identity(product):
+        return False
     if _route_has_primary_omega_panel(product):
         return True
     if _ROUTE_OMEGA_369_RE.search(name_text or "") and not _route_has_any_epa_dha_row(product):

@@ -154,11 +154,47 @@ _UNII_IDENTITY_DESCRIPTOR_TOKENS = frozenset({
     "seed",
     "seeds",
     "whole",
+    "forms",
+    "form",
 })
+
+
+@functools.lru_cache(maxsize=1)
+def _load_unii_exoneration_label_tokens() -> Dict[str, List[Set[str]]]:
+    """Load reviewed same-UNII exonerations as label-token sets.
+
+    The allowlist is maintained as reference-data policy. Runtime uses it only
+    to downgrade known same-substance collisions from warning to debug; lookup
+    precedence and resolved payloads remain unchanged.
+    """
+    path = Path(__file__).parent / "data" / "unii_exoneration_allowlist.json"
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+
+    out: Dict[str, List[Set[str]]] = {}
+    for exoneration in payload.get("exonerations", []) or []:
+        unii = _normalize_unii(exoneration.get("unii"))
+        if not unii:
+            continue
+        labels: List[Set[str]] = []
+        for ref in exoneration.get("entries", []) or []:
+            if not isinstance(ref, dict):
+                continue
+            entry_id = ref.get("entry_id")
+            if entry_id:
+                labels.append(_unii_identity_tokens(entry_id))
+        out[unii] = [label for label in labels if label]
+    return out
 
 
 def _unii_identity_tokens(label: Any) -> Set[str]:
     text = str(label or "").lower().replace("_", " ")
+    if ":" in text:
+        text = text.split(":", 1)[1]
     tokens = {
         tok for tok in re.split(r"[^a-z0-9]+", text)
         if tok and tok not in _UNII_IDENTITY_DESCRIPTOR_TOKENS
@@ -166,19 +202,49 @@ def _unii_identity_tokens(label: Any) -> Set[str]:
     return tokens
 
 
-def _is_same_unii_identity_variant(existing_name: Any, incoming_name: Any) -> bool:
-    """Return True for benign same-UNII parent/part duplicate labels.
+def _tokens_overlap_as_identity(left: Set[str], right: Set[str]) -> bool:
+    return bool(left and right and (left <= right or right <= left))
 
-    Examples: "Turmeric" vs "botanical:turmeric_root_powder",
-    "Shiitake" vs "botanical:shiitake_mushroom". This only changes log
-    severity; first-write lookup behavior is unchanged. Distinct branded
-    extracts with the same source UNII (e.g. Cran-Max vs Pacran) still warn.
-    """
+
+def _is_allowlisted_unii_identity_variant(
+    unii: Any,
+    existing_name: Any,
+    incoming_name: Any,
+) -> bool:
+    canon = _normalize_unii(unii)
+    if not canon:
+        return False
+    allowlisted = _load_unii_exoneration_label_tokens().get(canon) or []
+    if not allowlisted:
+        return False
+
     left = _unii_identity_tokens(existing_name)
     right = _unii_identity_tokens(incoming_name)
     if not left or not right:
         return False
-    return left <= right or right <= left
+
+    left_ok = any(_tokens_overlap_as_identity(left, allowed) for allowed in allowlisted)
+    right_ok = any(_tokens_overlap_as_identity(right, allowed) for allowed in allowlisted)
+    return left_ok and right_ok
+
+
+def _is_same_unii_identity_variant(
+    existing_name: Any,
+    incoming_name: Any,
+    unii: Any = None,
+) -> bool:
+    """Return True for benign same-UNII parent/part duplicate labels.
+
+    Examples: "Turmeric" vs "botanical:turmeric_root_powder",
+    "Shiitake" vs "botanical:shiitake_mushroom". This only changes log
+    severity; first-write lookup behavior is unchanged. Distinct non-reviewed
+    branded extracts with the same source UNII still warn.
+    """
+    if _is_allowlisted_unii_identity_variant(unii, existing_name, incoming_name):
+        return True
+    left = _unii_identity_tokens(existing_name)
+    right = _unii_identity_tokens(incoming_name)
+    return _tokens_overlap_as_identity(left, right)
 
 
 _VARIATION_ABBREVIATIONS = {
@@ -1795,10 +1861,13 @@ class EnhancedDSLDNormalizer:
             unii = _normalize_unii(unii_raw)
             if not unii:
                 return
+            payload_for_index = dict(payload)
+            if entry_id_for_log:
+                payload_for_index["_unii_entry_label"] = entry_id_for_log
             incoming_priority = payload.get("priority", 999)
             existing = target.get(unii)
             if existing is None:
-                target[unii] = payload
+                target[unii] = payload_for_index
                 return
             existing_priority = existing.get("priority", 999)
             if existing_priority < incoming_priority:
@@ -1810,7 +1879,7 @@ class EnhancedDSLDNormalizer:
                 )
                 return
             if incoming_priority < existing_priority:
-                target[unii] = payload
+                target[unii] = payload_for_index
                 logger.debug(
                     "UNII collision (cross-tier): %s previously mapped to tier-%d %r; "
                     "promoting to higher-priority tier-%d %r",
@@ -1819,9 +1888,14 @@ class EnhancedDSLDNormalizer:
                 )
                 return
             if existing is not payload:
-                same_identity_variant = _is_same_unii_identity_variant(
+                existing_identity_label = existing.get(
+                    "_unii_entry_label",
                     existing.get("standard_name", "?"),
+                )
+                same_identity_variant = _is_same_unii_identity_variant(
+                    existing_identity_label,
                     entry_id_for_log,
+                    unii,
                 )
                 log = logger.debug if same_identity_variant else logger.warning
                 log(
@@ -1936,7 +2010,7 @@ class EnhancedDSLDNormalizer:
                             self._identity_unii_to_payload_lookup,
                             _extract_unii(form_data),
                             payload,
-                            f"iqm:{parent_key}.{form_name}",
+                            f"iqm:{parent_key}.forms[{form_name}]",
                         )
 
         # PRIORITY 5: standardized_botanicals

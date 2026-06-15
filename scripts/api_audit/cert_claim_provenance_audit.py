@@ -47,6 +47,8 @@ CORE_DB = SCRIPTS_ROOT / "final_db_output" / "pharmaguide_core.db"
 BLOBS_DIR = SCRIPTS_ROOT / "final_db_output" / "detail_blobs"
 REPORT_DIR = SCRIPTS_ROOT / "api_audit" / "reports"
 
+from cert_resolver import CertRegistry, normalize_program  # noqa: E402
+
 
 # Programs we expect to see + Codex's interim handling guidance.
 # This is the routing decision matrix the audit informs.
@@ -134,8 +136,15 @@ INTERIM_PROGRAM_ROUTING = {
 }
 
 
-# Bucket programs we already cover via live registry (post-P0.1a)
-COVERED_BY_LIVE_REGISTRY = {"NSF Sport", "NSF Certified"}
+def _registry_covered_programs(registry: CertRegistry) -> set[str]:
+    """Return canonical program names backed by the loaded registry snapshot."""
+    from_sources = {
+        normalize_program(src.get("program", ""))
+        for src in (registry.metadata.get("registry_sources") or [])
+        if src.get("program")
+    }
+    from_records = {normalize_program(p) for p in registry.records_by_program.keys() if p}
+    return {p for p in (from_sources | from_records) if p}
 
 
 def load_audit_rows() -> list[dict]:
@@ -208,8 +217,13 @@ def extract_provenance(blob: dict) -> dict[str, list[str]]:
     }
 
 
-def summarize(audit_records: list[dict], sample_size: int = 5) -> dict:
+def summarize(
+    audit_records: list[dict],
+    sample_size: int = 5,
+    covered_programs: set[str] | None = None,
+) -> dict:
     """Aggregate per-program provenance counts + capture samples."""
+    covered_programs = covered_programs or set()
     by_program: dict[str, dict] = defaultdict(
         lambda: {
             "label_count": 0,
@@ -228,7 +242,15 @@ def summarize(audit_records: list[dict], sample_size: int = 5) -> dict:
         if not rec.get("provenance"):
             continue
         total_products_with_cert_provenance += 1
-        prov = rec["provenance"]
+        raw_prov = rec["provenance"]
+        prov = {
+            key: [
+                normalized
+                for normalized in (normalize_program(p) for p in raw_prov.get(key, []))
+                if normalized
+            ]
+            for key in ("label_certifications", "manufacturer_evidence", "either_or_unknown")
+        }
         all_programs_for_product = (
             set(prov["label_certifications"])
             | set(prov["manufacturer_evidence"])
@@ -265,7 +287,7 @@ def summarize(audit_records: list[dict], sample_size: int = 5) -> dict:
             if prog in prov["either_or_unknown"]:
                 slot["unknown_count"] += 1
 
-            if prog not in COVERED_BY_LIVE_REGISTRY:
+            if prog not in covered_programs:
                 product_has_unsupported = True
 
         if product_has_unsupported:
@@ -276,7 +298,7 @@ def summarize(audit_records: list[dict], sample_size: int = 5) -> dict:
         [
             {
                 "program": prog,
-                "covered_by_live_registry": prog in COVERED_BY_LIVE_REGISTRY,
+                "covered_by_live_registry": prog in covered_programs,
                 "interim_routing": INTERIM_PROGRAM_ROUTING.get(prog, {}).get("handling", "not_classified"),
                 "scraper_priority": INTERIM_PROGRAM_ROUTING.get(prog, {}).get("scraper_priority"),
                 **vals,
@@ -314,6 +336,11 @@ def render_markdown(summary: dict, timestamp: str) -> str:
         f"- Of those, products with at least one program OUTSIDE our live registry: "
         f"**{summary['products_with_any_unsupported_program']}**"
     )
+    covered = summary.get("covered_programs") or []
+    out.append(
+        f"- Live-registry covered programs: "
+        f"**{', '.join(covered) if covered else 'none'}**"
+    )
     out.append("")
     out.append("## Per-program counts (sorted by total products claiming this program)")
     out.append("")
@@ -338,7 +365,7 @@ def render_markdown(summary: dict, timestamp: str) -> str:
     out.append("  remain display-only / manufacturer trust signals — they do NOT prove SKU-level cert.")
     out.append("- **Unknown**: provenance unclear from the v3 blob (legacy shape). Ignore for now.")
     out.append("- **Covered**: program is loaded into `cert_registry.json` and a resolver can")
-    out.append("  verify it at SKU level. Currently only NSF Sport + NSF/ANSI 173.")
+    out.append("  verify it at SKU/product-line level when the public registry has a product match.")
     out.append("")
     out.append("## Samples (first 3 of each provenance per program)")
     for row in summary["by_program"][:30]:  # top 30 programs only
@@ -365,6 +392,15 @@ def main() -> None:
     args = parser.parse_args()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
+    print("Loading cert registry...", file=sys.stderr)
+    registry = CertRegistry.load()
+    covered_programs = _registry_covered_programs(registry)
+    print(
+        f"  {sum(len(v) for v in registry.records_by_program.values())} records "
+        f"across {len(covered_programs)} programs",
+        file=sys.stderr,
+    )
+
     print("Loading catalog rows...", file=sys.stderr)
     rows = load_audit_rows()
     print(f"  {len(rows)} products in products_core", file=sys.stderr)
@@ -389,11 +425,12 @@ def main() -> None:
 
     print(f"  audited {len(audit_records)} products; {missing} missing blobs", file=sys.stderr)
 
-    summary = summarize(audit_records, sample_size=args.sample)
+    summary = summarize(audit_records, sample_size=args.sample, covered_programs=covered_programs)
     # Wire catalog-scan counts into summary so the report can distinguish
     # "scanned" from "had cert provenance" — Codex feedback on report wording.
     summary["total_catalog_products_scanned"] = len(rows)
     summary["catalog_products_missing_blob"] = missing
+    summary["covered_programs"] = sorted(covered_programs)
 
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     stem = f"cert_claim_provenance_audit_{ts}"
@@ -402,10 +439,10 @@ def main() -> None:
 
     payload = {
         "_metadata": {
-            "schema_version": "1.1.0",
+            "schema_version": "1.2.0",
             "generated_at": ts,
             "audit_kind": "p0_1c_cert_claim_provenance",
-            "covered_by_live_registry": sorted(COVERED_BY_LIVE_REGISTRY),
+            "covered_by_live_registry": sorted(covered_programs),
             "total_catalog_products_scanned": summary["total_catalog_products_scanned"],
             "total_products_with_cert_provenance": summary["total_products_with_cert_provenance"],
         },

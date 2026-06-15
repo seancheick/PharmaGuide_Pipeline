@@ -4,7 +4,7 @@
     "purpose": "claims_scoring",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_cert_claim_rules_contract.py",
-    "last_updated": "2026-04-01",
+    "last_updated": "2026-06-15",
     "scoring_rule": "Only award points when evidence_strength >= 'medium' AND score_eligible=true AND feature gate enabled",
     "design_principles": [
       "Separation of concerns: Enrichment extracts claims, Scoring computes points",
@@ -1146,18 +1146,25 @@
         "dedupe_key": "traceability:coa",
         "claim_type": "batch_traceability",
         "positive_patterns": [
+          "\\bCOAs?\\b",
+          "\\bCertificates?\\s+of\\s+Analysis\\b",
           "\\bCOA\\b",
           "\\bCertificate\\s+of\\s+Analysis\\b",
-          "\\banalysis\\s+certificate\\b"
+          "\\banalysis\\s+certificates?\\b",
+          "\\b(?:third[-\\s]?party\\s+)?lab\\s+(?:test\\s+)?reports?\\b"
         ],
         "required_context": [
           "available",
           "request",
           "download",
+          "view",
+          "access",
           "scan",
           "provided",
           "upon",
-          "website"
+          "website",
+          "lot",
+          "batch"
         ],
         "required_context_note": "COA must be actionable - 'COA available on request' scores, 'we do COA testing' does not",
         "negative_patterns": [],
@@ -1175,7 +1182,9 @@
         "positive_patterns": [
           "\\bQR\\s*code\\b.*\\b(batch|lot|trace)\\b",
           "\\b(batch|lot)\\b.*\\bQR\\s*code\\b",
-          "\\bscan\\s+(for|to)\\s+(batch|lot|trace)\\b"
+          "\\bscan\\s+(for|to)\\s+(batch|lot|trace)\\b",
+          "\\bscan\\s+(?:the\\s+)?QR\\s*code\\b.*\\b(test\\s+results?|lab\\s+reports?|COA|certificate\\s+of\\s+analysis)\\b",
+          "\\b(test\\s+results?|lab\\s+reports?|COA|certificate\\s+of\\s+analysis)\\b.*\\bQR\\s*code\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "strong",
@@ -1209,7 +1218,10 @@
         "positive_patterns": [
           "\\btransparency\\s+program\\b",
           "\\btraceability\\s+program\\b",
-          "\\btrack\\s+(your|the)\\s+(batch|product)\\b"
+          "\\btrack\\s+(your|the)\\s+(batch|product)\\b",
+          "\\b(batch|lot)\\s+(lookup|look\\s*up|search|verification|trace|tracking)\\b",
+          "\\b(enter|submit)\\s+(?:your\\s+|the\\s+)?(batch|lot)\\s+(number|code)\\b",
+          "\\b(batch|lot)\\s+(number|code)\\b.{0,80}\\b(test\\s+results?|lab\\s+reports?|COA|certificate\\s+of\\s+analysis)\\b"
         ],
         "negative_patterns": [],
         "evidence_strength": "medium",
