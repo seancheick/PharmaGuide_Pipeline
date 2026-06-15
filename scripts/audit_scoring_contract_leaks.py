@@ -105,6 +105,18 @@ ALLOWLIST: dict[str, str] = {
     "scripts/scoring_v4/modules/sports_helpers.py|dose_g|get|quantity|21bfa8900072": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/sports_helpers.py|dose_g|get|unit_normalized|c466ec896cc8": "pass_a_known_pending_native_evidence_contract",
     "scripts/scoring_v4/modules/sports_helpers.py|dose_g|get|unit|a4456c65c40e": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/confidence.py|_is_non_contributory_epa_dha_placeholder|get|quantity|437869d0a4ab": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/confidence.py|_is_non_contributory_epa_dha_placeholder|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/gate_safety.py|_ingredient_safety_terms|get|raw_source_text|defe2b573198": "pass_a_known_pending_native_safety_signal_contract",
+    "scripts/scoring_v4/gate_safety.py|_blend_children_text|get|raw_source_text|785fb9c4489c": "pass_a_known_pending_native_safety_signal_contract",
+    "scripts/scoring_v4/modules/brand_testing_posture.py|gmp_facility_evidence|get|match_type|2d68ef6686e9": "pass_a_known_pending_native_safety_signal_contract",
+    "scripts/scoring_v4/modules/generic_dose.py|_score_no_reference_quantified_dose|get|quantity|3fd4e11ae842": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/generic_evidence.py|_row_identity_text|get|raw_source_text|2574dd84d909": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/multi_prenatal_dose.py|_unit_text|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/probiotic_dose.py|_ingredient_rows|get|activeIngredients|c732cecc648f": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/probiotic_dose.py|_row_positive_mass|get|unit_normalized|c7a08b90a025": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/probiotic_dose.py|_row_positive_mass|get|unit|d22733e3184e": "pass_a_known_pending_native_evidence_contract",
+    "scripts/scoring_v4/modules/probiotic_dose.py|_compute_direct_strain_mass_floor|get|raw_source_text|2574dd84d909": "pass_a_known_pending_native_evidence_contract",
 }
 
 

@@ -217,6 +217,59 @@ def _collect_allowlisted_banned_harmful_terms() -> set[str]:
     return allowed
 
 
+def test_cross_db_overlap_allowlist_entries_are_current_and_unique():
+    """The allowlist is a reviewed exception ledger, not a future wildcard.
+
+    Every entry must correspond to a currently observed overlap under the same
+    collectors that gate unknown overlaps. Hyphen/space variants normalize to
+    the same term, so duplicate normalized entries are also rejected.
+    """
+    allow = _load_json("cross_db_overlap_allowlist.json").get("allowed_overlaps", [])
+    harmful_db = _load_json("harmful_additives.json")
+    harmful = harmful_db.get("harmful_additives", harmful_db.get("additives", []))
+    banned_db = _load_json("banned_recalled_ingredients.json")
+    banned = banned_db.get("ingredients", banned_db.get("banned_recalled_ingredients", []))
+    iqm = _load_json("ingredient_quality_map.json")
+    botanicals = _load_json("botanical_ingredients.json").get("botanical_ingredients", [])
+
+    harmful_terms = _collect_db_terms(
+        harmful,
+        ["standard_name", "name", "additive_name", "ingredient"],
+        ["aliases", "label_tokens", "synonyms", "common_names"],
+    )
+    banned_terms = _collect_db_terms(banned, ["standard_name", "name"], ["aliases"])
+    observed = {
+        "harmful:iqm": harmful_terms & _collect_iqm_terms(iqm),
+        "harmful:botanical": harmful_terms & _collect_standard_alias_terms(botanicals),
+        "banned:harmful": banned_terms & harmful_terms,
+    }
+
+    seen: set[tuple[str, tuple[str, ...]]] = set()
+    duplicates = []
+    stale = []
+    malformed = []
+    for idx, row in enumerate(allow):
+        if not isinstance(row, dict):
+            malformed.append((idx, "not_dict"))
+            continue
+        term = _norm(str(row.get("term_normalized", "")))
+        pairs = row.get("db_pairs") or []
+        if not term or not isinstance(pairs, list) or not pairs or not row.get("reason"):
+            malformed.append((idx, term or "<blank>"))
+            continue
+        key = (term, tuple(sorted(str(pair) for pair in pairs)))
+        if key in seen:
+            duplicates.append((idx, term, sorted(pairs)))
+        seen.add(key)
+        for pair in pairs:
+            if pair not in observed or term not in observed[pair]:
+                stale.append((idx, term, pair))
+
+    assert not malformed, f"Malformed overlap allowlist entries: {malformed}"
+    assert not duplicates, f"Duplicate normalized overlap allowlist entries: {duplicates}"
+    assert not stale, f"Stale overlap allowlist entries with no current overlap: {stale}"
+
+
 def test_banned_terms_do_not_overlap_harmful_terms():
     banned_db = _load_json("banned_recalled_ingredients.json")
     harmful_db = _load_json("harmful_additives.json")

@@ -103,7 +103,7 @@
     },
     {
       "unii": "G199I91G4B",
-      "fda_canonical_name": "ISOMERIZED LINOLEIC ACID",
+      "fda_canonical_name": "CONJUGATED LINOLEIC ACID",
       "entries": [
         {"file": "ingredient_quality_map.json", "entry_id": "cla"},
         {"file": "other_ingredients.json", "entry_id": "OI_CLA_OIL_INACTIVE"}
@@ -153,7 +153,7 @@
     },
     {
       "unii": "394XK0IH40",
-      "fda_canonical_name": "PHOSPHATIDYL SERINE",
+      "fda_canonical_name": "PHOSPHATIDYLSERINE",
       "entries": [
         {"file": "ingredient_quality_map.json", "entry_id": "phosphatidylserine"},
         {"file": "botanical_ingredients.json", "entry_id": "phosphatidylserine"},
@@ -164,7 +164,7 @@
     },
     {
       "unii": "6PQP1V1B6O",
-      "fda_canonical_name": "CI 75120",
+      "fda_canonical_name": "ANNATTO",
       "entries": [
         {"file": "other_ingredients.json", "entry_id": "NHA_ANNATTO_VARIANTS"},
         {"file": "other_ingredients.json", "entry_id": "OI_ANNATTO_EXTRACT"}
@@ -194,7 +194,7 @@
     },
     {
       "unii": "BIA2SO6F5B",
-      "fda_canonical_name": "GALEGA OFFICINALIS",
+      "fda_canonical_name": "GALEGA OFFICINALIS WHOLE",
       "entries": [
         {"file": "botanical_ingredients.json", "entry_id": "galega_officinalis"},
         {"file": "botanical_ingredients.json", "entry_id": "goats_rue"}
@@ -255,7 +255,7 @@
     },
     {
       "unii": "FZ989GH94E",
-      "fda_canonical_name": "POVIDONE, UNSPECIFIED",
+      "fda_canonical_name": "PVP",
       "entries": [
         {"file": "other_ingredients.json", "entry_id": "NHA_PVP"},
         {"file": "other_ingredients.json", "entry_id": "PII_KOLLIDON"},
@@ -277,7 +277,7 @@
     },
     {
       "unii": "K679OBS311",
-      "fda_canonical_name": "CARBOXYMETHYLCELLULOSE SODIUM",
+      "fda_canonical_name": "CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM",
       "entries": [
         {"file": "other_ingredients.json", "entry_id": "OI_CELLULOSE_GUM"},
         {"file": "other_ingredients.json", "entry_id": "PII_SODIUM_CARBOXYMETHYLCELLULOSE"}
@@ -297,7 +297,7 @@
     },
     {
       "unii": "TJ6XA84OQF",
-      "fda_canonical_name": "ACACIA CATECHU WHOLE",
+      "fda_canonical_name": "SENEGALIA CATECHU WHOLE",
       "entries": [
         {"file": "ingredient_quality_map.json", "entry_id": "acacia_catechu"},
         {"file": "botanical_ingredients.json", "entry_id": "cutch_tree"}
@@ -318,7 +318,7 @@
     },
     {
       "unii": "E89I1637KE",
-      "fda_canonical_name": "GUAR GUM",
+      "fda_canonical_name": "CYAMOPSIS TETRAGONOLOBA (GUAR) GUM",
       "entries": [
         {"file": "other_ingredients.json", "entry_id": "OI_GUAR_GUM"},
         {"file": "other_ingredients.json", "entry_id": "NHA_PARTIALLY_HYDROLYZED_GUAR_GUM"}
