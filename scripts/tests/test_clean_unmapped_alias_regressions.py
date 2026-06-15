@@ -2899,3 +2899,113 @@ def test_red_yeast_rice_resolves_canonical_identity(normalizer, name):
 
     assert canonical_id == "red_yeast_rice"
     assert source_db == "botanical_ingredients"
+
+
+def test_structural_blend_total_is_not_reported_as_unmapped(normalizer):
+    """Blend-total rows are transparency structure, not missing ingredient IDs.
+
+    They should remain non-scorable blend headers, but the unmapped queue must
+    stay focused on true database gaps.
+    """
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    result = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "Brain Health Blend",
+            "category": "blend",
+            "ingredientGroup": "Blend",
+            "quantity": [{"quantity": 50, "unit": "mg"}],
+        },
+        is_active=True,
+    )
+
+    assert result is not None
+    assert result["cleaner_row_role"] == "blend_header_total"
+    assert result["score_eligible_by_cleaner"] is False
+    assert result["canonical_id"] is None
+    assert result["canonical_source_db"] == "unmapped"
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+def test_true_unknown_active_is_still_reported_as_unmapped(normalizer):
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    result = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": "Unverified Phantom Root",
+            "category": "botanical",
+            "ingredientGroup": "Unverified Phantom Root",
+            "quantity": [{"quantity": 100, "unit": "mg"}],
+        },
+        is_active=True,
+    )
+
+    assert result is not None
+    assert result["cleaner_row_role"] == "active_scorable"
+    delta = normalizer.get_unmapped_delta(snapshot)["unmapped"]
+    assert [row["name"] for row in delta] == ["Unverified Phantom Root"]
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("Dewaxed Bleached Shellac", "Shellac"),
+        ("Polyvinylpolypyrrolidone", "Crospovidone"),
+        ("Polydextrose Syrup", "Polydextrose"),
+        ("Polysorbate 60", "Polysorbate 60"),
+        ("FD&C Red # 40 Lake", "FD&C Red No. 40"),
+        ("Titanium Dixoide", "Titanium Dioxide"),
+        ("Acesulfme Potassium", "Acesulfame Potassium"),
+        ("Carrageenam", "Carrageenan"),
+        ("Frutose", "Fructose"),
+        ("Non-Fat Milk Powder", "Skim Milk Powder"),
+        ("NONFAT DRIED MILK POWDER", "Skim Milk Powder"),
+        ("high-purity Steviol Glycosides", "Stevia & Stevia Extracts"),
+        ("Baker's Yeast", "Saccharomyces cerevisiae"),
+        ("Palm kernel Oil", "Palm Oil"),
+        ("Palm Oil, Hydrogenated", "Palm Oil"),
+        ("Sodium Gluconate", "Sodium Gluconate"),
+        ("Dimethyl Siloxane", "Simethicone"),
+        ("Dimethylpolysiloxane", "Simethicone"),
+        ("Gum Acacia Fiber", "Acacia Gum"),
+        ("Vitamin/Mineral Blend", "Vitamin Premix"),
+        ("Fruit Blend Color", "Natural Colors from Plants"),
+        ("Supro(R) Brand Soy Protein Isolate", "Protein"),
+        ("Solae(R) Brand Isolated Soy Protein", "Protein"),
+        ("Egg Whites", "Egg Albumin"),
+        ("Carboxymethylstarch Sodium", "Sodium Starch Glycolate"),
+        ("hydrogenated Soy Oil", "Soy Bean Oil"),
+        ("Palm Oil Glycerides", "Mono and Diglycerides"),
+        ("Advantitol Erythritol", "Erythritol"),
+        ("soluble vegetable Fiber", "Vegetable Fiber"),
+    ],
+)
+def test_2026_06_15_unmapped_inactive_alias_batch_maps(normalizer, name, expected):
+    standard_name, mapped, _ = normalizer._map_inactive_name_prefer_other(name, [])
+
+    assert mapped is True
+    assert expected.lower() in standard_name.lower()
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        ("Ginkgo Flavone Glycosides", "Ginkgo"),
+        ("Gum Acacia Fiber", "Acacia Gum"),
+        ("PreforPro Prebiotic Blend", "PreforPro"),
+        ("Micronized BCAA", "Branched Chain Amino Acids"),
+        ("Free-form BCAA's", "Branched Chain Amino Acids"),
+        ("Persimmon, Powder", "Persimmon"),
+        ("Persimmon powder", "Persimmon"),
+        ("B. animalis lactis BI-07", "Bifidobacterium Lactis"),
+        ("B. animalis lactis BL-04", "Bifidobacterium Lactis"),
+        ("Soluble Vegetable Fiber", "Fiber"),
+        ("Himematsutake Mushroom", "Royal Sun Blazei"),
+        ("Lignamax Lignan Flaxseed Fiber", "Flaxseed"),
+    ],
+)
+def test_2026_06_15_unmapped_active_alias_batch_maps(normalizer, name, expected):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(name, [])
+
+    assert mapped is True
+    assert expected.lower() in standard_name.lower()

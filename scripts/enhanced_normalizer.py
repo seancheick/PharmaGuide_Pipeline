@@ -6145,7 +6145,11 @@ class EnhancedDSLDNormalizer:
 
         # Track unmapped ingredients only if not found in any database
         # AND not a nutrition fact/label phrase
-        if not is_mapped and not self._is_nutrition_fact(name):
+        if (
+            not is_mapped
+            and not is_structural_active_blend_total
+            and not self._is_nutrition_fact(name)
+        ):
             self._record_unmapped_ingredient(name, forms, is_active=is_active)
 
         # Preserve forms with full structure from DSLD (PRESERVE EVERYTHING).
@@ -6251,7 +6255,10 @@ class EnhancedDSLDNormalizer:
             standard_name = name
             is_mapped = False
             canonical_source_db = "unmapped"
-            if not self._is_nutrition_fact(name):
+            if (
+                not is_structural_active_blend_total
+                and not self._is_nutrition_fact(name)
+            ):
                 self._record_unmapped_ingredient(name, forms, is_active=is_active)
 
         # LABEL NUTRIENT CONTEXT (refactor Phase 1c — cross-alias disambiguator).

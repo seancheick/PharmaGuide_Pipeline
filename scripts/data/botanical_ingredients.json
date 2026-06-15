@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-05-25",
-    "total_entries": 530,
+    "last_updated": "2026-06-15",
+    "total_entries": 531,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -10754,6 +10754,41 @@
         "metabolites": []
       },
       "cui": "C0330664",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "persimmon",
+      "standard_name": "Persimmon",
+      "latin_name": "Diospyros spp.",
+      "aliases": [
+        "persimmon",
+        "persimmon powder",
+        "persimmon, powder",
+        "persimmon fruit",
+        "diospyros",
+        "diospyros kaki"
+      ],
+      "category": "fruit",
+      "notes": "Persimmon fruit botanical identity mapping for non-standardized whole fruit powder labels. Added from DSLD unmapped cleanup after live GSRS/UMLS verification on 2026-06-15; not a standardized extract entry and does not grant standardized-botanical bonus.",
+      "last_updated": "2026-06-15",
+      "external_ids": {
+        "unii": "4V023DD7KL"
+      },
+      "gsrs": {
+        "substance_name": "PERSIMMON",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": 66,
+        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Persimmon | 2386 (Number of products:66)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "cui": "C2349193",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

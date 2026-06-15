@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-15",
-    "total_entries": 116,
+    "total_entries": 117,
     "functional_roles_field": {
       "added_in": "5.2.0",
       "type": "string[]",
@@ -43,7 +43,7 @@
     "risk_breakdown": {
       "moderate": 45,
       "high": 22,
-      "low": 45
+      "low": 46
     },
     "categories_count": 20,
     "pipeline_integration": "Used by enrichment script to apply penalty points for harmful ingredients during scoring. Matches against ingredient names and other_ingredient forms.",
@@ -152,7 +152,8 @@
         "potassium acesulfame",
         "6-methyl-1,2,3-oxathiazine-4(3H)-one 2,2-dioxide potassium salt",
         "Sunett",
-        "Sweet One"
+        "Sweet One",
+        "Acesulfme Potassium"
       ],
       "category": "sweetener_artificial",
       "mechanism_of_harm": "May alter gut microbiome composition and glucose metabolism at high doses. Methylene chloride (manufacturing byproduct) is present at trace levels well below safety thresholds.",
@@ -3554,6 +3555,7 @@
         "semi-refined carrageenan",
         "red seaweed extract",
         "Carageenan",
+        "Carrageenam",
         "carrageenan",
         "CAS 9000-07-1"
       ],
@@ -4408,7 +4410,9 @@
         "PVPP",
         "polyplasdone",
         "kollidon CL",
-        "crosslinked PVP"
+        "crosslinked PVP",
+        "polyvinylpolypyrrolidone",
+        "polyvinyl polypyrrolidone"
       ],
       "category": "excipient",
       "mechanism_of_harm": "Synthetic cross-linked polyvinylpyrrolidone polymer largely unabsorbed by the body. As a synthetic polymer, theoretical concerns exist about potential accumulation in tissues with long-term exposure, though evidence is limited. May cause minor digestive effects in sensitive individuals. Not absorbed systemically.",
@@ -5194,6 +5198,7 @@
         "E968",
         "erythrite",
         "1,2,3,4-butanetetrol",
+        "Advantitol Erythritol",
         "mesoerythritol",
         "phycitol",
         "swerve",
@@ -8447,7 +8452,11 @@
         "red palm oil",
         "palm stearin",
         "refined palm oil",
-        "crude palm oil"
+        "crude palm oil",
+        "palm kernel oil",
+        "sustainable palm oil",
+        "non-hydrogenated palm oil",
+        "palm oil, hydrogenated"
       ],
       "category": "excipient",
       "mechanism_of_harm": "High in saturated fat (~50% palmitic acid) which may raise LDL cholesterol. Refined palm oil can contain 3-MCPD and glycidyl ester contaminants formed during high-temperature processing. EFSA 2018 identified glycidyl esters as genotoxic and carcinogenic. In supplement context, amounts are small (capsule coatings, softgel fill) but flagged as quality signal.",
@@ -8606,7 +8615,8 @@
         "PDX",
         "synthetic fiber",
         "glucose polymer",
-        "modified glucose polymer"
+        "modified glucose polymer",
+        "polydextrose syrup"
       ],
       "category": "filler",
       "mechanism_of_harm": "Synthetic glucose polymer classified as dietary fiber by FDA (2013). Partially fermented in the colon, producing gas and osmotic effects. Laxative threshold ~50 g/day (higher tolerance than sugar alcohols). GI effects (bloating, flatulence, diarrhea) are dose-dependent and self-limiting. Mineral absorption interference claims are not supported at normal use levels.",
@@ -9521,6 +9531,102 @@
       ]
     },
     {
+      "id": "ADD_POLYSORBATE_60",
+      "standard_name": "Polysorbate 60",
+      "aliases": [
+        "polysorbate 60",
+        "tween 60",
+        "polyoxyethylene sorbitan monostearate",
+        "E435"
+      ],
+      "category": "emulsifier",
+      "mechanism_of_harm": "Synthetic ethoxylated sorbitan monostearate. Same mechanistic class as other polysorbates; potential gut barrier and microbiome concerns are extrapolated from polysorbate class evidence. Oral supplement amounts are generally excipient-level.",
+      "regulatory_status": {
+        "US": "FDA approved food additive; GSRS lists 21 CFR 172.836 and 21 CFR 172.515.",
+        "EU": "E435 permitted emulsifier under the polysorbates group.",
+        "WHO": "JECFA group ADI for polysorbates 20/40/60/65/80: 25 mg/kg bw/day."
+      },
+      "population_warnings": [
+        "IBD/IBS - same emulsifier class as P80; potential gut barrier disruption",
+        "PEG/polysorbate allergy - cross-reactivity possible within polysorbate family"
+      ],
+      "notes": "Polysorbate-class synthetic emulsifier. Added from DSLD unmapped cleanup after live GSRS/UMLS verification on 2026-06-15. PubChem did not return a discrete compound record, consistent with mixture/polymer handling.",
+      "last_updated": "2026-06-15",
+      "severity_level": "low",
+      "penalty_points": -0.5,
+      "entity_type": "ingredient",
+      "cui": "C0982351",
+      "external_ids": {
+        "unii": "CAL22UVI4M",
+        "cas": "9005-67-8",
+        "pubchem_cid": null
+      },
+      "rxcui": "1368867",
+      "gsrs": {
+        "substance_name": "POLYSORBATE 60",
+        "substance_class": "mixture",
+        "cfr_sections": [
+          "21 CFR 310.527",
+          "21 CFR 172.836",
+          "21 CFR 172.515"
+        ],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "fuzzy_threshold": 0.72,
+        "case_sensitive": false,
+        "preferred_alias": "Polysorbate 60"
+      },
+      "references_structured": [
+        {
+          "type": "regulation",
+          "authority": "FDA",
+          "title": "GSRS Polysorbate 60 CFR references",
+          "citation": "GSRS: Polysorbate 60; 21 CFR 172.836, 21 CFR 172.515",
+          "url": "https://gsrs.ncats.nih.gov/ginas/app/api/v1/substances/search?q=Polysorbate%2060",
+          "published_date": null,
+          "evidence_grade": "R",
+          "supports_claims": []
+        },
+        {
+          "type": "regulatory_action",
+          "authority": "EFSA",
+          "title": "Re-evaluation of polysorbates (E432-E436)",
+          "citation": "EFSA Journal 2015;13(7):4152",
+          "url": "https://efsa.onlinelibrary.wiley.com/doi/10.2903/j.efsa.2015.4152",
+          "published_date": "2015-07-16",
+          "evidence_grade": "R",
+          "supports_claims": []
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-15",
+        "reviewed_by": "unmapped_resolution_batch",
+        "next_review_due": "2026-12-15",
+        "change_log": [
+          {
+            "date": "2026-06-15",
+            "change": "Created Polysorbate 60 entry with live GSRS/UMLS verification.",
+            "reason": "unmapped ingredient cleanup"
+          }
+        ]
+      },
+      "confidence": "medium",
+      "safety_summary": "A polysorbate-class emulsifier. May affect gut-lining integrity at higher intakes; overall concern is lower than P80 but worth noting.",
+      "safety_summary_one_liner": "Polysorbate emulsifier - lower-end gut signals.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
+    },
+    {
       "id": "ADD_POLYVINYLPYRROLIDONE",
       "standard_name": "Polyvinylpyrrolidone (PVP)",
       "aliases": [
@@ -10299,6 +10405,7 @@
         "Allura Red aluminum lake",
         "E129",
         "FD&C Red #40 Lake",
+        "FD&C Red # 40 Lake",
         "FD&C Red 40 Lake",
         "FD and C Red 40 Lake",
         "Red 40 Aluminum Lake",
@@ -17728,7 +17835,8 @@
         "fruit sugar",
         "levulose",
         "D-fructose",
-        "fructose syrup"
+        "fructose syrup",
+        "frutose"
       ],
       "category": "sweetener_natural",
       "mechanism_of_harm": "Metabolized primarily by the liver via fructokinase, bypassing phosphofructokinase regulation. Excessive intake drives de novo lipogenesis, uric acid production, and insulin resistance. Chronic high intake contributes to non-alcoholic fatty liver disease (NAFLD), visceral fat accumulation, and elevated triglycerides.",
