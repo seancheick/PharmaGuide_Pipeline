@@ -3659,6 +3659,133 @@ class TestLiposomalPureWayCVitaminC:
         assert "BRAND_PUREWAY_C" in evidence_ids
 
 
+class TestClinicalEvidenceUsesMatchedFormIdentity:
+    """Clinical evidence must see normalized form identities from enrichment."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @staticmethod
+    def _evidence_ids(enricher, product: dict) -> set:
+        enriched, issues = enricher.enrich_product(product)
+        assert issues == []
+        return {
+            match.get("id")
+            for match in enriched.get("evidence_data", {}).get("clinical_matches", [])
+        }
+
+    def test_magnesium_bisglycinate_chelate_routes_to_glycinate_evidence(self, enricher):
+        product = {
+            "id": "test_magnesium_bisglycinate_evidence",
+            "fullName": "Magnesium Bisglycinate",
+            "brandName": "Test Brand",
+            "activeIngredients": [
+                {
+                    "name": "Magnesium",
+                    "standardName": "Magnesium",
+                    "raw_source_text": "Magnesium",
+                    "quantity": 50.0,
+                    "unit": "mg",
+                    "forms": [
+                        {
+                            "name": "TRAACS Magnesium Bisglycinate Chelate",
+                            "prefix": "as",
+                            "category": "non-nutrient/non-botanical",
+                            "ingredientGroup": "Magnesium",
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        assert "INGR_MAG_GLYCINATE" in self._evidence_ids(enricher, product)
+
+    def test_iron_bisglycinate_chelate_routes_to_bisglycinate_evidence(self, enricher):
+        product = {
+            "id": "test_iron_bisglycinate_evidence",
+            "fullName": "Gentle Iron",
+            "brandName": "Test Brand",
+            "activeIngredients": [
+                {
+                    "name": "Iron",
+                    "standardName": "Iron",
+                    "raw_source_text": "Iron",
+                    "quantity": 18.0,
+                    "unit": "mg",
+                    "forms": [
+                        {
+                            "name": "Iron Bisglycinate Chelate",
+                            "prefix": "as",
+                            "category": "non-nutrient/non-botanical",
+                            "ingredientGroup": "Iron",
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        assert "INGR_IRON_BISGLYCINATE" in self._evidence_ids(enricher, product)
+
+    def test_row_level_ksm66_gets_brand_evidence(self, enricher):
+        product = {
+            "id": "test_ksm66_row_level_evidence",
+            "fullName": "Sport Multivitamin",
+            "brandName": "Test Brand",
+            "activeIngredients": [
+                {
+                    "name": "KSM-66",
+                    "standardName": "Ashwagandha",
+                    "raw_source_text": "KSM-66 Ashwagandha Withania somnifera extract",
+                    "quantity": 500.0,
+                    "unit": "mg",
+                    "forms": [
+                        {
+                            "name": "Total Withanolides",
+                            "prefix": "std. to",
+                            "percent": 5,
+                            "category": "non-nutrient/non-botanical",
+                            "ingredientGroup": "Withanolide",
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        assert "BRAND_KSM66" in self._evidence_ids(enricher, product)
+
+    def test_generic_ashwagandha_does_not_inherit_ksm66_evidence(self, enricher):
+        product = {
+            "id": "test_generic_ashwagandha_no_ksm66",
+            "fullName": "Ashwagandha Root Extract",
+            "brandName": "Test Brand",
+            "activeIngredients": [
+                {
+                    "name": "Ashwagandha Root Extract",
+                    "standardName": "Ashwagandha",
+                    "raw_source_text": "Ashwagandha Root Extract",
+                    "quantity": 500.0,
+                    "unit": "mg",
+                    "forms": [
+                        {
+                            "name": "Total Withanolides",
+                            "prefix": "std. to",
+                            "percent": 5,
+                            "category": "non-nutrient/non-botanical",
+                            "ingredientGroup": "Withanolide",
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+        assert "BRAND_KSM66" not in self._evidence_ids(enricher, product)
+
+
 class TestCerevisiaeYeastFormInjection:
     """BUG-11: S. cerevisiae culture form text must route to yeast IQM forms.
 

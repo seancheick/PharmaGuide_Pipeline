@@ -11670,7 +11670,60 @@ class SupplementEnricherV3:
         matches = []
         product_text = self._get_all_product_text(product)
 
-        def _clinical_form_candidates(ingredient: Dict) -> List[str]:
+        quality_rows = []
+        if isinstance(ingredient_quality_data, dict):
+            quality_rows = [
+                row
+                for row in ingredient_quality_data.get("ingredients", []) or []
+                if isinstance(row, dict)
+            ]
+
+        def _identity_key_values(row: Dict, fields: Tuple[str, ...]) -> set:
+            out = set()
+            for field in fields:
+                value = row.get(field)
+                if not value:
+                    continue
+                normalized = norm_module.make_normalized_key(str(value))
+                if normalized:
+                    out.add(normalized)
+            return out
+
+        def _same_quantity_unit(left: Dict, right: Dict) -> bool:
+            left_qty = left.get("quantity")
+            right_qty = right.get("quantity")
+            if not isinstance(left_qty, (int, float)) or not isinstance(right_qty, (int, float)):
+                return True
+            try:
+                if abs(float(left_qty) - float(right_qty)) > 1e-9:
+                    return False
+            except (TypeError, ValueError):
+                return True
+            left_unit = str(left.get("unit") or "").strip().lower()
+            right_unit = str(right.get("unit") or "").strip().lower()
+            return not left_unit or not right_unit or left_unit == right_unit
+
+        def _quality_rows_for_ingredient(ingredient: Dict) -> List[Dict]:
+            ingredient_keys = _identity_key_values(
+                ingredient,
+                ("name", "standardName", "standard_name", "raw_source_text"),
+            )
+            if not ingredient_keys:
+                return []
+
+            rows: List[Dict] = []
+            for row in quality_rows:
+                if str(row.get("source_section") or "active").lower() != "active":
+                    continue
+                row_keys = _identity_key_values(
+                    row,
+                    ("name", "standard_name", "raw_source_text", "original_label"),
+                )
+                if ingredient_keys.intersection(row_keys) and _same_quantity_unit(ingredient, row):
+                    rows.append(row)
+            return rows
+
+        def _clinical_form_candidates(ingredient: Dict, quality_matches: List[Dict]) -> List[str]:
             """Structured form labels can carry the clinical product identity.
 
             Example: DSLD stores PureWay-C under activeIngredients[].forms while
@@ -11709,17 +11762,46 @@ class SupplementEnricherV3:
                 ):
                     continue
                 out.append(name)
+
+            # Quality-map rows carry the normalized form identity.
+            # Evidence matching needs that identity too; raw DSLD text can say
+            # "TRAACS Magnesium Bisglycinate Chelate" while the verified
+            # clinical entry is keyed as "Magnesium Glycinate".
+            for quality_row in quality_matches:
+                for field in ("matched_form", "form_id", "matched_alias", "branded_token_extracted"):
+                    value = str(quality_row.get(field) or "").strip()
+                    if value:
+                        out.append(value)
+                for matched_form in quality_row.get("matched_forms") or []:
+                    if not isinstance(matched_form, dict):
+                        continue
+                    for field in ("form_key", "matched_candidate", "raw_form_text"):
+                        value = str(matched_form.get(field) or "").strip()
+                        if value:
+                            out.append(value)
+                for extracted_form in quality_row.get("extracted_forms") or []:
+                    if not isinstance(extracted_form, dict):
+                        continue
+                    for field in ("raw_form_text", "display_form"):
+                        value = str(extracted_form.get(field) or "").strip()
+                        if value:
+                            out.append(value)
+                    for candidate in extracted_form.get("match_candidates") or []:
+                        value = str(candidate or "").strip()
+                        if value:
+                            out.append(value)
             return out
 
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
+            quality_matches = _quality_rows_for_ingredient(ingredient)
             candidate_names = [
                 ing_name,
                 std_name,
                 ingredient.get("raw_source_text", ""),
             ]
-            candidate_names.extend(_clinical_form_candidates(ingredient))
+            candidate_names.extend(_clinical_form_candidates(ingredient, quality_matches))
             branded_token = ingredient.get("branded_token_extracted") or self._product_context_branded_token_for_ingredient(
                 product_text,
                 ingredient,
@@ -11740,7 +11822,19 @@ class SupplementEnricherV3:
                     # For brand-specific studies, check brand mention
                     study_id = study.get('id', '')
                     if study_id.startswith('BRAND_'):
-                        if not self._brand_mentioned(study_name, study_aliases, product):
+                        # A row-level exact standard-name match is itself an
+                        # explicit label mention of the branded ingredient
+                        # (e.g. "KSM-66" active row). Alias-only matches still
+                        # require broader product-text confirmation because
+                        # some BRAND_ aliases are generic ingredient names.
+                        row_level_brand_match = matched.get("method") in {
+                            "standard_name",
+                            "standard_name_key",
+                        }
+                        if (
+                            not row_level_brand_match
+                            and not self._brand_mentioned(study_name, study_aliases, product)
+                        ):
                             continue
 
                     if study_id in seen_study_ids:
@@ -15649,7 +15743,7 @@ class SupplementEnricherV3:
             # marker-via-ingredient clinical matches (identity_bioactivity_split
             # Phase 4 + Phase 5).
             enriched["evidence_data"] = self._collect_evidence_data(
-                product, ingredient_quality_data=enriched.get("ingredient_quality_data")
+                enriched, ingredient_quality_data=enriched.get("ingredient_quality_data")
             )
 
             # Section D: Brand Trust
