@@ -10,15 +10,22 @@ from typing import Any, Dict, Optional, Tuple
 
 from scoring_v4.modules.generic_helpers import _norm_text, _safe_list
 from scoring_v4.modules.sports_helpers import (
+    ALPHA_GPC_CANONICALS,
+    ATP_CANONICALS,
+    BCAA_AGGREGATE_CANONICALS,
     BCAA_CANONICALS,
     BETA_ALANINE_CANONICALS,
+    BETAINE_CANONICALS,
+    CAFFEINE_CANONICALS,
     CITRULLINE_CANONICALS,
     CREATINE_CANONICALS,
     EAA_CANONICALS,
     HMB_CANONICALS,
     SPORTS_PROTEIN_CANONICALS,
+    TAURINE_CANONICALS,
     canonical,
     dose_g,
+    dose_mg,
     group_bcaa,
     group_eaa,
     primary_sports_identity,
@@ -156,7 +163,17 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
     if identity == "bcaa":
         grouped = group_bcaa(rows)
         if not grouped["complete"]:
-            return 0.0, "bcaa_incomplete"
+            aggregate = _max_g(rows, BCAA_AGGREGATE_CANONICALS)
+            if aggregate is None:
+                return 0.0, "bcaa_incomplete"
+            # Disclosed BCAA aggregate ("BCAA 7 g 2:1:1") with no per-amino split.
+            # BCAA reliably aids recovery (CK/soreness) but not performance
+            # (PMID 33586928) -> credit as a recovery aid, capped below ergogenics.
+            if aggregate < 2:
+                return _partial(aggregate, 2.0, 8.0), "bcaa_aggregate_under_2_g"
+            if aggregate < 5:
+                return 10.0, "bcaa_aggregate_2_to_5_g"
+            return 14.0, "bcaa_aggregate_at_least_5_g"
         total = float(grouped["total_g"])
         if total < 3:
             return _partial(total, 3.0, 12.0), "bcaa_under_3_g"
@@ -184,6 +201,59 @@ def _score_primary(product: Dict[str, Any], identity: Optional[str]) -> Tuple[fl
             return 14.0, "eaa_5_to_8_g"
         return 18.0, "eaa_complete_at_least_8_g"
 
+    if identity == "alpha_gpc":
+        mg = _max_mg(rows, ALPHA_GPC_CANONICALS)
+        if mg is None:
+            return 0.0, "alpha_gpc_no_dose"
+        if mg < 300:
+            return _partial(mg, 300.0, 8.0), "alpha_gpc_under_300_mg"
+        if mg < 600:
+            return 14.0, "alpha_gpc_300_to_600_mg"
+        # 600 mg single dose for peak force/power (Ziegenfuss 2008, JISSN; moderate).
+        return 18.0, "alpha_gpc_at_least_600_mg"
+
+    if identity == "atp":
+        mg = _max_mg(rows, ATP_CANONICALS)
+        if mg is None:
+            return 0.0, "atp_no_dose"
+        if mg < 400:
+            return _partial(mg, 400.0, 6.0), "atp_under_400_mg"
+        # Oral ATP (PeakATP) ergogenic evidence is weak-equivocal (PMID 34957398) -> capped.
+        return 12.0, "atp_at_least_400_mg"
+
+    if identity == "caffeine":
+        mg = _max_mg(rows, CAFFEINE_CANONICALS)
+        if mg is None:
+            return 0.0, "caffeine_no_dose"
+        if mg < 150:
+            return _partial(mg, 150.0, 8.0), "caffeine_under_150_mg"
+        if mg < 200:
+            return 14.0, "caffeine_150_to_200_mg"
+        if mg <= 400:
+            # 3-6 mg/kg (~200-400 mg) ergogenic (ISSN PMID 33388079; strong).
+            return 18.0, "caffeine_200_to_400_mg"
+        # >= ~9 mg/kg adds no benefit and raises AEs.
+        return 14.0, "caffeine_above_400_mg"
+
+    if identity == "betaine":
+        grams = _max_g(rows, BETAINE_CANONICALS)
+        if grams is None:
+            return 0.0, "betaine_no_dose"
+        if grams < 2.5:
+            return _partial(grams, 2.5, 10.0), "betaine_under_2_5_g"
+        # 2.5 g/day chronic for strength/power (PMC2915951; moderate).
+        return 16.0, "betaine_at_least_2_5_g"
+
+    if identity == "taurine":
+        grams = _max_g(rows, TAURINE_CANONICALS)
+        if grams is None:
+            return 0.0, "taurine_no_dose"
+        # Flat dose-response, weak certainty (PMID 40852891): modest flat credit,
+        # no under-dose penalty above a token amount.
+        if grams < 1.0:
+            return _partial(grams, 1.0, 6.0), "taurine_under_1_g"
+        return 10.0, "taurine_at_least_1_g"
+
     return 0.0, "no_sports_primary_dose"
 
 
@@ -196,7 +266,10 @@ def _best_primary_score(product: Dict[str, Any]) -> Tuple[Optional[str], float, 
     best_identity: Optional[str] = None
     best_score = 0.0
     best_basis: Optional[str] = "no_sports_primary_dose"
-    for identity in ("protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline", "hmb"):
+    for identity in (
+        "protein", "creatine", "bcaa", "eaa", "beta_alanine", "citrulline", "hmb",
+        "alpha_gpc", "atp", "caffeine", "betaine", "taurine",
+    ):
         score, basis = _score_primary(product, identity)
         if score > best_score:
             best_identity = identity
@@ -283,6 +356,12 @@ def _opaque_penalty(product: Dict[str, Any], primary_score: float) -> Tuple[floa
 
 def _max_g(rows: list[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:
     values = [dose_g(row) for row in rows if canonical(row) in canonicals]
+    values = [value for value in values if value is not None]
+    return max(values) if values else None
+
+
+def _max_mg(rows: list[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:
+    values = [dose_mg(row) for row in rows if canonical(row) in canonicals]
     values = [value for value in values if value is not None]
     return max(values) if values else None
 

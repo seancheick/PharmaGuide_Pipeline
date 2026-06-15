@@ -45,6 +45,15 @@ EAA_CANONICALS = frozenset(
         "l_valine",
     }
 )
+# Non-classic pre-workout / recovery actives with source-verified dose bands
+# (see sports_dose._score_primary). BCAA_AGGREGATE is the disclosed
+# "branched_chain_amino_acids" total used when the leu/iso/val trio is not split out.
+ALPHA_GPC_CANONICALS = frozenset({"alpha_gpc", "alpha_glycerylphosphorylcholine", "choline_alphoscerate"})
+ATP_CANONICALS = frozenset({"atp", "adenosine_triphosphate"})
+CAFFEINE_CANONICALS = frozenset({"caffeine", "caffeine_anhydrous"})
+BETAINE_CANONICALS = frozenset({"betaine", "betaine_anhydrous", "tmg_betaine"})
+TAURINE_CANONICALS = frozenset({"taurine"})
+BCAA_AGGREGATE_CANONICALS = frozenset({"branched_chain_amino_acids"})
 SPORTS_CANONICALS = (
     SPORTS_PROTEIN_CANONICALS
     | CREATINE_CANONICALS
@@ -53,7 +62,13 @@ SPORTS_CANONICALS = (
     | HMB_CANONICALS
     | BCAA_CANONICALS
     | EAA_CANONICALS
-    | frozenset({"taurine", "agmatine", "l_tyrosine", "l_carnitine", "tmg_betaine", "caffeine"})
+    | ALPHA_GPC_CANONICALS
+    | ATP_CANONICALS
+    | CAFFEINE_CANONICALS
+    | BETAINE_CANONICALS
+    | TAURINE_CANONICALS
+    | BCAA_AGGREGATE_CANONICALS
+    | frozenset({"agmatine", "l_tyrosine", "l_carnitine"})
 )
 
 
