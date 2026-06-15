@@ -4,8 +4,8 @@
     "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-04-20",
-    "total_entries": 39,
+    "last_updated": "2026-06-15",
+    "total_entries": 57,
     "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
     "reviewed_at": "2026-04-14"
   },

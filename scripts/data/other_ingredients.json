@@ -7789,11 +7789,11 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Identity-only mapping for garlic marker-compound labels; scoring policy pending evidence/form curation.",
+      "notes": "Identity-only mapping for garlic marker-compound labels. Gamma-glutamylcysteines are glutathione precursors/related peptides, not glutathione itself; do not collapse into the glutathione scoring parent without dedicated evidence/form curation.",
       "common_uses": [
         "garlic marker disclosure"
       ],
-      "last_updated": "2026-02-24",
+      "last_updated": "2026-06-15",
       "external_ids": {},
       "cui": "C0061060",
       "functional_roles": [],

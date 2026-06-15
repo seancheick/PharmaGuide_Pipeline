@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12085,
+      "total_form_aliases": 12095,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,8 +60,8 @@
       "proteins": 16,
       "vitamins": 23
     },
-    "schema_version": "5.4.6",
-    "last_updated": "2026-06-10",
+    "schema_version": "5.4.7",
+    "last_updated": "2026-06-15",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1634,6 +1634,16 @@
           "Kept explicit shatavarin marker aliases on shatavarin_iv; marker UNII Z905922Y1P remains distinct from Shatavari root UNII Y8P1YR4920."
         ],
         "regression_tests": "scripts/tests/test_unii_match_path.py::test_shatavari_root_unii_does_not_resolve_to_shatavarin_marker"
+      },
+      "5.4.7": {
+        "date": "2026-06-15",
+        "audit": "Normalizer exact-label identity cleanup for beta readiness",
+        "changes": [
+          "Added exact DSLD typo aliases trimethylglycerine/trimethylglycerin hydrochloride to tmg_betaine::betaine hydrochloride.",
+          "Added Pylopass / L. reuteri DSM 17648 label aliases to lactobacillus_reuteri::lactobacillus reuteri (unspecified), intentionally conservative until a non-viable DSM 17648 form is curated.",
+          "Added LC-Plasma / IMMUSE label aliases to lactococcus_lactis::lactococcus lactis (unspecified), keeping the identity species-specific rather than broad probiotics."
+        ],
+        "regression_tests": "scripts/tests/test_clean_unmapped_alias_regressions.py"
       }
     },
     "category_enum": [
@@ -16456,6 +16466,8 @@
           "betaine digestive aid",
           "stomach acid support betaine",
           "betain hcl",
+          "trimethylglycerine hydrochloride",
+          "trimethylglycerin hydrochloride",
           "betaine hci",
           "betain"
         ],
@@ -56488,7 +56500,11 @@
         "aliases": [
           "L. reuteri",
           "lactobacillus reuteri",
-          "Limosilactobacillus reuteri"
+          "Limosilactobacillus reuteri",
+          "Pylopass Lactobacillus reuteri",
+          "Pylopass",
+          "Lactobacillus reuteri DSM 17648",
+          "Lactobacillus reuteri DSMZ 17648"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -61848,7 +61864,11 @@
           "lactococcus lactis",
           "lactobacillus lactis",
           "l. lactis",
-          "lc. lactis"
+          "lc. lactis",
+          "Lactococcus lactis strain Plasma",
+          "LC-Plasma",
+          "IMMUSE Lactococcus lactis strain Plasma",
+          "Lactococcus lactis subsp. lactis JCM 5805"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
