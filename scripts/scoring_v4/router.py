@@ -52,7 +52,11 @@ _PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
     re.IGNORECASE,
 )
-_PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\b", re.IGNORECASE)
+_PROBIOTIC_NAME_RE = re.compile(
+    r"\b(probiotic|probiotics|synbiotic|synbiotics|acidophilus|lactobacillus|"
+    r"bifidobacterium|saccharomyces|bacillus)\b",
+    re.IGNORECASE,
+)
 # A probiotic with only a tiny non-probiotic panel (e.g. a probiotic gummy with 1-2
 # vitamin adjuncts) can still be probiotic-primary when the name says so. Above this,
 # a non-probiotic panel means the strain is an adjunct, not the product's identity.
@@ -90,6 +94,13 @@ _SPORTS_PROTEIN_NAME_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
+_SPORTS_TRUE_PROTEIN_NAME_RE = re.compile(
+    r"\b(whey|casein|pea\s+protein|rice\s+protein|soy\s+protein|plant(?:-based)?\s+protein|"
+    r"protein\s+(?:powder|isolate|concentrate|hydrolysate|hydrolyzed|blend|matrix)|"
+    r"mass\s+gainer|gainer)\b",
+    re.IGNORECASE,
+)
+_COLLAGEN_TITLE_RE = re.compile(r"\b(collagen|gelatin|hyaluronic)\b", re.IGNORECASE)
 _SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
     r"\b(creatine|beta[\s-]?alanine|citrulline|hmb|bcaa|eaa|essential amino|branched chain)\b",
     re.IGNORECASE,
@@ -148,6 +159,7 @@ _B_VITAMIN_CANONICALS = {
     "vitamin_b2_riboflavin",
     "vitamin_b3_niacin",
     "vitamin_b5_pantothenic_acid",
+    "vitamin_b5_pantothenic",
     "vitamin_b6_pyridoxine",
     "vitamin_b7_biotin",
     "vitamin_b9_folate",
@@ -252,6 +264,10 @@ _EAA_CANONICALS = {
     "l_tryptophan",
     "l_valine",
 }
+_EXPLICIT_MULTIVITAMIN_NAME_RE = re.compile(
+    r"\b(multivitamin|multi-vitamin|multi vitamin|multimineral)\b",
+    re.IGNORECASE,
+)
 
 
 def _scoring_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
@@ -453,18 +469,20 @@ def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
 
     A large non-probiotic panel (a multivitamin's micronutrients, a protein's
     macros) means an accompanying strain is an adjunct, not the product identity.
-    Strains live in `probiotic_data`, so scorable rows are non-probiotic in the
-    common case; the category guard is defense-in-depth.
+    Count the scoring contract rows, not only IQD rows, so recovered actives and
+    product-level enzyme/protein evidence participate in the route decision.
     """
-    iqd = (product or {}).get("ingredient_quality_data") or {}
-    rows = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
     count = 0
-    for row in rows:
+    for row in _scoring_rows(product):
         if not isinstance(row, dict):
             continue
         tax = row.get("raw_taxonomy") if isinstance(row.get("raw_taxonomy"), dict) else {}
         category = str(tax.get("category") or row.get("category") or "").strip().lower()
         if category in {"probiotic", "probiotics", "bacteria"}:
+            continue
+        if str(row.get("dose_class") or "").strip().lower() == "probiotic_cfu":
+            continue
+        if str(row.get("evidence_type") or "").strip().lower() == "probiotic_cfu":
             continue
         canonical = str(row.get("canonical_id") or "").strip().lower()
         if canonical in {"fiber", "prebiotics"}:
@@ -493,6 +511,16 @@ def _non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
     return count
 
 
+def _title_has_non_probiotic_hero(name_text: str) -> bool:
+    return bool(_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""))
+
+
+def _title_hero_precedes_probiotic_signal(name_text: str) -> bool:
+    hero = _NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or "")
+    probiotic = _PROBIOTIC_NAME_RE.search(name_text or "")
+    return bool(hero and probiotic and hero.start() < probiotic.start())
+
+
 def _has_non_probiotic_hero(product: Dict[str, Any], name_text: str) -> bool:
     """True when the product clearly advertises a non-probiotic primary identity
     via a specific taxonomy class or a hero keyword in the title.
@@ -504,7 +532,7 @@ def _has_non_probiotic_hero(product: Dict[str, Any], name_text: str) -> bool:
     primary_type = _read_primary_type(product)
     if primary_type and primary_type not in _PROBIOTIC_VAGUE_TAXONOMY:
         return True
-    return bool(_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""))
+    return _title_has_non_probiotic_hero(name_text)
 
 
 def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
@@ -580,11 +608,11 @@ def _is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         if not (high_cfu and non_probiotic_panel <= _PROBIOTIC_ADJUNCT_PANEL_MAX):
             return False
 
-    if name_signal and non_probiotic_panel > 0 and _has_non_probiotic_hero(product, name_text):
+    if name_signal and non_probiotic_panel > 0 and _title_hero_precedes_probiotic_signal(name_text):
         return False
 
     if non_probiotic_panel > 0 and not name_signal:
-        if _NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""):
+        if _title_has_non_probiotic_hero(name_text):
             return False
         if not high_cfu:
             return False
@@ -865,6 +893,54 @@ def _has_sports_primary_dose_evidence(product: Dict[str, Any]) -> bool:
     return False
 
 
+def _has_product_level_protein_mass(product: Dict[str, Any]) -> bool:
+    protein_ids = {"protein", *_SPORTS_PROTEIN_CANONICALS}
+    for ing in _scoring_rows(product):
+        if ing.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        if str(ing.get("evidence_type") or "").strip().lower() not in {"sports_primary_dose", "blend_anchor_mass"}:
+            continue
+        identities = {
+            str(ing.get("canonical_id") or "").strip().lower(),
+            str(ing.get("evidence_canonical_id") or "").strip().lower(),
+            str(ing.get("scoring_parent_id") or "").strip().lower(),
+            str(ing.get("clean_identity_id") or "").strip().lower(),
+        }
+        if identities & protein_ids and _positive_quantity(ing):
+            return True
+    return False
+
+
+def _has_product_level_single_sports_mass(product: Dict[str, Any]) -> bool:
+    for ing in _scoring_rows(product):
+        if ing.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        if str(ing.get("evidence_type") or "").strip().lower() not in {"sports_primary_dose", "blend_anchor_mass"}:
+            continue
+        identities = {
+            str(ing.get("canonical_id") or "").strip().lower(),
+            str(ing.get("evidence_canonical_id") or "").strip().lower(),
+            str(ing.get("scoring_parent_id") or "").strip().lower(),
+            str(ing.get("clean_identity_id") or "").strip().lower(),
+        }
+        if identities & _SPORTS_SINGLE_CANONICALS and _positive_quantity(ing):
+            return True
+    return False
+
+
+def _has_collagen_primary_identity(product: Dict[str, Any], name_text: str) -> bool:
+    canonicals = _positive_canonicals(product)
+    has_collagen_row = bool(canonicals & {"collagen", "collagen_peptides", "hydrolyzed_collagen"})
+    has_collagen_title = bool(_COLLAGEN_TITLE_RE.search(name_text or ""))
+    if not (has_collagen_row or has_collagen_title):
+        return False
+    if canonicals & _SPORTS_PROTEIN_CANONICALS:
+        return False
+    if _SPORTS_TRUE_PROTEIN_NAME_RE.search(name_text or "") and not has_collagen_title:
+        return False
+    return True
+
+
 def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     """Return True for explicit sports-nutrition products.
 
@@ -875,6 +951,8 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     """
     primary_type = _read_primary_type(product)
     sports_intent = primary_type == "pre_workout" or bool(_SPORTS_PREWORKOUT_RE.search(name_text or ""))
+    if _has_collagen_primary_identity(product, name_text):
+        return False
     if _has_sports_primary_dose_evidence(product):
         return True
 
@@ -883,6 +961,8 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
 
     if canonicals & _SPORTS_PROTEIN_CANONICALS:
         return primary_type == "protein_powder" or bool(_SPORTS_PROTEIN_NAME_RE.search(lowered))
+    if _has_product_level_protein_mass(product) and _SPORTS_PROTEIN_NAME_RE.search(lowered):
+        return True
     if primary_type == "protein_powder" and _SPORTS_PROTEIN_NAME_RE.search(lowered):
         return True
 
@@ -896,6 +976,10 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
         return True
 
     if canonicals & _SPORTS_SINGLE_CANONICALS:
+        if _SPORTS_NAME_EXCLUSION_RE.search(lowered):
+            return False
+        return sports_intent or bool(_SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered))
+    if _has_product_level_single_sports_mass(product):
         if _SPORTS_NAME_EXCLUSION_RE.search(lowered):
             return False
         return sports_intent or bool(_SPORTS_SINGLE_ACTIVE_NAME_RE.search(lowered))
@@ -1012,6 +1096,12 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     # protein-like products stay generic.
     if _is_sports_class(product, name_text):
         return "sports"
+
+    if (
+        _EXPLICIT_MULTIVITAMIN_NAME_RE.search(_product_label_text(product))
+        and _is_multivitamin_route_eligible(product, name_text)
+    ):
+        return "multi_or_prenatal"
 
     # Priority 4: taxonomy primary_type — canonical signal when present.
     # Maps the 20 taxonomy types to the 4 v4 modules. Unknown taxonomy

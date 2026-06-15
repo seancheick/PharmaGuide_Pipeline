@@ -338,6 +338,62 @@ def test_conservative_blend_anchor_protein_does_not_route_multivitamin_to_sports
     assert class_for_product(product) == "multi_or_prenatal"
 
 
+def test_stale_taxonomy_whey_with_product_level_protein_mass_routes_sports() -> None:
+    product = _product(
+        primary_type="single_mineral",
+        name="100% Whey Protein Powdered Drink Mix Chocolate",
+        rows=[_row("potassium", 240, "mg")],
+        product_scoring_evidence=[
+            _product_evidence(
+                canonical_id="protein",
+                evidence_type="blend_anchor_mass",
+                quantity=20,
+                unit="Gram(s)",
+            )
+        ],
+    )
+
+    assert class_for_product(product) == "sports"
+
+
+def test_stale_taxonomy_creatine_blend_anchor_routes_sports() -> None:
+    product = _product(
+        primary_type="general_supplement",
+        name="Creatine Advance XR Unflavored",
+        product_scoring_evidence=[
+            _product_evidence(
+                canonical_id="creatine_monohydrate",
+                evidence_type="blend_anchor_mass",
+                quantity=5,
+                unit="Gram(s)",
+            )
+        ],
+    )
+
+    assert class_for_product(product) == "sports"
+
+
+def test_collagen_protein_macro_does_not_route_sports() -> None:
+    product = _product(
+        primary_type="protein_powder",
+        name="Collagen Hyaluronic Acid 20 g Unflavored",
+        rows=[
+            _row("collagen", 20, "Gram(s)"),
+            _row("hyaluronic_acid", 120, "mg"),
+        ],
+        product_scoring_evidence=[
+            _product_evidence(
+                canonical_id="protein",
+                evidence_type="sports_primary_dose",
+                quantity=18,
+                unit="Gram(s)",
+            )
+        ],
+    )
+
+    assert class_for_product(product) == "generic"
+
+
 def test_native_sports_primary_dose_evidence_can_route_to_sports() -> None:
     product = _product(
         primary_type="general_supplement",

@@ -273,6 +273,222 @@ def test_enzyme_hero_with_probiotic_adjunct_stays_generic():
     assert class_for_product(product) == "generic"
 
 
+def test_enzyme_activity_evidence_with_single_probiotic_adjunct_stays_generic():
+    """Product-level enzyme rows must count against probiotic dominance.
+
+    Doctor's Best Digestive Enzymes carries a Bacillus adjunct, but the product
+    identity is enzyme support. The route must see enzyme activity evidence,
+    not only ingredient_quality_data.ingredients_scorable.
+    """
+    product = _product(
+        product_name="Digestive Enzymes",
+        primary_type="general_supplement",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 1,
+            "has_cfu": True,
+            "total_cfu": 1_000_000_000,
+            "total_billion_count": 1.0,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "bacillus_subtilis", "name": "Bacillus subtilis", "category": "probiotics"},
+            ]
+        },
+        product_scoring_evidence=[
+            {
+                "evidence_type": "enzyme_activity",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "enzyme_activity",
+                "dose_value": 20000,
+                "dose_unit": "DU",
+                "source": "active",
+                "raw_source_path": "activeIngredients[0].notes",
+                "evidence_scope": "row_level",
+                "linked_rows": ["activeIngredients[0]"],
+                "confidence": "high",
+                "reason": "enzyme_activity_unit_from_label_notes",
+                "name": "Amylase",
+                "canonical_id": "digestive_enzymes",
+                "clean_identity_id": "digestive_enzymes",
+                "scoring_parent_id": "digestive_enzymes",
+                "evidence_canonical_id": "digestive_enzymes",
+                "canonical_source_db": "test_fixture",
+                "evidence_origin": "native_enrichment",
+            },
+        ],
+    )
+
+    assert class_for_product(product) == "generic"
+
+
+def test_botanical_formula_with_probiotic_addon_stays_generic():
+    product = _product(
+        product_name="Golden Milk",
+        primary_type="single_mineral",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 1_000_000_000,
+            "total_billion_count": 1.0,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "iron", "name": "Iron", "quantity": 1, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "potassium", "name": "Potassium", "quantity": 50, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "turmeric", "name": "Turmeric", "category": "botanical"},
+                {"canonical_id": "ashwagandha", "name": "Ashwagandha", "category": "botanical"},
+                {"canonical_id": "ginger", "name": "Ginger", "category": "botanical"},
+                {"canonical_id": "bifidobacterium_lactis", "name": "Bifidobacterium lactis", "category": "probiotics"},
+                {"canonical_id": "lactobacillus_plantarum", "name": "Lactobacillus plantarum", "category": "probiotics"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "generic"
+
+
+def test_acidophilus_title_routes_probiotic_despite_stale_mineral_taxonomy():
+    product = _product(
+        product_name="Acidophilus",
+        primary_type="single_mineral",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 1,
+            "has_cfu": True,
+            "total_cfu": 100_000_000,
+            "total_billion_count": 0.1,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "calcium", "name": "Calcium", "quantity": 109, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "lactobacillus_acidophilus", "name": "Lactobacillus acidophilus", "category": "probiotics"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
+def test_probiotic_complex_with_fiber_keeps_probiotic_route():
+    product = _product(
+        product_name="Probiotic Complex with Fiber",
+        primary_type="general_supplement",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 4,
+            "has_cfu": True,
+            "total_cfu": 12_500_000_000,
+            "total_billion_count": 12.5,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "prebiotics", "name": "Galactooligosaccharides", "quantity": 1.37, "unit": "g", "category": "prebiotics"},
+                {"canonical_id": "lactobacillus_acidophilus", "name": "Lactobacillus acidophilus", "category": "probiotics"},
+                {"canonical_id": "bifidobacterium_lactis", "name": "Bifidobacterium lactis", "category": "probiotics"},
+            ]
+        },
+        product_scoring_evidence=[
+            {
+                "evidence_type": "blend_anchor_mass",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 6.0,
+                "dose_unit": "g",
+                "source": "nutrition",
+                "raw_source_path": "nutrition.fiber",
+                "evidence_scope": "row_level",
+                "linked_rows": ["nutrition.fiber"],
+                "confidence": "medium",
+                "reason": "fiber_macro",
+                "name": "Dietary Fiber",
+                "canonical_id": "fiber",
+                "clean_identity_id": "fiber",
+                "scoring_parent_id": "fiber",
+                "evidence_canonical_id": "fiber",
+                "canonical_source_db": "test_fixture",
+                "evidence_origin": "native_enrichment",
+            },
+        ],
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
+def test_probiotic_name_before_b12_hero_routes_probiotic():
+    product = _product(
+        product_name="Digestive Probiotics + Energy B12 Dual Action",
+        primary_type="fiber_digestive",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 1,
+            "has_cfu": True,
+            "total_cfu": 4_000_000_000,
+            "total_billion_count": 4.0,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "vitamin_b12_cobalamin", "name": "Vitamin B12", "quantity": 1000, "unit": "mcg", "category": "vitamins"},
+                {"canonical_id": "bacillus_coagulans", "name": "Bacillus coagulans", "category": "probiotics"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
+def test_mineral_hero_before_probiotics_stays_generic():
+    product = _product(
+        product_name="Magnesium with Pre & Probiotics Gummies",
+        primary_type="probiotic",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 2,
+            "has_cfu": True,
+            "total_cfu": 1_250_000_000,
+            "total_billion_count": 1.25,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "magnesium", "name": "Magnesium", "quantity": 100, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "bacillus_subtilis", "name": "Bacillus subtilis", "quantity": 14, "unit": "mg", "category": "probiotics"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "generic"
+
+
+def test_explicit_hso_probiotic_with_many_strains_overrides_stale_mineral_taxonomy():
+    product = _product(
+        product_name="HSO Probiotic Formula",
+        primary_type="single_mineral",
+        probiotic_data={
+            "is_probiotic_product": True,
+            "total_strain_count": 12,
+            "has_cfu": True,
+            "total_cfu": 1_000_000_000,
+            "total_billion_count": 1.0,
+        },
+        ingredient_quality_data={
+            "ingredients_scorable": [
+                {"canonical_id": "iron", "name": "Iron", "quantity": 3, "unit": "mg", "category": "minerals"},
+                {"canonical_id": "oat_straw", "name": "Oat Grass", "category": "botanical"},
+                {"canonical_id": "lactobacillus_plantarum", "name": "Lactobacillus plantarum", "category": "probiotics"},
+                {"canonical_id": "bifidobacterium_bifidum", "name": "Bifidobacterium bifidum", "category": "probiotics"},
+                {"canonical_id": "lactobacillus_acidophilus", "name": "Lactobacillus acidophilus", "category": "probiotics"},
+            ]
+        },
+    )
+
+    assert class_for_product(product) == "probiotic"
+
+
 def test_epa_dha_name_without_panel_routes_omega_for_completeness_gate():
     product = {
         "product_name": "Omega-3 EPA/DHA",

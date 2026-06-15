@@ -51,7 +51,7 @@ GENERIC_CANARIES = {
     # but raw-score verdict guard keeps weak profiles from becoming SAFE.
     "12932": {
         "label": "vitafusion Fiber Gummies",
-        "score_range": (39.3, 40.7),
+        "score_range": (37.3, 38.7),
         "traits": {"dose_partial_no_rda": True, "trust_zero": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
@@ -80,20 +80,20 @@ PROBIOTIC_CANARIES = {
     # Highest real probiotic scorer from the catalog sweep.
     "306247": {
         "label": "Thorne FloraSport 20B",
-        "score_range": (85.8, 87.2),  # c644d77c: aggregate-CFU rebalance (cap 6->8)
+        "score_range": (83.3, 84.7),  # current probiotic calibration + PB opacity guard
         "traits": {"trust_positive": True},
     },
     # Low end of current probiotic score distribution.
     "201158": {
         "label": "OLLY Kids Quick Melt Probiotic Sticks",
-        "score_range": (58.1, 59.5),  # c644d77c CFU rebalance
+        "score_range": (55.1, 56.5),  # current aggregate-CFU proxy + PB opacity guard
         "traits": {"trust_positive": True},
     },
     # Aggregate-CFU-only canary: gets Formulation credit and capped dose proxy,
     # but not full per-strain disclosure/adequacy.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        "score_range": (68.5, 69.9),
+        "score_range": (71.0, 72.4),
         # c644d77c: appropriate-diversity curve drops a 16+-strain 50B aggregate
         # product below formulation max (no longer form_max=25); still aggregate-CFU proxy.
         "traits": {"aggregate_cfu_proxy": True, "trust_zero": True},
@@ -101,19 +101,19 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (64.6, 66.0),
+        "score_range": (62.2, 63.6),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (52.4, 53.8),  # aggregate low-CFU presence floor
+        "score_range": (54.4, 55.8),  # aggregate low-CFU presence floor
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (56.8, 58.2),  # c644d77c CFU rebalance
+        "score_range": (53.8, 55.0),  # current aggregate-CFU proxy + PB opacity guard
         "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }
@@ -275,7 +275,7 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         assert _dimension_score(breakdown, "dose") > 0
     if traits.get("aggregate_cfu_proxy"):
         dose = breakdown["dimensions"]["dose"]
-        assert dose["score"] == 8.0  # c644d77c: aggregate-CFU cap 6->8
+        assert dose["score"] == 11.0
         assert dose["components"]["per_strain_cfu_disclosure"] == 0.0
         assert dose["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
         assert dose["metadata"]["aggregate_cfu_proxy"]["applied"] is True

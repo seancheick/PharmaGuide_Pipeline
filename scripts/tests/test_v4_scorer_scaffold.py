@@ -89,6 +89,45 @@ def test_router_multivitamin_taxonomy_with_panel_routes_multi() -> None:
     assert class_for_product(product) == "multi_or_prenatal"
 
 
+def test_router_explicit_multivitamin_name_routes_multi_despite_stale_single_vitamin_taxonomy() -> None:
+    """A label-level multivitamin claim with a multi-nutrient panel beats stale
+    single-vitamin taxonomy. This protects products like Women's Daily
+    Multivitamin from generic single-nutrient scoring."""
+    from scoring_v4.router import class_for_product
+    product = {
+        "supplement_taxonomy": {"primary_type": "single_vitamin"},
+        "product_name": "Women's Daily Multivitamin",
+        "ingredient_quality_data": {
+            "ingredients_scorable": _mv_panel_rows(
+                ["vitamin_a", "vitamin_c", "vitamin_d", "vitamin_e", "vitamin_k1"]
+            )
+        },
+    }
+    assert class_for_product(product) == "multi_or_prenatal"
+
+
+def test_router_b50_uses_vitamin_b5_pantothenic_canonical_for_b_complex_panel() -> None:
+    """IQM uses vitamin_b5_pantothenic; the route gate must count it as B5."""
+    from scoring_v4.router import class_for_product
+    product = {
+        "supplement_taxonomy": {"primary_type": "b_complex"},
+        "product_name": "Balanced B50",
+        "ingredient_quality_data": {
+            "ingredients_scorable": _mv_panel_rows(
+                [
+                    "vitamin_b1_thiamine",
+                    "vitamin_b2_riboflavin",
+                    "vitamin_b3_niacin",
+                    "vitamin_b5_pantothenic",
+                    "vitamin_b6_pyridoxine",
+                    "vitamin_b12_cobalamin",
+                ]
+            )
+        },
+    }
+    assert class_for_product(product) == "multi_or_prenatal"
+
+
 def test_router_prenatal_dha_label_routes_to_omega_not_multi() -> None:
     """A DHA-only prenatal label should not be crushed by prenatal multi floors."""
     from scoring_v4.router import class_for_product

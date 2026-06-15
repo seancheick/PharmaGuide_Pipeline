@@ -1778,7 +1778,11 @@ _ROUTE_PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
     re.IGNORECASE,
 )
-_ROUTE_PROBIOTIC_NAME_RE = re.compile(r"\b(probiotic|probiotics|synbiotic|synbiotics)\b", re.IGNORECASE)
+_ROUTE_PROBIOTIC_NAME_RE = re.compile(
+    r"\b(probiotic|probiotics|synbiotic|synbiotics|acidophilus|lactobacillus|"
+    r"bifidobacterium|saccharomyces|bacillus)\b",
+    re.IGNORECASE,
+)
 _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX = 2
 _ROUTE_PROBIOTIC_HIGH_CFU_BILLIONS = 1.0
 _ROUTE_PROBIOTIC_PURE_STRAIN_MIN = 2
@@ -1803,6 +1807,13 @@ _ROUTE_SPORTS_PROTEIN_NAME_RE = re.compile(
     r")\b",
     re.IGNORECASE,
 )
+_ROUTE_TRUE_PROTEIN_NAME_RE = re.compile(
+    r"\b(whey|casein|pea\s+protein|rice\s+protein|soy\s+protein|plant(?:-based)?\s+protein|"
+    r"protein\s+(?:powder|isolate|concentrate|hydrolysate|hydrolyzed|blend|matrix)|"
+    r"mass\s+gainer|gainer)\b",
+    re.IGNORECASE,
+)
+_ROUTE_COLLAGEN_TITLE_RE = re.compile(r"\b(collagen|gelatin|hyaluronic)\b", re.IGNORECASE)
 _ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
     r"\b(creatine|beta[\s-]?alanine|citrulline|hmb|bcaa|eaa|essential amino|branched chain)\b",
     re.IGNORECASE,
@@ -1844,6 +1855,7 @@ _ROUTE_B_VITAMIN_CANONICALS = {
     "vitamin_b2_riboflavin",
     "vitamin_b3_niacin",
     "vitamin_b5_pantothenic_acid",
+    "vitamin_b5_pantothenic",
     "vitamin_b6_pyridoxine",
     "vitamin_b7_biotin",
     "vitamin_b9_folate",
@@ -1964,6 +1976,10 @@ _ROUTE_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES = {
     "probiotic",
     "protein_powder",
 }
+_ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE = re.compile(
+    r"\b(multivitamin|multi-vitamin|multi vitamin|multimineral)\b",
+    re.IGNORECASE,
+)
 
 
 def _valid_classification_origin(origin: Any) -> str:
@@ -2147,15 +2163,17 @@ def _route_probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _route_non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
-    iqd = _safe_dict((product or {}).get("ingredient_quality_data"))
-    rows = _safe_list(iqd.get("ingredients_scorable") or iqd.get("ingredients"))
     count = 0
-    for row in rows:
+    for row in _route_scoring_rows(product):
         if not isinstance(row, dict):
             continue
         taxonomy = _safe_dict(row.get("raw_taxonomy"))
         category = _norm(taxonomy.get("category") or row.get("category"))
         if category in {"probiotic", "probiotics", "bacteria"}:
+            continue
+        if _norm(row.get("dose_class")) == "probiotic_cfu":
+            continue
+        if _norm(row.get("evidence_type")) == "probiotic_cfu":
             continue
         if _has_probiotic_identity_text(row):
             continue
@@ -2165,11 +2183,21 @@ def _route_non_probiotic_scorable_count(product: Dict[str, Any]) -> int:
     return count
 
 
+def _route_title_has_non_probiotic_hero(name_text: str) -> bool:
+    return bool(_ROUTE_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""))
+
+
+def _route_title_hero_precedes_probiotic_signal(name_text: str) -> bool:
+    hero = _ROUTE_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or "")
+    probiotic = _ROUTE_PROBIOTIC_NAME_RE.search(name_text or "")
+    return bool(hero and probiotic and hero.start() < probiotic.start())
+
+
 def _route_has_non_probiotic_hero(product: Dict[str, Any], name_text: str) -> bool:
     primary_type = _primary_type(product)
     if primary_type and primary_type not in _ROUTE_PROBIOTIC_VAGUE_TAXONOMY:
         return True
-    return bool(_ROUTE_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""))
+    return _route_title_has_non_probiotic_hero(name_text)
 
 
 def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
@@ -2219,11 +2247,11 @@ def _route_is_probiotic_class(product: Dict[str, Any], name_text: str) -> bool:
         if not (high_cfu and non_probiotic_panel <= _ROUTE_PROBIOTIC_ADJUNCT_PANEL_MAX):
             return False
 
-    if name_signal and non_probiotic_panel > 0 and _route_has_non_probiotic_hero(product, name_text):
+    if name_signal and non_probiotic_panel > 0 and _route_title_hero_precedes_probiotic_signal(name_text):
         return False
 
     if non_probiotic_panel > 0 and not name_signal:
-        if _ROUTE_NON_PROBIOTIC_HERO_TITLE_RE.search(name_text or ""):
+        if _route_title_has_non_probiotic_hero(name_text):
             return False
         if not high_cfu:
             return False
@@ -2412,15 +2440,67 @@ def _route_has_sports_primary_dose_evidence(product: Dict[str, Any]) -> bool:
     return False
 
 
+def _route_has_product_level_protein_mass(product: Dict[str, Any]) -> bool:
+    protein_ids = {"protein"} | _ROUTE_SPORTS_PROTEIN_CANONICALS
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        if _norm(row.get("evidence_type")) not in {"sports_primary_dose", "blend_anchor_mass"}:
+            continue
+        identities = {
+            _norm(row.get("canonical_id")),
+            _norm(row.get("evidence_canonical_id")),
+            _norm(row.get("scoring_parent_id")),
+            _norm(row.get("clean_identity_id")),
+        }
+        if identities & protein_ids and _route_has_positive_quantity(row):
+            return True
+    return False
+
+
+def _route_has_product_level_single_sports_mass(product: Dict[str, Any]) -> bool:
+    for row in _route_scoring_rows(product):
+        if row.get("scoring_input_kind") != "product_level_evidence":
+            continue
+        if _norm(row.get("evidence_type")) not in {"sports_primary_dose", "blend_anchor_mass"}:
+            continue
+        identities = {
+            _norm(row.get("canonical_id")),
+            _norm(row.get("evidence_canonical_id")),
+            _norm(row.get("scoring_parent_id")),
+            _norm(row.get("clean_identity_id")),
+        }
+        if identities & _ROUTE_SPORTS_SINGLE_CANONICALS and _route_has_positive_quantity(row):
+            return True
+    return False
+
+
+def _route_has_collagen_primary_identity(product: Dict[str, Any], name_text: str) -> bool:
+    canonicals = _route_positive_canonicals(product)
+    has_collagen_row = bool(canonicals & {"collagen", "collagen_peptides", "hydrolyzed_collagen"})
+    has_collagen_title = bool(_ROUTE_COLLAGEN_TITLE_RE.search(name_text or ""))
+    if not (has_collagen_row or has_collagen_title):
+        return False
+    if canonicals & _ROUTE_SPORTS_PROTEIN_CANONICALS:
+        return False
+    if _ROUTE_TRUE_PROTEIN_NAME_RE.search(name_text or "") and not has_collagen_title:
+        return False
+    return True
+
+
 def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     primary_type = _primary_type(product)
     sports_intent = primary_type == "pre_workout" or bool(_ROUTE_SPORTS_PREWORKOUT_RE.search(name_text or ""))
+    if _route_has_collagen_primary_identity(product, name_text):
+        return False
     if _route_has_sports_primary_dose_evidence(product):
         return True
 
     canonicals = _route_positive_canonicals(product)
     if canonicals & _ROUTE_SPORTS_PROTEIN_CANONICALS:
         return primary_type == "protein_powder" or bool(_ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""))
+    if _route_has_product_level_protein_mass(product) and _ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""):
+        return True
     if primary_type == "protein_powder" and _ROUTE_SPORTS_PROTEIN_NAME_RE.search(name_text or ""):
         return True
     if _ROUTE_BCAA_CANONICALS.issubset(canonicals) and (
@@ -2432,6 +2512,10 @@ def _route_is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     ):
         return True
     if canonicals & _ROUTE_SPORTS_SINGLE_CANONICALS:
+        if _ROUTE_SPORTS_NAME_EXCLUSION_RE.search(name_text or ""):
+            return False
+        return sports_intent or bool(_ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or ""))
+    if _route_has_product_level_single_sports_mass(product):
         if _ROUTE_SPORTS_NAME_EXCLUSION_RE.search(name_text or ""):
             return False
         return sports_intent or bool(_ROUTE_SPORTS_SINGLE_ACTIVE_NAME_RE.search(name_text or ""))
@@ -2459,6 +2543,12 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
 
     if _route_is_sports_class(product, name_text):
         return "sports", "profile_content:sports", ["sports_identity_or_dose"]
+
+    if (
+        _ROUTE_EXPLICIT_MULTIVITAMIN_NAME_RE.search(_route_product_label_text(product))
+        and _route_is_multivitamin_eligible(product, name_text)
+    ):
+        return "multi_or_prenatal", "profile_content:explicit_multivitamin", ["explicit_multivitamin_name"]
 
     if primary_type:
         module = _ROUTE_TAXONOMY_TO_MODULE.get(primary_type)
