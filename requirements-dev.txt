@@ -7,3 +7,6 @@ jsonschema>=4,<5    # v4 scoring-config rubric validation (Phase 0 config regist
 supabase>=2.0,<3
 PyMuPDF>=1.24,<2
 Pillow>=10.0,<11
+beautifulsoup4>=4.12,<5
+lxml>=5.0,<7
+playwright>=1.50,<2

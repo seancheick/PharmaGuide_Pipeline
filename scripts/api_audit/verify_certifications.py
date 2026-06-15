@@ -13,6 +13,9 @@ Sources:
     `audit_only=true` in the registry; the resolver's recency gate will block
     scoring against it. Useful as a regression fixture and for testing the
     resolver against historical data.
+  - **live-consumerlab** (production): browser-fetches ConsumerLab's public
+    CL Certified Products table. Only current bold rows are written; historical
+    non-bold rows are excluded so expired seals do not score.
 
 Multi-source: the registry holds records from all sources. Each verified_record
 carries its `program` field; recency status is per-source.
@@ -22,6 +25,7 @@ Usage:
   python scripts/api_audit/verify_certifications.py --source live-nsf-sport
   python scripts/api_audit/verify_certifications.py --source live-nsf-sport --with-lots
   python scripts/api_audit/verify_certifications.py --source live-nsf-173
+  python scripts/api_audit/verify_certifications.py --source live-consumerlab
 
   # All sources merged:
   python scripts/api_audit/verify_certifications.py --source all
@@ -1069,6 +1073,129 @@ def fetch_bscg_live() -> tuple[list[dict], str]:
 
 
 # ============================================================================
+# ConsumerLab CL Certified Products (live) — consumerlab.com certified products
+# ============================================================================
+
+CONSUMERLAB_CERTIFIED_PRODUCTS_URL = "https://www.consumerlab.com/quality-certification-program/certified-products/"
+
+
+def _clean_consumerlab_text(value: str) -> str:
+    return re.sub(r"\s+", " ", html.unescape(value or "")).strip()
+
+
+def _has_consumerlab_current_marker(cell: object) -> bool:
+    """ConsumerLab marks current certifications with Bootstrap's fw-bold class."""
+    try:
+        class_values = cell.get("class") or []
+        if isinstance(class_values, str):
+            class_values = class_values.split()
+        if "fw-bold" in class_values:
+            return True
+        return bool(cell.select_one(".fw-bold"))
+    except AttributeError:
+        return False
+
+
+def parse_consumerlab_certified_products(
+    html_text: str,
+    snapshot_date: str,
+    current_only: bool = True,
+) -> list[dict]:
+    """Parse ConsumerLab's public CL Certified Products table.
+
+    ConsumerLab keeps historical certified products on the same page, while
+    current products are shown in bold. Certifications are time-limited, so the
+    production registry includes current rows only by default.
+    """
+    from bs4 import BeautifulSoup
+
+    soup = BeautifulSoup(html_text, "lxml")
+    records: list[dict] = []
+    seen: set[tuple[str, str, int | None]] = set()
+    for tr in soup.select("table tr"):
+        cells = tr.find_all("td")
+        if len(cells) < 4:
+            continue
+        product = _clean_consumerlab_text(cells[0].get_text(" ", strip=True))
+        review_category = _clean_consumerlab_text(cells[1].get_text(" ", strip=True))
+        brand = _clean_consumerlab_text(cells[2].get_text(" ", strip=True))
+        year_text = _clean_consumerlab_text(cells[3].get_text(" ", strip=True))
+        if not product or not brand:
+            continue
+        year_match = re.search(r"\b(20\d{2}|19\d{2})\b", year_text)
+        certified_year = int(year_match.group(1)) if year_match else None
+        current = _has_consumerlab_current_marker(cells[0]) or _has_consumerlab_current_marker(cells[3])
+        if current_only and not current:
+            continue
+        key = (normalize_brand(brand), normalize_product(product), certified_year)
+        if key in seen:
+            continue
+        seen.add(key)
+        records.append(
+            {
+                "record_id": _make_record_id(
+                    "ConsumerLab",
+                    brand,
+                    product,
+                    [],
+                    str(certified_year or ""),
+                ),
+                "program": "ConsumerLab",
+                "brand": brand,
+                "product": product,
+                "brand_normalized": normalize_brand(brand),
+                "product_normalized": normalize_product(product),
+                "scope": "sku",
+                "lot_numbers_tested": [],
+                "verified_at": snapshot_date,
+                "source_url": CONSUMERLAB_CERTIFIED_PRODUCTS_URL,
+                "evidence_band": "strong",
+                "review_category": review_category or None,
+                "certified_year": certified_year,
+                "current_certification": current,
+            }
+        )
+    return records
+
+
+def fetch_consumerlab_live() -> tuple[list[dict], str]:
+    """Fetch current ConsumerLab CL Certified product records.
+
+    The public page is Cloudflare-protected for plain requests, but renders in a
+    normal browser. Keep network fetching in Playwright and parsing in pure
+    BeautifulSoup so parser tests stay deterministic and offline.
+    """
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError as exc:
+        raise SystemExit(
+            "playwright is required to fetch ConsumerLab live listings because "
+            "consumerlab.com blocks plain requests. Install Playwright or run another source."
+        ) from exc
+
+    snapshot_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    print(f"GET {CONSUMERLAB_CERTIFIED_PRODUCTS_URL}", file=sys.stderr)
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        try:
+            page = browser.new_page(
+                user_agent=(
+                    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"
+                )
+            )
+            page.goto(CONSUMERLAB_CERTIFIED_PRODUCTS_URL, wait_until="domcontentloaded", timeout=60_000)
+            page.wait_for_selector("table tr", state="attached", timeout=15_000)
+            rendered_html = page.content()
+        finally:
+            browser.close()
+
+    records = parse_consumerlab_certified_products(rendered_html, snapshot_date, current_only=True)
+    print(f"ConsumerLab: {len(records)} current product records", file=sys.stderr)
+    return records, snapshot_date
+
+
+# ============================================================================
 # PDF (fixture only, marked stale via recency gate)
 # ============================================================================
 
@@ -1248,6 +1375,7 @@ def main() -> None:
             "live-informed-sport",
             "live-ifos",
             "live-bscg",
+            "live-consumerlab",
             "pdf",
             "all",
         ],
@@ -1362,6 +1490,17 @@ def main() -> None:
             {
                 "program": "BSCG",
                 "url": BSCG_DATABASE_URL,
+                "snapshot_date": snapshot,
+                "records": records,
+            }
+        )
+
+    if args.source in ("live-consumerlab", "all"):
+        records, snapshot = fetch_consumerlab_live()
+        sources.append(
+            {
+                "program": "ConsumerLab",
+                "url": CONSUMERLAB_CERTIFIED_PRODUCTS_URL,
                 "snapshot_date": snapshot,
                 "records": records,
             }

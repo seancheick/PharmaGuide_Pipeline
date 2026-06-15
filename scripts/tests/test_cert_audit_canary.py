@@ -28,6 +28,17 @@ from cert_resolver import CertRegistry, resolve  # noqa: E402
 
 REGISTRY_PATH = SCRIPTS_ROOT / "data" / "cert_registry.json"
 CORE_DB = SCRIPTS_ROOT / "final_db_output" / "pharmaguide_core.db"
+EXPECTED_LIVE_PROGRAMS = {
+    "NSF Sport",
+    "NSF Certified",
+    "NSF/ANSI 455",
+    "USP Verified",
+    "Informed Choice",
+    "Informed Sport",
+    "IFOS",
+    "BSCG",
+    "ConsumerLab",
+}
 
 
 def _registry_has_data() -> bool:
@@ -65,6 +76,34 @@ def test_registry_metadata_complete(registry: CertRegistry) -> None:
     assert any(s.get("program") == "NSF Sport" for s in sources)
 
 
+def test_registry_has_all_expected_live_sources_and_fresh_snapshots(registry: CertRegistry) -> None:
+    """A recognized high-impact verification program must not silently fall
+    out of the registry or age past the resolver warning window."""
+    sources = {
+        source.get("program"): source
+        for source in registry.metadata.get("registry_sources", []) or []
+    }
+    missing = EXPECTED_LIVE_PROGRAMS - set(sources)
+    assert not missing, f"missing live cert registry sources: {sorted(missing)}"
+
+    for program in sorted(EXPECTED_LIVE_PROGRAMS):
+        source = sources[program]
+        assert source.get("entry_count", 0) > 0, f"{program} has no registry records"
+        recency = registry.recency_for(program)
+        assert recency.get("status") == "fresh", (
+            f"{program} registry snapshot is not fresh: {recency}. "
+            "Run scripts/api_audit/verify_certifications.py --source all --merge-existing"
+        )
+
+
+def test_live_registry_programs_are_discoverable_by_resolver(registry: CertRegistry) -> None:
+    """The resolver's canonical program names must align with registry source
+    names; otherwise scoring can miss a source even when the registry is loaded."""
+    for program in EXPECTED_LIVE_PROGRAMS:
+        assert program in registry.records_by_program
+        assert registry.candidates_for(program), f"{program} has no resolver candidates"
+
+
 # --- Canary anchors ---------------------------------------------------------
 
 
@@ -80,9 +119,9 @@ def test_canary_thorne_mg_resolves_to_sku(registry: CertRegistry) -> None:
 
 def test_canary_thorne_mg_usp_resolves_claimed_only(registry: CertRegistry) -> None:
     """Thorne Mg claims NSF Sport + NSF Certified + USP Verified. NSF Sport
-    and NSF Certified (NSF/ANSI 173) are in our registry; USP isn't. USP must
-    resolve to claimed_only (we never falsely SKU-credit a program we haven't
-    loaded). This is the conservative-first contract."""
+    and NSF Certified (NSF/ANSI 173) are in our registry and match this SKU;
+    USP Verified is loaded too, but this SKU is not in the USP product list.
+    USP must resolve to claimed_only. This is the conservative-first contract."""
     out = resolve(
         "Thorne",
         "Magnesium Bisglycinate",

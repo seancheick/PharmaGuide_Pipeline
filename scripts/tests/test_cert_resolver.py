@@ -97,6 +97,8 @@ class TestNormalization:
         assert normalize_program("USP") == "USP Verified"
         assert normalize_program("Informed Sport") == "Informed Sport"
         assert normalize_program("IFOS 5 Star") == "IFOS"
+        assert normalize_program("ConsumerLab Approved") == "ConsumerLab"
+        assert normalize_program("CL Approved") == "ConsumerLab"
         assert normalize_program("Non-GMO Project Verified") == "Non-GMO Project"
 
     def test_normalize_program_passes_through_unknown(self) -> None:

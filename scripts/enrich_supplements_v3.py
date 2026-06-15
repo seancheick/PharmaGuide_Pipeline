@@ -1524,9 +1524,20 @@ class SupplementEnricherV3:
             'fda_registered': re.compile(r'\bFDA[\s-]?(registered|inspected)[\s-]+facility\b', re.I),
 
             # Batch traceability
-            'coa': re.compile(r'\b(certificate\s+of\s+analysis|COA)\b', re.I),
+            'coa': re.compile(
+                r'\b('
+                r'COAs?|certificates?\s+of\s+analysis|analysis\s+certificates?|'
+                r'(?:third[-\s]?party\s+)?lab\s+(?:test\s+)?reports?'
+                r')\b',
+                re.I,
+            ),
             'qr_code': re.compile(r'\bQR\s*code\b', re.I),
-            'batch_lookup': re.compile(r'\b(batch|lot)\s+(lookup|search|verify)\b', re.I),
+            'batch_lookup': re.compile(
+                r'\b(batch|lot)\s+(lookup|look\s*up|search|verify|verification|trace|tracking)\b|'
+                r'\b(enter|submit|scan)\s+(?:your\s+|the\s+)?(batch|lot)\s+(number|code)\b|'
+                r'\b(batch|lot)\s+(number|code)\b.{0,80}\b(test\s+results?|lab\s+reports?|COA|certificate\s+of\s+analysis)\b',
+                re.I,
+            ),
 
             # Country of origin
             'made_usa': re.compile(r'\b(made|manufactured|produced)\s+in\s+(the\s+)?USA\b', re.I),

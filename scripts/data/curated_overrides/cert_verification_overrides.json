@@ -3,9 +3,9 @@
     "schema_version": "6.0.0",
     "description": "Manual overrides for cert verification scope. Used when (a) the fuzzy resolver returns needs_review and a human confirms/downgrades, or (b) a known-good cert isn't in the public registry snapshots yet. Pattern matches scripts/data/curated_overrides/upc_overrides.json.",
     "purpose": "cert_verification_manual_override",
-    "last_updated": "2026-05-20",
+    "last_updated": "2026-06-15",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 712,
+    "total_overrides": 715,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -12672,6 +12672,58 @@
       "record_id": "NSF_SPORT_33DFB8FEB29C",
       "matched_brand": "Thorne",
       "matched_product": "Thorne Curcumin Phytosome",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature's Bounty",
+      "product": "D3 125 mcg (5000 IU)",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "cert_refresh_2026-06-15 auto-reject — dose_mismatch. Product matched registry row `Nature's Bounty Vitamin D3 125 mcg Softgels` but failed conservative same-product checks.",
+      "reviewed_at": "2026-06-15",
+      "review_source": "cert_refresh_2026-06-15_needs_review_rejects",
+      "dsld_id": "240732",
+      "record_id": "USP_VERIFIED_0604E8F6CA5F",
+      "matched_brand": "Nature's Bounty",
+      "matched_product": "Nature's Bounty Vitamin D3 125 mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature's Bounty",
+      "product": "Vitamin D3-5000 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "cert_refresh_2026-06-15 auto-reject — dose_mismatch. Product matched registry row `Nature's Bounty Vitamin D3 125 mcg Softgels` but failed conservative same-product checks.",
+      "reviewed_at": "2026-06-15",
+      "review_source": "cert_refresh_2026-06-15_needs_review_rejects",
+      "dsld_id": "83209",
+      "record_id": "USP_VERIFIED_0604E8F6CA5F",
+      "matched_brand": "Nature's Bounty",
+      "matched_product": "Nature's Bounty Vitamin D3 125 mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Prenatal DHA 650 mg",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "cert_refresh_2026-06-15 manual reject — product is Thorne Prenatal DHA 650 mg, while registry row is Thorne Basic Prenatal; different SKU/product line, so no product-level NSF Sport credit.",
+      "reviewed_at": "2026-06-15",
+      "review_source": "cert_refresh_2026-06-15_manual_review",
+      "reviewer": "Codex",
+      "dsld_id": "291804",
+      "record_id": "NSF_SPORT_BD1F477ECDDF",
+      "matched_brand": "Thorne®",
+      "matched_product": "Thorne® Basic Prenatal",
       "triage_reasons": [
         "no_strong_signal"
       ]

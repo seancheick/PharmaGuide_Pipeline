@@ -184,6 +184,7 @@ def main() -> None:
             product=r["product_name"] or "",
             claimed_programs=covered_claims,
             registry=registry,
+            dsld_id=r["dsld_id"],
         )
         for res in resolutions:
             d = res.to_dict()
@@ -222,6 +223,11 @@ def main() -> None:
                 "total_claims_in_catalog": total,
                 "scope_counts": dict(counts),
                 "sku_or_product_line_pct": round(100.0 * sku / total, 1) if total else 0.0,
+                "non_scoring_pct": round(100.0 * zero / total, 1) if total else 0.0,
+                # Backward-compatible key for older report consumers. The
+                # markdown now uses "non-scoring" because brand_only is not
+                # necessarily a false positive; it is often a real brand cert
+                # that does not prove this SKU.
                 "false_positive_pct": round(100.0 * zero / total, 1) if total else 0.0,
                 "samples": {
                     scope: samples.get((prog, scope), [])[: args.samples]
@@ -268,7 +274,7 @@ def main() -> None:
     out.append("")
     out.append("## Per-program breakdown")
     out.append("")
-    out.append("| Program | Total claims | sku | product_line | needs_review | brand_only | claimed_only | scoring_blocked | % real verify | % zero (likely FP) |")
+    out.append("| Program | Total claims | sku | product_line | needs_review | brand_only | claimed_only | scoring_blocked | % real verify | % non-scoring |")
     out.append("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for row in program_summary:
         c = row["scope_counts"]
@@ -283,7 +289,7 @@ def main() -> None:
     out.append("- **sku / product_line**: real verification — the resolver matched the brand + product.")
     out.append("- **needs_review**: borderline confidence (0.80-0.91) OR dose/form variant conflict.")
     out.append("- **brand_only**: brand IS in the registry but THIS product isn't (e.g., Thorne brand in NSF Sport, but Thorne Basic Prenatal not on the cert list).")
-    out.append("- **claimed_only**: brand isn't in the registry at all. Common causes: USP-grade ingredient claim, NSF GMP-facility wording, old manufacturer-injected claim, or unverified marketing — NOT actual cert participation.")
+    out.append("- **claimed_only**: no scoring product match. Common causes: explicit reviewer reject, USP-grade ingredient wording, NSF GMP-facility wording, old manufacturer-injected claim, or unverified marketing — NOT actual cert participation.")
     out.append("- **scoring_blocked**: resolver flagged the snapshot as too stale to score.")
     out.append("")
     out.append("## Per-program sample records")
