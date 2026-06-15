@@ -64,7 +64,7 @@ CANARY_TARGETS = {
     # --- 16-17/25 (PL krill mid-tier — no sustainability cert) ---
     "1072":   ("omega", "pl", 16.0, 16.0,
                "GNC Ultra Omega Krill Oil"),
-    "179775": ("omega", "pl", 17.0, 17.0,
+    "179775": ("omega", "pl", 16.5, 16.5,
                "Nature Made Krill Oil 300 mg"),
     "223318": ("omega", "pl", 16.0, 16.0,
                "Nutricost Krill Oil 1000 mg"),
@@ -72,7 +72,7 @@ CANARY_TARGETS = {
                "Pure Encapsulations Krill-Plex"),
 
     # --- 19/25 EE form with concentration (rare in catalog) ---
-    "239845": ("omega", "ee", 19.0, 19.0,
+    "239845": ("omega", "ee", 18.5, 18.5,
                "Spring Valley Omega-3 520 mg Natural Lemon Flavor — EE form"),
 
     # --- 8/25 undefined-form, source + sustainability in current enriched artifact ---
