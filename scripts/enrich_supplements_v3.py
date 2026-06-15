@@ -7509,6 +7509,26 @@ class SupplementEnricherV3:
             elif best["matched_on"].endswith("_pattern"):
                 match_tier = "pattern"
 
+        def _resolved_candidate_form_id(candidate: Dict) -> Optional[str]:
+            return (
+                candidate.get("form_key")
+                or candidate.get("fallback_form_name")
+                or (candidate.get("match_data") or {}).get("form_id")
+            )
+
+        def _same_quality_resolution(candidate_group: List[Dict]) -> bool:
+            """True when duplicate match paths land on identical scoring identity."""
+            if len(candidate_group) < 2:
+                return False
+            resolutions = {
+                (
+                    candidate.get("parent_key"),
+                    _resolved_candidate_form_id(candidate),
+                )
+                for candidate in candidate_group
+            }
+            return len(resolutions) == 1
+
         ambiguity_candidates = []
         if len(winning_candidates) > 1:
             reasons = ["tier"]
@@ -7554,12 +7574,14 @@ class SupplementEnricherV3:
                         "match_type": c["match_type"],
                         "tier": c["tier"],
                         "alias_len": c["alias_len"],
+                        "resolved_form_id": _resolved_candidate_form_id(c),
                     }
                     for c in winning_candidates
                 ],
                 "chosen": {
                     "canonical_id": best["parent_key"],
                     "form_key": best["form_key"],
+                    "resolved_form_id": _resolved_candidate_form_id(best),
                     "matched_alias": best["matched_alias"],
                     "matched_on": best["matched_on"],
                     "match_type": best["match_type"],
@@ -7569,10 +7591,16 @@ class SupplementEnricherV3:
                 "preferred_parent": preferred_parent,
                 "reason": reasons,
             }
-            ambiguity_candidates = payload["candidates"]
+            same_resolution = _same_quality_resolution(winning_candidates)
+            ambiguity_candidates = [] if same_resolution else payload["candidates"]
             # Only warn if not resolved cleanly by source precedence or context parent preference.
             # Set ENRICH_DEBUG_AMBIGUITY=1 to see all ambiguity warnings
-            if (
+            if same_resolution:
+                self.logger.debug(
+                    f"Quality-map duplicate match paths resolved to same canonical/form: "
+                    f"{json.dumps(payload, sort_keys=True)}"
+                )
+            elif (
                 ("raw_name_priority" not in reasons and "parent_context_preference" not in reasons)
                 or os.environ.get("ENRICH_DEBUG_AMBIGUITY")
             ):
