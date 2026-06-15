@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12111,
+      "total_form_aliases": 12115,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,7 +60,7 @@
       "proteins": 16,
       "vitamins": 23
     },
-    "schema_version": "5.4.8",
+    "schema_version": "5.4.9",
     "last_updated": "2026-06-15",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -1655,6 +1655,16 @@
           "Added deterministic aliases for soluble vegetable fiber, B. animalis lactis BL-04/BI-07 abbreviation labels, Lignamax flaxseed fiber, and Himematsutake Mushroom."
         ],
         "regression_tests": "scripts/tests/test_clean_unmapped_alias_regressions.py -k 2026_06_15_unmapped"
+      },
+      "5.4.9": {
+        "date": "2026-06-15",
+        "audit": "Liposomal PureWay-C form-context routing",
+        "changes": [
+          "Added Liposomal PureWay-C label aliases to vitamin_c::liposomal vitamin C.",
+          "Preserved plain PureWay-C routing while allowing liposomal product context to choose the liposomal vitamin C form.",
+          "Moved thioctic acid and DSLD typo Thiotic Acid aliases to alpha_lipoic_acid::racemic alpha-lipoic acid instead of the unspecified fallback."
+        ],
+        "regression_tests": "scripts/tests/test_enrichment_regressions.py -k LiposomalPureWayC"
       }
     },
     "category_enum": [
@@ -4497,7 +4507,10 @@
           "encapsulated vitamin c supplement",
           "encapsulated vit c",
           "advanced delivery c supplement",
-          "Lipo-Cmax"
+          "Lipo-Cmax",
+          "Liposomal PureWay-C",
+          "Liposomal PureWay C",
+          "Liposomal PureWay"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -19578,7 +19591,9 @@
           "mixed ALA",
           "DL-ALA",
           "synthetic ALA",
-          "racemic lipoic acid"
+          "racemic lipoic acid",
+          "thioctic acid",
+          "Thiotic Acid"
         ],
         "context_include": [
           "lipoic",
@@ -19618,8 +19633,7 @@
           "nutri-nano alpha lipoic acid",
           "Nutri Alpha Lipoic Acid",
           "alpha-lipoic acid",
-          "ALA",
-          "thioctic acid"
+          "ALA"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -2045,8 +2045,45 @@ class SupplementEnricherV3:
                 std_name,
                 ingredient.get("raw_source_text"),
                 ingredient.get("standard_name"),
+                " ".join(
+                    str(form.get("name") or "")
+                    for form in (ingredient.get("forms") or [])
+                    if isinstance(form, dict)
+                ),
             )
         ).lower()
+
+        is_vitamin_c_row = (
+            canonical_id == "vitamin_c"
+            or re.search(r"(?<![a-z0-9])vit(?:amin)?\s*c(?![a-z0-9])", row_text)
+            or "ascorb" in row_text
+        )
+        if is_vitamin_c_row:
+            context_text = f"{product_text} {row_text}"
+            context_lower = context_text.lower()
+            product_lower = product_text.lower()
+            context_key = norm_module.make_normalized_key(context_text)
+            row_key = norm_module.make_normalized_key(row_text)
+            negated_liposomal = bool(
+                re.search(r"\b(?:non|not|without)\s*[- ]?liposomal\b", context_lower)
+                or "nonliposomal" in context_key
+            )
+            row_has_pureway = "purewayc" in row_key or "pureway" in row_key
+            direct_liposomal_pureway = bool(
+                re.search(r"\bliposom\w*\s+pure\s*way[-\s]*c\b", context_lower)
+                or re.search(r"\bliposom\w*\s+pureway[-\s]*c\b", context_lower)
+                or re.search(r"\bliposom\w*\s+pure\s*way\b", context_lower)
+                or re.search(r"\bpure\s*way[-\s]*c\s+liposom\w*\b", context_lower)
+                or re.search(r"\bpureway[-\s]*c\s+liposom\w*\b", context_lower)
+            )
+            liposomal_vitamin_c_product = bool(
+                re.search(r"\bliposom\w*\s+vit(?:amin)?\s*c\b", product_lower)
+                or re.search(r"\bvit(?:amin)?\s*c\s+liposom\w*\b", product_lower)
+            )
+            if row_has_pureway and not negated_liposomal and (
+                direct_liposomal_pureway or liposomal_vitamin_c_product
+            ):
+                return "Liposomal PureWay-C"
 
         is_collagen_row = (
             canonical_id == "collagen"
@@ -11633,6 +11670,47 @@ class SupplementEnricherV3:
         matches = []
         product_text = self._get_all_product_text(product)
 
+        def _clinical_form_candidates(ingredient: Dict) -> List[str]:
+            """Structured form labels can carry the clinical product identity.
+
+            Example: DSLD stores PureWay-C under activeIngredients[].forms while
+            the row name remains just "Vitamin C". Evidence matching must see
+            that form text, but source/provenance forms such as "from Acerola"
+            should not become independent clinical identities.
+            """
+            out: List[str] = []
+            source_categories = {
+                "animal part or source",
+                "plant part",
+                "source material",
+            }
+            source_prefixes = {
+                "from",
+                "culture of",
+                "and culture of",
+                "naturally occurring from",
+                "derived from",
+            }
+            for form in ingredient.get("forms") or []:
+                if not isinstance(form, dict):
+                    continue
+                name = str(form.get("name") or "").strip()
+                if not name:
+                    continue
+                category = str(form.get("category") or "").strip().lower()
+                prefix = str(form.get("prefix") or "").strip().lower()
+                keep_source_prefixed = (
+                    prefix == "from"
+                    and self._should_keep_from_prefixed_form_as_actual(name)
+                )
+                if (
+                    (category in source_categories or prefix in source_prefixes)
+                    and not keep_source_prefixed
+                ):
+                    continue
+                out.append(name)
+            return out
+
         for ingredient in active_ingredients:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
@@ -11641,6 +11719,7 @@ class SupplementEnricherV3:
                 std_name,
                 ingredient.get("raw_source_text", ""),
             ]
+            candidate_names.extend(_clinical_form_candidates(ingredient))
             branded_token = ingredient.get("branded_token_extracted") or self._product_context_branded_token_for_ingredient(
                 product_text,
                 ingredient,

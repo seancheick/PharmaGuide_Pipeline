@@ -3567,6 +3567,98 @@ class TestFromPrefixChelateGate:
         )
 
 
+class TestLiposomalPureWayCVitaminC:
+    """Liposomal PureWay-C is a product-context form, not plain PureWay-C."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @staticmethod
+    def _vitamin_c_pureway_product(full_name: str) -> dict:
+        return {
+            "id": "test_liposomal_pureway_c",
+            "fullName": full_name,
+            "product_name": full_name,
+            "brandName": "Pure Encapsulations",
+            "statements": [
+                {
+                    "notes": (
+                        "Liposomal PUREWAY. Liposomal Pureway-C and the "
+                        "Liposomal Pureway-C logo are trademarks."
+                    )
+                    if "liposomal" in full_name.lower()
+                    else "PureWay-C is a trademark."
+                }
+            ],
+            "activeIngredients": [
+                {
+                    "name": "Vitamin C",
+                    "raw_source_text": "Vitamin C",
+                    "standardName": "Vitamin C",
+                    "canonical_id": "vitamin_c",
+                    "canonical_source_db": "ingredient_quality_map",
+                    "quantity": 500.0,
+                    "unit": "mg",
+                    "forms": [
+                        {
+                            "name": "Pureway-C",
+                            "prefix": None,
+                            "percent": None,
+                            "category": "vitamin",
+                            "ingredientGroup": "Vitamin C",
+                            "uniiCode": "0",
+                        }
+                    ],
+                }
+            ],
+            "inactiveIngredients": [],
+        }
+
+    def test_liposomal_pureway_c_resolves_to_liposomal_vitamin_c_form(self, enricher):
+        product = self._vitamin_c_pureway_product("Liposomal Vitamin C")
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["canonical_id"] == "vitamin_c"
+        assert row["form_id"] == "liposomal vitamin C"
+        assert row["matched_form"] == "liposomal vitamin C"
+        assert row["bio_score"] == 15.0
+        assert row["matched_alias"] == "Liposomal PureWay-C"
+
+    def test_non_liposomal_pureway_c_does_not_get_liposomal_credit(self, enricher):
+        product = self._vitamin_c_pureway_product(
+            "Sustained Release Vitamin C with PureWay-C 500 mg"
+        )
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["canonical_id"] == "vitamin_c"
+        assert row["form_id"] == "vitamin C with bioflavonoids"
+        assert row["bio_score"] == 12.0
+
+    @pytest.mark.parametrize(
+        "full_name",
+        [
+            "Liposomal Vitamin C",
+            "Sustained Release Vitamin C with PureWay-C 500 mg",
+        ],
+    )
+    def test_pureway_c_form_text_matches_existing_clinical_evidence(self, enricher, full_name):
+        product = self._vitamin_c_pureway_product(full_name)
+
+        enriched, issues = enricher.enrich_product(product)
+        evidence_ids = {
+            match.get("id")
+            for match in enriched.get("evidence_data", {}).get("clinical_matches", [])
+        }
+
+        assert issues == []
+        assert "BRAND_PUREWAY_C" in evidence_ids
+
+
 class TestCerevisiaeYeastFormInjection:
     """BUG-11: S. cerevisiae culture form text must route to yeast IQM forms.
 
