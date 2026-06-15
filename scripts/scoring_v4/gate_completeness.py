@@ -358,12 +358,21 @@ def _has_probiotic_relevant_identity(product: Dict[str, Any], ingredients: List[
 
 
 def _has_sports_relevant_identity(product: Dict[str, Any], ingredients: List[Dict[str, Any]]) -> bool:
-    """True when the scoring contract contains usable sports identity."""
+    """True when the scoring contract contains usable sports identity.
+
+    Identity uses the BROAD ``_SPORTS_IDENTITY_CANONICALS`` set (pre-workout /
+    recovery actives such as alpha-GPC, ATP, betaine, taurine, caffeine, the BCAA
+    aggregate, and arginine/glutamine/carnitine), not the narrower dose-scored
+    ``_SPORTS_ACTIVE_CANONICALS``. This lets the sports gate FAIL OPEN (soft debt)
+    like the omega gate for bona fide sports products whose primary dose the rubric
+    scores conservatively, instead of forcing NOT_SCORED. Only sports-ROUTED
+    products reach this check, so the broader set cannot pull non-sports products in.
+    """
     if _has_product_evidence(ingredients, "sports_primary_dose"):
         return True
     if _has_sports_primary_identity_signal(product):
         return True
-    return any(_norm(ing.get("canonical_id")) in _SPORTS_ACTIVE_CANONICALS for ing in ingredients)
+    return any(_norm(ing.get("canonical_id")) in _SPORTS_IDENTITY_CANONICALS for ing in ingredients)
 
 
 def _soft_policy_from_scoring_evidence(
@@ -675,6 +684,50 @@ _SPORTS_ACTIVE_CANONICALS = {
     "l_leucine",
     "l_isoleucine",
     "l_valine",
+}
+
+# Broader identity set (vs the dose-scored _SPORTS_ACTIVE_CANONICALS) used ONLY by
+# the completeness gate to decide eligibility. These pre-workout / recovery actives
+# mark a product as sports nutrition even when the primary-dose rubric scores them
+# conservatively, so the sports gate fails open (soft_missing) like the omega gate
+# instead of forcing NOT_SCORED. Only sports-ROUTED products reach this check, so the
+# broader set cannot pull non-sports products into a sports score. Canonicals here are
+# empirically confirmed against the real catalog (alpha_gpc/atp on Thorne Pre-Workout
+# Elite 323126; l_arginine/l_glutamine on GNC Amplified Creatine 18538;
+# branched_chain_amino_acids on Nutricost BCAA+ 306183/307773; l_carnitine on GNC
+# Carnitine 1000 + BCAA 67304) plus standard ISSN pre-workout actives.
+_SPORTS_IDENTITY_CANONICALS = _SPORTS_ACTIVE_CANONICALS | {
+    # creatine forms (proprietary "creatine matrix" blends often disclose no dose)
+    "creatine",
+    "creatine_hydrochloride",
+    "creatine_hcl",
+    "creatine_nitrate",
+    "creatine_citrate",
+    "buffered_creatine",
+    "magnesium_creatine_chelate",
+    # amino-acid aggregates / EAA
+    "branched_chain_amino_acids",
+    "eaa",
+    "essential_amino_acids",
+    # recovery / nitric-oxide / transport actives
+    "l_arginine",
+    "l_glutamine",
+    "l_carnitine",
+    "acetyl_l_carnitine",
+    # pre-workout ergogenic actives (dose-scored conservatively in the sports rubric)
+    "alpha_gpc",
+    "atp",
+    "adenosine_triphosphate",
+    "betaine",
+    "betaine_anhydrous",
+    "tmg_betaine",
+    "taurine",
+    "l_tyrosine",
+    "tyrosine",
+    "caffeine",
+    "caffeine_anhydrous",
+    "agmatine",
+    "agmatine_sulfate",
 }
 
 

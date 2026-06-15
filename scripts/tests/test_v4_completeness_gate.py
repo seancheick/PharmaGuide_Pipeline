@@ -507,6 +507,48 @@ def test_sports_primary_identity_without_dose_scores_without_cap() -> None:
     assert result.verdict_ceiling is None
 
 
+def test_sports_gate_fails_open_for_alpha_gpc_atp_preworkout() -> None:
+    # Real Thorne Pre-Workout Elite (323126): alpha-GPC 600 + ATP 450, no classic
+    # creatine/protein/BCAA anchor. The sports gate must fail OPEN (soft debt) like
+    # the omega gate, not force NOT_SCORED — these are bona fide pre-workout actives.
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[
+            _ingredient(name="Alpha-GPC", canonical_id="alpha_gpc", dose=600, unit="mg"),
+            _ingredient(name="ATP", canonical_id="adenosine_triphosphate", dose=450, unit="mg"),
+        ],
+        primary_type="pre_workout",
+        supplement_taxonomy={"primary_type": "pre_workout"},
+    )
+
+    result = evaluate_completeness_gate(product, module="sports")
+
+    assert result.module == "sports"
+    assert result.is_live_eligible is True
+    assert "active_identity" not in result.missing_fields
+    assert result.verdict != "NOT_SCORED"
+
+
+def test_sports_gate_accepts_bcaa_aggregate_identity() -> None:
+    # Real Nutricost BCAA+ (306183/307773): a disclosed branched_chain_amino_acids
+    # aggregate (7 g), not the leu/iso/val trio. The aggregate is valid sports identity.
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = _product(
+        ingredients=[
+            _ingredient(name="BCAA", canonical_id="branched_chain_amino_acids", dose=7000, unit="mg"),
+        ],
+        primary_type="amino_acid",
+        supplement_taxonomy={"primary_type": "amino_acid"},
+    )
+
+    result = evaluate_completeness_gate(product, module="sports")
+
+    assert result.is_live_eligible is True
+    assert "active_identity" not in result.missing_fields
+
+
 def test_malformed_product_never_raises_and_is_not_scored() -> None:
     from scoring_v4.gate_completeness import evaluate_completeness_gate
 
