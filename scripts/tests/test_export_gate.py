@@ -184,6 +184,7 @@ COLUMNS = [
     "is_gluten_free", "is_dairy_free", "is_soy_free", "is_vegan", "is_vegetarian", "is_organic", "is_non_gmo",
     "has_banned_substance", "has_recalled_ingredient", "has_harmful_additives", "has_allergen_risks",
     "blocking_reason",
+    "safety_signal_reason",
     "is_probiotic", "contains_sugar", "contains_sodium", "diabetes_friendly", "hypertension_friendly",
     "is_trusted_manufacturer", "has_third_party_testing", "has_full_disclosure",
     "cert_programs", "badges", "top_warnings", "flags",

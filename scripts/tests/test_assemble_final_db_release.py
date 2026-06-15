@@ -37,7 +37,7 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
                 20.0, 25.0, 20.0, 30.0, 15.0, 20.0, 4.0, 5.0,
                 90.0, 10.0, "targeted_capsule", "Top 10%", 100,
                 1, 0, 0, 0, 1, 0, 0,
-                0, 0, 0, 0, None,
+                0, 0, 0, 0, None, None,
                 0, 0, 0, 0, 0,
                 1, 1, 1,
                 "[]", "[]", "[]", "[]",
