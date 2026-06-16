@@ -611,6 +611,96 @@ def _form_match_terms(forms: Any) -> List[str]:
     return [term for term in terms if term]
 
 
+def _active_duplicate_identity_key(value: Any) -> str:
+    text = safe_str(value).lower()
+    if not text:
+        return ""
+    return re.sub(r"[^a-z0-9]+", "_", text).strip("_")
+
+
+def _add_active_duplicate_term(terms: set[str], value: Any) -> None:
+    text = safe_str(value)
+    if not text:
+        return
+    lowered = " ".join(text.lower().replace("_", " ").split())
+    if lowered:
+        terms.add(lowered)
+    identity_key = _active_duplicate_identity_key(text)
+    if identity_key:
+        terms.add(identity_key)
+
+
+def _active_form_duplicate_terms_for_product(ingredients: List[Dict[str, Any]]) -> set[str]:
+    """Build exact product-active identity terms for inactive form dedup.
+
+    This deliberately uses only the already-exported active rows for this one
+    product. It prevents global IQM matches such as "Leucine" or "Potassium
+    Chloride" from being tagged unless the matching parent is actually present
+    in the same active panel.
+    """
+    terms: set[str] = set()
+    for ing in ingredients:
+        if not isinstance(ing, dict):
+            continue
+        for key in (
+            "canonical_id",
+            "parent_key",
+            "normalized_key",
+            "name",
+            "standardName",
+            "standard_name",
+            "matched_form",
+            "display_form_label",
+        ):
+            _add_active_duplicate_term(terms, ing.get(key))
+        for form in safe_list(ing.get("forms")):
+            if isinstance(form, dict):
+                for key in ("name", "label", "ingredientGroup"):
+                    _add_active_duplicate_term(terms, form.get(key))
+            else:
+                _add_active_duplicate_term(terms, form)
+        for match in safe_list(ing.get("matched_forms")):
+            if isinstance(match, dict):
+                for key in ("form_key", "standard_name", "name"):
+                    _add_active_duplicate_term(terms, match.get(key))
+    return terms
+
+
+def _candidate_matches_product_active(candidate: Dict[str, Any], active_terms: set[str]) -> bool:
+    candidate_terms: set[str] = set()
+    for key in ("parent", "standard_name"):
+        _add_active_duplicate_term(candidate_terms, candidate.get(key))
+    for parent in safe_list(candidate.get("parents")):
+        _add_active_duplicate_term(candidate_terms, parent)
+    for term in safe_list(candidate.get("identity_terms")):
+        _add_active_duplicate_term(candidate_terms, term)
+    return bool(candidate_terms & active_terms)
+
+
+def _product_active_form_duplicate_candidate(
+    *,
+    inactive_resolver: InactiveIngredientResolver,
+    active_terms: set[str],
+    raw_name: str,
+    additional_terms: List[str],
+) -> Optional[Dict[str, Any]]:
+    """Return the IQM candidate only if product context proves the duplicate.
+
+    Upstream inactive ``standardName`` is intentionally not used here. It can
+    already contain broad active normalization ("Leucine" -> "L-Leucine") and
+    would reintroduce the same product-blind bug through a different path.
+    """
+    if not active_terms:
+        return None
+    for candidate in inactive_resolver.active_form_candidates(
+        raw_name=raw_name,
+        additional_terms=additional_terms,
+    ):
+        if _candidate_matches_product_active(candidate, active_terms):
+            return candidate
+    return None
+
+
 def _is_short_acronym_alias(value: Any) -> bool:
     text = safe_str(value)
     compact = re.sub(r"[^A-Za-z0-9]", "", text)
@@ -3713,6 +3803,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
     ingredients = _suppress_zero_dose_duplicate_active_rows(ingredients)
+    active_form_duplicate_terms = _active_form_duplicate_terms_for_product(ingredients)
 
     # Inactive ingredients
     # Inactive ingredients — unified resolver path (2026-05-12).
@@ -3747,6 +3838,18 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             standard_name=std_name_ing,
             additional_terms=_form_match_terms(ing.get("forms")),
         )
+        if res.matched_source is None:
+            active_form_candidate = _product_active_form_duplicate_candidate(
+                inactive_resolver=inactive_resolver,
+                active_terms=active_form_duplicate_terms,
+                raw_name=name or raw,
+                additional_terms=_form_match_terms(ing.get("forms")),
+            )
+            if active_form_candidate:
+                res = inactive_resolver.active_form_duplicate_resolution(
+                    name or raw,
+                    active_form_candidate,
+                )
 
         # Label fidelity contract (2026-06-15): inactive_ingredients[] is
         # the user-visible "Other Ingredients" surface, so resolver flags

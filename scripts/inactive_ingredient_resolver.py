@@ -83,6 +83,24 @@ SEVERITY_NA = "n/a"
 SOURCE_BANNED_RECALLED = "banned_recalled"
 SOURCE_HARMFUL_ADDITIVES = "harmful_additives"
 SOURCE_OTHER_INGREDIENTS = "other_ingredients"
+SOURCE_ACTIVE_FORM = "active_nutrient_form"
+
+# Policy tag for an inactive label term that is actually an active nutrient
+# FORM already scored on the active side (Pyridoxine HCl = B6, Cyanocobalamin =
+# B12, Zinc Oxide, ...). Not an excipient; excluded from the "unknown inactive
+# role" metric. See scripts/audits/inactive_active_form_dedup_SCOPING.md.
+POLICY_ACTIVE_FORM_DUPLICATE = "active_form_duplicate"
+
+# Generic single words that appear as IQM form aliases but are too ambiguous to
+# offer as active-form candidates on their own (an excipient could share them).
+# The active-form index skips these and any term shorter than 4 chars. The real
+# safeguard is still product context in build_final_db.py; resolve() never uses
+# this helper index directly.
+_ACTIVE_FORM_TERM_STOPLIST = frozenset({
+    "oil", "powder", "extract", "blend", "complex", "concentrate", "isolate",
+    "fiber", "fibre", "acid", "salt", "natural", "organic", "water", "starch",
+    "gum", "wax", "gel", "juice", "syrup", "flour", "protein",
+})
 
 
 def _normalize(text: Any) -> str:
@@ -226,11 +244,13 @@ class InactiveIngredientResolver:
         banned_recalled_path: Optional[Path] = None,
         harmful_additives_path: Optional[Path] = None,
         other_ingredients_path: Optional[Path] = None,
+        ingredient_quality_map_path: Optional[Path] = None,
     ) -> None:
         d = data_dir or _DEFAULT_DATA_DIR
         self._banned_path = banned_recalled_path or d / "banned_recalled_ingredients.json"
         self._harmful_path = harmful_additives_path or d / "harmful_additives.json"
         self._other_path = other_ingredients_path or d / "other_ingredients.json"
+        self._iqm_path = ingredient_quality_map_path or d / "ingredient_quality_map.json"
 
         self._banned_entries: list[dict] = []
         self._harmful_entries: list[dict] = []
@@ -239,6 +259,10 @@ class InactiveIngredientResolver:
         self._banned_index: dict[str, dict] = {}
         self._harmful_index: dict[str, dict] = {}
         self._other_index: dict[str, dict] = {}
+        # term -> [{"parent": iqm_parent_key, "parents": [equivalent ids], ...}]
+        # This is a lookup helper only. resolve() must not consume it directly
+        # because active-form-duplicate tagging requires product context.
+        self._active_form_index: dict[str, list[dict]] = {}
 
         self._build_indices()
 
@@ -275,6 +299,65 @@ class InactiveIngredientResolver:
             self._other_entries.append(e)
             for term in _entry_terms(e):
                 self._other_index.setdefault(term, e)
+
+        # active-form index — IQM active nutrient forms. This intentionally
+        # DOES NOT participate in resolve(); product-aware build code decides
+        # whether an unmatched inactive is a duplicate of the same product's
+        # active panel. IQM remains the authoritative active-form dictionary.
+        try:
+            iqm = _load_json(self._iqm_path)
+        except (OSError, ValueError):
+            iqm = {}
+        for parent_key, parent in iqm.items():
+            if parent_key.startswith("_") or not isinstance(parent, dict):
+                continue
+            equivalent_parents = {parent_key}
+            match_rules = parent.get("match_rules")
+            if isinstance(match_rules, dict):
+                mr_parent = _normalize(match_rules.get("parent_id"))
+                if mr_parent:
+                    equivalent_parents.add(mr_parent.replace(" ", "_"))
+            for rel in parent.get("relationships") or []:
+                if not isinstance(rel, dict):
+                    continue
+                target_id = _normalize(rel.get("target_id"))
+                if target_id:
+                    equivalent_parents.add(target_id.replace(" ", "_"))
+
+            identity_terms: set[str] = set()
+            for parent_id in equivalent_parents:
+                identity_terms.add(parent_id)
+                identity_terms.add(parent_id.replace("_", " "))
+            standard_name = parent.get("standard_name") or parent_key
+            identity_terms.add(_normalize(standard_name))
+            for a in (parent.get("aliases") or []):
+                if isinstance(a, str):
+                    identity_terms.add(_normalize(a))
+
+            meta = {
+                "parent": parent_key,
+                "parents": sorted(equivalent_parents),
+                "standard_name": standard_name,
+                "identity_terms": sorted(t for t in identity_terms if t),
+            }
+            terms: list[str] = [_normalize(parent_key.replace("_", " "))]
+            for a in (parent.get("aliases") or []):
+                if isinstance(a, str):
+                    terms.append(_normalize(a))
+            forms = parent.get("forms")
+            if isinstance(forms, dict):
+                for form_key, form in forms.items():
+                    terms.append(_normalize(form_key))
+                    if isinstance(form, dict):
+                        for a in (form.get("aliases") or []):
+                            if isinstance(a, str):
+                                terms.append(_normalize(a))
+            for t in terms:
+                if len(t) < 4 or t in _ACTIVE_FORM_TERM_STOPLIST:
+                    continue
+                bucket = self._active_form_index.setdefault(t, [])
+                if not any(existing.get("parent") == parent_key for existing in bucket):
+                    bucket.append(meta)
 
     # ----- Public API -----
 
@@ -319,6 +402,33 @@ class InactiveIngredientResolver:
 
         # 4. unmatched — well-formed unknown
         return self._unmatched(raw_name)
+
+    def active_form_candidates(
+        self,
+        raw_name: str,
+        standard_name: Optional[str] = None,
+        additional_terms: Optional[Iterable[str]] = None,
+    ) -> list[dict]:
+        """Return IQM active-form candidates for a label term.
+
+        This is deliberately separate from ``resolve()``. A global IQM hit is
+        not enough to classify an inactive row as an active-form duplicate;
+        the build layer must also prove the same product has the matching
+        active parent.
+        """
+        terms = _collect_terms(raw_name, standard_name, *(additional_terms or []))
+        seen: set[str] = set()
+        out: list[dict] = []
+        for t in terms:
+            for meta in self._active_form_index.get(t, []):
+                parent = str(meta.get("parent") or "")
+                if parent and parent not in seen:
+                    seen.add(parent)
+                    out.append(meta)
+        return out
+
+    def active_form_duplicate_resolution(self, raw_name: str, meta: dict) -> InactiveResolution:
+        return self._from_active_form(raw_name, meta)
 
     # ----- Audit hooks (no internal state mutation) -----
 
@@ -523,6 +633,40 @@ class InactiveIngredientResolver:
                 if entry.get(k) is not None
             },
             references=[],
+        )
+
+    @staticmethod
+    def _from_active_form(raw_name: str, meta: dict) -> InactiveResolution:
+        """An active nutrient FORM duplicated into the inactive list. It is
+        already scored as an active; we only tag it so the audit stops counting
+        it as an unknown inactive role. NOT an excipient — no functional role,
+        no safety contract, never a verdict input."""
+        return InactiveResolution(
+            raw_name=raw_name,
+            display_label=raw_name,
+            standard_name=meta.get("standard_name"),
+            matched_source=SOURCE_ACTIVE_FORM,
+            matched_rule_id=meta.get("parent"),
+            display_role_label="Active ingredient (listed as form)",
+            functional_roles=[],
+            additive_type=None,
+            category=None,
+            severity_status=SEVERITY_NA,
+            is_safety_concern=False,
+            is_banned=False,
+            safety_reason=None,
+            harmful_severity=None,
+            harmful_notes=None,
+            mechanism_of_harm=None,
+            population_warnings=[],
+            common_uses=[],
+            is_additive=False,
+            is_label_descriptor=False,
+            is_active_only=True,
+            notes="",
+            identifiers={},
+            references=[],
+            inactive_policy=POLICY_ACTIVE_FORM_DUPLICATE,
         )
 
     @staticmethod

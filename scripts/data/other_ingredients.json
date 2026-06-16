@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-16",
-    "total_entries": 695,
+    "total_entries": 696,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -2783,6 +2783,7 @@
       "id": "PII_CALCIUM_CARBONATE",
       "standard_name": "Calcium Carbonate (as filler)",
       "aliases": [
+        "calcium carbonate",
         "calcium salt of carbonic acid",
         "chalk",
         "E170",
@@ -5605,6 +5606,7 @@
         "di calcium phosphate",
         "dibasic calcium phosphate",
         "dibasic calcium phosphate dihydrate",
+        "dicalcium phosphate",
         "dicalcium phosphate anhydrous",
         "dicalcium phosphate dihydrate",
         "E341",
@@ -12662,15 +12664,46 @@
       "is_label_descriptor": true
     },
     {
+      "id": "NHA_NATURAL_AND_ARTIFICIAL_FLAVORS",
+      "standard_name": "Natural and Artificial Flavors",
+      "aliases": [
+        "artificial lemon flavor",
+        "natural artificial flavor",
+        "natural artificial flavors",
+        "natural & artificial flavor",
+        "natural & artificial flavors",
+        "natural & artificial orange flavor",
+        "natural & artificial orange flavors",
+        "natural and artificial flavor",
+        "natural and artificial flavors",
+        "natural and artificial lemon flavor",
+        "natural and artificial mint flavors",
+        "natural and artificial orange flavor"
+      ],
+      "category": "flavoring",
+      "is_additive": true,
+      "additive_type": "natural_and_artificial_flavor",
+      "allergen": false,
+      "notes": "Mixed natural and artificial flavor disclosure. Class-level inactive mapping only; no compound-level identifiers are assigned because the exact flavor chemicals are not disclosed on the label.",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "aroma improvement"
+      ],
+      "last_updated": "2026-06-16",
+      "external_ids": {},
+      "functional_roles": [
+        "flavor_natural",
+        "flavor_artificial"
+      ]
+    },
+    {
       "id": "NHA_NATURAL_FLAVORS",
       "standard_name": "Natural Flavors",
       "aliases": [
-        "natural artificial flavors",
-        "natural & artificial flavors",
         "acai flavor natural",
         "apple flavoring, natural",
         "apricot flavor",
-        "artificial lemon flavor",
         "banana flavor",
         "black tea flavor, natural",
         "blackcurrant flavor",
@@ -12707,14 +12740,8 @@
         "mango natural flavor",
         "melon flavor, natural",
         "mixed berry natural flavor",
-        "natural & artificial orange flavors",
         "Natural & Organic Fruit Flavors",
         "natural acai flavor",
-        "natural and artificial flavor",
-        "natural and artificial flavors",
-        "natural and artificial lemon flavor",
-        "natural and artificial mint flavors",
-        "natural and artificial orange flavor",
         "natural and mixed berry flavor",
         "natural and organic fruit flavors",
         "natural anise flavor",
@@ -13261,6 +13288,7 @@
         "E304",
         "natural antioxidants",
         "rosemary extract",
+        "rosemary leaf extract",
         "vitamin C ester",
         "ascorbate palmitate",
         "non-gmo rosemary extract",
@@ -14192,8 +14220,6 @@
       "id": "NHA_ORANGE_FLAVOR",
       "standard_name": "Orange Flavor",
       "aliases": [
-        "natural & artificial orange flavor",
-        "natural and artificial orange flavor",
         "orange flavor"
       ],
       "category": "flavor_natural",
@@ -23497,7 +23523,6 @@
         "flavoring",
         "natural flavor",
         "artificial flavor",
-        "natural and artificial flavors",
         "flavor blend"
       ],
       "category": "flavor_natural",

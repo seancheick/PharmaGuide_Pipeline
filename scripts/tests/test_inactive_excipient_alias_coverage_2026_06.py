@@ -15,9 +15,11 @@ other_ingredients.json, so each label term now resolves to a real role:
   "organic Palm Oil"             → carrier_oil                    ~18
   "Porcine Gelatin"              → coating                        ~15
 
-Five terms are aliases onto existing parents (no new entry); only Sodium
-Aluminum Silicate is a new entry, with content-verified UNII 058TS43PSM /
-CAS 1344-00-9. No active nutrient is ever mapped here.
+Four terms are aliases onto existing parents; Sodium Aluminum Silicate and the
+mixed Natural and Artificial Flavors class are new entries. Sodium Aluminum
+Silicate carries content-verified UNII 058TS43PSM / CAS 1344-00-9. The flavor
+class intentionally carries no compound identifiers because the label does not
+disclose exact flavor chemicals. No active nutrient is ever mapped here.
 """
 import pytest
 
@@ -35,18 +37,13 @@ def resolver():
 #   Soy Oil & Lecithin Blend   -> alias on existing PII_SOY_BEAN_OIL (soy allergen kept)
 #   Blend of oils              -> alias on existing PII_OIL_GENERIC
 #   organic Palm Oil           -> alias on existing ADD_PALM_OIL (harmful_additives, carrier_oil)
-#   Natural & Artificial Flavors -> &/no-connector aliases on existing NHA_NATURAL_FLAVORS
+#   Natural & Artificial Flavors -> new mixed-flavor class, both natural+artificial roles
 #   Sodium Aluminum Silicate   -> NEW entry (verified UNII 058TS43PSM / CAS 1344-00-9)
-#
-# NOTE (deferred): the existing flavors entries map "natural and artificial
-# flavors" to flavor_natural only. Splitting natural+artificial blends into a
-# both-roles (flavor_natural + flavor_artificial) entry is a separate ontology
-# cleanup — tracked, not done here, to keep this a non-colliding quick win.
 _EXPECTED = [
     ("Porcine Gelatin", "coating"),
     ("Soy Oil & Lecithin Blend", "carrier_oil"),
     ("Blend of oils", "carrier_oil"),
-    ("Natural & Artificial Flavors", "flavor_natural"),
+    ("Natural & Artificial Flavors", "flavor_artificial"),
     ("organic Palm Oil", "carrier_oil"),
     ("Sodium Aluminum Silicate", "anti_caking_agent"),
 ]
@@ -73,3 +70,9 @@ def test_soy_oil_lecithin_blend_preserves_soy_allergen(resolver):
     r = resolver.resolve(raw_name="Soy Oil & Lecithin Blend")
     # allergen surfaces via display/role; the parent entry is allergen=True (soy)
     assert r.functional_roles, "soy oil & lecithin blend must resolve"
+
+
+def test_natural_and_artificial_flavors_get_both_roles(resolver):
+    r = resolver.resolve(raw_name="Natural & Artificial Flavors")
+    assert r.matched_rule_id == "NHA_NATURAL_AND_ARTIFICIAL_FLAVORS"
+    assert r.functional_roles == ["flavor_natural", "flavor_artificial"]
