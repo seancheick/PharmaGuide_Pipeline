@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-06-15",
-    "total_entries": 694,
+    "last_updated": "2026-06-16",
+    "total_entries": 695,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -7849,6 +7849,7 @@
         "bovine",
         "porcine",
         "porcine gelatin capsule",
+        "porcine gelatin",
         "pork gelatin",
         "Soft Gel Capsule",
         "softgel",
@@ -12664,6 +12665,8 @@
       "id": "NHA_NATURAL_FLAVORS",
       "standard_name": "Natural Flavors",
       "aliases": [
+        "natural artificial flavors",
+        "natural & artificial flavors",
         "acai flavor natural",
         "apple flavoring, natural",
         "apricot flavor",
@@ -13841,6 +13844,7 @@
       "standard_name": "Oil (Generic)",
       "aliases": [
         "Cottonseed Oil",
+        "blend of oils",
         "oil",
         "Palm Olein"
       ],
@@ -18663,6 +18667,7 @@
         "refined Soybean Oil",
         "soy bean oil",
         "soy oil",
+        "soy oil & lecithin blend",
         "soybeal oil",
         "soybean oil",
         "Soya Oil",
@@ -24196,6 +24201,36 @@
       "external_ids": {},
       "branded_form": false,
       "functional_roles": []
+    },
+    {
+      "id": "NHA_SODIUM_ALUMINUM_SILICATE",
+      "standard_name": "Sodium Aluminum Silicate",
+      "aliases": [
+        "sodium aluminum silicate",
+        "sodium aluminium silicate",
+        "sodium silicoaluminate",
+        "sodium aluminosilicate",
+        "aluminum sodium silicate",
+        "E554"
+      ],
+      "category": "anti_caking_agent",
+      "is_additive": true,
+      "additive_type": "anticaking_agent",
+      "allergen": false,
+      "notes": "Synthetic sodium aluminosilicate (INS 554) used as an anti-caking / flow agent in powders and tablets. GRAS per 21 CFR 182.2727. Chemically DISTINCT from kaolin (CAS 1332-58-7) and calcium aluminum silicate. Negligible absorption; identity-only inactive mapping.",
+      "common_uses": [
+        "anti-caking",
+        "flow agent"
+      ],
+      "last_updated": "2026-06-16",
+      "external_ids": {
+        "unii": "058TS43PSM",
+        "cas": "1344-00-9",
+        "pubchem_cid": 72941443
+      },
+      "functional_roles": [
+        "anti_caking_agent"
+      ]
     }
   ]
 }

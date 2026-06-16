@@ -67,7 +67,12 @@ def test_aggregate_disposition_counts(by_id):
     # (category=label_descriptor → functional_roles: []).
     # 476 after db8f73c7 "Resolve unmapped ingredient identity gaps" populated one
     # more entry's functional_roles (475 -> 476; no duplicates per integrity suite).
-    assert populated == 476, f"expected 476 populated entries; got {populated}"
+    # 477 after the 2026-06-16 inactive-excipient coverage win added ONE genuine
+    # new entry (Sodium Aluminum Silicate [UNII 058TS43PSM / CAS 1344-00-9]);
+    # the other 5 terms were aliases onto existing parents (gelatin, soy oil,
+    # generic oil, ADD_PALM_OIL in harmful_additives, NHA_NATURAL_FLAVORS) and
+    # don't lift this count.
+    assert populated == 477, f"expected 477 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

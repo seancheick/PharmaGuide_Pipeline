@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-06-15",
+    "last_updated": "2026-06-16",
     "total_entries": 117,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -8442,6 +8442,8 @@
       "id": "ADD_PALM_OIL",
       "standard_name": "Palm Oil",
       "aliases": [
+        "organic palm oil",
+        "organic Palm Oil",
         "palm fruit oil",
         "Elaeis guineensis oil",
         "vegetable oil (palm)",
