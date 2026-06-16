@@ -267,8 +267,11 @@ def test_acetyl_l_carnitine_aliases_route_to_l_carnitine_alcar_form(iqm: dict) -
         "alcar hcl",
     }
     assert expected_aliases <= aliases
-    assert form["bio_score"] == 11
-    assert form["score"] == 11
+    # alcar sits with its premium peers l-carnitine tartrate (10) and
+    # propionyl-l-carnitine (10); 10 is the deliberate canonical value, and the
+    # deprecated acetyl_l_carnitine duplicate is synced to match.
+    assert form["bio_score"] == 10
+    assert form["score"] == 10
     assert form["external_ids"]["unii"] == "6DH1W9VH8Q"
 
 

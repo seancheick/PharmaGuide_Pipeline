@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12115,
+      "total_form_aliases": 12116,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,8 +60,8 @@
       "proteins": 16,
       "vitamins": 23
     },
-    "schema_version": "5.4.9",
-    "last_updated": "2026-06-15",
+    "schema_version": "5.4.10",
+    "last_updated": "2026-06-16",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -14604,6 +14604,7 @@
         "notes": "The standard unenhanced quercetin form — a yellow crystalline powder with notoriously poor absorption (~2% per Hollman 1995). Most of it passes through your gut unabsorbed. Still the most widely sold form because it's cheap. Works better when taken with fat or paired with bromelain/vitamin C, but even then absorption is limited compared to enhanced forms.",
         "aliases": [
           "quercetin",
+          "quercetin dihydrate",
           "quercetin bioflavonoid",
           "quercetin powder",
           "d.r.-quercetin",
@@ -19592,7 +19593,6 @@
           "DL-ALA",
           "synthetic ALA",
           "racemic lipoic acid",
-          "thioctic acid",
           "Thiotic Acid"
         ],
         "context_include": [
@@ -19633,7 +19633,8 @@
           "nutri-nano alpha lipoic acid",
           "Nutri Alpha Lipoic Acid",
           "alpha-lipoic acid",
-          "ALA"
+          "ALA",
+          "thioctic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35423,12 +35424,12 @@
     "rxcui": "193",
     "forms": {
       "alcar": {
-        "bio_score": 11,
+        "bio_score": 10,
         "natural": false,
         "absorption": "poor (~10-20% oral F; similar to L-carnitine supplements)",
         "notes": "Acetylated L-carnitine with improved BBB penetration over L-carnitine. However, oral bioavailability is only 10-20% (comparable to L-carnitine at 14-18%, Rebouche 2004, PMID 15591001). ALCAR actually showed 7.7x lower delta-AUC than L-carnitine in head-to-head PK study (PMID 19178874). Despite low F, clinically effective for cognitive support and neuropathy at 1500-3000 mg/day, likely due to sufficient carnitine pool loading at high oral doses. B42 structural merge 2026-06-06: deprecated compatibility form; scoring aligned to canonical l_carnitine::acetyl-l-carnitine (alcar), and real routing aliases moved to the canonical parent.",
         "aliases": ["deprecated acetyl_l_carnitine alcar compat only"],
-        "score": 11,
+        "score": 10,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.15,
@@ -35438,9 +35439,9 @@
         }
       },
       "acetyl-l-carnitine (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 10,
         "natural": false,
-        "score": 11,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score. B42 structural merge 2026-06-06: deprecated compatibility form; scoring aligned to canonical l_carnitine::acetyl-l-carnitine (alcar), and real routing aliases moved to the canonical parent.",
         "aliases": [

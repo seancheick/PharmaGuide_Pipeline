@@ -108,4 +108,6 @@ def test_botanical_total_count_unchanged(botanicals):
     # 530 after 2026-06-04 Red Yeast Rice identity entry added so products
     # can ship with existing monacolin-K safety handling instead of becoming
     # unscoreable.
-    assert len(botanicals) == 530
+    # 531 after db8f73c7 "Resolve unmapped ingredient identity gaps" added the next
+    # botanical identity entry (530 -> 531; no duplicates per integrity suite).
+    assert len(botanicals) == 531

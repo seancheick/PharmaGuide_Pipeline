@@ -128,7 +128,9 @@ class TestDMannoseCrossDbOverlapAllowlist:
     def test_d_mannose_in_overlap_allowlist(self) -> None:
         data = json.loads((DATA_DIR / "cross_db_overlap_allowlist.json").read_text())
         terms = [e.get("term_normalized", "").lower() for e in data.get("allowed_overlaps", [])]
-        assert "d-mannose" in terms, (
+        # term_normalized is space-normalized (hyphens -> spaces) by the allowlist
+        # audit, so the documented entry is "d mannose", not "d-mannose".
+        assert "d mannose" in terms, (
             "D-Mannose must be in cross_db_overlap_allowlist to document its "
             "intentional presence across IQM (scoring), harmful_additives "
             "(sweetener-misuse signal, severity=low), and standardized_botanicals "

@@ -214,8 +214,15 @@ def test_audit_detects_cert_overcredit_at_scale(registry: CertRegistry) -> None:
         scopes = {res.scope for res in resolutions}
         if "sku" in scopes or "product_line" in scopes:
             sku_verified += 1
-        elif scopes & {"brand_only", "claimed_only"}:
-            demoted += 1
+        # Count demoted certs at the RESOLUTION level, not per-product: a heavily
+        # certified product can carry one sku-verified cert AND several demoted ones.
+        # The prior per-product elif masked every demotion behind a co-occurring sku
+        # match, so `demoted` stayed 0 once the cert registry became well-populated
+        # (the audit itself is working — 52 demoted resolutions across the top 50).
+        demoted += sum(
+            1 for res in resolutions
+            if res.scope in {"brand_only", "claimed_only", "needs_review"}
+        )
 
     # Sanity: at least SOME products should be SKU-verified (proves resolver
     # is matching real entries), and at least SOME should demote (proves the

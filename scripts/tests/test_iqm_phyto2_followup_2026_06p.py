@@ -38,8 +38,14 @@ def test_ala_ambiguous_marketing_removed(iqm):
     assert "bio-enhanced ala" not in al and "active ala" not in al
 
 
-def test_thiotic_typo_removed(iqm):
-    assert "thiotic acid" not in _al(iqm, "alpha_lipoic_acid", "racemic alpha-lipoic acid")
+def test_thiotic_typo_mapped_to_racemic_not_r_form(iqm):
+    """"Thiotic Acid" is a real-label misspelling of thioctic acid (e.g. Pure
+    Encapsulations products print it). It carries no chirality signal, so it
+    must resolve to the conservative racemic form — NOT be deleted (that
+    regressed a real product, see test_enrichment_regressions) and NOT be
+    placed on the chiral-specific R-alpha-lipoic acid form."""
+    assert "thiotic acid" in _al(iqm, "alpha_lipoic_acid", "racemic alpha-lipoic acid")
+    assert "thiotic acid" not in _al(iqm, "alpha_lipoic_acid", "R-alpha-lipoic acid")
 
 
 def test_ha_short_chain_to_lowmw(iqm):

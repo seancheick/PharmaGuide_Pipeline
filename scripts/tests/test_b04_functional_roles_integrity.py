@@ -65,7 +65,9 @@ def test_aggregate_disposition_counts(by_id):
     # NHA_FISH_SOURCE_DESCRIPTOR (added 6d59fc5f) is correctly deferred under the
     # Phase 4 rule pinned in test_retired_descriptor_categories_have_empty_roles
     # (category=label_descriptor → functional_roles: []).
-    assert populated == 475, f"expected 475 populated entries; got {populated}"
+    # 476 after db8f73c7 "Resolve unmapped ingredient identity gaps" populated one
+    # more entry's functional_roles (475 -> 476; no duplicates per integrity suite).
+    assert populated == 476, f"expected 476 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

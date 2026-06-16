@@ -168,6 +168,35 @@ _LOCAL_MATRIX_UNSPECIFIED_LOCKED_SPREAD = {
 }
 
 
+# Audit-locked "(unspecified)" peer-min exemptions (2026-06-16).
+#
+# The Batch-5 peer-min floor (2026-04-29, above) is a *generic* recalibration:
+# it assumes an unspecified form should never sit below the cheapest plausible
+# disclosed peer. A later wave of *specific* clinical audits deliberately locked
+# several unspecified forms BELOW their peer-min, because the parent's real
+# worst-case form is genuinely lower-quality than the generic floor assumes
+# (intact ATP is not orally bioavailable; an unknown-matrix carotenoid sits
+# below any disclosed source; marker/species-free botanicals sit below their
+# standardized extracts; generic "prebiotics"/"choline" sit below disclosed
+# FOS-GOS / citrate forms).
+#
+# Specific audit locks win over the generic floor. Each parent below is pinned
+# to its exact locked score by the cited audit suite AND re-pinned in
+# test_audit_locked_unspecified_scores_pinned, so the value cannot drift in
+# either direction without explicit review against the owning audit.
+_AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS = {
+    'astaxanthin':         10,  # minerals_actives_06b: unknown matrix < disclosed source
+    'atp':                  6,  # botanicals_actives_06c: intact ATP < disodium salt
+    'phosphatidylcholine': 11,  # botanicals_actives_06c: undisclosed < soy-PC
+    'stinging_nettle':      9,  # botanicals_actives_06c: < root 11 / leaf 10
+    'pygeum':               8,  # botanicals_actives_06c: < bark extract 11
+    'prebiotics':           9,  # probiotics_phospholipids_06f: < disclosed FOS/GOS/HMO/XOS
+    'choline':              8,  # probiotics_phospholipids_06f / b33: < citrate/bitartrate 10
+    'rhodiola':             8,  # botanicals_06o: < rosavin-standardized extract
+    'ginkgo':               8,  # botanicals_06o: < EGb 24% flavone-glycoside extract
+}
+
+
 def test_no_unspec_form_scores_below_peer_min(iqm):
     """Every '(unspecified)' form must score ≥ parent's peer min,
     EXCEPT for clinician-locked overrides (Dr Pham probiotic sign-off) and
@@ -185,6 +214,8 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
         if parent_key in _STANDARDIZATION_MARKER_PEER_MIN_EXEMPTIONS:
             continue
         if parent_key in _LOCAL_MATRIX_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
+            continue
+        if parent_key in _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS:
             continue
         forms = v.get('forms', {})
         if not isinstance(forms, dict):
@@ -209,17 +240,57 @@ def test_no_unspec_form_scores_below_peer_min(iqm):
     )
 
 
+def test_audit_locked_unspecified_scores_pinned(iqm):
+    """Pin the exact score of every audit-locked unspecified form that is
+    exempted from the peer-min floor.
+
+    These forms are deliberately BELOW peer-min (see
+    _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS). The exemption alone would
+    let the score drift silently in either direction — including a well-meant
+    "raise it to satisfy the floor" edit that would undo the clinical audit.
+    This test re-pins each form to its exact audit-locked value, forcing any
+    change to be reconciled with the owning test_iqm_*_audit_2026_06* suite
+    rather than this generic floor test.
+    """
+    mismatches = []
+    for parent_key, locked_score in _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS.items():
+        forms = iqm.get(parent_key, {}).get('forms', {})
+        unspec = {k: f for k, f in forms.items()
+                  if isinstance(f, dict) and 'unspecified' in k.lower()}
+        if not unspec:
+            mismatches.append(f'{parent_key}: no unspecified form found')
+            continue
+        fk, ff = next(iter(unspec.items()))
+        s = ff.get('score')
+        if s != locked_score:
+            mismatches.append(
+                f'{parent_key}/{fk}: score={s}, expected audit-locked {locked_score}'
+            )
+    assert not mismatches, (
+        'Audit-locked unspecified scores drifted. Specific audit locks win over '
+        'the generic peer-min floor — if a value here changed, reconcile with the '
+        'owning test_iqm_*_audit_2026_06* suite, not this floor test:\n  '
+        + '\n  '.join(mismatches)
+    )
+
+
 def test_recalibrated_high_impact_entries(iqm):
     """Spot-check the highest-impact recalibrations from the audit."""
     expected = {
         # parent: minimum acceptable unspec score (peer-min from audit)
         'maca': 12,
         'ashwagandha': 7,
-        'rhodiola': 10,
-        'pygeum': 14,
-        'atp': 14,
+        # rhodiola/pygeum/atp/phosphatidylserine were lowered to their later
+        # audit-locked unspecified scores (botanicals_06o / botanicals_actives_06c /
+        # the phospholipid audit). The generic peer-min spot-check must not
+        # demand more than the specific audit lock allows. See
+        # _AUDIT_LOCKED_UNSPECIFIED_PEER_MIN_EXEMPTIONS and
+        # test_audit_locked_unspecified_scores_pinned.
+        'rhodiola': 8,
+        'pygeum': 8,
+        'atp': 6,
         'resveratrol': 11,
-        'phosphatidylserine': 12,
+        'phosphatidylserine': 10,
         'collagen': 10,
         'psyllium': 12,
         'holy_basil': 13,

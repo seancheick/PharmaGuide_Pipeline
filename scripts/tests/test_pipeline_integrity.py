@@ -42,7 +42,9 @@ REQUIRED_SCHEMA_VERSIONS = {
     "5.4.2",
     "5.4.6",
     "5.4.7",
-    "5.4.8",  # ingredient_quality_map.json — ongoing IQM audit-batch bumps
+    "5.4.8",
+    "5.4.9",
+    "5.4.10",  # ingredient_quality_map.json — ongoing IQM audit-batch bumps
     "6.0.0",
     "6.1.0",
     "6.1.1",

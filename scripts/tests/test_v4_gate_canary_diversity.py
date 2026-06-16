@@ -114,9 +114,12 @@ V4_CANARIES = {
     "12932": {
         "label": "vitafusion Fiber Gummies",
         "module": "generic",
-        "verdict": "SAFE",
+        # Re-baseline 2026-06-15: commit 2d6b841a rebalanced the V4 dietary-sugar
+        # penalty bands (gummies take B1_dietary_sugar -2.0), dropping raw 40.0 -> 38.0,
+        # crossing the 40-line into POOR. Legit corpus-wide scoring fix, not a regression.
+        "verdict": "POOR",
         "confidence": "low",
-        "score_range": (39.4, 40.6),
+        "score_range": (37.4, 38.6),
     },
     # Stable POOR diversity anchor (added 2026-06-08 when 241684 + 12932 both
     # legitimately crossed the 40 line into SAFE). Single-ingredient chlorophyll
@@ -131,7 +134,10 @@ V4_CANARIES = {
         "module": "generic",
         "verdict": "POOR",
         "confidence": "low",
-        "score_range": (26.8, 28.2),
+        # Re-baseline 2026-06-15: the product's USP strings are monograph refs
+        # ("Conforms to USP"), not named cert programs -> B4a_verified_certifications=0,
+        # so the prior provisional +2 USP trust credit does not apply; raw 26.4.
+        "score_range": (25.7, 27.1),
     },
     # Typed confidence high on the probiotic module.
     "230149": {
@@ -139,7 +145,7 @@ V4_CANARIES = {
         "module": "probiotic",
         "verdict": "SAFE",
         "confidence": "high",
-        "score_range": (75.6, 77.0),  # Phase 4: 80.5 → 77.1; cert→GMP: +2.2 (NSF Certified sku implies GMP)
+        "score_range": (72.6, 74.0),  # Re-baseline 2026-06-15: 2d6b841a sugar/additive penalties -> raw 73.3
     },
 }
 
