@@ -152,6 +152,12 @@ class TestAliasQuality:
             'monosodium glutamate',  # glutamate (pending audit) + l_glutamic_acid
             'msg',  # glutamate (pending audit) + l_glutamic_acid
             'bovine pancreas',  # digestive_enzymes + organ_extracts (shared animal source material)
+            # ─── Added 2026-06-17 (c3b6de11 active-form export mapping) ───
+            # Sodium metavanadate (NaVO3) is a vanadium(V) source; it resolves to
+            # the vanadium nutrient via either the vanadium parent (active-form
+            # mapping) or the vanadyl_sulfate 'sodium vanadate' form. Same scored
+            # nutrient on both, so the cross-parent alias is intentional.
+            'sodium metavanadate',  # vanadium + vanadyl_sulfate/sodium vanadate
         }
 
         alias_map = defaultdict(list)
