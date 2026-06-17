@@ -10414,7 +10414,8 @@ class SupplementEnricherV3:
         # Map evidence rule IDs to canonical display names used by safety flags.
         canonical_name_map = {
             "CERT_NSF_SPORT": "NSF Sport",
-            "CERT_NSF_CONTENTS": "NSF Certified",
+            "CERT_NSF_CONTENTS": "NSF Contents Certified",
+            "CERT_NSF_ANSI_455": "NSF/ANSI 455 Dietary Supplement",
             "CERT_USP_VERIFIED": "USP Verified",
             "CERT_CONSUMERLAB": "ConsumerLab",
             "CERT_INFORMED_SPORT": "Informed Sport",
@@ -10684,10 +10685,15 @@ class SupplementEnricherV3:
         """Collect third-party testing certifications"""
         certs = []
 
-        # Priority certification patterns (named programs only)
+        # Priority certification patterns (named quality/testing programs only).
+        # Generic "NSF Certified" is intentionally excluded: labels such as
+        # "NSF Certified Gluten-Free" certify a dietary claim, not supplement
+        # contents, contaminants, or potency. Quality flags require a specific
+        # quality program such as NSF Contents/ANSI 173, NSF Sport, or NSF/ANSI 455.
         cert_checks = [
             ("NSF Sport", r'\bNSF\b.*certified(?:\s*for)?\s*sport\b|\bNSF[-\s]?sport\b'),
-            ("NSF Certified", r'\bNSF\b.*(certified|certification)\b(?!.*sport)|\bNSF/ANSI\s*173\b'),
+            ("NSF Contents Certified", r'\bNSF\s+Contents\s+Certified\b|\bContents\s+Certified\s+NSF\b|\bNSF/ANSI\s*173\b|\bNSF\s+173\b'),
+            ("NSF/ANSI 455 Dietary Supplement", r'\bNSF[\s/]*ANSI\s*455\b|\bNSF\s+455\b|\bNSF\s+Dietary\s+Supplement\s+Certified\b'),
             ("USP Verified", r'\bUSP\b.*(Verified|Verification\s*Program)\b'),
             ("ConsumerLab", r'\bConsumerLab\b.*(Approved|Seal)\b'),
             ("Informed Sport", r'\bInformed[-\s]?Sport\b'),
@@ -10780,21 +10786,33 @@ class SupplementEnricherV3:
         )
         return merged
 
-    # Programs that test for heavy metals (lead, arsenic, mercury, cadmium)
-    HEAVY_METAL_TESTING_PROGRAMS = [
-        "NSF Sport", "NSF Certified", "USP Verified", "ConsumerLab", "IFOS"
-    ]
+    QUALITY_CERT_CAPABILITIES = {
+        # Contents / potency / contaminant programs.
+        "nsf sport": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "nsf certified for sport": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "nsf contents certified": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "nsf ansi 173": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "nsf 173": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "nsf ansi 455": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "nsf ansi 455 dietary supplement": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "usp verified": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "consumerlab": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "consumerlab approved": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "labdoor tested": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        # Contaminant / banned-substance programs. These are valuable but do
+        # not universally prove supplement-facts potency.
+        "ifos": {"purity_verified", "heavy_metal_tested"},
+        "goed certified": {"purity_verified", "heavy_metal_tested", "label_accuracy_verified"},
+        "clean label project certified": {"purity_verified", "heavy_metal_tested"},
+        "informed sport": {"purity_verified"},
+        "informed choice": {"purity_verified"},
+        "bscg": {"purity_verified"},
+    }
 
-    # Programs that verify label accuracy (ingredient identity & potency)
-    LABEL_ACCURACY_PROGRAMS = [
-        "USP Verified", "ConsumerLab", "NSF Certified"
-    ]
-
-    # Programs that test for purity/contaminants (pesticides, microbes, etc.)
-    PURITY_TESTING_PROGRAMS = [
-        "NSF Sport", "NSF Certified", "USP Verified", "ConsumerLab",
-        "IFOS", "Informed Sport", "Informed Choice", "BSCG"
-    ]
+    @classmethod
+    def _quality_cert_capabilities(cls, program_name: str) -> set:
+        key = re.sub(r"[^a-z0-9]+", " ", str(program_name or "").lower()).strip()
+        return cls.QUALITY_CERT_CAPABILITIES.get(key, set())
 
     # Categories with elevated contamination risk (based on ConsumerLab/FDA data)
     HIGH_CONTAMINATION_RISK_CATEGORIES = {
@@ -10845,16 +10863,13 @@ class SupplementEnricherV3:
         programs = third_party.get("programs", [])
         program_names = [p.get("name", "") for p in programs]
 
-        # Check if any program covers each safety criterion
-        purity_verified = any(
-            name in self.PURITY_TESTING_PROGRAMS for name in program_names
-        )
-        heavy_metal_tested = any(
-            name in self.HEAVY_METAL_TESTING_PROGRAMS for name in program_names
-        )
-        label_accuracy_verified = any(
-            name in self.LABEL_ACCURACY_PROGRAMS for name in program_names
-        )
+        capabilities = set()
+        for name in program_names:
+            capabilities.update(self._quality_cert_capabilities(name))
+
+        purity_verified = "purity_verified" in capabilities
+        heavy_metal_tested = "heavy_metal_tested" in capabilities
+        label_accuracy_verified = "label_accuracy_verified" in capabilities
 
         # Assess category-based contamination risk
         category_risk = self._assess_category_contamination_risk(product)

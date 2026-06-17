@@ -206,6 +206,7 @@
         "claim_type": "third_party_certification",
         "positive_patterns": [
           "\\bNSF\\s+Contents\\s+Certified\\b",
+          "\\bContents\\s+Certified\\s+NSF\\b",
           "\\bNSF/ANSI\\s*173\\b",
           "\\bNSF\\s+173\\b"
         ],

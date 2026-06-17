@@ -435,6 +435,7 @@ def normalize_program(text: str) -> str:
         "nsf certified for sport": "NSF Sport",
         "nsf for sport": "NSF Sport",
         "nsf sport": "NSF Sport",
+        "nsf contents certified": "NSF Certified",
         "nsf certified": "NSF Certified",
         "nsf ansi 173": "NSF Certified",
         "nsf 173": "NSF Certified",
