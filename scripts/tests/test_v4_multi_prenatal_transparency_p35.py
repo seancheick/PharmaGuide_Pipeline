@@ -225,6 +225,101 @@ def test_transparency_b5_opacity_uses_multi_prenatal_class_multiplier() -> None:
     assert evidence[0]["class_multiplier_applied"] == 1.3
 
 
+def test_transparency_disclosed_panel_with_opaque_food_matrix_gets_moderate_hit() -> None:
+    from scoring_v4.modules.multi_prenatal_transparency import score_transparency
+
+    food_matrix_rows = [
+        _ingredient("apple", name="Organic Apple", quantity=None, unit=None),
+        _ingredient("beet_root", name="Organic Beet", quantity=None, unit=None),
+        _ingredient("broccoli", name="Organic Broccoli", quantity=None, unit=None),
+        _ingredient("carrot", name="Organic Carrot", quantity=None, unit=None),
+        _ingredient("spinach", name="Organic Spinach", quantity=None, unit=None),
+        _ingredient("ginger", name="Organic Ginger", quantity=None, unit=None),
+        _ingredient("peppermint", name="Organic Peppermint", quantity=None, unit=None),
+        _ingredient("lemon_peel", name="Organic Lemon Peel", quantity=None, unit=None),
+        _ingredient("cranberry", name="Organic Cranberry", quantity=None, unit=None),
+        _ingredient("raspberry", name="Organic Raspberry", quantity=None, unit=None),
+    ]
+    for row in food_matrix_rows:
+        row["dose_status"] = "not_disclosed_blend"
+
+    payload = score_transparency(_product(
+        ingredients=_panel_ingredients() + food_matrix_rows,
+        proprietary_blends=[{
+            "name": "Organic Food Blend",
+            "disclosure_level": "partial",
+            "blend_total_mg": 1400,
+            "source_path": "activeIngredients[18]",
+            "child_ingredients": [{"name": row["name"]} for row in food_matrix_rows],
+            "hidden_count": len(food_matrix_rows),
+        }],
+        proprietary_data={"total_active_mg": 1753, "total_active_ingredients": 18},
+    ))
+
+    assert payload["metadata"]["panel_active_count"] == 8
+    assert payload["metadata"]["panel_excluded_adjunct_count"] == 10
+    assert payload["metadata"]["panel_dose_coverage"] == 1.0
+    assert payload["components"]["panel_individual_dose_disclosure"] == 7.0
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] == -2.0
+    assert payload["metadata"]["B5_adjunct_blend_cap_applied"] is True
+    assert payload["score"] == 9.0
+
+
+def test_transparency_hidden_prenatal_nutrients_still_keeps_full_b5_penalty() -> None:
+    from scoring_v4.modules.multi_prenatal_transparency import score_transparency
+
+    payload = score_transparency(_product(
+        ingredients=_panel_ingredients(),
+        proprietary_blends=[{
+            "name": "Prenatal Nutrient Blend",
+            "disclosure_level": "partial",
+            "blend_total_mg": 500,
+            "source_path": "activeIngredients[8]",
+            "child_ingredients": [
+                {"name": "Folate"},
+                {"name": "Iron"},
+                {"name": "Iodine"},
+                {"name": "Choline"},
+            ],
+            "hidden_count": 4,
+        }],
+        proprietary_data={"total_active_mg": 1000, "total_active_ingredients": 12},
+    ))
+
+    assert payload["metadata"]["panel_dose_coverage"] == 1.0
+    assert payload["metadata"]["B5_adjunct_blend_cap_applied"] is False
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] < -3.0
+    assert payload["score"] < 8.0
+
+
+def test_transparency_value_driving_opaque_blends_do_not_use_adjunct_cap() -> None:
+    from scoring_v4.modules.multi_prenatal_transparency import score_transparency
+
+    payload = score_transparency(_product(
+        ingredients=_panel_ingredients(),
+        proprietary_blends=[{
+            "name": "Antioxidant, Immune & Metabolism Blend",
+            "disclosure_level": "partial",
+            "blend_total_mg": 500,
+            "source_path": "activeIngredients[8]",
+            "child_ingredients": [
+                {"name": "Green Tea Extract"},
+                {"name": "Alpha Lipoic Acid"},
+                {"name": "CoQ10"},
+                {"name": "L-Carnitine"},
+            ],
+            "hidden_count": 4,
+        }],
+        proprietary_data={"total_active_mg": 1000, "total_active_ingredients": 12},
+    ))
+
+    assert payload["metadata"]["panel_dose_coverage"] == 1.0
+    assert payload["metadata"]["B5_adjunct_blend_cap_applied"] is False
+    assert payload["metadata"]["B5_adjunct_blend_cap_reason"] == "value_relevant_blend_payload"
+    assert payload["penalties"]["B5_proprietary_blend_opacity"] < -3.0
+    assert payload["score"] < 8.0
+
+
 def test_transparency_floors_at_zero_under_heavy_penalties() -> None:
     from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
