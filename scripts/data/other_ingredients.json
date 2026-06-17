@@ -12680,7 +12680,7 @@
         "natural and artificial mint flavors",
         "natural and artificial orange flavor"
       ],
-      "category": "flavoring",
+      "category": "flavor_artificial",
       "is_additive": true,
       "additive_type": "natural_and_artificial_flavor",
       "allergen": false,
