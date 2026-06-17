@@ -13322,6 +13322,7 @@
           "boron gluconate",
           "boron hydrolyzed vegetable protein",
           "boron chelate",
+          "boric acid",
           "sodium borate",
           "boric acid, sodium borate"
         ],
@@ -60037,6 +60038,7 @@
           "vanadium trace mineral",
           "vanadium, natural",
           "natural vanadium",
+          "sodium metavanadate",
           "sodium orthovanadate"
         ],
         "dosage_importance": 2.0,

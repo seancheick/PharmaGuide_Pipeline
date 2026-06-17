@@ -118,6 +118,70 @@ def test_form_contract_label_form_with_no_iqm_match_is_unmapped():
     }
 
 
+def test_form_contract_maps_cleaner_form_when_it_is_iqm_alias():
+    """A cleaner-disclosed form can be a valid IQM alias even when the
+    selected scoring form is the parent's '(unspecified)' fallback.
+
+    Example from live blobs: Silica (Silicon Dioxide) was scored against
+    silica (unspecified) but exported form_match_status='unmapped' even
+    though IQM lists 'silicon dioxide' as a silica form alias.
+    """
+    ing = {
+        "forms": [{"name": "Silicon Dioxide"}],
+        "canonical_id": "silica",
+        "name": "Silica",
+    }
+    m = {
+        "matched_form": "silica (unspecified)",
+        "canonical_id": "silica",
+        "parent_key": "silica",
+    }
+    out = _compute_form_contract(ing, m)
+    assert out == {
+        "display_form_label": "Silicon Dioxide",
+        "form_status": "known",
+        "form_match_status": "mapped",
+    }
+
+
+def test_form_contract_maps_sodium_metavanadate_vanadium_form():
+    ing = {
+        "forms": [{"name": "Sodium Metavanadate"}],
+        "canonical_id": "vanadium",
+        "name": "Vanadium",
+    }
+    m = {
+        "matched_form": "vanadium (unspecified)",
+        "canonical_id": "vanadium",
+        "parent_key": "vanadium",
+    }
+    out = _compute_form_contract(ing, m)
+    assert out == {
+        "display_form_label": "Sodium Metavanadate",
+        "form_status": "known",
+        "form_match_status": "mapped",
+    }
+
+
+def test_form_contract_maps_boric_acid_boron_form():
+    ing = {
+        "forms": [{"name": "Boric Acid"}],
+        "canonical_id": "boron",
+        "name": "Boron",
+    }
+    m = {
+        "matched_form": "boron (unspecified)",
+        "canonical_id": "boron",
+        "parent_key": "boron",
+    }
+    out = _compute_form_contract(ing, m)
+    assert out == {
+        "display_form_label": "Boric Acid",
+        "form_status": "known",
+        "form_match_status": "mapped",
+    }
+
+
 def test_form_contract_falls_back_to_ingredient_matched_form_field():
     # Older enricher paths put matched_form on the ingredient directly
     # rather than via the ingredient_quality_data lookup.
