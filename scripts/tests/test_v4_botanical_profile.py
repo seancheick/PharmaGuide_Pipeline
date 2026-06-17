@@ -36,6 +36,12 @@ def test_mass_mg_plain_units_unchanged():
     assert _mass_mg({"quantity": 5, "unit": "grams"}) == 5000.0
 
 
+def test_mass_mg_handles_qualified_micronutrient_units():
+    assert _mass_mg({"quantity": 1000, "unit": "mcg DFE"}) == 1.0
+    assert _mass_mg({"quantity": 1300, "unit": "mcg RAE"}) == 1.3
+    assert _mass_mg({"quantity": 1.7, "unit": "mg DFE"}) == 1.7
+
+
 def test_mass_mg_blank_unit_defaults_to_mg_but_non_mass_units_do_not():
     assert _mass_mg({"quantity": 250, "unit": ""}) == 250.0
     assert _mass_mg({"quantity": 10, "unit": "Billion CFU"}) is None

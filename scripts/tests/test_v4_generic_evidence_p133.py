@@ -565,6 +565,34 @@ def test_trace_active_does_not_recover_generic_ingredient_evidence() -> None:
     assert payload["score"] == 10.0
 
 
+def test_folate_mcg_dfe_gets_nutrition_authority_floor() -> None:
+    """Qualified folate units are still mass units for the DRI-essential floor.
+
+    Regression for labels like "Methyl Folate 1,000 mcg DFE": the scorer used
+    to treat `mcg DFE` as non-mass and missed the vitamin_b9_folate authority
+    floor, producing evidence=0 despite a dose-bearing essential nutrient row.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    product = _product(
+        ingredients=[
+            _ingredient(
+                name="Magnafolate C",
+                standard_name="Vitamin B9 (Folate)",
+                canonical_id="vitamin_b9_folate",
+                quantity=1000,
+                unit="mcg DFE",
+            )
+        ],
+        matches=[],
+    )
+
+    payload = score_evidence(product, apply_primary_floor=True)
+
+    assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_b9_folate"
+    assert payload["score"] == 10.0
+
+
 def test_hidden_coactive_does_not_recover_generic_ingredient_evidence() -> None:
     """A mass-dominant co-active still needs to be clear from the product title
     unless it is the only scorable active.

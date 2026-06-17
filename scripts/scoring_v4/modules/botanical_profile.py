@@ -331,11 +331,14 @@ def _mass_mg(row: Dict[str, Any]) -> Optional[float]:
     unit = unit.replace("(s)", "s")
     if not unit:
         return qty  # botanicals often omit units; default those to mg.
-    if unit in {"mg", "milligram", "milligrams"}:
+    if unit in {"mg", "milligram", "milligrams"} or unit.startswith(("mg", "milligram")):
         return qty
-    if unit in {"g", "gram", "grams"}:
+    if unit in {"g", "gram", "grams"} or unit.startswith("gram"):
         return qty * 1000.0
-    if unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms"}:
+    if (
+        unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms"}
+        or unit.startswith(("mcg", "ug", "µg", "μg", "microgram"))
+    ):
         return qty / 1000.0
     return None
 
