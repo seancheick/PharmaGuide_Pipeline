@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12118,
+      "total_form_aliases": 12117,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -11699,7 +11699,6 @@
         "absorption": "poor (~0.5%)",
         "notes": "A basic inorganic vanadium salt (NaVO3) with very low oral bioavailability — roughly 0.5%. Used in early diabetes research but largely superseded by chelated forms like BMOV that absorb 10–20x more efficiently. Not recommended when better options exist. B25 audit 2026-04-25: V class-equivalence collapse — all forms F~1-3% (PMID:23982218); sodium vanadate remains at the conservative class floor.",
         "aliases": [
-          "sodium metavanadate",
           "NaVO₃",
           "vanadate salt",
           "sodium vanadate supplement",
