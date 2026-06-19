@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12117,
+      "total_form_aliases": 12121,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 23
     },
     "schema_version": "5.4.10",
-    "last_updated": "2026-06-16",
+    "last_updated": "2026-06-19",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -11690,28 +11690,6 @@
           "range_low": 0.01,
           "range_high": 0.03,
           "quality": "low"
-        }
-      },
-      "sodium vanadate": {
-        "bio_score": 7,
-        "natural": false,
-        "score": 7,
-        "absorption": "poor (~0.5%)",
-        "notes": "A basic inorganic vanadium salt (NaVO3) with very low oral bioavailability — roughly 0.5%. Used in early diabetes research but largely superseded by chelated forms like BMOV that absorb 10–20x more efficiently. Not recommended when better options exist. B25 audit 2026-04-25: V class-equivalence collapse — all forms F~1-3% (PMID:23982218); sodium vanadate remains at the conservative class floor.",
-        "aliases": [
-          "NaVO₃",
-          "vanadate salt",
-          "sodium vanadate supplement",
-          "sodium metavanadate supplement",
-          "NaVO₃ supplement",
-          "vanadate salt supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": 0.005,
-          "range_low": 0.0,
-          "range_high": 0.105,
-          "quality": "poor"
         }
       },
       "vanadyl sulfate (unspecified)": {
@@ -60037,8 +60015,10 @@
           "vanadium trace mineral",
           "vanadium, natural",
           "natural vanadium",
-          "sodium metavanadate",
-          "sodium orthovanadate"
+          "sodium orthovanadate",
+          "sodium orthovanadate supplement",
+          "vanadate salt",
+          "vanadate salt supplement"
         ],
         "dosage_importance": 2.0,
         "absorption_structured": {
@@ -60048,6 +60028,35 @@
           "quality": "low"
         },
         "unii_note": "No exact form-level UNII: generic Vanadium parent owns elemental UNII 00J9J9XKDE. GSRS UNII 6DU9Y533FA is exact VANADYL SULFATE and is owned by standalone IQM parent vanadyl_sulfate."
+      },
+      "sodium vanadate": {
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "poor (~0.5%)",
+        "notes": "A basic inorganic vanadium salt (NaVO3) with very low oral bioavailability — roughly 0.5%. Used in early diabetes research but largely superseded by chelated forms like BMOV. PubChem/FDA GSRS verification 2026-06-19: sodium metavanadate / sodium vanadate (NaVO3; CAS 13718-26-8; UNII 252S9L5606) is a distinct compound from vanadyl sulfate (VOSO4; UNII 6DU9Y533FA), so these exact NaVO3 aliases belong under the generic vanadium nutrient parent, not the exact vanadyl_sulfate parent. B25 audit 2026-04-25: V class-equivalence collapse — all forms F~1-3% (PMID:23982218); sodium vanadate remains at the conservative class floor.",
+        "aliases": [
+          "sodium vanadate",
+          "sodium metavanadate",
+          "NaVO3",
+          "NaVO₃",
+          "sodium vanadate supplement",
+          "sodium metavanadate supplement",
+          "NaVO3 supplement",
+          "NaVO₃ supplement"
+        ],
+        "external_ids": {
+          "unii": "252S9L5606",
+          "cas": "13718-26-8",
+          "pubchem_cid": "4148882"
+        },
+        "dosage_importance": 1.5,
+        "absorption_structured": {
+          "value": 0.005,
+          "range_low": 0.0,
+          "range_high": 0.105,
+          "quality": "poor"
+        }
       }
     },
     "cui": "C0042306",

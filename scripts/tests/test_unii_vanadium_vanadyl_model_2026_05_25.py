@@ -63,11 +63,36 @@ def test_generic_vanadium_exact_lookup_stays_on_element_parent():
 
 
 def test_explicit_vanadyl_sulfate_terms_route_to_vanadyl_parent():
-    for text in ["Vanadyl Sulfate", "Vanadium Sulfate", "vanadyl", "vanadium citrate"]:
+    for text in ["Vanadyl Sulfate", "Vanadium Sulfate", "vanadyl", "VOSO4"]:
         payload = _exact_lookup(text)
         assert payload is not None, text
         assert payload["standard_name"] == "Vanadyl Sulfate", text
         assert payload["type"] == "ingredient", text
+
+
+def test_sodium_vanadate_terms_route_to_vanadium_parent():
+    for text in [
+        "Sodium Vanadate",
+        "Sodium Metavanadate",
+        "Sodium Metavanadate Supplement",
+        "Sodium Orthovanadate",
+        "NaVO3",
+        "NaVO₃",
+    ]:
+        payload = _exact_lookup(text)
+        assert payload is not None, text
+        assert payload["standard_name"] == "Vanadium", text
+        assert payload["type"] == "ingredient", text
+
+
+def test_sodium_vanadate_form_owns_verified_ids_under_vanadium():
+    form = _iqm()["vanadium"]["forms"]["sodium vanadate"]
+
+    assert form["external_ids"] == {
+        "unii": "252S9L5606",
+        "cas": "13718-26-8",
+        "pubchem_cid": "4148882",
+    }
 
 
 def test_vanadyl_sulfate_forms_obey_class_equivalence_bio_score_floor():
@@ -76,7 +101,6 @@ def test_vanadyl_sulfate_forms_obey_class_equivalence_bio_score_floor():
         "vanadyl sulfate (VOSO4)": 7,
         "bis(maltolato)oxovanadium (BMOV)": 7,
         "bis(picolinato)oxovanadium (BPOV)": 7,
-        "sodium vanadate": 7,
         "vanadyl sulfate (unspecified)": 7,
         "vanadium aspartate": 7,
         "vanadium citrate": 7,
