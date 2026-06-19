@@ -4959,7 +4959,7 @@
       "shortcut_from_existing": null,
       "fields_to_author": {
         "alert_headline": "Caution with diabetes",
-        "alert_body": "Niacin can lower blood sugar. If you have diabetes, talk to your clinician before adding Niacin and monitor your glucose, especially in the first weeks.",
+        "alert_body": "High-dose niacin can raise blood sugar. If you have diabetes, talk to your clinician before adding high-dose niacin and monitor your glucose, especially after dose changes.",
         "informational_note": "Niacin affects glycemic control — relevant to people with diabetes."
       },
       "authoring_notes": "metabolic family template."
@@ -5429,7 +5429,7 @@
       "shortcut_from_existing": null,
       "fields_to_author": {
         "alert_headline": "May add to diabetes-med effects",
-        "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+        "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
         "informational_note": "Niacin affects glycemic control — relevant to people on diabetes medications."
       },
       "authoring_notes": "metabolic family template."

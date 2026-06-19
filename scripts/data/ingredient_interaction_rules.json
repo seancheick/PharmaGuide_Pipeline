@@ -6896,10 +6896,11 @@
           "mechanism": "At pharmacologic doses (>=1g/day), niacin increases hepatic glucose output and decreases insulin sensitivity. FPG increases of 4-5% and HbA1c increases up to 0.3% documented.",
           "action": "Can worsen glycemic control. Monitor glucose after initiating niacin or increasing dose. Low-dose niacin in multivitamins is not a concern.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "High-dose niacin may raise blood sugar",
-          "alert_body": "Niacin can lower blood sugar. If you have diabetes, talk to your clinician before adding Niacin and monitor your glucose, especially in the first weeks.",
+          "alert_body": "High-dose niacin can raise blood sugar. If you have diabetes, talk to your clinician before adding high-dose niacin and monitor your glucose, especially after dose changes.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people with diabetes.",
           "profile_gate": {
             "gate_type": "condition",
@@ -6992,10 +6993,11 @@
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
-          "alert_headline": "May add to diabetes-med effects",
-          "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+          "alert_headline": "May affect glucose control",
+          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -7023,10 +7025,11 @@
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
-          "alert_headline": "May add to diabetes-med effects",
-          "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+          "alert_headline": "May affect glucose control",
+          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -7087,10 +7090,11 @@
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
+            "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
-          "alert_headline": "May add to diabetes-med effects",
-          "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+          "alert_headline": "May affect glucose control",
+          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications.",
           "profile_gate": {
             "gate_type": "drug_class",
