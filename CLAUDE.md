@@ -83,16 +83,16 @@ docs/                         # Technical deep-dives and infographics
 
 ## Key Data Files (scripts/data/)
 
-| File                               | Purpose                                                         |
-| ---------------------------------- | --------------------------------------------------------------- |
-| `ingredient_quality_map.json`      | Quality scoring for 610 IQM parents (largest file)              |
-| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties (143 entries)  |
-| `harmful_additives.json`           | Penalty scoring for harmful additives (115 entries)             |
-| `backed_clinical_studies.json`     | Clinical evidence bonus points (197 entries, all PMID-backed)    |
-| `allergens.json`                   | Allergen classification (Big 8 types)                           |
-| `rda_optimal_uls.json`             | Dosing adequacy benchmarks                                      |
-| `manufacturer_violations.json`     | Brand trust penalties                                           |
-| `synergy_cluster.json`             | Ingredient synergy bonuses                                      |
+| File                               | Purpose                                                        |
+| ---------------------------------- | -------------------------------------------------------------- |
+| `ingredient_quality_map.json`      | Quality scoring for 610 IQM parents (largest file)             |
+| `banned_recalled_ingredients.json` | Regulatory safety disqualifications or penalties (143 entries) |
+| `harmful_additives.json`           | Penalty scoring for harmful additives (115 entries)            |
+| `backed_clinical_studies.json`     | Clinical evidence bonus points (197 entries, all PMID-backed)  |
+| `allergens.json`                   | Allergen classification (Big 8 types)                          |
+| `rda_optimal_uls.json`             | Dosing adequacy benchmarks                                     |
+| `manufacturer_violations.json`     | Brand trust penalties                                          |
+| `synergy_cluster.json`             | Ingredient synergy bonuses                                     |
 
 All data files use the `_metadata` contract with `schema_version`, `last_updated`, `total_entries`.
 
@@ -160,21 +160,21 @@ These are the data-integrity gates the pipeline relies on. Run any of
 them against `scripts/final_db_output` or a fresh
 `/tmp/pharmaguide_release_build*/` to verify the contract.
 
-| Script                                          | What it gates                                                |
-| ----------------------------------------------- | ------------------------------------------------------------ |
-| `scripts/audit_contract_sync.py`                | v1.5.0/v1.6.x blob-contract field emit rates (GREEN/YELLOW/RED) |
-| `scripts/audit_raw_to_final.py`                 | Raw → blob reconciliation; 23 finding codes; canary set       |
-| `scripts/audit_inactive_safety.py`              | Banned-in-inactives have safety signal; notes-text FP catcher; unknown-role counter (CI gate) |
-| `scripts/db_integrity_sanity_check.py`          | SQLite schema + data validation                              |
-| `scripts/coverage_gate.py`                      | Quality / coverage threshold enforcement                     |
-| `scripts/coverage_gate_functional_roles.py`     | functional_roles coverage on inactives                       |
-| `scripts/enrichment_contract_validator.py`      | Enrichment output contract                                   |
-| `scripts/tests/test_inactive_ingredient_resolver.py` | Resolver unit + canary suite (20 tests)                |
-| `scripts/tests/test_canonical_id_delivers_markers_emit.py` | Active-side canonical_id + delivers_markers contract |
-| `scripts/tests/test_capsimax_display_label_fidelity.py` | Branded botanical display fidelity              |
-| `scripts/tests/test_vitamin_a_form_aware_normalization.py` | Vitamin A IU→mcg RAE form detection         |
-| `scripts/tests/test_label_fidelity_contract.py` | 8 invariants for blob ↔ label fidelity                       |
-| `scripts/tests/test_active_count_reconciliation.py` | E1.2.5 drop-reason enum                                 |
+| Script                                                     | What it gates                                                                                 |
+| ---------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `scripts/audit_contract_sync.py`                           | v1.5.0/v1.6.x blob-contract field emit rates (GREEN/YELLOW/RED)                               |
+| `scripts/audit_raw_to_final.py`                            | Raw → blob reconciliation; 23 finding codes; canary set                                       |
+| `scripts/audit_inactive_safety.py`                         | Banned-in-inactives have safety signal; notes-text FP catcher; unknown-role counter (CI gate) |
+| `scripts/db_integrity_sanity_check.py`                     | SQLite schema + data validation                                                               |
+| `scripts/coverage_gate.py`                                 | Quality / coverage threshold enforcement                                                      |
+| `scripts/coverage_gate_functional_roles.py`                | functional_roles coverage on inactives                                                        |
+| `scripts/enrichment_contract_validator.py`                 | Enrichment output contract                                                                    |
+| `scripts/tests/test_inactive_ingredient_resolver.py`       | Resolver unit + canary suite (20 tests)                                                       |
+| `scripts/tests/test_canonical_id_delivers_markers_emit.py` | Active-side canonical_id + delivers_markers contract                                          |
+| `scripts/tests/test_capsimax_display_label_fidelity.py`    | Branded botanical display fidelity                                                            |
+| `scripts/tests/test_vitamin_a_form_aware_normalization.py` | Vitamin A IU→mcg RAE form detection                                                           |
+| `scripts/tests/test_label_fidelity_contract.py`            | 8 invariants for blob ↔ label fidelity                                                        |
+| `scripts/tests/test_active_count_reconciliation.py`        | E1.2.5 drop-reason enum                                                                       |
 
 ## Conventions
 
@@ -190,8 +190,8 @@ them against `scripts/final_db_output` or a fresh
 
 These override speed when they conflict.
 
-- **No hallucinated identifiers — ever.** PMIDs, CUIs, RXCUIs, UNIIs, NCT IDs, CAS, CIDs must be content-verified against the live API (PubMed/UMLS/RxNorm/FDA/ClinicalTrials.gov). Existence is not enough — a real PMID about the wrong topic is a *ghost reference* and is a defect. Use `scripts/api_audit/verify_*.py`. This is a clinical product; one corrupt entry = a red flag for the whole product. See `critical_no_hallucinated_citations` and `critical_clinical_data_integrity` memories.
-- **Code is not cheap.** AI velocity is real, but bad code is *more* expensive than ever because AI works best in good codebases. Optimize for maintainability and the next reader, not lines-per-minute. Boring, idiomatic code beats clever code.
+- **No hallucinated identifiers — ever.** PMIDs, CUIs, RXCUIs, UNIIs, NCT IDs, CAS, CIDs must be content-verified against the live API (PubMed/UMLS/RxNorm/FDA/ClinicalTrials.gov). Existence is not enough — a real PMID about the wrong topic is a _ghost reference_ and is a defect. Use `scripts/api_audit/verify_*.py`. This is a clinical product; one corrupt entry = a red flag for the whole product. See `critical_no_hallucinated_citations` and `critical_clinical_data_integrity` memories.
+- **Code is not cheap.** AI velocity is real, but bad code is _more_ expensive than ever because AI works best in good codebases. Optimize for maintainability and the next reader, not lines-per-minute. Boring, idiomatic code beats clever code.
 - **Small batches, decomposed problems.** Solve one thing at a time. Atomic commits. Localize blast radius. The IQM batch cadence is the right shape — keep it.
 - **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py` 13K, `score_supplements.py` 4K, `enhanced_normalizer.py` 7K): treat them as gray boxes — design and lock the interface, delegate implementation, verify at the boundary with tests.
 - **Watch for cognitive debt and code bloat.** Generating code is nearly free; understanding it isn't. If a change adds volume without removing complexity, push back. If a CLAUDE.md / doc / config grows without being read, slim it.
@@ -200,19 +200,22 @@ These override speed when they conflict.
 ## Workflow Patterns
 
 ### Codebase navigation
+
 - For structural questions (call graphs, cross-file refs, blast radius), check `graphify-out/GRAPH_REPORT.md` and `graphify-out/graph.json` first.
 - Fall back to Grep/Read for runtime behavior, recent uncommitted code, or actual data values.
 - Re-run `/graphify` after major refactors or once a few IQM batches have shipped (graph drifts).
 
 ### Before non-trivial work
+
 - For audits, refactors, or cross-file features: ask clarifying questions until shared understanding before any tool calls or edits. This is upstream of plan mode — better than the eager "create a plan and start" default.
 - Reference `scripts/GLOSSARY.md` for IQM/scoring terminology — every term used in code, tests, and conversation should match the glossary. Add new terms to the glossary first.
 
 ### IQM audit batches (ongoing pattern)
+
 - **Cache research per-batch** in `scripts/audits/batch_NN/research.md` (verified PMIDs + abstracts) before writing the fix script. Delete or archive when batch ships — research rots.
-- **Test-first**: write the failing regression assertion in `scripts/tests/test_<topic>_integrity.py` *before* the fix. Confirm it fails on current data, then apply the fix.
+- **Test-first**: write the failing regression assertion in `scripts/tests/test_<topic>_integrity.py` _before_ the fix. Confirm it fails on current data, then apply the fix.
 - **Atomic commit per batch** with summary in commit message (parents corrected, ghost references found, framework errors caught).
-- Memory entries (`feedback_*`, `project_*`) capture *why* and *what surprised us*, not just what was done.
+- Memory entries (`feedback_*`, `project_*`) capture _why_ and _what surprised us_, not just what was done.
 
 ## Dependencies
 
