@@ -204,7 +204,7 @@ scripts/
     verify_rda_uls.py          # RDA/UL verification against DRI tables
     verify_clinical_trials.py  # ClinicalTrials.gov NCT verification
     fda_weekly_sync.py         # FDA recall tracking (openFDA, RSS, DEA)
-  tests/                       # 169 test files, 5100+ tests
+  tests/                       # 580 test files, 5100+ tests
   logs/                        # Runtime logs
   reports/                     # Generated audit reports
 docs/                          # Technical documentation

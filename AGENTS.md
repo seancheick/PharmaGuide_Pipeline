@@ -11,7 +11,7 @@ PharmaGuide is a 3-stage data pipeline (Clean → Enrich → Score) that process
 ## Commands
 
 ```bash
-# Run all tests (5100+ tests, 169 files)
+# Run all tests (5100+ tests, 580 files)
 python3 -m pytest scripts/tests/
 
 # Run a single test file
@@ -70,7 +70,7 @@ scripts/
   config/                     # cleaning_config.json, enrichment_config.json, scoring_config.json
   data/                       # 39 reference JSON databases (schema v5.0-5.3, 6.0 for user_goals)
   data/curated_overrides/     # Manual CUI/PubChem/GSRS policy overrides
-  tests/                      # 169 test files, 5100+ tests (incl. parametrized)
+  tests/                      # 580 test files, 5100+ tests (incl. parametrized)
   logs/                       # Runtime logs
   reports/                    # Generated audit reports
 docs/                         # Technical deep-dives and infographics
