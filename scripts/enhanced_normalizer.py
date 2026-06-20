@@ -1159,9 +1159,6 @@ class EnhancedDSLDNormalizer:
         self._harmful_variations_cache = None
         self._non_harmful_variations_cache = None
         self._allergen_variations_cache = None
-        self._banned_variations_cache = None
-        self._inactive_variations_cache = None
-        self._botanical_variations_cache = None
 
         # Track unmapped ingredients with more detail
         self.unmapped_ingredients = Counter()
@@ -1479,11 +1476,6 @@ class EnhancedDSLDNormalizer:
             "cache_performance": cache_info,
             "processing_stats": self._cache_stats.copy()
         }
-
-    def _build_fast_lookups(self):
-        """Build optimized lookup indices for common operations"""
-        # This will be called after the main indices are built
-        self._build_fast_lookups_impl()
 
     def _build_fast_lookups_impl(self):
         """Build optimized fast lookup indices"""
@@ -2166,83 +2158,6 @@ class EnhancedDSLDNormalizer:
 
         return "critical"
 
-    def _process_ingredient_parallel(self, ingredient_data: Dict[str, Any]) -> Dict[str, Any]:
-        """Process a single ingredient for parallel execution"""
-        name = ingredient_data.get("name", "")
-
-        # Extract forms with prefix for context-aware mapping (e.g., "from Fruits" for natural colors)
-        forms_data = ingredient_data.get("forms", [])
-        forms = []
-        if forms_data and isinstance(forms_data, list):
-            for form_dict in forms_data:
-                if isinstance(form_dict, dict):
-                    prefix = (form_dict.get("prefix", "") or "").strip()
-                    form_name = (form_dict.get("name", "") or "").strip()
-                    # Include prefix for context (e.g., "from Fruits" helps distinguish natural colors)
-                    full_form = f"{prefix} {form_name}".strip() if prefix else form_name
-                    if full_form:
-                        forms.append(full_form)
-                elif form_dict:
-                    forms.append(str(form_dict))
-
-        # Enhanced mapping
-        standard_name, mapped, _ = self._enhanced_ingredient_mapping(
-            name,
-            forms,
-            ingredient_group=ingredient_data.get("ingredientGroup"),
-        )
-
-        # Enhanced checks
-        allergen_info = self._enhanced_allergen_check(name, forms)
-        harmful_info = self._enhanced_harmful_check(name)
-
-        # Check if proprietary blend
-        is_proprietary = self._is_proprietary_blend_name(name)
-
-        # Calculate final mapping status
-        is_mapped = (mapped or
-                    harmful_info["category"] != "none" or
-                    allergen_info["is_allergen"] or
-                    is_proprietary)
-
-        is_display_only_leaf = (
-            self._is_structural_active_blend_leaf(ingredient_data)
-            or self._is_structural_active_display_only_leaf(ingredient_data)
-        )
-
-        # Track unmapped ingredients only if not found in any database
-        # DATA INTEGRITY FIX: Filter out label phrases and nutrition facts
-        # This prevents "None", "Contains < 2% of", etc. from appearing in unmapped list
-        if not is_mapped and not is_display_only_leaf and not self._is_nutrition_fact(name):
-            self._record_unmapped_ingredient(name, forms, is_active=True)
-
-        # Check if this ingredient is an additive (add metadata flag for enrichment phase)
-        processed_name = self.matcher.preprocess_text(name)
-        is_additive = False
-        additive_type = None
-        if processed_name in self.other_ingredients_lookup:
-            additive_data = self.other_ingredients_lookup[processed_name]
-            is_additive = additive_data.get("is_additive", False)
-            if is_additive:
-                additive_type = additive_data.get("additive_type")
-
-        # CLEANING ONLY - NO ENRICHMENT FIELDS
-        result = {
-            "order": ingredient_data.get("order", 0),
-            "name": name,
-            "standardName": standard_name,
-            "ingredientGroup": ingredient_data.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
-            "mapped": is_mapped
-        }
-
-        # Add additive metadata flag (for enrichment phase to use)
-        if is_additive:
-            result["isAdditive"] = True
-            if additive_type:
-                result["additiveType"] = additive_type
-
-        return result
-
     @property
     def ingredient_variations(self) -> List[str]:
         """Cached ingredient variations list for fuzzy matching"""
@@ -2279,44 +2194,6 @@ class EnhancedDSLDNormalizer:
         if self._allergen_variations_cache is None:
             self._allergen_variations_cache = list(self.allergen_lookup.keys())
         return self._allergen_variations_cache
-
-    @property
-    def banned_variations(self) -> List[str]:
-        """Cached banned variations list for fuzzy matching"""
-        if self._banned_variations_cache is None:
-            all_banned_terms = []
-            # Get all banned substances from all categories
-            for category, items in self.banned_recalled.items():
-                if isinstance(items, list):
-                    for banned in items:
-                        all_banned_terms.append(banned.get("standard_name", "").lower())
-                        all_banned_terms.extend([alias.lower() for alias in banned.get("aliases", []) or []])
-            self._banned_variations_cache = [term for term in all_banned_terms if term]
-        return self._banned_variations_cache
-
-    @property
-    def inactive_variations(self) -> List[str]:
-        """Cached inactive variations list for fuzzy matching"""
-        if self._inactive_variations_cache is None:
-            all_inactive_terms = []
-            inactive_ingredients = self.other_ingredients.get("other_ingredients", [])
-            for inactive in inactive_ingredients:
-                all_inactive_terms.append(inactive.get("standard_name", "").lower())
-                all_inactive_terms.extend([alias.lower() for alias in inactive.get("aliases", []) or []])
-            self._inactive_variations_cache = [term for term in all_inactive_terms if term]
-        return self._inactive_variations_cache
-
-    @property
-    def botanical_variations(self) -> List[str]:
-        """Cached botanical variations list for fuzzy matching"""
-        if self._botanical_variations_cache is None:
-            all_botanical_terms = []
-            botanical_ingredients = self.botanical_ingredients.get("botanical_ingredients", [])
-            for botanical in botanical_ingredients:
-                all_botanical_terms.append(botanical.get("standard_name", "").lower())
-                all_botanical_terms.extend([alias.lower() for alias in botanical.get("aliases", []) or []])
-            self._botanical_variations_cache = [term for term in all_botanical_terms if term]
-        return self._botanical_variations_cache
 
     # Reference databases whose absence means the pipeline CANNOT produce safe results.
     # If any of these fail to load, the pipeline must abort rather than silently degrade.
@@ -7542,15 +7419,6 @@ class EnhancedDSLDNormalizer:
             logger.warning(f"Failed to convert {field_name} '{value}' to float: using {default}")
             return default, False
     
-    def _extract_field_value(self, field_data: Any) -> str:
-        """Extract string value from field that can be either string or dict with langualCodeDescription"""
-        if isinstance(field_data, str):
-            return field_data
-        elif isinstance(field_data, dict) and "langualCodeDescription" in field_data:
-            return field_data["langualCodeDescription"]
-        else:
-            return str(field_data) if field_data else ""
-
     def _extract_forms_from_ingredient_name(self, ingredient_name: str) -> List[str]:
         """Extract form information from ingredient name for precise scoring.
 
@@ -9330,40 +9198,6 @@ class EnhancedDSLDNormalizer:
             # Missing blend total OR no sub-ingredient amounts at all
             return "none"
 
-    def _calculate_transparency_percentage(self, nested_ingredients: List[Dict]) -> float:
-        """
-        Calculate transparency percentage for partial disclosure blends
-        Returns 0-100 percentage of ingredients with disclosed quantities
-        """
-        if not nested_ingredients:
-            return 0.0
-
-        disclosed_count = 0
-        total_count = len(nested_ingredients)
-
-        for nested_ing in nested_ingredients:
-            # Extract quantity using same logic as disclosure determination
-            quantity_list = nested_ing.get("quantity", [])
-            nested_qty = 0
-            nested_unit = ""
-
-            if isinstance(quantity_list, list) and quantity_list:
-                qty_entry = quantity_list[0] if quantity_list else {}
-                nested_qty = qty_entry.get("quantity", 0) if isinstance(qty_entry.get("quantity"), (int, float)) else 0
-                nested_unit = qty_entry.get("unit", "")
-            elif isinstance(quantity_list, (int, float)):
-                nested_qty = quantity_list
-                nested_unit = nested_ing.get("unit", "")
-
-            # Count as disclosed if has real quantity
-            if nested_qty > 0 and nested_unit not in ["NP", "", None]:
-                disclosed_count += 1
-
-        transparency_percentage = (disclosed_count / total_count) * 100
-        logger.debug(f"Transparency: {disclosed_count}/{total_count} = {transparency_percentage:.1f}%")
-
-        return round(transparency_percentage, 1)
-
     def _extract_nutritional_amount(self, ingredient: Dict) -> Optional[Dict]:
         """Extract amount information from ingredient for nutritional warnings"""
         # First check the quantity field
@@ -9385,16 +9219,4 @@ class EnhancedDSLDNormalizer:
                 return {"amount": amount, "unit": unit}
         
         return None
-    
-    def _convert_to_standard_unit(self, amount: float, unit: str, conversions: Dict[str, float]) -> float:
-        """Convert amount to standard unit using conversion factors"""
-        unit_lower = unit.lower().strip()
-        
-        # Look for unit in conversions
-        for conv_unit, factor in conversions.items():
-            if conv_unit in unit_lower:
-                return amount * factor
-        
-        # If no conversion found, assume it's already in the standard unit
-        return amount
     
