@@ -10,7 +10,7 @@ Coverage:
   - Export contract validator catches all required-field violations
   - Enrichment metadata export_contract_valid blocks broken products
   - All safety categories (banned, recalled, high_risk, watchlist) route correctly
-  - Allergen, harmful additive, and interaction provenance survives export
+  - Structured allergen facts, harmful additive, and interaction provenance survive export
   - Detail blob ingredient keys match FLUTTER_DATA_CONTRACT_V1.md exactly
   - Blocking reason is never set for watchlist or missing data
   - top_warnings priority ordering is deterministic
@@ -581,7 +581,7 @@ class TestDetailBlobContract:
         assert "A" not in sb
         assert "B" not in sb
 
-    def test_warnings_include_provenance_source(self):
+    def test_structured_allergens_are_not_duplicated_into_generic_warnings(self):
         e = _base_enriched()
         e["allergen_hits"] = [
             {"allergen_id": "SOY", "allergen_name": "Soy", "presence_type": "contains",
@@ -589,8 +589,9 @@ class TestDetailBlobContract:
         ]
         blob = build_detail_blob(e, _base_scored())
         allergen_warnings = [w for w in blob["warnings"] if w["type"] == "allergen"]
-        assert allergen_warnings
-        assert allergen_warnings[0]["source"] == "allergen_db"
+        assert allergen_warnings == []
+        assert blob["allergens"][0]["allergen_id"] == "SOY"
+        assert blob["allergens"][0]["display_name"] == "Soy"
 
     def test_harmful_additive_carries_mechanism_from_reference(self):
         """Harmful additive detail should include real reference notes, not just category."""
@@ -627,16 +628,16 @@ class TestTopWarningsPriority:
         assert warnings[1].startswith("Recalled ingredient:")
         assert any("Watchlist" in w for w in warnings)
 
-    def test_max_five_warnings(self):
+    def test_structured_allergens_do_not_fill_top_warnings(self):
         e = _base_enriched()
         e["allergen_hits"] = [
             {"allergen_name": f"Allergen{i}", "matched_text": f"a{i}", "severity_level": "low", "presence_type": "contains"}
             for i in range(10)
         ]
         warnings = build_top_warnings(e)
-        assert len(warnings) <= 5
+        assert not any("Allergen" in w for w in warnings)
 
-    def test_safety_before_dietary_before_status(self):
+    def test_dietary_warning_surfaces_without_allergen_top_warning_noise(self):
         e = _base_enriched()
         e["status"] = "discontinued"
         e["discontinuedDate"] = "2025-01-01"
@@ -647,10 +648,8 @@ class TestTopWarningsPriority:
             {"type": "diabetes", "severity": "moderate", "message": "Contains sugar."}
         ]
         warnings = build_top_warnings(e)
-        # Allergen should come before dietary
-        allergen_idx = next((i for i, w in enumerate(warnings) if "Allergen" in w), 99)
-        dietary_idx = next((i for i, w in enumerate(warnings) if "sugar" in w.lower()), 99)
-        assert allergen_idx < dietary_idx
+        assert not any("Allergen" in w for w in warnings)
+        assert any("sugar" in w.lower() for w in warnings)
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -749,7 +748,7 @@ class TestGoldenProducts:
         assert any("Watchlist" in w for w in top)
 
     def test_golden_allergen_product(self):
-        """Product with allergen: flag in row + detail blob."""
+        """Product with allergen: row flag + structured detail blob only."""
         e = _base_enriched(dsld_id="GOLDEN_ALLERGEN")
         e["allergen_hits"] = [
             {"allergen_id": "MILK", "allergen_name": "Milk", "presence_type": "contains",
@@ -759,7 +758,8 @@ class TestGoldenProducts:
         row = _row_dict(e, s)
         assert row["has_allergen_risks"] == 1
         blob = build_detail_blob(e, s)
-        assert any(w["type"] == "allergen" for w in blob["warnings"])
+        assert not any(w["type"] == "allergen" for w in blob["warnings"])
+        assert blob["allergens"][0]["allergen_id"] == "MILK"
 
     def test_golden_high_risk_product(self):
         """High-risk: sets blocking_reason but NOT has_banned_substance."""
@@ -814,8 +814,9 @@ class TestGoldenProducts:
         blob = build_detail_blob(e, s)
         types = {w["type"] for w in blob["warnings"]}
         assert "banned_substance" in types
-        assert "allergen" in types
+        assert "allergen" not in types
         assert "harmful_additive" in types
+        assert blob["allergens"][0]["allergen_id"] == "WHEAT"
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -856,7 +857,7 @@ class TestScoreBonusPenaltyLists:
         assert "DMAA" in b0_penalties[0]["label"]
         assert b0_penalties[0]["status"] == "banned"
 
-    def test_penalty_list_includes_allergen_per_item(self):
+    def test_penalty_list_uses_neutral_allergen_source_label(self):
         e = _base_enriched()
         e["allergen_hits"] = [
             {"allergen_id": "MILK", "allergen_name": "Milk", "presence_type": "contains",
@@ -868,6 +869,7 @@ class TestScoreBonusPenaltyLists:
         b2_penalties = [p for p in blob["score_penalties"] if p["id"] == "B2"]
         assert len(b2_penalties) == 1
         assert "Milk" in b2_penalties[0]["label"]
+        assert not b2_penalties[0]["label"].startswith("Allergen:")
 
     def test_penalty_list_includes_harmful_additive_per_item(self):
         e = _base_enriched()

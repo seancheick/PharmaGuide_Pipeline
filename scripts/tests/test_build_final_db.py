@@ -1268,12 +1268,13 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     assert any(hit["kind"] == "allergen" for hit in soy["safety_hits"])
 
 
-def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_status():
+def test_detail_blob_warnings_cover_banned_interaction_dietary_and_status_not_allergens():
     # Sprint E1.5.X-4 — status is no longer emitted as a warning; it's
     # surfaced via the dedicated `product_status_detail` top-level field
     # so Flutter can render it as a neutral concern chip rather than a
     # safety warning. This test verifies warnings[] still covers the
-    # safety types AND product_status_detail is populated for discontinued.
+    # safety types, does not duplicate structured allergens, AND
+    # product_status_detail is populated for discontinued.
     enriched = make_enriched()
     enriched["status"] = "discontinued"
     enriched["discontinuedDate"] = "2025-12-31"
@@ -1294,10 +1295,11 @@ def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_stat
     warning_types = {warning["type"] for warning in blob["warnings"]}
 
     assert "banned_substance" in warning_types
-    assert "allergen" in warning_types
+    assert "allergen" not in warning_types
     assert "interaction" in warning_types
     assert "drug_interaction" in warning_types
     assert "dietary" in warning_types
+    assert blob["allergens"], "allergen facts belong in structured allergens[]"
     # E1.5.X-4 contract: status is NOT in warnings[] anymore.
     assert "status" not in warning_types, (
         "product status must not appear in warnings[] — use top-level "
@@ -1315,8 +1317,8 @@ def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_stat
 def test_detail_blob_emits_structured_allergens_array():
     """Phase 8: detail_blob.allergens[] is the structured contract for
     Flutter's personalized allergen matcher (matchAllergens against
-    profile.allergens). Distinct from the legacy warnings[] array which
-    powers the generic display banner.
+    profile.allergens). Distinct from warnings[], which is reserved for
+    non-allergen safety warnings and profile-gated interaction warnings.
     """
     enriched = make_enriched()
     enriched["allergen_hits"] = [
@@ -1752,11 +1754,12 @@ def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
 
     warnings = build_top_warnings(enriched)
 
-    assert len(warnings) == 5
+    assert len(warnings) <= 5
     assert warnings[0].startswith("Banned substance:")
     assert warnings[1].startswith("Recalled ingredient:")
-    assert any(w.startswith("Allergen:") for w in warnings)
+    assert not any(w.startswith("Allergen:") for w in warnings)
     assert any("Interaction:" in w for w in warnings)
+    assert any("sugar" in w.lower() for w in warnings)
     assert all("Discontinued" not in warning for warning in warnings)
 
 

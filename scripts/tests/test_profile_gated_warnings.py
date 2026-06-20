@@ -241,14 +241,13 @@ def test_harmful_additive_is_always_critical():
         assert w["display_mode_default"] == "critical"
 
 
-def test_allergen_defaults_informational_not_critical():
-    """Allergens default to informational — only critical if user has that
-    allergen in their profile. Flutter promotes on-device."""
+def test_allergens_are_structured_not_default_warnings():
+    """Allergens live in allergens[] only. Flutter promotes on-device
+    when a structured allergen matches the user's declared profile."""
     blob = build_detail_blob(make_enriched(), make_scored())
     allergens = [w for w in blob["warnings"] if w.get("type") == "allergen"]
-    assert allergens
-    for w in allergens:
-        assert w["display_mode_default"] == "informational"
+    assert allergens == []
+    assert blob["allergens"]
 
 
 def test_pipeline_passes_through_authored_fields_when_present():

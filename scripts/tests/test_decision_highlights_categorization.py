@@ -115,11 +115,12 @@ def test_caution_carries_additive_signal_when_not_blocked() -> None:
     assert dh["danger"] == []
 
 
-def test_caution_carries_allergen_signal_when_not_blocked() -> None:
+def test_caution_does_not_carry_allergen_signal_when_not_personalized() -> None:
     enriched = _base_enriched()
     enriched["allergen_hits"] = [{"name": "Milk"}]
     dh = build_decision_highlights(enriched, _base_scored(), None)
-    assert "allergen" in dh["caution"].lower()
+    assert "allergen" not in dh["caution"].lower()
+    assert "no major caution" in dh["caution"].lower()
 
 
 def test_no_caution_signal_message_on_clean_products() -> None:

@@ -2112,8 +2112,6 @@ def build_decision_highlights(
 
     if safe_list(enriched.get("harmful_additives")):
         caution = "Includes additives with known safety concerns."
-    elif safe_list(enriched.get("allergen_hits")):
-        caution = "Contains allergen risks that may matter for sensitive users."
     elif verdict in {"CAUTION", "POOR", "UNSAFE", "BLOCKED"}:
         caution = "Safety or quality signals lower confidence in this product."
     else:
@@ -3344,16 +3342,6 @@ def build_top_warnings(enriched: Dict) -> List[str]:
         )
         add_warning(warning_type, severity, f"{title_prefix}: {name}")
 
-    # Allergens
-    for a in safe_list(enriched.get("allergen_hits")):
-        if not isinstance(a, dict):
-            continue
-        add_warning(
-            "allergen",
-            safe_str(a.get("severity_level"), "moderate"),
-            f"Allergen: {safe_str(a.get('allergen_name'))} ({safe_str(a.get('presence_type'), 'contains')})",
-        )
-
     # Harmful additives
     for h in safe_list(enriched.get("harmful_additives")):
         if not isinstance(h, dict):
@@ -4137,25 +4125,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "display_mode_default": h_dm,
         })
 
-    for a in safe_list(enriched.get("allergen_hits")):
-        if not isinstance(a, dict):
-            continue
-        warnings.append({
-            "type": "allergen",
-            "severity": safe_str(a.get("severity_level"), "moderate"),
-            "title": f"Allergen: {safe_str(a.get('allergen_name'))}",
-            "detail": f"Presence: {safe_str(a.get('presence_type'))}. {safe_str(a.get('evidence'))}",
-            "notes": safe_str(a.get("notes")),
-            "supplement_context": safe_str(a.get("supplement_context")),
-            "prevalence": safe_str(a.get("prevalence")),
-            "allergen_id": safe_str(a.get("allergen_id") or a.get("canonical_id")),
-            "source": "allergen_db",
-            # Allergen presence is informational by default — only becomes
-            # critical when Flutter sees a match against user's declared
-            # allergens[] profile array.
-            "display_mode_default": "informational",
-        })
-
     # Interaction-rule warnings — profile-gating metadata added here.
     #
     # Each hit carries `display_mode_default` derived from rule severity.
@@ -4491,10 +4460,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "warnings": warnings,
         # Phase 8: structured per-allergen array for client-side
         # personalized matching against profile.allergens. Exact
-        # allergen_id matching only. The display-ready summary string
-        # (`allergen_summary` column on products_core) and the legacy
-        # warnings[] entries with type='allergen' continue to power the
-        # generic non-personalized banner.
+        # allergen_id matching only. Allergen facts intentionally do not
+        # duplicate into warnings[]; Flutter promotes them only when they
+        # match the user's declared allergens.
         "allergens": build_structured_allergens(enriched),
         # Phase 8: positive gluten-free signal — orthogonal to the
         # negative allergen flow above. True when the label carries a
@@ -4840,7 +4808,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         for a in safe_list(enriched.get("allergen_hits")):
             if isinstance(a, dict):
                 penalties.append({
-                    "id": "B2", "label": f"Allergen: {safe_str(a.get('allergen_name'))}",
+                    "id": "B2", "label": f"Declared allergen source: {safe_str(a.get('allergen_name'))}",
                     "severity": safe_str(a.get("severity_level")),
                     "presence": safe_str(a.get("presence_type")),
                 })
@@ -5844,10 +5812,11 @@ def generate_net_contents_summary(enriched: Dict) -> Dict:
 def build_structured_allergens(enriched: Dict) -> List[Dict]:
     """Phase 8: structured per-allergen array for client-side personalization.
 
-    The legacy `warnings[]` array carries display-ready strings for the
-    generic AllergenSummaryBanner; this array is the structured contract
-    for Flutter's personalized allergen matcher (matchAllergens against
-    profile.allergens). Exact `allergen_id` matching only — no substring.
+    This array is the structured contract for Flutter's personalized
+    allergen matcher (matchAllergens against profile.allergens). Exact
+    `allergen_id` matching only — no substring. Allergen facts are not
+    duplicated into warning channels, which are reserved for global
+    hazards and profile-gated interaction warnings.
 
     Sort: presence_type priority (contains → may_contain →
     manufactured_in_facility) so callers can render the most actionable
