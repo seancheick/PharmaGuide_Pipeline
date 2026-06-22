@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-06-15",
+    "last_updated": "2026-06-22",
     "total_entries": 531,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -11006,19 +11006,24 @@
       "standard_name": "Plantain",
       "latin_name": "Plantago major",
       "aliases": [
-        "musa paradisiaca",
         "plantain powder",
-        "cooking banana",
-        "Plantago major"
+        "Plantago major",
+        "common plantain",
+        "broadleaf plantain",
+        "greater plantain",
+        "plantain leaf",
+        "plantain leaf extract",
+        "plantain whole herb",
+        "plantain whole herb extract"
       ],
-      "category": "fruit",
-      "notes": "Plantago major (Plantaginaceae) leaf. Common plantain (not banana). Contains aucubin iridoid, mucilage, and allantoin. Traditional wound-healing and respiratory herb. Botanical leaf form.",
-      "last_updated": "2026-03-01",
+      "category": "herb",
+      "notes": "Plantago major (Plantaginaceae), common plantain — the medicinal leaf/whole-herb (NOT banana; cooking banana is Musa × paradisiaca, a different plant). Contains aucubin iridoid, mucilage, and allantoin. Traditional wound-healing and respiratory herb.",
+      "last_updated": "2026-06-22",
       "external_ids": {
-        "unii": "I4U55R240N"
+        "unii": "W2469WNO6U"
       },
       "gsrs": {
-        "substance_name": "Musa × paradisiaca whole",
+        "substance_name": "PLANTAGO MAJOR WHOLE",
         "substance_class": "structurallyDiverse",
         "cfr_sections": [],
         "dsld_count": null,
