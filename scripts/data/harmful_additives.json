@@ -4888,13 +4888,14 @@
       "standard_name": "Disodium EDTA",
       "aliases": [
         "disodium edta",
+        "edta disodium",
         "edta disodium salt",
         "ethylenediaminetetraacetic acid disodium salt",
         "disodium ethylenediaminetetraacetate"
       ],
       "category": "preservative",
       "notes": "Synthetic chelating agent and preservative. While FDA approved for food use, concerns about mineral depletion, potential heavy metal mobilization, and cellular membrane disruption. May interfere with nutrient absorption. Cross-reference: shares E385 regulatory identity with ADD_CALCIUM_DISODIUM_EDTA (calcium disodium EDTA).",
-      "last_updated": "2026-03-24",
+      "last_updated": "2026-06-22",
       "mechanism_of_harm": "Non-selective chelator binding divalent/trivalent metal ions (Zn²⁺, Fe²⁺/Fe³⁺, Cu²⁺, Ca²⁺). Mechanism identical to calcium disodium EDTA (ADD_CALCIUM_DISODIUM_EDTA). Poorly absorbed orally (~5%). GI-level mineral binding may reduce bioavailability of co-administered mineral supplements.",
       "regulatory_status": {
         "US": "FDA approved food additive (21 CFR 172.120). Approved uses are limited to specific food categories (dressings, sauces, mayonnaise, canned/bottled legumes). ADI: 2.5 mg/kg bw/day (JECFA).",
