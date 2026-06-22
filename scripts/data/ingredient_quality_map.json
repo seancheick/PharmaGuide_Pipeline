@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 628,
       "total_forms": 1417,
-      "total_form_aliases": 12121,
+      "total_form_aliases": 12136,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -16625,7 +16625,7 @@
         "score": 8,
         "absorption": "poor (~20-40% excreted intact even IV)",
         "notes": "Acetylated glutamine originally developed for IV parenteral nutrition stability, not oral use. Magnusson 1989 showed 20-40% IV dose excreted intact in urine — deacetylation by renal aminoacylase is saturable. No human oral bioavailability RCT exists. Substantially less efficient than free-form or dipeptide glutamine for raising plasma levels.",
-        "aliases": ["NAG", "acetyl glutamine"],
+        "aliases": ["NAG", "acetyl glutamine", "N-Acetyl L-Glutamine", "N-Acetyl Glutamine"],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.3,
@@ -28924,7 +28924,10 @@
           "ajuga turkestanica",
           "phytoecdysteroids",
           "spinach extract ecdysterone",
-          "ajuga turkestanica whole herb extract"
+          "ajuga turkestanica whole herb extract",
+          "Ajuga turkest",
+          "Ajuga turkest extract",
+          "Ajuga turkest Whole Herb Extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -30215,7 +30218,8 @@
           "jiaogulan gynostemma aerial part extract",
           "gynostemma pentaphyllum extract",
           "gynostemma pentaphyllum leaf extract",
-          "gynostemma aerial part extract"
+          "gynostemma aerial part extract",
+          "Gynostemma Leaf, Stem Extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -30586,7 +30590,9 @@
           "Soynatto Fermented Soyfood",
           "Soy Natto extract",
           "Isomax 30",
-          "total Soy Isoflavones"
+          "total Soy Isoflavones",
+          "Soy Bean Isoflavones",
+          "Soybean Isoflavone"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -36324,7 +36330,8 @@
           "Turkey Tail Mushroom fruiting body extract",
           "turkey tails",
           "turkey tails fruiting body extract",
-          "Coriolus versicolor Fruiting Body Extract"
+          "Coriolus versicolor Fruiting Body Extract",
+          "Coriolus versicolor Sporocarp Extract"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -49737,7 +49744,9 @@
           "velvet bean extract",
           "mucuna pruriens 15% l-dopa",
           "mucuna pruriens 98% l-dopa",
-          "mucuna seed extract"
+          "mucuna seed extract",
+          "Mucuna pruriens Fruit Extract",
+          "Mucuna pruriens Fruit Extract, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -52168,7 +52177,9 @@
           "Aloe Vera leaf oil",
           "organic Aloe vera inner leaf gel 200:1 concentrate",
           "aloe vera inner leaf gel concentrate",
-          "aloe vera inner leaf gel 200:1"
+          "aloe vera inner leaf gel 200:1",
+          "Aloe vera Aerial Part Extract",
+          "Aloe vera Aerial Parts Extract"
         ],
         "notes": "Aloe barbadensis inner leaf gel; contains acemannan (acetylated mannose polysaccharide), anthraquinones, and vitamins. Topical wound healing evidence strong; oral immune/GI data limited. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "natural": true,
@@ -53394,7 +53405,8 @@
           "lycium",
           "lycium berry extract",
           "goji lycium berry extract",
-          "lycium berry"
+          "lycium berry",
+          "Wolfberry Fruit Extract"
         ],
         "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
         "natural": true,
@@ -56198,7 +56210,8 @@
           "phenylethylamine alkaloids",
           "phenylethylamine hcl",
           "Beta Phenylethylamine",
-          "pea supplement"
+          "pea supplement",
+          "Phenylethylamine Hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
