@@ -3,7 +3,7 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.1.3",
-    "last_updated": "2026-05-26",
+    "last_updated": "2026-06-22",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
@@ -6997,7 +6997,7 @@
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "May affect glucose control",
-          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
+          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding it and monitor glucose more closely at first.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -7029,7 +7029,7 @@
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "May affect glucose control",
-          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
+          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding it and monitor glucose more closely at first.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications.",
           "profile_gate": {
             "gate_type": "drug_class",
@@ -7094,7 +7094,7 @@
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "May affect glucose control",
-          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding high-dose niacin and monitor glucose more closely at first.",
+          "alert_body": "High-dose niacin can raise blood sugar and may change diabetes-medication needs. If you take a diabetes medication, talk to your prescriber before adding it and monitor glucose more closely at first.",
           "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications.",
           "profile_gate": {
             "gate_type": "drug_class",
