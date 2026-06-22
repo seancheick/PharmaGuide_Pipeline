@@ -8369,6 +8369,17 @@ class EnhancedDSLDNormalizer:
             "variations_tried": self.matcher.generate_variations(processed_name),
             "is_active": is_active,
         }
+        # A row matching a safety/additive/allergen entry is *recognized* — it
+        # legitimately gets no IQM identity (canonical_id never comes from safety
+        # DBs), so it is not a true identity gap. Tag it so the unmapped report can
+        # route it to a separate recognized bucket instead of the "add to IQM"
+        # queue. Not dropped: a watchlist row may still be a real active.
+        safety_lookup = getattr(self, "_safety_exact_lookup", None) or {}
+        safety_entry = safety_lookup.get(processed_name)
+        if safety_entry:
+            detail["recognized_non_identity"] = True
+            detail["recognition_standard_name"] = safety_entry.get("standard_name")
+            detail["recognition_type"] = safety_entry.get("type")
         verification_rule = NEEDS_VERIFICATION_RULES.get(processed_name)
         if verification_rule:
             detail.update({

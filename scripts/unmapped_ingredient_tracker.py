@@ -32,6 +32,7 @@ class UnmappedIngredientTracker:
         
         self.unmapped_active = {}
         self.unmapped_inactive = {}
+        self.recognized_non_identity: Dict[str, Dict[str, Any]] = {}
         self.needs_verification_active: List[Dict[str, Any]] = []
         self.needs_verification_inactive: List[Dict[str, Any]] = []
         self.processed_count = 0
@@ -60,6 +61,23 @@ class UnmappedIngredientTracker:
         
         for ingredient_name, count in unmapped_data.items():
             details = details_by_name.get(ingredient_name, {})
+
+            # Safety/additive/allergen-recognized rows are NOT identity gaps —
+            # they get no IQM canonical_id by design. Route them to a separate
+            # bucket and exclude from the "add to IQM" unmapped lists.
+            if details.get("recognized_non_identity"):
+                existing = self.recognized_non_identity.get(ingredient_name)
+                if existing:
+                    existing["occurrences"] += count
+                else:
+                    self.recognized_non_identity[ingredient_name] = {
+                        "occurrences": count,
+                        "recognition_standard_name": details.get("recognition_standard_name"),
+                        "recognition_type": details.get("recognition_type"),
+                        "is_active": ingredient_name in active_ingredients,
+                    }
+                continue
+
             if ingredient_name in active_ingredients:
                 # This is an active ingredient
                 if ingredient_name in self.unmapped_active:
@@ -137,6 +155,31 @@ class UnmappedIngredientTracker:
                     "unmapped_ingredients": sorted_inactive
                 }, f, indent=2, ensure_ascii=False)
 
+            # Save recognized-but-non-identity rows (safety/additive/allergen
+            # matches that legitimately have no IQM identity). Audit-only — these
+            # are NOT identity gaps and must not be added to IQM.
+            recognized_sorted = dict(sorted(
+                self.recognized_non_identity.items(),
+                key=lambda x: x[1]["occurrences"],
+                reverse=True,
+            ))
+            recognized_file = self.output_path / "recognized_non_identity_ingredients.json"
+            with open(recognized_file, 'w', encoding='utf-8') as f:
+                json.dump({
+                    "metadata": {
+                        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                        "products_processed": self.processed_count,
+                        "description": (
+                            "Rows recognized by a safety/additive/allergen DB. They get no IQM "
+                            "identity by design and are excluded from the unmapped identity-gap "
+                            "lists. Listed here for audit only — do NOT add to IQM."
+                        ),
+                        "total_recognized": len(recognized_sorted),
+                        "total_occurrences": sum(v["occurrences"] for v in recognized_sorted.values()),
+                    },
+                    "recognized_ingredients": recognized_sorted,
+                }, f, indent=2, ensure_ascii=False)
+
             needs_active_file = self.output_path / "needs_verification_active_ingredients.json"
             with open(needs_active_file, 'w', encoding='utf-8') as f:
                 json.dump({
@@ -170,6 +213,7 @@ class UnmappedIngredientTracker:
             logger.info(f"Saved unmapped tracking files:")
             logger.info(f"  - Active: {len(sorted_active)} ingredients -> {active_file}")
             logger.info(f"  - Inactive: {len(sorted_inactive)} ingredients -> {inactive_file}")
+            logger.info(f"  - Recognized non-identity (excluded from unmapped): {len(recognized_sorted)} ingredients -> {recognized_file}")
             logger.info(f"  - Needs verification active: {len(self.needs_verification_active)} ingredients -> {needs_active_file}")
             logger.info(f"  - Needs verification inactive: {len(self.needs_verification_inactive)} ingredients -> {needs_inactive_file}")
             
