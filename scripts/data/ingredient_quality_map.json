@@ -38,9 +38,9 @@
       }
     },
     "statistics": {
-      "total_parents": 628,
-      "total_forms": 1417,
-      "total_form_aliases": 12136,
+      "total_parents": 629,
+      "total_forms": 1420,
+      "total_form_aliases": 12151,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 23
     },
     "schema_version": "5.4.10",
-    "last_updated": "2026-06-19",
+    "last_updated": "2026-06-22",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -1715,7 +1715,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 628,
+    "total_entries": 629,
     "total_ingredients": 1416,
     "data_quality": {
       "review_status": "stub"
@@ -17965,6 +17965,32 @@
           "range_low": 0.4,
           "range_high": 0.7,
           "quality": "moderate"
+        }
+      },
+      "l-ornithine l-aspartate (lola)": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 13,
+        "absorption": "high (~82% oral F); registered L-ornithine/L-aspartate salt with established PK",
+        "notes": "1:1 salt of L-ornithine and L-aspartate (LOLA; CAS 3230-94-2, PubChem CID 10220941). Oral bioavailability ~82% (Kircheis & Lüth 2019, PMID:30706424), markedly higher than free L-ornithine. Registered drug (Hepa-Merz) for hyperammonemia/hepatic encephalopathy; lowers blood ammonia via urea-cycle substrate (ornithine) and glutamine-synthesis substrate (aspartate). Delivers both amino acids.",
+        "aliases": [
+          "l-ornithine l-aspartate",
+          "l-ornithine-l-aspartate",
+          "ornithine aspartate",
+          "ornithine l-aspartate",
+          "ornithine-aspartate",
+          "lola"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.82,
+          "range_low": 0.75,
+          "range_high": 0.9,
+          "quality": "good"
+        },
+        "external_ids": {
+          "pubchem_cid": "10220941",
+          "cas": "3230-94-2"
         }
       }
     },
@@ -48430,6 +48456,31 @@
           "range_high": 0.55,
           "quality": "moderate"
         }
+      },
+      "n-acetyl-l-carnosine": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "oral systemic delivery as intact carnosine not established; primarily a topical ophthalmic agent",
+        "notes": "N-acetylated L-carnosine (NAC; CAS 56353-15-2, PubChem CID 9903482). The N-acetyl group resists serum carnosinase, the basis for its use as a topical ophthalmic agent (cataract eye drops). Human ORAL systemic bioavailability as intact carnosine is not established; PubMed literature is predominantly ophthalmic/metabolomic. Conservative score pending oral PK data; claims no oral advantage over free L-carnosine.",
+        "aliases": [
+          "n-acetyl-l-carnosine",
+          "n-acetyl l-carnosine",
+          "n-acetylcarnosine",
+          "n-acetyl carnosine",
+          "nac carnosine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.45,
+          "quality": "low"
+        },
+        "external_ids": {
+          "pubchem_cid": "9903482",
+          "cas": "56353-15-2"
+        }
       }
     },
     "match_rules": {
@@ -60091,6 +60142,61 @@
     },
     "external_ids": {
       "unii": "00J9J9XKDE"
+    },
+    "aliases": []
+  },
+  "creatinol_o_phosphate": {
+    "standard_name": "Creatinol O-Phosphate",
+    "category": "amino_acids",
+    "cui": null,
+    "cui_note": "No UMLS CUI verified for creatinol O-phosphate; identity established via PubChem CID 23342 / CAS 6903-79-3.",
+    "rxcui": null,
+    "rxcui_note": "No RxNorm concept for supplement ingredient.",
+    "description": "Creatine-related guanidino phosphate (creatinol O-phosphate) marketed as an ergogenic/cardiotrophic agent; chemically distinct from creatine.",
+    "forms": {
+      "creatinol o-phosphate (unspecified)": {
+        "bio_score": 5,
+        "natural": false,
+        "score": 5,
+        "absorption": "oral bioavailability not characterized in modern human PK studies",
+        "notes": "Creatinol O-phosphate (COP; CAS 6903-79-3, PubChem CID 23342), a creatine-related guanidino phosphate marketed as an ergogenic/cardiotrophic agent (chiefly older European literature). Distinct compound from creatine. Human oral bioavailability and supplement efficacy are not well-characterized in current PubMed literature. Conservative unknown-form score reflecting limited modern evidence.",
+        "aliases": [
+          "creatinol o-phosphate",
+          "creatinol-o-phosphate",
+          "creatinol phosphate",
+          "creatinolfosfate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "low"
+        },
+        "external_ids": {
+          "pubchem_cid": "23342",
+          "cas": "6903-79-3"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "category_enum": "amino_acids",
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-06-22",
+      "research_status": "validated"
+    },
+    "external_ids": {
+      "pubchem_cid": "23342",
+      "cas": "6903-79-3"
     },
     "aliases": []
   },
