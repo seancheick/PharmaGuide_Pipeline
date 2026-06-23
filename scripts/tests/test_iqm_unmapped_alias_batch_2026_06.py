@@ -43,6 +43,9 @@ def test_silibinin_forms_map_to_milk_thistle(enricher, label):
         ("Glucomannan root extract", "fiber"),               # konjac glucomannan fiber
         ("Isoflavonoids", "isoflavones"),                    # isoflavone class
         ("Soy Germ Isoflavones Concentrate", "isoflavones"), # soy germ isoflavone concentrate
+        ("Allin", "garlic"),                                 # typo of alliin; alliin AND allicin both -> garlic
+        ("beta-sitostanol", "phytosterols"),                 # == sitostanol (already a phytosterols alias)
+        ("Boswellia serrata AKBA standardized extract", "boswellia"),  # standardized extract, not the bare AKBA marker
     ],
 )
 def test_unmapped_label_maps_to_verified_iqm_parent(enricher, label, expected):

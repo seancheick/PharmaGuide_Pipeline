@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1420,
-      "total_form_aliases": 12173,
+      "total_form_aliases": 12176,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -22742,6 +22742,7 @@
           "unprocessed garlic powder",
           "garlic spice powder",
           "alliin",
+          "allin",
           "S-allyl-L-cysteine sulfoxide",
           "new-gar deodorized garlic bulb powder",
           "new-gar(tm)deodorized garlic bulb powder"
@@ -31771,6 +31772,7 @@
           "corowise plant sterols",
           "brassicasterol",
           "Sitostanol",
+          "beta-sitostanol",
           "Campestanol"
         ],
         "dosage_importance": 1.0,
@@ -39692,6 +39694,7 @@
           "total boswellic acids",
           "boswellic acid extract",
           "AKBA",
+          "boswellia serrata akba standardized extract",
           "Beta-Boswellic Acids",
           "AKBA, Beta-Boswellic Acids, total organic and Boswellic Acid",
           "acetyl-11-keto-beta-boswellic acid",
