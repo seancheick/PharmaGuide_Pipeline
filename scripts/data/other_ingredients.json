@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-23",
-    "total_entries": 708,
+    "total_entries": 707,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -20984,7 +20984,9 @@
       "id": "NHA_TOTAL_TERPENE_LACTONES",
       "standard_name": "Total Terpene Lactones",
       "aliases": [
-        "total terpene lactones"
+        "total terpene lactones",
+        "terpene lactone",
+        "terpene lactones"
       ],
       "category": "label_descriptor",
       "is_additive": false,
@@ -24438,28 +24440,6 @@
       "additive_type": "standardization_marker",
       "allergen": false,
       "notes": "Standardization marker for Ginkgo biloba — the 24% flavone-glycoside fraction (quercetin, kaempferol and isorhamnetin glycosides), the primary Ginkgo leaf standardization descriptor. Appears as a label sub-row under a Ginkgo extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The Ginkgo parent is the scored entity; this marker row adds no independent score. Not an IQM chemical identity.",
-      "common_uses": [
-        "standardization marker",
-        "identity routing"
-      ],
-      "last_updated": "2026-06-23",
-      "external_ids": {},
-      "functional_roles": [],
-      "is_label_descriptor": true
-    },
-    {
-      "id": "NHA_TERPENE_LACTONES_MARKER",
-      "standard_name": "Terpene Lactones",
-      "aliases": [
-        "terpene lactone",
-        "terpene lactones",
-        "total terpene lactones"
-      ],
-      "category": "label_descriptor",
-      "is_additive": false,
-      "additive_type": "standardization_marker",
-      "allergen": false,
-      "notes": "Standardization marker for Ginkgo biloba — the 6% terpene-lactone fraction (ginkgolides A, B, C and bilobalide), the second Ginkgo leaf standardization descriptor alongside the flavone glycosides. Appears as a label sub-row under a Ginkgo extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The Ginkgo parent is the scored entity; this marker row adds no independent score. Not an IQM chemical identity.",
       "common_uses": [
         "standardization marker",
         "identity routing"
