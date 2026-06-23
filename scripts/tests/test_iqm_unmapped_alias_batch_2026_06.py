@@ -48,7 +48,6 @@ def test_silibinin_forms_map_to_milk_thistle(enricher, label):
         ("Boswellia serrata AKBA standardized extract", "boswellia"),  # standardized extract, not the bare AKBA marker
         ("LuraLean Propolmannan (Amorphophallus konjac K. Koch, ssp. Amorphophallus japonica) fiber extract", "fiber"),  # purified konjac glucomannan
         ("Bioflavonoid Fruit Extract", "bioflavonoids"),     # generic bioflavonoid active
-        ("Chicken Sternum Collagen extract", "collagen"),    # -> collagen (unspecified), avoids hydrolyzed/undenatured mis-credit
     ],
 )
 # DEFERRED branded items (NOT aliased — would over-credit / unverified marketing salts):
@@ -64,3 +63,42 @@ def test_unmapped_label_maps_to_verified_iqm_parent(enricher, label, expected):
     assert m is not None and m.get("canonical_id") == expected, (
         f"{label!r} must map to the {expected!r} IQM parent; got {m}"
     )
+
+
+@pytest.mark.parametrize(
+    "label,expected",
+    [
+        ("LuraLean Propolmannan (Amorphophallus konjac K. Koch, ssp. Amorphophallus japonica) fiber extract", "fiber"),
+        ("ForsLean (Coleus forskohlii) root extract", "forskolin"),
+        ("Boswellia serrata AKBA standardized extract (wood) resin", "boswellia"),
+    ],
+)
+def test_generic_extract_form_does_not_block_verified_iqm_alias(enricher, label, expected):
+    """Cleaner-parsed bare ``extract`` is a generic descriptor, not failed form evidence."""
+    iqm = enricher.databases["ingredient_quality_map"]
+    m = enricher._match_quality_map(
+        label,
+        label,
+        iqm,
+        cleaned_forms=[{"name": "extract", "prefix": None, "category": None, "ingredientGroup": None}],
+    )
+    assert m is not None and m.get("canonical_id") == expected, (
+        f"{label!r} should still map through the clean→enrich seam; got {m}"
+    )
+    assert m.get("match_status") != "FORM_UNMAPPED"
+
+
+def test_bare_chicken_sternum_collagen_is_not_global_iqm_alias(enricher):
+    """Bare chicken-sternum text is product-context routed, not a global IQM alias.
+
+    The same row text can describe BioCell hydrolyzed chicken sternal cartilage
+    or native/undenatured type-II material. product_context_canonical_overrides
+    owns the reviewed Jarrow BioCell case; a global alias would bypass that guard.
+    """
+    collagen = enricher.databases["ingredient_quality_map"]["collagen"]
+    forbidden = {"chicken sternum collagen extract", "chicken sternum collagen"}
+    for form_name, form in collagen.get("forms", {}).items():
+        aliases = {str(alias).lower() for alias in form.get("aliases", [])}
+        assert aliases.isdisjoint(forbidden), (
+            f"bare chicken sternum alias found in collagen form {form_name!r}"
+        )

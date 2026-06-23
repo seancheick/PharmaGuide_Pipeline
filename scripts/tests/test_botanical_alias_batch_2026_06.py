@@ -9,9 +9,10 @@ The collision check prevented duplicate entries: Lonicera (Lonicera japonica =
 japanese_honeysuckle), Vijayasar (Pterocarpus marsupium = indian_kino_tree),
 Enokitake, and Himematsutake were all already present — this is alias-only.
 
-Deferred (NOT aliased): "Chinese Vitex" is Vitex negundo/rotundifolia, a
-different species from chaste_tree (V. agnus-castus) — no cross-species alias.
-"Red Currant Fruit Extract" is genuinely new and needs a verified CUI entry.
+Deferred (NOT aliased): bare "Tropical Almond" is ambiguous in DSLD. Current
+labels use it inside Triphala contexts for Terminalia chebula/myrobalan, while
+the common name can also mean Terminalia catappa. Keep it unmapped until a
+context-specific routing decision is reviewed.
 """
 import os
 import sys
@@ -38,11 +39,19 @@ def enricher():
         ("Biolut(TM) Marigold Extract", "marigold"),  # branded marigold lutein extract -> marigold botanical (dose-aware)
         ("Chinese Vitex", "nirgundi"),                # Vitex negundo, alias to existing Nirgundi (same CUI C1643782)
         ("Red Currant Fruit Extract", "red_currant"),         # new: Ribes rubrum (C1201367)
-        ("Tropical Almond", "tropical_almond"),               # new: Terminalia catappa (C0971878)
     ],
 )
 def test_botanical_label_recognized_as_identity(enricher, label, expected_id):
     r = enricher._is_recognized_non_scorable(label, label)
     assert r is not None and r.get("matched_entry_id") == expected_id, (
         f"{label!r} should recognize as {expected_id!r} (non-scorable botanical); got {r}"
+    )
+
+
+def test_tropical_almond_stays_unmapped_until_context_review(enricher):
+    r = enricher._is_recognized_non_scorable("Tropical Almond", "Tropical Almond")
+    assert r is None, (
+        "Bare Tropical Almond should not be globally mapped: DSLD uses it in "
+        "Triphala/Chebulic Myrobalan context, while the common name may also "
+        "refer to Terminalia catappa."
     )

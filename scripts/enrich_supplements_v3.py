@@ -6317,7 +6317,8 @@ class SupplementEnricherV3:
         # They carry no form information — skip entirely.
         _ADJECTIVE_QUALIFIERS = frozenset({
             'bioactive', 'bioactives', 'certified', 'deodorized', 'fermented',
-            'natural', 'non-gmo', 'organic', 'pure', 'raw', 'standardized', 'wild',
+            'extract', 'natural', 'non-gmo', 'organic', 'pure', 'raw',
+            'standardized', 'wild',
         })
 
         from_source_map: Dict[int, str] = {}  # index → source name
