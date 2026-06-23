@@ -33,8 +33,16 @@ from enrich_supplements_v3 import SupplementEnricherV3
 from score_supplements import SupplementScorer
 
 # Verified-clean standardization markers: no IQM/botanical/standardized identity,
-# currently true unmapped actives (recognizing them removes zero credit).
-CLEAN_MARKERS = ["Rosavins", "Salidrosides", "Astragaloside"]
+# currently true unmapped actives (recognizing them removes zero credit). Each was
+# per-item identity-checked; markers whose compound IS an IQM identity are deferred
+# to the alias batch and NOT listed here — silibinin (->milk_thistle), caffeoylquinic
+# acids / chlorogenic acid, isoflavones, hypericin are all IQM-scored.
+CLEAN_MARKERS = [
+    # batch 1 — Rhodiola / Astragalus
+    "Rosavins", "Salidrosides", "Astragaloside",
+    # batch 2 — St John's Wort / Ginkgo / English ivy
+    "Dianthrones", "Flavone Glycosides", "Terpene Lactone", "Hederacoside C",
+]
 
 
 @pytest.fixture(scope="module")
