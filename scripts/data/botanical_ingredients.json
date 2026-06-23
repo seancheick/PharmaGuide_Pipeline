@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-06-22",
-    "total_entries": 538,
+    "total_entries": 539,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -10560,6 +10560,28 @@
         "metabolites": []
       },
       "cui": "C1260949",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "passion_fruit",
+      "standard_name": "Passion Fruit",
+      "latin_name": "Passiflora edulis",
+      "aliases": [
+        "passion fruit",
+        "passion fruit extract",
+        "passiflora edulis",
+        "passionfruit",
+        "passionfruit extract",
+        "maracuya"
+      ],
+      "category": "fruit",
+      "notes": "Passiflora edulis (Passifloraceae) fruit, passion fruit/maracuya. DISTINCT from passionflower (Passiflora incarnata, the calming aerial herb) — different species, must not be conflated. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0553350",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
