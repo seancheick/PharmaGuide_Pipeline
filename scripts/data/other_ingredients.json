@@ -2864,7 +2864,8 @@
       "id": "NHA_CALCIUM_CASEINATE",
       "standard_name": "Calcium Caseinate",
       "aliases": [
-        "calcium caseinate"
+        "calcium caseinate",
+        "calcium caseinate and gelatin"
       ],
       "category": "filler",
       "is_additive": false,
@@ -22238,7 +22239,9 @@
       "id": "OI_WHEAT_BRAN",
       "standard_name": "Wheat Bran",
       "aliases": [
-        "Wheat Bran"
+        "Wheat Bran",
+        "millers bran",
+        "miller's bran"
       ],
       "category": "filler",
       "is_additive": false,
