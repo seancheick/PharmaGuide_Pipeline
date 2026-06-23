@@ -24,9 +24,13 @@ class TestCapsuleRoutingRegressions:
     def test_preticx_branded_token_fallback_resolves_xos(self, enricher):
         quality_map = enricher.databases["ingredient_quality_map"]
 
+        # "PreticX Xylooligosacharides" became a DIRECT IQM alias in d1c0148a, so
+        # it now matches directly (matched_alias = the full alias) and no longer
+        # exercises the branded-token fallback. Use a non-aliased PreticX variant
+        # here so this test keeps covering the FALLBACK path (matched_alias=="preticx").
         match = enricher._match_quality_map(
-            "PreticX Xylooligosacharides",
-            "PreticX Xylooligosacharides",
+            "PreticX Fiber",
+            "PreticX Fiber",
             quality_map,
             branded_token="PreticX",
         )
