@@ -16264,7 +16264,9 @@
         "marigold extract",
         "tagetes erecta extract",
         "aztec marigold extract",
-        "2020 marigold flower extract"
+        "2020 marigold flower extract",
+        "biolut marigold extract",
+        "biolut"
       ],
       "category": "flower",
       "notes": "Tagetes erecta (Aztec marigold) flower extract. Commercial source of lutein and zeaxanthin via saponification. Per identity_bioactivity_split policy: bare marigold labels resolve to this botanical canonical; lutein marker Section C credit requires explicit standardization declaration (see scripts/data/botanical_marker_contributions.json — TODO: add entry).",

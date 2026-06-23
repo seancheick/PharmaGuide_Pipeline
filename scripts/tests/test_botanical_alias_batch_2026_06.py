@@ -35,6 +35,7 @@ def enricher():
         ("Vijayasar", "indian_kino_tree"),
         ("organic Enokitake Mushroom", "enokitake"),
         ("organic Himematsutake Mushroom mycelium powder", "himematsutake"),
+        ("Biolut(TM) Marigold Extract", "marigold"),  # branded marigold lutein extract -> marigold botanical (dose-aware)
     ],
 )
 def test_botanical_label_recognized_as_identity(enricher, label, expected_id):

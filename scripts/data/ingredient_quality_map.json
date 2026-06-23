@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1420,
-      "total_form_aliases": 12176,
+      "total_form_aliases": 12179,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -29437,7 +29437,9 @@
           "amorphophallus konjac",
           "galactomannan",
           "konjac flour",
-          "konjac mannan"
+          "konjac mannan",
+          "luralean propolmannan",
+          "propolmannan"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -41502,7 +41504,7 @@
         "score": 14,
         "absorption": "bioflavonoid class poor F (~1-10% systemic); gut microbiota dominant",
         "notes": "Bioflavonoid form not specified. Conservative scoring. Bioflavonoids are a diverse class of plant polyphenols that support antioxidant defense and vascular health. Check label for specific composition. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
-        "aliases": ["bioflavonoids"],
+        "aliases": ["bioflavonoids", "bioflavonoid fruit extract"],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.05,

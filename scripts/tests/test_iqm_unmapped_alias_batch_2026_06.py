@@ -46,8 +46,17 @@ def test_silibinin_forms_map_to_milk_thistle(enricher, label):
         ("Allin", "garlic"),                                 # typo of alliin; alliin AND allicin both -> garlic
         ("beta-sitostanol", "phytosterols"),                 # == sitostanol (already a phytosterols alias)
         ("Boswellia serrata AKBA standardized extract", "boswellia"),  # standardized extract, not the bare AKBA marker
+        ("LuraLean Propolmannan (Amorphophallus konjac K. Koch, ssp. Amorphophallus japonica) fiber extract", "fiber"),  # purified konjac glucomannan
+        ("Bioflavonoid Fruit Extract", "bioflavonoids"),     # generic bioflavonoid active
     ],
 )
+# DEFERRED branded items (NOT aliased — would over-credit / unverified marketing salts):
+#   - "40% MCTs": explicit 40% standardization, direct mct_oil alias over-credits 2.5x.
+#   - "Acetyl L-Carnitine Arginate Di-HCl" / "L-Tauro Acetyl-L-Carnitine Taurinate HCl":
+#     novel branded carnitine salts; the IQM treats novel arginate salts as marketing
+#     forms (cf. chromium chelidamate arginate downgraded to bio 0.02, zero PubMed PK).
+#   - "Biolut Marigold Extract" -> routed to the marigold BOTANICAL (dose-aware lutein
+#     via marker contribution), NOT a direct lutein IQM alias — see the botanical batch.
 def test_unmapped_label_maps_to_verified_iqm_parent(enricher, label, expected):
     iqm = enricher.databases["ingredient_quality_map"]
     m = enricher._match_quality_map(label, label, iqm)
