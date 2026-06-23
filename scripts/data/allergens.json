@@ -3,7 +3,7 @@
     "description": "Regulatory allergen identification database for supplement ingredients. Covers FDA major allergens (9) and EU Annex II allergens (8). Used for consumer warnings and on-device personalization — not for general score penalties.",
     "purpose": "allergen_flagging",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-01",
+    "last_updated": "2026-06-23",
     "total_entries": 17,
     "scoring_system": {
       "allergen_free_bonus": 2,
@@ -36,6 +36,7 @@
         "soy protein",
         "glycine max",
         "soybean",
+        "soybeans",
         "soy flour",
         "soy lecithin e322",
         "phospholipids from soy",

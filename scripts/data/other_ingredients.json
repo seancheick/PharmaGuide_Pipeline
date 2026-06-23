@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-06-16",
-    "total_entries": 696,
+    "last_updated": "2026-06-23",
+    "total_entries": 697,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -2478,6 +2478,8 @@
         "bone broth",
         "beef bone broth protein powder",
         "beef bone broth protein",
+        "bovine bone broth protein",
+        "bovine bone broth protein powder",
         "chicken bone broth protein powder",
         "bone broth protein powder",
         "bone broth protein"
@@ -2496,6 +2498,29 @@
       "functional_roles": [
         "filler",
         "stabilizer"
+      ]
+    },
+    {
+      "id": "PII_BARLEY_RICE_PROTEIN",
+      "standard_name": "Barley Rice Protein",
+      "aliases": [
+        "barley rice protein",
+        "barley rice protein powder"
+      ],
+      "category": "filler",
+      "is_additive": true,
+      "additive_type": "plant_protein",
+      "allergen": true,
+      "allergen_type": "gluten",
+      "common_uses": [
+        "protein source",
+        "powder base"
+      ],
+      "last_updated": "2026-06-23",
+      "notes": "Barley-derived plant protein source label used on protein powders. Contains gluten. Recognized as a source descriptor so protein products do not appear as unmapped identity gaps; not promoted to rice-protein or collagen IQM scoring.",
+      "external_ids": {},
+      "functional_roles": [
+        "filler"
       ]
     },
     {
