@@ -16656,6 +16656,7 @@
         "Titanium Dioxide color",
         "Titanium Dioxide colour",
         "Titanium Dixoide",
+        "titanium dioxide mineral whitener",
         "titanium dioxide nanoparticles",
         "titanium dioxide nanoparticle",
         "nano titanium dioxide",
@@ -16768,6 +16769,11 @@
             "date": "2026-03-08",
             "change": "Updated reason with precise EFSA 2021 language: 'cannot be ruled out' for genotoxicity, 'can no longer be considered safe as food additive'. Six-month transition context added.",
             "by": "audit_march_2026_corrections"
+          },
+          {
+            "date": "2026-06-23",
+            "change": "Added exact DSLD label alias 'titanium dioxide mineral whitener' so the row is recognized as TiO2 safety context rather than an unmapped identity gap. No regulatory status or identifiers changed.",
+            "by": "unmapped_triage_audit"
           }
         ]
       },

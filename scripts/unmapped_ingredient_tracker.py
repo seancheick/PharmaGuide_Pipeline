@@ -33,6 +33,7 @@ class UnmappedIngredientTracker:
         self.unmapped_active = {}
         self.unmapped_inactive = {}
         self.recognized_non_identity: Dict[str, Dict[str, Any]] = {}
+        self.non_scoreable_unmapped: Dict[str, Dict[str, Any]] = {}
         self.needs_verification_active: List[Dict[str, Any]] = []
         self.needs_verification_inactive: List[Dict[str, Any]] = []
         self.processed_count = 0
@@ -74,6 +75,23 @@ class UnmappedIngredientTracker:
                         "occurrences": count,
                         "recognition_standard_name": details.get("recognition_standard_name"),
                         "recognition_type": details.get("recognition_type"),
+                        "is_active": ingredient_name in active_ingredients,
+                    }
+                continue
+
+            # Some DSLD active rows are preserved only for label fidelity:
+            # nested blend children with no individual dose, blend headers, etc.
+            # They are not scoreable identity gaps, so keep them audit-visible
+            # without polluting the IQM/remapping queue.
+            if details.get("non_scoreable_cleaner_row"):
+                existing = self.non_scoreable_unmapped.get(ingredient_name)
+                if existing:
+                    existing["occurrences"] += count
+                else:
+                    self.non_scoreable_unmapped[ingredient_name] = {
+                        "occurrences": count,
+                        "cleaner_row_role": details.get("cleaner_row_role"),
+                        "score_exclusion_reason": details.get("score_exclusion_reason"),
                         "is_active": ingredient_name in active_ingredients,
                     }
                 continue
@@ -180,6 +198,28 @@ class UnmappedIngredientTracker:
                     "recognized_ingredients": recognized_sorted,
                 }, f, indent=2, ensure_ascii=False)
 
+            non_scoreable_sorted = dict(sorted(
+                self.non_scoreable_unmapped.items(),
+                key=lambda x: x[1]["occurrences"],
+                reverse=True,
+            ))
+            non_scoreable_file = self.output_path / "non_scoreable_unmapped_ingredients.json"
+            with open(non_scoreable_file, 'w', encoding='utf-8') as f:
+                json.dump({
+                    "metadata": {
+                        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                        "products_processed": self.processed_count,
+                        "description": (
+                            "Rows preserved by the cleaner for label fidelity but excluded from "
+                            "scoring, such as nested display-only blend children with no individual "
+                            "dose. They are excluded from unmapped identity-gap lists."
+                        ),
+                        "total_excluded": len(non_scoreable_sorted),
+                        "total_occurrences": sum(v["occurrences"] for v in non_scoreable_sorted.values()),
+                    },
+                    "ingredients": non_scoreable_sorted,
+                }, f, indent=2, ensure_ascii=False)
+
             needs_active_file = self.output_path / "needs_verification_active_ingredients.json"
             with open(needs_active_file, 'w', encoding='utf-8') as f:
                 json.dump({
@@ -214,6 +254,7 @@ class UnmappedIngredientTracker:
             logger.info(f"  - Active: {len(sorted_active)} ingredients -> {active_file}")
             logger.info(f"  - Inactive: {len(sorted_inactive)} ingredients -> {inactive_file}")
             logger.info(f"  - Recognized non-identity (excluded from unmapped): {len(recognized_sorted)} ingredients -> {recognized_file}")
+            logger.info(f"  - Non-scoreable cleaner rows (excluded from unmapped): {len(non_scoreable_sorted)} ingredients -> {non_scoreable_file}")
             logger.info(f"  - Needs verification active: {len(self.needs_verification_active)} ingredients -> {needs_active_file}")
             logger.info(f"  - Needs verification inactive: {len(self.needs_verification_inactive)} ingredients -> {needs_inactive_file}")
             

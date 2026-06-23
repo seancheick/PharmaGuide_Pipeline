@@ -292,8 +292,12 @@ EXCLUDED_LABEL_PHRASES = {
     "typical amino acid profile",
     # Nutritional profile section headers (not ingredient names)
     "typical fatty acid profile",
+    "typical fatty acid profile per capsule",
     "fatty acid profile",
     "amino acid profile",
+    "isoflavone content per serving",
+    "typical isoflavone composition:",
+    "typical isoflavone composition",
     "also containing additional carotenoids",
     "quath dravya of",
     "these three oils typically provide the following fatty acid profile",

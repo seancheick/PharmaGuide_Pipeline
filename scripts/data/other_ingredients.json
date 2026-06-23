@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-23",
-    "total_entries": 697,
+    "total_entries": 699,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -4883,6 +4883,30 @@
       "cui": "C1138842",
       "functional_roles": [],
       "is_label_descriptor": true
+    },
+    {
+      "id": "PII_CORN_BRAN_POWDER",
+      "standard_name": "Corn Bran Powder",
+      "aliases": [
+        "corn bran powder",
+        "corn bran"
+      ],
+      "category": "filler",
+      "is_additive": true,
+      "additive_type": "dietary_fiber",
+      "allergen": false,
+      "notes": "Corn bran fiber/source material used as an inactive powder or fiber carrier. Identity-only other-ingredient mapping; must not route to purple corn, corn silk, or other Zea mays IQM scoring entries.",
+      "common_uses": [
+        "fiber source",
+        "powder base"
+      ],
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Processing-defined corn bran powder/source material; not a single confirmed UMLS concept.",
+      "functional_roles": [
+        "filler"
+      ]
     },
     {
       "id": "PII_CORN_OIL",
@@ -19242,6 +19266,7 @@
         "steviol glycosides",
         "high-purity steviol glycosides",
         "stevioside",
+        "steviosides",
         "truvia",
         "stevia rebaudioside a",
         "stevia reb-a",
@@ -22436,6 +22461,7 @@
         "whole adrenal",
         "bovine whole adrenal",
         "whole bovine adrenal",
+        "bovine adrenal",
         "adrenal whole glandular"
       ],
       "category": "active_pending_relocation",
@@ -23792,6 +23818,34 @@
       "cui_note": "Chickpea protein isolate is a processing-defined substance, not a single UMLS concept.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
+      "external_ids": {},
+      "functional_roles": [
+        "filler",
+        "stabilizer"
+      ]
+    },
+    {
+      "id": "PII_FAVA_BEAN_PROTEIN_ISOLATE",
+      "standard_name": "Fava Bean Protein Isolate",
+      "aliases": [
+        "fava bean protein isolate",
+        "fava bean protein",
+        "vicia faba protein isolate",
+        "broad bean protein isolate"
+      ],
+      "category": "filler",
+      "is_additive": true,
+      "additive_type": "protein_source",
+      "allergen": false,
+      "notes": "Vicia faba plant protein source used in vegan protein powders. Tracked as non-IQM protein source for label fidelity; does not imply therapeutic scoring or route to the vicine safety-marker IQM entry unless vicine itself is disclosed.",
+      "common_uses": [
+        "plant protein source",
+        "vegan protein blends"
+      ],
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Fava bean protein isolate is a processing-defined protein material, not a single confirmed UMLS concept.",
+      "added_by": "unmapped_triage_audit",
+      "last_updated": "2026-06-23",
       "external_ids": {},
       "functional_roles": [
         "filler",

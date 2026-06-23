@@ -62,3 +62,47 @@ def test_bovine_bone_broth_protein_uses_existing_bone_broth_descriptor():
     assert recognized is not None
     assert recognized["recognition_source"] == "other_ingredients"
     assert recognized["matched_entry_id"] == "PII_BONE_BROTH"
+
+
+def test_corn_bran_powder_uses_other_ingredient_source_descriptor_not_iqm():
+    normalizer = EnhancedDSLDNormalizer()
+    enricher = SupplementEnricherV3()
+
+    mapped_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Corn Bran Powder", ingredient_group="Corn Bran"
+    )
+    assert mapped is True
+    assert mapped_name == "Corn Bran Powder"
+    assert normalizer._resolve_canonical_identity(
+        mapped_name,
+        raw_name="Corn Bran Powder",
+    ) == ("PII_CORN_BRAN_POWDER", "other_ingredients")
+
+    recognized = enricher._is_recognized_non_scorable(
+        "Corn Bran Powder", "Corn Bran Powder"
+    )
+    assert recognized is not None
+    assert recognized["recognition_source"] == "other_ingredients"
+    assert recognized["matched_entry_id"] == "PII_CORN_BRAN_POWDER"
+
+
+def test_fava_bean_protein_isolate_uses_other_ingredient_source_descriptor_not_vicine():
+    normalizer = EnhancedDSLDNormalizer()
+    enricher = SupplementEnricherV3()
+
+    mapped_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Fava Bean Protein Isolate", ingredient_group="TBD"
+    )
+    assert mapped is True
+    assert mapped_name == "Fava Bean Protein Isolate"
+    assert normalizer._resolve_canonical_identity(
+        mapped_name,
+        raw_name="Fava Bean Protein Isolate",
+    ) == ("PII_FAVA_BEAN_PROTEIN_ISOLATE", "other_ingredients")
+
+    recognized = enricher._is_recognized_non_scorable(
+        "Fava Bean Protein Isolate", "Fava Bean Protein Isolate"
+    )
+    assert recognized is not None
+    assert recognized["recognition_source"] == "other_ingredients"
+    assert recognized["matched_entry_id"] == "PII_FAVA_BEAN_PROTEIN_ISOLATE"

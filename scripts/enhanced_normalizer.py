@@ -370,10 +370,15 @@ STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
 
 INACTIVE_CONTAINER_DESCRIPTOR_TOKENS = frozenset({
     "base",
+    "bits",
     "blend",
     "complex",
     "creamer",
+    "crumb",
+    "crumbs",
+    "margarine",
     "matrix",
+    "sprinkles",
 })
 
 STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
@@ -3127,7 +3132,7 @@ class EnhancedDSLDNormalizer:
         # 4) other_ingredients — index standard_name + aliases so labels
         # matching OI aliases (e.g. bare "Natural Colors" → NHA_NATURAL_COLORS)
         # resolve to a canonical_id.
-        for _key, _val in (self.other_ingredients_lookup or {}).items():
+        for _val in (self.other_ingredients or {}).get("other_ingredients", []):
             if not isinstance(_val, dict):
                 continue
             std = _val.get("standard_name") or ""
@@ -5960,6 +5965,25 @@ class EnhancedDSLDNormalizer:
         is_structural_active_blend_total = (
             is_active and self._is_dsld_active_blend_total_row(ing)
         )
+        unit_norm_for_unmapped = str(unit or "").strip().lower()
+        nested_without_individual_dose_for_report = (
+            is_active
+            and bool(ing.get("isNestedIngredient"))
+            and bool(ing.get("parentBlend"))
+            and (
+                quantity is None
+                or not isinstance(quantity, (int, float))
+                or quantity <= 0
+                or unit_norm_for_unmapped in {"", "np", "not provided", "unknown", "n/a", "na"}
+            )
+        )
+        unmapped_cleaner_row_role = None
+        if nested_without_individual_dose_for_report:
+            unmapped_cleaner_row_role = (
+                "composition_leaf"
+                if self._is_chemical_decomposition_leaf(ing)
+                else "nested_display_only"
+            )
 
         # Check if proprietary - based on quantity OR if name contains blend indicators
         is_proprietary = unit == "NP" or self._is_proprietary_blend_name(name)
@@ -6065,7 +6089,13 @@ class EnhancedDSLDNormalizer:
             )
             and not self._is_nutrition_fact(name)
         ):
-            self._record_unmapped_ingredient(name, forms, is_active=is_active)
+            self._record_unmapped_ingredient(
+                name,
+                forms,
+                is_active=is_active,
+                cleaner_row_role=unmapped_cleaner_row_role,
+                score_exclusion_reason=unmapped_cleaner_row_role,
+            )
 
         # Preserve forms with full structure from DSLD (PRESERVE EVERYTHING).
         # Schematic fields are required for downstream enrichment:
@@ -6179,7 +6209,13 @@ class EnhancedDSLDNormalizer:
                 )
                 and not self._is_nutrition_fact(name)
             ):
-                self._record_unmapped_ingredient(name, forms, is_active=is_active)
+                self._record_unmapped_ingredient(
+                    name,
+                    forms,
+                    is_active=is_active,
+                    cleaner_row_role=unmapped_cleaner_row_role,
+                    score_exclusion_reason=unmapped_cleaner_row_role,
+                )
 
         # LABEL NUTRIENT CONTEXT (refactor Phase 1c — cross-alias disambiguator).
         # For DSLD rows tagged as a vitamin or mineral, the row's `name` IS the
@@ -8410,7 +8446,14 @@ class EnhancedDSLDNormalizer:
             }
         }
 
-    def _build_unmapped_detail(self, name: str, forms: List[str], is_active: bool) -> Dict[str, Any]:
+    def _build_unmapped_detail(
+        self,
+        name: str,
+        forms: List[str],
+        is_active: bool,
+        cleaner_row_role: Optional[str] = None,
+        score_exclusion_reason: Optional[str] = None,
+    ) -> Dict[str, Any]:
         processed_name = self.matcher.preprocess_text(name)
         detail = {
             "processed_name": processed_name,
@@ -8418,6 +8461,10 @@ class EnhancedDSLDNormalizer:
             "variations_tried": self.matcher.generate_variations(processed_name),
             "is_active": is_active,
         }
+        if score_exclusion_reason:
+            detail["non_scoreable_cleaner_row"] = True
+            detail["cleaner_row_role"] = cleaner_row_role
+            detail["score_exclusion_reason"] = score_exclusion_reason
         # A row matching a safety/additive/allergen entry is *recognized* — it
         # legitimately gets no IQM identity (canonical_id never comes from safety
         # DBs), so it is not a true identity gap. Tag it so the unmapped report can
@@ -8437,11 +8484,24 @@ class EnhancedDSLDNormalizer:
             })
         return detail
 
-    def _record_unmapped_ingredient(self, name: str, forms: List[str], is_active: bool):
+    def _record_unmapped_ingredient(
+        self,
+        name: str,
+        forms: List[str],
+        is_active: bool,
+        cleaner_row_role: Optional[str] = None,
+        score_exclusion_reason: Optional[str] = None,
+    ):
         if name not in self.unmapped_ingredients:
             self._unmapped_keys_order.append(name)
         self.unmapped_ingredients[name] += 1
-        self.unmapped_details[name] = self._build_unmapped_detail(name, forms, is_active)
+        self.unmapped_details[name] = self._build_unmapped_detail(
+            name,
+            forms,
+            is_active,
+            cleaner_row_role=cleaner_row_role,
+            score_exclusion_reason=score_exclusion_reason,
+        )
     
     def process_and_save_unmapped_tracking(self, processed_count_override: Optional[int] = None):
         """Process unmapped ingredients and save separate active/inactive tracking files"""

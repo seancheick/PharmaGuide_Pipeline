@@ -75,7 +75,9 @@ def test_aggregate_disposition_counts(by_id):
     # plant-protein material, consistent with the 9 sibling protein-material fillers
     # (whey/beef/chicken/chickpea/corn/goat milk/marine/bone broth). A pure source
     # descriptor with no named material stays label_descriptor/[] (fish/algae-generic).
-    assert populated == 479, f"expected 479 populated entries; got {populated}"
+    # 481 after unmapped triage added PII_CORN_BRAN_POWDER and
+    # PII_FAVA_BEAN_PROTEIN_ISOLATE as non-IQM source/filler identities.
+    assert populated == 481, f"expected 481 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

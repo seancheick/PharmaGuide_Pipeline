@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1420,
-      "total_form_aliases": 12151,
+      "total_form_aliases": 12167,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -3394,6 +3394,8 @@
           "coenzymated b6 supplement",
           "Coenzyme Vitamin B6",
           "Pyridoxal 5' Phosphate",
+          "Pyridoxal 5'-Phosphate",
+          "Pyridoxal-5'-Phosphate",
           "pyridoxal phosphate",
           "plp",
           "active b6",
@@ -15192,6 +15194,9 @@
           "xylooligosaccharide",
           "PreticX XOS prebiotic",
           "PreticX xylooligosaccharide",
+          "PreticX xylooligosaccharides",
+          "PreticX Xylooligosacharides",
+          "PreticX Prebiotic Fiber",
           "prebiotic xylooligosaccharides"
         ],
         "dosage_importance": 1.0,
@@ -17957,7 +17962,9 @@
           "l-ornithine",
           "ornithine",
           "l-ornithine hcl",
-          "ornithine hydrochloride"
+          "ornithine hydrochloride",
+          "l-ornithine hydrochloride, micronized",
+          "micronized l-ornithine hydrochloride"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18518,6 +18525,7 @@
         "notes": "Xanthophyll carotenoid for macular and eye health, extracted from marigold (Tagetes erecta). Absorption is highly fat-dependent: <5% fasted, 10-50% with dietary fat (PMC5306026, PMC6054194). Free lutein and lutein esters show clinically equivalent bioavailability — conflicting 17% AUC difference across studies (Norkus 2010, PMID:21677121 vs Bowen 2002, PMID:12134711). FloraGLO (free lutein, used in AREDS2 NIH trial) and Lutemax 2020 are well-studied branded forms but not chemically distinct. Must be taken with fat-containing meal for meaningful absorption. Dedicated branded/free lutein form; separated from unspecified lutein so FloraGLO/Lutemax labels receive the disclosed-form signal.",
         "aliases": [
           "FloraGLO",
+          "FloraGLO Marigold extract",
           "Flora GLO",
           "flora-glo",
           "Lutemax 2020",
@@ -20299,6 +20307,7 @@
           "flavonoid glycosides",
           "ginkgo flavonol glycosides",
           "ginkgo flavone glycosides",
+          "ginkgo flavone glycoside",
           "gingko biloba extract"
         ],
         "dosage_importance": 1.0,
@@ -22152,6 +22161,7 @@
           "eleutheroside E",
           "syringin eleutheroside B",
           "eleuthero extract",
+          "standardized Eleuthero extract",
           "eleutherococcus senticosus extract",
           "eleuthero root extract",
           "siberian ginseng root extract",
@@ -32155,6 +32165,7 @@
           "Supro Soy Protein Isolate",
           "Supro(R) Brand Soy Protein Isolate",
           "Solae(R) Brand Isolated Soy Protein",
+          "Solae Soy Protein isolate",
           "egg white albumin"
         ],
         "dosage_importance": 1.0,
@@ -40701,7 +40712,8 @@
           "3,5-dihydroxy-3',4',6,7-tetramethoxyflavone",
           "Chaste Tree berry extract",
           "Chaste berry Vitex extract",
-          "chaste tree (vitex agnus-castus) extract"
+          "chaste tree (vitex agnus-castus) extract",
+          "standardized Chaste extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -43560,7 +43572,9 @@
           "willow bark extract",
           "salix alba",
           "salix alba extract",
-          "white willow (salix alba)"
+          "white willow (salix alba)",
+          "White Willow 5:1 extract",
+          "White Willow bark 5:1 extract"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -53457,7 +53471,9 @@
           "lycium berry extract",
           "goji lycium berry extract",
           "lycium berry",
-          "Wolfberry Fruit Extract"
+          "Wolfberry Fruit Extract",
+          "Goji Berry Fruit Juice, Powder",
+          "Lycium (Goji) Berry fruit juice powder"
         ],
         "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
         "natural": true,

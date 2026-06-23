@@ -118,7 +118,7 @@ def test_parallel_inactive_blend_container_is_not_unmapped():
     assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
 
 
-def test_parallel_inactive_source_container_suppressed_but_food_source_remains_unmapped():
+def test_parallel_inactive_source_container_suppressed_but_food_source_is_recognized_for_tracker():
     normalizer = EnhancedDSLDNormalizer()
     snapshot = normalizer.get_unmapped_snapshot()
 
@@ -159,3 +159,64 @@ def test_parallel_inactive_source_container_suppressed_but_food_source_remains_u
     }
     assert "Creamer" not in unmapped_names
     assert "Sweetened Condensed Whole Milk" in unmapped_names
+    assert normalizer.unmapped_details["Sweetened Condensed Whole Milk"][
+        "recognized_non_identity"
+    ] is True
+    assert normalizer.unmapped_details["Sweetened Condensed Whole Milk"][
+        "recognition_standard_name"
+    ] == "Milk"
+
+
+def test_parallel_inactive_food_piece_container_is_not_unmapped():
+    normalizer = EnhancedDSLDNormalizer()
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    rows = normalizer._process_ingredients_parallel(
+        [
+            {
+                "name": "Cookie Bits",
+                "standardName": "Cookie Bits",
+                "category": "other",
+                "ingredientGroup": "Cookie",
+                "quantity": None,
+                "forms": [
+                    {"name": "Cocoa"},
+                    {"name": "Corn Flour"},
+                    {"name": "Dextrose"},
+                ],
+            },
+            {
+                "name": "Margarine",
+                "standardName": "Margarine",
+                "category": "other",
+                "ingredientGroup": "Margarine",
+                "quantity": None,
+                "forms": [
+                    {"name": "Palm Oil"},
+                    {"name": "Soybean Oil"},
+                    {"name": "Water"},
+                ],
+            },
+            {
+                "name": "Chocolate Flavored Sprinkles",
+                "standardName": "Chocolate Flavored Sprinkles",
+                "category": "other",
+                "ingredientGroup": "Sprinkles",
+                "quantity": None,
+                "forms": [
+                    {"name": "Carnauba Wax"},
+                    {"name": "Cocoa"},
+                    {"name": "Corn Starch"},
+                    {"name": "Soy Lecithin"},
+                    {"name": "Sugar"},
+                ],
+            },
+        ]
+    )
+
+    assert {row["raw_source_text"] for row in rows} == {
+        "Cookie Bits",
+        "Margarine",
+        "Chocolate Flavored Sprinkles",
+    }
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
