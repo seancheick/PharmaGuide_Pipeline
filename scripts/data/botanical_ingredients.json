@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-06-22",
-    "total_entries": 531,
+    "total_entries": 538,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -10884,7 +10884,10 @@
       "latin_name": "Perilla frutescens",
       "aliases": [
         "benegut perilla leaf extract",
-        "Perilla frutescens"
+        "Perilla frutescens",
+        "perilla leaf extract",
+        "perilla aerial part",
+        "perilla aerial part extract"
       ],
       "category": "leaf",
       "notes": "Perilla frutescens (Lamiaceae) leaf. Shiso/Zi Su Ye in TCM. Contains rosmarinic acid and luteolin. Anti-allergic properties via lipoxygenase inhibition. Traditional respiratory and digestive herb.",
@@ -11034,6 +11037,158 @@
         "metabolites": []
       },
       "cui": "C0032094",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "dragon_fruit",
+      "standard_name": "Dragon Fruit",
+      "latin_name": "Hylocereus undatus",
+      "aliases": [
+        "dragon fruit",
+        "dragon fruit extract",
+        "pitaya",
+        "pitahaya",
+        "hylocereus undatus"
+      ],
+      "category": "fruit",
+      "notes": "Hylocereus undatus (Cactaceae) fruit, pitaya/dragon fruit. Contains betalains, vitamin C, and fiber. Identity-only botanical (no standardized clinical marker).",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C1202122",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "mulberry_mistletoe",
+      "standard_name": "Mulberry Mistletoe",
+      "latin_name": "Taxillus chinensis",
+      "aliases": [
+        "mulberry mistletoe",
+        "mulberry mistletoe extract",
+        "mulberry mistletoe leaf, stem extract",
+        "taxillus chinensis",
+        "sang ji sheng"
+      ],
+      "category": "herb",
+      "notes": "Taxillus chinensis (Loranthaceae), mulberry mistletoe (Sang Ji Sheng in TCM); parasitic plant harvested as leaf/stem. Traditional joint and pregnancy-support herb. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C1463005",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "purslane",
+      "standard_name": "Purslane",
+      "latin_name": "Portulaca oleracea",
+      "aliases": [
+        "purslane",
+        "purslane extract",
+        "portulaca oleracea",
+        "portulaca oleracea extract",
+        "portulaca oleracea whole herb extract",
+        "ma chi xian"
+      ],
+      "category": "herb",
+      "notes": "Portulaca oleracea (Portulacaceae), purslane (Ma Chi Xian in TCM); edible succulent aerial herb. Source of omega-3 ALA, betalains, and minerals. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0330346",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "galla_chinensis",
+      "standard_name": "Galla Chinensis",
+      "latin_name": "Rhus chinensis",
+      "aliases": [
+        "galla chinensis",
+        "galla chinensis extract",
+        "chinese gall",
+        "chinese gallnut",
+        "wu bei zi",
+        "rhus chinensis gall"
+      ],
+      "category": "herb",
+      "notes": "Galla chinensis, the Chinese gall formed on Rhus chinensis (Anacardiaceae) by aphids (Wu Bei Zi in TCM). Tannin-rich traditional astringent. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C1677349",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "black_rice",
+      "standard_name": "Black Rice",
+      "latin_name": "Oryza sativa",
+      "aliases": [
+        "black rice",
+        "black rice extract",
+        "purple rice",
+        "forbidden rice",
+        "black rice bran"
+      ],
+      "category": "seed",
+      "notes": "Oryza sativa (Poaceae), pigmented black/purple rice variety. Rich in anthocyanins (cyanidin-3-glucoside) and fiber; NOT standardized to an isolated anthocyanin marker. Identity-only botanical. CUI C0086740 is the Oryza concept.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0086740",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "arnica",
+      "standard_name": "Arnica",
+      "latin_name": "Arnica montana",
+      "aliases": [
+        "arnica",
+        "arnica extract",
+        "arnica flower extract",
+        "arnica montana",
+        "arnica montana flower",
+        "leopard's bane",
+        "mountain arnica"
+      ],
+      "category": "flower",
+      "notes": "Arnica montana (Asteraceae) flower. Contains sesquiterpene lactones (helenalin). Topical anti-inflammatory; oral use is generally unsafe (toxic) except in homeopathic dilution. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0331307",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "cassia_seed",
+      "standard_name": "Cassia Seed",
+      "latin_name": "Senna obtusifolia",
+      "aliases": [
+        "cassia seed",
+        "cassia seed extract",
+        "cassia obtusifolia",
+        "senna obtusifolia",
+        "jue ming zi",
+        "sicklepod seed"
+      ],
+      "category": "seed",
+      "notes": "Senna obtusifolia (syn. Cassia obtusifolia, Fabaceae) seed (Jue Ming Zi in TCM). Contains anthraquinones; traditional eye and bowel-regularity use. Distinct from Cinnamomum cassia (cinnamon) and Cassia nomame. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C1900008",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -15781,7 +15936,10 @@
         "white jelly mushroom",
         "snow fungus",
         "yin er",
-        "organic white wood ear"
+        "organic white wood ear",
+        "tremella extract",
+        "tremella fruiting body extract",
+        "tremella mushroom fruiting body extract"
       ],
       "category": "mushroom",
       "notes": "Tremella fuciformis (Tremellaceae) gelatinous mushroom. TCM and skincare use. Polysaccharides for hydration and immune support.",
