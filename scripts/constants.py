@@ -231,6 +231,8 @@ EXCLUDED_NUTRITION_FACTS = {
 # Label phrases and headers that should be excluded from ingredient processing
 # IMPORTANT: All entries must be lowercase for proper comparison with preprocessed text
 EXCLUDED_LABEL_PHRASES = {
+    # Label sentence fragments (not ingredients)
+    "containing the omega 3 fatty acids", "containing the omega-3 fatty acids",
     # Percentage headers (all lowercase)
     "contains <2% of:", "contains <2% of", "contains < 2% of",
     "contains 2% or less of the following", "contains less than 2% of",
@@ -952,6 +954,8 @@ HOLD_PROBIOTIC_STRAINS = {
 
 # Exact blend-header labels seen in DSLD where dose is blend total, not per-active dose.
 BLEND_HEADER_EXACT_NAMES = {
+    # EAA blend header: a class of essential amino acids carrying a total, not a per-active dose
+    "essential amino acids",
     "acid comfort",
     "botaniplex",
     "natural defense blend",
