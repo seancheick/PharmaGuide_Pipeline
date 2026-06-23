@@ -36,6 +36,9 @@ def enricher():
         ("organic Enokitake Mushroom", "enokitake"),
         ("organic Himematsutake Mushroom mycelium powder", "himematsutake"),
         ("Biolut(TM) Marigold Extract", "marigold"),  # branded marigold lutein extract -> marigold botanical (dose-aware)
+        ("Chinese Vitex", "nirgundi"),                # Vitex negundo, alias to existing Nirgundi (same CUI C1643782)
+        ("Red Currant Fruit Extract", "red_currant"),         # new: Ribes rubrum (C1201367)
+        ("Tropical Almond", "tropical_almond"),               # new: Terminalia catappa (C0971878)
     ],
 )
 def test_botanical_label_recognized_as_identity(enricher, label, expected_id):

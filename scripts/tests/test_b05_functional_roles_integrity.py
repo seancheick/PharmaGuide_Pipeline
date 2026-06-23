@@ -118,4 +118,8 @@ def test_botanical_total_count_unchanged(botanicals):
     # 545 after 2026-06-22 cross-part disambiguation: wild_cherry_bark, grape_leaf,
     # apple_seed, rhubarb_leaf, tomato_leaf added (vs cherry flavor / grape / apple
     # puree / rhubarb root / tomato fruit) — all UMLS CUI-verified.
-    assert len(botanicals) == 545
+    # 547 after 2026-06-23 unmapped-triage botanical tail: red_currant (Ribes rubrum,
+    # C1201367) and tropical_almond (Terminalia catappa, C0971878) added — both
+    # live-UMLS-CUI-verified, distinct from existing blackcurrant / Terminalia spp.
+    # (Chinese Vitex was an alias-add to existing nirgundi, not a new entry.)
+    assert len(botanicals) == 547

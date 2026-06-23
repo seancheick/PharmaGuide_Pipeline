@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-06-22",
-    "total_entries": 545,
+    "total_entries": 547,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -9866,7 +9866,9 @@
         "nirgundi",
         "Five-leaf Chastetree",
         "five-leaf chastetree",
-        "Vitex negundo"
+        "Vitex negundo",
+        "chinese vitex",
+        "chinese chaste tree"
       ],
       "category": "leaf",
       "notes": "Vitex negundo, commonly called Nirgundi/Nirgundee or five-leaf chaste tree. Ayurvedic botanical used in classical joint and women's health formulas.",
@@ -16305,6 +16307,46 @@
       },
       "notes": "Monascus purpureus fermented on rice. Contains monacolin K (chemically identical to the statin lovastatin); regulated as a borderline supplement/drug. Identity entry added so RYR products ship and pick up their existing monacolin-K safety handling in banned_recalled_ingredients.json. UNII 43CAU2Q6DY (FDA UNII cache, verified).",
       "last_updated": "2026-06-04"
+    },
+    {
+      "id": "red_currant",
+      "standard_name": "Red Currant",
+      "latin_name": "Ribes rubrum",
+      "aliases": [
+        "red currant",
+        "red currant fruit extract",
+        "ribes rubrum",
+        "ribes rubrum fruit extract"
+      ],
+      "category": "fruit",
+      "notes": "Ribes rubrum (Grossulariaceae) berry — red currant fruit; an anthocyanin- and vitamin-C-bearing food botanical. Distinct from blackcurrant (Ribes nigrum, C1033165). Identity-only botanical entry.",
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "cui": "C1201367",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "tropical_almond",
+      "standard_name": "Tropical Almond",
+      "latin_name": "Terminalia catappa",
+      "aliases": [
+        "tropical almond",
+        "terminalia catappa",
+        "indian almond",
+        "sea almond"
+      ],
+      "category": "fruit",
+      "notes": "Terminalia catappa (Combretaceae) — tropical / Indian / sea almond. NOT the true almond (Prunus dulcis, C0330656); a distinct Combretaceae tree whose seed and leaf are used traditionally. Identity-only botanical entry.",
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "cui": "C0971878",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     }
   ]
 }

@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1420,
-      "total_form_aliases": 12179,
+      "total_form_aliases": 12181,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -20899,7 +20899,9 @@
           "tendoguard",
           "KoAct(R) Calcium Collagen Chelate",
           "l-hydroxylysine",
-          "hydrolyzed Gelatin"
+          "hydrolyzed Gelatin",
+          "chicken sternum collagen extract",
+          "chicken sternum collagen"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
