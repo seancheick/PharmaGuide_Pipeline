@@ -60,3 +60,31 @@ def test_inactive_blend_descriptor_with_forms_is_not_unmapped():
     assert row["score_eligible_by_cleaner"] is False
     assert row["forms"][0]["name"] == "Maltodextrin"
     assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+def test_inactive_blend_descriptor_sequential_path_is_not_unmapped():
+    normalizer = EnhancedDSLDNormalizer()
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    rows = normalizer._process_ingredients_sequential(
+        [
+            {
+                "name": "Creamer",
+                "standardName": "Creamer",
+                "category": None,
+                "ingredientGroup": "Blend (Combination)",
+                "quantity": None,
+                "forms": [
+                    {"name": "Maltodextrin"},
+                    {"name": "Sodium Caseinate"},
+                    {"name": "Sunflower Oil"},
+                ],
+            }
+        ]
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["cleaner_row_role"] == "inactive"
+    assert rows[0]["score_eligible_by_cleaner"] is False
+    assert rows[0]["forms"][0]["name"] == "Maltodextrin"
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []

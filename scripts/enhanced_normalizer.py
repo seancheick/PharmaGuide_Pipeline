@@ -6825,8 +6825,15 @@ class EnhancedDSLDNormalizer:
                         allergen_info["is_allergen"] or
                         is_proprietary)
 
-            # Track unmapped ingredients only if not found in any database
-            if not is_mapped and not self._is_nutrition_fact(name):
+            # Track unmapped ingredients only if not found in any database.
+            # DSLD blend containers in inactive rows are label structure, not
+            # missing ingredient identities; their child forms remain preserved
+            # for safety and display.
+            if (
+                not is_mapped
+                and not self._has_dsld_blend_group_signal(ing)
+                and not self._is_nutrition_fact(name)
+            ):
                 self._record_unmapped_ingredient(name, forms, is_active=False)
 
             # Preserve forms with full DSLD schema (category/ingredientGroup/uniiCode).
@@ -6875,7 +6882,10 @@ class EnhancedDSLDNormalizer:
                 standard_name = name
                 is_mapped = False
                 canonical_source_db_f = "unmapped"
-                if not self._is_nutrition_fact(name):
+                if (
+                    not self._has_dsld_blend_group_signal(ing)
+                    and not self._is_nutrition_fact(name)
+                ):
                     self._record_unmapped_ingredient(name, forms, is_active=False)
             raw_category_f = ing.get("category") or ""
             label_nutrient_context_f = None
