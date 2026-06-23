@@ -20237,8 +20237,9 @@
         "pubchem_cid": 165001
       },
       "cui": "C3491692",
+      "ban_context": "substance",
       "safety_warning": "A potent dual estrogen-receptor agonist from Pueraria mirifica. Avoid with estrogen-sensitive cancers, endometriosis, or in pregnancy/nursing. Talk to your doctor.",
-      "safety_warning_one_liner": "Potent estrogen; avoid if estrogen-sensitive cancer or pregnant.",
+      "safety_warning_one_liner": "Potent estrogen. Avoid if you have estrogen-sensitive cancer or are pregnant.",
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-06-23",
@@ -20326,8 +20327,9 @@
         "pubchem_cid": 5281858
       },
       "cui": "C0675409",
-      "safety_warning": "An allergenic, cytotoxic ginkgo impurity. Quality extracts keep it under 5 ppm; its presence on a label suggests an under-purified extract.",
-      "safety_warning_one_liner": "Allergenic ginkgo impurity; quality extracts keep it under 5 ppm.",
+      "ban_context": "watchlist",
+      "safety_warning": "An allergenic, cytotoxic ginkgo impurity and a quality risk that suggests an under-purified extract. Quality extracts keep it under 5 ppm. Talk to your doctor about ginkgo sourcing.",
+      "safety_warning_one_liner": "Allergenic ginkgo impurity and quality risk. Avoid under-purified extracts.",
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-06-23",
@@ -20415,8 +20417,8 @@
         "pubchem_cid": 265237
       },
       "cui": "C0078503",
-      "safety_warning": "A normal ashwagandha compound that is cytotoxic only in concentrated, high-withanolide extracts. Discuss high-potency ashwagandha with your doctor.",
-      "safety_warning_one_liner": "Normal ashwagandha compound; cytotoxic only in concentrated extracts.",
+      "safety_warning": "A normal ashwagandha compound, but cytotoxic in concentrated, high-withanolide extracts — a dose-dependent risk. Talk to your doctor about high-potency ashwagandha.",
+      "safety_warning_one_liner": "Normal ashwagandha compound. Talk to your doctor before concentrated extracts.",
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-06-23",
