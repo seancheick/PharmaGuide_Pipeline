@@ -11273,7 +11273,8 @@
         "organic germanium",
         "propagermanium",
         "carboxyethylgermanium sesquioxide",
-        "bis(2-carboxyethylgermanium) sesquioxide"
+        "bis(2-carboxyethylgermanium) sesquioxide",
+        "bis-beta carboxyethyl germanium sesquioxide"
       ],
       "reason": "Inorganic germanium compounds (germanium dioxide, organic germanium carboxylate) were marketed as immunostimulants and cancer treatments in the 1980s before multiple reports of fatal kidney failure emerged. Japan reported over 30 deaths from kidney failure associated with inorganic germanium use. The compound accumulates in the kidneys and peripheral nerves, causing progressive and irreversible nephropathy and peripheral neuropathy. FDA banned the import of germanium-containing supplements in 1988. Products containing inorganic germanium compounds should be considered immediately unsafe.",
       "status": "high_risk",
