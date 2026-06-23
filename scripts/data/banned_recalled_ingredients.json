@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-06-09",
-    "total_entries": 165,
+    "total_entries": 168,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -2811,7 +2811,10 @@
         "naturally-occurring Cannabidiol",
         "naturally-occurring cannabidiol",
         "pure cannabidiol",
-        "pure cbd extract"
+        "pure cbd extract",
+        "broad spectrum phytocannabinoids",
+        "broad spectrum phytocannabinoid",
+        "phytocannabinoids"
       ],
       "reason": "Under the FD&C Act's drug exclusion rule, CBD (cannabidiol) cannot lawfully be marketed as a dietary supplement because it was first investigated as a drug (clinical trials pre-dated any supplement marketing) and is now an approved drug ingredient in Epidiolex (approved by FDA in 2018 for epilepsy). FDA has consistently stated that CBD is excluded from the dietary supplement definition under 21 U.S.C. §321(ff)(3)(B). Despite widespread US market presence, CBD supplement products are technically unlawful. FDA has exercised enforcement discretion but this legal status remains unchanged as of 2026.",
       "status": "banned",
@@ -11259,12 +11262,18 @@
     },
     {
       "id": "RISK_GERMANIUM",
-      "standard_name": "Germanium (Inorganic)",
+      "standard_name": "Germanium",
       "aliases": [
         "germanium dioxide",
         "germanium sesquioxide",
         "inorganic germanium",
-        "germanium (inorganic)"
+        "germanium (inorganic)",
+        "ge-132",
+        "ge 132",
+        "organic germanium",
+        "propagermanium",
+        "carboxyethylgermanium sesquioxide",
+        "bis(2-carboxyethylgermanium) sesquioxide"
       ],
       "reason": "Inorganic germanium compounds (germanium dioxide, organic germanium carboxylate) were marketed as immunostimulants and cancer treatments in the 1980s before multiple reports of fatal kidney failure emerged. Japan reported over 30 deaths from kidney failure associated with inorganic germanium use. The compound accumulates in the kidneys and peripheral nerves, causing progressive and irreversible nephropathy and peripheral neuropathy. FDA banned the import of germanium-containing supplements in 1988. Products containing inorganic germanium compounds should be considered immediately unsafe.",
       "status": "high_risk",
@@ -20155,6 +20164,271 @@
       "functional_roles": [],
       "verification": {
         "verification_report": "scripts/audits/open_decisions_20260609/verification.json"
+      }
+    },
+    {
+      "id": "RISK_MIROESTROL",
+      "standard_name": "Miroestrol",
+      "aliases": [
+        "miroestrol",
+        "miroestrol (pueraria mirifica)"
+      ],
+      "reason": "Miroestrol is the principal phytoestrogen of Pueraria mirifica (White Kwao Krua). It is a potent dual agonist of both estrogen receptors (ERalpha and ERbeta) with potency approaching estradiol — far stronger than soy isoflavones. Marketed for menopause, breast enhancement, and skin, its estrogenic activity is a serious safety concern for anyone with an estrogen-sensitive condition (breast/uterine/ovarian cancer, endometriosis) and in pregnancy/lactation. FDA twice declined Pueraria mirifica New Dietary Ingredient notifications (NDI 149, 204) on inadequate-safety grounds; it is not formally banned, so it is treated as high_risk rather than blocked.",
+      "status": "high_risk",
+      "class_tags": [
+        "phytoestrogen",
+        "endocrine_active",
+        "botanical"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "restricted",
+          "effective_date": null,
+          "source": {
+            "type": "fda_action",
+            "citation": "FDA declined Pueraria mirifica NDI notifications (NDI 149, 204) on safety grounds; not affirmed as a lawful dietary ingredient.",
+            "accessed_date": "2026-06-23"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-06-23"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "pmid",
+          "id": "19060449",
+          "title": "Pueraria mirifica phytoestrogens improve dyslipidemia in postmenopausal women probably by activating estrogen receptor subtypes",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19060449/",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "mechanism_of_harm"
+          ],
+          "evidence_summary": "Miroestrol activates both ERalpha and ERbeta (dual estrogen-receptor agonist)"
+        },
+        {
+          "type": "regulatory",
+          "title": "Hong Kong CFS Risk in Brief: Thai Kudzu (Pueraria mirifica)",
+          "url": "https://www.cfs.gov.hk/english/programme/programme_rafs/programme_rafs_fci_02_03.html",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "Advises against use in minors, pregnancy/nursing, and estrogen-sensitive conditions"
+        }
+      ],
+      "source_category": "high_risk_ingredients",
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "external_ids": {
+        "cas": "2618-41-9",
+        "pubchem_cid": 165001
+      },
+      "cui": "C3491692",
+      "safety_warning": "A potent dual estrogen-receptor agonist from Pueraria mirifica. Avoid with estrogen-sensitive cancers, endometriosis, or in pregnancy/nursing. Talk to your doctor.",
+      "safety_warning_one_liner": "Potent estrogen; avoid if estrogen-sensitive cancer or pregnant.",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-23",
+        "next_review_due": "2026-12-23",
+        "reviewed_by": "manual_entry",
+        "change_log": [
+          {
+            "date": "2026-06-23",
+            "change": "Created from live-API-verified identifiers (PubChem CID 165001, CAS 2618-41-9, UMLS CUI C3491692; no GSRS UNII). Unmapped-triage safety pass.",
+            "by": "manual_entry"
+          }
+        ]
+      }
+    },
+    {
+      "id": "CONTAM_GINKGOLIC_ACID",
+      "standard_name": "Ginkgolic Acid",
+      "aliases": [
+        "ginkgolic acid",
+        "ginkgolic acids",
+        "ginkgolic acid c15:1"
+      ],
+      "reason": "Ginkgolic acids are alkylphenol constituents of Ginkgo biloba that are allergenic, cytotoxic and genotoxic. They are an impurity/quality marker, not an intended active: pharmaceutical-grade standardized extract (EGb 761) is specified to contain <5 ppm ginkgolic acids. A label that discloses ginkgolic acid signals an extract that may not meet that purity limit. Ginkgo biloba itself is not unsafe — this entry flags the contaminant, and is intentionally a watchlist contaminant rather than a hard penalty so properly purified ginkgo products are not punished.",
+      "status": "watchlist",
+      "class_tags": [
+        "quality_marker",
+        "allergen",
+        "contaminant_risk"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "moderate",
+      "jurisdictions": [
+        {
+          "region": "EU",
+          "level": "pharmacopoeial",
+          "status": "restricted",
+          "effective_date": null,
+          "source": {
+            "type": "pharmacopoeia",
+            "citation": "Standardized ginkgo extract (EGb 761) specification limits ginkgolic acids to <5 ppm (Commission E / EU pharmacopoeial quality spec).",
+            "accessed_date": "2026-06-23"
+          },
+          "jurisdiction_type": "region",
+          "jurisdiction_code": "EU",
+          "last_verified_date": "2026-06-23"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "pmid",
+          "id": "18211362",
+          "title": "Quantitation of ginkgolic acids in ginkgo products",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18211362/",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "quality_limit"
+          ],
+          "evidence_summary": "EGb 761 specified to <5 ppm of the allergenic component ginkgolic acid"
+        },
+        {
+          "type": "pmid",
+          "id": "11698056",
+          "title": "Ginkgolic acids induce neuronal death and activate protein phosphatase type-2C",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11698056/",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "mechanism_of_harm"
+          ],
+          "evidence_summary": "Ginkgolic acids are cytotoxic/neurotoxic in vitro; allergenic and genotoxic"
+        }
+      ],
+      "source_category": "contaminant_risk",
+      "entity_type": "contaminant",
+      "match_mode": "active",
+      "external_ids": {
+        "cas": "22910-60-7",
+        "pubchem_cid": 5281858
+      },
+      "cui": "C0675409",
+      "safety_warning": "An allergenic, cytotoxic ginkgo impurity. Quality extracts keep it under 5 ppm; its presence on a label suggests an under-purified extract.",
+      "safety_warning_one_liner": "Allergenic ginkgo impurity; quality extracts keep it under 5 ppm.",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-23",
+        "next_review_due": "2026-12-23",
+        "reviewed_by": "manual_entry",
+        "change_log": [
+          {
+            "date": "2026-06-23",
+            "change": "Created from live-API-verified identifiers (PubChem CID 5281858, CAS 22910-60-7, UMLS CUI C0675409; no single GSRS UNII for the multi-congener class). Unmapped-triage safety pass.",
+            "by": "manual_entry"
+          }
+        ]
+      }
+    },
+    {
+      "id": "WATCH_WITHAFERIN_A",
+      "standard_name": "Withaferin A",
+      "aliases": [
+        "withaferin a",
+        "withaferin-a"
+      ],
+      "reason": "Withaferin A is a steroidal-lactone withanolide and a normal low-level constituent of ashwagandha (Withania somnifera). It is genuinely cytotoxic/pro-apoptotic and is studied as an anticancer agent, but at the trace levels in ordinary ashwagandha it is not a hazard. The concern is dose/concentration: high-withanolide 'standardized' extracts raise exposure. It is NOT banned or adulterant — it is a watchlist constituent. (Note: the broader ashwagandha liver-injury signal in NIH LiverTox is attributed to the whole extract / withanone, not specifically to withaferin A.)",
+      "status": "watchlist",
+      "class_tags": [
+        "withanolide",
+        "botanical",
+        "dose_dependent"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "lawful",
+      "clinical_risk_enum": "dose_dependent",
+      "ban_context": "watchlist",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "lawful",
+          "effective_date": null,
+          "source": {
+            "type": "literature",
+            "citation": "Normal ashwagandha constituent; no regulatory restriction. Watchlisted for dose-dependent cytotoxicity in concentrated extracts.",
+            "accessed_date": "2026-06-23"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-06-23"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "pmid",
+          "id": "32727824",
+          "title": "A Comprehensive Review and Perspective on Anticancer Mechanisms of Withaferin A in Breast Cancer",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32727824/",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "mechanism_of_harm"
+          ],
+          "evidence_summary": "Withaferin A is a pro-apoptotic/cytotoxic withanolide studied as an anticancer agent"
+        },
+        {
+          "type": "regulatory",
+          "title": "NIH LiverTox: Ashwagandha (NBK548536)",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548536/",
+          "evidence_grade": "R",
+          "supports_claims": [
+            "clinical_outcomes"
+          ],
+          "evidence_summary": "Ashwagandha LiverTox likelihood B; liver signal attributed to whole extract/withanone, not specifically withaferin A"
+        }
+      ],
+      "source_category": "high_risk_ingredients",
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "external_ids": {
+        "unii": "L6DO3QW4K5",
+        "cas": "5119-48-2",
+        "pubchem_cid": 265237
+      },
+      "cui": "C0078503",
+      "safety_warning": "A normal ashwagandha compound that is cytotoxic only in concentrated, high-withanolide extracts. Discuss high-potency ashwagandha with your doctor.",
+      "safety_warning_one_liner": "Normal ashwagandha compound; cytotoxic only in concentrated extracts.",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-06-23",
+        "next_review_due": "2026-12-23",
+        "reviewed_by": "manual_entry",
+        "change_log": [
+          {
+            "date": "2026-06-23",
+            "change": "Created from live-API-verified identifiers (PubChem CID 265237, CAS 5119-48-2, UMLS CUI C0078503, GSRS UNII L6DO3QW4K5). Unmapped-triage safety pass.",
+            "by": "manual_entry"
+          }
+        ]
       }
     }
   ]
