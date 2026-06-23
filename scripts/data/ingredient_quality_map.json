@@ -60148,8 +60148,7 @@
   "creatinol_o_phosphate": {
     "standard_name": "Creatinol O-Phosphate",
     "category": "amino_acids",
-    "cui": null,
-    "cui_note": "No UMLS CUI verified for creatinol O-phosphate; identity established via PubChem CID 23342 / CAS 6903-79-3.",
+    "cui": "C0056471",
     "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient.",
     "description": "Creatine-related guanidino phosphate (creatinol O-phosphate) marketed as an ergogenic/cardiotrophic agent; chemically distinct from creatine.",

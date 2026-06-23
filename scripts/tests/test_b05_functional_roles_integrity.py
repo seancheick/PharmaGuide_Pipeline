@@ -110,4 +110,7 @@ def test_botanical_total_count_unchanged(botanicals):
     # unscoreable.
     # 531 after db8f73c7 "Resolve unmapped ingredient identity gaps" added the next
     # botanical identity entry (530 -> 531; no duplicates per integrity suite).
-    assert len(botanicals) == 531
+    # 539 after 2026-06-22 BulkSupplements unmapped triage: 8 plain-identity entries
+    # added (dragon_fruit, mulberry_mistletoe, purslane, galla_chinensis, black_rice,
+    # arnica, cassia_seed, passion_fruit) — all UMLS CUI-verified, no duplicates.
+    assert len(botanicals) == 539
