@@ -88,3 +88,74 @@ def test_inactive_blend_descriptor_sequential_path_is_not_unmapped():
     assert rows[0]["score_eligible_by_cleaner"] is False
     assert rows[0]["forms"][0]["name"] == "Maltodextrin"
     assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+def test_parallel_inactive_blend_container_is_not_unmapped():
+    normalizer = EnhancedDSLDNormalizer()
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    rows = normalizer._process_ingredients_parallel(
+        [
+            {
+                "name": "Fat Blend",
+                "standardName": "Fat Blend",
+                "category": "blend",
+                "ingredientGroup": "Blend (Combination)",
+                "quantity": None,
+                "forms": [
+                    {"name": "Chia seed meal"},
+                    {"name": "Flaxseed powder"},
+                    {"name": "Safflower Oil"},
+                ],
+            }
+        ]
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["raw_source_text"] == "Fat Blend"
+    assert rows[0]["score_eligible_by_cleaner"] is False
+    assert rows[0]["forms"][0]["name"] == "Chia seed meal"
+    assert normalizer.get_unmapped_delta(snapshot)["unmapped"] == []
+
+
+def test_parallel_inactive_source_container_suppressed_but_food_source_remains_unmapped():
+    normalizer = EnhancedDSLDNormalizer()
+    snapshot = normalizer.get_unmapped_snapshot()
+
+    rows = normalizer._process_ingredients_parallel(
+        [
+            {
+                "name": "Creamer",
+                "standardName": "Creamer",
+                "category": "other",
+                "ingredientGroup": "Creamer",
+                "quantity": None,
+                "forms": [
+                    {"name": "Corn Syrup, Solids"},
+                    {"name": "Sodium Caseinate"},
+                    {"name": "Sunflower Oil"},
+                ],
+            },
+            {
+                "name": "Sweetened Condensed Whole Milk",
+                "standardName": "Sweetened Condensed Whole Milk",
+                "category": "animal part or source",
+                "ingredientGroup": "milk",
+                "quantity": None,
+                "forms": [
+                    {"name": "Sugar"},
+                    {"name": "Whole Milk"},
+                ],
+            },
+        ]
+    )
+
+    assert [row["raw_source_text"] for row in rows] == [
+        "Creamer",
+        "Sweetened Condensed Whole Milk",
+    ]
+    unmapped_names = {
+        item["name"] for item in normalizer.get_unmapped_delta(snapshot)["unmapped"]
+    }
+    assert "Creamer" not in unmapped_names
+    assert "Sweetened Condensed Whole Milk" in unmapped_names

@@ -368,6 +368,14 @@ STRUCTURAL_OTHER_FORM_CONTAINER_NAMES = frozenset({
     "isoflavones and saponins",
 })
 
+INACTIVE_CONTAINER_DESCRIPTOR_TOKENS = frozenset({
+    "base",
+    "blend",
+    "complex",
+    "creamer",
+    "matrix",
+})
+
 STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "zma",
     "mineral enzyme activators",
@@ -6050,7 +6058,11 @@ class EnhancedDSLDNormalizer:
         if (
             not is_mapped
             and not is_structural_active_blend_total
-            and not self._has_dsld_blend_group_signal(ing)
+            and not (
+                self._has_dsld_blend_group_signal(ing)
+                if is_active
+                else self._is_inactive_unmapped_report_container(ing)
+            )
             and not self._is_nutrition_fact(name)
         ):
             self._record_unmapped_ingredient(name, forms, is_active=is_active)
@@ -6160,7 +6172,11 @@ class EnhancedDSLDNormalizer:
             canonical_source_db = "unmapped"
             if (
                 not is_structural_active_blend_total
-                and not self._has_dsld_blend_group_signal(ing)
+                and not (
+                    self._has_dsld_blend_group_signal(ing)
+                    if is_active
+                    else self._is_inactive_unmapped_report_container(ing)
+                )
                 and not self._is_nutrition_fact(name)
             ):
                 self._record_unmapped_ingredient(name, forms, is_active=is_active)
@@ -6573,7 +6589,11 @@ class EnhancedDSLDNormalizer:
         # NOTE: We collect unmapped info here but DON'T mutate shared state
         # The calling function merges this in a single-threaded step after parallel execution
         unmapped_info = None
-        if not is_mapped and not self._is_nutrition_fact(name):
+        if (
+            not is_mapped
+            and not self._is_inactive_unmapped_report_container(ingredient_data)
+            and not self._is_nutrition_fact(name)
+        ):
             processed_name = self.matcher.preprocess_text(name)
             unmapped_info = {
                 "name": name,
@@ -6630,7 +6650,10 @@ class EnhancedDSLDNormalizer:
             standard_name = name
             is_mapped = False
             canonical_source_db = "unmapped"
-            if not self._is_nutrition_fact(name):
+            if (
+                not self._is_inactive_unmapped_report_container(ingredient_data)
+                and not self._is_nutrition_fact(name)
+            ):
                 self._record_unmapped_ingredient(name, forms, is_active=False)
         raw_category_i = ingredient_data.get("category") or ""
         label_nutrient_context = None
@@ -6734,13 +6757,20 @@ class EnhancedDSLDNormalizer:
                         form_std_name, raw_name=form_name,
                     )
 
-                    if not form_is_mapped and not self._is_nutrition_fact(form_name):
+                    if (
+                        not form_is_mapped
+                        and not self._is_inactive_unmapped_report_container(form_ing)
+                        and not self._is_nutrition_fact(form_name)
+                    ):
                         self._record_unmapped_ingredient(form_name, [], is_active=False)
                     elif form_canonical_id is None:
                         form_std_name = form_name
                         form_is_mapped = False
                         form_canonical_source_db = "unmapped"
-                        if not self._is_nutrition_fact(form_name):
+                        if (
+                            not self._is_inactive_unmapped_report_container(form_ing)
+                            and not self._is_nutrition_fact(form_name)
+                        ):
                             self._record_unmapped_ingredient(form_name, [], is_active=False)
 
                     form_ing["standardName"] = form_std_name
@@ -6770,13 +6800,20 @@ class EnhancedDSLDNormalizer:
                         form_std_name, raw_name=form_name,
                     )
 
-                    if not form_is_mapped and not self._is_nutrition_fact(form_name):
+                    if (
+                        not form_is_mapped
+                        and not self._is_inactive_unmapped_report_container(form_ing)
+                        and not self._is_nutrition_fact(form_name)
+                    ):
                         self._record_unmapped_ingredient(form_name, [], is_active=False)
                     elif form_canonical_id is None:
                         form_std_name = form_name
                         form_is_mapped = False
                         form_canonical_source_db = "unmapped"
-                        if not self._is_nutrition_fact(form_name):
+                        if (
+                            not self._is_inactive_unmapped_report_container(form_ing)
+                            and not self._is_nutrition_fact(form_name)
+                        ):
                             self._record_unmapped_ingredient(form_name, [], is_active=False)
 
                     form_ing["standardName"] = form_std_name
@@ -6831,7 +6868,7 @@ class EnhancedDSLDNormalizer:
             # for safety and display.
             if (
                 not is_mapped
-                and not self._has_dsld_blend_group_signal(ing)
+                and not self._is_inactive_unmapped_report_container(ing)
                 and not self._is_nutrition_fact(name)
             ):
                 self._record_unmapped_ingredient(name, forms, is_active=False)
@@ -6883,7 +6920,7 @@ class EnhancedDSLDNormalizer:
                 is_mapped = False
                 canonical_source_db_f = "unmapped"
                 if (
-                    not self._has_dsld_blend_group_signal(ing)
+                    not self._is_inactive_unmapped_report_container(ing)
                     and not self._is_nutrition_fact(name)
                 ):
                     self._record_unmapped_ingredient(name, forms, is_active=False)
@@ -9010,6 +9047,18 @@ class EnhancedDSLDNormalizer:
             return False
         quantity, unit = self._extract_primary_mass_unit(ing)
         if quantity is None or str(unit or "").strip().upper() == "NP":
+            # A blend TOTAL is a flat header carrying the aggregate mass. Rows with
+            # a more-specific structural identity are NOT totals and own their own
+            # display-only routing, so excluding them keeps the downstream
+            # `... and not _is_dsld_active_blend_total_row` guards intact:
+            #   - a curated structural active blend leaf (member row, e.g. Dashmoola)
+            #   - any row carrying nested child rows (a wrapper to unwrap, e.g.
+            #     "Safflower/Sunflower Oil concentrate")
+            # Widening this branch to None/NP rows (commit 3401ac96) swept these up
+            # and regressed test_batch27/28/18; a genuine flat NP blend header
+            # ("Brain Health Blend": no children, not curated) still returns True.
+            if self._is_structural_active_blend_leaf(ing) or ing.get("nestedRows"):
+                return False
             return strong_blend_signal
         # 2026-05-25: When the ONLY signal is the WEAK substring-based
         # `_is_proprietary_blend_name` match (no DSLD category='blend', no
@@ -9041,6 +9090,35 @@ class EnhancedDSLDNormalizer:
         raw_category = (ing.get("raw_category") or ing.get("category") or "").lower()
         ingredient_group = (ing.get("ingredientGroup") or "").lower()
         return raw_category == "blend" or "blend" in ingredient_group
+
+    def _is_inactive_unmapped_report_container(self, ing: Dict[str, Any]) -> bool:
+        """Return True for inactive parent/container rows that are not identity gaps.
+
+        DSLD often stores other-ingredient mixtures as a parent label row with
+        child ``forms[]`` rows. The parent text ("Creamer", "Fat Blend",
+        "Protein Complex") is useful label structure, but it is not a missing
+        ingredient identity to add to IQM. Child forms remain preserved for
+        display, safety, and later enrichment.
+        """
+        if not ing:
+            return False
+        if self._has_dsld_blend_group_signal(ing):
+            return True
+
+        forms = ing.get("forms") or []
+        has_child_forms = any(
+            isinstance(form, dict) and str(form.get("name") or "").strip()
+            for form in forms
+        )
+        if not has_child_forms:
+            return False
+
+        processed_name = self.matcher.preprocess_text(ing.get("name", ""))
+        if processed_name in STRUCTURAL_OTHER_FORM_CONTAINER_NAMES:
+            return True
+
+        name_tokens = set(processed_name.replace("-", " ").split())
+        return bool(name_tokens & INACTIVE_CONTAINER_DESCRIPTOR_TOKENS)
 
     def _is_structural_active_form_display_only(self, ing: Dict[str, Any]) -> bool:
         """Identify exact active parent rows whose forms are delivery descriptors, not scored actives."""
