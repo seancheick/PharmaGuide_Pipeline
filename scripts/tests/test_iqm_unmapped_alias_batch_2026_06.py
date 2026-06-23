@@ -32,3 +32,22 @@ def test_silibinin_forms_map_to_milk_thistle(enricher, label):
     assert m is not None and m.get("canonical_id") == "milk_thistle", (
         f"{label!r} must map to the milk_thistle IQM active (silibinin flavonolignan); got {m}"
     )
+
+
+# Per-item chemistry-verified: each unmapped label IS the named IQM parent's compound.
+@pytest.mark.parametrize(
+    "label,expected",
+    [
+        ("Chinese Red Ginseng", "ginseng"),                  # steamed Panax = red ginseng
+        ("Total Caffeoylquinic Acids", "caffeoyl_derivatives"),  # "Total" variant of caffeoylquinic acids
+        ("Glucomannan root extract", "fiber"),               # konjac glucomannan fiber
+        ("Isoflavonoids", "isoflavones"),                    # isoflavone class
+        ("Soy Germ Isoflavones Concentrate", "isoflavones"), # soy germ isoflavone concentrate
+    ],
+)
+def test_unmapped_label_maps_to_verified_iqm_parent(enricher, label, expected):
+    iqm = enricher.databases["ingredient_quality_map"]
+    m = enricher._match_quality_map(label, label, iqm)
+    assert m is not None and m.get("canonical_id") == expected, (
+        f"{label!r} must map to the {expected!r} IQM parent; got {m}"
+    )

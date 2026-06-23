@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1420,
-      "total_form_aliases": 12168,
+      "total_form_aliases": 12173,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -22092,6 +22092,7 @@
           "standardized panax ginseng",
           "ginseng extract",
           "korean red ginseng",
+          "chinese red ginseng",
           "asian ginseng extract",
           "hrg80",
           "hrg80 red ginseng",
@@ -28332,6 +28333,7 @@
         "aliases": [
           "caffeoyl derivatives",
           "caffeoylquinic acids",
+          "total caffeoylquinic acids",
           "total caffeic acid derivatives",
           "hydroxycinnamic acid esters"
         ],
@@ -29428,6 +29430,7 @@
         "notes": "Highly viscous soluble fiber from Amorphophallus konjac root. Meta-analysis of 12 RCTs (n=370, PMID 28356275): LDL-C -10%, non-HDL-C -7% at ~3 g/day. Additional meta-analysis confirms modest weight loss (PMID 24533610). Improves glycemia in T2DM (PMID 10372241). Mechanism: luminal viscosity reduces bile acid reabsorption and slows glucose absorption. Effective dose 3-5 g/day with adequate water before meals. B25 audit 2026-04-25: 7TH CATEGORY ERROR — viscous fiber luminal mechanism (PMID:14983741); same pattern as psyllium.",
         "aliases": [
           "glucomannan",
+          "glucomannan root extract",
           "konjac",
           "konjac root",
           "amorphophallus konjac",
@@ -30606,6 +30609,8 @@
         "notes": "Mixed soy isoflavone class (daidzein, genistein, glycitein). Glycoside forms show 1.6-1.8x higher Cmax than aglycones via intestinal beta-glucosidase (PMID 11285356). Meta-analysis (PMID 22433977, 9 RCTs, n=988): 40-80 mg/day reduced hot flash frequency 30.5% vs placebo. Equol production (30-50% of adults) determines response strength. ERbeta preferential agonism. See daidzein/genistein parents for individualized scoring.",
         "aliases": [
           "isoflavones",
+          "Isoflavonoids",
+          "Soy Germ Isoflavones Concentrate",
           "Isoflavone Glycosides",
           "Soy Isoflavones",
           "Soy Isoflavone extract",
