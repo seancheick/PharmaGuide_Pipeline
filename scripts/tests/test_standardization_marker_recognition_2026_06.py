@@ -42,6 +42,8 @@ CLEAN_MARKERS = [
     "Rosavins", "Salidrosides", "Astragaloside",
     # batch 2 — St John's Wort / Ginkgo / English ivy
     "Dianthrones", "Flavone Glycosides", "Terpene Lactone", "Hederacoside C",
+    # batch 3 — cinnamon marker + generic flavonoid-content descriptor
+    "Type-A Polymers", "Total Flavonoids",
 ]
 
 

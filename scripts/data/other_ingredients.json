@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-23",
-    "total_entries": 706,
+    "total_entries": 708,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -24484,6 +24484,51 @@
       "notes": "Standardization marker for English / common ivy (Hedera helix) — hederacoside C, the bisdesmosidic triterpene saponin marker of ivy-leaf extracts used in respiratory/expectorant products. Appears as a label sub-row under an ivy-leaf extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The source ivy botanical is the labeled entity; this marker row adds no independent score. Not an IQM chemical identity.",
       "common_uses": [
         "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_label_descriptor": true
+    },
+    {
+      "id": "NHA_TYPE_A_POLYMERS_MARKER",
+      "standard_name": "Type-A Polymers",
+      "aliases": [
+        "type-a polymers",
+        "type a polymers",
+        "type-a proanthocyanidins",
+        "a-type proanthocyanidins"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "standardization_marker",
+      "allergen": false,
+      "notes": "Standardization marker term for cinnamon (Cinnamomum) extracts — the A-type proanthocyanidin polymers (doubly-linked, distinct from B-type), the constituents associated with cinnamon's insulin-sensitizing activity. Appears as a label sub-row under a cinnamon extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The cinnamon parent is the scored entity; this marker row adds no independent score. Not an IQM chemical identity.",
+      "common_uses": [
+        "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_label_descriptor": true
+    },
+    {
+      "id": "NHA_TOTAL_FLAVONOIDS_DESCRIPTOR",
+      "standard_name": "Total Flavonoids",
+      "aliases": [
+        "total flavonoids",
+        "total flavonoid content",
+        "flavonoid content"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "content_descriptor",
+      "allergen": false,
+      "notes": "Generic flavonoid-content descriptor (a total-flavonoids assay value), not a specific compound and not tied to a single botanical. Appears as a label content row alongside the named botanical(s). Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit — the named source botanical is the scored entity. Parent-agnostic; not an IQM chemical identity.",
+      "common_uses": [
+        "content descriptor",
         "identity routing"
       ],
       "last_updated": "2026-06-23",
