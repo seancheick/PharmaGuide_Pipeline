@@ -5076,7 +5076,8 @@
         "flammulina velutipes",
         "enoki mushroom",
         "golden needle mushroom",
-        "winter mushroom"
+        "winter mushroom",
+        "enokitake mushroom"
       ],
       "category": "mushroom",
       "notes": "Flammulina velutipes (Physalacriaceae) fruiting body. Enoki mushroom containing flammulin protein and beta-glucans. Used in functional food and mushroom supplement blends. Minimal clinical supplement data.",
@@ -6919,7 +6920,9 @@
         "organic blazei",
         "blazei",
         "agaricus blazei murill",
-        "agaricus brasiliensis"
+        "agaricus brasiliensis",
+        "himematsutake mushroom",
+        "himematsutake mushroom mycelium powder"
       ],
       "category": "mushroom",
       "notes": "Agaricus blazei (Agaricaceae) fruiting body. Royal Sun agaricus mushroom rich in beta-glucans (beta-1,6-D-glucan). Japanese health food (Himematsutake). Immune-modulating properties. Botanical mushroom powder.",
@@ -7386,7 +7389,9 @@
         "indian kino tree (pterocarpus marsupium) extract",
         "pterocarpus marsupium extract",
         "pterocarpus marsupium bark extract",
-        "Pterocarpus marsupium"
+        "Pterocarpus marsupium",
+        "vijayasar",
+        "vijaysar"
       ],
       "category": "bark",
       "notes": "Pterocarpus marsupium (Fabaceae) heartwood/bark. Vijaysar in Ayurveda. Contains pterostilbene and epicatechin. Traditional anti-diabetic wood (water stored in kino wood cups). Botanical bark form.",
@@ -7570,7 +7575,8 @@
         "honeysuckle flower",
         "japanese honeysuckle flower",
         "honeysuckle",
-        "Lonicera japonica flower extract"
+        "Lonicera japonica flower extract",
+        "lonicera"
       ],
       "category": "flower",
       "notes": "Lonicera japonica (Caprifoliaceae) flower bud. Jin Yin Hua in TCM. Contains chlorogenic acid and luteolin. Heat-clearing and detoxifying herb. Major component of Yin Qiao San formula.",
