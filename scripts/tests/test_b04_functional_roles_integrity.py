@@ -70,7 +70,12 @@ def test_aggregate_disposition_counts(by_id):
     # 478 after the 2026-06-16 inactive-excipient coverage win added Sodium
     # Aluminum Silicate plus the mixed Natural and Artificial Flavors class;
     # the remaining terms were aliases onto existing parents.
-    assert populated == 478, f"expected 478 populated entries; got {populated}"
+    # 479 after dd266c7d "Recognize remaining protein source descriptors" added
+    # PII_BARLEY_RICE_PROTEIN (category=filler, functional_roles=["filler"]): a named
+    # plant-protein material, consistent with the 9 sibling protein-material fillers
+    # (whey/beef/chicken/chickpea/corn/goat milk/marine/bone broth). A pure source
+    # descriptor with no named material stays label_descriptor/[] (fish/algae-generic).
+    assert populated == 479, f"expected 479 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )
