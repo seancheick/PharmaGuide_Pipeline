@@ -113,4 +113,6 @@ def test_botanical_total_count_unchanged(botanicals):
     # 539 after 2026-06-22 BulkSupplements unmapped triage: 8 plain-identity entries
     # added (dragon_fruit, mulberry_mistletoe, purslane, galla_chinensis, black_rice,
     # arnica, cassia_seed, passion_fruit) — all UMLS CUI-verified, no duplicates.
-    assert len(botanicals) == 539
+    # 540 after 2026-06-22 plant-part guardrail: cooking_plantain (Musa x paradisiaca,
+    # CUI C1039591) added to disambiguate banana-plantain labels from Plantago.
+    assert len(botanicals) == 540

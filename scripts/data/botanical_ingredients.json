@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-06-22",
-    "total_entries": 539,
+    "total_entries": 540,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -11059,6 +11059,34 @@
         "metabolites": []
       },
       "cui": "C0032094",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "cooking_plantain",
+      "standard_name": "Cooking Plantain",
+      "latin_name": "Musa x paradisiaca",
+      "aliases": [
+        "cooking plantain",
+        "cooking banana",
+        "plantain fruit",
+        "plantain fruit extract",
+        "green plantain",
+        "green plantain powder",
+        "plantain flour",
+        "plantain banana",
+        "musa paradisiaca",
+        "musa x paradisiaca"
+      ],
+      "category": "fruit",
+      "notes": "Musa x paradisiaca, the starchy cooking banana / plantain FRUIT (e.g. green-plantain resistant starch). DISTINCT from common plantain (Plantago major), a leaf herb — the plant-part word disambiguates the two. Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {
+        "unii": "I4U55R240N"
+      },
+      "cui": "C1039591",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
