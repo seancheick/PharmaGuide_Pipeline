@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-06-23",
-    "total_entries": 699,
+    "total_entries": 702,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -24335,6 +24335,69 @@
       "functional_roles": [
         "anti_caking_agent"
       ]
+    },
+    {
+      "id": "NHA_ROSAVINS_MARKER",
+      "standard_name": "Rosavins",
+      "aliases": [
+        "rosavin",
+        "rosavins",
+        "total rosavins"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "standardization_marker",
+      "allergen": false,
+      "notes": "Standardization marker for Rhodiola rosea — the rosavin glycoside group (rosavin, rosarin, rosin). Appears as a label sub-row under a rhodiola extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The Rhodiola botanical parent is the scored entity; this marker row adds no independent score. Not an IQM chemical identity (verified absent from ingredient_quality_map).",
+      "common_uses": [
+        "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_SALIDROSIDES_MARKER",
+      "standard_name": "Salidrosides",
+      "aliases": [
+        "salidroside",
+        "salidrosides",
+        "rhodioloside"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "standardization_marker",
+      "allergen": false,
+      "notes": "Standardization marker for Rhodiola rosea — salidroside (rhodioloside), the phenylethanoid co-marker to the rosavins. Appears as a label sub-row under a rhodiola extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The Rhodiola botanical parent is the scored entity; this marker row adds no independent score. Not an IQM chemical identity (verified absent from ingredient_quality_map).",
+      "common_uses": [
+        "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_ASTRAGALOSIDE_MARKER",
+      "standard_name": "Astragaloside",
+      "aliases": [
+        "astragaloside",
+        "astragalosides",
+        "astragaloside iv"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "standardization_marker",
+      "allergen": false,
+      "notes": "Standardization marker for Astragalus membranaceus — astragaloside IV, the cycloartane-saponin marker. Appears as a label sub-row under an astragalus extract. Recognized for label fidelity only: non-scorable, no IQM / A5b / Section C credit. The Astragalus botanical parent is the scored entity; this marker row adds no independent score. Not an IQM chemical identity (verified absent from ingredient_quality_map).",
+      "common_uses": [
+        "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-06-23",
+      "external_ids": {},
+      "functional_roles": []
     }
   ]
 }
