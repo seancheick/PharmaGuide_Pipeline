@@ -6050,6 +6050,7 @@ class EnhancedDSLDNormalizer:
         if (
             not is_mapped
             and not is_structural_active_blend_total
+            and not self._has_dsld_blend_group_signal(ing)
             and not self._is_nutrition_fact(name)
         ):
             self._record_unmapped_ingredient(name, forms, is_active=is_active)
@@ -6159,6 +6160,7 @@ class EnhancedDSLDNormalizer:
             canonical_source_db = "unmapped"
             if (
                 not is_structural_active_blend_total
+                and not self._has_dsld_blend_group_signal(ing)
                 and not self._is_nutrition_fact(name)
             ):
                 self._record_unmapped_ingredient(name, forms, is_active=is_active)
@@ -8992,18 +8994,13 @@ class EnhancedDSLDNormalizer:
 
     def _is_dsld_active_blend_total_row(self, ing: Dict[str, Any]) -> bool:
         """Identify DSLD blend rows whose quantity is a blend total."""
-        raw_category = (ing.get("raw_category") or ing.get("category") or "").lower()
-        ingredient_group = (ing.get("ingredientGroup") or "").lower()
-        strong_blend_signal = (
-            raw_category == "blend"
-            or "blend" in ingredient_group
-        )
+        strong_blend_signal = self._has_dsld_blend_group_signal(ing)
         weak_blend_signal = self._is_proprietary_blend_name(ing.get("name", ""))
         if not (strong_blend_signal or weak_blend_signal):
             return False
         quantity, unit = self._extract_primary_mass_unit(ing)
         if quantity is None or str(unit or "").strip().upper() == "NP":
-            return False
+            return strong_blend_signal
         # 2026-05-25: When the ONLY signal is the WEAK substring-based
         # `_is_proprietary_blend_name` match (no DSLD category='blend', no
         # 'blend' in ingredientGroup), and the row name (or standardName)
@@ -9027,6 +9024,13 @@ class EnhancedDSLDNormalizer:
             ):
                 return False
         return True
+
+    @staticmethod
+    def _has_dsld_blend_group_signal(ing: Dict[str, Any]) -> bool:
+        """Return True when DSLD itself classifies the row as a blend container."""
+        raw_category = (ing.get("raw_category") or ing.get("category") or "").lower()
+        ingredient_group = (ing.get("ingredientGroup") or "").lower()
+        return raw_category == "blend" or "blend" in ingredient_group
 
     def _is_structural_active_form_display_only(self, ing: Dict[str, Any]) -> bool:
         """Identify exact active parent rows whose forms are delivery descriptors, not scored actives."""
