@@ -115,4 +115,7 @@ def test_botanical_total_count_unchanged(botanicals):
     # arnica, cassia_seed, passion_fruit) — all UMLS CUI-verified, no duplicates.
     # 540 after 2026-06-22 plant-part guardrail: cooking_plantain (Musa x paradisiaca,
     # CUI C1039591) added to disambiguate banana-plantain labels from Plantago.
-    assert len(botanicals) == 540
+    # 545 after 2026-06-22 cross-part disambiguation: wild_cherry_bark, grape_leaf,
+    # apple_seed, rhubarb_leaf, tomato_leaf added (vs cherry flavor / grape / apple
+    # puree / rhubarb root / tomato fruit) — all UMLS CUI-verified.
+    assert len(botanicals) == 545

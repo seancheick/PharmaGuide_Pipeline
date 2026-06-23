@@ -73,3 +73,54 @@ def test_cooking_plantain_entry_identity(botanicals):
     assert cp["latin_name"] == "Musa x paradisiaca"
     assert cp["cui"] == "C1039591"                      # UMLS-verified Musa x paradisiaca
     assert cp["external_ids"]["unii"] == "I4U55R240N"   # GSRS-verified banana UNII
+
+
+# ── cross-part disambiguation: the plant-part word must select the right identity ──
+@pytest.mark.parametrize(
+    "label,expected_id",
+    [
+        ("Cherry Bark Extract", "wild_cherry_bark"),      # was cherry FLAVOR
+        ("Wild Cherry Bark Extract", "wild_cherry_bark"),
+        ("Grape Leaf Extract", "grape_leaf"),             # was plain GRAPE
+        ("Red Vine Leaf Extract", "grape_leaf"),
+        ("Apple Seed Extract", "apple_seed"),             # was apple PUREE
+        ("Rhubarb Leaf Extract", "rhubarb_leaf"),         # was rhubarb (root)
+        ("Tomato Leaf Extract", "tomato_leaf"),           # was tomato (fruit)
+    ],
+)
+def test_cross_part_label_resolves_to_correct_part(enricher, label, expected_id):
+    r = enricher._is_recognized_non_scorable(label, label)
+    assert r is not None and r.get("matched_entry_id") == expected_id, (
+        f"{label!r} should resolve to {expected_id!r}, got {r}"
+    )
+
+
+def test_whole_plant_labels_not_falsely_rejected(enricher):
+    """The additive disambiguation must NOT break legit whole-plant / standard-part
+    labels — the reason we used identities instead of a recognition-core guard."""
+    for label, expect in [
+        ("Ashwagandha Root Extract", "ashwagandha"),
+        ("Pumpkin Seed Extract", "pumpkin"),
+        ("Grape Seed Extract", "grape_seed"),
+        ("Rhubarb Root Extract", "rhubarb"),
+    ]:
+        r = enricher._is_recognized_non_scorable(label, label)
+        assert r is not None and r.get("matched_entry_id") == expect, (
+            f"{label!r} regressed to {r}"
+        )
+
+
+@pytest.mark.parametrize(
+    "entry_id,cui,latin",
+    [
+        ("wild_cherry_bark", "C0330655", "Prunus serotina"),
+        ("grape_leaf", "C0682492", "Vitis vinifera"),
+        ("apple_seed", "C0330653", "Malus domestica"),
+        ("rhubarb_leaf", "C1066370", "Rheum officinale"),
+        ("tomato_leaf", "C1140676", "Solanum lycopersicum"),
+    ],
+)
+def test_disambiguation_entries_verified_cui(botanicals, entry_id, cui, latin):
+    e = botanicals[entry_id]
+    assert e["cui"] == cui          # UMLS-verified 2026-06-22
+    assert e["latin_name"] == latin

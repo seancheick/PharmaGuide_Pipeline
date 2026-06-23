@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-06-22",
-    "total_entries": 540,
+    "total_entries": 545,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -11087,6 +11087,103 @@
         "unii": "I4U55R240N"
       },
       "cui": "C1039591",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "wild_cherry_bark",
+      "standard_name": "Wild Cherry Bark",
+      "latin_name": "Prunus serotina",
+      "aliases": [
+        "wild cherry bark",
+        "wild cherry bark extract",
+        "cherry bark",
+        "cherry bark extract",
+        "prunus serotina bark"
+      ],
+      "category": "bark",
+      "notes": "Prunus serotina (Rosaceae) bark, wild/black cherry bark — a traditional cough/respiratory botanical. The BARK is distinct from cherry fruit/flavor (same species as black_cherry, different part). Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0330655",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "grape_leaf",
+      "standard_name": "Grape Leaf",
+      "latin_name": "Vitis vinifera",
+      "aliases": [
+        "grape leaf",
+        "grape leaf extract",
+        "red vine leaf",
+        "red vine leaf extract",
+        "vitis vinifera leaf"
+      ],
+      "category": "leaf",
+      "notes": "Vitis vinifera (Vitaceae) LEAF / red vine leaf — used for chronic venous insufficiency. Distinct from grape fruit/seed (same species, different part). Identity-only botanical.",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0682492",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "apple_seed",
+      "standard_name": "Apple Seed",
+      "latin_name": "Malus domestica",
+      "aliases": [
+        "apple seed",
+        "apple seed extract",
+        "malus domestica seed"
+      ],
+      "category": "seed",
+      "notes": "Malus domestica (Rosaceae) SEED — distinct from apple fruit/puree. Apple seeds contain the cyanogenic glycoside amygdalin and are not equivalent to edible apple. Identity-only botanical (safety-relevant disambiguation).",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C0330653",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "rhubarb_leaf",
+      "standard_name": "Rhubarb Leaf",
+      "latin_name": "Rheum officinale",
+      "aliases": [
+        "rhubarb leaf",
+        "rhubarb leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Rheum (Polygonaceae) LEAF — distinct from the medicinal rhubarb root/rhizome. Rhubarb leaves are toxic (high oxalic acid / anthraquinones) and are not an edible/medicinal part. Identity-only botanical (safety-relevant disambiguation).",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C1066370",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "tomato_leaf",
+      "standard_name": "Tomato Leaf",
+      "latin_name": "Solanum lycopersicum",
+      "aliases": [
+        "tomato leaf",
+        "tomato leaf extract"
+      ],
+      "category": "leaf",
+      "notes": "Solanum lycopersicum (Solanaceae) LEAF — distinct from the edible tomato fruit. Tomato leaves contain the glycoalkaloid tomatine and are not an edible part. Identity-only botanical (safety-relevant disambiguation).",
+      "last_updated": "2026-06-22",
+      "external_ids": {},
+      "cui": "C1140676",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
