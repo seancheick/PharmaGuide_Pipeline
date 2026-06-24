@@ -11507,7 +11507,12 @@ class SupplementEnricherV3:
         merged = {}
 
         def dedupe_key(blend: Dict) -> tuple:
-            """Generate deduplication key matching B4 scoring logic."""
+            """Generate deduplication key matching B4 scoring logic.
+
+            Keeps nested_count so genuinely-distinct same-name disclosed blends
+            stay separate; the header/body split is collapsed by the post-merge
+            consolidation pass below, not here.
+            """
             name = (blend.get("name") or "").lower().strip()
             mg = blend.get("total_weight")
             # 5mg bucket to tolerate parsing variance
@@ -11572,7 +11577,40 @@ class SupplementEnricherV3:
                 blend_copy["detector_group"] = None  # Not detected by pattern DB
                 merged[key] = blend_copy
 
-        return list(merged.values())
+        # Post-merge consolidation of the header/body split.
+        # The single-pass cleaning extractor emits one blend TWICE — a 0-child
+        # header row AND the aggregated nested-children body — with distinct
+        # dedupe keys (different nested_count), so both survive here and B5 then
+        # double-penalizes the blend (this list feeds enriched["proprietary_blends"]).
+        # Within a (name, mg_bucket) group: keep every DISCLOSED entry (so two
+        # genuinely-distinct same-name disclosed blends stay separate — the
+        # B4-parity case in test_blend_merge_pipeline), drop 0-child headers when a
+        # disclosed body exists, and collapse all-opaque duplicates to one.
+        def _consol_bucket(b: Dict):
+            mg = b.get("total_weight")
+            return int(round(mg / 5.0) * 5) if mg and mg > 0 else None
+
+        groups: Dict[tuple, List[Dict]] = {}
+        order: List[tuple] = []
+        for b in merged.values():
+            gkey = ((b.get("name") or "").lower().strip(), _consol_bucket(b))
+            groups.setdefault(gkey, [])
+            if gkey not in order:
+                order.append(gkey)
+            groups[gkey].append(b)
+
+        def _has_children(b: Dict) -> bool:
+            return bool(b.get("child_ingredients")) or (int(b.get("nested_count") or 0) > 0)
+
+        consolidated: List[Dict] = []
+        for gkey in order:
+            group = groups[gkey]
+            disclosed = [b for b in group if _has_children(b)]
+            if disclosed:
+                consolidated.extend(disclosed)  # drop 0-child header(s)
+            else:
+                consolidated.append(group[0])  # collapse all-opaque duplicates to one
+        return consolidated
 
     def _extract_strain_ids_from_product(self, product: Dict) -> List[str]:
         """Extract probiotic strain IDs from product text and ingredient fields."""
