@@ -1,19 +1,35 @@
 {
-  "generated_at": "2026-03-23T18:35:13.084905+00:00",
-  "file": "/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts/data/banned_recalled_ingredients.json",
-  "status": "pass",
+  "generated_at": "2026-06-24T10:10:03.572471+00:00",
+  "file": "/Users/seancheick/Downloads/dsld_clean/scripts/data/banned_recalled_ingredients.json",
+  "status": "warn",
   "integrity": {
     "errors": 0,
     "warnings": 0,
     "findings": []
   },
   "entry_quality": {
-    "missing_source_category": [],
-    "missing_reference_urls": [],
+    "missing_source_category": [
+      "BANNED_DHEA",
+      "BANNED_PENNYROYAL",
+      "BANNED_TANSY",
+      "BANNED_BITTER_ORANGE",
+      "BANNED_ADD_GREEN3",
+      "BANNED_ADD_PROPYLPARABEN",
+      "BANNED_ADD_AZODICARBONAMIDE"
+    ],
+    "missing_reference_urls": [
+      "BANNED_PENNYROYAL",
+      "BANNED_TANSY",
+      "BANNED_BITTER_ORANGE"
+    ],
     "product_missing_recall_scope": [],
     "review_gaps": {},
     "missing_entity_type": [],
-    "missing_cui_annotations": [],
+    "missing_cui_annotations": [
+      "ADULTERANT_TESTOSTERONE_PROPIONATE",
+      "BANNED_ADD_AZODICARBONAMIDE",
+      "WATCH_BOVINE_BRAIN_PHOSPHATIDYLSERINE"
+    ],
     "legacy_reference_blocks": [],
     "empty_reference_urls": [],
     "malformed_change_log": {}
@@ -21,20 +37,48 @@
   "cui_audit": {
     "enabled": true,
     "counts": {
-      "verified": 100,
+      "verified": 112,
       "invalid_cui": 0,
-      "mismatched_cui": 0,
+      "mismatched_cui": 1,
       "name_variants": 0,
-      "annotated_no_cui": 25,
-      "missing_cui_non_product": 0,
-      "not_found": 0,
-      "safe_missing_exact_matches": 0
+      "annotated_no_cui": 24,
+      "missing_cui_non_product": 3,
+      "not_found": 1,
+      "safe_missing_exact_matches": 2
     },
     "invalid_cui": [],
-    "mismatched_cui": [],
+    "mismatched_cui": [
+      {
+        "id": "BANNED_IGF1",
+        "standard_name": "IGF-1 (Insulin-like Growth Factor 1)",
+        "current_cui": "C0021665",
+        "status": "MISMATCH",
+        "umls_name": "Insulin-Like Growth Factor I",
+        "suggested_cui": "C3712803",
+        "suggested_name": "IGF1 protein, human",
+        "action": "CUI C0021665 maps to 'Insulin-Like Growth Factor I' but entry is 'IGF-1 (Insulin-like Growth Factor 1)'",
+        "match_source": "exact_alias",
+        "cui_status": null
+      }
+    ],
     "name_variants": [],
-    "missing_cui_non_product": [],
-    "safe_to_apply": [],
+    "missing_cui_non_product": [
+      "ADULTERANT_TESTOSTERONE_PROPIONATE",
+      "BANNED_ADD_AZODICARBONAMIDE",
+      "WATCH_BOVINE_BRAIN_PHOSPHATIDYLSERINE"
+    ],
+    "safe_to_apply": [
+      {
+        "id": "ADULTERANT_TESTOSTERONE_PROPIONATE",
+        "suggested_cui": "C0039607",
+        "suggested_name": "testosterone propionate"
+      },
+      {
+        "id": "BANNED_ADD_AZODICARBONAMIDE",
+        "suggested_cui": "C0043716",
+        "suggested_name": "azodicarbonamide"
+      }
+    ],
     "skipped_reason": null
   },
   "applied_safe_cui_updates": 0,
