@@ -95,7 +95,11 @@ from constants import (
 from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
-from scoring_input_contract import build_scoring_classification, derive_product_scoring_evidence
+from scoring_input_contract import (
+    build_scoring_classification,
+    derive_product_scoring_evidence,
+    get_scoring_ingredients,
+)
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -695,6 +699,137 @@ class SupplementEnricherV3:
             self.dosage_normalizer = None
             self.blend_detector = None
             self.rda_calculator = None
+
+    def _primary_active_ingredients_for_enrichment(
+        self,
+        product: Dict,
+        ingredient_quality_data: Optional[Dict] = None,
+    ) -> List[Dict]:
+        """Return active rows eligible for active-only enrichment collectors.
+
+        Cleaner/enrichment already splits primary scorable actives from
+        disclosed-blend children. Synergy, clinical evidence, standardized
+        botanical, and RDA/UL collectors must use that same contract instead of
+        the flattened label list, otherwise undosed blend members behave like
+        primary ingredients.
+        """
+        active_ingredients = [
+            ing for ing in product.get('activeIngredients', [])
+            if isinstance(ing, dict)
+        ]
+        iqd = ingredient_quality_data if isinstance(ingredient_quality_data, dict) else product.get("ingredient_quality_data")
+        if not isinstance(iqd, dict) or not isinstance(iqd.get("ingredients_scorable"), list):
+            return active_ingredients
+
+        contract_product = dict(product)
+        contract_product["ingredient_quality_data"] = iqd
+        try:
+            result = get_scoring_ingredients(
+                contract_product,
+                strict=True,
+                allow_legacy_fallback=False,
+            )
+        except Exception as exc:  # pragma: no cover - defensive legacy fallback.
+            self.logger.debug("strict scoring contract unavailable for enrichment: %s", exc)
+            return active_ingredients
+
+        scoring_rows = [
+            row for row in result.rows
+            if (
+                str(row.get("scoring_input_kind") or "") != "product_level_evidence"
+                and not self._is_display_only_blend_scoring_row(row)
+            )
+        ]
+        if not scoring_rows:
+            return []
+
+        source_paths = {
+            str(row.get("raw_source_path") or row.get("source_path") or "").strip()
+            for row in scoring_rows
+            if str(row.get("raw_source_path") or row.get("source_path") or "").strip()
+        }
+        terms = set()
+        canonical_ids = set()
+        for row in scoring_rows:
+            for key in (
+                "raw_source_text",
+                "name",
+                "standard_name",
+                "standardName",
+                "matched_name",
+                "display_label",
+            ):
+                value = str(row.get(key) or "").strip()
+                if value:
+                    terms.add(norm_module.make_normalized_key(value))
+            canonical = str(
+                row.get("canonical_id") or row.get("parent_key") or row.get("normalized_key") or ""
+            ).strip()
+            if canonical:
+                canonical_ids.add(canonical.lower())
+
+        selected: List[Dict] = []
+        for ing in active_ingredients:
+            path = str(ing.get("raw_source_path") or ing.get("source_path") or "").strip()
+            if path and path in source_paths:
+                selected.append(ing)
+                continue
+            matched = False
+            for key in (
+                "raw_source_text",
+                "name",
+                "standardName",
+                "standard_name",
+                "matched_name",
+                "display_label",
+            ):
+                value = str(ing.get(key) or "").strip()
+                if value and norm_module.make_normalized_key(value) in terms:
+                    matched = True
+                    break
+            canonical = str(
+                ing.get("canonical_id") or ing.get("parent_key") or ing.get("normalized_key") or ""
+            ).strip().lower()
+            if matched or (canonical and canonical in canonical_ids):
+                selected.append(ing)
+
+        if selected:
+            return selected
+
+        return [self._active_ingredient_from_scoring_row(row) for row in scoring_rows]
+
+    def _is_display_only_blend_scoring_row(self, row: Dict) -> bool:
+        if str(row.get("scoring_input_kind") or "") != "recovered_active_identity":
+            return False
+        path = str(row.get("raw_source_path") or row.get("source_path") or "").lower()
+        exclusion = str(row.get("score_exclusion_reason") or "").strip().lower()
+        return (
+            exclusion == "nested_display_only"
+            or "nestedrows" in path
+            or "child_ingredients" in path
+        )
+
+    def _active_ingredient_from_scoring_row(self, row: Dict) -> Dict:
+        name = str(
+            row.get("name")
+            or row.get("standard_name")
+            or row.get("raw_source_text")
+            or row.get("canonical_id")
+            or ""
+        ).strip()
+        standard_name = str(row.get("standard_name") or row.get("standardName") or name).strip()
+        return {
+            "name": name,
+            "standardName": standard_name,
+            "raw_source_text": row.get("raw_source_text") or name,
+            "raw_source_path": row.get("raw_source_path"),
+            "canonical_id": row.get("canonical_id") or row.get("parent_key"),
+            "quantity": row.get("quantity", row.get("dosage")),
+            "unit": row.get("unit", row.get("dosage_unit")),
+            "forms": row.get("forms") or [],
+            "matched_form": row.get("matched_form"),
+            "dose_data_quality": row.get("dose_data_quality"),
+        }
 
     def _load_config(self, config_path: str) -> Dict:
         """Load enrichment configuration"""
@@ -7810,8 +7945,9 @@ class SupplementEnricherV3:
         enhancers_db = self.databases.get('absorption_enhancers', {})
         enhancers_list = enhancers_db.get('absorption_enhancers', [])
 
-        # v3.0 scoring contract: enhancer pairing is ACTIVE-ONLY.
-        all_ingredients = product.get('activeIngredients', [])
+        # v3.0 scoring contract: enhancer pairing is ACTIVE-ONLY and must
+        # follow the same primary-active contract used by Section A scoring.
+        all_ingredients = self._primary_active_ingredients_for_enrichment(product)
 
         # Build ingredient name set for quick lookup
         ingredient_names = set()
@@ -7934,7 +8070,7 @@ class SupplementEnricherV3:
             botanicals_db.get('standardized_botanicals', [])
         )
 
-        active_ingredients = product.get('activeIngredients', [])
+        active_ingredients = self._primary_active_ingredients_for_enrichment(product)
         all_text = self._get_all_product_text(product)
 
         found_botanicals = []
@@ -8429,7 +8565,7 @@ class SupplementEnricherV3:
             if isinstance(canon, str) and isinstance(variants, list)
         }
 
-        active_ingredients = product.get('activeIngredients', [])
+        active_ingredients = self._primary_active_ingredients_for_enrichment(product)
 
         # Solution B: product-name fallback. When activeIngredients is sparse
         # (≤2 entries) and the product name contains an unambiguous biochem
@@ -11719,7 +11855,10 @@ class SupplementEnricherV3:
         clinical_db = self.databases.get('backed_clinical_studies', {})
         studies = clinical_db.get('backed_clinical_studies', [])
 
-        active_ingredients = product.get('activeIngredients', [])
+        active_ingredients = self._primary_active_ingredients_for_enrichment(
+            product,
+            ingredient_quality_data=ingredient_quality_data,
+        )
         matches = []
         product_text = self._get_all_product_text(product)
 
@@ -11727,7 +11866,11 @@ class SupplementEnricherV3:
         if isinstance(ingredient_quality_data, dict):
             quality_rows = [
                 row
-                for row in ingredient_quality_data.get("ingredients", []) or []
+                for row in (
+                    ingredient_quality_data.get("ingredients_scorable")
+                    or ingredient_quality_data.get("ingredients")
+                    or []
+                )
                 if isinstance(row, dict)
             ]
 
@@ -11953,7 +12096,11 @@ class SupplementEnricherV3:
         }
         ingredients_with_markers = []
         if isinstance(ingredient_quality_data, dict):
-            ingredients_with_markers = ingredient_quality_data.get("ingredients", []) or []
+            ingredients_with_markers = (
+                ingredient_quality_data.get("ingredients_scorable")
+                or ingredient_quality_data.get("ingredients")
+                or []
+            )
         for ing in ingredients_with_markers:
             if not isinstance(ing, dict):
                 continue
@@ -14880,17 +15027,22 @@ class SupplementEnricherV3:
         )
 
         iqd = enriched.get("ingredient_quality_data", {}) or {}
-        ingredients = iqd.get("ingredients", [])
-        skipped = iqd.get("ingredients_skipped", [])
-        if not isinstance(ingredients, list):
-            ingredients = []
-        if not isinstance(skipped, list):
+        raw_ingredients = iqd.get("ingredients", [])
+        raw_skipped = iqd.get("ingredients_skipped", [])
+        scorable = iqd.get("ingredients_scorable")
+        if not isinstance(raw_ingredients, list):
+            raw_ingredients = []
+        if not isinstance(raw_skipped, list):
+            raw_skipped = []
+        if isinstance(scorable, list):
+            ingredients = [row for row in scorable if isinstance(row, dict)]
             skipped = []
+        else:
+            ingredients = [row for row in raw_ingredients if isinstance(row, dict)]
+            skipped = [row for row in raw_skipped if isinstance(row, dict)]
 
-        for ingredient in ingredients:
-            if isinstance(ingredient, dict):
-                ingredient["safety_hits"] = []
-        for ingredient in skipped:
+        rows_to_clear = list(raw_ingredients) + list(raw_skipped) + list(ingredients)
+        for ingredient in rows_to_clear:
             if isinstance(ingredient, dict):
                 ingredient["safety_hits"] = []
 
@@ -15250,7 +15402,7 @@ class SupplementEnricherV3:
         - Safety flag generation for over-UL nutrients
         - Full evidence tracking
         """
-        active_ingredients = product.get('activeIngredients', [])
+        active_ingredients = self._primary_active_ingredients_for_enrichment(product)
         # Dual-declaration dedupe: the compound-weight restatement of a bare
         # elemental row must not contribute to UL totals (60+400=460 mg
         # would falsely breach the 350 mg magnesium UL).
@@ -15778,8 +15930,8 @@ class SupplementEnricherV3:
             enriched["supplement_type"] = self._classify_supplement_type(enriched)
 
             enriched["delivery_data"] = self._collect_delivery_data(product)
-            enriched["absorption_data"] = self._collect_absorption_data(product)
-            enriched["formulation_data"] = self._collect_formulation_data(product)
+            enriched["absorption_data"] = self._collect_absorption_data(enriched)
+            enriched["formulation_data"] = self._collect_formulation_data(enriched)
 
             # Section B: Safety & Purity
             # Collect contaminant_data once, pass to compliance to avoid double-collection
@@ -15826,7 +15978,7 @@ class SupplementEnricherV3:
                 servings_min = serving_data["serving_basis"].get("min_servings_per_day")
                 servings_max = serving_data["serving_basis"].get("max_servings_per_day")
                 enriched["rda_ul_data"] = self._collect_rda_ul_data(
-                    product,
+                    enriched,
                     min_servings_per_day=servings_min,
                     max_servings_per_day=servings_max
                 )

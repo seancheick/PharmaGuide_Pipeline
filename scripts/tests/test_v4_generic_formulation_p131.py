@@ -536,6 +536,34 @@ def test_a6_single_ingredient_skipped_for_non_single_supp_type() -> None:
     assert payload["components"]["A6_single_ingredient"] == 0.0
 
 
+def test_a6_single_ingredient_requires_exactly_one_scorable_active() -> None:
+    """D3 + K2 style products may route as single_nutrient, but they are
+    not focused single-active labels and must not earn A6."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        supp_type="single_nutrient",
+        ingredients=[
+            _ingredient(
+                name="Vitamin D3",
+                canonical_id="vitamin_d",
+                bio_score=14,
+                quantity=125,
+                unit="mcg",
+            ),
+            _ingredient(
+                name="Vitamin K2",
+                canonical_id="vitamin_k",
+                bio_score=14,
+                quantity=50,
+                unit="mcg",
+            ),
+        ],
+    )
+    payload = score_formulation(product)
+    assert payload["components"]["A6_single_ingredient"] == 0.0
+
+
 def test_a6_single_ingredient_below_floor_returns_zero() -> None:
     """Below the bio-10 floor (acceptable/weak form) earns nothing."""
     from scoring_v4.modules.generic_formulation import score_formulation
@@ -1514,6 +1542,10 @@ def test_dimension_score_clamps_to_max_30() -> None:
             _ingredient(canonical_id="g", bio_score=15, natural=True),
             _ingredient(canonical_id="h", bio_score=15, natural=True),
             _ingredient(canonical_id="i", bio_score=15, natural=True),
+            _ingredient(name="Amylase", canonical_id="amylase", bio_score=15, natural=True),
+            _ingredient(name="Protease", canonical_id="protease", bio_score=15, natural=True),
+            _ingredient(name="Lipase", canonical_id="lipase", bio_score=15, natural=True),
+            _ingredient(name="Cellulase", canonical_id="cellulase", bio_score=15, natural=True),
         ],
     )
     product["formulation_data"]["standardized_botanicals"] = [

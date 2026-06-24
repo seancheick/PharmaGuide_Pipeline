@@ -1410,6 +1410,255 @@ def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
     assert categories["key_ingredient_tags"] == ["potassium", "magnesium"]
 
 
+def test_export_uses_strict_scoring_rows_not_flattened_blend_children():
+    enriched = make_enriched()
+    enriched["product_name"] = "Vitamin D3 + K2"
+    enriched["supplement_taxonomy"] = {
+        "primary_type": "multi_or_complex",
+        "secondary_type": "",
+    }
+    enriched["probiotic_data"] = {"is_probiotic_product": True}
+    enriched["activeIngredients"] = [
+        {
+            "name": "Vitamin D3",
+            "standardName": "Vitamin D3",
+            "normalized_key": "vitamin_d",
+            "canonical_id": "vitamin_d",
+            "raw_source_text": "Vitamin D3",
+            "raw_source_path": "activeIngredients[0]",
+            "quantity": 125,
+            "unit": "mcg",
+        },
+        {
+            "name": "Vitamin K2",
+            "standardName": "Vitamin K2",
+            "normalized_key": "vitamin_k",
+            "canonical_id": "vitamin_k",
+            "raw_source_text": "Vitamin K2",
+            "raw_source_path": "activeIngredients[1]",
+            "quantity": 50,
+            "unit": "mcg",
+        },
+        {
+            "name": "QPower",
+            "standardName": "Quercetin",
+            "normalized_key": "quercetin",
+            "canonical_id": "quercetin",
+            "raw_source_text": "QPower",
+            "raw_source_path": "activeIngredients[2].child_ingredients[0]",
+            "quantity": 0,
+            "unit": "NP",
+        },
+        {
+            "name": "Rhodiola",
+            "standardName": "Rhodiola",
+            "normalized_key": "rhodiola",
+            "canonical_id": "rhodiola",
+            "raw_source_text": "Rhodiola",
+            "raw_source_path": "activeIngredients[2].child_ingredients[1]",
+            "quantity": 0,
+            "unit": "NP",
+        },
+    ]
+
+    def scoring_row(index, name, canonical_id, quantity, unit):
+        return {
+            "raw_source_text": name,
+            "name": name,
+            "standard_name": name,
+            "canonical_id": canonical_id,
+            "parent_key": canonical_id,
+            "source_section": "active",
+            "raw_source_path": f"activeIngredients[{index}]",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": True,
+            "dose_class": "measured_mass",
+            "role_classification": "active_scorable",
+            "scoreable_identity": True,
+            "mapped_identity": True,
+            "mapped": True,
+            "quantity": quantity,
+            "unit": unit,
+            "category": "vitamins",
+            "bio_score": 14,
+            "natural": False,
+            "score": 14.0,
+            "notes": "",
+            "safety_hits": [],
+        }
+
+    enriched["ingredient_quality_data"] = {
+        "ingredients_scorable": [
+            scoring_row(0, "Vitamin D3", "vitamin_d", 125, "mcg"),
+            scoring_row(1, "Vitamin K2", "vitamin_k", 50, "mcg"),
+        ],
+        "ingredients_recognized_non_scorable": [
+            {
+                "raw_source_text": "QPower",
+                "name": "QPower",
+                "standard_name": "Quercetin",
+                "canonical_id": "quercetin",
+                "raw_source_path": "activeIngredients[2].child_ingredients[0]",
+                "cleaner_row_role": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "role_classification": "recognized_non_scorable",
+                "scoreable_identity": False,
+            },
+            {
+                "raw_source_text": "Rhodiola",
+                "name": "Rhodiola",
+                "standard_name": "Rhodiola",
+                "canonical_id": "rhodiola",
+                "raw_source_path": "activeIngredients[2].child_ingredients[1]",
+                "cleaner_row_role": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "role_classification": "recognized_non_scorable",
+                "scoreable_identity": False,
+            },
+        ],
+        "ingredients_skipped": [
+            {
+                "raw_source_text": "QPower",
+                "name": "QPower",
+                "standard_name": "Quercetin",
+                "canonical_id": "quercetin",
+                "parent_key": "quercetin",
+                "raw_source_path": "activeIngredients[2].child_ingredients[0]",
+                "cleaner_row_role": "nested_display_only",
+                "score_exclusion_reason": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "role_classification": "recognized_non_scorable",
+                "scoreable_identity": False,
+                "mapped_identity": True,
+                "mapped": True,
+                "raw_taxonomy": {"category": "botanical"},
+            },
+            {
+                "raw_source_text": "Rhodiola",
+                "name": "Rhodiola",
+                "standard_name": "Rhodiola",
+                "canonical_id": "rhodiola",
+                "parent_key": "rhodiola",
+                "raw_source_path": "activeIngredients[2].child_ingredients[1]",
+                "cleaner_row_role": "nested_display_only",
+                "score_exclusion_reason": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "role_classification": "recognized_non_scorable",
+                "scoreable_identity": False,
+                "mapped_identity": True,
+                "mapped": True,
+                "raw_taxonomy": {"category": "botanical"},
+            },
+        ],
+        "ingredients": [
+            scoring_row(0, "Vitamin D3", "vitamin_d", 125, "mcg"),
+            scoring_row(1, "Vitamin K2", "vitamin_k", 50, "mcg"),
+        ],
+    }
+
+    blob = build_detail_blob(enriched, make_scored())
+    row = row_as_dict(build_core_row(
+        enriched,
+        make_scored(),
+        "2026-04-10T12:00:00Z",
+        detail_blob=blob,
+    ))
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert [ing["canonical_id"] for ing in blob["ingredients"]] == ["vitamin_d", "vitamin_k"]
+    assert json.loads(row["key_ingredient_tags"]) == ["vitamin_d", "vitamin_k"]
+    assert categories["contains_adaptogens"] == 0
+    assert categories["contains_probiotics"] == 0
+    assert "QPower" not in row["ingredients_text"]
+    assert "Rhodiola" not in row["ingredients_text"]
+
+
+def test_export_empty_strict_primary_contract_does_not_fallback_to_blend_children():
+    enriched = make_enriched()
+    enriched["product_name"] = "Nature Blend"
+    enriched["supplement_taxonomy"] = {
+        "primary_type": "multi_or_complex",
+        "secondary_type": "",
+    }
+    enriched["activeIngredients"] = [
+        {
+            "name": "QPower",
+            "standardName": "Quercetin",
+            "normalized_key": "quercetin",
+            "canonical_id": "quercetin",
+            "raw_source_text": "QPower",
+            "raw_source_path": "activeIngredients[0].child_ingredients[0]",
+            "quantity": 0,
+            "unit": "NP",
+        },
+        {
+            "name": "Rhodiola",
+            "standardName": "Rhodiola",
+            "normalized_key": "rhodiola",
+            "canonical_id": "rhodiola",
+            "raw_source_text": "Rhodiola",
+            "raw_source_path": "activeIngredients[0].child_ingredients[1]",
+            "quantity": 0,
+            "unit": "NP",
+        },
+    ]
+    skipped_rows = [
+        {
+            "raw_source_text": "QPower",
+            "name": "QPower",
+            "standard_name": "Quercetin",
+            "canonical_id": "quercetin",
+            "parent_key": "quercetin",
+            "raw_source_path": "activeIngredients[0].child_ingredients[0]",
+            "cleaner_row_role": "nested_display_only",
+            "score_exclusion_reason": "nested_display_only",
+            "score_eligible_by_cleaner": False,
+            "role_classification": "recognized_non_scorable",
+            "scoreable_identity": False,
+            "mapped_identity": True,
+            "mapped": True,
+            "raw_taxonomy": {"category": "botanical"},
+        },
+        {
+            "raw_source_text": "Rhodiola",
+            "name": "Rhodiola",
+            "standard_name": "Rhodiola",
+            "canonical_id": "rhodiola",
+            "parent_key": "rhodiola",
+            "raw_source_path": "activeIngredients[0].child_ingredients[1]",
+            "cleaner_row_role": "nested_display_only",
+            "score_exclusion_reason": "nested_display_only",
+            "score_eligible_by_cleaner": False,
+            "role_classification": "recognized_non_scorable",
+            "scoreable_identity": False,
+            "mapped_identity": True,
+            "mapped": True,
+            "raw_taxonomy": {"category": "botanical"},
+        },
+    ]
+    enriched["ingredient_quality_data"] = {
+        "ingredients_scorable": [],
+        "ingredients_recognized_non_scorable": skipped_rows,
+        "ingredients_skipped": skipped_rows,
+        "ingredients": [],
+    }
+
+    blob = build_detail_blob(enriched, make_scored())
+    row = row_as_dict(build_core_row(
+        enriched,
+        make_scored(),
+        "2026-04-10T12:00:00Z",
+        detail_blob=blob,
+    ))
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert blob["ingredients"] == []
+    assert json.loads(row["key_ingredient_tags"]) == []
+    assert categories["contains_adaptogens"] == 0
+    assert "QPower" not in row["ingredients_text"]
+    assert "Rhodiola" not in row["ingredients_text"]
+
+
 def test_key_ingredient_tags_use_clean_identity_for_red_yeast_rice_safety_canonical():
     enriched = make_enriched()
     enriched["activeIngredients"] = [

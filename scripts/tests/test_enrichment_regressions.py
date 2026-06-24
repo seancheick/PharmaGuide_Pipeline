@@ -2048,6 +2048,312 @@ class TestSynergyExplainabilityFields:
         assert clusters[0]["sources"][0]["source_type"] == "nih_ods"
 
 
+class TestPrimaryActiveContractForBlendChildren:
+    """Non-scorable disclosed-blend children should not drive active-only enrichment."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def _scoring_row(self, *, index, name, canonical_id, quantity, unit):
+        return {
+            "raw_source_text": name,
+            "name": name,
+            "standard_name": name,
+            "canonical_id": canonical_id,
+            "parent_key": canonical_id,
+            "source_section": "active",
+            "raw_source_path": f"activeIngredients[{index}]",
+            "cleaner_row_role": "active_scorable",
+            "score_eligible_by_cleaner": True,
+            "dose_class": "measured_mass",
+            "role_classification": "active_scorable",
+            "scoreable_identity": True,
+            "mapped_identity": True,
+            "mapped": True,
+            "quantity": quantity,
+            "unit": unit,
+            "bio_score": 14,
+            "natural": False,
+            "score": 14.0,
+            "notes": "",
+            "safety_hits": [],
+        }
+
+    def _product_with_blend_children(self):
+        return {
+            "id": "blend_contract",
+            "fullName": "Vitamin D3 + K2 with Nature's C Blend",
+            "activeIngredients": [
+                {
+                    "name": "Vitamin D3",
+                    "standardName": "Vitamin D3",
+                    "canonical_id": "vitamin_d",
+                    "raw_source_text": "Vitamin D3",
+                    "raw_source_path": "activeIngredients[0]",
+                    "quantity": 125,
+                    "unit": "mcg",
+                },
+                {
+                    "name": "Vitamin K2",
+                    "standardName": "Vitamin K2",
+                    "canonical_id": "vitamin_k",
+                    "raw_source_text": "Vitamin K2",
+                    "raw_source_path": "activeIngredients[1]",
+                    "quantity": 50,
+                    "unit": "mcg",
+                },
+                {
+                    "name": "Rhodiola",
+                    "standardName": "Rhodiola",
+                    "canonical_id": "rhodiola",
+                    "raw_source_text": "Rhodiola",
+                    "raw_source_path": "activeIngredients[2].child_ingredients[0]",
+                    "quantity": 100,
+                    "unit": "mg",
+                },
+                {
+                    "name": "Zinc",
+                    "standardName": "Zinc",
+                    "canonical_id": "zinc",
+                    "raw_source_text": "Zinc",
+                    "raw_source_path": "activeIngredients[2].child_ingredients[1]",
+                    "quantity": 15,
+                    "unit": "mg",
+                },
+            ],
+            "ingredient_quality_data": {
+                "ingredients_scorable": [
+                    self._scoring_row(
+                        index=0,
+                        name="Vitamin D3",
+                        canonical_id="vitamin_d",
+                        quantity=125,
+                        unit="mcg",
+                    ),
+                    self._scoring_row(
+                        index=1,
+                        name="Vitamin K2",
+                        canonical_id="vitamin_k",
+                        quantity=50,
+                        unit="mcg",
+                    ),
+                ],
+                "ingredients_skipped": [
+                    {
+                        "raw_source_text": "Rhodiola",
+                        "name": "Rhodiola",
+                        "standard_name": "Rhodiola",
+                        "canonical_id": "rhodiola",
+                        "parent_key": "rhodiola",
+                        "source_section": "active",
+                        "raw_source_path": "activeIngredients[2].child_ingredients[0]",
+                        "cleaner_row_role": "nested_display_only",
+                        "score_exclusion_reason": "nested_display_only",
+                        "score_eligible_by_cleaner": False,
+                        "dose_class": "missing",
+                        "role_classification": "recognized_non_scorable",
+                        "scoreable_identity": False,
+                        "mapped_identity": True,
+                        "mapped": True,
+                        "quantity": 100,
+                        "unit": "mg",
+                        "raw_taxonomy": {"category": "botanical"},
+                        "bio_score": 10,
+                        "natural": True,
+                        "score": 10.0,
+                    },
+                    {
+                        "raw_source_text": "Zinc",
+                        "name": "Zinc",
+                        "standard_name": "Zinc",
+                        "canonical_id": "zinc",
+                        "parent_key": "zinc",
+                        "source_section": "active",
+                        "raw_source_path": "activeIngredients[2].child_ingredients[1]",
+                        "cleaner_row_role": "nested_display_only",
+                        "score_exclusion_reason": "nested_display_only",
+                        "score_eligible_by_cleaner": False,
+                        "dose_class": "missing",
+                        "role_classification": "recognized_non_scorable",
+                        "scoreable_identity": False,
+                        "mapped_identity": True,
+                        "mapped": True,
+                        "quantity": 15,
+                        "unit": "mg",
+                        "raw_taxonomy": {"category": "botanical"},
+                        "bio_score": 10,
+                        "natural": True,
+                        "score": 10.0,
+                    },
+                ],
+                "ingredients": [
+                    self._scoring_row(
+                        index=0,
+                        name="Vitamin D3",
+                        canonical_id="vitamin_d",
+                        quantity=125,
+                        unit="mcg",
+                    ),
+                    self._scoring_row(
+                        index=1,
+                        name="Vitamin K2",
+                        canonical_id="vitamin_k",
+                        quantity=50,
+                        unit="mcg",
+                    ),
+                ],
+            },
+        }
+
+    def test_synergy_ignores_recognized_blend_children(self, enricher):
+        enricher.databases["synergy_cluster"] = {
+            "synergy_clusters": [
+                {
+                    "id": "vitamin_d_rhodiola",
+                    "standard_name": "Vitamin D + Rhodiola",
+                    "ingredients": ["vitamin d3", "rhodiola"],
+                    "min_effective_doses": {"vitamin d3": 1, "rhodiola": 1},
+                    "evidence_tier": 2,
+                }
+            ]
+        }
+
+        clusters = enricher._collect_synergy_data(self._product_with_blend_children())
+
+        assert clusters == []
+
+    def test_evidence_ignores_recognized_blend_children(self, enricher):
+        product = self._product_with_blend_children()
+        enricher.databases["backed_clinical_studies"] = {
+            "backed_clinical_studies": [
+                {
+                    "id": "VITAMIN_D_STUDY",
+                    "standard_name": "Vitamin D3",
+                    "aliases": ["vitamin d3"],
+                    "evidence_level": "ingredient-human",
+                    "study_type": "rct_single",
+                },
+                {
+                    "id": "RHODIOLA_STUDY",
+                    "standard_name": "Rhodiola",
+                    "aliases": ["rhodiola"],
+                    "evidence_level": "ingredient-human",
+                    "study_type": "rct_single",
+                },
+            ]
+        }
+
+        result = enricher._collect_evidence_data(
+            product,
+            ingredient_quality_data=product["ingredient_quality_data"],
+        )
+        matched_ids = {m.get("id") for m in result.get("clinical_matches", [])}
+
+        assert "VITAMIN_D_STUDY" in matched_ids
+        assert "RHODIOLA_STUDY" not in matched_ids
+
+    def test_standardized_botanicals_ignore_recognized_blend_children(self, enricher):
+        product = self._product_with_blend_children()
+        enricher.databases["standardized_botanicals"] = {
+            "standardized_botanicals": [
+                {
+                    "id": "rhodiola",
+                    "standard_name": "Rhodiola",
+                    "aliases": ["rhodiola"],
+                    "markers": ["rosavins"],
+                    "min_threshold": 3,
+                }
+            ]
+        }
+
+        botanicals = enricher._collect_standardized_botanicals(product)
+
+        assert botanicals == []
+
+    def test_rda_ul_ignores_recognized_blend_children(self, enricher):
+        product = self._product_with_blend_children()
+
+        result = enricher._collect_rda_ul_data(
+            product,
+            min_servings_per_day=1,
+            max_servings_per_day=1,
+        )
+
+        names = {row.get("ingredient") for row in result.get("ingredients_with_rda", [])}
+        assert "Vitamin D3" in names
+        assert "Zinc" not in names
+
+    def test_absorption_pairing_ignores_recognized_blend_children(self, enricher):
+        product = self._product_with_blend_children()
+        product["activeIngredients"].extend([
+            {
+                "name": "BioPerine",
+                "standardName": "Black Pepper",
+                "canonical_id": "piperine",
+                "raw_source_text": "BioPerine",
+                "raw_source_path": "activeIngredients[2].child_ingredients[2]",
+                "quantity": 5,
+                "unit": "mg",
+            },
+            {
+                "name": "Turmeric Extract",
+                "standardName": "Turmeric",
+                "canonical_id": "turmeric",
+                "raw_source_text": "Turmeric Extract",
+                "raw_source_path": "activeIngredients[2].child_ingredients[3]",
+                "quantity": 500,
+                "unit": "mg",
+            },
+        ])
+        product["ingredient_quality_data"]["ingredients_skipped"].extend([
+            {
+                "raw_source_text": "BioPerine",
+                "name": "BioPerine",
+                "standard_name": "Black Pepper",
+                "canonical_id": "piperine",
+                "parent_key": "piperine",
+                "source_section": "active",
+                "raw_source_path": "activeIngredients[2].child_ingredients[2]",
+                "cleaner_row_role": "nested_display_only",
+                "score_exclusion_reason": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "dose_class": "missing",
+                "role_classification": "recognized_non_scorable",
+                "scoreable_identity": False,
+                "mapped_identity": True,
+                "mapped": True,
+                "quantity": 5,
+                "unit": "mg",
+            },
+            {
+                "raw_source_text": "Turmeric Extract",
+                "name": "Turmeric Extract",
+                "standard_name": "Turmeric",
+                "canonical_id": "turmeric",
+                "parent_key": "turmeric",
+                "source_section": "active",
+                "raw_source_path": "activeIngredients[2].child_ingredients[3]",
+                "cleaner_row_role": "nested_display_only",
+                "score_exclusion_reason": "nested_display_only",
+                "score_eligible_by_cleaner": False,
+                "dose_class": "missing",
+                "role_classification": "recognized_non_scorable",
+                "scoreable_identity": False,
+                "mapped_identity": True,
+                "mapped": True,
+                "quantity": 500,
+                "unit": "mg",
+            },
+        ])
+
+        result = enricher._collect_absorption_data(product)
+
+        assert result["qualifies_for_bonus"] is False
+        enhancer_ids = {row.get("id") for row in result.get("enhancers", [])}
+        assert "ENHANCER_BLACK_PEPPER" not in enhancer_ids
+
+
 class TestDescriptorLeakageRegression:
     """Regression checks for descriptor/header leakage rows."""
 

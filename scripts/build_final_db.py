@@ -63,6 +63,7 @@ from identity.interaction import (
     interaction_tags_from_text,
     normalize_catalog_interaction_tag,
 )
+from scoring_input_contract import get_scoring_ingredients
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
@@ -1193,6 +1194,136 @@ def matching_allergen_hits(patterns: List[Dict], *ingredient_terms: Any) -> List
                 seen.add(key)
                 matches.append(hit)
     return matches
+
+
+def _active_export_contract(enriched: Dict) -> Dict[str, Any]:
+    """Return the strict scoring rows that should drive app-facing active identity.
+
+    Product-level evidence rows can legitimately support scoring, but they are
+    not label ingredients and must not render as active ingredient rows or key
+    search tags.
+    """
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    contract_available = isinstance(iqd.get("ingredients_scorable"), list)
+    try:
+        result = get_scoring_ingredients(enriched, strict=True, allow_legacy_fallback=False)
+    except Exception as exc:  # pragma: no cover - defensive export fallback.
+        logger.debug("strict scoring contract unavailable for export: %s", exc)
+        return {"available": False, "source_paths": set(), "terms": set(), "canonical_ids": set()}
+
+    rows = [
+        row for row in result.rows
+        if (
+            safe_str(row.get("scoring_input_kind")) != "product_level_evidence"
+            and not _is_display_only_blend_scoring_row(row)
+        )
+    ]
+    source_paths: set[str] = set()
+    terms: set[str] = set()
+    canonical_ids: set[str] = set()
+    for row in rows:
+        path = safe_str(row.get("raw_source_path") or row.get("source_path"))
+        if path:
+            source_paths.add(path)
+        for key in (
+            "raw_source_text",
+            "name",
+            "standard_name",
+            "standardName",
+            "matched_name",
+            "display_label",
+        ):
+            value = safe_str(row.get(key))
+            if value:
+                terms.add(value.casefold())
+        canonical_id = normalize_catalog_interaction_tag(
+            row.get("canonical_id") or row.get("parent_key") or row.get("normalized_key")
+        )
+        if canonical_id:
+            canonical_ids.add(canonical_id)
+
+    return {
+        "available": contract_available,
+        "source_paths": source_paths,
+        "terms": terms,
+        "canonical_ids": canonical_ids,
+    }
+
+
+def _is_display_only_blend_scoring_row(row: Dict[str, Any]) -> bool:
+    if safe_str(row.get("scoring_input_kind")) != "recovered_active_identity":
+        return False
+    path = safe_str(row.get("raw_source_path") or row.get("source_path")).lower()
+    exclusion = safe_str(row.get("score_exclusion_reason")).lower()
+    return (
+        exclusion == "nested_display_only"
+        or "nestedrows" in path
+        or "child_ingredients" in path
+    )
+
+
+def _active_row_has_explicit_safety_export_signal(
+    ing: Dict[str, Any],
+    *,
+    harmful_lookup: Optional[Dict[str, Dict]] = None,
+    contaminant_lookup: Optional[Dict[str, List[Dict]]] = None,
+    allergen_patterns: Optional[List[Dict]] = None,
+) -> bool:
+    if ing.get("is_safety_concern") or ing.get("is_banned") or safe_list(ing.get("safety_flags")):
+        return True
+    canonical_id = safe_str(ing.get("canonical_id") or ing.get("parent_key") or ing.get("normalized_key"))
+    if canonical_id.upper().startswith(("BANNED_", "RECALLED_", "HIGH_RISK_", "WATCHLIST_")):
+        return True
+
+    raw = safe_str(ing.get("raw_source_text"))
+    name = safe_str(ing.get("name") or ing.get("standardName") or ing.get("standard_name"))
+    standard_name = safe_str(ing.get("standardName") or ing.get("standard_name"))
+    if contaminant_lookup and matching_contaminant_hits(contaminant_lookup, raw, name, standard_name):
+        return True
+    if allergen_patterns and matching_allergen_hits(allergen_patterns, raw, name, standard_name):
+        return True
+    if harmful_lookup:
+        for term in collect_match_terms(raw, name, standard_name, canonical_id):
+            if harmful_lookup.get(term):
+                return True
+    return False
+
+
+def _active_row_allowed_for_primary_export(
+    ing: Dict[str, Any],
+    contract: Dict[str, Any],
+    *,
+    harmful_lookup: Optional[Dict[str, Dict]] = None,
+    contaminant_lookup: Optional[Dict[str, List[Dict]]] = None,
+    allergen_patterns: Optional[List[Dict]] = None,
+) -> bool:
+    if not contract.get("available"):
+        return True
+    path = safe_str(ing.get("raw_source_path") or ing.get("source_path"))
+    if path and path in contract.get("source_paths", set()):
+        return True
+    for key in (
+        "raw_source_text",
+        "name",
+        "standardName",
+        "standard_name",
+        "matched_name",
+        "display_label",
+    ):
+        value = safe_str(ing.get(key))
+        if value and value.casefold() in contract.get("terms", set()):
+            return True
+    canonical_id = normalize_catalog_interaction_tag(
+        ing.get("canonical_id") or ing.get("parent_key") or ing.get("normalized_key")
+    )
+    if canonical_id and canonical_id in contract.get("canonical_ids", set()):
+        return True
+    return _active_row_has_explicit_safety_export_signal(
+        ing,
+        harmful_lookup=harmful_lookup,
+        contaminant_lookup=contaminant_lookup,
+        allergen_patterns=allergen_patterns,
+    )
 
 
 EXPORT_REQUIRED_IQD_FIELDS = {
@@ -3643,6 +3774,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     harmful_lookup = build_harmful_lookup(enriched)
     contaminant_lookup = build_contaminant_lookup(enriched)
     allergen_patterns = build_allergen_patterns(enriched)
+    active_export_contract = _active_export_contract(enriched)
     iqm_index = load_iqm_reference_index()
 
     # Dosage normalization
@@ -3701,6 +3833,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     ingredients = []
     for ing in safe_list(enriched.get("activeIngredients")):
         if not isinstance(ing, dict):
+            continue
+        if not _active_row_allowed_for_primary_export(
+            ing,
+            active_export_contract,
+            harmful_lookup=harmful_lookup,
+            contaminant_lookup=contaminant_lookup,
+            allergen_patterns=allergen_patterns,
+        ):
             continue
         raw = safe_str(ing.get("raw_source_text"))
         name = safe_str(ing.get("name"), raw)
@@ -5316,6 +5456,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     ingredient_names = set()
     key_tags = []
     seen_key_tags = set()
+    active_export_contract = _active_export_contract(enriched)
 
     def normalize_interaction_tag(value: Any) -> str:
         return normalize_catalog_interaction_tag(value) or ""
@@ -5340,17 +5481,20 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     )
 
     for ing in ingredients:
-        if isinstance(ing, dict):
-            name = safe_str(ing.get("standard_name") or ing.get("name")).lower().replace(" ", "_")
-            if name:
-                ingredient_names.add(name)
-            add_interaction_tag(ing.get("canonical_id") or ing.get("parent_key"))
-            add_interaction_tags_from_text(
-                ing.get("name"),
-                ing.get("standard_name"),
-                ing.get("raw_source_text"),
-                ing.get("normalized_key"),
-            )
+        if not isinstance(ing, dict):
+            continue
+        if not _active_row_allowed_for_primary_export(ing, active_export_contract):
+            continue
+        name = safe_str(ing.get("standard_name") or ing.get("name")).lower().replace(" ", "_")
+        if name:
+            ingredient_names.add(name)
+        add_interaction_tag(ing.get("canonical_id") or ing.get("parent_key"))
+        add_interaction_tags_from_text(
+            ing.get("name"),
+            ing.get("standard_name"),
+            ing.get("raw_source_text"),
+            ing.get("normalized_key"),
+        )
 
     # Some safety/resolver canonicals live only on activeIngredients when the
     # active is recognized but not IQM-scorable (for example CBD, red yeast
@@ -5359,6 +5503,8 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     # them into the core carrier as well.
     for ing in safe_list(enriched.get("activeIngredients")):
         if not isinstance(ing, dict):
+            continue
+        if not _active_row_allowed_for_primary_export(ing, active_export_contract):
             continue
         name = safe_str(ing.get("standardName") or ing.get("name")).lower().replace(" ", "_")
         if name:
@@ -5408,8 +5554,13 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
     # Boolean flags
     contains_omega3 = omega3_audit["contains_omega3"]
-    contains_probiotics = primary_type == "probiotic" or bool(
-        safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product")
+    contains_probiotics = (
+        primary_type == "probiotic"
+        or any("probiotic" in name or "bacillus" in name or "lactobacillus" in name for name in ingredient_names)
+        or (
+            not active_export_contract.get("available")
+            and bool(safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product"))
+        )
     )
     contains_collagen = any(name in ingredient_names for name in ["collagen", "collagen_peptides"])
     contains_adaptogens = bool(ingredient_names & adaptogens)
@@ -6096,25 +6247,32 @@ def build_core_row(
     # ingredient. Use a set to dedup, sort for deterministic builds.
     ing_tokens: set[str] = set()
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    active_export_contract = _active_export_contract(enriched)
     iqd_search_rows = safe_list(iqd.get("ingredients_scorable")) + safe_list(iqd.get("ingredients_recognized_non_scorable"))
     if not iqd_search_rows:
         iqd_search_rows = safe_list(iqd.get("ingredients"))
     for ing in iqd_search_rows:
-        if isinstance(ing, dict):
-            for k in ("standard_name", "matched_name", "name", "raw_source_text",
-                      "canonical_id", "display_label"):
-                v = ing.get(k)
-                if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
-                    ing_tokens.add(v.strip())
+        if not isinstance(ing, dict):
+            continue
+        if not _active_row_allowed_for_primary_export(ing, active_export_contract):
+            continue
+        for k in ("standard_name", "matched_name", "name", "raw_source_text",
+                  "canonical_id", "display_label"):
+            v = ing.get(k)
+            if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
+                ing_tokens.add(v.strip())
     # Active ingredients can be recognized by the resolver yet absent from IQM
     # scoring rows (banned/not-lawful actives, non-scorable botanical source
     # identities, etc.). FTS must still expose those names and canonicals.
     for ing in safe_list(enriched.get("activeIngredients")):
-        if isinstance(ing, dict):
-            for k in ("standardName", "name", "raw_source_text", "canonical_id", "normalized_key"):
-                v = ing.get(k)
-                if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
-                    ing_tokens.add(v.strip())
+        if not isinstance(ing, dict):
+            continue
+        if not _active_row_allowed_for_primary_export(ing, active_export_contract):
+            continue
+        for k in ("standardName", "name", "raw_source_text", "canonical_id", "normalized_key"):
+            v = ing.get(k)
+            if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
+                ing_tokens.add(v.strip())
     # Inactives — pull from canonical inactiveIngredients list (label-fidelity)
     for ing in safe_list(enriched.get("inactiveIngredients")):
         if isinstance(ing, dict):

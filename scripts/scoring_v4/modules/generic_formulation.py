@@ -391,7 +391,7 @@ def _score_single_ingredient_efficiency(
     # Proprietary-blend containers are not transparent singles — keep them out
     # of the focus bonus even when their parent fills the A1 slot (v3 parity).
     scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
-    if not scorable:
+    if len(scorable) != 1:
         return 0.0
     if effective_quality is None or effective_quality < A6_TIER_FLOOR_BIO:
         return 0.0

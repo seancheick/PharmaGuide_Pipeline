@@ -137,6 +137,46 @@ class TestInteractionProfile:
         assert profile["ingredient_alerts"]
         assert "anticoagulants" in profile["drug_class_summary"]
 
+    def test_recognized_blend_children_do_not_emit_interaction_alerts(self, enricher):
+        enriched = {
+            "ingredient_quality_data": {
+                "ingredients": [
+                    {
+                        "name": "Biotin",
+                        "raw_source_text": "Biotin",
+                        "standard_name": "Biotin",
+                        "canonical_id": "biotin",
+                    },
+                ],
+                "ingredients_scorable": [
+                    {
+                        "name": "Biotin",
+                        "raw_source_text": "Biotin",
+                        "standard_name": "Biotin",
+                        "canonical_id": "biotin",
+                    },
+                ],
+                "ingredients_skipped": [
+                    {
+                        "name": "Vitamin K2",
+                        "raw_source_text": "Vitamin K2",
+                        "standard_name": "Vitamin K",
+                        "canonical_id": "vitamin_k",
+                        "form_id": "menaquinone_7_mk7",
+                        "skip_reason": "recognized_non_scorable",
+                        "is_proprietary_blend": True,
+                    },
+                ],
+            }
+        }
+
+        profile = enricher._collect_interaction_profile(enriched)
+
+        assert profile["ingredient_alerts"] == []
+        assert "anticoagulants" not in profile["drug_class_summary"]
+        skipped = enriched["ingredient_quality_data"]["ingredients_skipped"][0]
+        assert skipped["safety_hits"] == []
+
     def test_non_iqm_sources_are_supported(self, enricher):
         enriched = {
             "ingredient_quality_data": {
