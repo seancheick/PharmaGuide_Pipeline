@@ -2539,6 +2539,11 @@ class SupplementScorer:
         # critical severity still fire for actives (genuine safety concern
         # overrides section context — e.g., chronic senna risk).
         seen_ids: Dict[str, float] = {}
+        # Per-additive applied severity tier (post-exemption), keyed by additive id.
+        # build_final_db reads this to color the 'Other ingredients' dot by the
+        # penalty B1 ACTUALLY applied (display_tone) rather than file severity —
+        # an exempted/unmatched additive is absent here, so its dot reads green.
+        applied_tier: Dict[str, str] = {}
         for item in additives:
             source = item.get("source_section", "unknown")
             sev_text = norm_text(item.get("severity_level"))
@@ -2546,8 +2551,12 @@ class SupplementScorer:
                 continue  # suppress — IQM quality score is the correct signal
             aid = item.get("additive_id") or item.get("id") or f"_anon_{id(item)}"
             sev = risk_map.get(sev_text, 0.0)
+            if sev > seen_ids.get(aid, 0.0):
+                applied_tier[aid] = sev_text
             seen_ids[aid] = max(seen_ids.get(aid, 0.0), sev)
         named_penalty = sum(seen_ids.values())
+        if isinstance(product, dict):
+            product["_inactive_b1_applied_tier"] = applied_tier
         b1_cap = as_float(b1_cfg.get("cap"), 8.0)
 
         # --- Dietary sugar level penalty (layered on top of named-sweetener penalty) ---
@@ -5193,6 +5202,9 @@ class SupplementScorer:
             "not_scorable_reason": not_scorable_reason,
             "evaluation_stage": "safety" if verdict in {"BLOCKED", "UNSAFE"} else "scoring",
             "breakdown": breakdown,
+            # Per-additive B1 applied-penalty tier (post-exemption) → build_final_db
+            # colors the 'Other ingredients' dot (display_tone) by penalty applied.
+            "_inactive_b1_applied_tier": product.get("_inactive_b1_applied_tier") or {},
             "flags": sorted(set(flags)),
             "supp_type": supp_type,
             "primary_type": product.get("primary_type") or product.get("supplement_taxonomy", {}).get("primary_type"),

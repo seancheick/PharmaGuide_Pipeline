@@ -1083,6 +1083,36 @@ def _safety_flags_from_contract(contract: Dict[str, Any]) -> List[Dict[str, Any]
     }]
 
 
+def _inactive_display_tone(
+    matched_source: Optional[str],
+    matched_rule_id: Optional[str],
+    b1_applied_tier: Dict[str, str],
+) -> str:
+    """Penalty-aware dot tone for an 'Other ingredients' row.
+
+    Reflects the harmful-additive penalty B1 ACTUALLY applied (post-exemption),
+    NOT the additive's file severity — the two diverge (a capsule shell resolves
+    to MCC for display but is never penalized → green, while disclosed
+    maltodextrin costs 0.5 → light orange).
+
+    ``b1_applied_tier`` is the scorer's per-additive applied tier keyed by
+    additive id (== ``matched_rule_id`` for harmful rows); absence means B1 added
+    0 points. banned_recalled rows floor at red regardless: B0 (not B1) owns
+    their penalty, and green must mean "no penalty AND no safety/regulatory
+    concern" (Codex caveat). Tones: green < light_orange < dark_orange < red.
+    """
+    if safe_str(matched_source) == "banned_recalled":
+        return "red"
+    tier = b1_applied_tier.get(safe_str(matched_rule_id) or "")
+    if tier in ("high", "critical"):
+        return "red"
+    if tier == "moderate":
+        return "dark_orange"
+    if tier == "low":
+        return "light_orange"
+    return "green"
+
+
 def iter_match_terms(*values: Any) -> list[str]:
     ordered: list[str] = []
     seen: set[str] = set()
@@ -3858,6 +3888,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # the full architectural rationale.
     inactive_resolver = _get_shared_inactive_resolver()
     inactive = []
+    # Per-additive B1 applied-penalty tier (post-exemption) stashed by the scorer.
+    # Drives display_tone so the dot reflects the penalty actually applied.
+    # Emit display_tone ONLY when the scorer stash is present: a build over stale
+    # scored output (no stash) would otherwise mis-green real additives (e.g.
+    # titanium dioxide). Absent stash → omit display_tone so Flutter falls back to
+    # severity_status (safe, prior behavior).
+    _has_b1_tier = isinstance(scored, dict) and "_inactive_b1_applied_tier" in scored
+    _b1_applied_tier = scored.get("_inactive_b1_applied_tier") if _has_b1_tier else {}
+    if not isinstance(_b1_applied_tier, dict):
+        _b1_applied_tier = {}
     # Sprint E1.2.4 reconciliation (2026-05-14):
     # Count entries that were intentionally dropped here via the Phase 4a
     # label-descriptor / active-only filter. The downstream validator
@@ -3948,6 +3988,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "resolved_display_label": resolved_display_label,
             "display_role_label": res.display_role_label,
             "severity_status": res.severity_status,
+            # Penalty-aware dot tone (green/light_orange/dark_orange/red): reflects
+            # the B1 penalty actually applied, not file severity. Flutter renders
+            # this; severity_status is kept for the inactive-safety CI audit.
+            "display_tone": (
+                _inactive_display_tone(
+                    res.matched_source, res.matched_rule_id, _b1_applied_tier
+                )
+                if _has_b1_tier
+                else None
+            ),
             "is_safety_concern": res.is_safety_concern,
             "label_row_disposition": label_row_disposition,
             "is_label_descriptor": res.is_label_descriptor,
