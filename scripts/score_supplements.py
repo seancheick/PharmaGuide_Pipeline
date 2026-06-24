@@ -1880,7 +1880,11 @@ class SupplementScorer:
                 continue
             candidates.append(ing)
 
-        if not candidates:
+        # A6 is "single-nutrient premium form" — it must require EXACTLY one
+        # dosed standalone active, not merely "at least one". A D3+K2 product (2
+        # candidates) or a 1-active-plus-disclosed-blend product must not earn it.
+        # Mirrors the v4 guard in scoring_v4/modules/generic_formulation.py.
+        if len(candidates) != 1:
             return 0.0
 
         ing = candidates[0]
