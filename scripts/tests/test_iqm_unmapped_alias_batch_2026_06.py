@@ -65,25 +65,52 @@ def test_unmapped_label_maps_to_verified_iqm_parent(enricher, label, expected):
     )
 
 
+# REAL cleaned forms[] captured from the corpus (output_<brand>/cleaned/*.json),
+# NOT a hand-faked bare {"name": "extract"} token. The cleaner emits the
+# standardization marker (Forskolin), adjective qualifiers (extract+standardized),
+# or the botanical genus (Amorphophallus konjac) — none is a literal bare
+# "extract" — so these are the ACTUAL inputs the clean→enrich seam sees. A
+# low-level _match_quality_map(label, label, iqm) probe (no cleaned_forms) cannot
+# exercise this boundary; an earlier fictional bare-"extract" test gave false green.
 @pytest.mark.parametrize(
-    "label,expected",
+    "label,cleaned_forms,expected",
     [
-        ("LuraLean Propolmannan (Amorphophallus konjac K. Koch, ssp. Amorphophallus japonica) fiber extract", "fiber"),
-        ("ForsLean (Coleus forskohlii) root extract", "forskolin"),
-        ("Boswellia serrata AKBA standardized extract (wood) resin", "boswellia"),
+        (
+            "ForsLean (Coleus forskohlii) root extract",
+            [{"name": "Forskolin", "ingredientId": 121474, "order": 1,
+              "prefix": "standardized to ", "percent": 20,
+              "category": "non-nutrient/non-botanical",
+              "ingredientGroup": "Forskolin", "uniiCode": None}],
+            "forskolin",
+        ),
+        (
+            "Boswellia serrata AKBA standardized extract (wood) resin",
+            [{"name": "extract", "source": "name_extraction"},
+             {"name": "standardized", "source": "name_extraction"}],
+            "boswellia",
+        ),
+        (
+            "LuraLean Propolmannan (Amorphophallus konjac K. Koch, ssp. Amorphophallus japonica) fiber extract",
+            [{"name": "Amorphophallus konjac", "ingredientId": 150162, "order": 1,
+              "prefix": None, "percent": None, "category": "botanical",
+              "ingredientGroup": "Konjac", "uniiCode": None},
+             {"name": "ssp. Amorphophallus japonica", "ingredientId": 150163, "order": 2,
+              "prefix": None, "percent": None, "category": "botanical",
+              "ingredientGroup": "Konjac", "uniiCode": None}],
+            "fiber",
+        ),
     ],
 )
-def test_generic_extract_form_does_not_block_verified_iqm_alias(enricher, label, expected):
-    """Cleaner-parsed bare ``extract`` is a generic descriptor, not failed form evidence."""
+def test_branded_extract_labels_resolve_through_real_seam(enricher, label, cleaned_forms, expected):
+    """Branded extract labels reach the verified IQM parent with their REAL
+    cleaned forms[], so the clean→enrich seam (not just label text) is exercised.
+    The Boswellia case is the guard for the extract+standardized adjective-qualifier
+    exemption; Forskolin/konjac exercise marker- and botanical-form resolution.
+    """
     iqm = enricher.databases["ingredient_quality_map"]
-    m = enricher._match_quality_map(
-        label,
-        label,
-        iqm,
-        cleaned_forms=[{"name": "extract", "prefix": None, "category": None, "ingredientGroup": None}],
-    )
+    m = enricher._match_quality_map(label, label, iqm, cleaned_forms=cleaned_forms)
     assert m is not None and m.get("canonical_id") == expected, (
-        f"{label!r} should still map through the clean→enrich seam; got {m}"
+        f"{label!r} should resolve to {expected!r} through the real seam; got {m}"
     )
     assert m.get("match_status") != "FORM_UNMAPPED"
 
