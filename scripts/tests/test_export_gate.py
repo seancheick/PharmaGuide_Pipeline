@@ -835,7 +835,11 @@ class TestScoreBonusPenaltyLists:
 
     def test_bonus_list_includes_purity_testing_when_scored(self):
         s = _base_scored()
-        s["breakdown"]["B"]["B4a"] = 5.0
+        # v4 cutover: third-party purity bonus is sourced from the v4
+        # verification_bonus component, not the v3 B4a section sub-score.
+        s["_v4_module_breakdown"] = {
+            "verification_bonus": {"components": {"B4a_verified_certifications": 5.0}}
+        }
         blob = build_detail_blob(_base_enriched(), s)
         bonus_ids = {b["id"] for b in blob["score_bonuses"]}
         assert "B4a" in bonus_ids

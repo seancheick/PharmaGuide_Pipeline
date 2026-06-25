@@ -96,6 +96,9 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["_v4_suppressed_reason"] = v4.get("quality_score_suppressed_reason")
     scored["_v4_raw_score_100"] = v4.get("raw_score_v4_100")
     scored["_v4_module"] = v4.get("v4_module")
+    # Full module sub-breakdown (dimensions.*.penalties / verification_bonus.components)
+    # so derive_v4_tradeoffs can re-source the B-code penalties from v4, not v3.
+    scored["_v4_module_breakdown"] = breakdown.get("module") or None
     scored["_v4_confidence"] = v4.get("v4_confidence")
     scored["_v4_confidence_detail"] = breakdown.get("confidence") or None
     scored["_v4_quality_version"] = v4.get("quality_score_version")

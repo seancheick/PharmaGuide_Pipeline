@@ -43,10 +43,10 @@ def _base_enriched() -> dict:
     }
 
 
-def _base_scored(section_c: float = 0.0, score_80: float = 40.0, verdict: str = "SAFE") -> dict:
+def _base_scored(section_c: float = 0.0, score_100: float = 50.0, verdict: str = "SAFE") -> dict:
     return {
         "section_scores": {"C_evidence_research": {"score": section_c}},
-        "score_80": score_80,
+        "score_100_equivalent": score_100,
         "verdict": verdict,
     }
 
@@ -135,7 +135,7 @@ def test_no_caution_signal_message_on_clean_products() -> None:
 def test_positive_never_contains_deny_list_tokens() -> None:
     """Run through the branches that can assign positive and assert none
     carries a deny-list token. Covers: trusted-manufacturer, strong-
-    evidence, score-60+, default fallback."""
+    evidence, score-75+, default fallback."""
     # Trusted + full disclosure branch
     e1 = _base_enriched()
     e1["is_trusted_manufacturer"] = True
@@ -145,8 +145,8 @@ def test_positive_never_contains_deny_list_tokens() -> None:
     # Strong evidence branch
     dh2 = build_decision_highlights(_base_enriched(), _base_scored(section_c=15.0), None)
 
-    # Score >= 60 branch
-    dh3 = build_decision_highlights(_base_enriched(), _base_scored(score_80=65.0), None)
+    # Score >= 75 branch (V4 /100)
+    dh3 = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0), None)
 
     # Default branch
     dh4 = build_decision_highlights(_base_enriched(), _base_scored(), None)
@@ -157,6 +157,15 @@ def test_positive_never_contains_deny_list_tokens() -> None:
         low = dh["positive"].lower()
         for token in deny:
             assert token not in low, f"positive leaks {token!r}: {dh['positive']!r}"
+
+
+def test_positive_strong_quality_uses_v4_score_100() -> None:
+    """The 'strong overall quality' positive is gated on the V4 /100 score
+    (score_100_equivalent >= 75), not the retired V3 score_80."""
+    dh = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0), None)
+    assert dh["positive"] == "Strong overall quality profile."
+    dh_low = build_decision_highlights(_base_enriched(), _base_scored(score_100=70.0), None)
+    assert "closer look" in dh_low["positive"].lower()
 
 
 # ---------------------------------------------------------------------------

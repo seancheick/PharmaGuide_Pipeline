@@ -1,8 +1,12 @@
-"""Tests for CAERS adverse event signal ingestion and scoring integration.
+"""Tests for CAERS adverse event signal ingestion (ingest_caers.py).
 
-Covers:
-- ingest_caers.py: ingredient extraction, signal aggregation, output schema
-- score_supplements.py: B8 CAERS penalty computation, config gating, cap enforcement
+Covers ingredient extraction, signal aggregation, and output schema for the
+analytics ingestion pipeline (the dashboard CAERS-audit page consumes it).
+
+The B8 CAERS scoring penalty was retired 2026-06-24 — it had been disabled in
+production since 2026-04-30 (raw report counts are confounded by exposure
+base-rate; genuinely risky ingredients are covered by B0/B1). Only the
+analytics pipeline remains.
 """
 
 import json
@@ -192,146 +196,3 @@ class TestCAERSOutputSchema:
         for sig in signals_data["signals"].values():
             assert sig["signal_strength"] != "minimal"
             assert sig["serious_reports"] >= SIGNAL_WEAK
-
-
-# -------------------------------------------------------------------------
-# score_supplements.py B8 CAERS penalty tests
-# -------------------------------------------------------------------------
-
-class TestB8CAERSScoring:
-    @pytest.fixture
-    def scorer(self):
-        from score_supplements import SupplementScorer
-        return SupplementScorer()
-
-    @pytest.fixture
-    def b_cfg(self, scorer):
-        """Section B config dict — needed for direct _compute_caers_penalty calls.
-
-        B8 is disabled by default in production config (2026-04-30: raw CAERS
-        counts are confounded by exposure base-rate). For unit tests of the
-        penalty-math function itself we override enabled=True locally AND
-        force-load the signals data (init-time skipped it because of the gate)
-        so the scoring logic stays under test.
-        """
-        import copy
-        import json
-        from pathlib import Path
-        cfg = copy.deepcopy(scorer.config.get("section_B_safety_purity", {}))
-        cfg.setdefault("B8_caers_adverse_events", {})["enabled"] = True
-        if not scorer._caers_signals:
-            data_file = Path(__file__).parent.parent / "data" / "caers_adverse_event_signals.json"
-            with open(data_file, "r", encoding="utf-8") as f:
-                scorer._caers_signals = json.load(f).get("signals", {})
-        return cfg
-
-    def _make_product(self, ingredient_ids):
-        return {
-            "ingredients": [
-                {"canonical_id": cid} for cid in ingredient_ids
-            ],
-        }
-
-    def test_no_ingredients_no_penalty(self, scorer, b_cfg):
-        product = {"ingredients": []}
-        flags = []
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty == 0.0
-        assert evidence == []
-
-    def test_unknown_ingredient_no_penalty(self, scorer, b_cfg):
-        product = self._make_product(["completely_unknown_ingredient_xyz"])
-        flags = []
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty == 0.0
-
-    def test_strong_signal_penalty(self, scorer, b_cfg):
-        # Kratom has a strong CAERS signal
-        product = self._make_product(["kratom"])
-        flags = []
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty == 4.0
-        assert len(evidence) == 1
-        assert evidence[0]["signal_strength"] == "strong"
-        assert "CAERS_SIGNAL_kratom" in flags
-
-    def test_moderate_signal_penalty(self, scorer, b_cfg):
-        # Find a moderate signal ingredient from loaded data
-        moderate_ids = [
-            cid for cid, sig in scorer._caers_signals.items()
-            if sig["signal_strength"] == "moderate"
-        ]
-        if not moderate_ids:
-            pytest.skip("No moderate CAERS signals in data")
-        product = self._make_product([moderate_ids[0]])
-        flags = []
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty == 2.0
-
-    def test_weak_signal_penalty(self, scorer, b_cfg):
-        weak_ids = [
-            cid for cid, sig in scorer._caers_signals.items()
-            if sig["signal_strength"] == "weak"
-        ]
-        if not weak_ids:
-            pytest.skip("No weak CAERS signals in data")
-        product = self._make_product([weak_ids[0]])
-        flags = []
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty == 1.0
-
-    def test_cap_enforcement(self, scorer, b_cfg):
-        # Stack multiple strong signals — should cap at 5.0
-        strong_ids = [
-            cid for cid, sig in scorer._caers_signals.items()
-            if sig["signal_strength"] == "strong"
-        ][:5]
-        if len(strong_ids) < 2:
-            pytest.skip("Need at least 2 strong signals to test cap")
-        product = self._make_product(strong_ids)
-        flags = []
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty <= 5.0
-
-    def test_penalty_appears_in_section_b(self, scorer):
-        """B8 evidence keys must always be present in Section B output, even
-        when disabled — Flutter contract relies on the key existing."""
-        product = self._make_product(["kratom"])
-        product["supplement_type"] = {"category": "herbs"}
-        flags = []
-        section_b = scorer._compute_safety_purity_score(product, "herbs", 0.0, flags)
-        assert "B8_penalty" in section_b
-        assert "B8_caers_evidence" in section_b
-
-    def test_b8_disabled_by_default_no_penalty(self, scorer):
-        """B8 is disabled in production config (2026-04-30): kratom should
-        produce zero B8 penalty via the full Section B path. Genuine kratom
-        risk is enforced by B0 banned_recalled, not B8."""
-        product = self._make_product(["kratom"])
-        product["supplement_type"] = {"category": "herbs"}
-        flags = []
-        section_b = scorer._compute_safety_purity_score(product, "herbs", 0.0, flags)
-        assert section_b["B8_penalty"] == 0.0
-        assert section_b["B8_caers_evidence"] == []
-
-    def test_penalty_included_in_total_penalties(self, scorer, b_cfg):
-        """When B8 is enabled (via b_cfg override), its penalty contributes
-        to the penalties total — function-level invariant, not config state."""
-        product = self._make_product(["kratom"])
-        flags = []
-        b8_pen, _ = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert b8_pen == 4.0  # strong signal
-
-    def test_disabled_config_no_penalty(self):
-        """When B8 is disabled in config, no penalty should apply."""
-        from score_supplements import SupplementScorer
-        scorer = SupplementScorer()
-        # Temporarily disable
-        original = scorer._caers_signals
-        scorer._caers_signals = {}
-        product = {"ingredients": [{"canonical_id": "kratom"}]}
-        flags = []
-        b_cfg = scorer.config.get("section_B_safety_purity", {})
-        penalty, evidence = scorer._compute_caers_penalty(product, flags, b_cfg)
-        assert penalty == 0.0
-        scorer._caers_signals = original

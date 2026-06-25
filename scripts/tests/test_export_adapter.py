@@ -126,6 +126,15 @@ def test_scored_overlays_v4_headline(monkeypatch):
     assert json.loads(out["_v4_config_fingerprint"])["quality_score"] == "1.0.0"
 
 
+def test_module_breakdown_is_stashed_for_tradeoffs(monkeypatch):
+    """derive_v4_tradeoffs sources the B-code penalties from
+    v4_breakdown.module.dimensions.*.penalties — the overlay must stash that
+    sub-tree under _v4_module_breakdown (the module *name* lives in _v4_module)."""
+    _patch(monkeypatch, _canned_v4(status="scored"))
+    out = overlay_v4_scored({"dsld_id": "1"}, _v3_scored())
+    assert out["_v4_module_breakdown"] == {"dimensions": {"formulation": {"score": 20}}}
+
+
 def test_suppressed_safety_nulls_score_but_is_not_quarantined(monkeypatch):
     _patch(
         monkeypatch,

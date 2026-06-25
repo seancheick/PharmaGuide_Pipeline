@@ -2232,6 +2232,177 @@ _DECISION_HIGHLIGHTS_DENY_LIST_RE = re.compile(
 )
 
 
+def derive_v4_tradeoffs(
+    scored: Dict[str, Any], enriched: Dict[str, Any]
+) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    """Build (score_bonuses, score_penalties) for the Tradeoffs section from the
+    v4 contract + enriched safety data, with ZERO v3 section-score dependency.
+
+    Flutter renders only ``label``(/``reason``) and ``detail``(/``description``)
+    per item (see tradeoffs_section.dart ``_toTradeoff``); other fields are
+    diagnostic. Bonuses + nuanced transparency penalties are sourced from v4
+    (faithful to whether v4 scored them); safety penalties (B0/B1/B7/B8) gate on
+    enriched presence so they never under-warn, and preserve per-item detail."""
+    mb = safe_dict(scored.get("_v4_module_breakdown"))
+    dims = safe_dict(mb.get("dimensions"))
+    form = safe_dict(safe_dict(dims.get("formulation")).get("components"))
+    transp = safe_dict(dims.get("transparency"))
+    transp_pen = safe_dict(transp.get("penalties"))
+    transp_comp = safe_dict(transp.get("components"))
+    transp_meta = safe_dict(transp.get("metadata"))
+    verif = safe_dict(safe_dict(mb.get("verification_bonus")).get("components"))
+    dose = safe_dict(dims.get("dose"))
+    dose_c = safe_dict(dose.get("components"))
+    dose_m = safe_dict(dose.get("metadata"))
+    delivery_data = safe_dict(enriched.get("delivery_data"))
+
+    def _pos(d: Dict[str, Any], k: str) -> bool:
+        return safe_float(d.get(k), 0) > 0
+
+    def _neg(d: Dict[str, Any], k: str) -> bool:
+        return safe_float(d.get(k), 0) < 0
+
+    # ── Bonuses — gate on the v4 component that actually scored them ──────────
+    bonuses: List[Dict[str, Any]] = []
+    if _pos(form, "A2_premium_forms"):
+        bonuses.append({"id": "A2", "label": "Premium ingredient forms", "score": form["A2_premium_forms"]})
+    if _pos(form, "A3_delivery_system"):
+        bonuses.append({"id": "A3", "label": "Advanced delivery system", "score": form["A3_delivery_system"],
+                        "detail": safe_str(enriched.get("delivery_tier") or delivery_data.get("highest_tier"))})
+    if _pos(form, "A4_absorption_enhancer"):
+        bonuses.append({"id": "A4", "label": "Absorption enhancer present", "score": form["A4_absorption_enhancer"]})
+    if _pos(form, "A5a_organic"):
+        bonuses.append({"id": "A5a", "label": "Certified organic", "score": form["A5a_organic"]})
+    if _pos(form, "A5b_standardized_botanical"):
+        bonuses.append({"id": "A5b", "label": "Standardized botanicals", "score": form["A5b_standardized_botanical"]})
+    if _pos(form, "A5c_synergy_cluster"):
+        bonuses.append({"id": "A5c", "label": "Synergy cluster qualified", "score": form["A5c_synergy_cluster"]})
+    if _pos(form, "A5d_non_gmo"):
+        bonuses.append({"id": "A5d", "label": "Non-GMO Project Verified", "score": form["A5d_non_gmo"]})
+    if _pos(form, "A6_single_ingredient"):
+        bonuses.append({"id": "A6", "label": "Single-nutrient premium form", "score": form["A6_single_ingredient"]})
+    # A5e natural-source: scored by v4 but intentionally NOT surfaced (cosmetic).
+    if _pos(verif, "B4a_verified_certifications"):
+        bonuses.append({"id": "B4a", "label": "Third-party purity testing", "score": verif["B4a_verified_certifications"]})
+    if _pos(verif, "B4b_gmp"):
+        bonuses.append({"id": "B4b", "label": "GMP certified facility", "score": verif["B4b_gmp"]})
+    if _pos(verif, "B4c_batch_traceability"):
+        bonuses.append({"id": "B4c", "label": "Heavy metal tested", "score": verif["B4c_batch_traceability"]})
+
+    # Module-specific quality bonuses — the omega and probiotic modules credit
+    # their own positive components (not the generic A-codes), so surface them as
+    # the dedicated chips v3 carried (omega-3 dose, probiotic quality).
+    if _pos(dose_c, "epa_dha_band"):
+        omega_bonus = {"id": "omega3", "label": "Omega-3 dose bonus", "score": dose_c["epa_dha_band"]}
+        band = safe_str(dose_m.get("epa_dha_band_label")).replace("_", " ")
+        if band:
+            omega_bonus["detail"] = band
+        bonuses.append(omega_bonus)
+    _prob_signals = ("clinical_strain_codes", "cfu_amount", "named_species_diversity")
+    if any(_pos(form, k) for k in _prob_signals):
+        bonuses.append({"id": "probiotic", "label": "Probiotic quality bonus",
+                        "score": sum(safe_float(form.get(k), 0) for k in _prob_signals)})
+
+    # ── Penalties ────────────────────────────────────────────────────────────
+    penalties: List[Dict[str, Any]] = []
+
+    # Safety — gate on ENRICHED presence (never under-warn), detail preserved.
+    for sub in contaminant_matches(enriched):
+        status = normalize_text(sub.get("status"))
+        name = safe_str(sub.get("ingredient") or sub.get("banned_name"))
+        penalties.append({"id": "B0", "label": f"{status.title()}: {name}",
+                          "status": status, "reason": safe_str(sub.get("reason"))[:200]})
+    for h in safe_list(enriched.get("harmful_additives")):
+        if isinstance(h, dict):
+            penalties.append({
+                "id": "B1",
+                "label": f"Harmful additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
+                "severity": safe_str(h.get("severity_level")),
+                "reason": safe_str(h.get("mechanism_of_harm") or h.get("notes") or h.get("category"))[:200],
+            })
+    # B2 declared allergen source — gate on enriched allergen presence (the v3
+    # user-facing meaning, neutral label). v4's narrower B2 (false allergen-free
+    # claim) is a different signal; allergen *presence* is what users consider.
+    for a in safe_list(enriched.get("allergen_hits")):
+        if isinstance(a, dict):
+            penalties.append({
+                "id": "B2",
+                "label": f"Declared allergen source: {safe_str(a.get('allergen_name'))}",
+                "severity": safe_str(a.get("severity_level")),
+                "presence": safe_str(a.get("presence_type")),
+            })
+    # B1 dietary sugar — already enriched-gated in v3; carried over verbatim.
+    sugar_penalty = _dietary_sugar_penalty_detail(enriched)
+    sugar_penalty_score = safe_float(sugar_penalty.get("penalty"), 0)
+    if sugar_penalty_score > 0:
+        sugar_reason = safe_str(sugar_penalty.get("reason"))
+        sugar = safe_dict(safe_dict(enriched.get("dietary_sensitivity_data")).get("sugar"))
+        sources = safe_list(sugar_penalty.get("sugar_sources"))
+        high_glycemic = safe_list(sugar_penalty.get("high_glycemic_sweeteners"))
+        sugar_alcohols = safe_list(sugar_penalty.get("sugar_alcohols"))
+        if sugar_reason == "high_sugar_grams":
+            sugar_label = "High sugar content"
+        elif sugar_reason == "moderate_sugar_grams":
+            sugar_label = "Moderate sugar content"
+        elif sugar_reason == "high_glycemic_syrup_or_sugar_alcohol":
+            sugar_label = "High-glycemic sweetener or sugar alcohol"
+        else:
+            sugar_label = "Added sugar source"
+        detail_parts: List[str] = []
+        amount_g = safe_float(sugar.get("amount_g"))
+        if amount_g:
+            detail_parts.append(f"{amount_g:g}g sugar per serving")
+        named_sources = high_glycemic or sugar_alcohols or sources
+        if named_sources:
+            detail_parts.append(", ".join(safe_str(s) for s in named_sources if safe_str(s)))
+        penalties.append({
+            "id": "B1_dietary_sugar", "label": sugar_label, "score": -sugar_penalty_score,
+            "severity": "high" if sugar_penalty_score >= 4 else ("moderate" if sugar_penalty_score >= 2 else "low"),
+            "reason": sugar_reason, "detail": "; ".join(detail_parts),
+        })
+    # B7 dose-over-UL — enriched safety flags (Flutter also surfaces these from rda_ul_data).
+    for ev in safe_list(safe_dict(enriched.get("rda_ul_data")).get("safety_flags")):
+        if not isinstance(ev, dict):
+            continue
+        nutrient = safe_str(ev.get("nutrient")) or "unknown"
+        pct = safe_float(ev.get("pct_ul"), 0)
+        penalties.append({
+            "id": "B7",
+            "label": f"Exceeds safe dose limit: {nutrient} at {pct:.0f}% of UL",
+            "severity": "critical" if pct >= 200 else "warning",
+            "reason": f"{nutrient}: {ev.get('amount')} vs UL {ev.get('ul')}",
+        })
+    # B8 CAERS is intentionally NOT surfaced: it has been dead in production
+    # (the v3 scorer read a non-existent active key, so 0 shipped blobs carry
+    # it) and v4 does not score CAERS. Its count-based "signal strength" tracks
+    # how common an ingredient is, not its risk (e.g. calcium's reports are
+    # pill-choking, not toxicity), so surfacing it would over-warn on safe
+    # staples. Activating CAERS is a deliberate, risk-calibrated future feature.
+
+    # Transparency nuance — gate on v4 (faithful to whether v4 penalised it).
+    if _neg(transp_comp, "B3_claim_compliance"):
+        penalties.append({"id": "B3", "label": "Compliance claim violation",
+                          "score": safe_float(transp_comp.get("B3_claim_compliance"), 0)})
+    if _neg(transp_pen, "B5_proprietary_blend_opacity"):
+        penalties.append({"id": "B5", "label": "Proprietary blend opacity",
+                          "score": safe_float(transp_pen.get("B5_proprietary_blend_opacity"), 0),
+                          "blend_count": int(safe_float(transp_meta.get("B5_blend_count"), 0))})
+    if _neg(transp_pen, "B6_marketing_claims"):
+        penalties.append({"id": "B6", "label": "Unsubstantiated disease claims",
+                          "score": safe_float(transp_pen.get("B6_marketing_claims"), 0)})
+
+    # Manufacturer / quality-system violation (enriched manufacturer data).
+    mv = safe_dict(safe_dict(enriched.get("manufacturer_data")).get("violations"))
+    if safe_bool(mv.get("found")):
+        item = {"id": "violation", "label": "Scoring violation penalty"}
+        mv_score = safe_float(mv.get("total_deduction_applied"), 0)
+        if mv_score:
+            item["score"] = -abs(mv_score)
+        penalties.append(item)
+
+    return bonuses, penalties
+
+
 def build_decision_highlights(
     enriched: Dict, scored: Dict, blocking_reason: Optional[str]
 ) -> Dict[str, Any]:
@@ -2252,13 +2423,15 @@ def build_decision_highlights(
     named_programs = safe_list(enriched.get("named_cert_programs"))
     section_scores = safe_dict(scored.get("section_scores"))
     verdict = safe_str(scored.get("verdict")).upper()
-    score_80 = safe_float(scored.get("score_80"), 0) or 0
+    # V4 cutover: the shipped /100 score (overlay sets score_100_equivalent
+    # from quality_score_v4_100); 75/100 mirrors the retired V3 score_80>=60.
+    score_100 = safe_float(scored.get("score_100_equivalent"), 0) or 0
 
     if safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
         positive = "Trusted manufacturer with full label disclosure."
     elif safe_float(safe_dict(section_scores.get("C_evidence_research")).get("score"), 0) >= 12:
         positive = "Backed by meaningful clinical evidence."
-    elif score_80 >= 60:
+    elif score_100 >= 75:
         positive = "Strong overall quality profile."
     else:
         positive = "Some quality signals are present, but this product needs a closer look."
@@ -4895,142 +5068,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "claim_non_gmo_present": bool(non_gmo_audit.get("claim_present")),
     }
 
-    # Score reasons — structured bonus/penalty lists for the app
-    # Bonuses: everything that earned positive points
-    bonuses = []
+    # Score reasons — Tradeoffs bonus/penalty lists. v4 cutover: these are now
+    # sourced from the v4 contract + enriched safety data via
+    # derive_v4_tradeoffs (no v3 section-score dependency). a_sub is retained
+    # only for the diagnostic gate_audit.probiotic_eligibility emitted below.
     a_sub = section_breakdown.get("ingredient_quality", {}).get("sub", {})
-    if safe_float(a_sub.get("A2"), 0) > 0:
-        bonuses.append({"id": "A2", "label": "Premium ingredient forms", "score": a_sub["A2"]})
-    if safe_float(a_sub.get("A3"), 0) > 0:
-        bonuses.append({"id": "A3", "label": "Advanced delivery system", "score": a_sub["A3"],
-                        "detail": safe_str(enriched.get("delivery_tier") or delivery_data.get("highest_tier"))})
-    if safe_float(a_sub.get("A4"), 0) > 0:
-        bonuses.append({"id": "A4", "label": "Absorption enhancer present", "score": a_sub["A4"]})
-    if safe_float(a_sub.get("A5a"), 0) > 0:
-        bonuses.append({"id": "A5a", "label": "Certified organic", "score": a_sub["A5a"]})
-    if safe_float(a_sub.get("A5b"), 0) > 0:
-        bonuses.append({"id": "A5b", "label": "Standardized botanicals", "score": a_sub["A5b"]})
-    if safe_float(a_sub.get("A5c"), 0) > 0:
-        bonuses.append({"id": "A5c", "label": "Synergy cluster qualified", "score": a_sub["A5c"]})
-    if safe_float(a_sub.get("A5d"), 0) > 0:
-        bonuses.append({"id": "A5d", "label": "Non-GMO Project Verified", "score": a_sub["A5d"]})
-    if safe_float(a_sub.get("A5e"), 0) > 0:
-        # v3.6.0: natural-source bonus moved here from A1.
-        bonuses.append({"id": "A5e", "label": "Natural-source ingredients", "score": a_sub["A5e"]})
-    if safe_float(a_sub.get("A6"), 0) > 0:
-        bonuses.append({"id": "A6", "label": "Single-nutrient premium form", "score": a_sub["A6"]})
-    if safe_float(a_sub.get("probiotic_bonus"), 0) > 0:
-        bonuses.append({"id": "probiotic", "label": "Probiotic quality bonus", "score": a_sub["probiotic_bonus"]})
-    if safe_float(a_sub.get("omega3_dose_bonus"), 0) > 0:
-        bonuses.append(
-            {
-                "id": "omega3",
-                "label": "Omega-3 dose bonus",
-                "score": a_sub["omega3_dose_bonus"],
-                "detail": safe_str(omega3_audit.get("dose_band")).replace("_", " "),
-            }
-        )
-    b_sub = section_breakdown.get("safety_purity", {}).get("sub", {})
-    if safe_float(b_sub.get("B4a"), 0) > 0:
-        bonuses.append({"id": "B4a", "label": "Third-party purity testing", "score": b_sub["B4a"]})
-    if safe_float(b_sub.get("B4b"), 0) > 0:
-        bonuses.append({"id": "B4b", "label": "GMP certified facility", "score": b_sub["B4b"]})
-    if safe_float(b_sub.get("B4c"), 0) > 0:
-        bonuses.append({"id": "B4c", "label": "Heavy metal tested", "score": b_sub["B4c"]})
-    if safe_float(b_sub.get("B_hypoallergenic"), 0) > 0:
-        bonuses.append({"id": "B_hypo", "label": "Hypoallergenic verified", "score": b_sub["B_hypoallergenic"]})
-
-    # Penalties: everything that cost points
-    penalties = []
-    if safe_float(b_sub.get("B0_moderate_penalty"), 0) > 0:
-        # Build per-item list from contaminant matches
-        for sub in contaminant_matches(enriched):
-            status = normalize_text(sub.get("status"))
-            name = safe_str(sub.get("ingredient") or sub.get("banned_name"))
-            penalties.append({
-                "id": "B0", "label": f"{status.title()}: {name}",
-                "status": status,
-                "reason": safe_str(sub.get("reason"))[:200],
-            })
-    # Use .get() for all b_sub key reads so a future scorer field rename
-    # degrades gracefully instead of raising KeyError mid-blob-build.
-    if safe_float(b_sub.get("B1_penalty"), 0) > 0:
-        for h in safe_list(enriched.get("harmful_additives")):
-            if isinstance(h, dict):
-                penalties.append({
-                    "id": "B1", "label": f"Harmful additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
-                    "score": b_sub.get("B1_penalty", 0),
-                    "severity": safe_str(h.get("severity_level")),
-                    "reason": safe_str(h.get("mechanism_of_harm") or h.get("notes") or h.get("category"))[:200],
-                })
-    sugar_penalty = _dietary_sugar_penalty_detail(enriched)
-    sugar_penalty_score = safe_float(sugar_penalty.get("penalty"), 0)
-    if sugar_penalty_score > 0:
-        sugar_reason = safe_str(sugar_penalty.get("reason"))
-        sugar = safe_dict(safe_dict(enriched.get("dietary_sensitivity_data")).get("sugar"))
-        sources = safe_list(sugar_penalty.get("sugar_sources"))
-        high_glycemic = safe_list(sugar_penalty.get("high_glycemic_sweeteners"))
-        sugar_alcohols = safe_list(sugar_penalty.get("sugar_alcohols"))
-        if sugar_reason == "high_sugar_grams":
-            label = "High sugar content"
-        elif sugar_reason == "moderate_sugar_grams":
-            label = "Moderate sugar content"
-        elif sugar_reason == "high_glycemic_syrup_or_sugar_alcohol":
-            label = "High-glycemic sweetener or sugar alcohol"
-        else:
-            label = "Added sugar source"
-        detail_parts = []
-        amount_g = safe_float(sugar.get("amount_g"))
-        if amount_g:
-            detail_parts.append(f"{amount_g:g}g sugar per serving")
-        named_sources = high_glycemic or sugar_alcohols or sources
-        if named_sources:
-            detail_parts.append(", ".join(safe_str(source) for source in named_sources if safe_str(source)))
-        penalties.append({
-            "id": "B1_dietary_sugar",
-            "label": label,
-            "score": -sugar_penalty_score,
-            "severity": "high" if sugar_penalty_score >= 4 else ("moderate" if sugar_penalty_score >= 2 else "low"),
-            "reason": sugar_reason,
-            "detail": "; ".join(detail_parts),
-        })
-    if safe_float(b_sub.get("B2_penalty"), 0) > 0:
-        for a in safe_list(enriched.get("allergen_hits")):
-            if isinstance(a, dict):
-                penalties.append({
-                    "id": "B2", "label": f"Declared allergen source: {safe_str(a.get('allergen_name'))}",
-                    "severity": safe_str(a.get("severity_level")),
-                    "presence": safe_str(a.get("presence_type")),
-                })
-    if safe_float(b_sub.get("B3"), 0) < 0:
-        penalties.append({"id": "B3", "label": "Compliance claim violation", "score": b_sub.get("B3", 0)})
-    if safe_float(b_sub.get("B5_penalty"), 0) > 0:
-        penalties.append({"id": "B5", "label": "Proprietary blend opacity",
-                          "score": b_sub.get("B5_penalty", 0),
-                          "blend_count": len(safe_list(b_sub.get("B5_blend_evidence")))})
-    if safe_float(b_sub.get("B6_penalty"), 0) > 0:
-        penalties.append({"id": "B6", "label": "Unsubstantiated disease claims", "score": b_sub.get("B6_penalty", 0)})
-    if safe_float(b_sub.get("B7_penalty"), 0) > 0:
-        b7_evidence = safe_list(b_sub.get("B7_dose_safety_evidence"))
-        for ev in b7_evidence:
-            penalties.append({
-                "id": "B7",
-                "label": f"Exceeds safe dose limit: {ev.get('nutrient', 'unknown')} at {ev.get('pct_ul', 0):.0f}% of UL",
-                "severity": "critical" if ev.get("pct_ul", 0) >= 200 else "warning",
-                "reason": f"{ev.get('nutrient')}: {ev.get('amount')} vs UL {ev.get('ul')}",
-            })
-    if safe_float(b_sub.get("B8_penalty"), 0) > 0:
-        b8_evidence = safe_list(b_sub.get("B8_caers_evidence"))
-        for ev in b8_evidence:
-            penalties.append({
-                "id": "B8",
-                "label": f"FDA adverse events: {ev.get('ingredient', 'unknown')} ({ev.get('serious_reports', 0)} serious reports)",
-                "severity": ev.get("signal_strength", "unknown"),
-                "reason": f"FDA CAERS: {ev.get('total_reports', 0)} total reports, {ev.get('serious_reports', 0)} serious",
-            })
-    vp = section_breakdown.get("violation_penalty", 0)
-    if vp and safe_float(vp, 0) != 0:
-        penalties.append({"id": "violation", "label": "Scoring violation penalty", "score": vp})
+    bonuses, penalties = derive_v4_tradeoffs(scored, enriched)
 
     # v1.3.2: Nutrition detail — all five macros for the Flutter transparency panel
     ns = safe_dict(enriched.get("nutrition_summary"))
@@ -5081,16 +5124,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "blocking_reason": derive_blocking_reason(enriched, scored),
             "verdict": safe_str(scored.get("verdict")),
             "probiotic_eligibility": safe_dict(a_sub.get("probiotic_breakdown")).get("eligibility"),
-        },
-        "section_a_audit": {
-            "score": safe_float(section_breakdown.get("ingredient_quality", {}).get("score"), 0),
-            "max": safe_float(section_breakdown.get("ingredient_quality", {}).get("max"), 25),
-            "ceiling_hit": (
-                safe_float(section_breakdown.get("ingredient_quality", {}).get("score"), 0)
-                >= safe_float(section_breakdown.get("ingredient_quality", {}).get("max"), 25)
-            ),
-            "core_quality": safe_float(a_sub.get("core_quality"), 0),
-            "category_bonus_total": safe_float(a_sub.get("category_bonus_total"), 0),
         },
     }
 
@@ -6192,23 +6225,6 @@ def build_core_row(
     v4_pillars = safe_dict(effective_scored.get("_v4_pillars"))
 
     top_warnings = build_top_warnings(enriched)
-
-    # Inject B8 CAERS adverse event warnings from scored output
-    b8_evidence = safe_list(
-        safe_dict(safe_dict(scored.get("breakdown", {})).get("B", {})).get("B8_caers_evidence")
-    )
-    for ev in b8_evidence:
-        if not isinstance(ev, dict):
-            continue
-        ing = safe_str(ev.get("ingredient"))
-        serious = ev.get("serious_reports", 0)
-        total = ev.get("total_reports", 0)
-        strength = safe_str(ev.get("signal_strength"))
-        if strength in ("strong", "moderate"):
-            top_warnings.append(
-                f"FDA adverse events: {ing.replace('_', ' ').title()} "
-                f"({serious} serious of {total} reports)"
-            )
 
     derived_blocking = derive_blocking_reason(enriched, scored)
     scored_blocking = safe_str(scored.get("blocking_reason"))

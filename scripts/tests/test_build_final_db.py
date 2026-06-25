@@ -346,7 +346,11 @@ def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():
         }
     }
     scored = make_scored()
-    scored["breakdown"]["A"]["A5d"] = 0.5
+    # v4 cutover: the A5d Non-GMO bonus is sourced from the v4 formulation
+    # component, not the v3 A5d section sub-score.
+    scored["_v4_module_breakdown"] = {
+        "dimensions": {"formulation": {"components": {"A5d_non_gmo": 0.5}}}
+    }
 
     row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
     blob = build_detail_blob(enriched, scored)
@@ -449,7 +453,9 @@ def test_omega3_export_flags_follow_canonical_epa_dha_signals():
     assert row["contains_omega3"] == 1
     assert blob["omega3_audit"]["contains_omega3"] is True
     assert blob["omega3_audit"]["bonus_score"] == 1.5
-    assert any(bonus["id"] == "omega3" for bonus in blob["score_bonuses"])
+    # v4 cutover: the standalone "omega3" tradeoff chip is retired (no discrete
+    # v4 component). Omega-3 dose quality is preserved in omega3_audit /
+    # omega3_detail and reflected in the dose pillar score.
 
 
 def make_enriched():
