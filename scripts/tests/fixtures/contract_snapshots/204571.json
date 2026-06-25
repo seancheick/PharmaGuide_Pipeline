@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life MyKind Organics",
   "breakdown": {
     "A": {
-      "A1": 10.48,
+      "A1": 10.06,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
@@ -16,7 +16,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 13.73,
+      "core_quality": 13.31,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -44,7 +44,7 @@
             "guarantee_type": null,
             "is_probiotic_product": true,
             "strain_id_count": 0,
-            "supp_type": "multivitamin",
+            "supp_type": "specialty",
             "total_billion_count": 0.0,
             "total_strain_count": 2
           }
@@ -53,7 +53,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 13.73
+      "score": 13.31
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -61,19 +61,44 @@
       "B1_penalty": 0.0,
       "B2_penalty": 2.0,
       "B3": 1.0,
-      "B4a": 5.0,
+      "B4a": 0.0,
       "B4b": 0.0,
       "B4c": 0.0,
       "B5_blend_evidence": [
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_class": "multi_or_prenatal",
+          "blend_name": "Probiotic & Microbiome Blends",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 0,
+          "class_multiplier_applied": 1.3,
+          "computed_blend_penalty": -2.6,
+          "computed_blend_penalty_magnitude": 2.6,
+          "dedupe_fingerprint": "probiotic microbiome blends|||activeingredients[16]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.0,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[16]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_class": "multi_or_prenatal",
           "blend_name": "Organic B Complex Blend",
           "blend_total_mg": 50.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 3,
-          "computed_blend_penalty": -2.5,
-          "computed_blend_penalty_magnitude": 2.5,
-          "dedupe_fingerprint": "organic b complex blend|organic lemon extract,organic ocimum sanctum extract,organic psidium guajava extract|50.000|activeingredients[11]",
+          "class_multiplier_applied": 1.3,
+          "computed_blend_penalty": -3.25,
+          "computed_blend_penalty_magnitude": 3.25,
+          "dedupe_fingerprint": "organic b complex blend|organic lemon extract,organic ocimum sanctum extract,organic psidium guajava extract|50.000|activeingredients[13]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 50.0,
@@ -83,18 +108,20 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[11]",
+          "source_path": "activeIngredients[13]",
           "unit_conversion_failed": false
         },
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_class": "multi_or_prenatal",
           "blend_name": "Probiotic Blend",
           "blend_total_mg": 4.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 2,
-          "computed_blend_penalty": -2.5,
-          "computed_blend_penalty_magnitude": 2.5,
-          "dedupe_fingerprint": "probiotic blend|bifidobacterium lactis bl 04,lactobacillus acidophilus la 14|4.000|activeingredients[14]",
+          "class_multiplier_applied": 1.3,
+          "computed_blend_penalty": -3.25,
+          "computed_blend_penalty_magnitude": 3.25,
+          "dedupe_fingerprint": "probiotic blend|bifidobacterium lactis bl 04,lactobacillus acidophilus la 14|4.000|activeingredients[17]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 4.0,
@@ -104,46 +131,44 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[14]",
+          "source_path": "activeIngredients[17]",
           "unit_conversion_failed": false
         }
       ],
-      "B5_penalty": 5.0,
+      "B5_penalty": 9.1,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
-      "bonuses": 5.0,
+      "bonuses": 1.0,
       "max": 30.0,
-      "penalties": 7.0,
-      "raw": 23.0,
-      "score": 23.0
+      "penalties": 11.1,
+      "raw": 14.9,
+      "score": 14.9
     },
     "C": {
       "depth_bonus": 0.5,
       "ingredient_points": {
-        "lactobacillus acidophilus": 4.0,
         "pantothenic acid vitamin b5": 1.36,
         "vitamin b1 thiamine": 2.3,
         "vitamin b2 riboflavin": 5.76,
         "vitamin b3 niacin": 3.84,
         "vitamin b6": 4.8
       },
-      "matched_entries": 6,
+      "matched_entries": 5,
       "max": 20.0,
-      "score": 12.77,
+      "score": 12.23,
+      "sub_clinical_canonicals": [],
       "top_n_applied": 4
     },
     "D": {
-      "D1": 1.0,
+      "D1": 2.0,
       "D2": 0.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.5,
       "max": 5.0,
-      "score": 1.5
+      "score": 3.5
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -151,42 +176,43 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 51.0,
+    "quality_raw": 43.94,
     "violation_penalty": 0.0
   },
   "dsld_id": "204571",
   "evaluation_stage": "scoring",
   "flags": [
-    "PROPRIETARY_BLEND_PRESENT"
+    "PROPRIETARY_BLEND_PRESENT",
+    "SUPPLEMENT_TYPE_REINFERRED"
   ],
-  "grade": "Fair",
+  "grade": "Below Avg",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.6.0",
   "product_name": "Adrenal Daily Balance",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 63.7,
-  "score_80": 51.0,
+  "score_100_equivalent": 54.9,
+  "score_80": 43.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 13.73,
+      "core_quality": 13.31,
       "max": 25.0,
-      "score": 13.73
+      "score": 13.31
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 23.0
+      "score": 14.9
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 12.77
+      "score": 12.23
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 1.5
+      "score": 3.5
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
@@ -195,7 +221,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "multivitamin",
+  "supp_type": "b_complex",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

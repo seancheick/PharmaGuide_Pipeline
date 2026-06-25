@@ -40,11 +40,6 @@
   },
   "products": [
     {
-      "dsld_id": 16037,
-      "brand_source": "Thorne",
-      "label": "Thorne Silybin Phytosome (Planti-Oxidants) — Phase 3 canonical_id target"
-    },
-    {
       "dsld_id": 182730,
       "brand_source": "Pure_Encapsulations",
       "label": "Pure Encapsulations Athletic Pure Pack — Phase 3 phosphorus target"
@@ -55,19 +50,9 @@
       "label": "CVS Spectravite Advanced Formula — Phase 3 phosphorus target + mainstream multi"
     },
     {
-      "dsld_id": 64058,
-      "brand_source": "Thorne",
-      "label": "Thorne Catalyte Lemon Lime — Sodium/Chloride dual-context routing"
-    },
-    {
       "dsld_id": 288344,
       "brand_source": "Garden_of_life",
       "label": "Garden of Life Vitamin Code Men — whole-food multi"
-    },
-    {
-      "dsld_id": 241306,
-      "brand_source": "Garden_of_life",
-      "label": "Garden of Life Joint Health — glandular/source-descriptor"
     },
     {
       "dsld_id": 245156,
@@ -75,19 +60,9 @@
       "label": "Goli Ashwagandha Gummies — branded-token + plant-part"
     },
     {
-      "dsld_id": 182805,
-      "brand_source": "Pure_Encapsulations",
-      "label": "Pure CoQ10 120 mg — Period B MicroActive fix coverage"
-    },
-    {
       "dsld_id": 183275,
       "brand_source": "Pure_Encapsulations",
       "label": "Pure Silymarin — milk thistle baseline"
-    },
-    {
-      "dsld_id": 12131,
-      "brand_source": "Spring_Valley",
-      "label": "Spring Valley Korean Panax Ginseng — standardized extract"
     },
     {
       "dsld_id": 278454,
@@ -95,64 +70,14 @@
       "label": "Ritual Essential for Women — mainstream multivitamin"
     },
     {
-      "dsld_id": 16008,
-      "brand_source": "Thorne",
-      "label": "Thorne Green Tea Phytosome — phytosome delivery tech"
-    },
-    {
-      "dsld_id": 16125,
-      "brand_source": "Thorne",
-      "label": "Thorne FloraMend Prime Probiotic — probiotic strain claims"
-    },
-    {
       "dsld_id": 270831,
       "brand_source": "Nutricost",
       "label": "Nutricost Yohimbe Bark Extract — banned/recalled trigger"
     },
     {
-      "dsld_id": 222842,
-      "brand_source": "Garden_of_life",
-      "label": "Garden of Life Multivitamin Liquid — whole-food liquid multi"
-    },
-    {
-      "dsld_id": 173734,
-      "brand_source": "Garden_of_life",
-      "label": "Garden of Life Perfect Food Berry — yeast/greens-fermented"
-    },
-    {
       "dsld_id": 180417,
       "brand_source": "Nature_Made",
       "label": "Nature Made Ginkgo Biloba 30 mg — standardized botanical"
-    },
-    {
-      "dsld_id": 221671,
-      "brand_source": "Nutricost",
-      "label": "Nutricost Arginine AKG 3 g — AAKG release variants"
-    },
-    {
-      "dsld_id": 223319,
-      "brand_source": "Nutricost",
-      "label": "Nutricost KSM-66 600 mg — branded ashwagandha"
-    },
-    {
-      "dsld_id": 182800,
-      "brand_source": "Pure_Encapsulations",
-      "label": "Pure Calcium Magnesium (Citrate/Malate) — dual-mineral form"
-    },
-    {
-      "dsld_id": 183317,
-      "brand_source": "Pure_Encapsulations",
-      "label": "Pure Zinc 15 — single mineral baseline"
-    },
-    {
-      "dsld_id": 15756,
-      "brand_source": "Thorne",
-      "label": "Thorne Vitamin D — single-ingredient vitamin"
-    },
-    {
-      "dsld_id": 15805,
-      "brand_source": "Thorne",
-      "label": "Thorne Iron Citrate — iron form"
     },
     {
       "dsld_id": 18141,
@@ -163,11 +88,6 @@
       "dsld_id": 239600,
       "brand_source": "CVS",
       "label": "CVS Men's Daily Gummies Multivitamin — gummy mainstream"
-    },
-    {
-      "dsld_id": 173893,
-      "brand_source": "Garden_of_life",
-      "label": "Garden of Life Organic Plant Collagen Builder — collagen precursor"
     },
     {
       "dsld_id": 204571,
@@ -411,9 +331,22 @@
       "date": "2026-05-29",
       "product_ids": "16 products added — coverage refresh + new archetypes",
       "products_added": [
-        239741, 241353, 269278, 274498, 293924, 293943, 294077,
-        298070, 298102, 306237, 321405, 321969, 323080, 327416,
-        336337, 337853
+        239741,
+        241353,
+        269278,
+        274498,
+        293924,
+        293943,
+        294077,
+        298070,
+        298102,
+        306237,
+        321405,
+        321969,
+        323080,
+        327416,
+        336337,
+        337853
       ],
       "change": "Registered 16 contract-snapshot fixtures that had been committed in 795fb00a (DV-backed dose correction bundle) but never added to the manifest. These are current-shipped refreshes of existing archetypes (Korean ginseng, Calcium Magnesium, CoQ10, Zinc 15, Vitamin D, KSM-66, Catalyte, Plant Collagen, FloraMend, Green Tea Phytosome, AAKG, Iron Bisglycinate, Joint Health) plus three new archetypes (Garden Raw Organic Perfect Food Original, Garden Baby Multivitamin Liquid pediatric CAUTION, Thorne Boswellia Phytosome). No scoring drift in this entry — pure registration of pre-existing fixtures so the manifest contract test passes.",
       "commit": "pending"

@@ -9,8 +9,8 @@
   "brand_name": "Thorne",
   "breakdown": {
     "A": {
-      "A1": 13.52,
-      "A2": 4.0,
+      "A1": 12.76,
+      "A2": 3.0,
       "A3": 2.0,
       "A4": 3.0,
       "A5": 0.0,
@@ -22,7 +22,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 22.52,
+      "core_quality": 20.76,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 22.52
+      "score": 20.76
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -59,8 +59,6 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 3.0,
       "max": 30.0,
@@ -75,6 +73,7 @@
         "chromium picolinate": 3.17,
         "l 5 methyltetrahydrofolate": 3.2,
         "magnesium generic": 5.76,
+        "magnesium glycinate": 2.72,
         "pantothenic acid vitamin b5": 1.36,
         "potassium": 5.76,
         "taurine": 4.08,
@@ -85,7 +84,7 @@
         "vitamin c": 4.9,
         "zinc picolinate": 5.28
       },
-      "matched_entries": 13,
+      "matched_entries": 14,
       "max": 20.0,
       "score": 14.4,
       "sub_clinical_canonicals": [],
@@ -106,7 +105,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 67.92,
+    "quality_raw": 66.16,
     "violation_penalty": 0.0
   },
   "dsld_id": "323080",
@@ -117,17 +116,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Catalyte Lemon Lime Flavored Electrolytes",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 84.9,
-  "score_80": 67.9,
+  "score_100_equivalent": 82.7,
+  "score_80": 66.2,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 22.52,
+      "core_quality": 20.76,
       "max": 25.0,
-      "score": 22.52
+      "score": 20.76
     },
     "B_safety_purity": {
       "max": 30.0,

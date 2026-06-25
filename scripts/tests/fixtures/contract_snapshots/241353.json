@@ -3,20 +3,20 @@
   "brand_name": "Garden of Life",
   "breakdown": {
     "A": {
-      "A1": 9.29,
+      "A1": 8.91,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
-      "A5": 2.5,
+      "A5": 1.5,
       "A5a": 1.0,
-      "A5b": 1.0,
+      "A5b": 0.0,
       "A5c": 0.0,
       "A5d": 0.5,
       "A5e": 0.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 3.0,
-      "core_quality": 15.79,
+      "category_bonus_total": 3.5,
+      "core_quality": 14.41,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -61,14 +61,14 @@
             "strain_id_count": 0,
             "supp_type": "specialty",
             "total_billion_count": 1.5,
-            "total_strain_count": 4
+            "total_strain_count": 3
           }
         },
         "prebiotic": 1.0,
         "probiotic_bonus": 3.0,
         "survivability": 0.0
       },
-      "score": 18.79
+      "score": 17.91
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -122,98 +122,6 @@
           "impact_source": "count_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
-          "source_field": "activeIngredients",
-          "source_path": "activeIngredients[54]",
-          "unit_conversion_failed": false
-        },
-        {
-          "base_penalty_formula": "partial: -(1 + 3*impact)",
-          "blend_class": "multi_or_prenatal",
-          "blend_name": "Organic U.S.A. Farmed Green Juice Blend",
-          "blend_total_mg": 3500.0,
-          "children_with_amount_count": 0,
-          "children_without_amount_count": 0,
-          "class_multiplier_applied": 1.3,
-          "computed_blend_penalty": -2.9763,
-          "computed_blend_penalty_magnitude": 2.9763,
-          "dedupe_fingerprint": "organic u s a farmed green juice blend||3500.000|activeingredients[10]",
-          "disclosed_child_mg_sum": 0.0,
-          "disclosure_tier": "partial",
-          "hidden_mass_mg": 3500.0,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.429829,
-          "impact_source": "mg_share",
-          "presence_penalty": 1.0,
-          "proportional_coef": 3.0,
-          "source_field": "activeIngredients",
-          "source_path": "activeIngredients[10]",
-          "unit_conversion_failed": false
-        },
-        {
-          "base_penalty_formula": "partial: -(1 + 3*impact)",
-          "blend_class": "multi_or_prenatal",
-          "blend_name": "Organic Fruit & Veggie Juice Antioxidant Blend",
-          "blend_total_mg": 2400.0,
-          "children_with_amount_count": 0,
-          "children_without_amount_count": 0,
-          "class_multiplier_applied": 1.3,
-          "computed_blend_penalty": -2.4495,
-          "computed_blend_penalty_magnitude": 2.4495,
-          "dedupe_fingerprint": "organic fruit veggie juice antioxidant blend||2400.000|activeingredients[16]",
-          "disclosed_child_mg_sum": 0.0,
-          "disclosure_tier": "partial",
-          "hidden_mass_mg": 2400.0,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.29474,
-          "impact_source": "mg_share",
-          "presence_penalty": 1.0,
-          "proportional_coef": 3.0,
-          "source_field": "activeIngredients",
-          "source_path": "activeIngredients[16]",
-          "unit_conversion_failed": false
-        },
-        {
-          "base_penalty_formula": "partial: -(1 + 3*impact)",
-          "blend_class": "multi_or_prenatal",
-          "blend_name": "Organic Sprout Blend",
-          "blend_total_mg": 1000.0,
-          "children_with_amount_count": 0,
-          "children_without_amount_count": 0,
-          "class_multiplier_applied": 1.3,
-          "computed_blend_penalty": -1.779,
-          "computed_blend_penalty_magnitude": 1.779,
-          "dedupe_fingerprint": "organic sprout blend||1000.000|activeingredients[41]",
-          "disclosed_child_mg_sum": 0.0,
-          "disclosure_tier": "partial",
-          "hidden_mass_mg": 1000.0,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.122808,
-          "impact_source": "mg_share",
-          "presence_penalty": 1.0,
-          "proportional_coef": 3.0,
-          "source_field": "activeIngredients",
-          "source_path": "activeIngredients[41]",
-          "unit_conversion_failed": false
-        },
-        {
-          "base_penalty_formula": "partial: -(1 + 3*impact)",
-          "blend_class": "multi_or_prenatal",
-          "blend_name": "Raw Probiotic & Enzyme Blend",
-          "blend_total_mg": 30.0,
-          "children_with_amount_count": 0,
-          "children_without_amount_count": 0,
-          "class_multiplier_applied": 1.3,
-          "computed_blend_penalty": -1.69,
-          "computed_blend_penalty_magnitude": 1.69,
-          "dedupe_fingerprint": "raw probiotic enzyme blend||30.000|activeingredients[54]",
-          "disclosed_child_mg_sum": 0.0,
-          "disclosure_tier": "partial",
-          "hidden_mass_mg": 30.0,
-          "impact_floor_applied": true,
-          "impact_ratio": 0.1,
-          "impact_source": "mg_share",
-          "presence_penalty": 1.0,
-          "proportional_coef": 3.0,
           "source_field": "activeIngredients",
           "source_path": "activeIngredients[54]",
           "unit_conversion_failed": false
@@ -315,8 +223,6 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 1.0,
       "max": 30.0,
@@ -327,18 +233,13 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "bromelain": 3.26,
         "calcium": 5.76,
-        "digestive enzyme complex": 2.56,
-        "garlic extract": 4.9,
-        "ginger root": 4.8,
-        "lactobacillus and bifidobacterium strains": 5.28,
         "magnesium generic": 5.76,
         "potassium": 5.76,
         "vitamin a beta carotene": 5.76,
         "vitamin b2 riboflavin": 5.76
       },
-      "matched_entries": 11,
+      "matched_entries": 6,
       "max": 20.0,
       "score": 14.4,
       "sub_clinical_canonicals": [],
@@ -348,10 +249,10 @@
       "D1": 2.0,
       "D2": 0.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.5,
       "max": 5.0,
-      "score": 2.5
+      "score": 3.5
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -359,7 +260,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 49.69,
+    "quality_raw": 49.81,
     "violation_penalty": 0.0
   },
   "dsld_id": "241353",
@@ -373,17 +274,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Raw Organic Perfect Food Original",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 62.1,
-  "score_80": 49.7,
+  "score_100_equivalent": 62.3,
+  "score_80": 49.8,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 3.0,
-      "core_quality": 15.79,
+      "category_bonus_total": 3.5,
+      "core_quality": 14.41,
       "max": 25.0,
-      "score": 18.79
+      "score": 17.91
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -395,7 +296,7 @@
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 2.5
+      "score": 3.5
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",

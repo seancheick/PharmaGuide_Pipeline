@@ -9,7 +9,7 @@
   "brand_name": "Pure Encapsulations",
   "breakdown": {
     "A": {
-      "A1": 16.8,
+      "A1": 15.6,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
@@ -19,10 +19,10 @@
       "A5c": 0.0,
       "A5d": 0.0,
       "A5e": 0.0,
-      "A6": 3.0,
+      "A6": 2.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 19.8,
+      "core_quality": 17.6,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 19.8
+      "score": 17.6
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -59,8 +59,6 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 5.0,
       "max": 30.0,
@@ -83,10 +81,10 @@
       "D1": 2.0,
       "D2": 1.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.0,
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -94,7 +92,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 57.58,
+    "quality_raw": 56.38,
     "violation_penalty": 0.0
   },
   "dsld_id": "294077",
@@ -107,17 +105,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Zinc 15",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 72.0,
-  "score_80": 57.6,
+  "score_100_equivalent": 70.5,
+  "score_80": 56.4,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 19.8,
+      "core_quality": 17.6,
       "max": 25.0,
-      "score": 19.8
+      "score": 17.6
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -129,7 +127,7 @@
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",

@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life MyKind Organics",
   "breakdown": {
     "A": {
-      "A1": 9.91,
+      "A1": 9.71,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -16,7 +16,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.41,
+      "core_quality": 15.21,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -37,7 +37,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 15.41
+      "score": 15.21
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -68,52 +68,6 @@
           "impact_source": "count_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
-          "source_field": "activeIngredients",
-          "source_path": "activeIngredients[46]",
-          "unit_conversion_failed": false
-        },
-        {
-          "base_penalty_formula": "partial: -(1 + 3*impact)",
-          "blend_class": "generic",
-          "blend_name": "Organic Food Blend",
-          "blend_total_mg": 710.0,
-          "children_with_amount_count": 0,
-          "children_without_amount_count": 0,
-          "class_multiplier_applied": 1.0,
-          "computed_blend_penalty": -3.0509,
-          "computed_blend_penalty_magnitude": 3.0509,
-          "dedupe_fingerprint": "organic food blend||710.000|activeingredients[15]",
-          "disclosed_child_mg_sum": 0.0,
-          "disclosure_tier": "partial",
-          "hidden_mass_mg": 710.0,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.683647,
-          "impact_source": "mg_share",
-          "presence_penalty": 1.0,
-          "proportional_coef": 3.0,
-          "source_field": "activeIngredients",
-          "source_path": "activeIngredients[15]",
-          "unit_conversion_failed": false
-        },
-        {
-          "base_penalty_formula": "partial: -(1 + 3*impact)",
-          "blend_class": "generic",
-          "blend_name": "Organic Beauty Blend",
-          "blend_total_mg": 194.0,
-          "children_with_amount_count": 0,
-          "children_without_amount_count": 0,
-          "class_multiplier_applied": 1.0,
-          "computed_blend_penalty": -1.5604,
-          "computed_blend_penalty_magnitude": 1.5604,
-          "dedupe_fingerprint": "organic beauty blend||194.000|activeingredients[46]",
-          "disclosed_child_mg_sum": 0.0,
-          "disclosure_tier": "partial",
-          "hidden_mass_mg": 194.0,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.186799,
-          "impact_source": "mg_share",
-          "presence_penalty": 1.0,
-          "proportional_coef": 3.0,
           "source_field": "activeIngredients",
           "source_path": "activeIngredients[46]",
           "unit_conversion_failed": false
@@ -169,8 +123,6 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 2.0,
       "max": 30.0,
@@ -183,9 +135,6 @@
       "ingredient_points": {
         "biotin": 3.84,
         "chromium picolinate": 3.17,
-        "garlic extract": 4.9,
-        "ginger root": 4.8,
-        "green tea extract": 4.9,
         "pantothenic acid vitamin b5": 1.36,
         "selenium": 5.76,
         "vitamin a beta carotene": 5.76,
@@ -197,7 +146,7 @@
         "vitamin e": 3.46,
         "zinc picolinate": 5.28
       },
-      "matched_entries": 16,
+      "matched_entries": 13,
       "max": 20.0,
       "score": 14.76,
       "sub_clinical_canonicals": [],
@@ -207,10 +156,10 @@
       "D1": 2.0,
       "D2": 0.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.0,
       "max": 5.0,
-      "score": 2.0
+      "score": 3.0
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -218,7 +167,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 46.17,
+    "quality_raw": 46.97,
     "violation_penalty": 0.0
   },
   "dsld_id": "274498",
@@ -231,17 +180,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Organic Plant Collagen Builder",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 57.7,
-  "score_80": 46.2,
+  "score_100_equivalent": 58.7,
+  "score_80": 47.0,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.41,
+      "core_quality": 15.21,
       "max": 25.0,
-      "score": 15.41
+      "score": 15.21
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -253,7 +202,7 @@
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 2.0
+      "score": 3.0
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",

@@ -59,8 +59,6 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 3.0,
       "max": 30.0,
@@ -81,10 +79,10 @@
       "D1": 2.0,
       "D2": 1.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.0,
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -92,7 +90,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 44.0,
+    "quality_raw": 45.0,
     "violation_penalty": 0.0
   },
   "dsld_id": "269278",
@@ -105,8 +103,8 @@
   "output_schema_version": "3.6.0",
   "product_name": "Arginine AKG 3 g Unflavored",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 55.0,
-  "score_80": 44.0,
+  "score_100_equivalent": 56.2,
+  "score_80": 45.0,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -127,7 +125,7 @@
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",

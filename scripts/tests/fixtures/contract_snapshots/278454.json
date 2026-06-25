@@ -9,20 +9,20 @@
   "brand_name": "Ritual",
   "breakdown": {
     "A": {
-      "A1": 13.33,
-      "A2": 2.5,
+      "A1": 12.31,
+      "A2": 2.0,
       "A3": 2.0,
       "A4": 3.0,
-      "A5": 1.75,
+      "A5": 0.75,
       "A5a": 0.0,
       "A5b": 0.0,
       "A5c": 0.75,
       "A5d": 0.0,
-      "A5e": 1.0,
+      "A5e": 0.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 22.58,
+      "core_quality": 20.06,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 22.58
+      "score": 20.06
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -51,7 +51,7 @@
       "B1_penalty": 0.5,
       "B2_penalty": 0.0,
       "B3": 4.0,
-      "B4a": 5.0,
+      "B4a": 0.0,
       "B4b": 0.0,
       "B4c": 0.0,
       "B5_blend_evidence": [],
@@ -59,38 +59,40 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
-      "bonuses": 5.0,
+      "bonuses": 4.0,
       "max": 30.0,
       "penalties": 0.5,
-      "raw": 29.5,
-      "score": 29.5
+      "raw": 28.5,
+      "score": 28.5
     },
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
         "boron": 0.4,
+        "iron bisglycinate": 4.8,
         "magnesium generic": 5.76,
+        "omega 3 fatty acids": 4.9,
+        "quatrefolic": 3.6,
         "vitamin b12": 1.2,
         "vitamin d3": 5.28,
         "vitamin e": 3.46,
         "vitamin k2 mk 7": 2.4
       },
-      "matched_entries": 6,
+      "matched_entries": 9,
       "max": 20.0,
-      "score": 11.9,
+      "score": 13.34,
+      "sub_clinical_canonicals": [],
       "top_n_applied": 4
     },
     "D": {
       "D1": 2.0,
       "D2": 1.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.0,
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -98,7 +100,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 66.98,
+    "quality_raw": 65.9,
     "violation_penalty": 0.0
   },
   "dsld_id": "278454",
@@ -109,29 +111,29 @@
   "output_schema_version": "3.6.0",
   "product_name": "Essential for Women Mint Essenced",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 83.7,
-  "score_80": 67.0,
+  "score_100_equivalent": 82.4,
+  "score_80": 65.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 22.58,
+      "core_quality": 20.06,
       "max": 25.0,
-      "score": 22.58
+      "score": 20.06
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 29.5
+      "score": 28.5
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 11.9
+      "score": 13.34
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
@@ -140,7 +142,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "specialty",
+  "supp_type": "multivitamin",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

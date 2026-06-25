@@ -51,7 +51,7 @@
       "B1_penalty": 0.0,
       "B2_penalty": 0.0,
       "B3": 0.0,
-      "B4a": 0.0,
+      "B4a": 8.0,
       "B4b": 0.0,
       "B4c": 0.0,
       "B5_blend_evidence": [],
@@ -59,14 +59,12 @@
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
-      "bonuses": 0.0,
+      "bonuses": 5.0,
       "max": 30.0,
       "penalties": 0.0,
-      "raw": 25.0,
-      "score": 25.0
+      "raw": 30.0,
+      "score": 30.0
     },
     "C": {
       "depth_bonus": 0.0,
@@ -83,10 +81,10 @@
       "D1": 2.0,
       "D2": 1.0,
       "D3": 0.0,
-      "D4": 0.0,
+      "D4": 1.0,
       "D5": 0.0,
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -94,7 +92,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 51.68,
+    "quality_raw": 57.68,
     "violation_penalty": 0.0
   },
   "dsld_id": "298102",
@@ -102,13 +100,13 @@
   "flags": [
     "SUPPLEMENT_TYPE_REINFERRED"
   ],
-  "grade": "Fair",
+  "grade": "Good",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.6.0",
   "product_name": "Vitamin D",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 64.6,
-  "score_80": 51.7,
+  "score_100_equivalent": 72.1,
+  "score_80": 57.7,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -121,7 +119,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 25.0
+      "score": 30.0
     },
     "C_evidence_research": {
       "max": 20.0,
@@ -129,7 +127,7 @@
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 3.0
+      "score": 4.0
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",

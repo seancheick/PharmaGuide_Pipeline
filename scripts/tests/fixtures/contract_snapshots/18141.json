@@ -1,15 +1,9 @@
 {
-  "badges": [
-    {
-      "description": "This product lists exact amounts for every active ingredient.",
-      "id": "FULL_DISCLOSURE",
-      "label": "FULL DISCLOSURE"
-    }
-  ],
+  "badges": [],
   "brand_name": "CVS Pharmacy",
   "breakdown": {
     "A": {
-      "A1": 13.06,
+      "A1": 13.68,
       "A2": 1.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -22,7 +16,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 19.06,
+      "core_quality": 19.68,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +37,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 19.06
+      "score": 19.68
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -54,19 +48,64 @@
       "B4a": 0.0,
       "B4b": 0.0,
       "B4c": 0.0,
-      "B5_blend_evidence": [],
-      "B5_penalty": 0.0,
+      "B5_blend_evidence": [
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_class": "generic",
+          "blend_name": "General Proprietary Blends",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 0,
+          "class_multiplier_applied": 1.0,
+          "computed_blend_penalty": -2.0,
+          "computed_blend_penalty_magnitude": 2.0,
+          "dedupe_fingerprint": "general proprietary blends|||activeingredients[4]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.0,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[4]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "full: 0",
+          "blend_class": "generic",
+          "blend_name": "Flaxseed oil extract (plant based) and purified fish oil concentrate omega fatty acid blend",
+          "blend_total_mg": 300.0,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 0,
+          "class_multiplier_applied": 1.0,
+          "computed_blend_penalty": -0.0,
+          "computed_blend_penalty_magnitude": 0.0,
+          "dedupe_fingerprint": "flaxseed oil extract plant based and purified fish oil concentrate omega fatty acid blend||300.000|activeingredients[4]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "full",
+          "hidden_mass_mg": 300.0,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.842697,
+          "impact_source": "mg_share",
+          "presence_penalty": 0.0,
+          "proportional_coef": 0.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[4]",
+          "unit_conversion_failed": false
+        }
+      ],
+      "B5_penalty": 2.0,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
-      "B8_caers_evidence": [],
-      "B8_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 0.0,
       "max": 30.0,
-      "penalties": 2.5,
-      "raw": 22.5,
-      "score": 22.5
+      "penalties": 4.5,
+      "raw": 20.5,
+      "score": 20.5
     },
     "C": {
       "depth_bonus": 0.0,
@@ -80,16 +119,17 @@
       "matched_entries": 5,
       "max": 20.0,
       "score": 13.37,
+      "sub_clinical_canonicals": [],
       "top_n_applied": 4
     },
     "D": {
       "D1": 0.0,
-      "D2": 1.0,
+      "D2": 0.0,
       "D3": 0.0,
       "D4": 0.0,
       "D5": 0.0,
       "max": 5.0,
-      "score": 1.0
+      "score": 0.0
     },
     "E": {
       "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
@@ -97,32 +137,35 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 55.93,
+    "quality_raw": 53.55,
     "violation_penalty": 0.0
   },
   "dsld_id": "18141",
   "evaluation_stage": "scoring",
-  "flags": [],
+  "flags": [
+    "PROPRIETARY_BLEND_PRESENT",
+    "SUPPLEMENT_TYPE_REINFERRED"
+  ],
   "grade": "Fair",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.6.0",
   "product_name": "Omega-3 100 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 69.9,
-  "score_80": 55.9,
+  "score_100_equivalent": 66.9,
+  "score_80": 53.5,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 19.06,
+      "core_quality": 19.68,
       "max": 25.0,
-      "score": 19.06
+      "score": 19.68
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 22.5
+      "score": 20.5
     },
     "C_evidence_research": {
       "max": 20.0,
@@ -130,7 +173,7 @@
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 1.0
+      "score": 0.0
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
@@ -139,7 +182,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "multivitamin",
+  "supp_type": "single_vitamin",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

@@ -155,17 +155,10 @@ def _snapshot_params() -> List[Tuple[int, str, str]]:
     ]
 
 
-@pytest.mark.xfail(
-    reason=(
-        "Snapshots regenerate after identity_bioactivity_split Phase 7. "
-        "Phase 2 (commit f3b713d+ migration) relocates 108 source-botanical aliases "
-        "out of marker IQM canonicals, intentionally changing scored output for "
-        "products with acerola/camu camu/turmeric/cayenne/sophora/broccoli sprout/"
-        "horse chestnut/polygonum/tomato ingredients. Re-run pipeline + "
-        "scripts/tests/freeze_contract_snapshots.py per product after Phase 7."
-    ),
-    strict=False,
-)
+# Snapshots re-frozen 2026-06-25 against the post-Pass-1 (V4 tradeoffs + B8
+# removal) + blend D1/D3 build; 16 discontinued products dropped from the
+# manifest. Live regression guard again — re-run
+# scripts/tests/freeze_contract_snapshots.py after any reviewed scoring change.
 @pytest.mark.parametrize("dsld_id,brand_source,label", _snapshot_params())
 def test_scored_product_matches_snapshot(
     dsld_id: int, brand_source: str, label: str
