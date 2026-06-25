@@ -11283,11 +11283,16 @@ class SupplementEnricherV3:
                 # Roll nested rows under parent blend key when available.
                 if is_nested and parent_blend:
                     # Parent aggregates like "Total Cultures"/"Total Omega-3s"
-                    # are not proprietary blends unless the parent label itself
-                    # carries proprietary/blend structure.
-                    if parent_is_non_proprietary_aggregate or not parent_looks_like_blend:
+                    # are never proprietary blends — skip them outright.
+                    if parent_is_non_proprietary_aggregate:
                         continue
-
+                    # D3: a parent whose name lacks a blend keyword may STILL be a
+                    # proprietary blend (e.g. "Organic Alkalizing Green Juice
+                    # Powder"). Aggregate it here; the finalization opacity gate
+                    # below keeps a keyword-less group ONLY when it proves OPAQUE
+                    # (every child amount withheld). `_keyword_blend` records
+                    # whether the name matched so disclosed keyword-less
+                    # aggregates drop out.
                     group_key = (parent_blend.lower(), disclosure)
                     group = nested_parent_groups.get(group_key)
                     if not group:
@@ -11301,6 +11306,7 @@ class SupplementEnricherV3:
                             "source_field": source_field,
                             "source_path": source_field,
                             "sources": ["cleaning"],
+                            "_keyword_blend": parent_looks_like_blend,
                             "_source_fields": set(),
                             "_children_with_amounts": [],
                             "_children_without_amounts": set(),
@@ -11374,6 +11380,14 @@ class SupplementEnricherV3:
         for group in nested_parent_groups.values():
             with_amounts = group.pop("_children_with_amounts", [])
             without_amounts = sorted(group.pop("_children_without_amounts", set()))
+            keyword_blend = group.pop("_keyword_blend", True)
+            # D3 opacity gate: a keyword-less parent is a proprietary blend only
+            # when OPAQUE — total weight shown, every child amount withheld. Any
+            # disclosed child makes it a transparent aggregate, not a blend, so
+            # B5 must not fire on it. (Keyword-named blends are kept regardless.)
+            is_opaque = bool(without_amounts) and not with_amounts
+            if not keyword_blend and not is_opaque:
+                continue
             source_fields = sorted(group.pop("_source_fields", set()))
             group["source_fields"] = source_fields
             if source_fields:
