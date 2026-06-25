@@ -15,6 +15,11 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 source "$REPO_ROOT/scripts/python_env.sh"
 
+# Signals scripts/tests/conftest.py that pytest was launched through this runner
+# (pinned interpreter + profile selection), so it stays quiet. Raw
+# `python3 -m pytest` lacks it and gets nudged toward this script.
+export PG_TEST_RUNNER=1
+
 PROFILE="${1:-fast}"
 shift || true
 
@@ -23,11 +28,30 @@ PYTEST_BASE=(scripts/tests -q --tb=line)
 USER_TARGETS=()
 USER_OPTIONS=()
 SLOW_FILES=(
+  # Heavy real-catalog / V4-canary integration tests. Excluded from `fast`;
+  # run via `slow`/`full`. Expanded 2026-06-24 from a full --durations=40 pass
+  # — worst offenders ran 25s to 485s each and were not previously listed.
+  scripts/tests/test_canonical_id_e2e_continuity.py
   scripts/tests/test_clean_unmapped_alias_regressions.py
+  scripts/tests/test_dsld_317006_piperine_demotion_2026_05_25.py
   scripts/tests/test_enrichment_regressions.py
   scripts/tests/test_pipeline_regressions.py
   scripts/tests/test_scorable_classification.py
   scripts/tests/test_score_supplements.py
+  scripts/tests/test_scoring_evidence_contract_v1.py
+  scripts/tests/test_unii_match_method_in_ledger.py
+  scripts/tests/test_v4_banned_form_evidence_gate.py
+  scripts/tests/test_v4_cross_module_canary_diversity.py
+  scripts/tests/test_v4_gate_canary_diversity.py
+  scripts/tests/test_v4_multi_prenatal_canary_diversity_p3.py
+  scripts/tests/test_v4_omega_canary_diversity_p161.py
+  scripts/tests/test_v4_omega_dose_p162.py
+  scripts/tests/test_v4_omega_evidence_p163.py
+  scripts/tests/test_v4_omega_final_assembly_p166.py
+  scripts/tests/test_v4_omega_transparency_p165.py
+  scripts/tests/test_v4_omega_trust_p164.py
+  scripts/tests/test_v4_opaque_stimulant_blend.py
+  scripts/tests/test_v4_probiotic_final_assembly_p26.py
 )
 RELEASE_FILES=(
   scripts/tests/test_active_banned_recalled_parity.py
@@ -39,6 +63,7 @@ RELEASE_FILES=(
   scripts/tests/test_release_gate_banned_safe_contradictions.py
   scripts/tests/test_source_of_truth_contract.py
   scripts/tests/test_v4_canary_coverage.py
+  scripts/tests/test_v4_safety_parity_release.py
 )
 ARTIFACT_FILES=(
   scripts/tests/test_active_banned_recalled_parity.py

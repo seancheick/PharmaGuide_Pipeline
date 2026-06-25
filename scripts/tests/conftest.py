@@ -12,6 +12,7 @@ This file is auto-discovered by pytest. No imports needed in test files.
 from __future__ import annotations
 
 import importlib
+import os
 import sys
 import types
 from pathlib import Path
@@ -27,11 +28,30 @@ if str(_SCRIPTS_DIR) not in sys.path:
 
 
 SLOW_TEST_FILES = {
+    # Heavy real-catalog / V4-canary integration tests. Kept in sync with
+    # scripts/test.sh SLOW_FILES. Expanded 2026-06-24 from a --durations=40 pass
+    # (worst offenders ran 25s-485s each).
+    "test_canonical_id_e2e_continuity.py",
     "test_clean_unmapped_alias_regressions.py",
+    "test_dsld_317006_piperine_demotion_2026_05_25.py",
     "test_enrichment_regressions.py",
     "test_pipeline_regressions.py",
     "test_scorable_classification.py",
     "test_score_supplements.py",
+    "test_scoring_evidence_contract_v1.py",
+    "test_unii_match_method_in_ledger.py",
+    "test_v4_banned_form_evidence_gate.py",
+    "test_v4_cross_module_canary_diversity.py",
+    "test_v4_gate_canary_diversity.py",
+    "test_v4_multi_prenatal_canary_diversity_p3.py",
+    "test_v4_omega_canary_diversity_p161.py",
+    "test_v4_omega_dose_p162.py",
+    "test_v4_omega_evidence_p163.py",
+    "test_v4_omega_final_assembly_p166.py",
+    "test_v4_omega_transparency_p165.py",
+    "test_v4_omega_trust_p164.py",
+    "test_v4_opaque_stimulant_blend.py",
+    "test_v4_probiotic_final_assembly_p26.py",
 }
 
 RELEASE_TEST_FILES = {
@@ -44,6 +64,7 @@ RELEASE_TEST_FILES = {
     "test_release_gate_banned_safe_contradictions.py",
     "test_source_of_truth_contract.py",
     "test_v4_canary_coverage.py",
+    "test_v4_safety_parity_release.py",
 }
 
 ARTIFACT_TEST_FILES = {
@@ -61,6 +82,25 @@ ARTIFACT_TEST_FILES = {
     "test_safety_copy_contract.py",
     "test_v4_canary_coverage.py",
 }
+
+
+def pytest_configure(config: pytest.Config) -> None:  # noqa: ARG001
+    """Nudge when pytest is invoked directly instead of via scripts/test.sh.
+
+    The runner pins the project interpreter (pyenv 3.13; macOS/Xcode `python3`
+    is 3.9) and applies the fast/release/full profiles. A raw
+    `python3 -m pytest scripts/tests/` uses the wrong interpreter AND runs the
+    full heavy suite (one catalog test alone is ~8 min; whole run ~1 hr). The
+    runner sets PG_TEST_RUNNER=1; its absence means pytest was launched raw."""
+    if os.environ.get("PG_TEST_RUNNER"):
+        return
+    sys.stderr.write(
+        "\n\033[1;33m⚠  Run tests via scripts/test.sh, not raw pytest:\n"
+        "     scripts/test.sh fast     # dev loop (~3-5 min, pinned Python 3.13)\n"
+        "     scripts/test.sh full     # full suite, pre-ship / CI\n"
+        "   Raw `python3 -m pytest` uses Xcode's Python 3.9 and runs the full\n"
+        "   heavy suite (~1 hr). See AGENTS.md > Running tests.\033[0m\n\n"
+    )
 
 
 def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:

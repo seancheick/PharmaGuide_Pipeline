@@ -8,17 +8,35 @@ PharmaGuide is a 3-stage data pipeline (Clean → Enrich → Score) that process
 **Language:** Python 3.13
 **Test framework:** pytest 9
 
+## ⚠️ Running tests — use `scripts/test.sh`, never raw `pytest`
+
+The dev loop is **`scripts/test.sh fast`** (~3–5 min). The runner pins the
+project interpreter (pyenv **3.13.3**; macOS/Xcode `python3` is 3.9 and wrong)
+and skips the ~15 heavy real-catalog / V4-canary tests. Running
+`python3 -m pytest scripts/tests/` directly uses the wrong interpreter **and**
+runs every heavy test (one alone is ~8 min) — that is why ad-hoc runs balloon to
+~1 hour.
+
+```bash
+scripts/test.sh fast            # dev loop — ~3–5 min (DEFAULT; use this)
+scripts/test.sh fast -k banned  # filter by keyword
+scripts/test.sh fast scripts/tests/test_score_supplements.py   # one file
+scripts/test.sh release         # release gates before a ship / commit
+scripts/test.sh full            # entire suite, parallel (-n auto) — pre-ship / CI
+scripts/test.sh slow            # only the heavy integration tests
+```
+
+The ~15 catalog/release tests are **release gates**, not dev-loop tests — run
+them via `release`/`full` before a ship, not while iterating. (conftest.py prints
+a reminder if pytest is launched without the runner.)
+
 ## Commands
 
 ```bash
-# Run all tests (5100+ tests, 580 files)
-python3 -m pytest scripts/tests/
-
-# Run a single test file
-python3 -m pytest scripts/tests/test_score_supplements.py -v
-
-# Run tests matching a keyword
-python3 -m pytest scripts/tests/ -k "banned"
+# Tests — ALWAYS via the runner (see "Running tests" above), NEVER raw pytest.
+scripts/test.sh fast                 # dev loop (~3-5 min, pinned Python 3.13)
+scripts/test.sh fast -k banned       # filter by keyword
+scripts/test.sh full                 # full suite (pre-ship / CI)
 
 # Run the full pipeline on a dataset folder
 python3 scripts/run_pipeline.py <dataset_dir>
