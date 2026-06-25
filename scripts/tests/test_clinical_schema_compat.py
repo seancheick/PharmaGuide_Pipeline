@@ -61,6 +61,7 @@ class TestClinicalSchemaCompatibility:
         result = enricher._collect_evidence_data(product)
         assert result["match_count"] == 1
         match = result["clinical_matches"][0]
+        assert match["ui_evidence_scope"] == "ingredient"
         assert match["min_clinical_dose"] == 500
         assert match["dose_unit"] == "mg"
         assert match["typical_effective_dose"] == "500-1000 mg/day"
@@ -101,6 +102,62 @@ class TestClinicalSchemaCompatibility:
         result = enricher._collect_evidence_data(product)
         assert result["match_count"] == 0
         assert result["clinical_matches"] == []
+
+    def test_enrichment_stamps_ui_evidence_scope(self, enricher):
+        enricher.databases["backed_clinical_studies"] = {
+            "backed_clinical_studies": [
+                {
+                    "id": "PROD_TEST",
+                    "standard_name": "Exact Product",
+                    "aliases": ["exact product"],
+                    "evidence_level": "product-human",
+                    "study_type": "rct_single",
+                },
+                {
+                    "id": "BRAND_TEST",
+                    "standard_name": "Brand Extract",
+                    "aliases": ["brand extract"],
+                    "evidence_level": "branded-rct",
+                    "study_type": "rct_multiple",
+                },
+                {
+                    "id": "INGR_TEST",
+                    "standard_name": "Generic Ingredient",
+                    "aliases": ["generic ingredient"],
+                    "evidence_level": "ingredient-human",
+                    "study_type": "systematic_review_meta",
+                },
+                {
+                    "id": "REF_TEST",
+                    "standard_name": "Reference Ingredient",
+                    "aliases": ["reference ingredient"],
+                    "evidence_level": "reference",
+                    "study_type": "reference",
+                },
+            ]
+        }
+
+        product = {
+            "activeIngredients": [
+                {"name": "Exact Product", "standardName": "Exact Product"},
+                {"name": "Brand Extract", "standardName": "Brand Extract"},
+                {"name": "Generic Ingredient", "standardName": "Generic Ingredient"},
+                {"name": "Reference Ingredient", "standardName": "Reference Ingredient"},
+            ]
+        }
+
+        result = enricher._collect_evidence_data(product)
+        scopes = {
+            match["id"]: match["ui_evidence_scope"]
+            for match in result["clinical_matches"]
+        }
+
+        assert scopes == {
+            "PROD_TEST": "product",
+            "BRAND_TEST": "branded_ingredient",
+            "INGR_TEST": "ingredient",
+            "REF_TEST": "indirect",
+        }
 
     def test_scorer_uses_optional_base_points_and_multiplier(self, scorer):
         scorer.config.setdefault("section_C_evidence_research", {})

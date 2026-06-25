@@ -11891,6 +11891,17 @@ class SupplementEnricherV3:
     # SECTION C: EVIDENCE & RESEARCH DATA COLLECTORS
     # =========================================================================
 
+    @staticmethod
+    def _clinical_ui_evidence_scope(evidence_level: Any) -> str:
+        level = str(evidence_level or "").strip().lower()
+        if level == "product-human":
+            return "product"
+        if level == "branded-rct":
+            return "branded_ingredient"
+        if level in {"ingredient-human", "strain-clinical"}:
+            return "ingredient"
+        return "indirect"
+
     def _collect_evidence_data(
         self, product: Dict, ingredient_quality_data: Optional[Dict] = None
     ) -> Dict:
@@ -12089,6 +12100,7 @@ class SupplementEnricherV3:
                         continue
                     seen_study_ids.add(study_id)
 
+                    evidence_level = study.get('evidence_level', 'ingredient-human')
                     match_payload = {
                         "ingredient": ing_name,
                         "standard_name": study_name,
@@ -12097,7 +12109,8 @@ class SupplementEnricherV3:
                         "study_name": study_name,
                         "match_method": matched.get("method"),
                         "matched_term": matched.get("matched_term"),
-                        "evidence_level": study.get('evidence_level', 'ingredient-human'),
+                        "evidence_level": evidence_level,
+                        "ui_evidence_scope": self._clinical_ui_evidence_scope(evidence_level),
                         "study_type": study.get('study_type', 'rct_single'),
                         "score_contribution": study.get('score_contribution', 'tier_3'),
                         "health_goals_supported": study.get('health_goals_supported', []),
@@ -12183,6 +12196,7 @@ class SupplementEnricherV3:
                     # Skip brand-specific studies for marker-via path
                     if study_id.startswith("BRAND_"):
                         continue
+                    evidence_level = study.get("evidence_level", "ingredient-human")
                     match_payload = {
                         "ingredient": ing.get("name") or ing.get("raw_source_text"),
                         "standard_name": study_name,
@@ -12191,7 +12205,8 @@ class SupplementEnricherV3:
                         "study_name": study_name,
                         "match_method": matched.get("method"),
                         "matched_term": matched.get("matched_term"),
-                        "evidence_level": study.get("evidence_level", "ingredient-human"),
+                        "evidence_level": evidence_level,
+                        "ui_evidence_scope": self._clinical_ui_evidence_scope(evidence_level),
                         "study_type": study.get("study_type", "rct_single"),
                         "score_contribution": study.get("score_contribution", "tier_3"),
                         "health_goals_supported": study.get("health_goals_supported", []),
