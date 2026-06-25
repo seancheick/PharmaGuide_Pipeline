@@ -6305,6 +6305,14 @@ def build_core_row(
             v = ing.get(k)
             if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
                 ing_tokens.add(v.strip())
+        # DSLD lists Sodium/mineral compounds as a bare mineral name with the real
+        # compound in an "as" form (e.g. name="Sodium", forms=["Sodium Beta-
+        # Hydroxybutyrate"]). For non-IQD actives the bare name is all FTS would
+        # see; surface the form name so the compound is searchable.
+        for form in safe_list(ing.get("forms")):
+            fn = form.get("name") if isinstance(form, dict) else None
+            if isinstance(fn, str) and fn.strip() and fn.strip().lower() not in {"unknown", "n/a", "none"}:
+                ing_tokens.add(fn.strip())
     # Inactives — pull from canonical inactiveIngredients list (label-fidelity)
     for ing in safe_list(enriched.get("inactiveIngredients")):
         if isinstance(ing, dict):

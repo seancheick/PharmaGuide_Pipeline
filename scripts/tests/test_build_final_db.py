@@ -1665,6 +1665,39 @@ def test_export_empty_strict_primary_contract_does_not_fallback_to_blend_childre
     assert "Rhodiola" not in row["ingredients_text"]
 
 
+def test_ingredients_text_includes_as_form_compound_for_bare_mineral_active():
+    # DSLD labels Sodium-compound SKUs (Sodium BHB, Sodium D-Aspartate) with a
+    # bare mineral name="Sodium" and the real compound in an "as" form
+    # (forms[0].name). The activeIngredients search-token fallback collected only
+    # the bare name fields → ingredients_text read "Sodium sodium" and the compound
+    # was unsearchable. The "as" form name must be a search token.
+    enriched = make_enriched()
+    enriched["product_name"] = "Sodium BHB"
+    enriched["activeIngredients"] = [
+        {
+            "name": "Sodium",
+            "standardName": "Sodium",
+            "normalized_key": "sodium",
+            "canonical_id": "sodium",
+            "raw_source_text": "Sodium",
+            "raw_source_path": "ingredientRows[0]",
+            "quantity": 125,
+            "unit": "mg",
+            "forms": [{"name": "Sodium Beta-Hydroxybutyrate", "prefix": "as"}],
+        }
+    ]
+    # Empty IQD → the active routes through the activeIngredients fallback loop.
+    enriched["ingredient_quality_data"] = {"ingredients": [], "ingredients_scorable": []}
+
+    blob = build_detail_blob(enriched, make_scored())
+    row = row_as_dict(build_core_row(
+        enriched, make_scored(), "2026-04-10T12:00:00Z", detail_blob=blob,
+    ))
+    assert "Sodium Beta-Hydroxybutyrate" in row["ingredients_text"], (
+        f"the 'as' form compound must be searchable; got {row['ingredients_text']!r}"
+    )
+
+
 def test_key_ingredient_tags_use_clean_identity_for_red_yeast_rice_safety_canonical():
     enriched = make_enriched()
     enriched["activeIngredients"] = [
