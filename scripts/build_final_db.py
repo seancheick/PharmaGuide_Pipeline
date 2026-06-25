@@ -1299,6 +1299,22 @@ def _active_row_allowed_for_primary_export(
 ) -> bool:
     if not contract.get("available"):
         return True
+    # An "available" but EMPTY contract identifies no strict primary active (every
+    # disclosed active was recognized-but-non-scorable / unmapped / additive, e.g.
+    # a single-botanical BulkSupplements SKU). It provides no basis to filter, so a
+    # real LABEL row must still render — the product ships as opaque/POOR rather
+    # than being dropped to a 0-active blob the reconciliation gate then quarantines
+    # (see build_detail_blob gate intent: opaque actives SHIP). Nested blend
+    # children fall through to the safety-signal check below so they never surface
+    # as top-level actives unless they carry an explicit safety signal.
+    if not (
+        contract.get("source_paths")
+        or contract.get("terms")
+        or contract.get("canonical_ids")
+    ):
+        empty_path = safe_str(ing.get("raw_source_path") or ing.get("source_path")).lower()
+        if "child_ingredients" not in empty_path and "nestedrows" not in empty_path:
+            return True
     path = safe_str(ing.get("raw_source_path") or ing.get("source_path"))
     if path and path in contract.get("source_paths", set()):
         return True
