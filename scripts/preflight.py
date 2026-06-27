@@ -57,6 +57,7 @@ IMPORTANT_DATA_FILES = [
     ("clinically_relevant_strains.json", "Clinical probiotic strain database"),
     ("clinical_risk_taxonomy.json", "Condition and medication-class enum taxonomy"),
     ("ingredient_interaction_rules.json", "Ingredient-level interaction alert rules"),
+    ("medication_profile_gate_rules.json", "Standalone medication profile-gate rules"),
 ]
 
 # Optional data files - nice to have
@@ -151,6 +152,7 @@ SCHEMA_V5_DATABASES = [
     "ingredient_weights.json",
     "manufacture_deduction_expl.json",
     "manufacturer_violations.json",
+    "medication_profile_gate_rules.json",
     "migration_report.json",
     "other_ingredients.json",
     "proprietary_blends.json",

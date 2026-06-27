@@ -49,6 +49,7 @@
     "ingredient_interaction_rules": "data/ingredient_interaction_rules.json",
     "ingredient_weights": "data/ingredient_weights.json",
     "manufacturer_violations": "data/manufacturer_violations.json",
+    "medication_profile_gate_rules": "data/medication_profile_gate_rules.json",
     "other_ingredients": "data/other_ingredients.json",
     "percentile_categories": "data/percentile_categories.json",
     "proprietary_blends": "data/proprietary_blends.json",

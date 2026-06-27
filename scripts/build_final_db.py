@@ -6475,6 +6475,7 @@ REFERENCE_FILES = {
     "rda_optimal_uls": "data/rda_optimal_uls.json",
     "interaction_rules": "data/ingredient_interaction_rules.json",
     "clinical_risk_taxonomy": "data/clinical_risk_taxonomy.json",
+    "medication_profile_gate_rules": "data/medication_profile_gate_rules.json",
     "user_goals_clusters": "data/user_goals_to_clusters.json",
 }
 
