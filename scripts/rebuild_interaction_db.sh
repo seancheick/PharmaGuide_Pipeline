@@ -37,7 +37,7 @@ source "$REPO_ROOT/scripts/python_env.sh"
 # Defaults
 # ---------------------------------------------------------------------------
 
-INTERACTION_VERSION="1.0.0"
+INTERACTION_VERSION="1.0.2"
 OFFLINE_FLAG=""
 DO_IMPORT=0
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
