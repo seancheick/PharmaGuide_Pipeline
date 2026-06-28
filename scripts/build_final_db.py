@@ -5009,6 +5009,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         synergy_display = []
         best_tier = 4
         for sc in synergy_clusters:
+            # Present-but-underdosed sole-primary clusters are not real
+            # synergies — they exist only to feed goal matching's "partially
+            # supported" state (goal_matches_underdosed). Keep them out of the
+            # user-facing synergy detail and the display bonus tier.
+            if safe_bool(sc.get("underdosed_single")):
+                continue
             tier = int(safe_float(sc.get("evidence_tier"), 4))
             best_tier = min(best_tier, tier)
             matched = safe_list(sc.get("matched_ingredients"))

@@ -8748,6 +8748,7 @@ class SupplementEnricherV3:
             # prenatal_pregnancy_support, calcium-only → bone_health).
             qualifies = False
             single_ingredient_match = False
+            underdosed_single = False
 
             if len(matched_ings) >= 2:
                 qualifies = True
@@ -8765,19 +8766,33 @@ class SupplementEnricherV3:
                 matched_term = self._normalize_text(
                     sole.get("cluster_ingredient", "")
                 )
-                # Single-ingredient override requires BOTH:
-                #   (a) matched term is a primary ingredient for this cluster
-                #   (b) the ingredient is at an adequate (minimum effective) dose
-                # Rationale: a trace mineral (e.g. 100 mg magnesium in a multi)
-                # should not earn a solo "Sleep Quality" match — the clinical
-                # sleep-relevant dose is ~200 mg.
-                if (
-                    matched_term
-                    and matched_term in primary_norm
-                    and bool(sole.get("meets_minimum", False))
-                ):
-                    qualifies = True
-                    single_ingredient_match = True
+                # Single-ingredient override, two outcomes (both require the
+                # matched term to be a PRIMARY ingredient for this cluster):
+                #   (a) adequate dose -> a real solo synergy match (e.g.
+                #       magnesium >= 200 mg earning sleep_stack). single_ingredient_match.
+                #   (b) present-but-underdosed (>= 50% of the effective dose but
+                #       below it) -> emitted as underdosed_single so goal matching
+                #       surfaces "partially supported" instead of dropping to
+                #       "Unaddressed". The synergy DISPLAY and the A5c bonus both
+                #       skip it (build filters underdosed_single; the bonus needs
+                #       match_count >= 2). Below 50% is trace and stays dropped —
+                #       17 mg of magnesium must never claim to support sleep.
+                if matched_term and matched_term in primary_norm:
+                    if bool(sole.get("meets_minimum", False)):
+                        qualifies = True
+                        single_ingredient_match = True
+                    else:
+                        try:
+                            sole_qty = float(sole.get("quantity") or 0)
+                        except (TypeError, ValueError):
+                            sole_qty = 0.0
+                        try:
+                            sole_min = float(sole.get("min_effective_dose") or 0)
+                        except (TypeError, ValueError):
+                            sole_min = 0.0
+                        if sole_min > 0 and sole_qty >= 0.5 * sole_min:
+                            qualifies = True
+                            underdosed_single = True
 
             if qualifies:
                 sources = cluster.get("sources", [])
@@ -8809,6 +8824,11 @@ class SupplementEnricherV3:
                     "doses_adequate": doses_adequate,
                     "all_adequate": all(doses_adequate) if doses_adequate else False,
                     "single_ingredient_match": single_ingredient_match,
+                    # True only for a present-but-underdosed sole primary match
+                    # (>= 50% of the effective dose). Suppressed from the synergy
+                    # display; consumed by goal matching's presence path to mark
+                    # the goal "partially supported" rather than "Unaddressed".
+                    "underdosed_single": underdosed_single,
                 })
 
         return matched_clusters
