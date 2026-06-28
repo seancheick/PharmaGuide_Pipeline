@@ -26,17 +26,48 @@ def _enriched(clusters):
     return {"synergy_detail": {"clusters_matched": list(clusters)}}
 
 
+def _enriched_dosed(clusters_with_doses):
+    """Primary-path enrichment with per-cluster dose adequacy.
+
+    ``clusters_with_doses`` maps cluster_id -> meets_minimum (bool). Emits the
+    ``formulation_data.synergy_clusters[*].matched_ingredients[].meets_minimum``
+    shape the dose gate reads, so we can exercise the
+    supported-vs-present-but-underdosed split.
+    """
+    return {
+        "formulation_data": {
+            "synergy_clusters": [
+                {
+                    "cluster_id": cid,
+                    "matched_ingredients": [
+                        {"name": "magnesium", "meets_minimum": meets},
+                    ],
+                }
+                for cid, meets in clusters_with_doses.items()
+            ]
+        }
+    }
+
+
 # ---------- Empty / degenerate inputs ----------
 
 
 def test_empty_clusters_returns_empty_match():
     result = compute_goal_matches(_enriched([]))
-    assert result == {"goal_matches": [], "goal_match_confidence": 0.0}
+    assert result == {
+        "goal_matches": [],
+        "goal_match_confidence": 0.0,
+        "goal_matches_underdosed": [],
+    }
 
 
 def test_missing_synergy_detail_returns_empty_match():
     result = compute_goal_matches({})
-    assert result == {"goal_matches": [], "goal_match_confidence": 0.0}
+    assert result == {
+        "goal_matches": [],
+        "goal_match_confidence": 0.0,
+        "goal_matches_underdosed": [],
+    }
 
 
 def test_clusters_with_no_overlap_returns_empty_match():
@@ -198,7 +229,11 @@ def test_multi_goal_match_averages_confidence():
 
 def test_returns_only_documented_keys():
     result = compute_goal_matches(_enriched(["sleep_stack", "magnesium_nervous_system"]))
-    assert set(result.keys()) == {"goal_matches", "goal_match_confidence"}
+    assert set(result.keys()) == {
+        "goal_matches",
+        "goal_match_confidence",
+        "goal_matches_underdosed",
+    }
 
 
 def test_goal_matches_is_list_and_confidence_is_float():
@@ -242,3 +277,73 @@ def test_cache_is_lazily_populated_and_consistent():
     a = compute_goal_matches(enriched)
     b = compute_goal_matches(enriched)
     assert a == b
+
+
+# ---------- goal_matches_underdosed (present-but-underdosed split) ----------
+#
+# A goal whose only qualifying clusters fail the dose gate (present but below
+# the goal-specific effective dose) must NOT claim full support. It routes to
+# the additive ``goal_matches_underdosed`` list instead — the pipeline source
+# of truth for the app's "Partially supported" bucket. ``goal_matches`` keeps
+# its exact prior meaning (dose-adequate support only).
+
+
+def test_underdosed_cluster_routes_goal_to_underdosed_not_supported():
+    """Screenshot scenario: magnesium adequate for sleep_stack (≥100 mg) but
+    underdosed for stress_resilience (<200 mg). SLEEP is adequately supported;
+    STRESS is present-but-underdosed."""
+    result = compute_goal_matches(
+        _enriched_dosed(
+            {"sleep_stack": True, "stress_resilience": False}
+        )
+    )
+    # Sleep cleared its dose gate → fully supported, never in underdosed.
+    assert "GOAL_SLEEP_QUALITY" in result["goal_matches"]
+    assert "GOAL_SLEEP_QUALITY" not in result["goal_matches_underdosed"]
+    # Stress only qualifies on presence (its cluster failed the dose gate) →
+    # present-but-underdosed, never claimed as supported.
+    assert "GOAL_REDUCE_STRESS_ANXIETY" in result["goal_matches_underdosed"]
+    assert "GOAL_REDUCE_STRESS_ANXIETY" not in result["goal_matches"]
+
+
+def test_adequate_cluster_keeps_goal_supported_not_underdosed():
+    """Same clusters, but magnesium now meets the stress dose: STRESS becomes
+    fully supported and the underdosed list does not double-list it."""
+    result = compute_goal_matches(
+        _enriched_dosed(
+            {"sleep_stack": True, "stress_resilience": True}
+        )
+    )
+    assert "GOAL_REDUCE_STRESS_ANXIETY" in result["goal_matches"]
+    assert "GOAL_REDUCE_STRESS_ANXIETY" not in result["goal_matches_underdosed"]
+
+
+def test_underdosed_excludes_anything_already_supported():
+    """A goal present in goal_matches is never also in goal_matches_underdosed,
+    even when some of its clusters are underdosed (support already proven by an
+    adequate cluster)."""
+    result = compute_goal_matches(
+        _enriched_dosed(
+            {"sleep_stack": True, "stress_resilience": False}
+        )
+    )
+    overlap = set(result["goal_matches"]) & set(result["goal_matches_underdosed"])
+    assert overlap == set(), f"goal must not be both supported and underdosed: {overlap}"
+
+
+def test_all_clusters_adequate_yields_empty_underdosed():
+    """When every matched cluster clears its dose gate, the underdosed list is
+    empty (nothing is present-but-underdosed)."""
+    result = compute_goal_matches(
+        _enriched_dosed({"sleep_stack": True, "magnesium_nervous_system": True})
+    )
+    assert result["goal_matches_underdosed"] == []
+
+
+def test_fallback_path_without_dose_data_has_empty_underdosed():
+    """Legacy fallback inputs (clusters_matched, no dose data) pass the gate
+    leniently, so adequate == present and nothing is underdosed — preserving
+    the prior contract for existing callers."""
+    result = compute_goal_matches(_enriched(["sleep_stack"]))
+    assert "GOAL_SLEEP_QUALITY" in result["goal_matches"]
+    assert result["goal_matches_underdosed"] == []

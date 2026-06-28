@@ -197,6 +197,7 @@ COLUMNS = [
     "contains_adaptogens", "contains_nootropics", "key_ingredient_tags",
     "ingredients_text",  # 2026-05-12: searchable ingredient FTS column
     "goal_matches", "goal_match_confidence",
+    "goal_matches_underdosed",  # v2.x: goals present but below effective dose
     "dosing_summary", "servings_per_container",
     "net_contents_quantity", "net_contents_unit",
     "allergen_summary",

@@ -1974,8 +1974,9 @@ CREATE TABLE IF NOT EXISTS products_core (
     -- ====================================================================
     -- Enhancement 4: Goal Matching Preview
     -- ====================================================================
-    goal_matches                  TEXT,  -- JSON array: matched goal IDs
+    goal_matches                  TEXT,  -- JSON array: dose-adequate goal IDs
     goal_match_confidence         REAL,  -- 0.0-1.0: average cluster weight
+    goal_matches_underdosed       TEXT,  -- JSON array: goals present but below effective dose
 
     -- ====================================================================
     -- Enhancement 5: Dosing Guidance
@@ -5648,21 +5649,28 @@ def _load_goal_mappings() -> List[Dict[str, Any]]:
     return mappings
 
 
-def _extract_product_cluster_ids(enriched: Dict) -> set:
+def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True) -> set:
     """Flatten product cluster IDs from the enrichment output.
 
     Source of truth from ``enrich_supplements_v3.py``:
       ``enriched["formulation_data"]["synergy_clusters"]`` is a list of cluster
       dicts each containing ``cluster_id`` (e.g. ``"sleep_stack"``).
 
-    Dose-adequacy gate: a cluster counts toward goal matching only when at
-    least one of its ``matched_ingredients`` meets the ingredient's minimum
-    effective dose (``meets_minimum``). This prevents trace-mineral
-    over-matching from promoting clusters to goals — e.g. 17 mg of magnesium
-    in a whey protein powder must not earn the product a "Sleep Quality"
-    match, because the sleep-effective magnesium dose is ~200 mg. Clusters
-    without dose data (no ``matched_ingredients`` key, or all entries with
-    ``meets_minimum`` missing/null) pass through — legacy shape tolerance.
+    Dose-adequacy gate (``enforce_dose_gate=True``, default): a cluster counts
+    only when at least one of its ``matched_ingredients`` meets the
+    ingredient's minimum effective dose (``meets_minimum``). This prevents
+    trace-mineral over-matching from promoting clusters to goals — e.g. 17 mg
+    of magnesium in a whey protein powder must not earn the product a "Sleep
+    Quality" match, because the sleep-effective magnesium dose is ~100 mg.
+    Clusters without dose data (no ``matched_ingredients`` key, or all entries
+    with ``meets_minimum`` missing/null) pass through — legacy shape tolerance.
+
+    Pass ``enforce_dose_gate=False`` to get the presence-only set (every
+    matched cluster regardless of dose). ``compute_goal_matches`` runs both:
+    the gated set drives ``goal_matches`` (dose-adequate support) and the
+    presence-only set surfaces goals that match but are below effective dose
+    (``goal_matches_underdosed``). The presence-only set is always a superset
+    of the gated set.
 
     Also tolerates a ``synergy_detail.clusters_matched`` flat list if present
     (legacy/alternate path), so callers can feed either the raw enrichment
@@ -5700,7 +5708,7 @@ def _extract_product_cluster_ids(enriched: Dict) -> set:
             cid = safe_str(cluster.get("cluster_id"))
             if not cid:
                 continue
-            if not _cluster_has_adequate_dose(cluster):
+            if enforce_dose_gate and not _cluster_has_adequate_dose(cluster):
                 continue
             ids.add(cid)
 
@@ -5716,11 +5724,109 @@ def _extract_product_cluster_ids(enriched: Dict) -> set:
             cid = safe_str(cluster.get("id") or cluster.get("cluster_id"))
             if not cid:
                 continue
-            if not _cluster_has_adequate_dose(cluster):
+            if enforce_dose_gate and not _cluster_has_adequate_dose(cluster):
                 continue
             ids.add(cid)
 
     return ids
+
+
+def _evaluate_goal_match(goal_mapping: Dict, product_clusters: set) -> Optional[float]:
+    """Score one goal against a set of product clusters.
+
+    Returns the normalized match score (0.0..1.0) when the goal qualifies, or
+    ``None`` when any gate fails. Pure function of ``(mapping, clusters)`` so
+    ``compute_goal_matches`` can call it twice — once with the dose-adequate
+    cluster set (→ ``goal_matches``) and once with the presence-only set
+    (→ ``goal_matches_underdosed``) — without duplicating the gate logic.
+
+    Gates (v6.0.0):
+      1. blocked_by_clusters present → disqualify regardless of score.
+      2. required_clusters non-empty AND none present → disqualify.
+      3. normalized weighted score < min_match_score → disqualify.
+    """
+    cluster_weights = safe_dict(goal_mapping.get("cluster_weights"))
+    if not cluster_weights:
+        return None
+
+    required = {safe_str(c) for c in safe_list(goal_mapping.get("required_clusters")) if safe_str(c)}
+    blocked = {safe_str(c) for c in safe_list(goal_mapping.get("blocked_by_clusters")) if safe_str(c)}
+    min_score = safe_float(goal_mapping.get("min_match_score"), 0.5)
+
+    # Gate 1: blocked clusters disqualify regardless of score
+    if blocked and (product_clusters & blocked):
+        return None
+
+    # Gate 2: required clusters must have at least one present (when list is non-empty)
+    if required and not (product_clusters & required):
+        return None
+
+    # Gate 3: normalized weighted score must meet threshold.
+    # We compute TWO ratios and use the more generous one:
+    #
+    #   score_full     = matched_weight / max_weight
+    #     Rewards multivitamins for breadth — products covering many of
+    #     the goal's cluster_weights score high.
+    #
+    #   score_required = matched_required_weight / max_required_weight
+    #     Rewards focused single-purpose supplements — a DHA-only product
+    #     that hits the only required cluster (prenatal_pregnancy_support)
+    #     scores 1.0 even though it only covers a narrow slice of the
+    #     full goal profile. Without this, single-ingredient overrides
+    #     fire at the cluster level but never propagate to a goal match.
+    #
+    # Take the max — both signals are valid expressions of "this product
+    # serves this goal". Both still respect the same min_match_score
+    # threshold, so noise gets filtered.
+    max_weight = sum(safe_float(w, 0.0) for w in cluster_weights.values())
+    if max_weight <= 0.0:
+        return None
+    matched_weight = sum(
+        safe_float(cluster_weights.get(c), 0.0)
+        for c in product_clusters
+        if c in cluster_weights
+    )
+    score_full = matched_weight / max_weight
+
+    if required:
+        # Use MAX (not SUM) of required weights. Rationale: when a goal
+        # declares multiple required clusters (e.g. GOAL_DIGESTIVE_HEALTH
+        # requires gut_barrier OR probiotic_and_gut_health OR
+        # digestive_enzymes), a single-purpose probiotic that covers
+        # probiotic_and_gut_health at full weight should score 1.0 on
+        # the required axis — not 0.34 (which is what SUM would give,
+        # under-matching every probiotic against digestive).
+        #
+        # Any-present semantics is already the gate (Gate 2). The score
+        # should reflect "how strongly does the BEST matched required
+        # cluster represent this goal" — i.e. does the product cover the
+        # single most goal-relevant required cluster at its full weight?
+        # MAX answers that directly. This also aligns with the
+        # single-ingredient-override design: a DHA-only product earning
+        # prenatal_pregnancy_support (the one required cluster) should
+        # score 1.0 for PRENATAL.
+        required_weights = [
+            safe_float(cluster_weights.get(c), 0.0) for c in required
+        ]
+        matched_required_weights = [
+            safe_float(cluster_weights.get(c), 0.0)
+            for c in product_clusters
+            if c in required
+        ]
+        max_single_required = max(required_weights) if required_weights else 0.0
+        best_matched_required = (
+            max(matched_required_weights) if matched_required_weights else 0.0
+        )
+        score_required = (
+            best_matched_required / max_single_required
+            if max_single_required > 0.0
+            else 0.0
+        )
+    else:
+        score_required = score_full
+
+    score = max(score_full, score_required)
+    return score if score >= min_score else None
 
 
 def compute_goal_matches(enriched: Dict) -> Dict:
@@ -5731,27 +5837,48 @@ def compute_goal_matches(enriched: Dict) -> Dict:
         (primary: ``formulation_data.synergy_clusters[*].cluster_id``;
         fallback: ``synergy_detail.clusters_matched`` or
         ``synergy_detail.clusters[*].id``).
-      * For each goal in ``user_goal_mappings``:
+      * For each goal in ``user_goal_mappings`` (gates in ``_evaluate_goal_match``):
           - Skip if ANY of ``blocked_by_clusters`` is present in product clusters.
           - Skip if ``required_clusters`` is non-empty AND none are present.
-          - ``score = matched_weight / max_weight`` (normalized 0.0..1.0).
+          - ``score = max(score_full, score_required)`` (normalized 0.0..1.0).
           - Include goal iff ``score >= min_match_score``.
-      * Output ``goal_matches`` (list of goal IDs) + ``goal_match_confidence``
-        (average matched score, rounded to 2 decimals).
+      * Runs the gates twice: over the dose-adequate cluster set
+        (→ ``goal_matches``) and over the presence-only superset. Goals that
+        qualify only on presence — matched ingredient(s) present but below the
+        effective dose — route to ``goal_matches_underdosed`` instead. The two
+        lists are mutually exclusive.
+      * ``goal_match_confidence`` is the average matched score across the
+        SUPPORTED (dose-adequate) goals only, rounded to 2 decimals.
 
-    Returns dict with keys: ``goal_matches``, ``goal_match_confidence``.
+    Returns dict with keys: ``goal_matches``, ``goal_match_confidence``,
+    ``goal_matches_underdosed``.
     """
     goal_mappings = _load_goal_mappings()
     if not goal_mappings:
-        return {"goal_matches": [], "goal_match_confidence": 0.0}
+        return {
+            "goal_matches": [],
+            "goal_match_confidence": 0.0,
+            "goal_matches_underdosed": [],
+        }
 
-    product_clusters = _extract_product_cluster_ids(enriched)
+    # Two cluster sets drive the two-tier match. The dose-adequate (gated) set
+    # produces supported goals; the presence-only superset surfaces goals that
+    # match on ingredient presence but sit below their effective dose. A goal
+    # qualifying only on the presence set routes to goal_matches_underdosed —
+    # the pipeline source of truth for the app's "Partially supported" bucket.
+    adequate_clusters = _extract_product_cluster_ids(enriched, enforce_dose_gate=True)
+    present_clusters = _extract_product_cluster_ids(enriched, enforce_dose_gate=False)
 
-    if not product_clusters:
-        return {"goal_matches": [], "goal_match_confidence": 0.0}
+    if not present_clusters:
+        return {
+            "goal_matches": [],
+            "goal_match_confidence": 0.0,
+            "goal_matches_underdosed": [],
+        }
 
     matched_goals: List[str] = []
     matched_scores: List[float] = []
+    underdosed_goals: List[str] = []
 
     for goal_mapping in goal_mappings:
         if not isinstance(goal_mapping, dict):
@@ -5761,91 +5888,19 @@ def compute_goal_matches(enriched: Dict) -> Dict:
         if not goal_id:
             continue
 
-        cluster_weights = safe_dict(goal_mapping.get("cluster_weights"))
-        if not cluster_weights:
-            continue
-
-        required = {safe_str(c) for c in safe_list(goal_mapping.get("required_clusters")) if safe_str(c)}
-        blocked = {safe_str(c) for c in safe_list(goal_mapping.get("blocked_by_clusters")) if safe_str(c)}
-        min_score = safe_float(goal_mapping.get("min_match_score"), 0.5)
-
-        # Gate 1: blocked clusters disqualify regardless of score
-        if blocked and (product_clusters & blocked):
-            continue
-
-        # Gate 2: required clusters must have at least one present (when list is non-empty)
-        if required and not (product_clusters & required):
-            continue
-
-        # Gate 3: normalized weighted score must meet threshold.
-        # We compute TWO ratios and use the more generous one:
-        #
-        #   score_full     = matched_weight / max_weight
-        #     Rewards multivitamins for breadth — products covering many of
-        #     the goal's cluster_weights score high.
-        #
-        #   score_required = matched_required_weight / max_required_weight
-        #     Rewards focused single-purpose supplements — a DHA-only product
-        #     that hits the only required cluster (prenatal_pregnancy_support)
-        #     scores 1.0 even though it only covers a narrow slice of the
-        #     full goal profile. Without this, single-ingredient overrides
-        #     fire at the cluster level but never propagate to a goal match.
-        #
-        # Take the max — both signals are valid expressions of "this product
-        # serves this goal". Both still respect the same min_match_score
-        # threshold, so noise gets filtered.
-        max_weight = sum(safe_float(w, 0.0) for w in cluster_weights.values())
-        if max_weight <= 0.0:
-            continue
-        matched_weight = sum(
-            safe_float(cluster_weights.get(c), 0.0)
-            for c in product_clusters
-            if c in cluster_weights
-        )
-        score_full = matched_weight / max_weight
-
-        if required:
-            # Use MAX (not SUM) of required weights. Rationale: when a goal
-            # declares multiple required clusters (e.g. GOAL_DIGESTIVE_HEALTH
-            # requires gut_barrier OR probiotic_and_gut_health OR
-            # digestive_enzymes), a single-purpose probiotic that covers
-            # probiotic_and_gut_health at full weight should score 1.0 on
-            # the required axis — not 0.34 (which is what SUM would give,
-            # under-matching every probiotic against digestive).
-            #
-            # Any-present semantics is already the gate (Gate 2). The score
-            # should reflect "how strongly does the BEST matched required
-            # cluster represent this goal" — i.e. does the product cover the
-            # single most goal-relevant required cluster at its full weight?
-            # MAX answers that directly. This also aligns with the
-            # single-ingredient-override design: a DHA-only product earning
-            # prenatal_pregnancy_support (the one required cluster) should
-            # score 1.0 for PRENATAL.
-            required_weights = [
-                safe_float(cluster_weights.get(c), 0.0) for c in required
-            ]
-            matched_required_weights = [
-                safe_float(cluster_weights.get(c), 0.0)
-                for c in product_clusters
-                if c in required
-            ]
-            max_single_required = max(required_weights) if required_weights else 0.0
-            best_matched_required = (
-                max(matched_required_weights) if matched_required_weights else 0.0
-            )
-            score_required = (
-                best_matched_required / max_single_required
-                if max_single_required > 0.0
-                else 0.0
-            )
-        else:
-            score_required = score_full
-
-        score = max(score_full, score_required)
-
-        if score >= min_score:
+        # Tier 1 — dose-adequate support. Confidence is averaged over these
+        # (the supported goals) only, preserving the prior contract.
+        adequate_score = _evaluate_goal_match(goal_mapping, adequate_clusters)
+        if adequate_score is not None:
             matched_goals.append(goal_id)
-            matched_scores.append(score)
+            matched_scores.append(adequate_score)
+            continue
+
+        # Tier 2 — qualifies on presence but failed the dose gate above:
+        # present-but-underdosed. Never both supported and underdosed (the
+        # ``continue`` above guarantees mutual exclusion).
+        if _evaluate_goal_match(goal_mapping, present_clusters) is not None:
+            underdosed_goals.append(goal_id)
 
     if matched_goals:
         avg_confidence = sum(matched_scores) / len(matched_scores)
@@ -5855,6 +5910,7 @@ def compute_goal_matches(enriched: Dict) -> Dict:
     return {
         "goal_matches": matched_goals,
         "goal_match_confidence": round(avg_confidence, 2),
+        "goal_matches_underdosed": underdosed_goals,
     }
 
 
@@ -6445,6 +6501,7 @@ def build_core_row(
         # Enhancement 4: Goal Matching
         json.dumps(goal_data["goal_matches"], ensure_ascii=False),
         goal_data["goal_match_confidence"],
+        json.dumps(goal_data["goal_matches_underdosed"], ensure_ascii=False),
         # Enhancement 5: Dosing
         dosing["dosing_summary"],
         dosing["servings_per_container"],
@@ -6466,7 +6523,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 109  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols, +6 v4 pillar cols, + safety signal reason)
+CORE_COLUMN_COUNT = 110  # Must match the tuple above and SCHEMA_SQL (v2.0.0: −2 legacy /80 cols, +12 v4 cols, +6 v4 pillar cols, + safety signal reason, + goal_matches_underdosed)
 
 
 # ─── Reference Data Loader ───

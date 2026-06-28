@@ -136,6 +136,8 @@ PRODUCTS_CORE_COLUMNS = [
     "ingredients_text",
     "goal_matches",
     "goal_match_confidence",
+    # v2.x addition (1 new column — goals present but below effective dose)
+    "goal_matches_underdosed",
     "dosing_summary",
     "servings_per_container",
     "net_contents_quantity",
@@ -2361,9 +2363,10 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_109_columns():
-    # Tuple emitted by build_core_row must match the 109-column schema
-    # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason).
+def test_final_db_has_110_columns():
+    # Tuple emitted by build_core_row must match the 110-column schema
+    # (v2.0.0 + 6 v4 pillar component columns + safety_signal_reason
+    # + goal_matches_underdosed).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -2379,8 +2382,8 @@ def test_final_db_has_109_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 109
-    assert len(PRODUCTS_CORE_COLUMNS) == 109
+    assert len(row) == 110
+    assert len(PRODUCTS_CORE_COLUMNS) == 110
 
 
 def test_products_core_exports_production_v4_columns():
@@ -2510,10 +2513,10 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_109(self):
+    def test_core_row_column_count_is_110(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 109
-        assert CORE_COLUMN_COUNT == 109
+        assert len(row) == 110
+        assert CORE_COLUMN_COUNT == 110
 
     def test_schema_version_bumped_to_200(self):
         assert EXPORT_SCHEMA_VERSION == "2.0.0"
