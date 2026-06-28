@@ -1698,6 +1698,29 @@ def load_iqm_reference_index() -> Dict[str, Dict]:
     return IQM_REFERENCE_INDEX
 
 
+def _nutrient_group_id(source_canonical_id: str) -> Optional[str]:
+    """Return the IQM-authored nutrient display group for a matched source id.
+
+    Driven by the IQM ``match_rules.target_id`` redirect (currently only
+    ``vitamin_k1 -> vitamin_k``). The enricher may already emit the target as
+    ``canonical_id`` for interaction/evidence correctness; this field remains a
+    display/dual-read hint for the app's Nutrients tab and should never drive
+    deduplication.
+
+    Returns the redirect target only when it differs from the matched source id;
+    otherwise ``None`` (the common case), so the blob stays lean and the app
+    falls back to ``canonical_id``.
+    """
+    if not source_canonical_id:
+        return None
+    entry = (IQM_REFERENCE_INDEX or load_iqm_reference_index()).get(source_canonical_id)
+    if isinstance(entry, dict):
+        target = safe_str(safe_dict(entry.get("match_rules")).get("target_id"))
+        if target and target != source_canonical_id:
+            return target
+    return None
+
+
 def load_harmful_reference_index() -> Dict[str, Dict]:
     global HARMFUL_REFERENCE_INDEX
     if HARMFUL_REFERENCE_INDEX is not None:
@@ -4136,6 +4159,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # AND ingredient_quality_data.ingredients[].canonical_id (`m`).
             # Prefer `m` (post-enrichment match) over `ing` (raw label entry).
             "canonical_id": canonical_id,
+            # nutrient_group_id — display/dual-read roll-up of authored
+            # target redirects (e.g. vitamin_k1 -> vitamin_k) so the Nutrients
+            # tab aggregates K1 + K2 as one "Vitamin K". Null unless a
+            # redirect applies; the app groups by `nutrient_group_id ??
+            # canonical_id`. NEVER use this for dedup.
+            "nutrient_group_id": _nutrient_group_id(
+                safe_str(m.get("canonical_redirect_from") or m.get("matched_entry_id") or canonical_id)
+            ),
             # delivers_markers — marker-via-ingredient evidence routing payload.
             # Computed by the enricher (botanical_marker_contributions.json) and
             # attached to the IQM match record. Always emit as a list (possibly
