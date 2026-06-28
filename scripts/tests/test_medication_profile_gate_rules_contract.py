@@ -99,10 +99,64 @@ def test_pregnancy_nsaid_rule_semantics(rules_blob):
     assert aspirin_v1.fires is False
 
 
+def test_kidney_disease_nsaid_rule_semantics(rules_blob):
+    rule = next(
+        r
+        for r in rules_blob["medication_profile_gate_rules"]
+        if r["id"] == "MCR_KIDNEY_DISEASE_NSAIDS"
+    )
+    gate = rule["profile_gate"]
+    product_context = {
+        "product_form": None,
+        "nutrient_form": None,
+        "dose_per_day": None,
+        "dose_unit": None,
+    }
+
+    result = evaluate_profile_gate(
+        gate,
+        {
+            "conditions": ["kidney_disease"],
+            "drug_classes": ["nsaids"],
+            "profile_flags": [],
+        },
+        product_context,
+        base_severity=rule["severity"],
+    )
+    assert result.fires is True
+    assert result.severity == "avoid"
+
+    kidney_without_nsaid = evaluate_profile_gate(
+        gate,
+        {
+            "conditions": ["kidney_disease"],
+            "drug_classes": [],
+            "profile_flags": [],
+        },
+        product_context,
+        base_severity=rule["severity"],
+    )
+    assert kidney_without_nsaid.fires is False
+
+    nsaid_without_kidney = evaluate_profile_gate(
+        gate,
+        {
+            "conditions": [],
+            "drug_classes": ["nsaids"],
+            "profile_flags": [],
+        },
+        product_context,
+        base_severity=rule["severity"],
+    )
+    assert nsaid_without_kidney.fires is False
+
+
 def test_rule_sources_are_authoritative_urls(rules_blob):
     allowed_hosts = {
+        "www.accessdata.fda.gov",
         "www.fda.gov",
         "www.acog.org",
+        "www.niddk.nih.gov",
         "publications.smfm.org",
     }
     for rule in rules_blob["medication_profile_gate_rules"]:
