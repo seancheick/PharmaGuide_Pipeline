@@ -5339,6 +5339,24 @@ class SupplementEnricherV3:
         elif match_result:
             bio_score = match_result.get('bio_score', 5)
             natural = match_result.get('natural', False)
+            canonical_id = match_result.get('canonical_id')
+            matched_entry_id = None
+            canonical_redirect_from = None
+            canonical_redirect_source = None
+            if canonical_id:
+                quality_map = self.databases.get('ingredient_quality_map', {})
+                matched_entry = quality_map.get(canonical_id, {})
+                target_id = (matched_entry.get('match_rules') or {}).get('target_id')
+                if (
+                    isinstance(target_id, str)
+                    and target_id
+                    and target_id != canonical_id
+                    and target_id in quality_map
+                ):
+                    canonical_redirect_from = canonical_id
+                    canonical_redirect_source = 'match_rules.target_id'
+                    matched_entry_id = canonical_id
+                    canonical_id = target_id
             # v3.6.0: `score` is now an alias of bio_score (no natural-source
             # bonus). The legacy formula `bio_score + 3 if natural` was retired
             # because A1/A2/A6 in the scorer now read bio_score directly, and
@@ -5396,8 +5414,11 @@ class SupplementEnricherV3:
                 "raw_source_text": raw_source_text,  # Exact label text (provenance)
                 "standard_name": match_result.get('standard_name', std_name),  # Canonical
                 "matched_form": match_result.get('form_name', 'standard'),
-                "canonical_id": match_result.get('canonical_id'),
+                "canonical_id": canonical_id,
                 "canonical_source_db": match_result.get('canonical_source_db') or "ingredient_quality_map",
+                "matched_entry_id": matched_entry_id,
+                "canonical_redirect_from": canonical_redirect_from,
+                "canonical_redirect_source": canonical_redirect_source,
                 "form_id": match_result.get('form_id'),
                 "match_tier": match_result.get('match_tier'),
                 "matched_alias": match_result.get('matched_alias'),
