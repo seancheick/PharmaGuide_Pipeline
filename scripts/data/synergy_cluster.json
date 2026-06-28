@@ -3,7 +3,7 @@
     "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
     "purpose": "synergy_bonuses",
     "schema_version": "5.2.0",
-    "last_updated": "2026-04-24",
+    "last_updated": "2026-06-28",
     "total_entries": 58,
     "citation_fields": "note + sources (phase_3 curated_no_query_placeholders)",
     "citation_coverage": {
@@ -182,7 +182,7 @@
       ],
       "min_effective_doses": {
         "melatonin": 0.5,
-        "magnesium": 100,
+        "magnesium": 200,
         "l-theanine": 100,
         "gaba": 100,
         "apigenin": 50,
@@ -192,12 +192,14 @@
       "evidence_tier": 3,
       "standard_name": "Sleep Stack",
       "synergy_mechanism": "Melatonin regulates circadian signaling; magnesium activates GABA receptors and reduces cortisol; L-theanine promotes alpha-wave relaxation; glycine lowers core body temperature to initiate sleep onset.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Sleep Stack' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: melatonin >= 0.5, magnesium >= 100, l-theanine >= 100, gaba >= 100, apigenin >= 50, glycine >= 3000, .... See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Sleep Stack' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: melatonin >= 0.5, magnesium >= 200, l-theanine >= 100, gaba >= 100, apigenin >= 50, glycine >= 3000, .... See sources for supporting references.",
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Melatonin, magnesium, and zinc supplementation for insomnia in long-term care residents",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/34959948/"
+          "label": "The effect of magnesium supplementation on primary insomnia in elderly: a double-blind placebo-controlled clinical trial (500 mg/day)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23853635/",
+          "pmid": "23853635",
+          "verified": true
         },
         {
           "source_type": "nccih",
