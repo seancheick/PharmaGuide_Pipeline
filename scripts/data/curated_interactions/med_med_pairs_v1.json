@@ -83,10 +83,10 @@
       "agent1_id": "class:maois",
       "agent2_name": "CNS stimulants (class)",
       "agent2_id": "class:stimulants",
-      "severity": "Major",
+      "severity": "Contraindicated",
       "interaction_effect_type": "Additive",
-      "mechanism": "MAOIs can amplify sympathomimetic stimulant effects by reducing monoamine breakdown, raising norepinephrine and dopamine signaling. Combined use can trigger dangerous blood-pressure elevation, hypertensive crisis, agitation, hyperthermia, or cardiovascular events; amphetamine and methylphenidate labels specifically warn against MAOI co-use.",
-      "management": "Avoid combining MAOIs with prescription stimulants unless the prescriber managing the MAOI specifically directs it. A washout interval is usually required when switching; confirm timing with the prescriber before starting, stopping, or changing either medication.",
+      "mechanism": "MAOIs block the breakdown of norepinephrine and dopamine, so adding a sympathomimetic stimulant (amphetamine, lisdexamfetamine, methylphenidate) can trigger a hypertensive crisis — a sudden, severe, potentially fatal rise in blood pressure, with risk of stroke, heart attack, or seizure. FDA labels for amphetamine- and methylphenidate-family stimulants, and for the MAOIs phenelzine and tranylcypromine, explicitly contraindicate co-use with an MAOI or within 14 days of stopping one.",
+      "management": "Do not take an MAOI and a stimulant together. Allow at least 14 days between stopping an MAOI and starting a stimulant, and the same when switching the other way. If you are taking both, contact the prescriber managing your MAOI right away.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=aff45863-ffe1-4d4f-8acf-c7081512a6c0",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b1b0f2ff-d9df-42ab-b471-226ecf97e075"
@@ -103,9 +103,9 @@
         "notes": "DailyMed label check confirmed the Adderall XR label published May 06, 2026 and methylphenidate extended-release tablet label published Jun 24, 2026, both from the DailyMed database published Jun 26, 2026."
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium",
+      "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "Class-level warning is intentionally Major/avoid rather than Contraindicated because the bundled stimulant class includes agents with less uniform label language. Amphetamine and methylphenidate-family stimulant labels support the high-risk warning.",
+      "evidence_notes": "Promoted from Major/avoid to Contraindicated on 2026-06-27: FDA labels for amphetamine, lisdexamfetamine, and methylphenidate products, and for the MAOIs phenelzine (Nardil) and tranylcypromine (Parnate), explicitly contraindicate or prohibit MAOI co-use (hypertensive-crisis risk, 14-day washout). The one class exception is selegiline — oral low-dose and transdermal (Emsam) labels say 'monitor blood pressure' rather than contraindicate — which warrants a selegiline-specific carve-out once the interaction engine supports most-specific-wins precedence. Until then the safe class default is Contraindicated, because over-warning rare selegiline use is preferable to under-warning the common, label-contraindicated amphetamine/methylphenidate pairs (under-warning is the bigger clinical risk).",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null
     },
