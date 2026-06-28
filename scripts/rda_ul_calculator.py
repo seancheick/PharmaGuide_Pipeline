@@ -491,21 +491,22 @@ class RDAULCalculator:
 
     def _determine_ul_status(self, nutrient_data: Dict, ul: Optional[float]) -> str:
         """Determine UL status."""
-        if ul is not None and ul > 0:
-            return "established"
-
         # Check ul_status field. Floor nutrients carry the granular display schema
         # (not_established_low_toxicity / not_established_insufficient_data) or the
         # legacy "not_determined" — all mean "no enforceable UL" to the calculator.
         # Map them to the internal "not_determined" so a soft toxicity-study
         # highest_ul (e.g. vanadium's 1800) is never treated as an established UL.
+        nutrient_class = nutrient_data.get("nutrient_class")
         ul_status = nutrient_data.get("ul_status")
-        if ul_status in (
+        if nutrient_class == "floor" or ul_status in (
             "not_determined",
             "not_established_low_toxicity",
             "not_established_insufficient_data",
         ):
             return "not_determined"
+
+        if ul is not None and ul > 0:
+            return "established"
 
         # Check highest_ul
         highest = nutrient_data.get("highest_ul")

@@ -301,6 +301,37 @@ class TestVitaminB12NoUL:
         assert result.over_ul is False
 
 
+class TestFloorNutrientsNoEstablishedUL:
+    """
+    Golden Fixture 3b: floor nutrients with toxicity-study values.
+
+    Some floor nutrients carry historical/highest toxicity-study values for
+    transparency, but no official established UL. The calculator must not turn
+    those values into enforceable over-UL warnings.
+    """
+
+    @pytest.fixture
+    def calculator(self):
+        return RDAULCalculator()
+
+    def test_vanadium_highest_ul_is_not_treated_as_established_ul(self, calculator):
+        """Vanadium's historical highest_ul must remain informational only."""
+        result = calculator.compute_nutrient_adequacy(
+            nutrient="Vanadium",
+            amount=2000,
+            unit="mcg",
+            age_group="adult",
+        )
+
+        assert result.highest_ul == pytest.approx(1800)
+        assert result.ul is None
+        assert result.ul_status == "not_determined"
+        assert result.pct_ul is None
+        assert result.over_ul is False
+        assert result.over_ul_amount is None
+        assert "UL" not in " ".join(result.warnings)
+
+
 class TestGummyServingBasisNormalization:
     """
     Golden Fixture 4: Gummy "per 2 gummies" serving normalization

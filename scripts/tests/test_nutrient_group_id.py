@@ -3,9 +3,9 @@
 
 A ``form_of`` child (vitamin_k1) must roll up to its parent (vitamin_k) for
 nutrient-display grouping so Vitamin K1 + Vitamin K2 aggregate as one
-"Vitamin K", while ``canonical_id`` stays untouched (it is foundational for
-interactions / evidence routing / dedup — deduping K1+K2 is exactly what we
-must avoid). Driven by the IQM ``match_rules.target_id`` redirect.
+"Vitamin K". Driven by the IQM ``match_rules.target_id`` redirect and source
+provenance, so this stays valid whether the enricher still emits the source
+canonical_id or has already routed the row to the shared parent canonical.
 """
 
 import sys
