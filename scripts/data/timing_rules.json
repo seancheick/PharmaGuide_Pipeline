@@ -3,8 +3,8 @@
     "description": "Supplement timing and absorption interaction rules for optimal nutrient uptake",
     "purpose": "timing_optimization",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-14",
-    "total_entries": 42
+    "last_updated": "2026-06-28",
+    "total_entries": 35
   },
   "timing_rules": [
     {
@@ -25,7 +25,7 @@
         },
         {
           "source_type": "pubmed",
-          "label": "Cook JD et al. — Effect of calcium on nonheme iron absorption",
+          "label": "Hallberg L et al. — Calcium and iron absorption: mechanism of action and nutritional importance",
           "url": "https://pubmed.ncbi.nlm.nih.gov/1600930/"
         }
       ]
@@ -35,70 +35,17 @@
       "ingredient1": "iron",
       "ingredient2": "zinc",
       "rule_type": "separate",
-      "advice": "Take iron and zinc at least 2 hours apart — they compete for the same intestinal transporter and reduce each other's absorption.",
-      "mechanism": "Both iron and zinc are divalent cations absorbed via DMT1; high molar ratios of one suppress the other's uptake in a dose-dependent manner.",
+      "advice": "If you take higher-dose iron (about 25 mg or more), space it from zinc by a couple of hours — at those doses on an empty stomach they compete for the same transporter. Taking either with food blunts the effect.",
+      "mechanism": "Both iron and zinc are divalent cations absorbed via DMT1; high molar ratios of one suppress the other's uptake in a dose-dependent manner. The competition is meaningful mainly at supplemental iron doses around 25 mg or higher taken fasting; food largely abolishes it.",
       "separation_hours": 2,
       "score_impact": -2,
       "evidence_level": "established",
+      "min_dose": { "ingredient": "iron", "mg": 25 },
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Arredondo M et al. — New evidence of iron and zinc interplay at the enterocyte and neural tissues",
+          "label": "Kordas K, Stoltzfus RJ — New evidence of iron and zinc interplay at the enterocyte and neural tissues",
           "url": "https://pubmed.ncbi.nlm.nih.gov/15173386/"
-        }
-      ]
-    },
-    {
-      "id": "timing_zinc_copper_separate",
-      "ingredient1": "zinc",
-      "ingredient2": "copper",
-      "rule_type": "separate",
-      "advice": "Take zinc and copper at least 2 hours apart — high zinc doses induce metallothionein, which sequesters copper and can cause deficiency.",
-      "mechanism": "Zinc and copper share overlapping intestinal transport pathways. At supplemental doses, excess zinc can impair copper absorption. The metallothionein induction hypothesis (zinc induces metallothionein which sequesters copper) is widely cited but the exact transporter-level mechanism involves multiple pathways including ZIP and ZnT family proteins.",
-      "separation_hours": 2,
-      "score_impact": -2,
-      "evidence_level": "established",
-      "sources": [
-        {
-          "source_type": "pubmed",
-          "label": "Lichten LA, Cousins RJ — Transporters in the absorption and utilization of zinc and copper",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/18820153/"
-        }
-      ]
-    },
-    {
-      "id": "timing_calcium_magnesium_separate",
-      "ingredient1": "calcium",
-      "ingredient2": "magnesium",
-      "rule_type": "separate",
-      "advice": "At high doses, take calcium and magnesium at least 2 hours apart — they compete for intestinal absorption at the same transporter.",
-      "mechanism": "Calcium and magnesium share divalent cation transport channels in the small intestine; at supplemental doses exceeding 200–250 mg each, mutual absorption interference is measurable.",
-      "separation_hours": 2,
-      "score_impact": -1,
-      "evidence_level": "probable",
-      "sources": [
-        {
-          "source_type": "reference",
-          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals (notes on calcium-magnesium absorption competition at high supplemental doses)",
-          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-        }
-      ]
-    },
-    {
-      "id": "timing_iron_magnesium_separate",
-      "ingredient1": "iron",
-      "ingredient2": "magnesium",
-      "rule_type": "separate",
-      "advice": "Take iron and magnesium at least 2 hours apart — magnesium can reduce non-heme iron absorption.",
-      "mechanism": "Magnesium at high supplemental doses may interfere with non-heme iron absorption, though the mechanism is less clear than for calcium or zinc. Magnesium is primarily absorbed via TRPM6/TRPM7 channels, not DMT1, so direct transporter competition is limited. The interaction is most relevant at high doses (>400 mg) and the clinical significance is debated.",
-      "separation_hours": 2,
-      "score_impact": -1,
-      "evidence_level": "possible",
-      "sources": [
-        {
-          "source_type": "reference",
-          "label": "NIH Office of Dietary Supplements — Iron Fact Sheet for Health Professionals",
-          "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
         }
       ]
     },
@@ -211,56 +158,20 @@
       ]
     },
     {
-      "id": "timing_magnesium_evening",
+      "id": "timing_magnesium_with_food",
       "ingredient1": "magnesium",
-      "ingredient2": "sleep",
-      "rule_type": "time_of_day",
-      "advice": "Take magnesium in the evening — it supports muscle relaxation and sleep quality.",
-      "mechanism": "A 2022 systematic review found an association between magnesium supplementation and improved subjective sleep quality, though evidence is limited and mechanisms are not fully established. Magnesium may support relaxation through its role in neuromuscular function. Evening dosing is a practical recommendation based on this association, not a proven causal mechanism.",
+      "ingredient2": "food",
+      "rule_type": "take_with_food",
+      "advice": "Take magnesium with food to ease the loose stools or stomach upset it can cause on an empty stomach.",
+      "mechanism": "Unabsorbed magnesium salts are osmotically active in the gut and can cause diarrhea, especially in poorly-absorbed forms (oxide, citrate). Taking magnesium with a meal slows transit and eases this without meaningfully reducing absorption. On sleep: any benefit is modest and mainly in people who are low in magnesium, and no study has shown that taking it at night works better than any other time — but evening dosing is a reasonable wind-down habit (it is well-tolerated), just not a proven sleep trigger.",
       "separation_hours": null,
       "score_impact": 0,
-      "evidence_level": "possible",
-      "sources": [
-        {
-          "source_type": "pubmed",
-          "label": "Mah J, Pitre T — The Role of Magnesium in Sleep Health: a Systematic Review of Available Literature",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/35184264/"
-        }
-      ]
-    },
-    {
-      "id": "timing_b_vitamins_morning",
-      "ingredient1": "vitamin b complex",
-      "ingredient2": "sleep",
-      "rule_type": "time_of_day",
-      "advice": "Take B vitamins in the morning — they support energy metabolism and may cause alertness that disrupts sleep if taken at night.",
-      "mechanism": "B vitamins are cofactors in mitochondrial ATP synthesis; B6 (pyridoxine) is also a cofactor in serotonin and dopamine synthesis, and anecdotal evidence plus several case reports associate high-dose B6 with vivid dreaming and sleep disruption.",
-      "separation_hours": null,
-      "score_impact": 0,
-      "evidence_level": "possible",
+      "evidence_level": "probable",
       "sources": [
         {
           "source_type": "reference",
-          "label": "Linus Pauling Institute — Vitamin B6",
-          "url": "https://lpi.oregonstate.edu/mic/vitamins/vitamin-B6"
-        }
-      ]
-    },
-    {
-      "id": "timing_vitamin_d_morning",
-      "ingredient1": "vitamin d",
-      "ingredient2": "melatonin",
-      "rule_type": "time_of_day",
-      "advice": "Take vitamin D in the morning — evening doses may suppress melatonin and interfere with sleep onset.",
-      "mechanism": "Vitamin D receptors are expressed in the pineal gland; animal and preliminary human data suggest D3 modulates melatonin synthesis, with potential circadian disruption when taken close to bedtime.",
-      "separation_hours": null,
-      "score_impact": -1,
-      "evidence_level": "possible",
-      "sources": [
-        {
-          "source_type": "reference",
-          "label": "Gominak WE & Stumpf WE — The world epidemic of sleep disorders is linked to vitamin D deficiency (HYPOTHESIS PAPER, not RCT). Med Hypotheses. 2012",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/22583560/"
+          "label": "NIH ODS — Magnesium Fact Sheet for Health Professionals (forms, absorption, and GI tolerance)",
+          "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
       ]
     },
@@ -301,10 +212,10 @@
       ]
     },
     {
-      "id": "timing_probiotics_empty_stomach",
+      "id": "timing_probiotics_by_formulation",
       "ingredient1": "probiotics",
       "ingredient2": "food",
-      "rule_type": "take_on_empty_stomach",
+      "rule_type": "take_with_food",
       "advice": "Probiotic timing depends on formulation. Enteric-coated capsules can be taken any time. For standard probiotics, taking with a small meal may improve survival. Follow manufacturer guidance when available.",
       "mechanism": "The optimal timing for probiotics is debated. Fasted gastric pH is actually lower (more acidic, ~1.5-2.0) than postprandial pH (~3-5 due to food buffering). However, fasted gastric transit is faster, reducing total acid exposure time. Some evidence (Tompkins 2011, PMID 22146689) suggests probiotic survival is better WITH a meal containing fat or oatmeal due to acid buffering. Enteric-coated formulations bypass this concern. Net effect depends on strain, formulation, and meal composition.",
       "separation_hours": null,
@@ -312,9 +223,9 @@
       "evidence_level": "possible",
       "sources": [
         {
-          "source_type": "reference",
-          "label": "Linus Pauling Institute — Probiotics",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/probiotics"
+          "source_type": "pubmed",
+          "label": "Tompkins TA et al. — The impact of meals on a probiotic during transit through a model of the human upper gastrointestinal tract",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22146689/"
         }
       ]
     },
@@ -368,7 +279,7 @@
         {
           "source_type": "reference",
           "label": "Linus Pauling Institute — Curcumin",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/curcumin"
+          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/curcumin"
         }
       ]
     },
@@ -403,7 +314,7 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Hurrell RF et al. — Effect of tea and other dietary factors on iron absorption",
+          "label": "Zijp IM et al. — Effect of tea and other dietary factors on iron absorption",
           "url": "https://pubmed.ncbi.nlm.nih.gov/11029010/"
         }
       ]
@@ -421,26 +332,8 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Morck TA et al. — Inhibiting effects of coffee on iron absorption",
+          "label": "Morck TA et al. — Inhibition of food iron absorption by coffee",
           "url": "https://pubmed.ncbi.nlm.nih.gov/6402915/"
-        }
-      ]
-    },
-    {
-      "id": "timing_nac_zinc_separate",
-      "ingredient1": "nac",
-      "ingredient2": "zinc",
-      "rule_type": "separate",
-      "advice": "Take NAC and zinc at least 2 hours apart — NAC can chelate zinc and reduce its absorption.",
-      "mechanism": "N-acetylcysteine contains a thiol group capable of chelating divalent metals including zinc. In vitro, thiol-based chelators can bind intracellular zinc. However, direct clinical evidence for NAC reducing zinc absorption in supplement users is limited. Separation is a precautionary recommendation based on biochemical plausibility rather than clinical trials.",
-      "separation_hours": 2,
-      "score_impact": -1,
-      "evidence_level": "possible",
-      "sources": [
-        {
-          "source_type": "reference",
-          "label": "Precautionary recommendation based on NAC thiol-metal chelation chemistry. No controlled human clinical trial directly demonstrates this interaction.",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/N-acetylcysteine"
         }
       ]
     },
@@ -457,8 +350,8 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "FDA Drug Label — Levothyroxine Drug Interactions",
-          "url": "https://www.accessdata.fda.gov/drugsatfda_docs/label/2020/021402s043lbl.pdf"
+          "label": "FDA Drugs@FDA — Levothyroxine sodium product labels",
+          "url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=021402"
         }
       ]
     },
@@ -492,9 +385,9 @@
       "evidence_level": "possible",
       "sources": [
         {
-          "source_type": "reference",
-          "label": "Linus Pauling Institute — Berberine",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/berberine"
+          "source_type": "pubmed",
+          "label": "Bauman WA et al. — Increased intake of calcium reverses vitamin B12 malabsorption induced by metformin",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10977010/"
         }
       ]
     },
@@ -511,26 +404,8 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Linus Pauling Institute — Alpha-Lipoic Acid",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/alpha-lipoic-acid"
-        }
-      ]
-    },
-    {
-      "id": "timing_collagen_empty_stomach",
-      "ingredient1": "collagen peptides",
-      "ingredient2": "food",
-      "rule_type": "take_on_empty_stomach",
-      "advice": "Take collagen peptides on an empty stomach for optimal absorption — competing dietary proteins can reduce uptake of specific collagen-derived dipeptides.",
-      "mechanism": "Collagen-derived di- and tripeptides (hydroxyproline-proline, proline-hydroxyproline) are absorbed intact via peptide transporters (PEPT1); a protein-rich meal saturates these transporters and reduces the proportion of intact collagen peptides that reach systemic circulation.",
-      "separation_hours": null,
-      "score_impact": -1,
-      "evidence_level": "possible",
-      "sources": [
-        {
-          "source_type": "reference",
-          "label": "Linus Pauling Institute — Hydrolyzed Collagen",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/collagen"
+          "label": "Linus Pauling Institute — Lipoic Acid",
+          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/lipoic-acid"
         }
       ]
     },
@@ -565,8 +440,8 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Linus Pauling Institute — Quercetin",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/quercetin"
+          "label": "Linus Pauling Institute — Flavonoids: Quercetin",
+          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/flavonoids#quercetin"
         }
       ]
     },
@@ -582,9 +457,9 @@
       "evidence_level": "probable",
       "sources": [
         {
-          "source_type": "reference",
-          "label": "Linus Pauling Institute — Bromelain",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/bromelain"
+          "source_type": "pubmed",
+          "label": "Castell JV et al. — Intestinal absorption of undegraded proteins in men: presence of bromelain in plasma after oral intake",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9252520/"
         }
       ]
     },
@@ -601,8 +476,8 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Linus Pauling Institute — Ashwagandha",
-          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/ashwagandha"
+          "label": "NCCIH — Ashwagandha: Usefulness and Safety",
+          "url": "https://www.nccih.nih.gov/health/ashwagandha"
         }
       ]
     },
