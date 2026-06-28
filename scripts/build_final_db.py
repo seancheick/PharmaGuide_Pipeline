@@ -5667,7 +5667,7 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
     ingredient's minimum effective dose (``meets_minimum``). This prevents
     trace-mineral over-matching from promoting clusters to goals — e.g. 17 mg
     of magnesium in a whey protein powder must not earn the product a "Sleep
-    Quality" match, because the sleep-effective magnesium dose is ~100 mg.
+    Quality" match, because the sleep-effective magnesium dose is ~200 mg.
     Clusters without dose data (no ``matched_ingredients`` key, or all entries
     with ``meets_minimum`` missing/null) pass through — legacy shape tolerance.
 
