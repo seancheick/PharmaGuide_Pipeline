@@ -715,10 +715,7 @@ def _omega_product_source_text(product: Dict[str, Any]) -> str:
         str(product.get(k) or "")
         for k in ("product_name", "fullName", "brand_name", "bundleName")
     ]
-    rows = product.get("ingredient_quality_data") or product.get("active_ingredients") or []
-    for row in rows if isinstance(rows, list) else []:
-        if isinstance(row, dict):
-            parts.append(_row_source_text(row))
+    parts.extend(_row_source_text(row) for row in _scoring_rows(product))
     return " ".join(parts)
 
 

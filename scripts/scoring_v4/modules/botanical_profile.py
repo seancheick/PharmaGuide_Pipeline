@@ -249,7 +249,7 @@ def _scoring_actives(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     except Exception:  # pragma: no cover - legacy fixture fallback
         pass
     iqd = (product or {}).get("ingredient_quality_data") or {}
-    rows = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
+    rows = iqd.get("ingredients_scorable") or []
     return [r for r in rows if isinstance(r, dict)]
 
 

@@ -267,10 +267,8 @@ def collect_product_files(args: argparse.Namespace, *, prefer_enriched: bool = T
         root = repo_path(products_dir)
         if prefer_enriched:
             files.extend(enriched_files_from_products_dir(root))
-        elif getattr(args, "prefer_scored", False):
-            files.extend(scored_files_from_products_dir(root))
         else:
-            files.extend(iter_json_files([root]))
+            files.extend(scored_files_from_products_dir(root))
     dist_dir = getattr(args, "dist_dir", None)
     if dist_dir and not files:
         dist_path = repo_path(dist_dir)

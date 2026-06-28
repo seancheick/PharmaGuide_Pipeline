@@ -118,7 +118,7 @@ def _has_product_payload(product: Dict[str, Any]) -> bool:
     if product.get("dsld_id") or product.get("product_name") or product.get("fullName"):
         return True
     iqd = _safe_dict(product.get("ingredient_quality_data"))
-    if _safe_list(iqd.get("ingredients")) or _safe_list(iqd.get("ingredients_scorable")):
+    if _safe_list(iqd.get("ingredients_scorable")):
         return True
     return False
 

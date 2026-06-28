@@ -442,12 +442,36 @@ def test_probiotic_dose_resilient_to_malformed_input() -> None:
 # so dose is no longer treated as if no dose were disclosed. Must not fire for
 # proprietary-blend mass, because opacity is not rewarded.
 
+def _scorable_row(row: dict, index: int) -> dict:
+    name = str(row.get("name") or "").strip()
+    canonical = row.get("canonical_id") or name.lower().replace(" ", "_").replace("-", "_")
+    return {
+        **row,
+        "source_section": "active",
+        "raw_source_path": row.get("raw_source_path") or f"activeIngredients[{index}]",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "role_classification": "active_scorable",
+        "scoreable_identity": True,
+        "mapped": True,
+        "canonical_id": canonical,
+    }
+
+
 def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0):
+    scorable_rows = [
+        _scorable_row(row, index)
+        for index, row in enumerate(active_rows)
+    ]
     return {
         "status": "active",
         "supplement_type": {"type": "probiotic"},
         "activeIngredients": active_rows,
-        "ingredient_quality_data": {"total_active": max(1, len(active_rows)), "ingredients_scorable": []},
+        "ingredient_quality_data": {
+            "total_active": max(1, len(active_rows)),
+            "ingredients_scorable": scorable_rows,
+        },
         "probiotic_data": {
             "is_probiotic": True,
             "is_probiotic_product": True,
@@ -473,15 +497,12 @@ def test_direct_strain_mass_floors_dose_when_named_strain_has_mass_no_cfu() -> N
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is True
 
 
-def test_final_blob_ingredients_shape_can_floor_direct_strain_mass() -> None:
+def test_strict_scorable_ingredient_shape_can_floor_direct_strain_mass() -> None:
     from scoring_v4.modules.probiotic_dose import score_dose
     product = _no_cfu_probiotic(
-        active_rows=[],
+        active_rows=[{"name": "Bifidobacterium longum BB536", "quantity": 25.0, "unit": "mg"}],
         clinical_strains=[_strain("Bifidobacterium longum BB536", cfu_per_day=None, adequacy_tier=None)],
     )
-    product["ingredients"] = [
-        {"name": "Bifidobacterium longum BB536", "quantity": 25.0, "unit": "mg"},
-    ]
     payload = score_dose(product)
     assert payload["components"]["cfu_adequacy"] == 5.0
     assert payload["metadata"]["direct_strain_mass_floor"]["applied"] is True

@@ -18,6 +18,8 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, Iterable, List, Set
 
+from scoring_input_contract import get_scoring_ingredients
+
 
 PHASE_MARKER = "P2.2_probiotic_dose"
 CAP_DOSE = 25.0
@@ -203,19 +205,13 @@ def _cfu_adequacy_basis(
 
 
 def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    rows: List[Dict[str, Any]] = []
-    for a in _safe_list(product.get("activeIngredients")):
-        if isinstance(a, dict):
-            rows.append(a)
-    for a in _safe_list(product.get("ingredients")):
-        if isinstance(a, dict):
-            rows.append(a)
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    for key in ("ingredients_scorable", "ingredients"):
-        for a in _safe_list(iqd.get(key)):
-            if isinstance(a, dict):
-                rows.append(a)
-    return rows
+    try:
+        return [
+            row for row in get_scoring_ingredients(product or {}, strict=True).rows
+            if isinstance(row, dict)
+        ]
+    except Exception:
+        return []
 
 
 def _row_is_blend_header(row: Dict[str, Any]) -> bool:

@@ -61,6 +61,36 @@ def test_scoring_audit_passes_strict_scored_product(tmp_path: Path) -> None:
     assert audit_scoring(_args(path)) == []
 
 
+def test_scoring_audit_products_dir_reads_only_scored_outputs(tmp_path: Path) -> None:
+    products_dir = tmp_path / "products"
+    scored = products_dir / "output_Test_scored" / "scored" / "scored_batch_1.json"
+    cleaned = products_dir / "output_Test" / "cleaned" / "cleaned_batch_1.json"
+    enriched = products_dir / "output_Test_enriched" / "enriched" / "enriched_batch_1.json"
+    report = products_dir / "output_Test_scored" / "reports" / "scoring_summary.json"
+
+    for path, payload in (
+        (scored, _scored()),
+        (cleaned, {"dsld_id": "C1", "product_name": "Cleaned only"}),
+        (enriched, {"dsld_id": "E1", "product_name": "Enriched only"}),
+    ):
+        path.parent.mkdir(parents=True)
+        _write(path, payload)
+    report.parent.mkdir(parents=True)
+    report.write_text(json.dumps({"summary": "not a scored product payload"}), encoding="utf-8")
+
+    args = argparse.Namespace(
+        product_file=[],
+        enriched_file=[],
+        enriched_dir=[],
+        products_dir=str(products_dir),
+        dist_dir=None,
+        strict_release=True,
+        matrix=str(SCRIPTS_ROOT / "contracts" / "source_of_truth_matrix.json"),
+    )
+
+    assert audit_scoring(args) == []
+
+
 def test_scoring_audit_rejects_iqd_ingredients_fallback(tmp_path: Path) -> None:
     path = tmp_path / "scored.json"
     product = _scored(
@@ -133,3 +163,13 @@ def test_static_audit_flags_direct_v4_iqd_fallback(tmp_path: Path) -> None:
 
     assert "V4_IQD_INGREDIENTS_FALLBACK" in codes
     assert "V4_RAW_ACTIVE_FALLBACK" in codes
+
+
+def test_static_audit_current_v4_modules_have_no_forbidden_fallbacks() -> None:
+    args = argparse.Namespace(
+        path=[str(SCRIPTS_ROOT / "scoring_v4")],
+        strict_release=True,
+        matrix="",
+    )
+
+    assert audit_scoring_static(args) == []
