@@ -16,8 +16,8 @@ cd "$REPO_ROOT"
 source "$REPO_ROOT/scripts/python_env.sh"
 
 # Signals scripts/tests/conftest.py that pytest was launched through this runner
-# (pinned interpreter + profile selection), so it stays quiet. Raw
-# `python3 -m pytest` lacks it and gets nudged toward this script.
+# (pinned interpreter + profile selection), so it stays quiet. Direct raw
+# pytest invocation lacks it and gets nudged toward this script.
 export PG_TEST_RUNNER=1
 
 PROFILE="${1:-fast}"
