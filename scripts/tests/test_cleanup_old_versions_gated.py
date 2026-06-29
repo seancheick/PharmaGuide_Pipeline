@@ -531,6 +531,46 @@ def test_p1_6_cli_missing_dist_dir_exits_with_error(tmp_path, monkeypatch, capsy
 
 
 # ===========================================================================
+# Test 6b — orphan cleanup runs even when there are no old versions to delete
+# ===========================================================================
+
+
+def test_orphan_cleanup_runs_when_no_old_versions_to_delete(monkeypatch, capsys):
+    """Orphan-blob cleanup must NOT be short-circuited when only `keep`
+    versions exist.
+
+    Orphans accumulate independently of version-directory retention — a
+    backlog from prior gate-rejected runs persists even at steady-state
+    version count. Before the decoupling fix, ``main()`` hit a "nothing to
+    delete" early-return whenever ``old_rows`` was empty and never reached
+    the orphan sweep, which is how storage grew to 84% orphans. With the fix,
+    an empty ``old_rows`` still proceeds to the orphan path, which here fails
+    closed on the missing --flutter-repo (exit 2) — proving it was reached.
+    """
+    import cleanup_old_versions as cov
+
+    monkeypatch.setattr(cov, "get_supabase_client", lambda: object())
+    # Exactly `keep` versions → no old version directories to delete.
+    monkeypatch.setattr(cov, "fetch_all_versions", lambda client: [
+        {"db_version": "vNEW", "created_at": "2026-06-29T00:00:00Z", "is_current": True},
+        {"db_version": "vOLD", "created_at": "2026-06-28T00:00:00Z", "is_current": False},
+    ])
+    monkeypatch.setattr(cov, "delete_version_directory", lambda c, v, dr: (0, 0))
+
+    with pytest.raises(SystemExit) as excinfo:
+        cov.main([
+            "--execute",
+            "--cleanup-orphan-blobs",
+            "--keep", "2",
+        ])
+
+    assert excinfo.value.code == 2
+    out = capsys.readouterr().out
+    assert "orphan-blob cleanup" in out.lower()
+    assert "--flutter-repo" in out
+
+
+# ===========================================================================
 # Test 7 — unexpected exception in gated path returns (0, 0) at main() level
 # ===========================================================================
 

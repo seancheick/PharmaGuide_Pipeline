@@ -14,6 +14,7 @@ Usage:
 import argparse
 import sys
 import os
+import time
 
 # Ensure scripts/ is on the path for sibling imports (supabase_client, env_loader)
 sys.path.insert(0, os.path.dirname(__file__))
@@ -191,21 +192,32 @@ def list_all_blob_shard_dirs(client):
     return list(HEX_BLOB_SHARDS)
 
 
-def list_blobs_in_shard(client, shard):
-    """List all blob paths in a shard directory."""
+def list_blobs_in_shard(client, shard, max_retries=4):
+    """List all blob paths in a shard directory.
+
+    Retries transient Supabase storage failures (DatabaseTimeout etc.) with
+    exponential backoff before giving up on the page. At high blob counts the
+    per-shard list calls intermittently time out; a silent partial listing
+    would under-detect orphans, so we retry rather than break on first error.
+    """
     prefix = f"{BLOB_STORAGE_PREFIX}/{shard}"
     paths = []
     offset = 0
     while True:
-        try:
-            items = client.storage.from_(BUCKET).list(
-                path=prefix,
-                options={"limit": 1000, "offset": offset},
-            )
-        except Exception as exc:
-            print(f"  [WARN] Blob listing failed at offset {offset} in shard {shard}: {exc}")
-            print(f"  Returning {len(paths)} blobs found so far (listing may be incomplete).")
-            break
+        items = None
+        for attempt in range(max_retries):
+            try:
+                items = client.storage.from_(BUCKET).list(
+                    path=prefix,
+                    options={"limit": 1000, "offset": offset},
+                )
+                break
+            except Exception as exc:
+                if attempt == max_retries - 1:
+                    print(f"  [WARN] Blob listing failed at offset {offset} in shard {shard} after {max_retries} attempts: {exc}")
+                    print(f"  Returning {len(paths)} blobs found so far (listing may be incomplete).")
+                    return paths
+                time.sleep(0.5 * (2 ** attempt))  # 0.5s, 1s, 2s backoff
         if not items:
             break
         for item in items:
@@ -599,14 +611,7 @@ def main(argv=None):
 
     keep_rows, old_rows = partition_versions(rows, args.keep)
 
-    if not old_rows:
-        print(f"Nothing to delete — only {len(rows)} version(s) exist, keep threshold is {args.keep}.")
-        sys.exit(0)
-
-    print(f"Versions to clean up: {len(old_rows)}")
-    print()
-
-    # Safety: never delete a version marked is_current
+    # Safety: never delete a version marked is_current.
     safe_old_rows = []
     for row in old_rows:
         if row.get("is_current"):
@@ -614,9 +619,24 @@ def main(argv=None):
         else:
             safe_old_rows.append(row)
 
+    # Orphan-blob cleanup is DECOUPLED from version-directory retention.
+    # Orphans accumulate independently — a backlog from prior gate-rejected
+    # runs persists even at steady-state version count — so an empty
+    # safe_old_rows must NOT short-circuit the orphan sweep. That early return
+    # is exactly why storage grew to 84% orphans (the cleanup ran only when
+    # there happened to be an old version directory to delete).
     if not safe_old_rows:
-        print("All candidate versions are marked is_current. Nothing deleted.")
-        sys.exit(0)
+        msg = (
+            f"Nothing to delete at the version level — {len(rows)} version(s) "
+            f"exist, keep threshold is {args.keep}."
+        )
+        if not args.cleanup_orphan_blobs:
+            print(msg + " Nothing deleted.")
+            sys.exit(0)
+        print(msg + " Proceeding to orphan-blob cleanup.")
+    else:
+        print(f"Versions to clean up: {len(safe_old_rows)}")
+    print()
 
     # Delete storage objects
     total_deleted = 0

@@ -22,14 +22,21 @@
 #   4. Rebuild interaction DB      (rebuild_interaction_db.sh)
 #                                  AUTO-SKIPS when no rule-data file is
 #                                  newer than the bundled interaction_db.
-#   5. Sync to Supabase            (sync_to_supabase.py --cleanup)
+#   5. Sync to Supabase            (sync_to_supabase.py — UPLOAD ONLY)
 #                                  Trusts sync_to_supabase's built-in
 #                                  "up_to_date" detection (manifest checksum).
+#                                  Storage cleanup is NO LONGER here — see 8.
 #   6. Atomic Flutter bundle       (Flutter import_catalog_artifact.sh)
 #                                  AUTO-SKIPS when Flutter assets/db/
 #                                  manifests already match dist/ checksums.
 #   7. Prune .previous backups     (assets/db/*.previous)
 #                                  No-ops cleanly when none exist.
+#   8. Commit bundle + cleanup     (git commit assets/db/ then
+#                                  cleanup_old_versions.py --execute ...)
+#                                  Commits the Flutter bundle LOCALLY so the
+#                                  orphan-cleanup bundle_alignment gate passes,
+#                                  then sweeps old version dirs + orphan blobs.
+#                                  Push stays manual.
 #
 # Usage:
 #     # Standard: detect what needs running, do it, no flags needed.
@@ -464,19 +471,16 @@ if (( SKIP_SUPABASE == 0 )); then
     "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
-    info "Step 5/7: Syncing dist/ to Supabase (with --cleanup, content-checksum-aware)..."
-    # P1.6 commit 2 (2026-05-13): orphan-blob cleanup is ON by default in
-    # sync_to_supabase, gated by the P1+P2+P3 release-safety stack. The
-    # gate requires both --flutter-repo and --dist-dir to compute the
-    # bundled∪dist∪registry protected set; forward them here. --dist-dir
-    # defaults to the build_dir positional, so we only need to pass
-    # --flutter-repo. To skip the orphan sweep (incident response, etc.)
-    # rerun this script with --skip-supabase and call sync_to_supabase
-    # manually with --no-allow-destructive-orphan-cleanup.
-    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
-        --cleanup \
-        --cleanup-keep "$KEEP_VERSIONS" \
-        --flutter-repo "$FLUTTER_REPO"
+    info "Step 5/7: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
+    # Storage cleanup (version dirs + orphan blobs) is NO LONGER run here.
+    # It moved to the aligned-cleanup step below, AFTER the Flutter bundle is
+    # committed. Reason: the orphan-cleanup bundle_alignment gate compares
+    # Flutter main HEAD to the just-built dist version, but at THIS point the
+    # new bundle has not been imported or committed yet — so the gate rejected
+    # the sweep on every release and orphan blobs accumulated to ~84% of
+    # storage (cleanup quarantined 0 across 80 runs). Deferring cleanup until
+    # after the bundle commit lets the gate pass.
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR"
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else
@@ -559,24 +563,64 @@ else
   skip "Step 7/7: Skipped (Flutter step disabled)"
 fi
 
+# Resolve the freshly-bundled versions from the Flutter assets/db/ manifests
+# (used for the auto-commit message and the next-steps summary). Falls back to
+# "unknown" if a manifest is unreadable (skipped Flutter step, etc.).
+CATALOG_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('db_version','unknown'))" "$ASSETS_DIR/export_manifest.json" 2>/dev/null || echo unknown)"
+INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('interaction_db_version','unknown'))" "$ASSETS_DIR/interaction_db_manifest.json" 2>/dev/null || echo unknown)"
+
+# ---------------------------------------------------------------------------
+# Commit the Flutter bundle + run ALIGNED storage cleanup.
+#
+# The orphan-blob cleanup was moved out of Step 5 to here: its bundle_alignment
+# gate needs Flutter main HEAD to equal the just-built dist version. We commit
+# the bundle LOCALLY first (push stays manual), then run the cleanup so the
+# gate passes — fixing the deadlock that let orphan blobs grow to ~84% of
+# storage (0 blobs quarantined across 80 prior release runs).
+# ---------------------------------------------------------------------------
+if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
+  if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db | grep -q .; then
+      info "Committing Flutter bundle (local) so storage cleanup runs aligned..."
+      git -C "$FLUTTER_REPO" add assets/db/
+      if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
+        ok "Flutter bundle committed locally (push remains manual)"
+      else
+        warn "Flutter bundle commit failed — cleanup may reject on bundle_alignment"
+      fi
+    else
+      skip "Flutter bundle already committed — nothing to commit"
+    fi
+
+    info "Aligned storage cleanup (version dirs + orphan blobs)..."
+    # No --expected-count: blast-radius stays a backstop. A big-churn release
+    # that would delete >5% is logged and left for a manual authorized sweep
+    # (cleanup_old_versions.py --execute --cleanup-orphan-blobs ... --expected-count N).
+    # Quarantine is a recoverable MOVE (30-day TTL), not a hard delete.
+    if "$PG_PYTHON" scripts/cleanup_old_versions.py \
+        --execute --cleanup-db --cleanup-orphan-blobs \
+        --keep "$KEEP_VERSIONS" \
+        --flutter-repo "$FLUTTER_REPO" \
+        --dist-dir "$DIST_DIR"; then
+      ok "Storage cleanup step done"
+    else
+      warn "Storage cleanup returned non-zero — non-fatal; see reports/release_audit/"
+    fi
+  else
+    warn "$FLUTTER_REPO is not a git work tree — skipping bundle commit + cleanup"
+  fi
+else
+  skip "Bundle commit + aligned cleanup skipped (flutter/supabase disabled or dry-run)"
+fi
+
 ELAPSED=$(($(date +%s) - START_TS))
 echo ""
 ok "Full release pipeline completed in ${ELAPSED}s"
 info ""
 
-# Resolve the freshly-bundled versions from the Flutter assets/db/ manifests
-# so the next-steps message prints a copy-pasteable commit command instead of
-# a literal "<version>" placeholder. Falls back to "unknown" if the manifest
-# is unreadable (skipped Flutter step, missing jq, etc.) — the user will see
-# the placeholder and know something needs investigating before committing.
-CATALOG_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('db_version','unknown'))" "$ASSETS_DIR/export_manifest.json" 2>/dev/null || echo unknown)"
-INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('interaction_db_version','unknown'))" "$ASSETS_DIR/interaction_db_manifest.json" 2>/dev/null || echo unknown)"
-
-info "Next steps (manual git-side):"
+info "Next steps (push the auto-committed bundle):"
 info "  cd \"$FLUTTER_REPO\""
-info "  git status                 # review assets/db/ changes (LFS-tracked)"
-info "  git add assets/db/"
-info "  git commit -m 'chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}'"
+info "  git log --oneline -1       # the pipeline committed the bundle locally"
 info "  git push origin main"
 info ""
 info "  cd $REPO_ROOT"
