@@ -306,6 +306,7 @@ def cleanup_orphan_blobs_with_gates(
     audit_log=None,
     lock_path=None,
     run_date=None,
+    retained_versions=(),
 ):
     """Run release-safety gates THEN move orphaned detail blobs to quarantine.
 
@@ -351,6 +352,9 @@ def cleanup_orphan_blobs_with_gates(
             Defaults to today UTC. All blobs quarantined by THIS call land
             under the same date, so the sweeper can drain them as a unit
             after TTL. Tests pass an explicit value for determinism.
+        retained_versions: db_versions intentionally kept by --keep N.
+            Their version directories remain readable, so their detail blobs
+            must be protected from the orphan sweep.
 
     Returns:
         ``(quarantined_count, failed_count)``. Both 0 if gates rejected.
@@ -383,6 +387,9 @@ def cleanup_orphan_blobs_with_gates(
     print(f"  dist_dir:         {dist_dir}")
     print(f"  branch:           {branch}")
     print(f"  run_date:         {run_date}")
+    retained_versions = tuple(v for v in retained_versions if v)
+    if retained_versions:
+        print(f"  retained versions: {', '.join(retained_versions)}")
 
     # Step 1: list all blobs in storage (we need both the candidate set
     # and the total for blast-radius). Cheaper to do this once here than
@@ -431,6 +438,7 @@ def cleanup_orphan_blobs_with_gates(
         # catalog_releases row contributes its blob hashes to the protected
         # set before this gate decides which candidates survive.
         supabase_client=client,
+        retained_versions=retained_versions,
     )
 
     if not result.passed:
@@ -448,7 +456,7 @@ def cleanup_orphan_blobs_with_gates(
         f"Quarantining {len(actual_orphans)} blob(s) "
         f"to shared/quarantine/{run_date}/ "
         f"(of {len(candidate_hashes)} pre-gate candidates; "
-        f"{len(candidate_hashes) - len(actual_orphans)} protected by bundled∪dist). "
+        f"{len(candidate_hashes) - len(actual_orphans)} protected by release-safety sources). "
         f"Recoverable for {DEFAULT_QUARANTINE_TTL_DAYS} days."
     )
 
@@ -706,6 +714,10 @@ def main(argv=None):
                             branch=args.branch,
                             bundle_mismatch_reason=args.override_bundle_mismatch,
                             expected_count=args.expected_count,
+                            retained_versions=tuple(
+                                r["db_version"] for r in keep_rows
+                                if r.get("db_version")
+                            ),
                         )
                     )
                 except Exception as exc:

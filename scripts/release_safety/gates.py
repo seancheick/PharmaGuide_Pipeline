@@ -197,6 +197,8 @@ def evaluate_cleanup_gates(
     lock_path: Optional[Path] = None,
     # P3.5 — registry-backed protection. None preserves P1.4 bundled∪dist behavior.
     supabase_client=None,
+    # Version directories intentionally retained by cleanup_old_versions --keep.
+    retained_versions: Iterable[str] = (),
 ) -> GateResult:
     """Evaluate the cleanup gate sequence and return a single go/no-go.
 
@@ -222,6 +224,7 @@ def evaluate_cleanup_gates(
     """
     flutter_repo_path = Path(flutter_repo_path)
     dist_dir = Path(dist_dir)
+    retained_versions = tuple(v for v in retained_versions if v)
 
     log = audit_log if audit_log is not None else make_audit_log()
     log.event(
@@ -235,6 +238,7 @@ def evaluate_cleanup_gates(
         candidate_count=sum(1 for _ in candidate_blobs)
             if isinstance(candidate_blobs, (list, tuple, set, frozenset))
             else None,
+        retained_versions=list(retained_versions),
     )
 
     # Materialize candidate_blobs once (it may be a generator).
@@ -291,6 +295,7 @@ def evaluate_cleanup_gates(
             blast_radius_threshold=blast_radius_threshold,
             overrides=overrides,
             supabase_client=supabase_client,
+            retained_versions=retained_versions,
         )
     finally:
         if lock_ctx is not None:
@@ -317,6 +322,7 @@ def _run_gates_after_lock(
     blast_radius_threshold: float,
     overrides: GateOverrides,
     supabase_client=None,
+    retained_versions: tuple[str, ...] = (),
 ) -> GateResult:
     """Run preconditions + aggregating gates with the lock already held
     (or not, for dry-run mode)."""
@@ -348,6 +354,7 @@ def _run_gates_after_lock(
         protected_set = compute_protected_blob_set(
             flutter_repo_path, dist_dir, branch=branch,
             supabase_client=supabase_client,
+            retained_versions=retained_versions,
         )
         log.event(
             "protected_set_computed",
@@ -364,6 +371,10 @@ def _run_gates_after_lock(
             registry_protected_blob_count=len(protected_set.registry_hashes),
             registry_total_entry_count=protected_set.registry_count,
             registry_versions=list(protected_set.registry_versions),
+            retained_version_count=len(protected_set.retained_versions),
+            retained_protected_blob_count=len(protected_set.retained_hashes),
+            retained_total_entry_count=protected_set.retained_count,
+            retained_versions=list(protected_set.retained_versions),
         )
     except (
         MalformedBundleCatalogError,

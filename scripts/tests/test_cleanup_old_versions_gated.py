@@ -570,6 +570,47 @@ def test_orphan_cleanup_runs_when_no_old_versions_to_delete(monkeypatch, capsys)
     assert "--flutter-repo" in out
 
 
+def test_orphan_cleanup_passes_retained_versions_to_gates(tmp_path, monkeypatch):
+    """The orphan gate must protect every version retained by --keep N.
+
+    Otherwise an aligned bundle/dist pair protects only the newest catalog, and
+    the previous retained version's blobs can be quarantined even though its
+    version directory remains available for rollback or older clients.
+    """
+    import cleanup_old_versions as cov
+
+    captured = {}
+
+    class SweepResult:
+        total_deleted = 0
+        total_failed = 0
+        total_eligible = 0
+        eligible_dates = []
+
+    def fake_cleanup(*args, **kwargs):
+        captured["retained_versions"] = tuple(kwargs.get("retained_versions", ()))
+        return 0, 0
+
+    monkeypatch.setattr(cov, "get_supabase_client", lambda: object())
+    monkeypatch.setattr(cov, "fetch_all_versions", lambda client: [
+        {"db_version": "vNEW", "created_at": "2026-06-29T00:00:00Z", "is_current": True},
+        {"db_version": "vPREV", "created_at": "2026-06-28T00:00:00Z", "is_current": False},
+    ])
+    monkeypatch.setattr(cov, "delete_version_directory", lambda c, v, dr: (0, 0))
+    monkeypatch.setattr(cov, "cleanup_orphan_blobs_with_gates", fake_cleanup)
+    monkeypatch.setattr(cov, "sweep_quarantine", lambda *args, **kwargs: SweepResult())
+
+    cov.main([
+        "--execute",
+        "--cleanup-orphan-blobs",
+        "--keep", "2",
+        "--flutter-repo", str(tmp_path / "flutter"),
+        "--dist-dir", str(tmp_path / "dist"),
+    ])
+
+    assert captured["retained_versions"] == ("vNEW", "vPREV")
+
+
 # ===========================================================================
 # Test 7 — unexpected exception in gated path returns (0, 0) at main() level
 # ===========================================================================

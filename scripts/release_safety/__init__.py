@@ -52,6 +52,7 @@ from .protected_blobs import (
     MalformedBundleCatalogError,
     BundleCatalogQueryError,
     RegistryDetailIndexMissingError,
+    RetainedDetailIndexMissingError,
     RegistryFetchError,
     MalformedRegistryRowError,
     compute_protected_blob_set,
@@ -180,6 +181,7 @@ __all__ = [
     "compute_protected_blob_set",
     # P3.5 — registry-backed protection errors
     "RegistryDetailIndexMissingError",
+    "RetainedDetailIndexMissingError",
     "RegistryFetchError",
     "MalformedRegistryRowError",
     # P1.5a — structured audit log (JSONL, append-only, fsynced)

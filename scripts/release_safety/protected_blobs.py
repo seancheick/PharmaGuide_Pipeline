@@ -1,10 +1,13 @@
-"""Protected blob set computation — bundled∪dist∪registry union for orphan-cleanup gating.
+"""Protected blob set computation — bundled∪dist∪registry∪retained union for orphan-cleanup gating.
 
 Implements ADR-0001 P1.4 + P3.5.
 
-P1.4 shipped the interim bundled∪dist heuristic. P3.5 adds the third source:
-catalog_releases registry rows in state ∈ {ACTIVE, VALIDATING}. The union
-is purely additive — protected set only grows. ``dist_dir`` remains an
+P1.4 shipped the interim bundled∪dist heuristic. P3.5 adds registry rows in
+state ∈ {ACTIVE, VALIDATING}. Retained version directories from
+``cleanup_old_versions --keep N`` can also be supplied by the cleanup CLI so
+rollback/readability assets that remain in storage continue protecting their
+shared detail blobs. The union is purely additive — protected set only grows.
+``dist_dir`` remains an
 honored input until P3.6 has been observed through at least one clean
 release cycle, at which point a follow-up commit can drop it.
 
@@ -74,13 +77,16 @@ Public API
         supabase_client=None,                  # P3.5: enables registry side
         registry_bucket="pharmaguide",         # P3.5
         registry_table="catalog_releases",     # P3.5
+        retained_versions=(),                  # cleanup --keep N versions
     ) -> ProtectedBlobSet
 
 When ``supabase_client`` is ``None`` the registry side is a no-op and the
 function returns the P1.4 bundled∪dist set. When a client is provided,
 the function additionally fetches every ACTIVE+VALIDATING row, downloads
 its ``detail_index_url`` from Supabase storage, validates it, and unions
-its hashes into ``protected``.
+its hashes into ``protected``. If ``retained_versions`` is provided, each
+``v{db_version}/detail_index.json`` is fetched and unioned as a cleanup
+retention source, regardless of registry state.
 
 Registry-side failure modes (P3.5)
 ==================================
@@ -105,7 +111,7 @@ import sqlite3
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Optional, Tuple, Union
+from typing import Iterable, Optional, Tuple, Union
 
 from .bundle_alignment import (
     DEFAULT_BRANCH,
@@ -171,6 +177,18 @@ class RegistryDetailIndexMissingError(ProtectedBlobSetError):
     """
 
 
+class RetainedDetailIndexMissingError(ProtectedBlobSetError):
+    """A version retained by cleanup_old_versions --keep points at a
+    detail_index path that does not exist in Supabase storage.
+
+    Retained version directories are intentionally kept for rollback and
+    older-client readability. Their detail_index blobs must therefore be
+    protected during orphan cleanup; a missing retained index is a hard
+    fail because cleanup cannot prove which blobs belong to that retained
+    version.
+    """
+
+
 class RegistryFetchError(ProtectedBlobSetError):
     """Network/storage error while fetching a registry detail_index from
     Supabase storage (timeout, 500, transient connectivity, etc.).
@@ -197,7 +215,8 @@ class ProtectedBlobSet:
 
     Attributes:
         protected: frozenset of all unique blob hashes that must NOT be
-            deleted by orphan cleanup. ``bundled_hashes | dist_hashes``.
+            deleted by orphan cleanup.
+            ``bundled_hashes | dist_hashes | registry_hashes | retained_hashes``.
         bundled_hashes, dist_hashes: per-source unique hash sets.
         bundled_count, dist_count: total entries (with duplicates) per side.
             Always >= the corresponding hash-set size.
@@ -232,6 +251,10 @@ class ProtectedBlobSet:
     registry_hashes: frozenset = field(default_factory=frozenset)
     registry_count: int = 0                          # total entries (with dup)
     registry_versions: tuple[str, ...] = ()          # db_versions contributing
+    # --- Retained version-directory protection (cleanup --keep N) --------
+    retained_hashes: frozenset = field(default_factory=frozenset)
+    retained_count: int = 0                          # total entries (with dup)
+    retained_versions: tuple[str, ...] = ()          # db_versions contributing
 
 
 # ---------------------------------------------------------------------------
@@ -298,8 +321,9 @@ def compute_protected_blob_set(
     supabase_client=None,
     registry_bucket: str = DEFAULT_REGISTRY_BUCKET,
     registry_table: Optional[str] = None,
+    retained_versions: Iterable[str] = (),
 ) -> ProtectedBlobSet:
-    """Compute the bundled∪dist∪registry protected blob set.
+    """Compute the bundled∪dist∪registry∪retained protected blob set.
 
     Args:
         flutter_repo_path: filesystem path to the Flutter repo root.
@@ -317,9 +341,13 @@ def compute_protected_blob_set(
             Default ``pharmaguide``.
         registry_table: catalog_releases table name. Defaults to the value
             registry.DEFAULT_TABLE — kept as a parameter for testability.
+        retained_versions: db_versions whose version directories are being
+            kept by cleanup_old_versions --keep N. Their detail_index blobs
+            protect referenced shared detail blobs even if the registry row
+            is RETIRED.
 
     Returns:
-        ``ProtectedBlobSet`` with full bundled∪dist∪registry union when bundled
+        ``ProtectedBlobSet`` with full bundled∪dist∪registry∪retained union when bundled
         and registry sides are loadable; ``degenerate=True`` (and a populated
         ``degenerate_reason``) when the bundled side is absent. The registry
         side is NEVER degenerate — empty registry means zero additional
@@ -465,8 +493,22 @@ def compute_protected_blob_set(
             )
         )
 
-    # --- Step 4: compute union (bundled ∪ dist ∪ registry) ---------------
-    protected = bundled_hashes | dist_hashes | registry_hashes
+    # --- Step 4: retained version-directory fetch (cleanup --keep N) -----
+    retained_hashes: frozenset = frozenset()
+    retained_count = 0
+    retained_versions_contributing: tuple[str, ...] = ()
+    retained_versions = tuple(v for v in retained_versions if v)
+    if supabase_client is not None and retained_versions:
+        retained_hashes, retained_count, retained_versions_contributing = (
+            _fetch_retained_version_blob_hashes(
+                supabase_client,
+                bucket=registry_bucket,
+                versions=retained_versions,
+            )
+        )
+
+    # --- Step 5: compute union (bundled ∪ dist ∪ registry ∪ retained) ----
+    protected = bundled_hashes | dist_hashes | registry_hashes | retained_hashes
 
     return ProtectedBlobSet(
         protected=protected,
@@ -484,6 +526,9 @@ def compute_protected_blob_set(
         registry_hashes=registry_hashes,
         registry_count=registry_count,
         registry_versions=registry_versions,
+        retained_hashes=retained_hashes,
+        retained_count=retained_count,
+        retained_versions=retained_versions_contributing,
     )
 
 
@@ -566,12 +611,58 @@ def _fetch_registry_blob_hashes(
     return frozenset(all_hashes), total_count, tuple(versions)
 
 
+def _fetch_retained_version_blob_hashes(
+    client,
+    *,
+    versions: Tuple[str, ...],
+    bucket: str,
+) -> Tuple[frozenset, int, Tuple[str, ...]]:
+    """Fetch detail_index hashes for version directories kept by --keep N.
+
+    Unlike registry protection, retained versions may be RETIRED. The cleanup
+    CLI has explicitly decided to keep their version directories, so orphan
+    cleanup must also keep the shared detail blobs referenced by those
+    directories.
+    """
+    all_hashes: set[str] = set()
+    total_count = 0
+    contributing_versions: list[str] = []
+
+    for db_version in versions:
+        index_bytes = _fetch_index_from_storage(
+            client,
+            bucket=bucket,
+            storage_path=f"v{db_version}/detail_index.json",
+            db_version=db_version,
+            missing_error_cls=RetainedDetailIndexMissingError,
+            missing_context=f"retained export_manifest version db_version={db_version!r}",
+        )
+
+        with tempfile.NamedTemporaryFile(
+            mode="wb", suffix=".json", delete=False,
+        ) as tmp:
+            tmp.write(index_bytes)
+            tmp_path = Path(tmp.name)
+        try:
+            validated = validate_detail_index(tmp_path)
+        finally:
+            tmp_path.unlink(missing_ok=True)
+
+        all_hashes.update(validated.blob_hashes)
+        total_count += validated.count
+        contributing_versions.append(db_version)
+
+    return frozenset(all_hashes), total_count, tuple(contributing_versions)
+
+
 def _fetch_index_from_storage(
     client,
     *,
     bucket: str,
     storage_path: str,
     db_version: str,
+    missing_error_cls=RegistryDetailIndexMissingError,
+    missing_context: Optional[str] = None,
 ) -> bytes:
     """Download a registry detail_index from Supabase storage.
 
@@ -605,8 +696,13 @@ def _fetch_index_from_storage(
         isinstance(i, dict) and i.get("name") == basename for i in items
     )
     if not found:
-        raise RegistryDetailIndexMissingError(
-            f"catalog_releases row db_version={db_version!r} promises "
+        subject = (
+            missing_context
+            if missing_context is not None
+            else f"catalog_releases row db_version={db_version!r}"
+        )
+        raise missing_error_cls(
+            f"{subject} promises "
             f"detail_index at {bucket}/{storage_path} but the object does NOT "
             f"exist in storage. Either upload the missing index or retire the "
             f"row before cleanup can run."

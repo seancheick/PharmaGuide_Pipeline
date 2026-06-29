@@ -826,6 +826,69 @@ def test_p3_5_retired_row_is_not_protected(tmp_path):
     assert result.registry_count == 0
 
 
+def test_retained_retired_version_is_protected_when_cleanup_keeps_it(tmp_path):
+    """A RETIRED registry row is normally not protected, but if
+    cleanup_old_versions is retaining that db_version via --keep N, its
+    detail_index is still a rollback/readability asset and must protect
+    the blobs referenced by that retained version directory."""
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    retained_hashes = [_h(i) for i in range(330, 333)]
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)],
+        dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.04.01.retained", state="RETIRED"),
+    ])
+    client.storage.from_("pharmaguide").put(
+        "v2026.04.01.retained/detail_index.json",
+        _detail_index_bytes(retained_hashes, "2026.04.01.retained"),
+    )
+
+    result = compute_protected_blob_set(
+        flutter_repo,
+        dist_dir,
+        supabase_client=client,
+        retained_versions=("2026.04.01.retained",),
+    )
+
+    for h in retained_hashes:
+        assert h in result.protected
+    assert result.registry_versions == ()
+    assert result.retained_versions == ("2026.04.01.retained",)
+    assert result.retained_count == len(retained_hashes)
+
+
+def test_retained_version_missing_detail_index_hard_fails(tmp_path):
+    """Retained version directories must fail closed if their index is
+    missing; otherwise cleanup cannot prove which shared blobs are still
+    needed by that retained version."""
+    from release_safety.protected_blobs import (
+        RetainedDetailIndexMissingError,
+        compute_protected_blob_set,
+    )
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)],
+        dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+
+    with pytest.raises(RetainedDetailIndexMissingError, match="retained_missing"):
+        compute_protected_blob_set(
+            flutter_repo,
+            dist_dir,
+            supabase_client=client,
+            retained_versions=("2026.04.01.retained_missing",),
+        )
+
+
 # ===========================================================================
 # P3.5 — PENDING row is NOT protected
 # ===========================================================================

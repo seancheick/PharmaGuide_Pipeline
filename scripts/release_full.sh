@@ -286,14 +286,14 @@ step1_needs_run() {
 }
 
 if step1_needs_run; then
-  info "Step 1/7: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
+  info "Step 1/8: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
   # build_all_final_dbs.py defaults its scan dir to scripts/ but per-brand
   # pipeline outputs live in scripts/products/output_*/. Always pass an
   # explicit --scan-dir so the auto-discovery actually finds them.
   "$PG_PYTHON" scripts/build_all_final_dbs.py --scan-dir scripts/products --output-dir scripts/final_db_output
   ok "Final DB assembled (scripts/final_db_output/)"
 else
-  skip "Step 1/7: Catalog up to date with per-brand outputs — skipping assembly"
+  skip "Step 1/8: Catalog up to date with per-brand outputs — skipping assembly"
 fi
 
 # ---------------------------------------------------------------------------
@@ -316,7 +316,7 @@ step2_needs_run() {
   fi
   # If neither catalog exists, this is a hard fail (caller bug)
   if [[ ! -f "$DIST_CATALOG" && ! -f "$FINAL_CATALOG" ]]; then
-    err "Step 2/7: No catalog anywhere — step 1 should have caught this."
+    err "Step 2/8: No catalog anywhere — step 1 should have caught this."
     err "         Run 'bash scripts/build_all_final_dbs.py' or rebuild_dashboard_snapshot.sh."
     exit 1
   fi
@@ -324,11 +324,11 @@ step2_needs_run() {
 }
 
 if step2_needs_run; then
-  info "Step 2/7: final_db_output newer than dist/ — staging catalog..."
+  info "Step 2/8: final_db_output newer than dist/ — staging catalog..."
   "$PG_PYTHON" scripts/release_catalog_artifact.py
   ok "Catalog staged"
 else
-  skip "Step 2/7: dist/ catalog already current — skipping stage"
+  skip "Step 2/8: dist/ catalog already current — skipping stage"
 fi
 
 # ---------------------------------------------------------------------------
@@ -388,14 +388,14 @@ PY
 
 if (( SKIP_PRODUCT_IMAGES == 0 )); then
   if step3_needs_run; then
-    info "Step 3/7: Catalog/images out of sync — extracting DSLD product images..."
+    info "Step 3/8: Catalog/images out of sync — extracting DSLD product images..."
     "$PG_PYTHON" scripts/extract_product_images.py --db-path "$DIST_CATALOG"
     ok "DSLD product images extracted + DB backfilled"
   else
-    skip "Step 3/7: DSLD product images already current — skipping extraction"
+    skip "Step 3/8: DSLD product images already current — skipping extraction"
   fi
 else
-  skip "Step 3/7: DSLD product image extraction skipped (--skip-product-images)"
+  skip "Step 3/8: DSLD product image extraction skipped (--skip-product-images)"
 fi
 
 # Step 3 mutates the staged dist catalog in place when it backfills
@@ -426,11 +426,11 @@ step4_needs_run() {
 }
 
 if step4_needs_run; then
-  info "Step 4/7: Interaction-rule inputs newer than bundled DB — rebuilding..."
+  info "Step 4/8: Interaction-rule inputs newer than bundled DB — rebuilding..."
   bash scripts/rebuild_interaction_db.sh
   ok "Interaction DB rebuilt + staged"
 else
-  skip "Step 4/7: Interaction DB up to date with rule sources — skipping rebuild"
+  skip "Step 4/8: Interaction DB up to date with rule sources — skipping rebuild"
 fi
 
 run_strict_gate "cleaner/IQD row contract" \
@@ -457,7 +457,7 @@ run_strict_gate "export contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" export --dist-dir "$DIST_DIR" --require-stamped-manifest --strict-release
 
 # ---------------------------------------------------------------------------
-# Step 5: Sync to Supabase (with full cleanup)
+# Step 5: Sync to Supabase (upload only; cleanup is post-bundle)
 #
 # We do NOT pre-skip this step — sync_to_supabase.py has built-in
 # checksum-based "up_to_date" detection that is more reliable than mtime
@@ -467,11 +467,11 @@ run_strict_gate "export contract" \
 
 if (( SKIP_SUPABASE == 0 )); then
   if (( SUPABASE_DRY_RUN == 1 )); then
-    info "Step 5/7: Syncing dist/ to Supabase (DRY-RUN)..."
+    info "Step 5/8: Syncing dist/ to Supabase (DRY-RUN)..."
     "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
-    info "Step 5/7: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
+    info "Step 5/8: Syncing dist/ to Supabase (upload only; cleanup deferred)..."
     # Storage cleanup (version dirs + orphan blobs) is NO LONGER run here.
     # It moved to the aligned-cleanup step below, AFTER the Flutter bundle is
     # committed. Reason: the orphan-cleanup bundle_alignment gate compares
@@ -484,7 +484,7 @@ if (( SKIP_SUPABASE == 0 )); then
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else
-  skip "Step 5/7: Supabase sync skipped (--skip-supabase)"
+  skip "Step 5/8: Supabase sync skipped (--skip-supabase)"
 fi
 
 # ---------------------------------------------------------------------------
@@ -495,7 +495,7 @@ fi
 # every release when nothing actually changed.
 # ---------------------------------------------------------------------------
 
-step5_needs_run() {
+step6_needs_run() {
   (( FORCE == 1 )) && return 0
   # Compare both manifest checksums dist/ vs Flutter assets/
   local dist_cat dist_int flu_cat flu_int dist_cat_manifest dist_int_manifest flu_cat_manifest flu_int_manifest
@@ -524,12 +524,12 @@ if (( SKIP_FLUTTER == 0 )); then
     err "or --skip-flutter to bypass this step."
     exit 1
   fi
-  if step5_needs_run; then
-    info "Step 6/7: Checksums differ between dist/ and Flutter assets/ — importing..."
+  if step6_needs_run; then
+    info "Step 6/8: Checksums differ between dist/ and Flutter assets/ — importing..."
     "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" "$DIST_DIR"
     ok "Flutter bundle updated"
   else
-    skip "Step 6/7: Flutter bundle checksums already match dist/ — skipping import"
+    skip "Step 6/8: Flutter bundle checksums already match dist/ — skipping import"
   fi
   run_strict_gate "Flutter bundle parity" \
     "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" flutter \
@@ -537,7 +537,7 @@ if (( SKIP_FLUTTER == 0 )); then
       --flutter-repo "$FLUTTER_REPO" \
       --strict-release
 else
-  skip "Step 6/7: Flutter import skipped (--skip-flutter)"
+  skip "Step 6/8: Flutter import skipped (--skip-flutter)"
 fi
 
 # ---------------------------------------------------------------------------
@@ -550,17 +550,17 @@ if (( SKIP_FLUTTER == 0 )); then
   PREVS=("$ASSETS_DIR"/*.previous)
   shopt -u nullglob
   if (( ${#PREVS[@]} > 0 )); then
-    info "Step 7/7: Pruning ${#PREVS[@]} .previous backup(s) in $ASSETS_DIR..."
+    info "Step 7/8: Pruning ${#PREVS[@]} .previous backup(s) in $ASSETS_DIR..."
     for p in "${PREVS[@]}"; do
       info "  removing $(basename "$p")"
       rm -f "$p"
     done
     ok "Pruned"
   else
-    skip "Step 7/7: No .previous backups to prune"
+    skip "Step 7/8: No .previous backups to prune"
   fi
 else
-  skip "Step 7/7: Skipped (Flutter step disabled)"
+  skip "Step 7/8: Skipped (Flutter step disabled)"
 fi
 
 # Resolve the freshly-bundled versions from the Flutter assets/db/ manifests
@@ -592,7 +592,7 @@ if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
       skip "Flutter bundle already committed — nothing to commit"
     fi
 
-    info "Aligned storage cleanup (version dirs + orphan blobs)..."
+    info "Step 8/8: Aligned storage cleanup (version dirs + orphan blobs)..."
     # No --expected-count: blast-radius stays a backstop. A big-churn release
     # that would delete >5% is logged and left for a manual authorized sweep
     # (cleanup_old_versions.py --execute --cleanup-orphan-blobs ... --expected-count N).
