@@ -737,6 +737,26 @@ class BatchProcessor:
         
         return summary
     
+    def _effective_workers(self, file_count: int) -> int:
+        """Size the worker pool to the batch's workload.
+
+        Each spawned worker (macOS ``spawn``) re-imports the module tree and
+        runs ``init_worker`` — loading ~29.5MB of reference JSON to build an
+        EnhancedDSLDNormalizer. For a small brand that warmup dwarfs the work
+        (and shows up as a per-brand pause), so small batches run in-process
+        (one reference load, no spawn) and larger ones scale up to the
+        configured ``max_workers``. Serial and pool paths produce byte-identical
+        output (both call ``process_single_file`` and re-order results to input
+        order), so this is purely a performance decision.
+
+        ``processing.min_files_per_worker`` (default 50) is the knob; set it to 0
+        to disable throttling and always use ``max_workers``.
+        """
+        per_worker = self.config.get("processing", {}).get("min_files_per_worker", 50)
+        if per_worker <= 0:
+            return self.max_workers
+        return max(1, min(self.max_workers, file_count // per_worker))
+
     def process_batch(self, batch_num: int, files: List[Path], output_batch_num: Optional[int] = None) -> Dict[str, Any]:
         """Process a single batch of files"""
         batch_start_time = time.time()
@@ -765,8 +785,16 @@ class BatchProcessor:
         batch_mapped = Counter()
         processed_files = []  # FIX 1+2: Track processed file paths
         
-        # Process files
-        if self.max_workers == 1:
+        # Process files. Size the pool to this batch so small brands skip the
+        # multi-worker spawn + per-worker reference reload (identical output).
+        effective_workers = self._effective_workers(len(files))
+        if effective_workers < self.max_workers:
+            logger.info(
+                "Worker sizing: %d file(s) -> %d worker(s) in-process/pool "
+                "(configured max %d); skips redundant reference reload",
+                len(files), effective_workers, self.max_workers,
+            )
+        if effective_workers == 1:
             # Single-threaded processing
             # PERFORMANCE FIX: Initialize worker once before processing files
             init_worker(str(self.output_dir))
@@ -841,7 +869,7 @@ class BatchProcessor:
                     valid_files.append(file_path)
 
             with ProcessPoolExecutor(
-                max_workers=self.max_workers,
+                max_workers=effective_workers,
                 initializer=init_worker,
                 initargs=(str(self.output_dir),)
             ) as executor:
