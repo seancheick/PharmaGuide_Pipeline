@@ -619,6 +619,11 @@ class SupplementEnricherV3:
         )
         # Per-quality-map cache: normalized context term -> preferred parent key.
         self._quality_parent_context_index_cache: Dict[int, Dict[str, str]] = {}
+        # Memoized ingredient-match results (see _match_quality_map). Keyed on the
+        # full result-affecting argument tuple; run-lifetime, per enricher instance.
+        # ponytail: unbounded dict — add an LRU cap only if one enricher is held
+        # across a multi-million-row run and RSS becomes the binding constraint.
+        self._match_quality_cache: Dict[str, Any] = {}
         self.databases = {}
         self._load_all_databases()
         self._compile_patterns()
@@ -6668,6 +6673,54 @@ class SupplementEnricherV3:
                            preferred_parent: Optional[str] = None,
                            branded_token: Optional[str] = None,
                            cleaner_canonical_id: Optional[str] = None) -> Optional[Dict]:
+        """Memoizing wrapper around :meth:`_match_quality_map_impl`.
+
+        The match result is a pure function of these arguments plus the static
+        (within a run) quality_map, so repeated ingredient labels — ubiquitous in
+        real catalogs — are matched once instead of re-running the full
+        exact→alias→token→fuzzy cascade per occurrence. The key includes EVERY
+        result-affecting argument (notably ``cleaner_canonical_id``, which
+        hard-constrains the matched parent) plus ``id(quality_map)`` so a custom
+        map passed to the same instance can't return a stale result. Returns a
+        deep copy so callers may freely mutate the result without poisoning the
+        cache. Telemetry counters/trackers updated inside the impl are
+        intentionally NOT re-incremented on a cache hit — they are diagnostic,
+        not part of the scored output.
+        """
+        try:
+            key = json.dumps(
+                [
+                    ing_name, std_name, _form_extraction_attempt, cleaned_forms,
+                    preferred_parent, branded_token, cleaner_canonical_id,
+                    id(quality_map),
+                ],
+                sort_keys=True, default=str,
+            )
+        except (TypeError, ValueError):
+            # Unserializable argument (rare) → correctness over speed: bypass cache.
+            return self._match_quality_map_impl(
+                ing_name, std_name, quality_map, _form_extraction_attempt,
+                cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
+            )
+
+        if key in self._match_quality_cache:
+            return copy.deepcopy(self._match_quality_cache[key])
+
+        result = self._match_quality_map_impl(
+            ing_name, std_name, quality_map, _form_extraction_attempt,
+            cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
+        )
+        # Store an isolated copy (defends against any impl-side aliasing) and
+        # hand every caller its own isolated copy — the cache entry is immutable.
+        self._match_quality_cache[key] = copy.deepcopy(result)
+        return copy.deepcopy(result)
+
+    def _match_quality_map_impl(self, ing_name: str, std_name: str, quality_map: Dict,
+                                _form_extraction_attempt: bool = False,
+                                cleaned_forms: Optional[List[Dict]] = None,
+                                preferred_parent: Optional[str] = None,
+                                branded_token: Optional[str] = None,
+                                cleaner_canonical_id: Optional[str] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
