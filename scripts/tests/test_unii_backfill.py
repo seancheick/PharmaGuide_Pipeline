@@ -85,7 +85,12 @@ def test_apply_with_unknown_entry_ids_refused(tmp_path):
     import backfill_unii_from_cache as bf
 
     # Use the live repo for reference data (this won't write anything because
-    # the unknown ID won't match any candidate).
+    # the unknown ID won't match any candidate). Point --dsld-staging at an
+    # absent tmp dir so build_dsld_consensus_index short-circuits to {} instead
+    # of json.load-scanning the whole live DSLD staging tree (thousands of
+    # files) — that scan made this test take minutes, and hang for hours under
+    # I/O contention. The refusal is independent of the consensus index, so
+    # this preserves the assertion while keeping the test in the fast loop.
     rc = bf.main(
         argv=[
             "--apply",
@@ -93,6 +98,8 @@ def test_apply_with_unknown_entry_ids_refused(tmp_path):
             "ENTRY_THAT_DOES_NOT_EXIST_xyz",
             "--repo-root",
             str(REPO_ROOT),
+            "--dsld-staging",
+            str(tmp_path / "no_dsld_staging"),
             "--output-dir",
             str(tmp_path / "reports"),
         ]
