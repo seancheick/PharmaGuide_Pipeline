@@ -1098,3 +1098,109 @@ When you're ready, I can:
 - Write the Flutter Realtime subscription + FCM trigger.
 
 Just say when.
+
+---
+
+# 2026 Tech Refresh (added 2026-06-30)
+
+This section updates the plan above with current (mid-2026) free-tier tooling.
+Nothing in Phases 1–5 is invalidated — the *architecture* holds. What changed
+is a handful of specific tool choices and one safety-critical deprecation.
+
+**Research provenance:** object storage, push/APNs, on-device compression, and
+Turso/offline-sync were verified against live 2026 vendor docs this session and
+carry inline source URLs. The CI / backend / edge items are current best
+practice as of the Jan-2026 knowledge cutoff and are flagged `[confirm at build]`
+where a free-tier number should be re-checked the day you wire it up — vendor
+limits drift.
+
+## TL;DR — the 8 deltas
+
+1. **FCM legacy HTTP API is DEAD** (Google shut it down ~June 2024; this plan predates that). The `safety_warning_one_liner` push in Phase 1.5 must use **FCM HTTP v1** + the `firebase_messaging` Flutter plugin. Stay on FCM — go direct to APNs *only* if you later add iOS Live Activities (FCM still can't send those) or hit a no-Google data-residency requirement. **Safety-critical: this is the one item that would silently fail to send recall alerts if built to the old plan.**
+2. **Keyless CI auth.** Replace long-lived `SUPABASE_SERVICE_KEY` / storage keys in GitHub Secrets with **GitHub OIDC federation** where the provider supports it. Fewer secrets to leak or rotate. `[confirm at build]`
+3. **`uv` replaces `pip` in CI.** Astral's `uv` is production-ready and 10–100× faster for installs; it also pins Python 3.13 deterministically via a lockfile — directly relevant since your dev pain is partly interpreter pinning. Swap `pip install -r` for `uv sync` in `build-db.yml`.
+4. **Cloudflare Workflows for the FDA lane.** The Phase 1.5 poll→classify→match→notify chain is multi-step and must not drop a run. Use **Cloudflare Workflows** (durable execution, GA'd 2025) instead of a bare Cron Worker — automatic retries + step persistence make a missed safety alert far less likely. Cron Worker still *triggers* it. `[confirm at build]`
+5. **R2 stays the storage call** (verified). Zero egress, 10 GB free, 1M Class-A + 10M Class-B ops/mo. For mobile shard serving, put a **Custom Domain** on the bucket (the `r2.dev` URL won't cache) + enable **Smart Tiered Cache**. The boto3 CRC32 incompatibility that broke R2 uploads in 2025 was **fixed Feb 3 2026** — make sure botocore is current. [R2 pricing](https://developers.cloudflare.com/r2/pricing/), [R2+cache](https://developers.cloudflare.com/cache/interaction-cloudflare-products/r2/). Closest free alt is **Tigris** (truly unlimited egress, 5 GB, no built-in CDN); avoid **Storj** (raising min monthly fee $5→$50 on 2026-07-01).
+6. **Do NOT use `sqlite-zstd`** for the verdict shard (verified). The author explicitly warns "I wouldn't trust it with my data (yet)," it has unresolved data-corruption issues, and it's an `sqlite3_load_extension` cdylib that **cannot run on iOS** (Apple disables load-extension + bans runtime `.dylib` loading). [repo](https://github.com/phiresky/sqlite-zstd). **Instead — and mind the delivery path (verified):**
+   - **Tier-1 shard bundled *inside* the app** → ship **plain uncompressed `.sqlite`** and use sqflite's 15-line copy-once-on-first-launch pattern. **Do not zstd it**: Android AAPT and the iOS IPA ZIP already deflate `.sqlite`/`.db` at packaging time for free, and pre-compressing forces a wasteful "deflate an already-compressed stream" (bigger output + a `noCompress` gradle hack). Zero decompression code, native query speed.
+   - **Tier-2 shard downloaded OTA from R2** → here zstd earns its keep. **Whole-file zstd level 19** (4–11× on a text-heavy DB; decompression speed is level-independent, so max level is free on the read path), decompress once on device, store the plain `.sqlite`, delete the compressed download.
+   - **Per-row detail blobs** (Tier-3 on-demand JSON from R2/Supabase) → **train a zstd dictionary** at build time on a blob sample (`zstd --train`) and ship it with the app; per-blob compression jumps from ~2.8× (plain) to **5–7×** since the blobs share schema keys.
+
+   All use the plain `zstd` C library present on iOS+Android — no SQLite extension, no `$2K` CEROD, no maintenance risk.
+7. **Delta sync: don't build binary diffing.** At a 5–15 MB shard, skip bsdiff/zsync/page-diff entirely. **Baseline = re-download the compressed snapshot** on version change (Phase 4.5's manifest already does this). If that ever feels heavy, step up to **app-level row UPSERT deltas** (ship changed rows as JSON, apply with `INSERT … ON CONFLICT`), not file-level binary patching.
+8. **Flutter local DB = `drift`** (SQLite). It's the maintained, safe default for a read-heavy catalog with FTS5. **Avoid Isar** (maintenance limbo), **Realm** (MongoDB sunsetting it), and **DuckDB** (verified: ~20 MB binary added to every install, Android support officially experimental, and it's an OLAP scan engine — wrong tool for point-lookups by id/barcode; SQLite is already on every device at ~750 KB). **Turso/libSQL offline sync is NOT ready for a clinical app** — its offline-write sync is public beta with *no durability guarantee*, and the Flutter SDK (`libsql_dart`) is community-maintained and explicitly "may not be officially supported." If you want Turso, use it only as a read-only embedded replica, never as the offline source of truth. [Turso offline beta](https://turso.tech/blog/turso-offline-sync-public-beta), [DuckDB vs SQLite](https://posthog.com/blog/duckdb-vs-sqlite).
+
+9. **⚠️ openFDA can't deliver the "<15 min" promise by itself (verified — re-scope Phase 1.5).** The openFDA enforcement endpoints (`/food`, `/drug`, `/device/enforcement.json`) are **updated WEEKLY** (they mirror the FDA's weekly Enforcement Report), and FDA's own docs state this data **"should not be used as a method to collect data to issue alerts to the public."** Polling it every 15 min therefore gives you fast detection of the *weekly batch*, not sub-15-min detection of a *just-announced* Class I recall. The genuine real-time channel is FDA **press releases / the MedWatch recall-announcement pages** — and the legacy MedWatch/FoodSafety **RSS feeds 404 as of June 2026** with no announced replacement (needs a human to confirm the current feed URL in a browser). **Action:** keep the 15-min openFDA poller (it's still the cleanest structured source and catches everything within a week, fast), but be honest that the latency floor is "within the FDA's publication cadence," and add a secondary watcher that scrapes the FDA recall-press-release listing page for true same-day signal. Rate limits (verified): 240 req/min both tiers; 1,000/day no-key, **120,000/day with a free key** — get the key. [openFDA enforcement](https://open.fda.gov/apis/food/enforcement/), [auth/limits](https://open.fda.gov/apis/authentication/).
+
+## Codex review corrections (2026-06-30) — Phase 1.5 delivery + cost
+
+An adversarial review (Codex) caught a real flaw the transport-only refresh above
+missed, plus a cost overstatement. Both are folded in here.
+
+10. **⚠️ Phase 1.5's push topology is broken — fix the delivery, not just the transport.**
+    The original plan has the server *broadcast every alert over Supabase Realtime*,
+    each client *match locally*, then *the client fires its own push*. This cannot
+    reach a **backgrounded/terminated app** — which is exactly the user who needs a
+    recall alert most — because a closed iOS app isn't holding a Realtime websocket
+    open. Delta #1 fixed the transport (FCM v1); this fixes the topology.
+
+    **Correct design: server-side targeted FCM v1 `notification` pushes for Tier-1.**
+    Only server-side targeting is both *reliable on a closed app* (the OS displays a
+    `notification` payload without your code running) **and** *non-spammy* (a topic
+    broadcast would alert every user for every recall → alert fatigue → users mute the
+    one signal that matters). A `data`-message + on-device filter preserves privacy but
+    iOS background/terminated delivery is best-effort — not acceptable for safety.
+
+    **Privacy handling (medical-grade):** targeting needs the server to know which
+    ingredient/product keys a device cares about. Mitigations, in order:
+    - If the stack is already synced to Supabase (multi-device / family sharing, a Pro
+      feature), the server already knows it — targeting adds nothing.
+    - For on-device-only stacks, make closed-app alerts **opt-in**: "upload a hashed /
+      canonicalized interest index to receive recall alerts when the app is closed."
+      Store the minimum (device token + hashed alert keys), never plaintext stacks.
+
+    Client mechanics: `firebase_messaging` does **not** expose `showNotification` — the
+    OS auto-displays a `notification` push to a closed app; `flutter_local_notifications`
+    is only for *foreground* display or the data-message-filter path.
+    [FCM receive docs](https://firebase.google.com/docs/cloud-messaging/flutter/receive).
+
+11. **Remove "$0 at 100k users" — and note it no longer gates safety.** Supabase Realtime
+    free tier is **200 concurrent connections**, not unlimited; the original plan's
+    "$0/mo at 100k users" is wrong for a production safety path. Two things resolve it:
+    (a) **Supabase Pro** (now active on this project) raises Realtime to ~500 concurrent
+    (10k without a spend cap), 5M Realtime msgs/mo, 2M edge-function invocations/mo —
+    ample for `safety_alerts`, the reviewer queue, audit trail, and in-app banners; and
+    (b) moving Tier-1 alerts to **server-side FCM** takes Realtime *off* the safety-critical
+    path — Realtime then only powers open-app banners + admin flows, so its connection cap
+    is a UX limit, not a safety one. FCM carries the actual alerts (free, 600k msg/min).
+    [Realtime limits](https://supabase.com/docs/guides/realtime/limits),
+    [Realtime pricing](https://supabase.com/docs/guides/realtime/pricing).
+
+12. **FDA real-time target = the recalls page, not the (404'ing) MedWatch RSS.** For
+    same-day signal watch
+    [fda.gov/safety/recalls-market-withdrawals-safety-alerts](https://www.fda.gov/safety/recalls-market-withdrawals-safety-alerts);
+    reconcile against openFDA enforcement (weekly) as structured backfill per delta #9.
+
+## Per-phase mapping
+
+| Phase | Plan-as-written | 2026 adjustment |
+| ----- | --------------- | --------------- |
+| **1** (CI) | GH Actions + GitHub Secrets + pip | GH Actions + **OIDC** + **`uv`**; keep R2 + Supabase. `build-db.yml` stages stay as written. |
+| **1.5** (FDA lane) | Cron Worker → Edge Function → **FCM (legacy)** | **FCM HTTP v1** (mandatory); wrap the multi-step lane in **Cloudflare Workflows** for retry durability. openFDA + RSS unchanged. `[confirm openFDA limits at build]` |
+| **2** (Dr. Pham web editor) | Streamlit Cloud + PyGithub PRs | Unchanged — still the right free stack. |
+| **3** (scheduled intake) | GH Actions cron | Unchanged. (Optionally move polling into **Supabase Cron/pg_cron** if you'd rather keep it next to the DB — not required.) |
+| **4** (hot-refresh) | reverse index + targeted rebuild | Unchanged. Reverse index matters more at 250k — keep it. |
+| **4.5** (tiered offline) | verdict shard + **sqlite-zstd** + ODR/PAD + manual snapshot+delta | Drop **sqlite-zstd** → **whole-file zstd**. Local DB = **drift**. Delta = **re-download compressed snapshot** (don't binary-diff). ODR/PAD still valid but "download from R2 on first launch + cache" is simpler for a solo dev — prefer it unless app-store size forces ODR. |
+| **5** (observability) | Grafana/Sentry/UptimeRobot free | Unchanged. |
+
+## What did NOT change (don't over-engineer)
+
+- The 3-stage Python pipeline stays **plain Python**. At 100k–250k rows with custom scoring, adopting DuckDB / dlt / SQLMesh adds tooling without removing complexity — skip them. (DuckDB is worth a look *only* if a specific enrich/score join becomes a measured bottleneck.)
+- Supabase Postgres stays the source of truth. Don't swap to Turso/D1 for the write path.
+- The manual snapshot+delta distribution model is the *right* simplicity for a weekly cadence. Verified: there is **no free local-first sync engine that actually fits** anyway — Zero/SQLSync/Triplit/InstantDB/ElectricSQL are JS/TS-only (no Flutter), Realm's Atlas Device Sync hit **EOL 2025-09-30**, PowerSync's free tier **deactivates after 1 week idle** (production-disqualifying), and Ditto's free tier is real but P2P-mesh-shaped (wrong model for one-way catalog push). A read-only catalog doesn't need bi-directional sync — don't buy that complexity.
+
+## Start-soon order (unchanged recommendation, refreshed steps)
+
+1. **This week:** `config/brands.json` + `config/categories.json` (all `enabled:false`). Commit.
+2. **Phase 1:** R2 bucket + `storage_client.py` (boto3, current botocore) + `build-db.yml` using `uv` + OIDC. One brand first.
+3. **Phase 1.5:** Supabase `safety_alerts` table → Cloudflare **Workflow** (poll openFDA) → **FCM v1** push. Ship before public beta.
