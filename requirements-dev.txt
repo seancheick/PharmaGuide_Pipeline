@@ -3,6 +3,7 @@ requests>=2.32,<3
 rapidfuzz>=3.9,<4
 pytest>=9,<10
 pytest-xdist>=3.6,<4
+pytest-timeout>=2.3,<3   # fail a hung test with a named traceback instead of a multi-hour zombie
 jsonschema>=4,<5    # v4 scoring-config rubric validation (Phase 0 config registry)
 supabase>=2.0,<3
 PyMuPDF>=1.24,<2

@@ -87,6 +87,22 @@ import xdist  # noqa: F401
 PY
 }
 
+has_timeout() {
+  "$PG_PYTHON" - <<'PY' >/dev/null 2>&1
+import pytest_timeout  # noqa: F401
+PY
+}
+
+# Emit `--timeout=<seconds>` iff pytest-timeout is installed, so a hung test
+# fails with a named traceback instead of becoming a multi-hour zombie (see
+# the test_unii_backfill live-DSLD-scan incident). No-op on minimal installs.
+# A user-supplied --timeout in USER_OPTIONS is appended after and wins.
+timeout_args() {
+  if has_timeout; then
+    printf '%s\n' "--timeout=$1"
+  fi
+}
+
 split_user_pytest_args() {
   USER_TARGETS=()
   USER_OPTIONS=()
@@ -238,6 +254,12 @@ for path in sorted(Path("scripts/tests").glob("test_*.py")):
 PY
 }
 
+# Per-profile hang guards. fast = dev loop (no test should exceed 2 min);
+# heavy profiles run real-catalog tests that legitimately take ~8 min, so use a
+# 10-min ceiling there to catch true hangs without false-killing slow tests.
+TIMEOUT_FAST=(); while IFS= read -r _a; do TIMEOUT_FAST+=("$_a"); done < <(timeout_args 120)
+TIMEOUT_HEAVY=(); while IFS= read -r _a; do TIMEOUT_HEAVY+=("$_a"); done < <(timeout_args 600)
+
 case "$PROFILE" in
   fast)
     split_user_pytest_args "$@"
@@ -249,7 +271,7 @@ case "$PROFILE" in
         files+=("$file")
       done < <(fast_test_files)
     fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_FAST[@]+"${TIMEOUT_FAST[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
   release)
     # Wave 6.Z release hardening: actionable staleness preflight runs
@@ -263,7 +285,7 @@ case "$PROFILE" in
     else
       files=("${RELEASE_FILES[@]}")
     fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     run_release_artifact_gates
     ;;
   full)
@@ -277,7 +299,7 @@ case "$PROFILE" in
     while IFS= read -r arg; do
       parallel_args+=("$arg")
     done < <(pytest_args_for_full)
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
   slow)
     split_user_pytest_args "$@"
@@ -286,7 +308,7 @@ case "$PROFILE" in
     else
       files=("${SLOW_FILES[@]}")
     fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
   *)
     cat >&2 <<'EOF'
