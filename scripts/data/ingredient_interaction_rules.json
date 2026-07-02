@@ -664,7 +664,7 @@
           "mechanism": "Possible additive glucose-lowering. Oral aloe may also alter drug absorption via laxative effects.",
           "action": "Monitor glucose and GI symptoms.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Aloe vera can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding aloe vera and monitor your glucose more closely at first.",
@@ -695,7 +695,7 @@
           "mechanism": "Possible additive glucose-lowering. Oral aloe may also alter drug absorption via laxative effects.",
           "action": "Monitor glucose and GI symptoms.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Aloe vera can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding aloe vera and monitor your glucose more closely at first.",
@@ -726,7 +726,7 @@
           "mechanism": "Possible additive glucose-lowering. Oral aloe may also alter drug absorption via laxative effects.",
           "action": "Monitor glucose and GI symptoms.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Aloe vera can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding aloe vera and monitor your glucose more closely at first.",
@@ -2472,7 +2472,7 @@
           "mechanism": "Additive glucose-lowering and fiber-mediated delay of oral medication absorption.",
           "action": "Separate dosing from oral hypoglycemics by 2 hours. Monitor for hypoglycemia.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fenugreek can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fenugreek and monitor your glucose more closely at first.",
@@ -2503,7 +2503,7 @@
           "mechanism": "Additive glucose-lowering and fiber-mediated delay of oral medication absorption.",
           "action": "Separate dosing from oral hypoglycemics by 2 hours. Monitor for hypoglycemia.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fenugreek can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fenugreek and monitor your glucose more closely at first.",
@@ -2534,7 +2534,7 @@
           "mechanism": "Additive glucose-lowering and fiber-mediated delay of oral medication absorption.",
           "action": "Separate dosing from oral hypoglycemics by 2 hours. Monitor for hypoglycemia.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fenugreek can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fenugreek and monitor your glucose more closely at first.",
@@ -2721,7 +2721,7 @@
           "mechanism": "Viscous soluble fiber delays gastric emptying and slows glucose absorption. Meta-analysis of 6 RCTs showed significant reductions in FBG (-1.08 mmol/L) and 2h postprandial glucose.",
           "action": "Separate from oral diabetes medications by at least 2 hours (fiber delays drug absorption). Take with adequate water.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May reduce glucose after meals",
           "alert_body": "Fiber can lower blood sugar. If you have diabetes, talk to your clinician before adding fiber and monitor your glucose, especially in the first weeks.",
@@ -2754,7 +2754,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate glucomannan from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fiber can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fiber and monitor your glucose more closely at first.",
@@ -2785,7 +2785,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate glucomannan from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fiber can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fiber and monitor your glucose more closely at first.",
@@ -2848,7 +2848,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate glucomannan from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fiber can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fiber and monitor your glucose more closely at first.",
@@ -3723,7 +3723,7 @@
           "mechanism": "Ginsenosides improve insulin sensitivity and increase pancreatic beta-cell insulin secretion. RCTs show significant postprandial glucose reduction.",
           "action": "Monitor glucose levels when combining with diabetes medications.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May modestly lower blood sugar",
           "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
@@ -5896,7 +5896,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
@@ -5927,7 +5927,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
@@ -5958,7 +5958,7 @@
           "mechanism": "Reduces lithium absorption when taken concurrently. Separate dosing by 1-2 hours.",
           "action": "If you take lithium, separate psyllium and high-fiber supplements from your lithium dose by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/1968148/"
           ],
           "alert_headline": "May reduce lithium absorption",
           "alert_body": "Psyllium and other high-fiber supplements can reduce how much lithium your body absorbs if taken at the same time. Space them apart by 2 hours.",
@@ -5989,7 +5989,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
@@ -6462,7 +6462,7 @@
           "mechanism": "Vanadium is insulin-mimetic: activates insulin receptor substrate, inhibits PTP-1B, and reduces hepatic glucose production. Clinical studies showed FBG and HbA1c reductions at 150 mg/day.",
           "action": "Additive hypoglycemia risk with insulin and oral hypoglycemics. GI side effects common. Use only under medical supervision.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/37958659/"
           ],
           "alert_headline": "Insulin-mimetic \u2014 may lower glucose",
           "alert_body": "Vanadium can lower blood sugar. If you have diabetes, talk to your clinician before adding vanadium and monitor your glucose, especially in the first weeks.",
@@ -6495,7 +6495,7 @@
           "mechanism": "Insulin-mimetic activity creates additive hypoglycemia risk. Narrow therapeutic window.",
           "action": "Use only under clinician supervision with glucose monitoring.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/37958659/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Vanadium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding vanadium and monitor your glucose more closely at first.",
@@ -6526,7 +6526,7 @@
           "mechanism": "Insulin-mimetic activity creates additive hypoglycemia risk. Narrow therapeutic window.",
           "action": "Use only under clinician supervision with glucose monitoring.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/37958659/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Vanadium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding vanadium and monitor your glucose more closely at first.",
@@ -6557,7 +6557,7 @@
           "mechanism": "Insulin-mimetic activity creates additive hypoglycemia risk. Narrow therapeutic window.",
           "action": "Use only under clinician supervision with glucose monitoring.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/37958659/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Vanadium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding vanadium and monitor your glucose more closely at first.",
@@ -6946,7 +6946,6 @@
           "mechanism": "At pharmacologic doses (>=1g/day), niacin increases hepatic glucose output and decreases insulin sensitivity. FPG increases of 4-5% and HbA1c increases up to 0.3% documented.",
           "action": "Can worsen glycemic control. Monitor glucose after initiating niacin or increasing dose. Low-dose niacin in multivitamins is not a concern.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "High-dose niacin may raise blood sugar",
@@ -7055,7 +7054,6 @@
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "May affect glucose control",
@@ -7099,7 +7097,6 @@
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "May affect glucose control",
@@ -7176,7 +7173,6 @@
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
             "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/"
           ],
           "alert_headline": "May affect glucose control",
@@ -16593,7 +16589,7 @@
           "mechanism": "Serotonin precursor combined with MAOI inhibition \u2192 serotonin syndrome.",
           "action": "Do not combine 5-HTP with MAOIs. Allow appropriate washout between MAOI discontinuation and 5-HTP use.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/31523132/"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. 5-HTP raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
@@ -21541,7 +21537,7 @@
           "mechanism": "PEA is a direct MAO substrate; combination with MAOIs causes hypertensive crisis.",
           "action": "Do not combine PEA-containing supplements with MAOIs. Discontinue MAOI for the appropriate washout period before any PEA-containing product.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=380d7717-2a79-42f3-a712-efe5e7696ba0"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. PEA combined with MAO-inhibitor antidepressants can cause a dangerous spike in blood pressure.",
@@ -21647,7 +21643,7 @@
           "mechanism": "Hordenine is a \u03b2-PEA analog and direct MAO substrate. Often combined with PEA in pre-workout / fat-burner stacks, compounding the risk.",
           "action": "Do not combine hordenine with MAOIs. Avoid pre-workout and fat-burner products listing hordenine if you take an MAOI.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=380d7717-2a79-42f3-a712-efe5e7696ba0"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. Hordenine works like PEA and can cause dangerous blood pressure changes with MAO-inhibitor antidepressants.",
@@ -21880,7 +21876,7 @@
           "mechanism": "Tyramine is a sympathomimetic biogenic amine and MAO substrate. With MAO-inhibitor medication, ingested tyramine cannot be metabolized normally, producing massive norepinephrine release and severe hypertensive crisis ('cheese reaction'). Documented fatalities in the clinical literature.",
           "action": "Do not combine tyramine-rich extracts with MAOIs. Read supplement labels for aged-yeast, fermented bovine, or tyramine-containing protein hydrolysates if you take an MAOI.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=380d7717-2a79-42f3-a712-efe5e7696ba0"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. Tyramine-rich supplement extracts can trigger a severe hypertensive crisis (the classic MAOI \"cheese reaction\") that may be fatal.",
