@@ -14199,6 +14199,10 @@
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
         "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/24624087/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501835/"
+        ],
         "direction": "unknown",
         "materiality": "presence"
       },
@@ -21642,6 +21646,9 @@
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
         "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "sources": [
+          "https://webprod.hc-sc.gc.ca/nhpid-bdipsn/atReq?atid=pygeum&lang=eng"
+        ],
         "direction": "unknown",
         "materiality": "presence"
       },
