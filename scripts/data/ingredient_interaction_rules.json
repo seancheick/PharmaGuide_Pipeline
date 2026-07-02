@@ -824,6 +824,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/22374556/",
+            "rationale": "ALA lowers fasting glucose/HbA1c dose-dependently across 300-1200 mg/day (PMID 22374556); additive hypoglycemia with glucose-lowering meds becomes relevant from ~600 mg/day. Multivitamin ALA (typically <100 mg) is well below this."
           }
         }
       ],
@@ -857,6 +868,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/22374556/",
+            "rationale": "ALA lowers fasting glucose/HbA1c dose-dependently across 300-1200 mg/day (PMID 22374556); additive hypoglycemia with glucose-lowering meds becomes relevant from ~600 mg/day. Multivitamin ALA (typically <100 mg) is well below this."
           }
         },
         {
@@ -888,6 +910,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/22374556/",
+            "rationale": "ALA lowers fasting glucose/HbA1c dose-dependently across 300-1200 mg/day (PMID 22374556); additive hypoglycemia with glucose-lowering meds becomes relevant from ~600 mg/day. Multivitamin ALA (typically <100 mg) is well below this."
           }
         },
         {
@@ -919,6 +952,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/22374556/",
+            "rationale": "ALA lowers fasting glucose/HbA1c dose-dependently across 300-1200 mg/day (PMID 22374556); additive hypoglycemia with glucose-lowering meds becomes relevant from ~600 mg/day. Multivitamin ALA (typically <100 mg) is well below this."
           }
         }
       ],
@@ -1757,6 +1801,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23871889/",
+            "rationale": "Acute blood-pressure effects are relevant at moderate intake (>=200 mg/day, ~2 cups of coffee); trace caffeine is below this."
           }
         }
       ],
@@ -2922,6 +2977,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
         },
         {
@@ -2954,6 +3020,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
         },
         {
@@ -3017,6 +3094,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
         }
       ],
@@ -3050,6 +3138,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
         },
         {
@@ -3081,6 +3180,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
         },
         {
@@ -3112,6 +3222,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
         },
         {
@@ -3415,6 +3536,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.nccih.nih.gov/health/ginkgo",
+            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
           }
         },
         {
@@ -3478,6 +3610,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.nccih.nih.gov/health/ginkgo",
+            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
           }
         },
         {
@@ -3509,6 +3652,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.nccih.nih.gov/health/ginkgo",
+            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
           }
         }
       ],
@@ -3543,6 +3697,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.nccih.nih.gov/health/ginkgo",
+            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
           }
         },
         {
@@ -3574,6 +3739,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.nccih.nih.gov/health/ginkgo",
+            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
           }
         },
         {
@@ -3605,6 +3781,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://www.nccih.nih.gov/health/ginkgo",
+            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
           }
         }
       ],
@@ -5146,6 +5333,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/393503/",
+            "rationale": "Glycyrrhizin-induced pseudoaldosteronism / hypertension is dose-related (PMID 393503); ~100 mg/day glycyrrhizin is a conservative flag point. Deglycyrrhizinated (DGL) and trace amounts are below this."
           }
         },
         {
@@ -5211,6 +5409,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/393503/",
+            "rationale": "Glycyrrhizin-induced pseudoaldosteronism / hypertension is dose-related (PMID 393503); ~100 mg/day glycyrrhizin is a conservative flag point. Deglycyrrhizinated (DGL) and trace amounts are below this."
           }
         }
       ],
@@ -6937,7 +7146,9 @@
             "value": 1500,
             "unit": "mg",
             "basis": "per_day",
-            "form_scope": ["nicotinic acid"],
+            "form_scope": [
+              "nicotinic acid"
+            ],
             "confidence": "high",
             "confidence_basis": "guideline_stated_cutoff",
             "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
@@ -7045,7 +7256,9 @@
             "value": 1500,
             "unit": "mg",
             "basis": "per_day",
-            "form_scope": ["nicotinic acid"],
+            "form_scope": [
+              "nicotinic acid"
+            ],
             "confidence": "high",
             "confidence_basis": "guideline_stated_cutoff",
             "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
@@ -7088,7 +7301,9 @@
             "value": 1500,
             "unit": "mg",
             "basis": "per_day",
-            "form_scope": ["nicotinic acid"],
+            "form_scope": [
+              "nicotinic acid"
+            ],
             "confidence": "high",
             "confidence_basis": "guideline_stated_cutoff",
             "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
@@ -7164,7 +7379,9 @@
             "value": 1500,
             "unit": "mg",
             "basis": "per_day",
-            "form_scope": ["nicotinic acid"],
+            "form_scope": [
+              "nicotinic acid"
+            ],
             "confidence": "high",
             "confidence_basis": "guideline_stated_cutoff",
             "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
@@ -7431,6 +7648,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "IU",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "guideline_stated_cutoff",
+            "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+            "rationale": "NIH ODS: clinically significant antiplatelet / vitamin K-antagonist bleeding effects probably exceed 400 IU/day; multivitamin vitamin E (~30 IU) is well below this."
           }
         }
       ],
@@ -8828,6 +9056,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "no_validated_cutoff_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10484074/",
+            "rationale": "No validated antiplatelet dose cutoff exists for curcumin (MSK); 1 g/day is a conservative flag point (curcumin inhibits platelet aggregation in vitro, PMID 10484074). Trace turmeric in a multi is below this."
           }
         }
       ],
@@ -8861,6 +9100,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "no_validated_cutoff_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10484074/",
+            "rationale": "No validated antiplatelet dose cutoff exists for curcumin (MSK); 1 g/day is a conservative flag point (curcumin inhibits platelet aggregation in vitro, PMID 10484074). Trace turmeric in a multi is below this."
           }
         },
         {
@@ -8893,6 +9143,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "no_validated_cutoff_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10484074/",
+            "rationale": "No validated antiplatelet dose cutoff exists for curcumin (MSK); 1 g/day is a conservative flag point (curcumin inhibits platelet aggregation in vitro, PMID 10484074). Trace turmeric in a multi is below this."
           }
         },
         {
@@ -9133,6 +9394,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -9164,6 +9436,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -9354,6 +9637,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -9386,6 +9680,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         }
       ],
@@ -9420,6 +9725,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -9453,6 +9769,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -9610,6 +9937,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "no_validated_cutoff_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10484074/",
+            "rationale": "No validated antiplatelet dose cutoff exists for curcumin (MSK); 1 g/day is a conservative flag point (curcumin inhibits platelet aggregation in vitro, PMID 10484074). Trace turmeric in a multi is below this."
           }
         },
         {
@@ -9675,6 +10013,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "no_validated_cutoff_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10484074/",
+            "rationale": "No validated antiplatelet dose cutoff exists for curcumin (MSK); 1 g/day is a conservative flag point (curcumin inhibits platelet aggregation in vitro, PMID 10484074). Trace turmeric in a multi is below this."
           }
         },
         {
@@ -9708,6 +10057,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "no_validated_cutoff_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10484074/",
+            "rationale": "No validated antiplatelet dose cutoff exists for curcumin (MSK); 1 g/day is a conservative flag point (curcumin inhibits platelet aggregation in vitro, PMID 10484074). Trace turmeric in a multi is below this."
           }
         },
         {
@@ -10272,7 +10632,6 @@
         "canonical_id": "vitamin_d"
       },
       "condition_rules": [
-        
         {
           "condition_id": "heart_disease",
           "severity": "monitor",
@@ -13711,7 +14070,6 @@
         "canonical_id": "dhea"
       },
       "condition_rules": [
-        
         {
           "condition_id": "pregnancy",
           "severity": "avoid",
@@ -15119,6 +15477,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/393503/",
+            "rationale": "Glycyrrhizin-induced pseudoaldosteronism / hypertension is dose-related (PMID 393503); ~100 mg/day glycyrrhizin is a conservative flag point. Deglycyrrhizinated (DGL) and trace amounts are below this."
           }
         }
       ],
@@ -17507,6 +17876,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -17538,6 +17918,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         }
       ],
@@ -17700,6 +18091,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -17731,6 +18133,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         }
       ],
@@ -20278,6 +20691,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         },
         {
@@ -20310,6 +20734,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "inferred_from_dose_range",
+            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
           }
         }
       ],
