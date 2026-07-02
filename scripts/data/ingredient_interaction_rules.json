@@ -1912,17 +1912,10 @@
           "condition_id": "diabetes",
           "severity": "monitor",
           "evidence_level": "probable",
-          "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 200,
-            "unit": "mcg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
-            "rationale": "INFERRED, not a guideline no-effect cutoff. NIH ODS: chromium AI 25-35 mcg/day; glucose-affecting trials used 200-1000 mcg with effects concentrated at high doses and clinical significance 'unclear'. 200 mcg = top of typical multivitamin range, below the trial doses; trace multivitamin chromium (~35-120 mcg) is below actionable."
-          },
+          "direction": "beneficial",
+          "materiality": "presence",
+          "min_effective_dose": null,
+          "reconciliation_note": "Aligned to the app const table's clinical decision: chromium is beneficial/positive for the diabetes CONDITION (NIH ODS: modest benefit on glycemic control). The additive-hypoglycemia risk with diabetes MEDS is a distinct interaction, captured in the hypoglycemics drug_class_rules (harmful, dose_dependent) below.",
           "mechanism": "Chromium can alter glucose metabolism and insulin sensitivity.",
           "action": "Use with glucose monitoring if on diabetes treatment.",
           "sources": [
