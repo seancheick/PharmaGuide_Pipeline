@@ -15207,6 +15207,8 @@ class SupplementEnricherV3:
         floor_value = self._to_float_safe(min_effective_dose.get("value"))
         floor_unit = self._normalize_threshold_unit(min_effective_dose.get("unit"))
         basis = str(min_effective_dose.get("basis") or "per_day").strip().lower()
+        if basis not in ("per_day", "per_serving"):
+            return None  # unknown basis (authoring typo) -> fail open, never suppress
         if floor_value is None or not floor_unit:
             return None
         quantity = self._to_float_safe(ingredient.get("quantity"))
@@ -15351,7 +15353,7 @@ class SupplementEnricherV3:
                     )
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
-                    min_effective_dose = cond_rule.get("min_effective_dose") or rule.get("min_effective_dose")
+                    min_effective_dose = cond_rule.get("min_effective_dose")
                     dose_floor_status = self._evaluate_min_effective_dose(
                         min_effective_dose, ingredient, servings_per_day_max
                     )
@@ -15370,8 +15372,8 @@ class SupplementEnricherV3:
                         "alert_body": cond_rule.get("alert_body"),
                         "informational_note": cond_rule.get("informational_note"),
                         "warning_type": cond_rule.get("warning_type"),
-                        "direction": cond_rule.get("direction") or rule.get("direction"),
-                        "materiality": cond_rule.get("materiality") or rule.get("materiality"),
+                        "direction": cond_rule.get("direction"),
+                        "materiality": cond_rule.get("materiality"),
                         "min_effective_dose": min_effective_dose,
                         "dose_floor_status": dose_floor_status,
                         "profile_gate": cond_rule.get("profile_gate"),
@@ -15418,7 +15420,7 @@ class SupplementEnricherV3:
                     )
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
-                    min_effective_dose = drug_rule.get("min_effective_dose") or rule.get("min_effective_dose")
+                    min_effective_dose = drug_rule.get("min_effective_dose")
                     dose_floor_status = self._evaluate_min_effective_dose(
                         min_effective_dose, ingredient, servings_per_day_max
                     )
@@ -15437,8 +15439,8 @@ class SupplementEnricherV3:
                         "alert_body": drug_rule.get("alert_body"),
                         "informational_note": drug_rule.get("informational_note"),
                         "warning_type": drug_rule.get("warning_type"),
-                        "direction": drug_rule.get("direction") or rule.get("direction"),
-                        "materiality": drug_rule.get("materiality") or rule.get("materiality"),
+                        "direction": drug_rule.get("direction"),
+                        "materiality": drug_rule.get("materiality"),
                         "min_effective_dose": min_effective_dose,
                         "dose_floor_status": dose_floor_status,
                         "profile_gate": drug_rule.get("profile_gate"),

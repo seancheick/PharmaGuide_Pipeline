@@ -71,7 +71,36 @@ def parse_app_table(text: str) -> dict[tuple[str, str], dict]:
 
 
 # --------------------------------------------------------------------------
-# Index the pipeline by (condition, canonical_id).
+# Canonical base-ingredient normalization — so pipeline `vitamin_b3_niacin`
+# reconciles with app `niacin`, and form variants (magnesium_glycinate,
+# cinnamon_bark_extract) collapse to their base rule. Without this the audit
+# emits FALSE NEGATIVES (real disagreements filed as benign "no rule").
+# --------------------------------------------------------------------------
+
+_ALIASES = {
+    "vitamin_b3_niacin": "niacin", "vitamin_b_3_niacin": "niacin",
+    "vitamin_b3": "niacin", "vitamin_b_3": "niacin",
+    "vitamin_d3": "vitamin_d",
+    "myo_inositol": "inositol", "d_chiro_inositol": "inositol",
+}
+_FORM_SUFFIXES = (
+    "_bark_extract_dried", "_bark_extract", "_bark", "_extract", "_dried",
+    "_glycinate", "_citrate",
+)
+
+
+def base(name: str) -> str:
+    n = (name or "").strip().lower()
+    n = _ALIASES.get(n, n)
+    for suf in _FORM_SUFFIXES:
+        if n.endswith(suf) and len(n) > len(suf):
+            n = n[: -len(suf)]
+            break
+    return _ALIASES.get(n, n)
+
+
+# --------------------------------------------------------------------------
+# Index the pipeline by (condition, base-canonical_id).
 # --------------------------------------------------------------------------
 
 def index_pipeline(rules: list[dict]) -> dict[tuple[str, str], dict]:
@@ -83,7 +112,7 @@ def index_pipeline(rules: list[dict]) -> dict[tuple[str, str], dict]:
         for cr in r.get("condition_rules") or []:
             cond = str(cr.get("condition_id") or "").lower()
             med = cr.get("min_effective_dose") or {}
-            out[(cond, canon.lower())] = {
+            out[(cond, base(canon))] = {
                 "direction": cr.get("direction"),
                 "materiality": cr.get("materiality"),
                 "floor": med.get("value"),
@@ -124,14 +153,23 @@ def main() -> int:
     pipe = index_pipeline(json.loads(RULES.read_text(encoding="utf-8"))["interaction_rules"])
 
     buckets: dict[str, list[str]] = {"MATCH": [], "DISAGREE": [], "TO_MIGRATE": []}
-    for key in sorted(app):
-        cat, why = classify(app[key], pipe.get(key))
-        buckets[cat].append(f"  {key[0]:<20} {key[1]:<24} {why}")
+    seen: set[tuple[str, str]] = set()
+    for cond, ing in sorted(app):
+        bkey = (cond, base(ing))
+        if bkey in seen:  # dedupe form variants that collapse to the same base
+            continue
+        seen.add(bkey)
+        cat, why = classify(app[(cond, ing)], pipe.get(bkey))
+        buckets[cat].append(f"  {cond:<20} {bkey[1]:<20} {why}")
 
-    print(f"App const-table entries: {len(app)}  |  pipeline condition-rule pairs: {len(pipe)}\n")
+    print(f"App base-ingredient pairs: {len(seen)}  |  pipeline condition-rule pairs: {len(pipe)}\n")
     for cat in ("DISAGREE", "TO_MIGRATE", "MATCH"):
         print(f"=== {cat} ({len(buckets[cat])}) ===")
-        print("\n".join(buckets[cat]) or "  (none)")
+        if cat == "TO_MIGRATE":
+            print("  (app has a suppression decision the pipeline does NOT encode -> the")
+            print("   pipeline currently FIRES. Migrate to preserve, or the app's clinical")
+            print("   suppression is lost once the const table is retired.)")
+        print("\n".join(sorted(buckets[cat])) or "  (none)")
         print()
     # Self-check: guard against a silent regex breakage that would make the
     # report falsely empty (and thus falsely "reconciled").

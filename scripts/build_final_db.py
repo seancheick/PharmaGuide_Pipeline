@@ -4694,13 +4694,19 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Suppressed by default; the app promotes it on a diabetes profile match,
     # and materiality=presence means it is never dose-suppressed.
     _sugar = safe_dict(ds.get("sugar"))
-    if _sugar.get("has_added_sugar") or _sugar.get("level") in ("moderate", "high"):
+    _has_added = bool(_sugar.get("has_added_sugar"))
+    if _has_added or _sugar.get("level") in ("moderate", "high"):
         _amt = _sugar.get("amount_g")
+        # `level` is computed from TOTAL sugar grams, independent of whether an
+        # added-sugar ingredient was found. Only call it "added" when it truly is;
+        # a whole-food/fruit powder with no added-sugar ingredient is "Sugar".
+        _label = "Added sugar" if _has_added else "Sugar"
+        _lead = "Contains added sugar" if _has_added else "Contains sugar"
         warnings.append({
             "type": "dietary",
             "severity": "monitor",
-            "title": "Added sugar",
-            "detail": "Contains added sugar"
+            "title": _label,
+            "detail": _lead
             + (f" ({_amt} g/serving)" if _amt else "")
             + " - relevant if you have diabetes.",
             "condition_ids": ["diabetes"],

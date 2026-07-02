@@ -78,6 +78,16 @@ def test_form_scope_only_matching_form_gets_floor():
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, {"quantity": 20, "unit": "mg"}, 1.0) is None
 
 
+def test_unknown_basis_fails_open():
+    # A `basis` typo (e.g. "daily" instead of "per_day") must NOT silently drop
+    # the per-day multiplier and under-count the dose -> fail open (adversarial
+    # audit D2). Even a large dose returns None (fires) under a bad basis.
+    e = SupplementEnricher()
+    typo = {"value": 1500, "unit": "mg", "basis": "daily", "form_scope": ["nicotinic acid"]}
+    assert e._evaluate_min_effective_dose(typo, _ing(20), 1.0) is None
+    assert e._evaluate_min_effective_dose(typo, _ing(9999), 1.0) is None
+
+
 # --------------------------------------------------------------------------
 # build_final_db emission of the new axes onto the blob warning
 # --------------------------------------------------------------------------
@@ -202,13 +212,19 @@ def _enriched_with_sugar(has_added_sugar=False, level="low"):
 
 
 def _sugar_warning(blob):
-    return next((w for w in blob.get("warnings", []) if w.get("title") == "Added sugar"), None)
+    return next(
+        (w for w in blob.get("warnings", [])
+         if w.get("type") == "dietary" and w.get("direction") == "harmful"
+         and "diabetes" in (w.get("condition_ids") or [])),
+        None,
+    )
 
 
 def test_added_sugar_emits_diabetes_presence_flag():
     blob = build_detail_blob(_enriched_with_sugar(has_added_sugar=True), _scored())
     w = _sugar_warning(blob)
     assert w is not None
+    assert w["title"] == "Added sugar"  # has_added_sugar=True -> correctly "Added"
     assert w["condition_ids"] == ["diabetes"]
     assert w["direction"] == "harmful"
     assert w["materiality"] == "presence"
@@ -221,3 +237,16 @@ def test_added_sugar_emits_diabetes_presence_flag():
 def test_no_added_sugar_no_flag():
     blob = build_detail_blob(_enriched_with_sugar(has_added_sugar=False, level="low"), _scored())
     assert _sugar_warning(blob) is None
+
+
+def test_total_sugar_labeled_sugar_not_added():
+    # has_added_sugar False but total sugar level moderate -> still fires (total
+    # sugar matters for a diabetic) BUT must be titled "Sugar", not "Added sugar"
+    # (D5 mislabel fix from the adversarial audit).
+    blob = build_detail_blob(
+        _enriched_with_sugar(has_added_sugar=False, level="moderate"), _scored()
+    )
+    w = _sugar_warning(blob)
+    assert w is not None
+    assert w["title"] == "Sugar"
+    assert "added" not in (w.get("detail") or "").lower()
