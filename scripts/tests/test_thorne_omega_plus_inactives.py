@@ -192,3 +192,64 @@ def test_omega3_form_disclosed_helper_detects_premium_forms():
         ]
     }
     assert helper(coincidence) is False
+
+
+def test_omega3_form_disclosed_helper_reads_product_level_label_surfaces():
+    """Form disclosure can live outside the EPA/DHA rows.
+
+    Nordic Naturals-style labels often state the molecular form in label text
+    or structured statements ("triglyceride form") rather than on each EPA/DHA
+    ingredient row. The legacy flag must follow the v4 detector there.
+    """
+    from scripts.score_supplements import SupplementScorer  # type: ignore
+
+    helper = SupplementScorer._is_omega3_form_disclosed
+
+    label_text = {
+        "product_name": "Ultimate Omega-D3 Sport",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "epa", "quantity": 650, "unit": "mg"},
+                {"canonical_id": "dha", "quantity": 450, "unit": "mg"},
+            ]
+        },
+        "labelText": {
+            "raw": "All fish oils are in the triglyceride form and surpass strict purity standards."
+        },
+    }
+    assert helper(label_text) is True
+
+    statements = {
+        "product_name": "Omega-3 Fish Oil",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "epa", "quantity": 690, "unit": "mg"},
+                {"canonical_id": "dha", "quantity": 310, "unit": "mg"},
+            ]
+        },
+        "statements": [{"notes": "Made with re-esterified triglyceride fish oil."}],
+    }
+    assert helper(statements) is True
+
+
+def test_omega3_form_disclosed_helper_reads_companion_form_rows():
+    """Companion ingredient rows can disclose the omega molecular form.
+
+    Some labels expose "Triglycerides" as its own row next to EPA/DHA. That
+    row is not itself EPA or DHA, but it is a real form-disclosure surface.
+    """
+    from scripts.score_supplements import SupplementScorer  # type: ignore
+
+    helper = SupplementScorer._is_omega3_form_disclosed
+
+    product = {
+        "product_name": "Omega-3 1055 mg Fish Oil 1250 mg",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "fish_oil", "name": "Triglycerides", "quantity": 1250, "unit": "mg"},
+                {"canonical_id": "epa", "name": "EPA", "quantity": 690, "unit": "mg"},
+                {"canonical_id": "dha", "name": "DHA", "quantity": 310, "unit": "mg"},
+            ]
+        },
+    }
+    assert helper(product) is True

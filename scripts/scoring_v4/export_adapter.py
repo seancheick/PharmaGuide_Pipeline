@@ -28,11 +28,13 @@ Suppression contract (honors ``quality_score_status``):
 from __future__ import annotations
 
 import json
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from score_supplements_v4 import score_product_v4
 
 SCORE_MODEL_V4 = "v4"
+OMEGA3_FORM_NOT_DISCLOSED_FLAG = "OMEGA3_FORM_NOT_DISCLOSED"
+_OMEGA_UNDISCLOSED_FORM_VALUES = {"undefined", "unknown", "not_disclosed", "none", ""}
 
 
 def _fmt_display_100(quality_score: Any) -> str:
@@ -43,11 +45,77 @@ def _fmt_display_100(quality_score: Any) -> str:
         return "N/A"
 
 
+def _safe_dict(value: Any) -> Dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
+def _is_v4_omega_result(v4: Dict[str, Any]) -> bool:
+    breakdown = _safe_dict(v4.get("v4_breakdown"))
+    provenance = _safe_dict(breakdown.get("provenance"))
+    completeness_gate = _safe_dict(breakdown.get("completeness_gate"))
+    module = (
+        v4.get("v4_module")
+        or provenance.get("module_route")
+        or completeness_gate.get("module")
+        or ""
+    )
+    return str(module).strip().lower() == "omega"
+
+
+def _v4_omega_form_disclosed(v4: Dict[str, Any]) -> Optional[bool]:
+    """Read v4's omega form conclusion from the module breakdown.
+
+    Returns:
+      True  — v4 detected TG/rTG/EE/PL or awarded form-disclosure credit.
+      False — v4 explicitly detected an undefined/not-disclosed form.
+      None  — not an omega result, or the v4 result lacks enough detail.
+    """
+    if not _is_v4_omega_result(v4):
+        return None
+
+    breakdown = _safe_dict(v4.get("v4_breakdown"))
+    module = _safe_dict(breakdown.get("module"))
+    dimensions = _safe_dict(module.get("dimensions"))
+    formulation = _safe_dict(dimensions.get("formulation"))
+    metadata = _safe_dict(formulation.get("metadata"))
+    form_detected = str(metadata.get("form_detected") or "").strip().lower()
+    if form_detected and form_detected not in _OMEGA_UNDISCLOSED_FORM_VALUES:
+        return True
+    if form_detected in _OMEGA_UNDISCLOSED_FORM_VALUES and form_detected:
+        return False
+
+    transparency = _safe_dict(dimensions.get("transparency"))
+    transparency_components = _safe_dict(transparency.get("components"))
+    if "form_disclosed" in transparency_components:
+        return True
+
+    return None
+
+
+def _reconcile_v4_omega_form_flag(scored: Dict[str, Any], v4: Dict[str, Any]) -> None:
+    """Keep the exported legacy flags aligned with v4's omega source of truth."""
+    flags = scored.get("flags")
+    if flags is None:
+        flags = []
+    if not isinstance(flags, list):
+        return
+
+    form_disclosed = _v4_omega_form_disclosed(v4)
+    if form_disclosed is True:
+        scored["flags"] = [flag for flag in flags if flag != OMEGA3_FORM_NOT_DISCLOSED_FLAG]
+    elif form_disclosed is False:
+        next_flags = list(flags)
+        if OMEGA3_FORM_NOT_DISCLOSED_FLAG not in next_flags:
+            next_flags.append(OMEGA3_FORM_NOT_DISCLOSED_FLAG)
+        scored["flags"] = next_flags
+
+
 def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
     """Run v4 on ``enriched`` and overlay its public contract onto a copy of
     ``scored_v3``. Returns the new dict; never mutates either input."""
     v4 = score_product_v4(enriched if isinstance(enriched, dict) else {})
     scored = dict(scored_v3) if isinstance(scored_v3, dict) else {}
+    _reconcile_v4_omega_form_flag(scored, v4)
 
     breakdown = v4.get("v4_breakdown") or {}
     safety_gate = breakdown.get("safety_gate") or {}

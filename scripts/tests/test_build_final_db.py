@@ -2646,6 +2646,45 @@ def _patch_v4_by_id(monkeypatch, by_id):
     monkeypatch.setattr(_v4_export_adapter, "score_product_v4", fake)
 
 
+def test_v4_overlay_removes_stale_omega_form_flag_when_v4_detects_form(monkeypatch):
+    """The exported legacy flags must not contradict v4's omega form detector."""
+    scored_v4 = _canned_v4(status="scored", quality_100=90.3, verdict="SAFE", tier="Excellent")
+    scored_v4["v4_module"] = "omega"
+    scored_v4["v4_breakdown"]["provenance"]["module_route"] = "omega"
+    scored_v4["v4_breakdown"]["module"] = {
+        "dimensions": {
+            "formulation": {"metadata": {"form_detected": "rtg"}},
+            "transparency": {"components": {"form_disclosed": 3.0}},
+        }
+    }
+    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", lambda _enriched: scored_v4)
+
+    overlaid = _v4_export_adapter.overlay_v4_scored(
+        {"dsld_id": "omega-rtg"},
+        {"flags": ["OMEGA3_FORM_NOT_DISCLOSED", "SUPPLEMENT_TYPE_REINFERRED"]},
+    )
+
+    assert overlaid["flags"] == ["SUPPLEMENT_TYPE_REINFERRED"]
+
+
+def test_v4_overlay_keeps_omega_form_flag_when_v4_form_is_undefined(monkeypatch):
+    """True undefined-form omega products should still carry the disclosure flag."""
+    scored_v4 = _canned_v4(status="scored", quality_100=85.9, verdict="SAFE", tier="Strong")
+    scored_v4["v4_module"] = "omega"
+    scored_v4["v4_breakdown"]["provenance"]["module_route"] = "omega"
+    scored_v4["v4_breakdown"]["module"] = {
+        "dimensions": {
+            "formulation": {"metadata": {"form_detected": "undefined"}},
+            "transparency": {"components": {}},
+        }
+    }
+    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", lambda _enriched: scored_v4)
+
+    overlaid = _v4_export_adapter.overlay_v4_scored({"dsld_id": "omega-undefined"}, {"flags": []})
+
+    assert overlaid["flags"] == ["OMEGA3_FORM_NOT_DISCLOSED"]
+
+
 def _run_build(tmp, enriched_list, scored_list):
     root = Path(tmp)
     enriched_dir = root / "enriched"; enriched_dir.mkdir()

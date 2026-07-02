@@ -4263,20 +4263,31 @@ class SupplementScorer:
 
     @classmethod
     def _is_omega3_form_disclosed(cls, product: Dict[str, Any]) -> bool:
-        """Scan EPA/DHA active ingredient form/source text for premium-form
-        keywords (rTG, ethyl ester, phospholipid, etc.). Returns True when
-        ANY EPA/DHA ingredient discloses a recognized molecular form.
+        """Return True when the omega molecular form is disclosed anywhere
+        the v4 omega scorer recognizes it.
 
         Used to emit form_disclosed=False on the omega3_breakdown so the UI
         can explain why no premium-form credit (A2) was awarded even though
         EPA/DHA dose is disclosed.
         """
-        ingredients = (
-            safe_list(product.get("activeIngredients"))
-            or safe_list(product.get("active_ingredients"))
-            or safe_list(product.get("ingredient_quality_data"))
-            or []
-        )
+        from scoring_v4.modules.omega_formulation import _detect_form
+
+        # v4 is the production source of truth for omega form detection. It
+        # reads product names, label text, statements, and companion ingredient
+        # rows; the fallback below preserves legacy unit-test shapes that only
+        # provide activeIngredients/active_ingredients.
+        if _detect_form(product if isinstance(product, dict) else {}) != "undefined":
+            return True
+
+        iqd = product.get("ingredient_quality_data") if isinstance(product, dict) else None
+        ingredients = []
+        for source in (
+            product.get("activeIngredients") if isinstance(product, dict) else None,
+            product.get("active_ingredients") if isinstance(product, dict) else None,
+            iqd.get("ingredients_scorable") if isinstance(iqd, dict) else None,
+            iqd.get("ingredients") if isinstance(iqd, dict) else None,
+        ):
+            ingredients.extend(safe_list(source))
         for ing in ingredients:
             if not isinstance(ing, dict):
                 continue
