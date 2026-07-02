@@ -1555,7 +1555,7 @@
           "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/bitter-melon"
         ],
         "alert_headline": "Not recommended in pregnancy or breastfeeding",
-        "alert_body": "Bitter melon shows abortifacient and embryotoxic signals in animal studies. If you are pregnant or breastfeeding, do not use bitter melon supplements unless directed by your clinician.",
+        "alert_body": "Bitter melon shows abortifacient and embryotoxic signals in animal studies, so avoid it in pregnancy. Its safety during breastfeeding has not been studied; use only with clinician guidance.",
         "informational_note": "Bitter melon has abortifacient signals \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding.",
         "profile_gate": {
           "gate_type": "profile_flag",
@@ -2569,7 +2569,7 @@
           "https://www.ncbi.nlm.nih.gov/books/NBK501779/"
         ],
         "alert_headline": "Not recommended during pregnancy",
-        "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician; during breastfeeding, use under clinician guidance for milk-supply support.",
+        "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician. Evidence for fenugreek as a breastfeeding galactagogue is weak and conflicting.",
         "informational_note": "Fenugreek has uterotonic activity \u2014 relevant to anyone pregnant or planning pregnancy.",
         "profile_gate": {
           "gate_type": "profile_flag",
@@ -12147,7 +12147,7 @@
       "condition_rules": [
         {
           "severity": "informational",
-          "mechanism": "Selenium is essential for iodothyronine deiodinase (type I/II/III) function required to convert T4 to active T3. Selenium supplementation may benefit Hashimoto thyroiditis by reducing thyroid peroxidase antibody titers. However, excess selenium (>400 mcg/day) can paradoxically impair thyroid function and is toxic.",
+          "mechanism": "Selenium is essential for iodothyronine deiodinase (type I/II/III) function required to convert T4 to active T3. Selenium supplementation can lower thyroid peroxidase antibody titers in Hashimoto thyroiditis, but the evidence does not support routine selenium supplementation for autoimmune thyroiditis. However, excess selenium (>400 mcg/day) can paradoxically impair thyroid function and is toxic.",
           "action": "Selenium supplementation in thyroid disorders should be guided by serum selenium levels. Doses above 200 mcg/day should only be used under medical supervision.",
           "last_reviewed": "2026-04-09",
           "condition_id": "thyroid_disorder",
@@ -16486,8 +16486,8 @@
         "evidence_level": "probable",
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "alert_body": "Senna is generally acceptable at usual doses while breastfeeding (its active sennosides are not measurably passed into milk) and is an accepted second-line laxative in pregnancy after bulk-forming and osmotic options. Avoid chronic high-dose use and check with your clinician.",
+        "informational_note": "Senna is generally acceptable in pregnancy (second-line) and breastfeeding at usual doses.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
