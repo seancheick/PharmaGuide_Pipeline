@@ -15177,6 +15177,46 @@ class SupplementEnricherV3:
 
         return severity_candidate, details
 
+    def _evaluate_min_effective_dose(
+        self,
+        min_effective_dose: Optional[Dict[str, Any]],
+        ingredient: Dict[str, Any],
+        servings_per_day_max: float,
+    ) -> Optional[str]:
+        """Dose-floor status vs an authored ``min_effective_dose``.
+
+        Returns ``"below"`` when the product's daily dose is under the clinical
+        floor (interaction immaterial at this amount), ``"at_or_above"`` when it
+        meets/exceeds it, or ``None`` when no floor is authored, the dose is
+        unknown, or the unit is not convertible. ``None`` is FAIL-OPEN — callers
+        must treat it as "fires", never suppress on missing evidence (mirrors the
+        dose-threshold contract and the app's ``_isFullyGated``).
+        """
+        if not isinstance(min_effective_dose, dict):
+            return None
+        floor_value = self._to_float_safe(min_effective_dose.get("value"))
+        floor_unit = self._normalize_threshold_unit(min_effective_dose.get("unit"))
+        basis = str(min_effective_dose.get("basis") or "per_day").strip().lower()
+        if floor_value is None or not floor_unit:
+            return None
+        quantity = self._to_float_safe(ingredient.get("quantity"))
+        unit = self._normalize_threshold_unit(ingredient.get("unit"))
+        if quantity is None or quantity <= 0 or not unit:
+            return None
+        amount_basis = quantity * (servings_per_day_max if basis == "per_day" else 1.0)
+        ingredient_name = str(ingredient.get("raw_source_text") or ingredient.get("name") or "")
+        standard_name = str(ingredient.get("standard_name") or "")
+        converted_amount, _reason = self._convert_amount_to_target_unit(
+            amount=amount_basis,
+            from_unit=unit,
+            target_unit=floor_unit,
+            ingredient_name=ingredient_name,
+            standard_name=standard_name,
+        )
+        if converted_amount is None:
+            return None
+        return "below" if converted_amount < floor_value else "at_or_above"
+
     def _collect_interaction_profile(self, enriched: Dict, user_profile: Optional[Dict] = None) -> Dict:
         taxonomy_db = self.databases.get("clinical_risk_taxonomy", {}) or {}
         rules_db = self.databases.get("ingredient_interaction_rules", {}) or {}
@@ -15301,6 +15341,10 @@ class SupplementEnricherV3:
                     )
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
+                    min_effective_dose = cond_rule.get("min_effective_dose")
+                    dose_floor_status = self._evaluate_min_effective_dose(
+                        min_effective_dose, ingredient, servings_per_day_max
+                    )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
                         source_set.add(src)
@@ -15316,6 +15360,10 @@ class SupplementEnricherV3:
                         "alert_body": cond_rule.get("alert_body"),
                         "informational_note": cond_rule.get("informational_note"),
                         "warning_type": cond_rule.get("warning_type"),
+                        "direction": cond_rule.get("direction"),
+                        "materiality": cond_rule.get("materiality"),
+                        "min_effective_dose": min_effective_dose,
+                        "dose_floor_status": dose_floor_status,
                         "profile_gate": cond_rule.get("profile_gate"),
                     })
 
@@ -15360,6 +15408,10 @@ class SupplementEnricherV3:
                     )
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
+                    min_effective_dose = drug_rule.get("min_effective_dose")
+                    dose_floor_status = self._evaluate_min_effective_dose(
+                        min_effective_dose, ingredient, servings_per_day_max
+                    )
                     sources = [str(s).strip() for s in (drug_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
                         source_set.add(src)
@@ -15375,6 +15427,10 @@ class SupplementEnricherV3:
                         "alert_body": drug_rule.get("alert_body"),
                         "informational_note": drug_rule.get("informational_note"),
                         "warning_type": drug_rule.get("warning_type"),
+                        "direction": drug_rule.get("direction"),
+                        "materiality": drug_rule.get("materiality"),
+                        "min_effective_dose": min_effective_dose,
+                        "dose_floor_status": dose_floor_status,
                         "profile_gate": drug_rule.get("profile_gate"),
                     })
 

@@ -6893,6 +6893,15 @@
           "condition_id": "diabetes",
           "severity": "caution",
           "evidence_level": "established",
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "rationale": "NIH ODS: nicotinic acid doses >=1.5 g/day are where hyperglycemia becomes likely; below this the glucose interaction is not clinically meaningful (multivitamin niacin is ~20-35 mg). Verified guideline cutoff. Applies to nicotinic acid, not niacinamide/nicotinamide (form-gating is a follow-up)."
+          },
           "mechanism": "At pharmacologic doses (>=1g/day), niacin increases hepatic glucose output and decreases insulin sensitivity. FPG increases of 4-5% and HbA1c increases up to 0.3% documented.",
           "action": "Can worsen glycemic control. Monitor glucose after initiating niacin or increasing dose. Low-dose niacin in multivitamins is not a concern.",
           "sources": [

@@ -4609,6 +4609,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "evidence_level": safe_str(ch.get("evidence_level")),
                     "sources": safe_list(ch.get("sources")),
                     "dose_threshold_evaluation": dose_eval if isinstance(dose_eval, dict) else None,
+                    "direction": ch.get("direction"),
+                    "materiality": ch.get("materiality"),
+                    "min_effective_dose": ch.get("min_effective_dose"),
+                    "dose_floor_status": ch.get("dose_floor_status"),
                     "source": "interaction_rules",
                     "profile_gate": ch.get("profile_gate"),
                 })
@@ -4636,6 +4640,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "evidence_level": safe_str(dh.get("evidence_level")),
                     "sources": safe_list(dh.get("sources")),
                     "dose_threshold_evaluation": dose_eval if isinstance(dose_eval, dict) else None,
+                    "direction": dh.get("direction"),
+                    "materiality": dh.get("materiality"),
+                    "min_effective_dose": dh.get("min_effective_dose"),
+                    "dose_floor_status": dh.get("dose_floor_status"),
                     "source": "interaction_rules",
                     "profile_gate": dh.get("profile_gate"),
                 })
