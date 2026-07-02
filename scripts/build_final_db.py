@@ -4054,6 +4054,171 @@ _PRENATAL_ANCHORS = (
         "terms": ("vitamin a", "retinol", "retinyl", "beta carotene"),
     },
 )
+_ADULT_MULTI_CORE_ANCHORS = (
+    "vitamin_a",
+    "vitamin_c",
+    "vitamin_d",
+    "vitamin_e",
+    "vitamin_k",
+    "vitamin_b1_thiamine",
+    "vitamin_b2_riboflavin",
+    "vitamin_b3_niacin",
+    "vitamin_b6",
+    "folate",
+    "vitamin_b12",
+    "biotin",
+    "pantothenic_acid",
+    "iodine",
+    "zinc",
+    "selenium",
+    "copper",
+)
+_ADULT_MULTI_ANCHORS = (
+    {
+        "id": "vitamin_a",
+        "label": "Vitamin A",
+        "target": 900.0,
+        "unit": "mcg RAE",
+        "ul": None,
+        "terms": ("vitamin a", "retinol", "retinyl", "beta carotene"),
+    },
+    {
+        "id": "vitamin_c",
+        "label": "Vitamin C",
+        "target": 90.0,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("vitamin c", "ascorbic acid", "ascorbate"),
+    },
+    {
+        "id": "vitamin_d",
+        "label": "Vitamin D",
+        "target": 20.0,
+        "unit": "mcg",
+        "ul": 100.0,
+        "terms": ("vitamin d", "vitamin d3", "cholecalciferol"),
+    },
+    {
+        "id": "vitamin_e",
+        "label": "Vitamin E",
+        "target": 15.0,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("vitamin e", "tocopherol", "tocotrienol"),
+    },
+    {
+        "id": "vitamin_k",
+        "label": "Vitamin K",
+        "target": 120.0,
+        "unit": "mcg",
+        "ul": None,
+        "terms": ("vitamin k", "phylloquinone", "menaquinone", "mk 7", "mk7"),
+    },
+    {
+        "id": "vitamin_b1_thiamine",
+        "label": "Thiamin",
+        "target": 1.2,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("thiamin", "thiamine", "vitamin b1"),
+    },
+    {
+        "id": "vitamin_b2_riboflavin",
+        "label": "Riboflavin",
+        "target": 1.3,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("riboflavin", "vitamin b2"),
+    },
+    {
+        "id": "vitamin_b3_niacin",
+        "label": "Niacin",
+        "target": 16.0,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("niacin", "niacinamide", "vitamin b3"),
+    },
+    {
+        "id": "vitamin_b6",
+        "label": "Vitamin B6",
+        "target": 1.7,
+        "unit": "mg",
+        "ul": 100.0,
+        "terms": ("vitamin b6", "pyridoxine", "pyridoxal"),
+    },
+    {
+        "id": "folate",
+        "label": "Folate",
+        "target": 400.0,
+        "unit": "mcg DFE",
+        "ul": None,
+        "terms": ("folate", "folic acid", "vitamin b9", "5 mthf", "methylfolate"),
+    },
+    {
+        "id": "vitamin_b12",
+        "label": "Vitamin B12",
+        "target": 2.4,
+        "unit": "mcg",
+        "ul": None,
+        "terms": ("vitamin b12", "b12", "cobalamin", "methylcobalamin"),
+    },
+    {
+        "id": "biotin",
+        "label": "Biotin",
+        "target": 30.0,
+        "unit": "mcg",
+        "ul": None,
+        "terms": ("biotin", "vitamin b7"),
+    },
+    {
+        "id": "pantothenic_acid",
+        "label": "Pantothenic Acid",
+        "target": 5.0,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("pantothenic acid", "pantothenate", "vitamin b5"),
+    },
+    {
+        "id": "iodine",
+        "label": "Iodine",
+        "target": 150.0,
+        "unit": "mcg",
+        "ul": 1100.0,
+        "terms": ("iodine", "iodide"),
+    },
+    {
+        "id": "zinc",
+        "label": "Zinc",
+        "target": 11.0,
+        "unit": "mg",
+        "ul": 40.0,
+        "terms": ("zinc",),
+    },
+    {
+        "id": "selenium",
+        "label": "Selenium",
+        "target": 55.0,
+        "unit": "mcg",
+        "ul": 400.0,
+        "terms": ("selenium", "selenomethionine", "selenite"),
+    },
+    {
+        "id": "copper",
+        "label": "Copper",
+        "target": 0.9,
+        "unit": "mg",
+        "ul": 10.0,
+        "terms": ("copper",),
+    },
+)
+_IRON_ANCHOR = {
+    "id": "iron",
+    "label": "Iron",
+    "target": 18.0,
+    "unit": "mg",
+    "ul": 45.0,
+    "terms": ("iron",),
+}
 
 
 def _space_normalized(value: Any) -> str:
@@ -4198,7 +4363,13 @@ def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Opt
     return best_amount, best_unit
 
 
-def _build_prenatal_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict[str, Any]:
+def _build_anchor_coverage(
+    ingredients: List[Dict],
+    rda_ul_data: Dict,
+    anchors_source: Tuple[Dict[str, Any], ...],
+    *,
+    source: str,
+) -> Dict[str, Any]:
     anchors = []
     summary = {
         "missing": [],
@@ -4214,7 +4385,7 @@ def _build_prenatal_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict
         if isinstance(row, dict)
     }
 
-    for anchor in _PRENATAL_ANCHORS:
+    for anchor in anchors_source:
         anchor_id = safe_str(anchor["id"])
         amount, unit = _anchor_amount(ingredients, anchor)
         present = amount is not None and amount > 0
@@ -4244,7 +4415,7 @@ def _build_prenatal_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict
             "target": target,
             "target_unit": anchor["unit"],
             "ul": ul,
-            "source": "prenatal_anchor_table",
+            "source": source,
         })
         summary[status].append(anchor_id)
 
@@ -4253,6 +4424,49 @@ def _build_prenatal_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict
         "anchors": anchors,
         "summary": summary,
         "has_any_anchor": present_any,
+    }
+
+
+def _build_prenatal_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict[str, Any]:
+    return _build_anchor_coverage(
+        ingredients,
+        rda_ul_data,
+        _PRENATAL_ANCHORS,
+        source="prenatal_anchor_table",
+    )
+
+
+def _build_adult_multi_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict[str, Any]:
+    return _build_anchor_coverage(
+        ingredients,
+        rda_ul_data,
+        _ADULT_MULTI_ANCHORS,
+        source="adult_multi_anchor_table",
+    )
+
+
+def _present_only_coverage(coverage: Dict[str, Any]) -> Dict[str, Any]:
+    anchors = [
+        row for row in safe_list(coverage.get("anchors"))
+        if isinstance(row, dict) and safe_str(row.get("status")) != "missing"
+    ]
+    summary = {
+        "missing": [],
+        "below_target": [],
+        "covered": [],
+        "near_ul": [],
+        "above_ul": [],
+    }
+    for row in anchors:
+        status = safe_str(row.get("status"))
+        nutrient_id = safe_str(row.get("nutrient_id"))
+        if status in summary and nutrient_id:
+            summary[status].append(nutrient_id)
+    return {
+        "scoring_impact": coverage.get("scoring_impact", "none"),
+        "anchors": anchors,
+        "summary": summary,
+        "has_any_anchor": bool(anchors),
     }
 
 
@@ -4277,14 +4491,38 @@ def _has_multivitamin_shape(enriched: Dict, ingredients: List[Dict]) -> bool:
     return len(disclosed) >= 6
 
 
-def _classify_product_role(enriched: Dict, ingredients: List[Dict], prenatal_coverage: Dict[str, Any]) -> Dict[str, Any]:
+def _anchor_summary_present(coverage: Dict[str, Any]) -> set:
+    summary = safe_dict(coverage.get("summary"))
+    return (
+        set(safe_list(summary.get("covered")))
+        | set(safe_list(summary.get("below_target")))
+        | set(safe_list(summary.get("near_ul")))
+        | set(safe_list(summary.get("above_ul")))
+    )
+
+
+def _has_anchor_ingredient(ingredients: List[Dict], anchor: Dict[str, Any]) -> bool:
+    for ingredient in ingredients:
+        if isinstance(ingredient, dict) and _ingredient_matches_anchor(ingredient, anchor):
+            amount, _unit = _anchor_amount([ingredient], anchor)
+            if amount is not None and amount > 0:
+                return True
+    return False
+
+
+def _classify_product_role(
+    enriched: Dict,
+    ingredients: List[Dict],
+    prenatal_coverage: Dict[str, Any],
+    adult_multi_coverage: Dict[str, Any],
+) -> Dict[str, Any]:
     prenatal = _is_prenatal_positioned(enriched)
-    summary = safe_dict(prenatal_coverage.get("summary"))
-    covered = set(safe_list(summary.get("covered")))
-    below = set(safe_list(summary.get("below_target")))
-    present = covered | below | set(safe_list(summary.get("near_ul"))) | set(safe_list(summary.get("above_ul")))
+    present = _anchor_summary_present(prenatal_coverage)
+    adult_present = _anchor_summary_present(adult_multi_coverage)
     core_present = sum(1 for anchor in _PRENATAL_CORE_ANCHORS if anchor in present)
     complement_present = sum(1 for anchor in _PRENATAL_COMPLEMENT_ANCHORS if anchor in present)
+    adult_anchor_count = sum(1 for anchor in _ADULT_MULTI_CORE_ANCHORS if anchor in adult_present)
+    iron_present = _has_anchor_ingredient(ingredients, _IRON_ANCHOR)
     role = "targeted_gap_filler"
 
     if prenatal:
@@ -4297,7 +4535,13 @@ def _classify_product_role(enriched: Dict, ingredients: List[Dict], prenatal_cov
         else:
             role = "prenatal_support"
     elif _has_multivitamin_shape(enriched, ingredients):
-        role = "general_multi"
+        role = (
+            "adult_multi_with_iron"
+            if adult_anchor_count >= 12 and iron_present
+            else "adult_multi_iron_free"
+            if adult_anchor_count >= 12
+            else "general_multi"
+        )
 
     name_text, context_text = _product_positioning_text(enriched)
     claim_text = f"{name_text} {context_text}"
@@ -4315,6 +4559,9 @@ def _classify_product_role(enriched: Dict, ingredients: List[Dict], prenatal_cov
             "core_anchor_count": core_present,
             "complement_anchor_count": complement_present,
             "present_prenatal_anchors": sorted(present),
+            "adult_anchor_count": adult_anchor_count,
+            "iron_present": iron_present,
+            "present_adult_multi_anchors": sorted(adult_present),
         },
     }
 
@@ -5252,7 +5499,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     evidence_data = safe_dict(enriched.get("evidence_data"))
     rda_ul_data = safe_dict(enriched.get("rda_ul_data"))
     prenatal_coverage = _build_prenatal_coverage(ingredients, rda_ul_data)
-    role_context = _classify_product_role(enriched, ingredients, prenatal_coverage)
+    adult_multi_coverage = _build_adult_multi_coverage(ingredients, rda_ul_data)
+    role_context = _classify_product_role(
+        enriched,
+        ingredients,
+        prenatal_coverage,
+        adult_multi_coverage,
+    )
 
     blob = {
         "dsld_id": safe_str(enriched.get("dsld_id")),
@@ -5336,6 +5589,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "prenatal_choline_companion",
     }:
         blob["prenatal_coverage"] = prenatal_coverage
+    if adult_multi_coverage.get("has_any_anchor"):
+        adult_role = safe_str(role_context["product_role"]).startswith("adult_multi_")
+        blob["adult_multi_coverage"] = (
+            adult_multi_coverage if adult_role else _present_only_coverage(adult_multi_coverage)
+        )
     if evidence_data:
         blob["evidence_data"] = {
             "match_count": evidence_data.get("match_count"),

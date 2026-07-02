@@ -98,6 +98,32 @@ def _core_prenatal_ingredients():
     ]
 
 
+def _adult_multi_ingredients(*, include_iron=False, omit=()):
+    rows = [
+        _ingredient("Vitamin A", "vitamin_a", 900, "mcg RAE"),
+        _ingredient("Vitamin C", "vitamin_c", 90, "mg"),
+        _ingredient("Vitamin D3", "vitamin_d", 20, "mcg", standard_name="Vitamin D"),
+        _ingredient("Vitamin E", "vitamin_e", 15, "mg"),
+        _ingredient("Vitamin K", "vitamin_k", 120, "mcg"),
+        _ingredient("Thiamin", "vitamin_b1_thiamine", 1.2, "mg"),
+        _ingredient("Riboflavin", "vitamin_b2_riboflavin", 1.3, "mg"),
+        _ingredient("Niacin", "vitamin_b3_niacin", 16, "mg NE"),
+        _ingredient("Vitamin B6", "vitamin_b6", 1.7, "mg"),
+        _ingredient("Folate", "folate", 400, "mcg DFE"),
+        _ingredient("Vitamin B12", "vitamin_b12_cobalamin", 2.4, "mcg"),
+        _ingredient("Biotin", "biotin", 30, "mcg"),
+        _ingredient("Pantothenic Acid", "pantothenic_acid", 5, "mg"),
+        _ingredient("Iodine", "iodine", 150, "mcg", category="minerals"),
+        _ingredient("Zinc", "zinc", 11, "mg", category="minerals"),
+        _ingredient("Selenium", "selenium", 55, "mcg", category="minerals"),
+        _ingredient("Copper", "copper", 0.9, "mg", category="minerals"),
+    ]
+    if include_iron:
+        rows.append(_ingredient("Iron", "iron", 18, "mg", category="minerals"))
+    omitted = set(omit)
+    return [row for row in rows if row["active"]["canonical_id"] not in omitted]
+
+
 def test_prenatal_core_without_dha_or_choline_exports_prenatal_base():
     enriched = _product("Essential Prenatal Multi", _core_prenatal_ingredients())
 
@@ -172,3 +198,49 @@ def test_pregnancy_negation_target_group_is_not_prenatal_positioning():
 
     assert blob["product_role"] == "targeted_gap_filler"
     assert blob["product_role_evidence"]["prenatal_positioned"] is False
+
+
+def test_adult_iron_free_multi_exports_score_neutral_adult_coverage():
+    enriched = _product(
+        "Benchmark Adult Multi Iron-Free",
+        _adult_multi_ingredients(include_iron=False, omit=("vitamin_d",)),
+    )
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["product_role"] == "adult_multi_iron_free"
+    assert blob["adult_multi_coverage"]["scoring_impact"] == "none"
+    assert blob["adult_multi_coverage"]["summary"]["missing"] == ["vitamin_d"]
+    assert "iron" not in {
+        row["nutrient_id"] for row in blob["adult_multi_coverage"]["anchors"]
+    }
+
+
+def test_adult_multi_with_iron_exports_with_iron_role():
+    enriched = _product(
+        "Benchmark Adult Multi With Iron",
+        _adult_multi_ingredients(include_iron=True),
+    )
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["product_role"] == "adult_multi_with_iron"
+    assert blob["adult_multi_coverage"]["summary"]["missing"] == []
+    assert blob["product_role_evidence"]["adult_anchor_count"] >= 12
+
+
+def test_targeted_adult_anchor_exports_coverage_without_adult_multi_role():
+    enriched = _product(
+        "Vitamin D3",
+        [_ingredient("Vitamin D3", "vitamin_d", 25, "mcg", standard_name="Vitamin D")],
+        primary_type="single_vitamin",
+    )
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["product_role"] == "targeted_gap_filler"
+    assert blob["adult_multi_coverage"]["summary"]["covered"] == ["vitamin_d"]
+    assert blob["adult_multi_coverage"]["summary"]["missing"] == []
+    assert [
+        row["nutrient_id"] for row in blob["adult_multi_coverage"]["anchors"]
+    ] == ["vitamin_d"]
