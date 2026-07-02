@@ -7002,6 +7002,18 @@
           "drug_class_id": "hypoglycemics_high_risk",
           "severity": "caution",
           "evidence_level": "established",
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "form_scope": ["nicotinic acid"],
+            "confidence": "high",
+            "confidence_basis": "guideline_stated_cutoff",
+            "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "rationale": "NIH ODS: nicotinic acid >=1.5 g/day raises glucose; below this the additive effect on diabetes-med needs is not clinically meaningful. Nicotinic acid only (not niacinamide)."
+          },
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
@@ -7034,6 +7046,18 @@
           "drug_class_id": "hypoglycemics_lower_risk",
           "severity": "caution",
           "evidence_level": "established",
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "form_scope": ["nicotinic acid"],
+            "confidence": "high",
+            "confidence_basis": "guideline_stated_cutoff",
+            "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "rationale": "NIH ODS: nicotinic acid >=1.5 g/day raises glucose; below this the additive effect on diabetes-med needs is not clinically meaningful. Nicotinic acid only (not niacinamide)."
+          },
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
@@ -7099,6 +7123,18 @@
           "drug_class_id": "hypoglycemics_unknown",
           "severity": "caution",
           "evidence_level": "established",
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "form_scope": ["nicotinic acid"],
+            "confidence": "high",
+            "confidence_basis": "guideline_stated_cutoff",
+            "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "rationale": "NIH ODS: nicotinic acid >=1.5 g/day raises glucose; below this the additive effect on diabetes-med needs is not clinically meaningful. Nicotinic acid only (not niacinamide)."
+          },
           "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
