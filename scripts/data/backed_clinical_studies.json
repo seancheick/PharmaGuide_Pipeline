@@ -5093,7 +5093,7 @@
       "notes": "Meta-analytic human evidence supports garlic most clearly for blood-pressure lowering in hypertensive adults, with additional but smaller lipid-related benefits.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-06",
-      "notable_studies": "Ried (2020, PMID 32010325) reported clinically meaningful systolic and diastolic blood-pressure reductions with garlic in hypertensive participants. Lipid and metabolic effects are more modest but supported by later pooled analyses such as PMID 37311799.",
+      "notable_studies": "Ried (2020, PMID 32010325) reported clinically meaningful systolic and diastolic blood-pressure reductions with garlic in hypertensive participants.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -5104,25 +5104,6 @@
           "citation": "Experimental and therapeutic medicine (2020-02-01)",
           "url": "https://pubmed.ncbi.nlm.nih.gov/32010325/",
           "published_date": "2020-02-01",
-          "publication_types": [
-            "Journal Article"
-          ],
-          "mesh_terms": [],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "37311799",
-          "doi": "10.1038/s41439-023-00246-9",
-          "title": "Genome-wide association study of preterm birth and gestational age in a Japanese population.",
-          "citation": "Human genome variation (2023-06-13)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/37311799/",
-          "published_date": "2023-06-13",
           "publication_types": [
             "Journal Article"
           ],
@@ -6156,7 +6137,7 @@
         "Reduce Stress/Anxiety"
       ],
       "notes": "Direct human evidence specific to magnesium bisglycinate is limited. Small trials suggest good tolerability and possible benefit for leg cramps or sleep-related outcomes, while the larger evidence base is for magnesium more generally rather than the glycinate form alone.",
-      "notable_studies": "Direct bisglycinate evidence includes the leg-cramp trial indexed as PMID 22909270. Broader magnesium-sleep syntheses such as PMID 34811585 suggest possible benefit in selected populations, but they are not specific to glycinate and the effect size remains modest.",
+      "notable_studies": "Direct bisglycinate evidence includes the pregnancy leg-cramp trial indexed as PMID 22909270. Broader magnesium-sleep evidence is limited and not specific to the glycinate form.",
       "study_type": "rct_single",
       "last_updated": "2026-03-07",
       "references_structured": [
@@ -6190,32 +6171,6 @@
           ],
           "supplementary_concepts": [],
           "evidence_grade": "rct",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "34811585",
-          "doi": "10.1007/s10140-021-01996-1",
-          "title": "Retrospective analysis of the sonographic and computed tomographic features of gallbladder empyema.",
-          "citation": "Emergency radiology (2022-04-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/34811585/",
-          "published_date": "2022-04-01",
-          "publication_types": [
-            "Journal Article"
-          ],
-          "mesh_terms": [
-            "Cholecystitis",
-            "Gallbladder",
-            "Humans",
-            "Retrospective Studies",
-            "Tomography, X-Ray Computed",
-            "Ultrasonography"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
@@ -7519,7 +7474,7 @@
       "notes": "Human evidence supports Rhodiola rosea for stress-related fatigue and some endurance or exertion outcomes, but effect estimates vary meaningfully by extract standardization and study design.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
-      "notable_studies": "Recent endurance-performance meta-analysis PMID 41080184 found modest improvements in endurance-related outcomes and biomarkers. Earlier systematic-review evidence, including PMID 23420780, concluded that Rhodiola shows promise for fatigue and performance but that trial quality and extract heterogeneity remain important limitations.",
+      "notable_studies": "Recent endurance-performance meta-analysis PMID 41080184 found modest improvements in endurance-related outcomes and biomarkers, though trial quality and extract heterogeneity remain important limitations.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -7537,39 +7492,6 @@
           "mesh_terms": [],
           "supplementary_concepts": [],
           "evidence_grade": "systematic_review",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "23420780",
-          "doi": "10.1002/biot.201200279",
-          "title": "Flux-coupled genes and their use in metabolic flux analysis.",
-          "citation": "Biotechnology journal (2013-09-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/23420780/",
-          "published_date": "2013-09-01",
-          "publication_types": [
-            "Journal Article",
-            "Research Support, Non-U.S. Gov't"
-          ],
-          "mesh_terms": [
-            "Algorithms",
-            "Citric Acid Cycle",
-            "Computer Simulation",
-            "Escherichia coli",
-            "Gene Knockdown Techniques",
-            "Genes, Bacterial",
-            "Metabolic Flux Analysis",
-            "Metabolic Networks and Pathways",
-            "Models, Biological",
-            "Pentose Phosphate Pathway",
-            "Systems Biology",
-            "Transcriptome"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
@@ -9074,7 +8996,7 @@
       "notes": "Human evidence supports fenugreek most consistently for glycemic outcomes, with smaller and more variable support for testosterone- or libido-related endpoints in men.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
-      "notable_studies": "Testosterone-related evidence is summarized in PMID 32048383, which found modest androgen-related effects in men. Glycemic support remains stronger and is captured in the earlier metabolic meta-analysis PMID 25023485 and later pooled work on glucose-control outcomes.",
+      "notable_studies": "Testosterone-related evidence is summarized in PMID 32048383, which found modest androgen-related effects in men.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -9103,44 +9025,6 @@
           ],
           "supplementary_concepts": [],
           "evidence_grade": "meta_analysis",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "25023485",
-          "doi": "10.1093/mmy/myu020",
-          "title": "Identification, molecular characterization, and expression analysis of a DOMON-like type 9 carbohydrate-binding module domain-containing protein of Coccidioides posadasii.",
-          "citation": "Medical mycology (2014-08-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/25023485/",
-          "published_date": "2014-08-01",
-          "publication_types": [
-            "Journal Article",
-            "Research Support, N.I.H., Extramural"
-          ],
-          "mesh_terms": [
-            "Amino Acid Sequence",
-            "Base Sequence",
-            "Coccidioides",
-            "Computational Biology",
-            "DNA, Complementary",
-            "DNA, Fungal",
-            "Fungal Proteins",
-            "Gene Expression Profiling",
-            "Mass Spectrometry",
-            "Models, Molecular",
-            "Molecular Sequence Data",
-            "Molecular Weight",
-            "Polymerase Chain Reaction",
-            "Protein Conformation",
-            "Protein Structure, Tertiary",
-            "Sequence Analysis, DNA",
-            "Sequence Homology, Amino Acid"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
           "retracted": false,
           "supports_claims": [],
           "verification_source": "pubmed_eutils"
@@ -9421,7 +9305,7 @@
       "notes": "Human evidence strongly supports red yeast rice for LDL-cholesterol lowering, largely via monacolin K. Because monacolin K is pharmacologically similar to lovastatin, efficacy and safety interpretation should reflect that statin-like mechanism.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
-      "notable_studies": "Recent pooled lipid-lowering evidence includes PMID 35264949 and PMID 33497775, both supporting meaningful LDL reductions with red yeast rice. The key mechanism is monacolin K, which is structurally identical to lovastatin, so efficacy and adverse-effect interpretation should remain statin-aware.",
+      "notable_studies": "Recent pooled lipid-lowering evidence includes PMID 35264949, supporting meaningful LDL reductions with red yeast rice. The key mechanism is monacolin K, which is structurally identical to lovastatin, so efficacy and adverse-effect interpretation should remain statin-aware.",
       "references_structured": [
         {
           "type": "pubmed",
@@ -9437,40 +9321,6 @@
             "Review"
           ],
           "mesh_terms": [],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "33497775",
-          "doi": "10.1016/j.neuroimage.2021.117778",
-          "title": "MRI monitoring of macaque monkeys in neuroscience: Case studies, resource and normative data comparisons.",
-          "citation": "NeuroImage (2021-04-15)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/33497775/",
-          "published_date": "2021-04-15",
-          "publication_types": [
-            "Comparative Study",
-            "Journal Article",
-            "Research Support, N.I.H., Extramural",
-            "Research Support, Non-U.S. Gov't"
-          ],
-          "mesh_terms": [
-            "Animals",
-            "Brain",
-            "Case-Control Studies",
-            "Data Analysis",
-            "Demyelinating Diseases",
-            "Infections",
-            "Macaca mulatta",
-            "Magnetic Resonance Imaging",
-            "Male",
-            "Muscle Weakness",
-            "Nervous System Diseases"
-          ],
           "supplementary_concepts": [],
           "evidence_grade": "journal_article",
           "retracted": false,
@@ -9812,35 +9662,8 @@
       "notes": "Meta-analytic human evidence supports cinnamon for modest fasting-glucose and insulin-resistance improvements, but HbA1c and long-term glycemic effects are less consistently robust across trials.",
       "study_type": "systematic_review_meta",
       "last_updated": "2026-03-07",
-      "notable_studies": "Recent pooled evidence includes PMID 38218735, which supports fasting-glucose and HOMA-IR improvements with cinnamon supplementation. Earlier meta-analysis PMID 24019277 also found favorable glycemic and lipid shifts, although the effect size on HbA1c remained modest.",
+      "notable_studies": "Meta-analysis PMID 24019277 found favorable glycemic and lipid shifts with cinnamon supplementation, although the effect size on HbA1c remained modest.",
       "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "38218735",
-          "doi": "10.1038/s41375-024-02139-4",
-          "title": "How to individualize therapy after failing milestones in chronic myeloid leukaemia: weighting late response and early death from CML against risk of alternative therapies.",
-          "citation": "Leukemia (2024-02-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/38218735/",
-          "published_date": "2024-02-01",
-          "publication_types": [
-            "Letter",
-            "Research Support, Non-U.S. Gov't",
-            "Comment"
-          ],
-          "mesh_terms": [
-            "Humans",
-            "Leukemia, Myelogenous, Chronic, BCR-ABL Positive",
-            "Leukemia, Myeloid",
-            "Chronic Disease",
-            "Complementary Therapies"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
@@ -9917,39 +9740,8 @@
       "notes": "Human evidence for digestive enzymes is strong in exocrine pancreatic insufficiency, but evidence for broad over-the-counter digestive support in otherwise healthy adults remains limited and product-specific.",
       "study_type": "rct_single",
       "last_updated": "2026-03-07",
-      "notable_studies": "Pancreatic-enzyme replacement evidence is well established in pancreatic insufficiency and summarized in guidance and reviews such as PMID 33931040. Over-the-counter multi-enzyme blends have much less robust support; one placebo-controlled dyspepsia trial is indexed as PMID 37976892, but no broad general-population meta-analysis exists.",
+      "notable_studies": "Pancreatic-enzyme replacement evidence is well established in pancreatic insufficiency. Over-the-counter multi-enzyme blends have much less robust support; one placebo-controlled dyspepsia trial is indexed as PMID 37976892, but no broad general-population meta-analysis exists.",
       "references_structured": [
-        {
-          "type": "pubmed",
-          "authority": "NCBI PubMed",
-          "pmid": "33931040",
-          "doi": "10.1186/s12889-021-10873-y",
-          "title": "Fear of COVID-19 and workplace phobia among Pakistani doctors: A survey study.",
-          "citation": "BMC public health (2021-04-30)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/33931040/",
-          "published_date": "2021-04-30",
-          "publication_types": [
-            "Journal Article"
-          ],
-          "mesh_terms": [
-            "Adult",
-            "COVID-19",
-            "Fear",
-            "Female",
-            "Humans",
-            "Male",
-            "Pakistan",
-            "Pandemics",
-            "Phobic Disorders",
-            "SARS-CoV-2",
-            "Workplace"
-          ],
-          "supplementary_concepts": [],
-          "evidence_grade": "journal_article",
-          "retracted": false,
-          "supports_claims": [],
-          "verification_source": "pubmed_eutils"
-        },
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
@@ -20129,11 +19921,11 @@
         {
           "type": "pubmed",
           "authority": "NCBI PubMed",
-          "pmid": "11403866",
-          "doi": "10.1016/s0169-5347(01)02167-x",
-          "title": "The genetics of species differences.",
-          "citation": "Trends in ecology & evolution (2001-07-01)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/11403866/",
+          "pmid": "10991877",
+          "doi": null,
+          "title": "Undecylenic acid inhibits morphogenesis of Candida albicans.",
+          "citation": "Antimicrobial agents and chemotherapy (2000 Oct)",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10991877/",
           "published_date": "2001-07-01",
           "publication_types": [
             "Journal Article"
