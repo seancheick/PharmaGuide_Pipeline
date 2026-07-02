@@ -15194,6 +15194,16 @@ class SupplementEnricherV3:
         """
         if not isinstance(min_effective_dose, dict):
             return None
+        # Form-gate (G1): a form-scoped floor applies ONLY to a confirmed
+        # matching form. Unknown / other forms fail open (fire) — a form must
+        # never inherit another form's floor (e.g. niacinamide must not get the
+        # nicotinic-acid glucose suppression). No form_scope = form-agnostic.
+        form_scope = min_effective_dose.get("form_scope")
+        if isinstance(form_scope, list) and form_scope:
+            ingredient_form = str(ingredient.get("matched_form") or "").strip().lower()
+            allowed = {str(f).strip().lower() for f in form_scope if str(f).strip()}
+            if not ingredient_form or ingredient_form not in allowed:
+                return None
         floor_value = self._to_float_safe(min_effective_dose.get("value"))
         floor_unit = self._normalize_threshold_unit(min_effective_dose.get("unit"))
         basis = str(min_effective_dose.get("basis") or "per_day").strip().lower()

@@ -54,6 +54,30 @@ def test_floor_fails_open_on_missing_or_absent():
     ) is None
 
 
+FLOOR_NICOTINIC = {
+    "value": 1500, "unit": "mg", "basis": "per_day",
+    "form_scope": ["nicotinic acid"],
+}
+
+
+def _ing(qty, form="nicotinic acid", unit="mg"):
+    return {"quantity": qty, "unit": unit, "raw_source_text": "Niacin", "matched_form": form}
+
+
+def test_form_scope_only_matching_form_gets_floor():
+    """G1: the nicotinic-acid floor must NOT suppress other/unknown forms.
+
+    niacinamide, unknown, and missing form all fail open (the warning fires) —
+    they never inherit the nicotinic-acid glucose suppression.
+    """
+    e = SupplementEnricher()
+    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, "nicotinic acid"), 1.0) == "below"
+    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(2000, "nicotinic acid"), 1.0) == "at_or_above"
+    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, "niacinamide"), 1.0) is None
+    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, ""), 1.0) is None
+    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, {"quantity": 20, "unit": "mg"}, 1.0) is None
+
+
 # --------------------------------------------------------------------------
 # build_final_db emission of the new axes onto the blob warning
 # --------------------------------------------------------------------------

@@ -6899,6 +6899,9 @@
             "value": 1500,
             "unit": "mg",
             "basis": "per_day",
+            "form_scope": ["nicotinic acid"],
+            "confidence": "high",
+            "confidence_basis": "guideline_stated_cutoff",
             "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
             "rationale": "NIH ODS: nicotinic acid doses >=1.5 g/day are where hyperglycemia becomes likely; below this the glucose interaction is not clinically meaningful (multivitamin niacin is ~20-35 mg). Verified guideline cutoff. Applies to nicotinic acid, not niacinamide/nicotinamide (form-gating is a follow-up)."
           },
