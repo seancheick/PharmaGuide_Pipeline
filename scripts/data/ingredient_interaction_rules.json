@@ -2816,7 +2816,7 @@
           "last_reviewed": "2026-04-09",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+            "https://pubmed.ncbi.nlm.nih.gov/33801406/"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
@@ -4922,7 +4922,7 @@
           "last_reviewed": "2026-04-09",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+            "https://pubmed.ncbi.nlm.nih.gov/1443969/"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
@@ -11787,8 +11787,7 @@
           "last_reviewed": "2026-04-09",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30368654/",
-            "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+            "https://pubmed.ncbi.nlm.nih.gov/30368654/"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
