@@ -3962,6 +3962,363 @@ def _build_v4_score_explanation(pillars: Any) -> Optional[Dict[str, Any]]:
     return {"strengths": strengths, "drags": drags}
 
 
+_PRENATAL_POSITIONING_RE = re.compile(
+    r"\b(prenatal|pre[\s-]?natal|pregnancy|pregnant|preconception|"
+    r"pre[\s-]?conception|trying\s+to\s+conceive|ttc|maternal|expecting|"
+    r"gestation)\b",
+    re.IGNORECASE,
+)
+_PRENATAL_UNAMBIGUOUS_RE = re.compile(
+    r"\b(prenatal|pre[\s-]?natal|preconception|pre[\s-]?conception|"
+    r"trying\s+to\s+conceive|ttc|maternal|expecting)\b",
+    re.IGNORECASE,
+)
+_PREGNANCY_NEGATION_RE = re.compile(
+    r"\b(not|non|avoid|contraindicated|do\s+not\s+use|should\s+not\s+use|"
+    r"consult)\b[^.;:,]{0,60}\b(pregnant|pregnancy|lactating|breastfeeding)\b",
+    re.IGNORECASE,
+)
+_COMPLETENESS_CLAIM_RE = re.compile(
+    r"\b(complete|all[\s-]?in[\s-]?one|comprehensive|full[\s-]?spectrum|"
+    r"total|whole\s+prenatal)\b",
+    re.IGNORECASE,
+)
+
+_PRENATAL_CORE_ANCHORS = ("folate", "iron", "iodine", "vitamin_d", "vitamin_b12")
+_PRENATAL_COMPLEMENT_ANCHORS = ("choline", "dha")
+_PRENATAL_ANCHORS = (
+    {
+        "id": "folate",
+        "label": "Folate",
+        "target": 600.0,
+        "unit": "mcg DFE",
+        "ul": 1667.0,
+        "terms": ("folate", "folic acid", "vitamin b9", "5 mthf", "methylfolate"),
+    },
+    {
+        "id": "iron",
+        "label": "Iron",
+        "target": 27.0,
+        "unit": "mg",
+        "ul": 45.0,
+        "terms": ("iron",),
+    },
+    {
+        "id": "iodine",
+        "label": "Iodine",
+        "target": 220.0,
+        "unit": "mcg",
+        "ul": 1100.0,
+        "terms": ("iodine", "iodide"),
+    },
+    {
+        "id": "vitamin_d",
+        "label": "Vitamin D",
+        "target": 15.0,
+        "unit": "mcg",
+        "ul": 100.0,
+        "terms": ("vitamin d", "vitamin d3", "cholecalciferol"),
+    },
+    {
+        "id": "vitamin_b12",
+        "label": "Vitamin B12",
+        "target": 2.6,
+        "unit": "mcg",
+        "ul": None,
+        "terms": ("vitamin b12", "b12", "cobalamin", "methylcobalamin"),
+    },
+    {
+        "id": "choline",
+        "label": "Choline",
+        "target": 450.0,
+        "unit": "mg",
+        "ul": 3500.0,
+        "terms": ("choline", "phosphatidylcholine"),
+    },
+    {
+        "id": "dha",
+        "label": "DHA",
+        "target": 200.0,
+        "unit": "mg",
+        "ul": None,
+        "terms": ("dha", "docosahexaenoic", "docosahexaenoic acid"),
+    },
+    {
+        "id": "vitamin_a",
+        "label": "Vitamin A",
+        "target": 770.0,
+        "unit": "mcg RAE",
+        # UL depends on preformed vitamin A form; the existing RDA/UL engine
+        # owns that form-sensitive over-UL decision.
+        "ul": None,
+        "terms": ("vitamin a", "retinol", "retinyl", "beta carotene"),
+    },
+)
+
+
+def _space_normalized(value: Any) -> str:
+    return re.sub(r"[^a-z0-9]+", " ", safe_str(value).lower()).strip()
+
+
+def _flatten_text(value: Any) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, dict):
+        out: List[str] = []
+        for item in value.values():
+            out.extend(_flatten_text(item))
+        return out
+    if isinstance(value, (list, tuple, set)):
+        out = []
+        for item in value:
+            out.extend(_flatten_text(item))
+        return out
+    return [str(value)]
+
+
+def _term_present(haystack: str, terms: Tuple[str, ...]) -> bool:
+    padded = f" {_space_normalized(haystack)} "
+    for term in terms:
+        normalized = _space_normalized(term)
+        if normalized and f" {normalized} " in padded:
+            return True
+    return False
+
+
+def _product_positioning_text(enriched: Dict) -> Tuple[str, str]:
+    name_text = " ".join(
+        safe_str(enriched.get(key))
+        for key in ("product_name", "fullName", "displayName", "name")
+        if safe_str(enriched.get(key))
+    )
+    context_parts = [name_text]
+    for key in (
+        "targetGroups",
+        "target_groups",
+        "intended_use",
+        "intendedUse",
+        "audience",
+        "population",
+    ):
+        context_parts.extend(_flatten_text(enriched.get(key)))
+    return name_text, " ".join(part for part in context_parts if safe_str(part))
+
+
+def _is_prenatal_positioned(enriched: Dict) -> bool:
+    name_text, context_text = _product_positioning_text(enriched)
+    if _PRENATAL_UNAMBIGUOUS_RE.search(name_text):
+        return True
+    if _PREGNANCY_NEGATION_RE.search(context_text):
+        return False
+    return bool(_PRENATAL_POSITIONING_RE.search(context_text))
+
+
+def _ingredient_anchor_key(ingredient: Dict[str, Any]) -> str:
+    fields = (
+        ingredient.get("canonical_id"),
+        ingredient.get("nutrient_group_id"),
+        ingredient.get("standard_name"),
+        ingredient.get("standardName"),
+        ingredient.get("name"),
+        ingredient.get("display_label"),
+        ingredient.get("raw_source_text"),
+    )
+    return " ".join(_space_normalized(field) for field in fields if safe_str(field))
+
+
+def _ingredient_matches_anchor(ingredient: Dict[str, Any], anchor: Dict[str, Any]) -> bool:
+    canonical = _space_normalized(ingredient.get("canonical_id")).replace(" ", "_")
+    group = _space_normalized(ingredient.get("nutrient_group_id")).replace(" ", "_")
+    anchor_id = safe_str(anchor.get("id"))
+    if canonical == anchor_id or group == anchor_id:
+        return True
+    if anchor_id == "folate" and canonical in {"vitamin_b9_folate", "vitamin_b9"}:
+        return True
+    if anchor_id == "vitamin_b12" and canonical in {"vitamin_b12_cobalamin", "cobalamin"}:
+        return True
+    if anchor_id == "dha" and canonical in {"dha", "docosahexaenoic_acid"}:
+        return True
+    return _term_present(_ingredient_anchor_key(ingredient), tuple(anchor.get("terms") or ()))
+
+
+def _amount_in_unit(amount: Any, source_unit: Any, target_unit: str) -> Optional[float]:
+    value = safe_float(amount)
+    if value is None:
+        return None
+    source = _space_normalized(source_unit)
+    target = _space_normalized(target_unit)
+    if not source or not target:
+        return value
+    if source == target or source.startswith(target) or target.startswith(source):
+        return value
+    source_is_mcg = source.startswith("mcg") or source.startswith("ug")
+    target_is_mcg = target.startswith("mcg") or target.startswith("ug")
+    source_is_mg = source.startswith("mg")
+    target_is_mg = target.startswith("mg")
+    source_is_g = source == "g" or source.startswith("gram")
+    if source_is_mcg and target_is_mg:
+        return value / 1000.0
+    if source_is_mg and target_is_mcg:
+        return value * 1000.0
+    if source_is_g and target_is_mg:
+        return value * 1000.0
+    if source_is_g and target_is_mcg:
+        return value * 1_000_000.0
+    return value
+
+
+def _anchor_amount(ingredients: List[Dict], anchor: Dict[str, Any]) -> Tuple[Optional[float], Optional[str]]:
+    best_amount = None
+    best_unit = None
+    for ingredient in ingredients:
+        if not isinstance(ingredient, dict) or not _ingredient_matches_anchor(ingredient, anchor):
+            continue
+        raw_amount = (
+            ingredient.get("normalized_amount")
+            if ingredient.get("normalized_amount") is not None
+            else ingredient.get("normalized_value")
+            if ingredient.get("normalized_value") is not None
+            else ingredient.get("quantity")
+            if ingredient.get("quantity") is not None
+            else ingredient.get("dosage")
+        )
+        raw_unit = (
+            ingredient.get("normalized_unit")
+            or ingredient.get("dosage_unit")
+            or ingredient.get("unit")
+        )
+        converted = _amount_in_unit(raw_amount, raw_unit, safe_str(anchor.get("unit")))
+        if converted is None:
+            continue
+        if best_amount is None or converted > best_amount:
+            best_amount = converted
+            best_unit = safe_str(anchor.get("unit") or raw_unit)
+    return best_amount, best_unit
+
+
+def _build_prenatal_coverage(ingredients: List[Dict], rda_ul_data: Dict) -> Dict[str, Any]:
+    anchors = []
+    summary = {
+        "missing": [],
+        "below_target": [],
+        "covered": [],
+        "near_ul": [],
+        "above_ul": [],
+    }
+    present_any = False
+    safety_rows = {
+        _space_normalized(row.get("nutrient") or row.get("ingredient_name")): row
+        for row in safe_list(rda_ul_data.get("adequacy_results"))
+        if isinstance(row, dict)
+    }
+
+    for anchor in _PRENATAL_ANCHORS:
+        anchor_id = safe_str(anchor["id"])
+        amount, unit = _anchor_amount(ingredients, anchor)
+        present = amount is not None and amount > 0
+        present_any = present_any or present
+        target = safe_float(anchor.get("target"))
+        ul = safe_float(anchor.get("ul"))
+        status = "missing"
+        if present:
+            status = "covered"
+            if target and amount < target:
+                status = "below_target"
+            if ul and amount >= ul:
+                status = "above_ul"
+            elif ul and amount >= ul * 0.8:
+                status = "near_ul"
+
+        row = safety_rows.get(_space_normalized(anchor.get("label")))
+        if isinstance(row, dict) and row.get("over_ul"):
+            status = "above_ul"
+
+        anchors.append({
+            "nutrient_id": anchor_id,
+            "label": anchor["label"],
+            "status": status,
+            "amount": round(amount, 4) if amount is not None else None,
+            "unit": unit or anchor["unit"],
+            "target": target,
+            "target_unit": anchor["unit"],
+            "ul": ul,
+            "source": "prenatal_anchor_table",
+        })
+        summary[status].append(anchor_id)
+
+    return {
+        "scoring_impact": "none",
+        "anchors": anchors,
+        "summary": summary,
+        "has_any_anchor": present_any,
+    }
+
+
+def _has_multivitamin_shape(enriched: Dict, ingredients: List[Dict]) -> bool:
+    taxonomy = safe_dict(enriched.get("supplement_taxonomy"))
+    stype = safe_dict(enriched.get("supplement_type"))
+    text = " ".join(
+        safe_str(value)
+        for value in (
+            taxonomy.get("primary_type"),
+            taxonomy.get("secondary_type"),
+            stype.get("type"),
+            enriched.get("product_name"),
+        )
+    )
+    if re.search(r"\b(multivitamin|multi[\s-]?vitamin|multi_or_prenatal|prenatal_multi)\b", text, re.IGNORECASE):
+        return True
+    disclosed = [
+        ing for ing in ingredients
+        if isinstance(ing, dict) and safe_float(ing.get("quantity") or ing.get("normalized_amount"), 0) > 0
+    ]
+    return len(disclosed) >= 6
+
+
+def _classify_product_role(enriched: Dict, ingredients: List[Dict], prenatal_coverage: Dict[str, Any]) -> Dict[str, Any]:
+    prenatal = _is_prenatal_positioned(enriched)
+    summary = safe_dict(prenatal_coverage.get("summary"))
+    covered = set(safe_list(summary.get("covered")))
+    below = set(safe_list(summary.get("below_target")))
+    present = covered | below | set(safe_list(summary.get("near_ul"))) | set(safe_list(summary.get("above_ul")))
+    core_present = sum(1 for anchor in _PRENATAL_CORE_ANCHORS if anchor in present)
+    complement_present = sum(1 for anchor in _PRENATAL_COMPLEMENT_ANCHORS if anchor in present)
+    role = "targeted_gap_filler"
+
+    if prenatal:
+        if core_present <= 1 and "dha" in present:
+            role = "prenatal_dha_companion"
+        elif core_present <= 1 and "choline" in present:
+            role = "prenatal_choline_companion"
+        elif core_present >= 4:
+            role = "prenatal_complete" if complement_present == len(_PRENATAL_COMPLEMENT_ANCHORS) else "prenatal_base"
+        else:
+            role = "prenatal_support"
+    elif _has_multivitamin_shape(enriched, ingredients):
+        role = "general_multi"
+
+    name_text, context_text = _product_positioning_text(enriched)
+    claim_text = f"{name_text} {context_text}"
+    mismatch = bool(
+        role == "prenatal_base"
+        and _COMPLETENESS_CLAIM_RE.search(claim_text)
+        and ({"dha", "choline"} - present)
+    )
+
+    return {
+        "product_role": role,
+        "completeness_claim_mismatch": mismatch,
+        "role_evidence": {
+            "prenatal_positioned": prenatal,
+            "core_anchor_count": core_present,
+            "complement_anchor_count": complement_present,
+            "present_prenatal_anchors": sorted(present),
+        },
+    }
+
+
 def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     """Build the per-product detail blob for caching/Supabase."""
     non_gmo_audit = derive_non_gmo_audit(enriched)
@@ -4894,6 +5251,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     serving = safe_dict(enriched.get("serving_basis"))
     evidence_data = safe_dict(enriched.get("evidence_data"))
     rda_ul_data = safe_dict(enriched.get("rda_ul_data"))
+    prenatal_coverage = _build_prenatal_coverage(ingredients, rda_ul_data)
+    role_context = _classify_product_role(enriched, ingredients, prenatal_coverage)
 
     blob = {
         "dsld_id": safe_str(enriched.get("dsld_id")),
@@ -4903,6 +5262,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "secondary_type": (enriched.get("supplement_taxonomy") or {}).get("secondary_type"),
         "classification_confidence": (enriched.get("supplement_taxonomy") or {}).get("classification_confidence"),
         "classification_reasons": (enriched.get("supplement_taxonomy") or {}).get("classification_reasons"),
+        "product_role": role_context["product_role"],
+        "completeness_claim_mismatch": role_context["completeness_claim_mismatch"],
+        "product_role_evidence": role_context["role_evidence"],
         "blob_version": 1,
         "ingredients": ingredients,
         "inactive_ingredients": inactive,
@@ -4967,6 +5329,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "proprietary_blend_audit": proprietary_blend_audit,
         "supplement_type_audit": supplement_type_audit,
     }
+    if prenatal_coverage.get("has_any_anchor") or role_context["product_role"] in {
+        "prenatal_base",
+        "prenatal_complete",
+        "prenatal_dha_companion",
+        "prenatal_choline_companion",
+    }:
+        blob["prenatal_coverage"] = prenatal_coverage
     if evidence_data:
         blob["evidence_data"] = {
             "match_count": evidence_data.get("match_count"),
