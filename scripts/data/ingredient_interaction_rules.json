@@ -4251,6 +4251,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+            "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose."
           }
         },
         {
@@ -4282,6 +4293,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+            "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose."
           }
         }
       ],
@@ -4315,6 +4337,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+            "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose."
           }
         },
         {
@@ -4346,6 +4379,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+            "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose."
           }
         },
         {
@@ -4377,6 +4421,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+            "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose."
           }
         },
         {
@@ -4439,6 +4494,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35509826/",
+            "rationale": "Panax ginseng has dose-dependent metabolic/BP effects from ~200 mg extract/day (lowest studied; PMID 35509826); it can raise BP in some (biphasic), so the flag is kept for hypertensives above this dose."
           }
         }
       ],
@@ -4690,6 +4756,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "caffeine_content_conservative",
+            "source": "https://www.nccih.nih.gov/health/green-tea",
+            "rationale": "Green tea extract BP effect is caffeine-driven; ~400 mg extract carries a meaningfully caffeinated dose (NCCIH). Set on the caffeinated form; decaffeinated/trace amounts are below this."
           }
         },
         {
@@ -4755,6 +4832,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "caffeine_content_conservative",
+            "source": "https://www.nccih.nih.gov/health/green-tea",
+            "rationale": "Green tea extract BP effect is caffeine-driven; ~400 mg extract carries a meaningfully caffeinated dose (NCCIH). Set on the caffeinated form; decaffeinated/trace amounts are below this."
           }
         },
         {
@@ -5069,6 +5157,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 160,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11807965/",
+            "rationale": "Hawthorn extract has a mild dose-dependent BP effect from ~160 mg/day (lowest studied; PMID 11807965); additive with antihypertensives above this."
           }
         },
         {
@@ -5134,6 +5233,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 160,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11807965/",
+            "rationale": "Hawthorn extract has a mild dose-dependent BP effect from ~160 mg/day (lowest studied; PMID 11807965); additive with antihypertensives above this."
           }
         }
       ],
@@ -5579,6 +5689,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 4000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/34967840/",
+            "rationale": "L-arginine lowers systolic BP only at >=4 g/day (dose-response meta-analysis PMID 34967840); below this no meaningful BP effect."
           }
         },
         {
@@ -5643,6 +5764,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 4000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/34967840/",
+            "rationale": "L-arginine lowers systolic BP only at >=4 g/day (dose-response meta-analysis PMID 34967840); below this no meaningful BP effect."
           }
         }
       ],
@@ -6747,6 +6879,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 900,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "cyp_induction_threshold",
+            "source": "https://www.nccih.nih.gov/health/st-johns-wort",
+            "rationale": "St Johns wort induces CYP3A4 at ~900 mg/day (300 mg TID), reducing antihypertensive (esp. CCB) drug levels and BP control (NCCIH). Below the induction dose the effect is negligible; this is a drug-interaction, not a direct pressor."
           }
         },
         {
@@ -15888,6 +16031,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "caffeine_content_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/39708247/",
+            "rationale": "Yerba mate raises BP via caffeine (PMID 39708247); ~1000 mg is a conservative caffeinated floor."
           }
         },
         {
@@ -15983,6 +16137,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "caffeine_content_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/39708247/",
+            "rationale": "Yerba mate raises BP via caffeine (PMID 39708247); ~1000 mg is a conservative caffeinated floor."
           }
         }
       ],
@@ -16969,6 +17134,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "caffeine_content_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/21676849/",
+            "rationale": "Guarana raises BP via its high caffeine content (~10-12% by weight; PMID 21676849); ~1000 mg guarana ~ 100 mg caffeine, a conservative pressor floor."
           }
         },
         {
@@ -17034,6 +17210,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "caffeine_content_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/21676849/",
+            "rationale": "Guarana raises BP via its high caffeine content (~10-12% by weight; PMID 21676849); ~1000 mg guarana ~ 100 mg caffeine, a conservative pressor floor."
           }
         },
         {
@@ -18362,6 +18549,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -18393,6 +18591,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -18457,6 +18666,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -18488,6 +18708,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -18519,6 +18750,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -18550,6 +18792,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -18581,6 +18834,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27512971/",
+            "rationale": "Nigella sativa lowers BP (and glucose/lipids) from ~2 g oil / 1.5 g powder per day (meta-analysis PMID 27512971); trace amounts are sub-therapeutic."
           }
         }
       ],
@@ -19065,6 +19329,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23107346/",
+            "rationale": "L-theanine mildly blunts BP rises at 200 mg (PMID 23107346); a soft additive effect below which it is negligible."
           }
         },
         {
@@ -20214,6 +20489,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "typical_serving_conservative",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/forskolin",
+            "rationale": "Coleus forskohlii extract (~500 mg, 10% forskolin) is the standard dose with vasodilatory/hypotensive potential (MSK); below this negligible."
           }
         },
         {
@@ -20245,6 +20531,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "typical_serving_conservative",
+            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/forskolin",
+            "rationale": "Coleus forskohlii extract (~500 mg, 10% forskolin) is the standard dose with vasodilatory/hypotensive potential (MSK); below this negligible."
           }
         }
       ],

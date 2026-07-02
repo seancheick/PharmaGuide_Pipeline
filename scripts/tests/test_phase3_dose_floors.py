@@ -37,6 +37,33 @@ EXPECTED = {
     "curcumin": (1000, "mg", {"bleeding_disorders", "anticoagulants", "antiplatelets"}),
     "caffeine": (200, "mg", {"hypertension"}),
     "licorice": (100, "mg", {"hypertension", "antihypertensives"}),
+    # glucose batch
+    "berberine_supplement": (500, "mg", {"diabetes", "hypoglycemics_high_risk"}),
+    "gymnema_sylvestre": (400, "mg", {"diabetes"}),
+    "fenugreek": (500, "mg", {"diabetes"}),
+    "bitter_melon": (600, "mg", {"diabetes"}),
+    "white_mulberry": (125, "mg", {"diabetes"}),
+    "psyllium": (3000, "mg", {"hypoglycemics_high_risk"}),
+    # bleeding batch
+    "feverfew": (100, "mg", {"bleeding_disorders", "anticoagulants"}),
+    "quercetin": (150, "mg", {"anticoagulants"}),
+    "saw_palmetto": (320, "mg", {"anticoagulants"}),
+    "glucosamine": (1500, "mg", {"anticoagulants"}),
+    "white_willow_bark": (120, "mg", {"bleeding_disorders"}),
+    # BP batch
+    "hawthorn": (160, "mg", {"hypertension"}),
+    "l_arginine": (4000, "mg", {"antihypertensives"}),
+    "black_seed_oil": (2000, "mg", {"diabetes", "hypertension"}),
+    "st_johns_wort": (900, "mg", {"antihypertensives"}),
+    # vitamin D high-dose-only
+    "vitamin_d": (10000, "IU", {"anticoagulants"}),
+}
+
+# (canonical, sub-rule) that MUST be beneficial (routed to support, never floored)
+BENEFICIAL_EXPECTED = {
+    ("magnesium", "hypertension"), ("magnesium", "diabetes"),
+    ("vitamin_d", "diabetes"), ("inositol", "diabetes"), ("inositol", "ttc"),
+    ("chromium", "diabetes"),
 }
 
 
@@ -76,6 +103,21 @@ def test_no_floor_on_beneficial_or_presence():
             if x.get("min_effective_dose"):
                 assert x.get("direction") == "harmful"
                 assert x.get("materiality") == "dose_dependent"
+
+
+def test_beneficial_ingredients_reclassified_not_floored():
+    """Beneficial nutrients (magnesium/inositol/vitamin-D for their conditions)
+    must be direction=beneficial and carry NO floor — flooring them as harmful
+    would re-introduce the benefit-as-warning false positive."""
+    found = set()
+    for r in RULES:
+        canon = (r.get("subject_ref") or {}).get("canonical_id", "")
+        for key, x in _sub_rules(r):
+            if (canon, key) in BENEFICIAL_EXPECTED:
+                assert x.get("direction") == "beneficial", f"{canon}/{key} not beneficial"
+                assert not x.get("min_effective_dose"), f"{canon}/{key} beneficial rule wrongly floored"
+                found.add((canon, key))
+    assert found == BENEFICIAL_EXPECTED, f"missing beneficial reclassifications: {BENEFICIAL_EXPECTED - found}"
 
 
 def test_floor_shape_is_valid():
