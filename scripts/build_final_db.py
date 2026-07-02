@@ -4686,6 +4686,30 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "display_mode_default": "informational",
             })
 
+    # Diabetes-specific added-sugar flag (presence-matters, harmful). A
+    # diabetic should be flagged that a product contains added sugar,
+    # regardless of amount. Distinct from the general dietary note above and
+    # from the B1 sugar score penalty — scoring reads dietary_sensitivity_data.
+    # sugar directly, so this warning does NOT touch it (score-neutral).
+    # Suppressed by default; the app promotes it on a diabetes profile match,
+    # and materiality=presence means it is never dose-suppressed.
+    _sugar = safe_dict(ds.get("sugar"))
+    if _sugar.get("has_added_sugar") or _sugar.get("level") in ("moderate", "high"):
+        _amt = _sugar.get("amount_g")
+        warnings.append({
+            "type": "dietary",
+            "severity": "monitor",
+            "title": "Added sugar",
+            "detail": "Contains added sugar"
+            + (f" ({_amt} g/serving)" if _amt else "")
+            + " - relevant if you have diabetes.",
+            "condition_ids": ["diabetes"],
+            "direction": "harmful",
+            "materiality": "presence",
+            "display_mode_default": "suppress",
+            "source": "dietary_sensitivity_data",
+        })
+
     # Sprint E1.5.X-4 — discontinued/off-market no longer emitted into
     # warnings[]. Status is now exposed as a top-level `product_status_detail`
     # field so Flutter can render it as a small neutral "concern" chip

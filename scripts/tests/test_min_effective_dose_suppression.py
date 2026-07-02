@@ -185,3 +185,39 @@ def test_blob_floor_status_none_when_unknown():
     w = _niacin_warning(blob)
     assert w is not None
     assert w["dose_floor_status"] is None
+
+
+# --------------------------------------------------------------------------
+# Diabetes-gated added-sugar flag (presence-matters, harmful, score-neutral)
+# --------------------------------------------------------------------------
+
+def _enriched_with_sugar(has_added_sugar=False, level="low"):
+    e = _enriched_with_niacin_alert(None)
+    e["interaction_profile"] = {"ingredient_alerts": []}
+    e["dietary_sensitivity_data"] = {
+        "warnings": [],
+        "sugar": {"has_added_sugar": has_added_sugar, "amount_g": 6, "level": level},
+    }
+    return e
+
+
+def _sugar_warning(blob):
+    return next((w for w in blob.get("warnings", []) if w.get("title") == "Added sugar"), None)
+
+
+def test_added_sugar_emits_diabetes_presence_flag():
+    blob = build_detail_blob(_enriched_with_sugar(has_added_sugar=True), _scored())
+    w = _sugar_warning(blob)
+    assert w is not None
+    assert w["condition_ids"] == ["diabetes"]
+    assert w["direction"] == "harmful"
+    assert w["materiality"] == "presence"
+    # presence-matters carries no floor -> never dose-suppressed
+    assert w.get("dose_floor_status") is None
+    # suppressed by default -> hidden until a diabetes profile match promotes it
+    assert _sugar_warning({"warnings": blob.get("warnings_profile_gated", [])}) is None
+
+
+def test_no_added_sugar_no_flag():
+    blob = build_detail_blob(_enriched_with_sugar(has_added_sugar=False, level="low"), _scored())
+    assert _sugar_warning(blob) is None
