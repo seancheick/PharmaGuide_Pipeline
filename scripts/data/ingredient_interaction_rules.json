@@ -7828,8 +7828,7 @@
         "mechanism": "Safety data are limited and stimulant effects raise risk concerns.",
         "notes": "Avoid in pregnancy and lactation.",
         "sources": [
-          "https://www.nccih.nih.gov/health/yohimbe",
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+          "https://www.nccih.nih.gov/health/yohimbe"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
@@ -7990,7 +7989,6 @@
         "mechanism": "Uterotonic glycosides (caulosaponin) and nicotinic alkaloids (methylcytisine) pose direct fetal risk including cardiac toxicity and CNS injury.",
         "notes": "Multiple case reports of serious neonatal adverse events. ACOG and NCCIH advise against use in pregnancy.",
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
           "https://pubmed.ncbi.nlm.nih.gov/30000839/"
         ],
         "alert_headline": "Do not use during pregnancy",
@@ -16589,7 +16587,6 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
           "https://www.nccih.nih.gov/health/chasteberry"
         ],
         "pregnancy_category": "no_data",
