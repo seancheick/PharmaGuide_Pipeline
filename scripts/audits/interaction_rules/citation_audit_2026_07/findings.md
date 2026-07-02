@@ -37,7 +37,47 @@ App table (`condition_thresholds.dart`, PharmaGuide ai repo) — 8 ghosts, all r
 Verified-clean, left as-is: app-table 28150351 (Mg/glycemia), 22318649 (Mg/BP),
 22374556 (ALA T2D RCT — the earlier ghost-21134318 replacement, re-confirmed).
 
-## TODO — off-claim mismatches (right ingredient, WRONG condition/organ/context)
+## RESOLUTION LOG — off-claim batch (2026-07-02, all live-verified)
+
+Second commit (off-claim batch). Final verifier state: 186 PMIDs, 4 ghost-suspect
+(all verified false-positives: Morus alba, Andrographis, Schisandra, NAC —
+efetch title-truncation on italic species names), 2 not-found (LactMed Bookshelf
+blue cohosh 30000839 + dong quai 30000896, legitimate). 457 interaction tests pass.
+
+RE-SOURCED (verified authoritative replacement):
+- cordyceps autoimmune/immunosuppressants/anticoagulants: 37513265 -> MSK cordyceps
+- chromium/thyroid_medications: 33584551 -> ODS Chromium + PMID 17725434 (verified)
+- icariin heart_disease/antihypertensives: 30342950 -> MSK epimedium + PMID 18778098 (PDE5) + 15546831 (CV case)
+- l_tyrosine thyroid_disorder/thyroid_medications: 33795250 -> Cleveland Clinic + PMID 39608720 (verified)
+- resveratrol bleeding/anticoagulants/antiplatelets: 29737899 -> MSK resveratrol; resveratrol/pregnancy -> PMID 24563374 (verified primate study, found via live search after my first guess 24941454 proved a ghost)
+- forskolin antihypertensives/anticoagulants: 38623169 -> MSK forskolin
+- lions_mane/anticoagulants: 40284172 -> PMID 20637576 (verified); mechanism corrected (hericenone B acts via collagen/integrin a2b1, NOT thromboxane — the old "reduced TXB2" claim was contradicted by the source)
+- vanadyl_sulfate/pregnancy_lactation: 37958659 -> ATSDR vanadium NBK592340 (animal teratogenicity + no human data)
+- wild_yam pregnancy/lactation/ttc: ovariectomy PMIDs 30735081+21800902 -> MSK wild-yam
+- fish_oil/antiplatelets: dropped psychiatric 35311615 (ODS + NCCIH co-sources remain)
+
+SOFTENED (claim overstated vs source):
+- senna/pregnancy: sources 36702448 (Cassiae semen) + NBK548375 (Muscle Relaxants LiverTox!) -> LiverTox Senna NBK547922 + BUMPS; mechanism reworded (BUMPS: uterine-contraction concern is theoretical + "not observed"; senna is an acceptable second-line laxative in pregnancy)
+
+REMOVED (CLAIM-DUBIOUS — no authoritative source supports it):
+- gotu_kola/bleeding_disorders: MSK documents only CYP450 + hepatotoxicity, no bleeding basis (liver + sedatives sub-rules kept)
+- huperzine_a/seizure_disorder: CONTRADICTED — evidence (PMID 40140526) shows huperzine A is ANTI-seizure, not pro-convulsant (anticholinergics + PL sub-rules kept)
+- pygeum/nsaids: undocumented interaction; MSK has no herb-drug section, drug refs report "no known interactions" (PL kept)
+
+LEFT AS DEFENSIBLE (citation supports the mechanism + a valid co-source exists — reviewed, not defects):
+- tribulus/liver (20667992: abstract confirms hepatotoxicity + elevated aminotransferases, not just nephrotoxicity)
+- magnesium/heart (25864370 dialysis paper backs the renal-comorbidity concern; + ODS Magnesium)
+- citrus_bergamot/statins (grapefruit paper 23184849 backs the shared furanocoumarin/CYP3A4 mechanism; + bergamot-specific 39517207)
+- saw_palmetto/ttc (alopecia paper 30980598 demonstrates the 5-AR/DHT mechanism; + NCCIH)
+- rhodiola/sedatives (26613955 IS the cited rhodiola CYP study)
+
+STILL OPEN (generic-reference imprecision, low urgency):
+- iron/thyroid_medications + fiber/thyroid_medications still cite the generic LT4-dosing review 33584551 (calcium has a specific co-source 30368654); deep-link/replace with ingredient-specific evidence.
+- NBK501922 = LactMed database landing page cited for 11 herbs; deep-link each to its per-herb monograph.
+
+---
+
+## (historical) off-claim mismatches (right ingredient, WRONG condition/organ/context)
 
 Lesser than total-topic ghosts but still defects: the cited paper is about the
 ingredient but NOT about the sub-rule's claim. Fix one ingredient at a time,
