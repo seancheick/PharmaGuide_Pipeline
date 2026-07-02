@@ -37,6 +37,49 @@ App table (`condition_thresholds.dart`, PharmaGuide ai repo) — 8 ghosts, all r
 Verified-clean, left as-is: app-table 28150351 (Mg/glycemia), 22318649 (Mg/BP),
 22374556 (ALA T2D RCT — the earlier ghost-21134318 replacement, re-confirmed).
 
+## GENERIC-FILLER CLEANUP (2026-07-02, all live-verified)
+
+A `>=3 distinct ingredients` scan found 58 sub-rules whose SOLE citation was a
+generic landing page that never names the ingredient (FDA "drug-interactions-
+what-you-should-know" x21 ingredients, NCCIH "/health/safety" x10, LactMed
+front page NBK501922 x11) — effectively unsourced warnings. Now 0 remain.
+
+Re-sourced by cluster (each target self-verified live; LactMed NBK ids
+content-checked to the right herb — they mis-map easily):
+- Diabetes/glucose (aloe, fenugreek, fiber, ginseng, psyllium) -> NCCIH
+  diabetes-and-dietary-supplements page; vanadyl -> PMID 37958659; psyllium/
+  lithium -> PMID 1968148 (ispaghula/lithium).
+- MAOI: 5-HTP -> serotonin-syndrome PMID 31523132; pressor amines
+  (phenylethylamine, hordenine, tyramine-rich) -> DailyMed MAOI label.
+- Pregnancy: yohimbe/dong-quai/bitter-melon/ephedra -> MSK; mugwort ->
+  PMC7583039; rue -> PMID 15639078; vitamin A -> ODS Vitamin A.
+- Lactation: sage NBK501816, fenugreek NBK501779, senna NBK501349, cascara
+  NBK501328, aloe NBK501829, black cohosh NBK501781, caffeine NBK501467,
+  St. John's wort NBK501770 (all LactMed, id-verified).
+- Interactions: ginger/schisandra/berberine/ginkgo/cat's-claw -> MSK; selenium
+  -> ODS Selenium; melatonin -> NCCIH melatonin; CBD -> DailyMed Epidiolex label.
+- niacin diabetes/hypoglycemic rules: dropped redundant FDA filler (verified ODS
+  Niacin co-source kept).
+
+REMOVED 8 CLAIM-DUBIOUS sub-rules (no authoritative source, per live checks):
+- vitamin_d / autoimmune, / nsaids, / antiplatelets, / immunosuppressants — ODS
+  lists only orlistat/statins/corticosteroids/thiazides; frames vitamin D as
+  protective in autoimmunity, not interacting. (anticoagulants + thiazide_diuretics kept.)
+- dhea / ttc — MSK doesn't support a "trying-to-conceive" caution (pregnancy kept).
+- guarana / seizure — only a multi-ingredient energy-drink case report.
+- elderberry / autoimmune + immunosuppressants — MSK calls the immune effect
+  "controversial"; no contraindication anywhere.
+
+Softening still worth doing (PARTIAL per sources, low urgency): fenugreek
+galactagogue evidence is weak; sage milk-reduction "purported/unstudied"; black
+cohosh lactation split-opinion; senna is *acceptable* in lactation (not "avoid");
+caffeine = moderation not avoid; vitamin A risk is preformed only (>10,000 IU);
+melatonin "lowers seizure threshold" unproven (epilepsy caution is real);
+cat's-claw hard immunosuppressant contraindication not on current MSK page;
+ginkgo pre-op *timing* should cite ASA/SPAQI. 444 interaction tests pass.
+
+---
+
 ## RESOLUTION LOG — off-claim batch (2026-07-02, all live-verified)
 
 Second commit (off-claim batch). Final verifier state: 186 PMIDs, 4 ghost-suspect

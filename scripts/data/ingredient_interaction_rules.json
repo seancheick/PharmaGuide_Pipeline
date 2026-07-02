@@ -260,7 +260,7 @@
         "mechanism": "Serious toxicity risk profile and regulatory prohibition for supplement use.",
         "notes": "Ephedra-containing supplements should not be used.",
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+          "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/ephedra"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
@@ -437,7 +437,7 @@
           "mechanism": "Stimulant profile and hemodynamic effects present maternal-fetal risk concerns.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
@@ -470,7 +470,7 @@
           "mechanism": "Yohimbe can counter blood pressure-lowering therapy.",
           "action": "Avoid combination with antihypertensive medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
           "alert_body": "Yohimbe's stimulant activity can work against blood-pressure-lowering drugs. If you take antihypertensive medication, talk to your prescriber before using it.",
@@ -502,7 +502,7 @@
         "mechanism": "Safety data are limited and stimulant effects are concerning.",
         "notes": "Avoid in pregnancy and lactation.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
@@ -759,7 +759,7 @@
         "mechanism": "NCCIH indicates oral aloe may be unsafe in pregnancy and breastfeeding.",
         "notes": "This rule is intended for oral/systemic supplement use, not topical-only products.",
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501829/",
           "https://www.nccih.nih.gov/health/aloe-vera"
         ],
         "alert_headline": "Oral aloe not recommended in pregnancy",
@@ -1173,7 +1173,7 @@
           "mechanism": "In-vitro CYP3A4 inhibition; clinical effect modest at typical doses (\u2265500 mg/day). Increasingly common in metabolic-health supplements.",
           "action": "If you take a CYP3A4-substrate prescription drug, talk to your prescriber before adding a berberine supplement.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/berberine"
           ],
           "alert_headline": "May affect prescription drug levels",
           "alert_body": "Berberine can mildly slow the breakdown of certain prescription drugs. Mention berberine use to your prescriber if you take other medications.",
@@ -1552,7 +1552,7 @@
         "mechanism": "Animal studies suggest abortifacient and embryotoxic effects.",
         "notes": "Avoid during pregnancy and lactation.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/bitter-melon"
         ],
         "alert_headline": "Not recommended in pregnancy or breastfeeding",
         "alert_body": "Bitter melon shows abortifacient and embryotoxic signals in animal studies. If you are pregnant or breastfeeding, do not use bitter melon supplements unless directed by your clinician.",
@@ -1661,7 +1661,7 @@
         "mechanism": "Pregnancy safety is uncertain and potential adverse effects are described in safety guidance.",
         "notes": "Avoid in pregnancy; lactation evidence is limited.",
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501781/",
           "https://www.nccih.nih.gov/health/black-cohosh"
         ],
         "alert_headline": "Not recommended during pregnancy",
@@ -1872,7 +1872,7 @@
         "mechanism": "High caffeine exposure can affect maternal-fetal and infant outcomes.",
         "notes": "This threshold applies to supplemental caffeine only; total daily caffeine from beverages/foods should be considered.",
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501467/",
           "https://www.cdc.gov/breastfeeding/breastfeeding-special-circumstances/maternal-or-infant-illnesses/maternal-diet.html"
         ],
         "alert_headline": "Caffeine adds up \u2014 watch total intake",
@@ -2298,7 +2298,7 @@
           "mechanism": "Dong quai is traditionally associated with uterine and hormone-active effects; pregnancy safety is not established.",
           "action": "Avoid during pregnancy unless specifically directed by obstetric clinician.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/dong-quai"
           ],
           "alert_headline": "May affect uterine activity",
           "alert_body": "Dong quai has traditional uterine and hormone-active effects with no established pregnancy safety. If you are pregnant, talk to your obstetrician before any use.",
@@ -2365,7 +2365,7 @@
         "mechanism": "Clinical pregnancy/lactation safety data are limited and precautionary avoidance is recommended.",
         "notes": "Use only with clinician oversight during pregnancy or lactation.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/dong-quai"
         ],
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "Dong quai has traditional uterine and hormone-active effects with no established pregnancy safety. If you are pregnant, talk to your obstetrician before any use.",
@@ -2566,7 +2566,7 @@
         "mechanism": "Traditional concern for uterotonic effects. May also lower blood sugar in pregnant women on glucose management.",
         "notes": "Avoid during pregnancy.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501779/"
         ],
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician; during breastfeeding, use under clinician guidance for milk-supply support.",
@@ -3276,7 +3276,7 @@
           "mechanism": "Ginger inhibits thromboxane A2 (TXA2) synthesis and PAF-induced platelet aggregation. In patients with inherited or acquired bleeding disorders, this antiplatelet activity increases hemorrhage risk.",
           "action": "Use ginger supplements with caution in bleeding disorders. Monitor for bruising or prolonged bleeding.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/ginger"
           ],
           "alert_headline": "Concentrated ginger may raise bleeding risk",
           "alert_body": "High-dose ginger supplements may affect platelet activity. If you have a bleeding disorder or use blood thinners, review use with your clinician. Normal food-level ginger is generally fine.",
@@ -3340,7 +3340,7 @@
           "mechanism": "Additive antiplatelet effect: ginger TXA2 inhibition combined with aspirin COX-1 or clopidogrel ADP pathway inhibition.",
           "action": "Monitor for increased bleeding risk when combining ginger with antiplatelet drugs.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/ginger"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Ginger has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding ginger.",
@@ -3487,7 +3487,7 @@
           "mechanism": "PAF inhibition by ginkgolides increases perioperative bleeding risk. Discontinue at least 2 weeks before scheduled surgery.",
           "action": "Discontinue ginkgo at least 14 days before surgery.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/ginkgo"
           ],
           "alert_headline": "Ginkgo may increase surgical bleeding risk",
           "alert_body": "If you have surgery scheduled, stop ginkgo at least 2 weeks before unless your surgical team advises otherwise. It may increase perioperative bleeding.",
@@ -6419,7 +6419,7 @@
         "mechanism": "Potential fetal risk and broad CYP/P-gp interactions.",
         "notes": "Use in pregnancy should be avoided outside specialist care.",
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501770/",
           "https://www.nccih.nih.gov/health/stjohnswort"
         ],
         "alert_headline": "Not recommended during pregnancy",
@@ -6892,7 +6892,7 @@
         "notes": "Applies to preformed vitamin A forms; carotenoids are not handled by this threshold rule.",
         "sources": [
           "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+          "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
         ],
         "alert_headline": "Keep preformed vitamin A within prenatal range",
         "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
@@ -7698,7 +7698,7 @@
           "mechanism": "Yohimbe has stimulant and hemodynamic effects with concerning maternal-fetal risk profile.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety",
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe",
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
           ],
           "alert_headline": "Stimulant \u2014 do not use in pregnancy",
@@ -7730,7 +7730,7 @@
           "mechanism": "Adrenergic stimulation may increase blood pressure and cardiovascular risk.",
           "action": "Do not use in hypertension or cardiovascular risk settings.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe"
           ],
           "alert_headline": "Not recommended with high blood pressure",
           "alert_body": "If you have high blood pressure, avoid yohimbe. It stimulates adrenergic activity and may raise blood pressure or heart rate.",
@@ -7763,7 +7763,7 @@
           "mechanism": "Yohimbe can counter blood pressure-lowering effects.",
           "action": "Avoid co-use with antihypertensive medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety",
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/yohimbe",
             "https://www.nccih.nih.gov/health/yohimbe"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
@@ -8034,7 +8034,7 @@
           "mechanism": "Artemisia vulgaris contains thujone and other volatile terpenoids with emmenagogue and abortifacient activity. Animal studies demonstrate uterotonic effects.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://pmc.ncbi.nlm.nih.gov/articles/PMC7583039/"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Mugwort contains compounds with uterine-stimulating and historical abortifacient activity. If you are pregnant, do not use mugwort-containing products.",
@@ -8068,7 +8068,7 @@
         "mechanism": "Thujone-containing Artemisia species have documented emmenagogue activity. Traditional abortifacient use is well-described historically.",
         "notes": "Avoid all Artemisia vulgaris preparations during pregnancy and lactation.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://pmc.ncbi.nlm.nih.gov/articles/PMC7583039/"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Mugwort contains compounds with uterine-stimulating and historical abortifacient activity. If you are pregnant, do not use mugwort-containing products.",
@@ -8111,7 +8111,7 @@
           "mechanism": "Ruta graveolens contains furanoquinoline alkaloids (dictamnine, skimmianine) and furanocoumarins with established abortifacient activity. Animal studies confirm embryotoxic and teratogenic effects at moderate doses.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/15639078/"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Rue has established abortifacient activity and teratogenic effects in animal studies. If you are pregnant, do not use rue-containing products.",
@@ -10274,38 +10274,7 @@
         "canonical_id": "vitamin_d"
       },
       "condition_rules": [
-        {
-          "severity": "informational",
-          "mechanism": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
-          "action": "Vitamin D supplementation at standard doses (1000\u20134000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity.",
-          "last_reviewed": "2026-04-09",
-          "condition_id": "autoimmune",
-          "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
-          ],
-          "evidence_level": "probable",
-          "alert_headline": "Use labs to guide vitamin D",
-          "alert_body": "Vitamin D affects immune regulation and is often monitored in autoimmune care. Use blood levels and clinician guidance to avoid under- or over-supplementing.",
-          "informational_note": "Vitamin D affects immune function \u2014 relevant to people with autoimmune conditions.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "autoimmune"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
+        
         {
           "condition_id": "heart_disease",
           "severity": "monitor",
@@ -10452,100 +10421,6 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "anticoagulants"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
-        {
-          "drug_class_id": "antiplatelets",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvement.",
-          "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
-          "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
-          ],
-          "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
-          "informational_note": "Vitamin D can affect platelet function \u2014 relevant to people on antiplatelets.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "antiplatelets"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
-        {
-          "drug_class_id": "nsaids",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti-inflammatory regulatory roles.",
-          "action": "No specific action required at standard supplemental doses.",
-          "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
-          ],
-          "alert_headline": "May add to NSAID bleeding risk",
-          "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
-          "informational_note": "Vitamin D can affect platelet function \u2014 relevant to people on NSAIDs.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "nsaids"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
-        {
-          "severity": "informational",
-          "mechanism": "Vitamin D has additive immunomodulatory effects that may complement immunosuppressant therapy. Standard-dose supplementation is generally considered safe alongside immunosuppressants and may reduce corticosteroid-induced bone loss.",
-          "action": "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight.",
-          "last_reviewed": "2026-04-09",
-          "drug_class_id": "immunosuppressants",
-          "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
-          ],
-          "evidence_level": "probable",
-          "alert_headline": "Caution with immunosuppressants",
-          "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
-          "informational_note": "Vitamin D affects immune function \u2014 relevant to people on immunosuppressants.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "immunosuppressants"
               ],
               "profile_flags_any": []
             },
@@ -11585,7 +11460,7 @@
           "condition_id": "autoimmune",
           "evidence_level": "probable",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/cat-claw"
           ],
           "alert_headline": "Immune-active herb \u2014 use caution",
           "alert_body": "Cat\u2019s claw may affect immune-cell signaling. If you have an autoimmune condition or take immune-suppressing medication, review use with your clinician.",
@@ -11713,7 +11588,7 @@
           "drug_class_id": "immunosuppressants",
           "evidence_level": "probable",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/cat-claw"
           ],
           "alert_headline": "Do not combine with immunosuppressants",
           "alert_body": "Cat's claw stimulates immune pathways that immunosuppressants are designed to calm. If you take transplant or autoimmune medications, do not combine.",
@@ -12280,7 +12155,7 @@
           "last_reviewed": "2026-04-09",
           "condition_id": "thyroid_disorder",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
           ],
           "evidence_level": "probable",
           "alert_headline": "Keep selenium within thyroid-safe range",
@@ -12721,74 +12596,8 @@
         "db": "ingredient_quality_map",
         "canonical_id": "elderberry"
       },
-      "condition_rules": [
-        {
-          "severity": "caution",
-          "mechanism": "Elderberry (Sambucus nigra) extracts stimulate cytokine production including TNF-alpha, IL-1, IL-6, and IL-8. This immune stimulation may exacerbate autoimmune conditions by amplifying the pathological immune response.",
-          "action": "Avoid elderberry supplements in autoimmune conditions. Consult a physician before use if on immunosuppressive therapy.",
-          "last_reviewed": "2026-04-09",
-          "condition_id": "autoimmune",
-          "evidence_level": "probable",
-          "sources": [
-            "https://www.nccih.nih.gov/health/safety"
-          ],
-          "alert_headline": "Immune-active supplement \u2014 use caution",
-          "alert_body": "Elderberry may affect cytokine and immune signaling. If you have an autoimmune condition or use immune-suppressing medication, review it with your clinician.",
-          "informational_note": "Elderberry is immune-stimulating \u2014 relevant to people with autoimmune conditions.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "autoimmune"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
-      "drug_class_rules": [
-        {
-          "severity": "avoid",
-          "mechanism": "Elderberry's pro-inflammatory cytokine stimulation (TNF-alpha, IL-1, IL-6) may functionally oppose immunosuppressive drug therapy, particularly in transplant patients or those with active autoimmune disease.",
-          "action": "Avoid concurrent use with immunosuppressants. Patients on transplant or autoimmune immunosuppression should not take elderberry.",
-          "last_reviewed": "2026-04-09",
-          "drug_class_id": "immunosuppressants",
-          "evidence_level": "probable",
-          "sources": [
-            "https://www.nccih.nih.gov/health/safety"
-          ],
-          "alert_headline": "Do not combine with immunosuppressants",
-          "alert_body": "Elderberry's cytokine-stimulating effects work against immunosuppressive therapy. If you take transplant or autoimmune medications, do not combine.",
-          "informational_note": "Elderberry is immune-stimulating \u2014 relevant to people on immunosuppressant medications.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "immunosuppressants"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
+      "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "pregnancy_category": "no_data",
@@ -12991,7 +12800,7 @@
           "condition_id": "seizure_disorder",
           "evidence_level": "probable",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
           ],
           "alert_headline": "Seizure effects can vary",
           "alert_body": "Melatonin may affect sleep and seizure patterns differently across people. If you have epilepsy, start only with clinician guidance, especially if seizures are unstable.",
@@ -13025,7 +12834,7 @@
           "drug_class_id": "sedatives",
           "evidence_level": "probable",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
           ],
           "alert_headline": "May add to sedative drowsiness",
           "alert_body": "Melatonin has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding melatonin \u2014 the combination can increase drowsiness.",
@@ -13835,7 +13644,7 @@
           "mechanism": "Salvia officinalis (sage) is traditionally used to suppress lactation (antilactogenic effect). The mechanism involves thujone, camphor, and other volatile terpenes which may have estrogenic and/or dopaminergic effects that reduce prolactin and milk production. Sage tea is used as a traditional remedy to wean nursing infants or reduce painful engorgement. Conversely, nursing mothers who consume sage supplements may experience unwanted milk reduction. Thujone in high concentrations can also be neurotoxic.",
           "action": "Avoid sage supplements during established breastfeeding if continuing lactation is desired, as they may reduce milk supply. Culinary amounts of sage in food are generally safe. High-dose sage extracts should be avoided.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety",
+            "https://www.ncbi.nlm.nih.gov/books/NBK501816/",
             "https://www.drugs.com/npp/sage.html"
           ],
           "alert_headline": "May reduce milk supply",
@@ -13870,7 +13679,7 @@
         "mechanism": "Sage contains thujone and other terpenes with potential uterotonic effects (avoid in pregnancy). During lactation, may suppress milk production via antilactogenic mechanisms.",
         "notes": "Avoid supplemental/concentrated sage in pregnancy and during active breastfeeding. Culinary use is generally considered safe at typical food amounts.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501816/"
         ],
         "alert_headline": "Concentrated sage may affect milk supply",
         "alert_body": "Sage at supplement or concentrated doses may reduce milk supply. If you are breastfeeding, talk to your clinician before using concentrated forms; culinary use at typical amounts is fine.",
@@ -13905,37 +13714,7 @@
         "canonical_id": "dhea"
       },
       "condition_rules": [
-        {
-          "condition_id": "ttc",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "DHEA (dehydroepiandrosterone) supplementation at 75 mg/day for \u226512 weeks has been studied in women with diminished ovarian reserve (DOR) undergoing IVF. The DITTO RCT protocol targeted women with AFC \u226410 and AMH \u22645 pmol/L. A controlled case-series (Barad & Gleicher 2006) showed significant improvements in fertilized oocytes, normal Day-3 embryo count, and embryos transferred after DHEA treatment. Proposed mechanism: DHEA converts to androgens and estrogens in follicular cells, improving follicular microenvironment and reducing follicle apoptosis. DHEA should not be used without hormonal workup confirming DOR, as it may disrupt normal hormonal balance in women without ovarian reserve issues.",
-          "action": "DHEA at 75 mg/day may be considered for women with confirmed diminished ovarian reserve, ideally under reproductive endocrinologist guidance. Monitor DHEA-S and androgen levels. Not appropriate for general TTC use without confirmed DOR diagnosis.",
-          "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
-          ],
-          "alert_headline": "DHEA \u2014 fertility clinician only",
-          "alert_body": "DHEA is hormone-active and has been studied in specific fertility-clinic settings. Do not use it casually while trying to conceive; use only with clinician monitoring.",
-          "informational_note": "DHEA is continued under clinician guidance \u2014 relevant to people planning pregnancy.",
-          "profile_gate": {
-            "gate_type": "profile_flag",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [
-                "trying_to_conceive"
-              ]
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
+        
         {
           "condition_id": "pregnancy",
           "severity": "avoid",
@@ -14839,7 +14618,7 @@
           "mechanism": "Schizandrol-rich extracts inhibit CYP3A4. Some clinical interactions documented with tacrolimus and sirolimus. Common in adaptogen blends used by transplant-recovery population.",
           "action": "If you take a CYP3A4-substrate prescription drug, talk to your prescriber before using schisandra. Especially relevant for transplant patients on tacrolimus or sirolimus.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/schisandra"
           ],
           "alert_headline": "May affect prescription drug levels",
           "alert_body": "Schisandra can change levels of certain prescription drugs by inhibiting a key liver enzyme. Especially important for transplant patients.",
@@ -16121,37 +15900,6 @@
             },
             "dose": null
           }
-        },
-        {
-          "condition_id": "seizure_disorder",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "High-dose caffeine (the primary active compound in guarana) lowers the seizure threshold by antagonizing adenosine receptors, which normally exert inhibitory control over neuronal excitability. Case reports document caffeine-triggered seizures in susceptible individuals, and animal studies confirm proconvulsant effects at high doses. Standard-dose guarana supplements provide caffeine equivalent to 1-4 cups of coffee.",
-          "action": "Use caution with guarana in patients with seizure disorders or epilepsy. Limit total daily caffeine from all sources. Inform neurologist of guarana supplement use. Avoid energy drink and pre-workout products containing guarana.",
-          "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
-          ],
-          "alert_headline": "High caffeine may affect seizures",
-          "alert_body": "Guarana can add significant caffeine. High caffeine intake may lower seizure threshold in some people. If you have epilepsy, review high-caffeine supplements with your clinician.",
-          "informational_note": "Guarana may affect seizure threshold \u2014 relevant to people with a seizure disorder.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "seizure_disorder"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
         }
       ],
       "drug_class_rules": [
@@ -16734,7 +16482,7 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501349/"
         ],
         "pregnancy_category": "no_data",
         "lactation_category": "caution",
@@ -17339,7 +17087,7 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501328/"
         ],
         "pregnancy_category": "no_data",
         "lactation_category": "avoid",
@@ -20851,7 +20599,7 @@
           "mechanism": "CBD inhibits CYP3A4, which metabolizes tacrolimus and sirolimus. FDA drug labels for both tacrolimus and sirolimus explicitly warn that CBD co-administration increases their plasma concentrations, risking nephrotoxicity and immunosuppressive toxicity.",
           "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
           "alert_headline": "Caution with immunosuppressants",
           "alert_body": "CBD has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding CBD.",
@@ -20882,7 +20630,7 @@
           "mechanism": "CBD inhibits CYP2C9, which metabolizes warfarin. Case reports document elevated INR when CBD is added to warfarin therapy. The interaction may increase bleeding risk.",
           "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://dailymed.nlm.nih.gov/dailymed/fda/fdaDrugXsl.cfm?setid=8bf27097-4870-43fb-94f0-f3d0871d1eec&type=display"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "CBD has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding CBD and ask about INR or bleeding checks.",
