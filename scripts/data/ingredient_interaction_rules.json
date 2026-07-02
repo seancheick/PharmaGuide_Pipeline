@@ -7994,7 +7994,7 @@
         "notes": "Multiple case reports of serious neonatal adverse events. ACOG and NCCIH advise against use in pregnancy.",
         "sources": [
           "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
-          "https://pubmed.ncbi.nlm.nih.gov/17592099/"
+          "https://pubmed.ncbi.nlm.nih.gov/30000839/"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
@@ -13946,8 +13946,7 @@
           "mechanism": "DHEA is a steroid precursor with potential fetal endocrine effects.",
           "action": "Avoid in pregnancy unless a reproductive specialist has a specific indication.",
           "sources": [
-            "https://medlineplus.gov/druginfo/natural/331.html",
-            "https://pubmed.ncbi.nlm.nih.gov/32852449/"
+            "https://medlineplus.gov/druginfo/natural/331.html"
           ],
           "alert_headline": "Not recommended in pregnancy",
           "alert_body": "DHEA is a steroid precursor that can affect fetal hormone signaling. If you are pregnant, talk to a reproductive specialist before using it.",
@@ -15845,7 +15844,7 @@
           "mechanism": "Red clover (Trifolium pratense) contains coumestrol and coumarin-like compounds alongside isoflavones (biochanin A, formononetin, genistein, daidzein). Coumarins share structural homology with warfarin. Additionally, isoflavone metabolites may mildly inhibit platelet aggregation. While no direct clinical evidence of red clover-induced bleeding has been documented, the structural pharmacology of its constituents supports a caution-level concern in patients with pre-existing bleeding disorders.",
           "action": "Use caution in patients with bleeding disorders. Avoid high-dose red clover isoflavone extracts (>160 mg/day) in active bleeding. Disclose use to clinician.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/9464451/"
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/red-clover"
           ],
           "alert_headline": "Coumarin-like \u2014 limited bleeding evidence",
           "alert_body": "Red clover contains natural coumarins, but clinical bleeding significance at supplement doses is uncertain. If you use blood thinners, mention red clover to your clinician.",
@@ -19132,7 +19131,8 @@
           "mechanism": "L-tyrosine is converted to tyramine in the gut. Tyramine is normally metabolised by MAO-A in the gut wall and liver (first-pass). MAO inhibitors block this pathway, leading to tyramine accumulation and triggering norepinephrine release from sympathetic nerve terminals \u2014 the classic 'cheese reaction' causing hypertensive crisis (severe headache, diaphoresis, hypertension to malignant levels, stroke risk).",
           "action": "Absolutely contraindicated with MAOIs. A tyramine-restricted diet AND avoidance of tyrosine supplements is mandatory during MAOI therapy.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/37937763/"
+            "https://pubmed.ncbi.nlm.nih.gov/6472051/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=380d7717-2a79-42f3-a712-efe5e7696ba0"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "L-tyrosine converts to tyramine, which MAOIs prevent the body from breaking down. If you take an MAOI, do not combine \u2014 this pairing risks a hypertensive crisis.",
