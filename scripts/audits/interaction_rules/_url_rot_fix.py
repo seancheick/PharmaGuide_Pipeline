@@ -1,8 +1,25 @@
 #!/usr/bin/env python3
-"""Replace all dead URLs identified by URL_ROT_REPORT.md with verified PubMed or authoritative sources.
+"""One-off audit tool: replace dead URLs (from URL_ROT_REPORT.md) in
+ingredient_interaction_rules.json with content-verified PubMed sources.
 
-Reads the current rules file, finds entries with dead URLs, searches PubMed
-for topic-specific reviews, and replaces. Each replacement is logged.
+STATUS: COMPLETED / INERT as of 2026-07-02 — all 22 mapped dead URLs are already
+gone from the data file, so a re-run is a no-op. Kept, hardened, for reference.
+
+HARDENED 2026-07-02 after a near-miss where auto-selected sources reached a
+working tree unverified:
+  * DRY-RUN BY DEFAULT. It writes the clinical data file ONLY with an explicit
+    `--apply` flag. (Previously it wrote unless `--dry-run` was passed — running
+    it with no args silently overwrote the file.)
+  * CONTENT-VERIFIED replacements. A candidate PMID is accepted ONLY if its
+    fetched title+abstract actually shares a topic word with the ingredient/
+    query — the "real PMID, wrong topic = ghost reference" failure mode is
+    rejected and logged, not written. (Previously it took pubmed_search()[0]
+    blind, with no topic check.) See the `critical_no_hallucinated_citations`
+    rule: PMID existence never proves relevance.
+
+Usage:
+    python3 scripts/audits/interaction_rules/_url_rot_fix.py            # dry-run (default)
+    python3 scripts/audits/interaction_rules/_url_rot_fix.py --apply    # write the file
 """
 import json, os, re, sys, time, urllib.request, urllib.parse, urllib.error
 
@@ -33,17 +50,41 @@ def _get(url, params, retries=4):
             raise
     raise last
 
-def pubmed_search(term, n=3):
+def pubmed_search(term, n=4):
     raw = _get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi',
                dict(db='pubmed', term=term, retmode='json', retmax=n, sort='relevance'))
     return json.loads(raw).get('esearchresult', {}).get('idlist', [])
 
-def pubmed_title(pmid):
-    raw = _get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi',
-               dict(db='pubmed', id=pmid, retmode='json'))
-    result = json.loads(raw).get('result', {})
-    entry = result.get(pmid, {})
-    return entry.get('title', ''), entry.get('pubdate', ''), entry.get('source', '')
+def pubmed_fetch_text(pmid):
+    """efetch title+abstract as plain text (used for topic verification)."""
+    raw = _get('https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi',
+               dict(db='pubmed', id=pmid, rettype='abstract', retmode='text'))
+    return raw.decode('utf-8', 'replace')
+
+# Generic words that don't identify a topic — stripped before overlap so a
+# match must be on the ingredient itself, not on "safety"/"review"/etc.
+_STOP = {
+    'safety', 'review', 'systematic', 'meta', 'analysis', 'pharmacology', 'clinical',
+    'supplement', 'supplements', 'supplemental', 'extract', 'drug', 'interaction',
+    'interactions', 'toxicity', 'content', 'standardization', 'oral', 'human', 'study',
+    'trial', 'effects', 'effect', 'health', 'dietary', 'acid', 'acids', 'from', 'with',
+    'and', 'the', 'for', 'randomized', 'controlled', 'double', 'blind', 'placebo',
+    'evidence', 'based', 'update', 'overview', 'report', 'case',
+}
+
+def _topic_words(text):
+    return {w for w in re.findall(r'[a-z]{4,}', (text or '').lower()) if w not in _STOP}
+
+def _on_topic(query, article_text):
+    """True iff the fetched article shares a non-generic topic word with the
+    query (the query is authored to name the ingredient, e.g. 'Nigella sativa
+    black seed ...'). Conservative: no overlap -> reject (manual review)."""
+    return bool(_topic_words(query) & _topic_words(article_text))
+
+def _should_apply(argv):
+    """Write the data file ONLY when --apply is explicitly passed."""
+    return '--apply' in argv
+
 
 # Dead URLs from the audit → ingredient + search query
 DEAD_URL_REPLACEMENTS = {
@@ -87,22 +128,31 @@ HERBS_AT_A_GLANCE_ENTRIES = {
 
 
 def find_replacement_pmid(query):
-    """Search PubMed and return the best PMID + URL or None."""
+    """Search PubMed and return a CONTENT-VERIFIED replacement URL, or None.
+
+    Walks candidates in relevance order and returns the first whose fetched
+    title+abstract is on-topic for the query. Never returns an unverified PMID:
+    if no candidate is on-topic, returns None so the caller logs a failure for
+    manual review instead of writing a possible ghost reference.
+    """
     try:
-        ids = pubmed_search(query, 3)
-        if not ids:
-            return None
-        # Pick the first (most relevant)
-        pmid = ids[0]
-        title, date, src = pubmed_title(pmid)
-        time.sleep(0.4)
-        return f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'
+        for pmid in pubmed_search(query, 4):
+            text = pubmed_fetch_text(pmid)
+            time.sleep(0.34)
+            if _on_topic(query, text):
+                first_line = text.strip().split('\n', 1)[0][:90]
+                print(f'    verified PMID {pmid}: {first_line}', file=sys.stderr)
+                return f'https://pubmed.ncbi.nlm.nih.gov/{pmid}/'
+            print(f'    rejected PMID {pmid} (off-topic for "{query[:40]}")', file=sys.stderr)
+        return None
     except Exception as e:
         print(f'  ERROR searching "{query}": {e}', file=sys.stderr)
         return None
 
 
 def main():
+    apply = _should_apply(sys.argv)
+
     with open(RULES_PATH) as f:
         data = json.load(f)
 
@@ -112,36 +162,36 @@ def main():
 
     # Build lookup: dead_url → replacement_url
     replacements = {}
-    print('Searching PubMed for replacements...', file=sys.stderr)
+    print('Searching PubMed for content-verified replacements...', file=sys.stderr)
 
     for dead_url, (cid, query) in DEAD_URL_REPLACEMENTS.items():
         if query is None:
             continue  # herbs-at-a-glance handled separately
+        # Only bother hitting the API for URLs still present in the file.
+        if dead_url not in json.dumps(data):
+            continue
         print(f'  {cid}: {query[:50]}...', file=sys.stderr)
         repl = find_replacement_pmid(query)
         if repl:
             replacements[dead_url] = repl
-            print(f'    → {repl}', file=sys.stderr)
         else:
             failed.append((dead_url, cid))
-            print(f'    → FAILED', file=sys.stderr)
+            print(f'    → FAILED (no on-topic PubMed match)', file=sys.stderr)
 
     # herbs-at-a-glance: per-entry replacement
     hag_url = 'https://www.nccih.nih.gov/health/herbs-at-a-glance'
     hag_replacements = {}
-    for cid, query in HERBS_AT_A_GLANCE_ENTRIES.items():
-        print(f'  {cid} (herbs-at-a-glance): {query[:50]}...', file=sys.stderr)
-        repl = find_replacement_pmid(query)
-        if repl:
-            hag_replacements[cid] = repl
-            print(f'    → {repl}', file=sys.stderr)
-        else:
-            failed.append((hag_url, cid))
-            print(f'    → FAILED', file=sys.stderr)
+    if hag_url in json.dumps(data):
+        for cid, query in HERBS_AT_A_GLANCE_ENTRIES.items():
+            print(f'  {cid} (herbs-at-a-glance): {query[:50]}...', file=sys.stderr)
+            repl = find_replacement_pmid(query)
+            if repl:
+                hag_replacements[cid] = repl
+            else:
+                failed.append((hag_url, cid))
+                print(f'    → FAILED (no on-topic PubMed match)', file=sys.stderr)
 
     # Apply replacements to rules
-    url_re = re.compile(r'https?://[^\s"]+')
-
     for r in rules:
         sr = r.get('subject_ref', {})
         cid = sr.get('canonical_id') if isinstance(sr, dict) else str(sr)
@@ -177,19 +227,17 @@ def main():
                     dt['note'] = note.replace(dead_url, repl_url)
                     changes.append(f'{cid}: dose note inline URL replaced')
 
-    # Canada timeout URL — just flag, don't replace blindly
-    # (it was a timeout, not a confirmed 404)
-
-    if not sys.argv[1:] or '--dry-run' not in sys.argv:
+    if apply and changes:
         with open(RULES_PATH, 'w', encoding='utf-8') as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
             f.write('\n')
 
-    print(f'\n{"DRY RUN — " if "--dry-run" in sys.argv else ""}Applied {len(changes)} URL replacements', file=sys.stderr)
+    banner = 'APPLIED' if (apply and changes) else 'DRY RUN (default; pass --apply to write)'
+    print(f'\n{banner} — {len(changes)} content-verified URL replacement(s)', file=sys.stderr)
     for c in changes:
         print(f'  ✓ {c}', file=sys.stderr)
     if failed:
-        print(f'\n⚠ {len(failed)} replacements FAILED (no PubMed match):', file=sys.stderr)
+        print(f'\n⚠ {len(failed)} replacement(s) had NO on-topic PubMed match — MANUAL REVIEW:', file=sys.stderr)
         for url, cid in failed:
             print(f'  {cid}: {url[:60]}', file=sys.stderr)
 
