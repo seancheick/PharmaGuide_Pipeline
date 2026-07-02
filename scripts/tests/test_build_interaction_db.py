@@ -424,7 +424,9 @@ def test_interactions_columns_match_spec(build_ctx):
         "retired_at",
         "retired_reason",
     }
-    missing = (required_base | required_enhancements) - cols
+    # Smart-flagging Phase 2 two-axis classification (2026-07-02)
+    required_classification = {"direction", "materiality"}
+    missing = (required_base | required_enhancements | required_classification) - cols
     assert not missing, f"missing columns: {missing}"
 
 

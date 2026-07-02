@@ -49,6 +49,7 @@ REQUIRED_SCHEMA_VERSIONS = {
     "6.1.0",
     "6.1.1",
     "6.1.3",
+    "6.2.0",  # ingredient_interaction_rules.json — smart-flagging Phase 2 direction/materiality
 }
 
 # Files that belong to a different subsystem and carry their own schema

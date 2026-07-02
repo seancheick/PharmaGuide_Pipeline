@@ -1,7 +1,7 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
-    "last_updated": "2026-05-27",
+    "schema_version": "1.1.0",
+    "last_updated": "2026-07-02",
     "total_entries": 108,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
@@ -15,7 +15,8 @@
     "migration_notes": [
       "2026-05-27T15:05:47Z: Fixed agent2_canonical_id misassignment on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY (phosphatidylserine -> genistein; soy isoflavones are pharmacologically distinct from phosphatidylserine). Added PMID 16571087 (Messina & Redmond, Thyroid 2006) to DSI_LEVOTHYROXINE_SOY source_pmids — content-verified via PubMed esummary API. Candidate PMID 15448175 rejected as ghost reference (real but off-topic: plant plasma membrane radicals).",
       "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override.",
-      "2026-05-27T15:26:04Z: Added food_advisory_note schema to 5 Med-Food entries (DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE, DSI_MAOI_TYRAMINE). New optional fields: alert_style ('food_advisory_note'), note_body (plain-English explainer), practical_guidance (action-oriented). Added content-verified PMIDs: 26299317, 16814135, 35322792, 3525654 (DSI_LEVOTHYROXINE_COFFEE already had 18341376). Each PMID title content-verified via PubMed esummary API on 2026-05-27. Clinical severity field unchanged — alert_style controls UI tone, not clinical truth."
+      "2026-05-27T15:26:04Z: Added food_advisory_note schema to 5 Med-Food entries (DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE, DSI_MAOI_TYRAMINE). New optional fields: alert_style ('food_advisory_note'), note_body (plain-English explainer), practical_guidance (action-oriented). Added content-verified PMIDs: 26299317, 16814135, 35322792, 3525654 (DSI_LEVOTHYROXINE_COFFEE already had 18341376). Each PMID title content-verified via PubMed esummary API on 2026-05-27. Clinical severity field unchanged — alert_style controls UI tone, not clinical truth.",
+      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 110 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py."
     ]
   },
   "interactions": [
@@ -53,7 +54,9 @@
       "applies_to": "dose_dependent",
       "evidence_notes": "Vitamin K directly antagonizes warfarin mechanism. This is stated on every warfarin drug label. NIH ODS Vitamin K fact sheet explicitly warns anticoagulant users.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_k"
+      "agent2_canonical_id": "vitamin_k",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_OMEGA3",
@@ -87,7 +90,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "fish_oil"
+      "agent2_canonical_id": "fish_oil",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_WAR_GINKGO",
@@ -121,7 +126,9 @@
       "clinical_confidence": "medium",
       "evidence_notes": "Mixed: observational data suggest increased bleeding risk, but controlled studies at recommended doses show no significant effect. Severity reflects precautionary approach for anticoagulant users.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginkgo"
+      "agent2_canonical_id": "ginkgo",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_GARLIC",
@@ -156,7 +163,9 @@
       "evidence_notes": "Mainly case reports. Culinary amounts are safe. Concentrated supplements may have mild antiplatelet effect.",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "garlic"
+      "agent2_canonical_id": "garlic",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_WAR_SJW",
@@ -192,7 +201,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_VITE",
@@ -226,7 +237,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_e"
+      "agent2_canonical_id": "vitamin_e",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_WAR_COQ10",
@@ -258,7 +271,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "coq10"
+      "agent2_canonical_id": "coq10",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_GLUCOSAMINE",
@@ -288,7 +303,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "glucosamine"
+      "agent2_canonical_id": "glucosamine",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_CRANBERRY",
@@ -318,7 +335,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "cranberry"
+      "agent2_canonical_id": "cranberry",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_TURMERIC",
@@ -352,7 +371,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "turmeric"
+      "agent2_canonical_id": "turmeric",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_WAR_DONGQUAI",
@@ -383,7 +404,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "dong_quai"
+      "agent2_canonical_id": "dong_quai",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_GINGER",
@@ -414,7 +437,9 @@
       "evidence_notes": "Theoretical based on in-vitro platelet inhibition. Clinical evidence for interaction at dietary doses is weak.",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginger"
+      "agent2_canonical_id": "ginger",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_SJW",
@@ -459,7 +484,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_STATINS_RYR",
@@ -505,7 +532,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "BANNED_RED_YEAST_RICE"
+      "agent2_canonical_id": "BANNED_RED_YEAST_RICE",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_STATINS_GRAPEFRUIT",
@@ -547,7 +576,9 @@
       "agent2_canonical_id": "grapefruit",
       "alert_style": "food_advisory_note",
       "note_body": "Grapefruit and grapefruit juice can affect how your body breaks down some statins (simvastatin, atorvastatin, lovastatin). It slows down a liver enzyme, which means more of the drug stays in your system than intended. This can raise the chance of muscle aches or weakness.",
-      "practical_guidance": "Either skip grapefruit while on these statins, or talk to your prescriber about switching to pravastatin, rosuvastatin, or fluvastatin — those aren't affected by grapefruit."
+      "practical_guidance": "Either skip grapefruit while on these statins, or talk to your prescriber about switching to pravastatin, rosuvastatin, or fluvastatin — those aren't affected by grapefruit.",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_STATINS_NIACIN",
@@ -591,7 +622,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_b3_niacin"
+      "agent2_canonical_id": "vitamin_b3_niacin",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_STATINS_COQ10",
@@ -622,7 +655,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "coq10"
+      "agent2_canonical_id": "coq10",
+      "direction": "neutral",
+      "materiality": "presence"
     },
     {
       "id": "DSI_SSRI_SJW",
@@ -657,7 +692,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_SSRI_5HTP",
@@ -688,7 +725,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "5_htp"
+      "agent2_canonical_id": "5_htp",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_SSRI_SAME",
@@ -722,7 +761,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "same"
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_SSRI_FISHOIL",
@@ -752,7 +793,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "fish_oil"
+      "agent2_canonical_id": "fish_oil",
+      "direction": "neutral",
+      "materiality": "presence"
     },
     {
       "id": "DSI_SSRI_GINKGO",
@@ -785,7 +828,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginkgo"
+      "agent2_canonical_id": "ginkgo",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_SSRI_MELATONIN",
@@ -818,7 +863,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "melatonin"
+      "agent2_canonical_id": "melatonin",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ACEI_POTASSIUM",
@@ -850,7 +897,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "potassium"
+      "agent2_canonical_id": "potassium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTIHYP_LICORICE",
@@ -884,7 +933,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "licorice"
+      "agent2_canonical_id": "licorice",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_BETABLOCK_EPHEDRA",
@@ -918,7 +969,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ephedra"
+      "agent2_canonical_id": "ephedra",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_CCB_GRAPEFRUIT",
@@ -960,7 +1013,9 @@
       "agent2_canonical_id": "grapefruit",
       "alert_style": "food_advisory_note",
       "note_body": "Grapefruit slows down how your body processes some blood pressure medicines (felodipine, nifedipine, amlodipine), so more of the drug ends up in your bloodstream. This can cause dizziness, flushing, or low blood pressure.",
-      "practical_guidance": "Skip grapefruit and grapefruit juice while on these medicines. The effect can last 1–3 days, so timing the dose around grapefruit doesn't really help."
+      "practical_guidance": "Skip grapefruit and grapefruit juice while on these medicines. The effect can last 1–3 days, so timing the dose around grapefruit doesn't really help.",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_DIURETICS_POTASSIUM",
@@ -990,7 +1045,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "potassium"
+      "agent2_canonical_id": "potassium",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_ACEI_IRON",
@@ -1020,7 +1077,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "iron"
+      "agent2_canonical_id": "iron",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTIHYP_COQ10",
@@ -1053,7 +1112,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "coq10"
+      "agent2_canonical_id": "coq10",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_METFORMIN_ALA",
@@ -1084,7 +1145,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "alpha_lipoic_acid"
+      "agent2_canonical_id": "alpha_lipoic_acid",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_CHROMIUM",
@@ -1118,7 +1181,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "chromium"
+      "agent2_canonical_id": "chromium",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_BERBERINE",
@@ -1152,7 +1217,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "berberine_supplement"
+      "agent2_canonical_id": "berberine_supplement",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_DM_BITTERMELON",
@@ -1186,7 +1253,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "bitter_melon"
+      "agent2_canonical_id": "bitter_melon",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_FENUGREEK",
@@ -1219,7 +1288,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "fenugreek"
+      "agent2_canonical_id": "fenugreek",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_GYMNEMA",
@@ -1252,7 +1323,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "gymnema_sylvestre"
+      "agent2_canonical_id": "gymnema_sylvestre",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_CINNAMON",
@@ -1285,7 +1358,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "cinnamon"
+      "agent2_canonical_id": "cinnamon",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_LEVOTHYROXINE_CALCIUM",
@@ -1318,7 +1393,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "calcium"
+      "agent2_canonical_id": "calcium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_LEVOTHYROXINE_IRON",
@@ -1351,7 +1428,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "iron"
+      "agent2_canonical_id": "iron",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_LEVOTHYROXINE_MAGNESIUM",
@@ -1381,7 +1460,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium"
+      "agent2_canonical_id": "magnesium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_LEVOTHYROXINE_SOY",
@@ -1419,7 +1500,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "genistein"
+      "agent2_canonical_id": "genistein",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_LEVOTHYROXINE_COFFEE",
@@ -1459,7 +1542,9 @@
       "agent2_canonical_id": "coffee",
       "alert_style": "food_advisory_note",
       "note_body": "Coffee, especially espresso, can reduce how much levothyroxine your body absorbs when you take them close together. This isn't dangerous, but it can mean your thyroid medicine doesn't work as well.",
-      "practical_guidance": "Take levothyroxine with water on an empty stomach, and wait at least 30–60 minutes before having coffee or breakfast."
+      "practical_guidance": "Take levothyroxine with water on an empty stomach, and wait at least 30–60 minutes before having coffee or breakfast.",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IMMUNO_SJW",
@@ -1492,7 +1577,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IMMUNO_ECHINACEA",
@@ -1523,7 +1610,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "echinacea"
+      "agent2_canonical_id": "echinacea",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IMMUNO_CATSCLAW",
@@ -1553,7 +1642,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "cat_s_claw"
+      "agent2_canonical_id": "cat_s_claw",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IMMUNO_ASTRAGALUS",
@@ -1583,7 +1674,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "astragalus"
+      "agent2_canonical_id": "astragalus",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IMMUNO_GRAPEFRUIT",
@@ -1624,7 +1717,9 @@
       "practical_guidance": "Avoid grapefruit and grapefruit juice entirely while on transplant immunosuppressants. Be consistent — even occasional grapefruit can shift your levels.",
       "source_pmids": [
         "35322792"
-      ]
+      ],
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICONV_FOLATE",
@@ -1658,7 +1753,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_b9_folate"
+      "agent2_canonical_id": "vitamin_b9_folate",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICONV_VITD",
@@ -1690,7 +1787,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_d"
+      "agent2_canonical_id": "vitamin_d",
+      "direction": "neutral",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICONV_EPO",
@@ -1722,7 +1821,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "evening_primrose_oil"
+      "agent2_canonical_id": "evening_primrose_oil",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICONV_GINKGO",
@@ -1753,7 +1854,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginkgo"
+      "agent2_canonical_id": "ginkgo",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_MAOI_TYRAMINE",
@@ -1796,7 +1899,9 @@
       "agent2_canonical_id": "tyramine",
       "alert_style": "food_advisory_note",
       "note_body": "MAOIs block an enzyme that normally breaks down tyramine in foods like aged cheese, cured meats, fermented foods, and tap beer. With the enzyme blocked, tyramine can spike blood pressure quickly.",
-      "practical_guidance": "A low-tyramine diet is essential while on MAOIs. Your prescriber or a dietitian should walk you through the food list. Headache, sweating, or chest pain after a meal can mean a tyramine reaction — call your prescriber."
+      "practical_guidance": "A low-tyramine diet is essential while on MAOIs. Your prescriber or a dietitian should walk you through the food list. Headache, sweating, or chest pain after a meal can mean a tyramine reaction — call your prescriber.",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_MAOI_SJW",
@@ -1831,7 +1936,9 @@
       "applies_to": "whole_class",
       "evidence_notes": "St Johns Wort is a known serotonergic agent. Combination with MAOIs carries serotonin syndrome risk. NCCIH and FDA both warn against this combination.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_MAOI_5HTP",
@@ -1862,7 +1969,9 @@
       "applies_to": "whole_class",
       "evidence_notes": "5-HTP is a direct serotonin precursor. Combination with MAOIs is universally contraindicated due to serotonin syndrome risk. Clinical pharmacology consensus.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "5_htp"
+      "agent2_canonical_id": "5_htp",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_MAOI_SAME",
@@ -1896,7 +2005,9 @@
       "applies_to": "whole_class",
       "evidence_notes": "SAMe has documented serotonergic activity. NCCIH explicitly warns against combination with serotonergic drugs including MAOIs.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "same"
+      "agent2_canonical_id": "same",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_MAOI_GINSENG",
@@ -1927,7 +2038,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginseng"
+      "agent2_canonical_id": "ginseng",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_NSAID_FISHOIL",
@@ -1957,7 +2070,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "fish_oil"
+      "agent2_canonical_id": "fish_oil",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_NSAID_GARLIC",
@@ -1987,7 +2102,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "garlic"
+      "agent2_canonical_id": "garlic",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_NSAID_GINKGO",
@@ -2020,7 +2137,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginkgo"
+      "agent2_canonical_id": "ginkgo",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_NSAID_WILLOWBARK",
@@ -2052,7 +2171,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "white_willow_bark"
+      "agent2_canonical_id": "white_willow_bark",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_SEDATIVES_VALERIAN",
@@ -2086,7 +2207,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "valerian"
+      "agent2_canonical_id": "valerian",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_SEDATIVES_KAVA",
@@ -2119,7 +2242,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "kavalactones"
+      "agent2_canonical_id": "kavalactones",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_BENZO_MELATONIN",
@@ -2149,7 +2274,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "melatonin"
+      "agent2_canonical_id": "melatonin",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_SEDATIVES_PASSIONFLOWER",
@@ -2179,7 +2306,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "passionflower"
+      "agent2_canonical_id": "passionflower",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_PPI_IRON",
@@ -2211,7 +2340,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "iron"
+      "agent2_canonical_id": "iron",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_PPI_B12",
@@ -2243,7 +2374,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_b12_cobalamin"
+      "agent2_canonical_id": "vitamin_b12_cobalamin",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_PPI_MAGNESIUM",
@@ -2274,7 +2407,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium"
+      "agent2_canonical_id": "magnesium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_PPI_CALCIUM",
@@ -2306,7 +2441,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "calcium"
+      "agent2_canonical_id": "calcium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_CORTICO_LICORICE",
@@ -2339,7 +2476,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "licorice"
+      "agent2_canonical_id": "licorice",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_CORTICO_CALCIUM_VITD",
@@ -2370,7 +2509,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "calcium"
+      "agent2_canonical_id": "calcium",
+      "direction": "neutral",
+      "materiality": "presence"
     },
     {
       "id": "DSI_CORTICO_ECHINACEA",
@@ -2400,7 +2541,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "echinacea"
+      "agent2_canonical_id": "echinacea",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_OC_SJW",
@@ -2435,7 +2578,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_OC_CHASTEBERRY",
@@ -2465,7 +2610,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "chasteberry"
+      "agent2_canonical_id": "chasteberry",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_OC_SOY",
@@ -2495,7 +2642,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "genistein"
+      "agent2_canonical_id": "genistein",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "SSI_IRON_CALCIUM",
@@ -2526,7 +2675,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "agent1_canonical_id": "iron",
-      "agent2_canonical_id": "calcium"
+      "agent2_canonical_id": "calcium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "SSI_IRON_GREENTEA",
@@ -2558,7 +2709,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "agent1_canonical_id": "iron",
-      "agent2_canonical_id": "green_tea_extract"
+      "agent2_canonical_id": "green_tea_extract",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "SSI_ZINC_COPPER",
@@ -2592,7 +2745,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": "zinc",
-      "agent2_canonical_id": "copper"
+      "agent2_canonical_id": "copper",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "SSI_SJW_5HTP",
@@ -2625,7 +2780,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
       "agent1_canonical_id": "st_johns_wort",
-      "agent2_canonical_id": "5_htp"
+      "agent2_canonical_id": "5_htp",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "SSI_KAVA_ACETAMINOPHEN",
@@ -2657,7 +2814,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": "kavalactones",
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "SSI_VITE_VITK",
@@ -2691,7 +2850,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": "vitamin_e",
-      "agent2_canonical_id": "vitamin_k"
+      "agent2_canonical_id": "vitamin_k",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_DM_VITD",
@@ -2725,7 +2886,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_d"
+      "agent2_canonical_id": "vitamin_d",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",
@@ -2759,7 +2922,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium"
+      "agent2_canonical_id": "magnesium",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_ANTIPSYCH_MELATONIN",
@@ -2789,7 +2954,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "melatonin"
+      "agent2_canonical_id": "melatonin",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_ANTICOAG_CBD",
@@ -2823,7 +2990,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "cbd"
+      "agent2_canonical_id": "cbd",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTIHYP_CBD",
@@ -2856,7 +3025,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "cbd"
+      "agent2_canonical_id": "cbd",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_STATINS_CBD",
@@ -2889,7 +3060,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "cbd"
+      "agent2_canonical_id": "cbd",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICOAG_VINPOCETINE",
@@ -2923,7 +3096,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "nootropic_vinpocetine"
+      "agent2_canonical_id": "nootropic_vinpocetine",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICOAG_HORSE_CHESTNUT",
@@ -2955,7 +3130,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "horse_chestnut_seed"
+      "agent2_canonical_id": "horse_chestnut_seed",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_ASHWAGANDHA",
@@ -2988,7 +3165,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ashwagandha"
+      "agent2_canonical_id": "ashwagandha",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_ANTIHYP_ASHWAGANDHA",
@@ -3021,7 +3200,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ashwagandha"
+      "agent2_canonical_id": "ashwagandha",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_SEDATIVES_ASHWAGANDHA",
@@ -3054,7 +3235,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ashwagandha"
+      "agent2_canonical_id": "ashwagandha",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_THYROID_TURMERIC",
@@ -3087,7 +3270,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "turmeric"
+      "agent2_canonical_id": "turmeric",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICOAG_TURMERIC",
@@ -3120,7 +3305,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "turmeric"
+      "agent2_canonical_id": "turmeric",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_DM_MAGNESIUM",
@@ -3154,7 +3341,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium"
+      "agent2_canonical_id": "magnesium",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "SSI_MAGNESIUM_CALCIUM",
@@ -3184,7 +3373,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": "magnesium",
-      "agent2_canonical_id": "calcium"
+      "agent2_canonical_id": "calcium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "SSI_VITD_VITK2",
@@ -3217,7 +3408,9 @@
       "clinical_confidence": "low",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": "vitamin_d",
-      "agent2_canonical_id": "vitamin_k"
+      "agent2_canonical_id": "vitamin_k",
+      "direction": "neutral",
+      "materiality": "presence"
     },
     {
       "id": "DSI_BETABLOCK_MELATONIN",
@@ -3250,7 +3443,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "melatonin"
+      "agent2_canonical_id": "melatonin",
+      "direction": "neutral",
+      "materiality": "presence"
     },
     {
       "id": "DSI_HIV_SJW",
@@ -3282,7 +3477,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IMMUNOSUP_PROBIOTICS",
@@ -3314,7 +3511,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "probiotic_unspecified"
+      "agent2_canonical_id": "probiotic_unspecified",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTICOAG_GINSENG",
@@ -3345,7 +3544,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "ginseng"
+      "agent2_canonical_id": "ginseng",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ANTIHYP_VITD",
@@ -3377,7 +3578,9 @@
       "clinical_confidence": "low",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "vitamin_d"
+      "agent2_canonical_id": "vitamin_d",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_FISHOIL_VITE",
@@ -3407,7 +3610,9 @@
         }
       },
       "evidence_basis": "systematic_review",
-      "clinical_confidence": "moderate"
+      "clinical_confidence": "moderate",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_FISHOIL_GINKGO",
@@ -3437,7 +3642,9 @@
         }
       },
       "evidence_basis": "review",
-      "clinical_confidence": "moderate"
+      "clinical_confidence": "moderate",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_MELATONIN_VALERIAN",
@@ -3467,7 +3674,9 @@
         }
       },
       "evidence_basis": "mechanism_inferred",
-      "clinical_confidence": "low"
+      "clinical_confidence": "low",
+      "direction": "harmful",
+      "materiality": "dose_dependent"
     },
     {
       "id": "DSI_CALCIUM_FLUOROQUINOLONE",
@@ -3497,7 +3706,9 @@
         }
       },
       "evidence_basis": "rct",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_IRON_PPI",
@@ -3527,7 +3738,9 @@
         }
       },
       "evidence_basis": "observational",
-      "clinical_confidence": "moderate"
+      "clinical_confidence": "moderate",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_MAGNESIUM_BISPHOSPHONATE",
@@ -3557,7 +3770,9 @@
         }
       },
       "evidence_basis": "preclinical",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_GINKGO_ANTIPLATELET",
@@ -3587,7 +3802,9 @@
         }
       },
       "evidence_basis": "systematic_review",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_VITE_ANTICOAG",
@@ -3617,7 +3834,9 @@
         }
       },
       "evidence_basis": "review",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_ZINC_FLUOROQUINOLONE",
@@ -3647,7 +3866,9 @@
         }
       },
       "evidence_basis": "review",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "direction": "harmful",
+      "materiality": "presence"
     }
   ]
 }

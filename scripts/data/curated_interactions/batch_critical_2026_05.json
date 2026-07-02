@@ -1,11 +1,14 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
-    "last_updated": "2026-05-26",
+    "schema_version": "1.1.0",
+    "last_updated": "2026-07-02",
     "total_entries": 10,
     "purpose": "Wave 8 critical-only drug-supplement interaction additions",
     "selection_policy": "Only interactions with label-backed avoid guidance, narrow-therapeutic-index treatment-failure risk, severe electrolyte risk, antibiotic treatment-failure risk, or human PK evidence. No Minor/monitor entries.",
-    "notes": "Drug classes are intentionally narrow to avoid broad warning noise. Biotin diagnostic interference is handled in ingredient_interaction_rules.json, not in this interaction DB shard. Fluoroquinolone mineral rows are timing/treatment-failure rules and should be surfaced only with active antibiotic context."
+    "notes": "Drug classes are intentionally narrow to avoid broad warning noise. Biotin diagnostic interference is handled in ingredient_interaction_rules.json, not in this interaction DB shard. Fluoroquinolone mineral rows are timing/treatment-failure rules and should be surfaced only with active antibiotic context.",
+    "migration_notes": [
+      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 10 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py."
+    ]
   },
   "interactions": [
     {
@@ -41,7 +44,9 @@
       "applies_to": "whole_class",
       "evidence_notes": "DailyMed labeling for apixaban and rivaroxaban explicitly names St. John's wort among combined P-gp/CYP3A inducers to avoid; dabigatran and edoxaban labels warn against P-gp inducers that reduce exposure.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_POTASSIUM_SPARING_DIURETICS_POTASSIUM",
@@ -74,7 +79,9 @@
       "applies_to": "whole_class",
       "evidence_notes": "Spironolactone labeling warns against potassium supplementation and high-potassium salt substitutes because of hyperkalemia risk.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "potassium"
+      "agent2_canonical_id": "potassium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_DIGOXIN_SJW",
@@ -111,7 +118,9 @@
       "applies_to": "dose_dependent",
       "evidence_notes": "Human pharmacokinetic evidence and digoxin labeling support a clinically relevant reduction in digoxin concentration with St. John's wort.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "st_johns_wort"
+      "agent2_canonical_id": "st_johns_wort",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_TETRACYCLINES_CALCIUM",
@@ -143,7 +152,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "calcium"
+      "agent2_canonical_id": "calcium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_TETRACYCLINES_IRON",
@@ -175,7 +186,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "iron"
+      "agent2_canonical_id": "iron",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_TETRACYCLINES_MAGNESIUM",
@@ -207,7 +220,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "magnesium"
+      "agent2_canonical_id": "magnesium",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_TETRACYCLINES_ZINC",
@@ -238,7 +253,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "zinc"
+      "agent2_canonical_id": "zinc",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DSI_NADOLOL_GREEN_TEA",
@@ -276,7 +293,9 @@
       "applies_to": "dose_dependent",
       "evidence_notes": "Human pharmacokinetic studies show substantial nadolol exposure reduction with green tea or EGCG-concentrated green tea extract.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": "green_tea_extract"
+      "agent2_canonical_id": "green_tea_extract",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "type": "Med-Sup",
@@ -309,7 +328,9 @@
       "agent2_canonical_id": "iron",
       "mechanism": "Iron can chelate fluoroquinolone antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk during an active infection.",
       "management": "Separate iron supplements from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval specified on the antibiotic label or by the prescriber.",
-      "evidence_notes": "Current ciprofloxacin and levofloxacin DailyMed labels instruct separation from iron-containing products because absorption is reduced."
+      "evidence_notes": "Current ciprofloxacin and levofloxacin DailyMed labels instruct separation from iron-containing products because absorption is reduced.",
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "type": "Med-Sup",
@@ -342,7 +363,9 @@
       "agent2_canonical_id": "magnesium",
       "mechanism": "Magnesium can chelate fluoroquinolone antibiotics in the gut, reducing antibiotic absorption and increasing treatment-failure risk during an active infection.",
       "management": "Separate magnesium supplements or magnesium-containing antacids from ciprofloxacin, levofloxacin, and related fluoroquinolones by the interval specified on the antibiotic label or by the prescriber.",
-      "evidence_notes": "Current ciprofloxacin and levofloxacin DailyMed labels instruct separation from magnesium-containing products because absorption is reduced."
+      "evidence_notes": "Current ciprofloxacin and levofloxacin DailyMed labels instruct separation from magnesium-containing products because absorption is reduced.",
+      "direction": "harmful",
+      "materiality": "presence"
     }
   ]
 }

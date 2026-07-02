@@ -321,7 +321,15 @@ CREATE TABLE interactions (
     --   apart by N hours" / "Talk to your prescriber".
     alert_style             TEXT,
     note_body               TEXT,
-    practical_guidance      TEXT
+    practical_guidance      TEXT,
+    -- Smart-flagging two-axis classification (2026-07-02). Optional; the app
+    -- routes on them once its pairwise router lands. direction: harmful |
+    -- beneficial | neutral | unknown. materiality: presence | dose_dependent
+    -- (presence == never dose-suppressed). Authored fresh per-pair, NOT mapped
+    -- from applies_to (a scope descriptor that includes never-suppress
+    -- warfarin+vitamin K).
+    direction               TEXT,
+    materiality             TEXT
 );
 
 CREATE INDEX idx_int_a1_canon ON interactions(agent1_canonical_id)
@@ -461,6 +469,9 @@ def build_interaction_row(
         "alert_style": draft.get("alert_style"),
         "note_body": draft.get("note_body"),
         "practical_guidance": draft.get("practical_guidance"),
+        # Smart-flagging Phase 2 classification (advisory-only, app routes later)
+        "direction": draft.get("direction"),
+        "materiality": draft.get("materiality"),
     }
 
 
@@ -564,6 +575,9 @@ def _column_order(table: str) -> list[str]:
             "alert_style",
             "note_body",
             "practical_guidance",
+            # Smart-flagging Phase 2 classification (2026-07-02)
+            "direction",
+            "materiality",
         ]
     if table == "research_pairs":
         return [

@@ -15397,6 +15397,8 @@ class SupplementEnricherV3:
                                 "alert_body": pregnancy_block.get("alert_body"),
                                 "informational_note": pregnancy_block.get("informational_note"),
                                 "warning_type": pregnancy_block.get("warning_type"),
+                                "direction": pregnancy_block.get("direction"),
+                                "materiality": pregnancy_block.get("materiality"),
                                 "profile_gate": pregnancy_block.get("profile_gate"),
                             })
 

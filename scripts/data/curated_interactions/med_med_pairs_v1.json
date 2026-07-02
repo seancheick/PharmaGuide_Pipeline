@@ -1,7 +1,7 @@
 {
   "_metadata": {
-    "schema_version": "1.0.0",
-    "last_updated": "2026-06-28",
+    "schema_version": "1.1.0",
+    "last_updated": "2026-07-02",
     "total_entries": 29,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
@@ -11,7 +11,10 @@
       "NCBI Bookshelf (ncbi.nlm.nih.gov/books) — clinical pharmacology references",
       "PubMed (pubmed.ncbi.nlm.nih.gov) — peer-reviewed clinical evidence"
     ],
-    "notes": "Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor). verify_interactions.py normalizes to Flutter enum (contraindicated/avoid/caution/monitor). All Major+ entries have ≥1 source_url to pass the evidence gate (§6.2 check 9). Cisapride included as withdrawn-drug reference pair due to high educational value. Metformin/contrast and metformin/alcohol entries are procedural/lifestyle warnings, not classic DDI — flagged accordingly in mechanism text."
+    "notes": "Severities use draft vocabulary (Contraindicated/Major/Moderate/Minor). verify_interactions.py normalizes to Flutter enum (contraindicated/avoid/caution/monitor). All Major+ entries have ≥1 source_url to pass the evidence gate (§6.2 check 9). Cisapride included as withdrawn-drug reference pair due to high educational value. Metformin/contrast and metformin/alcohol entries are procedural/lifestyle warnings, not classic DDI — flagged accordingly in mechanism text.",
+    "migration_notes": [
+      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 29 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py."
+    ]
   },
   "interactions": [
     {
@@ -43,7 +46,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_MAOI_MEPERIDINE",
@@ -74,7 +79,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_MAOI_STIMULANTS",
@@ -107,7 +114,9 @@
       "applies_to": "whole_class",
       "evidence_notes": "Promoted from Major/avoid to Contraindicated on 2026-06-27: FDA labels for amphetamine, lisdexamfetamine, and methylphenidate products, and for the MAOIs phenelzine (Nardil) and tranylcypromine (Parnate), explicitly contraindicate or prohibit MAOI co-use (hypertensive-crisis risk, 14-day washout). The one class exception is selegiline — oral low-dose and transdermal (Emsam) labels say 'monitor blood pressure' rather than contraindicate — which warrants a selegiline-specific carve-out once the interaction engine supports most-specific-wins precedence. Until then the safe class default is Contraindicated, because over-warning rare selegiline use is preferable to under-warning the common, label-contraindicated amphetamine/methylphenidate pairs (under-warning is the bigger clinical risk).",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_MTX_TRIMETHOPRIM",
@@ -137,7 +146,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ERGOTAMINE_ERYTHROMYCIN",
@@ -167,7 +178,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ANTICOAG_NSAID",
@@ -198,7 +211,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_LITHIUM_ACE",
@@ -229,7 +244,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_LITHIUM_THIAZIDE",
@@ -261,7 +278,9 @@
       "applies_to": "dose_dependent",
       "evidence_notes": "Thiazide diuretics reduce lithium clearance, causing accumulation and toxicity. This interaction is stated on lithium drug labels and is a standard pharmacology teaching point.",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_SIMVASTATIN_ERYTHROMYCIN",
@@ -291,7 +310,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ONDANSETRON_LEVOFLOXACIN",
@@ -322,7 +343,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_SPIRO_ACE",
@@ -353,7 +376,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_SSRI_TRIPTAN",
@@ -384,7 +409,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_METFORMIN_IVCONTRAST",
@@ -413,7 +440,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "agent1_canonical_id": null
+      "agent1_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_CLOPIDOGREL_OMEPRAZOLE",
@@ -443,7 +472,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_FLUCONAZOLE_STATINS",
@@ -474,7 +505,9 @@
       "clinical_confidence": "high",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_BETABLOCKER_VERAPAMIL",
@@ -505,7 +538,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_DIGOXIN_AMIODARONE",
@@ -536,7 +571,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_THEOPHYLLINE_CIPRO",
@@ -567,7 +604,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ANTICOAG_ACETAMINOPHEN",
@@ -598,7 +637,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ANTICONV_OCP",
@@ -629,7 +670,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_PHENYTOIN_VALPROATE",
@@ -660,7 +703,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_CORTICO_NSAID",
@@ -691,7 +736,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ANTIPSYCH_BENZO",
@@ -722,7 +769,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_SSRI_NSAID",
@@ -753,7 +802,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_METFORMIN_ALCOHOL",
@@ -782,7 +833,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "agent1_canonical_id": null
+      "agent1_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_DIGOXIN_DIURETICS",
@@ -813,7 +866,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_STATIN_GEMFIBROZIL",
@@ -844,7 +899,9 @@
       "clinical_confidence": "medium",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_ANTIHYP_NSAID",
@@ -875,7 +932,9 @@
       "clinical_confidence": "medium",
       "applies_to": "whole_class",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     },
     {
       "id": "DDI_BENZO_OPIOID",
@@ -906,7 +965,9 @@
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
-      "agent2_canonical_id": null
+      "agent2_canonical_id": null,
+      "direction": "harmful",
+      "materiality": "presence"
     }
   ]
 }

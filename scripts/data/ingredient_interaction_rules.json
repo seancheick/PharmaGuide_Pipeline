@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.1.3",
-    "last_updated": "2026-06-22",
+    "schema_version": "6.2.0",
+    "last_updated": "2026-07-02",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
@@ -79,6 +79,12 @@
           "to": "6.1.2",
           "date": "2026-05-26",
           "summary": "Wave 8 critical-only interaction pass: added narrow rule-only medication classes for DOACs, potassium-sparing diuretics, tetracycline antibiotics, and beta blockers; added high-signal St Johns Wort/DOAC, potassium/potassium-sparing diuretic, green tea extract/beta-blocker, and biotin diagnostic-interference gates. No monitor-volume expansion."
+        },
+        {
+          "from": "6.1.3",
+          "to": "6.2.0",
+          "date": "2026-07-02",
+          "summary": "Smart-flagging Phase 2: authored direction + materiality on the 429 sub-rules that still lacked them (condition_rules, drug_class_rules, pregnancy_lactation blocks). materiality=presence for all (none carry a dose_threshold; presence == never dose-suppressed). direction: drug-class + non-nutrient condition rows harmful; beneficial for condition-supportive nutrients (milk_thistle/liver, coq10/heart, berberine|garlic|bergamot/cholesterol, folate|B12|fish_oil|inositol|coq10|vitamin_d preconception/pregnancy); neutral for standard pregnancy nutrients + diagnostic-interference (biotin assays) + mixed-evidence rows; unknown for bare 'limited safety data' pregnancy rows (fail-open, always fires). Advisory-only: score-neutral and, until the app router lands (Phase 4), behavior-neutral. Applied via scripts/tools/migrate_phase2_direction_materiality.py."
         }
       ]
     },
@@ -139,7 +145,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -174,7 +182,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-01",
       "review_owner": "pharmaguide_clinical_team"
@@ -216,7 +226,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -249,7 +261,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -283,7 +297,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -324,7 +340,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -357,7 +375,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -386,7 +406,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -428,7 +450,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -459,7 +483,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -492,7 +518,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -525,7 +553,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -567,7 +597,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -578,7 +610,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -622,7 +656,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "diabetes",
@@ -827,7 +863,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -1054,7 +1092,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team"
@@ -1137,7 +1177,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -1254,7 +1296,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "maois",
@@ -1285,7 +1329,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "cyp3a4_substrates",
@@ -1316,7 +1362,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -1391,7 +1439,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team",
@@ -1751,7 +1801,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -1793,7 +1845,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -1825,7 +1879,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -1861,7 +1917,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -1902,7 +1960,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "hypertension",
@@ -1977,7 +2037,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -2083,7 +2145,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -2247,7 +2311,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -2318,7 +2384,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -2509,7 +2577,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -2551,7 +2621,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -2585,7 +2657,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -2619,7 +2693,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-01",
       "review_owner": "pharmaguide_clinical_team"
@@ -2703,7 +2779,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -2864,7 +2942,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -2906,7 +2986,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -2984,7 +3066,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "form_scope": null,
       "last_reviewed": "2026-02-28",
@@ -3158,7 +3242,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -3210,7 +3296,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -3338,7 +3426,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         },
         {
           "condition_id": "diabetes",
@@ -3539,7 +3629,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -3622,7 +3714,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -3812,7 +3906,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
@@ -3898,7 +3994,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "bleeding_disorders",
@@ -4141,7 +4239,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
@@ -4220,7 +4320,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "diabetes",
@@ -4463,7 +4565,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -4576,7 +4680,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team"
@@ -4617,7 +4723,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -4650,7 +4758,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "cyp2d6_substrates",
@@ -4681,7 +4791,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -4715,7 +4827,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team"
@@ -4799,7 +4913,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -4875,7 +4991,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -4885,7 +5003,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team",
@@ -5114,7 +5234,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -5200,7 +5322,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -5254,7 +5378,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -5296,7 +5422,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "caution",
@@ -5328,7 +5456,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -5361,7 +5491,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "lithium",
@@ -5392,7 +5524,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -5498,7 +5632,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -5540,7 +5676,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -5573,7 +5711,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "caution",
@@ -5605,7 +5745,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -5637,7 +5779,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -5647,7 +5791,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -5731,7 +5877,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -5785,7 +5933,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -5871,7 +6021,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -5948,7 +6100,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
@@ -6096,7 +6250,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "kidney_disease",
@@ -6127,7 +6283,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "diabetes",
@@ -6192,7 +6350,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "caution",
@@ -6224,7 +6384,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "lithium",
@@ -6255,7 +6417,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -6287,7 +6451,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -6316,7 +6482,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
@@ -6395,7 +6563,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "kidney_disease",
@@ -6426,7 +6596,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "heart_disease",
@@ -6457,7 +6629,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -6490,7 +6664,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "potassium_sparing_diuretics",
@@ -6522,7 +6698,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -6551,7 +6729,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -6721,7 +6901,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -6773,7 +6955,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -6815,7 +6999,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "hypertension",
@@ -6846,7 +7032,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -6921,7 +7109,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -6952,7 +7142,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "statins",
@@ -6983,7 +7175,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "sedatives",
@@ -7014,7 +7208,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antidepressants_ssri_snri",
@@ -7045,7 +7241,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "maois",
@@ -7076,7 +7274,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "oral_contraceptives",
@@ -7107,7 +7307,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "cyp2d6_substrates",
@@ -7138,7 +7340,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "doacs",
@@ -7171,7 +7375,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -7206,7 +7412,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -7419,7 +7627,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team",
@@ -7619,7 +7829,9 @@
               ]
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -7650,7 +7862,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -7722,7 +7936,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -7809,7 +8025,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "high_cholesterol",
@@ -7840,7 +8058,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -7965,7 +8185,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -8057,7 +8279,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team"
@@ -8099,7 +8323,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -8171,7 +8397,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team"
@@ -8213,7 +8441,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -8364,7 +8594,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-27",
       "review_owner": "pharmaguide_clinical_team"
@@ -8405,7 +8637,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -8438,7 +8672,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -8449,7 +8685,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team"
@@ -8494,7 +8732,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -8504,7 +8744,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -8547,7 +8789,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "hypertension",
@@ -8578,7 +8822,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -8612,7 +8858,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "maois",
@@ -8643,7 +8891,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -8677,7 +8927,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -8718,7 +8970,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -8751,7 +9005,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "pregnancy_lactation": {
@@ -8761,7 +9017,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -8803,7 +9061,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -8838,7 +9098,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "form_scope": null,
       "last_reviewed": "2026-04-26",
@@ -8880,7 +9142,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -8915,7 +9179,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "form_scope": null,
       "last_reviewed": "2026-02-28",
@@ -8957,7 +9223,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -8989,7 +9257,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "form_scope": null,
       "last_reviewed": "2026-02-28",
@@ -9032,7 +9302,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "caution",
@@ -9064,7 +9336,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -9098,7 +9372,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -9132,7 +9408,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -9174,7 +9452,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -9208,7 +9488,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -9242,7 +9524,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -9284,7 +9568,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "bleeding_disorders",
@@ -9402,7 +9688,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -9434,7 +9722,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -9553,7 +9843,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -9624,7 +9916,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9666,7 +9960,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "bleeding_disorders",
@@ -9828,7 +10124,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "lithium",
@@ -9859,7 +10157,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -9906,7 +10206,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -9947,7 +10249,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -9959,7 +10263,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -10001,7 +10307,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -10120,7 +10428,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -10237,7 +10547,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -10454,7 +10766,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -10536,7 +10850,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -10622,7 +10938,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -10742,7 +11060,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "lithium",
@@ -10773,7 +11093,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -10856,7 +11178,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -11029,7 +11353,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -11040,7 +11366,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -11125,7 +11453,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -11244,7 +11574,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -11328,7 +11660,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -11370,7 +11704,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "ttc",
@@ -11402,7 +11738,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -11433,7 +11771,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "diabetes",
@@ -11832,7 +12172,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -12003,7 +12345,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -12051,7 +12395,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -12093,7 +12439,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -12127,7 +12475,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -12158,7 +12508,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "nsaids",
@@ -12189,7 +12541,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "caution",
@@ -12221,7 +12575,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -12232,7 +12588,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -12273,7 +12631,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -12306,7 +12666,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -12338,7 +12700,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "nsaids",
@@ -12370,7 +12734,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -12381,7 +12747,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -12553,7 +12921,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -12564,7 +12934,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -12605,7 +12977,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "caution",
@@ -12637,7 +13011,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -12671,7 +13047,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -12702,7 +13080,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "nsaids",
@@ -12733,7 +13113,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "avoid",
@@ -12765,7 +13147,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -12776,7 +13160,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -12817,7 +13203,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -12850,7 +13238,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -12881,7 +13271,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "nsaids",
@@ -12912,7 +13304,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -12923,7 +13317,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -12965,7 +13361,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -12997,7 +13395,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -13063,7 +13463,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -13099,7 +13501,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ]
     },
@@ -13140,7 +13544,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "fluoroquinolones",
@@ -13172,7 +13578,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -13202,7 +13610,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -13245,7 +13655,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -13279,7 +13691,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -13290,7 +13704,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -13332,7 +13748,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -13400,7 +13818,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
@@ -13443,7 +13863,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -13477,7 +13899,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -13488,7 +13912,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -13532,7 +13958,9 @@
             },
             "dose": null
           },
-          "warning_type": "diagnostic_interference"
+          "warning_type": "diagnostic_interference",
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "heart_disease",
@@ -13565,7 +13993,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -13650,7 +14080,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
@@ -13693,7 +14125,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -13728,7 +14162,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -13739,7 +14175,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -13760,7 +14198,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -13802,7 +14242,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -13836,7 +14278,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -13847,7 +14291,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -13889,7 +14335,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -13923,7 +14371,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -13934,7 +14384,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -13976,7 +14428,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -14010,7 +14464,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -14021,7 +14477,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14063,7 +14521,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -14075,7 +14535,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14117,7 +14579,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -14128,7 +14592,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -14171,7 +14637,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         },
         {
           "condition_id": "high_cholesterol",
@@ -14203,7 +14671,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "ttc",
@@ -14235,7 +14705,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -14268,7 +14740,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "statins",
@@ -14299,7 +14773,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -14310,7 +14786,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14352,7 +14830,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -14386,7 +14866,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -14416,7 +14898,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14457,7 +14941,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -14492,7 +14978,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "calcium_channel_blockers",
@@ -14525,7 +15013,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -14557,7 +15047,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiarrhythmics",
@@ -14589,7 +15081,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "anticoagulants",
@@ -14621,7 +15115,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "oral_contraceptives",
@@ -14653,7 +15149,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -14664,7 +15162,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14707,7 +15207,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -14779,7 +15281,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14821,7 +15325,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -14856,7 +15362,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -14897,7 +15405,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -14932,7 +15442,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -14974,7 +15486,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -15009,7 +15523,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "beneficial",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -15120,7 +15636,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "beneficial",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -15162,7 +15680,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -15196,7 +15716,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -15207,7 +15729,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -15248,7 +15772,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "hypertension",
@@ -15279,7 +15805,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -15312,7 +15840,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -15344,7 +15874,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antihypertensives",
@@ -15375,7 +15907,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -15386,7 +15920,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -15469,7 +16005,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -15500,7 +16038,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "kidney_disease",
@@ -15531,7 +16071,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -15648,7 +16190,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -15701,7 +16245,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -15744,7 +16290,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -15778,7 +16326,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "severity": "monitor",
@@ -15810,7 +16360,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "cyp3a4_substrates",
@@ -15841,7 +16393,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -15852,7 +16406,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -15893,7 +16449,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "lactation",
@@ -15924,7 +16482,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "ttc",
@@ -15955,7 +16515,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -15990,7 +16552,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16073,7 +16637,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -16106,7 +16672,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antihypertensives",
@@ -16159,7 +16727,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16202,7 +16772,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "beneficial",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -16238,7 +16810,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "beneficial",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16280,7 +16854,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "kidney_disease",
@@ -16312,7 +16888,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -16424,7 +17002,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16466,7 +17046,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -16501,7 +17083,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -16512,7 +17096,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -16555,7 +17141,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "autoimmune",
@@ -16587,7 +17175,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -16620,7 +17210,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -16654,7 +17246,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -16686,7 +17280,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -16717,7 +17313,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -16801,7 +17399,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -16842,7 +17442,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "thyroid_disorder",
@@ -16873,7 +17475,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -16906,7 +17510,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -16940,7 +17546,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -17092,7 +17700,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -17177,7 +17787,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -17253,7 +17865,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -17324,7 +17938,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -17366,7 +17982,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -17433,7 +18051,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -17475,7 +18095,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -17542,7 +18164,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -17584,7 +18208,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -17617,7 +18243,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "maois",
@@ -17648,7 +18276,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -17659,7 +18289,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -17701,7 +18333,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "kidney_disease",
@@ -17732,7 +18366,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -17765,7 +18401,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -17798,7 +18436,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -17840,7 +18480,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "ttc",
@@ -17872,7 +18514,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "unknown",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -17906,7 +18550,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -17988,7 +18634,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -18170,7 +18818,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "neutral",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -18212,7 +18862,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -18243,7 +18895,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -18255,7 +18909,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -18296,7 +18952,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -18327,7 +18985,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "kidney_disease",
@@ -18358,7 +19018,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -18391,7 +19053,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -18424,7 +19088,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -18465,7 +19131,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "liver_disease",
@@ -18496,7 +19164,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -18508,7 +19178,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -18633,7 +19305,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -18856,7 +19530,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -19071,7 +19747,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -19286,7 +19964,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -19372,7 +20052,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -19383,7 +20065,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -19424,7 +20108,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -19457,7 +20143,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "sedatives",
@@ -19488,7 +20176,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -19499,7 +20189,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -19541,7 +20233,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -19590,7 +20284,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -19631,7 +20327,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -19664,7 +20362,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_high_risk",
@@ -19695,7 +20395,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_lower_risk",
@@ -19726,7 +20428,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "lithium",
@@ -19758,7 +20462,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_unknown",
@@ -19789,7 +20495,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -19800,7 +20508,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -19841,7 +20551,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -19874,7 +20586,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "anticoagulants",
@@ -19905,7 +20619,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -19916,7 +20632,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20127,7 +20845,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -20138,7 +20858,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20180,7 +20902,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -20191,7 +20915,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20233,7 +20959,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -20244,7 +20972,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20286,7 +21016,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -20320,7 +21052,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "thyroid_medications",
@@ -20352,7 +21086,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -20363,7 +21099,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20405,7 +21143,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "statins",
@@ -20436,7 +21176,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -20447,7 +21189,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20553,7 +21297,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20596,7 +21342,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -20631,7 +21379,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -20642,7 +21392,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20727,7 +21479,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_high_risk",
@@ -20864,7 +21618,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20885,7 +21641,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -20970,7 +21728,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "hypoglycemics_high_risk",
@@ -21288,7 +22048,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -21329,7 +22091,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -21362,7 +22126,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "anticoagulants",
@@ -21393,7 +22159,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -21404,7 +22172,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -21446,7 +22216,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -21457,7 +22229,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -21498,7 +22272,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -21590,7 +22366,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -21631,7 +22409,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -21661,7 +22441,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -21694,7 +22476,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "antiplatelets",
@@ -21725,7 +22509,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [
@@ -21845,7 +22631,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22082,7 +22870,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "beneficial",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "drug_label_mining"
@@ -22124,7 +22914,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "condition_id": "seizure_disorder",
@@ -22155,7 +22947,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "neutral",
+          "materiality": "presence"
         },
         {
           "condition_id": "pregnancy",
@@ -22186,7 +22980,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -22219,7 +23015,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -22250,7 +23048,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "anticoagulants",
@@ -22281,7 +23081,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         },
         {
           "drug_class_id": "sedatives",
@@ -22312,7 +23114,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -22342,7 +23146,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "drug_label_mining"
@@ -22384,7 +23190,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -22415,7 +23223,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22456,7 +23266,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -22487,7 +23299,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22529,7 +23343,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -22596,7 +23412,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22637,7 +23455,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -22649,7 +23469,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22689,7 +23511,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -22701,7 +23525,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22741,7 +23567,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "unknown",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -22753,7 +23581,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22816,7 +23646,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22916,7 +23748,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -22958,7 +23792,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -22969,7 +23805,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23011,7 +23849,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -23022,7 +23862,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23064,7 +23906,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -23094,7 +23938,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23136,7 +23982,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -23147,7 +23995,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23190,7 +24040,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -23201,7 +24053,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23266,7 +24120,9 @@
         "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended."
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23308,7 +24164,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -23338,7 +24196,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -23380,7 +24240,9 @@
               "nutrient_forms_any": []
             },
             "dose": null
-          }
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -23411,7 +24273,9 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        }
+        },
+        "direction": "harmful",
+        "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
