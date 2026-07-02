@@ -653,6 +653,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 300,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/25883909/",
+            "rationale": "Oral aloe extract lowers fasting glucose from ~300 mg/serving (PMID 25883909); trace amounts negligible."
           }
         }
       ],
@@ -686,6 +697,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 300,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/25883909/",
+            "rationale": "Oral aloe extract lowers fasting glucose from ~300 mg/serving (PMID 25883909); trace amounts negligible."
           }
         },
         {
@@ -717,6 +739,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 300,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/25883909/",
+            "rationale": "Oral aloe extract lowers fasting glucose from ~300 mg/serving (PMID 25883909); trace amounts negligible."
           }
         },
         {
@@ -748,6 +781,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 300,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/25883909/",
+            "rationale": "Oral aloe extract lowers fasting glucose from ~300 mg/serving (PMID 25883909); trace amounts negligible."
           }
         }
       ],
@@ -1051,6 +1095,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18442638/",
+            "rationale": "Berberine lowers fasting glucose at >=500 mg/serving (900-1500 mg/day, PMID 18442638); below this it is sub-therapeutic, so additive hypoglycemia with glucose-lowering meds is negligible."
           }
         },
         {
@@ -1115,6 +1170,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18442638/",
+            "rationale": "Berberine lowers fasting glucose at >=500 mg/serving (900-1500 mg/day, PMID 18442638); below this it is sub-therapeutic, so additive hypoglycemia with glucose-lowering meds is negligible."
           }
         },
         {
@@ -1146,6 +1212,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18442638/",
+            "rationale": "Berberine lowers fasting glucose at >=500 mg/serving (900-1500 mg/day, PMID 18442638); below this it is sub-therapeutic, so additive hypoglycemia with glucose-lowering meds is negligible."
           }
         },
         {
@@ -1270,6 +1347,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18442638/",
+            "rationale": "Berberine lowers fasting glucose at >=500 mg/serving (900-1500 mg/day, PMID 18442638); below this it is sub-therapeutic, so additive hypoglycemia with glucose-lowering meds is negligible."
           }
         }
       ],
@@ -1491,6 +1579,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35140559/",
+            "rationale": "Standardized bitter melon extract lowers fasting glucose at ~600 mg/day (PMID 35140559); trace amounts are sub-therapeutic."
           }
         }
       ],
@@ -1524,6 +1623,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35140559/",
+            "rationale": "Standardized bitter melon extract lowers fasting glucose at ~600 mg/day (PMID 35140559); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -1555,6 +1665,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35140559/",
+            "rationale": "Standardized bitter melon extract lowers fasting glucose at ~600 mg/day (PMID 35140559); trace amounts are sub-therapeutic."
           }
         },
         {
@@ -1586,6 +1707,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35140559/",
+            "rationale": "Standardized bitter melon extract lowers fasting glucose at ~600 mg/day (PMID 35140559); trace amounts are sub-therapeutic."
           }
         }
       ],
@@ -2228,6 +2360,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+            "rationale": "Water-soluble cinnamon extract affects fasting glucose from ~500 mg/day (powder 1-6 g); review PMID 24019277. Floor set for the extract form."
           }
         }
       ],
@@ -2261,6 +2404,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+            "rationale": "Water-soluble cinnamon extract affects fasting glucose from ~500 mg/day (powder 1-6 g); review PMID 24019277. Floor set for the extract form."
           }
         },
         {
@@ -2292,6 +2446,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+            "rationale": "Water-soluble cinnamon extract affects fasting glucose from ~500 mg/day (powder 1-6 g); review PMID 24019277. Floor set for the extract form."
           }
         },
         {
@@ -2323,6 +2488,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+            "rationale": "Water-soluble cinnamon extract affects fasting glucose from ~500 mg/day (powder 1-6 g); review PMID 24019277. Floor set for the extract form."
           }
         }
       ],
@@ -2485,6 +2661,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24438170/",
+            "rationale": "Fenugreek extract affects glycemia from ~500-1000 mg/day (seed powder ~5 g); PMID 24438170. Floor set for the extract form."
           }
         },
         {
@@ -2549,6 +2736,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24438170/",
+            "rationale": "Fenugreek extract affects glycemia from ~500-1000 mg/day (seed powder ~5 g); PMID 24438170. Floor set for the extract form."
           }
         },
         {
@@ -2580,6 +2778,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24438170/",
+            "rationale": "Fenugreek extract affects glycemia from ~500-1000 mg/day (seed powder ~5 g); PMID 24438170. Floor set for the extract form."
           }
         },
         {
@@ -2611,6 +2820,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24438170/",
+            "rationale": "Fenugreek extract affects glycemia from ~500-1000 mg/day (seed powder ~5 g); PMID 24438170. Floor set for the extract form."
           }
         }
       ],
@@ -2719,6 +2939,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/22096324/",
+            "rationale": "Feverfew inhibits platelet activity via parthenolide at standard extract doses (~100 mg/day, 0.2-0.4% parthenolide; PMID 22096324); below this sub-therapeutic."
           }
         }
       ],
@@ -2798,6 +3029,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Viscous/psyllium fiber blunts postprandial glucose from ~3-5 g/dose (PMID 10500014); below this negligible."
           }
         }
       ],
@@ -2831,6 +3073,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Viscous/psyllium fiber blunts postprandial glucose from ~3-5 g/dose (PMID 10500014); below this negligible."
           }
         },
         {
@@ -2862,6 +3115,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Viscous/psyllium fiber blunts postprandial glucose from ~3-5 g/dose (PMID 10500014); below this negligible."
           }
         },
         {
@@ -2925,6 +3189,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Viscous/psyllium fiber blunts postprandial glucose from ~3-5 g/dose (PMID 10500014); below this negligible."
           }
         }
       ],
@@ -3388,6 +3663,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 4000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/26488162/",
+            "rationale": "Ginger antiplatelet effect is genuinely dose-dependent: no effect at 2-4 g/day, significant only at bolus ~10 g (PMID 26488162). Whole-herb floor ~4 g; typical extract capsules are far below."
           }
         },
         {
@@ -3419,6 +3705,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 4000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/26488162/",
+            "rationale": "Ginger antiplatelet effect is genuinely dose-dependent: no effect at 2-4 g/day, significant only at bolus ~10 g (PMID 26488162). Whole-herb floor ~4 g; typical extract capsules are far below."
           }
         }
       ],
@@ -3452,6 +3749,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 4000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/26488162/",
+            "rationale": "Ginger antiplatelet effect is genuinely dose-dependent: no effect at 2-4 g/day, significant only at bolus ~10 g (PMID 26488162). Whole-herb floor ~4 g; typical extract capsules are far below."
           }
         },
         {
@@ -3483,6 +3791,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 4000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/26488162/",
+            "rationale": "Ginger antiplatelet effect is genuinely dose-dependent: no effect at 2-4 g/day, significant only at bolus ~10 g (PMID 26488162). Whole-herb floor ~4 g; typical extract capsules are far below."
           }
         }
       ],
@@ -4558,6 +4877,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/34467577/",
+            "rationale": "Gymnema (GS4) lowers glucose at ~400 mg/day (PMID 34467577); below this negligible."
           }
         }
       ],
@@ -4591,6 +4921,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/34467577/",
+            "rationale": "Gymnema (GS4) lowers glucose at ~400 mg/day (PMID 34467577); below this negligible."
           }
         },
         {
@@ -4622,6 +4963,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/34467577/",
+            "rationale": "Gymnema (GS4) lowers glucose at ~400 mg/day (PMID 34467577); below this negligible."
           }
         },
         {
@@ -4653,6 +5005,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/34467577/",
+            "rationale": "Gymnema (GS4) lowers glucose at ~400 mg/day (PMID 34467577); below this negligible."
           }
         }
       ],
@@ -6094,6 +6457,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Psyllium blunts postprandial glucose from ~3-5 g/dose (PMID 10500014)."
           }
         }
       ],
@@ -6127,6 +6501,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Psyllium blunts postprandial glucose from ~3-5 g/dose (PMID 10500014)."
           }
         },
         {
@@ -6158,6 +6543,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Psyllium blunts postprandial glucose from ~3-5 g/dose (PMID 10500014)."
           }
         },
         {
@@ -6220,6 +6616,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/10500014/",
+            "rationale": "Psyllium blunts postprandial glucose from ~3-5 g/dose (PMID 10500014)."
           }
         }
       ],
@@ -6693,6 +7100,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 50,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23982218/",
+            "rationale": "Vanadium improves fasting glucose only at >=50 mg elemental V/day (PMID 23982218); 25 mg was sub-therapeutic. NOTE unit is elemental V (100 mg vanadyl sulfate ~ 26 mg V) - low-dose products are below this."
           }
         }
       ],
@@ -6726,6 +7144,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 50,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23982218/",
+            "rationale": "Vanadium improves fasting glucose only at >=50 mg elemental V/day (PMID 23982218); 25 mg was sub-therapeutic. NOTE unit is elemental V (100 mg vanadyl sulfate ~ 26 mg V) - low-dose products are below this."
           }
         },
         {
@@ -6757,6 +7186,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 50,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23982218/",
+            "rationale": "Vanadium improves fasting glucose only at >=50 mg elemental V/day (PMID 23982218); 25 mg was sub-therapeutic. NOTE unit is elemental V (100 mg vanadyl sulfate ~ 26 mg V) - low-dose products are below this."
           }
         },
         {
@@ -6788,6 +7228,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 50,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23982218/",
+            "rationale": "Vanadium improves fasting glucose only at >=50 mg elemental V/day (PMID 23982218); 25 mg was sub-therapeutic. NOTE unit is elemental V (100 mg vanadyl sulfate ~ 26 mg V) - low-dose products are below this."
           }
         }
       ],
@@ -8718,6 +9169,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 320,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
+            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
           }
         },
         {
@@ -8750,6 +9212,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 320,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
+            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
           }
         },
         {
@@ -8848,6 +9321,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 320,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
+            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
           }
         },
         {
@@ -8880,6 +9364,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 320,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/16985705/",
+            "rationale": "Saw palmetto (320 mg liposterolic extract, the standard dose) is linked to bleeding case reports via COX/5-LOX inhibition (PMID 16985705)."
           }
         },
         {
@@ -10257,6 +10752,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18667054/",
+            "rationale": "Boswellia (5-Loxin, 30% AKBA) is clinically active and inhibits platelet aggregation from ~100 mg extract/day (PMID 18667054)."
           }
         }
       ],
@@ -10290,6 +10796,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18667054/",
+            "rationale": "Boswellia (5-Loxin, 30% AKBA) is clinically active and inhibits platelet aggregation from ~100 mg extract/day (PMID 18667054)."
           }
         },
         {
@@ -10322,6 +10839,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18667054/",
+            "rationale": "Boswellia (5-Loxin, 30% AKBA) is clinically active and inhibits platelet aggregation from ~100 mg extract/day (PMID 18667054)."
           }
         },
         {
@@ -10407,6 +10935,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/19783511/",
+            "rationale": "EPO increases bleeding time at supplemental GLA doses (~300 mg GLA ~ 3 g oil; PMID 19783511). Floor on oil basis; capsule doses at/above 3 g fire."
           }
         },
         {
@@ -10473,6 +11012,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/19783511/",
+            "rationale": "EPO increases bleeding time at supplemental GLA doses (~300 mg GLA ~ 3 g oil; PMID 19783511). Floor on oil basis; capsule doses at/above 3 g fire."
           }
         },
         {
@@ -10505,6 +11055,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 3000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/19783511/",
+            "rationale": "EPO increases bleeding time at supplemental GLA doses (~300 mg GLA ~ 3 g oil; PMID 19783511). Floor on oil basis; capsule doses at/above 3 g fire."
           }
         },
         {
@@ -11141,6 +11702,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "warfarin_context_dose_related",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "rationale": "Glucosamine potentiates warfarin dose-relatedly: stable at 1000 mg, INR rose at 1500 mg+ (PMID 18363538). Warfarin-context; below the standard 1500 mg dose it is negligible."
           }
         }
       ],
@@ -11176,6 +11748,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "warfarin_context_dose_related",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "rationale": "Glucosamine potentiates warfarin dose-relatedly: stable at 1000 mg, INR rose at 1500 mg+ (PMID 18363538). Warfarin-context; below the standard 1500 mg dose it is negligible."
           }
         },
         {
@@ -11207,6 +11790,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "warfarin_context_dose_related",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/18363538/",
+            "rationale": "Glucosamine potentiates warfarin dose-relatedly: stable at 1000 mg, INR rose at 1500 mg+ (PMID 18363538). Warfarin-context; below the standard 1500 mg dose it is negligible."
           }
         },
         {
@@ -11658,6 +12252,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 6000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "high_intake_only",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/7774533/",
+            "rationale": "Flax antiplatelet effect appears only at high intake (~40 g seed / >6 g ALA; PMID 7774533); capsule/oil doses are sub-threshold."
           }
         }
       ],
@@ -11692,6 +12297,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 6000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "high_intake_only",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/7774533/",
+            "rationale": "Flax antiplatelet effect appears only at high intake (~40 g seed / >6 g ALA; PMID 7774533); capsule/oil doses are sub-threshold."
           }
         },
         {
@@ -11724,6 +12340,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 6000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "high_intake_only",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/7774533/",
+            "rationale": "Flax antiplatelet effect appears only at high intake (~40 g seed / >6 g ALA; PMID 7774533); capsule/oil doses are sub-threshold."
           }
         },
         {
@@ -14625,6 +15252,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "single_trial_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27255456/",
+            "rationale": "Single T2D RCT shows a glucose-lowering effect at 1000 mg/day hydroalcoholic extract (PMID 27255456); no lower dose studied."
           }
         },
         {
@@ -14751,6 +15389,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "single_trial_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27255456/",
+            "rationale": "Single T2D RCT shows a glucose-lowering effect at 1000 mg/day hydroalcoholic extract (PMID 27255456); no lower dose studied."
           }
         },
         {
@@ -14782,6 +15431,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "single_trial_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27255456/",
+            "rationale": "Single T2D RCT shows a glucose-lowering effect at 1000 mg/day hydroalcoholic extract (PMID 27255456); no lower dose studied."
           }
         },
         {
@@ -14844,6 +15504,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "single_trial_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/27255456/",
+            "rationale": "Single T2D RCT shows a glucose-lowering effect at 1000 mg/day hydroalcoholic extract (PMID 27255456); no lower dose studied."
           }
         }
       ],
@@ -16114,6 +16785,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "warfarin_context_dose_related",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/14986566/",
+            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 14986566); warfarin-context, dose-related."
           }
         },
         {
@@ -16146,6 +16828,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "warfarin_context_dose_related",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/14986566/",
+            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 14986566); warfarin-context, dose-related."
           }
         }
       ],
@@ -16180,6 +16873,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "warfarin_context_dose_related",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/14986566/",
+            "rationale": "Chondroitin (with glucosamine) raised INR when escalated to 1200 mg BID (PMID 14986566); warfarin-context, dose-related."
           }
         }
       ],
@@ -17024,6 +17728,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/21600014/",
+            "rationale": "NAC antiplatelet effect maps to ~100-1000 mg oral (in vitro; PMID 21600014); in vivo it did not clearly increase bleeding. Soft signal, conservative 600 mg floor."
           }
         },
         {
@@ -17087,6 +17802,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 600,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/21600014/",
+            "rationale": "NAC antiplatelet effect maps to ~100-1000 mg oral (in vitro; PMID 21600014); in vivo it did not clearly increase bleeding. Soft signal, conservative 600 mg floor."
           }
         }
       ],
@@ -18924,6 +19650,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "aspirin_like_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
+            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
           }
         },
         {
@@ -18955,6 +19692,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "aspirin_like_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
+            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
           }
         }
       ],
@@ -18988,6 +19736,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "aspirin_like_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
+            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
           }
         },
         {
@@ -19019,6 +19778,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 120,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "aspirin_like_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
+            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
           }
         },
         {
@@ -19584,6 +20354,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35800714/",
+            "rationale": "Nettle glucose-lowering evidence is from tinctures / mg-per-kg dosing, not standard dried-leaf capsules (PMID 35800714 review); typical capsules (300-500 mg) are effectively sub-therapeutic, so a conservative 1000 mg floor."
           }
         }
       ],
@@ -19648,6 +20429,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35800714/",
+            "rationale": "Nettle glucose-lowering evidence is from tinctures / mg-per-kg dosing, not standard dried-leaf capsules (PMID 35800714 review); typical capsules (300-500 mg) are effectively sub-therapeutic, so a conservative 1000 mg floor."
           }
         },
         {
@@ -19679,6 +20471,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35800714/",
+            "rationale": "Nettle glucose-lowering evidence is from tinctures / mg-per-kg dosing, not standard dried-leaf capsules (PMID 35800714 review); typical capsules (300-500 mg) are effectively sub-therapeutic, so a conservative 1000 mg floor."
           }
         },
         {
@@ -19710,6 +20513,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/35800714/",
+            "rationale": "Nettle glucose-lowering evidence is from tinctures / mg-per-kg dosing, not standard dried-leaf capsules (PMID 35800714 review); typical capsules (300-500 mg) are effectively sub-therapeutic, so a conservative 1000 mg floor."
           }
         }
       ],
@@ -19783,6 +20597,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23516412/",
+            "rationale": "Olive leaf improves insulin sensitivity at oleuropein-standardized doses (PMID 23516412); direct fasting-glucose signal is weak, so a conservative ~500 mg extract floor."
           }
         }
       ],
@@ -19847,6 +20672,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23516412/",
+            "rationale": "Olive leaf improves insulin sensitivity at oleuropein-standardized doses (PMID 23516412); direct fasting-glucose signal is weak, so a conservative ~500 mg extract floor."
           }
         },
         {
@@ -19878,6 +20714,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23516412/",
+            "rationale": "Olive leaf improves insulin sensitivity at oleuropein-standardized doses (PMID 23516412); direct fasting-glucose signal is weak, so a conservative ~500 mg extract floor."
           }
         },
         {
@@ -19909,6 +20756,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/23516412/",
+            "rationale": "Olive leaf improves insulin sensitivity at oleuropein-standardized doses (PMID 23516412); direct fasting-glucose signal is weak, so a conservative ~500 mg extract floor."
           }
         }
       ],
@@ -20344,6 +21202,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 150,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/15613018/",
+            "rationale": "Quercetin inhibits platelet aggregation in humans from 150 mg (lowest dose tested; PMID 15613018)."
           }
         }
       ],
@@ -21595,6 +22464,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 2000,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "weak_signal_conservative",
+            "source": "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/",
+            "rationale": "L-carnitine reduces fasting glucose consistently only at >=2 g/day (NIH ODS Carnitine); lower doses show unreliable effects."
           }
         }
       ],
@@ -21647,6 +22527,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 125,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "documented_effective_dose",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24843505/",
+            "rationale": "Mulberry leaf extract blunts glucose from ~6 mg DNJ (~125 mg standardized extract, PMID 24843505); best expressed as DNJ but 125 mg extract is the practical floor."
           }
         }
       ],
@@ -22024,6 +22915,17 @@
               "nutrient_forms_any": []
             },
             "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 500,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "preclinical_conservative",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/11577981/",
+            "rationale": "Bromelain antithrombotic/antiplatelet activity is preclinical; systemic serving ~500 mg (~2000 GDU; PMID 11577981). Digestive-enzyme doses are lower and sub-threshold."
           }
         }
       ],
