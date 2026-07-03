@@ -125,7 +125,7 @@ def test_router_b50_uses_vitamin_b5_pantothenic_canonical_for_b_complex_panel() 
             )
         },
     }
-    assert class_for_product(product) == "multi_or_prenatal"
+    assert class_for_product(product) == "b_complex"
 
 
 def test_router_prenatal_dha_label_routes_to_omega_not_multi() -> None:

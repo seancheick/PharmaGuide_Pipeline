@@ -87,4 +87,4 @@ def test_module_route_recorded_in_provenance():
         ]},
     }
     prov = _provenance(product)
-    assert prov["module_route"] in {"generic", "probiotic", "omega", "multi_or_prenatal", "sports"}
+    assert prov["module_route"] in {"generic", "probiotic", "omega", "multi_or_prenatal", "b_complex", "sports"}

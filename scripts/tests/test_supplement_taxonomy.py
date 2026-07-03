@@ -221,6 +221,24 @@ class TestBComplex:
         assert result["primary_type"] == "b_complex"
         assert result["percentile_category"] == "b_complex"
 
+    def test_b_complex_with_stimulant_weight_loss_actives_is_not_b_complex(self):
+        p = {
+            "product_name": "Mega B-100 Energy Soft Chews",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "Vitamin B1", "canonical_id": "vitamin_b1", "category": "vitamin", "quantity": 100, "unit": "mg"},
+                {"name": "Vitamin B2", "canonical_id": "vitamin_b2", "category": "vitamin", "quantity": 100, "unit": "mg"},
+                {"name": "Niacin", "canonical_id": "vitamin_b3", "category": "vitamin", "quantity": 100, "unit": "mg"},
+                {"name": "Vitamin B6", "canonical_id": "vitamin_b6", "category": "vitamin", "quantity": 100, "unit": "mg"},
+                {"name": "Vitamin B12", "canonical_id": "vitamin_b12", "category": "vitamin", "quantity": 5000, "unit": "mcg"},
+                {"name": "Caffeine", "canonical_id": "caffeine", "category": "stimulant", "quantity": 150, "unit": "mg"},
+                {"name": "Green Tea Extract", "canonical_id": "green_tea_extract", "category": "herb", "quantity": 100, "unit": "mg"},
+                {"name": "Garcinia Cambogia", "canonical_id": "garcinia_cambogia", "category": "herb", "quantity": 100, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+
+        assert result["primary_type"] != "b_complex"
+
 
 # ============================================================================
 # Multivitamin

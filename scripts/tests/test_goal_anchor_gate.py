@@ -88,13 +88,48 @@ def test_real_anchors_still_emit_goal_clusters():
         _cluster("liver_support", [("milk thistle", True)]),
         _cluster("hair_skin_nutrition", [("collagen", True), ("vitamin c", True)]),
         _cluster("fertility_female", [("myo-inositol", True), ("coq10", True)]),
-        _cluster("prenatal_pregnancy_support", [("folate", True), ("dha", True)]),
+        _cluster("prenatal_pregnancy_support", [("folate", True), ("dha", True), ("choline", True)]),
     ], n_actives=20)
     ids = b._extract_product_cluster_ids(real, enforce_dose_gate=True)
     for good in ("eye_health", "immune_defense", "liver_support",
                  "hair_skin_nutrition", "fertility_female",
                  "prenatal_pregnancy_support"):
         assert good in ids, f"{good} wrongly filtered despite a real anchor at dose"
+
+
+def test_plain_b_complex_folate_b12_does_not_claim_prenatal_goal():
+    """Folate/B12 support is useful, but it is not a full prenatal match.
+
+    Prenatal relevance should require explicit prenatal positioning or a broader
+    prenatal anchor panel; otherwise B-complex products look like prenatal
+    formulas despite missing iodine, iron, choline/DHA, and vitamin D.
+    """
+    b_complex = _enriched([
+        _cluster("prenatal_pregnancy_support", [("folate", True), ("vitamin b12", True)]),
+        _cluster("methylation_support", [("methylfolate", True), ("vitamin b12", True)]),
+    ], n_actives=8)
+    b_complex["product_name"] = "Super B-Complex"
+    b_complex["supplement_taxonomy"] = {"primary_type": "b_complex"}
+
+    ids = b._extract_product_cluster_ids(b_complex, enforce_dose_gate=True)
+    result = b.compute_goal_matches(b_complex)
+
+    assert "prenatal_pregnancy_support" not in ids
+    assert "GOAL_PRENATAL_PREGNANCY" not in result["goal_matches"]
+
+
+def test_prenatal_positioned_product_keeps_prenatal_goal():
+    prenatal = _enriched([
+        _cluster("prenatal_pregnancy_support", [("folate", True), ("choline", True), ("dha", True)]),
+    ], n_actives=12)
+    prenatal["product_name"] = "Prenatal Multi + DHA"
+    prenatal["supplement_taxonomy"] = {"primary_type": "multivitamin"}
+
+    assert "prenatal_pregnancy_support" in b._extract_product_cluster_ids(
+        prenatal,
+        enforce_dose_gate=True,
+    )
+    assert "GOAL_PRENATAL_PREGNANCY" in b.compute_goal_matches(prenatal)["goal_matches"]
 
 
 def test_focused_micronutrient_products_keep_their_goal():

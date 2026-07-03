@@ -35,6 +35,7 @@ from score_supplements_v4 import score_product_v4
 SCORE_MODEL_V4 = "v4"
 OMEGA3_FORM_NOT_DISCLOSED_FLAG = "OMEGA3_FORM_NOT_DISCLOSED"
 PROPRIETARY_BLEND_PRESENT_FLAG = "PROPRIETARY_BLEND_PRESENT"
+SECTION_A_ZERO_NO_SCORABLE_FLAG = "SECTION_A_ZERO_NO_SCORABLE_INGREDIENTS"
 _OMEGA_UNDISCLOSED_FORM_VALUES = {"undefined", "unknown", "not_disclosed", "none", ""}
 
 
@@ -178,6 +179,20 @@ def _reconcile_v4_probiotic_proprietary_flag(scored: Dict[str, Any], v4: Dict[st
         ]
 
 
+def _reconcile_v4_section_a_zero_flag(scored: Dict[str, Any], v4: Dict[str, Any]) -> None:
+    """Drop stale v3 Section-A diagnostics once v4 has a live score."""
+    flags = scored.get("flags")
+    if flags is None:
+        flags = []
+    if not isinstance(flags, list):
+        return
+    if v4.get("quality_score_status") != "scored":
+        return
+    scored["flags"] = [
+        flag for flag in flags if flag != SECTION_A_ZERO_NO_SCORABLE_FLAG
+    ]
+
+
 def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
     """Run v4 on ``enriched`` and overlay its public contract onto a copy of
     ``scored_v3``. Returns the new dict; never mutates either input."""
@@ -185,6 +200,7 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored = dict(scored_v3) if isinstance(scored_v3, dict) else {}
     _reconcile_v4_omega_form_flag(scored, v4)
     _reconcile_v4_probiotic_proprietary_flag(scored, v4)
+    _reconcile_v4_section_a_zero_flag(scored, v4)
 
     breakdown = v4.get("v4_breakdown") or {}
     safety_gate = breakdown.get("safety_gate") or {}
@@ -230,6 +246,7 @@ def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Di
     scored["_v4_quality_score_100"] = quality_100
     scored["_v4_quality_status"] = status
     scored["_v4_quality_tier"] = v4.get("quality_tier")
+    scored["_v4_quality_score_cap"] = v4.get("quality_score_cap_v4")
     scored["_v4_suppressed_reason"] = v4.get("quality_score_suppressed_reason")
     scored["_v4_raw_score_100"] = v4.get("raw_score_v4_100")
     scored["_v4_module"] = v4.get("v4_module")

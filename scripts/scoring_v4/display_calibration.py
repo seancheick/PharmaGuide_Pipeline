@@ -85,9 +85,18 @@ def _transform(
 
 def _archetype(module: Optional[str], module_breakdown: Dict[str, Any]) -> str:
     if module == "sports":
+        subtype = str((module_breakdown.get("metadata") or {}).get("sports_subtype") or "").strip().lower()
+        if subtype == "pre_workout":
+            return "sports_pre_workout"
+        if subtype == "protein":
+            return "sports_protein"
+        if subtype == "bcaa_eaa":
+            return "sports_bcaa_eaa"
         return "sports_single"
     if module == "fiber_digestive":
         return "fiber_digestive"
+    if module == "b_complex":
+        return "b_complex"
     if module == "omega":
         return "omega"
     if module == "probiotic":

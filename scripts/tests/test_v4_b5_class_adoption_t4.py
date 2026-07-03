@@ -99,11 +99,19 @@ def test_multivitamin_taxonomy_without_panel_routes_generic():
     assert _b5_class_for_product(product) == "generic"
 
 
-def test_b_complex_taxonomy_returns_multi():
-    """B-complex is a multi-vitamin variant in the router mapping."""
+def test_b_complex_panel_uses_multi_panel_opacity_tier():
+    """B-complex scores in its own module but uses panel opacity semantics."""
     product = {
         "primary_type": "b_complex",
         "product_name": "B-Complex 50",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"canonical_id": "vitamin_b1_thiamine", "quantity": 50, "unit": "mg"},
+            {"canonical_id": "vitamin_b2_riboflavin", "quantity": 50, "unit": "mg"},
+            {"canonical_id": "vitamin_b3_niacin", "quantity": 50, "unit": "mg"},
+            {"canonical_id": "vitamin_b5_pantothenic_acid", "quantity": 50, "unit": "mg"},
+            {"canonical_id": "vitamin_b6_pyridoxine", "quantity": 50, "unit": "mg"},
+            {"canonical_id": "vitamin_b12_cobalamin", "quantity": 500, "unit": "mcg"},
+        ]},
     }
     assert _b5_class_for_product(product) == "multi_or_prenatal"
 

@@ -480,7 +480,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             checked_fields=["product_payload"],
         )
 
-    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive"} else "generic"
+    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
     # Phase 3: role-aware caps. Classify the already-derived rows (no second

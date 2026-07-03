@@ -92,11 +92,12 @@ WARNING_PRIORITY = {
     "watchlist_substance": 2,
     "allergen": 3,
     "harmful_additive": 4,
-    "interaction": 5,
-    "drug_interaction": 6,
-    "diagnostic_interference": 7,
-    "dietary": 8,
-    "status": 9,
+    "dose_safety": 5,
+    "interaction": 6,
+    "drug_interaction": 7,
+    "diagnostic_interference": 8,
+    "dietary": 9,
+    "status": 10,
 }
 
 SEVERITY_PRIORITY = {
@@ -3730,6 +3731,23 @@ def build_top_warnings(enriched: Dict) -> List[str]:
         name = safe_str(h.get("additive_name") or h.get("ingredient"))
         add_warning("harmful_additive", sev, f"{sev.title()}-risk additive: {name}")
 
+    # RDA/UL dose safety flags
+    for flag in safe_list(safe_dict(enriched.get("rda_ul_data")).get("safety_flags")):
+        if not isinstance(flag, dict):
+            continue
+        nutrient = safe_str(flag.get("nutrient") or flag.get("standard_name") or flag.get("canonical_id"))
+        if not nutrient:
+            continue
+        pct_ul = safe_float(flag.get("pct_ul"))
+        sev = safe_str(flag.get("severity"))
+        if not sev:
+            sev = "high" if pct_ul is not None and pct_ul >= 150 else "moderate"
+        if pct_ul is not None:
+            message = f"Upper-limit warning: {nutrient} at {pct_ul:.0f}% of UL"
+        else:
+            message = f"Upper-limit warning: {nutrient}"
+        add_warning("dose_safety", sev, message)
+
     # Interaction alerts
     for alert in safe_list(safe_dict(enriched.get("interaction_profile")).get("ingredient_alerts")):
         if not isinstance(alert, dict):
@@ -5947,6 +5965,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     if scored.get("_v4_quality_status") is not None:
         pillars = scored.get("_v4_pillars")
         blob["quality_pillars_v4"] = pillars
+        blob["quality_score_cap_v4"] = scored.get("_v4_quality_score_cap")
         blob["clean_label_flags_v4"] = scored.get("_v4_clean_label_flags")
         blob["raw_score_v4_100"] = scored.get("_v4_raw_score_100")
         blob["v4_safety_gate"] = scored.get("_v4_safety_gate")
@@ -6061,12 +6080,14 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
     """Extract top 5-10 key nutrients with doses for quick display."""
     nutrients = []
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
-    ingredients = safe_list(iqd.get("ingredients"))
+    ingredients = safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients"))
 
     # Priority order for display
     priority_nutrients = [
         "dietary fiber", "fiber", "psyllium husk", "psyllium",
-        "vitamin d", "vitamin c", "vitamin b12", "magnesium", "zinc",
+        "niacin", "vitamin b6", "folate", "vitamin b12", "biotin",
+        "vitamin b1", "vitamin b2", "pantothenic acid", "choline",
+        "vitamin d", "vitamin c", "magnesium", "zinc",
         "omega-3", "iron", "calcium", "vitamin a", "vitamin e",
     ]
 
@@ -6090,8 +6111,13 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
         if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids", "fiber", "fibers"]:
             continue
 
-        normalized_amount = ing.get("normalized_amount") or ing.get("dosage")
-        normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit"))
+        normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
+        normalized_unit = safe_str(
+            ing.get("normalized_unit")
+            or ing.get("dosage_unit")
+            or ing.get("unit_normalized")
+            or ing.get("unit")
+        )
 
         if normalized_amount is not None:
             priority_idx = priority_nutrients.index(standard_name) if standard_name in priority_nutrients else 999
@@ -6615,6 +6641,17 @@ def _protein_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) ->
     return total_plant_g >= PROTEIN_GOAL_MIN_DOSE_G
 
 
+def _pre_workout_goal_cluster_ids(enriched: Dict, *, enforce_dose_gate: bool) -> set:
+    """Direct sports goal extraction for disclosed pre-workout formulas."""
+    try:
+        from scoring_v4.modules.sports_helpers import pre_workout_goal_cluster_ids
+
+        return set(pre_workout_goal_cluster_ids(enriched, enforce_dose_gate=enforce_dose_gate))
+    except Exception as exc:
+        logger.debug("pre-workout goal cluster extraction skipped: %s", exc)
+        return set()
+
+
 def _sleep_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
     """Direct sleep-quality cluster extraction for focused sleep actives.
 
@@ -6746,7 +6783,7 @@ _GOAL_CLUSTER_ANCHORS: Dict[str, set] = {
     },
     "prenatal_pregnancy_support": {
         "folate", "folic acid", "methylfolate", "5-mthf", "quatrefolic", "dha",
-        "choline",
+        "choline", "iron", "iodine", "vitamin d", "vitamin d3",
     },
     "hormone_balance_men": {
         "ashwagandha", "ksm-66", "tongkat ali", "eurycoma longifolia",
@@ -6832,6 +6869,24 @@ _GOAL_CLUSTER_INTENT_KEYWORDS: Dict[str, tuple] = {
     # formulas explicitly positioned around thyroid support.
     "thyroid_support": ("thyroid", "iodine", "kelp", "bladderwrack", "guggul"),
 }
+_PRENATAL_GOAL_INTENT_KEYWORDS = (
+    "prenatal",
+    "pre-natal",
+    "pregnancy",
+    "pregnant",
+    "maternal",
+    "ttc",
+    "trying to conceive",
+)
+_PRENATAL_GOAL_ANCHOR_GROUPS = {
+    "folate": {"folate", "folic acid", "methylfolate", "5-mthf", "quatrefolic"},
+    "dha": {"dha"},
+    "choline": {"choline"},
+    "iron": {"iron"},
+    "iodine": {"iodine"},
+    "vitamin_d": {"vitamin d", "vitamin d3"},
+}
+_PRENATAL_GOAL_MIN_ANCHOR_GROUPS = 3
 
 
 def _goal_cluster_active_count(enriched: Dict[str, Any]) -> int:
@@ -6907,6 +6962,36 @@ def _goal_cluster_intent_allowed(cid: str, active_count: int, product_text: str)
     return any(keyword in product_text for keyword in keywords)
 
 
+def _prenatal_goal_cluster_allowed(
+    matched: list,
+    *,
+    require_adequate_dose: bool,
+    cluster_all_adequate: Optional[bool],
+    product_text: str,
+) -> bool:
+    """Full prenatal goal support requires prenatal positioning or a panel.
+
+    A plain B-complex with folate/B12 should not become a full prenatal match.
+    A prenatal-positioned product (e.g. Prenatal DHA, Prenatal Multi) can claim
+    the cluster with its relevant prenatal anchor; otherwise require a broader
+    prenatal anchor panel so a general nutrient product is not over-promoted.
+    """
+    if any(keyword in product_text for keyword in _PRENATAL_GOAL_INTENT_KEYWORDS):
+        return True
+
+    groups: set[str] = set()
+    for m in matched:
+        adequacy = _goal_cluster_match_adequacy(m, cluster_all_adequate)
+        if require_adequate_dose and adequacy is False:
+            continue
+        ing = _goal_cluster_match_name(m)
+        for group, aliases in _PRENATAL_GOAL_ANCHOR_GROUPS.items():
+            if ing in aliases:
+                groups.add(group)
+                break
+    return len(groups) >= _PRENATAL_GOAL_MIN_ANCHOR_GROUPS
+
+
 def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True) -> set:
     """Flatten product cluster IDs from the enrichment output.
 
@@ -6959,6 +7044,13 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
         focused = _GOAL_CLUSTER_FOCUSED_NUTRIENTS.get(cid)
         is_focused_product = active_count <= _GOAL_CLUSTER_FOCUS_MAX_ACTIVES
         cluster_all_adequate = _goal_cluster_all_adequate(cluster)
+        if cid == "prenatal_pregnancy_support":
+            return _prenatal_goal_cluster_allowed(
+                matched,
+                require_adequate_dose=require_adequate_dose,
+                cluster_all_adequate=cluster_all_adequate,
+                product_text=product_text,
+            )
         has_dose_info = False
         for m in matched:
             adequacy = _goal_cluster_match_adequacy(m, cluster_all_adequate)
@@ -7029,6 +7121,7 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
         ids.add(CREATINE_GOAL_CLUSTER_ID)
     if _protein_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
         ids.add(CREATINE_GOAL_CLUSTER_ID)
+    ids.update(_pre_workout_goal_cluster_ids(enriched, enforce_dose_gate=enforce_dose_gate))
     if _sleep_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
         ids.add(SLEEP_GOAL_CLUSTER_ID)
     if _joint_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
@@ -7233,6 +7326,72 @@ def _format_quantity(value: Any) -> str:
     return ("%g" % num)
 
 
+def _normalize_weight_serving_for_display(
+    min_qty: Optional[float],
+    max_qty: Optional[float],
+    unit: str,
+) -> tuple[Optional[float], Optional[float], str]:
+    """Keep weight serving summaries in human units without changing dose math."""
+    unit_l = safe_str(unit).strip().lower()
+    compact = unit_l.replace(".", "").replace(" ", "")
+    if compact in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        finite_values = [
+            abs(q) for q in (min_qty, max_qty)
+            if q is not None and _math.isfinite(q)
+        ]
+        if not finite_values:
+            return min_qty, max_qty, unit
+        largest = max(finite_values)
+        if largest >= 1000:
+            return (
+                None if min_qty is None else min_qty / 1000.0,
+                None if max_qty is None else max_qty / 1000.0,
+                "g",
+            )
+    return min_qty, max_qty, unit
+
+
+def _collagen_serving_looks_implausible(
+    enriched: Dict,
+    max_qty: Optional[float],
+    unit: str,
+    max_daily: Any,
+) -> bool:
+    """Hide clearly broken collagen serving summaries before export."""
+    if max_qty is None or not _math.isfinite(max_qty):
+        return False
+
+    haystack_parts = [
+        safe_str(enriched.get("product_name")),
+        safe_str(enriched.get("brand_name")),
+        safe_str(enriched.get("form_factor")),
+        safe_str(enriched.get("form_factor_canonical")),
+    ]
+    ingredient_quality = safe_dict(enriched.get("ingredient_quality_data"))
+    for ing in safe_list(ingredient_quality.get("ingredients_scorable")):
+        ing = safe_dict(ing)
+        haystack_parts.extend([
+            safe_str(ing.get("name")),
+            safe_str(ing.get("standard_name")),
+            safe_str(ing.get("canonical_id")),
+        ])
+    haystack = " ".join(haystack_parts).lower()
+    if "collagen" not in haystack:
+        return False
+
+    unit_l = safe_str(unit).strip().lower().replace(".", "").replace(" ", "")
+    if unit_l in {"g", "gram", "grams", "gram(s)"}:
+        grams_per_serving = max_qty
+    elif unit_l in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        grams_per_serving = max_qty / 1000.0
+    else:
+        return False
+
+    daily_multiplier = safe_float(max_daily, 1.0) or 1.0
+    daily_multiplier = max(daily_multiplier, 1)
+    return grams_per_serving * daily_multiplier > 50
+
+
 def _diabetes_friendly_from_dietary(ds: Dict[str, Any]) -> bool:
     if not safe_bool(ds.get("diabetes_friendly", False)):
         return False
@@ -7306,10 +7465,12 @@ def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str
         or "fluid ounce" in unit_l
     ) or has("liquid"):
         return ("Take", "mL", "mL")
-    # Weight units (grams) — must come before powder/scoop fallback.
+    # Weight units — must come before powder/scoop fallback.
+    if "milligram" in unit_l or unit_l.strip() in ("mg", "mg."):
+        return ("Mix", "mg", "mg")
     if (
         "gram" in unit_l
-        or unit_l.strip() in ("g", "g.", "mg")
+        or unit_l.strip() in ("g", "g.")
         or unit_l.strip().endswith(" g")
     ):
         return ("Mix", "gram", "grams")
@@ -7385,17 +7546,24 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
         if max_qty is None:
             max_qty = min_qty
 
+        min_qty, max_qty, unit = _normalize_weight_serving_for_display(
+            min_qty, max_qty, unit,
+        )
+
         verb, noun_singular, noun_plural = _derive_serving_verb_and_noun(unit, form_factor)
 
-        if min_qty == max_qty:
+        if _collagen_serving_looks_implausible(enriched, max_qty, unit, max_daily):
+            summary = "See product label"
+        elif min_qty == max_qty:
             qty_text = _format_quantity(min_qty)
             noun = noun_singular if min_qty == 1 else noun_plural
+            cadence = _frequency_phrase(max_daily)
+            summary = f"{verb} {qty_text} {noun} {cadence}".strip()
         else:
             qty_text = f"{_format_quantity(min_qty)}-{_format_quantity(max_qty)}"
             noun = noun_plural
-
-        cadence = _frequency_phrase(max_daily)
-        summary = f"{verb} {qty_text} {noun} {cadence}".strip()
+            cadence = _frequency_phrase(max_daily)
+            summary = f"{verb} {qty_text} {noun} {cadence}".strip()
 
     # Limit length defensively.
     if len(summary) > 150:

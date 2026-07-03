@@ -126,6 +126,8 @@ def test_gate_blocks_safety_signals() -> None:
 def test_archetype_from_module() -> None:
     from scoring_v4.display_calibration import _archetype
     assert _archetype("sports", {}) == "sports_single"
+    assert _archetype("sports", {"metadata": {"sports_subtype": "pre_workout"}}) == "sports_pre_workout"
+    assert _archetype("sports", {"metadata": {"sports_subtype": "protein"}}) == "sports_protein"
     assert _archetype("omega", {}) == "omega"
     assert _archetype("probiotic", {}) == "probiotic"
     assert _archetype("multi_or_prenatal", {}) == "prenatal_multi"

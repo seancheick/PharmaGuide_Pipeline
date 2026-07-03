@@ -90,7 +90,7 @@
         "recovery_support": 0.4
       },
       "required_clusters": ["fat_metabolism", "blood_sugar_regulation"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.5
     },
     {
@@ -129,7 +129,7 @@
         "inflammation_control": 0.5
       },
       "required_clusters": ["longevity_and_anti_aging", "antioxidant_defense"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.4
     },
     {
@@ -145,7 +145,7 @@
         "nerve_health_neuropathy_support": 0.25
       },
       "required_clusters": ["blood_sugar_regulation"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.5
     },
     {
@@ -157,7 +157,7 @@
         "gut_barrier": 0.4
       },
       "required_clusters": ["immune_defense", "immune_probiotic_blend"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.5
     },
     {
@@ -236,8 +236,8 @@
         "detox_pathway": 0.4,
         "inflammation_control": 0.4
       },
-      "required_clusters": ["hair_skin_nutrition", "skin_health_complex", "wound_healing"],
-      "blocked_by_clusters": [],
+      "required_clusters": ["hair_skin_nutrition", "skin_health_complex", "collagen_synthesis_support"],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.5
     },
     {
@@ -252,7 +252,7 @@
         "kidney_health_support": 0.4
       },
       "required_clusters": ["liver_support", "detox_pathway"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.5
     },
     {
@@ -286,7 +286,7 @@
         "methylation_support": 0.5
       },
       "required_clusters": ["hormone_balance_men", "hormone_balance_women", "thyroid_support"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.4
     },
     {
@@ -300,7 +300,7 @@
         "nitric_oxide_blood_flow": 0.4
       },
       "required_clusters": ["eye_health"],
-      "blocked_by_clusters": [],
+      "blocked_by_clusters": ["pre_workout_energy", "pre_post_workout"],
       "min_match_score": 0.6
     }
   ]

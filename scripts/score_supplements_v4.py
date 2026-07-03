@@ -13,10 +13,10 @@ gates, modules, and confidence rules independently.
 
 Current P3.6 / P2.6 / P1.6.6 state:
   - Router runs and decides the module (generic / probiotic / omega /
-    multi_or_prenatal).
+    multi_or_prenatal / b_complex).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
-  - Generic, probiotic, omega, sports, and multi_or_prenatal modules emit
+  - Generic, probiotic, omega, sports, b_complex, and multi_or_prenatal modules emit
     populated dimensions plus manufacturer trust / violations and final 0-100
     rubric scores.
   - raw_score_v4_100 mirrors the module result for complete products in
@@ -56,6 +56,7 @@ from typing import Any, Dict
 from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
+from scoring_v4.modules.b_complex import score_b_complex
 from scoring_v4.modules.fiber_digestive import score_fiber_digestive
 from scoring_v4.modules.generic import score_generic
 from scoring_v4.modules.multi_prenatal import score_multi_prenatal
@@ -87,7 +88,7 @@ V4_SCORER_KEYS = (
 # classification-schema version, and the version+fingerprint of every config
 # rubric consumed. Bump SCORING_ENGINE_VERSION on a material ALGORITHM change;
 # config-value changes are captured by the per-rubric fingerprints, not here.
-SCORING_ENGINE_VERSION = "4.0.0"
+SCORING_ENGINE_VERSION = "4.1.0"
 SCORING_MODE = "production"
 
 
@@ -209,7 +210,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
 
     Pipeline (per §4 of SCORING_V4_PROPOSAL.md):
       1. Router decides module (generic / probiotic / omega /
-         multi_or_prenatal).
+         multi_or_prenatal / b_complex).
       2. Layer 1 Safety Gate. BLOCKED/UNSAFE short-circuit scoring
          (score=None, confidence='blocked_by_safety_gate'). CAUTION
          sets verdict but scoring continues.
@@ -278,7 +279,7 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         return result
 
     # Layer 3 — Per-class module dispatch. Generic, probiotic, omega,
-    # sports, fiber_digestive, and multi_or_prenatal are wired as complete
+    # sports, fiber_digestive, b_complex, and multi_or_prenatal are wired as complete
     # score-producing modules.
     if module == "generic":
         module_result = score_generic(enriched_product)
@@ -337,6 +338,26 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
             result["raw_score_v4_100"],
             _carried_verdict_with_completeness_policy(result, completeness),
             multi_result.raw_score_100,
+        )
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
+        )
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
+    elif module == "b_complex":
+        b_complex_result = score_b_complex(enriched_product)
+        result["v4_breakdown"]["module"] = b_complex_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
+            b_complex_result.score_100,
+            completeness,
+        )
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
+            b_complex_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,

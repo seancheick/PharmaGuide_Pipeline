@@ -15,6 +15,7 @@ from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 from scoring_v4.modules.verification_bonus import score_verification_bonus
 from scoring_v4.modules.sports_dose import score_dose
 from scoring_v4.modules.sports_formulation import score_formulation
+from scoring_v4.modules.sports_helpers import sports_public_quality_cap, sports_subtype
 
 
 PHASE_MARKER = "P1.7_sports_module"
@@ -78,4 +79,8 @@ def score_sports(product: Any) -> GenericModuleResult:
     _assemble_score(result)
     result.phase = PHASE_MARKER
     result.metadata["phase"] = PHASE_MARKER
+    result.metadata["sports_subtype"] = sports_subtype(product)
+    public_cap = sports_public_quality_cap(product)
+    if public_cap is not None:
+        result.metadata["public_quality_cap"] = public_cap
     return result

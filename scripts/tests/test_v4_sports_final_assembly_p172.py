@@ -48,6 +48,26 @@ def _sports_product() -> dict:
     }
 
 
+def _preworkout_product() -> dict:
+    return {
+        "id": 999001,
+        "fullName": "Vector Pre-Workout Tested",
+        "product_name": "Vector Pre-Workout Tested",
+        "brandName": "Vector",
+        "primary_type": "pre_workout",
+        "supplement_taxonomy": {"primary_type": "pre_workout"},
+        "form_factor_canonical": "powder",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                _row("beta-alanine", 3200, "mg", name="Beta-Alanine"),
+                _row("l_citrulline", 6000, "mg", name="Citrulline Malate"),
+                _row("betaine_anhydrous", 2500, "mg", name="Betaine Anhydrous"),
+                _row("caffeine", 150, "mg", name="Caffeine Anhydrous"),
+            ]
+        },
+    }
+
+
 def test_score_sports_returns_shared_breakdown_shape_with_sports_dose() -> None:
     result = score_sports(_sports_product())
     breakdown = result.to_breakdown()
@@ -60,6 +80,17 @@ def test_score_sports_returns_shared_breakdown_shape_with_sports_dose() -> None:
     assert breakdown["dimensions"]["dose"]["score"] == 25.0
     assert breakdown["raw_score_100"] is not None
     assert breakdown["score_100"] is not None
+    assert breakdown["metadata"]["sports_subtype"] == "creatine"
+    assert "public_quality_cap" not in breakdown["metadata"]
+
+
+def test_score_sports_stamps_preworkout_subtype_and_public_cap() -> None:
+    result = score_sports(_preworkout_product())
+    breakdown = result.to_breakdown()
+
+    assert breakdown["metadata"]["sports_subtype"] == "pre_workout"
+    assert breakdown["metadata"]["public_quality_cap"]["id"] == "sports_pre_workout"
+    assert breakdown["metadata"]["public_quality_cap"]["cap"] == 88.0
 
 
 def test_score_sports_requests_primary_evidence_floor(monkeypatch) -> None:

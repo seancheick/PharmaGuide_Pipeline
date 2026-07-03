@@ -184,6 +184,63 @@ def _joint_active_enriched(
     }
 
 
+def _preworkout_enriched(*, adequate: bool = True):
+    multiplier = 1.0 if adequate else 0.25
+    return {
+        "product_name": "Vector Pre-Workout Tested",
+        "fullName": "Vector Pre-Workout Tested",
+        "supplement_taxonomy": {"primary_type": "pre_workout"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Beta-Alanine",
+                    "standard_name": "Beta-Alanine",
+                    "canonical_id": "beta-alanine",
+                    "quantity": 3200 * multiplier,
+                    "unit": "mg",
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                },
+                {
+                    "name": "Citrulline Malate",
+                    "standard_name": "Citrulline Malate",
+                    "canonical_id": "l_citrulline",
+                    "quantity": 6000 * multiplier,
+                    "unit": "mg",
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                },
+                {
+                    "name": "Caffeine Anhydrous",
+                    "standard_name": "Caffeine Anhydrous",
+                    "canonical_id": "caffeine",
+                    "quantity": 150 * multiplier,
+                    "unit": "mg",
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                },
+            ]
+        },
+        # Regression shape from the sports audit: trace nutrients/adapted
+        # clusters can over-promote a pre-workout to broad wellness goals.
+        # Once the direct pre-workout clusters are added, goal-level
+        # blocked_by rules should suppress these broad goals.
+        "synergy_detail": {
+            "clusters_matched": [
+                "fat_metabolism",
+                "immune_defense",
+                "hair_skin_nutrition",
+                "liver_support",
+                "hormone_balance_men",
+                "eye_health",
+            ]
+        },
+    }
+
+
 # ---------- Empty / degenerate inputs ----------
 
 
@@ -237,6 +294,24 @@ def test_required_clusters_gate_passes_when_at_least_one_required_present():
         "sleep_stack", "magnesium_nervous_system", "stress_resilience",
     ]))
     assert "GOAL_SLEEP_QUALITY" in result["goal_matches"]
+
+
+def test_skin_hair_nails_matches_collagen_synthesis_support():
+    """Collagen synthesis support is a direct skin/hair/nails lane.
+
+    A clean collagen product commonly carries this cluster without the broader
+    beauty-stack clusters, so it must qualify the goal by itself.
+    """
+    result = compute_goal_matches(_enriched(["collagen_synthesis_support"]))
+
+    assert "GOAL_SKIN_HAIR_NAILS" in result["goal_matches"]
+
+
+def test_skin_hair_nails_does_not_match_wound_healing_alone():
+    """Wound-healing formulas are adjacent, not a standalone beauty-goal match."""
+    result = compute_goal_matches(_enriched(["wound_healing"]))
+
+    assert "GOAL_SKIN_HAIR_NAILS" not in result["goal_matches"]
 
 
 # ---------- blocked_by_clusters gate ----------
@@ -299,13 +374,27 @@ def test_zero_required_overlap_excludes_goal():
     assert "GOAL_LIVER_DETOX" not in result["goal_matches"]
 
 
-def test_high_threshold_single_required_still_passes_when_fully_covered():
-    """PRENATAL has min_match_score=0.7. Hitting only prenatal_pregnancy_support:
-       score_required = 1.0/1.0 = 1.0 ≥ 0.7 → MATCH.
-    A DHA-only or folate-only single-ingredient supplement reaches PRENATAL
-    via this path — exactly the behavior the single-ingredient override
-    on the cluster needs at the goal layer."""
-    result = compute_goal_matches(_enriched(["prenatal_pregnancy_support"]))
+def test_prenatal_required_cluster_passes_when_product_is_prenatal_positioned():
+    """PRENATAL still has a high threshold, but the cluster must first survive
+    the product-level prenatal gate. A product explicitly positioned as prenatal
+    with prenatal anchors can claim the goal; a plain B-complex cannot."""
+    result = compute_goal_matches({
+        "product_name": "Prenatal Multi + DHA",
+        "activeIngredients": [{"i": i} for i in range(10)],
+        "supplement_taxonomy": {"primary_type": "multivitamin"},
+        "formulation_data": {
+            "synergy_clusters": [
+                {
+                    "cluster_id": "prenatal_pregnancy_support",
+                    "matched_ingredients": [
+                        {"cluster_ingredient": "folate", "meets_minimum": True},
+                        {"cluster_ingredient": "choline", "meets_minimum": True},
+                        {"cluster_ingredient": "dha", "meets_minimum": True},
+                    ],
+                }
+            ]
+        },
+    })
     assert "GOAL_PRENATAL_PREGNANCY" in result["goal_matches"]
     assert result["goal_match_confidence"] == 1.0
 
@@ -344,14 +433,14 @@ def test_confidence_is_average_of_matched_scores_rounded_to_two_decimals():
 def test_multi_goal_match_averages_confidence():
     """Hit a strong cluster set that triggers two distinct goals at different scores."""
     # WEIGHT_MGMT: req fat_metabolism+blood_sugar, weights 1.0+0.9+0.7+0.5+0.6+0.4 = 4.1
-    # Hit fat_metabolism + blood_sugar + thyroid + energy + pre_workout = 1.0+0.9+0.7+0.5+0.6 = 3.7
-    #   → 3.7/4.1 = 0.902, no blocked → MATCH
+    # Hit fat_metabolism + blood_sugar + thyroid + energy + recovery = 1.0+0.9+0.7+0.5+0.4 = 3.5
+    #   → 3.5/4.1 = 0.854, no blocked → MATCH
     # BLOOD_SUGAR_SUPPORT: req blood_sugar, weights 1.0+0.6+0.5+0.5+0.4+0.4 = 3.4
     # Hit blood_sugar + energy + thyroid + fat_metabolism = 1.0+0.6+0.5+0.5 = 2.6
     #   → 2.6/3.4 = 0.765, no blocked → MATCH
     result = compute_goal_matches(_enriched([
         "fat_metabolism", "blood_sugar_regulation", "thyroid_support",
-        "energy_mitochondria", "pre_workout_energy",
+        "energy_mitochondria", "recovery_support",
     ]))
     assert "GOAL_WEIGHT_MANAGEMENT" in result["goal_matches"]
     assert "GOAL_BLOOD_SUGAR_SUPPORT" in result["goal_matches"]
@@ -635,3 +724,28 @@ def test_low_dose_joint_active_routes_joint_goal_to_underdosed():
 
     assert "GOAL_JOINT_BONE_MOBILITY" not in result["goal_matches"]
     assert "GOAL_JOINT_BONE_MOBILITY" in result["goal_matches_underdosed"]
+
+
+def test_dosed_preworkout_matches_training_and_energy_without_broad_goal_spam():
+    result = compute_goal_matches(_preworkout_enriched(adequate=True))
+
+    assert "GOAL_INCREASE_ENERGY" in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches"]
+    for noisy_goal in {
+        "GOAL_WEIGHT_MANAGEMENT",
+        "GOAL_IMMUNE_SUPPORT",
+        "GOAL_SKIN_HAIR_NAILS",
+        "GOAL_LIVER_DETOX",
+        "GOAL_HORMONAL_BALANCE",
+        "GOAL_EYE_VISION_HEALTH",
+    }:
+        assert noisy_goal not in result["goal_matches"]
+
+
+def test_low_dose_preworkout_routes_training_and_energy_to_underdosed():
+    result = compute_goal_matches(_preworkout_enriched(adequate=False))
+
+    assert "GOAL_INCREASE_ENERGY" not in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches"]
+    assert "GOAL_INCREASE_ENERGY" in result["goal_matches_underdosed"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches_underdosed"]

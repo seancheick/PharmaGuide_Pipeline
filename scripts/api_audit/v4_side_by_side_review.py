@@ -30,7 +30,7 @@ from v4_release_readiness_audit import classify_row  # noqa: E402
 
 DEFAULT_OUT_DIR = REPO_ROOT / "reports" / "v4_side_by_side_review"
 DEFAULT_SAMPLE_SIZE = 100
-MODULE_ORDER = ["generic", "multi_or_prenatal", "probiotic", "omega", "sports"]
+MODULE_ORDER = ["generic", "multi_or_prenatal", "b_complex", "probiotic", "omega", "sports"]
 SCORE_BANDS = (
     (95.0, "near_perfect", "95-100 near-perfect; requires maxed rubric quality with no meaningful penalties"),
     (90.0, "exceptional", "90-94 exceptional; rare on the raw rubric scale"),

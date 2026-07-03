@@ -685,7 +685,7 @@ def _b5_class_for_product(product: Dict[str, Any]) -> str:
     if B5_SPORTS_KEYWORDS.search(name_text):
         return "sports_active"
 
-    if scoring_class == "multi_or_prenatal":
+    if scoring_class in {"multi_or_prenatal", "b_complex"}:
         return "multi_or_prenatal"
     return "generic"
 

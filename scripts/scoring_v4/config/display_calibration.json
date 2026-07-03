@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "config_name": "display_calibration",
-    "version": "1.0.0-experiment",
+    "version": "1.0.2-sports-subtypes",
     "schema_version": "1.0.0",
     "last_updated": "2026-06-07",
     "description": "Display-layer, archetype-anchored top-band normalization. Corrects unreachable structural dimension ceilings so each archetype's best-in-class reads ~95 for consumers, WITHOUT mutating raw_score_100 (the audit/math score). Conservative k=3 convex lift, gated by top_band_eligibility. Anchors R_a are frozen best-in-class raw scores (derived 2026-06-07), not corpus percentiles.",
@@ -23,9 +23,13 @@
   },
   "archetypes": {
     "sports_single": { "R_a": 93.0 },
+    "sports_pre_workout": { "R_a": 95.0 },
+    "sports_protein": { "R_a": 93.0 },
+    "sports_bcaa_eaa": { "R_a": 95.0 },
     "omega": { "R_a": 89.3 },
     "probiotic": { "R_a": 86.5 },
     "fiber_digestive": { "R_a": 88.0 },
+    "b_complex": { "R_a": 86.0 },
     "immune_support": { "R_a": 88.0 },
     "prenatal_multi": { "R_a": 87.9 },
     "generic_single_molecule": { "R_a": 87.5 },

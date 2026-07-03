@@ -10,20 +10,22 @@ Priority order (post-taxonomy refactor, 2026-05-20):
        or broad prenatal micronutrient panel. Does NOT override probiotic,
        single-purpose prenatal DHA, or single-ingredient products that merely
        live in a prenatal bundle/program.
-  3. multivitamin / b-complex → multi_or_prenatal
-     - taxonomy primary_type in {multivitamin, b_complex}
+  3. b-complex              → b_complex
+     - focused B-vitamin panel without stimulant/weight-loss/liver/mood actives
+  4. multivitamin           → multi_or_prenatal
+     - taxonomy primary_type == multivitamin
      - OR legacy type=multivitamin only when the physical panel is broad
        enough to be a true themed multivitamin
-  4. sports                 → sports
+  5. sports                 → sports
      - sports-protein identity (not protein taxonomy alone)
      - OR sports-active canonical panel + explicit sports label intent
      - OR native sports_primary_dose evidence
-  5. fiber_digestive        → fiber_digestive
+  6. fiber_digestive        → fiber_digestive
      - fiber/prebiotic/digestive-enzyme identity
-  6. omega_3                → omega
+  7. omega_3                → omega
      - taxonomy primary_type == "omega_3"
      - OR EPA/DHA canonical in ingredient panel (positive quantity)
-  7. fall through           → generic
+  8. fall through           → generic
 
 The taxonomy primary_type field comes from scripts/supplement_taxonomy.py
 (introduced 2026-05-20) and uses canonical-ID-based panel composition
@@ -48,7 +50,7 @@ from typing import Any, Dict
 
 from scoring_input_contract import build_scoring_classification, get_scoring_ingredients
 
-VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive")
+VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive")
 
 _PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
@@ -116,6 +118,19 @@ _FIBER_DIGESTIVE_NAME_RE = re.compile(
     r"\b(fiber|fibre|psyllium|inulin|prebiotic|digestive\s+enzymes?|digestive\s+fiber)\b",
     re.IGNORECASE,
 )
+_B_COMPLEX_EXCLUSION_RE = re.compile(
+    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|liver|stress|mood)\b",
+    re.IGNORECASE,
+)
+_B_COMPLEX_DISQUALIFY_CANONICALS = {
+    "caffeine",
+    "green_tea_extract",
+    "green_coffee_bean",
+    "garcinia_cambogia",
+    "yohimbe",
+    "yohimbine",
+    "synephrine",
+}
 
 # Per scripts/data/omega_rubric.json router.name_keywords. Lowercased
 # substring matches against the joined product/brand/bundle name text.
@@ -824,11 +839,12 @@ def _is_b_complex_route_eligible(product: Dict[str, Any], name_text: str) -> boo
     explicitly says B-complex or the panel has a broad B-vitamin spread.
     """
     lowered = (name_text or "").lower()
-    if "b-complex" in lowered or "b complex" in lowered:
-        return True
+    if _B_COMPLEX_EXCLUSION_RE.search(name_text or ""):
+        return False
 
     b_vitamins: set[str] = set()
     non_b_scorable = 0
+    disqualifying_actives: set[str] = set()
     for ing in get_scoring_ingredients(product or {}, strict=True).rows:
         if not isinstance(ing, dict):
             continue
@@ -839,8 +855,14 @@ def _is_b_complex_route_eligible(product: Dict[str, Any], name_text: str) -> boo
             b_vitamins.add(canonical)
         else:
             non_b_scorable += 1
+            if canonical in _B_COMPLEX_DISQUALIFY_CANONICALS:
+                disqualifying_actives.add(canonical)
 
-    return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
+    if disqualifying_actives:
+        return False
+    if "b-complex" in lowered or "b complex" in lowered:
+        return len(b_vitamins) >= 3 and non_b_scorable <= 2
+    return len(b_vitamins) >= 4 and non_b_scorable <= 1
 
 
 def _is_multivitamin_route_eligible(product: Dict[str, Any], name_text: str) -> bool:
@@ -1098,7 +1120,7 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
 _TAXONOMY_TO_MODULE = {
     "probiotic": "probiotic",
     "multivitamin": "multi_or_prenatal",
-    "b_complex": "multi_or_prenatal",  # B-complex is a multi-vitamin variant
+    "b_complex": "b_complex",
     "omega_3": "omega",
     # Everything else routes to generic — listed explicitly so future
     # taxonomy types are caught by the unknown-key fallthrough below:
@@ -1220,9 +1242,9 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     # fall through to the omega / generic logic below rather than crashing.
     if primary_type:
         module = _TAXONOMY_TO_MODULE.get(primary_type)
+        if module == "b_complex":
+            return "b_complex" if _is_b_complex_route_eligible(product, name_text) else "generic"
         if module == "multi_or_prenatal":
-            if primary_type == "b_complex" and not _is_b_complex_route_eligible(product, name_text):
-                return "generic"
             if primary_type == "multivitamin" and not _is_multivitamin_route_eligible(product, name_text):
                 return "generic"
             return "multi_or_prenatal"

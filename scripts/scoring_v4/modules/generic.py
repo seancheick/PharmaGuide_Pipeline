@@ -55,6 +55,7 @@ from typing import Any, Dict, Optional
 from scoring_v4.modules.generic_dose import score_dose
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
+from scoring_v4.modules.generic_helpers import get_active_ingredients, _norm_text
 from scoring_v4.modules.generic_manufacturer import (
     score_manufacturer_trust,
     score_manufacturer_violations,
@@ -90,6 +91,47 @@ MANUFACTURER_VIOLATIONS_FLOOR = -25
 # must not be stamped POOR purely from removing the old renormalization, before
 # Phase 6's botanical dose adapter lands. Floors raw at the SAFE/POOR boundary.
 BOTANICAL_RAW_FLOOR = 40.0
+
+ASTAXANTHIN_PUBLIC_QUALITY_CAP = 85.0
+COQ10_PUBLIC_QUALITY_CAP = 93.0
+_ASTAXANTHIN_IDENTITIES = frozenset({
+    "astaxanthin",
+    "natural_astaxanthin",
+    "astareal",
+    "astalif",
+    "icelandic_astalif",
+    "haematococcus_pluvialis",
+    "h_pluvialis",
+})
+_COQ10_IDENTITIES = frozenset({
+    "coq10",
+    "coenzyme_q10",
+    "coenzyme_q_10",
+    "ubiquinol",
+    "ubiquinone",
+    "kaneka_ubiquinol",
+    "reduced_form_coenzyme_q10",
+})
+_PUBLIC_CAP_NEUTRAL_IDENTITIES = frozenset({
+    "mixed_tocopherols",
+    "tocopherols",
+    "vitamin_e",
+    "d_alpha_tocopherol",
+    "rosemary_extract",
+    "olive_oil",
+    "extra_virgin_olive_oil",
+    "sunflower_oil",
+    "safflower_oil",
+    "corn_oil",
+    "coconut_oil",
+    "mct_oil",
+    "medium_chain_triglycerides",
+    "beeswax",
+    "gelatin",
+    "glycerin",
+    "purified_water",
+    "water",
+})
 
 
 @dataclass
@@ -234,6 +276,69 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
     return {name: DimensionResult(max=float(cap)) for name, cap in DIMENSION_CAPS}
 
 
+def _identity_tokens(ingredient: Dict[str, Any]) -> set[str]:
+    tokens: set[str] = set()
+    if not isinstance(ingredient, dict):
+        return tokens
+    for field in (
+        "canonical_id",
+        "standard_name",
+        "matched_id",
+        "ingredient_id",
+        "name",
+        "raw_source_text",
+    ):
+        value = _norm_text(ingredient.get(field))
+        if not value:
+            continue
+        tokens.add(value)
+        tokens.add(value.replace("-", "_").replace(" ", "_"))
+    return {token for token in tokens if token}
+
+
+def _identity_matches(tokens: set[str], identities: frozenset[str]) -> bool:
+    return any(token in identities for token in tokens)
+
+
+def generic_public_quality_cap(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """Return a public-score cap for generic single-bioactive products.
+
+    Raw v4 math still records the product's label/form/testing strength. This cap
+    only prevents the consumer six-pillar score from implying gold-standard
+    clinical formula evidence for clean but narrow generic bioactives.
+    """
+    if not isinstance(product, dict):
+        return None
+
+    active_groups: list[str] = []
+    for ingredient in get_active_ingredients(product):
+        tokens = _identity_tokens(ingredient)
+        if not tokens or _identity_matches(tokens, _PUBLIC_CAP_NEUTRAL_IDENTITIES):
+            continue
+        if _identity_matches(tokens, _ASTAXANTHIN_IDENTITIES):
+            active_groups.append("astaxanthin")
+        elif _identity_matches(tokens, _COQ10_IDENTITIES):
+            active_groups.append("coq10")
+        else:
+            active_groups.append("other")
+
+    if not active_groups:
+        return None
+    if all(group == "astaxanthin" for group in active_groups):
+        return {
+            "id": "generic_astaxanthin_single",
+            "cap": ASTAXANTHIN_PUBLIC_QUALITY_CAP,
+            "reason": "Single-ingredient astaxanthin has promising but not elite clinical evidence.",
+        }
+    if all(group == "coq10" for group in active_groups):
+        return {
+            "id": "generic_coq10_single",
+            "cap": COQ10_PUBLIC_QUALITY_CAP,
+            "reason": "Single-ingredient CoQ10 is useful but should not exceed an elite clinical-formula score.",
+        }
+    return None
+
+
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
@@ -327,6 +432,9 @@ def score_generic(product: Any) -> GenericModuleResult:
     result.safety_hygiene_base = score_safety_hygiene_base(product)
 
     _assemble_score(result)
+    public_cap = generic_public_quality_cap(product)
+    if public_cap is not None:
+        result.metadata["public_quality_cap"] = public_cap
 
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension

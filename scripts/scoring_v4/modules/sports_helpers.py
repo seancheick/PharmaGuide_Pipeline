@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Dict, Iterable, List, Optional, Set
 
 from scoring_v4.modules.generic_helpers import (
     _as_float,
@@ -88,6 +88,31 @@ SPORTS_BAND_CANONICALS = (
     | BETAINE_CANONICALS
     | TAURINE_CANONICALS
     | BCAA_AGGREGATE_CANONICALS
+)
+PRE_WORKOUT_CANONICALS = (
+    CREATINE_CANONICALS
+    | BETA_ALANINE_CANONICALS
+    | CITRULLINE_CANONICALS
+    | CAFFEINE_CANONICALS
+    | BETAINE_CANONICALS
+    | TAURINE_CANONICALS
+    | ALPHA_GPC_CANONICALS
+    | ATP_CANONICALS
+    | frozenset({"l_tyrosine", "tyrosine", "acetyl_l_carnitine", "l_carnitine"})
+)
+STIMULANT_CANONICALS = CAFFEINE_CANONICALS | frozenset(
+    {
+        "yohimbe",
+        "yohimbine",
+        "synephrine",
+        "green_tea_extract",
+        "green_coffee_bean",
+        "guarana",
+    }
+)
+ELECTROLYTE_CANONICALS = frozenset({"sodium", "potassium", "magnesium", "calcium", "chloride"})
+PRE_WORKOUT_GOAL_CLUSTERS = frozenset(
+    {"pre_workout_energy", "pre_post_workout", "muscle_building_recovery"}
 )
 
 
@@ -215,4 +240,193 @@ def primary_sports_identity(product: Dict[str, Any]) -> Optional[str]:
         return "citrulline"
     if HMB_CANONICALS & canons:
         return "hmb"
+    return None
+
+
+def sports_subtype(product: Dict[str, Any]) -> str:
+    """Return the sports subtype used by public calibration and goal routing.
+
+    The module route remains ``sports``. This finer subtype is deliberately
+    non-clinical metadata: it prevents a transparent multi-active pre-workout or
+    BCAA/EAA formula from inheriting the same public-score ceiling as focused
+    creatine/protein products, while preserving the high ceiling for clean
+    single-purpose products.
+    """
+    if not isinstance(product, dict):
+        product = {}
+    rows = sports_identity_rows(product)
+    canons = {canonical(row) for row in rows}
+    text = _product_text(product)
+    taxonomy = _taxonomy_type(product)
+
+    if _is_opaque_stimulant_context(product, canons, text, taxonomy):
+        return "stimulant_fat_burner"
+    if _is_protein_context(canons, text, taxonomy):
+        return "protein"
+    if _is_pre_workout_context(canons, text, taxonomy):
+        return "pre_workout"
+    if _is_focused_creatine(canons):
+        return "creatine"
+    if canons & (BCAA_CANONICALS | EAA_CANONICALS | BCAA_AGGREGATE_CANONICALS):
+        return "bcaa_eaa"
+    if taxonomy == "electrolyte" or any(term in text for term in ("electrolyte", "hydration")):
+        return "electrolyte_hydration"
+    primary = primary_sports_identity(product)
+    if primary in {"creatine", "protein"}:
+        return primary
+    if primary in {"bcaa", "eaa"}:
+        return "bcaa_eaa"
+    return primary or "sports_other"
+
+
+def sports_public_quality_cap(product: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    subtype = sports_subtype(product)
+    if subtype == "stimulant_fat_burner":
+        return {
+            "id": "sports_opaque_stimulant",
+            "cap": 65.0,
+            "reason": "Opaque stimulant or fat-burner sports formulas should not rank with transparent sports staples.",
+        }
+    if subtype == "pre_workout":
+        return {
+            "id": "sports_pre_workout",
+            "cap": 88.0,
+            "reason": "Transparent pre-workout stacks are useful but should not score like focused creatine/protein products.",
+        }
+    if subtype == "bcaa_eaa":
+        return {
+            "id": "sports_bcaa_eaa",
+            "cap": 78.0,
+            "reason": "BCAA/EAA products have narrower evidence than complete protein or creatine staples.",
+        }
+    return None
+
+
+def pre_workout_goal_cluster_ids(product: Dict[str, Any], *, enforce_dose_gate: bool) -> Set[str]:
+    """Direct goal clusters for a true pre-workout.
+
+    Goal matching otherwise sees trace cofactors (zinc, chromium, choline, etc.)
+    before it sees the product's real job. For supported goals, require at least
+    two disclosed pre-workout anchors at the same evidence-backed floors used by
+    the sports dose bands. For the underdosed surface, presence of a real
+    pre-workout identity is enough; ``compute_goal_matches`` calls this with
+    ``enforce_dose_gate=False`` for its presence-only pass.
+    """
+    if sports_subtype(product) != "pre_workout":
+        return set()
+    if not enforce_dose_gate:
+        return set(PRE_WORKOUT_GOAL_CLUSTERS)
+    return set(PRE_WORKOUT_GOAL_CLUSTERS) if _adequate_pre_workout_anchor_count(product) >= 2 else set()
+
+
+def _product_text(product: Dict[str, Any]) -> str:
+    taxonomy = (product or {}).get("supplement_taxonomy") or {}
+    parts = [
+        (product or {}).get("product_name"),
+        (product or {}).get("fullName"),
+        (product or {}).get("brand_name"),
+        (product or {}).get("brandName"),
+        (product or {}).get("primary_type"),
+    ]
+    if isinstance(taxonomy, dict):
+        parts.extend([taxonomy.get("primary_type"), taxonomy.get("secondary_type"), taxonomy.get("percentile_category")])
+    for blend in (product or {}).get("proprietary_blends") or []:
+        if isinstance(blend, dict):
+            parts.extend([blend.get("name"), blend.get("description")])
+    return " ".join(_norm_text(part) for part in parts if _norm_text(part))
+
+
+def _taxonomy_type(product: Dict[str, Any]) -> str:
+    taxonomy = (product or {}).get("supplement_taxonomy") or {}
+    direct = _norm_text((product or {}).get("primary_type"))
+    if direct:
+        return direct
+    if isinstance(taxonomy, dict):
+        return _norm_text(taxonomy.get("primary_type"))
+    return ""
+
+
+def _is_protein_context(canons: set[str], text: str, taxonomy: str) -> bool:
+    if canons & SPORTS_PROTEIN_CANONICALS:
+        return True
+    if taxonomy == "protein_powder":
+        return True
+    return "protein" in text and "collagen" not in text
+
+
+def _is_pre_workout_context(canons: set[str], text: str, taxonomy: str) -> bool:
+    preworkout_text = text.replace("-", " ")
+    explicit = taxonomy == "pre_workout" or "pre workout" in preworkout_text or "preworkout" in text
+    if explicit:
+        return bool(canons & PRE_WORKOUT_CANONICALS) or not canons
+    if canons & CAFFEINE_CANONICALS and len(canons & (PRE_WORKOUT_CANONICALS - CAFFEINE_CANONICALS)) >= 1:
+        return True
+    return False
+
+
+def _is_focused_creatine(canons: set[str]) -> bool:
+    non_creatine = canons - CREATINE_CANONICALS
+    return bool(canons & CREATINE_CANONICALS) and not non_creatine
+
+
+def _is_opaque_stimulant_context(
+    product: Dict[str, Any],
+    canons: set[str],
+    text: str,
+    taxonomy: str,
+) -> bool:
+    fat_burner = any(term in text for term in ("fat burner", "fat-burner", "thermogenic", "weight loss", "shred", "cutting"))
+    opaque_blend = False
+    for blend in (product or {}).get("proprietary_blends") or []:
+        if not isinstance(blend, dict):
+            continue
+        disclosure = _norm_text(blend.get("disclosure_level"))
+        if disclosure in {"", "none", "partial"}:
+            opaque_blend = True
+            break
+    stimulant = bool(canons & STIMULANT_CANONICALS)
+    preworkout = taxonomy == "pre_workout" or "pre workout" in text.replace("-", " ") or "preworkout" in text
+    return (fat_burner and (stimulant or opaque_blend)) or (opaque_blend and (stimulant or preworkout))
+
+
+def _adequate_pre_workout_anchor_count(product: Dict[str, Any]) -> int:
+    rows = sports_dosed_rows(product)
+    count = 0
+    if _max_g(rows, CREATINE_CANONICALS) is not None and _max_g(rows, CREATINE_CANONICALS) >= 3.0:
+        count += 1
+    if _max_g(rows, BETA_ALANINE_CANONICALS) is not None and _max_g(rows, BETA_ALANINE_CANONICALS) >= 3.2:
+        count += 1
+    citrulline = _first_row(rows, CITRULLINE_CANONICALS)
+    citrulline_g = dose_g(citrulline or {})
+    if citrulline_g is not None:
+        label = " ".join(
+            _norm_text((citrulline or {}).get(field))
+            for field in ("name", "standard_name", "matched_form", "form", "ingredient_form")
+        )
+        target = 6.0 if "malate" in label else 3.0
+        if citrulline_g >= target:
+            count += 1
+    if _max_mg(rows, CAFFEINE_CANONICALS) is not None and _max_mg(rows, CAFFEINE_CANONICALS) >= 100.0:
+        count += 1
+    if _max_g(rows, BETAINE_CANONICALS) is not None and _max_g(rows, BETAINE_CANONICALS) >= 2.5:
+        count += 1
+    return count
+
+
+def _max_g(rows: Iterable[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:
+    values = [dose_g(row) for row in rows if canonical(row) in canonicals]
+    values = [value for value in values if value is not None]
+    return max(values) if values else None
+
+
+def _max_mg(rows: Iterable[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[float]:
+    values = [dose_mg(row) for row in rows if canonical(row) in canonicals]
+    values = [value for value in values if value is not None]
+    return max(values) if values else None
+
+
+def _first_row(rows: Iterable[Dict[str, Any]], canonicals: frozenset[str]) -> Optional[Dict[str, Any]]:
+    for row in rows:
+        if canonical(row) in canonicals:
+            return row
     return None

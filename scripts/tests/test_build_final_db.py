@@ -2054,6 +2054,22 @@ def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
     assert all("Discontinued" not in warning for warning in warnings)
 
 
+def test_top_warnings_include_rda_ul_safety_flags():
+    enriched = make_enriched()
+    enriched["rda_ul_data"] = {
+        "safety_flags": [
+            {"nutrient": "Vitamin B6", "pct_ul": 588, "severity": "high"},
+        ]
+    }
+
+    warnings = build_top_warnings(enriched)
+
+    assert any(
+        warning == "Upper-limit warning: Vitamin B6 at 588% of UL"
+        for warning in warnings
+    )
+
+
 def test_export_contract_validator_fails_loudly_when_real_upstream_field_is_missing():
     enriched = make_enriched()
     del enriched["ingredient_quality_data"]["ingredients"][0]["score"]
@@ -2302,6 +2318,38 @@ def test_generate_dosing_summary_gummy_form():
     assert "2" in dosing["dosing_summary"]
 
 
+def test_generate_dosing_summary_converts_mg_powder_serving_to_grams():
+    enriched = {
+        "servingsPerContainer": 60,
+        "serving_basis": {
+            "basis_count": 2500,
+            "basis_unit": "mg",
+            "max_servings_per_day": 4,
+        },
+        "form_factor_canonical": "powder",
+    }
+
+    dosing = generate_dosing_summary(enriched)
+
+    assert dosing["dosing_summary"] == "Mix 2.5 grams four times daily"
+
+
+def test_generate_dosing_summary_hides_implausible_collagen_weight_serving():
+    enriched = {
+        "product_name": "Collagen Peptides Powder",
+        "serving_basis": {
+            "basis_count": 2500,
+            "basis_unit": "g",
+            "max_servings_per_day": 4,
+        },
+        "form_factor_canonical": "powder",
+    }
+
+    dosing = generate_dosing_summary(enriched)
+
+    assert dosing["dosing_summary"] == "See product label"
+
+
 def test_generate_dosing_summary_handles_missing_fields():
     # Empty servingSizes, no servingsPerContainer. Must not crash.
     enriched = {"servingSizes": [], "form_factor": "capsule"}
@@ -2514,6 +2562,47 @@ class TestDetailBlobNutritionAndUnmapped:
             "unit": "g",
         } in summary
 
+    def test_key_nutrients_summary_reads_modern_scorable_b_complex_rows(self):
+        enriched = make_enriched()
+        enriched["ingredient_quality_data"] = {
+            "ingredients_scorable": [
+                {
+                    "standard_name": "Vitamin B6",
+                    "canonical_id": "vitamin_b6_pyridoxine",
+                    "category": "vitamins",
+                    "quantity": 10,
+                    "unit": "mg",
+                },
+                {
+                    "standard_name": "Folate",
+                    "canonical_id": "vitamin_b9_folate",
+                    "category": "vitamins",
+                    "quantity": 400,
+                    "unit": "mcg",
+                },
+                {
+                    "standard_name": "Vitamin B12",
+                    "canonical_id": "vitamin_b12_cobalamin",
+                    "category": "vitamins",
+                    "quantity": 500,
+                    "unit": "mcg",
+                },
+                {
+                    "standard_name": "Niacin",
+                    "canonical_id": "vitamin_b3_niacin",
+                    "category": "vitamins",
+                    "quantity": 20,
+                    "unit": "mg",
+                },
+            ]
+        }
+
+        summary = generate_key_nutrients_summary(enriched)
+        names = [item["name"] for item in summary]
+
+        assert names[:4] == ["Niacin", "Vitamin B6", "Folate", "Vitamin B12"]
+        assert {"name": "Folate", "amount": 400.0, "unit": "mcg"} in summary
+
     def test_detail_blob_contains_unmapped_actives_subkey_empty(self):
         blob = build_detail_blob(make_enriched(), make_scored())
         assert "unmapped_actives" in blob
@@ -2718,6 +2807,25 @@ def test_v4_overlay_keeps_omega_form_flag_when_v4_form_is_undefined(monkeypatch)
     assert overlaid["flags"] == ["OMEGA3_FORM_NOT_DISCLOSED"]
 
 
+def test_v4_overlay_removes_stale_section_a_zero_flag_when_v4_scores(monkeypatch):
+    """Legacy v3 Section-A-zero flags must not ship on v4-live products."""
+    scored_v4 = _canned_v4(status="scored", quality_100=90.7, verdict="SAFE", tier="Excellent")
+    scored_v4["v4_module"] = "fiber_digestive"
+    scored_v4["v4_breakdown"]["provenance"]["module_route"] = "fiber_digestive"
+    scored_v4["v4_breakdown"]["completeness_gate"] = {
+        "module": "fiber_digestive",
+        "is_live_eligible": True,
+    }
+    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", lambda _enriched: scored_v4)
+
+    overlaid = _v4_export_adapter.overlay_v4_scored(
+        {"dsld_id": "psyllium-live"},
+        {"flags": ["SECTION_A_ZERO_NO_SCORABLE_INGREDIENTS", "SUPPLEMENT_TYPE_REINFERRED"]},
+    )
+
+    assert overlaid["flags"] == ["SUPPLEMENT_TYPE_REINFERRED"]
+
+
 def _run_build(tmp, enriched_list, scored_list):
     root = Path(tmp)
     enriched_dir = root / "enriched"; enriched_dir.mkdir()
@@ -2749,8 +2857,14 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     s1 = make_scored(); s1["dsld_id"] = "999"
     s2 = make_scored(); s2["dsld_id"] = "888"
     s3 = make_scored(); s3["dsld_id"] = "777"
+    scored_live = _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong")
+    scored_live["quality_score_cap_v4"] = {
+        "id": "generic_astaxanthin_single",
+        "cap": 85.0,
+        "applied": True,
+    }
     _patch_v4_by_id(monkeypatch, {
-        "999": _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong"),
+        "999": scored_live,
         "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
                           tier=None, safety_verdict="BLOCKED",
                           blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
@@ -2789,6 +2903,7 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
         assert blob["v4_score_provenance"]["score_model_version"] == "v4"
         assert blob["v4_confidence_detail"]["band"] == "high"
         assert blob["v4_confidence_detail"]["score_uncertainty_pts"] == 1
+        assert blob["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
         assert "v4_score_explanation" in blob
         assert blob["raw_score_v4_100"] == 88.0
 

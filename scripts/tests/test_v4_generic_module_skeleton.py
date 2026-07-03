@@ -210,6 +210,79 @@ def test_score_generic_does_not_mutate_input() -> None:
     assert product == before
 
 
+def test_single_astaxanthin_emits_public_quality_cap() -> None:
+    from scoring_v4.modules.generic import generic_public_quality_cap
+
+    product = _single_active_product("Astaxanthin", "astaxanthin", 4)
+
+    cap = generic_public_quality_cap(product)
+
+    assert cap is not None
+    assert cap["id"] == "generic_astaxanthin_single"
+    assert cap["cap"] == 85.0
+
+
+def test_haematococcus_astaxanthin_source_emits_public_quality_cap() -> None:
+    from scoring_v4.modules.generic import generic_public_quality_cap
+
+    product = _single_active_product("Haematococcus pluvialis extract", "haematococcus_pluvialis", 4)
+
+    cap = generic_public_quality_cap(product)
+
+    assert cap is not None
+    assert cap["id"] == "generic_astaxanthin_single"
+
+
+def test_single_coq10_emits_public_quality_cap() -> None:
+    from scoring_v4.modules.generic import generic_public_quality_cap
+
+    product = _single_active_product("Kaneka Ubiquinol", "kaneka_ubiquinol", 100)
+
+    cap = generic_public_quality_cap(product)
+
+    assert cap is not None
+    assert cap["id"] == "generic_coq10_single"
+    assert cap["cap"] == 93.0
+
+
+def _single_active_product(name: str, canonical_id: str, quantity: float) -> dict:
+    return {
+        **COMPLETE_GENERIC_PRODUCT,
+        "ingredient_quality_data": {
+            "total_active": 1,
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "canonical_id": canonical_id,
+                    "mapped": True,
+                    "dose": quantity,
+                    "quantity": quantity,
+                    "unit": "mg",
+                }
+            ],
+        },
+    }
+
+
+def test_areds_like_eye_formula_is_not_capped_as_single_astaxanthin() -> None:
+    from scoring_v4.modules.generic import generic_public_quality_cap
+
+    product = {
+        **COMPLETE_GENERIC_PRODUCT,
+        "ingredient_quality_data": {
+            "total_active": 4,
+            "ingredients_scorable": [
+                {"name": "Astaxanthin", "canonical_id": "astaxanthin", "mapped": True, "quantity": 4, "unit": "mg"},
+                {"name": "Lutein", "canonical_id": "lutein", "mapped": True, "quantity": 10, "unit": "mg"},
+                {"name": "Zeaxanthin", "canonical_id": "zeaxanthin", "mapped": True, "quantity": 2, "unit": "mg"},
+                {"name": "Zinc", "canonical_id": "zinc", "mapped": True, "quantity": 15, "unit": "mg"},
+            ],
+        },
+    }
+
+    assert generic_public_quality_cap(product) is None
+
+
 # --- Shadow integration ---------------------------------------------------
 
 

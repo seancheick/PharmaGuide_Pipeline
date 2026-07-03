@@ -136,6 +136,23 @@ def _tier(score: float) -> str:
     return bands[-1]["name"]
 
 
+def _public_quality_cap(module_bd: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    cap = ((module_bd.get("metadata") or {}).get("public_quality_cap") or {})
+    if not isinstance(cap, dict):
+        return None
+    cap_value = _num(cap.get("cap"), None)
+    if cap_value is None or cap_value <= 0 or cap_value > 100:
+        return None
+    cap_id = str(cap.get("id") or "").strip()
+    if not cap_id:
+        return None
+    return {
+        "id": cap_id,
+        "cap": round(cap_value, 1),
+        "reason": cap.get("reason"),
+    }
+
+
 def _manuf_violation_split(module_bd: Dict[str, Any]) -> Dict[str, float]:
     """PR3: route a maker's violation deduction into ONE pillar by type.
 
@@ -345,9 +362,18 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
 
 def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
     if module == "sports":
+        subtype = str((module_bd.get("metadata") or {}).get("sports_subtype") or "").strip().lower()
+        if subtype == "pre_workout":
+            return "sports_pre_workout"
+        if subtype == "protein":
+            return "sports_protein"
+        if subtype == "bcaa_eaa":
+            return "sports_bcaa_eaa"
         return "sports_single"
     if module == "fiber_digestive":
         return "fiber_digestive"
+    if module == "b_complex":
+        return "b_complex"
     if module == "omega":
         return "omega"
     if module == "probiotic":
@@ -608,6 +634,7 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     # Public-contract aliases / provenance (always emitted)
     result["raw_score_v4_100"] = raw
     result["quality_score_version"] = cfg["_metadata"]["version"]
+    result["quality_score_cap_v4"] = None
     # Clean-label additive flags (titanium dioxide / E171). Emit the consumer
     # "inform" flag for every status, including BLOCKED/UNSAFE suppressed rows;
     # the numeric penalty only applies on the scored path below.
@@ -636,6 +663,16 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
 
     pillars = _build_pillars(module_bd, cfg, module, clean_label_penalty=cl_penalty)
     total = max(0.0, min(100.0, round(sum(p["score"] for p in pillars.values()), 1)))
+    cap = _public_quality_cap(module_bd)
+    if cap is not None and total > cap["cap"]:
+        score_before_cap = total
+        total = cap["cap"]
+        result["quality_score_cap_v4"] = {
+            **cap,
+            "applied": True,
+            "score_before_cap": score_before_cap,
+            "score_after_cap": total,
+        }
 
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)
     result["quality_score_v4_100"] = total

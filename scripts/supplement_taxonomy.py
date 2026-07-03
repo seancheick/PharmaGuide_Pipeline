@@ -172,6 +172,19 @@ _AMINO_NAME_TOKENS = {"bcaa", "eaa", "amino acid", "amino acids", "essential ami
 _SLEEP_SINGLE_IDS = frozenset({"melatonin", "5_htp", "gaba"})
 _JOINT_SINGLE_IDS = frozenset({"msm", "glucosamine", "chondroitin", "hyaluronic_acid"})
 _PRE_WORKOUT_IDS = frozenset({"caffeine", "beta_alanine", "creatine", "l_citrulline", "citrulline"})
+_B_COMPLEX_DISQUALIFY_IDS = frozenset({
+    "caffeine",
+    "green_tea_extract",
+    "green_coffee_bean",
+    "garcinia_cambogia",
+    "yohimbe",
+    "yohimbine",
+    "synephrine",
+})
+_B_COMPLEX_EXCLUSION_RE = re.compile(
+    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|liver|stress|mood)\b",
+    re.IGNORECASE,
+)
 _PROTEIN_IDS = frozenset({"whey_protein", "casein", "pea_protein", "protein"})
 _GREENS_IDS = frozenset({"spirulina", "chlorella", "wheatgrass", "barley_grass"})
 _ELECTROLYTE_IDS = frozenset({"sodium", "potassium", "magnesium", "calcium", "chloride"})
@@ -702,18 +715,25 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # vitamins but are still a narrower peer class than full multis.
     elif (
         "prenatal" not in product_name
-        and
-        (b_vitamin_ids and len(b_vitamin_ids) >= 3)
-        or "b-complex" in product_name
-        or "b complex" in product_name
+        and not _B_COMPLEX_EXCLUSION_RE.search(product_name)
+        and not (cid_set & _B_COMPLEX_DISQUALIFY_IDS)
+        and (
+            (b_vitamin_ids and len(b_vitamin_ids) >= 3)
+            or "b-complex" in product_name
+            or "b complex" in product_name
+        )
     ):
         non_b_vitamins = vitamin_ids - _B_VITAMIN_IDS
         non_b_minerals = mineral_ids
-        if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2:
+        non_b_active_ids = {
+            cid for cid in cid_set
+            if cid not in _B_VITAMIN_IDS
+        }
+        if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2 and len(non_b_active_ids) <= 2:
             primary_type = "b_complex"
             confidence = 0.9 if "complex" in product_name else 0.75
             reasons.append(
-                f"b-complex: {len(b_vitamin_ids)} B-vitamins, {len(non_b_vitamins)} non-B vitamins"
+                f"b-complex: {len(b_vitamin_ids)} B-vitamins, {len(non_b_active_ids)} non-B actives"
             )
         else:
             primary_type = "multivitamin"

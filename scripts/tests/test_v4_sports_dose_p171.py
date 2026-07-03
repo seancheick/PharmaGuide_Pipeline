@@ -14,9 +14,12 @@ from scoring_v4.modules.sports_helpers import (
     dose_g,
     group_bcaa,
     group_eaa,
+    pre_workout_goal_cluster_ids,
     primary_sports_identity,
+    sports_public_quality_cap,
     sports_identity_rows,
     sports_rows,
+    sports_subtype,
 )
 
 
@@ -146,6 +149,78 @@ def test_primary_identity_prefers_creatine_single() -> None:
     product = _product(_row("creatine_monohydrate", 3, "Gram(s)"), name="Creatine Monohydrate")
 
     assert primary_sports_identity(product) == "creatine"
+
+
+def test_sports_subtype_keeps_clean_creatine_uncapped() -> None:
+    product = _product(_row("creatine_monohydrate", 5, "Gram(s)"), name="Creatine Monohydrate")
+
+    assert sports_subtype(product) == "creatine"
+    assert sports_public_quality_cap(product) is None
+
+
+def test_sports_subtype_detects_transparent_preworkout_with_public_cap() -> None:
+    product = _product(
+        _row("beta-alanine", 3200, "mg"),
+        _row("l_citrulline", 6000, "mg", name="Citrulline Malate"),
+        _row("betaine_anhydrous", 2500, "mg"),
+        _row("caffeine", 150, "mg", name="Caffeine Anhydrous"),
+        name="Vector Pre-Workout Tested",
+        primary_type="pre_workout",
+    )
+
+    cap = sports_public_quality_cap(product)
+
+    assert sports_subtype(product) == "pre_workout"
+    assert cap is not None
+    assert cap["id"] == "sports_pre_workout"
+    assert cap["cap"] == pytest.approx(88.0)
+
+
+def test_opaque_stimulant_preworkout_gets_lower_public_cap() -> None:
+    product = {
+        "fullName": "MegaPump Pre-Workout",
+        "product_name": "MegaPump Pre-Workout",
+        "primary_type": "pre_workout",
+        "supplement_taxonomy": {"primary_type": "pre_workout"},
+        "ingredient_quality_data": {"ingredients_scorable": []},
+        "proprietary_blends": [{"name": "Stimulant Blend", "disclosure_level": "none"}],
+    }
+
+    cap = sports_public_quality_cap(product)
+
+    assert sports_subtype(product) == "stimulant_fat_burner"
+    assert cap is not None
+    assert cap["id"] == "sports_opaque_stimulant"
+    assert cap["cap"] == pytest.approx(65.0)
+
+
+def test_preworkout_goal_clusters_require_dosed_anchors_for_supported_goals() -> None:
+    adequate = _product(
+        _row("beta-alanine", 3200, "mg"),
+        _row("l_citrulline", 6000, "mg", name="Citrulline Malate"),
+        _row("caffeine", 150, "mg"),
+        name="Vector Pre-Workout Tested",
+        primary_type="pre_workout",
+    )
+    underdosed = _product(
+        _row("beta-alanine", 800, "mg"),
+        _row("l_citrulline", 1000, "mg", name="Citrulline Malate"),
+        _row("caffeine", 50, "mg"),
+        name="Vector Pre-Workout Tested",
+        primary_type="pre_workout",
+    )
+
+    assert pre_workout_goal_cluster_ids(adequate, enforce_dose_gate=True) == {
+        "pre_workout_energy",
+        "pre_post_workout",
+        "muscle_building_recovery",
+    }
+    assert pre_workout_goal_cluster_ids(underdosed, enforce_dose_gate=True) == set()
+    assert pre_workout_goal_cluster_ids(underdosed, enforce_dose_gate=False) == {
+        "pre_workout_energy",
+        "pre_post_workout",
+        "muscle_building_recovery",
+    }
 
 
 def test_creatine_three_grams_scores_primary_dose_max() -> None:

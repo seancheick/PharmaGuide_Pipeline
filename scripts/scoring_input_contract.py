@@ -36,9 +36,9 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.3"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.4"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
-SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive"}
+SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
 SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
     "classification_schema_version",
@@ -1827,6 +1827,19 @@ _ROUTE_FIBER_DIGESTIVE_NAME_RE = re.compile(
     r"\b(fiber|fibre|psyllium|inulin|prebiotic|digestive\s+enzymes?|digestive\s+fiber)\b",
     re.IGNORECASE,
 )
+_ROUTE_B_COMPLEX_EXCLUSION_RE = re.compile(
+    r"\b(pre[\s-]?workout|fat\s*burn|thermogenic|weight\s*loss|liver|stress|mood)\b",
+    re.IGNORECASE,
+)
+_ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS = {
+    "caffeine",
+    "green_tea_extract",
+    "green_coffee_bean",
+    "garcinia_cambogia",
+    "yohimbe",
+    "yohimbine",
+    "synephrine",
+}
 _ROUTE_OMEGA_NAME_KEYWORDS = (
     "fish oil",
     "omega-3",
@@ -1970,7 +1983,7 @@ _ROUTE_EAA_CANONICALS = {
 _ROUTE_TAXONOMY_TO_MODULE = {
     "probiotic": "probiotic",
     "multivitamin": "multi_or_prenatal",
-    "b_complex": "multi_or_prenatal",
+    "b_complex": "b_complex",
     "omega_3": "omega",
     "single_vitamin": "generic",
     "single_mineral": "generic",
@@ -2431,11 +2444,12 @@ def _route_is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
 
 def _route_is_b_complex_eligible(product: Dict[str, Any], name_text: str) -> bool:
     lowered = (name_text or "").lower()
-    if "b-complex" in lowered or "b complex" in lowered:
-        return True
+    if _ROUTE_B_COMPLEX_EXCLUSION_RE.search(name_text or ""):
+        return False
 
     b_vitamins: set[str] = set()
     non_b_scorable = 0
+    disqualifying_actives: set[str] = set()
     for row in _route_scoring_rows(product):
         canonical = _norm(row.get("canonical_id"))
         if not canonical:
@@ -2444,7 +2458,13 @@ def _route_is_b_complex_eligible(product: Dict[str, Any], name_text: str) -> boo
             b_vitamins.add(canonical)
         else:
             non_b_scorable += 1
-    return len(b_vitamins) >= 4 and len(b_vitamins) > non_b_scorable
+            if canonical in _ROUTE_B_COMPLEX_DISQUALIFY_CANONICALS:
+                disqualifying_actives.add(canonical)
+    if disqualifying_actives:
+        return False
+    if "b-complex" in lowered or "b complex" in lowered:
+        return len(b_vitamins) >= 3 and non_b_scorable <= 2
+    return len(b_vitamins) >= 4 and non_b_scorable <= 1
 
 
 def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> bool:
@@ -2695,9 +2715,11 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
 
     if primary_type:
         module = _ROUTE_TAXONOMY_TO_MODULE.get(primary_type)
+        if module == "b_complex":
+            if _route_is_b_complex_eligible(product, name_text):
+                return "b_complex", f"taxonomy:{primary_type}:b_complex_validated", [f"taxonomy:{primary_type}", "b_complex_panel"]
+            return "generic", "b_complex_taxonomy_without_route_eligible_panel", ["taxonomy:b_complex"]
         if module == "multi_or_prenatal":
-            if primary_type == "b_complex" and not _route_is_b_complex_eligible(product, name_text):
-                return "generic", "b_complex_taxonomy_without_route_eligible_panel", ["taxonomy:b_complex"]
             if primary_type == "multivitamin" and not _route_is_multivitamin_eligible(product, name_text):
                 return "generic", "multivitamin_taxonomy_without_route_eligible_panel", ["taxonomy:multivitamin"]
             return "multi_or_prenatal", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]

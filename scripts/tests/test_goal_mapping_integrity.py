@@ -10,6 +10,8 @@ recompute goal matching.
 import json
 from pathlib import Path
 
+import pytest
+
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
@@ -204,6 +206,60 @@ def test_joint_inflammation_copy_matches_moderate_evidence_tier():
     assert cluster["evidence_tier"] == 3
     assert "Tier 1" not in cluster["note"]
     assert "Tier 3" in cluster["note"]
+
+
+def test_collagen_skin_cluster_copy_matches_popular_stack_tier():
+    """Skin/collagen popular-stack clusters must not overstate synergy evidence."""
+    for cluster_id in (
+        "hair_skin_nutrition",
+        "skin_health_complex",
+        "collagen_synthesis_support",
+    ):
+        cluster = _load_cluster(cluster_id)
+
+        assert cluster["evidence_tier"] == 4
+        assert "Tier 1" not in cluster["note"]
+        assert "Tier 2" not in cluster["note"]
+        assert "Tier 4" in cluster["note"]
+
+
+def test_methylation_support_copy_matches_moderate_evidence_tier():
+    cluster = _load_cluster("methylation_support")
+
+    assert cluster["evidence_tier"] == 2
+    assert "Tier 1" not in cluster["note"]
+    assert "Tier 2" in cluster["note"]
+
+
+@pytest.mark.parametrize(
+    ("cluster_id", "expected_tier"),
+    [
+        ("eye_health", 2),
+        ("cardiovascular_support", 4),
+    ],
+)
+def test_generic_bioactive_goal_copy_matches_structured_evidence_tier(cluster_id, expected_tier):
+    cluster = _load_cluster(cluster_id)
+
+    assert cluster["evidence_tier"] == expected_tier
+    assert "Tier 1" not in cluster["note"]
+    assert f"Tier {expected_tier}" in cluster["note"]
+
+
+@pytest.mark.parametrize(
+    "cluster_id",
+    [
+        "pre_post_workout",
+        "pre_workout_energy",
+        "muscle_building_recovery",
+    ],
+)
+def test_sports_stack_copy_matches_popular_stack_tier(cluster_id):
+    cluster = _load_cluster(cluster_id)
+
+    assert cluster["evidence_tier"] == 4
+    assert "Tier 1" not in cluster["note"]
+    assert "Tier 4" in cluster["note"]
 
 
 # ---------- blocked_by_clusters ----------

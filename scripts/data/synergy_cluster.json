@@ -346,7 +346,7 @@
       "evidence_tier": 2,
       "standard_name": "Eye Health",
       "synergy_mechanism": "Lutein and zeaxanthin accumulate in the macular pigment, filtering blue light and quenching reactive oxygen species. Zinc supports retinal metabolism. Vitamin C and E provide systemic antioxidant defense for ocular tissues (AREDS2 formulation basis).",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Eye Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: lutein >= 10, zeaxanthin >= 2, astaxanthin >= 4, zinc >= 15, vitamin c >= 250. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Eye Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: lutein >= 10, zeaxanthin >= 2, astaxanthin >= 4, zinc >= 15, vitamin c >= 250. See sources for supporting references.",
       "sources": [
         {
           "source_type": "pubmed",
@@ -424,7 +424,7 @@
       "evidence_tier": 2,
       "standard_name": "Methylation Support",
       "synergy_mechanism": "Methylcobalamin and methylfolate serve as methyl donors in the methionine cycle. TMG provides an alternative remethylation pathway via BHMT. Choline feeds into phosphatidylcholine synthesis. B6 (P5P) is required for the transsulfuration pathway converting homocysteine to cysteine.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Methylation Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: methylcobalamin >= 500, methylfolate >= 400, choline >= 250, vitamin b6 >= 10. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Methylation Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: methylcobalamin >= 500, methylfolate >= 400, choline >= 250, vitamin b6 >= 10. See sources for supporting references.",
       "sources": [
         {
           "source_type": "nih_ods",
@@ -953,7 +953,7 @@
       "evidence_tier": 4,
       "standard_name": "Cardiovascular Support",
       "synergy_mechanism": "CoQ10 supports mitochondrial energy production in cardiomyocytes and acts as a lipid-soluble antioxidant. Omega-3 (EPA/DHA) reduces triglycerides and dampens vascular inflammation. Vitamin K2 (MK-7) activates matrix Gla-protein which inhibits arterial calcification. Magnesium supports vascular smooth muscle relaxation.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Cardiovascular Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: coq10 >= 100, omega-3 >= 1000, magnesium >= 200, garlic extract >= 600. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Cardiovascular Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack). Anchor dose checks: coq10 >= 100, omega-3 >= 1000, magnesium >= 200, garlic extract >= 600. See sources for supporting references.",
       "sources": [
         {
           "source_type": "nih_ods",
@@ -1210,7 +1210,7 @@
       "evidence_tier": 4,
       "standard_name": "Hair & Skin Nutrition",
       "synergy_mechanism": "Biotin is a cofactor for carboxylase enzymes critical in keratin synthesis. Collagen peptides provide hydroxyproline and glycine as structural protein precursors. Vitamin C is required for procollagen hydroxylation. Zinc supports keratinocyte differentiation.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Hair & Skin Nutrition' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: biotin >= 2500, zinc >= 15, collagen >= 2500, vitamin c >= 250. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Hair & Skin Nutrition' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack; ingredient-level evidence, no exact-combination trial). Anchor dose checks: biotin >= 2500, zinc >= 15, collagen >= 2500, vitamin c >= 250. See sources for supporting references.",
       "sources": [
         {
           "source_type": "nih_ods",
@@ -1571,7 +1571,7 @@
       "evidence_tier": 4,
       "standard_name": "Pre/Post Workout",
       "synergy_mechanism": "Creatine replenishes ATP via the phosphocreatine system during high-intensity efforts. Beta-alanine buffers intramuscular hydrogen ions by increasing carnosine stores. Citrulline enhances arginine-nitric oxide pathway, improving blood flow. Caffeine antagonizes adenosine receptors, reducing perceived exertion.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Pre/Post Workout' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: creatine >= 3000, beta-alanine >= 3200, citrulline malate >= 6000, caffeine >= 100. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Pre/Post Workout' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack; ingredient-level evidence, no exact-combination trial). Anchor dose checks: creatine >= 3000, beta-alanine >= 3200, citrulline malate >= 6000, caffeine >= 100. See sources for supporting references.",
       "sources": [
         {
           "source_type": "fda",
@@ -1824,7 +1824,7 @@
       "evidence_tier": 4,
       "standard_name": "Muscle Building/Recovery",
       "synergy_mechanism": "Creatine saturates intramuscular phosphocreatine stores for improved power output. BCAAs (especially leucine) activate mTOR pathway for muscle protein synthesis. HMB reduces proteasome-mediated protein degradation. Beta-alanine increases muscle carnosine for pH buffering during intense exercise.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Muscle Building/Recovery' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: creatine >= 3000, leucine >= 3000, glutamine >= 5000, hmb >= 3000. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Muscle Building/Recovery' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack; ingredient-level evidence, no exact-combination trial). Anchor dose checks: creatine >= 3000, leucine >= 3000, glutamine >= 5000, hmb >= 3000. See sources for supporting references.",
       "sources": [
         {
           "source_type": "fda",
@@ -2161,7 +2161,7 @@
       "evidence_tier": 4,
       "standard_name": "Pre-Workout Energy",
       "synergy_mechanism": "Caffeine antagonizes adenosine receptors, increasing alertness and delaying fatigue. L-citrulline enhances nitric oxide production for vasodilation. Beta-alanine increases muscle carnosine for intracellular pH buffering. Creatine provides immediate ATP regeneration during explosive movements.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Pre-Workout Energy' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: citrulline malate >= 6000, beta-alanine >= 3200, betaine >= 2500, caffeine >= 100. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Pre-Workout Energy' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack; ingredient-level evidence, no exact-combination trial). Anchor dose checks: citrulline malate >= 6000, beta-alanine >= 3200, betaine >= 2500, caffeine >= 100. See sources for supporting references.",
       "sources": [
         {
           "source_type": "fda",
@@ -2419,7 +2419,7 @@
       "evidence_tier": 4,
       "standard_name": "Skin Health Complex",
       "synergy_mechanism": "Collagen peptides provide bioactive hydroxyproline-containing dipeptides that stimulate fibroblast activity. Hyaluronic acid supports dermal hydration. Vitamin C is required for prolyl hydroxylase in collagen cross-linking. Astaxanthin protects skin from UV-induced oxidative damage.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Skin Health Complex' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: hyaluronic acid >= 100, marine collagen >= 2500, vitamin c >= 250, zinc >= 15. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Skin Health Complex' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack; ingredient-level evidence, no exact-combination trial). Anchor dose checks: hyaluronic acid >= 100, marine collagen >= 2500, vitamin c >= 250, zinc >= 15. See sources for supporting references.",
       "sources": [
         {
           "source_type": "nih_ods",
@@ -2577,7 +2577,7 @@
       "synergy_mechanism": "Vitamin C is essential cofactor for prolyl and lysyl hydroxylase (collagen synthesis enzymes). Copper enables cross-linking via lysyl oxidase. Lysine/proline are primary collagen amino acids.",
       "evidence_tier": 4,
       "standard_name": "Collagen Synthesis Support",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Collagen Synthesis Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: vitamin c >= 500, lysine >= 500, proline >= 500, copper >= 1. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Collagen Synthesis Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 4 (popular stack; ingredient-level evidence, no exact-combination trial). Anchor dose checks: vitamin c >= 500, lysine >= 500, proline >= 500, copper >= 1. See sources for supporting references.",
       "sources": [
         {
           "source_type": "nih_ods",

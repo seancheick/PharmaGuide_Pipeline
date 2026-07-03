@@ -49,7 +49,7 @@ def _row(dsld_id: int, module: str, **overrides):
 
 
 def test_select_review_sample_balances_v4_modules_when_available():
-    modules = ["generic", "multi_or_prenatal", "omega", "probiotic", "sports"]
+    modules = ["generic", "multi_or_prenatal", "b_complex", "omega", "probiotic", "sports"]
     rows = []
     dsld_id = 1000
     for module in modules:
@@ -57,7 +57,7 @@ def test_select_review_sample_balances_v4_modules_when_available():
             rows.append(_row(dsld_id, module, raw_score_delta_vs_v3=idx - 12))
             dsld_id += 1
 
-    sample = select_review_sample(rows, sample_size=100)
+    sample = select_review_sample(rows, sample_size=120)
 
     counts = {}
     for row in sample:

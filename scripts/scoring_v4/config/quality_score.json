@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.1-public-safety-additives",
+    "version": "1.0.4-sports-subtypes",
     "schema_version": "1.0.0",
     "last_updated": "2026-06-08",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.0.0.",
-    "phase": "public_safety_additives"
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Generic single-bioactive caps prevent clean narrow products from implying elite clinical-formula evidence. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.0.0.",
+    "phase": "generic_public_caps"
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
@@ -31,10 +31,14 @@
     "_doc": "PR6: category-aware evidence fit. The raw evidence dimension's branded-RCT/consensus floor caps a SINGLE ingredient at 18, reserving 19-20 for multi-active breadth. The spec explicitly forbids this ('do not cap single-ingredient evidence just because it is single; a focused product can have better evidence than a blend'). Normalize single-purpose archetypes to an evidence ceiling of 19 so a strong branded/consensus single (KSM-66, creatine, EPA/DHA) earns ~19 by HAVING the evidence — a weak single (low raw evidence) still scores low. 19 not 20 keeps a sliver for the rare perfect-evidence case; multi/breadth archetypes keep 20.",
     "archetype_reference": {
       "sports_single": 19.0,
+      "sports_pre_workout": 20.0,
+      "sports_protein": 20.0,
+      "sports_bcaa_eaa": 19.0,
       "generic_single_molecule": 19.0,
       "generic_botanical_branded": 19.0,
       "immune_support": 20.0,
       "fiber_digestive": 19.0,
+      "b_complex": 14.0,
       "omega": 20.0,
       "probiotic": 20.0,
       "prenatal_multi": 20.0
@@ -45,10 +49,14 @@
     "_doc": "PR5: category-aware purpose-fit dose. The raw dose dimension caps a single nutrient/botanical in its supplemental/clinical window at ~22 (CAP_SUPPLEMENTAL_WINDOW); the top 3 (→25) is multi-form/completion that single-purpose products can't earn — the same structural pattern as formulation. Normalize each archetype to its achievable APPROPRIATE-dose ceiling so a well-dosed product earns ~19-20. MEGADOSE-SAFE: an overdosed product already gets low raw dose (overdose → half credit) and a sub-clinical one gets proportional-low; normalizing only lifts appropriately-dosed products, never rewards excess.",
     "archetype_reference": {
       "sports_single": 25.0,
+      "sports_pre_workout": 25.0,
+      "sports_protein": 25.0,
+      "sports_bcaa_eaa": 25.0,
       "generic_single_molecule": 22.0,
       "generic_botanical_branded": 22.0,
       "immune_support": 25.0,
       "fiber_digestive": 25.0,
+      "b_complex": 25.0,
       "omega": 23.0,
       "probiotic": 22.0,
       "prenatal_multi": 23.0
@@ -59,10 +67,14 @@
     "_doc": "PR4: category-aware purpose-fit formulation. The raw formulation dimension is scored out of a breadth-dependent max (30 for generic/sports) that a SINGLE ingredient structurally cannot reach (A2-A5 = premium-form stacking, synergy, absorption enhancers are multi-ingredient features). Normalize each archetype to its ACHIEVABLE form ceiling so a best-in-class product earns ~19-20 by being the OPTIMAL FORM, not by faking breadth. Computed from the real form-quality components, so a cheap form (magnesium oxide, low A1) still scores low. This is purpose-fit, not premium-form dominance.",
     "archetype_reference": {
       "sports_single": 25.0,
+      "sports_pre_workout": 30.0,
+      "sports_protein": 30.0,
+      "sports_bcaa_eaa": 25.0,
       "generic_single_molecule": 25.0,
       "generic_botanical_branded": 25.0,
       "immune_support": 30.0,
       "fiber_digestive": 28.0,
+      "b_complex": 30.0,
       "omega": 23.0,
       "probiotic": 22.0,
       "prenatal_multi": 23.0

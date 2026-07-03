@@ -600,7 +600,7 @@ def test_targeted_three_b_vitamin_product_does_not_route_multi_as_b_complex():
     assert class_for_product(product) == "generic"
 
 
-def test_explicit_b_complex_label_still_routes_multi():
+def test_explicit_b_complex_label_routes_b_complex():
     product = {
         "product_name": "High Potency B-Complex",
         "primary_type": "b_complex",
@@ -613,10 +613,10 @@ def test_explicit_b_complex_label_still_routes_multi():
         },
     }
 
-    assert class_for_product(product) == "multi_or_prenatal"
+    assert class_for_product(product) == "b_complex"
 
 
-def test_broad_b_complex_panel_routes_multi_without_explicit_name():
+def test_broad_b_complex_panel_routes_b_complex_without_explicit_name():
     product = {
         "product_name": "Daily Energy Support",
         "primary_type": "b_complex",
@@ -632,4 +632,25 @@ def test_broad_b_complex_panel_routes_multi_without_explicit_name():
         },
     }
 
-    assert class_for_product(product) == "multi_or_prenatal"
+    assert class_for_product(product) == "b_complex"
+
+
+def test_stimulant_b_vitamin_stack_does_not_route_b_complex():
+    product = {
+        "product_name": "Mega B-100 Energy Soft Chews",
+        "primary_type": "b_complex",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"canonical_id": "vitamin_b1_thiamine", "quantity": 100, "unit": "mg"},
+                {"canonical_id": "vitamin_b2_riboflavin", "quantity": 100, "unit": "mg"},
+                {"canonical_id": "vitamin_b3_niacin", "quantity": 100, "unit": "mg"},
+                {"canonical_id": "vitamin_b6_pyridoxine", "quantity": 100, "unit": "mg"},
+                {"canonical_id": "vitamin_b12_cobalamin", "quantity": 5000, "unit": "mcg"},
+                {"canonical_id": "caffeine", "quantity": 150, "unit": "mg"},
+                {"canonical_id": "green_tea_extract", "quantity": 100, "unit": "mg"},
+                {"canonical_id": "garcinia_cambogia", "quantity": 100, "unit": "mg"},
+            ]
+        },
+    }
+
+    assert class_for_product(product) == "generic"

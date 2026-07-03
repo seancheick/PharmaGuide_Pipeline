@@ -163,6 +163,8 @@ def test_formulation_never_exceeds_20() -> None:
 def test_archetype_classification() -> None:
     from scoring_v4.quality_score import _archetype
     assert _archetype("sports", {}) == "sports_single"
+    assert _archetype("sports", {"metadata": {"sports_subtype": "pre_workout"}}) == "sports_pre_workout"
+    assert _archetype("sports", {"metadata": {"sports_subtype": "protein"}}) == "sports_protein"
     assert _archetype("omega", {}) == "omega"
     assert _archetype("multi_or_prenatal", {}) == "prenatal_multi"
     botan = {"dimensions": {"formulation": {"metadata": {"botanical_profile_applied": True}}}}
@@ -404,7 +406,47 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"].startswith("1.0.1")  # versioned public contract
+    assert out["quality_score_version"].startswith("1.0.4")  # versioned public contract
+
+
+def test_public_quality_cap_limits_score_without_changing_raw() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd(form=24, dose=21, evidence=18, verification=8, manuf_trust=5, hygiene=4)
+    bd["metadata"] = {
+        "public_quality_cap": {
+            "id": "generic_astaxanthin_single",
+            "cap": 85.0,
+            "reason": "Single-ingredient astaxanthin has promising but not elite clinical evidence.",
+        }
+    }
+
+    out = assemble_quality_score(_shadow(raw=88.5, module="generic", bd=bd))
+
+    assert out["raw_score_v4_100"] == 88.5
+    assert out["quality_score_v4_100"] == 85.0
+    assert out["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
+    assert out["quality_score_cap_v4"]["score_before_cap"] > 85.0
+
+
+def test_sports_preworkout_public_cap_limits_score_below_creatine_ceiling() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _module_bd(form=30, dose=25, evidence=20, verification=8, manuf_trust=5, hygiene=4)
+    bd["metadata"] = {
+        "sports_subtype": "pre_workout",
+        "public_quality_cap": {
+            "id": "sports_pre_workout",
+            "cap": 88.0,
+            "reason": "Transparent pre-workout stacks should not score like focused creatine/protein products.",
+        },
+    }
+
+    out = assemble_quality_score(_shadow(raw=94.0, module="sports", bd=bd))
+
+    assert out["quality_score_v4_100"] == 88.0
+    assert out["raw_score_v4_100"] == 94.0
+    assert out["quality_score_cap_v4"]["id"] == "sports_pre_workout"
 
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------

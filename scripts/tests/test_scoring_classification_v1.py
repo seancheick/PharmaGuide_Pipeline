@@ -64,7 +64,7 @@ def test_classification_builder_is_total_and_schema_valid(payload):
     contract = build_scoring_classification(payload)  # type: ignore[arg-type]
     assert contract["classification_schema_version"] == SCORING_CLASSIFICATION_SCHEMA_VERSION
     assert contract["classification_origin"] == "compatibility_derived"
-    assert contract["route_module"] in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive"}
+    assert contract["route_module"] in {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
     assert contract["route_confidence"] in {"high", "medium", "low", "failed"}
     assert isinstance(contract["ingredients"], list)
     assert isinstance(contract["profile_eligibility"], dict)

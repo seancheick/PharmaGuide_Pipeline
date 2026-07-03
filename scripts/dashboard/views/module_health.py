@@ -1,7 +1,7 @@
 """Module Health — per-module V4 pillar comparison.
 
-V4 routes each product to a scoring module (generic / multi_or_prenatal / omega /
-probiotic / sports). A systematic scorer bug usually shows up as ONE module's
+V4 routes each product to a scoring module (generic / multi_or_prenatal /
+b_complex / omega / probiotic / sports). A systematic scorer bug usually shows up as ONE module's
 pillar distribution collapsing relative to the others — invisible in a
 catalog-wide average. This view puts module means/medians side by side so a
 broken module is a single bad row, not a support ticket.
