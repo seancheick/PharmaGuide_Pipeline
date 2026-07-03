@@ -188,6 +188,22 @@ _GENERIC_BLEND_IDENTITIES = {
     "general_proprietary_blends",
     "blend_general",
 }
+_BOTANICAL_BLEND_NAME_STRIP_RE = re.compile(
+    r"\b("
+    r"organic|wildcrafted|standardized|standardised|extract|powder|root|leaf|"
+    r"leaves|seed|seeds|fruit|berry|berries|flower|bark|rhizome|aerial|"
+    r"whole|herb|herbal"
+    r")\b",
+    re.IGNORECASE,
+)
+_BOTANICAL_BLEND_GENERIC_KEYS = {
+    "blend",
+    "complex",
+    "formula",
+    "matrix",
+    "proprietary",
+    "proprietary_blend",
+}
 
 EXCLUDED_CLEANER_ROLES = {
     "blend_header_total",
@@ -368,6 +384,63 @@ def _slug(value: Any) -> str:
     text = _norm(value)
     text = re.sub(r"[^a-z0-9]+", "_", text).strip("_")
     return text
+
+
+@lru_cache(maxsize=1)
+def _botanical_identity_lookup() -> Dict[str, Dict[str, str]]:
+    try:
+        raw = json.loads((_DATA_DIR / "botanical_ingredients.json").read_text())
+    except Exception:  # pragma: no cover - missing data only disables fallback evidence
+        return {}
+    out: Dict[str, Dict[str, str]] = {}
+    for entry in _safe_list(raw.get("botanical_ingredients")):
+        if not isinstance(entry, dict):
+            continue
+        canonical = _slug(entry.get("id"))
+        if not canonical:
+            continue
+        display = str(entry.get("standard_name") or entry.get("id") or canonical)
+        keys = [
+            entry.get("id"),
+            entry.get("standard_name"),
+            entry.get("latin_name"),
+        ] + _safe_list(entry.get("aliases"))
+        for key in keys:
+            for variant in (_norm(key), _slug(key)):
+                if variant:
+                    out.setdefault(variant, {"canonical_id": canonical, "name": display})
+    return out
+
+
+def _botanical_child_identity(name: Any) -> Optional[Dict[str, str]]:
+    text = _norm(name)
+    if not text:
+        return None
+    lookup = _botanical_identity_lookup()
+    variants = {
+        text,
+        _slug(text),
+        _norm(re.sub(r"\([^)]*\)", " ", text)),
+        _slug(re.sub(r"\([^)]*\)", " ", text)),
+    }
+    stripped = _BOTANICAL_BLEND_NAME_STRIP_RE.sub(" ", text)
+    stripped = re.sub(r"\s+", " ", stripped).strip()
+    variants.update({stripped, _slug(stripped)})
+    for variant in variants:
+        if variant in lookup:
+            return lookup[variant]
+
+    # Conservative phrase fallback for labels like "Milk thistle seed extract".
+    # Require a non-generic key with enough characters so broad terms ("tea",
+    # "root", "blend") cannot create botanical ownership by substring alone.
+    for key in sorted(lookup, key=len, reverse=True):
+        compact = key.replace("_", "")
+        if len(compact) < 6 or key in _BOTANICAL_BLEND_GENERIC_KEYS:
+            continue
+        pattern = r"(?<![a-z0-9])" + re.escape(key.replace("_", " ")) + r"(?![a-z0-9])"
+        if re.search(pattern, text):
+            return lookup[key]
+    return None
 
 
 @lru_cache(maxsize=1)
@@ -925,6 +998,130 @@ def _derive_blend_header_anchor_from_nested_child(
     return item
 
 
+def _blend_total_amount_unit(blend: Dict[str, Any]) -> tuple[Optional[float], Optional[str]]:
+    if blend.get("blend_total_mg") is not None:
+        return _as_float(blend.get("blend_total_mg"), None), "mg"
+    for key in ("total_weight", "amount", "quantity"):
+        value = _as_float(blend.get(key), None)
+        if value is not None and value > 0:
+            return value, str(blend.get("unit") or blend.get("unit_normalized") or "mg")
+    return None, None
+
+
+def _blend_child_names(blend: Dict[str, Any]) -> List[str]:
+    names: List[str] = []
+    for child in _safe_list(blend.get("child_ingredients")):
+        if isinstance(child, dict):
+            name = child.get("name") or child.get("ingredient")
+        else:
+            name = child
+        if name:
+            names.append(str(name))
+    evidence = _safe_dict(blend.get("evidence"))
+    for key in ("ingredients_without_amounts", "children_without_amounts"):
+        for child in _safe_list(evidence.get(key) or blend.get(key)):
+            name = child.get("name") or child.get("ingredient") if isinstance(child, dict) else child
+            if name:
+                names.append(str(name))
+    for key in ("ingredients_with_amounts", "children_with_amounts"):
+        for child in _safe_list(evidence.get(key) or blend.get(key)):
+            if not isinstance(child, dict):
+                continue
+            name = child.get("name") or child.get("ingredient")
+            if name:
+                names.append(str(name))
+    out: List[str] = []
+    seen = set()
+    for name in names:
+        key = _slug(name)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        out.append(name)
+    return out
+
+
+def _derive_top_level_botanical_blend_evidence(
+    product: Dict[str, Any],
+    blocked_paths: set[str],
+) -> List[Dict[str, Any]]:
+    """Compatibility bridge for enriched blobs that have blend detail but no
+    IQD skipped parent/child rows.
+
+    Emits a conservative product-level ``blend_anchor_mass`` only when the label
+    discloses a blend total and a child name resolves to a therapeutic botanical.
+    The total remains blend-level evidence; downstream botanical dose scores it
+    as ``blend_total_only``, never as a verified per-ingredient clinical dose.
+    """
+    blends = _safe_list(product.get("proprietary_blends"))
+    if not blends:
+        blends = _safe_list(_safe_dict(product.get("proprietary_data")).get("blends"))
+    evidence: List[Dict[str, Any]] = []
+    for index, blend in enumerate(blends):
+        if not isinstance(blend, dict):
+            continue
+        amount, unit = _blend_total_amount_unit(blend)
+        if amount is None or amount <= 0 or not _unit_is_mass(unit):
+            continue
+        source_path = str(
+            blend.get("source_path")
+            or blend.get("source_field")
+            or f"proprietary_blends[{index}]"
+        )
+        linked_paths = {
+            source_path,
+            *{str(path) for path in _safe_list(blend.get("source_fields")) if path},
+        }
+        if linked_paths & blocked_paths:
+            continue
+        botanical_child = None
+        child_name = ""
+        for name in _blend_child_names(blend):
+            candidate = _botanical_child_identity(name)
+            if candidate and has_therapeutic_reference(
+                candidate["canonical_id"],
+                candidate["name"],
+            ):
+                botanical_child = candidate
+                child_name = name
+                break
+        if not botanical_child:
+            continue
+        row = {
+            "name": child_name or botanical_child["name"],
+            "canonical_id": botanical_child["canonical_id"],
+            "canonical_source_db": "botanical_ingredients",
+            "source_section": "proprietary_blends",
+            "raw_source_path": source_path,
+            "raw_source_text": child_name or botanical_child["name"],
+            "raw_taxonomy": {
+                "category": "botanical",
+                "ingredientGroup": botanical_child["name"],
+                "forms": [{"name": child_name or botanical_child["name"], "category": "botanical"}],
+            },
+            "forms": [{"name": child_name or botanical_child["name"], "category": "botanical"}],
+        }
+        item = _evidence_base(
+            row=row,
+            evidence_type="blend_anchor_mass",
+            canonical_id=botanical_child["canonical_id"],
+            clean_identity_id=botanical_child["canonical_id"],
+            scoring_parent_id=botanical_child["canonical_id"],
+            dose_value=amount,
+            dose_unit=str(unit),
+            evidence_scope="blend_level",
+            confidence="low",
+            reason="proprietary_blend_total_from_botanical_child",
+            name=child_name or botanical_child["name"],
+        )
+        for path in sorted(linked_paths):
+            if path and path not in item["linked_rows"]:
+                item["linked_rows"].append(path)
+        item["anchor_risk_class"] = "botanical_or_standardized"
+        evidence.append(item)
+    return evidence
+
+
 def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Derive ScoringEvidence v1 rows from cleaner/enrichment-owned fields.
 
@@ -1161,6 +1358,15 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
         if item:
             special_evidence_paths.add(parent_path)
             evidence.append(item)
+
+    for item in _derive_top_level_botanical_blend_evidence(
+        product,
+        scorable_paths | special_evidence_paths,
+    ):
+        path = str(item.get("raw_source_path") or "")
+        if path:
+            special_evidence_paths.add(path)
+        evidence.append(item)
 
     probiotic_cfu_evidence = _derive_probiotic_cfu_evidence(product)
     if probiotic_cfu_evidence:

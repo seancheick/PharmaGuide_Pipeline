@@ -492,6 +492,11 @@ def _recover_verified_primary_ingredient_matches(
     for row in get_active_ingredients(product):
         if not isinstance(row, dict):
             continue
+        if _norm_text(row.get("evidence_type")) == "blend_anchor_mass":
+            # Blend totals are product-level/aggregate evidence. They may recover
+            # verified product-level branded studies above, but they must not
+            # borrow generic per-ingredient human evidence or primary floors.
+            continue
         mass = _mass_mg(row) or 0.0
         if mass < threshold:
             continue

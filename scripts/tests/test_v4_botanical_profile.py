@@ -425,6 +425,80 @@ def test_product_level_botanical_evidence_is_visible_to_profile_scorer():
     assert out["score"] == 10.0  # calibration v2 (was 7)
 
 
+def test_top_level_proprietary_botanical_blend_total_gets_conservative_profile():
+    """A pure botanical proprietary blend with only a total amount is evaluable,
+    but only as blend_total_only. It must not fall to generic no-dose fallback,
+    and it must not receive within-range per-ingredient dose credit."""
+    from scoring_input_contract import get_scoring_ingredients
+    from scoring_v4.modules.generic import score_generic
+
+    product = {
+        "product_name": "Liver Botanicals Proprietary Blend 900",
+        "primary_type": "general_supplement",
+        "ingredient_quality_data": {"ingredients_scorable": [], "ingredients": []},
+        "proprietary_blends": [
+            {
+                "name": "Proprietary Liver Botanical Blend",
+                "blend_total_mg": 900.0,
+                "unit": "mg",
+                "hidden_count": 3,
+                "nested_count": 3,
+                "child_ingredients": [
+                    {"name": "Milk thistle seed extract", "amount": None, "unit": ""},
+                    {"name": "Dandelion root", "amount": None, "unit": ""},
+                    {"name": "Artichoke leaf", "amount": None, "unit": ""},
+                ],
+            }
+        ],
+    }
+
+    rows = get_scoring_ingredients(product, strict=True).rows
+    assert len(rows) == 1
+    assert rows[0]["evidence_type"] == "blend_anchor_mass"
+    assert rows[0]["reason"] == "proprietary_blend_total_from_botanical_child"
+    assert rows[0]["canonical_id"] == "milk_thistle"
+
+    assert is_botanical_product(product) is True
+    dose = score_botanical_dose(product)
+    assert dose["band"] == "blend_total_only"
+    assert dose["score"] == 10.0
+
+    result = score_generic(product)
+    formulation = result.dimensions["formulation"]
+    assert formulation.metadata["botanical_profile_applied"] is True
+    assert result.dimensions["dose"].metadata["botanical_dose_band"] == "blend_total_only"
+    assert result.dimensions["evidence"].metadata["primary_evidence_floor"] == 0.0
+    assert result.score_100 > 20.0
+
+
+def test_top_level_food_matrix_blend_does_not_create_botanical_profile():
+    """Food/vegetable matrices are blend opacity signals, not botanical dose evidence."""
+    from scoring_input_contract import get_scoring_ingredients
+
+    product = {
+        "product_name": "Daily Greens Food Matrix",
+        "primary_type": "general_supplement",
+        "ingredient_quality_data": {"ingredients_scorable": [], "ingredients": []},
+        "proprietary_blends": [
+            {
+                "name": "Organic Vegetables",
+                "blend_total_mg": 62.0,
+                "unit": "mg",
+                "child_ingredients": [
+                    {"name": "organic Broccoli", "amount": None, "unit": ""},
+                    {"name": "organic Kale", "amount": None, "unit": ""},
+                    {"name": "organic Parsley", "amount": None, "unit": ""},
+                    {"name": "organic Spinach", "amount": None, "unit": ""},
+                    {"name": "organic Tomato", "amount": None, "unit": ""},
+                ],
+            }
+        ],
+    }
+
+    assert get_scoring_ingredients(product, strict=True).rows == []
+    assert is_botanical_product(product) is False
+
+
 def test_botanical_formulation_prefers_recognized_anchor_over_unmapped_blend_header():
     """Relora/Seditol shape: a parent proprietary-blend total and a recognized
     nested botanical anchor can carry the same mass. The botanical formulation
