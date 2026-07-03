@@ -273,6 +273,24 @@ def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[st
     return round(min(raw, cap), 1) if raw > 0 else 0.0
 
 
+def _dose_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:
+    """Small public Safety Hygiene deduction for over-UL dose flags.
+
+    The Dose pillar remains the main overdose penalty. This capped cross-pillar
+    deduction only prevents Safety Hygiene from displaying 10/10 when the same
+    product carries an explicit B7 dose-safety flag.
+    """
+    dose = ((module_bd.get("dimensions") or {}).get("dose") or {})
+    penalties = dose.get("penalties") or {}
+    raw = 0.0
+    value = _num(penalties.get("B7_dose_safety"))
+    if value < 0:
+        raw += abs(value)
+    sub = cfg.get("safety_hygiene_subscale") or {}
+    cap = _num(sub.get("over_ul_max_penalty"), 3.0)
+    return round(min(raw, cap), 1) if raw > 0 else 0.0
+
+
 def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
                            cfg: Dict[str, Any],
                            clean_label_penalty: float = 0.0) -> Dict[str, Any]:
@@ -292,7 +310,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     safety_pen = _manuf_violation_split(module_bd)["safety"]
     cl_pen = max(0.0, _num(clean_label_penalty))
     additive_pen = _formulation_additive_safety_penalty(module_bd, cfg)
-    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen)), 1)
+    over_ul_pen = _dose_safety_penalty(module_bd, cfg)
+    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen - over_ul_pen)), 1)
     deductions = []
     if safety_pen > 0:
         deductions.append("the maker had a serious product recall")
@@ -300,6 +319,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         deductions.append("it contains a restricted additive")
     if additive_pen > 0:
         deductions.append("it contains additive or sweetener/form-factor concerns")
+    if over_ul_pen > 0:
+        deductions.append("one or more nutrients are above established upper limits")
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
@@ -312,6 +333,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
         components["clean_label_penalty"] = cl_pen
     if additive_pen > 0:
         components["additive_or_sweetener_penalty"] = additive_pen
+    if over_ul_pen > 0:
+        components["over_ul_penalty"] = over_ul_pen
     return {
         "score": val,
         "max": weight,
@@ -333,6 +356,8 @@ def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
         return "prenatal_multi"
     form = (module_bd.get("dimensions", {}) or {}).get("formulation") or {}
     meta = form.get("metadata") or {}
+    if (meta.get("immune_support") or {}).get("profile_applied"):
+        return "immune_support"
     if meta.get("botanical_profile_applied") or meta.get("collagen_profile_applied"):
         return "generic_botanical_branded"
     return "generic_single_molecule"

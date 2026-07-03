@@ -1205,6 +1205,12 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     ):
         return "multi_or_prenatal"
 
+    if (
+        primary_type == "multivitamin"
+        and _is_multivitamin_route_eligible(product, name_text)
+    ) or _has_broad_legacy_multivitamin_panel(product):
+        return "multi_or_prenatal"
+
     if _is_fiber_digestive_class(product, name_text):
         return "fiber_digestive"
 

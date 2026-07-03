@@ -245,6 +245,19 @@ def test_sleep_melatonin_gummy_penalty_reduces_public_safety_pillar() -> None:
     assert "additive or sweetener" in pillar["reason"]
 
 
+def test_b7_over_ul_penalty_reduces_public_safety_pillar() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    bd = _module_bd(hygiene=4)
+    bd["dimensions"]["dose"]["penalties"] = {"B7_dose_safety": -2.0}
+
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))
+    pillar = out["quality_pillars_v4"]["safety_hygiene"]
+
+    assert pillar["score"] == 8.0
+    assert pillar["components"]["over_ul_penalty"] == 2.0
+    assert "above established upper limits" in pillar["reason"]
+
+
 def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:
     from scoring_v4.quality_score import assemble_quality_score
 

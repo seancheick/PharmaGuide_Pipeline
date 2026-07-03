@@ -72,6 +72,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.modules.immune_support import score_immune_support_dose
 from scoring_v4.modules.joint_support import score_joint_support_dose
 from scoring_v4.modules.sleep_support import score_sleep_support_dose
 
@@ -364,6 +365,26 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "phase": PHASE_MARKER,
                 "method": "sleep_support_clinical_dose_v1",
                 "sleep_support_dose": sleep,
+            },
+        }
+
+    immune = score_immune_support_dose(product)
+    if immune is not None:
+        b7 = _penalty_b7_dose_safety(product)
+        components = dict(immune["components"])
+        components["multi_form_bonus"] = 0.0
+        penalties = {"B7_dose_safety": round(-b7, 4)}
+        score = _clamp(0.0, DIMENSION_CAP, float(immune["score"]) - b7)
+        return {
+            "score": round(score, 4),
+            "max": DIMENSION_CAP,
+            "components": components,
+            "penalties": penalties,
+            "phase": PHASE_MARKER,
+            "metadata": {
+                "phase": PHASE_MARKER,
+                "method": "immune_support_daily_dose_v1",
+                "immune_support_dose": immune.get("metadata", {}),
             },
         }
 

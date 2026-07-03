@@ -154,13 +154,9 @@
       "cluster_weights": {
         "immune_defense": 1.0,
         "immune_probiotic_blend": 0.8,
-        "gut_barrier": 0.7,
-        "bone_health": 0.6,
-        "antioxidant_defense": 0.5,
-        "detox_pathway": 0.5,
-        "liver_support": 0.4
+        "gut_barrier": 0.4
       },
-      "required_clusters": ["immune_defense"],
+      "required_clusters": ["immune_defense", "immune_probiotic_blend"],
       "blocked_by_clusters": [],
       "min_match_score": 0.5
     },

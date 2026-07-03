@@ -43,6 +43,23 @@ def _enriched(clusters, n_actives=8):
     }
 
 
+def _detail_cluster(cid, matched, all_adequate=1):
+    """Post-build detail-blob shape: id + string matched_ingredients."""
+    return {
+        "id": cid,
+        "matched_ingredients": list(matched),
+        "all_adequate": all_adequate,
+    }
+
+
+def _detail_blob(clusters, raw_actives_count=8):
+    return {
+        "raw_actives_count": raw_actives_count,
+        "ingredients": [{"i": i} for i in range(raw_actives_count)],
+        "synergy_detail": {"clusters": clusters},
+    }
+
+
 def test_incidental_cofactors_do_not_emit_goal_clusters():
     """The exact pre-workout pathology: trace micronutrients in a LOADED product
     must NOT emit the broad goal clusters."""
@@ -130,8 +147,91 @@ def test_uncurated_clusters_keep_legacy_behavior():
     assert "sleep_stack" in b._extract_product_cluster_ids(e, enforce_dose_gate=True)
 
 
-def test_presence_only_set_is_unchanged_by_the_gate():
-    """enforce_dose_gate=False (the presence superset for `underdosed`) must NOT
-    apply the anchor gate — it is the un-gated set by contract."""
-    e = _enriched([_cluster("eye_health", [("zinc", True)])])
-    assert "eye_health" in b._extract_product_cluster_ids(e, enforce_dose_gate=False)
+def test_presence_only_set_keeps_real_anchor_but_not_cofactor_only_noise():
+    """The underdosed surface bypasses dose, not anchor identity.
+
+    A real anchor below dose should be present-but-underdosed; a cofactor-only
+    match should disappear entirely instead of moving to partial support.
+    """
+    cofactor_only = _enriched([_cluster("eye_health", [("zinc", True)])])
+    assert "eye_health" not in b._extract_product_cluster_ids(
+        cofactor_only,
+        enforce_dose_gate=False,
+    )
+
+    real_anchor_below_dose = _enriched([
+        _cluster("eye_health", [("lutein", False), ("zinc", True)])
+    ])
+    assert "eye_health" in b._extract_product_cluster_ids(
+        real_anchor_below_dose,
+        enforce_dose_gate=False,
+    )
+
+
+def test_detail_blob_shape_uses_id_strings_and_raw_active_count():
+    """Regression for post-build detail blobs: cluster id lives in `id`, matches
+    are strings, and product breadth lives in raw_actives_count/ingredients."""
+    blob = _detail_blob([
+        _detail_cluster("eye_health", ["Zinc"]),
+        _detail_cluster("immune_defense", ["Zinc", "Selenium"]),
+        _detail_cluster("liver_support", ["Selenium"]),
+        _detail_cluster("hair_skin_nutrition", ["Zinc", "Copper"]),
+        _detail_cluster("methylation_support", ["BetaPure", "Choline Bitartrate"]),
+    ], raw_actives_count=14)
+
+    ids = b._extract_product_cluster_ids(blob, enforce_dose_gate=True)
+
+    for bad in ("eye_health", "immune_defense", "liver_support", "hair_skin_nutrition"):
+        assert bad not in ids
+    assert "methylation_support" in ids
+
+
+def test_detail_blob_focused_zinc_keeps_immune_but_loaded_zinc_does_not():
+    focused = _detail_blob([
+        _detail_cluster("immune_defense", ["Zinc"]),
+    ], raw_actives_count=1)
+    loaded = _detail_blob([
+        _detail_cluster("immune_defense", ["Zinc"]),
+    ], raw_actives_count=9)
+
+    assert "immune_defense" in b._extract_product_cluster_ids(
+        focused,
+        enforce_dose_gate=True,
+    )
+    assert "immune_defense" not in b._extract_product_cluster_ids(
+        loaded,
+        enforce_dose_gate=True,
+    )
+
+
+def test_detail_blob_cofactor_goals_do_not_move_to_underdosed():
+    """The original pathology must not survive as partial goal support."""
+    blob = _detail_blob([
+        _detail_cluster("eye_health", ["Zinc"]),
+        _detail_cluster("immune_defense", ["Zinc", "Selenium"]),
+        _detail_cluster("liver_support", ["Selenium"]),
+        _detail_cluster("hair_skin_nutrition", ["Zinc", "Copper"]),
+        _detail_cluster("thyroid_support", ["Selenium", "Zinc", "Copper"]),
+    ], raw_actives_count=14)
+
+    result = b.compute_goal_matches(blob)
+    noisy_goals = {
+        "GOAL_EYE_VISION_HEALTH",
+        "GOAL_IMMUNE_SUPPORT",
+        "GOAL_LIVER_DETOX",
+        "GOAL_SKIN_HAIR_NAILS",
+        "GOAL_HORMONAL_BALANCE",
+    }
+
+    assert noisy_goals.isdisjoint(result["goal_matches"])
+    assert noisy_goals.isdisjoint(result["goal_matches_underdosed"])
+
+
+def test_detail_blob_real_anchor_below_dose_routes_to_underdosed():
+    blob = _detail_blob([
+        _detail_cluster("eye_health", ["Lutein", "Zinc"], all_adequate=0),
+    ], raw_actives_count=2)
+
+    result = b.compute_goal_matches(blob)
+    assert "GOAL_EYE_VISION_HEALTH" not in result["goal_matches"]
+    assert "GOAL_EYE_VISION_HEALTH" in result["goal_matches_underdosed"]

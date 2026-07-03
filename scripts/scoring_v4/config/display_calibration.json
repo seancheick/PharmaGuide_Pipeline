@@ -26,6 +26,7 @@
     "omega": { "R_a": 89.3 },
     "probiotic": { "R_a": 86.5 },
     "fiber_digestive": { "R_a": 88.0 },
+    "immune_support": { "R_a": 88.0 },
     "prenatal_multi": { "R_a": 87.9 },
     "generic_single_molecule": { "R_a": 87.5 },
     "generic_botanical_branded": { "R_a": 88.5 }

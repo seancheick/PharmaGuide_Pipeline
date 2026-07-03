@@ -728,6 +728,28 @@ def test_BUG_16_real_fish_oil_still_routes_omega_3():
     assert result["primary_type"] == "omega_3"
 
 
+def test_stress_defense_adaptogen_product_is_not_immune_support():
+    """A broad word like "defense" is not enough to make an adaptogen/stress
+    formula an immune-support product.
+
+    Real audit case: Nature's Way Stress Defense was topping the immune cohort
+    because the name token ``defense`` fired before composition. It should stay
+    in the botanical/stress lane unless the label has an explicit immune token
+    or immune-primary actives.
+    """
+    product = {
+        "product_name": "Stress Defense",
+        "fullName": "Stress Defense",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Ashwagandha", "canonical_id": "ashwagandha", "category": "botanical", "quantity": 300, "unit": "mg"},
+            {"name": "Panax Ginseng", "canonical_id": "ginseng", "category": "botanical", "quantity": 200, "unit": "mg"},
+            {"name": "Rhodiola", "canonical_id": "rhodiola", "category": "botanical", "quantity": 100, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "immune_support"
+
+
 def test_BUG_16_multi_omega_row_product_still_routes_omega_3():
     """Inverse guard: a multi-row EPA+DHA product (active_count > 1)
     still routes to omega_3 regardless of name keyword or productType."""

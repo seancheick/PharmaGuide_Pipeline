@@ -604,7 +604,7 @@
       "evidence_tier": 3,
       "standard_name": "Immune Defense",
       "synergy_mechanism": "Vitamin C supports neutrophil function and acts as a cofactor for immune signaling enzymes. Zinc is required for T-cell maturation and NK cell activity. Vitamin D modulates innate immune responses through antimicrobial peptide (cathelicidin) expression. Quercetin has demonstrated ionophore activity facilitating zinc uptake into cells.",
-      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Immune Defense' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: vitamin c >= 500, zinc >= 15, vitamin d >= 1000, quercetin >= 500. See sources for supporting references.",
+      "note": "+1 synergy bonus applies when at least 2 ingredients from 'Immune Defense' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 3 (promising mechanistic rationale with limited combination-outcome evidence). Anchor dose checks: vitamin c >= 500, zinc >= 15, vitamin d >= 1000, quercetin >= 500. See sources for supporting references.",
       "sources": [
         {
           "source_type": "nih_ods",
@@ -635,7 +635,7 @@
         "astragalus",
         "colostrum"
       ],
-      "evidence_note": "Vitamin C + zinc for immune support: some cold symptom relief data (PMC10600480), but no RCT proving the combo is better than each alone.",
+      "evidence_note": "Vitamin C + zinc for immune support: some cold symptom relief data (PMC10600480), but no clinical trial has tested this exact combination against each ingredient alone.",
       "synergy_benefit_short": "Vitamin C, zinc, vitamin D, and elderberry work on different immune pathways — giving your defense system multiple angles at once.",
       "allow_single_ingredient": true,
       "primary_ingredients": [

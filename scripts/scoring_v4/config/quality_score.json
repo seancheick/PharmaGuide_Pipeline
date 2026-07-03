@@ -16,9 +16,10 @@
     "safety_hygiene": { "weight": 10, "assembler": "safety_hygiene" }
   },
   "safety_hygiene_subscale": {
-    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. B1 additive/sweetener penalties still mainly lower formulation, but they also take a small capped Safety Hygiene deduction so products with additive or glycemic-sweetener concerns do not show 10/10 safety hygiene. B7 overdose stays in dose only.",
+    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. B1 additive/sweetener penalties still mainly lower formulation, but they also take a small capped Safety Hygiene deduction so products with additive or glycemic-sweetener concerns do not show 10/10 safety hygiene. B7 overdose remains primarily a Dose-pillar penalty and also gets a small capped Safety Hygiene truthfulness deduction.",
     "base_max": 10.0,
-    "additive_or_sweetener_max_penalty": 4.0
+    "additive_or_sweetener_max_penalty": 4.0,
+    "over_ul_max_penalty": 3.0
   },
   "clean_label_subscale": {
     "_doc": "STEP 3a: clean-label additive penalty (titanium dioxide / E171 + future EU-banned additives). A flagged additive INFORMS (clean_label_flags_v4) AND takes a SMALL graduated safety_hygiene penalty WITHOUT forcing a CAUTION verdict (CAUTION is the safety gate's lane). penalty = penalty_base (per-additive, from banned_recalled_ingredients.json clean_label.penalty_base) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); a flagged additive present as an active is penalized harder (×1.5). MAGNITUDES HERE ARE CONSERVATIVE DEFAULTS PENDING USER/ADVISOR SIGN-OFF (spec §7, reports/v4_clean_label_flag_design.md): titanium dioxide as a coating = 2.0 × 0.5 = −1.0 on the /10 pillar. tier_base is a FALLBACK base used only when an entry omits penalty_base.",
@@ -32,6 +33,7 @@
       "sports_single": 19.0,
       "generic_single_molecule": 19.0,
       "generic_botanical_branded": 19.0,
+      "immune_support": 20.0,
       "fiber_digestive": 19.0,
       "omega": 20.0,
       "probiotic": 20.0,
@@ -45,6 +47,7 @@
       "sports_single": 25.0,
       "generic_single_molecule": 22.0,
       "generic_botanical_branded": 22.0,
+      "immune_support": 25.0,
       "fiber_digestive": 25.0,
       "omega": 23.0,
       "probiotic": 22.0,
@@ -58,6 +61,7 @@
       "sports_single": 25.0,
       "generic_single_molecule": 25.0,
       "generic_botanical_branded": 25.0,
+      "immune_support": 30.0,
       "fiber_digestive": 28.0,
       "omega": 23.0,
       "probiotic": 22.0,

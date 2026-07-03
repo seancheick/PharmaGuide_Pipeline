@@ -71,6 +71,7 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.modules.immune_support import immune_support_formulation_adjustment
 from scoring_v4.modules.sleep_support import (
     MELATONIN_GUMMY_FORMAT_PENALTY,
     has_melatonin_gummy_format,
@@ -797,6 +798,14 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     # convention error here can't silently inflate scores.
     penalties: Dict[str, float] = dict(shared_penalty_detail["penalties"])
     sleep_support_metadata: Dict[str, Any] = {}
+    immune_support_metadata: Dict[str, Any] = {}
+    immune_adjustment = immune_support_formulation_adjustment(product)
+    if immune_adjustment is not None:
+        components["immune_support_profile"] = round(
+            float(immune_adjustment["bonus"]), 4
+        )
+        penalties.update(immune_adjustment.get("penalties", {}))
+        immune_support_metadata = immune_adjustment.get("metadata", {})
     if has_melatonin_gummy_format(product):
         penalties["B1_sleep_melatonin_gummy"] = round(
             -MELATONIN_GUMMY_FORMAT_PENALTY, 4
@@ -823,6 +832,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         + a5_clamped
         + components["A6_single_ingredient"]
         + components["enzyme_recognition"]
+        + components.get("immune_support_profile", 0.0)
     )
     premium_single_floor = _premium_single_floor_target(product, components["A1_bio_score"])
     standard_single_floor = _standard_single_floor_target(product, components["A1_bio_score"])
@@ -895,6 +905,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "applied": presence_floor_applied,
             },
             "sleep_support": sleep_support_metadata,
+            "immune_support": immune_support_metadata,
             "dietary_sugar": shared_penalty_detail["metadata"]["dietary_sugar"],
         },
     }

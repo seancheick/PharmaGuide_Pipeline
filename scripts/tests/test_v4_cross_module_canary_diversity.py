@@ -48,11 +48,13 @@ GENERIC_CANARIES = {
         "traits": {"trust_high": True},
     },
     # No-RDA quantified dose path: gets conservative partial dose credit,
-    # but raw-score verdict guard keeps weak profiles from becoming SAFE.
-    "12932": {
-        "label": "vitafusion Fiber Gummies",
-        "score_range": (37.3, 38.7),
-        "traits": {"dose_partial_no_rda": True, "trust_zero": True},
+    # but weak formulation/evidence keeps the product in the low generic band.
+    # Replaced vitafusion Fiber Gummies after the dedicated fiber module made
+    # that product correctly route to fiber_digestive.
+    "251998": {
+        "label": "Nature's Way DHEA-25 mg",
+        "score_range": (34.5, 35.9),
+        "traits": {"dose_partial_no_rda": True, "trust_positive": True},
     },
     # False-positive guard from omega routing: liposomal delivery/lecithin
     # stays generic even though fatty-acid-like carrier signals exist.
@@ -60,7 +62,7 @@ GENERIC_CANARIES = {
         "label": "Pure Encapsulations Liposomal Glutathione",
         # Phase 4: 65 → 63. Phase 8: Setria glutathione (mass-primary) evidenced,
         # but positive_weak effect -> floor 14*0.85=11.9 -> 64.8.
-        "score_range": (63.0, 64.4),  # re-baseline 2026-06: current calibrated generic score lock
+        "score_range": (58.0, 59.4),  # re-baseline 2026-07: current calibrated generic score lock
         "traits": {},
     },
 }
@@ -93,7 +95,7 @@ PROBIOTIC_CANARIES = {
     # but not full per-strain disclosure/adequacy.
     "178346": {
         "label": "Spring Valley Advanced Strength Probiotic 50B",
-        "score_range": (71.0, 72.4),
+        "score_range": (68.6, 70.0),
         # c644d77c: appropriate-diversity curve drops a 16+-strain 50B aggregate
         # product below formulation max (no longer form_max=25); still aggregate-CFU proxy.
         "traits": {"aggregate_cfu_proxy": True, "trust_zero": True},
@@ -101,19 +103,19 @@ PROBIOTIC_CANARIES = {
     # Per-strain CFU disclosed path; Dose > 0 with no Trust credit.
     "286725": {
         "label": "vitafusion Probiotic 5B",
-        "score_range": (62.2, 63.6),
+        "score_range": (60.8, 62.2),
         "traits": {"dose_positive": True, "trust_zero": True},
     },
     # Per-strain CFU + positive Trust path.
     "184730": {
         "label": "Pure Encapsulations Probiotic 123",
-        "score_range": (54.4, 55.8),  # aggregate low-CFU presence floor
+        "score_range": (49.0, 50.4),  # aggregate low-CFU presence floor
         "traits": {"dose_positive": True, "trust_positive": True},
     },
     # Prenatal name must stay probiotic because supplement_type wins.
     "76803": {
         "label": "GNC Probiotic Solutions Prenatal 20B",
-        "score_range": (53.8, 55.0),  # current aggregate-CFU proxy + PB opacity guard
+        "score_range": (52.5, 53.9),  # current aggregate-CFU proxy + PB opacity guard
         "traits": {"prenatal_name_routes_probiotic": True, "trust_positive": True},
     },
 }
@@ -275,10 +277,11 @@ def test_probiotic_real_catalog_canary_score_and_traits(dsld_id: str, expected: 
         assert _dimension_score(breakdown, "dose") > 0
     if traits.get("aggregate_cfu_proxy"):
         dose = breakdown["dimensions"]["dose"]
-        assert dose["score"] == 11.0
+        assert dose["score"] == pytest.approx(9.35)
         assert dose["components"]["per_strain_cfu_disclosure"] == 0.0
         assert dose["metadata"]["window_proxy_reason"] == "aggregate_cfu_not_per_strain"
         assert dose["metadata"]["aggregate_cfu_proxy"]["applied"] is True
+        assert dose["metadata"]["aggregate_cfu_proxy"]["score"] == 11.0
     if traits.get("trust_zero"):
         assert _verification_strength(breakdown) == 0
     if traits.get("trust_positive"):

@@ -97,6 +97,8 @@ def _archetype(module: Optional[str], module_breakdown: Dict[str, Any]) -> str:
     # generic is split: botanical/branded-extract must not share the single-molecule curve
     form = (module_breakdown.get("dimensions", {}) or {}).get("formulation") or {}
     meta = form.get("metadata") or {}
+    if (meta.get("immune_support") or {}).get("profile_applied"):
+        return "immune_support"
     if meta.get("botanical_profile_applied") or meta.get("collagen_profile_applied"):
         return "generic_botanical_branded"
     return "generic_single_molecule"

@@ -148,6 +148,29 @@ def test_multivitamin_real_broad_panel_routes_multi():
     assert _legacy_class_for_product(p) == "multi_or_prenatal"
 
 
+def test_multivitamin_with_fiber_adjunct_routes_multi_not_fiber():
+    """A prebiotic/fiber row inside a broad multivitamin panel is an adjunct,
+    not the product identity. The multi rubric must win so incidental fiber
+    rows do not send real multis into the fiber/digestive module."""
+    p = _product(
+        "Daily Multi 40+",
+        [
+            _row("vitamin_a", "Vitamin A", 900, "mcg"),
+            _row("vitamin_c", "Vitamin C", 90, "mg"),
+            _row("vitamin_d", "Vitamin D", 25, "mcg"),
+            _row("vitamin_e", "Vitamin E", 15, "mg"),
+            _row("vitamin_b12_cobalamin", "Vitamin B12", 100, "mcg"),
+            _row("zinc", "Zinc", 11, "mg"),
+            _row("magnesium", "Magnesium", 100, "mg"),
+            _row("selenium", "Selenium", 55, "mcg"),
+            _row("inulin", "Organic Inulin", 200, "mg", category="fiber"),
+        ],
+        primary_type="multivitamin",
+    )
+    assert build_scoring_classification(p)["route_module"] == "multi_or_prenatal"
+    assert _legacy_class_for_product(p) == "multi_or_prenatal"
+
+
 @pytest.mark.parametrize("primary_type", ["immune_support", "sleep_support", "herbal_botanical"])
 def test_themed_legacy_multivitamin_with_broad_panel_routes_multi(primary_type):
     """The taxonomy can carry the product theme while the enriched product type

@@ -2677,6 +2677,19 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     ):
         return "multi_or_prenatal", "profile_content:explicit_multivitamin", ["explicit_multivitamin_name"]
 
+    if (
+        primary_type == "multivitamin"
+        and _route_is_multivitamin_eligible(product, name_text)
+    ):
+        return "multi_or_prenatal", "taxonomy:multivitamin", ["taxonomy:multivitamin"]
+
+    if _route_has_broad_legacy_multivitamin_panel(product):
+        return (
+            "multi_or_prenatal",
+            "legacy_multivitamin_broad_panel",
+            ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
+        )
+
     if _route_is_fiber_digestive_class(product, name_text):
         return "fiber_digestive", "profile_content:fiber_digestive", ["fiber_digestive_identity"]
 

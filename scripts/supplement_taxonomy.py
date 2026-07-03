@@ -148,7 +148,7 @@ _SLEEP_NAME_TOKENS = {"sleep", "melatonin", "nighttime", "night time", "calm sle
 # Short tokens that need word-boundary matching (avoid "forest" -> "rest").
 # "PM" alone is packet timing, not a sleep claim.
 _SLEEP_BOUNDARY_PATTERNS = [re.compile(r'\bnight\b'), re.compile(r'\brest\b')]
-_IMMUNE_NAME_TOKENS = {"immune", "immunity", "defense", "elderberry", "echinacea"}
+_IMMUNE_NAME_TOKENS = {"immune", "immunity", "elderberry", "echinacea"}
 _JOINT_NAME_TOKENS = {"joint", "glucosamine", "chondroitin", "msm", "flexibility", "cartilage"}
 _BEAUTY_NAME_TOKENS = {"skin", "nail", "nails", "beauty", "glow", "radiance", "keratin"}
 # "hair" needs word-boundary matching to avoid "chairman" false positive

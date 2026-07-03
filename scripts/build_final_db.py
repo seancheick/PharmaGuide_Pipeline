@@ -6827,6 +6827,58 @@ _GOAL_CLUSTER_FOCUSED_NUTRIENTS: Dict[str, set] = {
 _GOAL_CLUSTER_FOCUS_MAX_ACTIVES = 3
 
 
+def _goal_cluster_active_count(enriched: Dict[str, Any]) -> int:
+    """Best available active-count proxy for focused-nutrient goal gating."""
+    active_rows = [
+        row for row in safe_list(enriched.get("activeIngredients"))
+        if isinstance(row, dict)
+    ]
+    if active_rows:
+        return len(active_rows)
+
+    raw_count = safe_float(enriched.get("raw_actives_count"))
+    if raw_count is not None and raw_count > 0:
+        return int(raw_count)
+
+    detail_rows = [
+        row for row in safe_list(enriched.get("ingredients"))
+        if isinstance(row, dict)
+    ]
+    if detail_rows:
+        return len(detail_rows)
+
+    # Unknown breadth should not qualify as "focused"; this prevents legacy
+    # detail-blob shapes from leaking broad micronutrient goals.
+    return _GOAL_CLUSTER_FOCUS_MAX_ACTIVES + 1
+
+
+def _goal_cluster_match_name(match: Any) -> str:
+    if isinstance(match, dict):
+        for key in ("cluster_ingredient", "name", "standard_name", "standardName"):
+            value = safe_str(match.get(key)).strip().lower()
+            if value:
+                return value
+        return ""
+    return safe_str(match).strip().lower()
+
+
+def _goal_cluster_all_adequate(cluster: Dict[str, Any]) -> Optional[bool]:
+    if "all_adequate" not in cluster:
+        return None
+    value = cluster.get("all_adequate")
+    if value is None:
+        return None
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes"}
+    return bool(value)
+
+
+def _goal_cluster_match_adequacy(match: Any, cluster_all_adequate: Optional[bool]) -> Optional[bool]:
+    if isinstance(match, dict) and match.get("meets_minimum") is not None:
+        return bool(match.get("meets_minimum"))
+    return cluster_all_adequate
+
+
 def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True) -> set:
     """Flatten product cluster IDs from the enrichment output.
 
@@ -6858,37 +6910,40 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
     """
     ids: set = set()
     # Product breadth — the dominance proxy for the tier-2 focused-nutrient gate.
-    active_count = len(safe_list(enriched.get("activeIngredients")))
+    active_count = _goal_cluster_active_count(enriched)
 
-    def _cluster_has_adequate_dose(cluster: Dict) -> bool:
-        """True iff the cluster has no dose data, OR at least one matched
-        ingredient meets its minimum effective dose."""
+    def _cluster_passes_goal_gate(cluster: Dict, *, require_adequate_dose: bool) -> bool:
+        """True iff the cluster is goal-relevant.
+
+        Curated clusters require a defining anchor match for both supported and
+        underdosed goal surfaces. ``require_adequate_dose`` only decides whether
+        that anchor must meet its effective dose, or whether presence is enough
+        for the underdosed surface.
+        """
         matched = cluster.get("matched_ingredients")
         if not isinstance(matched, list) or not matched:
             # No per-ingredient data → trust the cluster (legacy tolerance).
             return True
         # Anchor set for this cluster (None = uncurated → legacy behavior).
-        cid = safe_str(cluster.get("cluster_id"))
+        cid = safe_str(cluster.get("cluster_id") or cluster.get("id"))
         anchors = _GOAL_CLUSTER_ANCHORS.get(cid)
         focused = _GOAL_CLUSTER_FOCUSED_NUTRIENTS.get(cid)
         is_focused_product = active_count <= _GOAL_CLUSTER_FOCUS_MAX_ACTIVES
+        cluster_all_adequate = _goal_cluster_all_adequate(cluster)
         has_dose_info = False
         for m in matched:
-            if not isinstance(m, dict):
+            adequacy = _goal_cluster_match_adequacy(m, cluster_all_adequate)
+            if adequacy is not None:
+                has_dose_info = True
+            if require_adequate_dose and adequacy is False:
                 continue
-            meets = m.get("meets_minimum")
-            if meets is None:
-                continue
-            has_dose_info = True
-            if not bool(meets):
-                continue
-            # Adequately-dosed match. For a curated cluster it only counts toward
-            # the GOAL when it is a defining anchor — an incidental cofactor
-            # (zinc/selenium/vitamin E/omega-3...) at adequate dose is not
-            # evidence the product is FORMULATED for that goal. Keep scanning for
-            # an anchor; uncurated clusters accept any adequate match.
+            # Relevant match. For a curated cluster it only counts toward the
+            # GOAL when it is a defining anchor — an incidental cofactor
+            # (zinc/selenium/vitamin E/omega-3...) is not evidence the product
+            # is FORMULATED for that goal. Keep scanning for an anchor;
+            # uncurated clusters accept any adequate match.
             if anchors is not None:
-                ing = safe_str(m.get("cluster_ingredient")).strip().lower()
+                ing = _goal_cluster_match_name(m)
                 if ing in anchors:
                     return True
                 # Tier-2: a broad micronutrient that IS the primary actor for
@@ -6900,6 +6955,8 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             return True
         # Rich dose data present and no adequate (anchor) match → filter out.
         # If dose data is absent across all matches, be lenient.
+        if anchors is not None:
+            return False
         return not has_dose_info
 
     # Primary path: formulation_data.synergy_clusters[*].cluster_id
@@ -6909,7 +6966,10 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             cid = safe_str(cluster.get("cluster_id"))
             if not cid:
                 continue
-            if enforce_dose_gate and not _cluster_has_adequate_dose(cluster):
+            if not _cluster_passes_goal_gate(
+                cluster,
+                require_adequate_dose=enforce_dose_gate,
+            ):
                 continue
             ids.add(cid)
 
@@ -6925,7 +6985,10 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             cid = safe_str(cluster.get("id") or cluster.get("cluster_id"))
             if not cid:
                 continue
-            if enforce_dose_gate and not _cluster_has_adequate_dose(cluster):
+            if not _cluster_passes_goal_gate(
+                cluster,
+                require_adequate_dose=enforce_dose_gate,
+            ):
                 continue
             ids.add(cid)
 
