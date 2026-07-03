@@ -193,14 +193,45 @@ def _reconcile_v4_section_a_zero_flag(scored: Dict[str, Any], v4: Dict[str, Any]
     ]
 
 
+def _v4_result_from_overlaid_scored(scored: Dict[str, Any]) -> Dict[str, Any]:
+    """Rehydrate the v4 shape from an already-overlaid scored dict."""
+    return {
+        "v4_module": scored.get("_v4_module"),
+        "quality_score_status": scored.get("_v4_quality_status"),
+        "quality_score_v4_100": scored.get("_v4_quality_score_100"),
+        "v4_breakdown": {
+            "module": _safe_dict(scored.get("_v4_module_breakdown")),
+            "safety_gate": _safe_dict(scored.get("_v4_safety_gate")),
+            "completeness_gate": _safe_dict(scored.get("_v4_completeness_gate")),
+            "provenance": _safe_dict(scored.get("_v4_provenance")),
+        },
+    }
+
+
+def reconcile_v4_flags(
+    scored: Dict[str, Any],
+    v4: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Return ``scored`` with legacy flags reconciled to the v4 source of truth.
+
+    ``overlay_v4_scored`` calls this with the native v4 scorer result. Export
+    boundaries that receive an already-overlaid scored dict can call it without
+    ``v4``; the reserved ``_v4_*`` fields carry enough contract to remove stale
+    v3 diagnostics from app-facing flag columns.
+    """
+    out = dict(scored) if isinstance(scored, dict) else {}
+    v4_result = v4 if isinstance(v4, dict) else _v4_result_from_overlaid_scored(out)
+    _reconcile_v4_omega_form_flag(out, v4_result)
+    _reconcile_v4_probiotic_proprietary_flag(out, v4_result)
+    _reconcile_v4_section_a_zero_flag(out, v4_result)
+    return out
+
+
 def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
     """Run v4 on ``enriched`` and overlay its public contract onto a copy of
     ``scored_v3``. Returns the new dict; never mutates either input."""
     v4 = score_product_v4(enriched if isinstance(enriched, dict) else {})
-    scored = dict(scored_v3) if isinstance(scored_v3, dict) else {}
-    _reconcile_v4_omega_form_flag(scored, v4)
-    _reconcile_v4_probiotic_proprietary_flag(scored, v4)
-    _reconcile_v4_section_a_zero_flag(scored, v4)
+    scored = reconcile_v4_flags(scored_v3, v4)
 
     breakdown = v4.get("v4_breakdown") or {}
     safety_gate = breakdown.get("safety_gate") or {}

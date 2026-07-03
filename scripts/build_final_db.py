@@ -7708,6 +7708,12 @@ def registry_verified_cert_display_programs(enriched: Dict) -> List[str]:
     return out
 
 
+def _reconcile_scored_export_flags(scored: Dict) -> Dict:
+    from scoring_v4.export_adapter import reconcile_v4_flags
+
+    return reconcile_v4_flags(scored)
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -7787,6 +7793,8 @@ def build_core_row(
                 "verdict": "CAUTION",
                 "safety_verdict": "CAUTION",
             })
+
+    effective_scored = _reconcile_scored_export_flags(effective_scored)
 
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
     ss = safe_dict(effective_scored.get("section_scores"))
@@ -7971,7 +7979,7 @@ def build_core_row(
         json.dumps(cert_display_programs, ensure_ascii=False),
         json.dumps(scored.get("badges", []), ensure_ascii=False),
         json.dumps(top_warnings, ensure_ascii=False),
-        json.dumps(scored.get("flags", []), ensure_ascii=False),
+        json.dumps(effective_scored.get("flags", []), ensure_ascii=False),
         # ── v1.1.0 Additions ──
         # Enhancement 1: Stack Interaction
         json.dumps(fingerprint, ensure_ascii=False),

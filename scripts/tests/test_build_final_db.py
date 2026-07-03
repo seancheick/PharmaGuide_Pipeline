@@ -2826,6 +2826,68 @@ def test_v4_overlay_removes_stale_section_a_zero_flag_when_v4_scores(monkeypatch
     assert overlaid["flags"] == ["SUPPLEMENT_TYPE_REINFERRED"]
 
 
+def test_build_core_row_reconciles_stale_v3_flags_from_v4_contract():
+    """The final products_core flags column must follow v4, not stale v3 diagnostics."""
+    enriched = make_enriched()
+    scored = make_scored()
+    scored.update({
+        "flags": [
+            "SECTION_A_ZERO_NO_SCORABLE_INGREDIENTS",
+            "OMEGA3_FORM_NOT_DISCLOSED",
+            "PROPRIETARY_BLEND_PRESENT",
+            "SUPPLEMENT_TYPE_REINFERRED",
+        ],
+        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": 90.7,
+        "_v4_module": "omega",
+        "_v4_module_breakdown": {
+            "dimensions": {
+                "formulation": {"metadata": {"form_detected": "rtg"}},
+                "transparency": {
+                    "components": {
+                        "form_disclosed": 3.0,
+                        "strain_identities_named": 8.0,
+                        "per_strain_cfu_on_label": 7.0,
+                    },
+                },
+            },
+        },
+    })
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-06-30T12:00:00Z"))
+
+    assert json.loads(row["flags"]) == [
+        "PROPRIETARY_BLEND_PRESENT",
+        "SUPPLEMENT_TYPE_REINFERRED",
+    ]
+
+
+def test_build_core_row_reconciles_probiotic_proprietary_flag_from_v4_contract():
+    """Fully disclosed probiotic labels must not ship stale proprietary-blend flags."""
+    enriched = make_enriched()
+    scored = make_scored()
+    scored.update({
+        "flags": ["PROPRIETARY_BLEND_PRESENT", "SUPPLEMENT_TYPE_REINFERRED"],
+        "_v4_quality_status": "scored",
+        "_v4_quality_score_100": 91.2,
+        "_v4_module": "probiotic",
+        "_v4_module_breakdown": {
+            "dimensions": {
+                "transparency": {
+                    "components": {
+                        "strain_identities_named": 8.0,
+                        "per_strain_cfu_on_label": 7.0,
+                    },
+                },
+            },
+        },
+    })
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-06-30T12:00:00Z"))
+
+    assert json.loads(row["flags"]) == ["SUPPLEMENT_TYPE_REINFERRED"]
+
+
 def _run_build(tmp, enriched_list, scored_list):
     root = Path(tmp)
     enriched_dir = root / "enriched"; enriched_dir.mkdir()
