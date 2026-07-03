@@ -1,6 +1,6 @@
 {
   "_metadata": {
-    "schema_version": "1.1.0",
+    "schema_version": "1.2.0",
     "last_updated": "2026-07-02",
     "total_entries": 108,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
@@ -16,7 +16,8 @@
       "2026-05-27T15:05:47Z: Fixed agent2_canonical_id misassignment on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY (phosphatidylserine -> genistein; soy isoflavones are pharmacologically distinct from phosphatidylserine). Added PMID 16571087 (Messina & Redmond, Thyroid 2006) to DSI_LEVOTHYROXINE_SOY source_pmids — content-verified via PubMed esummary API. Candidate PMID 15448175 rejected as ghost reference (real but off-topic: plant plasma membrane radicals).",
       "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override.",
       "2026-05-27T15:26:04Z: Added food_advisory_note schema to 5 Med-Food entries (DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE, DSI_MAOI_TYRAMINE). New optional fields: alert_style ('food_advisory_note'), note_body (plain-English explainer), practical_guidance (action-oriented). Added content-verified PMIDs: 26299317, 16814135, 35322792, 3525654 (DSI_LEVOTHYROXINE_COFFEE already had 18341376). Each PMID title content-verified via PubMed esummary API on 2026-05-27. Clinical severity field unchanged — alert_style controls UI tone, not clinical truth.",
-      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 110 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py."
+      "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 110 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py.",
+      "2026-07-02: Phase 3 — authored structured dose_threshold on all 33 dose_dependent pairs (floor value + confidence + verified ODS/NCCIH/PMID source per pair; reuses verified ingredient-rule floors where the same supplement+effect exists). Below-floor = suppressible by the app dose gate; inert until Phase 4. Applied via scripts/tools/author_phase3_pairwise_floors.py."
     ]
   },
   "interactions": [
@@ -92,7 +93,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "fish_oil",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "fish_oil",
+        "value": 1000,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "management_stated",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/17192169/",
+        "rationale": "Pair mgmt: fish oil up to 1 g/day is low-risk with warfarin; >1 g warrants INR monitoring."
+      }
     },
     {
       "id": "DSI_WAR_GINKGO",
@@ -165,7 +176,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "garlic",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "garlic",
+        "value": 600,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse+management",
+        "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+        "rationale": "Reused garlic bleeding floor (600 mg); pair mgmt agrees (>600 mg supplement); culinary safe."
+      }
     },
     {
       "id": "DSI_WAR_SJW",
@@ -373,7 +394,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "turmeric",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "turmeric",
+        "value": 500,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/22531131/",
+        "rationale": "High-dose curcumin (>500 mg/day, per the sibling anticoagulant pair) with warfarin; culinary turmeric safe."
+      }
     },
     {
       "id": "DSI_WAR_DONGQUAI",
@@ -439,7 +470,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginger",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ginger",
+        "value": 2000,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://www.nccih.nih.gov/health/ginger",
+        "rationale": "Pair mgmt: high-dose ginger supplements (>2 g/day) with warfarin; culinary ginger safe."
+      }
     },
     {
       "id": "DSI_STATINS_SJW",
@@ -624,7 +665,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "vitamin_b3_niacin",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "vitamin_b3_niacin",
+        "value": 1000,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "management_stated",
+        "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+        "rationale": "Pharmacologic niacin (>=1 g/day) drives statin-myopathy risk; nutritional/multivitamin niacin doses are safe."
+      }
     },
     {
       "id": "DSI_STATINS_COQ10",
@@ -830,7 +881,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginkgo",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ginkgo",
+        "value": 120,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://www.nccih.nih.gov/health/ginkgo",
+        "rationale": "Reused ginkgo antiplatelet floor (120 mg, standard EGb-761 dose)."
+      }
     },
     {
       "id": "DSI_SSRI_MELATONIN",
@@ -1114,7 +1175,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "coq10",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "coq10",
+        "value": 100,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/coenzyme-q10",
+        "rationale": "INFERRED floor at the supplemental CoQ10 dose (~100 mg) where a modest BP effect is reported; trace amounts below."
+      }
     },
     {
       "id": "DSI_METFORMIN_ALA",
@@ -1147,7 +1218,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "alpha_lipoic_acid",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "alpha_lipoic_acid",
+        "value": 600,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/22374556/",
+        "rationale": "Reused ALA glucose floor (600 mg)."
+      }
     },
     {
       "id": "DSI_DM_CHROMIUM",
@@ -1183,7 +1264,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "chromium",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "chromium",
+        "value": 200,
+        "unit": "mcg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/",
+        "rationale": "Reused chromium glucose floor (200 mcg; top of multivitamin range, trace below)."
+      }
     },
     {
       "id": "DSI_DM_BERBERINE",
@@ -1255,7 +1346,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "bitter_melon",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "bitter_melon",
+        "value": 600,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/35140559/",
+        "rationale": "Reused bitter melon glucose floor (600 mg)."
+      }
     },
     {
       "id": "DSI_DM_FENUGREEK",
@@ -1290,7 +1391,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "fenugreek",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "fenugreek",
+        "value": 500,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/24438170/",
+        "rationale": "Reused fenugreek glucose floor (500 mg)."
+      }
     },
     {
       "id": "DSI_DM_GYMNEMA",
@@ -1325,7 +1436,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "gymnema_sylvestre",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "gymnema_sylvestre",
+        "value": 400,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/34467577/",
+        "rationale": "Reused gymnema glucose floor (400 mg)."
+      }
     },
     {
       "id": "DSI_DM_CINNAMON",
@@ -1360,7 +1481,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "cinnamon",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "cinnamon",
+        "value": 500,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/24019277/",
+        "rationale": "Reused cinnamon glucose floor (500 mg extract); culinary cinnamon safe."
+      }
     },
     {
       "id": "DSI_LEVOTHYROXINE_CALCIUM",
@@ -2072,7 +2203,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "fish_oil",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "fish_oil",
+        "value": 2000,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "management_stated",
+        "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+        "rationale": "Pair mgmt: caution combining fish oil >2 g/day with NSAIDs; lower doses low-risk."
+      }
     },
     {
       "id": "DSI_NSAID_GARLIC",
@@ -2104,7 +2245,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "garlic",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "garlic",
+        "value": 600,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
+        "rationale": "Reused garlic bleeding floor; culinary garlic safe with NSAIDs."
+      }
     },
     {
       "id": "DSI_NSAID_GINKGO",
@@ -2139,7 +2290,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ginkgo",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ginkgo",
+        "value": 120,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse",
+        "source": "https://www.nccih.nih.gov/health/ginkgo",
+        "rationale": "Reused ginkgo antiplatelet floor (120 mg)."
+      }
     },
     {
       "id": "DSI_NSAID_WILLOWBARK",
@@ -2209,7 +2370,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "valerian",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "valerian",
+        "value": 400,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/valerian",
+        "rationale": "INFERRED conservative floor at a sedative valerian-root dose (~400 mg; typical 300-600 mg)."
+      }
     },
     {
       "id": "DSI_SEDATIVES_KAVA",
@@ -2276,7 +2447,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "melatonin",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "melatonin",
+        "value": 5,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
+        "rationale": "Pair mgmt: low-dose melatonin (0.5-3 mg) is fine with benzodiazepines; floor at 5 mg (above the sleep-dose range)."
+      }
     },
     {
       "id": "DSI_SEDATIVES_PASSIONFLOWER",
@@ -2308,7 +2489,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "passionflower",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "passionflower",
+        "value": 400,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/passionflower",
+        "rationale": "INFERRED conservative floor at a sedative passionflower dose (~400 mg)."
+      }
     },
     {
       "id": "DSI_PPI_IRON",
@@ -2644,7 +2835,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "genistein",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "genistein",
+        "value": 100,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://www.nccih.nih.gov/health/soy",
+        "rationale": "Pair mgmt: high-dose soy isoflavone supplements (>100 mg/day) warrant caution; dietary soy safe with OCs."
+      }
     },
     {
       "id": "SSI_IRON_CALCIUM",
@@ -2888,7 +3089,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "vitamin_d",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "vitamin_d",
+        "value": 4000,
+        "unit": "IU",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
+        "rationale": "Pair mgmt: high-dose vitamin D >4000 IU/day (the adult UL) warrants supervision; typical repletion doses below."
+      }
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",
@@ -2924,7 +3135,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "magnesium",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "magnesium",
+        "value": 350,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
+        "rationale": "INFERRED floor at the supplemental-magnesium UL (350 mg); dietary magnesium below is not a meaningful BP modifier."
+      }
     },
     {
       "id": "DSI_ANTIPSYCH_MELATONIN",
@@ -2956,7 +3177,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "melatonin",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "melatonin",
+        "value": 5,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know",
+        "rationale": "Pair mgmt: low-dose melatonin (0.5-3 mg) is fine with antipsychotics; floor at 5 mg."
+      }
     },
     {
       "id": "DSI_ANTICOAG_CBD",
@@ -3132,7 +3363,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "horse_chestnut_seed",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "horse_chestnut_seed",
+        "value": 300,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/horse-chestnut",
+        "rationale": "INFERRED conservative floor at standardized horse-chestnut-seed (aescin) supplement dose (~300 mg); not a guideline cutoff."
+      }
     },
     {
       "id": "DSI_DM_ASHWAGANDHA",
@@ -3167,7 +3408,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ashwagandha",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ashwagandha",
+        "value": 300,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/ashwagandha",
+        "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg); not a guideline cutoff."
+      }
     },
     {
       "id": "DSI_ANTIHYP_ASHWAGANDHA",
@@ -3202,7 +3453,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ashwagandha",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ashwagandha",
+        "value": 300,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/ashwagandha",
+        "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg)."
+      }
     },
     {
       "id": "DSI_SEDATIVES_ASHWAGANDHA",
@@ -3237,7 +3498,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "ashwagandha",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ashwagandha",
+        "value": 300,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/ashwagandha",
+        "rationale": "INFERRED conservative floor at a standardized ashwagandha-extract dose (~300 mg)."
+      }
     },
     {
       "id": "DSI_THYROID_TURMERIC",
@@ -3307,7 +3578,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "turmeric",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "turmeric",
+        "value": 500,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "management_stated",
+        "source": "https://pubmed.ncbi.nlm.nih.gov/22531131/",
+        "rationale": "Pair mgmt: curcumin >500 mg/day with anticoagulants; culinary turmeric safe."
+      }
     },
     {
       "id": "DSI_DM_MAGNESIUM",
@@ -3343,7 +3624,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "magnesium",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "magnesium",
+        "value": 350,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
+        "rationale": "INFERRED floor at the supplemental-magnesium UL (350 mg); dietary/multivitamin magnesium below is not a meaningful glucose modifier."
+      }
     },
     {
       "id": "SSI_MAGNESIUM_CALCIUM",
@@ -3580,7 +3871,17 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "vitamin_d",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "vitamin_d",
+        "value": 4000,
+        "unit": "IU",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
+        "rationale": "INFERRED floor at the adult UL (4000 IU); repletion doses below are usually beneficial rather than additive-hypotensive."
+      }
     },
     {
       "id": "DSI_FISHOIL_VITE",
@@ -3612,7 +3913,17 @@
       "evidence_basis": "systematic_review",
       "clinical_confidence": "moderate",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "vitamin_e",
+        "value": 400,
+        "unit": "IU",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse+management",
+        "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+        "rationale": "Reused vitamin E bleeding floor (400 IU); pair mgmt agrees (<=400 IU/day with fish oil)."
+      }
     },
     {
       "id": "DSI_FISHOIL_GINKGO",
@@ -3644,7 +3955,17 @@
       "evidence_basis": "review",
       "clinical_confidence": "moderate",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "ginkgo",
+        "value": 120,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "reuse",
+        "source": "https://www.nccih.nih.gov/health/ginkgo",
+        "rationale": "Sup-Sup additive bleeding; floor on ginkgo (primary antiplatelet, 120 mg standard dose)."
+      }
     },
     {
       "id": "DSI_MELATONIN_VALERIAN",
@@ -3676,7 +3997,17 @@
       "evidence_basis": "mechanism_inferred",
       "clinical_confidence": "low",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "valerian",
+        "value": 400,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "low",
+        "confidence_basis": "inferred_conservative",
+        "source": "https://www.nccih.nih.gov/health/valerian",
+        "rationale": "INFERRED conservative floor on valerian (~400 mg) for additive sedation with melatonin."
+      }
     },
     {
       "id": "DSI_CALCIUM_FLUOROQUINOLONE",

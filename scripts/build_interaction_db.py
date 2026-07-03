@@ -329,7 +329,14 @@ CREATE TABLE interactions (
     -- from applies_to (a scope descriptor that includes never-suppress
     -- warfarin+vitamin K).
     direction               TEXT,
-    materiality             TEXT
+    materiality             TEXT,
+    -- Phase 3 (2026-07-02): structured per-supplement dose floor as a JSON blob
+    -- {agent_canonical_id,value,unit,basis,confidence,confidence_basis,source,
+    -- rationale}. Below the floor the additive interaction is negligible and the
+    -- app dose gate may suppress; at/above it the pair fires. Null when no floor
+    -- is authored yet. `dose_dependent` is now derived from `materiality`
+    -- (fixes the historical builder read of an absent `dose_dependent` key).
+    dose_threshold_json     TEXT
 );
 
 CREATE INDEX idx_int_a1_canon ON interactions(agent1_canonical_id)
@@ -410,6 +417,18 @@ CREATE TABLE interaction_db_metadata (
 # --------------------------------------------------------------------------- #
 
 
+def _dose_threshold_text(draft: dict[str, Any]) -> str | None:
+    """Human-readable floor for the free-text column, derived from the structured
+    dose_threshold when present; else the pre-authored free text."""
+    dt = draft.get("dose_threshold")
+    if isinstance(dt, dict) and dt.get("value") is not None:
+        agent = dt.get("agent_canonical_id")
+        agent = f" {agent}" if agent else ""
+        basis = "/day" if dt.get("basis") == "per_day" else ""
+        return f">= {dt['value']} {dt.get('unit', '')}{basis}{agent}".strip()
+    return draft.get("dose_threshold_text")
+
+
 def build_interaction_row(
     draft: dict[str, Any],
     *,
@@ -454,8 +473,10 @@ def build_interaction_row(
             draft.get("source_pmids", []), sort_keys=True
         ),
         "bidirectional": 1 if draft.get("bidirectional", True) else 0,
-        "dose_dependent": 1 if draft.get("dose_dependent", False) else 0,
-        "dose_threshold_text": draft.get("dose_threshold_text"),
+        # Derive from the authored `materiality` (fixes the historical read of an
+        # absent `dose_dependent` key, which pinned every row to 0).
+        "dose_dependent": 1 if draft.get("materiality") == "dose_dependent" else 0,
+        "dose_threshold_text": _dose_threshold_text(draft),
         "type_authored": draft.get("type_authored") or draft.get("type"),
         "source": draft.get("source", "curated"),
         "provenance": derive_provenance(draft.get("source_urls", [])),
@@ -472,6 +493,10 @@ def build_interaction_row(
         # Smart-flagging Phase 2 classification (advisory-only, app routes later)
         "direction": draft.get("direction"),
         "materiality": draft.get("materiality"),
+        "dose_threshold_json": (
+            json.dumps(draft["dose_threshold"], sort_keys=True)
+            if isinstance(draft.get("dose_threshold"), dict) else None
+        ),
     }
 
 
@@ -578,6 +603,8 @@ def _column_order(table: str) -> list[str]:
             # Smart-flagging Phase 2 classification (2026-07-02)
             "direction",
             "materiality",
+            # Phase 3 structured dose floor (2026-07-02)
+            "dose_threshold_json",
         ]
     if table == "research_pairs":
         return [

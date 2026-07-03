@@ -424,8 +424,8 @@ def test_interactions_columns_match_spec(build_ctx):
         "retired_at",
         "retired_reason",
     }
-    # Smart-flagging Phase 2 two-axis classification (2026-07-02)
-    required_classification = {"direction", "materiality"}
+    # Smart-flagging Phase 2 two-axis classification + Phase 3 dose floor (2026-07-02)
+    required_classification = {"direction", "materiality", "dose_threshold_json"}
     missing = (required_base | required_enhancements | required_classification) - cols
     assert not missing, f"missing columns: {missing}"
 
