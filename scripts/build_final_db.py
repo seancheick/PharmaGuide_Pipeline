@@ -6826,6 +6826,13 @@ _GOAL_CLUSTER_FOCUSED_NUTRIENTS: Dict[str, set] = {
 # micronutrient — the nutrient is incidental, so it does not claim the goal.
 _GOAL_CLUSTER_FOCUS_MAX_ACTIVES = 3
 
+_GOAL_CLUSTER_INTENT_KEYWORDS: Dict[str, tuple] = {
+    # Iodine/selenium in multis and sports formulas should not imply a hormonal
+    # or thyroid goal. Keep thyroid support for focused iodine/kelp products or
+    # formulas explicitly positioned around thyroid support.
+    "thyroid_support": ("thyroid", "iodine", "kelp", "bladderwrack", "guggul"),
+}
+
 
 def _goal_cluster_active_count(enriched: Dict[str, Any]) -> int:
     """Best available active-count proxy for focused-nutrient goal gating."""
@@ -6879,6 +6886,27 @@ def _goal_cluster_match_adequacy(match: Any, cluster_all_adequate: Optional[bool
     return cluster_all_adequate
 
 
+def _goal_cluster_product_text(enriched: Dict[str, Any]) -> str:
+    taxonomy = safe_dict(enriched.get("supplement_taxonomy"))
+    parts = [
+        enriched.get("product_name"),
+        enriched.get("brand_name"),
+        enriched.get("product_role"),
+        taxonomy.get("primary_type"),
+        taxonomy.get("secondary_type"),
+    ]
+    return " ".join(safe_str(part).lower() for part in parts if safe_str(part))
+
+
+def _goal_cluster_intent_allowed(cid: str, active_count: int, product_text: str) -> bool:
+    keywords = _GOAL_CLUSTER_INTENT_KEYWORDS.get(cid)
+    if not keywords:
+        return True
+    if active_count <= _GOAL_CLUSTER_FOCUS_MAX_ACTIVES:
+        return True
+    return any(keyword in product_text for keyword in keywords)
+
+
 def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True) -> set:
     """Flatten product cluster IDs from the enrichment output.
 
@@ -6911,6 +6939,7 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
     ids: set = set()
     # Product breadth — the dominance proxy for the tier-2 focused-nutrient gate.
     active_count = _goal_cluster_active_count(enriched)
+    product_text = _goal_cluster_product_text(enriched)
 
     def _cluster_passes_goal_gate(cluster: Dict, *, require_adequate_dose: bool) -> bool:
         """True iff the cluster is goal-relevant.
@@ -6945,7 +6974,7 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             if anchors is not None:
                 ing = _goal_cluster_match_name(m)
                 if ing in anchors:
-                    return True
+                    return _goal_cluster_intent_allowed(cid, active_count, product_text)
                 # Tier-2: a broad micronutrient that IS the primary actor for
                 # this goal (zinc→immune, vit C/E→antioxidant) counts only when
                 # the product is focused on it — not incidental in a multi/stack.

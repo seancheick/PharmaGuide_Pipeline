@@ -91,8 +91,8 @@ def test_real_anchors_still_emit_goal_clusters():
         _cluster("prenatal_pregnancy_support", [("folate", True), ("dha", True)]),
     ], n_actives=20)
     ids = b._extract_product_cluster_ids(real, enforce_dose_gate=True)
-    for good in ("eye_health", "immune_defense", "thyroid_support",
-                 "liver_support", "hair_skin_nutrition", "fertility_female",
+    for good in ("eye_health", "immune_defense", "liver_support",
+                 "hair_skin_nutrition", "fertility_female",
                  "prenatal_pregnancy_support"):
         assert good in ids, f"{good} wrongly filtered despite a real anchor at dose"
 
@@ -225,6 +225,36 @@ def test_detail_blob_cofactor_goals_do_not_move_to_underdosed():
 
     assert noisy_goals.isdisjoint(result["goal_matches"])
     assert noisy_goals.isdisjoint(result["goal_matches_underdosed"])
+
+
+def test_loaded_non_thyroid_formula_does_not_get_hormonal_partial_from_iodine():
+    blob = _detail_blob([
+        _detail_cluster("thyroid_support", ["Iodine", "Selenium", "Zinc"], all_adequate=0),
+    ], raw_actives_count=12)
+    blob["product_name"] = "Pre-Workout Energy"
+
+    result = b.compute_goal_matches(blob)
+    assert "GOAL_HORMONAL_BALANCE" not in result["goal_matches"]
+    assert "GOAL_HORMONAL_BALANCE" not in result["goal_matches_underdosed"]
+
+
+def test_focused_or_positioned_thyroid_products_keep_thyroid_goal():
+    focused = _detail_blob([
+        _detail_cluster("thyroid_support", ["Iodine"], all_adequate=1),
+    ], raw_actives_count=1)
+    positioned = _detail_blob([
+        _detail_cluster("thyroid_support", ["Iodine", "Tyrosine"], all_adequate=1),
+    ], raw_actives_count=8)
+    positioned["product_name"] = "Thyroid Support Complex"
+
+    assert "thyroid_support" in b._extract_product_cluster_ids(
+        focused,
+        enforce_dose_gate=True,
+    )
+    assert "thyroid_support" in b._extract_product_cluster_ids(
+        positioned,
+        enforce_dose_gate=True,
+    )
 
 
 def test_detail_blob_real_anchor_below_dose_routes_to_underdosed():
