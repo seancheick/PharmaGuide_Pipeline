@@ -117,9 +117,46 @@ split_user_pytest_args() {
   done
 }
 
+# RAM-aware xdist worker cap. Each pytest worker loads the heavy enricher
+# (~13k lines) + the large data JSONs and holds ~4-5 GB resident. `-n auto`
+# (one worker PER CORE) therefore demanded ~60 GB on a 16 GB / high-core box and
+# swap-thrashed the machine into a freeze. Cap workers by whichever is smaller:
+# CPU cores or how many ~5 GB workers physical RAM can hold after reserving
+# headroom for the OS + editor + browser. Override with PG_TEST_WORKERS=N.
+safe_worker_count() {
+  if [[ -n "${PG_TEST_WORKERS:-}" ]]; then
+    printf '%s\n' "$PG_TEST_WORKERS"
+    return
+  fi
+  "$PG_PYTHON" - <<'PY'
+import os, sys
+mem_gb = 8.0
+try:
+    if sys.platform == "darwin":
+        import subprocess
+        mem_gb = int(subprocess.check_output(["sysctl", "-n", "hw.memsize"])) / 1e9
+    else:
+        with open("/proc/meminfo") as f:
+            for line in f:
+                if line.startswith("MemTotal:"):
+                    mem_gb = int(line.split()[1]) / 1e6  # kB -> GB
+                    break
+except Exception:
+    pass
+cores = os.cpu_count() or 2
+PER_WORKER_GB = 5.0   # conservative resident footprint per worker
+RESERVE_GB = 6.0      # OS + editor/Claude + browser headroom
+by_mem = int((mem_gb - RESERVE_GB) // PER_WORKER_GB)
+print(max(1, min(cores - 1, by_mem)))
+PY
+}
+
 pytest_args_for_full() {
   if has_xdist; then
-    printf '%s\n' -n auto
+    local n
+    n="$(safe_worker_count)"
+    echo "test.sh: running full suite with $n parallel worker(s) (RAM-capped; set PG_TEST_WORKERS to override)" >&2
+    printf '%s\n' -n "$n"
   fi
 }
 
@@ -260,6 +297,10 @@ PY
 TIMEOUT_FAST=(); while IFS= read -r _a; do TIMEOUT_FAST+=("$_a"); done < <(timeout_args 120)
 TIMEOUT_HEAVY=(); while IFS= read -r _a; do TIMEOUT_HEAVY+=("$_a"); done < <(timeout_args 600)
 
+# Low-priority prefix for the heavy (full/slow) profiles so a long parallel run
+# can't starve the UI / freeze the machine. No-op if `nice` is unavailable.
+NICE=(); command -v nice >/dev/null 2>&1 && NICE=(nice -n 15)
+
 case "$PROFILE" in
   fast)
     split_user_pytest_args "$@"
@@ -299,7 +340,7 @@ case "$PROFILE" in
     while IFS= read -r arg; do
       parallel_args+=("$arg")
     done < <(pytest_args_for_full)
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${parallel_args[@]+"${parallel_args[@]}"}" "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
   slow)
     split_user_pytest_args "$@"
@@ -308,7 +349,7 @@ case "$PROFILE" in
     else
       files=("${SLOW_FILES[@]}")
     fi
-    "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
+    "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;
   *)
     cat >&2 <<'EOF'
