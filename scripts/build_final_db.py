@@ -6700,6 +6700,133 @@ def _joint_active_id(row: Dict[str, Any]) -> Optional[str]:
     return None
 
 
+# Goal-emission anchors (goal correctness, 2026-07-03). A cluster's GOAL is only
+# claimed when a DEFINING "anchor" ingredient is present at an adequate dose —
+# not when incidental broad cofactors (zinc, selenium, copper, vitamin E,
+# omega-3, iron...) merely overlap. Without this, a pre-workout that only
+# contains trace zinc+selenium was mapped to eye/immune/liver/thyroid/skin/
+# hormonal goals (P0 data-correctness bug: ~2k products per weak goal).
+#
+# Scope note: GOAL-EMISSION POLICY ONLY. This gate feeds `goal_matches`; it does
+# NOT touch the synergy DISPLAY or the A5c synergy score (both read the enriched
+# clusters directly and are unaffected). Anchor strings are lower-cased and match
+# synergy_cluster.json `ingredients`. Curated only for the clusters that drove
+# false goals; every other cluster keeps the legacy "any adequate match" gate.
+# (Interim home: belongs beside the cluster defs in synergy_cluster.json, but
+# that file is under concurrent edit — migrate when reconciling.)
+_GOAL_CLUSTER_ANCHORS: Dict[str, set] = {
+    "eye_health": {"lutein", "zeaxanthin", "astaxanthin", "bilberry", "saffron"},
+    "immune_defense": {
+        "vitamin c", "ascorbic acid", "ester-c", "vitamin d", "vitamin d3",
+        "cholecalciferol", "elderberry", "sambucus", "echinacea", "beta glucans",
+        "beta-glucan", "astragalus", "colostrum", "epicor", "quercetin",
+        "mushroom complex",
+    },
+    "hair_skin_nutrition": {
+        "biotin", "vitamin b7", "collagen", "collagen peptides", "keratin",
+        "silica", "bamboo extract", "hyaluronic acid", "msm",
+        "methylsulfonylmethane",
+    },
+    "liver_support": {
+        "milk thistle", "silymarin", "nac", "n-acetyl-cysteine",
+        "alpha-lipoic acid", "ala", "artichoke extract", "cynara scolymus",
+        "dandelion root", "turmeric", "curcumin", "glutathione", "schisandra",
+        "burdock root", "tudca",
+    },
+    "thyroid_support": {
+        "iodine", "kelp", "bladderwrack", "tyrosine", "l-tyrosine", "guggul",
+    },
+    "wound_healing": {
+        "collagen", "collagen peptides", "l-arginine", "arginine", "bromelain",
+        "aloe vera",
+    },
+    "fertility_female": {
+        "myo-inositol", "inositol", "d-chiro-inositol", "coq10", "coenzyme q10",
+        "ubiquinol", "vitex", "chasteberry",
+    },
+    "prenatal_pregnancy_support": {
+        "folate", "folic acid", "methylfolate", "5-mthf", "quatrefolic", "dha",
+        "choline",
+    },
+    "hormone_balance_men": {
+        "ashwagandha", "ksm-66", "tongkat ali", "eurycoma longifolia",
+        "tribulus terrestris", "d-aspartic acid", "daa", "boron", "saw palmetto",
+        "nettle root", "dim", "diindolylmethane", "maca", "fenugreek",
+    },
+    "hormone_balance_women": {
+        "chasteberry", "vitex", "dim", "diindolylmethane", "black cohosh",
+        "red clover", "evening primrose oil", "dong quai", "wild yam",
+        "shatavari", "maca", "calcium d-glucarate",
+    },
+    "skin_health_complex": {
+        "hyaluronic acid", "ceramides", "marine collagen", "type i collagen",
+        "biotin",
+    },
+    "collagen_synthesis_support": {
+        "collagen peptides", "type i collagen", "type ii collagen",
+        "type iii collagen", "lysine", "l-lysine", "proline", "l-proline",
+        "hydroxyproline", "glycine", "silica", "silicon", "bamboo extract",
+        "hyaluronic acid",
+    },
+    "antioxidant_defense": {
+        "glutathione", "nac", "alpha-lipoic acid", "resveratrol",
+        "green tea extract", "egcg", "grape seed extract", "pycnogenol",
+        "astaxanthin", "bilberry", "coq10", "ubiquinol",
+    },
+    "adrenal_support": {
+        "ashwagandha", "rhodiola", "rhodiola rosea", "holy basil", "ginseng",
+        "panax ginseng", "licorice",
+    },
+    "respiratory_health_lung_support": {
+        "nac", "n-acetyl cysteine", "n-acetylcysteine", "bromelain",
+        "elderberry", "sambucus", "cordyceps", "mullein", "ivy leaf extract",
+        "pelargonium sidoides", "quercetin",
+    },
+    "prostate_health": {
+        "saw palmetto", "serenoa repens", "beta-sitosterol", "plant sterols",
+        "pygeum", "pygeum africanum", "nettle root", "stinging nettle",
+        "pumpkin seed oil", "pumpkin seed extract", "lycopene",
+    },
+    "menopause_perimenopause_support": {
+        "black cohosh", "cimicifuga racemosa", "red clover", "isoflavones",
+        "soy isoflavones", "genistein", "evening primrose oil", "maca",
+        "lepidium meyenii", "sage", "dong quai", "shatavari",
+    },
+    "blood_sugar_regulation": {
+        "berberine", "berberine hcl", "chromium", "chromium picolinate",
+        "alpha-lipoic acid", "ala", "cinnamon", "cinnamon extract", "gymnema",
+        "gymnema sylvestre", "bitter melon", "vanadyl sulfate", "banaba leaf",
+        "fenugreek",
+    },
+}
+
+# Product-intent tier-2: a handful of BROAD micronutrients that genuinely ARE
+# the primary actor for a few nutrient-defined goals (zinc for immune, vitamin
+# C/E/selenium for antioxidant, zinc lozenges for respiratory). They are
+# EXCLUDED from the anchor sets above on purpose — as an incidental cofactor in
+# a loaded pre-workout or a 95-ingredient multivitamin they are noise. They
+# should only claim the goal when the product is FOCUSED on them: a standalone
+# "Zinc 30", "Vitamin C & E", "Zinc Lozenges". The active-count ceiling is the
+# dominance proxy — a bare mineral pill has ~1-3 actives; a multi/pre-workout
+# has many. (Specific goals like eye/liver/thyroid never get a tier-2 entry —
+# a broad micronutrient is never their primary actor.)
+_GOAL_CLUSTER_FOCUSED_NUTRIENTS: Dict[str, set] = {
+    "immune_defense": {
+        "zinc", "zinc picolinate", "zinc bisglycinate", "vitamin a", "retinol",
+    },
+    "antioxidant_defense": {
+        "vitamin c", "ascorbic acid", "ester-c", "vitamin e", "alpha-tocopherol",
+        "selenium", "selenomethionine",
+    },
+    "respiratory_health_lung_support": {
+        "zinc", "zinc picolinate", "vitamin c", "ascorbic acid",
+    },
+}
+# A product with more disclosed actives than this is not "focused" on a tier-2
+# micronutrient — the nutrient is incidental, so it does not claim the goal.
+_GOAL_CLUSTER_FOCUS_MAX_ACTIVES = 3
+
+
 def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True) -> set:
     """Flatten product cluster IDs from the enrichment output.
 
@@ -6730,6 +6857,8 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
     Returns a deduplicated set of non-empty cluster ID strings.
     """
     ids: set = set()
+    # Product breadth — the dominance proxy for the tier-2 focused-nutrient gate.
+    active_count = len(safe_list(enriched.get("activeIngredients")))
 
     def _cluster_has_adequate_dose(cluster: Dict) -> bool:
         """True iff the cluster has no dose data, OR at least one matched
@@ -6738,6 +6867,11 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
         if not isinstance(matched, list) or not matched:
             # No per-ingredient data → trust the cluster (legacy tolerance).
             return True
+        # Anchor set for this cluster (None = uncurated → legacy behavior).
+        cid = safe_str(cluster.get("cluster_id"))
+        anchors = _GOAL_CLUSTER_ANCHORS.get(cid)
+        focused = _GOAL_CLUSTER_FOCUSED_NUTRIENTS.get(cid)
+        is_focused_product = active_count <= _GOAL_CLUSTER_FOCUS_MAX_ACTIVES
         has_dose_info = False
         for m in matched:
             if not isinstance(m, dict):
@@ -6746,9 +6880,25 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             if meets is None:
                 continue
             has_dose_info = True
-            if bool(meets):
-                return True
-        # Rich dose data present and no match was adequate → filter out.
+            if not bool(meets):
+                continue
+            # Adequately-dosed match. For a curated cluster it only counts toward
+            # the GOAL when it is a defining anchor — an incidental cofactor
+            # (zinc/selenium/vitamin E/omega-3...) at adequate dose is not
+            # evidence the product is FORMULATED for that goal. Keep scanning for
+            # an anchor; uncurated clusters accept any adequate match.
+            if anchors is not None:
+                ing = safe_str(m.get("cluster_ingredient")).strip().lower()
+                if ing in anchors:
+                    return True
+                # Tier-2: a broad micronutrient that IS the primary actor for
+                # this goal (zinc→immune, vit C/E→antioxidant) counts only when
+                # the product is focused on it — not incidental in a multi/stack.
+                if focused is not None and is_focused_product and ing in focused:
+                    return True
+                continue
+            return True
+        # Rich dose data present and no adequate (anchor) match → filter out.
         # If dose data is absent across all matches, be lenient.
         return not has_dose_info
 
