@@ -81,6 +81,15 @@ def test_dose_dependent_only_on_supplement_additive_pairs():
                 f"{e['id']} dose_dependent but severity={e.get('severity')}"
 
 
+def test_narrow_ti_and_electrolyte_hazards_are_presence():
+    """Adversarial-review carve-outs: Moderate/Additive pairs that are narrow-
+    therapeutic-index (warfarin INR) or electrolyte/arrhythmia hazards must be
+    presence (never dose-suppressed), not the default dose_dependent."""
+    for rid in ("DSI_WAR_VITE", "DSI_CORTICO_LICORICE", "DSI_DIURETICS_POTASSIUM"):
+        assert BY_ID[rid].get("materiality") == "presence", \
+            f"{rid} must be presence (never dose-suppressed), got {BY_ID[rid].get('materiality')}"
+
+
 def test_immunosuppressant_probiotics_is_harmful_not_neutral():
     """Tagged interaction_effect_type='Neutral' but the mechanism is sepsis risk
     in the immunocompromised — must be harmful, never demoted to neutral."""

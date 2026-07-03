@@ -239,7 +239,7 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "vitamin_e",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "presence"
     },
     {
       "id": "DSI_WAR_COQ10",
@@ -1047,7 +1047,7 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "potassium",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "presence"
     },
     {
       "id": "DSI_ACEI_IRON",
@@ -2478,7 +2478,7 @@
       "agent1_canonical_id": null,
       "agent2_canonical_id": "licorice",
       "direction": "harmful",
-      "materiality": "dose_dependent"
+      "materiality": "presence"
     },
     {
       "id": "DSI_CORTICO_CALCIUM_VITD",

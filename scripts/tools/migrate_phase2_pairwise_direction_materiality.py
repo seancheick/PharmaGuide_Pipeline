@@ -53,6 +53,22 @@ SUPP_TYPES = {"Med-Sup", "Sup-Sup", "Sup-Med"}
 # effect Neutral but the real direction is harmful (infection risk, not a benign combo)
 DIRECTION_OVERRIDE = {"DSI_IMMUNOSUP_PROBIOTICS": "harmful"}
 
+# Clinical exceptions (adversarial safety review, 2026-07-02): these read as
+# Moderate/Additive supplement pairs (which would default to dose_dependent) but
+# are narrow-therapeutic-index or electrolyte/arrhythmia hazards that must NEVER
+# be dose-suppressed — a low-dose floor could hide a life-threatening event.
+MATERIALITY_PRESENCE_OVERRIDE = {
+    # Vitamin E antagonizes vitamin-K-dependent clotting -> INR shift on warfarin
+    # (same clotting pathway as DSI_WAR_VITK, which is presence). Narrow TI.
+    "DSI_WAR_VITE",
+    # Glycyrrhizin + corticosteroid -> additive hypokalemia -> arrhythmia;
+    # pseudohyperaldosteronism is idiosyncratic at modest intakes, no safe floor.
+    "DSI_CORTICO_LICORICE",
+    # Class-level "Diuretics" cannot know the subclass at fire time; with a
+    # potassium-sparing diuretic, added potassium -> hyperkalemia (cardiac arrest).
+    "DSI_DIURETICS_POTASSIUM",
+}
+
 
 def classify(e: dict) -> tuple[str, str]:
     eid = e.get("id")
@@ -62,7 +78,7 @@ def classify(e: dict) -> tuple[str, str]:
 
     direction = DIRECTION_OVERRIDE.get(eid) or ("neutral" if effect == "Neutral" else "harmful")
 
-    if sev in ("Major", "Contraindicated"):
+    if sev in ("Major", "Contraindicated") or eid in MATERIALITY_PRESENCE_OVERRIDE:
         materiality = "presence"
     elif typ in SUPP_TYPES and effect == "Additive":
         materiality = "dose_dependent"

@@ -60,9 +60,15 @@ EXPECTED = {
 }
 
 # (canonical, sub-rule) that MUST be beneficial (routed to support, never floored)
+# NB: (inositol, diabetes) was beneficial in the Phase-3 batch but was retagged
+# `neutral` after an adversarial clinical review (2026-07-02): inositol's glucose
+# benefit for diabetics is weakly evidenced (PCOS extrapolation) and it has no
+# hypoglycemics drug backstop, so a green "supports glucose control" bullet could
+# mask additive hypoglycemia. Its copy already carries the additive-lowering
+# caution, which the neutral (good-to-know) surface preserves.
 BENEFICIAL_EXPECTED = {
     ("magnesium", "hypertension"), ("magnesium", "diabetes"),
-    ("vitamin_d", "diabetes"), ("inositol", "diabetes"), ("inositol", "ttc"),
+    ("vitamin_d", "diabetes"), ("inositol", "ttc"),
     ("chromium", "diabetes"),
 }
 
