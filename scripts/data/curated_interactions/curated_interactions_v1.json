@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.2.0",
-    "last_updated": "2026-07-02",
-    "total_entries": 108,
+    "last_updated": "2026-07-03",
+    "total_entries": 111,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -17,7 +17,8 @@
       "2026-05-27T15:08:14Z: Fixed agent2_id on DSI_LEVOTHYROXINE_SOY and DSI_OC_SOY. Source had C0301704 (UMLS-verified = phosphatidylserine) but agent2_name was \"Soy isoflavones\" — a CUI hallucination from the original Wave 8 ingestion. Reassigned to C0061202 (UMLS-verified = genistein, the predominant soy isoflavone and existing IQM canonical). verify_interactions.py CUI->canonical_id index will now resolve correctly without override.",
       "2026-05-27T15:26:04Z: Added food_advisory_note schema to 5 Med-Food entries (DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE, DSI_MAOI_TYRAMINE). New optional fields: alert_style ('food_advisory_note'), note_body (plain-English explainer), practical_guidance (action-oriented). Added content-verified PMIDs: 26299317, 16814135, 35322792, 3525654 (DSI_LEVOTHYROXINE_COFFEE already had 18341376). Each PMID title content-verified via PubMed esummary API on 2026-05-27. Clinical severity field unchanged — alert_style controls UI tone, not clinical truth.",
       "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 110 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py.",
-      "2026-07-02: Phase 3 — authored structured dose_threshold on all 33 dose_dependent pairs (floor value + confidence + verified ODS/NCCIH/PMID source per pair; reuses verified ingredient-rule floors where the same supplement+effect exists). Below-floor = suppressible by the app dose gate; inert until Phase 4. Applied via scripts/tools/author_phase3_pairwise_floors.py."
+      "2026-07-02: Phase 3 — authored structured dose_threshold on all 33 dose_dependent pairs (floor value + confidence + verified ODS/NCCIH/PMID source per pair; reuses verified ingredient-rule floors where the same supplement+effect exists). Below-floor = suppressible by the app dose gate; inert until Phase 4. Applied via scripts/tools/author_phase3_pairwise_floors.py.",
+      "2026-07-03: Added SSI_5HTP_SAME for 5-HTP + SAMe supplement-supplement serotonin-risk coverage. Also corrected metadata.total_entries to match the interactions array length."
     ]
   },
   "interactions": [
@@ -2982,6 +2983,41 @@
       "clinical_confidence": "high",
       "agent1_canonical_id": "st_johns_wort",
       "agent2_canonical_id": "5_htp",
+      "direction": "harmful",
+      "materiality": "presence"
+    },
+    {
+      "id": "SSI_5HTP_SAME",
+      "type": "Sup-Sup",
+      "agent1_name": "5-HTP",
+      "agent1_id": "C0000578",
+      "agent2_name": "SAMe (S-Adenosyl-L-methionine)",
+      "agent2_id": "C0036002",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "5-HTP increases serotonin synthesis as a direct precursor. SAMe is involved in monoamine neurotransmitter metabolism and may interact with supplements that increase serotonin. Combining them can add serotonergic load and increase serotonin-syndrome risk.",
+      "management": "Avoid combining 5-HTP with SAMe unless a clinician is deliberately supervising serotonergic supplement use. Watch for agitation, tremor, diarrhea, fever, sweating, or confusion if they were taken together.",
+      "source_urls": [
+        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
+        "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/sam-e",
+        "https://www.nccih.nih.gov/health/sadenosyllmethionine-same-in-depth"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-07-03T00:00:00Z",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "source_review_2026_07_03"
+      },
+      "evidence_basis": "clinical_reference",
+      "clinical_confidence": "medium",
+      "evidence_notes": "MSK and NCCIH describe serotonin-risk concerns for 5-HTP/SAMe and advise avoiding multiple serotonin-affecting supplements; direct pair evidence is limited, so this remains a precautionary Major stack warning.",
+      "agent1_canonical_id": "5_htp",
+      "agent2_canonical_id": "same",
       "direction": "harmful",
       "materiality": "presence"
     },

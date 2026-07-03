@@ -39,6 +39,7 @@ def _product(
     total_strain_count: int = 3,
     blends: list[dict] | None = None,
     clinical_strains: list[dict] | None = None,
+    guarantee_type: str | None = "at_expiration",
 ) -> dict:
     if clinical_strains is None:
         clinical_strains = [
@@ -68,6 +69,7 @@ def _product(
         "probiotic_data": {
             "is_probiotic": True,
             "is_probiotic_product": True,
+            "guarantee_type": guarantee_type,
             "total_strain_count": total_strain_count,
             "total_billion_count": 50.0,
             "has_cfu": True,
@@ -92,6 +94,30 @@ def test_probiotic_dose_scores_full_25_when_all_strains_have_cfu_and_adequacy_ca
     assert payload["metadata"]["cfu_adequacy_v3_points"] == 5.0
     assert payload["metadata"]["cfu_adequacy_scaled_points"] == 15.0
     assert payload["metadata"]["cfu_adequacy_basis"] == "per_strain_cfu_disclosed"
+
+
+def test_at_manufacture_cfu_guarantee_reduces_adequacy_not_disclosure() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+
+    payload = score_dose(_product(guarantee_type="at_manufacture"))
+
+    assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
+    assert payload["components"]["cfu_adequacy"] == 13.5
+    assert payload["score"] == 23.5
+    assert payload["metadata"]["cfu_guarantee"]["type"] == "at_manufacture"
+    assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 0.9
+
+
+def test_missing_cfu_guarantee_reduces_adequacy_more_than_at_manufacture() -> None:
+    from scoring_v4.modules.probiotic_dose import score_dose
+
+    payload = score_dose(_product(guarantee_type=None))
+
+    assert payload["components"]["per_strain_cfu_disclosure"] == 10.0
+    assert payload["components"]["cfu_adequacy"] == 12.75
+    assert payload["score"] == 22.75
+    assert payload["metadata"]["cfu_guarantee"]["type"] == "unknown"
+    assert payload["metadata"]["cfu_guarantee"]["multiplier"] == 0.85
 
 
 def test_aggregate_blend_cfu_gets_capped_adequacy_proxy_not_disclosure_credit() -> None:
@@ -459,7 +485,8 @@ def _scorable_row(row: dict, index: int) -> dict:
     }
 
 
-def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0):
+def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0,
+                      guarantee_type="at_expiration"):
     scorable_rows = [
         _scorable_row(row, index)
         for index, row in enumerate(active_rows)
@@ -475,6 +502,7 @@ def _no_cfu_probiotic(*, active_rows, clinical_strains, total_billion=0.0):
         "probiotic_data": {
             "is_probiotic": True,
             "is_probiotic_product": True,
+            "guarantee_type": guarantee_type,
             "total_strain_count": len(clinical_strains),
             "total_billion_count": total_billion,
             "has_cfu": total_billion > 0,

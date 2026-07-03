@@ -246,3 +246,54 @@ def test_live_file_no_combination_gate_with_only_one_axis(live_rules):
                     if not gate.get("dose"):
                         suspicious.append(f"{rule_id}/{bucket}[{i}]")
     assert not suspicious, f"combination gate with <2 axes and no dose: {suspicious}"
+
+
+def test_5_htp_has_broad_serotonergic_medications_profile_gate(live_rules):
+    """The broad 5-HTP serotonin-risk path must be an explicit profile-vocab
+    rule, not an untyped JSON guess or a hidden copy branch."""
+    five_htp = next(
+        r for r in live_rules
+        if r.get("subject_ref", {}).get("canonical_id") == "5_htp"
+    )
+    matches = [
+        r for r in five_htp.get("drug_class_rules", [])
+        if r.get("drug_class_id") == "serotonergic_medications"
+    ]
+    assert len(matches) == 1
+    rule = matches[0]
+    assert rule["severity"] == "avoid"
+    assert rule["direction"] == "harmful"
+    assert rule["materiality"] == "presence"
+    assert rule["profile_gate"]["gate_type"] == "drug_class"
+    assert rule["profile_gate"]["requires"]["drug_classes_any"] == [
+        "serotonergic_medications"
+    ]
+    assert set(rule["profile_gate"]["excludes"]["drug_classes_any"]) == {
+        "antidepressants_ssri_snri",
+        "maois",
+    }
+    body = f"{rule['mechanism']} {rule['alert_body']} {rule['informational_note']}"
+    assert "linezolid" in body.lower()
+    assert "tricyclic" in body.lower()
+
+
+def test_nattokinase_has_anticoagulant_and_antiplatelet_profile_gates(live_rules):
+    nattokinase = next(
+        r for r in live_rules
+        if r.get("subject_ref", {}).get("canonical_id") == "nattokinase"
+    )
+    classes = {
+        r.get("drug_class_id"): r
+        for r in nattokinase.get("drug_class_rules", [])
+        if isinstance(r, dict)
+    }
+
+    for class_id in ("anticoagulants", "antiplatelets"):
+        rule = classes[class_id]
+        assert rule["severity"] == "avoid"
+        assert rule["direction"] == "harmful"
+        assert rule["materiality"] == "presence"
+        assert rule["profile_gate"]["gate_type"] == "drug_class"
+        assert rule["profile_gate"]["requires"]["drug_classes_any"] == [class_id]
+        body = f"{rule['mechanism']} {rule['alert_body']} {rule['informational_note']}"
+        assert "bleeding" in body.lower()

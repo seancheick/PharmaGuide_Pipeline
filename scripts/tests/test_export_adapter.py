@@ -217,6 +217,56 @@ def test_v3_scaffolding_is_preserved(monkeypatch):
     assert out["score_80"] == 64.0
 
 
+def test_probiotic_full_nested_disclosure_removes_stale_proprietary_flag(monkeypatch):
+    v4 = _canned_v4()
+    v4["v4_module"] = "probiotic"
+    v4["v4_breakdown"]["provenance"]["module_route"] = "probiotic"
+    v4["v4_breakdown"]["completeness_gate"]["module"] = "probiotic"
+    v4["v4_breakdown"]["module"] = {
+        "dimensions": {
+            "transparency": {
+                "components": {
+                    "strain_identities_named": 8.0,
+                    "per_strain_cfu_on_label": 7.0,
+                }
+            }
+        }
+    }
+    _patch(monkeypatch, v4)
+
+    out = overlay_v4_scored(
+        {"dsld_id": "probiotic-full"},
+        {**_v3_scored(), "flags": ["PROPRIETARY_BLEND_PRESENT", "OTHER_FLAG"]},
+    )
+
+    assert out["flags"] == ["OTHER_FLAG"]
+
+
+def test_probiotic_partial_disclosure_keeps_proprietary_flag(monkeypatch):
+    v4 = _canned_v4()
+    v4["v4_module"] = "probiotic"
+    v4["v4_breakdown"]["provenance"]["module_route"] = "probiotic"
+    v4["v4_breakdown"]["completeness_gate"]["module"] = "probiotic"
+    v4["v4_breakdown"]["module"] = {
+        "dimensions": {
+            "transparency": {
+                "components": {
+                    "strain_identities_named": 8.0,
+                    "per_strain_cfu_on_label": 0.0,
+                }
+            }
+        }
+    }
+    _patch(monkeypatch, v4)
+
+    out = overlay_v4_scored(
+        {"dsld_id": "probiotic-partial"},
+        {**_v3_scored(), "flags": ["PROPRIETARY_BLEND_PRESENT"]},
+    )
+
+    assert out["flags"] == ["PROPRIETARY_BLEND_PRESENT"]
+
+
 def test_detail_blob_provenance_keys_present(monkeypatch):
     _patch(monkeypatch, _canned_v4())
     out = overlay_v4_scored({"dsld_id": "7"}, _v3_scored())

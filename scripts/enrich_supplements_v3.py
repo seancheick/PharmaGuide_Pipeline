@@ -214,6 +214,44 @@ BOTANICAL_CANONICAL_SOURCE_DBS = {
 _UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
 
 
+def _rda_mass_unit_key(value) -> Optional[str]:
+    unit = "" if value is None else str(value)
+    compact = (
+        unit.lower()
+        .replace("µg", "mcg")
+        .replace("μg", "mcg")
+        .replace(" ", "")
+        .strip()
+    )
+    if compact in {"g", "gram", "grams", "gram(s)"}:
+        return "g"
+    if compact in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        return "mg"
+    if compact in {"mcg", "ug", "microgram", "micrograms", "microgram(s)"}:
+        return "mcg"
+    return None
+
+
+def _has_no_official_ul_reference(nutrient_record: Dict[str, Any]) -> bool:
+    if not nutrient_record:
+        return False
+    highest_ul = nutrient_record.get("highest_ul")
+    if highest_ul not in (None, ""):
+        return False
+    note = str(nutrient_record.get("ul_note") or "").lower()
+    if "no official ul" in note or "no ul established" in note:
+        return True
+    data = nutrient_record.get("data")
+    if isinstance(data, list) and data:
+        statuses = [
+            str(row.get("ul_status") or "").lower()
+            for row in data
+            if isinstance(row, dict)
+        ]
+        return bool(statuses) and all(status == "not_determined" for status in statuses)
+    return True
+
+
 def _normalize_unii(value):
     """Canonicalize a UNII string. Returns None for placeholders/garbage."""
     if not isinstance(value, str):
@@ -15740,10 +15778,22 @@ class SupplementEnricherV3:
                         conversion.converted_value is None or
                         conversion.converted_unit is None
                     )
+                    _nutrient_record = (
+                        self.rda_calculator._find_nutrient(std_name) or {}
+                    )
                     if conversion_failed:
-                        unit_normalized = unit.lower().replace('µg', 'mcg').replace(' ', '_').strip()
-                        if unit_normalized.startswith('mcg') or unit_normalized.startswith('mg') or unit_normalized == 'g':
+                        unit_key = _rda_mass_unit_key(unit)
+                        reference_unit_key = _rda_mass_unit_key(_nutrient_record.get("unit"))
+                        if unit_key and reference_unit_key and unit_key == reference_unit_key:
                             conversion_failed = False
+                            if conv_evidence.get("error"):
+                                conv_evidence["original_error"] = conv_evidence.pop("error")
+                            conv_evidence["confidence"] = "not_applicable"
+                            conv_evidence["nonfatal_reason"] = (
+                                "no_official_ul_reference"
+                                if _has_no_official_ul_reference(_nutrient_record)
+                                else "reference_unit_already_normalized"
+                            )
                     skip_ul_check = False
                     skip_ul_reason = None
                     if ingredient.get('is_compound_duplicate'):
@@ -15869,9 +15919,6 @@ class SupplementEnricherV3:
                     # catalog entries. The `skip_ul_check` flag remains — it
                     # now correctly means "pipeline's product-level verdict
                     # skipped" rather than "no UL data available."
-                    _nutrient_record = (
-                        self.rda_calculator._find_nutrient(std_name) or {}
-                    )
                     file_highest_ul = _nutrient_record.get("highest_ul")
                     if isinstance(file_highest_ul, str):
                         try:

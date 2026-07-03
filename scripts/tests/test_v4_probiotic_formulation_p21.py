@@ -33,15 +33,27 @@ def _product(
             }
             for i in range(1, strain_count + 1)
         ]
+    ingredients_scorable = [
+        {"name": "Lactobacillus rhamnosus", "canonical_id": "lacto", "mapped": True, "has_dose": True}
+    ]
+    if prebiotic_present:
+        ingredients_scorable.append(
+            {
+                "name": "Inulin",
+                "canonical_id": "inulin",
+                "mapped": True,
+                "has_dose": True,
+                "quantity": 3.0,
+                "unit": "g",
+            }
+        )
     return {
         "status": "active",
         "form_factor": "capsule",
         "supplement_type": {"type": "probiotic"},
         "ingredient_quality_data": {
             "total_active": max(1, strain_count),
-            "ingredients_scorable": [
-                {"name": "Lactobacillus rhamnosus", "canonical_id": "lacto", "mapped": True, "has_dose": True}
-            ],
+            "ingredients_scorable": ingredients_scorable,
         },
         "delivery_tier": delivery_tier,
         "probiotic_data": {
@@ -165,14 +177,44 @@ def test_delivery_survivability_uses_enriched_survivability_then_delivery_tier(
     assert payload["components"]["delivery_survivability"] == expected
 
 
-def test_prebiotic_complement_uses_p05_enriched_flag() -> None:
+def test_prebiotic_complement_requires_meaningful_dose_for_full_credit() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
     with_prebiotic = score_formulation(_product(prebiotic_present=True))
     without_prebiotic = score_formulation(_product(prebiotic_present=False))
+    unknown_dose_product = _product(prebiotic_present=True)
+    unknown_dose_product["ingredient_quality_data"]["ingredients_scorable"] = [
+        row
+        for row in unknown_dose_product["ingredient_quality_data"]["ingredients_scorable"]
+        if row["canonical_id"] != "inulin"
+    ]
+    unknown_prebiotic = score_formulation(unknown_dose_product)
 
     assert with_prebiotic["components"]["prebiotic_complement"] == 1.0
+    assert unknown_prebiotic["components"]["prebiotic_complement"] == 0.25
     assert without_prebiotic["components"]["prebiotic_complement"] == 0.0
+
+
+@pytest.mark.parametrize(
+    ("quantity", "unit", "expected"),
+    [
+        (500, "mg", 0.25),
+        (2, "g", 0.5),
+        (3, "g", 1.0),
+    ],
+)
+def test_prebiotic_complement_is_dose_aware(quantity: float, unit: str, expected: float) -> None:
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+
+    product = _product(prebiotic_present=True)
+    for row in product["ingredient_quality_data"]["ingredients_scorable"]:
+        if row["canonical_id"] == "inulin":
+            row["quantity"] = quantity
+            row["unit"] = unit
+
+    payload = score_formulation(product)
+
+    assert payload["components"]["prebiotic_complement"] == expected
 
 
 def test_probiotic_formulation_accepts_final_blob_probiotic_detail_alias() -> None:

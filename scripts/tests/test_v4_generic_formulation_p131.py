@@ -61,12 +61,14 @@ def _product(
     *,
     supp_type: str = "single_nutrient",
     ingredients: list | None = None,
+    form_factor: str = "capsule",
     **extra,
 ) -> dict:
     rows = ingredients if ingredients is not None else [_ingredient()]
     product = {
         "status": "active",
-        "form_factor": "capsule",
+        "form_factor": form_factor,
+        "form_factor_canonical": form_factor,
         "supplement_type": {"type": supp_type},
         "ingredient_quality_data": {
             "total_active": len(rows),
@@ -939,6 +941,29 @@ def test_b1_dietary_sugar_clean_returns_zero() -> None:
 
     payload = score_formulation(_product())
     assert payload["penalties"]["B1_dietary_sugar"] == 0.0
+
+
+def test_sleep_melatonin_gummy_gets_format_safety_penalty() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            form_factor="gummy",
+            supplement_taxonomy={"primary_type": "sleep_support"},
+            ingredients=[
+                _ingredient(
+                    name="Melatonin",
+                    canonical_id="melatonin",
+                    bio_score=9,
+                    quantity=3,
+                    unit="mg",
+                )
+            ],
+        )
+    )
+
+    assert payload["penalties"]["B1_sleep_melatonin_gummy"] == -2.0
+    assert payload["metadata"]["sleep_support"]["melatonin_gummy_penalty"] == 2.0
 
 
 # --- P1.3.1b formulation-excellence components ---------------------------

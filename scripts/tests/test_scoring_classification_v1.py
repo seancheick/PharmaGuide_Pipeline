@@ -64,7 +64,7 @@ def test_classification_builder_is_total_and_schema_valid(payload):
     contract = build_scoring_classification(payload)  # type: ignore[arg-type]
     assert contract["classification_schema_version"] == SCORING_CLASSIFICATION_SCHEMA_VERSION
     assert contract["classification_origin"] == "compatibility_derived"
-    assert contract["route_module"] in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
+    assert contract["route_module"] in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive"}
     assert contract["route_confidence"] in {"high", "medium", "low", "failed"}
     assert isinstance(contract["ingredients"], list)
     assert isinstance(contract["profile_eligibility"], dict)
@@ -534,7 +534,7 @@ def test_botanical_title_theme_does_not_override_enzyme_product_intent():
 
     contract = build_scoring_classification(product)
 
-    assert contract["route_module"] == "generic"
+    assert contract["route_module"] == "fiber_digestive"
     assert contract["profile_eligibility"]["botanical"]["eligible"] is False
 
 
@@ -658,10 +658,15 @@ def test_flax_oil_name_only_signal_routes_generic():
     assert build_scoring_classification(product)["route_module"] == "generic"
 
 
-def test_fiber_and_super_seed_name_signal_routes_generic():
-    """Real-catalog patterns (dsld 299755 'Raw Organic Fiber', 274833 'Super
-    Seed'): plant/seed omega_3 products with bare 'Omega-3 Fatty Acids' rows."""
-    for name in ("Raw Organic Fiber", "Super Seed", "MCT Oil 3,000 mg"):
+def test_fiber_and_super_seed_name_signal_does_not_route_marine_omega():
+    """Real-catalog patterns with plant/seed omega rows must not route to the
+    marine omega module. True fiber now routes to the dedicated fiber module."""
+    expected = {
+        "Raw Organic Fiber": "fiber_digestive",
+        "Super Seed": "generic",
+        "MCT Oil 3,000 mg": "generic",
+    }
+    for name, expected_module in expected.items():
         row = _row(
             "epa_dha",
             "Omega-3 Fatty Acids",
@@ -673,7 +678,18 @@ def test_fiber_and_super_seed_name_signal_routes_generic():
         product = _product(
             name, [row], primary_type="omega_3", activeIngredients=[row]
         )
-        assert build_scoring_classification(product)["route_module"] == "generic", name
+        assert build_scoring_classification(product)["route_module"] == expected_module, name
+
+
+def test_true_fiber_taxonomy_routes_dedicated_fiber_module():
+    product = _product(
+        "Psyllium Husk Fiber",
+        [_row("psyllium", "Psyllium Husk", 7, "g", category="fiber")],
+        primary_type="fiber_digestive",
+    )
+
+    assert build_scoring_classification(product)["route_module"] == "fiber_digestive"
+    assert class_for_product(product) == "fiber_digestive"
 
 
 def test_true_fish_oil_parent_still_routes_omega_without_epa_dha_dose_invention():

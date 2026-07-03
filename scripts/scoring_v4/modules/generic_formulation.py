@@ -71,6 +71,10 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.modules.sleep_support import (
+    MELATONIN_GUMMY_FORMAT_PENALTY,
+    has_melatonin_gummy_format,
+)
 
 
 # --- v4 generic Formulation weights ---------------------------------------
@@ -792,6 +796,12 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     # subtracts |abs| values explicitly via _sum_penalty_magnitudes so any sign
     # convention error here can't silently inflate scores.
     penalties: Dict[str, float] = dict(shared_penalty_detail["penalties"])
+    sleep_support_metadata: Dict[str, Any] = {}
+    if has_melatonin_gummy_format(product):
+        penalties["B1_sleep_melatonin_gummy"] = round(
+            -MELATONIN_GUMMY_FORMAT_PENALTY, 4
+        )
+        sleep_support_metadata["melatonin_gummy_penalty"] = MELATONIN_GUMMY_FORMAT_PENALTY
 
     # A5 rollup hard-clamp at CAP_EXCELLENCE (4).
     a5_sum = (
@@ -884,6 +894,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "pre_floor_score": round(pre_floor_score, 4),
                 "applied": presence_floor_applied,
             },
+            "sleep_support": sleep_support_metadata,
             "dietary_sugar": shared_penalty_detail["metadata"]["dietary_sugar"],
         },
     }

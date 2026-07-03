@@ -212,12 +212,37 @@ def test_violation_penalty_floors_pillar_at_zero() -> None:
     assert viol["quality_pillars_v4"]["safety_hygiene"]["score"] == 0.0
 
 
-def test_b1_harmful_additive_does_not_touch_safety_pillar() -> None:
-    # a low formulation (B1 penalty already applied there) must NOT also lower safety
-    # — no double-count. Safety only moves on banned/recalled/watchlist or violations.
+def test_b1_additive_and_sugar_penalties_reduce_public_safety_pillar() -> None:
+    # The additive/sweetener signal still lowers formulation, but the public
+    # Safety Hygiene pillar must not claim 10/10 when additive concerns exist.
     from scoring_v4.quality_score import assemble_quality_score
-    out = assemble_quality_score(_shadow(module="generic", bd=_module_bd(form=2, form_max=30, hygiene=4)))
-    assert out["quality_pillars_v4"]["safety_hygiene"]["score"] == 10.0
+    bd = _module_bd(form=2, form_max=30, hygiene=4)
+    bd["dimensions"]["formulation"]["penalties"] = {
+        "B1_harmful_additives": -1.0,
+        "B1_dietary_sugar": -2.0,
+    }
+
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))
+    pillar = out["quality_pillars_v4"]["safety_hygiene"]
+
+    assert pillar["score"] == 7.0
+    assert pillar["components"]["additive_or_sweetener_penalty"] == 3.0
+    assert "additive or sweetener" in pillar["reason"]
+
+
+def test_sleep_melatonin_gummy_penalty_reduces_public_safety_pillar() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+    bd = _module_bd(form=2, form_max=30, hygiene=4)
+    bd["dimensions"]["formulation"]["penalties"] = {
+        "B1_sleep_melatonin_gummy": -2.0,
+    }
+
+    out = assemble_quality_score(_shadow(module="generic", bd=bd))
+    pillar = out["quality_pillars_v4"]["safety_hygiene"]
+
+    assert pillar["score"] == 8.0
+    assert pillar["components"]["additive_or_sweetener_penalty"] == 2.0
+    assert "additive or sweetener" in pillar["reason"]
 
 
 def test_verification_pillar_reads_lowercase_v4_component_keys() -> None:
@@ -366,7 +391,7 @@ def test_every_pillar_has_a_reason() -> None:
 def test_version_emitted() -> None:
     from scoring_v4.quality_score import assemble_quality_score
     out = assemble_quality_score(_shadow())
-    assert out["quality_score_version"].startswith("1.0.0")  # versioned public contract
+    assert out["quality_score_version"].startswith("1.0.1")  # versioned public contract
 
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------

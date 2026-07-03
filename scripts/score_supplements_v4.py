@@ -56,6 +56,7 @@ from typing import Any, Dict
 from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
+from scoring_v4.modules.fiber_digestive import score_fiber_digestive
 from scoring_v4.modules.generic import score_generic
 from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 from scoring_v4.modules.omega import score_omega
@@ -277,8 +278,8 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         return result
 
     # Layer 3 — Per-class module dispatch. Generic, probiotic, omega,
-    # sports, and multi_or_prenatal are wired as complete score-producing
-    # modules.
+    # sports, fiber_digestive, and multi_or_prenatal are wired as complete
+    # score-producing modules.
     if module == "generic":
         module_result = score_generic(enriched_product)
         result["v4_breakdown"]["module"] = module_result.to_breakdown()
@@ -379,6 +380,26 @@ def _score_v4_core(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
             result["raw_score_v4_100"],
             _carried_verdict_with_completeness_policy(result, completeness),
             sports_result.raw_score_100,
+        )
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=result["v4_breakdown"]["module"],
+            safety_gate=result["v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=result["v4_breakdown"].get("completeness_gate", {}),
+        )
+        result["v4_breakdown"]["confidence"] = confidence
+        result["v4_confidence"] = confidence["band"]
+    elif module == "fiber_digestive":
+        fiber_result = score_fiber_digestive(enriched_product)
+        result["v4_breakdown"]["module"] = fiber_result.to_breakdown()
+        result["raw_score_v4_100"] = _score_after_completeness_policy(
+            fiber_result.score_100,
+            completeness,
+        )
+        result["v4_verdict"] = _verdict_from_score(
+            result["raw_score_v4_100"],
+            _carried_verdict_with_completeness_policy(result, completeness),
+            fiber_result.raw_score_100,
         )
         confidence = evaluate_confidence(
             enriched_product,

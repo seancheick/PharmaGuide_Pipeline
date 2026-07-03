@@ -146,8 +146,7 @@ def _manuf_violation_split(module_bd: Dict[str, Any]) -> Dict[str, float]:
         → the SAFETY pillar absorbs the deduction.
       - otherwise (GMP / labeling / quality-system) → the VERIFICATION pillar.
     Magnitude = the raw deduction itself (same /100 scale), so nothing is invented.
-    B1 (harmful additive) and B7 (overdose) are NOT here — they already lower the
-    formulation/dose pillars (single-count)."""
+    B7 (overdose) is NOT here — it already lowers the dose pillar."""
     mv = module_bd.get("manufacturer_violations") or {}
     score = _num(mv.get("score"))  # negative deduction or 0
     if score >= 0:
@@ -251,6 +250,29 @@ def _build_clean_label_flags(enriched_hits: List[Dict[str, Any]]) -> List[Dict[s
     return flags
 
 
+def _formulation_additive_safety_penalty(module_bd: Dict[str, Any], cfg: Dict[str, Any]) -> float:
+    """Small public Safety Hygiene deduction for additive/sweetener concerns.
+
+    The underlying B1 formulation penalties remain the main scoring signal. This
+    separate, capped deduction prevents the public Safety Hygiene pillar from
+    claiming 10/10 when the product carries additive or glycemic-sweetener flags.
+    """
+    formulation = ((module_bd.get("dimensions") or {}).get("formulation") or {})
+    penalties = formulation.get("penalties") or {}
+    raw = 0.0
+    for key in (
+        "B1_harmful_additives",
+        "B1_dietary_sugar",
+        "B1_sleep_melatonin_gummy",
+    ):
+        value = _num(penalties.get(key))
+        if value < 0:
+            raw += abs(value)
+    sub = cfg.get("safety_hygiene_subscale") or {}
+    cap = _num(sub.get("additive_or_sweetener_max_penalty"), 4.0)
+    return round(min(raw, cap), 1) if raw > 0 else 0.0
+
+
 def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
                            cfg: Dict[str, Any],
                            clean_label_penalty: float = 0.0) -> Dict[str, Any]:
@@ -259,8 +281,9 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     a Class I (critical) manufacturer recall deducts the raw violation magnitude here (the
     safety/contamination half of the violation split). Step 3a: a clean-label additive
     (titanium dioxide / E171) deducts a SMALL graduated penalty here (inform + penalize,
-    no forced CAUTION). B1 harmful additive and B7 overdose are intentionally absent —
-    they already lower the formulation/dose pillars, so re-deducting would double-count."""
+    no forced CAUTION). B1 additive/sweetener concerns also deduct a capped public
+    truthfulness penalty so the Safety Hygiene pillar cannot remain perfect when
+    additive concerns are present. B7 overdose stays in dose only."""
     base = module_bd.get("safety_hygiene_base") or {}
     bscore = _num(base.get("score"))
     bmax = _num(base.get("max"))
@@ -268,12 +291,15 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     clean = max(0.0, min(float(weight), clean))
     safety_pen = _manuf_violation_split(module_bd)["safety"]
     cl_pen = max(0.0, _num(clean_label_penalty))
-    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen)), 1)
+    additive_pen = _formulation_additive_safety_penalty(module_bd, cfg)
+    val = round(max(0.0, min(float(weight), clean - safety_pen - cl_pen - additive_pen)), 1)
     deductions = []
     if safety_pen > 0:
         deductions.append("the maker had a serious product recall")
     if cl_pen > 0:
         deductions.append("it contains a restricted additive")
+    if additive_pen > 0:
+        deductions.append("it contains additive or sweetener/form-factor concerns")
     if deductions:
         # Plain-English join: "A and B" rather than a comma list.
         reason = "Safety concern: " + " and ".join(deductions) + "."
@@ -284,6 +310,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
     components = {"clean_base": clean, "class_i_recall_penalty": safety_pen}
     if cl_pen > 0:
         components["clean_label_penalty"] = cl_pen
+    if additive_pen > 0:
+        components["additive_or_sweetener_penalty"] = additive_pen
     return {
         "score": val,
         "max": weight,
@@ -295,6 +323,8 @@ def _pillar_safety_hygiene(module_bd: Dict[str, Any], weight: float,
 def _archetype(module: Optional[str], module_bd: Dict[str, Any]) -> str:
     if module == "sports":
         return "sports_single"
+    if module == "fiber_digestive":
+        return "fiber_digestive"
     if module == "omega":
         return "omega"
     if module == "probiotic":

@@ -680,6 +680,30 @@ class TestMedicalSafetyDefaults:
         assert row["diabetes_friendly"] == 1
         assert row["hypertension_friendly"] == 1
 
+    def test_diabetes_friendly_false_when_dietary_data_has_diabetes_warning(self):
+        e = _base_enriched()
+        e["dietary_sensitivity_data"] = {
+            "diabetes_friendly": True,
+            "warnings": [
+                {"type": "diabetes", "severity": "moderate", "message": "Contains added sugar."}
+            ],
+        }
+
+        row = _row_dict(e, _base_scored())
+
+        assert row["diabetes_friendly"] == 0
+
+    def test_diabetes_friendly_false_when_high_glycemic_sweetener_present(self):
+        e = _base_enriched()
+        e["dietary_sensitivity_data"] = {
+            "diabetes_friendly": True,
+            "sweeteners": {"has_high_glycemic": True},
+        }
+
+        row = _row_dict(e, _base_scored())
+
+        assert row["diabetes_friendly"] == 0
+
     def test_blocking_reason_null_for_safe_verdict(self):
         row = _row_dict(_base_enriched(), _base_scored(verdict="SAFE"))
         assert row["blocking_reason"] is None

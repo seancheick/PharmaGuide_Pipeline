@@ -70,7 +70,7 @@ def test_incidental_non_quantified_probiotic_rows_do_not_promote_without_name_or
     assert class_for_product(product) == "generic"
 
 
-def test_prebiotic_only_name_does_not_route_to_probiotic_without_probiotic_word():
+def test_prebiotic_only_name_routes_to_fiber_digestive_not_probiotic():
     product = _product(
         product_name="Daily Prebiotic Fiber",
         primary_type="fiber_digestive",
@@ -83,7 +83,7 @@ def test_prebiotic_only_name_does_not_route_to_probiotic_without_probiotic_word(
         },
     )
 
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "fiber_digestive"
 
 
 def test_casein_decapeptide_is_not_probiotic_even_with_stale_taxonomy_payload():
@@ -248,7 +248,7 @@ def test_d3_hero_with_low_cfu_adjunct_stays_generic():
     assert class_for_product(product) == "generic"
 
 
-def test_enzyme_hero_with_probiotic_adjunct_stays_generic():
+def test_enzyme_hero_with_probiotic_adjunct_routes_to_fiber_digestive():
     """Grammar-aware guard: 'Digestive Enzymes with Probiotics' is an
     enzyme product with probiotic adjuncts, not a probiotic primary.
     """
@@ -270,10 +270,10 @@ def test_enzyme_hero_with_probiotic_adjunct_stays_generic():
         },
     )
 
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "fiber_digestive"
 
 
-def test_enzyme_activity_evidence_with_single_probiotic_adjunct_stays_generic():
+def test_enzyme_activity_evidence_with_single_probiotic_adjunct_routes_to_fiber_digestive():
     """Product-level enzyme rows must count against probiotic dominance.
 
     Doctor's Best Digestive Enzymes carries a Bacillus adjunct, but the product
@@ -321,7 +321,7 @@ def test_enzyme_activity_evidence_with_single_probiotic_adjunct_stays_generic():
         ],
     )
 
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "fiber_digestive"
 
 
 def test_botanical_formula_with_probiotic_addon_stays_generic():

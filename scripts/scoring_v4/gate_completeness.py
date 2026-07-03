@@ -438,7 +438,7 @@ def _soft_policy_from_scoring_evidence(
     # Enzyme activity is a real dose unit and should not be hard-blocked for
     # lacking mass. If it is paired with a blend/header anchor, the blend policy
     # above carries the caution ceiling.
-    if "enzyme_activity" in evidence_types and module == "generic":
+    if "enzyme_activity" in evidence_types and module in {"generic", "fiber_digestive"}:
         soft_missing.append("enzyme_activity_dose_evidence")
 
     omega_rows = [
@@ -480,7 +480,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             checked_fields=["product_payload"],
         )
 
-    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"} else "generic"
+    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
     # Phase 3: role-aware caps. Classify the already-derived rows (no second

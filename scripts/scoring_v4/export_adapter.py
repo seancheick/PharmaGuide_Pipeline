@@ -34,6 +34,7 @@ from score_supplements_v4 import score_product_v4
 
 SCORE_MODEL_V4 = "v4"
 OMEGA3_FORM_NOT_DISCLOSED_FLAG = "OMEGA3_FORM_NOT_DISCLOSED"
+PROPRIETARY_BLEND_PRESENT_FLAG = "PROPRIETARY_BLEND_PRESENT"
 _OMEGA_UNDISCLOSED_FORM_VALUES = {"undefined", "unknown", "not_disclosed", "none", ""}
 
 
@@ -49,6 +50,13 @@ def _safe_dict(value: Any) -> Dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
+def _num(value: Any, default: float = 0.0) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
 def _is_v4_omega_result(v4: Dict[str, Any]) -> bool:
     breakdown = _safe_dict(v4.get("v4_breakdown"))
     provenance = _safe_dict(breakdown.get("provenance"))
@@ -60,6 +68,19 @@ def _is_v4_omega_result(v4: Dict[str, Any]) -> bool:
         or ""
     )
     return str(module).strip().lower() == "omega"
+
+
+def _is_v4_probiotic_result(v4: Dict[str, Any]) -> bool:
+    breakdown = _safe_dict(v4.get("v4_breakdown"))
+    provenance = _safe_dict(breakdown.get("provenance"))
+    completeness_gate = _safe_dict(breakdown.get("completeness_gate"))
+    module = (
+        v4.get("v4_module")
+        or provenance.get("module_route")
+        or completeness_gate.get("module")
+        or ""
+    )
+    return str(module).strip().lower() == "probiotic"
 
 
 def _v4_omega_form_disclosed(v4: Dict[str, Any]) -> Optional[bool]:
@@ -110,12 +131,60 @@ def _reconcile_v4_omega_form_flag(scored: Dict[str, Any], v4: Dict[str, Any]) ->
         scored["flags"] = next_flags
 
 
+def _v4_probiotic_fully_disclosed(v4: Dict[str, Any]) -> Optional[bool]:
+    """Return v4's nested-disclosure conclusion for probiotic labels.
+
+    True only when v4 shows both named strain identities and per-strain CFU
+    disclosure. False when v4 has enough transparency detail to show the label is
+    partial. None when this is not a probiotic result or the breakdown lacks detail.
+    """
+    if not _is_v4_probiotic_result(v4):
+        return None
+
+    breakdown = _safe_dict(v4.get("v4_breakdown"))
+    module = _safe_dict(breakdown.get("module"))
+    dimensions = _safe_dict(module.get("dimensions"))
+    transparency = _safe_dict(dimensions.get("transparency"))
+    components = _safe_dict(transparency.get("components"))
+    if components:
+        named = _num(components.get("strain_identities_named"))
+        per_strain_cfu = _num(components.get("per_strain_cfu_on_label"))
+        if named >= 8.0 and per_strain_cfu >= 7.0:
+            return True
+        if "strain_identities_named" in components or "per_strain_cfu_on_label" in components:
+            return False
+
+    dose = _safe_dict(dimensions.get("dose"))
+    metadata = _safe_dict(dose.get("metadata"))
+    total = _num(metadata.get("total_strain_count"))
+    disclosed = _num(metadata.get("per_strain_cfu_disclosed_count"))
+    if total > 0:
+        return disclosed >= total
+
+    return None
+
+
+def _reconcile_v4_probiotic_proprietary_flag(scored: Dict[str, Any], v4: Dict[str, Any]) -> None:
+    flags = scored.get("flags")
+    if flags is None:
+        flags = []
+    if not isinstance(flags, list):
+        return
+
+    fully_disclosed = _v4_probiotic_fully_disclosed(v4)
+    if fully_disclosed is True:
+        scored["flags"] = [
+            flag for flag in flags if flag != PROPRIETARY_BLEND_PRESENT_FLAG
+        ]
+
+
 def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
     """Run v4 on ``enriched`` and overlay its public contract onto a copy of
     ``scored_v3``. Returns the new dict; never mutates either input."""
     v4 = score_product_v4(enriched if isinstance(enriched, dict) else {})
     scored = dict(scored_v3) if isinstance(scored_v3, dict) else {}
     _reconcile_v4_omega_form_flag(scored, v4)
+    _reconcile_v4_probiotic_proprietary_flag(scored, v4)
 
     breakdown = v4.get("v4_breakdown") or {}
     safety_gate = breakdown.get("safety_gate") or {}

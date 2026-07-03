@@ -8,7 +8,7 @@ selectable) plus 13 rule-only drug classes referenced by interaction
 rules but not surfaced as profile picks (CYP substrates, narrow families).
 
 Locked decisions:
-  - Exactly 28 drug classes (15 user_selectable + 13 rule-only)
+  - Exactly 29 drug classes (16 user_selectable + 13 rule-only)
   - Lean schema + extras: id, name, notes, examples, rx_status, user_selectable
   - All IDs lowercase snake_case
   - rx_status enum: rx_only | otc | mixed
@@ -40,20 +40,20 @@ def drug_classes(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 28
-    assert md["user_selectable_count"] == 15
+    assert md["total_entries"] == 29
+    assert md["user_selectable_count"] == 16
     assert md["rule_only_count"] == 13
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_28_drug_classes_locked(drug_classes):
-    assert len(drug_classes) == 28
+def test_exactly_29_drug_classes_locked(drug_classes):
+    assert len(drug_classes) == 29
 
 
 def test_user_selectable_split_correct(drug_classes):
     selectable = [d for d in drug_classes if d.get("user_selectable")]
     rule_only = [d for d in drug_classes if not d.get("user_selectable")]
-    assert len(selectable) == 15, f"expected 15 user_selectable; got {len(selectable)}"
+    assert len(selectable) == 16, f"expected 16 user_selectable; got {len(selectable)}"
     assert len(rule_only) == 13, f"expected 13 rule-only; got {len(rule_only)}"
 
 
@@ -78,18 +78,29 @@ def test_every_id_unique_and_snake_case(drug_classes):
         assert ID_PATTERN.match(did), f"id {did!r} not snake_case"
 
 
-def test_user_selectable_13_match_schema_ids_dart(drug_classes):
-    """The 13 user_selectable IDs must match `drugClasses` in
+def test_user_selectable_16_match_schema_ids_dart(drug_classes):
+    """The user_selectable IDs must match `drugClasses` in
     lib/core/constants/schema_ids.dart"""
     expected = {
         "anticoagulants", "antiplatelets", "nsaids", "antihypertensives",
         "hypoglycemics_high_risk", "hypoglycemics_lower_risk", "hypoglycemics_unknown",
         "thyroid_medications", "sedatives",
         "immunosuppressants", "statins", "antidepressants_ssri_snri",
-        "maois", "cardiac_glycosides", "anticholinergics",
+        "maois", "serotonergic_medications", "cardiac_glycosides", "anticholinergics",
     }
     actual = {d["id"] for d in drug_classes if d.get("user_selectable")}
     assert actual == expected, f"missing={expected-actual} extra={actual-expected}"
+
+
+def test_serotonergic_medications_vocab_is_user_selectable(drug_classes):
+    by_id = {d["id"]: d for d in drug_classes}
+    entry = by_id.get("serotonergic_medications")
+    assert entry is not None
+    assert entry["user_selectable"] is True
+    assert entry["rx_status"] == "rx_only"
+    assert "linezolid" in " ".join(entry["examples"]).lower()
+    assert "amitriptyline" in " ".join(entry["examples"]).lower()
+    assert "5-HTP" in entry["notes"]
 
 
 def test_notes_within_char_limit(drug_classes):

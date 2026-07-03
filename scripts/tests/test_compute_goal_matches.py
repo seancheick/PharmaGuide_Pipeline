@@ -49,6 +49,141 @@ def _enriched_dosed(clusters_with_doses):
     }
 
 
+def _creatine_enriched(
+    *,
+    quantity: float = 5,
+    unit: str = "Gram(s)",
+    canonical_id: str = "creatine_monohydrate",
+    name: str = "Creatine Monohydrate",
+    bio_score: float = 14,
+):
+    return {
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "standard_name": name,
+                    "canonical_id": canonical_id,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "bio_score": bio_score,
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ]
+        }
+    }
+
+
+def _protein_enriched(
+    *,
+    quantity: float = 25,
+    unit: str = "Gram(s)",
+    canonical_id: str = "whey_protein",
+    name: str = "Whey Protein Isolate",
+    bio_score: float = 12,
+):
+    return {
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "standard_name": name,
+                    "canonical_id": canonical_id,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "bio_score": bio_score,
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ]
+        }
+    }
+
+
+def _fiber_enriched(
+    *,
+    quantity: float = 5,
+    unit: str = "Gram(s)",
+    canonical_id: str = "psyllium",
+    name: str = "Psyllium Husk",
+):
+    return {
+        "product_name": "Daily Psyllium Fiber",
+        "supplement_taxonomy": {"primary_type": "fiber_digestive"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "standard_name": name,
+                    "canonical_id": canonical_id,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ]
+        },
+    }
+
+
+def _sleep_active_enriched(
+    *,
+    canonical_id: str = "5_htp",
+    name: str = "5-HTP",
+    quantity: float = 100,
+    unit: str = "mg",
+):
+    return {
+        "supplement_taxonomy": {"primary_type": "sleep_support"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "standard_name": name,
+                    "canonical_id": canonical_id,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "bio_score": 12,
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ]
+        },
+    }
+
+
+def _joint_active_enriched(
+    *,
+    canonical_id: str = "glucosamine",
+    name: str = "Glucosamine Sulfate",
+    quantity: float = 1500,
+    unit: str = "mg",
+):
+    return {
+        "supplement_taxonomy": {"primary_type": "joint_support"},
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": name,
+                    "standard_name": name,
+                    "canonical_id": canonical_id,
+                    "quantity": quantity,
+                    "unit": unit,
+                    "bio_score": 11,
+                    "mapped": True,
+                    "scoreable_identity": True,
+                    "cleaner_row_role": "active_scorable",
+                }
+            ]
+        },
+    }
+
+
 # ---------- Empty / degenerate inputs ----------
 
 
@@ -347,3 +482,156 @@ def test_fallback_path_without_dose_data_has_empty_underdosed():
     result = compute_goal_matches(_enriched(["sleep_stack"]))
     assert "GOAL_SLEEP_QUALITY" in result["goal_matches"]
     assert result["goal_matches_underdosed"] == []
+
+
+def test_probiotic_product_directly_matches_digestive_health_when_dosed():
+    """A well-disclosed probiotic should not need a precomputed synergy cluster
+    to reach the digestive-health goal surface."""
+    result = compute_goal_matches(
+        {
+            "probiotic_data": {
+                "is_probiotic_product": True,
+                "total_billion_count": 10.0,
+                "total_strain_count": 3,
+                "clinical_strain_count": 1,
+            }
+        }
+    )
+
+    assert "GOAL_DIGESTIVE_HEALTH" in result["goal_matches"]
+    assert "GOAL_DIGESTIVE_HEALTH" not in result["goal_matches_underdosed"]
+
+
+def test_low_cfu_probiotic_routes_digestive_health_to_underdosed():
+    result = compute_goal_matches(
+        {
+            "probiotic_data": {
+                "is_probiotic_product": True,
+                "total_billion_count": 0.5,
+                "total_strain_count": 3,
+            }
+        }
+    )
+
+    assert "GOAL_DIGESTIVE_HEALTH" not in result["goal_matches"]
+    assert "GOAL_DIGESTIVE_HEALTH" in result["goal_matches_underdosed"]
+
+
+def test_dosed_fiber_directly_matches_digestive_health():
+    result = compute_goal_matches(_fiber_enriched(quantity=5, unit="Gram(s)"))
+
+    assert "GOAL_DIGESTIVE_HEALTH" in result["goal_matches"]
+    assert "GOAL_DIGESTIVE_HEALTH" not in result["goal_matches_underdosed"]
+
+
+def test_low_dose_fiber_routes_digestive_health_to_underdosed():
+    result = compute_goal_matches(_fiber_enriched(quantity=1, unit="Gram(s)"))
+
+    assert "GOAL_DIGESTIVE_HEALTH" not in result["goal_matches"]
+    assert "GOAL_DIGESTIVE_HEALTH" in result["goal_matches_underdosed"]
+
+
+def test_nutrition_facts_fiber_directly_matches_digestive_health_when_contextual():
+    result = compute_goal_matches(
+        {
+            "product_name": "Clear Mixing Fiber",
+            "nutrition_detail": {"dietary_fiber_g": 5},
+            "ingredient_quality_data": {"ingredients_scorable": []},
+        }
+    )
+
+    assert "GOAL_DIGESTIVE_HEALTH" in result["goal_matches"]
+    assert "GOAL_DIGESTIVE_HEALTH" not in result["goal_matches_underdosed"]
+
+
+def test_dosed_creatine_monohydrate_directly_matches_muscle_recovery():
+    """Creatine monohydrate is a focused single-ingredient sports product.
+    It should not depend on a precomputed synergy cluster to reach the
+    recovery goal surface."""
+    result = compute_goal_matches(_creatine_enriched(quantity=5, unit="Gram(s)"))
+
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches_underdosed"]
+
+
+def test_low_dose_creatine_routes_muscle_recovery_to_underdosed():
+    result = compute_goal_matches(_creatine_enriched(quantity=1890, unit="mg"))
+
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches_underdosed"]
+
+
+def test_creatine_ethyl_ester_does_not_get_supported_recovery_goal():
+    result = compute_goal_matches(
+        _creatine_enriched(
+            quantity=5,
+            unit="Gram(s)",
+            name="Creatine Ethyl Ester",
+            bio_score=4,
+        )
+    )
+
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches_underdosed"]
+
+
+def test_dosed_complete_protein_directly_matches_muscle_recovery():
+    result = compute_goal_matches(_protein_enriched(quantity=25, unit="Gram(s)"))
+
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches_underdosed"]
+
+
+def test_low_dose_protein_routes_muscle_recovery_to_underdosed():
+    result = compute_goal_matches(_protein_enriched(quantity=10, unit="Gram(s)"))
+
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" in result["goal_matches_underdosed"]
+
+
+def test_collagen_does_not_inherit_complete_protein_muscle_goal():
+    result = compute_goal_matches(
+        _protein_enriched(
+            quantity=20,
+            unit="Gram(s)",
+            canonical_id="protein",
+            name="Hydrolyzed Collagen Peptides",
+        )
+    )
+
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches"]
+    assert "GOAL_MUSCLE_GROWTH_RECOVERY" not in result["goal_matches_underdosed"]
+
+
+def test_dosed_5htp_sleep_support_directly_matches_sleep_quality():
+    result = compute_goal_matches(_sleep_active_enriched(quantity=100))
+
+    assert "GOAL_SLEEP_QUALITY" in result["goal_matches"]
+    assert "GOAL_SLEEP_QUALITY" not in result["goal_matches_underdosed"]
+
+
+def test_low_dose_5htp_routes_sleep_quality_to_underdosed():
+    result = compute_goal_matches(_sleep_active_enriched(quantity=25))
+
+    assert "GOAL_SLEEP_QUALITY" not in result["goal_matches"]
+    assert "GOAL_SLEEP_QUALITY" in result["goal_matches_underdosed"]
+
+
+def test_dosed_joint_active_directly_matches_joint_bone_mobility():
+    result = compute_goal_matches(_joint_active_enriched(quantity=1500))
+
+    assert "GOAL_JOINT_BONE_MOBILITY" in result["goal_matches"]
+    assert "GOAL_JOINT_BONE_MOBILITY" not in result["goal_matches_underdosed"]
+
+
+def test_low_dose_joint_active_routes_joint_goal_to_underdosed():
+    result = compute_goal_matches(
+        _joint_active_enriched(
+            canonical_id="hyaluronic_acid",
+            name="Hyaluronic Acid",
+            quantity=10,
+        )
+    )
+
+    assert "GOAL_JOINT_BONE_MOBILITY" not in result["goal_matches"]
+    assert "GOAL_JOINT_BONE_MOBILITY" in result["goal_matches_underdosed"]

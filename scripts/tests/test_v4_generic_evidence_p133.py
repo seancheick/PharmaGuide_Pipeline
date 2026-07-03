@@ -67,9 +67,14 @@ def _match(
     return row
 
 
-def _product(*, ingredients: list | None = None, matches: list | None = None) -> dict:
+def _product(
+    *,
+    ingredients: list | None = None,
+    matches: list | None = None,
+    **extra,
+) -> dict:
     rows = ingredients if ingredients is not None else [_ingredient()]
-    return {
+    product = {
         "status": "active",
         "form_factor": "capsule",
         "supplement_type": {"type": "single_nutrient"},
@@ -81,6 +86,8 @@ def _product(*, ingredients: list | None = None, matches: list | None = None) ->
             "clinical_matches": matches if matches is not None else [_match()],
         },
     }
+    product.update(extra)
+    return product
 
 
 def test_evidence_payload_shape_and_phase() -> None:
@@ -725,6 +732,42 @@ def test_primary_floor_still_rejects_negative_effect() -> None:
     assert payload["score"] == 0.0
     assert "primary_evidence_floor" not in payload["components"]
     assert payload["metadata"]["primary_evidence_floor"] == 0.0
+
+
+def test_joint_support_caps_branded_primary_evidence_floor() -> None:
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(
+            supplement_taxonomy={"primary_type": "joint_support"},
+            ingredients=[
+                _ingredient(
+                    name="OptiMSM",
+                    standard_name="MSM",
+                    canonical_id="msm",
+                    quantity=1500,
+                    unit="mg",
+                )
+            ],
+            matches=[
+                _match(
+                    id="BRAND_OPTIMSM",
+                    ingredient="OptiMSM",
+                    standard_name="OptiMSM",
+                    study_type="rct_multiple",
+                    evidence_level="branded-rct",
+                    effect_direction="positive_strong",
+                    total_enrollment=200,
+                )
+            ],
+        ),
+        apply_primary_floor=True,
+    )
+
+    assert payload["score"] == 14.0
+    assert payload["components"]["joint_support_evidence_cap"] == 14.0
+    assert payload["metadata"]["primary_evidence_floor"] == 18.0
+    assert payload["metadata"]["joint_support_evidence_cap_applied"] is True
 
 
 def test_generic_evidence_does_not_import_v3_scorer() -> None:

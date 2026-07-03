@@ -503,6 +503,47 @@ def test_BUG_13b_functional_positive_cases_still_classify():
         assert result["primary_type"] == expected_type
 
 
+def test_fibrinolytic_enzymes_do_not_pollute_fiber_digestive_category():
+    """Nattokinase/serrapeptase are systemic fibrinolytic enzymes, not digestive
+    enzymes. They should not sit in the fiber/digestive percentile cohort."""
+    for name, canonical_id in (
+        ("Nattokinase 2,000 FU", "nattokinase"),
+        ("Serrapeptase 120,000 SPU", "serrapeptase"),
+    ):
+        result = classify_supplement({
+            "product_name": name,
+            "ingredient_quality_data": {"ingredients": [
+                {
+                    "name": name,
+                    "canonical_id": canonical_id,
+                    "category": "enzyme",
+                    "quantity": 100,
+                    "unit": "mg",
+                }
+            ]},
+        })
+        assert result["primary_type"] != "fiber_digestive"
+        assert result["secondary_type"] == canonical_id
+
+
+def test_coq10_does_not_pollute_fiber_digestive_category():
+    result = classify_supplement({
+        "product_name": "CoQ10 200 mg Softgels",
+        "ingredient_quality_data": {"ingredients": [
+            {
+                "name": "Coenzyme Q10",
+                "canonical_id": "coq10",
+                "category": "antioxidant",
+                "quantity": 200,
+                "unit": "mg",
+            }
+        ]},
+    })
+
+    assert result["primary_type"] != "fiber_digestive"
+    assert result["secondary_type"] == "coq10"
+
+
 def test_BUG_14_sodium_chloride_are_mineral_canonicals():
     """Electrolyte minerals should count as mineral actives in taxonomy."""
     product = {
@@ -723,6 +764,7 @@ COVERED_TYPES = {
     "greens_powder",  # BUG-9
     "electrolyte",  # BUG-10
     "joint_support",  # BUG-5b
+    "fiber_digestive",  # BUG-13b + fiber pollution guards
     # general_supplement is the residual — implicit fallback testing
     "general_supplement",
 }
@@ -736,11 +778,10 @@ def test_every_primary_type_has_a_regression_test():
 
     Currently UNTESTED — flagged for follow-up:
       - collagen  (no test, taxonomy has _COLLAGEN_IDS but no real-catalog canary)
-      - fiber_digestive  (no test)
       - immune_support  (no test — but real catalog audit showed 40% miss rate)
     """
     missing = set(PRIMARY_TYPES) - COVERED_TYPES
-    expected_gaps = {"collagen", "fiber_digestive", "immune_support"}
+    expected_gaps = {"collagen", "immune_support"}
     new_gaps = missing - expected_gaps
     assert not new_gaps, (
         f"New PRIMARY_TYPES added without regression test: {new_gaps}. "

@@ -346,14 +346,14 @@ def test_theanine_sleep_support_stays_generic() -> None:
     assert class_for_product(product) == "generic"
 
 
-def test_digestive_enzyme_amino_cofactor_stays_generic() -> None:
+def test_digestive_enzyme_amino_cofactor_routes_fiber_digestive_not_sports() -> None:
     product = _product(
         primary_type="amino_acid",
         name="Digestive Enzymes Ultra with Betaine HCl",
         rows=[_row("tmg_betaine", 650, "mg")],
     )
 
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "fiber_digestive"
 
 
 def test_conservative_blend_anchor_protein_does_not_route_multivitamin_to_sports() -> None:

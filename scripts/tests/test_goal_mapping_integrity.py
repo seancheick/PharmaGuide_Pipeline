@@ -55,6 +55,14 @@ def _load_cluster_ids():
     return {c["id"] for c in clusters["synergy_clusters"]}
 
 
+def _load_cluster(cluster_id: str):
+    clusters = json.loads((DATA_DIR / "synergy_cluster.json").read_text())
+    for cluster in clusters["synergy_clusters"]:
+        if cluster["id"] == cluster_id:
+            return cluster
+    raise AssertionError(f"missing cluster {cluster_id}")
+
+
 # ---------- top-level structure ----------
 
 
@@ -188,6 +196,14 @@ def test_required_clusters_appear_in_cluster_weights():
                 f"{goal['id']}.required_clusters: {cid!r} not in cluster_weights "
                 "(would force a zero-weight match)"
             )
+
+
+def test_joint_inflammation_copy_matches_moderate_evidence_tier():
+    cluster = _load_cluster("joint_inflammation")
+
+    assert cluster["evidence_tier"] == 3
+    assert "Tier 1" not in cluster["note"]
+    assert "Tier 3" in cluster["note"]
 
 
 # ---------- blocked_by_clusters ----------

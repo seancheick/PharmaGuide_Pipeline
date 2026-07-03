@@ -63,3 +63,13 @@ def test_all_seven_taxonomy_arrays_present(blob):
     for a in REQUIRED_ARRAYS:
         assert isinstance(blob[a], list), f"{a!r} must be a list"
         assert blob[a], f"{a!r} cannot be empty"
+
+
+def test_serotonergic_medications_drug_class_is_taxonomy_backed(blob):
+    """5-HTP cannot safely broaden beyond SSRI/SNRI + MAOI unless the
+    profile-gate vocabulary has a real class for other serotonergic drugs."""
+    drug_classes = {entry["id"]: entry for entry in blob["drug_classes"]}
+    entry = drug_classes.get("serotonergic_medications")
+    assert entry is not None
+    assert entry["category"] == "psychiatry"
+    assert "Serotonergic" in entry["label"]

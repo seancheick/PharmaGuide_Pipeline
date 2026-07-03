@@ -3,12 +3,14 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-05-26",
-    "total_classes": 32,
-    "total_members": 743,
+    "last_updated": "2026-07-03",
+    "total_classes": 33,
+    "total_members": 761,
     "data_source_metadata": {
       "sources": [
-        "NLM RxClass (ATC)"
+        "NLM RxClass (ATC)",
+        "NLM RxNorm",
+        "DailyMed label review"
       ],
       "fetched_at": "2026-04-11T17:54:39Z",
       "relaSource": "ATC",
@@ -22,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class \u2192 blocks build.",
-    "total_entries": 32
+    "total_entries": 33
   },
   "classes": {
     "class:statins": {
@@ -1914,6 +1916,59 @@
         "J01AA"
       ],
       "notes": "Narrow Wave 8 class for mineral-chelation treatment-failure timing rules."
+    },
+    "class:serotonergic_medications": {
+      "display_name": "Other serotonergic medications",
+      "description": "Non-SSRI/SNRI/MAOI serotonergic medicines relevant to serotonin-syndrome supplement interactions.",
+      "member_rxcuis": [
+        "279645",
+        "704",
+        "1827",
+        "2597",
+        "3247",
+        "3638",
+        "231049",
+        "228783",
+        "5691",
+        "2256930",
+        "190376",
+        "6754",
+        "141366",
+        "7531",
+        "88014",
+        "37418",
+        "10689",
+        "135775"
+      ],
+      "member_names": [
+        "almotriptan",
+        "amitriptyline",
+        "buspirone",
+        "clomipramine",
+        "desipramine",
+        "doxepin",
+        "eletriptan",
+        "frovatriptan",
+        "imipramine",
+        "lasmiditan",
+        "linezolid",
+        "meperidine",
+        "naratriptan",
+        "nortriptyline",
+        "rizatriptan",
+        "sumatriptan",
+        "tramadol",
+        "zolmitriptan"
+      ],
+      "rxclass_id": "CURATED_SEROTONERGIC_MEDICATIONS",
+      "atc_codes": [
+        "J01XX08",
+        "N02AJ13",
+        "N02CC",
+        "N05BE01",
+        "N06AA"
+      ],
+      "notes": "Curated from DailyMed linezolid serotonergic-agent warning plus RxNorm rxcui lookup; excludes SSRIs/SNRIs and MAOIs, which have dedicated classes."
     }
   }
 }

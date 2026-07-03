@@ -156,8 +156,7 @@ _BEAUTY_NAME_TOKENS = {"skin", "nail", "nails", "beauty", "glow", "radiance", "k
 _BEAUTY_BOUNDARY_PATTERNS = [re.compile(r'\bhair')]
 _FIBER_NAME_TOKENS = {"fiber", "fibre", "digestive fiber", "prebiotic", "psyllium", "inulin"}
 _DIGESTIVE_ENZYME_NAME_TOKENS = {
-    "digestive", "digestion", "enzyme", "enzymes", "proteolytic",
-    "serrapeptase", "nattokinase", "lumbrokinase", "natto-serra",
+    "digestive", "digestion", "enzyme", "enzymes",
     "pepsin", "bitters", "betaine hcl",
 }
 _PRE_WORKOUT_NAME_TOKENS = {"pre-workout", "pre workout", "preworkout"}
@@ -177,8 +176,11 @@ _PROTEIN_IDS = frozenset({"whey_protein", "casein", "pea_protein", "protein"})
 _GREENS_IDS = frozenset({"spirulina", "chlorella", "wheatgrass", "barley_grass"})
 _ELECTROLYTE_IDS = frozenset({"sodium", "potassium", "magnesium", "calcium", "chloride"})
 _ENZYME_CANONICAL_IDS = frozenset({
-    "digestive_enzymes", "nattokinase", "serrapeptase", "pepsin",
+    "digestive_enzymes", "pepsin",
     "protease", "amylase", "lipase", "bromelain", "papain",
+})
+_SYSTEMIC_ENZYME_CANONICAL_IDS = frozenset({
+    "nattokinase", "serrapeptase", "lumbrokinase",
 })
 
 # Secondary type detection: compound → secondary_type
@@ -609,7 +611,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     vitamin_count = category_counts.get("vitamin", 0)
     mineral_count = category_counts.get("mineral", 0)
     enzyme_identity_count = sum(1 for cid in canonical_ids if cid in _ENZYME_CANONICAL_IDS)
-    enzyme_count = max(category_counts.get("enzyme", 0), enzyme_identity_count)
+    digestive_enzyme_category_count = sum(
+        1
+        for row in quantified_rows
+        if canonical_category(row.get("category")) == "enzyme"
+        and _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "") not in _SYSTEMIC_ENZYME_CANONICAL_IDS
+    )
+    enzyme_count = max(digestive_enzyme_category_count, enzyme_identity_count)
     enzyme_name_signal = any(t in product_name for t in _DIGESTIVE_ENZYME_NAME_TOKENS)
     non_enzyme_cids = {
         cid for cid in cid_set if canonical_categories.get(cid) != "enzyme"

@@ -72,6 +72,8 @@ from scoring_v4.modules.generic_helpers import (
     _safe_dict,
     _safe_list,
 )
+from scoring_v4.modules.joint_support import score_joint_support_dose
+from scoring_v4.modules.sleep_support import score_sleep_support_dose
 
 
 # --- Dose 25 weights ------------------------------------------------------
@@ -340,6 +342,50 @@ def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
                 "method": "botanical_clinical_dose_v1",
                 "botanical_dose_band": bot["band"],
                 "botanical_dose": bot.get("metadata", {}),
+            },
+        }
+
+    sleep = score_sleep_support_dose(product)
+    if sleep is not None:
+        b7 = _penalty_b7_dose_safety(product)
+        components = {
+            "sleep_support_dose": round(float(sleep["score"]), 4),
+            "multi_form_bonus": 0.0,
+        }
+        penalties = {"B7_dose_safety": round(-b7, 4)}
+        score = _clamp(0.0, DIMENSION_CAP, float(sleep["score"]) - b7)
+        return {
+            "score": round(score, 4),
+            "max": DIMENSION_CAP,
+            "components": components,
+            "penalties": penalties,
+            "phase": PHASE_MARKER,
+            "metadata": {
+                "phase": PHASE_MARKER,
+                "method": "sleep_support_clinical_dose_v1",
+                "sleep_support_dose": sleep,
+            },
+        }
+
+    joint = score_joint_support_dose(product)
+    if joint is not None:
+        b7 = _penalty_b7_dose_safety(product)
+        components = {
+            "joint_support_dose": round(float(joint["score"]), 4),
+            "multi_form_bonus": 0.0,
+        }
+        penalties = {"B7_dose_safety": round(-b7, 4)}
+        score = _clamp(0.0, DIMENSION_CAP, float(joint["score"]) - b7)
+        return {
+            "score": round(score, 4),
+            "max": DIMENSION_CAP,
+            "components": components,
+            "penalties": penalties,
+            "phase": PHASE_MARKER,
+            "metadata": {
+                "phase": PHASE_MARKER,
+                "method": "joint_support_clinical_dose_v1",
+                "joint_support_dose": joint,
             },
         }
 

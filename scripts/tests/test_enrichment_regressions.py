@@ -601,6 +601,45 @@ class TestUnknownFormSkipsUL:
         assert adequacy['scoring_eligible'] is False
 
 
+class TestNonRdaNutrientSkipsUL:
+    """Sports nutrients with no official UL should not look like conversion failures."""
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    def test_creatine_mass_dose_reports_no_official_rda_ul_reference(self, enricher):
+        product = {
+            'id': 'test_creatine_no_rda',
+            'activeIngredients': [
+                {
+                    'name': 'Creatine Monohydrate',
+                    'standardName': 'Creatine Monohydrate',
+                    'canonical_id': 'creatine_monohydrate',
+                    'quantity': 5,
+                    'unit': 'Gram(s)',
+                }
+            ],
+        }
+
+        result = enricher._collect_rda_ul_data(
+            product,
+            min_servings_per_day=1,
+            max_servings_per_day=1,
+        )
+
+        adequacy = result['adequacy_results'][0]
+        assert adequacy['skip_ul_check'] is False
+        assert adequacy.get('skip_ul_reason') is None
+        assert adequacy['ul_status'] == 'not_determined'
+        assert adequacy['pct_rda'] is not None
+        assert adequacy['pct_ul'] is None
+        analyzed = result['analyzed_ingredients'][0]
+        assert analyzed['conversion_evidence']['confidence'] == 'not_applicable'
+        assert analyzed['conversion_evidence']['nonfatal_reason'] == 'no_official_ul_reference'
+        assert result['conversion_evidence'][0]['confidence'] == 'not_applicable'
+
+
 class TestManufacturerNormalization:
     """P1.3: Manufacturer normalization"""
 

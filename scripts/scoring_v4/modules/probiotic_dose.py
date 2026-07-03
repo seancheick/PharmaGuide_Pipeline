@@ -106,6 +106,21 @@ def score_dose(product: Any) -> Dict[str, Any]:
         direct_strain_mass_floor,
         disclosed_count=disclosed_count,
     )
+    cfu_guarantee = _cfu_guarantee_adjustment(pdata)
+    if (
+        cfu_adequacy_scaled > 0.0
+        and cfu_guarantee["multiplier"] < 1.0
+        and cfu_adequacy_basis != "direct_strain_mass_no_cfu_floor"
+    ):
+        cfu_adequacy_scaled *= cfu_guarantee["multiplier"]
+        cfu_guarantee["applied"] = True
+        cfu_guarantee["adjusted_score"] = round(cfu_adequacy_scaled, 4)
+    cfu_adequacy_basis = _cfu_adequacy_basis(
+        cfu_adequacy_scaled,
+        aggregate_proxy,
+        direct_strain_mass_floor,
+        disclosed_count=disclosed_count,
+    )
 
     components = {
         "per_strain_cfu_disclosure": round(disclosure_score, 2),
@@ -130,6 +145,7 @@ def score_dose(product: Any) -> Dict[str, Any]:
             "cfu_adequacy_contributions": adequacy["strain_contributions"],
             "aggregate_cfu_proxy": aggregate_proxy,
             "direct_strain_mass_floor": direct_strain_mass_floor,
+            "cfu_guarantee": cfu_guarantee,
             "window_proxy_reason": _disclosure_reason(pdata, total_strain_count, disclosed_count),
         },
     }
@@ -202,6 +218,36 @@ def _cfu_adequacy_basis(
     if cfu_adequacy_scaled > 0.0:
         return "strain_level_cfu_evidence"
     return "no_cfu_adequacy_credit"
+
+
+def _cfu_guarantee_adjustment(pdata: Dict[str, Any]) -> Dict[str, Any]:
+    guarantee = _norm(pdata.get("guarantee_type")) or "unknown"
+    if guarantee in {
+        "at_expiration",
+        "until_expiration",
+        "through_expiration",
+        "guaranteed_through_expiration",
+        "expiration",
+    }:
+        return {
+            "type": "at_expiration",
+            "multiplier": 1.0,
+            "applied": False,
+            "reason": "cfu_guaranteed_through_expiration",
+        }
+    if guarantee in {"at_manufacture", "manufacture", "time_of_manufacture"}:
+        return {
+            "type": "at_manufacture",
+            "multiplier": 0.9,
+            "applied": False,
+            "reason": "cfu_guaranteed_at_manufacture",
+        }
+    return {
+        "type": "unknown",
+        "multiplier": 0.85,
+        "applied": False,
+        "reason": "cfu_guarantee_not_disclosed",
+    }
 
 
 def _ingredient_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:

@@ -18,10 +18,12 @@ Priority order (post-taxonomy refactor, 2026-05-20):
      - sports-protein identity (not protein taxonomy alone)
      - OR sports-active canonical panel + explicit sports label intent
      - OR native sports_primary_dose evidence
-  5. omega_3                → omega
+  5. fiber_digestive        → fiber_digestive
+     - fiber/prebiotic/digestive-enzyme identity
+  6. omega_3                → omega
      - taxonomy primary_type == "omega_3"
      - OR EPA/DHA canonical in ingredient panel (positive quantity)
-  6. fall through           → generic
+  7. fall through           → generic
 
 The taxonomy primary_type field comes from scripts/supplement_taxonomy.py
 (introduced 2026-05-20) and uses canonical-ID-based panel composition
@@ -46,7 +48,7 @@ from typing import Any, Dict
 
 from scoring_input_contract import build_scoring_classification, get_scoring_ingredients
 
-VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega", "sports")
+VALID_CLASSES = ("generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive")
 
 _PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
@@ -108,6 +110,10 @@ _SPORTS_SINGLE_ACTIVE_NAME_RE = re.compile(
 _SPORTS_NAME_EXCLUSION_RE = re.compile(
     r"\b(nac|n-acetyl|theanine|tryptophan|5-htp|sam-e|sleep|calm|mood|stress|"
     r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
+    re.IGNORECASE,
+)
+_FIBER_DIGESTIVE_NAME_RE = re.compile(
+    r"\b(fiber|fibre|psyllium|inulin|prebiotic|digestive\s+enzymes?|digestive\s+fiber)\b",
     re.IGNORECASE,
 )
 
@@ -1106,7 +1112,7 @@ _TAXONOMY_TO_MODULE = {
     "electrolyte": "generic",
     "pre_workout": "generic",
     "amino_acid": "generic",
-    "fiber_digestive": "generic",
+    "fiber_digestive": "fiber_digestive",
     "sleep_support": "generic",
     "immune_support": "generic",
     "joint_support": "generic",
@@ -1199,6 +1205,9 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     ):
         return "multi_or_prenatal"
 
+    if _is_fiber_digestive_class(product, name_text):
+        return "fiber_digestive"
+
     # Priority 4: taxonomy primary_type — canonical signal when present.
     # Maps the 20 taxonomy types to the 4 v4 modules. Unknown taxonomy
     # values (new types added later that aren't in _TAXONOMY_TO_MODULE)
@@ -1215,6 +1224,8 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
             return "omega" if _is_omega_class(product, name_text) else "generic"
         if module == "sports":
             return "sports" if _is_sports_class(product, name_text) else "generic"
+        if module == "fiber_digestive":
+            return "fiber_digestive" if _is_fiber_digestive_class(product, name_text) else "generic"
         if module == "generic":
             # Taxonomy is authoritative for generic classes, but the
             # physical panel fact of disclosed EPA/DHA still wins. Explicit
@@ -1259,3 +1270,48 @@ def class_for_product(product: Dict[str, Any]) -> str:
     except Exception:  # pragma: no cover - router is a total public API
         return "generic"
     return result if result in VALID_CLASSES else "generic"
+
+
+def _is_fiber_digestive_class(product: Dict[str, Any], name_text: str) -> bool:
+    primary_type = _read_primary_type(product)
+    if _FIBER_DIGESTIVE_NAME_RE.search(name_text or ""):
+        return True
+
+    rows = list(get_scoring_ingredients(product or {}, strict=True).rows)
+    digestive_signal_count = 0
+    row_count = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        row_count += 1
+        canonical = str(row.get("canonical_id") or "").strip().lower().replace("-", "_")
+        category = str(row.get("category") or "").strip().lower()
+        source = " ".join(
+            str(row.get(k) or "").lower()
+            for k in ("name", "standard_name", "standardName", "raw_source_text")
+        )
+        if canonical in {
+            "fiber",
+            "psyllium",
+            "psyllium_husk",
+            "inulin",
+            "acacia_fiber",
+            "prebiotics",
+        }:
+            return True
+        if category == "fiber" or "psyllium" in source:
+            return True
+        if canonical in {
+            "digestive_enzymes",
+            "pepsin",
+            "protease",
+            "amylase",
+            "lipase",
+            "bromelain",
+            "papain",
+        } or "digestive enzyme" in source:
+            digestive_signal_count += 1
+    return (
+        (primary_type == "fiber_digestive" and digestive_signal_count > 0)
+        or (row_count > 0 and digestive_signal_count > row_count * 0.5)
+    )

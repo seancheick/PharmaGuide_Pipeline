@@ -1,9 +1,11 @@
-"""v4 Sports module — transparent sports nutrition products."""
+"""v4 Fiber/Digestive module — fiber, prebiotic fiber, and digestive enzymes."""
 
 from __future__ import annotations
 
 from typing import Any
 
+from scoring_v4.modules.fiber_digestive_dose import score_dose
+from scoring_v4.modules.fiber_digestive_formulation import score_formulation
 from scoring_v4.modules.generic import GenericModuleResult, _assemble_score, _empty_dimensions
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_manufacturer import (
@@ -13,19 +15,17 @@ from scoring_v4.modules.generic_manufacturer import (
 from scoring_v4.modules.generic_transparency import score_transparency
 from scoring_v4.modules.safety_hygiene import score_safety_hygiene_base
 from scoring_v4.modules.verification_bonus import score_verification_bonus
-from scoring_v4.modules.sports_dose import score_dose
-from scoring_v4.modules.sports_formulation import score_formulation
 
 
-PHASE_MARKER = "P1.7_sports_module"
+PHASE_MARKER = "P1.8_fiber_digestive_module"
 
 
-def score_sports(product: Any) -> GenericModuleResult:
-    """Score an explicit sports-nutrition product against the v4 module."""
+def score_fiber_digestive(product: Any) -> GenericModuleResult:
+    """Score fiber/digestive products against category-specific dose/form facts."""
     if not isinstance(product, dict):
         product = {}
 
-    result = GenericModuleResult(module="sports", dimensions=_empty_dimensions())
+    result = GenericModuleResult(module="fiber_digestive", dimensions=_empty_dimensions())
 
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]

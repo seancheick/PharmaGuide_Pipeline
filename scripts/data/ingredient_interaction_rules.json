@@ -2,11 +2,11 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.2.0",
-    "last_updated": "2026-07-02",
-    "total_entries": 145,
+    "schema_version": "6.2.2",
+    "last_updated": "2026-07-03",
+    "total_entries": 146,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 145,
+    "total_rules": 146,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -85,6 +85,18 @@
           "to": "6.2.0",
           "date": "2026-07-02",
           "summary": "Smart-flagging Phase 2: authored direction + materiality on the 429 sub-rules that still lacked them (condition_rules, drug_class_rules, pregnancy_lactation blocks). materiality=presence for all (none carry a dose_threshold; presence == never dose-suppressed). direction: drug-class + non-nutrient condition rows harmful; beneficial for condition-supportive nutrients (milk_thistle/liver, coq10/heart, berberine|garlic|bergamot/cholesterol, folate|B12|fish_oil|inositol|coq10|vitamin_d preconception/pregnancy); neutral for standard pregnancy nutrients + diagnostic-interference (biotin assays) + mixed-evidence rows; unknown for bare 'limited safety data' pregnancy rows (fail-open, always fires). Advisory-only: score-neutral and, until the app router lands (Phase 4), behavior-neutral. Applied via scripts/tools/migrate_phase2_direction_materiality.py."
+        },
+        {
+          "from": "6.2.0",
+          "to": "6.2.1",
+          "date": "2026-07-03",
+          "summary": "Added explicit 5-HTP profile gate for other serotonergic medications (linezolid, tricyclic antidepressants, triptans, tramadol, meperidine, buspirone) using the new serotonergic_medications drug-class vocabulary. Existing SSRI/SNRI and MAOI gates remain more severe and are excluded from the broad gate to avoid duplicate warnings."
+        },
+        {
+          "from": "6.2.1",
+          "to": "6.2.2",
+          "date": "2026-07-03",
+          "summary": "Added explicit nattokinase bleeding-risk profile gates for anticoagulants and antiplatelets, sourced to MSK's nattokinase monograph. Presence-matters harmful rule; advisory-only and score-neutral."
         }
       ]
     },
@@ -18283,6 +18295,43 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "drug_class_id": "serotonergic_medications",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "5-HTP is a direct serotonin precursor. Combining it with other serotonergic medicines such as linezolid, tricyclic antidepressants, triptans, tramadol, meperidine, or buspirone can add serotonergic load and increase serotonin-syndrome risk.",
+          "action": "Avoid combining 5-HTP with other serotonergic medications unless the prescriber managing that medication specifically approves and monitors the combination.",
+          "sources": [
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/5-htp-01",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?audience=consumer&setid=13990ee8-8fbe-402d-8aba-cba78964fd32"
+          ],
+          "alert_headline": "Review with serotonergic medicines",
+          "alert_body": "5-HTP raises serotonin. If you take linezolid, tricyclic antidepressants, triptans, tramadol, buspirone, or similar serotonergic medicine, review before use.",
+          "informational_note": "5-HTP raises serotonin \u2014 relevant to people taking non-SSRI serotonergic medicines such as linezolid or tricyclics.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "serotonergic_medications"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antidepressants_ssri_snri",
+                "maois"
+              ],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "dose_thresholds": [],
@@ -24285,6 +24334,96 @@
         "materiality": "presence"
       },
       "last_reviewed": "2026-04-30",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_NATTOKINASE_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "nattokinase"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Nattokinase has fibrinolytic and antithrombotic activity. Combining it with anticoagulant medications may increase bleeding risk.",
+          "action": "Avoid combining nattokinase with anticoagulant medications unless your prescriber specifically approves and monitors the combination.",
+          "sources": [
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/nattokinase"
+          ],
+          "alert_headline": "Avoid with blood thinners",
+          "alert_body": "Nattokinase can affect clotting. If you take an anticoagulant such as warfarin, apixaban, rivaroxaban, or dabigatran, avoid adding nattokinase unless your prescriber approves it.",
+          "informational_note": "Nattokinase may increase bleeding risk \u2014 relevant to people on anticoagulants.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "anticoagulants"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Nattokinase may reduce clot formation through fibrinolytic and antithrombotic mechanisms. Combining it with antiplatelet medications can add bleeding risk.",
+          "action": "Avoid combining nattokinase with antiplatelet medications unless your prescriber specifically approves and monitors the combination.",
+          "sources": [
+            "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/nattokinase"
+          ],
+          "alert_headline": "Avoid with antiplatelet medication",
+          "alert_body": "Nattokinase can affect clotting. If you take aspirin, clopidogrel, or another antiplatelet medication, avoid adding nattokinase unless your prescriber approves it.",
+          "informational_note": "Nattokinase may increase bleeding risk \u2014 relevant to people on antiplatelet medication.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antiplatelets"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "no_data",
+        "lactation_category": "no_data",
+        "evidence_level": "no_data",
+        "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
+        "alert_headline": "Limited safety data",
+        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
+        "direction": "unknown",
+        "materiality": "presence"
+      },
+      "last_reviewed": "2026-07-03",
       "review_owner": "pharmaguide_clinical_team"
     }
   ]

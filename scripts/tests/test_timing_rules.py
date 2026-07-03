@@ -151,6 +151,19 @@ class TestTimingDataQuality:
         pairs = {(r["ingredient1"], r["ingredient2"]) for r in rules}
         assert ("iron", "calcium") in pairs or ("calcium", "iron") in pairs
 
+    def test_psyllium_water_and_med_spacing_rule_exists(self, rules):
+        rule = next(
+            (r for r in rules if r["id"] == "timing_psyllium_water_med_spacing"),
+            None,
+        )
+        assert rule is not None
+        assert rule["ingredient1"] == "psyllium"
+        assert rule["ingredient2"] == "medications"
+        assert rule["rule_type"] == "separate"
+        assert rule["separation_hours"] == 3
+        assert "8 oz" in rule["advice"]
+        assert any("medlineplus.gov" in s["url"] for s in rule["sources"])
+
     def test_advice_is_consumer_friendly(self, rules):
         for r in rules:
             assert len(r["advice"]) >= 20, f"Rule {r['id']} advice too short"

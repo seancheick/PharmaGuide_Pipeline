@@ -64,6 +64,12 @@ from identity.interaction import (
     normalize_catalog_interaction_tag,
 )
 from scoring_input_contract import get_scoring_ingredients
+from scoring_v4.modules.fiber_digestive_helpers import (
+    fiber_rows as _fiber_goal_rows,
+    has_fiber_context as _has_fiber_goal_context,
+    nutrition_fiber_grams as _nutrition_fiber_goal_grams,
+    total_fiber_grams as _total_fiber_goal_grams,
+)
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
@@ -6059,9 +6065,20 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
 
     # Priority order for display
     priority_nutrients = [
+        "dietary fiber", "fiber", "psyllium husk", "psyllium",
         "vitamin d", "vitamin c", "vitamin b12", "magnesium", "zinc",
         "omega-3", "iron", "calcium", "vitamin a", "vitamin e",
     ]
+
+    nutrition = safe_dict(enriched.get("nutrition_detail")) or safe_dict(enriched.get("nutrition_summary"))
+    dietary_fiber_g = safe_float(nutrition.get("dietary_fiber_g"))
+    if dietary_fiber_g and dietary_fiber_g > 0:
+        nutrients.append({
+            "name": "Dietary Fiber",
+            "amount": float(dietary_fiber_g),
+            "unit": "g",
+            "priority": priority_nutrients.index("dietary fiber"),
+        })
 
     for ing in ingredients:
         if not isinstance(ing, dict):
@@ -6070,7 +6087,7 @@ def generate_key_nutrients_summary(enriched: Dict) -> List[Dict]:
         standard_name = safe_str(ing.get("standard_name")).lower()
         category = safe_str(ing.get("category")).lower()
 
-        if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids"]:
+        if category not in ["vitamins", "minerals", "amino_acids", "fatty_acids", "fiber", "fibers"]:
             continue
 
         normalized_amount = ing.get("normalized_amount") or ing.get("dosage")
@@ -6332,7 +6349,42 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
 
 _GOAL_MAPPINGS_CACHE: Optional[List[Dict[str, Any]]] = None
-
+PROBIOTIC_GOAL_CLUSTER_ID = "probiotic_and_gut_health"
+FIBER_GOAL_CLUSTER_ID = "gut_barrier"
+CREATINE_GOAL_CLUSTER_ID = "muscle_building_recovery"
+SLEEP_GOAL_CLUSTER_ID = "sleep_stack"
+JOINT_GOAL_CLUSTER_ID = "joint_inflammation"
+FIBER_GOAL_MIN_DOSE_G = 3.0
+CREATINE_GOAL_MIN_DOSE_G = 3.0
+CREATINE_GOAL_MIN_BIO_SCORE = 10.0
+CREATINE_GOAL_CANONICALS = frozenset({
+    "creatine",
+    "creatine_monohydrate",
+    "creatine_anhydrous",
+    "creatine_hydrochloride",
+    "creatine_hcl",
+    "creatine_nitrate",
+    "creatine_citrate",
+    "buffered_creatine",
+    "magnesium_creatine_chelate",
+})
+PROTEIN_GOAL_MIN_DOSE_G = 20.0
+PROTEIN_COMPLETE_CANONICALS = frozenset({
+    "whey_protein",
+    "casein",
+    "soy_protein",
+})
+PROTEIN_PLANT_BLEND_CANONICALS = frozenset({
+    "pea_protein",
+    "rice_protein",
+})
+JOINT_GOAL_MIN_DOSE_MG = {
+    "glucosamine": 1500.0,
+    "chondroitin": 1200.0,
+    "msm": 1000.0,
+    "uc_ii": 40.0,
+    "hyaluronic_acid": 120.0,
+}
 
 def _load_goal_mappings() -> List[Dict[str, Any]]:
     """Load and cache goal-mapping contract (schema v6.0.0)."""
@@ -6349,6 +6401,303 @@ def _load_goal_mappings() -> List[Dict[str, Any]]:
         mappings = []
     _GOAL_MAPPINGS_CACHE = mappings
     return mappings
+
+
+def _probiotic_has_named_identity(pdata: Dict[str, Any]) -> bool:
+    if safe_float(pdata.get("total_strain_count"), 0.0) > 0:
+        return True
+    if safe_float(pdata.get("clinical_strain_count"), 0.0) > 0:
+        return True
+    for blend in safe_list(pdata.get("probiotic_blends")):
+        blend = safe_dict(blend)
+        if safe_list(blend.get("strains")):
+            return True
+    return False
+
+
+def _probiotic_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    pdata = safe_dict(enriched.get("probiotic_data") or enriched.get("probiotic_detail"))
+    if not safe_bool(pdata.get("is_probiotic_product") or pdata.get("is_probiotic")):
+        return False
+    if not _probiotic_has_named_identity(pdata):
+        return False
+    total_billion = safe_float(pdata.get("total_billion_count"))
+    if total_billion is None:
+        total_cfu = safe_float(pdata.get("total_cfu"))
+        total_billion = (total_cfu / 1_000_000_000.0) if total_cfu else None
+    if enforce_dose_gate:
+        return total_billion is not None and total_billion >= 1.0
+    return True
+
+
+def _fiber_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    """Direct digestive-health goal extraction for fiber products.
+
+    Fiber products should not need a probiotic or enzyme synergy cluster to
+    reach the digestive-health goal surface. Keep the override conservative:
+    require an explicit fiber context from the product name or scorable rows,
+    then dose-gate supported vs present-but-underdosed using grams per serving.
+    """
+    rows = _fiber_goal_rows(enriched)
+    if not rows and not _has_fiber_goal_context(enriched):
+        return False
+
+    if not enforce_dose_gate:
+        return True
+
+    label_grams = _nutrition_fiber_goal_grams(enriched)
+    grams = label_grams if label_grams is not None else _total_fiber_goal_grams(rows)
+    return grams >= FIBER_GOAL_MIN_DOSE_G
+
+
+def _mass_dose_g(row: Dict[str, Any]) -> Optional[float]:
+    quantity = safe_float((row or {}).get("quantity"))
+    if quantity is None or quantity <= 0:
+        return None
+    unit = safe_str((row or {}).get("unit_normalized") or (row or {}).get("unit")).lower()
+    compact = unit.replace(" ", "")
+    if unit in {"g", "gram", "grams", "gram(s)"} or compact in {"g", "gram", "grams", "gram(s)"}:
+        return quantity
+    if unit in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        return quantity / 1000.0
+    if unit in {"mcg", "ug", "µg", "μg", "microgram", "micrograms", "microgram(s)"}:
+        return quantity / 1_000_000.0
+    return None
+
+
+def _mass_dose_mg(row: Dict[str, Any]) -> Optional[float]:
+    grams = _mass_dose_g(row)
+    if grams is None:
+        return None
+    return grams * 1000.0
+
+
+def _creatine_row_text(row: Dict[str, Any]) -> str:
+    fields = (
+        "name",
+        "standard_name",
+        "canonical_id",
+        "matched_form",
+        "form",
+        "ingredient_form",
+        "raw_source_text",
+    )
+    return " ".join(safe_str((row or {}).get(field)).lower() for field in fields)
+
+
+def _protein_row_text(row: Dict[str, Any]) -> str:
+    fields = (
+        "name",
+        "standard_name",
+        "canonical_id",
+        "matched_form",
+        "form",
+        "ingredient_form",
+        "raw_source_text",
+    )
+    return " ".join(safe_str((row or {}).get(field)).lower() for field in fields)
+
+
+def _sleep_row_text(row: Dict[str, Any]) -> str:
+    fields = (
+        "name",
+        "standard_name",
+        "canonical_id",
+        "matched_form",
+        "form",
+        "ingredient_form",
+        "raw_source_text",
+    )
+    return " ".join(safe_str((row or {}).get(field)).lower() for field in fields)
+
+
+def _joint_row_text(row: Dict[str, Any]) -> str:
+    fields = (
+        "name",
+        "standard_name",
+        "canonical_id",
+        "matched_form",
+        "form",
+        "ingredient_form",
+        "raw_source_text",
+    )
+    return " ".join(safe_str((row or {}).get(field)).lower() for field in fields)
+
+
+def _creatine_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    rows = safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients"))
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        canonical = safe_str(row.get("canonical_id")).lower()
+        text = _creatine_row_text(row)
+        if canonical not in CREATINE_GOAL_CANONICALS and "creatine" not in text:
+            continue
+
+        if not enforce_dose_gate:
+            return True
+
+        if "ethyl ester" in text:
+            continue
+        bio_score = safe_float(row.get("bio_score"))
+        if bio_score is not None and bio_score < CREATINE_GOAL_MIN_BIO_SCORE:
+            continue
+        grams = _mass_dose_g(row)
+        if grams is not None and grams >= CREATINE_GOAL_MIN_DOSE_G:
+            return True
+
+    return False
+
+
+def _protein_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    """Direct muscle/recovery goal extraction for complete protein products.
+
+    Protein powders should not depend on broad synergy clusters to surface the
+    muscle recovery goal. The gate is intentionally conservative: complete dairy
+    or soy protein, or a pea+rice plant blend, can qualify at a meaningful dose.
+    Collagen/gelatin never qualifies for this muscle-protein direct path.
+    """
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    rows = [
+        row
+        for row in (safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients")))
+        if isinstance(row, dict)
+    ]
+    if not rows:
+        return False
+
+    plant_canons: set[str] = set()
+    qualifying_rows: List[Dict[str, Any]] = []
+    for row in rows:
+        canonical = safe_str(row.get("canonical_id")).lower()
+        text = _protein_row_text(row)
+        if "collagen" in text or "gelatin" in text:
+            continue
+
+        is_complete = canonical in PROTEIN_COMPLETE_CANONICALS or any(
+            term in text
+            for term in (
+                "whey protein",
+                "whey isolate",
+                "casein",
+                "soy protein",
+            )
+        )
+        if canonical in PROTEIN_PLANT_BLEND_CANONICALS:
+            plant_canons.add(canonical)
+        if is_complete:
+            qualifying_rows.append(row)
+
+    if PROTEIN_PLANT_BLEND_CANONICALS.issubset(plant_canons):
+        qualifying_rows.extend(
+            row
+            for row in rows
+            if safe_str(row.get("canonical_id")).lower() in PROTEIN_PLANT_BLEND_CANONICALS
+        )
+
+    if not qualifying_rows:
+        return False
+    if not enforce_dose_gate:
+        return True
+
+    total_plant_g = 0.0
+    for row in qualifying_rows:
+        grams = _mass_dose_g(row)
+        if grams is None:
+            continue
+        canonical = safe_str(row.get("canonical_id")).lower()
+        if canonical in PROTEIN_PLANT_BLEND_CANONICALS:
+            total_plant_g += grams
+        elif grams >= PROTEIN_GOAL_MIN_DOSE_G:
+            return True
+
+    return total_plant_g >= PROTEIN_GOAL_MIN_DOSE_G
+
+
+def _sleep_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    """Direct sleep-quality cluster extraction for focused sleep actives.
+
+    Melatonin and 5-HTP products can be legitimately sleep-positioned without a
+    precomputed synergy cluster. Dose gating keeps trace/unclear rows out of
+    supported goals while preserving the present-but-underdosed surface.
+    """
+    taxonomy = safe_dict(enriched.get("supplement_taxonomy"))
+    if safe_str(enriched.get("primary_type") or taxonomy.get("primary_type")).lower() != "sleep_support":
+        return False
+
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    rows = [
+        row
+        for row in (safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients")))
+        if isinstance(row, dict)
+    ]
+    for row in rows:
+        canonical = safe_str(row.get("canonical_id")).lower()
+        text = _sleep_row_text(row)
+        is_melatonin = canonical == "melatonin" or "melatonin" in text
+        is_5htp = canonical == "5_htp" or "5-htp" in text or "5 htp" in text
+        if not is_melatonin and not is_5htp:
+            continue
+
+        if not enforce_dose_gate:
+            return True
+
+        mg = _mass_dose_mg(row)
+        if mg is None:
+            continue
+        if is_melatonin and 0.3 <= mg <= 10.0:
+            return True
+        if is_5htp and 50.0 <= mg <= 400.0:
+            return True
+
+    return False
+
+
+def _joint_goal_cluster_applies(enriched: Dict, *, enforce_dose_gate: bool) -> bool:
+    taxonomy = safe_dict(enriched.get("supplement_taxonomy"))
+    if safe_str(enriched.get("primary_type") or taxonomy.get("primary_type")).lower() != "joint_support":
+        return False
+
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    rows = [
+        row
+        for row in (safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients")))
+        if isinstance(row, dict)
+    ]
+    for row in rows:
+        active = _joint_active_id(row)
+        if not active:
+            continue
+        if not enforce_dose_gate:
+            return True
+
+        mg = _mass_dose_mg(row)
+        if mg is not None and mg >= JOINT_GOAL_MIN_DOSE_MG[active]:
+            return True
+
+    return False
+
+
+def _joint_active_id(row: Dict[str, Any]) -> Optional[str]:
+    canonical = safe_str(row.get("canonical_id")).lower()
+    text = _joint_row_text(row)
+    if canonical == "glucosamine" or "glucosamine" in text:
+        return "glucosamine"
+    if canonical == "chondroitin" or "chondroitin" in text:
+        return "chondroitin"
+    if canonical == "msm" or "methylsulfonylmethane" in text or "msm" in text:
+        return "msm"
+    if canonical in {"uc_ii", "collagen"} and (
+        "uc-ii" in text
+        or "uc ii" in text
+        or "type ii collagen" in text
+        or "undenatured type ii" in text
+    ):
+        return "uc_ii"
+    if canonical == "hyaluronic_acid" or "hyaluronic acid" in text or "hyaluronan" in text:
+        return "hyaluronic_acid"
+    return None
 
 
 def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True) -> set:
@@ -6429,6 +6778,19 @@ def _extract_product_cluster_ids(enriched: Dict, enforce_dose_gate: bool = True)
             if enforce_dose_gate and not _cluster_has_adequate_dose(cluster):
                 continue
             ids.add(cid)
+
+    if _probiotic_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(PROBIOTIC_GOAL_CLUSTER_ID)
+    if _fiber_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(FIBER_GOAL_CLUSTER_ID)
+    if _creatine_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(CREATINE_GOAL_CLUSTER_ID)
+    if _protein_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(CREATINE_GOAL_CLUSTER_ID)
+    if _sleep_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(SLEEP_GOAL_CLUSTER_ID)
+    if _joint_goal_cluster_applies(enriched, enforce_dose_gate=enforce_dose_gate):
+        ids.add(JOINT_GOAL_CLUSTER_ID)
 
     return ids
 
@@ -6627,6 +6989,28 @@ def _format_quantity(value: Any) -> str:
     if num == int(num):
         return str(int(num))
     return ("%g" % num)
+
+
+def _diabetes_friendly_from_dietary(ds: Dict[str, Any]) -> bool:
+    if not safe_bool(ds.get("diabetes_friendly", False)):
+        return False
+
+    sugar = safe_dict(ds.get("sugar"))
+    if safe_bool(sugar.get("has_added_sugar")):
+        return False
+    if safe_bool(sugar.get("exceeds_diabetic_threshold")):
+        return False
+
+    sweeteners = safe_dict(ds.get("sweeteners"))
+    if safe_bool(sweeteners.get("has_high_glycemic")):
+        return False
+
+    for warning in safe_list(ds.get("warnings")):
+        warning = safe_dict(warning)
+        if safe_str(warning.get("type")).lower() == "diabetes":
+            return False
+
+    return True
 
 
 def _derive_serving_verb_and_noun(unit: str, form_factor: str) -> tuple[str, str, str]:
@@ -7168,7 +7552,7 @@ def build_core_row(
         safe_bool(safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product")),
         safe_bool(ds.get("contains_sugar")),
         safe_bool(ds.get("contains_sodium")),
-        safe_bool(ds.get("diabetes_friendly", False)),
+        safe_bool(_diabetes_friendly_from_dietary(ds)),
         safe_bool(ds.get("hypertension_friendly", False)),
         safe_bool(enriched.get("is_trusted_manufacturer")),
         safe_bool(cert_display_programs),

@@ -31,6 +31,7 @@ from scoring_v4.modules.generic_helpers import (
 )
 from scoring_v4.modules.botanical_profile import _mass_mg
 from scoring_v4.modules.collagen_profile import is_collagen_product
+from scoring_v4.modules.joint_support import joint_support_evidence_cap
 
 
 PHASE_MARKER = "P1.3.3_evidence_pipeline"
@@ -314,6 +315,10 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
                 floor_canonical = auth_canon
 
     total = _clamp(0.0, CAP_TOTAL, max(pipeline_total + depth_bonus, primary_floor))
+    joint_cap = joint_support_evidence_cap(product)
+    joint_cap_applied = joint_cap is not None and total > joint_cap
+    if joint_cap_applied:
+        total = joint_cap
 
     components = {
         "clinical_evidence_pipeline": round(pipeline_total, 4),
@@ -321,6 +326,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
     }
     if primary_floor > 0.0:
         components["primary_evidence_floor"] = round(primary_floor, 4)
+    if joint_cap_applied:
+        components["joint_support_evidence_cap"] = round(joint_cap, 4)
 
     return {
         "score": round(total, 4),
@@ -336,6 +343,8 @@ def score_evidence(product: Dict[str, Any], *, apply_primary_floor: bool = False
             "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
             "primary_evidence_floor": round(primary_floor, 4),
             "primary_evidence_floor_canonical": floor_canonical,
+            "joint_support_evidence_cap_applied": joint_cap_applied,
+            "joint_support_evidence_cap": round(joint_cap, 4) if joint_cap is not None else None,
             "nutrition_authority_floor_applied": nutrition_authority_canonical is not None,
             "nutrition_authority_canonical": nutrition_authority_canonical,
             "recovered_matches": [

@@ -52,7 +52,7 @@ from sp2_adoption_audit import enumerate_sp2_legacy_reads, hits_grouped_by_file
 #                replaced with `router.class_for_product` delegation +
 #                sports overlay)
 EXPECTED_HITS_PER_FILE = {
-    "scripts/build_final_db.py": 15,
+    "scripts/build_final_db.py": 16,
     "scripts/scoring_v4/confidence.py": 1,
     "scripts/scoring_v4/modules/generic_helpers.py": 1,
     "scripts/scoring_v4/router.py": 1,

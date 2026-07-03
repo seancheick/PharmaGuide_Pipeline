@@ -86,6 +86,8 @@ def _transform(
 def _archetype(module: Optional[str], module_breakdown: Dict[str, Any]) -> str:
     if module == "sports":
         return "sports_single"
+    if module == "fiber_digestive":
+        return "fiber_digestive"
     if module == "omega":
         return "omega"
     if module == "probiotic":

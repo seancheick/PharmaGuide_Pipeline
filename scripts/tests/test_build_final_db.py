@@ -24,6 +24,7 @@ from build_final_db import (
     classify_product_categories,
     fetch_staged_product,
     generate_ingredient_fingerprint,
+    generate_key_nutrients_summary,
     generate_dosing_summary,
     has_banned_substance,
     iter_json_products,
@@ -2480,6 +2481,38 @@ class TestDetailBlobNutritionAndUnmapped:
         assert nd["total_fat_g"] is None
         assert nd["protein_g"] is None
         assert nd["dietary_fiber_g"] is None
+
+    def test_key_nutrients_summary_includes_dietary_fiber_from_nutrition_facts(self):
+        enriched = self._enriched_with_nutrition(fiber=7.0)
+
+        summary = generate_key_nutrients_summary(enriched)
+
+        assert {
+            "name": "Dietary Fiber",
+            "amount": 7.0,
+            "unit": "g",
+        } in summary
+
+    def test_key_nutrients_summary_includes_scored_fiber_ingredient(self):
+        enriched = make_enriched()
+        enriched["ingredient_quality_data"] = {
+            "ingredients": [
+                {
+                    "standard_name": "Psyllium Husk",
+                    "category": "fiber",
+                    "normalized_amount": 5.0,
+                    "normalized_unit": "g",
+                }
+            ]
+        }
+
+        summary = generate_key_nutrients_summary(enriched)
+
+        assert {
+            "name": "Psyllium Husk",
+            "amount": 5.0,
+            "unit": "g",
+        } in summary
 
     def test_detail_blob_contains_unmapped_actives_subkey_empty(self):
         blob = build_detail_blob(make_enriched(), make_scored())

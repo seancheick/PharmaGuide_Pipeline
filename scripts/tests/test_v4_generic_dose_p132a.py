@@ -85,6 +85,60 @@ def _adequacy(*, nutrient: str = "Magnesium", pct_rda: float | None = 50.0, pct_
     return {"nutrient": nutrient, "pct_rda": pct_rda, "pct_ul": pct_ul}
 
 
+def _sleep_product(
+    *,
+    canonical_id: str = "melatonin",
+    name: str = "Melatonin",
+    quantity: float = 0.5,
+    unit: str = "mg",
+    adequacy_results: list | None = None,
+) -> dict:
+    return _product(
+        ingredients=[
+            _ingredient(
+                name=name,
+                standard_name=name,
+                canonical_id=canonical_id,
+                bio_score=10,
+                quantity=quantity,
+                unit=unit,
+            )
+        ],
+        adequacy_results=adequacy_results if adequacy_results is not None else [],
+        supplement_taxonomy={"primary_type": "sleep_support"},
+    )
+
+
+def _joint_product(
+    *,
+    ingredients: list | None = None,
+) -> dict:
+    return _product(
+        ingredients=ingredients
+        if ingredients is not None
+        else [
+            _ingredient(
+                name="Glucosamine Sulfate",
+                standard_name="Glucosamine",
+                canonical_id="glucosamine",
+                bio_score=11,
+                quantity=1500,
+                unit="mg",
+            ),
+            _ingredient(
+                name="Chondroitin Sulfate",
+                standard_name="Chondroitin",
+                canonical_id="chondroitin",
+                bio_score=9,
+                quantity=1200,
+                unit="mg",
+            ),
+        ],
+        adequacy_results=[],
+        supplement_taxonomy={"primary_type": "joint_support"},
+    )
+
+
 # --- Proxy metadata guardrails -------------------------------------------
 
 
@@ -114,6 +168,76 @@ def test_dose_dimension_cap_25() -> None:
 
     payload = score_dose(_product())
     assert payload["max"] == 25.0
+
+
+def test_sleep_melatonin_low_dose_gets_sleep_specific_full_credit() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(_sleep_product(quantity=0.5))
+
+    assert payload["components"]["sleep_support_dose"] == 22.0
+    assert payload["metadata"]["method"] == "sleep_support_clinical_dose_v1"
+    assert payload["metadata"]["sleep_support_dose"]["band"] == "low_dose_preferred"
+
+
+def test_sleep_melatonin_high_dose_is_penalized_not_full_credit() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(_sleep_product(quantity=10))
+
+    assert payload["components"]["sleep_support_dose"] == 11.0
+    assert payload["metadata"]["sleep_support_dose"]["band"] == "high_dose"
+
+
+def test_sleep_5htp_does_not_receive_full_generic_proxy_credit() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(
+        _sleep_product(
+            canonical_id="5_htp",
+            name="5-HTP",
+            quantity=100,
+            adequacy_results=[_adequacy(nutrient="5-HTP", pct_rda=66.7, pct_ul=None)],
+        )
+    )
+
+    assert payload["components"]["sleep_support_dose"] == 16.0
+    assert payload["metadata"]["sleep_support_dose"]["band"] == "sleep_support_preliminary"
+
+
+def test_joint_glucosamine_chondroitin_gets_joint_specific_full_dose_credit() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(_joint_product())
+
+    assert payload["components"]["joint_support_dose"] == 22.0
+    assert payload["metadata"]["method"] == "joint_support_clinical_dose_v1"
+    assert payload["metadata"]["joint_support_dose"]["adequate_actives"] == [
+        "glucosamine",
+        "chondroitin",
+    ]
+
+
+def test_joint_glucosamine_gram_units_do_not_fall_through_to_rda_proxy() -> None:
+    from scoring_v4.modules.generic_dose import score_dose
+
+    payload = score_dose(
+        _joint_product(
+            ingredients=[
+                _ingredient(
+                    name="Glucosamine Sulfate 2KCl",
+                    standard_name="Glucosamine",
+                    canonical_id="glucosamine",
+                    bio_score=11,
+                    quantity=2.0,
+                    unit="g",
+                )
+            ]
+        )
+    )
+
+    assert payload["components"]["joint_support_dose"] == 20.0
+    assert payload["metadata"]["joint_support_dose"]["actives"][0]["daily_mg"] == 2000.0
 
 
 # --- Supplemental-window proxy: in-window cases --------------------------

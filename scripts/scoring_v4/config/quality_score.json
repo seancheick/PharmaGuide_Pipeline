@@ -1,11 +1,11 @@
 {
   "_metadata": {
     "config_name": "quality_score",
-    "version": "1.0.0-pr2.1-brand-only-verification",
+    "version": "1.0.1-public-safety-additives",
     "schema_version": "1.0.0",
     "last_updated": "2026-06-08",
-    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here and quality-system violations to verification (PR3). Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.0.0.",
-    "phase": "pr2.1_brand_only_verification"
+    "description": "PharmaGuide public six-pillar Quality Score (decision score) in the 20/20/20/15/15/10 frame. Pillars are category-aware purpose-fit adapters, NOT raw linear remaps: formulation/dose/evidence normalize each archetype to its ACHIEVABLE ceiling (PR4/PR5/PR6); verification saturates hard third-party signals with a fail-open neutral baseline (PR2) and recognizes verified brand/facility-scoped certs as a small non-stacking signal (PR2.1); safety_hygiene is a product-level pillar that routes a maker's Class I recall here, quality-system violations to verification (PR3), and applies a small capped truthfulness deduction for additive/sweetener concerns so flagged products do not show 10/10 safety hygiene. Only transparency remains a faithful linear source_dim map (no structural cap to correct). raw_score_v4_100 is audit/math only and is NEVER shown as the shipped score when quality_score_status suppresses display. v4 is the production catalog scoring contract as of export schema 2.0.0.",
+    "phase": "public_safety_additives"
   },
   "pillars": {
     "formulation":    { "weight": 20, "assembler": "formulation" },
@@ -16,8 +16,9 @@
     "safety_hygiene": { "weight": 10, "assembler": "safety_hygiene" }
   },
   "safety_hygiene_subscale": {
-    "_doc": "PR3: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. Manufacturer violations were previously absent from EVERY pillar, so the public score was blind to them (a violation product scored identical to a clean one). B1 harmful additive and B7 overdose are NOT here — they already lower the formulation/dose pillars, so re-deducting would double-count >50% of the catalog.",
-    "base_max": 10.0
+    "_doc": "PR3 + public truthfulness: product-level safety pillar. Clean base (no banned/recalled/watchlist match) → full 10; banned/recalled/watchlist present zeroes the raw safety_hygiene_base → 0. A Class I (critical) manufacturer recall in the last 3y deducts the raw violation magnitude HERE (safety/contamination half of the violation split); non-critical quality-system violations go to the verification pillar instead. B1 additive/sweetener penalties still mainly lower formulation, but they also take a small capped Safety Hygiene deduction so products with additive or glycemic-sweetener concerns do not show 10/10 safety hygiene. B7 overdose stays in dose only.",
+    "base_max": 10.0,
+    "additive_or_sweetener_max_penalty": 4.0
   },
   "clean_label_subscale": {
     "_doc": "STEP 3a: clean-label additive penalty (titanium dioxide / E171 + future EU-banned additives). A flagged additive INFORMS (clean_label_flags_v4) AND takes a SMALL graduated safety_hygiene penalty WITHOUT forcing a CAUTION verdict (CAUTION is the safety gate's lane). penalty = penalty_base (per-additive, from banned_recalled_ingredients.json clean_label.penalty_base) × role_multiplier[role], summed across flagged additives and clamped to max_total_penalty per product. A coating/excipient (role=inactive) is penalized lightly (×0.5); a flagged additive present as an active is penalized harder (×1.5). MAGNITUDES HERE ARE CONSERVATIVE DEFAULTS PENDING USER/ADVISOR SIGN-OFF (spec §7, reports/v4_clean_label_flag_design.md): titanium dioxide as a coating = 2.0 × 0.5 = −1.0 on the /10 pillar. tier_base is a FALLBACK base used only when an entry omits penalty_base.",
@@ -31,6 +32,7 @@
       "sports_single": 19.0,
       "generic_single_molecule": 19.0,
       "generic_botanical_branded": 19.0,
+      "fiber_digestive": 19.0,
       "omega": 20.0,
       "probiotic": 20.0,
       "prenatal_multi": 20.0
@@ -43,6 +45,7 @@
       "sports_single": 25.0,
       "generic_single_molecule": 22.0,
       "generic_botanical_branded": 22.0,
+      "fiber_digestive": 25.0,
       "omega": 23.0,
       "probiotic": 22.0,
       "prenatal_multi": 23.0
@@ -55,6 +58,7 @@
       "sports_single": 25.0,
       "generic_single_molecule": 25.0,
       "generic_botanical_branded": 25.0,
+      "fiber_digestive": 28.0,
       "omega": 23.0,
       "probiotic": 22.0,
       "prenatal_multi": 23.0

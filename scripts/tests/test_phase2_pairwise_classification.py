@@ -34,7 +34,7 @@ BY_ID = {e["id"]: e for e in PAIRS}
 
 
 def test_every_pair_classified_with_valid_enums():
-    assert len(PAIRS) == 149, f"expected 149 pairs, found {len(PAIRS)}"
+    assert len(PAIRS) == 150, f"expected 150 pairs, found {len(PAIRS)}"
     bad = []
     for e in PAIRS:
         d, m = e.get("direction"), e.get("materiality")

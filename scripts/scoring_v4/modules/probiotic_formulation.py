@@ -8,8 +8,10 @@ Dose and strain-clinical evidence belongs to P2.3 Evidence.
 
 from __future__ import annotations
 
+import re
 from typing import Any, Dict
 
+from scoring_input_contract import get_scoring_ingredients
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 
 
@@ -68,7 +70,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
         "named_species_diversity": _score_named_species_diversity(strain_count),
         "clinical_strain_codes": _score_clinical_strain_codes(clinical_count),
         "delivery_survivability": _score_delivery_survivability(product, pdata),
-        "prebiotic_complement": 1.0 if pdata.get("prebiotic_present") else 0.0,
+        "prebiotic_complement": _score_prebiotic_complement(product, pdata),
     }
     shared_penalties = shared_formulation_penalty_detail(product)
     penalties = dict(shared_penalties["penalties"])
@@ -180,6 +182,99 @@ def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]
         tier = _safe_dict(product.get("delivery_data")).get("highest_tier")
     tier_int = _as_int(tier, 0)
     return {1: 3.0, 2: 2.5, 3: 1.5}.get(tier_int, 0.0)
+
+
+_PREBIOTIC_RE = re.compile(
+    r"\b(prebiotic|inulin|fructooligosaccharides?|fos|"
+    r"galactooligosaccharides?|gos|chicory|acacia|fiber)\b",
+    re.IGNORECASE,
+)
+
+
+def _score_prebiotic_complement(product: Dict[str, Any], pdata: Dict[str, Any]) -> float:
+    """Dose-aware scoring for the 1-point prebiotic complement component.
+
+    Presence alone is a weak formulation signal. Full credit requires a disclosed
+    multi-gram prebiotic amount, so tiny excipient-level fiber does not score the
+    same as a purposefully formulated synbiotic.
+    """
+    if not pdata.get("prebiotic_present"):
+        return 0.0
+
+    dose_g = _prebiotic_dose_g(product, pdata)
+    if dose_g is None:
+        return 0.25
+    if dose_g >= 3.0:
+        return 1.0
+    if dose_g >= 1.0:
+        return 0.5
+    if dose_g > 0.0:
+        return 0.25
+    return 0.0
+
+
+def _prebiotic_dose_g(product: Dict[str, Any], pdata: Dict[str, Any]) -> float | None:
+    for key in ("prebiotic_dose_g", "prebiotic_grams", "prebiotic_amount_g"):
+        value = _as_float(pdata.get(key), None)
+        if value is not None and value > 0:
+            return value
+
+    best: float | None = None
+    for row in _ingredient_rows(product):
+        row = _safe_dict(row)
+        if not row:
+            continue
+        text = " ".join(
+            str(row.get(key) or "")
+            for key in (
+                "name",
+                "standardName",
+                "standard_name",
+                "canonical_id",
+                "raw_source_text",
+                "display_label",
+            )
+        )
+        if not _PREBIOTIC_RE.search(text):
+            continue
+        grams = _row_quantity_g(row)
+        if grams is None:
+            continue
+        best = grams if best is None else max(best, grams)
+    return best
+
+
+def _ingredient_rows(product: Dict[str, Any]) -> list[Dict[str, Any]]:
+    try:
+        return [
+            row for row in get_scoring_ingredients(product or {}, strict=True).rows
+            if isinstance(row, dict)
+        ]
+    except Exception:
+        return []
+
+
+def _row_quantity_g(row: Dict[str, Any]) -> float | None:
+    quantity = None
+    for key in ("quantity", "amount", "dose", "dosage"):
+        quantity = _as_float(row.get(key), None)
+        if quantity is not None:
+            break
+    if quantity is None:
+        return None
+    unit = str(
+        row.get("unit_normalized")
+        or row.get("unit")
+        or row.get("dose_unit")
+        or ""
+    ).strip().lower()
+    if unit in {"g", "gram", "grams", "gm"}:
+        return quantity
+    if unit in {"mg", "milligram", "milligrams"}:
+        return quantity / 1000.0
+    if unit in {"mcg", "microgram", "micrograms", "ug", "µg"}:
+        return quantity / 1_000_000.0
+    return None
 
 
 def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:

@@ -36,9 +36,9 @@ PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "percent_dv_dose": ["generic_percent_dv_dose"],
 }
 PRODUCT_EVIDENCE_ORIGINS = {"native_enrichment", "compatibility_derived"}
-SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.2"
+SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.3"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
-SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports"}
+SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
 SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
     "classification_schema_version",
@@ -1823,6 +1823,10 @@ _ROUTE_SPORTS_NAME_EXCLUSION_RE = re.compile(
     r"digestive|enzyme|enzymes|keratin|lactoferrin|collagen)\b",
     re.IGNORECASE,
 )
+_ROUTE_FIBER_DIGESTIVE_NAME_RE = re.compile(
+    r"\b(fiber|fibre|psyllium|inulin|prebiotic|digestive\s+enzymes?|digestive\s+fiber)\b",
+    re.IGNORECASE,
+)
 _ROUTE_OMEGA_NAME_KEYWORDS = (
     "fish oil",
     "omega-3",
@@ -1978,7 +1982,7 @@ _ROUTE_TAXONOMY_TO_MODULE = {
     "electrolyte": "generic",
     "pre_workout": "generic",
     "amino_acid": "generic",
-    "fiber_digestive": "generic",
+    "fiber_digestive": "fiber_digestive",
     "sleep_support": "generic",
     "immune_support": "generic",
     "joint_support": "generic",
@@ -2673,6 +2677,9 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     ):
         return "multi_or_prenatal", "profile_content:explicit_multivitamin", ["explicit_multivitamin_name"]
 
+    if _route_is_fiber_digestive_class(product, name_text):
+        return "fiber_digestive", "profile_content:fiber_digestive", ["fiber_digestive_identity"]
+
     if primary_type:
         module = _ROUTE_TAXONOMY_TO_MODULE.get(primary_type)
         if module == "multi_or_prenatal":
@@ -2689,6 +2696,10 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
             if _route_is_sports_class(product, name_text):
                 return "sports", f"taxonomy:{primary_type}:sports_validated", [f"taxonomy:{primary_type}", "sports_evidence"]
             return "generic", f"taxonomy:{primary_type}:sports_evidence_missing", [f"taxonomy:{primary_type}"]
+        if module == "fiber_digestive":
+            if _route_is_fiber_digestive_class(product, name_text):
+                return "fiber_digestive", f"taxonomy:{primary_type}:fiber_digestive_validated", [f"taxonomy:{primary_type}", "fiber_digestive_identity"]
+            return "generic", f"taxonomy:{primary_type}:fiber_digestive_evidence_missing", [f"taxonomy:{primary_type}"]
         if module == "generic":
             if _route_is_omega_class(product, name_text):
                 return "omega", f"taxonomy:{primary_type}:omega_evidence_override", [f"taxonomy:{primary_type}", "omega_evidence"]
@@ -2709,6 +2720,51 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
             ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
         )
     return "generic", "generic_safe_default", ["generic_safe_default"]
+
+
+def _route_is_fiber_digestive_class(product: Dict[str, Any], name_text: str) -> bool:
+    primary_type = _primary_type(product)
+    if _ROUTE_FIBER_DIGESTIVE_NAME_RE.search(name_text or ""):
+        return True
+
+    rows = list(_route_scoring_rows(product))
+    digestive_signal_count = 0
+    row_count = 0
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        row_count += 1
+        canonical = _norm(row.get("canonical_id")).replace("-", "_")
+        category = _norm(row.get("category"))
+        source = " ".join(
+            _norm(row.get(key))
+            for key in ("name", "standard_name", "standardName", "raw_source_text")
+        )
+        if canonical in {
+            "fiber",
+            "psyllium",
+            "psyllium_husk",
+            "inulin",
+            "acacia_fiber",
+            "prebiotics",
+        }:
+            return True
+        if category == "fiber" or "psyllium" in source:
+            return True
+        if canonical in {
+            "digestive_enzymes",
+            "pepsin",
+            "protease",
+            "amylase",
+            "lipase",
+            "bromelain",
+            "papain",
+        } or "digestive enzyme" in source:
+            digestive_signal_count += 1
+    return (
+        (primary_type == "fiber_digestive" and digestive_signal_count > 0)
+        or (row_count > 0 and digestive_signal_count > row_count * 0.5)
+    )
 
 
 def _classification_identity(row: Dict[str, Any]) -> str:

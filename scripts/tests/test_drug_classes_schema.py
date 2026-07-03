@@ -58,6 +58,7 @@ EXPECTED_CLASSES = {
     "class:doacs",
     "class:potassium_sparing_diuretics",
     "class:tetracycline_antibiotics",
+    "class:serotonergic_medications",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -83,6 +84,7 @@ CANONICAL_ANCHORS = {
     "class:doacs": ["apixaban", "rivaroxaban"],
     "class:potassium_sparing_diuretics": ["spironolactone", "triamterene"],
     "class:tetracycline_antibiotics": ["doxycycline", "tetracycline"],
+    "class:serotonergic_medications": ["linezolid", "amitriptyline", "tramadol", "buspirone"],
 }
 
 RXCUI_PATTERN = re.compile(r"^\d+$")
