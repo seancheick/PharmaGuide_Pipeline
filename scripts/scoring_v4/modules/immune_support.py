@@ -13,6 +13,7 @@ from scoring_v4.modules.generic_helpers import (
     _as_float,
     _norm_text,
     _safe_dict,
+    _safe_list,
     get_active_ingredients,
     primary_type_of,
 )
@@ -55,8 +56,9 @@ def score_immune_support_dose(product: Dict[str, Any]) -> Optional[Dict[str, Any
     if not doses:
         return None
 
-    high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
-    high_d = (doses.get("vitamin_d_mcg") or 0.0) > 100.0
+    design_flags = _immune_design_flags(product, doses)
+    high_zinc = design_flags["high_zinc"]
+    high_d = design_flags["high_vitamin_d"]
 
     components = {
         "vitamin_c_daily_range": _range_score(doses.get("vitamin_c_mg"), 100.0, 1000.0, 3.0),
@@ -105,10 +107,7 @@ def immune_support_formulation_adjustment(product: Dict[str, Any]) -> Optional[D
     )
 
     high_zinc = (doses.get("zinc_mg") or 0.0) > 40.0
-    form_text = _norm_text(
-        f"{product.get('form_factor_canonical') or ''} {product.get('form_factor') or ''} {product.get('product_name') or ''}"
-    )
-    gummy_or_syrup = any(token in form_text for token in ("gummy", "gummies", "syrup"))
+    gummy_or_syrup = _is_gummy_or_syrup(product)
     herb_soup = _high_variability_botanical_count(product) >= 3
 
     components = {
@@ -171,6 +170,14 @@ def immune_support_evidence_floor(product: Dict[str, Any]) -> Optional[Dict[str,
 
     if floor <= 0.0:
         return None
+    design_flags = _immune_design_flags(product, doses)
+    if (
+        design_flags["high_zinc"]
+        or design_flags["high_vitamin_d"]
+        or design_flags["gummy_or_syrup"]
+        or design_flags["high_glycemic_sugar"]
+    ):
+        return None
     return {
         "floor": round(floor, 4),
         "components": {
@@ -187,6 +194,15 @@ def immune_support_evidence_cap(product: Dict[str, Any]) -> Optional[float]:
     if is_immune_support_product(product):
         return 17.0
     return None
+
+
+def _immune_design_flags(product: Dict[str, Any], doses: Dict[str, float]) -> Dict[str, bool]:
+    return {
+        "high_zinc": (doses.get("zinc_mg") or 0.0) > 40.0,
+        "high_vitamin_d": (doses.get("vitamin_d_mcg") or 0.0) > 100.0,
+        "gummy_or_syrup": _is_gummy_or_syrup(product),
+        "high_glycemic_sugar": _has_high_glycemic_sugar(product),
+    }
 
 
 def immune_active_doses(product: Dict[str, Any]) -> Dict[str, float]:
@@ -284,11 +300,42 @@ def _daily_serving_multiplier(product: Dict[str, Any]) -> float:
     return 1.0
 
 
+def _is_gummy_or_syrup(product: Dict[str, Any]) -> bool:
+    form_text = _norm_text(
+        f"{product.get('form_factor_canonical') or ''} {product.get('form_factor') or ''} {product.get('product_name') or ''}"
+    )
+    return any(token in form_text for token in ("gummy", "gummies", "syrup"))
+
+
+def _has_high_glycemic_sugar(product: Dict[str, Any]) -> bool:
+    dietary = _safe_dict((product or {}).get("dietary_sensitivity_data"))
+    sugar = _safe_dict(dietary.get("sugar"))
+    sweeteners = _safe_dict(dietary.get("sweeteners"))
+    level = _norm_text(sugar.get("level"))
+    sugar_sources = _safe_list(sugar.get("sugar_sources"))
+    high_glycemic = _safe_list(
+        sweeteners.get("high_glycemic") or sweeteners.get("high_glycemic_sweeteners")
+    )
+    return (
+        level == "high"
+        or bool(high_glycemic)
+        or any("syrup" in _norm_text(source) for source in sugar_sources)
+    )
+
+
 def _high_variability_botanical_count(product: Dict[str, Any]) -> int:
-    count = 0
+    matched: set[str] = set()
     for row in get_active_ingredients(product):
-        keys = _row_keys(row)
-        text = " ".join(keys)
-        if _matches_any(keys, text, _HIGH_VARIABILITY_BOTANICALS):
-            count += 1
-    return count
+        botanical = _high_variability_botanical_id(row)
+        if botanical:
+            matched.add(botanical)
+    return len(matched)
+
+
+def _high_variability_botanical_id(row: Dict[str, Any]) -> Optional[str]:
+    keys = _row_keys(row)
+    text = " ".join(keys)
+    for botanical in sorted(_HIGH_VARIABILITY_BOTANICALS, key=len, reverse=True):
+        if _matches_any(keys, text, (botanical,)):
+            return "ginseng" if botanical == "panax ginseng" else botanical
+    return None

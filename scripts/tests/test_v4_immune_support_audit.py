@@ -142,6 +142,48 @@ def _immune_product(*, high_zinc: bool = False, gummy: bool = False) -> Dict[str
     }
 
 
+def _emergency_gummy_product() -> Dict[str, Any]:
+    product = _immune_product(high_zinc=True, gummy=True)
+    product["verified_cert_programs"] = []
+    product["ingredient_quality_data"]["ingredients_scorable"] = [
+        _row("Vitamin C", "vitamin_c", 1000, "mg", bio_score=8),
+        _row("Vitamin D3", "vitamin_d3", 100, "mcg", bio_score=10),
+        _row("Zinc oxide", "zinc", 50, "mg", bio_score=4, category="mineral"),
+        _row("Elderberry syrup concentrate", "elderberry", 100, "mg", bio_score=6, category="botanical"),
+    ]
+    return product
+
+
+def _botanical_stack_with_duplicate_rows() -> Dict[str, Any]:
+    rows = [
+        _row("Vitamin C", "vitamin_c", 250, "mg", bio_score=10),
+    ]
+    for name, canonical_id in (
+        ("Echinacea", "echinacea"),
+        ("Goldenseal", "goldenseal"),
+        ("Astragalus", "astragalus"),
+        ("Andrographis", "andrographis"),
+        ("Oregano oil", "oregano_oil"),
+    ):
+        rows.append(_row(name, canonical_id, 100, "mg", bio_score=6, category="botanical"))
+        rows.append(_row(f"{name} extract duplicate", canonical_id, 100, "mg", bio_score=6, category="botanical"))
+
+    product = _immune_product()
+    product["product_name"] = "Immune Botanical Defense Complex"
+    product["verified_cert_programs"] = []
+    product["ingredient_quality_data"]["ingredients_scorable"] = rows
+    product["evidence_data"]["clinical_matches"] = []
+    product["rda_ul_data"]["safety_flags"] = []
+    product["rda_ul_data"]["adequacy_results"] = [
+        {"nutrient": "Vitamin C", "pct_rda": 277, "pct_ul": 12.5},
+    ]
+    product["dietary_sensitivity_data"] = {
+        "sugar": {"level": "sugar_free", "contains_sugar": False, "has_added_sugar": False, "amount_g": 0},
+        "sweeteners": {},
+    }
+    return product
+
+
 def test_clean_daily_immune_formula_reaches_realistic_high_80s() -> None:
     out = score_product_v4(_immune_product())
 
@@ -161,6 +203,25 @@ def test_gummy_high_zinc_immune_formula_not_benchmark_clean() -> None:
     assert out["quality_score_v4_100"] < 75.0
     assert pillars["safety_hygiene"]["score"] < 10.0
     assert pillars["dose"]["score"] < 17.0
+
+
+def test_high_zinc_gummy_does_not_receive_clean_daily_immune_evidence_floor() -> None:
+    out = score_product_v4(_emergency_gummy_product())
+    evidence = out["v4_breakdown"]["module"]["dimensions"]["evidence"]
+
+    assert out["quality_score_v4_100"] < 60.0
+    assert evidence["score"] < 14.0
+    assert evidence["metadata"]["immune_support_evidence_floor_applied"] is False
+
+
+def test_high_variability_botanical_count_dedupes_duplicate_rows() -> None:
+    out = score_product_v4(_botanical_stack_with_duplicate_rows())
+    formulation = out["v4_breakdown"]["module"]["dimensions"]["formulation"]
+    immune_meta = formulation["metadata"]["immune_support"]
+
+    assert immune_meta["high_variability_botanical_count"] == 5
+    assert "immune_high_variability_botanical_stack" in formulation["penalties"]
+    assert out["quality_score_v4_100"] < 50.0
 
 
 def test_immune_goal_mapping_excludes_broad_lifestyle_clusters() -> None:
