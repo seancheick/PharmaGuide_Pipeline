@@ -2468,15 +2468,17 @@ def build_decision_highlights(
     non-blocking signals (additives, allergens, verdict).
     """
     named_programs = safe_list(enriched.get("named_cert_programs"))
-    section_scores = safe_dict(scored.get("section_scores"))
     verdict = safe_str(scored.get("verdict")).upper()
     # V4 cutover: the shipped /100 score (overlay sets score_100_equivalent
     # from quality_score_v4_100); 75/100 mirrors the retired V3 score_80>=60.
     score_100 = safe_float(scored.get("score_100_equivalent"), 0) or 0
+    # Evidence copy reads the v4 evidence pillar (/20), not the retired v3
+    # section_scores.C — keeps the user-facing string aligned with the shipped score.
+    v4_evidence = safe_float(safe_dict(safe_dict(scored.get("_v4_pillars")).get("evidence")).get("score"), 0)
 
     if safe_bool(enriched.get("is_trusted_manufacturer")) and safe_bool(enriched.get("has_full_disclosure")):
         positive = "Trusted manufacturer with full label disclosure."
-    elif safe_float(safe_dict(section_scores.get("C_evidence_research")).get("score"), 0) >= 12:
+    elif v4_evidence >= 12:
         positive = "Backed by meaningful clinical evidence."
     elif score_100 >= 75:
         positive = "Strong overall quality profile."
@@ -6149,7 +6151,8 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     score_100 = safe_float(scored.get("score_100_equivalent"))
     grade = safe_str(scored.get("grade"))
     verdict = safe_str(scored.get("verdict")).upper()
-    section_scores = safe_dict(scored.get("section_scores"))
+    # V4 cutover: evidence copy reads the v4 evidence pillar (/20), not v3 section C.
+    v4_evidence = safe_float(safe_dict(safe_dict(scored.get("_v4_pillars")).get("evidence")).get("score"), 0)
 
     # Title with score emoji
     score_emoji = ""
@@ -6169,7 +6172,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
 
     # Description
     positive_signals = []
-    if safe_float(safe_dict(section_scores.get("C_evidence_research")).get("score"), 0) >= 15:
+    if v4_evidence >= 15:
         positive_signals.append("clinically-backed")
     if safe_list(enriched.get("named_cert_programs")):
         positive_signals.append("third-party tested")
@@ -6198,9 +6201,9 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     if delivery_tier in ["premium", "enhanced"]:
         highlights.append(f"Premium {delivery_tier} formulation")
 
-    # Clinical evidence
-    evidence_matched = safe_dict(section_scores.get("C_evidence_research")).get("matched_entries", 0)
-    if evidence_matched > 0:
+    # Clinical evidence — v4 evidence pillar (>= 12 of /20) stands in for the
+    # retired v3 C.matched_entries; avoids over-claiming on the evidence floor.
+    if v4_evidence >= 12:
         highlights.append("Clinically-backed ingredients")
 
     # Certifications

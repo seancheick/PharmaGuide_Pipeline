@@ -43,9 +43,9 @@ def _base_enriched() -> dict:
     }
 
 
-def _base_scored(section_c: float = 0.0, score_100: float = 50.0, verdict: str = "SAFE") -> dict:
+def _base_scored(evidence: float = 0.0, score_100: float = 50.0, verdict: str = "SAFE") -> dict:
     return {
-        "section_scores": {"C_evidence_research": {"score": section_c}},
+        "_v4_pillars": {"evidence": {"score": evidence, "max": 20}},
         "score_100_equivalent": score_100,
         "verdict": verdict,
     }
@@ -143,7 +143,7 @@ def test_positive_never_contains_deny_list_tokens() -> None:
     dh1 = build_decision_highlights(e1, _base_scored(), None)
 
     # Strong evidence branch
-    dh2 = build_decision_highlights(_base_enriched(), _base_scored(section_c=15.0), None)
+    dh2 = build_decision_highlights(_base_enriched(), _base_scored(evidence=15.0), None)
 
     # Score >= 75 branch (V4 /100)
     dh3 = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0), None)
@@ -165,6 +165,15 @@ def test_positive_strong_quality_uses_v4_score_100() -> None:
     dh = build_decision_highlights(_base_enriched(), _base_scored(score_100=80.0), None)
     assert dh["positive"] == "Strong overall quality profile."
     dh_low = build_decision_highlights(_base_enriched(), _base_scored(score_100=70.0), None)
+    assert "closer look" in dh_low["positive"].lower()
+
+
+def test_positive_evidence_uses_v4_evidence_pillar() -> None:
+    """The 'meaningful clinical evidence' positive is gated on the V4 evidence
+    pillar (>= 12 of /20), not the retired V3 section_scores.C."""
+    dh = build_decision_highlights(_base_enriched(), _base_scored(evidence=13.0), None)
+    assert dh["positive"] == "Backed by meaningful clinical evidence."
+    dh_low = build_decision_highlights(_base_enriched(), _base_scored(evidence=8.0), None)
     assert "closer look" in dh_low["positive"].lower()
 
 
