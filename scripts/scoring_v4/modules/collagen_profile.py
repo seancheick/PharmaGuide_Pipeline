@@ -50,7 +50,12 @@ from scoring_v4.modules.botanical_profile import (
     _classification_product_profile_eligible,
 )
 
-COLLAGEN_FORMULATION_CAP = 15.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_FVM = _cfg_block("formulation_variant_magnitudes", "collagen")["collagen"]
+
+
+COLLAGEN_FORMULATION_CAP = _FVM["collagen_formulation_cap"]
 
 _COLLAGEN_TOKENS = ("collagen", "gelatin")
 _HYDROLYZED_TOKENS = ("hydrolyzed", "hydrolysed", "hydrolysate", "peptide")

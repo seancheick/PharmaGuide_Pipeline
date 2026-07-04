@@ -37,7 +37,12 @@ from typing import Any, Dict, List, Optional
 
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 
-BOTANICAL_FORMULATION_CAP = 15.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_FVM = _cfg_block("formulation_variant_magnitudes", "botanical")["botanical"]
+
+
+BOTANICAL_FORMULATION_CAP = _FVM["botanical_formulation_cap"]
 
 # Roles that mark an active as the product's marketed hero (Phase 2 classifier).
 # Used by the route-drift fix so a mass-heavy botanical *adjunct* can't hijack a
@@ -589,10 +594,10 @@ def _standardized_match(product: Dict[str, Any], row: Dict[str, Any]) -> bool:
 #   2 = marker disclosed and >= 50% of threshold
 #   1 = marker/standardization disclosed but no usable quantified amount
 #   0 = below 50% of threshold / plain powder / no evidence
-STANDARDIZATION_TIER_FULL = 4.0
-STANDARDIZATION_TIER_NEAR = 3.0
-STANDARDIZATION_TIER_HALF = 2.0
-STANDARDIZATION_TIER_DISCLOSED = 1.0
+STANDARDIZATION_TIER_FULL = _FVM["standardization_tier_full"]
+STANDARDIZATION_TIER_NEAR = _FVM["standardization_tier_near"]
+STANDARDIZATION_TIER_HALF = _FVM["standardization_tier_half"]
+STANDARDIZATION_TIER_DISCLOSED = _FVM["standardization_tier_disclosed"]
 
 
 def _standardization_tier_credit(product: Dict[str, Any], row: Dict[str, Any]) -> float:
@@ -728,14 +733,14 @@ def _range_mg(entry: Dict[str, Any]) -> Optional[tuple]:
 #   blend   10  (opaque blend / anchor total — dose not per-ingredient — was 7)
 #   no_dose  5  (primary botanical, no disclosed dose — was 0; "lose credit, not all")
 #   no_active 0 (no botanical active at all)
-BOTANICAL_DOSE_WITHIN = 21.0
-BOTANICAL_DOSE_NEAR = 16.0
-BOTANICAL_DOSE_ABOVE = 12.0
-BOTANICAL_DOSE_BELOW = 12.0
-BOTANICAL_DOSE_DISCLOSED_NO_REF = 12.0
-BOTANICAL_DOSE_BLEND_TOTAL = 10.0
-BOTANICAL_DOSE_PRIMARY_NO_DOSE = 5.0
-BOTANICAL_DOSE_NO_ACTIVE = 0.0
+BOTANICAL_DOSE_WITHIN = _FVM["botanical_dose_within"]
+BOTANICAL_DOSE_NEAR = _FVM["botanical_dose_near"]
+BOTANICAL_DOSE_ABOVE = _FVM["botanical_dose_above"]
+BOTANICAL_DOSE_BELOW = _FVM["botanical_dose_below"]
+BOTANICAL_DOSE_DISCLOSED_NO_REF = _FVM["botanical_dose_disclosed_no_ref"]
+BOTANICAL_DOSE_BLEND_TOTAL = _FVM["botanical_dose_blend_total"]
+BOTANICAL_DOSE_PRIMARY_NO_DOSE = _FVM["botanical_dose_primary_no_dose"]
+BOTANICAL_DOSE_NO_ACTIVE = _FVM["botanical_dose_no_active"]
 
 
 def score_botanical_dose(product: Dict[str, Any]) -> Dict[str, Any]:

@@ -19,7 +19,12 @@ from scoring_v4.modules.generic_formulation import (
 from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list, get_active_ingredients
 
 
-DIMENSION_CAP = 30.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_FVM = _cfg_block("formulation_variant_magnitudes", "fiber_digestive")["fiber_digestive"]
+
+
+DIMENSION_CAP = _FVM["dimension_cap"]
 PHASE_MARKER = "P1.8_fiber_digestive_formulation_v1"
 STIMULANT_LAXATIVE_CANONICALS = {"senna", "cascara_sagrada", "aloe_latex", "aloe_emodin"}
 

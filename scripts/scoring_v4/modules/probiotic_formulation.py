@@ -16,7 +16,12 @@ from scoring_v4.modules.generic_formulation import shared_formulation_penalty_de
 
 
 PHASE_MARKER = "P2.1_probiotic_formulation"
-CAP_FORMULATION = 25.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_FVM = _cfg_block("formulation_variant_magnitudes", "probiotic")["probiotic"]
+
+
+CAP_FORMULATION = _FVM["cap_formulation"]
 
 
 def _safe_dict(value: Any) -> Dict[str, Any]:

@@ -32,21 +32,26 @@ from scoring_v4.modules.generic_helpers import (
 from scoring_v4.modules.generic_formulation import shared_formulation_penalty_detail
 
 
-CAP_FORMULATION = 25.0
-FORMULATION_PRESENCE_FLOOR = 2.0
-CAP_PANEL_FORM_QUALITY = 12.0
-CAP_PREMIUM_FORM_DIVERSITY = 4.0
-CAP_KEY_FORM_SUPPORT = 5.0
-CAP_PANEL_DISCLOSURE_STRUCTURE = 2.0
-CAP_DOSAGE_FORM_SUITABILITY = 2.0
+from scoring_v4.quality_score_config import block as _cfg_block
 
-PANEL_FORM_SMOOTHING_FACTOR = 0.7
-PANEL_FORM_NEUTRAL_FLOOR = 9.0
-BIO_SCORE_MAX = 15.0
-PREMIUM_FORM_THRESHOLD = 12.0
-PREMIUM_POINTS_PER_ADDITIONAL = 0.5
+_FVM = _cfg_block("formulation_variant_magnitudes", "multi_prenatal")["multi_prenatal"]
 
-GUMMY_FORMULATION_PENALTY = 3.0
+
+CAP_FORMULATION = _FVM["cap_formulation"]
+FORMULATION_PRESENCE_FLOOR = _FVM["formulation_presence_floor"]
+CAP_PANEL_FORM_QUALITY = _FVM["cap_panel_form_quality"]
+CAP_PREMIUM_FORM_DIVERSITY = _FVM["cap_premium_form_diversity"]
+CAP_KEY_FORM_SUPPORT = _FVM["cap_key_form_support"]
+CAP_PANEL_DISCLOSURE_STRUCTURE = _FVM["cap_panel_disclosure_structure"]
+CAP_DOSAGE_FORM_SUITABILITY = _FVM["cap_dosage_form_suitability"]
+
+PANEL_FORM_SMOOTHING_FACTOR = _FVM["panel_form_smoothing_factor"]
+PANEL_FORM_NEUTRAL_FLOOR = _FVM["panel_form_neutral_floor"]
+BIO_SCORE_MAX = _FVM["bio_score_max"]
+PREMIUM_FORM_THRESHOLD = _FVM["premium_form_threshold"]
+PREMIUM_POINTS_PER_ADDITIONAL = _FVM["premium_points_per_additional"]
+
+GUMMY_FORMULATION_PENALTY = _FVM["gummy_formulation_penalty"]
 
 PHASE_MARKER = "P3.1_multi_prenatal_formulation"
 

@@ -32,7 +32,12 @@ from scoring_v4.modules.sports_helpers import (
 )
 
 
-DIMENSION_CAP = 30.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_FVM = _cfg_block("formulation_variant_magnitudes", "sports")["sports"]
+
+
+DIMENSION_CAP = _FVM["dimension_cap"]
 PHASE_MARKER = "P1.7_sports_protein_formulation_v1"
 
 _WHEY_TERMS = ("whey",)

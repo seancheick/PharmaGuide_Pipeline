@@ -43,7 +43,12 @@ from scoring_v4.modules.generic_helpers import get_active_ingredients
 
 
 PHASE_MARKER = "P1.6.1_omega_formulation"
-CAP_FORMULATION = 25.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_FVM = _cfg_block("formulation_variant_magnitudes", "omega")["omega"]
+
+
+CAP_FORMULATION = _FVM["cap_formulation"]
 
 
 # Form-detection regex — order matters (most-specific first). Each
@@ -118,8 +123,8 @@ _QUALITY_PROGRAM_KEYWORDS = (
     "eurofins",
     "bscg",
 )
-DATA_LIMITED_FORM_FLOOR = 19.0
-DATA_LIMITED_FORM_MIN_EPA_DHA_MG = 750.0
+DATA_LIMITED_FORM_FLOOR = _FVM["data_limited_form_floor"]
+DATA_LIMITED_FORM_MIN_EPA_DHA_MG = _FVM["data_limited_form_min_epa_dha_mg"]
 
 
 def _load_rubric() -> Dict[str, Any]:
