@@ -168,6 +168,35 @@
     "sports": { "dimension_cap": 25.0 },
     "fiber_digestive": { "dimension_cap": 25.0 }
   },
+  "evidence_magnitudes": {
+    "_doc": "Evidence-dimension caps, primary-evidence floors, enrollment/depth bands and effect-direction multipliers per category module — hoisted from the score_evidence modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty score_evidence diff verified, incl. generic's primary-floor path). Structural constants (eligible study-type sets, positioning/relevance sets) stay in code. Drift-guarded by test_v4_evidence_magnitudes_config.",
+    "generic": {
+      "cap_total": 20.0,
+      "cap_per_ingredient": 7.0,
+      "supra_clinical_multiple": 3.0,
+      "sub_clinical_dose_guard_multiplier": 0.25,
+      "enrollment_default_multiplier": 1.2,
+      "primary_floor_strong": 14.0,
+      "primary_floor_moderate": 11.0,
+      "primary_floor_branded_strong": 18.0,
+      "primary_floor_branded_moderate": 17.0,
+      "nutrition_authority_floor": 10.0,
+      "primary_mass_fraction": 0.5,
+      "enrollment_quality_bands": [[50.0, 0.6], [200.0, 0.8], [500.0, 1.0], [1000.0, 1.1]],
+      "top_n_weights": [1.0, 0.7, 0.5, 0.3],
+      "depth_bonus_bands": [[20.0, 0.25], [40.0, 0.5]]
+    },
+    "probiotic": {
+      "cap_evidence": 20.0,
+      "cap_strain_clinical": 12.0,
+      "cap_indication_relevance": 8.0,
+      "effect_direction_multipliers": { "positive_strong": 1.0, "positive_weak": 0.85, "mixed": 0.6, "null": 0.25, "negative": 0.0 },
+      "native_strain_evidence_points": { "strong": 8.0, "high": 8.0, "moderate": 6.0, "medium": 6.0, "weak": 3.0, "low": 3.0, "limited": 3.0 },
+      "native_strain_evidence_weights": [1.0, 0.7, 0.5, 0.3]
+    },
+    "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
+    "omega": { "cap_evidence": 20.0 }
+  },
   "verification_subscale": {
     "_doc": "PR2/PR2.1: hard third-party signals saturate the cap (over-provisioned, internal sum clamps at 15) so a SUBSET (e.g. one gold cert) maxes it. Self-asserted cGMP is table stakes (near-zero). FAIL OPEN: a product with no third-party cert AND no COA is data-UNKNOWN, not uncertified — it floors at a neutral baseline so the catalog we lack cert data on is not cratered (confidence carries the gap). PR2.1 recognizes verified brand/facility-scoped third-party certs as a small hard signal, weaker than sku/product_line and non-stacking with product-level cert/COA. Product-label/rules-db quality-cert claims get only provisional label_asserted_cert_points unless registry-backed; needs_review stays zero. Soft reputation/region capped at 3; physician/sustainability dropped. The wall truly lifts only when real cert data is sourced (cert_registry task).",
     "cap": 15.0,

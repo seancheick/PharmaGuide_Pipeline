@@ -43,10 +43,15 @@ PHASE_MARKER = "P1.3.3_evidence_pipeline"
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 _BACKED_CLINICAL_STUDIES_PATH = _DATA_DIR / "backed_clinical_studies.json"
 
-CAP_TOTAL = 20.0
-CAP_PER_INGREDIENT = 7.0
-SUPRA_CLINICAL_MULTIPLE = 3.0
-SUB_CLINICAL_DOSE_GUARD_MULTIPLIER = 0.25
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_EM = _cfg_block("evidence_magnitudes", "generic")["generic"]
+
+
+CAP_TOTAL = _EM["cap_total"]
+CAP_PER_INGREDIENT = _EM["cap_per_ingredient"]
+SUPRA_CLINICAL_MULTIPLE = _EM["supra_clinical_multiple"]
+SUB_CLINICAL_DOSE_GUARD_MULTIPLIER = _EM["sub_clinical_dose_guard_multiplier"]
 
 STUDY_TYPE_BASE_POINTS: Dict[str, float] = {
     "systematic_review_meta": 6.0,
@@ -86,16 +91,11 @@ EFFECT_DIRECTION_MULTIPLIERS: Dict[str, float] = {
 ENROLLMENT_ELIGIBLE_STUDY_TYPES = frozenset(
     {"systematic_review_meta", "rct_multiple", "rct_single"}
 )
-ENROLLMENT_QUALITY_BANDS = (
-    (50.0, 0.6),
-    (200.0, 0.8),
-    (500.0, 1.0),
-    (1000.0, 1.1),
-)
-ENROLLMENT_DEFAULT_MULTIPLIER = 1.2
+ENROLLMENT_QUALITY_BANDS = tuple(tuple(b) for b in _EM["enrollment_quality_bands"])
+ENROLLMENT_DEFAULT_MULTIPLIER = _EM["enrollment_default_multiplier"]
 
-TOP_N_WEIGHTS = (1.0, 0.7, 0.5, 0.3)
-DEPTH_BONUS_BANDS = ((20.0, 0.25), (40.0, 0.5))
+TOP_N_WEIGHTS = tuple(_EM["top_n_weights"])
+DEPTH_BONUS_BANDS = tuple(tuple(b) for b in _EM["depth_bonus_bands"])
 
 # Phase 8 — primary-ingredient evidence floor (PROTOTYPE). The top-N additive
 # pipeline rewards ingredient COUNT: a focused single clinically-validated
@@ -106,15 +106,15 @@ DEPTH_BONUS_BANDS = ((20.0, 0.25), (40.0, 0.5))
 # match must link to an active whose mass >= PRIMARY_MASS_FRACTION of the heaviest
 # active), NOT merely the top evidence-points contributor — otherwise a well-studied
 # TRACE co-ingredient (calcium in a protein powder) would wrongly float the product.
-PRIMARY_FLOOR_STRONG = 14.0     # systematic review / multi-RCT, positive, clinical dose
-PRIMARY_FLOOR_MODERATE = 11.0   # single RCT / clinical strain, positive, clinical dose
+PRIMARY_FLOOR_STRONG = _EM["primary_floor_strong"]     # systematic review / multi-RCT, positive, clinical dose
+PRIMARY_FLOOR_MODERATE = _EM["primary_floor_moderate"]   # single RCT / clinical strain, positive, clinical dose
 # v4.1 branded-RCT tier: a branded clinically-studied extract (Sensoril, KSM-66,
 # Meriva/BCM-95 — its OWN brand-specific RCT evidence, not a generic literature
 # match) earns a higher floor than a non-branded ingredient at the same study tier.
 # 18 (branded + meta/multi-RCT) / 17 (branded + single RCT). 19-20 stays reserved
 # for multi-active breadth, so a single extract can be "excellent" but not "perfect".
-PRIMARY_FLOOR_BRANDED_STRONG = 18.0
-PRIMARY_FLOOR_BRANDED_MODERATE = 17.0
+PRIMARY_FLOOR_BRANDED_STRONG = _EM["primary_floor_branded_strong"]
+PRIMARY_FLOOR_BRANDED_MODERATE = _EM["primary_floor_branded_moderate"]
 _BRANDED_EVIDENCE_LEVELS = frozenset({"branded-rct", "branded_rct"})
 # 3-lane evidence floor (2026-06-06): a broad-consensus SIMPLE ingredient whose
 # GENERIC form IS the clinically-validated form earns the elevated (branded-tier)
@@ -148,7 +148,7 @@ _MODERATE_STUDY = frozenset({"rct_single", "clinical_strain"})
 # Curated DRI-essentials only (mirrors the multi-panel canonicals); excludes
 # UL-only / non-essential bioactives (boron, CoQ10, etc.) so they stay evidence-
 # light, and excludes anything not in this set.
-NUTRITION_AUTHORITY_FLOOR = 10.0
+NUTRITION_AUTHORITY_FLOOR = _EM["nutrition_authority_floor"]
 _DRI_ESSENTIAL_NUTRIENTS = frozenset({
     # essential minerals / electrolytes with established RDA or AI
     "copper", "zinc", "selenium", "iodine", "chromium", "molybdenum", "manganese",
@@ -177,7 +177,7 @@ _EFFECT_FLOOR_MULTIPLIER = {
 # floats a product on a well-studied TRACE co-ingredient (calcium in a protein
 # powder) — the failure the focus-gate benchmark surfaced.
 PRIMARY_FLOOR_ENABLED = True
-PRIMARY_MASS_FRACTION = 0.5
+PRIMARY_MASS_FRACTION = _EM["primary_mass_fraction"]
 
 _RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
     "id": "RECOVERED_COLLAGEN_PEPTIDES_V1",

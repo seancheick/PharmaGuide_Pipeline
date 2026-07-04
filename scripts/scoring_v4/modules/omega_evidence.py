@@ -48,7 +48,12 @@ from scoring_v4.modules.omega_dose import (
 
 
 PHASE_MARKER = "P1.6.3_omega_evidence"
-CAP_EVIDENCE = 20.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_EM = _cfg_block("evidence_magnitudes", "omega")["omega"]
+
+
+CAP_EVIDENCE = _EM["cap_evidence"]
 
 
 def _load_rubric() -> Dict[str, Any]:

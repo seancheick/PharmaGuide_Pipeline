@@ -15,8 +15,13 @@ from scoring_v4.modules.generic_evidence import score_evidence as score_generic_
 
 
 PHASE_MARKER = "P3.3_multi_prenatal_evidence"
-CAP_EVIDENCE = 20.0
-GENERIC_CAP_EVIDENCE = 20.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_EM = _cfg_block("evidence_magnitudes", "multi_prenatal")["multi_prenatal"]
+
+
+CAP_EVIDENCE = _EM["cap_evidence"]
+GENERIC_CAP_EVIDENCE = _EM["generic_cap_evidence"]
 RESCALE_FACTOR = CAP_EVIDENCE / GENERIC_CAP_EVIDENCE
 
 

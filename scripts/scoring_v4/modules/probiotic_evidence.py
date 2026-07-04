@@ -21,9 +21,14 @@ from scoring_v4.modules.generic_evidence import score_evidence as score_generic_
 
 
 PHASE_MARKER = "P2.3_probiotic_evidence"
-CAP_EVIDENCE = 20.0
-CAP_STRAIN_CLINICAL = 12.0
-CAP_INDICATION_RELEVANCE = 8.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_EM = _cfg_block("evidence_magnitudes", "probiotic")["probiotic"]
+
+
+CAP_EVIDENCE = _EM["cap_evidence"]
+CAP_STRAIN_CLINICAL = _EM["cap_strain_clinical"]
+CAP_INDICATION_RELEVANCE = _EM["cap_indication_relevance"]
 
 INDICATION_KEYWORDS: Dict[str, Set[str]] = {
     "digestive": {
@@ -66,25 +71,11 @@ PARTIAL_RELEVANCE_PAIRS = {
     ("digestive", "immune"),
 }
 
-EFFECT_DIRECTION_MULTIPLIERS = {
-    "positive_strong": 1.0,
-    "positive_weak": 0.85,
-    "mixed": 0.6,
-    "null": 0.25,
-    "negative": 0.0,
-}
+EFFECT_DIRECTION_MULTIPLIERS = dict(_EM["effect_direction_multipliers"])
 
-NATIVE_STRAIN_EVIDENCE_POINTS = {
-    "strong": 8.0,
-    "high": 8.0,
-    "moderate": 6.0,
-    "medium": 6.0,
-    "weak": 3.0,
-    "low": 3.0,
-    "limited": 3.0,
-}
+NATIVE_STRAIN_EVIDENCE_POINTS = dict(_EM["native_strain_evidence_points"])
 
-NATIVE_STRAIN_EVIDENCE_WEIGHTS = (1.0, 0.7, 0.5, 0.3)
+NATIVE_STRAIN_EVIDENCE_WEIGHTS = tuple(_EM["native_strain_evidence_weights"])
 
 
 def score_evidence(product: Any) -> Dict[str, Any]:
