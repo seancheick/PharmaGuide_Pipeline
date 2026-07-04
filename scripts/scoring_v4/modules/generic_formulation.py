@@ -82,11 +82,36 @@ from scoring_v4.modules.sleep_support import (
 # Mirror v3 with the §6 rescaling: bio_score cap 18→15, single-ingredient
 # 3→1, A5 rollup cap 4 preserved.
 
-CAP_BIO_SCORE = 15.0
-CAP_PREMIUM_FORMS = 4.0
-CAP_DELIVERY = 3.0
-CAP_ABSORPTION = 3.0
-CAP_EXCELLENCE = 4.0       # A5 rollup
+# ── Config-driven calibration magnitudes ─────────────────────────
+# All formulation-dimension point values, caps, and tier thresholds are hoisted
+# to scripts/scoring_v4/config/quality_score.json (formulation_magnitudes +
+# formulation_penalties). Read once at import; the A-/B- scoring logic stays in
+# code (§13 lock). Fail fast if a block is missing. Drift-guarded by
+# test_v4_formulation_magnitudes_config / test_v4_additive_points_config.
+_V4_CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "quality_score.json"
+
+
+@lru_cache(maxsize=1)
+def _v4_config() -> Dict[str, Any]:
+    return json.loads(_V4_CONFIG_PATH.read_text())
+
+
+def _v4_block(name: str, sentinel: str) -> Dict[str, Any]:
+    cfg = _v4_config()
+    blk = cfg.get(name) if isinstance(cfg, dict) else None
+    if not isinstance(blk, dict) or sentinel not in blk:
+        raise RuntimeError(f"quality_score.json missing {name}.{sentinel} — v4 config not found")
+    return blk
+
+
+_FM = _v4_block("formulation_magnitudes", "dimension_cap")
+
+
+CAP_BIO_SCORE = _FM["a1_bio_score_cap"]
+CAP_PREMIUM_FORMS = _FM["a2_premium_forms_cap"]
+CAP_DELIVERY = _FM["a3_delivery_cap"]
+CAP_ABSORPTION = _FM["a4_absorption_cap"]
+CAP_EXCELLENCE = _FM["a5_excellence_cap"]       # A5 rollup
 # A6 (v4.1) — tiered focused-single-ingredient quality. Compensates a focused
 # product for the A2 "premium forms beyond primary" breadth bonus it structurally
 # cannot earn (a single active has no additional forms). Mutually exclusive with A2
@@ -94,19 +119,19 @@ CAP_EXCELLENCE = 4.0       # A5 rollup
 # Tiered by bio_score so "solid premium" (12) and "elite" (>=14) differ, controlling
 # inflation. A1 still pays the form's bioavailability; A6 is the focus bonus on top,
 # the single's structural analog to a multi's A2.
-CAP_SINGLE_INGREDIENT = 4.0
-A6_TIER_FLOOR_BIO = 10.0        # below this: acceptable/weak form, no focus bonus
-A6_TIER_SOLID_BIO = 12.0
-A6_TIER_ELITE_BIO = 14.0
-A6_POINTS_GOOD = 1.0            # bio 10-11.99
-A6_POINTS_SOLID = 3.0          # bio 12-13.99
-A6_POINTS_ELITE = 4.0          # bio >= 14
-CAP_ENZYME = 2.0
-DIMENSION_CAP = 30.0
-FORMULATION_PRESENCE_FLOOR = 2.0
-PREMIUM_SINGLE_FLOOR_SOLID = 22.0
-PREMIUM_SINGLE_FLOOR_ELITE = 24.0
-STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO = 13.0
+CAP_SINGLE_INGREDIENT = _FM["a6_single_ingredient_cap"]
+A6_TIER_FLOOR_BIO = _FM["a6_tier_floor_bio"]        # below this: acceptable/weak form, no focus bonus
+A6_TIER_SOLID_BIO = _FM["a6_tier_solid_bio"]
+A6_TIER_ELITE_BIO = _FM["a6_tier_elite_bio"]
+A6_POINTS_GOOD = _FM["a6_points_good"]            # bio 10-11.99
+A6_POINTS_SOLID = _FM["a6_points_solid"]          # bio 12-13.99
+A6_POINTS_ELITE = _FM["a6_points_elite"]          # bio >= 14
+CAP_ENZYME = _FM["enzyme_cap"]
+DIMENSION_CAP = _FM["dimension_cap"]
+FORMULATION_PRESENCE_FLOOR = _FM["presence_floor"]
+PREMIUM_SINGLE_FLOOR_SOLID = _FM["premium_single_floor_solid"]
+PREMIUM_SINGLE_FLOOR_ELITE = _FM["premium_single_floor_elite"]
+STANDARD_SINGLE_FLOOR_VALIDATED_LOW_BIO = _FM["standard_single_floor_validated_low_bio"]
 _MODULE_OWNED_STANDARD_SINGLE_CANONICALS = frozenset({
     "collagen",
     "dha",
@@ -129,23 +154,23 @@ _DRI_LIKE_STANDARD_SINGLE_CANONICALS = frozenset({
     "vitamin_b9_folate", "vitamin_b12_cobalamin", "choline",
 })
 
-PREMIUM_FORM_THRESHOLD = 12.0           # v3.6.0 A2 threshold on bio_score scale
-PREMIUM_FORM_POINTS_PER_ADDITIONAL = 0.5
+PREMIUM_FORM_THRESHOLD = _FM["a2_premium_form_threshold"]           # v3.6.0 A2 threshold on bio_score scale
+PREMIUM_FORM_POINTS_PER_ADDITIONAL = _FM["a2_premium_form_points_per_additional"]
 PREMIUM_FORM_SKIP_FIRST = True
 
-DELIVERY_TIER_POINTS = {1: 3.0, 2: 2.0, 3: 1.0}
+DELIVERY_TIER_POINTS = {int(k): v for k, v in _FM["a3_delivery_tier_points"].items()}
 
 SINGLE_INGREDIENT_SUPP_TYPES = frozenset({"single", "single_nutrient"})
 
 # A5 rollup sub-credits (sum can exceed CAP_EXCELLENCE; we clamp at the end).
-A5A_ORGANIC = 1.0
-A5B_STANDARDIZED_FULL = 1.0
-A5B_STANDARDIZED_MARKER_ONLY = 0.5
-A5C_SYNERGY_TIER_POINTS = {1: 1.0, 2: 0.75, 3: 0.5, 4: 0.25}
-A5D_NON_GMO_PROJECT = 0.5
-A5E_NATURAL = 1.0
+A5A_ORGANIC = _FM["a5a_organic"]
+A5B_STANDARDIZED_FULL = _FM["a5b_standardized_full"]
+A5B_STANDARDIZED_MARKER_ONLY = _FM["a5b_standardized_marker_only"]
+A5C_SYNERGY_TIER_POINTS = {int(k): v for k, v in _FM["a5c_synergy_tier_points"].items()}
+A5D_NON_GMO_PROJECT = _FM["a5d_non_gmo_project"]
+A5E_NATURAL = _FM["a5e_natural"]
 
-ENZYME_POINTS_PER_NAMED = 0.5
+ENZYME_POINTS_PER_NAMED = _FM["enzyme_points_per_named"]
 _KNOWN_ENZYMES = frozenset(
     {
         "amylase",
@@ -177,9 +202,9 @@ _KNOWN_ENZYMES = frozenset(
     }
 )
 
-B0_HIGH_RISK_PENALTY = 10.0
-B0_WATCHLIST_PENALTY = 5.0
-B0_MODERATE_PENALTY = 10.0
+B0_HIGH_RISK_PENALTY = _FM["b0_high_risk_penalty"]
+B0_WATCHLIST_PENALTY = _FM["b0_watchlist_penalty"]
+B0_MODERATE_PENALTY = _FM["b0_moderate_penalty"]
 # B0 safety-signal penalties ACCUMULATE per substance (2 high_risk = -20, a
 # high_risk + watchlist mix = -15) so a product carrying more risk is tanked more.
 # Bounded by the formulation dimension itself (a B0 of 30 can fully consume the
@@ -192,28 +217,9 @@ B0_CAP = DIMENSION_CAP  # 30.0
 # stays here (§13 architecture lock). Fail fast if the block is missing — a
 # silent wrong score is worse than a loud error. test_v4_additive_points_config
 # guards config<->runtime drift.
-_V4_CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "quality_score.json"
-
-
-@lru_cache(maxsize=1)
-def _v4_formulation_penalties() -> Dict[str, Any]:
-    cfg = json.loads(_V4_CONFIG_PATH.read_text())
-    fp = cfg.get("formulation_penalties") if isinstance(cfg, dict) else None
-    if not isinstance(fp, dict) or "b1_harmful_additive_points" not in fp:
-        raise RuntimeError(
-            f"{_V4_CONFIG_PATH.name} missing formulation_penalties."
-            "b1_harmful_additive_points — v4 additive scoring config not found"
-        )
-    return fp
-
-
-B1_HARMFUL_ADDITIVE_POINTS = {
-    str(k): float(v)
-    for k, v in _v4_formulation_penalties()["b1_harmful_additive_points"].items()
-}
-B1_HARMFUL_ADDITIVE_CAP = float(
-    _v4_formulation_penalties().get("b1_harmful_additive_cap", 15.0)
-)
+_FP = _v4_block("formulation_penalties", "b1_harmful_additive_points")
+B1_HARMFUL_ADDITIVE_POINTS = {str(k): float(v) for k, v in _FP["b1_harmful_additive_points"].items()}
+B1_HARMFUL_ADDITIVE_CAP = float(_FP.get("b1_harmful_additive_cap", 15.0))
 
 # B1 dietary-sugar penalty bands. Uses the strongest applicable band rather
 # than summing, so one gummy with syrup and 4g sugar is a high-sugar penalty,
