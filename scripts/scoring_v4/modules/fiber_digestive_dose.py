@@ -13,7 +13,12 @@ from scoring_v4.modules.fiber_digestive_helpers import (
 from scoring_v4.modules.generic_dose import score_dose as score_generic_dose
 
 
-DIMENSION_CAP = 25.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_DM = _cfg_block("dose_magnitudes", "fiber_digestive")["fiber_digestive"]
+
+
+DIMENSION_CAP = _DM["dimension_cap"]
 PHASE_MARKER = "P1.8_fiber_digestive_dose_v1"
 
 

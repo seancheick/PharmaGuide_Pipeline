@@ -22,16 +22,21 @@ from scoring_input_contract import get_scoring_ingredients
 
 
 PHASE_MARKER = "P2.2_probiotic_dose"
-CAP_DOSE = 25.0
-CAP_PER_STRAIN_CFU_DISCLOSURE = 10.0
-CAP_CFU_ADEQUACY = 15.0
-CAP_AGGREGATE_CFU_PROXY_ADEQUACY = 11.0
-AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR = 2.0
-AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR = 4.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_DM = _cfg_block("dose_magnitudes", "probiotic")["probiotic"]
+
+
+CAP_DOSE = _DM["cap_dose"]
+CAP_PER_STRAIN_CFU_DISCLOSURE = _DM["cap_per_strain_cfu_disclosure"]
+CAP_CFU_ADEQUACY = _DM["cap_cfu_adequacy"]
+CAP_AGGREGATE_CFU_PROXY_ADEQUACY = _DM["cap_aggregate_cfu_proxy_adequacy"]
+AGGREGATE_CFU_LOW_TIER_PRESENCE_FLOOR = _DM["aggregate_cfu_low_tier_presence_floor"]
+AGGREGATE_CFU_LOW_NAMED_STRAIN_TOTAL_FLOOR = _DM["aggregate_cfu_low_named_strain_total_floor"]
 # A named strain disclosed at its OWN mass (e.g. BB536 25 mg) with no CFU gets a
 # small dose floor — strictly below the aggregate-CFU proxy, since mass is a weaker
 # potency signal than CFU and must not approach real CFU credit.
-CAP_DIRECT_STRAIN_MASS_FLOOR = 5.0
+CAP_DIRECT_STRAIN_MASS_FLOOR = _DM["cap_direct_strain_mass_floor"]
 # Rows whose NAME marks them as a blend/header/container, not a single strain at a
 # disclosed mass. The floor must never fire on these (opacity is not rewarded).
 _BLEND_ROW_RE = re.compile(
@@ -41,20 +46,11 @@ _BLEND_ROW_RE = re.compile(
 )
 _MASS_UNITS = frozenset({"mg", "milligram", "milligrams", "g", "gram", "grams", "gm",
                          "mcg", "microgram", "micrograms", "ug", "µg"})
-V3_CFU_ADEQUACY_CAP = 5.0
+V3_CFU_ADEQUACY_CAP = _DM["v3_cfu_adequacy_cap"]
 
-TIER_POINTS = {
-    "low": 0.0,
-    "adequate": 1.0,
-    "good": 2.0,
-    "excellent": 3.0,
-}
+TIER_POINTS = dict(_DM["tier_points"])
 
-SUPPORT_LEVEL_CAPS = {
-    "high": 1.0,
-    "moderate": 0.75,
-    "weak": 0.5,
-}
+SUPPORT_LEVEL_CAPS = dict(_DM["support_level_caps"])
 
 
 def score_dose(product: Any) -> Dict[str, Any]:

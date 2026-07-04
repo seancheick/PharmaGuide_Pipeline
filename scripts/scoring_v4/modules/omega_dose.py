@@ -43,7 +43,12 @@ from scoring_v4.modules.generic_helpers import get_active_ingredients
 
 
 PHASE_MARKER = "P1.6.2_omega_dose"
-CAP_DOSE = 25.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_DM = _cfg_block("dose_magnitudes", "omega")["omega"]
+
+
+CAP_DOSE = _DM["cap_dose"]
 
 # Indication-aware dosing for prenatal DHA. The general EPA+DHA bands target
 # cardiovascular intakes (~1000-2000 mg/day), which under-credits a prenatal

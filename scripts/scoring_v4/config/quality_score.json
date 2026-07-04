@@ -120,6 +120,54 @@
     "b0_watchlist_penalty": 5.0,
     "b0_moderate_penalty": 10.0
   },
+  "dose_magnitudes": {
+    "_doc": "Dose-dimension caps, windows, thresholds and penalties per category module — hoisted from the score_dose modules 2026-07-04 as a PURE REFACTOR (values unchanged; verified byte-identical score_dose diff on a real-product sample). Each module reads its sub-block via scoring_v4.quality_score_config. Structural constants stay in code. Drift-guarded by test_v4_dose_magnitudes_config.",
+    "generic": {
+      "cap_supplemental_window": 22.0,
+      "cap_multi_form_bonus": 3.0,
+      "dimension_cap": 25.0,
+      "window_rda_threshold": 25.0,
+      "window_ul_partial_band": 100.0,
+      "b7_ul_pct_threshold": 150.0,
+      "window_overdose_credit": 11.0,
+      "no_reference_individual_dose_credit": 16.0,
+      "no_reference_product_evidence_credit": 12.0,
+      "multi_form_premium_bio_threshold": 12.0,
+      "multi_form_min_group_count": 2,
+      "b7_per_flag_penalty": 2.0,
+      "b7_cap": 3.0
+    },
+    "multi_prenatal": {
+      "dimension_cap": 25.0,
+      "cap_rda_ai_coverage": 15.0,
+      "cap_panel_breadth": 3.0,
+      "cap_critical_nutrient_coverage": 5.0,
+      "cap_prenatal_complement_support": 2.0,
+      "b7_ul_pct_threshold": 150.0,
+      "b7_per_flag_penalty": 2.0,
+      "b7_cap": 3.0,
+      "panel_breadth_full_count": 18,
+      "prenatal_dha_full_mg": 200.0,
+      "prenatal_dha_partial_mg": 100.0,
+      "targeted_multi_selected_anchors": 5,
+      "critical_min_pct_rda": { "folate": 50.0, "iron": 50.0, "iodine": 50.0, "vitamin_d": 50.0, "vitamin_b12": 50.0, "choline": 25.0 }
+    },
+    "probiotic": {
+      "cap_dose": 25.0,
+      "cap_per_strain_cfu_disclosure": 10.0,
+      "cap_cfu_adequacy": 15.0,
+      "cap_aggregate_cfu_proxy_adequacy": 11.0,
+      "aggregate_cfu_low_tier_presence_floor": 2.0,
+      "aggregate_cfu_low_named_strain_total_floor": 4.0,
+      "cap_direct_strain_mass_floor": 5.0,
+      "v3_cfu_adequacy_cap": 5.0,
+      "tier_points": { "low": 0.0, "adequate": 1.0, "good": 2.0, "excellent": 3.0 },
+      "support_level_caps": { "high": 1.0, "moderate": 0.75, "weak": 0.5 }
+    },
+    "omega": { "cap_dose": 25.0 },
+    "sports": { "dimension_cap": 25.0 },
+    "fiber_digestive": { "dimension_cap": 25.0 }
+  },
   "verification_subscale": {
     "_doc": "PR2/PR2.1: hard third-party signals saturate the cap (over-provisioned, internal sum clamps at 15) so a SUBSET (e.g. one gold cert) maxes it. Self-asserted cGMP is table stakes (near-zero). FAIL OPEN: a product with no third-party cert AND no COA is data-UNKNOWN, not uncertified — it floors at a neutral baseline so the catalog we lack cert data on is not cratered (confidence carries the gap). PR2.1 recognizes verified brand/facility-scoped third-party certs as a small hard signal, weaker than sku/product_line and non-stacking with product-level cert/COA. Product-label/rules-db quality-cert claims get only provisional label_asserted_cert_points unless registry-backed; needs_review stays zero. Soft reputation/region capped at 3; physician/sustainability dropped. The wall truly lifts only when real cert data is sourced (cert_registry task).",
     "cap": 15.0,

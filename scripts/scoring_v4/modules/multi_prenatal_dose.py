@@ -31,19 +31,24 @@ _BIO_SCORE_MAX = 15.0
 _BIO_WEIGHT_FLOOR = 0.75
 
 
-DIMENSION_CAP = 25.0
-CAP_RDA_AI_COVERAGE = 15.0
-CAP_PANEL_BREADTH = 3.0
-CAP_CRITICAL_NUTRIENT_COVERAGE = 5.0
-CAP_PRENATAL_COMPLEMENT_SUPPORT = 2.0
+from scoring_v4.quality_score_config import block as _cfg_block
 
-B7_UL_PCT_THRESHOLD = 150.0
-B7_PER_FLAG_PENALTY = 2.0
-B7_CAP = 3.0
+_DM = _cfg_block("dose_magnitudes", "multi_prenatal")["multi_prenatal"]
 
-PANEL_BREADTH_FULL_COUNT = 18
-PRENATAL_DHA_FULL_MG = 200.0
-PRENATAL_DHA_PARTIAL_MG = 100.0
+
+DIMENSION_CAP = _DM["dimension_cap"]
+CAP_RDA_AI_COVERAGE = _DM["cap_rda_ai_coverage"]
+CAP_PANEL_BREADTH = _DM["cap_panel_breadth"]
+CAP_CRITICAL_NUTRIENT_COVERAGE = _DM["cap_critical_nutrient_coverage"]
+CAP_PRENATAL_COMPLEMENT_SUPPORT = _DM["cap_prenatal_complement_support"]
+
+B7_UL_PCT_THRESHOLD = _DM["b7_ul_pct_threshold"]
+B7_PER_FLAG_PENALTY = _DM["b7_per_flag_penalty"]
+B7_CAP = _DM["b7_cap"]
+
+PANEL_BREADTH_FULL_COUNT = _DM["panel_breadth_full_count"]
+PRENATAL_DHA_FULL_MG = _DM["prenatal_dha_full_mg"]
+PRENATAL_DHA_PARTIAL_MG = _DM["prenatal_dha_partial_mg"]
 
 PHASE_MARKER = "P3.2_multi_prenatal_dose"
 METHOD_MARKER = "rda_ai_panel_coverage_from_enriched_rda_ul_data"
@@ -72,7 +77,7 @@ TARGETED_MULTI_ANCHORS = (
     "magnesium",
     "zinc",
 )
-TARGETED_MULTI_SELECTED_ANCHORS = 5
+TARGETED_MULTI_SELECTED_ANCHORS = _DM["targeted_multi_selected_anchors"]
 
 PRENATAL_CORE_ANCHORS = (
     "folate",
@@ -83,14 +88,7 @@ PRENATAL_CORE_ANCHORS = (
 )
 PRENATAL_COMPLEMENT_ANCHORS = ("choline", "dha")
 
-CRITICAL_MIN_PCT_RDA = {
-    "folate": 50.0,
-    "iron": 50.0,
-    "iodine": 50.0,
-    "vitamin_d": 50.0,
-    "vitamin_b12": 50.0,
-    "choline": 25.0,
-}
+CRITICAL_MIN_PCT_RDA = dict(_DM["critical_min_pct_rda"])
 
 
 def _clamp(low: float, high: float, value: float) -> float:

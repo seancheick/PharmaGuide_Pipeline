@@ -79,25 +79,30 @@ from scoring_v4.modules.sleep_support import score_sleep_support_dose
 
 # --- Dose 25 weights ------------------------------------------------------
 
-CAP_SUPPLEMENTAL_WINDOW = 22.0
-CAP_MULTI_FORM_BONUS = 3.0
-DIMENSION_CAP = 25.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_DM = _cfg_block("dose_magnitudes", "generic")["generic"]
+
+
+CAP_SUPPLEMENTAL_WINDOW = _DM["cap_supplemental_window"]
+CAP_MULTI_FORM_BONUS = _DM["cap_multi_form_bonus"]
+DIMENSION_CAP = _DM["dimension_cap"]
 
 # Proxy band cutoffs.
-WINDOW_RDA_THRESHOLD = 25.0      # pct_rda below this is sub-clinical
-WINDOW_UL_PARTIAL_BAND = 100.0   # above this and below 150 → half credit
-B7_UL_PCT_THRESHOLD = 150.0      # at/above this triggers B7 + zeroes window
-WINDOW_OVERDOSE_CREDIT = 11.0    # 100% < pct_ul < 150% credit (half of 22)
-NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = 16.0
-NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = 12.0
+WINDOW_RDA_THRESHOLD = _DM["window_rda_threshold"]      # pct_rda below this is sub-clinical
+WINDOW_UL_PARTIAL_BAND = _DM["window_ul_partial_band"]   # above this and below 150 → half credit
+B7_UL_PCT_THRESHOLD = _DM["b7_ul_pct_threshold"]      # at/above this triggers B7 + zeroes window
+WINDOW_OVERDOSE_CREDIT = _DM["window_overdose_credit"]    # 100% < pct_ul < 150% credit (half of 22)
+NO_REFERENCE_INDIVIDUAL_DOSE_CREDIT = _DM["no_reference_individual_dose_credit"]
+NO_REFERENCE_PRODUCT_EVIDENCE_CREDIT = _DM["no_reference_product_evidence_credit"]
 
 # Multi-form bonus thresholds.
-MULTI_FORM_PREMIUM_BIO_THRESHOLD = 12.0
-MULTI_FORM_MIN_GROUP_COUNT = 2
+MULTI_FORM_PREMIUM_BIO_THRESHOLD = _DM["multi_form_premium_bio_threshold"]
+MULTI_FORM_MIN_GROUP_COUNT = _DM["multi_form_min_group_count"]
 
 # B7 penalty.
-B7_PER_FLAG_PENALTY = 2.0
-B7_CAP = 3.0
+B7_PER_FLAG_PENALTY = _DM["b7_per_flag_penalty"]
+B7_CAP = _DM["b7_cap"]
 
 PHASE_MARKER = "P1.3.2a_dose_proxy"
 METHOD_MARKER = "rda_ul_proxy_until_dietary_intake_table"

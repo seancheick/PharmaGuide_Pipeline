@@ -37,7 +37,12 @@ from scoring_v4.modules.sports_helpers import (
 
 PHASE_MARKER = "P1.7_sports_dose_v1"
 METHOD_MARKER = "sports_active_dose_bands_v1"
-DIMENSION_CAP = 25.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_DM = _cfg_block("dose_magnitudes", "sports")["sports"]
+
+
+DIMENSION_CAP = _DM["dimension_cap"]
 
 
 def score_dose(product: Dict[str, Any]) -> Dict[str, Any]:
