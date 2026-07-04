@@ -21,14 +21,19 @@ from scoring_v4.modules.generic_helpers import (
 )
 
 
-MANUFACTURER_TRUST_CAP = 5.0
-D1_TRUSTED = 2.0
-D1_MID_TIER = 1.0
-D2_DISCLOSURE = 1.0
-D3_PHYSICIAN = 0.5
-D4_HIGH_STANDARD_REGION = 1.0
-D5_SUSTAINABILITY = 0.5
-D3_D4_D5_CAP = 2.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_VM = _cfg_block("verification_magnitudes", "manufacturer")["manufacturer"]
+
+
+MANUFACTURER_TRUST_CAP = _VM["manufacturer_trust_cap"]
+D1_TRUSTED = _VM["d1_trusted"]
+D1_MID_TIER = _VM["d1_mid_tier"]
+D2_DISCLOSURE = _VM["d2_disclosure"]
+D3_PHYSICIAN = _VM["d3_physician"]
+D4_HIGH_STANDARD_REGION = _VM["d4_high_standard_region"]
+D5_SUSTAINABILITY = _VM["d5_sustainability"]
+D3_D4_D5_CAP = _VM["d3_d4_d5_cap"]
 
 DEFAULT_HIGH_STANDARD_REGIONS = frozenset(
     {
@@ -47,9 +52,9 @@ DEFAULT_HIGH_STANDARD_REGIONS = frozenset(
     }
 )
 
-MFG_CAP_DEFAULT = -25.0
-MFG_CAP_TWO_CLASS_I = -35.0
-MFG_CAP_THREE_OR_MORE_CLASS_I = -50.0
+MFG_CAP_DEFAULT = _VM["mfg_cap_default"]
+MFG_CAP_TWO_CLASS_I = _VM["mfg_cap_two_class_i"]
+MFG_CAP_THREE_OR_MORE_CLASS_I = _VM["mfg_cap_three_or_more_class_i"]
 CLASS_I_LOOKBACK_DAYS = 3 * 365
 
 

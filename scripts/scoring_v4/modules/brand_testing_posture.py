@@ -17,8 +17,13 @@ from typing import Any, Dict, List, Tuple
 REPO_ROOT = Path(__file__).resolve().parents[3]
 TOP_MANUFACTURERS_PATH = REPO_ROOT / "scripts" / "data" / "top_manufacturers_data.json"
 
-BRAND_TESTING_HARD_EVIDENCE_SCORE = 2.0
-BRAND_TESTING_SOFT_QUALITY_SCORE = 1.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_VM = _cfg_block("verification_magnitudes", "brand_testing")["brand_testing"]
+
+
+BRAND_TESTING_HARD_EVIDENCE_SCORE = _VM["hard_evidence_score"]
+BRAND_TESTING_SOFT_QUALITY_SCORE = _VM["soft_quality_score"]
 
 HARD_TESTING_EVIDENCE_RE = re.compile(
     r"("

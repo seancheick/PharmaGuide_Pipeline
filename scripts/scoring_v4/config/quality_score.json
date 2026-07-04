@@ -197,6 +197,35 @@
     "multi_prenatal": { "cap_evidence": 20.0, "generic_cap_evidence": 20.0 },
     "omega": { "cap_evidence": 20.0 }
   },
+  "verification_magnitudes": {
+    "_doc": "Trust/verification point values, cert-scope points, and manufacturer D1-D5 + violation caps per module — hoisted from the trust/manufacturer/brand-testing/verification-bonus modules 2026-07-04 as a PURE REFACTOR (values unchanged; empty diff verified across score_trust / score_manufacturer_trust / score_manufacturer_violations / score_brand_testing_posture / score_verification_bonus). Structural cert-name sets stay in code; CLASS_I_LOOKBACK_DAYS (3*365) stays in code as a documented window. Drift-guarded by test_v4_verification_magnitudes_config.",
+    "generic_trust": {
+      "dimension_cap": 15.0,
+      "b4a_cap": 12.0,
+      "b4a_scope_points": { "sku": [8.0, 4.0, 2.0], "product_line": [6.0, 3.0, 1.0], "label_asserted_product": [2.0, 1.0, 0.0], "brand_only": [0.0, 0.0, 0.0], "needs_review": [0.0, 0.0, 0.0], "claimed_only": [0.0, 0.0, 0.0] },
+      "b4a_scope_strength": { "sku": 3, "product_line": 2, "label_asserted_product": 1 },
+      "b4b_gmp_certified": 4.0,
+      "b4b_fda_registered": 2.0,
+      "b4c_coa": 1.0,
+      "b4c_batch_lookup": 1.0
+    },
+    "manufacturer": {
+      "manufacturer_trust_cap": 5.0,
+      "d1_trusted": 2.0,
+      "d1_mid_tier": 1.0,
+      "d2_disclosure": 1.0,
+      "d3_physician": 0.5,
+      "d4_high_standard_region": 1.0,
+      "d5_sustainability": 0.5,
+      "d3_d4_d5_cap": 2.0,
+      "mfg_cap_default": -25.0,
+      "mfg_cap_two_class_i": -35.0,
+      "mfg_cap_three_or_more_class_i": -50.0
+    },
+    "brand_testing": { "hard_evidence_score": 2.0, "soft_quality_score": 1.0 },
+    "verification_bonus": { "cap": 8.0 },
+    "omega_trust": { "cap_trust": 15.0 }
+  },
   "verification_subscale": {
     "_doc": "PR2/PR2.1: hard third-party signals saturate the cap (over-provisioned, internal sum clamps at 15) so a SUBSET (e.g. one gold cert) maxes it. Self-asserted cGMP is table stakes (near-zero). FAIL OPEN: a product with no third-party cert AND no COA is data-UNKNOWN, not uncertified — it floors at a neutral baseline so the catalog we lack cert data on is not cratered (confidence carries the gap). PR2.1 recognizes verified brand/facility-scoped third-party certs as a small hard signal, weaker than sku/product_line and non-stacking with product-level cert/COA. Product-label/rules-db quality-cert claims get only provisional label_asserted_cert_points unless registry-backed; needs_review stays zero. Soft reputation/region capped at 3; physician/sustainability dropped. The wall truly lifts only when real cert data is sourced (cert_registry task).",
     "cap": 15.0,

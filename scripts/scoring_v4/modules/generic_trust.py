@@ -36,23 +36,17 @@ _DHA_EPA_WORD_BOUNDARY_RE = re.compile(r"\b(epa|dha)\b", re.IGNORECASE)
 
 PHASE_MARKER = "P1.3.4_testing_trust"
 
-DIMENSION_CAP = 15.0
-B4A_CAP = 12.0
+from scoring_v4.quality_score_config import block as _cfg_block
 
-B4A_SCOPE_POINTS = {
-    "sku": [8.0, 4.0, 2.0],
-    "product_line": [6.0, 3.0, 1.0],
-    "label_asserted_product": [2.0, 1.0, 0.0],
-    "brand_only": [0.0, 0.0, 0.0],
-    "needs_review": [0.0, 0.0, 0.0],
-    "claimed_only": [0.0, 0.0, 0.0],
-}
+_VM = _cfg_block("verification_magnitudes", "generic_trust")["generic_trust"]
 
-B4A_SCOPE_STRENGTH = {
-    "sku": 3,
-    "product_line": 2,
-    "label_asserted_product": 1,
-}
+
+DIMENSION_CAP = _VM["dimension_cap"]
+B4A_CAP = _VM["b4a_cap"]
+
+B4A_SCOPE_POINTS = {k: list(v) for k, v in _VM["b4a_scope_points"].items()}
+
+B4A_SCOPE_STRENGTH = dict(_VM["b4a_scope_strength"])
 
 LABEL_ASSERTED_WHITELIST = frozenset(
     {
@@ -74,10 +68,10 @@ SUSTAINABILITY_ONLY_CERTS = frozenset(
 )
 MARINE_CERTS_FALLBACK = frozenset({"ifos", "friend of the sea", "msc", "goed"})
 
-B4B_GMP_CERTIFIED = 4.0
-B4B_FDA_REGISTERED = 2.0
-B4C_COA = 1.0
-B4C_BATCH_LOOKUP = 1.0
+B4B_GMP_CERTIFIED = _VM["b4b_gmp_certified"]
+B4B_FDA_REGISTERED = _VM["b4b_fda_registered"]
+B4C_COA = _VM["b4c_coa"]
+B4C_BATCH_LOOKUP = _VM["b4c_batch_lookup"]
 
 
 def score_trust(product: Dict[str, Any]) -> Dict[str, Any]:

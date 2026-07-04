@@ -20,7 +20,12 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
-VERIFICATION_BONUS_CAP = 8.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_VM = _cfg_block("verification_magnitudes", "verification_bonus")["verification_bonus"]
+
+
+VERIFICATION_BONUS_CAP = _VM["cap"]
 _TRUST_DIMENSION_CAP = 15.0
 _RESCALE = VERIFICATION_BONUS_CAP / _TRUST_DIMENSION_CAP  # 8/15 ≈ 0.5333
 

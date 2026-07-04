@@ -44,7 +44,12 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 
 
 PHASE_MARKER = "P1.6.4_omega_trust"
-CAP_TRUST = 15.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_VM = _cfg_block("verification_magnitudes", "omega_trust")["omega_trust"]
+
+
+CAP_TRUST = _VM["cap_trust"]
 
 LABEL_ASSERTED_QUALITY_PROGRAMS = frozenset(
     {
