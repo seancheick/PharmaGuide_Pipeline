@@ -42,7 +42,7 @@ def find_drug_class_rule(rules, db, canonical_id, drug_class_id):
 
 W_FAMILY = [
     # (label, db, canonical_id, drug_class_id, expected_severity)
-    ("W1",  "ingredient_quality_map", "vitamin_k",      "anticoagulants", "avoid"),
+    ("W1",  "ingredient_quality_map", "vitamin_k",      "vitamin_k_antagonists", "caution"),
     ("W2",  "ingredient_quality_map", "ginkgo",         "anticoagulants", "avoid"),
     ("W3",  "ingredient_quality_map", "garlic",         "anticoagulants", "monitor"),
     ("W4",  "ingredient_quality_map", "fish_oil",       "anticoagulants", "caution"),

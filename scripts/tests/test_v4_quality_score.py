@@ -427,6 +427,7 @@ def test_public_quality_cap_limits_score_without_changing_raw() -> None:
     assert out["quality_score_v4_100"] == 85.0
     assert out["quality_score_cap_v4"]["id"] == "generic_astaxanthin_single"
     assert out["quality_score_cap_v4"]["score_before_cap"] > 85.0
+    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == 85.0
 
 
 def test_sports_preworkout_public_cap_limits_score_below_creatine_ceiling() -> None:
@@ -447,6 +448,7 @@ def test_sports_preworkout_public_cap_limits_score_below_creatine_ceiling() -> N
     assert out["quality_score_v4_100"] == 88.0
     assert out["raw_score_v4_100"] == 94.0
     assert out["quality_score_cap_v4"]["id"] == "sports_pre_workout"
+    assert round(sum(p["score"] for p in out["quality_pillars_v4"].values()), 1) == 88.0
 
 
 # ---- PR2 verification pillar (saturate-subset + fail-open neutral) ----------

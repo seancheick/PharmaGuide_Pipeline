@@ -350,6 +350,18 @@
       ],
       "change": "Registered 16 contract-snapshot fixtures that had been committed in 795fb00a (DV-backed dose correction bundle) but never added to the manifest. These are current-shipped refreshes of existing archetypes (Korean ginseng, Calcium Magnesium, CoQ10, Zinc 15, Vitamin D, KSM-66, Catalyte, Plant Collagen, FloraMend, Green Tea Phytosome, AAKG, Iron Bisglycinate, Joint Health) plus three new archetypes (Garden Raw Organic Perfect Food Original, Garden Baby Multivitamin Liquid pediatric CAUTION, Thorne Boswellia Phytosome). No scoring drift in this entry — pure registration of pre-existing fixtures so the manifest contract test passes.",
       "commit": "pending"
+    },
+    {
+      "date": "2026-07-04",
+      "action": "refrozen_fresh_pipeline_primary_type_refresh",
+      "products": [
+        204571,
+        306381
+      ],
+      "sprints_covered": [
+        "Fresh full-pipeline rerun after scoring-input performance fix"
+      ],
+      "notes": "Re-froze two legacy scoring snapshots after the full pipeline regenerated scored outputs from current taxonomy. Garden of Life Adrenal Daily Balance now uses canonical primary_type=multivitamin instead of stale b_complex, with a small A1/raw-score drift from that reclassification. Nutricost PRE Pre-Workout Complex now uses canonical primary_type=pre_workout instead of stale b_complex. Both refreshed values match the current enriched taxonomy and product identity; this snapshot update is separate from the v4 public-cap reconciliation fix."
     }
   ]
 }

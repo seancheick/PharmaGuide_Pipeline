@@ -135,7 +135,7 @@ class TestInteractionProfile:
 
         assert enriched["ingredient_quality_data"]["ingredients"][0]["safety_hits"]
         assert profile["ingredient_alerts"]
-        assert "anticoagulants" in profile["drug_class_summary"]
+        assert "vitamin_k_antagonists" in profile["drug_class_summary"]
 
     def test_recognized_blend_children_do_not_emit_interaction_alerts(self, enricher):
         enriched = {

@@ -171,13 +171,14 @@ def fetch_articles(pmids: list[str]) -> dict[str, dict]:
                 pmid = pmid_el.text.strip()
 
                 title_el = article.find(".//ArticleTitle")
-                title = title_el.text if title_el is not None and title_el.text else ""
+                title = "".join(title_el.itertext()) if title_el is not None else ""
 
                 # Collect all abstract sections
                 abstract_parts = []
                 for abs_el in article.findall(".//AbstractText"):
-                    if abs_el.text:
-                        abstract_parts.append(abs_el.text)
+                    text = "".join(abs_el.itertext()).strip()
+                    if text:
+                        abstract_parts.append(text)
                 abstract = " ".join(abstract_parts)
 
                 # Collect MeSH terms

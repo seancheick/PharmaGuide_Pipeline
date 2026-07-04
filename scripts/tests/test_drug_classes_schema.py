@@ -59,6 +59,7 @@ EXPECTED_CLASSES = {
     "class:potassium_sparing_diuretics",
     "class:tetracycline_antibiotics",
     "class:serotonergic_medications",
+    "class:vitamin_k_antagonists",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -81,6 +82,7 @@ CANONICAL_ANCHORS = {
     "class:calcium_channel_blockers": ["amlodipine", "diltiazem"],
     "class:diuretics": ["furosemide", "hydrochlorothiazide"],
     "class:anticoagulants": ["warfarin"],
+    "class:vitamin_k_antagonists": ["warfarin"],
     "class:doacs": ["apixaban", "rivaroxaban"],
     "class:potassium_sparing_diuretics": ["spironolactone", "triamterene"],
     "class:tetracycline_antibiotics": ["doxycycline", "tetracycline"],

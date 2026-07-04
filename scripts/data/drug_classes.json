@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X \u2192 RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-07-03",
-    "total_classes": 33,
-    "total_members": 761,
+    "last_updated": "2026-07-04",
+    "total_classes": 34,
+    "total_members": 768,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)",
@@ -24,7 +24,7 @@
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
     "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class \u2192 blocks build.",
-    "total_entries": 33
+    "total_entries": 34
   },
   "classes": {
     "class:statins": {
@@ -1969,6 +1969,33 @@
         "N06AA"
       ],
       "notes": "Curated from DailyMed linezolid serotonergic-agent warning plus RxNorm rxcui lookup; excludes SSRIs/SNRIs and MAOIs, which have dedicated classes."
+    },
+    "class:vitamin_k_antagonists": {
+      "display_name": "Vitamin K antagonists",
+      "description": "Warfarin-like anticoagulants whose effect is directly opposed by vitamin K intake changes.",
+      "member_rxcuis": [
+        "154",
+        "1598",
+        "50097",
+        "8130",
+        "8150",
+        "163426",
+        "11289"
+      ],
+      "member_names": [
+        "acenocoumarol",
+        "dicumarol",
+        "fluindione",
+        "phenindione",
+        "phenprocoumon",
+        "tioclomarol",
+        "warfarin"
+      ],
+      "rxclass_id": "B01AA",
+      "atc_codes": [
+        "B01AA"
+      ],
+      "notes": "Narrow class for vitamin K supplement warnings; excludes DOACs such as apixaban, rivaroxaban, dabigatran, and edoxaban."
     }
   }
 }

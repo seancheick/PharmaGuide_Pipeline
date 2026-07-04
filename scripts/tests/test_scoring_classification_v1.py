@@ -12,6 +12,7 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
+import scoring_input_contract as sic  # noqa: E402
 from scoring_input_contract import (  # noqa: E402
     SCORING_CLASSIFICATION_SCHEMA_VERSION,
     build_scoring_classification,
@@ -102,6 +103,38 @@ def test_classification_builder_is_total_and_schema_valid(payload):
 def test_router_public_api_matches_legacy_parity_baseline(product):
     assert class_for_product(product) == _legacy_class_for_product(product)
     assert build_scoring_classification(product)["route_module"] == _legacy_class_for_product(product)
+
+
+def test_route_classification_reuses_scoring_rows(monkeypatch):
+    product = _product(
+        "Creatine Monohydrate",
+        [_row("creatine_monohydrate", "Creatine Monohydrate", 5, "g")],
+        primary_type="general_supplement",
+    )
+    calls = 0
+
+    def fake_get_scoring_ingredients(product_arg, *, strict=True, allow_legacy_fallback=False):
+        nonlocal calls
+        calls += 1
+        rows = product_arg["ingredient_quality_data"]["ingredients_scorable"]
+        return sic.ScoringInputResult(
+            rows=rows,
+            rejected_rows=[],
+            source=sic.SCORING_SOURCE,
+            fallbacks_used=[],
+            strict_contract_passed=True,
+            zero_scorable_reason=None,
+            mapped_count=len(rows),
+            unmapped_count=0,
+            mapped_coverage=1.0,
+            contract_findings=[],
+        )
+
+    monkeypatch.setattr(sic, "get_scoring_ingredients", fake_get_scoring_ingredients)
+
+    assert build_scoring_classification(product)["route_module"] == "sports"
+    assert calls == 1
+    assert not any(key.startswith("__scoring_input_contract") for key in product)
 
 
 # ── Multivitamin route-trust hardening ──────────────────────────────────────

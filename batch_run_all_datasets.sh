@@ -269,6 +269,7 @@ SKIP_SNAPSHOT="${SKIP_SNAPSHOT:-0}"
 SKIP_RELEASE="${SKIP_RELEASE:-0}"
 SNAPSHOT_SCRIPT="$SCRIPTS_DIR/rebuild_dashboard_snapshot.sh"
 RELEASE_SCRIPT="$SCRIPTS_DIR/release_full.sh"
+SNAPSHOT_OK=0
 
 # CLI flag overrides env var for the full release.
 if [ "$SKIP_RELEASE_FLAG" = "1" ]; then
@@ -305,6 +306,7 @@ echo "==========================================${NC}"
 echo ""
 if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
     echo -e "${GREEN}✓ Snapshot rebuilt: scripts/dist/ is up to date${NC}"
+    SNAPSHOT_OK=1
 else
     echo -e "${RED}✗ Snapshot rebuild failed — pipeline outputs are fresh but scripts/dist/ may be stale${NC}"
     echo -e "${RED}  Rerun manually: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
@@ -319,7 +321,11 @@ if [ "$SKIP_RELEASE" = "1" ]; then
     echo -e "${YELLOW}Full release skipped (SKIP_RELEASE=1 or --skip-release).${NC}"
     echo -e "${YELLOW}  Run manually when ready: bash scripts/release_full.sh${NC}"
     echo ""
-    echo -e "${GREEN}All datasets + dashboard snapshot ready.${NC}"
+    if [ "$SNAPSHOT_OK" = "1" ]; then
+        echo -e "${GREEN}All datasets + dashboard snapshot ready.${NC}"
+    else
+        echo -e "${YELLOW}All datasets processed, but dashboard snapshot is NOT ready.${NC}"
+    fi
     exit 0
 fi
 

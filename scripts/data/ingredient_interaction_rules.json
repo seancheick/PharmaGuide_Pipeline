@@ -3,10 +3,10 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "6.2.2",
-    "last_updated": "2026-07-03",
-    "total_entries": 146,
+    "last_updated": "2026-07-04",
+    "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
-    "total_rules": 146,
+    "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "6.1.2",
     "v60_added_fields": {
@@ -2017,6 +2017,50 @@
             "source": "https://pubmed.ncbi.nlm.nih.gov/23871889/",
             "rationale": "Acute blood-pressure effects are relevant at moderate intake (>=200 mg/day, ~2 cups of coffee); trace caffeine is below this."
           }
+        },
+        {
+          "condition_id": "ttc",
+          "severity": "informational",
+          "evidence_level": "limited",
+          "last_reviewed": "2026-07-04",
+          "mechanism": "Fertility-specific evidence flags decreased fertility only at high intake (~500 mg/day; ASRM, OR 1.45). Moderate intake (1-2 cups, ~200 mg/day) has no apparent adverse effect on fertility. A 200 mg/day precautionary ceiling is borrowed from pregnancy guidance (ACOG) for those trying to conceive.",
+          "action": "Moderate caffeine (under ~200 mg/day) is a reasonable precaution when trying to conceive; documented fertility concern is only at high intake (~500 mg/day).",
+          "sources": [
+            "https://www.asrm.org/practice-guidance/practice-committee-documents/optimizing-natural-fertility-a-committee-opinion-2021/",
+            "https://pubmed.ncbi.nlm.nih.gov/20664420/"
+          ],
+          "alert_headline": "Consider moderating caffeine when trying to conceive",
+          "alert_body": "Moderate caffeine (~200 mg/day, about 2 cups of coffee) has no clear fertility effect; only high intake (~500 mg/day) lowers fertility. Moderating caffeine is sensible when trying to conceive.",
+          "informational_note": "Caffeine is a common preconception consideration \u2014 relevant to people trying to conceive.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "ttc"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "low",
+            "confidence_basis": "precautionary_pregnancy_proxy",
+            "source": "https://www.asrm.org/practice-guidance/practice-committee-documents/optimizing-natural-fertility-a-committee-opinion-2021/",
+            "rationale": "Fertility harm documented only at ~500 mg/day (ASRM); 200 mg/day is a conservative precautionary floor borrowed from ACOG pregnancy guidance. Below this, no fertility concern."
+          }
         }
       ],
       "drug_class_rules": [
@@ -2646,7 +2690,7 @@
           "mechanism": "Coumarin content plus antiplatelet phytochemicals. Multiple case reports of INR elevation in patients on warfarin.",
           "action": "If you take warfarin or an antiplatelet, avoid dong quai unless cleared by your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30000896/",
+            "https://pubmed.ncbi.nlm.nih.gov/10417036/",
             "https://www.nccih.nih.gov/health/herbsataglance"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
@@ -3483,6 +3527,50 @@
             "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
             "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
           }
+        },
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-07-04",
+          "mechanism": "Garlic inhibits platelet aggregation (allicin/ajoene antiplatelet activity). A 3-arm RCT found reduced platelet aggregation at 1200 and 2400 mg/day but NOT at 600 mg/day (Fakhar 2012). Case reports link garlic to surgical and spontaneous bleeding, compounded by anticoagulants/antiplatelets.",
+          "action": "Use caution with garlic supplements >=1200 mg/day in bleeding disorders. Discontinue before surgery and review with a clinician if taking anticoagulants/antiplatelets.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/garlic",
+            "https://pubmed.ncbi.nlm.nih.gov/24575255/"
+          ],
+          "alert_headline": "Garlic supplements may increase bleeding",
+          "alert_body": "Concentrated garlic supplements can reduce platelet clumping and raise bleeding risk, especially with blood thinners. If you have a bleeding disorder, review garlic use with your clinician.",
+          "informational_note": "Garlic can affect clotting at supplement doses \u2014 relevant to people with bleeding disorders.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "bleeding_disorders"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1200,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "rct_dose_ladder",
+            "source": "https://pubmed.ncbi.nlm.nih.gov/24575255/",
+            "rationale": "Antiplatelet effect seen at 1200 and 2400 mg/day but NOT at 600 mg/day in a 3-arm RCT (Fakhar 2012); culinary/trace garlic is below this."
+          }
         }
       ],
       "drug_class_rules": [
@@ -4265,9 +4353,9 @@
           "comparator": ">",
           "value": 240,
           "unit": "mg",
-          "severity_if_met": "caution",
+          "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
-          "note": "Ginkgo's antiplatelet activity is dose-dependent; bleeding risks increase at \u2265240 mg/day. https://pubmed.ncbi.nlm.nih.gov/17085776/",
+          "note": "Ginkgo's antiplatelet activity is dose-dependent; doses >240 mg/day keep the baseline anticoagulant avoid severity rather than downgrading it. https://pubmed.ncbi.nlm.nih.gov/17085776/",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -4289,7 +4377,7 @@
               "comparator": ">",
               "value": 240,
               "unit": "mg",
-              "severity_if_met": "caution",
+              "severity_if_met": "avoid",
               "severity_if_not_met": "monitor"
             }
           }
@@ -7877,6 +7965,44 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "ttc",
+          "severity": "caution",
+          "evidence_level": "established",
+          "last_reviewed": "2026-07-04",
+          "mechanism": "Preformed vitamin A (retinol/retinyl esters) is teratogenic in early pregnancy, which can occur before conception is confirmed; the apparent threshold is ~10,000 IU/day (Rothman 1995, RR 4.8, ~1 in 57 attributable malformations). Beta-carotene is not teratogenic. Cranial-neural-crest development occurs before the 7th week, so the preconception window mirrors pregnancy.",
+          "action": "When trying to conceive, keep supplemental preformed vitamin A (retinol) within prenatal range (<10,000 IU/day). Beta-carotene is preferred. Discuss with a clinician.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/7477116/"
+          ],
+          "alert_headline": "Keep preformed vitamin A moderate when trying to conceive",
+          "alert_body": "High-dose preformed vitamin A (retinol, 10,000 IU/day or more) can affect early pregnancy, even before it's detected. Beta-carotene is fine. Keep retinol in prenatal range when trying to conceive.",
+          "informational_note": "Preformed retinol is dose-sensitive before conception \u2014 relevant to people trying to conceive.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "ttc"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [],
@@ -7912,6 +8038,44 @@
               "value": 10000,
               "unit": "iu",
               "severity_if_met": "contraindicated",
+              "severity_if_not_met": "caution"
+            }
+          }
+        },
+        {
+          "scope": "condition",
+          "target_id": "ttc",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 10000,
+          "unit": "iu",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [
+                "ttc"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 10000,
+              "unit": "iu",
+              "severity_if_met": "avoid",
               "severity_if_not_met": "caution"
             }
           }
@@ -8456,6 +8620,94 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-07-04",
+          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors. A meta-analysis of RCTs found a 22% increased risk of hemorrhagic stroke (Schurks 2010, pooled RR 1.22); the signal is anchored to ~400 IU/day supplemental doses and compounds with anticoagulant or antiplatelet use.",
+          "action": "Use caution with supplemental vitamin E >=400 IU/day in bleeding disorders. Review with a clinician, especially if taking anticoagulants/antiplatelets or before surgery.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/21051774/"
+          ],
+          "alert_headline": "High-dose vitamin E may increase bleeding",
+          "alert_body": "High-dose vitamin E (about 400 IU/day or more) can inhibit clotting and raise bleeding risk. If you have a bleeding disorder or take blood thinners, review vitamin E use with your clinician.",
+          "informational_note": "Vitamin E can affect clotting at high doses \u2014 relevant to people with bleeding disorders.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "bleeding_disorders"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 180,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "trial_anchored_threshold",
+            "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+            "rationale": "Hemorrhagic-stroke signal anchored to 400 IU/day synthetic (=180 mg) in Physicians' Health Study II (per NIH ODS); trace vitamin E in a multivitamin is far below this."
+          }
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-07-04",
+          "mechanism": "Vitamin E inhibits platelet aggregation and antagonizes vitamin K-dependent clotting factors, raising perioperative bleeding risk at high supplemental doses (~400 IU/day and above).",
+          "action": "Discontinue high-dose vitamin E (>=400 IU/day) 1-2 weeks before scheduled surgery; review with the surgical team.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/21051774/"
+          ],
+          "alert_headline": "Stop high-dose vitamin E before surgery",
+          "alert_body": "High-dose vitamin E can increase bleeding. If you have surgery scheduled, ask your clinician about stopping vitamin E supplements about 1-2 weeks beforehand.",
+          "informational_note": "Vitamin E can increase bleeding \u2014 relevant before scheduled surgery.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "surgery_scheduled"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 180,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "trial_anchored_threshold",
+            "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+            "rationale": "Same antiplatelet/hemorrhagic mechanism as the bleeding_disorders rule (400 IU/day = 180 mg synthetic, per NIH ODS); standard advice is to discontinue before surgery."
+          }
         }
       ],
       "drug_class_rules": [
@@ -8656,23 +8908,23 @@
       ],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
-          "severity": "avoid",
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Vitamin K opposes warfarin's anticoagulant action via the vitamin-K-dependent clotting cascade. INR destabilization risk; clinical principle is intake consistency, not absolute abstinence.",
-          "action": "If you take warfarin or another vitamin-K antagonist, do not start, stop, or change vitamin K intake without checking with your prescriber. Keep daily intake consistent.",
+          "mechanism": "Vitamin K opposes warfarin and similar vitamin-K antagonists through the vitamin-K-dependent clotting cascade. INR destabilization risk comes from sudden intake changes; the clinical principle is consistent intake, not absolute abstinence.",
+          "action": "If you take warfarin or another vitamin-K antagonist, keep vitamin K intake consistent and check with your prescriber before starting, stopping, or changing vitamin K supplements.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
           ],
-          "alert_headline": "May counteract warfarin",
-          "alert_body": "Vitamin K can reduce the effect of warfarin and similar blood thinners. Talk to your prescriber before adding a vitamin K supplement and keep your daily intake steady.",
-          "informational_note": "Vitamin K affects how warfarin works \u2014 relevant to anyone on warfarin or coumarin anticoagulants.",
+          "alert_headline": "Keep vitamin K consistent with warfarin",
+          "alert_body": "Vitamin K can reduce the effect of warfarin and similar vitamin-K antagonist blood thinners. Keep intake steady and talk to your prescriber before adding a vitamin K supplement.",
+          "informational_note": "Vitamin K affects warfarin-like anticoagulants; DOAC blood thinners use a different mechanism.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -8716,23 +8968,23 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "anticoagulants",
-          "severity": "avoid",
+          "drug_class_id": "vitamin_k_antagonists",
+          "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Longer half-life menaquinone forms may have prolonged interaction potential with anticoagulants.",
-          "action": "Escalate anticoagulant interaction warning for MK-7 forms.",
+          "mechanism": "Longer half-life menaquinone forms may have prolonged interaction potential with warfarin-like vitamin-K antagonists.",
+          "action": "Escalate vitamin-K antagonist interaction warning for MK-7 forms.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
           ],
           "alert_headline": "MK-7 may prolong warfarin interaction",
-          "alert_body": "The MK-7 form of vitamin K has a longer half-life than other forms. If you take warfarin, talk to your prescriber before adding MK-7.",
-          "informational_note": "MK-7 affects warfarin levels \u2014 relevant to people on warfarin or other anticoagulants.",
+          "alert_body": "The MK-7 form of vitamin K has a longer half-life than other forms. If you take warfarin or another vitamin-K antagonist, talk to your prescriber before adding MK-7.",
+          "informational_note": "MK-7 can affect warfarin-like vitamin-K antagonist control; DOAC blood thinners use a different mechanism.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
               "conditions_any": [],
               "drug_classes_any": [
-                "anticoagulants"
+                "vitamin_k_antagonists"
               ],
               "profile_flags_any": []
             },
@@ -9051,7 +9303,7 @@
           "mechanism": "Caulophyllum thalictroides contains caulosaponin and methylcytisine, which stimulate uterine contractions. Case reports document neonatal stroke, heart failure, and multi-organ injury following maternal use near term.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30000839/"
+            "https://pubmed.ncbi.nlm.nih.gov/18204101/"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
@@ -9087,7 +9339,7 @@
         "mechanism": "Uterotonic glycosides (caulosaponin) and nicotinic alkaloids (methylcytisine) pose direct fetal risk including cardiac toxicity and CNS injury.",
         "notes": "Multiple case reports of serious neonatal adverse events. ACOG and NCCIH advise against use in pregnancy.",
         "sources": [
-          "https://pubmed.ncbi.nlm.nih.gov/30000839/"
+          "https://pubmed.ncbi.nlm.nih.gov/18204101/"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
@@ -10824,7 +11076,7 @@
           "target_id": "anticoagulants",
           "basis": "per_day",
           "comparator": ">",
-          "value": 2000,
+          "value": 3000,
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
@@ -10847,26 +11099,82 @@
             "dose": {
               "basis": "per_day",
               "comparator": ">",
-              "value": 2000,
+              "value": 3000,
               "unit": "mg",
               "severity_if_met": "caution",
               "severity_if_not_met": "monitor"
             }
-          }
+          },
+          "note": "Harmonized after duplicate fish-oil rule merge; 3 g/day EPA+DHA is the canonical high-dose bleeding flag."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "antiplatelets",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 3000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "antiplatelets"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">",
+              "value": 3000,
+              "unit": "mg",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "monitor"
+            }
+          },
+          "note": "Harmonized after duplicate fish-oil rule merge; 3 g/day EPA+DHA is the canonical high-dose antiplatelet flag."
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
-        "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
+        "pregnancy_category": "monitor",
+        "lactation_category": "monitor",
+        "evidence_level": "established",
+        "notes": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
+        "alert_headline": "Continue omega-3 under prenatal care",
+        "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
+        "informational_note": "Omega-3 is part of standard prenatal support \u2014 relevant to anyone pregnant or breastfeeding.",
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        },
+        "direction": "beneficial",
         "materiality": "presence"
       },
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-07-04",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -11184,15 +11492,37 @@
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "caution",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "evidence_level": "theoretical",
+        "notes": "Pregnancy: Keep to food-level intake; avoid routine high-dose extracts. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "High doses may be a concern",
+        "alert_body": "Food-level turmeric is different from concentrated curcumin extracts. If you are pregnant, routine high-dose curcumin may not be the right choice because safety data are limited. Breastfeeding safety data are limited; ask your clinician before use.",
         "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://www.nccih.nih.gov/health/turmeric"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -15226,6 +15556,51 @@
           },
           "direction": "harmful",
           "materiality": "presence"
+        },
+        {
+          "condition_id": "seizure_disorder",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "last_reviewed": "2026-07-04",
+          "mechanism": "High-dose pyridoxine can reduce serum concentrations of phenytoin and phenobarbital by increasing their metabolism (documented at 200 mg/day), potentially lowering seizure control. The neuropathy-based UL is 100 mg/day. RDA-level B6 has no antiepileptic interaction; several antiepileptic drugs actually deplete B6.",
+          "action": "Use caution with pyridoxine >=100 mg/day in seizure disorders, particularly with phenytoin or phenobarbital. Review with a clinician; drug levels may need monitoring.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/",
+            "https://www.ncbi.nlm.nih.gov/books/NBK554500/",
+            "https://pubmed.ncbi.nlm.nih.gov/55569/"
+          ],
+          "alert_headline": "High-dose B6 may affect seizure medications",
+          "alert_body": "High-dose vitamin B6 (100 mg/day or more) can lower blood levels of phenytoin and phenobarbital, reducing seizure control. If you take antiseizure medication, review B6 use with your clinician.",
+          "informational_note": "High-dose B6 can affect some antiseizure drugs \u2014 relevant to people with a seizure disorder.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": [
+                "seizure_disorder"
+              ],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          },
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 100,
+            "unit": "mg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "conservative_ul",
+            "source": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/",
+            "rationale": "Phenytoin/phenobarbital serum-lowering documented at 200 mg/day; 100 mg/day (the neuropathy UL) is the conservative protective floor. RDA-level B6 has no AED interaction."
+          }
         }
       ],
       "drug_class_rules": [],
@@ -17033,18 +17408,19 @@
       },
       "condition_rules": [
         {
-          "condition_id": "autoimmune",
+          "condition_id": "immunocompromised",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "In severely immunocompromised patients (solid organ transplant recipients, hematologic malignancy, high-dose corticosteroid therapy), orally administered probiotic organisms \u2014 particularly Lactobacillus spp. and Saccharomyces boulardii \u2014 have been documented in case reports to translocate across disrupted mucosal barriers, causing bacteremia or fungemia. Risk is low in healthy individuals but clinically meaningful in profound immunosuppression.",
-          "action": "Use caution in severely immunocompromised patients (transplant recipients, patients on high-dose immunosuppression). Discuss risk-benefit with transplant team or treating physician before initiating probiotic supplements. Risk does not apply to mild immunosuppression (e.g., low-dose prednisone).",
+          "mechanism": "In severely immunocompromised patients (solid organ transplant recipients, hematologic malignancy, chemotherapy, high-dose corticosteroid therapy, or central venous catheter exposure), orally administered probiotic organisms can rarely cause bacteremia or fungemia. Risk is low in healthy or uncomplicated autoimmune users but clinically meaningful in profound immunosuppression.",
+          "action": "Use probiotics only with clinician guidance when severely immunocompromised, post-transplant, on chemotherapy, or otherwise at high infection risk.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/35225182/",
-            "https://pubmed.ncbi.nlm.nih.gov/24859749/"
+            "https://pubmed.ncbi.nlm.nih.gov/24859749/",
+            "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
           ],
           "alert_headline": "Caution if severely immunocompromised",
-          "alert_body": "If you are severely immunocompromised, on chemotherapy, or post-transplant, live probiotics carry a small infection risk. Most autoimmune users can use them safely.",
-          "informational_note": "Probiotic infection risk is for severe immunocompromise, not general autoimmune conditions.",
+          "alert_body": "If you are severely immunocompromised, on chemotherapy, or post-transplant, live probiotics carry a small infection risk. This is not a general autoimmune warning.",
+          "informational_note": "Probiotic infection risk is for severe immunocompromise, not autoimmune disease by itself.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -18336,15 +18712,38 @@
       ],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "avoid",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "evidence_level": "theoretical",
+        "notes": "Pregnancy: Avoid 5-HTP during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human safety data are lacking. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "Pregnancy safety is unclear",
+        "alert_body": "5-HTP raises serotonin and has no human pregnancy safety data. If you are pregnant, talk to your obstetrician before any 5-HTP use. Breastfeeding safety data are limited; ask your clinician before use.",
+        "informational_note": "5-HTP raises serotonin \u2014 relevant to anyone pregnant or planning pregnancy.",
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/16023217/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -18462,15 +18861,17 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501349/"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501349/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK547922/",
+          "https://www.medicinesinpregnancy.org/leaflets-a-z/senna/"
         ],
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "caution",
         "lactation_category": "caution",
         "evidence_level": "probable",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "Senna is generally acceptable at usual doses while breastfeeding (its active sennosides are not measurably passed into milk) and is an accepted second-line laxative in pregnancy after bulk-forming and osmotic options. Avoid chronic high-dose use and check with your clinician.",
-        "informational_note": "Senna is generally acceptable in pregnancy (second-line) and breastfeeding at usual doses.",
+        "notes": "Pregnancy: Prefer bulk-forming or osmotic laxatives first; senna is an acceptable second-line option in pregnancy. Avoid chronic high-dose use and consult an obstetrician for anything beyond occasional short-term relief. Lactation: caution category remains separately tracked.",
+        "alert_headline": "Use stimulant laxatives with guidance",
+        "alert_body": "Senna may be used during pregnancy in some cases, but chronic or high-dose use can cause cramping, dehydration, or electrolyte shifts. Use with obstetric guidance.",
+        "informational_note": "Senna has limited pregnancy data \u2014 relevant to people who are pregnant or planning pregnancy.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -18490,7 +18891,7 @@
           },
           "dose": null
         },
-        "direction": "neutral",
+        "direction": "harmful",
         "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
@@ -18576,15 +18977,16 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.nccih.nih.gov/health/chasteberry"
+          "https://www.nccih.nih.gov/health/chasteberry",
+          "https://pubmed.ncbi.nlm.nih.gov/23136064/"
         ],
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "probable",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "notes": "Pregnancy: Discontinue chasteberry upon confirmed pregnancy. Do not use during the first trimester. Inform obstetrician of prior use. Lactation: avoid category remains separately tracked.",
+        "alert_headline": "Hormone-active \u2014 avoid in pregnancy",
+        "alert_body": "Chasteberry influences pituitary hormones and is not recommended in pregnancy. If pregnancy is confirmed, talk to your obstetrician about discontinuing.",
+        "informational_note": "Chasteberry affects pituitary hormones \u2014 relevant to anyone pregnant or planning pregnancy.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -18604,7 +19006,7 @@
           },
           "dose": null
         },
-        "direction": "unknown",
+        "direction": "harmful",
         "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
@@ -18624,7 +19026,7 @@
           "mechanism": "N-acetylcysteine (NAC) inhibits platelet aggregation by reducing disulfide bonds on platelet surface glycoproteins and by increasing nitric oxide bioavailability. At high doses (>1200 mg/day) this antiplatelet effect may be clinically meaningful in patients with underlying coagulopathy.",
           "action": "Use with caution in bleeding disorders. Avoid high doses (>1200 mg/day) without haematology oversight. Inform prescribers before surgical procedures.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/34208683/"
+            "https://pubmed.ncbi.nlm.nih.gov/21600014/"
           ],
           "alert_headline": "Bleeding signal is limited",
           "alert_body": "NAC may affect platelet biology at high doses, but clinical bleeding risk in supplement users is not well established. If you have a bleeding disorder, mention NAC to your clinician.",
@@ -18695,16 +19097,16 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "NAC reduces disulfide bridges on coagulation factors and on platelet membrane glycoproteins, and it scavenges reactive oxygen species that normally promote pro-coagulant states. Combined with warfarin, case reports document enhanced anticoagulant effect and elevated INR.",
-          "action": "Monitor INR more frequently if starting or stopping NAC during anticoagulant therapy. Alert prescriber to any INR changes.",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "NAC has demonstrated antiplatelet effects in vitro at therapeutically relevant concentrations, including reduced thrombin- and ADP-induced platelet aggregation. Clinical bleeding interaction evidence with anticoagulants is limited, so this is a precautionary monitoring warning rather than a documented warfarin-INR interaction.",
+          "action": "Mention NAC use to the anticoagulation clinician and monitor for unusual bruising or bleeding, especially at higher supplement doses or if other bleeding-risk agents are present.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/34208683/"
+            "https://pubmed.ncbi.nlm.nih.gov/21600014/"
           ],
           "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "NAC has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding NAC and ask about INR or bleeding checks.",
-          "informational_note": "NAC can affect clotting \u2014 relevant to people on anticoagulants.",
+          "alert_body": "NAC may affect platelet activity at higher doses, but clinical bleeding interaction evidence is limited. If you take an anticoagulant, mention NAC to your clinician.",
+          "informational_note": "NAC has limited platelet-activity evidence \u2014 relevant to people on anticoagulants.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -18956,15 +19358,38 @@
       "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "contraindicated",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "evidence_level": "probable",
+        "notes": "Pregnancy: Do not use any butterbur product during pregnancy unless it is certified PA-free AND your obstetric clinician specifically approves. The default assumption for unverified products is contraindication. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "PA-containing butterbur is unsafe",
+        "alert_body": "If you are pregnant, do not use butterbur. Raw or non-PA-free products can contain pyrrolizidine alkaloids that are toxic to the liver. Breastfeeding safety data are limited; ask your clinician before use.",
+        "informational_note": "Butterbur PA content makes it unsafe in pregnancy \u2014 relevant to anyone pregnant or planning pregnancy.",
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://www.nccih.nih.gov/health/butterbur",
+          "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -19114,15 +19539,16 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "sources": [
-          "https://www.ncbi.nlm.nih.gov/books/NBK501328/"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501328/",
+          "https://pubmed.ncbi.nlm.nih.gov/32876395/"
         ],
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "avoid",
         "lactation_category": "avoid",
         "evidence_level": "probable",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "notes": "Pregnancy: Avoid during pregnancy. Select a safer laxative such as polyethylene glycol or psyllium and consult an obstetrician. Lactation: avoid category remains separately tracked.",
+        "alert_headline": "Stimulant laxative \u2014 avoid in pregnancy",
+        "alert_body": "Cascara sagrada stimulates colonic muscle and passes into breast milk. If you are pregnant, talk to your obstetrician about a gentler laxative instead.",
+        "informational_note": "Cascara sagrada is a stimulant laxative \u2014 relevant to anyone pregnant.",
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -19142,7 +19568,7 @@
           },
           "dose": null
         },
-        "direction": "unknown",
+        "direction": "harmful",
         "materiality": "presence"
       },
       "last_reviewed": "2026-04-26",
@@ -19225,15 +19651,37 @@
       "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "avoid",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "evidence_level": "theoretical",
+        "notes": "Pregnancy: Avoid during pregnancy due to absent safety data. Inform obstetrician of any prior use. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "Pregnancy safety is unclear",
+        "alert_body": "Chinese skullcap lacks human pregnancy safety data and animal studies suggest teratogenic signals. If you are pregnant, talk to your obstetrician before any use. Breastfeeding safety data are limited; ask your clinician before use.",
+        "informational_note": "Chinese skullcap lacks pregnancy safety data \u2014 relevant to anyone pregnant or planning pregnancy.",
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/31236960/"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -19577,15 +20025,37 @@
       ],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "avoid",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "evidence_level": "probable",
+        "notes": "Pregnancy: Avoid black seed oil during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human pregnancy data are lacking. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "Pregnancy safety is unclear",
+        "alert_body": "Black seed oil has limited pregnancy safety data and animal studies have flagged uterine-effect signals. If you are pregnant, talk to your obstetrician before use. Breastfeeding safety data are limited; ask your clinician before use.",
+        "informational_note": "Black seed oil pregnancy data are limited \u2014 relevant to anyone pregnant.",
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/34073784/"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -22681,233 +23151,18 @@
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
-        "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
-      },
-      "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
-    },
-    {
-      "id": "RULE_IQM_FISH_OIL_BLEEDING",
-      "subject_ref": {
-        "db": "ingredient_quality_map",
-        "canonical_id": "fish_oil"
-      },
-      "condition_rules": [],
-      "drug_class_rules": [
-        {
-          "drug_class_id": "anticoagulants",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Omega-3 fatty acids prolong bleeding time and may potentiate anticoagulant effects. FDA labels for icosapent ethyl and omega-3-acid ethyl esters explicitly state: 'omega-3 acids may prolong bleeding time. Monitor patients receiving anticoagulants.'",
-          "action": "Monitor INR/bleeding time more frequently. Watch for signs of bruising or bleeding. Inform prescriber.",
-          "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
-          ],
-          "alert_headline": "May add to blood-thinner effects",
-          "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
-          "informational_note": "Fish oil can affect clotting \u2014 relevant to people on anticoagulants.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "anticoagulants"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 3000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
-          }
-        },
-        {
-          "drug_class_id": "antiplatelets",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin or clopidogrel.",
-          "action": "Monitor for increased bruising or bleeding. Inform prescriber of omega-3 supplementation.",
-          "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
-          ],
-          "alert_headline": "May add to antiplatelet effects",
-          "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
-          "informational_note": "Fish oil can affect platelet function \u2014 relevant to people on antiplatelets.",
-          "profile_gate": {
-            "gate_type": "drug_class",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "antiplatelets"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          },
-          "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 3000,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-            "rationale": "NIH ODS: bleeding-time effects appear at high intakes (~2-15 g/day EPA+DHA); 3 g/day is a conservative flag point (FDA deems <=5 g/day safe). Trace omega-3 in a multivitamin is far below this."
-          }
-        }
-      ],
-      "dose_thresholds": [
-        {
-          "scope": "condition",
-          "target_id": "bleeding_disorders",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 2000,
-          "unit": "mg EPA+DHA",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "informational",
-          "note": "Harmonized with individual DHA/EPA rules per clinical-team signoff 2026-04-24. 2 g/day EPA+DHA measurably prolongs bleeding time via TXA2 suppression.",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [
-                "bleeding_disorders"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">",
-              "value": 2000,
-              "unit": "mg EPA+DHA",
-              "severity_if_met": "caution",
-              "severity_if_not_met": "informational"
-            }
-          }
-        },
-        {
-          "scope": "drug_class",
-          "target_id": "anticoagulants",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 2000,
-          "unit": "mg EPA+DHA",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "informational",
-          "note": "Harmonized with DHA/EPA individual anticoagulant thresholds per clinical-team signoff 2026-04-24. Previous >3000 mg threshold narrowed to >2000 mg to align with omega-3 bleeding-time data.",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "anticoagulants"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">",
-              "value": 2000,
-              "unit": "mg EPA+DHA",
-              "severity_if_met": "caution",
-              "severity_if_not_met": "informational"
-            }
-          }
-        },
-        {
-          "scope": "drug_class",
-          "target_id": "antiplatelets",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 3000,
-          "unit": "mg EPA+DHA",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "informational",
-          "note": "Preserves the stricter high-dose warning at 3 g/day for antiplatelet co-therapy per FDA labeling of Vascepa/Lovaza. Clinical-team signoff 2026-04-24.",
-          "profile_gate": {
-            "gate_type": "combination",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [
-                "antiplatelets"
-              ],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": {
-              "basis": "per_day",
-              "comparator": ">",
-              "value": 3000,
-              "unit": "mg EPA+DHA",
-              "severity_if_met": "caution",
-              "severity_if_not_met": "informational"
-            }
-          }
-        }
-      ],
-      "pregnancy_lactation": {
         "pregnancy_category": "monitor",
-        "lactation_category": "monitor",
-        "evidence_level": "established",
-        "notes": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
-        "alert_headline": "Continue omega-3 under prenatal care",
-        "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
-        "informational_note": "Omega-3 is part of standard prenatal support \u2014 relevant to anyone pregnant or breastfeeding.",
+        "lactation_category": "no_data",
+        "evidence_level": "theoretical",
+        "notes": "Pregnancy: Avoid high-dose self-supplementation. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "Limited pregnancy safety data",
+        "alert_body": "Resveratrol has limited human pregnancy data, and higher exposures raise developmental questions in animal studies. If you are pregnant, avoid routine high-dose self-supplementation. Breastfeeding safety data are limited; ask your clinician before use.",
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/24563374/"
+        ],
         "profile_gate": {
           "gate_type": "profile_flag",
           "requires": {
@@ -22926,12 +23181,10 @@
             "nutrient_forms_any": []
           },
           "dose": null
-        },
-        "direction": "beneficial",
-        "materiality": "presence"
+        }
       },
-      "last_reviewed": "2026-04-24",
-      "review_owner": "drug_label_mining"
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
     },
     {
       "id": "RULE_BANNED_CBD_INTERACTIONS",
@@ -23519,15 +23772,37 @@
       "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "avoid",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "evidence_level": "probable",
+        "notes": "Pregnancy: Avoid chronic use in pregnancy and stop before delivery if used. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "May raise bleeding risk",
+        "alert_body": "Ginkgo can have antiplatelet effects, which is a concern near delivery. If you are pregnant, avoid chronic use and stop before birth if your clinician has you taking it. Breastfeeding safety data are limited; ask your clinician before use.",
+        "informational_note": "Ginkgo's antiplatelet activity is a peripartum bleeding concern, especially near delivery.",
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://www.nccih.nih.gov/health/ginkgo"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -23575,15 +23850,37 @@
       "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "informational",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "evidence_level": "theoretical",
+        "notes": "Pregnancy: Avoid concentrated extracts; culinary use is not the same as supplement use. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "Not well studied in pregnancy",
+        "alert_body": "Holy basil has limited pregnancy data, and animal studies raise endocrine and uterotonic uncertainty. If you are pregnant, avoid concentrated extracts. Breastfeeding safety data are limited; ask your clinician before use.",
         "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
-        "direction": "unknown",
-        "materiality": "presence"
+        "direction": "harmful",
+        "materiality": "presence",
+        "sources": [
+          "https://www.nccih.nih.gov/health/herbsataglance"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -23631,15 +23928,37 @@
       "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "pregnancy_category": "no_data",
+        "pregnancy_category": "informational",
         "lactation_category": "no_data",
-        "evidence_level": "no_data",
-        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "alert_headline": "Limited safety data",
-        "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
+        "evidence_level": "theoretical",
+        "notes": "Pregnancy: Do not present as proven pregnancy support; monitor rather than hard-block. Lactation: no_data category remains separately tracked.",
+        "alert_headline": "Pregnancy safety is unclear",
+        "alert_body": "Human pregnancy safety data for maca are sparse. If you are pregnant, discuss use with your clinician rather than treating it as proven support. Breastfeeding safety data are limited; ask your clinician before use.",
         "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
         "direction": "unknown",
-        "materiality": "presence"
+        "materiality": "presence",
+        "sources": [
+          "https://pubmed.ncbi.nlm.nih.gov/38440178/"
+        ],
+        "profile_gate": {
+          "gate_type": "profile_flag",
+          "requires": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [
+              "pregnant",
+              "breastfeeding"
+            ]
+          },
+          "excludes": {
+            "conditions_any": [],
+            "drug_classes_any": [],
+            "profile_flags_any": [],
+            "product_forms_any": [],
+            "nutrient_forms_any": []
+          },
+          "dose": null
+        }
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -23720,7 +24039,7 @@
           "condition_id": "diabetes",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Alpha-glucosidase inhibition slows carbohydrate absorption.",
+          "mechanism": "White mulberry (Morus alba) leaf extract inhibits alpha-glucosidase and slows carbohydrate absorption.",
           "action": "Monitor if combined with acarbose-like therapy or insulin.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27974904/"
@@ -24416,10 +24735,10 @@
         "pregnancy_category": "no_data",
         "lactation_category": "no_data",
         "evidence_level": "no_data",
-        "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
+        "notes": "Limited data \u2014 discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
+        "informational_note": "Pregnancy/lactation safety data is limited \u2014 clinician guidance recommended.",
         "direction": "unknown",
         "materiality": "presence"
       },

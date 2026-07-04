@@ -3,7 +3,7 @@
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
-    "last_updated": "2026-06-16",
+    "last_updated": "2026-07-04",
     "total_entries": 117,
     "functional_roles_field": {
       "added_in": "5.2.0",
@@ -4078,7 +4078,7 @@
         "dehydrated corn syrup",
         "CSS"
       ],
-      "category": "filler",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Essentially dried corn syrup - pure glucose with extremely high glycemic index (GI 100+). Causes rapid, severe blood sugar spikes. Metabolically equivalent to pure sugar. Used as cheap filler/sweetener in supplements. Contributes to insulin resistance, weight gain, and metabolic dysfunction.",
       "regulatory_status": {
         "US": "FDA GRAS status",
@@ -8184,7 +8184,7 @@
       "category": "preservative",
       "mechanism_of_harm": "Nitrite preservative that can form N-nitroso compounds (NOCs) in the acidic stomach environment, especially in the presence of secondary amines. NOCs are potent carcinogens (IARC Group 2A for ingested nitrite under conditions resulting in endogenous nitrosation). Also causes methemoglobinemia by oxidizing hemoglobin iron from Fe2+ to Fe3+, reducing oxygen-carrying capacity.",
       "regulatory_status": {
-        "US": "FDA: regulated food preservative under 21 CFR 172.175. Strictly limited in cured meats. Not approved for supplement use.",
+        "US": "FDA: potassium nitrite is prior-sanctioned for meat curing under 21 CFR 181.34 (listed with sodium nitrite); it has no standalone 21 CFR 172 listing. Strictly limited in cured meats. Not approved for supplement use.",
         "EU": "E249 permitted in specific meat products with limits (max 150 mg/kg ingoing). EFSA 2017 re-evaluation.",
         "WHO": "JECFA ADI 0-0.07 mg/kg bw/day (as nitrite ion). IARC Group 2A (ingested nitrite under conditions of endogenous nitrosation)."
       },

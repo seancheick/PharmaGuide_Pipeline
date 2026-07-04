@@ -619,6 +619,77 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
     return pillars
 
 
+def _apply_public_cap_to_pillars(
+    pillars: Dict[str, Any],
+    *,
+    capped_total: float,
+    cap: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Scale shipped pillar scores so the public breakdown reconciles to a cap.
+
+    Public caps are cross-pillar calibration ceilings, not raw-score math. Keep
+    the uncapped total in ``quality_score_cap_v4.score_before_cap`` and annotate
+    each pillar with its pre-cap contribution, but ship a visible breakdown that
+    sums to the visible headline score.
+    """
+    current_tenths = sum(
+        max(0, int(round(_num(pillar.get("score")) * 10)))
+        for pillar in pillars.values()
+        if isinstance(pillar, dict)
+    )
+    target_tenths = max(0, int(round(capped_total * 10)))
+    if current_tenths <= 0 or target_tenths >= current_tenths:
+        return pillars
+
+    allocations: List[Dict[str, Any]] = []
+    base_sum = 0
+    for index, (name, pillar) in enumerate(pillars.items()):
+        if not isinstance(pillar, dict):
+            continue
+        score_tenths = max(0, int(round(_num(pillar.get("score")) * 10)))
+        numerator = score_tenths * target_tenths
+        base = numerator // current_tenths
+        remainder = numerator % current_tenths
+        allocations.append({
+            "name": name,
+            "base": base,
+            "remainder": remainder,
+            "original": score_tenths,
+            "index": index,
+        })
+        base_sum += base
+
+    remaining = target_tenths - base_sum
+    for item in sorted(
+        allocations,
+        key=lambda alloc: (alloc["remainder"], alloc["original"], -alloc["index"]),
+        reverse=True,
+    ):
+        if remaining <= 0:
+            break
+        if item["base"] < item["original"]:
+            item["base"] += 1
+            remaining -= 1
+
+    adjusted = copy.deepcopy(pillars)
+    for item in allocations:
+        name = item["name"]
+        pillar = adjusted.get(name)
+        if not isinstance(pillar, dict):
+            continue
+        before = round(item["original"] / 10.0, 1)
+        after = round(item["base"] / 10.0, 1)
+        pillar["score"] = after
+        components = pillar.get("components")
+        if not isinstance(components, dict):
+            components = {}
+        components["score_before_public_cap"] = before
+        components["public_cap_delta"] = round(before - after, 1)
+        components["public_cap_id"] = cap.get("id")
+        pillar["components"] = components
+    return adjusted
+
+
 def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     """Add public six-pillar quality fields. Mutates & returns ``result``.
     ``raw_score_v4_100`` (raw) is never modified."""
@@ -666,7 +737,12 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
     cap = _public_quality_cap(module_bd)
     if cap is not None and total > cap["cap"]:
         score_before_cap = total
-        total = cap["cap"]
+        pillars = _apply_public_cap_to_pillars(
+            pillars,
+            capped_total=cap["cap"],
+            cap=cap,
+        )
+        total = round(sum(p["score"] for p in pillars.values()), 1)
         result["quality_score_cap_v4"] = {
             **cap,
             "applied": True,

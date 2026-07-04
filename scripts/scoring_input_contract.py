@@ -40,6 +40,7 @@ SCORING_CLASSIFICATION_SCHEMA_VERSION = "1.1.4"
 SCORING_CLASSIFICATION_ORIGINS = {"compatibility_derived", "native_enrichment"}
 SCORING_ROUTE_MODULES = {"generic", "probiotic", "multi_or_prenatal", "b_complex", "omega", "sports", "fiber_digestive"}
 SCORING_ROUTE_CONFIDENCE = {"high", "medium", "low", "failed"}
+_ROUTE_SCORING_ROWS_CACHE_KEY = "__scoring_input_contract_route_rows_cache"
 SCORING_CLASSIFICATION_REQUIRED_FIELDS = {
     "classification_schema_version",
     "classification_origin",
@@ -412,6 +413,21 @@ def _botanical_identity_lookup() -> Dict[str, Dict[str, str]]:
     return out
 
 
+@lru_cache(maxsize=1)
+def _botanical_phrase_patterns() -> tuple[tuple[str, re.Pattern[str], Dict[str, str]], ...]:
+    lookup = _botanical_identity_lookup()
+    patterns: List[tuple[str, re.Pattern[str], Dict[str, str]]] = []
+    for key in sorted(lookup, key=len, reverse=True):
+        compact = key.replace("_", "")
+        if len(compact) < 6 or key in _BOTANICAL_BLEND_GENERIC_KEYS:
+            continue
+        pattern = re.compile(
+            r"(?<![a-z0-9])" + re.escape(key.replace("_", " ")) + r"(?![a-z0-9])"
+        )
+        patterns.append((key, pattern, lookup[key]))
+    return tuple(patterns)
+
+
 def _botanical_child_identity(name: Any) -> Optional[Dict[str, str]]:
     text = _norm(name)
     if not text:
@@ -433,13 +449,9 @@ def _botanical_child_identity(name: Any) -> Optional[Dict[str, str]]:
     # Conservative phrase fallback for labels like "Milk thistle seed extract".
     # Require a non-generic key with enough characters so broad terms ("tea",
     # "root", "blend") cannot create botanical ownership by substring alone.
-    for key in sorted(lookup, key=len, reverse=True):
-        compact = key.replace("_", "")
-        if len(compact) < 6 or key in _BOTANICAL_BLEND_GENERIC_KEYS:
-            continue
-        pattern = r"(?<![a-z0-9])" + re.escape(key.replace("_", " ")) + r"(?![a-z0-9])"
-        if re.search(pattern, text):
-            return lookup[key]
+    for _, pattern, identity in _botanical_phrase_patterns():
+        if pattern.search(text):
+            return identity
     return None
 
 
@@ -2266,6 +2278,9 @@ def _embedded_native_scoring_classification(product: Dict[str, Any]) -> Optional
 
 
 def _route_scoring_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    cached_rows = _safe_list(_safe_dict(product or {}).get(_ROUTE_SCORING_ROWS_CACHE_KEY))
+    if cached_rows:
+        return [row for row in cached_rows if isinstance(row, dict)]
     try:
         return [
             row for row in get_scoring_ingredients(product or {}, strict=True).rows
@@ -3668,27 +3683,40 @@ def build_scoring_classification(
     route_evidence: List[str] = []
     rows: List[Dict[str, Any]] = []
     roles: List[Dict[str, Any]] = []
+    route_rows_cache_sentinel = object()
+    previous_route_rows_cache: Any = route_rows_cache_sentinel
+    route_rows_cache_installed = False
 
     try:
         input_result = get_scoring_ingredients(product, strict=True)
         rows = list(input_result.rows)
+        previous_route_rows_cache = product.get(_ROUTE_SCORING_ROWS_CACHE_KEY, route_rows_cache_sentinel)
+        product[_ROUTE_SCORING_ROWS_CACHE_KEY] = rows
+        route_rows_cache_installed = True
     except Exception as exc:  # pragma: no cover - defensive totality path
         failed = True
         failure_reason = f"scoring_input_failed:{exc.__class__.__name__}"
         rows = []
 
-    if route_module not in SCORING_ROUTE_MODULES:
-        try:
-            route_module, route_reason, route_evidence = _classify_route_module(product)
-        except Exception as exc:  # pragma: no cover
-            failed = True
-            failure_reason = failure_reason or f"route_failed:{exc.__class__.__name__}"
-            route_module = "generic"
-            route_reason = failure_reason
-            route_evidence = ["route_classification_failed"]
-    else:
-        route_reason = f"explicit_route:{route_module}"
-        route_evidence = [route_module]
+    try:
+        if route_module not in SCORING_ROUTE_MODULES:
+            try:
+                route_module, route_reason, route_evidence = _classify_route_module(product)
+            except Exception as exc:  # pragma: no cover
+                failed = True
+                failure_reason = failure_reason or f"route_failed:{exc.__class__.__name__}"
+                route_module = "generic"
+                route_reason = failure_reason
+                route_evidence = ["route_classification_failed"]
+        else:
+            route_reason = f"explicit_route:{route_module}"
+            route_evidence = [route_module]
+    finally:
+        if route_rows_cache_installed:
+            if previous_route_rows_cache is route_rows_cache_sentinel:
+                product.pop(_ROUTE_SCORING_ROWS_CACHE_KEY, None)
+            else:
+                product[_ROUTE_SCORING_ROWS_CACHE_KEY] = previous_route_rows_cache
     if route_module not in SCORING_ROUTE_MODULES:
         route_module = "generic"
         if not route_reason:

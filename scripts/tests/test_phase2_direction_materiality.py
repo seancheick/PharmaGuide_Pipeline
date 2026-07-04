@@ -86,19 +86,39 @@ def test_presence_rules_carry_no_floor():
             assert not x.get("min_effective_dose"), f"{canon}/{key} presence rule wrongly floored"
 
 
+# Reproductive/contraindication rules that are DELIBERATELY dose_dependent — the
+# evidence establishes dose-safety, so a floor + below-floor suppression is
+# correct, not a fail-safe violation. Each needs a sourced rationale here.
+#   caffeine/ttc: moderate caffeine has no established fertility effect (ASRM:
+#     1-2 cups/day "no apparent adverse effects on fertility"); concern is only
+#     ~500 mg/day. A precautionary 200 mg floor is evidence-based. (research.md)
+# NOTE the contrast: vitamin_a/ttc STAYS presence (below) — preformed retinol is
+# a teratogen with no safe preconception dose; it carries a base caution at any
+# dose and escalates to avoid at >10,000 IU via a dose_thresholds entry.
+_DOSE_SAFE_REPRODUCTIVE = {("caffeine", "ttc")}
+
+
 def test_never_suppress_buckets_are_presence():
     """Pregnancy/lactation/ttc and MAOI contraindications must be presence —
-    they fire at any dose and can never be dose-suppressed."""
+    they fire at any dose and can never be dose-suppressed. Exceptions in
+    _DOSE_SAFE_REPRODUCTIVE are dose_dependent by verified evidence."""
     for canon, kind, key, x in _all():
+        if (canon, key) in _DOSE_SAFE_REPRODUCTIVE:
+            continue
         if key in ("pregnancy", "lactation", "ttc", "pregnancy_lactation") or key == "maois":
             assert x.get("materiality") == "presence", f"{canon}/{key} must be presence, got {x.get('materiality')}"
 
 
 def test_vitamin_k_warfarin_never_suppressed():
-    """The canonical never-suppress interaction: vitamin K vs anticoagulants
-    stays harmful + presence (intake consistency matters at any dose)."""
-    hits = [x for c, _k, key, x in _all() if c == "vitamin_k" and key == "anticoagulants"]
-    assert hits, "vitamin_k/anticoagulants rule missing"
+    """The canonical never-suppress interaction: vitamin K vs warfarin-like
+    vitamin-K antagonists stays harmful + presence. DOACs do not use this
+    vitamin-K mechanism."""
+    hits = [
+        x
+        for c, _k, key, x in _all()
+        if c == "vitamin_k" and key == "vitamin_k_antagonists"
+    ]
+    assert hits, "vitamin_k/vitamin_k_antagonists rule missing"
     for x in hits:
         assert x.get("direction") == "harmful"
         assert x.get("materiality") == "presence"

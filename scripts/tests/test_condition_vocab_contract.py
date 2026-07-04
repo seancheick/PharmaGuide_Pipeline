@@ -7,7 +7,7 @@ the hardcoded `conditionLabels` map in
 `lib/core/constants/schema_ids.dart`.
 
 Locked decisions:
-  - Exactly 14 conditions (matches schema_ids.dart `conditions` list)
+  - Exactly 15 conditions (matches schema_ids.dart `conditions` list after app sync)
   - Lean schema: id + name + notes + (optional) synonyms + icd10
   - notes ≤200 chars
   - All IDs lowercase snake_case
@@ -41,13 +41,13 @@ def conditions(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 14
+    assert md["total_entries"] == 15
     assert "LOCKED" in md["status"]
     assert md["char_limit_notes"] == 200
 
 
-def test_exactly_14_conditions_locked(conditions):
-    assert len(conditions) == 14, f"locked at 14; got {len(conditions)}"
+def test_exactly_15_conditions_locked(conditions):
+    assert len(conditions) == 15, f"locked at 15; got {len(conditions)}"
 
 
 REQUIRED_FIELDS = {"id", "name", "notes"}
@@ -72,12 +72,12 @@ def test_every_id_unique_and_snake_case(conditions):
 
 
 def test_canonical_ids_match_schema_ids_dart(conditions):
-    """The 14 IDs must match `conditions` in lib/core/constants/schema_ids.dart"""
+    """The 15 IDs must match `conditions` in lib/core/constants/schema_ids.dart."""
     expected = {
         "pregnancy", "lactation", "ttc", "surgery_scheduled",
         "hypertension", "heart_disease", "diabetes",
         "bleeding_disorders", "kidney_disease", "liver_disease",
-        "thyroid_disorder", "autoimmune", "seizure_disorder",
+        "thyroid_disorder", "autoimmune", "immunocompromised", "seizure_disorder",
         "high_cholesterol",
     }
     actual = {c["id"] for c in conditions}
