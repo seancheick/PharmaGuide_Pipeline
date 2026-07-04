@@ -59,9 +59,14 @@ from scoring_v4.modules.omega_formulation import (
 
 
 PHASE_MARKER = "P1.6.5_omega_transparency"
-CAP_TRANSPARENCY = 15.0
-DATA_LIMITED_TRANSPARENCY_FLOOR = 12.0
-DATA_LIMITED_TRANSPARENCY_MIN_EPA_DHA_MG = 750.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_TM = _cfg_block("transparency_magnitudes", "omega")["omega"]
+
+
+CAP_TRANSPARENCY = _TM["cap_transparency"]
+DATA_LIMITED_TRANSPARENCY_FLOOR = _TM["data_limited_transparency_floor"]
+DATA_LIMITED_TRANSPARENCY_MIN_EPA_DHA_MG = _TM["data_limited_transparency_min_epa_dha_mg"]
 
 
 # Oxidation-signal keys checked on the product blob. Future-ready: when

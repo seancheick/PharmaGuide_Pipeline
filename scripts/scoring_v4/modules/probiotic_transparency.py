@@ -52,10 +52,15 @@ from scoring_v4.modules.probiotic_dose import _per_strain_cfu_disclosed_keys
 
 PHASE_MARKER = "P2.5_probiotic_transparency"
 
-DIMENSION_CAP = 15.0
-CAP_STRAIN_IDENTITIES = 8.0
-CAP_PER_STRAIN_CFU = 7.0
-CAP_AGGREGATE_CFU_DISCLOSURE_PROXY = 4.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_TM = _cfg_block("transparency_magnitudes", "probiotic")["probiotic"]
+
+
+DIMENSION_CAP = _TM["dimension_cap"]
+CAP_STRAIN_IDENTITIES = _TM["cap_strain_identities"]
+CAP_PER_STRAIN_CFU = _TM["cap_per_strain_cfu"]
+CAP_AGGREGATE_CFU_DISCLOSURE_PROXY = _TM["cap_aggregate_cfu_disclosure_proxy"]
 
 
 def score_transparency(product: Any) -> Dict[str, Any]:

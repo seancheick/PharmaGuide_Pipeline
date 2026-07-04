@@ -41,11 +41,16 @@ from scoring_v4.modules.multi_prenatal_formulation import _active_ingredients
 
 PHASE_MARKER = "P3.5_multi_prenatal_transparency"
 
-DIMENSION_CAP = 15.0
-CAP_PANEL_IDENTITY_DISCLOSURE = 4.0
-CAP_PANEL_INDIVIDUAL_DOSE_DISCLOSURE = 7.0
-ADJUNCT_BLEND_PANEL_DISCLOSURE_THRESHOLD = 0.9
-ADJUNCT_BLEND_B5_CAP = 2.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_TM = _cfg_block("transparency_magnitudes", "multi_prenatal")["multi_prenatal"]
+
+
+DIMENSION_CAP = _TM["dimension_cap"]
+CAP_PANEL_IDENTITY_DISCLOSURE = _TM["cap_panel_identity_disclosure"]
+CAP_PANEL_INDIVIDUAL_DOSE_DISCLOSURE = _TM["cap_panel_individual_dose_disclosure"]
+ADJUNCT_BLEND_PANEL_DISCLOSURE_THRESHOLD = _TM["adjunct_blend_panel_disclosure_threshold"]
+ADJUNCT_BLEND_B5_CAP = _TM["adjunct_blend_b5_cap"]
 
 PANEL_MINERAL_CANONICALS = frozenset(
     {

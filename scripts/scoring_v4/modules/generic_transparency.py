@@ -33,32 +33,28 @@ from scoring_v4.modules.generic_helpers import (
 
 PHASE_MARKER = "P1.3.5_transparency"
 
-DIMENSION_CAP = 10.0
-CLEAR_DISCLOSURE_BASE = 6.0
-COMPLETE_ACTIVE_DISCLOSURE_BONUS = 3.0
+from scoring_v4.quality_score_config import block as _cfg_block
 
-B2_CAP = 2.0
-B2_SEVERITY_POINTS = {
-    "high": 2.0,
-    "moderate": 1.5,
-    "low": 1.0,
-}
+_TM = _cfg_block("transparency_magnitudes", "generic")["generic"]
 
-B3_CAP = 4.0
-B3_ALLERGEN_FREE = 2.0
-B3_GLUTEN_FREE = 1.0
-B3_VEGAN_OR_VEGETARIAN = 1.0
 
-B5_BASE = {"full": 0.0, "partial": 1.0, "none": 2.0}
-B5_PROP_COEF = {"full": 0.0, "partial": 3.0, "none": 5.0}
-B5_CAP = 10.0
-B5_COUNT_DENOM_MIN = 8
-B5_CLASS_MULTIPLIERS = {
-    "probiotic": 0.4,
-    "multi_or_prenatal": 1.3,
-    "sports_active": 1.5,
-    "generic": 1.0,
-}
+DIMENSION_CAP = _TM["dimension_cap"]
+CLEAR_DISCLOSURE_BASE = _TM["clear_disclosure_base"]
+COMPLETE_ACTIVE_DISCLOSURE_BONUS = _TM["complete_active_disclosure_bonus"]
+
+B2_CAP = _TM["b2_cap"]
+B2_SEVERITY_POINTS = dict(_TM["b2_severity_points"])
+
+B3_CAP = _TM["b3_cap"]
+B3_ALLERGEN_FREE = _TM["b3_allergen_free"]
+B3_GLUTEN_FREE = _TM["b3_gluten_free"]
+B3_VEGAN_OR_VEGETARIAN = _TM["b3_vegan_or_vegetarian"]
+
+B5_BASE = dict(_TM["b5_base"])
+B5_PROP_COEF = dict(_TM["b5_prop_coef"])
+B5_CAP = _TM["b5_cap"]
+B5_COUNT_DENOM_MIN = _TM["b5_count_denom_min"]
+B5_CLASS_MULTIPLIERS = dict(_TM["b5_class_multipliers"])
 B5_PRENATAL_KEYWORDS = re.compile(
     r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
     re.IGNORECASE,
@@ -84,8 +80,8 @@ B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES = {
     "enzyme",
     "enzymes",
 }
-B5_TRIVIAL_MICRO_BLEND_HIDDEN_MASS_MG = 1.0
-B5_TRIVIAL_MICRO_BLEND_MAX_IMPACT = 0.01
+B5_TRIVIAL_MICRO_BLEND_HIDDEN_MASS_MG = _TM["b5_trivial_micro_blend_hidden_mass_mg"]
+B5_TRIVIAL_MICRO_BLEND_MAX_IMPACT = _TM["b5_trivial_micro_blend_max_impact"]
 B5_SAFETY_RELEVANT_BLEND_PATTERN = re.compile(
     r"\b(caffeine|stimulant|yohimbine|yohimbe|synephrine|octopamine|dmha|"
     r"dmaa|geranium|ephedra|higenamine|phenethylamine|pea|theacrine|"
@@ -93,7 +89,7 @@ B5_SAFETY_RELEVANT_BLEND_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-B6_DISEASE_CLAIM_PENALTY = 5.0
+B6_DISEASE_CLAIM_PENALTY = _TM["b6_disease_claim_penalty"]
 
 
 def score_transparency(product: Dict[str, Any]) -> Dict[str, Any]:
