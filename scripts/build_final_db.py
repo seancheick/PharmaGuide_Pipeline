@@ -6173,16 +6173,16 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     # Description
     positive_signals = []
     if v4_evidence >= 15:
-        positive_signals.append("clinically-backed")
+        positive_signals.append("clinical evidence")
     if safe_list(enriched.get("named_cert_programs")):
-        positive_signals.append("third-party tested")
+        positive_signals.append("third-party testing")
     # Dietary signals come from compliance_data (the canonical source for
     # vegan / gluten_free / etc. flags). dietary_sensitivity_data carries
     # only sugar / sodium per `_collect_dietary_sensitivity_data` and never
     # had `vegan` or `gluten_free` populated — the prior reads against
     # `dietary_sensitivity_data` were silently always-false dead paths.
     if safe_dict(enriched.get("compliance_data")).get("vegan"):
-        positive_signals.append("vegan")
+        positive_signals.append("vegan-friendly formulation")
 
     share_description = f"A {grade.lower()} quality supplement"
     if positive_signals:

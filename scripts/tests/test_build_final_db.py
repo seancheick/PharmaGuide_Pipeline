@@ -23,6 +23,7 @@ from build_final_db import (
     build_top_warnings,
     classify_product_categories,
     fetch_staged_product,
+    generate_share_metadata,
     generate_ingredient_fingerprint,
     generate_key_nutrients_summary,
     generate_dosing_summary,
@@ -290,6 +291,34 @@ def test_build_core_row_includes_flutter_convenience_fields():
     assert isinstance(decision_highlights["caution"], str)
     assert isinstance(decision_highlights["danger"], list)
     assert isinstance(decision_highlights["trust"], str)
+
+
+def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
+    enriched = {
+        "product_name": "Clinical Probe",
+        "brand_name": "Test Brand",
+        "compliance_data": {},
+    }
+    base_scored = {
+        "grade": "Strong",
+        "score_100_equivalent": 82,
+        "verdict": "SAFE",
+    }
+
+    mid = generate_share_metadata(
+        enriched,
+        {**base_scored, "_v4_pillars": {"evidence": {"score": 12.0, "max": 20}}},
+    )
+    assert "Clinically-backed ingredients" in mid["share_highlights"]
+    assert "clinical evidence" not in mid["share_description"]
+    assert "clinically-backed" not in mid["share_description"]
+
+    high = generate_share_metadata(
+        enriched,
+        {**base_scored, "_v4_pillars": {"evidence": {"score": 15.0, "max": 20}}},
+    )
+    assert "with clinical evidence" in high["share_description"]
+    assert "with clinically-backed" not in high["share_description"]
 
 
 def test_export_prefers_resolved_supplement_type_over_stale_specialty():
