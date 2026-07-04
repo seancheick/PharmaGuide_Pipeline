@@ -17,15 +17,14 @@ from scoring_v4.modules.generic_helpers import (
 )
 
 
-JOINT_SUPPORT_EVIDENCE_CAP = 14.0
+from scoring_v4.quality_score_config import block as _cfg_block
 
-JOINT_TARGET_DOSE_MG = {
-    "glucosamine": 1500.0,
-    "chondroitin": 1200.0,
-    "msm": 1500.0,
-    "uc_ii": 40.0,
-    "hyaluronic_acid": 120.0,
-}
+_CM = _cfg_block("category_magnitudes", "joint_support")["joint_support"]
+
+
+JOINT_SUPPORT_EVIDENCE_CAP = _CM["evidence_cap"]
+
+JOINT_TARGET_DOSE_MG = dict(_CM["target_dose_mg"])
 
 _JOINT_ALIASES = {
     "glucosamine": ("glucosamine",),

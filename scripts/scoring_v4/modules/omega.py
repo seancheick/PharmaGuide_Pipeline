@@ -82,12 +82,12 @@ PHASE_MARKER = "P1.6.6_omega_final_assembly"
 
 # Dimension caps per §4 + omega_rubric.json. Order is rendering order in
 # audit / UI. Locked by test_v4_omega_module_skeleton_p160.
-DIMENSION_CAPS = (
-    ("formulation", 25),
-    ("dose", 25),
-    ("evidence", 20),
-    ("transparency", 15),
-)
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "omega")["omega"]
+
+
+DIMENSION_CAPS = tuple((n, c) for n, c in _CM["dimension_caps"])
 
 
 @dataclass

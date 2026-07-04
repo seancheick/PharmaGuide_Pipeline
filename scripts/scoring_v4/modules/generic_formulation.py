@@ -224,11 +224,11 @@ B1_HARMFUL_ADDITIVE_CAP = float(_FP.get("b1_harmful_additive_cap", 15.0))
 # B1 dietary-sugar penalty bands. Uses the strongest applicable band rather
 # than summing, so one gummy with syrup and 4g sugar is a high-sugar penalty,
 # not three separate sugar penalties.
-DIETARY_SUGAR_LOW_ADDED_PENALTY = 1.0
-DIETARY_SUGAR_HIGH_GLYCEMIC_OR_ALCOHOL_PENALTY = 2.0
-DIETARY_SUGAR_MODERATE_PENALTY = 3.0
-DIETARY_SUGAR_HIGH_PENALTY = 4.0
-DIETARY_SUGAR_CAP = 4.0
+DIETARY_SUGAR_LOW_ADDED_PENALTY = _FM["dietary_sugar_low_added_penalty"]
+DIETARY_SUGAR_HIGH_GLYCEMIC_OR_ALCOHOL_PENALTY = _FM["dietary_sugar_high_glycemic_or_alcohol_penalty"]
+DIETARY_SUGAR_MODERATE_PENALTY = _FM["dietary_sugar_moderate_penalty"]
+DIETARY_SUGAR_HIGH_PENALTY = _FM["dietary_sugar_high_penalty"]
+DIETARY_SUGAR_CAP = _FM["dietary_sugar_cap"]
 
 PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 _DATA_DIR = Path(__file__).resolve().parents[2] / "data"

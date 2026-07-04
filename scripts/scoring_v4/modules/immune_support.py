@@ -19,8 +19,13 @@ from scoring_v4.modules.generic_helpers import (
 )
 
 
-IMMUNE_FORMULATION_BONUS_CAP = 12.0
-IMMUNE_EVIDENCE_FLOOR_CAP = 16.5
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "immune_support")["immune_support"]
+
+
+IMMUNE_FORMULATION_BONUS_CAP = _CM["formulation_bonus_cap"]
+IMMUNE_EVIDENCE_FLOOR_CAP = _CM["evidence_floor_cap"]
 
 _ALIASES = {
     "vitamin_c": ("vitamin_c", "ascorbic acid", "ascorbate", "ester-c", "vitamin c"),

@@ -78,22 +78,22 @@ RETIRED_AFFINE_METHOD = "affine_p15"
 # Phase 4 (Trust→Verification Bonus): the former ("trust", 15) DIMENSION was
 # removed from the denominator and converted to an additive verification_bonus
 # (0-8). Core now sums to 85; verification is added like manufacturer_trust.
-DIMENSION_CAPS = (
-    ("formulation", 30),
-    ("dose", 25),
-    ("evidence", 20),
-    ("transparency", 10),
-)
+from scoring_v4.quality_score_config import block as _cfg_block
 
-MANUFACTURER_TRUST_CAP = 5
-MANUFACTURER_VIOLATIONS_FLOOR = -25
+_CM = _cfg_block("category_magnitudes", "generic")["generic"]
+
+
+DIMENSION_CAPS = tuple((n, c) for n, c in _CM["dimension_caps"])
+
+MANUFACTURER_TRUST_CAP = _CM["manufacturer_trust_cap"]
+MANUFACTURER_VIOLATIONS_FLOOR = _CM["manufacturer_violations_floor"]
 # Phase 4 botanical guard: a botanical whose dose dimension is non-evaluable
 # must not be stamped POOR purely from removing the old renormalization, before
 # Phase 6's botanical dose adapter lands. Floors raw at the SAFE/POOR boundary.
-BOTANICAL_RAW_FLOOR = 40.0
+BOTANICAL_RAW_FLOOR = _CM["botanical_raw_floor"]
 
-ASTAXANTHIN_PUBLIC_QUALITY_CAP = 85.0
-COQ10_PUBLIC_QUALITY_CAP = 93.0
+ASTAXANTHIN_PUBLIC_QUALITY_CAP = _CM["astaxanthin_public_quality_cap"]
+COQ10_PUBLIC_QUALITY_CAP = _CM["coq10_public_quality_cap"]
 _ASTAXANTHIN_IDENTITIES = frozenset({
     "astaxanthin",
     "natural_astaxanthin",

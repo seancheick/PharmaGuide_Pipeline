@@ -22,7 +22,12 @@ MELATONIN_CANONICALS = frozenset({"melatonin"})
 FIVE_HTP_CANONICALS = frozenset({"5_htp", "5-htp", "5 hydroxytryptophan"})
 SLEEP_CANONICALS = MELATONIN_CANONICALS | FIVE_HTP_CANONICALS
 
-MELATONIN_GUMMY_FORMAT_PENALTY = 2.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "sleep_support")["sleep_support"]
+
+
+MELATONIN_GUMMY_FORMAT_PENALTY = _CM["melatonin_gummy_format_penalty"]
 
 
 def is_sleep_support_product(product: Dict[str, Any]) -> bool:

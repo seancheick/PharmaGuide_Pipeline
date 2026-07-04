@@ -60,12 +60,12 @@ PHASE_MARKER = "P3.6_multi_prenatal_final_assembly"
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
 # audit / UI and should remain stable across P3 slices.
-DIMENSION_CAPS = (
-    ("formulation", 25),
-    ("dose", 25),
-    ("evidence", 20),
-    ("transparency", 15),
-)
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "multi_prenatal")["multi_prenatal"]
+
+
+DIMENSION_CAPS = tuple((n, c) for n, c in _CM["dimension_caps"])
 
 
 @dataclass

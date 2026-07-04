@@ -49,12 +49,17 @@ B_CORE = (
 )
 B_OPTIONAL_SUPPORT = {"choline", "inositol"}
 
-FORMULATION_CAP = 30.0
-DOSE_CAP = 25.0
-EVIDENCE_CAP = 20.0
-B7_UL_PCT_THRESHOLD = 150.0
-B7_PER_FLAG_PENALTY = 2.0
-B7_CAP = 3.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "b_complex")["b_complex"]
+
+
+FORMULATION_CAP = _CM["formulation_cap"]
+DOSE_CAP = _CM["dose_cap"]
+EVIDENCE_CAP = _CM["evidence_cap"]
+B7_UL_PCT_THRESHOLD = _CM["b7_ul_pct_threshold"]
+B7_PER_FLAG_PENALTY = _CM["b7_per_flag_penalty"]
+B7_CAP = _CM["b7_cap"]
 
 PREFERRED_FORM_PATTERNS = {
     "vitamin_b2_riboflavin": re.compile(r"\b(riboflavin[-\s]?5[-\s]?phosphate|r5p)\b", re.IGNORECASE),

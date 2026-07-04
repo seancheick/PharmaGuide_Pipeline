@@ -76,12 +76,12 @@ PHASE_MARKER = "P2.6_probiotic_final_assembly"
 
 # Dimension caps per §4 line 176, probiotic column.
 # Order is rendering order in audit / UI.
-DIMENSION_CAPS = (
-    ("formulation", 25),
-    ("dose", 25),
-    ("evidence", 20),
-    ("transparency", 15),
-)
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "probiotic")["probiotic"]
+
+
+DIMENSION_CAPS = tuple((n, c) for n, c in _CM["dimension_caps"])
 
 
 @dataclass

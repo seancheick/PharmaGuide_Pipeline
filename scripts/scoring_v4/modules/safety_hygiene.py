@@ -20,7 +20,12 @@ from scoring_v4.modules.generic_helpers import _safe_dict, _safe_list
 # overdose / harmful-additive / manufacturer-violation passes were removed
 # because each is already penalised by its own dimension (B7 / B1 /
 # manufacturer_violations) — crediting "absence" here double-counted.
-SAFETY_HYGIENE_CAP = 4.0
+from scoring_v4.quality_score_config import block as _cfg_block
+
+_CM = _cfg_block("category_magnitudes", "safety_hygiene")["safety_hygiene"]
+
+
+SAFETY_HYGIENE_CAP = _CM["cap"]
 
 
 @dataclass
