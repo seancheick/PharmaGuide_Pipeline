@@ -1459,7 +1459,8 @@ def test_b1_harmful_additives_severity_points_and_sugar_stays_separate() -> None
         )
     )
 
-    assert payload["penalties"]["B1_harmful_additives"] == -6.5
+    # S6 recalibration (2026-07-04): critical 4 + high 3 + moderate 2 + low 0.5 = 9.5
+    assert payload["penalties"]["B1_harmful_additives"] == -9.5
     assert payload["penalties"]["B1_dietary_sugar"] == -4.0
 
 
@@ -1481,7 +1482,8 @@ def test_b1_harmful_additives_suppresses_low_and_moderate_actives_only() -> None
         )
     )
 
-    assert payload["penalties"]["B1_harmful_additives"] == -5.0
+    # S6: only high (3) + critical (4) score — low/moderate active-source rows suppressed
+    assert payload["penalties"]["B1_harmful_additives"] == -7.0
 
 
 def test_b1_harmful_additives_dedupes_by_id_and_caps_at_15() -> None:

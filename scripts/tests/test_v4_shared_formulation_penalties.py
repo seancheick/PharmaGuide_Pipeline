@@ -75,7 +75,7 @@ def test_shared_formulation_penalties_are_identical_across_module_formulators() 
     expected = {
         "B1_dietary_sugar": -2.0,
         "B0_moderate_watchlist": -5.0,
-        "B1_harmful_additives": -2.0,
+        "B1_harmful_additives": -3.0,  # S6 (2026-07-04): single high additive = 3.0
     }
 
     for scorer in (

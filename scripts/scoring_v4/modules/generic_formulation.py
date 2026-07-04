@@ -186,14 +186,34 @@ B0_MODERATE_PENALTY = 10.0
 # 30-pt dimension, not exceed it). Was 10.0 (which collapsed 2 high_risk into 1).
 B0_CAP = DIMENSION_CAP  # 30.0
 
-B1_HARMFUL_ADDITIVE_CAP = 15.0
+# B1 harmful-additive points/cap are HOISTED to scripts/scoring_v4/config/
+# quality_score.json (formulation_penalties). Single source: the safety_hygiene
+# pillar reads the same file. Only the VALUES are config-driven; the B1 logic
+# stays here (§13 architecture lock). Fail fast if the block is missing — a
+# silent wrong score is worse than a loud error. test_v4_additive_points_config
+# guards config<->runtime drift.
+_V4_CONFIG_PATH = Path(__file__).resolve().parents[1] / "config" / "quality_score.json"
+
+
+@lru_cache(maxsize=1)
+def _v4_formulation_penalties() -> Dict[str, Any]:
+    cfg = json.loads(_V4_CONFIG_PATH.read_text())
+    fp = cfg.get("formulation_penalties") if isinstance(cfg, dict) else None
+    if not isinstance(fp, dict) or "b1_harmful_additive_points" not in fp:
+        raise RuntimeError(
+            f"{_V4_CONFIG_PATH.name} missing formulation_penalties."
+            "b1_harmful_additive_points — v4 additive scoring config not found"
+        )
+    return fp
+
+
 B1_HARMFUL_ADDITIVE_POINTS = {
-    "critical": 3.0,
-    "high": 2.0,
-    "moderate": 1.0,
-    "low": 0.5,
-    "none": 0.0,
+    str(k): float(v)
+    for k, v in _v4_formulation_penalties()["b1_harmful_additive_points"].items()
 }
+B1_HARMFUL_ADDITIVE_CAP = float(
+    _v4_formulation_penalties().get("b1_harmful_additive_cap", 15.0)
+)
 
 # B1 dietary-sugar penalty bands. Uses the strongest applicable band rather
 # than summing, so one gummy with syrup and 4g sugar is a high-sugar penalty,
