@@ -170,10 +170,10 @@
       "notes": "An artificial sweetener ~200× sweeter than sugar (E950). FDA-approved with an ADI of 15 mg/kg/day. Some studies suggest effects on gut microbiome composition and glucose/insulin response, but evidence is limited. WHO (2023) advises against long-term use of non-sugar sweeteners for weight control. Generally safe at typical supplement doses.",
       "scientific_references": [
         "DOI: 10.1371/journal.pone.0199080 - Gut microbiome effects",
-        "DOI: 10.1016/j.fct.2005.05.012 - Safety assessment (needs_verification: DOI could not be resolved to an acesulfame paper)",
+        "DOI: 10.1016/j.fct.2020.111375 - Lack of potential carcinogenicity for acesulfame potassium",
         "WHO Guideline: Use of non-sugar sweeteners (2023)"
       ],
-      "last_updated": "2026-02-16",
+      "last_updated": "2026-07-04",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -194,10 +194,10 @@
         {
           "type": "systematic_review",
           "authority": "OTHER",
-          "title": "DOI: 10.1016/j.fct.2005.05.012 - Safety assessment (NEEDS VERIFICATION: DOI could not be confirmed to resolve to an acesulfame safety paper)",
-          "citation": "DOI: 10.1016/j.fct.2005.05.012 - Safety assessment (NEEDS VERIFICATION)",
-          "url": "https://doi.org/10.1016/j.fct.2005.05.012",
-          "published_date": null,
+          "title": "Lack of potential carcinogenicity for acesulfame potassium - Systematic evaluation and integration of mechanistic data into the totality of the evidence",
+          "citation": "Chappell GA et al. Food Chem Toxicol. 2020;141:111375. DOI: 10.1016/j.fct.2020.111375",
+          "url": "https://doi.org/10.1016/j.fct.2020.111375",
+          "published_date": "2020",
           "evidence_grade": "B",
           "supports_claims": []
         },
@@ -305,8 +305,13 @@
           },
           {
             "date": "2026-03-24",
-            "change": "Added dose_thresholds (FDA/EFSA/JECFA ADI 15 mg/kg/day). Flagged DOI 10.1016/j.fct.2005.05.012 as needs_verification (cannot confirm it resolves to an acesulfame safety paper).",
+            "change": "Added dose_thresholds (FDA/EFSA/JECFA ADI 15 mg/kg/day). Flagged a prior acesulfame safety-assessment DOI as needs_verification because it resolved to the wrong topic.",
             "reason": "deep_audit_batch_1"
+          },
+          {
+            "date": "2026-07-04",
+            "change": "Replaced wrong-topic detergent-study DOI with content-verified Ace-K review DOI 10.1016/j.fct.2020.111375.",
+            "reason": "citation_integrity_cleanup"
           }
         ]
       },
@@ -16385,10 +16390,10 @@
         {
           "type": "doi",
           "authority": "OTHER",
-          "title": "Tissue accumulation",
-          "citation": "",
-          "url": "https://doi.org/10.1002/tcp.10162",
-          "published_date": null,
+          "title": "Safety Assessment of Butylated Hydroxyanisole and Butylated Hydroxytoluene as Antioxidant Food Additives",
+          "citation": "Williams GM, Iatropoulos MJ, Whysner J. Food Chem Toxicol. 1999;37(9-10):1027-1038. DOI: 10.1016/S0278-6915(99)00085-X",
+          "url": "https://doi.org/10.1016/S0278-6915(99)00085-X",
+          "published_date": "1999",
           "evidence_grade": "B",
           "supports_claims": [
             "mechanism_of_harm",
@@ -16988,10 +16993,10 @@
         {
           "type": "doi",
           "authority": "OTHER",
-          "title": "Accumulation studies",
-          "citation": "",
-          "url": "https://doi.org/10.1002/tcp.10162",
-          "published_date": null,
+          "title": "Safety Assessment of Butylated Hydroxyanisole and Butylated Hydroxytoluene as Antioxidant Food Additives",
+          "citation": "Williams GM, Iatropoulos MJ, Whysner J. Food Chem Toxicol. 1999;37(9-10):1027-1038. DOI: 10.1016/S0278-6915(99)00085-X",
+          "url": "https://doi.org/10.1016/S0278-6915(99)00085-X",
+          "published_date": "1999",
           "evidence_grade": "B",
           "supports_claims": [
             "mechanism_of_harm",
@@ -17108,10 +17113,23 @@
         {
           "type": "doi",
           "authority": "OTHER",
-          "title": "Safety review",
-          "citation": "",
-          "url": "https://doi.org/10.1080/10408398.2019.1629524",
-          "published_date": null,
+          "title": "Toxicology of tert-butylhydroquinone (TBHQ)",
+          "citation": "van Esch GJ. Food Chem Toxicol. 1986;24(10-11):1063-1065. DOI: 10.1016/0278-6915(86)90289-9",
+          "url": "https://doi.org/10.1016/0278-6915(86)90289-9",
+          "published_date": "1986",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ]
+        },
+        {
+          "type": "doi",
+          "authority": "OTHER",
+          "title": "Nrf2-dependent and -independent effects of tBHQ in activated murine B cells",
+          "citation": "Bursley JK, Rockwell CE. Food Chem Toxicol. 2020;145:111595. DOI: 10.1016/j.fct.2020.111595",
+          "url": "https://doi.org/10.1016/j.fct.2020.111595",
+          "published_date": "2020",
           "evidence_grade": "B",
           "supports_claims": [
             "mechanism_of_harm",
@@ -17150,6 +17168,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI C0046563 verified. CAS 1948-33-0 pre-verified. Populated dose_thresholds (JECFA ADI 0.7 mg/kg). Upgraded confidence medium->high. Added Japan ban + clean-label warnings. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-07-04",
+            "change": "Replaced unresolved safety-review DOI with content-verified TBHQ toxicology DOI 10.1016/0278-6915(86)90289-9 and B-cell immune-effects DOI 10.1016/j.fct.2020.111595. Corrected PMC9147452 journal label to Life (Basel) 2022.",
+            "reason": "citation_integrity_cleanup"
           }
         ]
       },
@@ -17161,16 +17184,18 @@
         "Japan": "PROHIBITED. Japan prohibits TBHQ as a food additive.",
         "Retail": "Increasingly being voluntarily removed by major retailers (Walmart, Kroger, Whole Foods clean label commitments)."
       },
-      "mechanism_of_harm": "Synthetic antioxidant preservative. NOT classified by IARC (not in Group 2B, 2A, or 1 — formally unclassified, distinct from Group 3). EFSA 2004: no carcinogenicity concern identified. NTP: not listed as carcinogen. EMERGING IMMUNOTOXICITY CONCERN: EWG-commissioned ToxCast analysis and peer-reviewed animal studies (PMC9147452, Frontiers in Immunology 2022) demonstrate that TBHQ: modulates T-cell function (Th2 skewing), may suppress vaccine efficacy, and exacerbates food allergy in animal models. FDA has not reviewed TBHQ for immunotoxicity since 1972 — a significant regulatory data gap. Japan prohibits TBHQ; EU permits with limits; US FDA approves with 0.02% fat content ceiling.",
-      "notes": "Petroleum-derived antioxidant preservative. Japan prohibits; FDA and EU permit with limits. IARC STATUS CLARIFIED: TBHQ is NOT classified by IARC (not Group 2B and not Group 3 — formally unclassified). SEVERITY DOWNGRADED FROM CRITICAL TO HIGH: 'Critical' requires confirmed major human harm. TBHQ has no carcinogen classification from IARC, NTP, or EFSA; however, the emerging immunotoxicity signal (PMC9147452), Japan prohibition, and 50-year FDA safety data gap justify 'high' as precautionary. FDA ADI note: 0.02% of fat content is a use limit, not an ADI per se; JECFA international ADI = 0.7 mg/kg bw/day.",
+      "mechanism_of_harm": "Synthetic antioxidant preservative. NOT classified by IARC (not in Group 2B, 2A, or 1 — formally unclassified, distinct from Group 3). EFSA 2004: no carcinogenicity concern identified. NTP: not listed as carcinogen. EMERGING IMMUNOTOXICITY CONCERN: ToxCast analysis and peer-reviewed studies (including PMC9147452, Life (Basel) 2022, and DOI 10.1016/j.fct.2020.111595) suggest immune-related gene-expression and B-cell effects, but human clinical significance remains uncertain. FDA has not reviewed TBHQ for immunotoxicity since 1972 — a significant regulatory data gap. Japan prohibits TBHQ; EU permits with limits; US FDA approves with 0.02% fat content ceiling.",
+      "notes": "Petroleum-derived antioxidant preservative. Japan prohibits; FDA and EU permit with limits. IARC STATUS CLARIFIED: TBHQ is NOT classified by IARC (not Group 2B and not Group 3 — formally unclassified). SEVERITY DOWNGRADED FROM CRITICAL TO HIGH: 'Critical' requires confirmed major human harm. TBHQ has no carcinogen classification from IARC, NTP, or EFSA; however, the emerging immunotoxicity signal (PMC9147452; DOI 10.1016/j.fct.2020.111595), Japan prohibition, and 50-year FDA safety data gap justify 'high' as precautionary. FDA ADI note: 0.02% of fat content is a use limit, not an ADI per se; JECFA international ADI = 0.7 mg/kg bw/day.",
       "scientific_references": [
-        "PMC9147452 — Chronic tBHQ exposure modulates immune function: Th2 skewing, vaccine efficacy reduction, food allergy exacerbation (Frontiers in Immunology 2022)",
+        "PMC9147452 — Chronic tBHQ exposure modulates expression of genes related to SARS-CoV-2 and influenza viruses (Life (Basel) 2022)",
+        "DOI: 10.1016/j.fct.2020.111595 — Nrf2-dependent and -independent effects of tBHQ in activated murine B cells",
+        "DOI: 10.1016/0278-6915(86)90289-9 — Toxicology of tert-butylhydroquinone (TBHQ)",
         "EFSA 2004 — TBHQ re-evaluation: no carcinogenicity concern identified",
         "JECFA — TBHQ ADI: 0.7 mg/kg bw/day",
         "FDA 21 CFR 172.185 — TBHQ use limit ≤0.02% of fat content",
         "EWG ToxCast report — TBHQ immunotoxicity analysis"
       ],
-      "last_updated": "2026-03-28",
+      "last_updated": "2026-07-04",
       "jurisdictional_statuses": [],
       "cui": "C0046563",
       "external_ids": {
