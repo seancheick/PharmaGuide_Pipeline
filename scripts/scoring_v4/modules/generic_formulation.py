@@ -225,7 +225,8 @@ B1_HARMFUL_ADDITIVE_CAP = float(_FP.get("b1_harmful_additive_cap", 15.0))
 # than summing, so one gummy with syrup and 4g sugar is a high-sugar penalty,
 # not three separate sugar penalties.
 DIETARY_SUGAR_LOW_ADDED_PENALTY = _FM["dietary_sugar_low_added_penalty"]
-DIETARY_SUGAR_HIGH_GLYCEMIC_OR_ALCOHOL_PENALTY = _FM["dietary_sugar_high_glycemic_or_alcohol_penalty"]
+DIETARY_SUGAR_HIGH_GLYCEMIC_OR_SYRUP_PENALTY = _FM["dietary_sugar_high_glycemic_or_syrup_penalty"]
+DIETARY_SUGAR_SUGAR_ALCOHOL_PENALTY = _FM["dietary_sugar_sugar_alcohol_penalty"]
 DIETARY_SUGAR_MODERATE_PENALTY = _FM["dietary_sugar_moderate_penalty"]
 DIETARY_SUGAR_HIGH_PENALTY = _FM["dietary_sugar_high_penalty"]
 DIETARY_SUGAR_CAP = _FM["dietary_sugar_cap"]
@@ -641,9 +642,15 @@ def _dietary_sugar_penalty_detail(product: Dict[str, Any]) -> Dict[str, Any]:
     elif level == "moderate":
         penalty = DIETARY_SUGAR_MODERATE_PENALTY
         reason = "moderate_sugar_grams"
-    elif high_glycemic or sugar_alcohols or syrup_sources:
-        penalty = DIETARY_SUGAR_HIGH_GLYCEMIC_OR_ALCOHOL_PENALTY
-        reason = "high_glycemic_syrup_or_sugar_alcohol"
+    elif high_glycemic or syrup_sources:
+        # Real added sugar / high-glycemic — check FIRST so alcohol+syrup stays here.
+        penalty = DIETARY_SUGAR_HIGH_GLYCEMIC_OR_SYRUP_PENALTY
+        reason = "high_glycemic_or_syrup"
+    elif sugar_alcohols:
+        # Sugar alcohols de-conflated (2026-07-04): a light penalty, NOT corn-syrup
+        # equivalence. They can still carry their own harmful_additives severity.
+        penalty = DIETARY_SUGAR_SUGAR_ALCOHOL_PENALTY
+        reason = "sugar_alcohol_source"
     elif bool(sugar.get("has_added_sugar")) or (
         bool(sugar.get("contains_sugar")) and sugar_sources
     ):

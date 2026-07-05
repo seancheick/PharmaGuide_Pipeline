@@ -2391,8 +2391,10 @@ def derive_v4_tradeoffs(
             sugar_label = "High sugar content"
         elif sugar_reason == "moderate_sugar_grams":
             sugar_label = "Moderate sugar content"
-        elif sugar_reason == "high_glycemic_syrup_or_sugar_alcohol":
-            sugar_label = "High-glycemic sweetener or sugar alcohol"
+        elif sugar_reason == "high_glycemic_or_syrup":
+            sugar_label = "High-glycemic sweetener or syrup"
+        elif sugar_reason == "sugar_alcohol_source":
+            sugar_label = "Sugar alcohol"
         else:
             sugar_label = "Added sugar source"
         detail_parts: List[str] = []

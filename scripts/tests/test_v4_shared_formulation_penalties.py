@@ -96,5 +96,5 @@ def test_shared_formulation_penalties_keep_dietary_sugar_metadata() -> None:
 
     sugar = payload["metadata"]["dietary_sugar"]
     assert sugar["penalty"] == 2.0
-    assert sugar["reason"] == "high_glycemic_syrup_or_sugar_alcohol"
+    assert sugar["reason"] == "high_glycemic_or_syrup"
     assert sugar["syrup_sources"] == ["corn syrup"]

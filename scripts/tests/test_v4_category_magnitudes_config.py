@@ -49,7 +49,8 @@ ORIGINAL = {
     "safety_hygiene": {"cap": 4.0},
 }
 SUGAR = {
-    "dietary_sugar_low_added_penalty": 1.0, "dietary_sugar_high_glycemic_or_alcohol_penalty": 2.0,
+    "dietary_sugar_low_added_penalty": 1.0, "dietary_sugar_sugar_alcohol_penalty": 1.0,
+    "dietary_sugar_high_glycemic_or_syrup_penalty": 2.0,
     "dietary_sugar_moderate_penalty": 3.0, "dietary_sugar_high_penalty": 4.0, "dietary_sugar_cap": 4.0,
 }
 

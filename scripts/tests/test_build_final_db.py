@@ -803,7 +803,7 @@ def test_dietary_sugar_penalty_exports_to_tradeoffs():
     )
     assert sugar_penalty["score"] == -2.0
     assert sugar_penalty["severity"] == "moderate"
-    assert sugar_penalty["reason"] == "high_glycemic_syrup_or_sugar_alcohol"
+    assert sugar_penalty["reason"] == "high_glycemic_or_syrup"
 
 
 def test_recalled_exact_match_sets_recalled_flag_but_not_banned_flag():
