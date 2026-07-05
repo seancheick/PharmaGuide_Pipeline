@@ -285,7 +285,11 @@ class PipelineRunner:
 
         try:
             from coverage_gate import CoverageGate
+        except ImportError:
+            logger.warning("coverage_gate module not available, skipping coverage check")
+            return True, None
 
+        try:
             # Load enriched products
             enriched_path = self._resolve_path(enriched_dir)
             products = []
@@ -346,9 +350,6 @@ class PipelineRunner:
                 "issues": result.issues_by_type
             }
 
-        except ImportError:
-            logger.warning("coverage_gate module not available, skipping coverage check")
-            return True, None
         except Exception as e:
             logger.error(f"Coverage gate failed: {e}")
             return not block_on_failure, None
