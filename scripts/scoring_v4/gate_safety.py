@@ -555,6 +555,41 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
         _append_signal(result, f"B0_STATUS_{status.upper()}")
 
 
+def _apply_ul_dose_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
+    """UL dose severity → verdict (P0-1b).
+
+    A GATE-ELIGIBLE over-UL flag (``pct_ul >= 150``) cannot ship SAFE:
+      - 150–199% → CAUTION
+      - >= 200%  → CAUTION + a critical dose signal
+    Dose excess NEVER escalates past CAUTION — BLOCKED/UNSAFE stay for
+    banned/recalled/adulterated substances.
+
+    Flags marked ``ul_gate_eligible: False`` (compound_mass_not_elemental — e.g.
+    Magtein, whose label states compound not elemental mass) are excluded so the
+    gate never fires a false CAUTION. Missing key defaults to eligible
+    (back-compat with older enrich output). ``pct_ul is None`` is not evaluable
+    and never treated as over.
+    """
+    rda_ul = _safe_dict(product.get("rda_ul_data"))
+    max_pct = 0.0
+    for flag in _safe_list(rda_ul.get("safety_flags")):
+        if not isinstance(flag, dict):
+            continue
+        if flag.get("ul_gate_eligible") is False:
+            continue
+        pct = _as_float(flag.get("pct_ul"))
+        if pct is None:
+            continue
+        if pct >= 150.0 and pct > max_pct:
+            max_pct = pct
+    if max_pct >= 150.0:
+        result.verdict = _max_verdict(result.verdict, "CAUTION")
+        _append_signal(
+            result,
+            "DOSE_OVER_UL_CRITICAL" if max_pct >= 200.0 else "DOSE_OVER_UL_CAUTION",
+        )
+
+
 def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
@@ -579,6 +614,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
         _apply_signal_policy(result, sig)
 
     _apply_stimulant_policy(result, product)
+    _apply_ul_dose_policy(result, product)
 
     # Disease claims → CAUTION. v3 routes this through B6 marketing
     # penalty + verdict adjustment; v4 surfaces it as a Layer 1 signal.
