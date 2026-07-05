@@ -7964,9 +7964,15 @@ def build_core_row(
         safe_float(safe_dict(ss.get("C_evidence_research")).get("max")),
         safe_float(safe_dict(ss.get("D_brand_trust")).get("score")),
         safe_float(safe_dict(ss.get("D_brand_trust")).get("max")),
-        # Percentile
-        safe_float(cp.get("percentile_rank")) if cp.get("available") else None,
-        safe_float(cp.get("top_percent")) if cp.get("available") else None,
+        # Percentile — SUPPRESSED. category_percentile is frozen at score time
+        # (score_supplements._attach_category_percentiles ranks on the retired V3
+        # score_100_equivalent); export_adapter overwrites the score with the V4
+        # value but never recomputes the rank, so the badge would be ranked by a
+        # different model than the score shown. Suppress until a V4 percentile is
+        # recomputed over the v4-scored cohort at build time. Category/label
+        # (cohort identity, below) are basis-independent and still ship.
+        None,  # percentile_rank
+        None,  # percentile_top_pct
         safe_str((enriched.get("supplement_taxonomy") or {}).get("percentile_category")) or safe_str(cp.get("category_key")),
         safe_str(cp.get("category_label")),
         cp.get("cohort_size", 0) if cp.get("available") else None,
