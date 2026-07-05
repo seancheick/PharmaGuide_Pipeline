@@ -4,9 +4,14 @@ Review follow-up — don't ship the V3-basis "Top X%" percentile next to a V4 sc
 `category_percentile` is frozen at score time by
 score_supplements._attach_category_percentiles, which ranks on
 `score_100_equivalent` (= the retired V3 score). export_adapter later overwrites
-the score with the V4 value but never recomputes the percentile, so the badge is
-ranked by a different model than the score shown. Until a V4 percentile is
-recomputed at build time, suppress the rank (hide) rather than mislead.
+the score with the V4 value but never recomputes the percentile, so the frozen
+rank is ranked by a different model than the score shown.
+
+build_core_row must therefore emit percentile_rank / top_pct / cohort as NULL —
+the shippable V4 percentile is BACKFILLED after the insert loop by
+compute_v4_category_percentiles (ranked over quality_score_v4_100 across the
+surviving cohort). This test guards the per-row emitter: it must never leak the
+frozen V3-basis rank/cohort, or the backfill would be racing a stale value.
 """
 
 from __future__ import annotations
@@ -30,8 +35,11 @@ def test_v3_basis_percentile_rank_is_suppressed():
     row = row_as_dict(build_core_row(enriched, scored, "2026-07-05T00:00:00Z"))
 
     assert row["percentile_rank"] is None, (
-        "V3-basis percentile_rank must not ship next to a V4 score"
+        "V3-basis percentile_rank must not ship from build_core_row (backfilled)"
     )
     assert row["percentile_top_pct"] is None, (
-        "V3-basis percentile_top_pct must not ship next to a V4 score"
+        "V3-basis percentile_top_pct must not ship from build_core_row (backfilled)"
+    )
+    assert row["percentile_cohort"] is None, (
+        "V3-basis percentile_cohort must not ship from build_core_row (backfilled)"
     )

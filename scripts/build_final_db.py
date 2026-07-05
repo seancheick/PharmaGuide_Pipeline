@@ -7719,6 +7719,50 @@ def _reconcile_scored_export_flags(scored: Dict) -> Dict:
     return reconcile_v4_flags(scored)
 
 
+def compute_v4_category_percentiles(
+    rows: List[Tuple[str, Optional[str], float]],
+    min_cohort: int = 5,
+) -> List[Tuple[float, float, int, str]]:
+    """Rank shipped v4 /100 scores within each percentile-category cohort.
+
+    Mirrors ``score_supplements._attach_category_percentiles`` exactly, but over
+    the actually-exported ``quality_score_v4_100`` instead of the retired V3
+    ``score_100_equivalent``. Products in a cohort smaller than ``min_cohort``
+    are left unranked (no tuple emitted -> percentile columns stay NULL, which
+    matches the V3 "insufficient_cohort_size" behaviour).
+
+    Args:
+        rows: ``(dsld_id, percentile_category, quality_score_v4_100)`` for
+            products that are v4-scored (``quality_score_status == 'scored'``).
+            Rows with an empty/None category are ignored (no cohort to rank in).
+        min_cohort: smallest cohort that gets ranked (default 5, matching
+            ``score_supplements._CATEGORY_PERCENTILE_MIN_COHORT``).
+
+    Returns:
+        ``(percentile_rank, top_pct, cohort_size, dsld_id)`` per ranked product.
+    """
+    cohorts: Dict[str, List[Tuple[str, float]]] = {}
+    for dsld_id, category, score in rows:
+        if not category or score is None:
+            continue
+        cohorts.setdefault(category, []).append((dsld_id, float(score)))
+
+    updates: List[Tuple[float, float, int, str]] = []
+    for members in cohorts.values():
+        cohort_size = len(members)
+        if cohort_size < min_cohort:
+            continue
+        scores = [s for _, s in members]
+        for dsld_id, score in members:
+            higher = sum(1 for v in scores if v > score)
+            equal = sum(1 for v in scores if v == score)
+            rank = higher + ((equal + 1.0) / 2.0)
+            top_pct = round(max(0.0, min(100.0, (rank / cohort_size) * 100.0)), 1)
+            percentile_rank = round(100.0 - top_pct, 1)
+            updates.append((percentile_rank, top_pct, cohort_size, dsld_id))
+    return updates
+
+
 def build_core_row(
     enriched: Dict,
     scored: Dict,
@@ -7964,18 +8008,18 @@ def build_core_row(
         safe_float(safe_dict(ss.get("C_evidence_research")).get("max")),
         safe_float(safe_dict(ss.get("D_brand_trust")).get("score")),
         safe_float(safe_dict(ss.get("D_brand_trust")).get("max")),
-        # Percentile — SUPPRESSED. category_percentile is frozen at score time
-        # (score_supplements._attach_category_percentiles ranks on the retired V3
-        # score_100_equivalent); export_adapter overwrites the score with the V4
-        # value but never recomputes the rank, so the badge would be ranked by a
-        # different model than the score shown. Suppress until a V4 percentile is
-        # recomputed over the v4-scored cohort at build time. Category/label
-        # (cohort identity, below) are basis-independent and still ship.
-        None,  # percentile_rank
-        None,  # percentile_top_pct
+        # Percentile — rank/top_pct/cohort are emitted NULL here and BACKFILLED
+        # after the insert loop by compute_v4_category_percentiles(), which ranks
+        # the actually-shipped quality_score_v4_100 within each percentile_category
+        # cohort. The frozen category_percentile (score_supplements) ranks on the
+        # retired V3 score_100_equivalent and its cohort_size counts the V3-scored
+        # set, so neither its rank NOR its cohort can ship next to a V4 score.
+        # Category/label (cohort identity) are basis-independent and still ship.
+        None,  # percentile_rank      (backfilled: V4 recompute)
+        None,  # percentile_top_pct   (backfilled: V4 recompute)
         safe_str((enriched.get("supplement_taxonomy") or {}).get("percentile_category")) or safe_str(cp.get("category_key")),
         safe_str(cp.get("category_label")),
-        cp.get("cohort_size", 0) if cp.get("available") else None,
+        None,  # percentile_cohort    (backfilled: V4 recompute; V3 cohort is stale)
         # Compliance
         safe_bool(comp.get("gluten_free")),
         safe_bool(comp.get("dairy_free")),
@@ -8594,6 +8638,33 @@ def build_final_db(
             "INSERT OR REPLACE INTO export_manifest VALUES (?,?)",
             ("not_scored_swept_count", str(not_scored_swept)),
         )
+
+    # ── V4 category percentiles (backfill, ranked over the shipped cohort) ──
+    # Runs LAST — after UPC dedup and the NOT_SCORED sweep — so each cohort
+    # counts only rows that actually ship. Ranks quality_score_v4_100 within
+    # percentile_category, mirroring score_supplements._attach_category_percentiles.
+    # Reading products_core means banned-/safety-suppressed products (status !=
+    # 'scored') self-exclude; cohorts smaller than 5 stay NULL (unranked).
+    pct_rows = c.execute(
+        "SELECT dsld_id, percentile_category, quality_score_v4_100 "
+        "FROM products_core "
+        "WHERE quality_score_status = 'scored' "
+        "AND quality_score_v4_100 IS NOT NULL "
+        "AND percentile_category IS NOT NULL AND percentile_category != ''"
+    ).fetchall()
+    pct_updates = compute_v4_category_percentiles(
+        [(str(r[0]), str(r[1]), float(r[2])) for r in pct_rows]
+    )
+    if pct_updates:
+        c.executemany(
+            "UPDATE products_core SET percentile_rank = ?, percentile_top_pct = ?, "
+            "percentile_cohort = ? WHERE dsld_id = ?",
+            pct_updates,
+        )
+    logger.info(
+        "V4 percentiles: ranked %d of %d scored products (cohorts >= 5)",
+        len(pct_updates), len(pct_rows),
+    )
 
     conn.commit()
     conn.close()

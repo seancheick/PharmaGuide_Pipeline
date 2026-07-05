@@ -269,6 +269,79 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates(monk
         assert manifest["detail_index_checksum"].startswith("sha256:")
 
 
+def test_build_backfills_v4_category_percentiles(monkeypatch):
+    """End-to-end: after the build, products_core carries a V4 percentile ranked
+    over the shipped quality_score_v4_100 within each percentile_category cohort.
+    Cohorts < 5 stay NULL. The backfill runs AFTER UPC dedup, so the five ranked
+    products carry distinct UPCs to all survive into the cohort.
+    """
+    ranked = [("801", 95.0), ("802", 85.0), ("803", 75.0), ("804", 65.0), ("805", 55.0)]
+    canned = {pid: _canned_v4(status="scored", quality_100=sc) for pid, sc in ranked}
+    canned["806"] = _canned_v4(status="scored", quality_100=70.0)  # solo cohort -> unranked
+    _patch_v4_by_id(monkeypatch, canned)
+
+    def _enriched(pid, upc, category):
+        e = make_enriched()
+        e["dsld_id"] = pid
+        e["upcSku"] = upc
+        e["supplement_taxonomy"] = {
+            "primary_type": "omega_3",
+            "percentile_category": category,
+            "classification_confidence": 0.95,
+        }
+        return e
+
+    def _scored(pid):
+        s = make_scored()
+        s["dsld_id"] = pid
+        return s
+
+    enriched_list = [
+        _enriched(pid, f"11111111{i:05d}", "fish_oil") for i, (pid, _) in enumerate(ranked)
+    ]
+    enriched_list.append(_enriched("806", "1111111199999", "solo_cat"))
+    scored_list = [_scored(pid) for pid, _ in ranked] + [_scored("806")]
+
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        enriched_dir = root / "enriched"
+        enriched_dir.mkdir()
+        scored_dir = root / "scored"
+        scored_dir.mkdir()
+        output_dir = root / "out"
+        (enriched_dir / "batch.json").write_text(json.dumps(enriched_list), encoding="utf-8")
+        (scored_dir / "batch.json").write_text(json.dumps(scored_list), encoding="utf-8")
+
+        result = build_final_db(
+            [str(enriched_dir)],
+            [str(scored_dir)],
+            str(output_dir),
+            str(Path(__file__).parent.parent),
+        )
+        assert result["product_count"] == 6, result
+
+        conn = sqlite3.connect(output_dir / "pharmaguide_core.db")
+        try:
+            rows = {
+                r[0]: r
+                for r in conn.execute(
+                    "SELECT dsld_id, percentile_rank, percentile_top_pct, "
+                    "percentile_cohort FROM products_core"
+                ).fetchall()
+            }
+        finally:
+            conn.close()
+
+    # Five fish_oil products form a cohort of 5, ranked by v4 score.
+    assert rows["801"][3] == 5 and rows["805"][3] == 5
+    # Top scorer (95): higher=0, equal=1 -> rank=1.0 -> top%=20.0 -> prank=80.0
+    assert rows["801"][1] == 80.0 and rows["801"][2] == 20.0
+    # Bottom scorer (55): higher=4, equal=1 -> rank=5.0 -> top%=100.0 -> prank=0.0
+    assert rows["805"][1] == 0.0 and rows["805"][2] == 100.0
+    # Solo-category product: cohort of 1 (<5) -> unranked, all three columns NULL.
+    assert rows["806"][1] is None and rows["806"][2] is None and rows["806"][3] is None
+
+
 def test_build_core_row_includes_flutter_convenience_fields():
     enriched = make_enriched()
     scored = make_scored()
