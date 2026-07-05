@@ -1,5 +1,6 @@
 import logging
 
+import clean_dsld_data
 from clean_dsld_data import DSLDCleaningPipeline
 from enhanced_normalizer import EnhancedDSLDNormalizer
 from preflight import validate_iqm_br_collision
@@ -55,3 +56,45 @@ def test_preflight_iqm_banned_collision_guard_has_no_hard_collisions():
 
     assert result["ok"] is True
     assert result["collisions"] == []
+
+
+def test_clean_pipeline_fails_when_processing_summary_is_incomplete(tmp_path, monkeypatch):
+    pipeline = DSLDCleaningPipeline.__new__(DSLDCleaningPipeline)
+    pipeline.config = {
+        "paths": {
+            "input_directory": str(tmp_path),
+            "output_directory": str(tmp_path / "out"),
+        },
+        "validation": {"min_success_rate": 95.0},
+    }
+    pipeline.logger = logging.getLogger("test_clean_pipeline_incomplete_summary")
+
+    input_file = tmp_path / "product.json"
+    input_file.write_text("{}", encoding="utf-8")
+
+    class FakeProcessor:
+        def __init__(self, config):
+            self.config = config
+
+        def get_input_files(self, input_dir):
+            return [input_file]
+
+        def process_all_files(self, files, resume=False):
+            return {
+                "processing_complete": False,
+                "total_files": 100,
+                "success_rate": 99.0,
+                "results": {
+                    "cleaned": 99,
+                    "needs_review": 0,
+                    "incomplete": 0,
+                    "errors": 1,
+                },
+                "unmapped_ingredients": 0,
+                "output_write_failures": 1,
+            }
+
+    monkeypatch.setattr(pipeline, "validate_config", lambda: True)
+    monkeypatch.setattr(clean_dsld_data, "BatchProcessor", FakeProcessor)
+
+    assert pipeline.run() is False

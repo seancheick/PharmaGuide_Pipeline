@@ -416,6 +416,18 @@ class DSLDCleaningPipeline:
             success_rate = summary['success_rate']
             min_success_rate = self.config.get("validation", {}).get("min_success_rate", 95.0)
 
+            if not summary.get("processing_complete", True):
+                output_write_failures = summary.get("output_write_failures", 0)
+                self.logger.error(
+                    "PIPELINE FAILED: processing summary is incomplete"
+                    + (
+                        f" ({output_write_failures} file(s) had output write failures)"
+                        if output_write_failures
+                        else ""
+                    )
+                )
+                return False
+
             if total_files > 0 and success_rate < min_success_rate:
                 self.logger.error(
                     f"PIPELINE FAILED: success rate {success_rate:.1f}% is below "

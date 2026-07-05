@@ -344,3 +344,31 @@ def test_failed_write_batch_not_recorded_as_processed(tmp_path, monkeypatch):
     assert state.processed_files == 0, (
         f"processed_files counter advanced for a failed-write batch: {state.processed_files}"
     )
+
+
+def test_failed_write_batch_fails_final_summary(tmp_path):
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+
+    summary = processor._generate_final_summary(
+        [
+            {
+                "summary": {
+                    "processed": 3,
+                    "cleaned": 3,
+                    "needs_review": 0,
+                    "incomplete": 0,
+                    "errors": 0,
+                    "input_validation_failures": 0,
+                },
+                "write_success": False,
+            }
+        ],
+        total_time=1.0,
+    )
+
+    assert summary["processing_complete"] is False
+    assert summary["output_write_failures"] == 3
+    assert summary["results"]["cleaned"] == 0
+    assert summary["results"]["errors"] == 3
+    assert summary["success_rate"] == 0.0

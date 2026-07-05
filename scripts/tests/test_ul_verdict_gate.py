@@ -51,7 +51,8 @@ def test_ul_dose_never_blocks_or_unsafe():
     assert r.verdict == "CAUTION"  # dose excess never escalates past CAUTION
 
 
-def test_missing_eligibility_defaults_eligible_backcompat():
-    # A flag with no ul_gate_eligible key (older enrich output) defaults eligible.
+def test_missing_eligibility_does_not_force_caution_until_reenriched():
+    # Older enriched output has no ul_gate_eligible key. Do not let stale flags
+    # drive the new verdict gate; a fresh enrich must explicitly mark eligibility.
     r = evaluate_safety_gate(_prod([{"nutrient": "X", "pct_ul": 200}]))
-    assert r.verdict == "CAUTION"
+    assert r.verdict != "CAUTION"

@@ -564,18 +564,17 @@ def _apply_ul_dose_policy(result: SafetyResult, product: Dict[str, Any]) -> None
     Dose excess NEVER escalates past CAUTION — BLOCKED/UNSAFE stay for
     banned/recalled/adulterated substances.
 
-    Flags marked ``ul_gate_eligible: False`` (compound_mass_not_elemental — e.g.
-    Magtein, whose label states compound not elemental mass) are excluded so the
-    gate never fires a false CAUTION. Missing key defaults to eligible
-    (back-compat with older enrich output). ``pct_ul is None`` is not evaluable
-    and never treated as over.
+    Only flags explicitly marked ``ul_gate_eligible: True`` can drive the verdict
+    gate. Older enriched output lacks that field and may contain compound-mass
+    false positives, so stale flags must be re-enriched before they can affect
+    the verdict. ``pct_ul is None`` is not evaluable and never treated as over.
     """
     rda_ul = _safe_dict(product.get("rda_ul_data"))
     max_pct = 0.0
     for flag in _safe_list(rda_ul.get("safety_flags")):
         if not isinstance(flag, dict):
             continue
-        if flag.get("ul_gate_eligible") is False:
+        if flag.get("ul_gate_eligible") is not True:
             continue
         pct = _as_float(flag.get("pct_ul"))
         if pct is None:

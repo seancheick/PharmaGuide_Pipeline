@@ -981,6 +981,7 @@ class BatchProcessor:
             "incomplete": len(incomplete_products),
             "errors": len(errors),
             "input_validation_failures": input_validation_failures,
+            "output_write_failures": 0 if write_ok else len(processed_files),
             "processing_time": batch_time,
             "avg_time_per_file": batch_time / len(processed_files) if processed_files else 0,
             "memory_mb": final_memory  # FIX 6: Already in MB from check_memory()
@@ -1250,10 +1251,26 @@ class BatchProcessor:
     def _generate_final_summary(self, batch_results: List[Dict], total_time: float) -> Dict[str, Any]:
         """Generate final processing summary with performance metrics"""
         total_processed = sum(r["summary"]["processed"] for r in batch_results)
-        total_cleaned = sum(r["summary"]["cleaned"] for r in batch_results)
-        total_needs_review = sum(r["summary"]["needs_review"] for r in batch_results)
-        total_incomplete = sum(r["summary"]["incomplete"] for r in batch_results)
+        total_output_write_failures = 0
+        total_cleaned = 0
+        total_needs_review = 0
+        total_incomplete = 0
         total_errors = sum(r["summary"]["errors"] for r in batch_results)
+        for result in batch_results:
+            batch_summary = result["summary"]
+            if "output_write_failures" in batch_summary:
+                write_failed_files = batch_summary.get("output_write_failures") or 0
+            elif result.get("write_success") is False:
+                write_failed_files = batch_summary.get("processed", 0)
+            else:
+                write_failed_files = 0
+            total_output_write_failures += write_failed_files
+            if write_failed_files:
+                continue
+            total_cleaned += batch_summary["cleaned"]
+            total_needs_review += batch_summary["needs_review"]
+            total_incomplete += batch_summary["incomplete"]
+        total_errors += total_output_write_failures
         # P1-6: input-validation failures are dropped before `processed`, so they
         # must be added back into the attempted-files denominator — else a run
         # that silently drops malformed inputs still reports ~100% success and the
@@ -1267,9 +1284,10 @@ class BatchProcessor:
         perf_stats = self.performance_tracker.get_stats()
 
         summary = {
-            "processing_complete": True,
+            "processing_complete": total_output_write_failures == 0,
             "total_files": total_attempted,
             "input_validation_failures": total_validation_failures,
+            "output_write_failures": total_output_write_failures,
             "results": {
                 "cleaned": total_cleaned,
                 "needs_review": total_needs_review,
