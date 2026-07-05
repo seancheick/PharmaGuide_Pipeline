@@ -60,7 +60,7 @@ class TestVitaminAIUConversions:
         assert result.conversion_rule_id is not None
 
     def test_vitamin_a_beta_carotene_iu_to_mcg(self, converter):
-        """Beta-carotene supplement: 10,000 IU = 1,000 mcg RAE (supplement factor 0.1)"""
+        """Beta-carotene supplement: 10,000 IU = 3,000 mcg RAE (supplement factor 0.3)"""
         result = converter.convert_nutrient(
             nutrient="Vitamin A",
             amount=10000,
@@ -71,12 +71,12 @@ class TestVitaminAIUConversions:
         assert result.success is True
         # Note: Returns "mcg RAE" (Retinol Activity Equivalent)
         assert "mcg" in result.converted_unit
-        # Beta-carotene supplement: 10,000 IU * 0.1 = 1,000 mcg RAE
-        # (per NIH ODS: supplement beta-carotene converts at 0.1 mcg RAE/IU)
-        assert result.converted_value == pytest.approx(1000, rel=0.01)
+        # Beta-carotene supplement: 10,000 IU * 0.3 = 3,000 mcg RAE
+        # (per NIH-ODS: supplemental beta-carotene = 0.3 mcg RAE/IU under RAE)
+        assert result.converted_value == pytest.approx(3000, rel=0.01)
         # Verify form was correctly detected
         assert result.conversion_rule_id == "vitamin_a_beta_carotene_supplement"
-        assert result.conversion_factor == pytest.approx(0.1)
+        assert result.conversion_factor == pytest.approx(0.3)
         assert result.form_detected is not None
 
     def test_vitamin_a_unknown_form_flagged(self, converter):

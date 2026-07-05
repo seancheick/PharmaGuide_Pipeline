@@ -420,7 +420,7 @@ class UnitConverter:
         ingredient_lower = ingredient_text.lower()
 
         # CRITICAL: Form detection MUST run FIRST for form-dependent vitamins
-        # Vitamin A: retinol (0.3) vs beta-carotene (0.1) - different UL implications
+        # Vitamin A: retinol and supplemental beta-carotene both 0.3 mcg RAE/IU; only preformed retinol carries a UL
         if 'vitamin a' in nutrient_lower or 'retinol' in nutrient_lower or \
            'beta-carotene' in nutrient_lower or 'beta carotene' in nutrient_lower:
             return self._detect_vitamin_a_form(ingredient_lower)

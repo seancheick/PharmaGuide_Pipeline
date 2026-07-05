@@ -115,8 +115,8 @@
         "carotenoid"
       ],
       "conversions": {
-        "iu_to_mcg_rae": 0.1,
-        "mcg_rae_to_iu": 10,
+        "iu_to_mcg_rae": 0.3,
+        "mcg_rae_to_iu": 3.33,
         "mcg_beta_carotene_to_mcg_rae": 0.5
       },
       "canonical_unit": "mcg RAE",

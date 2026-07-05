@@ -71,7 +71,14 @@ def _serving_basis() -> ServingBasis:
 # ---------------------------------------------------------------------------
 
 def test_vitamin_a_iu_beta_carotene_form_converts_to_mcg_rae() -> None:
-    """5000 IU Vitamin A with β-carotene form → 500 mcg RAE (factor 0.1)."""
+    """5000 IU Vitamin A with β-carotene form → 1500 mcg RAE (factor 0.3).
+
+    Supplemental β-carotene is 0.3 mcg RAE/IU under the RAE system
+    (1 IU = 0.6 mcg β-carotene x 0.5 mcg-RAE/mcg = 0.3), the SAME as retinol —
+    not the deprecated pre-2001 Retinol-Equivalent 6:1 factor (0.1). Verified
+    against the NIH-ODS Vitamin A fact sheet ("1 IU supplemental beta-carotene
+    = 0.3 mcg RAE").
+    """
     n = _make_normalizer()
     ing = {
         "name": "Vitamin A",
@@ -86,8 +93,8 @@ def test_vitamin_a_iu_beta_carotene_form_converts_to_mcg_rae() -> None:
     assert result.normalized_unit == "mcg RAE", (
         f"expected mcg RAE, got {result.normalized_unit!r}"
     )
-    assert result.normalized_amount == pytest.approx(500.0), (
-        f"expected 500 mcg RAE from 5000 IU β-carotene supplement, got {result.normalized_amount}"
+    assert result.normalized_amount == pytest.approx(1500.0), (
+        f"expected 1500 mcg RAE from 5000 IU β-carotene supplement, got {result.normalized_amount}"
     )
     assert "beta-carotene" in (result.standard_name or "").lower()
 
