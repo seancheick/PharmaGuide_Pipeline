@@ -6550,7 +6550,7 @@
         "malitol syrup"
       ],
       "category": "sweetener_sugar_alcohol",
-      "notes": "Sugar alcohol sweetener (E965) with ~40% small intestine absorption. Higher glycemic index than most sugar alcohols (GI 35-52). Laxative effects documented at >10 g single dose — roughly half the threshold of sorbitol. Moderate severity due to concentrated dosing in supplements and higher glycemic impact than marketed. ID note: entry ID contains legacy typo 'MALITOL'; standard_name is correct.",
+      "notes": "Sugar alcohol sweetener (E965) with ~40% small intestine absorption. Higher glycemic index than most sugar alcohols (GI 35-52). Laxative effects documented at >10 g single dose — roughly half the threshold of sorbitol. Low severity: the GI-tolerance and glycemic effects are a nutritional/tolerance concern rather than a toxicological hazard, matching other sugar-alcohol fillers. ID note: entry ID contains legacy typo 'MALITOL'; standard_name is correct.",
       "last_updated": "2026-03-27",
       "mechanism_of_harm": "Sugar alcohol (E965) partially absorbed in the small intestine (~40%). Unabsorbed portion fermented by colonic bacteria causing osmotic diarrhea. Higher glycemic index than most sugar alcohols (GI ~35-52 depending on form). Laxative effects documented at >10g single dose. JECFA ADI \"not specified\" (safe at typical use).",
       "regulatory_status": {
@@ -6733,7 +6733,7 @@
         "IBD (Crohn's disease) — in vitro evidence of impaired antimicrobial defense and promoted E. coli adhesion (PMID 23251695)",
         "Celiac disease — wheat-derived maltodextrin may contain trace gluten"
       ],
-      "notes": "Highly processed glucose polymer used as filler, binder, and carrier in supplements. GI 85-105 makes it metabolically equivalent to glucose. In vitro data suggests potential gut barrier effects but clinical significance at supplement doses is uncertain. Moderate severity due to high glycemic impact and filler quality signal.",
+      "notes": "Highly processed glucose polymer used as filler, binder, and carrier in supplements. GI 85-105 makes it metabolically equivalent to glucose. In vitro data suggests potential gut barrier effects but clinical significance at supplement doses is uncertain. Low severity: the high glycemic impact is a nutritional concern (like added sugar) rather than a toxicological hazard, matching other caloric filler ingredients.",
       "scientific_references": [
         "PMID 23251695 - Nickerson KP, McDonald C. 'Crohn's disease-associated adherent-invasive Escherichia coli adhesion is enhanced by exposure to the ubiquitous dietary polysaccharide maltodextrin.' PLoS One 2012;7(12):e52132. Content-verified via PubMed 2026-05-25.",
         "21 CFR 184.1444 — FDA GRAS listing for maltodextrin"
@@ -8489,7 +8489,7 @@
         "Infants and children - Higher exposure to 3-MCPD contaminants per body weight",
         "People with cardiovascular disease - Limit saturated fat intake"
       ],
-      "notes": "Palm oil in supplements is typically present in small amounts (softgel fill, carrier oil). The primary concern is 3-MCPD/glycidyl ester contamination from refining, not saturated fat at supplement doses. Moderate severity as quality signal for processed oil use.",
+      "notes": "Palm oil in supplements is typically present in small amounts (softgel fill, carrier oil). The primary concern is 3-MCPD/glycidyl ester contamination from refining, not saturated fat at supplement doses. Low severity: a processed-oil quality signal rather than a toxicological hazard.",
       "scientific_references": [
         "DOI: 10.2903/j.efsa.2018.5083 - EFSA 3-MCPD assessment",
         "DOI: 10.3390/nu12051347 - Palm oil health effects"
@@ -11620,7 +11620,7 @@
         "Products with ascorbic acid — benzene formation risk when sodium benzoate + vitamin C coexist (especially under heat/light)",
         "Children — EFSA noted exposure may exceed ADI in high consumers"
       ],
-      "notes": "FDA GRAS Affirmed (21 CFR Part 184). Benzene formation with vitamin C is documented concern. Moved from banned_recalled to harmful_additives (2026-02-18). Low severity reflects benzene risk when combined with ascorbic acid. SEVERITY UPGRADED FROM LOW TO MODERATE (2026): Benzene formation with ascorbic acid is not merely theoretical in the supplement context — liquid supplement formulations routinely contain both sodium benzoate and ascorbic acid (vitamin C). Benzene is an IARC Group 1 carcinogen with no established safe threshold. FDA 2006 survey of beverages found some products exceeded 5 ppb benzene from this reaction. Hyperactivity association supported beyond Southampton pediatric study: PMID 22538314 found sodium benzoate-rich beverage intake significantly associated with ADHD symptom reporting in college students. The combination in a supplement product (sodium benzoate + vitamin C) represents a realistic benzene-formation risk that warrants moderate rather than low severity.",
+      "notes": "FDA GRAS Affirmed (21 CFR Part 184). Benzene formation with vitamin C is documented concern. Moved from banned_recalled to harmful_additives (2026-02-18); severity set to moderate (2026). Benzene formation with ascorbic acid is not merely theoretical in the supplement context — liquid supplement formulations routinely contain both sodium benzoate and ascorbic acid (vitamin C). Benzene is an IARC Group 1 carcinogen with no established safe threshold. FDA 2006 survey of beverages found some products exceeded 5 ppb benzene from this reaction. Hyperactivity association supported beyond Southampton pediatric study: PMID 22538314 found sodium benzoate-rich beverage intake significantly associated with ADHD symptom reporting in college students. The combination in a supplement product (sodium benzoate + vitamin C) represents a realistic benzene-formation risk that warrants a moderate rather than low classification.",
       "scientific_references": [
         "21 CFR 184.1733 - FDA GRAS Affirmed listing",
         "FDA Survey of Benzene in Soft Drinks (2006)",
@@ -13974,7 +13974,7 @@
         "Hereditary fructose intolerance — sorbitol contraindicated (metabolized to fructose)",
         "Children — lower body weight means lower absolute laxative threshold"
       ],
-      "notes": "Umbrella entry for sugar alcohol class (sorbitol, maltitol, xylitol, erythritol, etc.). Individual entries exist for specific polyols with more precise data. This class entry catches generic 'sugar alcohols' on labels. Moderate severity due to concentrated dosing in supplements.",
+      "notes": "Umbrella entry for sugar alcohol class (sorbitol, maltitol, xylitol, erythritol, etc.). Individual entries exist for specific polyols with more precise data. This class entry catches generic 'sugar alcohols' on labels. Low severity: GI-tolerance effects are a tolerance/nutritional concern rather than a toxicological hazard, matching other sugar-alcohol fillers.",
       "scientific_references": [
         "PMID: 27840639 (Maguire & Maguire 2016 Int J Dent) - GI disturbances from sugar alcohols, esp. xylitol - Digestive effects",
         "PMID: 28710145 (Lenhart & Chey 2017 Adv Nutr) - Systematic review: polyols and GI health / IBS - Sugar alcohol review"
