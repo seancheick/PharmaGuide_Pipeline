@@ -7771,6 +7771,20 @@ def build_core_row(
             "verdict": "BLOCKED",
             "safety_verdict": "BLOCKED",
             "section_scores": section_scores,
+            # P0-3: suppress the v4 public contract too. This branch fires on the
+            # BROADER has_export_banned_signal (has_banned_substance OR a blob
+            # critical banned warning); suppress_v4_for_hard_block only ran on the
+            # narrow has_banned_substance signal, so a product banned via a
+            # resolver-detected inactive (titanium-dioxide class) would otherwise
+            # keep a finite, rankable quality_score_v4_100 with status='scored' and
+            # stay in idx_core_cat_score. _v4_pillars / _v4_raw_score_100 are kept
+            # as an audit trail, matching the native suppressed_safety contract.
+            "_v4_quality_score_100": None,
+            "_v4_quality_status": "suppressed_safety",
+            "_v4_quality_tier": None,
+            "_v4_suppressed_reason": (
+                effective_scored.get("_v4_suppressed_reason") or "banned_substance"
+            ),
         })
     elif blob_has_profile_gated_hard_safety_warning(detail_blob):
         # Release-gate invariant: SAFE on either verdict or safety_verdict is
