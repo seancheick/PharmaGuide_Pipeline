@@ -7459,7 +7459,7 @@ class EnhancedDSLDNormalizer:
 
         # Handle empty strings and "none"
         if isinstance(value, str):
-            value = value.strip().lower()
+            value = value.strip().lower().replace(",", "")  # strip US thousands separator
             if not value or value == "none":
                 logger.debug(f"Empty/none {field_name} converted to {default}")
                 return default
@@ -7482,7 +7482,7 @@ class EnhancedDSLDNormalizer:
 
         # Handle empty strings and "none"
         if isinstance(value, str):
-            value = value.strip().lower()
+            value = value.strip().lower().replace(",", "")  # strip US thousands separator
             if not value or value == "none":
                 logger.debug(f"Empty/none {field_name} converted to {default}")
                 return default
@@ -7498,6 +7498,8 @@ class EnhancedDSLDNormalizer:
         """Like _safe_float but returns (value, parsed_ok) so callers can flag synthetic data."""
         if value is None or (isinstance(value, str) and (not value.strip() or value.strip().lower() == "none")):
             return default, False
+        if isinstance(value, str):
+            value = value.strip().replace(",", "")  # US thousands separator
         try:
             return float(value), True
         except (ValueError, TypeError):
