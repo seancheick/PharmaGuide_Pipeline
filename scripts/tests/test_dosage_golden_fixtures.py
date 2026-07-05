@@ -172,11 +172,14 @@ class TestVitaminKMassConversion:
         assert result.converted_unit == "mcg"
         assert result.converted_value == pytest.approx(1000, rel=0.001)
 
-    def test_vitamin_e_unknown_defaults_to_synthetic(self, converter):
-        """Unknown form defaults to synthetic (conservative - lower conversion).
+    def test_vitamin_e_unknown_form_not_defaulted_to_synthetic(self, converter):
+        """Unknown Vitamin E form must NOT default to the synthetic factor (0.45).
 
-        This is safer than defaulting to natural because it doesn't over-report
-        the converted mg value.
+        Defaulting to synthetic under-states mg vs natural (0.67 mg/IU) and can
+        hide an over-UL dose. The form now resolves to 'vitamin_e_unknown'
+        (flag_for_review), and the enricher skips the UL check rather than
+        converting at a guessed factor. (Policy changed 2026-07 — was previously
+        'default to synthetic'.)
         """
         result = converter.convert_nutrient(
             nutrient="Vitamin E",
@@ -185,10 +188,11 @@ class TestVitaminKMassConversion:
             ingredient_name="Vitamin E"  # No form specified
         )
 
-        assert result.success is True
-        # Should default to synthetic (0.45)
-        assert result.converted_value == pytest.approx(180, rel=0.01)
-        assert result.conversion_factor == pytest.approx(0.45, rel=0.01)
+        assert "unknown" in (result.form_detected or "").lower(), (
+            f"expected vitamin_e_unknown form, got {result.form_detected!r}"
+        )
+        # The synthetic 0.45 factor must NOT be silently applied.
+        assert result.converted_value != pytest.approx(180, rel=0.01)
 
 
 class TestVitaminDIUConversions:

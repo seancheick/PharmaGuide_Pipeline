@@ -496,14 +496,13 @@ class UnitConverter:
                 return 'vitamin_e_dl_alpha_tocopherol', \
                        self.vitamin_conversions.get('vitamin_e_dl_alpha_tocopherol', {})
 
-        # Default to synthetic (conservative)
-        default = patterns.get('default_if_unknown', 'synthetic')
-        if default == 'synthetic':
-            return 'vitamin_e_dl_alpha_tocopherol', \
-                   self.vitamin_conversions.get('vitamin_e_dl_alpha_tocopherol', {})
-        else:
-            return 'vitamin_e_d_alpha_tocopherol', \
-                   self.vitamin_conversions.get('vitamin_e_d_alpha_tocopherol', {})
+        # Unknown form: fail safe to not-evaluable (mirror vitamin A). Defaulting
+        # to the synthetic factor (0.45 mg/IU) UNDER-states mg vs natural
+        # (0.67 mg/IU) and can hide an over-UL dose — don't guess the form. The
+        # enricher treats a 'vitamin_e_unknown' form as skip_ul_check.
+        logger.debug("Vitamin E form not detected from: %s", ingredient_text)
+        return 'vitamin_e_unknown', \
+               self.vitamin_conversions.get('vitamin_e_unknown', {})
 
     def _detect_folate_form(
         self,
