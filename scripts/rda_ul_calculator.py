@@ -43,6 +43,18 @@ ADEQUACY_BANDS = {
 }
 
 
+# Mass-unit reconciliation. rda_ai/ul are stored in each nutrient's own table
+# `unit`; the label amount can arrive in a different mass unit (mcg vs mg)
+# because unit_converter.convert_nutrient is a no-op for plain minerals. These
+# support converting the label amount into the table unit before any pct math.
+_MASS_TO_MCG = {"g": 1_000_000.0, "mg": 1_000.0, "mcg": 1.0}
+_MASS_UNIT_SYNONYMS = {
+    "g": "g", "gram": "g", "grams": "g", "gm": "g",
+    "mg": "mg", "milligram": "mg", "milligrams": "mg",
+    "mcg": "mcg", "ug": "mcg", "microgram": "mcg", "micrograms": "mcg",
+}
+
+
 @dataclass
 class NutrientAdequacyResult:
     """Result of nutrient adequacy calculation."""
@@ -218,6 +230,46 @@ class RDAULCalculator:
         normalized = re.sub(r'\s+', '_', normalized.strip())
         return normalized
 
+    @staticmethod
+    def _canonical_mass_unit(unit: Optional[str]) -> Optional[str]:
+        """Return 'g' | 'mg' | 'mcg' for a mass unit, else None.
+
+        Handles qualified reference units like 'mcg RAE' / 'mcg DFE' by taking
+        the leading token, and the µg/ug spellings of micrograms.
+        """
+        if not unit:
+            return None
+        s = str(unit).strip().lower().replace("µg", "mcg").replace("μg", "mcg")
+        parts = s.split()
+        token = parts[0] if parts else s
+        return _MASS_UNIT_SYNONYMS.get(token)
+
+    @staticmethod
+    def _reconcile_amount_to_reference(
+        amount: float,
+        from_unit: Optional[str],
+        ref_unit: Optional[str],
+    ) -> Tuple[Optional[float], bool]:
+        """Express ``amount`` (in ``from_unit``) in the table's ``ref_unit``.
+
+        Returns ``(amount_in_ref_unit, evaluable)``. ``evaluable`` is False when
+        the units are not comparable (e.g. raw IU vs a mass reference); callers
+        MUST NOT compute pct_rda/pct_ul in that case — "not evaluable", never a
+        false flag. A missing ``ref_unit`` preserves the historical assumption
+        that ``amount`` is already in the reference unit.
+        """
+        if not ref_unit:
+            return amount, True
+        fu = RDAULCalculator._canonical_mass_unit(from_unit)
+        ru = RDAULCalculator._canonical_mass_unit(ref_unit)
+        if fu is not None and ru is not None:
+            return amount * (_MASS_TO_MCG[fu] / _MASS_TO_MCG[ru]), True
+        # Identical raw unit strings (e.g. both 'IU') are comparable as-is.
+        if str(from_unit or "").strip().lower() == str(ref_unit or "").strip().lower():
+            return amount, True
+        # One side is non-mass (IU, %, …) and they differ: cannot compare.
+        return None, False
+
     def compute_nutrient_adequacy(
         self,
         nutrient: str,
@@ -291,21 +343,42 @@ class RDAULCalculator:
         # Get optimal range
         optimal_min, optimal_max = self._parse_optimal_range(nutrient_data.get("optimal_range", ""))
 
+        # Reconcile the label amount to the RDA/UL table's own unit BEFORE any
+        # percentage math. unit_converter.convert_nutrient is a no-op for plain
+        # minerals, so `amount`/`unit` can still be in the label unit (e.g. mcg)
+        # while rda_ai/ul are in the table unit (e.g. mg). Comparing them raw
+        # produced false over-UL flags (Boron 150 mcg vs a 20 mg UL -> 750%) and
+        # missed exposures (Copper 2 mg read as 0.22% of a 900 mcg RDA).
+        reference_unit = nutrient_data.get("unit")
+        amount_in_ref, unit_evaluable = self._reconcile_amount_to_reference(
+            amount, unit, reference_unit
+        )
+        ref_unit_label = reference_unit or unit
+
         # Calculate percentages
         pct_rda = None
-        if rda_ai and rda_ai > 0:
-            pct_rda = (amount / rda_ai) * 100
-            notes.append(f"{pct_rda:.1f}% of RDA/AI ({rda_ai} {nutrient_data.get('unit', unit)})")
-
         pct_ul = None
         over_ul = False
         over_ul_amount = None
-        if ul and ul > 0 and ul_status == "established":
-            pct_ul = (amount / ul) * 100
-            if amount > ul:
-                over_ul = True
-                over_ul_amount = amount - ul
-                warnings.append(f"Exceeds UL by {over_ul_amount:.1f} {unit}")
+
+        if not unit_evaluable:
+            # Units are not comparable (e.g. raw IU vs a mass reference). Do NOT
+            # fabricate a percentage — leave adequacy/UL unevaluated.
+            notes.append(
+                f"UL/RDA not evaluated: label unit '{unit}' is not comparable to "
+                f"the reference unit '{reference_unit}' (needs form-aware conversion)."
+            )
+        else:
+            if rda_ai and rda_ai > 0:
+                pct_rda = (amount_in_ref / rda_ai) * 100
+                notes.append(f"{pct_rda:.1f}% of RDA/AI ({rda_ai} {ref_unit_label})")
+
+            if ul and ul > 0 and ul_status == "established":
+                pct_ul = (amount_in_ref / ul) * 100
+                if amount_in_ref > ul:
+                    over_ul = True
+                    over_ul_amount = amount_in_ref - ul
+                    warnings.append(f"Exceeds UL by {over_ul_amount:.1f} {ref_unit_label}")
 
         # Determine adequacy band. Magnesium is a special case because the UL
         # applies to supplemental intake only while the RDA is total intake.
@@ -313,7 +386,7 @@ class RDAULCalculator:
         if over_ul and uses_supplement_only_ul:
             notes.append("Supplemental magnesium has a separate UL from the total-intake RDA.")
             warnings.append(
-                f"Supplemental magnesium exceeds the adult supplemental UL by {over_ul_amount:.1f} {unit}"
+                f"Supplemental magnesium exceeds the adult supplemental UL by {over_ul_amount:.1f} {ref_unit_label}"
             )
         adequacy_band = self._determine_adequacy_band(
             pct_rda,
