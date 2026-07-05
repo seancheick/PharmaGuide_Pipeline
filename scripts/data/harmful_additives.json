@@ -4213,11 +4213,17 @@
             "date": "2026-03-24",
             "change": "Deep audit: removed 2 misattributed DOIs (10.1093/ajcn/86.4.895 = fructose paper, 10.1016/j.numecd.2019.05.062 = alcohol/mortality paper). Downgraded confidence high->medium. CFR ref and WHO guideline retained as authoritative.",
             "reason": "batch_3_deep_audit"
+          },
+          {
+            "date": "2026-07-04",
+            "change": "Severity moderate->low for caloric-sugar consistency (HFCS/cane sugar/dextrose are all low). Audit confirmed no toxicological basis \u2014 the 2026-03-01 high->moderate note already flagged it a sugar filler, not a toxicant.",
+            "reason": "sugar_filler_severity_consistency",
+            "by": "harmful_additives_sugar_consistency"
           }
         ]
       },
       "confidence": "medium",
-      "severity_level": "moderate",
+      "severity_level": "low",
       "cui": "C0991816",
       "external_ids": {
         "unii": "9G5L16BK6N"
