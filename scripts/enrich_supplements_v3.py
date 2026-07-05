@@ -15714,6 +15714,12 @@ class SupplementEnricherV3:
                 for ingredient in active_ingredients:
                     ing_name = ingredient.get('name', '')
                     std_name = ingredient.get('standardName', '') or ing_name
+                    # P0-1b: dailyValue present ⟹ elemental mass (corpus-validated
+                    # across 13,753 mineral rows). Rows without it (e.g. Magtein
+                    # 2000 mg magnesium L-threonate, which states COMPOUND mass) are
+                    # NOT eligible for the UL VERDICT gate — comparing compound mass
+                    # to an elemental UL yields a false over-UL.
+                    _dv_present = ingredient.get('dailyValue') is not None
                     quantity = ingredient.get('quantity', 0)
                     unit = ingredient.get('unit', '')
 
@@ -15874,6 +15880,13 @@ class SupplementEnricherV3:
                                 "over_amount": over_ul_amount,
                                 "warning": f"Exceeds UL by {over_ul_amount:.1f}",
                                 "severity": "critical" if pct_ul_val >= 200 else "warning",
+                                "ul_gate_eligible": _dv_present,
+                                "ul_gate_ineligible_reason": (
+                                    None if _dv_present
+                                    else ("compound_mass_not_elemental"
+                                          if self._normalize_text(ing_name) != self._normalize_text(std_name)
+                                          else "no_daily_value_anchor")
+                                ),
                             }
                         ))
 
@@ -15907,6 +15920,7 @@ class SupplementEnricherV3:
                                 "amount": amount_for_ul,
                                 "unit": converted_unit,
                                 "pct_ul_individual": adequacy.pct_ul,
+                                "dv_present": _dv_present,
                             })
 
                     # Sprint E1.5.X-4 — ALWAYS emit `highest_ul` from the RDA
@@ -16000,6 +16014,9 @@ class SupplementEnricherV3:
                     if agg_adequacy.over_ul:
                         pct_ul_val = agg_adequacy.pct_ul or 0.0
                         over_ul_amount = agg_adequacy.over_ul_amount or 0.0
+                        # Aggregated flag is gate-eligible only if EVERY contributing
+                        # row is elemental-confirmed (has a dailyValue).
+                        _agg_dv = all(r.get("dv_present") for r in group["rows"])
                         safety_flags.append({
                             "nutrient": group["std_name"],
                             "amount": group["total_amount"],
@@ -16016,6 +16033,8 @@ class SupplementEnricherV3:
                             "aggregation": "canonical_sum",
                             "canonical_id": cid,
                             "contributing_rows": group["rows"],
+                            "ul_gate_eligible": _agg_dv,
+                            "ul_gate_ineligible_reason": (None if _agg_dv else "compound_mass_not_elemental"),
                         })
                         _aggregated_canonicals.add(cid)
 
