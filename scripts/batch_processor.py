@@ -707,14 +707,19 @@ class BatchProcessor:
             batch_result = self.process_batch(batch_num, batch_files, output_batch_num=output_batch_num)
             batch_results.append(batch_result)
             
-            # Update state — only advance last_completed_batch if outputs were written successfully
+            # Update state — only advance last_completed_batch AND record the
+            # batch's files as processed when outputs were written successfully.
+            # A failed write must NOT mark the files processed: per-file resume
+            # filters processed_file_paths out, so a recorded-but-unwritten batch
+            # would be permanently skipped on resume — silent data loss reported
+            # as success.
             if batch_result.get("write_success", True):
                 state.last_completed_batch = batch_num
-            state.processed_files += len(batch_result.get("processed_files", []))
+                state.processed_files += len(batch_result.get("processed_files", []))
+                # FIX 1+2: Track processed file paths for per-file resume
+                state.processed_file_paths.extend(batch_result.get("processed_files", []))
             state.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             state.errors.extend(batch_result.get("errors", []))
-            # FIX 1+2: Track processed file paths for per-file resume
-            state.processed_file_paths.extend(batch_result.get("processed_files", []))
             self.save_state(state)
             
             # Log batch completion
@@ -784,7 +789,8 @@ class BatchProcessor:
         batch_unmapped = Counter()
         batch_mapped = Counter()
         processed_files = []  # FIX 1+2: Track processed file paths
-        
+        input_validation_failures = 0  # P1-6: files rejected by validate_input_file
+
         # Process files. Size the pool to this batch so small brands skip the
         # multi-worker spawn + per-worker reference reload (identical output).
         effective_workers = self._effective_workers(len(files))
@@ -804,6 +810,7 @@ class BatchProcessor:
                 if not is_valid:
                     error_msg = f"Input validation failed for {file_path}: {validation_error}"
                     errors.append(error_msg)
+                    input_validation_failures += 1
                     batch_logger.error(error_msg)
                     # FIX 4: Write structured quarantine for validation failures
                     self._write_quarantine_file(
@@ -854,6 +861,7 @@ class BatchProcessor:
                 if not is_valid:
                     error_msg = f"Input validation failed: {file_path}: {validation_error}"
                     errors.append(error_msg)
+                    input_validation_failures += 1
                     batch_logger.error(error_msg)
                     # FIX 4: Write structured quarantine for validation failures
                     self._write_quarantine_file(
@@ -972,6 +980,7 @@ class BatchProcessor:
             "needs_review": len(needs_review_products),
             "incomplete": len(incomplete_products),
             "errors": len(errors),
+            "input_validation_failures": input_validation_failures,
             "processing_time": batch_time,
             "avg_time_per_file": batch_time / len(processed_files) if processed_files else 0,
             "memory_mb": final_memory  # FIX 6: Already in MB from check_memory()
@@ -1245,13 +1254,22 @@ class BatchProcessor:
         total_needs_review = sum(r["summary"]["needs_review"] for r in batch_results)
         total_incomplete = sum(r["summary"]["incomplete"] for r in batch_results)
         total_errors = sum(r["summary"]["errors"] for r in batch_results)
+        # P1-6: input-validation failures are dropped before `processed`, so they
+        # must be added back into the attempted-files denominator — else a run
+        # that silently drops malformed inputs still reports ~100% success and the
+        # min_success_rate gate can never fire.
+        total_validation_failures = sum(
+            r["summary"].get("input_validation_failures", 0) for r in batch_results
+        )
+        total_attempted = total_processed + total_validation_failures
 
         # Get performance stats
         perf_stats = self.performance_tracker.get_stats()
 
         summary = {
             "processing_complete": True,
-            "total_files": total_processed,
+            "total_files": total_attempted,
+            "input_validation_failures": total_validation_failures,
             "results": {
                 "cleaned": total_cleaned,
                 "needs_review": total_needs_review,
@@ -1265,7 +1283,7 @@ class BatchProcessor:
             },
             "unmapped_ingredients": len(self.global_unmapped),
             "mapped_ingredients": len(self.global_mapped),
-            "success_rate": (total_cleaned / total_processed * 100) if total_processed else 0
+            "success_rate": (total_cleaned / total_attempted * 100) if total_attempted else 0
         }
 
         # Add performance metrics if tracking is enabled

@@ -288,3 +288,59 @@ def test_dedup_still_blocks_real_duplicate_ids(tmp_path, monkeypatch):
     processor._categorize_result(dupe, cleaned, needs_review, incomplete, errors, batch_unmapped)
 
     assert len(cleaned) == 1, f"Expected one kept, got {len(cleaned)}"
+
+
+# ---------------------------------------------------------------------------
+# P1-5 — a batch whose OUTPUT WRITE failed must not be recorded as processed.
+# Otherwise per-file resume filters those files out and never regenerates
+# their cleaned output — silent, permanent data loss reported as success.
+# ---------------------------------------------------------------------------
+
+
+def test_failed_write_batch_not_recorded_as_processed(tmp_path, monkeypatch):
+    cfg = _make_config(tmp_path)
+    processor = BatchProcessor(cfg)
+
+    files = []
+    for i in range(3):
+        path = tmp_path / f"{i:03d}.json"
+        path.write_text(
+            json.dumps({"id": i, "ingredientRows": [{"name": "Vitamin C"}]}),
+            encoding="utf-8",
+        )
+        files.append(path)
+
+    def fake_process_batch(batch_num, batch_files, output_batch_num=None):
+        # Outputs were NOT written (disk full / interrupted / permission).
+        return {
+            "summary": {
+                "processed": len(batch_files),
+                "cleaned": len(batch_files),
+                "needs_review": 0,
+                "incomplete": 0,
+                "errors": 0,
+            },
+            "errors": [],
+            "unmapped_count": 0,
+            "processed_files": [str(p) for p in batch_files],
+            "write_success": False,
+        }
+
+    monkeypatch.setattr(processor, "process_batch", fake_process_batch)
+    monkeypatch.setattr(processor, "_generate_final_summary", lambda batch_results, total_time: {"ok": True})
+    monkeypatch.setattr(processor, "_save_unmapped_ingredients", lambda *a, **kw: None)
+    monkeypatch.setattr(processor, "_generate_processing_report", lambda summary, batch_results: None)
+    monkeypatch.setattr(processor, "_generate_detailed_review_report", lambda: None)
+
+    processor.process_all_files(files, resume=False)
+
+    state = processor.load_state()
+    assert state is not None
+    # Failed-write batch must NOT be recorded — else resume skips it forever.
+    assert state.processed_file_paths == [], (
+        f"Failed-write batch recorded as processed (silent loss on resume): "
+        f"{state.processed_file_paths}"
+    )
+    assert state.processed_files == 0, (
+        f"processed_files counter advanced for a failed-write batch: {state.processed_files}"
+    )
