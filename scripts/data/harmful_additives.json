@@ -17035,6 +17035,11 @@
             "date": "2026-03-28",
             "change": "Deep audit final: CUI null (umbrella entry, added cui_status/cui_note). Cross-references individual BHA/BHT/TBHQ entries. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_final"
+          },
+          {
+            "date": "2026-07-04",
+            "change": "Removed wrong-topic PMCID pointer from umbrella mechanism; TBHQ immunotoxicity citations now live only on canonical ADD_TBHQ.",
+            "reason": "citation_integrity_cleanup"
           }
         ]
       },
@@ -17044,9 +17049,9 @@
         "EU": "BHA (E320): approved with limits; BHT (E321): approved with limits; TBHQ (E319): approved with limits.",
         "WHO": "See individual IARC/JECFA assessments: BHA = IARC Group 2B; BHT = IARC Group 3; TBHQ = not formally classified by IARC."
       },
-      "mechanism_of_harm": "Cross-reference umbrella entry covering BHA (ADD_BHA), BHT (ADD_BHT), and TBHQ (ADD_TBHQ). IARC CLASSIFICATIONS DIFFER BY COMPOUND — they are NOT all Group 2B: • BHA (E320): IARC Group 2B (possibly carcinogenic); NTP 'reasonably anticipated human carcinogen';   FDA launched post-market reassessment February 2026. • BHT (E321): IARC Group 3 (NOT classifiable as carcinogen); NOT in NTP ROC. • TBHQ (E319): Not formally classified by IARC; EFSA found no carcinogenicity concern;   emerging immunotoxicity signal (PMC9147452, 2022). Refer to individual entries for compound-specific mechanisms.",
+      "mechanism_of_harm": "Cross-reference umbrella entry covering BHA (ADD_BHA), BHT (ADD_BHT), and TBHQ (ADD_TBHQ). IARC CLASSIFICATIONS DIFFER BY COMPOUND — they are NOT all Group 2B: • BHA (E320): IARC Group 2B (possibly carcinogenic); NTP 'reasonably anticipated human carcinogen';   FDA launched post-market reassessment February 2026. • BHT (E321): IARC Group 3 (NOT classifiable as carcinogen); NOT in NTP ROC. • TBHQ (E319): Not formally classified by IARC; EFSA found no carcinogenicity concern;   emerging immunotoxicity signals. See ADD_TBHQ for immunotoxicity citations. Refer to individual entries for compound-specific mechanisms.",
       "notes": "Umbrella cross-reference for synthetic phenolic antioxidant preservatives. CORRECTION: Previous entry stated 'all are IARC 2B or have carcinogenicity concerns' — this is WRONG. BHT is IARC Group 3 (not classifiable); TBHQ is not evaluated by IARC. Only BHA is Group 2B. Individual entries (ADD_BHA, ADD_BHT, ADD_TBHQ) are canonical — this umbrella entry is a cross-reference only and should not be used for scoring.",
-      "last_updated": "2026-03-28",
+      "last_updated": "2026-07-04",
       "jurisdictional_statuses": [],
       "entity_type": "class",
       "member_ids": [
@@ -17135,6 +17140,32 @@
             "mechanism_of_harm",
             "clinical_outcomes"
           ]
+        },
+        {
+          "type": "doi",
+          "authority": "OTHER",
+          "title": "Th2 skewing by activation of Nrf2 in CD4(+) T cells",
+          "citation": "Rockwell CE et al. J Immunol. 2012;188(4):1630-1637. PMID 22250088. DOI: 10.4049/jimmunol.1101712",
+          "url": "https://doi.org/10.4049/jimmunol.1101712",
+          "published_date": "2012",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ]
+        },
+        {
+          "type": "doi",
+          "authority": "OTHER",
+          "title": "The transcription factor Nrf2 links Th2-mediated experimental allergy to food preservatives",
+          "citation": "Jin Y et al. Front Immunol. 2025;15:1476480. PMID 40115160. DOI: 10.3389/fimmu.2024.1476480",
+          "url": "https://doi.org/10.3389/fimmu.2024.1476480",
+          "published_date": "2025",
+          "evidence_grade": "B",
+          "supports_claims": [
+            "mechanism_of_harm",
+            "clinical_outcomes"
+          ]
         }
       ],
       "review": {
@@ -17173,6 +17204,11 @@
             "date": "2026-07-04",
             "change": "Replaced unresolved safety-review DOI with content-verified TBHQ toxicology DOI 10.1016/0278-6915(86)90289-9 and B-cell immune-effects DOI 10.1016/j.fct.2020.111595. Corrected PMC9147452 journal label to Life (Basel) 2022.",
             "reason": "citation_integrity_cleanup"
+          },
+          {
+            "date": "2026-07-04",
+            "change": "Added content-verified TBHQ Th2-skewing citation PMID 22250088 and experimental food-allergy citation PMID 40115160; vaccine-efficacy wording remains excluded because no indexed citation supports it.",
+            "reason": "citation_integrity_cleanup"
           }
         ]
       },
@@ -17184,11 +17220,13 @@
         "Japan": "PROHIBITED. Japan prohibits TBHQ as a food additive.",
         "Retail": "Increasingly being voluntarily removed by major retailers (Walmart, Kroger, Whole Foods clean label commitments)."
       },
-      "mechanism_of_harm": "Synthetic antioxidant preservative. NOT classified by IARC (not in Group 2B, 2A, or 1 — formally unclassified, distinct from Group 3). EFSA 2004: no carcinogenicity concern identified. NTP: not listed as carcinogen. EMERGING IMMUNOTOXICITY CONCERN: ToxCast analysis and peer-reviewed studies (including PMC9147452, Life (Basel) 2022, and DOI 10.1016/j.fct.2020.111595) suggest immune-related gene-expression and B-cell effects, but human clinical significance remains uncertain. FDA has not reviewed TBHQ for immunotoxicity since 1972 — a significant regulatory data gap. Japan prohibits TBHQ; EU permits with limits; US FDA approves with 0.02% fat content ceiling.",
-      "notes": "Petroleum-derived antioxidant preservative. Japan prohibits; FDA and EU permit with limits. IARC STATUS CLARIFIED: TBHQ is NOT classified by IARC (not Group 2B and not Group 3 — formally unclassified). SEVERITY DOWNGRADED FROM CRITICAL TO HIGH: 'Critical' requires confirmed major human harm. TBHQ has no carcinogen classification from IARC, NTP, or EFSA; however, the emerging immunotoxicity signal (PMC9147452; DOI 10.1016/j.fct.2020.111595), Japan prohibition, and 50-year FDA safety data gap justify 'high' as precautionary. FDA ADI note: 0.02% of fat content is a use limit, not an ADI per se; JECFA international ADI = 0.7 mg/kg bw/day.",
+      "mechanism_of_harm": "Synthetic antioxidant preservative. NOT classified by IARC (not in Group 2B, 2A, or 1 — formally unclassified, distinct from Group 3). EFSA 2004: no carcinogenicity concern identified. NTP: not listed as carcinogen. EMERGING IMMUNOTOXICITY CONCERN: ToxCast analysis and peer-reviewed studies show that tBHQ can activate Nrf2 in CD4+ T cells and skew toward Th2 differentiation (PMID 22250088), affect activated murine B-cell function (DOI 10.1016/j.fct.2020.111595), and in mice promote allergen sensitization and exacerbate anaphylaxis in experimental food allergy (PMID 40115160). Human clinical significance remains uncertain. FDA has not reviewed TBHQ for immunotoxicity since 1972 — a significant regulatory data gap. Japan prohibits TBHQ; EU permits with limits; US FDA approves with 0.02% fat content ceiling.",
+      "notes": "Petroleum-derived antioxidant preservative. Japan prohibits; FDA and EU permit with limits. IARC STATUS CLARIFIED: TBHQ is NOT classified by IARC (not Group 2B and not Group 3 — formally unclassified). SEVERITY DOWNGRADED FROM CRITICAL TO HIGH: 'Critical' requires confirmed major human harm. TBHQ has no carcinogen classification from IARC, NTP, or EFSA; however, emerging immunotoxicity signals (PMID 22250088; DOI 10.1016/j.fct.2020.111595; PMID 40115160), Japan prohibition, and 50-year FDA safety data gap justify 'high' as precautionary. FDA ADI note: 0.02% of fat content is a use limit, not an ADI per se; JECFA international ADI = 0.7 mg/kg bw/day.",
       "scientific_references": [
         "PMC9147452 — Chronic tBHQ exposure modulates expression of genes related to SARS-CoV-2 and influenza viruses (Life (Basel) 2022)",
         "DOI: 10.1016/j.fct.2020.111595 — Nrf2-dependent and -independent effects of tBHQ in activated murine B cells",
+        "PMID 22250088 — Th2 skewing by activation of Nrf2 in CD4(+) T cells (J Immunol 2012; DOI 10.4049/jimmunol.1101712)",
+        "PMID 40115160 — The transcription factor Nrf2 links Th2-mediated experimental allergy to food preservatives (Front Immunol 2025; DOI 10.3389/fimmu.2024.1476480)",
         "DOI: 10.1016/0278-6915(86)90289-9 — Toxicology of tert-butylhydroquinone (TBHQ)",
         "EFSA 2004 — TBHQ re-evaluation: no carcinogenicity concern identified",
         "JECFA — TBHQ ADI: 0.7 mg/kg bw/day",

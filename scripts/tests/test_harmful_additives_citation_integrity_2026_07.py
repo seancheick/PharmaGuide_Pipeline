@@ -61,3 +61,25 @@ def test_tbhq_pmc9147452_is_not_mislabelled_as_frontiers():
     assert "PMC9147452" in tbhq
     assert "Life (Basel) 2022" in tbhq
     assert "Frontiers in Immunology" not in tbhq
+
+
+def test_tbhq_specific_immunotoxicity_claims_are_cited_without_vaccine_overclaim():
+    tbhq = _entry_text(_entries_by_id()["ADD_TBHQ"])
+
+    assert "PMID 22250088" in tbhq
+    assert "Th2 skewing by activation of Nrf2 in CD4" in tbhq
+    assert "10.4049/jimmunol.1101712" in tbhq
+
+    assert "PMID 40115160" in tbhq
+    assert "The transcription factor Nrf2 links Th2-mediated experimental allergy to food preservatives" in tbhq
+    assert "10.3389/fimmu.2024.1476480" in tbhq
+
+    assert "vaccine efficacy" not in tbhq
+    assert "vaccine suppression" not in tbhq
+
+
+def test_synthetic_antioxidants_umbrella_defers_tbhq_immunotox_to_canonical_entry():
+    synthetic = _entry_text(_entries_by_id()["ADD_SYNTHETIC_ANTIOXIDANTS"])
+
+    assert "PMC9147452" not in synthetic
+    assert "See ADD_TBHQ for immunotoxicity citations" in synthetic
