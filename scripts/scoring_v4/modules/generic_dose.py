@@ -255,8 +255,10 @@ def _penalty_b7_dose_safety(product: Dict[str, Any]) -> float:
     for flag in safety_flags:
         if not isinstance(flag, dict):
             continue
-        pct_ul = _as_float(flag.get("pct_ul"), 0.0) or 0.0
-        if pct_ul >= B7_UL_PCT_THRESHOLD:
+        pct_ul = _as_float(flag.get("pct_ul"), None)
+        # P0-2: a safety_flag is emitted only for an over-UL row, so a missing
+        # pct_ul must fail SAFE (apply the penalty), never be read as under-UL.
+        if pct_ul is None or pct_ul >= B7_UL_PCT_THRESHOLD:
             total += B7_PER_FLAG_PENALTY
     return _clamp(0.0, B7_CAP, total)
 
