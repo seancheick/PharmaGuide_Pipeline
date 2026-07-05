@@ -4095,12 +4095,12 @@
         "People with insulin resistance - Exacerbates the problem",
         "Everyone - Essentially sugar, should be minimized"
       ],
-      "notes": "Corn syrup solids are dehydrated corn syrup — essentially pure glucose with a glycemic index near 100. FDA GRAS. In supplements, they serve as cheap fillers or binders adding empty calories and causing rapid blood-sugar spikes. While metabolically harmful in excess, this is a nutritional concern (like added sugar) rather than a toxicological hazard, so severity is moderate. Diabetics and those with metabolic syndrome should avoid products containing this ingredient.",
+      "notes": "Corn syrup solids are dehydrated corn syrup — essentially pure glucose with a glycemic index near 100. FDA GRAS. In supplements, they serve as cheap fillers or binders adding empty calories and causing rapid blood-sugar spikes. While metabolically harmful in excess, this is a nutritional concern (like added sugar) rather than a toxicological hazard, so severity is low, matching other caloric sugar fillers. Diabetics and those with metabolic syndrome should avoid products containing this ingredient.",
       "scientific_references": [
         "REMOVED: DOI 10.1093/ajcn/86.4.895 was MISATTRIBUTED (resolves to fructose paper, not glycemic effects of glucose)",
         "REMOVED: DOI 10.1016/j.numecd.2019.05.062 was MISATTRIBUTED (resolves to alcohol/mortality paper, not GI carbohydrates)"
       ],
-      "last_updated": "2026-03-24",
+      "last_updated": "2026-07-04",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -4219,6 +4219,11 @@
             "change": "Severity moderate->low for caloric-sugar consistency (HFCS/cane sugar/dextrose are all low). Audit confirmed no toxicological basis \u2014 the 2026-03-01 high->moderate note already flagged it a sugar filler, not a toxicant.",
             "reason": "sugar_filler_severity_consistency",
             "by": "harmful_additives_sugar_consistency"
+          },
+          {
+            "date": "2026-07-04",
+            "change": "Synchronized explanatory notes with low-severity classification so downstream blobs do not carry stale moderate-severity language.",
+            "reason": "sugar_filler_severity_consistency"
           }
         ]
       },

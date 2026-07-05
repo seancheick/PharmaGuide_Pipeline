@@ -27,6 +27,7 @@ def test_corn_syrup_solids_is_low_not_moderate():
     e = _ENTRIES["ADD_CORN_SYRUP_SOLIDS"]
     assert e["severity_level"] == "low", "corn syrup solids is a caloric sugar filler, not a toxicological hazard"
     assert e["category"] == "sweetener_natural"
+    assert "severity is moderate" not in e["notes"].lower()
 
 
 def test_caloric_added_sugars_share_the_low_tier():
