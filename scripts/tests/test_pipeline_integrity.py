@@ -52,6 +52,7 @@ REQUIRED_SCHEMA_VERSIONS = {
     "6.2.0",  # ingredient_interaction_rules.json — smart-flagging Phase 2 direction/materiality
     "6.2.1",  # ingredient_interaction_rules.json — broad serotonergic class support
     "6.2.2",  # ingredient_interaction_rules.json — nattokinase bleeding profile gates
+    "6.2.3",  # ingredient_interaction_rules.json — thyroid mineral emitted floors
 }
 
 # Files that belong to a different subsystem and carry their own schema

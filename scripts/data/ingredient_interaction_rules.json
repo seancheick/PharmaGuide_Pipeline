@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.2.2",
-    "last_updated": "2026-07-04",
+    "schema_version": "6.2.3",
+    "last_updated": "2026-07-05",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
@@ -97,6 +97,12 @@
           "to": "6.2.2",
           "date": "2026-07-03",
           "summary": "Added explicit nattokinase bleeding-risk profile gates for anticoagulants and antiplatelets, sourced to MSK's nattokinase monograph. Presence-matters harmful rule; advisory-only and score-neutral."
+        },
+        {
+          "from": "6.2.2",
+          "to": "6.2.3",
+          "date": "2026-07-05",
+          "summary": "Moved thyroid selenium/iodine warning suppression boundaries from the retired Flutter condition_thresholds table into emitted pipeline min_effective_dose floors. Iodine/thyroid now floors at the adult RDA boundary (150 mcg/day) while the existing 1100 mcg/day UL dose_threshold continues severity escalation; selenium/thyroid floors at the NIH ODS adult UL (400 mcg/day)."
         }
       ]
     },
@@ -5558,7 +5564,16 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "presence"
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 150,
+            "unit": "mcg",
+            "basis": "per_day",
+            "confidence": "medium",
+            "confidence_basis": "adult_rda_threshold",
+            "source": "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/",
+            "rationale": "NIH ODS adult RDA is 150 mcg/day. The thyroid-disorder monitor warning is intended for supplemental iodine at or above routine adult intake; the separate 1100 mcg/day adult UL dose_threshold continues to escalate high excess iodine."
+          }
         }
       ],
       "drug_class_rules": [
@@ -14091,8 +14106,17 @@
             },
             "dose": null
           },
-          "direction": "neutral",
-          "materiality": "presence"
+          "direction": "harmful",
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 400,
+            "unit": "mcg",
+            "basis": "per_day",
+            "confidence": "high",
+            "confidence_basis": "adult_ul",
+            "source": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/",
+            "rationale": "NIH ODS adult UL is 400 mcg/day. Below this authored excess-risk floor, the thyroid-specific selenium toxicity warning should suppress; missing or unknown dose still fails open."
+          }
         }
       ],
       "drug_class_rules": [],

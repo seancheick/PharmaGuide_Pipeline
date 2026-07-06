@@ -11,6 +11,7 @@ Covers the Phase-2/3 pipeline half of the smart-flagging rework:
 
 Hermetic: no network, no live pipeline run.
 """
+import json
 import sys
 from pathlib import Path
 
@@ -20,6 +21,9 @@ from enrich_supplements_v3 import SupplementEnricherV3 as SupplementEnricher
 from build_final_db import build_detail_blob
 
 FLOOR = {"value": 1500, "unit": "mg", "basis": "per_day"}
+RULES = json.loads(
+    (Path(__file__).parent.parent / "data" / "ingredient_interaction_rules.json").read_text()
+)["interaction_rules"]
 
 
 # --------------------------------------------------------------------------
@@ -52,6 +56,39 @@ def test_floor_fails_open_on_missing_or_absent():
     assert e._evaluate_min_effective_dose(
         {"unit": "mg"}, {"quantity": 20, "unit": "mg"}, 1.0
     ) is None
+
+
+def _condition_floor(canonical_id, condition_id):
+    for rule in RULES:
+        if (rule.get("subject_ref") or {}).get("canonical_id") != canonical_id:
+            continue
+        for condition_rule in rule.get("condition_rules") or []:
+            if condition_rule.get("condition_id") == condition_id:
+                return condition_rule.get("min_effective_dose")
+    return None
+
+
+def test_thyroid_mineral_floors_restore_retired_app_boundaries():
+    """Selenium/iodine thyroid gates moved out of Flutter and into the emitted
+    pipeline floor contract. Below-floor warnings suppress; missing dose still
+    fails open in the generic floor tests above.
+    """
+    e = SupplementEnricher()
+    iodine_floor = _condition_floor("iodine", "thyroid_disorder")
+    selenium_floor = _condition_floor("selenium", "thyroid_disorder")
+
+    assert e._evaluate_min_effective_dose(
+        iodine_floor, {"quantity": 149, "unit": "mcg", "raw_source_text": "Iodine"}, 1.0
+    ) == "below"
+    assert e._evaluate_min_effective_dose(
+        iodine_floor, {"quantity": 150, "unit": "mcg", "raw_source_text": "Iodine"}, 1.0
+    ) == "at_or_above"
+    assert e._evaluate_min_effective_dose(
+        selenium_floor, {"quantity": 399, "unit": "mcg", "raw_source_text": "Selenium"}, 1.0
+    ) == "below"
+    assert e._evaluate_min_effective_dose(
+        selenium_floor, {"quantity": 400, "unit": "mcg", "raw_source_text": "Selenium"}, 1.0
+    ) == "at_or_above"
 
 
 FLOOR_NICOTINIC = {

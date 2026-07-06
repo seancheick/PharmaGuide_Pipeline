@@ -57,6 +57,10 @@ EXPECTED = {
     "st_johns_wort": (900, "mg", {"antihypertensives"}),
     # vitamin D high-dose-only
     "vitamin_d": (10000, "IU", {"anticoagulants"}),
+    # thyroid mineral dose gates moved from the retired Flutter threshold table
+    # into emitted pipeline floors.
+    "iodine": (150, "mcg", {"thyroid_disorder"}),
+    "selenium": (400, "mcg", {"thyroid_disorder"}),
 }
 
 # (canonical, sub-rule) that MUST be beneficial (routed to support, never floored)

@@ -153,7 +153,6 @@ NEUTRAL_LOCK = {
     ("vitamin_b7_biotin", "thyroid_disorder"),   # TSH/T4 assay interference
     ("coq10", "statins"),                        # no adverse PK interaction
     ("calcium", "pregnancy_lactation"),          # generally-compatible standard nutrient
-    ("selenium", "thyroid_disorder"),
 }
 
 HARMFUL_LOCK = {
@@ -163,6 +162,7 @@ HARMFUL_LOCK = {
     ("iodine", "pregnancy"),                     # excess disrupts fetal thyroid
     ("red_clover", "thyroid_disorder"),          # TPO inhibition
     ("potassium", "potassium_sparing_diuretics"),  # hyperkalemia
+    ("selenium", "thyroid_disorder"),            # excess above adult UL is toxic
 }
 
 
