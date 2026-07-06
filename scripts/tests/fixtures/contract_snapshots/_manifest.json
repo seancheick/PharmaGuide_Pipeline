@@ -362,6 +362,17 @@
         "Fresh full-pipeline rerun after scoring-input performance fix"
       ],
       "notes": "Re-froze two legacy scoring snapshots after the full pipeline regenerated scored outputs from current taxonomy. Garden of Life Adrenal Daily Balance now uses canonical primary_type=multivitamin instead of stale b_complex, with a small A1/raw-score drift from that reclassification. Nutricost PRE Pre-Workout Complex now uses canonical primary_type=pre_workout instead of stale b_complex. Both refreshed values match the current enriched taxonomy and product identity; this snapshot update is separate from the v4 public-cap reconciliation fix."
+    },
+    {
+      "date": "2026-07-05",
+      "action": "refrozen_ul_gate_boron_false_penalty_removed",
+      "products": [
+        12012
+      ],
+      "sprints_covered": [
+        "UL-gate ul_gate_eligible fix (DV-anchored elemental mass)"
+      ],
+      "notes": "Re-froze CVS Spectravite Advanced Formula (12012) after the UL-gate fix removed a false OVER_UL_Boron flag. Boron 0.4 mg is 2% of the 20 mg adult UL, so the B7 dose-safety penalty (2.0) was never warranted; removing it raised section B 14.5->16.5, quality_raw 48.82->50.82, and score_100_equivalent 61.0->63.5. This is a scoring correction, not a regression."
     }
   ]
 }

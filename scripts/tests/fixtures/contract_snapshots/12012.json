@@ -57,22 +57,14 @@
       "B5_blend_evidence": [],
       "B5_penalty": 0.0,
       "B6_penalty": 0.0,
-      "B7_dose_safety_evidence": [
-        {
-          "amount": 75.0,
-          "nutrient": "Boron",
-          "pct_ul": 375.0,
-          "penalty": 2.0,
-          "ul": 20
-        }
-      ],
-      "B7_penalty": 2.0,
+      "B7_dose_safety_evidence": [],
+      "B7_penalty": 0.0,
       "B_hypoallergenic": 0.0,
       "bonuses": 1.0,
       "max": 30.0,
-      "penalties": 11.5,
-      "raw": 14.5,
-      "score": 14.5
+      "penalties": 9.5,
+      "raw": 16.5,
+      "score": 16.5
     },
     "C": {
       "depth_bonus": 0.5,
@@ -119,14 +111,13 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 48.82,
+    "quality_raw": 50.82,
     "violation_penalty": 0.0
   },
   "dsld_id": "12012",
   "evaluation_stage": "scoring",
   "flags": [
     "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY",
-    "OVER_UL_Boron",
     "SUPPLEMENT_TYPE_REINFERRED"
   ],
   "grade": "Fair",
@@ -134,8 +125,8 @@
   "output_schema_version": "3.6.0",
   "product_name": "Spectravite Advanced Formula",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 61.0,
-  "score_80": 48.8,
+  "score_100_equivalent": 63.5,
+  "score_80": 50.8,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -148,7 +139,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 14.5
+      "score": 16.5
     },
     "C_evidence_research": {
       "max": 20.0,
