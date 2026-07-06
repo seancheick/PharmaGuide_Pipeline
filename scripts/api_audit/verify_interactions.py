@@ -109,6 +109,124 @@ REQUIRED_FIELDS: tuple[str, ...] = (
     "management",
 )
 
+# --------------------------------------------------------------------------- #
+# Evidence-strength derivation (SP-6)  ⚠ CLINICIAN REVIEW REQUIRED before rebuild
+# --------------------------------------------------------------------------- #
+#
+# Curated PAIRWISE interactions (curated_interactions/*.json) carry author
+# metadata `clinical_confidence` (high/medium/moderate/low) + `evidence_basis`
+# (study / source type), NOT a graded `evidence_level`. That is why the shipped
+# interaction_db has 150/150 evidence_level = NULL. This derives the
+# evidence_level into the LOCKED evidence_strength_vocab
+# (scripts/data/evidence_strength_vocab.json), gated on audited provenance per
+# the SP-0 rule: "map evidence grade to clinical-study data and audited
+# identifiers; do NOT infer from marketing copy."
+#
+# The tables below are a defensible, conservative DEFAULT grounded in the vocab
+# tier definitions. Adjust the TABLES (not the logic) after clinician review.
+# Preview every proposed grade first:
+#     python3 scripts/api_audit/review_evidence_derivation.py
+#
+# Canonical vocab, weakest -> strongest. `no_data` is the fail-safe: the
+# ship-blocking NULL becomes an explicit, honest "no evidence data" tier, never
+# a silent absence. Kept in sync with evidence_strength_vocab.json by the
+# module-load self-check below.
+EVIDENCE_STRENGTH_ORDER: tuple[str, ...] = (
+    "no_data",
+    "theoretical",
+    "limited",
+    "moderate",
+    "probable",
+    "established",
+)
+
+# evidence_basis (study / source type) -> BASE strength tier, before the
+# confidence + provenance modifiers. Mirrors the study-design hierarchy in
+# audit_clinical_evidence_strength.STUDY_TYPE_STRENGTH.
+EVIDENCE_BASIS_BASE_STRENGTH: dict[str, str] = {
+    # Strongest designs + regulatory authority = "consistent clinical or
+    # regulatory backing" (established).
+    "systematic_review": "established",
+    "rct": "established",
+    "label_regulatory": "established",  # FDA / label warnings = regulatory backing
+    # Credible human / authoritative but not definitive = probable.
+    "authoritative_review": "probable",
+    "clinical_reference": "probable",
+    "clinical_literature": "probable",
+    "review": "probable",
+    # Narrower / early human evidence.
+    "observational": "moderate",
+    # Mechanism-only, no direct confirmation = theoretical.
+    "mechanism_inferred": "theoretical",
+    "preclinical": "theoretical",
+}
+
+# Bases that are self-authoritative for provenance (regulatory / expert-curated
+# references) and so may hold established/probable WITHOUT a PMID. Everything
+# else must carry an audited identifier to grade above `moderate`.
+SELF_AUTHORITATIVE_BASES: frozenset[str] = frozenset(
+    {"label_regulatory", "authoritative_review", "clinical_reference"}
+)
+
+
+def derive_evidence_level(
+    evidence_basis: str | None,
+    clinical_confidence: str | None,
+    source_pmids: list[str] | None,
+) -> str:
+    """Derive an evidence_strength_vocab tier from curated-interaction author
+    metadata. SP-6 compliant: canonical vocab, provenance-gated, never NULL.
+
+    Rubric (clinician-reviewable — adjust the tables above, not this logic):
+      1. evidence_basis -> base tier (EVIDENCE_BASIS_BASE_STRENGTH).
+      2. clinical_confidence: `low` steps down one tier (floor: theoretical);
+         high / medium / moderate keep the base tier.
+      3. provenance gate (SP-0): `established`/`probable` require an audited
+         PMID OR a self-authoritative basis; otherwise cap at `moderate`.
+    Unknown / absent basis -> `no_data`.
+    """
+    basis = (evidence_basis or "").strip().lower()
+    conf = (clinical_confidence or "").strip().lower()
+    base = EVIDENCE_BASIS_BASE_STRENGTH.get(basis)
+    if base is None:
+        return "no_data"
+
+    idx = EVIDENCE_STRENGTH_ORDER.index(base)
+    if conf == "low":
+        idx = max(idx - 1, EVIDENCE_STRENGTH_ORDER.index("theoretical"))
+
+    if EVIDENCE_STRENGTH_ORDER[idx] in ("established", "probable"):
+        has_provenance = bool(source_pmids) or basis in SELF_AUTHORITATIVE_BASES
+        if not has_provenance:
+            idx = EVIDENCE_STRENGTH_ORDER.index("moderate")
+    return EVIDENCE_STRENGTH_ORDER[idx]
+
+
+def _assert_evidence_vocab_alignment() -> None:
+    """SP-6 canonical-ID enforcement: EVIDENCE_STRENGTH_ORDER must match the
+    LOCKED evidence_strength_vocab exactly, so the derivation can never emit an
+    off-vocab tier. Best-effort — skipped if the vocab file is unavailable."""
+    vocab_path = (
+        Path(__file__).resolve().parent.parent
+        / "data"
+        / "evidence_strength_vocab.json"
+    )
+    try:
+        vocab = json.loads(vocab_path.read_text())
+    except OSError:
+        return
+    ids = {e["id"] for e in vocab.get("evidence_strengths", []) if e.get("id")}
+    off = set(EVIDENCE_STRENGTH_ORDER) - ids
+    missing = ids - set(EVIDENCE_STRENGTH_ORDER)
+    if off or missing:
+        raise ValueError(
+            "evidence_strength derivation drifted from evidence_strength_vocab: "
+            f"not-in-vocab={sorted(off)} not-mapped={sorted(missing)}"
+        )
+
+
+_assert_evidence_vocab_alignment()
+
 # Agent ID shapes
 RXCUI_RE = re.compile(r"^\d+$")
 REF_RE = re.compile(r"^ref:[a-z][a-z0-9_]*$")
@@ -1219,6 +1337,18 @@ def verify_entry(
                 normalized[f"{side}_canonical_id"] = map_canonical_id(
                     resolved_cui, "supplement", ctx.iqm_cui_index
                 )
+
+    # SP-6 evidence-strength derivation. Curated pairwise interactions ship
+    # `clinical_confidence` + `evidence_basis` but no graded `evidence_level`
+    # (why the DB shipped 150/150 NULL). Derive it into the canonical vocab,
+    # provenance-gated, so a graded — never NULL — value always reaches the
+    # builder. ⚠ Review the proposed grades before rebuild:
+    #   python3 scripts/api_audit/review_evidence_derivation.py
+    normalized["evidence_level"] = derive_evidence_level(
+        entry.get("evidence_basis"),
+        entry.get("clinical_confidence"),
+        normalized.get("source_pmids"),
+    )
 
     return normalized
 
