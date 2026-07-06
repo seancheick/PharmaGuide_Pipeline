@@ -14,6 +14,7 @@ from verify_interactions import (  # noqa: E402
     derive_evidence_level,
 )
 from review_evidence_derivation import serious_below_probable_flags  # noqa: E402
+from review_evidence_derivation import merged_source_pmids  # noqa: E402
 
 
 def test_strong_designs_with_provenance_are_established():
@@ -33,6 +34,21 @@ def test_clinical_literature_without_pmid_capped_at_moderate():
 
 def test_clinical_literature_with_pmid_is_probable():
     assert derive_evidence_level("clinical_literature", "medium", ["999"]) == "probable"
+
+
+def test_review_uses_pubmed_urls_as_evidence_provenance():
+    pmids = merged_source_pmids(
+        {
+            "source_urls": [
+                "https://pubmed.ncbi.nlm.nih.gov/21191575/",
+                "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
+            ],
+            "source_pmids": [],
+        }
+    )
+
+    assert pmids == ["21191575"]
+    assert derive_evidence_level("clinical_literature", "medium", pmids) == "probable"
 
 
 def test_authoritative_review_is_probable_without_pmid():

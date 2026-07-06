@@ -19,6 +19,7 @@ import collections
 import glob
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -30,6 +31,35 @@ CURATED_GLOB = str(SCRIPTS / "data" / "curated_interactions" / "*.json")
 TIERS = ("established", "probable", "moderate", "limited", "theoretical", "no_data")
 SERIOUS_SEVERITIES = {"contraindicated", "avoid", "major"}
 BELOW_PROBABLE = {"moderate", "limited", "theoretical", "no_data"}
+PUBMED_URL_RE = re.compile(
+    r"(?:pubmed\.ncbi\.nlm\.nih\.gov|ncbi\.nlm\.nih\.gov/pubmed)/(?P<pmid>\d+)",
+    re.IGNORECASE,
+)
+
+
+def merged_source_pmids(entry: dict) -> list[str]:
+    """Return explicit source_pmids plus PMIDs extracted from PubMed URLs.
+
+    This mirrors verify_interactions.py's build-time provenance merge so the
+    clinician review artifact predicts the actual DB evidence_level values.
+    """
+    out: list[str] = []
+    seen: set[str] = set()
+
+    def add(candidate: object) -> None:
+        pmid = str(candidate or "").strip()
+        if pmid.isdigit() and pmid not in seen:
+            seen.add(pmid)
+            out.append(pmid)
+
+    for pmid in entry.get("source_pmids") or []:
+        add(pmid)
+    for url in entry.get("source_urls") or []:
+        if not isinstance(url, str):
+            continue
+        for match in PUBMED_URL_RE.finditer(url):
+            add(match.group("pmid"))
+    return out
 
 
 def _rows():
@@ -39,7 +69,7 @@ def _rows():
         for e in entries or []:
             if not isinstance(e, dict):
                 continue
-            pmids = e.get("source_pmids") or []
+            pmids = merged_source_pmids(e)
             yield {
                 "id": e.get("id", ""),
                 "severity": e.get("severity", ""),
