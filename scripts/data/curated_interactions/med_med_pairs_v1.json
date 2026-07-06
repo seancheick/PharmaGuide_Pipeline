@@ -360,7 +360,15 @@
       "management": "Use this combination with caution only when clinically indicated (e.g., heart failure post-RALES). Monitor serum potassium and creatinine closely — within 1 week of starting and after any dose change. Avoid potassium supplements and potassium-containing salt substitutes.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
-        "https://www.ncbi.nlm.nih.gov/books/NBK539831/"
+        "https://www.ncbi.nlm.nih.gov/books/NBK539831/",
+        "https://pubmed.ncbi.nlm.nih.gov/15295047/",
+        "https://pubmed.ncbi.nlm.nih.gov/11331054/",
+        "https://pubmed.ncbi.nlm.nih.gov/25683504/"
+      ],
+      "source_pmids": [
+        "15295047",
+        "11331054",
+        "25683504"
       ],
       "verification": {
         "status": "verified",

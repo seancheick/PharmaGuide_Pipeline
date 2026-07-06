@@ -306,6 +306,14 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
     sources_field = config.get("sources_field", "sources")
     source_format = config.get("source_format", "dict_list")
 
+    def add_pmid(pmid: str, url: str | None = None) -> None:
+        if not pmid or any(ref["pmid"] == pmid for ref in results):
+            return
+        results.append({
+            "pmid": pmid,
+            "url": url or f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
+        })
+
     sources = entry.get(sources_field, [])
     if source_format == "nested_cfu_evidence_pmids":
         evidence = ((entry.get("cfu_thresholds") or {}).get("evidence") or {})
@@ -317,10 +325,7 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
         for candidate in candidates:
             pmid = re.sub(r"[^0-9]", "", str(candidate or ""))
             if pmid:
-                results.append({
-                    "pmid": pmid,
-                    "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
-                })
+                add_pmid(pmid)
         return results
 
     if not isinstance(sources, list):
@@ -332,10 +337,7 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
             # Bare PMID string (e.g. "24401291"); tolerate "PMID:123" / int.
             pmid = re.sub(r"[^0-9]", "", str(s))
             if pmid:
-                results.append({
-                    "pmid": pmid,
-                    "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
-                })
+                add_pmid(pmid)
             continue
         if source_format == "url_list":
             url = s if isinstance(s, str) else ""
@@ -348,10 +350,16 @@ def extract_pmids_from_entry(entry: dict, config: dict) -> list[dict]:
 
         m = PMID_RE.search(url)
         if m:
-            results.append({
-                "pmid": m.group(1),
-                "url": url,
-            })
+            add_pmid(m.group(1), url)
+
+    # Curated interaction files historically carry PMID identifiers in both
+    # source_urls and source_pmids. Include the explicit field as a first-class
+    # verification input so a PMID cannot influence SP-6 grading while bypassing
+    # the content verifier.
+    for source_pmid in entry.get("source_pmids") or []:
+        pmid = re.sub(r"[^0-9]", "", str(source_pmid))
+        if pmid:
+            add_pmid(pmid)
 
     return results
 

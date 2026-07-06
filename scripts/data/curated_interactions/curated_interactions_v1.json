@@ -420,9 +420,12 @@
       "management": "Avoid dong quai while taking warfarin. INR should be checked if the herb was recently used. Inform prescriber.",
       "source_urls": [
         "https://www.nccih.nih.gov/health/dong-quai",
-        "https://nccih.nih.gov/health/herbsataglance.htm"
+        "https://nccih.nih.gov/health/herbsataglance.htm",
+        "https://pubmed.ncbi.nlm.nih.gov/10417036/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "10417036"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2153,9 +2156,12 @@
       "mechanism": "Ginseng has stimulant and sympathomimetic-like properties. With MAO inhibited, the catecholaminergic activity of ginseng can contribute to hypertensive reactions and CNS overstimulation.",
       "management": "Avoid ginseng with MAOIs. Case reports of hypomania and headache with this combination exist. Use ginseng only after full MAOI washout.",
       "source_urls": [
-        "https://nccih.nih.gov/health/asianginseng"
+        "https://nccih.nih.gov/health/asianginseng",
+        "https://pubmed.ncbi.nlm.nih.gov/3597812/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "3597812"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2397,9 +2403,12 @@
       "source_urls": [
         "https://www.nccih.nih.gov/health/kava",
         "https://nccih.nih.gov/health/kava",
-        "https://livertox.nih.gov/Kava.htm"
+        "https://livertox.nih.gov/Kava.htm",
+        "https://pubmed.ncbi.nlm.nih.gov/8967683/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "8967683"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3275,16 +3284,14 @@
       "source_urls": [
         "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
-      "source_pmids": [
-        "37740600"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
-          "pubmed": true
+          "pubmed": false
         },
         "method": "live_api_batch_2026_04_13"
       },
@@ -3310,16 +3317,14 @@
       "source_urls": [
         "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
-      "source_pmids": [
-        "37740600"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
         "verified_with": {
           "rxnorm": true,
           "umls": true,
-          "pubmed": true
+          "pubmed": false
         },
         "method": "live_api_batch_2026_04_13"
       },
@@ -3423,10 +3428,11 @@
       "mechanism": "Ashwagandha (Withania somnifera) has been shown in clinical trials to reduce fasting blood glucose and HbA1c. Combined with diabetes medications, it can cause additive glucose lowering.",
       "management": "Monitor blood glucose when adding ashwagandha to diabetes therapy. Inform prescriber. Dose adjustment may be needed.",
       "source_urls": [
-        "https://www.nccih.nih.gov/health/ashwagandha"
+        "https://www.nccih.nih.gov/health/ashwagandha",
+        "https://pubmed.ncbi.nlm.nih.gov/31975514/"
       ],
       "source_pmids": [
-        "25237891"
+        "31975514"
       ],
       "verification": {
         "status": "verified",
