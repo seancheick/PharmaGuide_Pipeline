@@ -75,9 +75,12 @@ FLOORS = {
     "DSI_FISHOIL_GINKGO": dict(canon="ginkgo", value=120, unit="mg", conf="low",
         basis="reuse", src=NCCIH.format("ginkgo"),
         why="Sup-Sup additive bleeding; floor on ginkgo (primary antiplatelet, 120 mg standard dose)."),
-    "DSI_FISHOIL_VITE": dict(canon="vitamin_e", value=400, unit="IU", conf="medium",
-        basis="reuse+management", src=ODS.format("VitaminE"),
-        why="Reused vitamin E bleeding floor (400 IU); pair mgmt agrees (<=400 IU/day with fish oil)."),
+    "DSI_FISHOIL_VITE": dict(canon="vitamin_e", value=180, unit="mg", conf="medium",
+        basis="reuse+management+unit_normalized", src=ODS.format("VitaminE"),
+        why=("Reused vitamin E bleeding floor (400 IU/day) normalized to a conservative "
+             "180 mg alpha-tocopherol equivalent. NIH ODS lists 1 IU synthetic vitamin E "
+             "as 0.45 mg alpha-tocopherol and 1 IU natural vitamin E as 0.67 mg; 180 mg "
+             "is the lower mass equivalent, so below this floor is below 400 IU for either form.")),
     "DSI_ANTICOAG_HORSE_CHESTNUT": dict(canon="horse_chestnut_seed", value=300, unit="mg", conf="low",
         basis="inferred_conservative", src=NCCIH.format("horse-chestnut"),
         why="INFERRED conservative floor at standardized horse-chestnut-seed (aescin) supplement dose (~300 mg); not a guideline cutoff."),

@@ -3937,7 +3937,7 @@
       "severity": "Moderate",
       "interaction_effect_type": "Additive",
       "mechanism": "Both omega-3 fatty acids and vitamin E suppress platelet aggregation via separate pathways (membrane phospholipid remodeling and inhibition of platelet thromboxane synthesis), producing additive antiplatelet effects.",
-      "management": "Monitor for signs of easy bruising or bleeding. Consider limiting vitamin E to ≤400 IU/day when taking fish oil.",
+      "management": "Monitor for signs of easy bruising or bleeding. Consider keeping supplemental vitamin E below high-dose ranges (≤400 IU/day, roughly 180-268 mg alpha-tocopherol depending on form) when taking fish oil.",
       "source_urls": [
         "https://pubmed.ncbi.nlm.nih.gov/22300597/"
       ],
@@ -3958,13 +3958,13 @@
       "materiality": "dose_dependent",
       "dose_threshold": {
         "agent_canonical_id": "vitamin_e",
-        "value": 400,
-        "unit": "IU",
+        "value": 180,
+        "unit": "mg",
         "basis": "per_day",
         "confidence": "medium",
-        "confidence_basis": "reuse+management",
+        "confidence_basis": "reuse+management+unit_normalized",
         "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "rationale": "Reused vitamin E bleeding floor (400 IU); pair mgmt agrees (<=400 IU/day with fish oil)."
+        "rationale": "Reused vitamin E bleeding floor (400 IU/day) normalized to a conservative 180 mg alpha-tocopherol equivalent. NIH ODS lists 1 IU synthetic vitamin E as 0.45 mg alpha-tocopherol and 1 IU natural vitamin E as 0.67 mg; 180 mg is the lower mass equivalent, so below this floor is below 400 IU for either form."
       }
     },
     {

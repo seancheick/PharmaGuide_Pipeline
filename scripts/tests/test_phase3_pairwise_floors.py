@@ -51,7 +51,7 @@ def test_exactly_33_floored():
 
 # Representative floors locked (value+unit) so a later edit can't silently move them.
 EXPECTED = {
-    "DSI_FISHOIL_VITE": (400, "IU"),        # vitamin E bleeding, reused floor
+    "DSI_FISHOIL_VITE": (180, "mg"),        # vitamin E bleeding, 400 IU floor normalized conservatively
     "DSI_DM_CHROMIUM": (200, "mcg"),        # chromium glucose, reused
     "DSI_METFORMIN_ALA": (600, "mg"),       # ALA glucose, reused
     "DSI_WAR_GARLIC": (600, "mg"),          # garlic bleeding, reused
