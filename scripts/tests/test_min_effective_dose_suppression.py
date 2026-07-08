@@ -148,6 +148,26 @@ def test_form_scope_inferred_form_fails_open():
     ) is None
 
 
+def test_hard_severity_never_emits_a_suppressing_floor_status():
+    """Defense-in-depth: an avoid/contraindicated rule must never EMIT a
+    suppressing floor status. The app already fires hard severities regardless
+    of dose_floor_status (Severity.isHard), so this is behavior-neutral
+    on-device — it exists so a future dose_floor_status consumer that lacks the
+    isHard guard cannot under-warn on a hard rule.
+    """
+    e = SupplementEnricher()
+    # Suppressing statuses ("below"/"form_mismatch") → None (fail open) for hard.
+    assert e._floor_status_for_emission("below", "avoid") is None
+    assert e._floor_status_for_emission("form_mismatch", "contraindicated") is None
+    assert e._floor_status_for_emission("below", " AVOID ") is None  # case/space
+    # Firing / neutral statuses pass through unchanged even for hard.
+    assert e._floor_status_for_emission("at_or_above", "avoid") == "at_or_above"
+    assert e._floor_status_for_emission(None, "contraindicated") is None
+    # Soft severities keep their suppressing status — the floor still applies.
+    assert e._floor_status_for_emission("below", "caution") == "below"
+    assert e._floor_status_for_emission("form_mismatch", "monitor") == "form_mismatch"
+
+
 def test_unknown_basis_fails_open():
     # A `basis` typo (e.g. "daily" instead of "per_day") must NOT silently drop
     # the per-day multiplier and under-count the dose -> fail open (adversarial

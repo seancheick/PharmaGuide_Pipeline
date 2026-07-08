@@ -15281,6 +15281,28 @@ class SupplementEnricherV3:
             return None
         return "below" if converted_amount < floor_value else "at_or_above"
 
+    @staticmethod
+    def _floor_status_for_emission(
+        dose_floor_status: Optional[str], severity: Optional[str]
+    ) -> Optional[str]:
+        """Defense-in-depth for the SUPPRESSING floor statuses.
+
+        The app never dose-suppresses a hard severity (its
+        ``doseSuppressionGuardsPass`` / ``Severity.isHard`` guardrail fires the
+        warning regardless of ``dose_floor_status``). Mirror that at the source:
+        never EMIT a suppressing status ("below" / "form_mismatch") for an
+        ``avoid`` / ``contraindicated`` rule — fail open (None) instead. Today
+        the app already fails safe, so this is behavior-neutral on-device; it
+        exists so a future/second consumer of ``dose_floor_status`` that lacks
+        the ``isHard`` guard cannot under-warn on a hard rule. "at_or_above"
+        (which fires) and None pass through unchanged.
+        """
+        if dose_floor_status in ("below", "form_mismatch") and str(
+            severity or ""
+        ).strip().lower() in ("avoid", "contraindicated"):
+            return None
+        return dose_floor_status
+
     def _collect_interaction_profile(self, enriched: Dict, user_profile: Optional[Dict] = None) -> Dict:
         taxonomy_db = self.databases.get("clinical_risk_taxonomy", {}) or {}
         rules_db = self.databases.get("ingredient_interaction_rules", {}) or {}
@@ -15406,8 +15428,11 @@ class SupplementEnricherV3:
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
                     min_effective_dose = cond_rule.get("min_effective_dose")
-                    dose_floor_status = self._evaluate_min_effective_dose(
-                        min_effective_dose, ingredient, servings_per_day_max
+                    dose_floor_status = self._floor_status_for_emission(
+                        self._evaluate_min_effective_dose(
+                            min_effective_dose, ingredient, servings_per_day_max
+                        ),
+                        severity,
                     )
                     sources = [str(s).strip() for s in (cond_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
@@ -15475,8 +15500,11 @@ class SupplementEnricherV3:
                     if adjusted_severity in severity_weights:
                         severity = adjusted_severity
                     min_effective_dose = drug_rule.get("min_effective_dose")
-                    dose_floor_status = self._evaluate_min_effective_dose(
-                        min_effective_dose, ingredient, servings_per_day_max
+                    dose_floor_status = self._floor_status_for_emission(
+                        self._evaluate_min_effective_dose(
+                            min_effective_dose, ingredient, servings_per_day_max
+                        ),
+                        severity,
                     )
                     sources = [str(s).strip() for s in (drug_rule.get("sources") or []) if str(s).strip()]
                     for src in sources:
