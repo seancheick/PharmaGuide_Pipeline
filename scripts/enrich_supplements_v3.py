@@ -15225,7 +15225,8 @@ class SupplementEnricherV3:
 
         Returns ``"below"`` when the product's daily dose is under the clinical
         floor (interaction immaterial at this amount), ``"at_or_above"`` when it
-        meets/exceeds it, or ``None`` when no floor is authored, the dose is
+        meets/exceeds it, ``"form_mismatch"`` when a confirmed form is outside a
+        form-scoped rule, or ``None`` when no floor is authored, the dose/form is
         unknown, or the unit is not convertible. ``None`` is FAIL-OPEN — callers
         must treat it as "fires", never suppress on missing evidence (mirrors the
         dose-threshold contract and the app's ``_isFullyGated``).
@@ -15233,15 +15234,17 @@ class SupplementEnricherV3:
         if not isinstance(min_effective_dose, dict):
             return None
         # Form-gate (G1): a form-scoped floor applies ONLY to a confirmed
-        # matching form. Unknown / other forms fail open (fire) — a form must
-        # never inherit another form's floor (e.g. niacinamide must not get the
-        # nicotinic-acid glucose suppression). No form_scope = form-agnostic.
+        # matching form. Confirmed nonmatching forms are not affected by that
+        # rule; unknown/missing forms fail open (fire). No form_scope =
+        # form-agnostic.
         form_scope = min_effective_dose.get("form_scope")
         if isinstance(form_scope, list) and form_scope:
             ingredient_form = str(ingredient.get("matched_form") or "").strip().lower()
             allowed = {str(f).strip().lower() for f in form_scope if str(f).strip()}
-            if not ingredient_form or ingredient_form not in allowed:
+            if not ingredient_form:
                 return None
+            if ingredient_form not in allowed:
+                return "form_mismatch"
         floor_value = self._to_float_safe(min_effective_dose.get("value"))
         floor_unit = self._normalize_threshold_unit(min_effective_dose.get("unit"))
         basis = str(min_effective_dose.get("basis") or "per_day").strip().lower()

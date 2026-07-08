@@ -107,11 +107,15 @@ def test_expected_floors_present_and_correct():
 
 def test_no_floor_on_beneficial_or_presence():
     """A floor must never sit on a beneficial or presence-materiality sub-rule
-    (would wrongly dose-suppress a benefit or a presence-matters risk)."""
+    (would wrongly dose-suppress a benefit or a presence-matters risk).
+
+    Neutral high-dose guidance may be floored when the copy is explicitly about
+    pharmacologic dosing (for example high-dose niacin for cholesterol).
+    """
     for r in RULES:
         for _key, x in _sub_rules(r):
             if x.get("min_effective_dose"):
-                assert x.get("direction") == "harmful"
+                assert x.get("direction") != "beneficial"
                 assert x.get("materiality") == "dose_dependent"
 
 

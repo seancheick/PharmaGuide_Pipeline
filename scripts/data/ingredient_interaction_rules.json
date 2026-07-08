@@ -8251,7 +8251,19 @@
             "dose": null
           },
           "direction": "neutral",
-          "materiality": "presence"
+          "materiality": "dose_dependent",
+          "min_effective_dose": {
+            "value": 1500,
+            "unit": "mg",
+            "basis": "per_day",
+            "form_scope": [
+              "nicotinic acid"
+            ],
+            "confidence": "high",
+            "confidence_basis": "guideline_stated_cutoff",
+            "source": "https://ods.od.nih.gov/factsheets/Niacin-HealthProfessional/",
+            "rationale": "NIH ODS frames lipid and glucose effects around pharmacologic nicotinic-acid doses (>=1.5 g/day); multivitamin-dose niacinamide should not trigger high-dose cholesterol guidance."
+          }
         }
       ],
       "drug_class_rules": [

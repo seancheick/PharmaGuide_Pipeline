@@ -102,15 +102,15 @@ def _ing(qty, form="nicotinic acid", unit="mg"):
 
 
 def test_form_scope_only_matching_form_gets_floor():
-    """G1: the nicotinic-acid floor must NOT suppress other/unknown forms.
+    """G1: the nicotinic-acid floor must NOT fire on confirmed other forms.
 
-    niacinamide, unknown, and missing form all fail open (the warning fires) —
-    they never inherit the nicotinic-acid glucose suppression.
+    A confirmed nonmatching form (niacinamide) is a form mismatch, not an
+    unknown. Unknown and missing form still fail open (the warning fires).
     """
     e = SupplementEnricher()
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, "nicotinic acid"), 1.0) == "below"
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(2000, "nicotinic acid"), 1.0) == "at_or_above"
-    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, "niacinamide"), 1.0) is None
+    assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, "niacinamide"), 1.0) == "form_mismatch"
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, ""), 1.0) is None
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, {"quantity": 20, "unit": "mg"}, 1.0) is None
 
