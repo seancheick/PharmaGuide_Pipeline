@@ -107,16 +107,27 @@ def test_expected_floors_present_and_correct():
 
 def test_no_floor_on_beneficial_or_presence():
     """A floor must never sit on a beneficial or presence-materiality sub-rule
-    (would wrongly dose-suppress a benefit or a presence-matters risk).
+    (would wrongly dose-suppress a benefit or a presence-matters risk), nor on a
+    `contraindicated` sub-rule.
 
     Neutral high-dose guidance may be floored when the copy is explicitly about
     pharmacologic dosing (for example high-dose niacin for cholesterol).
+
+    Severity guard: a min_effective_dose floor SUPPRESSES the warning below the
+    floor, but the app's dose-suppression guardrail (doseSuppressionGuardsPass /
+    Severity.isHard) refuses to suppress hard severities — a `contraindicated`
+    warning must fire at ANY dose, so a floor on it is a contradiction. (12
+    `avoid`-severity floored rules also lean on that app fail-safe today; that
+    is inert-not-dangerous — flagged for clinician review to drop the floor or
+    reclassify — but NOT asserted here to avoid encoding a contested clinical
+    call.)
     """
     for r in RULES:
         for _key, x in _sub_rules(r):
             if x.get("min_effective_dose"):
                 assert x.get("direction") != "beneficial"
                 assert x.get("materiality") == "dose_dependent"
+                assert x.get("severity") != "contraindicated"
 
 
 def test_beneficial_ingredients_reclassified_not_floored():

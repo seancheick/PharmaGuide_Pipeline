@@ -15233,15 +15233,26 @@ class SupplementEnricherV3:
         """
         if not isinstance(min_effective_dose, dict):
             return None
-        # Form-gate (G1): a form-scoped floor applies ONLY to a confirmed
-        # matching form. Confirmed nonmatching forms are not affected by that
-        # rule; unknown/missing forms fail open (fire). No form_scope =
-        # form-agnostic.
+        # Form-gate (G1): a form-scoped floor may SUPPRESS only against a
+        # LABEL-CONFIRMED form. Confirmed nonmatching forms are not affected by
+        # that rule; unknown, missing, AND inferred/unspecified forms fail open
+        # (fire). No form_scope = form-agnostic.
+        #
+        # F2 (2026-07-08): `matched_form` is populated even for a FALLBACK form
+        # — a generic "Vitamin B3" label with no "(as ...)" resolves to a
+        # '<parent>_unspecified' form_id and a fallback matched_form. Gating on
+        # matched_form alone treated that inferred form as "confirmed" and
+        # emitted form_mismatch, SUPPRESSING a genuine nicotinic-acid
+        # flush/hepatotoxicity warning — a generic B3 could BE nicotinic acid,
+        # so that is an under-warn. Require a confirmed form, mirroring the
+        # matcher's own test (`form_id and 'unspecified' not in form_id`).
         form_scope = min_effective_dose.get("form_scope")
         if isinstance(form_scope, list) and form_scope:
             ingredient_form = str(ingredient.get("matched_form") or "").strip().lower()
+            form_id = str(ingredient.get("form_id") or "").strip().lower()
+            form_confirmed = bool(form_id) and "unspecified" not in form_id
             allowed = {str(f).strip().lower() for f in form_scope if str(f).strip()}
-            if not ingredient_form:
+            if not ingredient_form or not form_confirmed:
                 return None
             if ingredient_form not in allowed:
                 return "form_mismatch"

@@ -97,8 +97,20 @@ FLOOR_NICOTINIC = {
 }
 
 
-def _ing(qty, form="nicotinic acid", unit="mg"):
-    return {"quantity": qty, "unit": unit, "raw_source_text": "Niacin", "matched_form": form}
+def _ing(qty, form="nicotinic acid", unit="mg", form_id=None):
+    # Real pipeline rows carry a form_id. A LABEL-CONFIRMED form has a
+    # non-"unspecified" id; an inferred/fallback form (generic "Vitamin B3")
+    # gets a '<parent>_unspecified' id. Default derives a confirmed id from the
+    # form name so the confirmed-form cases exercise the mismatch path; pass an
+    # explicit form_id to model an inferred form.
+    resolved_form_id = form_id if form_id is not None else form.replace(" ", "_")
+    return {
+        "quantity": qty,
+        "unit": unit,
+        "raw_source_text": "Niacin",
+        "matched_form": form,
+        "form_id": resolved_form_id,
+    }
 
 
 def test_form_scope_only_matching_form_gets_floor():
@@ -113,6 +125,27 @@ def test_form_scope_only_matching_form_gets_floor():
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, "niacinamide"), 1.0) == "form_mismatch"
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, _ing(20, ""), 1.0) is None
     assert e._evaluate_min_effective_dose(FLOOR_NICOTINIC, {"quantity": 20, "unit": "mg"}, 1.0) is None
+
+
+def test_form_scope_inferred_form_fails_open():
+    """G1/F2: an INFERRED (unconfirmed) form must NOT suppress the floor.
+
+    A generic "Vitamin B3" label with no "(as ...)" resolves to a fallback
+    matched_form and a '<parent>_unspecified' form_id. Because generic B3 could
+    BE nicotinic acid, gating on the inferred form (form_mismatch → suppress)
+    would hide a genuine flush/hepatotoxicity warning. The floor must fail open
+    until the form is label-confirmed. Mirrors the matcher's own confirmation
+    test (`form_id and 'unspecified' not in form_id`).
+    """
+    e = SupplementEnricher()
+    # matched_form populated but form_id is the unspecified fallback → not confirmed
+    assert e._evaluate_min_effective_dose(
+        FLOOR_NICOTINIC, _ing(20, "niacin", form_id="niacin_unspecified"), 1.0
+    ) is None
+    # matched_form populated but form_id missing entirely → not confirmed
+    assert e._evaluate_min_effective_dose(
+        FLOOR_NICOTINIC, _ing(20, "niacin", form_id=""), 1.0
+    ) is None
 
 
 def test_unknown_basis_fails_open():
