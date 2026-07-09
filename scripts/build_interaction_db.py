@@ -63,6 +63,10 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
 
+from api_audit.verify_interactions import (
+    derive_evidence_level,
+    extract_pmids_from_urls,
+)
 from identity.interaction import normalize_interaction_canonical_id
 
 SCHEMA_VERSION = "1.0.0"
@@ -429,6 +433,31 @@ def _dose_threshold_text(draft: dict[str, Any]) -> str | None:
     return draft.get("dose_threshold_text")
 
 
+def _draft_evidence_level(draft: dict[str, Any]) -> str:
+    """Evidence tier for the app's evidence badge.
+
+    Curated pairwise drafts carry `evidence_basis` + `clinical_confidence` but
+    ship `evidence_level` NULL, so all 150 rendered as "Theoretical",
+    under-stating established interactions (warfarin x vitamin K, MAOI x SSRI).
+    Reuse the audited SP-6 rubric (single source of truth in
+    api_audit.verify_interactions): `evidence_basis` sets the base tier, `low`
+    confidence steps down, and a provenance gate caps unverifiable claims at
+    `moderate` (preclinical / mechanism-only -> `theoretical`). PMIDs are merged
+    from `source_pmids` + any PubMed `source_urls`, matching the rubric's own
+    caller. An explicit authored `evidence_level` still wins.
+    """
+    explicit = draft.get("evidence_level")
+    if isinstance(explicit, str) and explicit.strip():
+        return explicit.strip().lower()
+    pmids = list(draft.get("source_pmids") or [])
+    pmids += extract_pmids_from_urls(draft.get("source_urls") or [])
+    return derive_evidence_level(
+        draft.get("evidence_basis"),
+        draft.get("clinical_confidence"),
+        pmids,
+    )
+
+
 def build_interaction_row(
     draft: dict[str, Any],
     *,
@@ -465,7 +494,7 @@ def build_interaction_row(
         "effect_type": effect_type,
         "mechanism": draft["mechanism"],
         "management": draft["management"],
-        "evidence_level": draft.get("evidence_level"),
+        "evidence_level": _draft_evidence_level(draft),
         "source_urls_json": json.dumps(
             draft.get("source_urls", []), sort_keys=True
         ),

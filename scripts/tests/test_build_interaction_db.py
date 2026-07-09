@@ -513,6 +513,48 @@ def test_curated_rows_inserted_with_correct_severity(build_ctx):
     assert got["DDI_SSRI_STJOHNS"] == "avoid"
 
 
+def test_evidence_level_wired_from_sp6_rubric():
+    """The builder derives evidence_level via the audited SP-6 rubric instead of
+    shipping the drafts' NULL (which the app rendered "Theoretical"). Regression
+    guard for the all-150-NULL bug.
+    """
+    # label_regulatory is self-authoritative -> established without a PMID
+    assert bid._draft_evidence_level(
+        {"evidence_basis": "label_regulatory", "clinical_confidence": "high"}
+    ) == "established"
+    # clinical_literature without provenance is capped at moderate by the gate;
+    # a PMID (or a PubMed source_url, merged like the rubric's caller) clears it
+    assert bid._draft_evidence_level(
+        {"evidence_basis": "clinical_literature", "clinical_confidence": "high"}
+    ) == "moderate"
+    assert bid._draft_evidence_level(
+        {"evidence_basis": "clinical_literature", "clinical_confidence": "high",
+         "source_urls": ["https://pubmed.ncbi.nlm.nih.gov/21191575/"]}
+    ) == "probable"
+    # preclinical basis is never overstated
+    assert bid._draft_evidence_level(
+        {"evidence_basis": "preclinical", "clinical_confidence": "high",
+         "source_pmids": ["1"]}
+    ) == "theoretical"
+    # an explicit authored level wins; and the result is NEVER None (the bug)
+    assert bid._draft_evidence_level(
+        {"evidence_level": "limited", "evidence_basis": "label_regulatory"}
+    ) == "limited"
+    assert bid._draft_evidence_level({"clinical_confidence": "high"}) is not None
+
+
+def test_no_curated_row_ships_null_evidence_level(build_ctx):
+    """Every curated interaction row in the built DB carries a graded
+    evidence_level — the 150-NULL 'everything is Theoretical' bug can't recur."""
+    _build(build_ctx)
+    con = _conn(build_ctx.output_db)
+    nulls = con.execute(
+        "SELECT COUNT(*) AS n FROM interactions "
+        "WHERE source = 'curated' AND evidence_level IS NULL"
+    ).fetchone()["n"]
+    assert nulls == 0
+
+
 def test_research_pairs_populated(build_ctx):
     _build(build_ctx)
     con = _conn(build_ctx.output_db)
