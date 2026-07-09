@@ -1203,7 +1203,7 @@
       "drug_class_rules": [
         {
           "drug_class_id": "hypoglycemics_high_risk",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Additive glucose-lowering comparable to metformin. Also inhibits CYP3A4/CYP2D6, potentially increasing drug levels of co-administered medications.",
           "action": "Avoid unsupervised co-administration. Requires clinician-guided glucose monitoring and potential dose adjustment.",
@@ -4106,7 +4106,7 @@
         },
         {
           "condition_id": "bleeding_disorders",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Ginkgolides (especially ginkgolide B) inhibit platelet-activating factor (PAF), reducing platelet aggregation and extending bleeding time. Multiple case reports of spontaneous hemorrhage including subdural hematoma.",
           "action": "Avoid ginkgo with bleeding disorders. If used, monitor for bruising, prolonged bleeding, or unexplained headache.",
@@ -4235,7 +4235,7 @@
         },
         {
           "drug_class_id": "anticoagulants",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Ginkgo inhibits platelet aggregation (PAF antagonism). Bleeding risk amplified with warfarin or antiplatelet therapy.",
           "action": "If you take warfarin, aspirin, or another antiplatelet/anticoagulant, avoid ginkgo unless your prescriber clears it.",
@@ -6065,7 +6065,7 @@
       "condition_rules": [
         {
           "condition_id": "hypertension",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule applies only to whole/standard licorice extract containing glycyrrhizin.",
           "action": "Avoid in uncontrolled blood pressure unless deglycyrrhizinated form is confirmed.",
@@ -7155,7 +7155,7 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Potent CYP3A4/P-gp induction reduces plasma levels of calcium channel blockers and other CYP3A4-metabolized antihypertensives, compromising BP control.",
           "action": "Avoid combination. If SJW is discontinued, BP medications may suddenly become more potent, risking hypotension.",
@@ -17323,7 +17323,7 @@
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy.",
           "action": "Discontinue licorice root supplements in patients on antihypertensive therapy. DGL (deglycyrrhizinated licorice) does not carry this interaction. Inform prescriber of any licorice supplement use.",
@@ -21207,7 +21207,7 @@
       "condition_rules": [
         {
           "condition_id": "bleeding_disorders",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "White willow bark contains salicin, which is metabolised in the gut and liver to salicylate and salicylic acid \u2014 pharmacologically similar to aspirin. Salicylates irreversibly acetylate cyclooxygenase-1 in platelets, blocking thromboxane A2 synthesis and impairing platelet aggregation for the lifespan of the platelet (8-10 days).",
           "action": "Avoid in bleeding disorders. Treat similarly to aspirin from a bleeding risk perspective.",
@@ -21293,7 +21293,7 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Salicylate from white willow bark inhibits platelet aggregation (antiplatelet) AND displaces warfarin from albumin binding sites, potentially elevating free warfarin plasma concentrations and raising INR. The combination significantly increases haemorrhagic risk.",
           "action": "Avoid white willow bark with anticoagulants. If analgesic is needed, consult prescriber about alternatives.",
@@ -21335,7 +21335,7 @@
         },
         {
           "drug_class_id": "antiplatelets",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
           "mechanism": "Additive irreversible COX-1 inhibition. White willow bark combined with aspirin or clopidogrel produces dual antiplatelet inhibition beyond standard cardioprotective dosing.",
           "action": "Do not combine with antiplatelet therapy. Consult prescriber if analgesic is needed.",
