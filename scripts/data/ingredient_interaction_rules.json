@@ -2692,7 +2692,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "avoid",
-          "evidence_level": "established",
+          "evidence_level": "probable",
           "mechanism": "Coumarin content plus antiplatelet phytochemicals. Multiple case reports of INR elevation in patients on warfarin.",
           "action": "If you take warfarin or an antiplatelet, avoid dong quai unless cleared by your prescriber.",
           "sources": [
@@ -3404,16 +3404,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 600,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.mskcc.org/cancer-care/integrative-medicine/herbs/garlic",
-            "rationale": "Garlic antiplatelet / BP / glucose effects are documented for concentrated extracts (~600 mg/day and above); culinary or trace amounts are below this."
-          }
+          "materiality": "presence"
         },
         {
           "condition_id": "hypertension",
@@ -4177,16 +4168,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "medium",
-            "confidence_basis": "inferred_from_dose_range",
-            "source": "https://www.nccih.nih.gov/health/ginkgo",
-            "rationale": "Ginkgo antiplatelet/bleeding and hemodynamic effects are documented at standardized-extract doses (>=120 mg/day); trace ginkgo in a multi is below this."
-          }
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [
@@ -21278,16 +21260,7 @@
             "dose": null
           },
           "direction": "harmful",
-          "materiality": "dose_dependent",
-          "min_effective_dose": {
-            "value": 120,
-            "unit": "mg",
-            "basis": "per_day",
-            "confidence": "low",
-            "confidence_basis": "aspirin_like_conservative",
-            "source": "https://pubmed.ncbi.nlm.nih.gov/11345689/",
-            "rationale": "Willow bark salicin is aspirin-like and inhibits platelet aggregation (documented at 240 mg salicin; PMID 11345689). Conservative 120 mg floor (salicin basis) given aspirin-equivalent risk."
-          }
+          "materiality": "presence"
         }
       ],
       "drug_class_rules": [

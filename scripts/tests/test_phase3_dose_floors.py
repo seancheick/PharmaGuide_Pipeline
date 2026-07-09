@@ -29,10 +29,12 @@ EXPECTED = {
     "omega_3": (3000, "mg", {"anticoagulants", "antiplatelets"}),
     "fish_oil": (3000, "mg", {"anticoagulants", "antiplatelets", "bleeding_disorders",
                               "surgery_scheduled"}),
+    # surgery_scheduled normalized to materiality=presence (fires at any dose,
+    # perioperative) — no longer a dose floor, so not listed here.
     "ginkgo": (120, "mg", {"bleeding_disorders", "anticoagulants", "antiplatelets",
-                           "hypertension", "antihypertensives", "surgery_scheduled"}),
+                           "hypertension", "antihypertensives"}),
     "garlic": (600, "mg", {"anticoagulants", "antiplatelets", "hypertension",
-                           "antihypertensives", "diabetes", "surgery_scheduled"}),
+                           "antihypertensives", "diabetes"}),
     "turmeric": (1000, "mg", {"bleeding_disorders", "anticoagulants", "antiplatelets"}),
     "curcumin": (1000, "mg", {"bleeding_disorders", "anticoagulants", "antiplatelets"}),
     "caffeine": (200, "mg", {"hypertension"}),
@@ -128,6 +130,28 @@ def test_no_floor_on_beneficial_or_presence():
                 assert x.get("direction") != "beneficial"
                 assert x.get("materiality") == "dose_dependent"
                 assert x.get("severity") != "contraindicated"
+
+
+def test_surgery_botanicals_are_presence_not_dose_gated():
+    """Perioperative antiplatelet botanicals must fire at ANY dose (stop before
+    surgery regardless of amount). Their surgery_scheduled subrule is therefore
+    materiality=presence with NO floor, so the data contract matches the
+    behavior (avoid + presence -> never dose-suppressed) instead of the old
+    avoid+dose_dependent+floor shape that only failed-open by accident.
+    """
+    surgery = {}
+    for r in RULES:
+        canon = (r.get("subject_ref") or {}).get("canonical_id", "")
+        if canon not in ("garlic", "ginkgo", "white_willow_bark"):
+            continue
+        for key, x in _sub_rules(r):
+            if key == "surgery_scheduled":
+                surgery[canon] = x
+    assert set(surgery) == {"garlic", "ginkgo", "white_willow_bark"}, surgery.keys()
+    for canon, x in surgery.items():
+        assert x.get("severity") == "avoid", canon
+        assert x.get("materiality") == "presence", f"{canon} surgery must be presence"
+        assert not x.get("min_effective_dose"), f"{canon} surgery must carry no floor"
 
 
 def test_beneficial_ingredients_reclassified_not_floored():
