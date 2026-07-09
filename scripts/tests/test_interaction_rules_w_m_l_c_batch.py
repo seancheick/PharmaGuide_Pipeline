@@ -43,7 +43,10 @@ def find_drug_class_rule(rules, db, canonical_id, drug_class_id):
 W_FAMILY = [
     # (label, db, canonical_id, drug_class_id, expected_severity)
     ("W1",  "ingredient_quality_map", "vitamin_k",      "vitamin_k_antagonists", "caution"),
-    ("W2",  "ingredient_quality_map", "ginkgo",         "anticoagulants", "avoid"),
+    # 2026-07 dose-floor review supersedes the original 2026-04 lock:
+    # ginkgo x anticoagulants is dose-dependent and now warns as caution
+    # at/above the authored 120 mg floor; trace doses suppress.
+    ("W2",  "ingredient_quality_map", "ginkgo",         "anticoagulants", "caution"),
     ("W3",  "ingredient_quality_map", "garlic",         "anticoagulants", "monitor"),
     ("W4",  "ingredient_quality_map", "fish_oil",       "anticoagulants", "caution"),
     ("W5a", "ingredient_quality_map", "turmeric",       "anticoagulants", "caution"),
