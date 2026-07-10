@@ -146,7 +146,7 @@ def test_route_classification_reuses_scoring_rows(monkeypatch):
 # the prenatal-panel floors for nutrients it never contained.
 
 def test_multivitamin_taxonomy_thin_panel_routes_generic():
-    """primary_type=multivitamin but a thin panel (<4 multi-nutrients) and no
+    """primary_type=multivitamin but a thin panel (<5 multi-nutrients) and no
     multi* in the name is a mis-tag, not a real multivitamin. It must route
     generic, not multi_or_prenatal (which would impose prenatal-panel floors)."""
     p = _product(
@@ -162,8 +162,27 @@ def test_multivitamin_taxonomy_thin_panel_routes_generic():
     assert _legacy_class_for_product(p) == "generic"  # parity: both brains agree
 
 
+def test_targeted_beauty_formula_with_four_micronutrients_routes_generic():
+    """Hair/beauty formulas are not broad multis merely because taxonomy drift
+    counted three B vitamins plus one mineral as a multivitamin panel."""
+    p = _product(
+        "Hair Sweet Hair Berry",
+        [
+            _row("vitamin_b12_cobalamin", "Vitamin B12", 850, "mcg"),
+            _row("vitamin_b9_folate", "Folic Acid", 500, "mcg"),
+            _row("vitamin_b7_biotin", "Biotin", 5000, "mcg"),
+            _row("zinc", "Zinc", 20, "mg"),
+            _row("paba", "PABA", 25, "mg"),
+            _row("fo_ti", "Fo-Ti Extract", 10, "mg"),
+        ],
+        primary_type="multivitamin",
+    )
+    assert build_scoring_classification(p)["route_module"] == "generic"
+    assert _legacy_class_for_product(p) == "generic"
+
+
 def test_multivitamin_real_broad_panel_routes_multi():
-    """A genuine multivitamin (≥4 distinct multi-panel nutrients) still routes
+    """A genuine multivitamin (≥5 distinct multi-panel nutrients) still routes
     multi_or_prenatal — regression guard so the hardening doesn't demote real
     multis."""
     p = _product(

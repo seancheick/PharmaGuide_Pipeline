@@ -879,7 +879,10 @@ def _is_multivitamin_route_eligible(product: Dict[str, Any], name_text: str) -> 
     ):
         return True
     canonicals = _positive_canonicals(product)
-    if len(canonicals & _MULTI_PANEL_CANONICALS) >= 4:
+    if (
+        len(canonicals & _MULTI_PANEL_CANONICALS)
+        >= _LEGACY_MULTIVITAMIN_MIN_MULTI_NUTRIENTS
+    ):
         return True
     if _read_primary_type(product) == "multivitamin":
         return (

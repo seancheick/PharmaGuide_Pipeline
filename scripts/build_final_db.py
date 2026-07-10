@@ -1095,6 +1095,7 @@ def _inactive_display_tone(
     matched_source: Optional[str],
     matched_rule_id: Optional[str],
     b1_applied_tier: Dict[str, str],
+    harmful_severity: Optional[str] = None,
 ) -> str:
     """Penalty-aware dot tone for an 'Other ingredients' row.
 
@@ -1104,10 +1105,12 @@ def _inactive_display_tone(
     maltodextrin costs 0.5 → light orange).
 
     ``b1_applied_tier`` is the scorer's per-additive applied tier keyed by
-    additive id (== ``matched_rule_id`` for harmful rows); absence means B1 added
-    0 points. banned_recalled rows floor at red regardless: B0 (not B1) owns
-    their penalty, and green must mean "no penalty AND no safety/regulatory
-    concern" (Codex caveat). Tones: green < light_orange < dark_orange < red.
+    additive id (== ``matched_rule_id`` for harmful rows). The applied tier is
+    authoritative when present. When B1 missed a resolver-only moderate/high
+    concern, ``harmful_severity`` supplies a safety floor so green still means
+    "no penalty AND no safety/regulatory concern". Low unpenalized excipients
+    remain green. banned_recalled rows floor at red regardless because B0 (not
+    B1) owns their penalty. Tones: green < light_orange < dark_orange < red.
     """
     if safe_str(matched_source) == "banned_recalled":
         return "red"
@@ -1118,6 +1121,12 @@ def _inactive_display_tone(
         return "dark_orange"
     if tier == "low":
         return "light_orange"
+    if safe_str(matched_source) == "harmful_additives":
+        fallback_tier = safe_str(harmful_severity).lower()
+        if fallback_tier in ("high", "critical"):
+            return "red"
+        if fallback_tier == "moderate":
+            return "dark_orange"
     return "green"
 
 
@@ -2361,11 +2370,20 @@ def derive_v4_tradeoffs(
                           "status": status, "reason": safe_str(sub.get("reason"))[:200]})
     for h in safe_list(enriched.get("harmful_additives")):
         if isinstance(h, dict):
+            harmful_ref = resolve_harmful_reference(h)
             penalties.append({
                 "id": "B1",
                 "label": f"Harmful additive: {safe_str(h.get('additive_name') or h.get('ingredient'))}",
                 "severity": safe_str(h.get("severity_level")),
-                "reason": safe_str(h.get("mechanism_of_harm") or h.get("notes") or h.get("category"))[:200],
+                "reason": safe_str(
+                    harmful_ref.get("safety_summary_one_liner")
+                    or harmful_ref.get("safety_summary")
+                    or h.get("safety_summary_one_liner")
+                    or h.get("safety_summary")
+                    or h.get("mechanism_of_harm")
+                    or h.get("notes")
+                    or h.get("category")
+                )[:200],
             })
     # B2 declared allergen source — gate on enriched allergen presence (the v3
     # user-facing meaning, neutral label). v4's narrower B2 (false allergen-free
@@ -4986,7 +5004,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # this; severity_status is kept for the inactive-safety CI audit.
             "display_tone": (
                 _inactive_display_tone(
-                    res.matched_source, res.matched_rule_id, _b1_applied_tier
+                    res.matched_source,
+                    res.matched_rule_id,
+                    _b1_applied_tier,
+                    harmful_severity=res.harmful_severity,
                 )
                 if _has_b1_tier
                 else None

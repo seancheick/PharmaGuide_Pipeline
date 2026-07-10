@@ -239,6 +239,27 @@ class TestBComplex:
 
         assert result["primary_type"] != "b_complex"
 
+    def test_b_complex_with_three_hair_adjuncts_stays_b_complex(self):
+        # Regression (Hair Sweet Hair 241692): 3 B-vitamins + zinc + PABA +
+        # Fo-Ti = 3 non-B actives. Previously fell to multivitamin because the
+        # b_complex gate capped non-B actives at 2 — but a B-vitamin-dominant
+        # hair formula with a few functional adjuncts is b_complex, not a broad
+        # multivitamin (which carries 4+ non-B vitamins). Must NOT route to the
+        # multivitamin RDA-coverage rubric.
+        p = {
+            "product_name": "Hair Sweet Hair",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "Vitamin B12", "canonical_id": "vitamin_b12", "category": "vitamin", "quantity": 100, "unit": "mcg"},
+                {"name": "Folate", "canonical_id": "folate", "category": "vitamin", "quantity": 400, "unit": "mcg"},
+                {"name": "Biotin", "canonical_id": "biotin", "category": "vitamin", "quantity": 5000, "unit": "mcg"},
+                {"name": "Zinc", "canonical_id": "zinc", "category": "mineral", "quantity": 5, "unit": "mg"},
+                {"name": "PABA", "canonical_id": "paba", "category": "amino_acid", "quantity": 50, "unit": "mg"},
+                {"name": "Fo-Ti", "canonical_id": "fo_ti", "category": "herb", "quantity": 100, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] == "b_complex"
+
 
 # ============================================================================
 # Multivitamin

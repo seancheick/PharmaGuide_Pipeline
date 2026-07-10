@@ -243,6 +243,7 @@ def test_mixed_multivitamin_with_whey_row_stays_multi_not_sports() -> None:
             _row("vitamin_c", 90, "mg"),
             _row("vitamin_d", 25, "mcg"),
             _row("vitamin_b12_cobalamin", 100, "mcg"),
+            _row("zinc", 11, "mg"),
             _row("whey_protein", 8, "Gram(s)"),
         ],
     )
@@ -365,6 +366,7 @@ def test_conservative_blend_anchor_protein_does_not_route_multivitamin_to_sports
             _row("vitamin_c", 90, "mg"),
             _row("vitamin_d", 25, "mcg"),
             _row("vitamin_b12_cobalamin", 100, "mcg"),
+            _row("zinc", 11, "mg"),
         ],
         product_scoring_evidence=[
             _product_evidence(

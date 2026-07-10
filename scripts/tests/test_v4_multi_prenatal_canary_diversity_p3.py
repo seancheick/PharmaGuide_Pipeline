@@ -98,10 +98,12 @@ TRUE_POSITIVE_TARGETS = {
     #   - Hum Mighty Night (sleep aid w/ herbs) → sleep_support
     #     (TAXONOMY-BUG-2 fixed: sleep name signal overrides herb plurality;
     #     route generic because there is no dedicated v4 sleep module)
-#   - Hum Hair Sweet Hair → b_complex in current taxonomy, but router's
-#     B-complex guard keeps targeted 3-B-vitamin products generic.
-#   - Vitafusion Everyday Energy → b_complex in current taxonomy, guarded
-#     generic for the same reason.
+#   - Hum Hair Sweet Hair → b_complex (3 B-vitamins + zinc/PABA/Fo-Ti adjuncts);
+#     the b_complex route is generic, so it never hits the multivitamin rubric.
+#     (Restored by the <=3 non-B-adjunct fix in supplement_taxonomy.py; the blob
+#     re-bakes b_complex on the next enrichment.)
+#   - Vitafusion Everyday Energy → general_supplement (caffeine/CoQ10 energy
+#     product, disqualified from b_complex); routes generic, not multi.
 # Format: dsld_id → (expected_route, expected_primary_type, label)
 FALSE_POSITIVE_TARGETS = {
     "174772": ("omega", "single_vitamin",
@@ -115,8 +117,8 @@ FALSE_POSITIVE_TARGETS = {
                "Hum Hair Sweet Hair (beauty name signal — not multi)"),
     "241699": ("generic", "sleep_support",
                "Hum Mighty Night (sleep aid — not multi)"),
-    "176800": ("generic", "b_complex",
-               "Vitafusion Everyday Energy (general — not multi)"),
+    "176800": ("generic", "general_supplement",
+               "Vitafusion Everyday Energy (energy/caffeine → general, not multi)"),
 }
 
 

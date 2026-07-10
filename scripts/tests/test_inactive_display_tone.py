@@ -11,6 +11,7 @@ Codex caveat baked in: green = "0 penalty AND no safety/regulatory concern". Any
 banned_recalled row (banned / recalled / high_risk / watchlist) floors at red even
 when B1 adds 0 points, because B0 — not B1 — owns its score penalty.
 """
+import inspect
 import os
 import sys
 
@@ -46,3 +47,26 @@ from build_final_db import _inactive_display_tone
 )
 def test_inactive_display_tone(matched_source, matched_rule_id, b1_applied_tier, expected):
     assert _inactive_display_tone(matched_source, matched_rule_id, b1_applied_tier) == expected
+
+
+@pytest.mark.parametrize(
+    "harmful_severity,expected",
+    [
+        ("moderate", "dark_orange"),
+        ("high", "red"),
+    ],
+)
+def test_resolver_only_safety_concern_cannot_render_green(
+    harmful_severity, expected
+):
+    """A resolver safety hit must remain visible even when B1 missed it."""
+    if "harmful_severity" not in inspect.signature(_inactive_display_tone).parameters:
+        actual = "missing_safety_fallback"
+    else:
+        actual = _inactive_display_tone(
+            "harmful_additives",
+            "ADD_RESOLVER_ONLY",
+            {},
+            harmful_severity=harmful_severity,
+        )
+    assert actual == expected

@@ -48,6 +48,27 @@ def test_add_polysorbate_20_unii_is_canonical_gsrs_record(harmful_additives):
     )
 
 
+def test_add_polysorbate_80_uses_the_actual_ema_polysorbates_review(
+    harmful_additives,
+):
+    """P80 must not cite EMA/CHMP/351898/2014, which is the sodium
+    laurilsulfate review. The polysorbates excipient review is
+    EMA/CHMP/190743/2016, published by EMA in 2024."""
+    entry = _find(harmful_additives, "ADD_POLYSORBATE80")
+    serialized = json.dumps(entry)
+    assert "EMA/CHMP/190743/2016" in serialized
+    assert "EMA/CHMP/351898/2014" not in serialized
+    assert "10.2903/j.efsa.2015.4152" in serialized
+    assert "10.2903/j.efsa.2017.4663" not in serialized
+    assert "10.1016/j.bbi.2024.03.052" in serialized
+    assert "10.1016/j.bbi.2024.05.033" not in serialized
+    assert "25731162" in serialized
+    assert "27821485" not in serialized
+    assert "polysorbate" not in entry["aliases"]
+    assert "Severely disrupts" not in entry["mechanism_of_harm"]
+    assert "human organoid data confirms" not in serialized
+
+
 def test_add_senna_rxcui_cleared_to_null(harmful_additives):
     """ADD_SENNA must not carry rxcui '237929' — that RxCUI returns no
     record from RxNav (/REST/rxcui/237929/properties.json → 404 on

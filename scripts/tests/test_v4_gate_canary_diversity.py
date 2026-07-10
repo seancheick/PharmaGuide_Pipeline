@@ -57,17 +57,13 @@ V4_CANARIES = {
     # CAUTION ceiling. Phase 9 makes production score equal raw.
     "241684": {
         "label": "HUM Flatter Me",
-        "module": "generic",
-        # Re-baseline 2026-06-08: real clinical-evidence-pipeline credit for
-        # bromelain + digestive proteases (content-verified as genuinely earned,
-        # NOT the essential-nutrient floor) lifted raw ~36 -> 46.1, crossing the
-        # 40 SAFE cutoff. SAFE = no safety concern; the weak quality is conveyed
-        # by the score (46 = Weak six-pillar tier), not the verdict. Blend
-        # visibility still does NOT force CAUTION (transparency dim = 0, correctly
-        # penalized). Mirrors the 241707 re-baseline precedent.
-        "verdict": "SAFE",
+        "module": "fiber_digestive",
+        # Re-baseline 2026-07-10: the dedicated fiber/digestive router correctly
+        # owns this digestive-enzyme + herbal blend. Its undisclosed enzyme
+        # activity and proprietary blends keep transparency/evidence low.
+        "verdict": "POOR",
         "confidence": "low",
-        "score_range": (45.4, 46.8),
+        "score_range": (35.5, 36.9),
     },
     # Probiotic with named strains but no total CFU: scoreable with low
     # confidence; dose/transparency dimensions keep it weak without a forced
@@ -80,7 +76,7 @@ V4_CANARIES = {
         # (low quality is conveyed by the score, not the verdict).
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (46.5, 47.9),
+        "score_range": (45.7, 47.1),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -113,31 +109,33 @@ V4_CANARIES = {
     # held by 2266 below, not this knife-edge product.
     "12932": {
         "label": "vitafusion Fiber Gummies",
-        "module": "generic",
-        # Re-baseline 2026-06-15: commit 2d6b841a rebalanced the V4 dietary-sugar
-        # penalty bands (gummies take B1_dietary_sugar -2.0), dropping raw 40.0 -> 38.0,
-        # crossing the 40-line into POOR. Legit corpus-wide scoring fix, not a regression.
-        "verdict": "POOR",
+        "module": "fiber_digestive",
+        # Re-baseline 2026-07-10: the dedicated fiber module reads the disclosed
+        # 5 g fiber dose while retaining the sugar/additive penalties and zero
+        # clinical-evidence credit.
+        "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (37.4, 38.6),
+        "score_range": (49.3, 50.7),
     },
-    # Stable POOR diversity anchor (added 2026-06-08 when 241684 + 12932 both
-    # legitimately crossed the 40 line into SAFE). Single-ingredient chlorophyll
-    # commodity: no clinical evidence, minimal formulation → raw 26.4, ~14 pts
-    # below the cutoff so it will not drift across it. Clean SAFE gate (not
-    # dangerous); POOR comes purely from the score band. Also a documented weak/
-    # junk control in the display-calibration tests. Re-baseline 2026-06-09:
-    # product-label USP claim gets the intentional small provisional +2 trust
-    # credit, while still staying POOR.
+    # Weak generic control: strict scoring now recovers the disclosed 60 mg
+    # chlorophyll blend anchor, while copper remains its only RDA-bearing row.
+    # Evidence stays at zero and formulation remains weak; disclosure and the
+    # in-range copper row lift raw above the old POOR boundary.
     "2266": {
         "label": "Triple Chlorophyll (GNC)",
         "module": "generic",
-        "verdict": "POOR",
+        "verdict": "SAFE",
         "confidence": "low",
-        # Re-baseline 2026-06-15: the product's USP strings are monograph refs
-        # ("Conforms to USP"), not named cert programs -> B4a_verified_certifications=0,
-        # so the prior provisional +2 USP trust credit does not apply; raw 26.4.
-        "score_range": (25.7, 27.1),
+        "score_range": (47.5, 48.9),
+    },
+    # Real-catalog guard for the four-micronutrient taxonomy false positive:
+    # a targeted hair formula is generic, not a broad multi/prenatal panel.
+    "241692": {
+        "label": "HUM Hair Sweet Hair Berry",
+        "module": "generic",
+        "verdict": "SAFE",
+        "confidence": "moderate",
+        "score_range": (63.8, 65.2),
     },
     # Typed confidence high on the probiotic module.
     "230149": {

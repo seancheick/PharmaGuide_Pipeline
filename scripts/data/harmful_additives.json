@@ -8977,32 +8977,29 @@
         "polyoxyethylene (20) sorbitan monooleate",
         "PS80",
         "Tween 80 NF",
-        "emulsifier-Polysorbate 80",
-        "polysorbate"
+        "emulsifier-Polysorbate 80"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "mechanism_of_harm": "Animal and in-vitro intestinal models report changes in gut microbiota, epithelial-barrier markers, and inflammatory signalling after polysorbate 80 exposure. These are mechanistic signals, not evidence that typical oral supplement-excipient doses cause clinical harm in humans; labels also rarely disclose the excipient dose.",
       "regulatory_status": {
-        "US": "FDA approved for use in foods and supplements",
-        "EU": "E433 approved",
-        "WHO": "ADI not specified but under review"
+        "US": "FDA permits specified uses in foods and vitamin/mineral preparations under 21 CFR 172.840",
+        "EU": "Authorised food additive E433 under specified conditions of use",
+        "WHO": "JECFA group ADI: 0-25 mg/kg body weight/day as total polyoxyethylene (20) sorbitan esters"
       },
       "population_warnings": [
-        "IBD/Crohn's disease — animal models show P80 promotes colitis; human organoid data confirms barrier disruption (PMID 37530764)",
-        "PEG/polysorbate allergy — documented anaphylaxis risk with parenteral polysorbate 80",
-        "IBS — may worsen symptoms via gut microbiome disruption"
+        "IBD/Crohn's disease or IBS — animal and in-vitro human intestinal models raise a precautionary gut-barrier concern, but direct clinical effects at oral supplement-excipient exposure have not been established (PMID 37530764)",
+        "Known polysorbate allergy — hypersensitivity including anaphylactoid reactions is documented primarily with parenteral exposure; this must not be presented as an established oral-supplement risk"
       ],
-      "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): Animal study doses demonstrating gut microbiome disruption (Chassaing et al., Nature 2015) were estimated at 100–500× human dietary exposure. ADDapt 2025 trial showed emulsifier-free diet associated with Crohn's remission, but trial used a MIXTURE of emulsifiers (P80 + CMC + carrageenan) in IBD patients — cannot isolate P80 effects. EMA review of polysorbate 80 as pharmaceutical excipient: 'no adverse reactions reported for oral tablet/capsule excipient use' in healthy populations. Human mechanistic data at supplement-level doses is lacking; high/high rating is not supported. Genuine concern warrants moderate/medium as precautionary stance.",
+      "notes": "Polysorbate 80 is a nonionic emulsifier. Animal studies and in-vitro human intestinal models report microbiome, barrier, and inflammatory signals, but they do not establish clinical harm from oral supplement-excipient exposure. EMA's 2024 review (EMA/CHMP/190743/2016) estimates maximum oral exposure from authorised medicines at about 1 mg/kg/day, far below the 25 mg/kg/day group ADI, and concludes that an oral package-leaflet warning is not meaningful. Moderate/medium is a precautionary rating for mechanistic signals plus unknown label-level dose, not evidence of established human harm. Parenteral hypersensitivity, cardiovascular, and hepatic risks are route-specific and must not be presented as oral supplement outcomes.",
       "scientific_references": [
-        "DOI: 10.1016/j.bbi.2024.05.033 - Cognitive decline 2024",
-        "PMID: 40730751 (Naimi et al. 2025 Nat Commun) - Maternal emulsifier consumption alters offspring microbiota and goblet cell function",
-        "DOI: 10.1038/s42003-024-06224-3 - Gut microbiome disruption 2024",
-        "PMID 27821485 — Chassaing et al., Nature 2015: P80 in mice at ~500× human dose → colitis, metabolic syndrome",
-        "PMID 37530764 — Ogulur et al., Allergy 2023: human organoid barrier disruption at sub-authorized concentrations",
-        "ADDapt Trial 2025 (Alimentary Pharmacol Ther 61:1276): emulsifier-free diet in Crohn's — mixed emulsifier intervention, P80 not isolated",
-        "EMA background review CHMP/351898/2014 — Polysorbate 80 as excipient: no adverse reactions in oral tablet/capsule use"
+        "DOI: 10.1016/j.bbi.2024.03.052 - P80 accelerated age-related cognitive decline in a mouse model exposed to 1% P80 in drinking water",
+        "PMID: 40730751 (Naimi et al. 2025 Nat Commun) - Maternal emulsifier consumption altered offspring microbiota and goblet-cell function in mice",
+        "PMID 25731162 - Chassaing et al., Nature 2015: P80 altered gut microbiota and promoted inflammation in mouse models",
+        "PMID 37530764 - Ogulur et al., Allergy 2023: in-vitro human intestinal organoid and cell models showed barrier and inflammatory effects",
+        "ADDapt Trial 2025 (Alimentary Pharmacol Ther 61:1276): emulsifier-restricted diet in Crohn's; mixed-emulsifier intervention cannot isolate P80",
+        "EMA/CHMP/190743/2016 — 2024 polysorbates excipient review: estimated maximum oral medicinal exposure about 1 mg/kg/day, far below the group ADI"
       ],
-      "last_updated": "2026-03-27",
+      "last_updated": "2026-07-10",
       "match_rules": {
         "match_mode": "alias_and_fuzzy",
         "fuzzy_threshold": 0.72,
@@ -9011,54 +9008,96 @@
       },
       "references_structured": [
         {
-          "type": "systematic_review",
+          "type": "primary_study",
           "authority": "OTHER",
-          "title": "DOI: 10.1016/j.bbi.2024.05.033 - Cognitive decline 2024",
-          "citation": "DOI: 10.1016/j.bbi.2024.05.033 - Cognitive decline 2024",
-          "url": "https://doi.org/10.1016/j.bbi.2024.05.033",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "title": "Dietary emulsifier polysorbate 80 exposure accelerates age-related cognitive decline",
+          "citation": "Brain Behav Immun. 2024;119:171-187. doi:10.1016/j.bbi.2024.03.052",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38565398/",
+          "published_date": "2024-03-31",
+          "evidence_grade": "C",
+          "supports_claims": [
+            "preclinical cognitive and gut-brain-axis signal in mice exposed to 1% P80"
+          ]
         },
         {
-          "type": "systematic_review",
+          "type": "primary_study",
           "authority": "OTHER",
-          "title": "DOI: PMID:40730751 - Mucus-penetrating bacteria 2025",
-          "citation": "DOI: PMID:40730751 - Mucus-penetrating bacteria 2025",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/40730751",
+          "title": "Maternal consumption of dietary emulsifiers alters offspring early-life microbiota and goblet cell function",
+          "citation": "Nat Commun. 2025;16:6954. PMID:40730751",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40730751/",
           "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "evidence_grade": "C",
+          "supports_claims": [
+            "preclinical maternal-exposure signal in mice"
+          ]
         },
         {
-          "type": "systematic_review",
+          "type": "primary_study",
           "authority": "OTHER",
-          "title": "DOI: 10.1038/s42003-024-06224-3 - Gut microbiome disruption 2024",
-          "citation": "DOI: 10.1038/s42003-024-06224-3 - Gut microbiome disruption 2024",
-          "url": "https://doi.org/10.1038/s42003-024-06224-3",
-          "published_date": null,
-          "evidence_grade": "B",
-          "supports_claims": []
+          "title": "Dietary emulsifiers impact the mouse gut microbiota promoting colitis and metabolic syndrome",
+          "citation": "Nature. 2015;519:92-96. PMID:25731162",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25731162/",
+          "published_date": "2015-02-25",
+          "evidence_grade": "C",
+          "supports_claims": [
+            "preclinical gut-microbiota and inflammation signal in mice"
+          ]
         },
         {
-          "type": "regulatory_action",
+          "type": "primary_study",
+          "authority": "OTHER",
+          "title": "Mechanisms of gut epithelial barrier impairment caused by food emulsifiers polysorbate 20 and polysorbate 80",
+          "citation": "Allergy. 2023;78(9):2441-2455. PMID:37530764",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37530764/",
+          "published_date": "2023-08-02",
+          "evidence_grade": "C",
+          "supports_claims": [
+            "in-vitro human intestinal organoid and cell-model barrier signal"
+          ]
+        },
+        {
+          "type": "regulation",
           "authority": "FDA",
-          "title": "21 CFR 172.840 - Polysorbates",
-          "citation": "21 CFR 172.840 - Polysorbates",
-          "url": "https://www.law.cornell.edu/cfr/text/21/172.840",
+          "title": "21 CFR 172.840 - Polysorbate 80",
+          "citation": "21 CFR 172.840",
+          "url": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-172/subpart-I/section-172.840",
           "published_date": null,
+          "evidence_grade": "A",
+          "supports_claims": [
+            "specified US food and vitamin/mineral preparation uses"
+          ]
+        },
+        {
+          "type": "monograph",
+          "authority": "EFSA",
+          "title": "EFSA Journal 2015;13(7):4152 - Re-evaluation of polysorbates",
+          "citation": "EFSA Journal 2015;13(7):4152 - Re-evaluation of polysorbates",
+          "url": "https://doi.org/10.2903/j.efsa.2015.4152",
+          "published_date": "2015-07-17",
           "evidence_grade": "B",
           "supports_claims": []
         },
         {
           "type": "monograph",
-          "authority": "EFSA",
-          "title": "EFSA Journal 2017;15(1):4663 - Re-evaluation of polysorbates",
-          "citation": "EFSA Journal 2017;15(1):4663 - Re-evaluation of polysorbates",
-          "url": "https://doi.org/10.2903/j.efsa.2017.4663",
-          "published_date": null,
-          "evidence_grade": "B",
+          "authority": "EMA",
+          "title": "Information for the package leaflet regarding polysorbates used as excipients in medicinal products for human use",
+          "citation": "EMA/CHMP/190743/2016",
+          "url": "https://www.ema.europa.eu/en/documents/scientific-guideline/information-package-leaflet-regarding-polysorbates-used-excipients-medicinal-products-human-use_en.pdf",
+          "published_date": "2024-04-17",
+          "evidence_grade": "A",
           "supports_claims": []
+        },
+        {
+          "type": "monograph",
+          "authority": "WHO",
+          "title": "JECFA evaluation of Polysorbate 80",
+          "citation": "JECFA 17 (1973), polysorbate 80, group ADI 0-25 mg/kg body weight",
+          "url": "https://apps.who.int/food-additives-contaminants-jecfa-database/Home/Chemical/3735",
+          "published_date": "1973-01-01",
+          "evidence_grade": "A",
+          "supports_claims": [
+            "group ADI 0-25 mg/kg body weight as total polyoxyethylene (20) sorbitan esters"
+          ]
         }
       ],
       "jurisdictional_statuses": [
@@ -9071,7 +9110,7 @@
             "start": "1979-01-01",
             "end": null
           },
-          "source_ref": "https://www.fda.gov/food/food-additives-petitions/food-additive-status-list"
+          "source_ref": "https://www.ecfr.gov/current/title-21/chapter-I/subchapter-B/part-172/subpart-I/section-172.840"
         },
         {
           "authority": "EU",
@@ -9093,14 +9132,14 @@
             "start": "1979-01-01",
             "end": null
           },
-          "source_ref": "https://www.who.int/publications"
+          "source_ref": "https://apps.who.int/food-additives-contaminants-jecfa-database/Home/Chemical/3735"
         }
       ],
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-27",
-        "reviewed_by": "harmful_additives_deep_audit_batch6",
-        "next_review_due": "2026-09-27",
+        "last_reviewed_at": "2026-07-10",
+        "reviewed_by": "p80_authority_citation_audit",
+        "next_review_due": "2027-01-10",
         "change_log": [
           {
             "date": "2025-11-17",
@@ -9145,7 +9184,7 @@
           {
             "date": "2026-03-08",
             "change_type": "SEVERITY_DOWNGRADE",
-            "description": "Downgraded severity high/high → moderate/medium. Animal study doses 100–500× human exposure. ADDapt 2025 trial tested mixed emulsifiers in IBD patients — cannot isolate P80. EMA confirms no adverse reactions in oral excipient use for healthy populations.",
+            "description": "Downgraded severity high/high → moderate/medium. Animal study doses 100–500× human exposure. ADDapt 2025 trial tested mixed emulsifiers in IBD patients — cannot isolate P80. EMA estimates oral medicinal exposure far below the group ADI and does not consider an oral warning meaningful.",
             "auditor": "automated_audit_march_2026"
           },
           {
@@ -9167,6 +9206,11 @@
             "date": "2026-03-27",
             "change": "Deep audit batch 6: CUI C0032601 verified. Added CAS 9005-65-6, RxCUI 8560. PubChem N/A (polymer). Replaced placeholder population warnings with evidence-cited specifics. Fixed jurisdictional dates.",
             "reason": "harmful_additives_deep_audit_batch6"
+          },
+          {
+            "date": "2026-07-10",
+            "change": "Corrected EMA, EFSA, cognitive-study, and Nature-study identifiers; removed the ambiguous generic polysorbate alias; replaced clinical-sounding copy with route- and evidence-aware wording; added official FDA and JECFA sources.",
+            "reason": "authority_citation_correction"
           }
         ]
       },
@@ -9176,8 +9220,8 @@
           "amount": 25,
           "unit": "mg/kg",
           "basis": "per day",
-          "context": "EFSA ANS Panel (2017) ADI 25 mg/kg for polysorbates.",
-          "citation": "EFSA Journal 2017;15(1):4663 - Re-evaluation of polysorbates."
+          "context": "EFSA ANS Panel (2015) group ADI 25 mg/kg for polysorbates.",
+          "citation": "EFSA Journal 2015;13(7):4152 - Re-evaluation of polysorbates."
         }
       ],
       "severity_level": "moderate",
@@ -9203,8 +9247,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A synthetic emulsifier (P80). Animal and preclinical studies show gut-microbiome disruption and low-grade inflammation — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "safety_summary": "Animal and in-vitro intestinal models raise gut-barrier concerns, but clinical harm at typical excipient exposure is unproven. Avoiding it is a precaution, not a finding that the product is unsafe.",
+      "safety_summary_one_liner": "Synthetic emulsifier with preclinical gut signals. Oral human harm is unproven.",
       "functional_roles": [
         "emulsifier",
         "surfactant"

@@ -729,7 +729,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             cid for cid in cid_set
             if cid not in _B_VITAMIN_IDS
         }
-        if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2 and len(non_b_active_ids) <= 2:
+        # A B-vitamin-dominant formula stays b_complex even with a few
+        # functional adjuncts (e.g. Hair Sweet Hair: B12/folate/biotin + zinc +
+        # PABA + Fo-Ti = 3 non-B actives). The `non_b_vitamins <= 1` +
+        # `non_b_minerals <= 2` bounds already exclude true multivitamins (they
+        # carry 4+ non-B vitamins), so allowing up to 3 non-B actives only
+        # rescues B-complex-plus-adjuncts products from the multivitamin bucket.
+        if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2 and len(non_b_active_ids) <= 3:
             primary_type = "b_complex"
             confidence = 0.9 if "complex" in product_name else 0.75
             reasons.append(

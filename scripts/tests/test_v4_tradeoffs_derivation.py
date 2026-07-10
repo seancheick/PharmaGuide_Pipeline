@@ -182,6 +182,25 @@ def test_b1_harmful_additive_from_enriched():
     assert b1["label"] == "Harmful additive: Disodium EDTA"
 
 
+def test_b1_prefers_reviewed_safety_summary_over_stale_mechanism_copy():
+    enriched = {"harmful_additives": [
+        {
+            "id": "ADD_POLYSORBATE80",
+            "additive_id": "ADD_POLYSORBATE80",
+            "additive_name": "Polysorbate 80",
+            "severity_level": "moderate",
+            "mechanism_of_harm": "Severely disrupts gut microbiome composition.",
+        },
+    ]}
+    _, penalties = derive_v4_tradeoffs(_scored_v4(), enriched)
+    b1 = _by_id(penalties, "B1")
+    assert b1["reason"].startswith(
+        "Synthetic emulsifier with preclinical gut signals"
+    )
+    assert "Oral human harm is unproven" in b1["reason"]
+    assert "Severely disrupts" not in b1["reason"]
+
+
 def test_b7_dose_over_ul_detail_preserved():
     enriched = {"rda_ul_data": {"safety_flags": [
         {"nutrient": "Vitamin B3 (Niacin)", "amount": 1000.0, "ul": 35, "pct_ul": 2857.14},
