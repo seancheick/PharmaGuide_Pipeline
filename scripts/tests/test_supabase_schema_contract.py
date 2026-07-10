@@ -1,135 +1,85 @@
-"""Contract tests for the Supabase SQL schema shipped to the project."""
+"""Contract tests for pipeline-owned Supabase distribution schema."""
 
 from pathlib import Path
 
 
 SCHEMA_PATH = Path(__file__).parent.parent / "sql" / "supabase_schema.sql"
+DISTRIBUTION_MIGRATION_PATH = (
+    Path(__file__).parent.parent
+    / "sql"
+    / "migrations"
+    / "20260710210008_pipeline_distribution_contract.sql"
+)
 
 
 def _schema_sql() -> str:
     return SCHEMA_PATH.read_text(encoding="utf-8")
 
 
-def test_user_stacks_supports_local_first_sync_metadata():
-    sql = _schema_sql()
-    assert "deleted_at" in sql
-    assert "client_updated_at" in sql
-    assert "source_device_id" in sql
+def _distribution_migration_sql() -> str:
+    return DISTRIBUTION_MIGRATION_PATH.read_text(encoding="utf-8")
 
 
-def _user_stacks_create_block(sql: str) -> str:
-    """The CREATE TABLE body for user_stacks (up to its closing paren)."""
-    start = sql.index("CREATE TABLE IF NOT EXISTS user_stacks")
-    end = sql.index(");", start) + 2
-    return sql[start:end]
+def test_pipeline_schema_excludes_app_owned_tables_and_routines():
+    """App data is defined only by Flutter's executable migrations.
 
-
-def test_user_stacks_id_is_text_not_uuid():
-    """REGRESSION GUARD (2026-06 sync outage). The Flutter client is
-    authoritative for local `id` values ("<dsldId>_<microseconds>"). A uuid
-    column rejects those values with 22P02 and the dirty row retries forever.
-    Remote state now upserts by `(user_id, dsld_id)`, but `id` MUST stay text
-    for local identity and deterministic LWW tie-breaking."""
-    block = _user_stacks_create_block(_schema_sql())
-    assert "text PRIMARY KEY" in block, "user_stacks.id must be text PRIMARY KEY"
-    assert "uuid PRIMARY KEY DEFAULT gen_random_uuid()" not in block, (
-        "user_stacks.id must NOT be a server-issued uuid — the client owns ids"
-    )
-
-
-def test_user_stacks_uses_one_total_product_state_key():
-    """The state key must be a normal UNIQUE constraint, not a partial index.
-
-    Flutter upserts by `(user_id, dsld_id)`. A partial active-only index cannot
-    be selected as a PostgREST conflict target and previously caused 23505 on
-    replacement rows. This gate prevents the bootstrap schema from undoing the
-    repaired live contract.
+    The pipeline may publish catalog artifacts, but it must never re-author
+    user data, PHI controls, or freemium behavior as a manual SQL bootstrap.
+    That previously created two independently maintained user_stacks schemas.
     """
     sql = _schema_sql()
-    block = _user_stacks_create_block(sql)
 
-    assert "dsld_id           text NOT NULL" in block
-    assert "user_stacks_user_dsld_unique UNIQUE (user_id, dsld_id)" in block
-    assert "ALTER COLUMN dsld_id SET NOT NULL" in sql
-    assert "ALTER COLUMN dsld_id DROP NOT NULL" not in sql
-    assert "CREATE UNIQUE INDEX IF NOT EXISTS idx_user_stacks_user_dsld_active" not in sql
-    assert "DROP INDEX IF EXISTS public.idx_user_stacks_user_dsld_active" in sql
-
-
-def test_user_stacks_preserves_newest_client_state():
-    """A later pipeline schema run must retain, not remove, the LWW guard."""
-    sql = _schema_sql()
-
-    assert "CREATE OR REPLACE FUNCTION public.keep_newest_user_stack_state()" in sql
-    assert "CREATE TRIGGER zz_user_stacks_keep_newest_state" in sql
-    assert "NEW.client_updated_at < OLD.client_updated_at" in sql
-    assert "NEW.id < OLD.id" in sql
-
-
-def test_user_stacks_requires_the_lww_timestamp():
-    """LWW cannot be correct when a client state omits its ordering value."""
-    sql = _schema_sql()
-    block = _user_stacks_create_block(sql)
-
-    assert "client_updated_at timestamptz NOT NULL" in block
-    assert "ALTER COLUMN client_updated_at SET NOT NULL" in sql
-    assert "client_updated_at IS NULL" in sql
-
-
-def test_user_stacks_bootstrap_asserts_its_postconditions():
-    """A manual bootstrap run must fail rather than leave silent schema drift."""
-    sql = _schema_sql()
-
-    assert "user_stacks product-state contract drift" in sql
-    assert "zz_user_stacks_keep_newest_state" in sql
-
-
-def test_user_stacks_type_check_blocks_medication_phi():
-    """PHI guard: medications (type='medication') must NEVER reach the cloud.
-    The column-level CHECK is the DB half of the belt-and-suspenders."""
-    block = _user_stacks_create_block(_schema_sql())
-    assert "CHECK (type = 'supplement')" in block, (
-        "user_stacks must CHECK (type = 'supplement') so medication PHI cannot sync"
+    app_owned_markers = (
+        "user_stacks",
+        "user_usage",
+        "pending_products",
+        "increment_usage",
+        "keep_newest_user_stack_state",
+        "set_updated_at",
     )
-
-
-def test_user_stacks_rls_enforces_supplement_on_write():
-    """RLS WITH CHECK is the third line of PHI defense. The old catch-all
-    `FOR ALL` policy had no WITH CHECK and let a client write a
-    type='medication' row for its own user_id. Granular policies replace it."""
-    sql = _schema_sql()
-    assert 'CREATE POLICY "users_can_insert_own_supplements"' in sql
-    assert 'CREATE POLICY "users_can_update_own_supplements"' in sql
-    assert "WITH CHECK ((SELECT auth.uid()) = user_id AND type = 'supplement')" in sql
-    # The unguarded catch-all must be dropped, never recreated.
-    assert 'DROP POLICY IF EXISTS "Users manage own stacks"' in sql
-    assert 'CREATE POLICY "Users manage own stacks"' not in sql
+    for marker in app_owned_markers:
+        assert marker not in sql, f"pipeline schema must not define {marker}"
 
 
 def test_security_definer_functions_pin_search_path():
-    """Advisor 0011: SECURITY DEFINER / trigger functions with a mutable
-    search_path are a privilege-escalation vector. set_updated_at,
-    rotate_manifest, and increment_usage must each pin a fixed search_path."""
+    """Pipeline-owned privileged functions must pin a fixed search path."""
     sql = _schema_sql()
-    assert sql.count("SET search_path = public, pg_catalog") >= 3, (
-        "set_updated_at, rotate_manifest, increment_usage must each pin search_path"
+    assert "CREATE OR REPLACE FUNCTION rotate_manifest" in sql
+    assert "SECURITY DEFINER SET search_path = public, pg_catalog" in sql
+
+
+def test_distribution_migration_enforces_live_integrity_and_access_contract():
+    """Existing projects receive the same contract as a fresh bootstrap.
+
+    The bootstrap file is for new projects; this versioned migration is the
+    upgrade path. Both must preserve the pipeline-owned integrity and public
+    read-only boundary without touching app-owned user data.
+    """
+    sql = _distribution_migration_sql()
+
+    assert "ALTER COLUMN is_current SET NOT NULL" in sql
+    assert "ALTER COLUMN product_count SET NOT NULL" in sql
+    assert "export_manifest_product_count_nonnegative_check" in sql
+    assert "activated_at_set_iff_active_or_retired" in sql
+    assert "retired_fields_consistent" in sql
+    assert "bundled_requires_flutter_commit" in sql
+    assert "CREATE UNIQUE INDEX IF NOT EXISTS idx_catalog_releases_active" in sql
+    assert "ON public.catalog_releases(release_channel)" in sql
+    assert "WHERE state = 'ACTIVE'" in sql
+    assert 'FOR SELECT TO anon, authenticated' in sql
+    assert "REVOKE ALL ON TABLE public.export_manifest FROM anon, authenticated" in sql
+    assert "REVOKE ALL ON TABLE public.catalog_releases FROM anon, authenticated" in sql
+    assert "GRANT SELECT ON TABLE public.export_manifest TO anon, authenticated" in sql
+    assert "GRANT SELECT ON TABLE public.catalog_releases TO anon, authenticated" in sql
+    assert "ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA public" in sql
+    app_definition_markers = (
+        "CREATE TABLE IF NOT EXISTS public.user_stacks",
+        "CREATE TABLE IF NOT EXISTS public.user_usage",
+        "CREATE TABLE IF NOT EXISTS public.pending_products",
+        "CREATE OR REPLACE FUNCTION public.increment_usage",
     )
-
-
-def test_user_usage_reset_policy_is_explicitly_utc():
-    sql = _schema_sql()
-    assert "reset_day_utc" in sql
-    assert "UTC day boundaries" in sql
-
-
-def test_pending_products_supports_moderation_and_dedupe():
-    sql = _schema_sql()
-    assert "normalized_upc" in sql
-    assert "submitter_note" in sql
-    assert "review_notes" in sql
-    assert "reviewed_at" in sql
-    assert "reviewed_by" in sql
-    assert "idx_pending_products_user_normalized_upc_pending" in sql
+    for marker in app_definition_markers:
+        assert marker not in sql
 
 
 # ---------------------------------------------------------------------------

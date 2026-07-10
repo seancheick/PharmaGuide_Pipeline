@@ -5,9 +5,10 @@ Uploads pipeline build output to Supabase for distribution to the Flutter app.
 ## Prerequisites
 
 1. **Supabase Project:** Create at [supabase.com](https://supabase.com)
-2. **Run Schema:** Copy `scripts/sql/supabase_schema.sql` into the Supabase SQL Editor and execute
-3. **Create Storage Bucket:** In Supabase Dashboard > Storage, create bucket `pharmaguide` with public read access
-4. **Environment Variables:** Add to your `.env` file:
+2. **Run Pipeline Schema:** Copy `scripts/sql/supabase_schema.sql` into the Supabase SQL Editor and execute. It creates only pipeline distribution and release objects.
+3. **Apply App Migrations:** Apply the versioned migrations in the Flutter repository's `supabase/migrations/` directory. Those migrations are the sole authority for user data, stack sync, usage storage, and pending-product requests.
+4. **Create Storage Bucket:** In Supabase Dashboard > Storage, create bucket `pharmaguide` with public read access
+5. **Environment Variables:** Add to your `.env` file:
 
 ```
 SUPABASE_URL=https://your-project.supabase.co
@@ -71,16 +72,23 @@ Required client behavior:
 
 ## Supabase Schema
 
-See `scripts/sql/supabase_schema.sql` for the complete schema including:
+See `scripts/sql/supabase_schema.sql` for pipeline-owned schema including:
 - `export_manifest` (pipeline version tracking)
-- `user_stacks` (user supplement stacks)
-- `user_usage` (freemium scan/AI limits)
-- `pending_products` (user-submitted product requests)
+- `catalog_releases` (release state and artifact provenance)
 
-Current remote user-data contract notes:
-- `user_stacks` uses last-write-wins with tombstones for MVP (`deleted_at`, `client_updated_at`, `source_device_id`)
+The Flutter repository's `supabase/migrations/` directory owns the app-data contract:
+- `user_stacks` uses last-write-wins with tombstones (`deleted_at`, `client_updated_at`, `source_device_id`)
 - `user_usage` resets on UTC day boundaries via `reset_day_utc`
 - `pending_products` includes normalized UPC dedupe and review metadata
+
+For an existing production project, apply named incremental migrations from
+each owner rather than treating this bootstrap file as an upgrade mechanism:
+- pipeline distribution migrations: `scripts/sql/migrations/`
+- Flutter app-data migrations: `supabase/migrations/`
+
+Each migration must be recorded through the Supabase migration mechanism after
+the preflight checks pass. Do not use a blind `supabase db push` against this
+project until its legacy migration history has been reconciled.
 
 Sync decision logic:
 - push when `db_version` changes

@@ -215,7 +215,7 @@ The 2026-04 audit traced every field across Clean → Enrich → Score → Final
 
 ## Supabase deployment checklist
 
-The pipeline targets an **offline-first architecture**: the products table lives inside the SQLite file (`pharmaguide_core.db`) that ships as a Supabase Storage blob, NOT in the Supabase Postgres layer. Schema bumps to the SQLite columns require no Postgres migration — the Postgres tables (`export_manifest`, `user_stacks`, `user_usage`, `pending_products`) are unchanged.
+The pipeline targets an **offline-first architecture**: the products table lives inside the SQLite file (`pharmaguide_core.db`) that ships as a Supabase Storage blob, NOT in the Supabase Postgres layer. Schema bumps to the SQLite columns require no Postgres migration. This pipeline owns only Supabase distribution state (`export_manifest`, `catalog_releases`, and `rotate_manifest`); Flutter owns user-data tables and user-facing quota behavior.
 
 What actually moves:
 
