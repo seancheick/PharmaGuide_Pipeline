@@ -4,6 +4,11 @@
     "purpose": "dosing_validation",
     "schema_version": "5.0.0",
     "last_updated": "2026-06-28",
+    "reference_data_contract": {
+      "contract_version": "1",
+      "reference_version": "5.0.0-2026-06-28",
+      "semantic_fingerprint": "sha256:31527647197b2a2597c65d3de9c319684fb8febff32f2e8d6ea5c328fee9cb1c"
+    },
     "total_entries": 77,
     "data_source": "Institute of Medicine (IOM) Dietary Reference Intakes, National Academies 2019 Sodium/Potassium Update, FDA, USDA, Clinical Research",
     "country": "USA",

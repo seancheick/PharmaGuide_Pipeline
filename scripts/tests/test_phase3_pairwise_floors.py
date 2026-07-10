@@ -42,16 +42,17 @@ def test_presence_pairs_carry_no_floor():
             assert not e.get("dose_threshold"), f"{e['id']} presence pair wrongly floored"
 
 
-def test_exactly_33_floored():
+def test_exactly_34_floored():
     floored = [e["id"] for e in PAIRS if e.get("dose_threshold")]
     dose_dep = [e["id"] for e in PAIRS if e.get("materiality") == "dose_dependent"]
-    assert len(floored) == 33, f"expected 33 floors, found {len(floored)}"
+    assert len(floored) == 34, f"expected 34 floors, found {len(floored)}"
     assert set(floored) == set(dose_dep), "floored set != dose_dependent set"
 
 
 # Representative floors locked (value+unit) so a later edit can't silently move them.
 EXPECTED = {
     "DSI_FISHOIL_VITE": (180, "mg"),        # vitamin E bleeding, 400 IU floor normalized conservatively
+    "SSI_VITE_VITK": (180, "mg"),            # vitamin E/K antagonism shares the same high-dose floor
     "DSI_DM_CHROMIUM": (200, "mcg"),        # chromium glucose, reused
     "DSI_METFORMIN_ALA": (600, "mg"),       # ALA glucose, reused
     "DSI_WAR_GARLIC": (600, "mg"),          # garlic bleeding, reused

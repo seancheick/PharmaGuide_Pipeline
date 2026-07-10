@@ -164,6 +164,14 @@ class TestTimingDataQuality:
         assert "8 oz" in rule["advice"]
         assert any("medlineplus.gov" in s["url"] for s in rule["sources"])
 
+    def test_vitamin_e_vitamin_k_separation_has_high_dose_floor(self, rules):
+        rule = next(
+            (r for r in rules if r["id"] == "timing_vitamin_e_vitamin_k_separate"),
+            None,
+        )
+        assert rule is not None
+        assert rule.get("min_dose") == {"ingredient": "vitamin e", "mg": 180}
+
     def test_advice_is_consumer_friendly(self, rules):
         for r in rules:
             assert len(r["advice"]) >= 20, f"Rule {r['id']} advice too short"

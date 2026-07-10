@@ -5688,6 +5688,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         blob["rda_ul_data"] = {
             "collection_enabled": rda_ul_data.get("collection_enabled"),
             "collection_reason": rda_ul_data.get("collection_reason"),
+            "reference_data_version": rda_ul_data.get("reference_data_version"),
+            "reference_data_fingerprint": rda_ul_data.get("reference_data_fingerprint"),
             "ingredients_with_rda": rda_ul_data.get("ingredients_with_rda"),
             "analyzed_ingredients": _flag_below_clinical(
                 rda_ul_data.get("analyzed_ingredients")
@@ -6076,10 +6078,18 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
             normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit") or ing.get("unit"))
 
             if normalized_amount is not None:
-                fingerprint["nutrients"][ingredient_id] = {
-                    "amount": float(normalized_amount),
-                    "unit": normalized_unit,
-                }
+                amount = float(normalized_amount)
+                existing = fingerprint["nutrients"].get(ingredient_id)
+                if existing is None:
+                    fingerprint["nutrients"][ingredient_id] = {
+                        "amount": amount,
+                        "unit": normalized_unit,
+                    }
+                elif safe_str(existing.get("unit")).strip().lower() == normalized_unit.strip().lower():
+                    # Multiple label forms can share one interaction canonical
+                    # (e.g. K1 + K2 -> vitamin_k). The fingerprint must retain
+                    # their total, rather than silently letting the last form win.
+                    existing["amount"] = float(existing["amount"]) + amount
 
         # Track herbs
         if category in herb_categories:

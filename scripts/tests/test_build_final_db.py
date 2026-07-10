@@ -770,6 +770,8 @@ def make_enriched():
         },
         "rda_ul_data": {
             "collection_enabled": True,
+            "reference_data_version": "5.0.0-2026-06-28",
+            "reference_data_fingerprint": "sha256:test-reference",
             "ingredients_with_rda": 1,
             "analyzed_ingredients": 1,
             "count": 1,
@@ -1274,6 +1276,8 @@ def test_detail_blob_includes_optional_rda_and_evidence_sections_when_present():
 
     assert "rda_ul_data" in blob
     assert blob["rda_ul_data"]["collection_enabled"] is True
+    assert blob["rda_ul_data"]["reference_data_version"] == "5.0.0-2026-06-28"
+    assert blob["rda_ul_data"]["reference_data_fingerprint"] == "sha256:test-reference"
     assert "evidence_data" in blob
     assert blob["evidence_data"]["match_count"] == 1
 
@@ -2023,6 +2027,35 @@ def test_ingredient_fingerprint_uses_canonical_ids_and_singular_categories():
     assert fingerprint["herbs"] == ["ashwagandha"]
     assert "mineral" in fingerprint["categories"]
     assert "botanical" in fingerprint["categories"]
+
+
+def test_ingredient_fingerprint_sums_same_unit_forms_with_one_canonical_id():
+    enriched = make_enriched()
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "name": "Vitamin K1",
+            "standard_name": "Vitamin K1",
+            "canonical_id": "vitamin_k",
+            "category": "vitamins",
+            "quantity": 100,
+            "unit": "mcg",
+        },
+        {
+            "name": "Vitamin K2",
+            "standard_name": "Vitamin K2",
+            "canonical_id": "vitamin_k",
+            "category": "vitamins",
+            "quantity": 30,
+            "unit": "mcg",
+        },
+    ]
+
+    fingerprint = generate_ingredient_fingerprint(enriched)
+
+    assert fingerprint["nutrients"]["vitamin_k"] == {
+        "amount": 130.0,
+        "unit": "mcg",
+    }
 
 
 def test_detail_blob_allergens_skips_entries_missing_allergen_id():

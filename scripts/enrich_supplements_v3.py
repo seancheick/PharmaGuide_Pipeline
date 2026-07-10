@@ -113,6 +113,7 @@ from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer, DosageNormalizationResult
 from proprietary_blend_detector import ProprietaryBlendDetector, BlendAnalysisResult
 from rda_ul_calculator import RDAULCalculator, NutrientAdequacyResult
+from reference_data_contract import reference_stamp
 from collagen_taxonomy import classify_collagen_subtype_strict, UNSPECIFIED as _COLLAGEN_UNSPECIFIED
 import normalization as norm_module  # Single-source normalization
 from match_ledger import (
@@ -664,6 +665,9 @@ class SupplementEnricherV3:
         self._match_quality_cache: Dict[str, Any] = {}
         self.databases = {}
         self._load_all_databases()
+        self._rda_reference_stamp = reference_stamp(
+            self.databases.get("rda_optimal_uls", {})
+        )
         self._compile_patterns()
 
         # ── Performance indexes (built once, used per-ingredient) ──
@@ -15683,6 +15687,7 @@ class SupplementEnricherV3:
     def _empty_rda_ul_payload(self, reason: str) -> Dict:
         """Return a schema-stable empty RDA/UL payload when collection is skipped."""
         return {
+            **self._rda_reference_stamp,
             "ingredients_with_rda": [],
             "analyzed_ingredients": [],
             "count": 0,
@@ -15693,6 +15698,123 @@ class SupplementEnricherV3:
             "collection_enabled": False,
             "collection_reason": reason
         }
+
+    def _rda_source_label_key(self, ingredient: Dict[str, Any]) -> str:
+        """Return a stable key for one label-declared nutrient row."""
+        supplied = ingredient.get("source_label_key")
+        if isinstance(supplied, str) and supplied.strip():
+            return supplied.strip()
+
+        canonical = self._normalize_text(
+            ingredient.get("canonical_id")
+            or ingredient.get("standardName")
+            or ingredient.get("name")
+            or "unknown"
+        )
+        label_name = self._normalize_text(
+            ingredient.get("raw_source_text") or ingredient.get("name") or "unknown"
+        )
+        try:
+            quantity = float(ingredient.get("quantity") or 0)
+        except (TypeError, ValueError):
+            quantity = 0.0
+        quantity_key = format(quantity, ".12g")
+        unit = self._normalize_text(ingredient.get("unit") or "unknown")
+        return f"label:{canonical}:{label_name}:{quantity_key}:{unit}"
+
+    def _declared_folate_dfe_totals(
+        self, active_ingredients: List[Dict[str, Any]]
+    ) -> List[Dict[str, Any]]:
+        """Find explicit label Folate DFE totals before form conversion.
+
+        A label such as ``Folate 667 mcg DFE (400 mcg L-5-MTHF)`` declares
+        one dose. The MTHF amount is component context, not an additional
+        folate source. This is deliberately narrow: it does not collapse
+        separate declared folate forms or any other multi-form nutrient.
+        """
+        totals: List[Dict[str, Any]] = []
+        for ingredient in active_ingredients:
+            canonical = self._normalize_text(
+                ingredient.get("canonical_id")
+                or ingredient.get("standardName")
+                or ingredient.get("name")
+                or ""
+            )
+            label_name = self._normalize_text(ingredient.get("name") or "")
+            unit = self._normalize_text(ingredient.get("unit") or "")
+            try:
+                quantity = float(ingredient.get("quantity") or 0)
+            except (TypeError, ValueError):
+                continue
+            if (
+                canonical in {"folate", "vitamin_b9_folate"}
+                and label_name == "folate"
+                and "dfe" in unit
+                and quantity > 0
+            ):
+                totals.append(
+                    {
+                        "source_label_key": self._rda_source_label_key(ingredient),
+                        "quantity": quantity,
+                    }
+                )
+        return totals
+
+    def _rda_dose_lineage(
+        self,
+        ingredient: Dict[str, Any],
+        *,
+        converted_amount: float,
+        converted_unit: str,
+        conversion_evidence: Dict[str, Any],
+        declared_folate_totals: List[Dict[str, Any]],
+    ) -> Dict[str, Optional[str]]:
+        """Classify an emitted RDA/UL row as a total or label sub-component."""
+        source_label_key = self._rda_source_label_key(ingredient)
+        lineage: Dict[str, Optional[str]] = {
+            "source_label_key": source_label_key,
+            "dose_role": "declared_total",
+            "parent_label_key": None,
+        }
+        if not declared_folate_totals:
+            return lineage
+
+        canonical = self._normalize_text(
+            ingredient.get("canonical_id")
+            or ingredient.get("standardName")
+            or ingredient.get("name")
+            or ""
+        )
+        label_name = self._normalize_text(ingredient.get("name") or "")
+        original_unit = self._normalize_text(ingredient.get("unit") or "")
+        converted_unit_key = self._normalize_text(converted_unit)
+        factor = conversion_evidence.get("conversion_factor")
+        try:
+            factor_value = float(factor)
+        except (TypeError, ValueError):
+            factor_value = 0.0
+
+        # Require an actual form-derived conversion rather than another DFE
+        # line. The named MTHF guard prevents unrelated folate forms from
+        # being discarded merely because their converted doses are similar.
+        if (
+            canonical not in {"folate", "vitamin_b9_folate"}
+            or label_name == "folate"
+            or "dfe" in original_unit
+            or "dfe" not in converted_unit_key
+            or factor_value <= 1.0
+            or not ("mthf" in label_name or "methylfolate" in label_name)
+        ):
+            return lineage
+
+        for declared in declared_folate_totals:
+            declared_amount = float(declared["quantity"])
+            tolerance = max(0.5, declared_amount * 0.025)
+            if abs(converted_amount - declared_amount) <= tolerance:
+                lineage["dose_role"] = "form_component"
+                lineage["parent_label_key"] = declared["source_label_key"]
+                return lineage
+        return lineage
 
     # =========================================================================
     # RDA/UL DATA COLLECTOR (for user profile scoring on device)
@@ -15718,6 +15840,7 @@ class SupplementEnricherV3:
         # elemental row must not contribute to UL totals (60+400=460 mg
         # would falsely breach the 350 mg magnesium UL).
         mark_compound_duplicate_rows(active_ingredients)
+        declared_folate_totals = self._declared_folate_dfe_totals(active_ingredients)
         rda_data = []
         adequacy_results = []
         safety_flags = []
@@ -15842,9 +15965,25 @@ class SupplementEnricherV3:
                                 if _has_no_official_ul_reference(_nutrient_record)
                                 else "reference_unit_already_normalized"
                             )
+                    converted_amount = conversion.converted_value or float(quantity)
+                    converted_unit = conversion.converted_unit or unit
+                    dose_lineage = self._rda_dose_lineage(
+                        ingredient,
+                        converted_amount=converted_amount,
+                        converted_unit=converted_unit,
+                        conversion_evidence=conv_evidence,
+                        declared_folate_totals=declared_folate_totals,
+                    )
+                    conv_evidence.update(dose_lineage)
                     skip_ul_check = False
                     skip_ul_reason = None
-                    if ingredient.get('is_compound_duplicate'):
+                    if dose_lineage["dose_role"] == "form_component":
+                        # The label-declared DFE total owns this form-derived
+                        # conversion. Retain the row for label context but do
+                        # not create a second UL or stack dose.
+                        skip_ul_check = True
+                        skip_ul_reason = "form_component_of_declared_total"
+                    elif ingredient.get('is_compound_duplicate'):
                         # The bare elemental sibling row carries the true
                         # dose; checking/summing this row double-counts.
                         skip_ul_check = True
@@ -15856,8 +15995,6 @@ class SupplementEnricherV3:
                         skip_ul_check = True
                         skip_ul_reason = "conversion_failed"
 
-                    converted_amount = conversion.converted_value or float(quantity)
-                    converted_unit = conversion.converted_unit or unit
                     per_day_min = converted_amount * servings_min
                     per_day_max = converted_amount * servings_max
                     amount_for_ul = per_day_max or per_day_min or converted_amount
@@ -15894,6 +16031,7 @@ class SupplementEnricherV3:
                     adequacy_dict["original_quantity"] = quantity
                     adequacy_dict["original_unit"] = unit
                     adequacy_dict["conversion_applied"] = conversion.success
+                    adequacy_dict.update(dose_lineage)
                     adequacy_dict["per_day_min"] = per_day_min
                     adequacy_dict["per_day_max"] = per_day_max
                     adequacy_dict["servings_per_day_min"] = servings_min
@@ -15990,6 +16128,7 @@ class SupplementEnricherV3:
                         "unit": unit,
                         "converted_quantity": converted_amount,
                         "converted_unit": converted_unit,
+                        **dose_lineage,
                         "per_day_min": per_day_min,
                         "per_day_max": per_day_max,
                         "servings_per_day_min": servings_min,
@@ -16090,6 +16229,7 @@ class SupplementEnricherV3:
                     safety_flags.append(row_flag)
 
                 return {
+                    **self._rda_reference_stamp,
                     "ingredients_with_rda": rda_data,
                     "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
                     "count": len(rda_data),
@@ -16160,6 +16300,7 @@ class SupplementEnricherV3:
                     break
 
         return {
+            **self._rda_reference_stamp,
             "ingredients_with_rda": rda_data,
             "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
             "count": len(rda_data),

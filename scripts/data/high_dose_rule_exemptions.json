@@ -1,0 +1,16 @@
+{
+  "_metadata": {
+    "version": "1.0.0",
+    "purpose": "Reviewed exemptions for active pairwise rules whose clinical copy mentions high-dose use but must not be suppressed by a numeric app gate."
+  },
+  "pairwise_interaction_ids": {
+    "DSI_WAR_VITK": "Warfarin has a narrow therapeutic index; the safety action is consistent vitamin K exposure and INR review, not suppression below a supplement-dose floor.",
+    "DSI_WAR_VITE": "Warfarin anticoagulation is individualized by INR and concurrent bleeding risks, so this interaction remains present rather than being hidden by a vitamin E dose gate.",
+    "DSI_LEVOTHYROXINE_SOY": "The actionable issue is absorption timing for supplemental soy isoflavones; high-dose wording only adds follow-up monitoring and does not define a safe no-action floor.",
+    "DSI_ANTICONV_FOLATE": "Folate management with anticonvulsants depends on seizure history, medication, and pregnancy context; a generic numeric floor cannot safely suppress clinician-review guidance.",
+    "SSI_ZINC_COPPER": "Copper depletion reflects prolonged cumulative zinc exposure and baseline copper status, which a one-day label dose cannot fully model; retain the non-suppressed monitoring signal.",
+    "SSI_KAVA_ACETAMINOPHEN": "This is a major shared-hepatotoxicity concern. It must remain visible regardless of an incomplete or low apparent supplement dose.",
+    "DSI_THYROID_TURMERIC": "The relevant action is levothyroxine separation and thyroid monitoring; the high-dose phrase is advisory and does not establish a verified safe suppression threshold.",
+    "DSI_VITE_ANTICOAG": "Anticoagulant risk is medication- and patient-specific. This major interaction must remain visible rather than being suppressed by a generic vitamin E threshold."
+  }
+}

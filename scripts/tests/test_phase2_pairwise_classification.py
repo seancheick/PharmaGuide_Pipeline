@@ -34,7 +34,7 @@ BY_ID = {e["id"]: e for e in PAIRS}
 
 
 def test_every_pair_classified_with_valid_enums():
-    assert len(PAIRS) == 150, f"expected 150 pairs, found {len(PAIRS)}"
+    assert len(PAIRS) == 149, f"expected 149 pairs, found {len(PAIRS)}"
     bad = []
     for e in PAIRS:
         d, m = e.get("direction"), e.get("materiality")
@@ -69,13 +69,26 @@ def test_fishoil_vitamin_e_is_dose_dependent():
     assert e.get("materiality") == "dose_dependent"
 
 
-def test_dose_dependent_only_on_supplement_additive_pairs():
+def test_vitamin_e_vitamin_k_is_dose_dependent():
+    e = BY_ID["SSI_VITE_VITK"]
+    assert e.get("direction") == "harmful"
+    assert e.get("materiality") == "dose_dependent"
+    assert e.get("dose_threshold", {}).get("agent_canonical_id") == "vitamin_e"
+    assert e.get("dose_threshold", {}).get("value") == 180
+    assert e.get("dose_threshold", {}).get("unit") == "mg"
+
+
+def test_vitamin_d_vitamin_k2_is_not_a_safety_pair():
+    assert "SSI_VITD_VITK2" not in BY_ID
+
+
+def test_dose_dependent_only_on_measurable_supplement_pairs():
     """A dose can only be floored where a supplement with a measurable dose
-    exists and the effect is pharmacodynamically additive."""
+    exists and the effect is pharmacodynamically additive or inhibitory."""
     for e in PAIRS:
         if e.get("materiality") == "dose_dependent":
             assert e.get("type") in SUPP_TYPES, f"{e['id']} dose_dependent but type={e.get('type')}"
-            assert e.get("interaction_effect_type") == "Additive", \
+            assert e.get("interaction_effect_type") in {"Additive", "Inhibitor"}, \
                 f"{e['id']} dose_dependent but effect={e.get('interaction_effect_type')}"
             assert e.get("severity") in ("Moderate", "Minor"), \
                 f"{e['id']} dose_dependent but severity={e.get('severity')}"

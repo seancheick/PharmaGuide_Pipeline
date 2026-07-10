@@ -3098,7 +3098,17 @@
       "agent1_canonical_id": "vitamin_e",
       "agent2_canonical_id": "vitamin_k",
       "direction": "harmful",
-      "materiality": "presence"
+      "materiality": "dose_dependent",
+      "dose_threshold": {
+        "agent_canonical_id": "vitamin_e",
+        "value": 180,
+        "unit": "mg",
+        "basis": "per_day",
+        "confidence": "medium",
+        "confidence_basis": "reuse+management+unit_normalized",
+        "source": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+        "rationale": "Reused vitamin E bleeding floor (400 IU/day) normalized to a conservative 180 mg alpha-tocopherol equivalent. NIH ODS lists 1 IU synthetic vitamin E as 0.45 mg alpha-tocopherol and 1 IU natural vitamin E as 0.67 mg; 180 mg is the lower mass equivalent, so below this floor is below 400 IU for either form."
+      }
     },
     {
       "id": "DSI_DM_VITD",
@@ -3708,41 +3718,6 @@
       "agent1_canonical_id": "magnesium",
       "agent2_canonical_id": "calcium",
       "direction": "harmful",
-      "materiality": "presence"
-    },
-    {
-      "id": "SSI_VITD_VITK2",
-      "type": "Sup-Sup",
-      "agent1_name": "Vitamin D (high dose)",
-      "agent1_id": "C0042866",
-      "agent2_name": "Vitamin K2",
-      "agent2_id": "C0042878",
-      "severity": "Minor",
-      "interaction_effect_type": "Neutral",
-      "mechanism": "High-dose vitamin D increases calcium absorption. Without adequate vitamin K2, this absorbed calcium may deposit in arterial walls rather than bone. K2 activates matrix Gla protein (MGP) and osteocalcin, directing calcium to appropriate sites. The combination is synergistic and generally recommended.",
-      "management": "Consider taking vitamin K2 (MK-7, 100–200 mcg/day) alongside high-dose vitamin D supplementation (>2000 IU/day) to optimize calcium utilization. Particularly relevant for bone health and cardiovascular safety.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/22516723/"
-      ],
-      "source_pmids": [
-        "22516723"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": true
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low",
-      "applies_to": "dose_dependent",
-      "agent1_canonical_id": "vitamin_d",
-      "agent2_canonical_id": "vitamin_k",
-      "direction": "neutral",
       "materiality": "presence"
     },
     {

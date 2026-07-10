@@ -125,6 +125,7 @@ DIST_PRODUCT_IMAGES_DIR="$DIST_DIR/product_images"
 DIST_PRODUCT_IMAGE_INDEX="$DIST_PRODUCT_IMAGES_DIR/product_image_index.json"
 PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
+RDA_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/rda_optimal_uls.json"
 
 START_TS=$(date +%s)
 
@@ -282,6 +283,12 @@ step1_needs_run() {
       return 0
     fi
   fi
+  # A reference-table change alters every emitted rda_ul_data stamp and can
+  # change product UL outcomes, so it requires a catalog rebuild even when no
+  # source label changed.
+  if is_path_newer_than "$RDA_REFERENCE_SOURCE" "$newest_output"; then
+    return 0
+  fi
   return 1  # safe to skip
 }
 
@@ -295,6 +302,11 @@ if step1_needs_run; then
 else
   skip "Step 1/8: Catalog up to date with per-brand outputs — skipping assembly"
 fi
+
+# Every emitted product UL block must carry the canonical reference stamp.
+# This blocks a mixed refresh from publishing stale product-detail UL data.
+run_strict_gate "RDA/UL emitted-reference stamp parity" \
+  "$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir "$PRODUCTS_DIR"
 
 # ---------------------------------------------------------------------------
 # Step 2: Stage catalog to dist/
@@ -456,6 +468,11 @@ fi
 run_strict_gate "export contract" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" export --dist-dir "$DIST_DIR" --require-stamped-manifest --strict-release
 
+# The pipeline RDA/UL file is canonical. Validate its semantic fingerprint
+# and regenerate the Flutter copy before any bundle commit can occur.
+run_strict_gate "RDA/UL Flutter reference-data parity" \
+  "$PG_PYTHON" scripts/sync_flutter_reference_data.py --flutter-repo "$FLUTTER_REPO"
+
 # ---------------------------------------------------------------------------
 # Step 5: Sync to Supabase (upload only; cleanup is post-bundle)
 #
@@ -580,9 +597,9 @@ INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sy
 # ---------------------------------------------------------------------------
 if (( SKIP_FLUTTER == 0 && SKIP_SUPABASE == 0 && SUPABASE_DRY_RUN == 0 )); then
   if git -C "$FLUTTER_REPO" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db | grep -q .; then
-      info "Committing Flutter bundle (local) so storage cleanup runs aligned..."
-      git -C "$FLUTTER_REPO" add assets/db/
+    if git -C "$FLUTTER_REPO" status --porcelain -- assets/db assets/reference_data/rda_optimal_uls.json | grep -q .; then
+      info "Committing Flutter bundle and RDA/UL reference data (local) so storage cleanup runs aligned..."
+      git -C "$FLUTTER_REPO" add assets/db/ assets/reference_data/rda_optimal_uls.json
       if git -C "$FLUTTER_REPO" commit -q -m "chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}"; then
         ok "Flutter bundle committed locally (push remains manual)"
       else
