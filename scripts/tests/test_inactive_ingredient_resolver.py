@@ -145,6 +145,31 @@ def test_mica_pearlescent_pigment_does_not_falsely_match_titanium_dioxide(resolv
     assert r.is_banned is False, "Candurin Silver is not banned itself"
 
 
+def test_bare_cellulose_does_not_falsely_match_microcrystalline_cellulose(resolver) -> None:
+    """Regression (2026-07-10): bare 'Cellulose' on a label is the veggie-capsule
+    shell material, not the Microcrystalline Cellulose (MCC) tablet filler. The
+    MCC entry (ADD_MICROCRYSTALLINE_CELLULOSE, category='filler') used to carry
+    the over-broad aliases 'Cellulose'/'cellulose', so a plain-'Cellulose' capsule
+    got a spurious 'Low-risk additive: Microcrystalline Cellulose' penalty — which
+    made otherwise-identical Pure Encapsulations Magnesium Glycinate entries score
+    ~0.9 pt apart depending purely on how the capsule was transcribed.
+
+    Bare 'Cellulose' must NOT resolve to the MCC filler. Genuine MCC still matches
+    on its specific aliases (Microcrystalline Cellulose / Cellulose Gel / MCC /
+    Avicel), and 'Plant-Derived Cellulose' stays benign (NHA_CELLULOSE_PLANT)."""
+    bare = resolver.resolve(raw_name="Cellulose")
+    assert not (bare.matched_rule_id or "").upper().endswith("MICROCRYSTALLINE_CELLULOSE"), (
+        f"bare 'Cellulose' must not match the MCC filler — got {bare.matched_rule_id!r}"
+    )
+
+    # Specific MCC forms must still be caught.
+    for mcc_name in ("Microcrystalline Cellulose", "Cellulose Gel"):
+        r = resolver.resolve(raw_name=mcc_name)
+        assert r.matched_rule_id and "MICROCRYSTALLINE_CELLULOSE" in r.matched_rule_id.upper(), (
+            f"{mcc_name!r} must still resolve to the MCC filler — got {r.matched_rule_id!r}"
+        )
+
+
 def test_banned_recalled_resolution_exposes_policy_and_status(resolver) -> None:
     banned = resolver.resolve(raw_name="Brominated Vegetable Oil")
     assert banned.matched_source == "banned_recalled"
