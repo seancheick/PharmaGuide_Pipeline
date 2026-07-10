@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.2.0",
-    "last_updated": "2026-07-03",
-    "total_entries": 111,
+    "last_updated": "2026-07-10",
+    "total_entries": 110,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -18,7 +18,8 @@
       "2026-05-27T15:26:04Z: Added food_advisory_note schema to 5 Med-Food entries (DSI_STATINS_GRAPEFRUIT, DSI_CCB_GRAPEFRUIT, DSI_IMMUNO_GRAPEFRUIT, DSI_LEVOTHYROXINE_COFFEE, DSI_MAOI_TYRAMINE). New optional fields: alert_style ('food_advisory_note'), note_body (plain-English explainer), practical_guidance (action-oriented). Added content-verified PMIDs: 26299317, 16814135, 35322792, 3525654 (DSI_LEVOTHYROXINE_COFFEE already had 18341376). Each PMID title content-verified via PubMed esummary API on 2026-05-27. Clinical severity field unchanged — alert_style controls UI tone, not clinical truth.",
       "2026-07-02: Phase 2 smart-flagging — authored direction + materiality on all 110 pairwise interactions. materiality authored fresh (NOT from applies_to): Major/Contraindicated + PK/absorption + non-supplement pairs = presence (never suppress, incl. warfarin+vitK); supplement-dose Additive pairs = dose_dependent (floorable, incl. fish-oil+vitamin-E). Advisory-only; score- and (pre-Phase-4) behavior-neutral. Applied via scripts/tools/migrate_phase2_pairwise_direction_materiality.py.",
       "2026-07-02: Phase 3 — authored structured dose_threshold on all 33 dose_dependent pairs (floor value + confidence + verified ODS/NCCIH/PMID source per pair; reuses verified ingredient-rule floors where the same supplement+effect exists). Below-floor = suppressible by the app dose gate; inert until Phase 4. Applied via scripts/tools/author_phase3_pairwise_floors.py.",
-      "2026-07-03: Added SSI_5HTP_SAME for 5-HTP + SAMe supplement-supplement serotonin-risk coverage. Also corrected metadata.total_entries to match the interactions array length."
+      "2026-07-03: Added SSI_5HTP_SAME for 5-HTP + SAMe supplement-supplement serotonin-risk coverage. Also corrected metadata.total_entries to match the interactions array length.",
+      "2026-07-10: Retired SSI_VITD_VITK2 from the safety interaction set because its neutral, synergy-oriented copy was contradictory as a scored alert. Corrected metadata.total_entries to the current 110 interaction rows."
     ]
   },
   "interactions": [

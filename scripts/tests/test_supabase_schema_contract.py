@@ -26,14 +26,62 @@ def _user_stacks_create_block(sql: str) -> str:
 
 def test_user_stacks_id_is_text_not_uuid():
     """REGRESSION GUARD (2026-06 sync outage). The Flutter client is
-    authoritative for `id` ("<dsldId>_<microseconds>") and upserts with
-    onConflict:'id'. A uuid column rejects every client id with 22P02 and the
-    dirty row retries forever. `id` MUST be text."""
+    authoritative for local `id` values ("<dsldId>_<microseconds>"). A uuid
+    column rejects those values with 22P02 and the dirty row retries forever.
+    Remote state now upserts by `(user_id, dsld_id)`, but `id` MUST stay text
+    for local identity and deterministic LWW tie-breaking."""
     block = _user_stacks_create_block(_schema_sql())
     assert "text PRIMARY KEY" in block, "user_stacks.id must be text PRIMARY KEY"
     assert "uuid PRIMARY KEY DEFAULT gen_random_uuid()" not in block, (
         "user_stacks.id must NOT be a server-issued uuid — the client owns ids"
     )
+
+
+def test_user_stacks_uses_one_total_product_state_key():
+    """The state key must be a normal UNIQUE constraint, not a partial index.
+
+    Flutter upserts by `(user_id, dsld_id)`. A partial active-only index cannot
+    be selected as a PostgREST conflict target and previously caused 23505 on
+    replacement rows. This gate prevents the bootstrap schema from undoing the
+    repaired live contract.
+    """
+    sql = _schema_sql()
+    block = _user_stacks_create_block(sql)
+
+    assert "dsld_id           text NOT NULL" in block
+    assert "user_stacks_user_dsld_unique UNIQUE (user_id, dsld_id)" in block
+    assert "ALTER COLUMN dsld_id SET NOT NULL" in sql
+    assert "ALTER COLUMN dsld_id DROP NOT NULL" not in sql
+    assert "CREATE UNIQUE INDEX IF NOT EXISTS idx_user_stacks_user_dsld_active" not in sql
+    assert "DROP INDEX IF EXISTS public.idx_user_stacks_user_dsld_active" in sql
+
+
+def test_user_stacks_preserves_newest_client_state():
+    """A later pipeline schema run must retain, not remove, the LWW guard."""
+    sql = _schema_sql()
+
+    assert "CREATE OR REPLACE FUNCTION public.keep_newest_user_stack_state()" in sql
+    assert "CREATE TRIGGER zz_user_stacks_keep_newest_state" in sql
+    assert "NEW.client_updated_at < OLD.client_updated_at" in sql
+    assert "NEW.id < OLD.id" in sql
+
+
+def test_user_stacks_requires_the_lww_timestamp():
+    """LWW cannot be correct when a client state omits its ordering value."""
+    sql = _schema_sql()
+    block = _user_stacks_create_block(sql)
+
+    assert "client_updated_at timestamptz NOT NULL" in block
+    assert "ALTER COLUMN client_updated_at SET NOT NULL" in sql
+    assert "client_updated_at IS NULL" in sql
+
+
+def test_user_stacks_bootstrap_asserts_its_postconditions():
+    """A manual bootstrap run must fail rather than leave silent schema drift."""
+    sql = _schema_sql()
+
+    assert "user_stacks product-state contract drift" in sql
+    assert "zz_user_stacks_keep_newest_state" in sql
 
 
 def test_user_stacks_type_check_blocks_medication_phi():

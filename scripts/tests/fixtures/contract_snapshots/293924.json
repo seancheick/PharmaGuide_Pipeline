@@ -48,7 +48,7 @@
     "B": {
       "B0_moderate_penalty": 0.0,
       "B1_evidence": [],
-      "B1_penalty": 0.5,
+      "B1_penalty": 0.0,
       "B2_penalty": 0.0,
       "B3": 3.0,
       "B4a": 0.0,
@@ -62,9 +62,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 5.0,
       "max": 30.0,
-      "penalties": 0.5,
-      "raw": 29.5,
-      "score": 29.5
+      "penalties": 0.0,
+      "raw": 30.0,
+      "score": 30.0
     },
     "C": {
       "depth_bonus": 0.0,
@@ -93,7 +93,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 60.14,
+    "quality_raw": 60.64,
     "violation_penalty": 0.0
   },
   "dsld_id": "293924",
@@ -106,8 +106,8 @@
   "output_schema_version": "3.6.0",
   "product_name": "Calcium Magnesium (Citrate/Malate)",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 75.2,
-  "score_80": 60.1,
+  "score_100_equivalent": 75.8,
+  "score_80": 60.6,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -120,7 +120,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 29.5
+      "score": 30.0
     },
     "C_evidence_research": {
       "max": 20.0,

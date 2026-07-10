@@ -1,6 +1,8 @@
 {
   "_metadata": {
     "version": "1.0.0",
+    "schema_version": "6.2.3",
+    "description": "Explicit reviewed exemptions for active pairwise interaction rules that must remain visible without a numeric high-dose threshold.",
     "purpose": "Reviewed exemptions for active pairwise rules whose clinical copy mentions high-dose use but must not be suppressed by a numeric app gate."
   },
   "pairwise_interaction_ids": {

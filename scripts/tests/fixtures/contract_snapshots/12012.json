@@ -48,7 +48,7 @@
     "B": {
       "B0_moderate_penalty": 0.0,
       "B1_evidence": [],
-      "B1_penalty": 8.0,
+      "B1_penalty": 7.5,
       "B2_penalty": 1.5,
       "B3": 1.0,
       "B4a": 0.0,
@@ -62,9 +62,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 1.0,
       "max": 30.0,
-      "penalties": 9.5,
-      "raw": 16.5,
-      "score": 16.5
+      "penalties": 9.0,
+      "raw": 17.0,
+      "score": 17.0
     },
     "C": {
       "depth_bonus": 0.5,
@@ -111,7 +111,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 50.82,
+    "quality_raw": 51.32,
     "violation_penalty": 0.0
   },
   "dsld_id": "12012",
@@ -125,8 +125,8 @@
   "output_schema_version": "3.6.0",
   "product_name": "Spectravite Advanced Formula",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 63.5,
-  "score_80": 50.8,
+  "score_100_equivalent": 64.1,
+  "score_80": 51.3,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -139,7 +139,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 16.5
+      "score": 17.0
     },
     "C_evidence_research": {
       "max": 20.0,

@@ -373,6 +373,20 @@
         "UL-gate ul_gate_eligible fix (DV-anchored elemental mass)"
       ],
       "notes": "Re-froze CVS Spectravite Advanced Formula (12012) after the UL-gate fix removed a false OVER_UL_Boron flag. Boron 0.4 mg is 2% of the 20 mg adult UL, so the B7 dose-safety penalty (2.0) was never warranted; removing it raised section B 14.5->16.5, quality_raw 48.82->50.82, and score_100_equivalent 61.0->63.5. This is a scoring correction, not a regression."
+    },
+    {
+      "date": "2026-07-10",
+      "action": "refrozen_p80_alias_precision",
+      "products": [
+        12012,
+        293924,
+        293943,
+        294077
+      ],
+      "sprints_covered": [
+        "P80 authority-citation and alias-precision audit (commit c92cada)"
+      ],
+      "notes": "Re-froze four snapshots after the reviewed Polysorbate 80 audit corrected the safety evidence and removed its ambiguous bare 'polysorbate' alias. CVS Spectravite (12012) retains its actual P80 match but receives the reviewed moderate B1 penalty (8.0->7.5). The three Pure Encapsulations products lose an unsupported 0.5-point B1 penalty because a non-P80 polysorbate must not inherit P80's evidence. These changes improve match specificity; they do not suppress a verified P80 safety signal."
     }
   ]
 }

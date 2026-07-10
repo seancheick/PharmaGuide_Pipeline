@@ -1,7 +1,7 @@
 -- PharmaGuide Supabase Schema
 -- Run this in the Supabase SQL Editor to set up the project.
--- Version: 2.0.0
--- Date: 2026-03-27
+-- Version: 2.1.0
+-- Date: 2026-07-10
 -- Reviewed by: Flutter expert + PostgreSQL expert
 
 -- =============================================================================
@@ -26,30 +26,32 @@ CREATE TABLE IF NOT EXISTS export_manifest (
 -- 2. User Tables (App-facing)
 -- =============================================================================
 
--- The Flutter client is AUTHORITATIVE for `id`: it generates a string
--- "<dsldId>_<microseconds>" and upserts with onConflict:'id'. `id` MUST be
--- text, NOT uuid — a uuid column rejects every client id with 22P02 and the
--- dirty row retries forever (the 2026-06 sync outage). `type` is hard-pinned
--- to 'supplement' (column CHECK + RLS WITH CHECK) so medication PHI can never
--- reach the cloud — medications stay device-local. See the reconciliation
--- block below, which heals pre-existing deployments on re-run.
+-- Flutter creates local entry ids, but remote state is identified by
+-- `(user_id, dsld_id)`: one current state per catalog product. This must be a
+-- full UNIQUE constraint so PostgREST can select it as the upsert target; the
+-- retired partial active-only index caused 23505 replacement-row failures.
+-- `id` remains text, not uuid, because the client sends its entry id verbatim.
+-- `type` is hard-pinned to 'supplement' (column CHECK + RLS WITH CHECK) so
+-- medication PHI can never reach the cloud. The reconciliation block below
+-- heals pre-existing deployments on re-run and asserts this contract.
 CREATE TABLE IF NOT EXISTS user_stacks (
   id                text PRIMARY KEY,                                  -- client-generated "<dsldId>_<microseconds>"; NOT uuid
   user_id           uuid REFERENCES auth.users ON DELETE CASCADE NOT NULL,
   type              text NOT NULL DEFAULT 'supplement'                 -- PHI guard: medications never sync here
                     CHECK (type = 'supplement'),
   name              text,
-  dsld_id           text,                                             -- nullable: medication entries (local-only) have none
+  dsld_id           text NOT NULL,                                    -- every synced row is a catalog supplement
   ingredient_keys   text,                                             -- JSON-encoded canonical ingredient ids
   dosage            text,
   frequency         text,
   supply_count      integer,
   source_device_id  text,
-  client_updated_at timestamptz,
+  client_updated_at timestamptz NOT NULL,                              -- LWW ordering value supplied by Flutter
   deleted_at        timestamptz,
   added_at          timestamptz DEFAULT now(),
   updated_at        timestamptz DEFAULT now(),
-  CONSTRAINT user_stacks_user_id_id_unique UNIQUE (user_id, id)        -- cross-user id-collision guard
+  CONSTRAINT user_stacks_user_id_id_unique UNIQUE (user_id, id),       -- cross-user id-collision guard
+  CONSTRAINT user_stacks_user_dsld_unique UNIQUE (user_id, dsld_id)    -- canonical remote product-state key
 );
 
 -- Reconcile pre-existing deployments to the contract above (idempotent).
@@ -78,8 +80,38 @@ BEGIN
   ALTER TABLE public.user_stacks ADD COLUMN IF NOT EXISTS name text;
   ALTER TABLE public.user_stacks ADD COLUMN IF NOT EXISTS ingredient_keys text;
 
-  -- dsld_id must be nullable (medication entries have none)
-  ALTER TABLE public.user_stacks ALTER COLUMN dsld_id DROP NOT NULL;
+  -- A synced row is always a catalog supplement. Fail closed rather than
+  -- inventing an identity or deleting an unexpected legacy row.
+  IF EXISTS (
+    SELECT 1 FROM public.user_stacks WHERE dsld_id IS NULL
+  ) THEN
+    RAISE EXCEPTION
+      'user_stacks contains rows without dsld_id; remediate before enforcing the product-state contract';
+  END IF;
+  IF EXISTS (
+    SELECT 1 FROM public.user_stacks WHERE client_updated_at IS NULL
+  ) THEN
+    RAISE EXCEPTION
+      'user_stacks contains rows without client_updated_at; remediate before enforcing LWW';
+  END IF;
+
+  -- Keep one newest state per product before adding the full UNIQUE key. A
+  -- tombstone is the product's current state, not retained history.
+  DELETE FROM public.user_stacks AS stack
+  USING (
+    SELECT
+      ctid,
+      row_number() OVER (
+        PARTITION BY user_id, dsld_id
+        ORDER BY client_updated_at DESC, updated_at DESC, id DESC
+      ) AS row_number
+    FROM public.user_stacks
+  ) AS ranked
+  WHERE stack.ctid = ranked.ctid
+    AND ranked.row_number > 1;
+
+  ALTER TABLE public.user_stacks ALTER COLUMN dsld_id SET NOT NULL;
+  ALTER TABLE public.user_stacks ALTER COLUMN client_updated_at SET NOT NULL;
 
   -- type backstop: default + not null + supplement-only CHECK
   UPDATE public.user_stacks SET type='supplement' WHERE type IS NULL;
@@ -98,6 +130,15 @@ BEGIN
                    AND conname='user_stacks_user_id_id_unique') THEN
     ALTER TABLE public.user_stacks
       ADD CONSTRAINT user_stacks_user_id_id_unique UNIQUE (user_id, id);
+  END IF;
+
+  -- Canonical upsert target used by Flutter. Add this before removing the
+  -- historical partial index so no duplicate-active window exists.
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint
+                 WHERE conrelid='public.user_stacks'::regclass
+                   AND conname='user_stacks_user_dsld_unique') THEN
+    ALTER TABLE public.user_stacks
+      ADD CONSTRAINT user_stacks_user_dsld_unique UNIQUE (user_id, dsld_id);
   END IF;
 END$$;
 
@@ -130,9 +171,9 @@ CREATE TABLE IF NOT EXISTS pending_products (
 -- =============================================================================
 
 CREATE INDEX IF NOT EXISTS idx_user_stacks_user ON user_stacks(user_id);
-CREATE UNIQUE INDEX IF NOT EXISTS idx_user_stacks_user_dsld_active
-  ON user_stacks(user_id, dsld_id)
-  WHERE deleted_at IS NULL;
+-- Retired: a partial index cannot be targeted by the client's PostgREST
+-- upsert and would reintroduce the replacement-row 23505 bug.
+DROP INDEX IF EXISTS public.idx_user_stacks_user_dsld_active;
 CREATE INDEX IF NOT EXISTS idx_user_usage_user ON user_usage(user_id);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_user_usage_daily ON user_usage(user_id, reset_day_utc);
 CREATE INDEX IF NOT EXISTS idx_pending_products_user ON pending_products(user_id);
@@ -162,9 +203,76 @@ END;
 -- listed so the body's unqualified table refs resolve; pg_catalog for now() etc.
 $$ LANGUAGE plpgsql SET search_path = public, pg_catalog;
 
+DROP TRIGGER IF EXISTS user_stacks_updated_at ON user_stacks;
 CREATE TRIGGER user_stacks_updated_at
   BEFORE UPDATE ON user_stacks
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- Client timestamp LWW must be enforced in the database, not inferred from
+-- request arrival order. `zz_` runs after user_stacks_updated_at and restores
+-- OLD for a stale write, including the server-side updated_at value.
+CREATE OR REPLACE FUNCTION public.keep_newest_user_stack_state()
+RETURNS trigger
+LANGUAGE plpgsql
+SET search_path = ''
+AS $$
+BEGIN
+  IF NEW.client_updated_at < OLD.client_updated_at
+     OR (
+       NEW.client_updated_at = OLD.client_updated_at
+       AND NEW.id < OLD.id
+     ) THEN
+    RETURN OLD;
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS zz_user_stacks_keep_newest_state ON user_stacks;
+CREATE TRIGGER zz_user_stacks_keep_newest_state
+  BEFORE UPDATE ON user_stacks
+  FOR EACH ROW EXECUTE FUNCTION public.keep_newest_user_stack_state();
+
+-- Bootstrap postcondition: this script is intentionally re-runnable, so it
+-- must fail loudly if a future edit leaves the app-facing state contract in a
+-- shape Flutter cannot safely upsert or order.
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1
+    FROM pg_constraint
+    WHERE conrelid = 'public.user_stacks'::regclass
+      AND conname = 'user_stacks_user_dsld_unique'
+  )
+  OR NOT (
+    SELECT attnotnull
+    FROM pg_attribute
+    WHERE attrelid = 'public.user_stacks'::regclass
+      AND attname = 'dsld_id'
+  )
+  OR NOT (
+    SELECT attnotnull
+    FROM pg_attribute
+    WHERE attrelid = 'public.user_stacks'::regclass
+      AND attname = 'client_updated_at'
+  )
+  OR EXISTS (
+    SELECT 1
+    FROM pg_indexes
+    WHERE schemaname = 'public'
+      AND tablename = 'user_stacks'
+      AND indexname = 'idx_user_stacks_user_dsld_active'
+  )
+  OR NOT EXISTS (
+    SELECT 1
+    FROM pg_trigger
+    WHERE tgrelid = 'public.user_stacks'::regclass
+      AND tgname = 'zz_user_stacks_keep_newest_state'
+      AND NOT tgisinternal
+  ) THEN
+    RAISE EXCEPTION 'user_stacks product-state contract drift';
+  END IF;
+END$$;
 
 -- =============================================================================
 -- 5. Row Level Security
