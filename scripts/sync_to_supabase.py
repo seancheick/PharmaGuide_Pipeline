@@ -55,9 +55,10 @@ DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 #       Brings the registry row to VALIDATING-or-later. The row's blobs
 #       are protected by P3.5 once the state is VALIDATING.
 #
-#   _ensure_registry_active(client, db_version)
+#   _promote_registry_release(client, db_version)
 #       Stage 2. Called AFTER manifest flip, BEFORE reporting sync success.
-#       Brings the row from VALIDATING to ACTIVE.
+#       Atomically retires an older active release in the target channel and
+#       promotes this VALIDATING row to ACTIVE.
 #
 # Re-entry behavior (per ADR-0001 P3.6b sign-off):
 #
@@ -69,11 +70,9 @@ DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 #   ACTIVE                          -> no-op (already past)
 #   RETIRED                         -> RAISE (never resurrect)
 #
-#   row state on entry to Stage 2   -> action
-#   -----------------------------------------------------------
-#   VALIDATING                      -> advance ACTIVE
-#   ACTIVE                          -> no-op (idempotent success)
-#   any other                       -> RAISE (between-stage inconsistency)
+#   Stage 2 state handling is owned by public.promote_catalog_release. This
+#   avoids client-side sequencing that could violate the one-ACTIVE-row-per-
+#   channel invariant or expose a no-ACTIVE gap.
 #
 # Partial-failure policy:
 #   - Stage 1 failure: sync aborts BEFORE manifest flip. Registry may be
@@ -139,74 +138,39 @@ def _ensure_registry_validating(client, *, db_version, detail_index_url):
     )
 
 
-def _ensure_registry_active(client, *, db_version):
-    """Stage 2: bring the registry row from VALIDATING to ACTIVE.
+def _promote_registry_release(client, *, db_version):
+    """Stage 2: atomically promote a VALIDATING release through the registry.
 
-    Called AFTER manifest flip succeeds.
-
-    Returns the CatalogRelease in ACTIVE state.
-    Raises RuntimeError if the row is in any state other than VALIDATING
-    or ACTIVE when this stage runs (shouldn't be reached after Stage 1).
+    The database function retires any older ACTIVE release in the same
+    channel before activating this release, within one transaction. The
+    client never sequences those state changes itself.
     """
     from release_safety import (
         ReleaseState,
-        activate_release,
         get_release,
     )
 
-    existing = get_release(client, db_version)
-    if existing is None:
+    print(f"  [registry] {db_version}: promoting atomically through database RPC")
+    response = client.rpc(
+        "promote_catalog_release",
+        {"p_db_version": db_version},
+    ).execute()
+    if getattr(response, "data", None) is None:
         raise RuntimeError(
-            f"[registry] {db_version}: row disappeared between Stage 1 and "
-            f"Stage 2 (concurrent deletion?). Aborting."
+            "promote_catalog_release RPC returned no result; registry promotion "
+            "may not have completed. Check Supabase logs before retrying."
         )
 
-    if existing.state == ReleaseState.ACTIVE:
-        print(f"  [registry] {db_version}: row already ACTIVE (idempotent re-entry)")
-        return existing
+    promoted = get_release(client, db_version)
+    if promoted is None or promoted.state != ReleaseState.ACTIVE:
+        actual_state = "missing" if promoted is None else promoted.state.value
+        raise RuntimeError(
+            f"[registry] {db_version}: promotion RPC returned without an ACTIVE "
+            f"registry row (observed {actual_state!r})."
+        )
 
-    if existing.state == ReleaseState.VALIDATING:
-        print(f"  [registry] {db_version}: VALIDATING -> ACTIVE")
-        return activate_release(client, db_version)
-
-    raise RuntimeError(
-        f"[registry] {db_version}: unexpected state {existing.state.value!r} "
-        f"between Stage 1 (VALIDATING) and Stage 2 (ACTIVE). Manual "
-        f"intervention required."
-    )
-
-
-def _retire_superseded_ota_releases(client, *, current_db_version):
-    """Retire older ACTIVE ota_stable registry rows after a successful sync.
-
-    ``catalog_releases`` is part of the orphan-blob protected-set contract:
-    every ACTIVE/VALIDATING row is treated as live. Leaving old OTA rows
-    ACTIVE keeps stale detail indexes in the protected set and can block
-    cleanup if an old index has already been pruned from storage. Bundled
-    rows are intentionally left alone because they anchor app-bundled
-    catalog state, not OTA state.
-    """
-    from release_safety import (
-        ReleaseChannel,
-        list_active_releases,
-    )
-    from release_safety.registry import retire_release
-
-    retired = []
-    for release in list_active_releases(client):
-        if release.db_version == current_db_version:
-            continue
-        if release.release_channel != ReleaseChannel.OTA_STABLE:
-            continue
-        reason = f"superseded by active release {current_db_version}"
-        print(f"  [registry] retiring superseded OTA release {release.db_version}")
-        retired.append(retire_release(client, release.db_version, reason=reason))
-
-    if retired:
-        print(f"  [registry] retired {len(retired)} superseded OTA release(s)")
-    else:
-        print("  [registry] no superseded OTA releases to retire")
-    return retired
+    print(f"  [registry] {db_version} is ACTIVE (idempotent promotion confirmed)")
+    return promoted
 
 
 # ---------------------------------------------------------------------------
@@ -976,8 +940,7 @@ def sync(
             db_version=version,
             detail_index_url=remote_detail_index_path,
         )
-        _ensure_registry_active(client, db_version=version)
-        _retire_superseded_ota_releases(client, current_db_version=version)
+        _promote_registry_release(client, db_version=version)
         print("Already up to date. Nothing to upload.")
         return {"status": "up_to_date", "version": version}
 
@@ -1136,10 +1099,9 @@ def sync(
     # Manifest is already updated (consumers see new version). Stage 2
     # failure leaves the row in VALIDATING — still fully protected,
     # operator re-run will resume from VALIDATING and complete ACTIVE.
-    print(f"\n[registry] Stage 2: activating {version}...")
-    _ensure_registry_active(client, db_version=version)
+    print(f"\n[registry] Stage 2: promoting {version} atomically...")
+    _promote_registry_release(client, db_version=version)
     print(f"  [registry] {version} is ACTIVE; release fully visible to cleanup gates")
-    _retire_superseded_ota_releases(client, current_db_version=version)
 
     # Summary
     total_time = db_time + detail_index_time + discover_time + blob_time

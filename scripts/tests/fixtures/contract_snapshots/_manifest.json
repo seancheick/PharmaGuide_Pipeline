@@ -387,6 +387,18 @@
         "P80 authority-citation and alias-precision audit (commit c92cada)"
       ],
       "notes": "Re-froze four snapshots after the reviewed Polysorbate 80 audit corrected the safety evidence and removed its ambiguous bare 'polysorbate' alias. CVS Spectravite (12012) retains its actual P80 match but receives the reviewed moderate B1 penalty (8.0->7.5). The three Pure Encapsulations products lose an unsupported 0.5-point B1 penalty because a non-P80 polysorbate must not inherit P80's evidence. These changes improve match specificity; they do not suppress a verified P80 safety signal."
+    },
+    {
+      "date": "2026-07-10",
+      "action": "refrozen_fresh_pipeline_inactive_b1_refresh",
+      "products": [
+        239741,
+        321405
+      ],
+      "sprints_covered": [
+        "Fresh full-pipeline batch run"
+      ],
+      "notes": "Re-froze two May fixtures after the fresh pipeline materialized the existing low-severity inactive-additive data. Spring Valley Korean Panax Ginseng (239741) now has three low-tier processing-aid penalties totaling 1.5 rather than stale 2.0. Garden of Life Wobenzym N Joint Health (321405) now has one low-tier stearic-acid penalty of 0.5 rather than stale 1.0. The current reference data and B1 risk map already carried these low tiers when the prior fixtures were frozen; this is a stale-artifact correction, not a new clinical downgrade. Both products remain SAFE with the same grade."
     }
   ]
 }

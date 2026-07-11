@@ -1,9 +1,12 @@
 """Contract tests for pipeline-owned Supabase distribution schema."""
 
 from pathlib import Path
+import re
 
 
 SCHEMA_PATH = Path(__file__).parent.parent / "sql" / "supabase_schema.sql"
+MIGRATIONS_DIR = Path(__file__).parent.parent / "sql" / "migrations"
+SYNC_PATH = Path(__file__).parent.parent / "sync_to_supabase.py"
 DISTRIBUTION_MIGRATION_PATH = (
     Path(__file__).parent.parent
     / "sql"
@@ -18,6 +21,26 @@ def _schema_sql() -> str:
 
 def _distribution_migration_sql() -> str:
     return DISTRIBUTION_MIGRATION_PATH.read_text(encoding="utf-8")
+
+
+def _catalog_release_promotion_migration_sql() -> str:
+    matches = sorted(MIGRATIONS_DIR.glob("*_catalog_release_promotion.sql"))
+    assert len(matches) == 1, (
+        "catalog release promotion must have exactly one versioned migration; "
+        f"found {len(matches)}"
+    )
+    return matches[0].read_text(encoding="utf-8")
+
+
+def _normalized_promotion_function(sql: str) -> str:
+    match = re.search(
+        r"CREATE OR REPLACE FUNCTION public\.promote_catalog_release\(.*?\$\$;",
+        sql,
+        flags=re.DOTALL,
+    )
+    assert match, "promote_catalog_release definition is missing"
+    without_comments = re.sub(r"(?m)^\s*--.*$", "", match.group(0))
+    return " ".join(without_comments.split())
 
 
 def test_pipeline_schema_excludes_app_owned_tables_and_routines():
@@ -80,6 +103,48 @@ def test_distribution_migration_enforces_live_integrity_and_access_contract():
     )
     for marker in app_definition_markers:
         assert marker not in sql
+
+
+def test_catalog_release_promotion_is_database_owned_and_atomic():
+    """A release promotion must not be split into client-side state writes.
+
+    The active-channel uniqueness rule requires retirement before activation,
+    but those writes need one transaction so a failed promotion cannot leave a
+    no-ACTIVE channel. The function is deliberately present both in the fresh
+    bootstrap schema and in the live upgrade migration.
+    """
+    for sql in (_schema_sql(), _catalog_release_promotion_migration_sql()):
+        assert "CREATE OR REPLACE FUNCTION public.promote_catalog_release" in sql
+        assert "pg_advisory_xact_lock" in sql
+        assert "FOR UPDATE" in sql
+        assert "promote_catalog_release is restricted to service_role" in sql
+        assert "SECURITY DEFINER" in sql
+        assert "SET search_path = public, pg_catalog" in sql
+        assert "REVOKE ALL ON FUNCTION public.promote_catalog_release(text)" in sql
+        assert "GRANT EXECUTE ON FUNCTION public.promote_catalog_release(text)" in sql
+
+        retire_at = sql.index("SET state = 'RETIRED'")
+        activate_at = sql.index("SET state = 'ACTIVE'")
+        assert retire_at < activate_at, (
+            "promotion must retire the old active release before activating "
+            "the new release inside its transaction"
+        )
+
+
+def test_catalog_release_promotion_definition_stays_in_sync_across_bootstrap_and_upgrade():
+    """Fresh projects and upgraded projects must receive identical behavior."""
+    assert _normalized_promotion_function(_schema_sql()) == _normalized_promotion_function(
+        _catalog_release_promotion_migration_sql()
+    )
+
+
+def test_sync_uses_only_the_database_owned_catalog_promotion_path():
+    """The pipeline must not regain a competing client-side state transition."""
+    sync_source = SYNC_PATH.read_text(encoding="utf-8")
+    assert "client.rpc(" in sync_source
+    assert '"promote_catalog_release"' in sync_source
+    assert "_ensure_registry_active" not in sync_source
+    assert "_retire_superseded_ota_releases" not in sync_source
 
 
 # ---------------------------------------------------------------------------

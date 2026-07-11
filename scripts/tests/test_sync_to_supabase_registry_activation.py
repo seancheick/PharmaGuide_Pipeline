@@ -9,10 +9,9 @@ Required scenarios (per ADR-0001 P3.6b sign-off):
   - Stage 1 retry from ACTIVE (already past) -> no-op
   - Stage 1 from RETIRED -> LOUD FAILURE (do not resurrect)
   - Stage 1 happy path (row missing) -> insert PENDING -> VALIDATING
-  - Stage 2 from VALIDATING -> ACTIVE
-  - Stage 2 from ACTIVE -> no-op (idempotent)
-  - Stage 2 from any other state -> raise (between-stage inconsistency)
-  - Stage 2 row disappeared between stages -> raise
+  - Stage 2 promotes through one database RPC
+  - Stage 2 retires a superseded same-channel ACTIVE release atomically
+  - Stage 2 from ACTIVE is idempotent through the same RPC
   - Log/print output makes state transitions visible
 """
 
@@ -31,9 +30,8 @@ if _scripts_dir not in sys.path:
     sys.path.insert(0, os.path.abspath(_scripts_dir))
 
 from sync_to_supabase import (
-    _ensure_registry_active,
     _ensure_registry_validating,
-    _retire_superseded_ota_releases,
+    _promote_registry_release,
 )
 from release_safety.registry import (
     DEFAULT_TABLE as REGISTRY_TABLE,
@@ -118,6 +116,7 @@ class FakeTable:
 class FakeClient:
     def __init__(self) -> None:
         self._tables: dict[str, list[dict]] = {}
+        self.rpc_calls: list[tuple[str, dict]] = []
 
     def table(self, name: str) -> FakeTable:
         store = self._tables.setdefault(name, [])
@@ -130,6 +129,49 @@ class FakeClient:
         store = self._tables.setdefault(table, [])
         store.extend(dict(r) for r in rows)
         return self
+
+    def rpc(self, name: str, params: dict) -> "FakeRpc":
+        self.rpc_calls.append((name, dict(params)))
+        return FakeRpc(self, name, params)
+
+
+class FakeRpc:
+    """Minimal transactional stand-in for promote_catalog_release."""
+
+    def __init__(self, client: FakeClient, name: str, params: dict) -> None:
+        self._client = client
+        self._name = name
+        self._params = params
+
+    def execute(self) -> _Response:
+        if self._name != "promote_catalog_release":
+            raise AssertionError(f"unexpected RPC: {self._name}")
+
+        target_version = self._params["p_db_version"]
+        rows = self._client.rows()
+        target = next((row for row in rows if row["db_version"] == target_version), None)
+        if target is None:
+            raise RuntimeError("target release is missing")
+        if target["state"] not in {"VALIDATING", "ACTIVE"}:
+            raise RuntimeError(f"cannot promote {target['state']}")
+
+        if target["state"] == "VALIDATING":
+            for row in rows:
+                if (
+                    row["db_version"] != target_version
+                    and row["release_channel"] == target["release_channel"]
+                    and row["state"] == "ACTIVE"
+                ):
+                    row.update({
+                        "state": "RETIRED",
+                        "retired_at": "2026-05-14T00:00:00Z",
+                        "retired_reason": f"superseded by active release {target_version}",
+                    })
+            target.update({
+                "state": "ACTIVE",
+                "activated_at": "2026-05-14T00:00:00Z",
+            })
+        return _Response([{"db_version": target_version, "state": "ACTIVE"}])
 
 
 def _row(*, db_version: str, state: str,
@@ -302,22 +344,35 @@ def test_stage1_retired_row_error_mentions_create_new_version_remedy(
 
 
 # ===========================================================================
-# Stage 2 — happy path: VALIDATING -> ACTIVE
+# Stage 2 — atomic promotion through the database-owned RPC
 # ===========================================================================
 
 
-def test_stage2_validating_to_active(client: FakeClient):
-    client.seed([_row(db_version="v1", state="VALIDATING")])
+def test_stage2_promotes_and_retires_superseded_same_channel_release_atomically(
+    client: FakeClient,
+):
+    client.seed([
+        _row(db_version="v1", state="VALIDATING"),
+        _row(db_version="v0", state="ACTIVE"),
+        _row(db_version="bundled", state="ACTIVE", channel="bundled"),
+    ])
 
     captured = io.StringIO()
     with redirect_stdout(captured):
-        result = _ensure_registry_active(client, db_version="v1")
+        result = _promote_registry_release(client, db_version="v1")
 
     assert result.state == ReleaseState.ACTIVE
     assert result.activated_at is not None
-    assert client.rows()[0]["state"] == "ACTIVE"
+    rows = {row["db_version"]: row for row in client.rows()}
+    assert rows["v1"]["state"] == "ACTIVE"
+    assert rows["v0"]["state"] == "RETIRED"
+    assert rows["v0"]["retired_reason"] == "superseded by active release v1"
+    assert rows["bundled"]["state"] == "ACTIVE"
+    assert client.rpc_calls == [
+        ("promote_catalog_release", {"p_db_version": "v1"}),
+    ]
     out = captured.getvalue()
-    assert "VALIDATING -> ACTIVE" in out
+    assert "promoting atomically" in out
 
 
 # ===========================================================================
@@ -325,50 +380,21 @@ def test_stage2_validating_to_active(client: FakeClient):
 # ===========================================================================
 
 
-def test_stage2_active_row_is_idempotent_noop(client: FakeClient):
-    """Re-running a successful sync should NOT touch an already-ACTIVE row."""
+def test_stage2_active_row_is_idempotent_through_database_rpc(client: FakeClient):
+    """Re-running a successful sync leaves the already-ACTIVE row unchanged."""
     client.seed([_row(db_version="v1", state="ACTIVE")])
 
     captured = io.StringIO()
     with redirect_stdout(captured):
-        result = _ensure_registry_active(client, db_version="v1")
+        result = _promote_registry_release(client, db_version="v1")
 
     assert result.state == ReleaseState.ACTIVE
+    assert client.rpc_calls == [
+        ("promote_catalog_release", {"p_db_version": "v1"}),
+    ]
     out = captured.getvalue()
-    assert "already ACTIVE" in out
+    assert "is ACTIVE" in out
     assert "idempotent" in out.lower()
-
-
-# ===========================================================================
-# Stage 2 — between-stage inconsistencies raise loudly
-# ===========================================================================
-
-
-def test_stage2_row_disappeared_between_stages_raises(client: FakeClient):
-    """If something deletes the row between Stage 1 and Stage 2, fail loudly."""
-    # Note: row NOT seeded
-    with pytest.raises(RuntimeError, match="disappeared"):
-        _ensure_registry_active(client, db_version="v_gone")
-
-
-def test_stage2_row_in_pending_raises(client: FakeClient):
-    """Stage 2 should never see PENDING — Stage 1 would have advanced past
-    it. A row in PENDING at Stage 2 = something went very wrong."""
-    client.seed([_row(db_version="v1", state="PENDING")])
-    with pytest.raises(RuntimeError, match="unexpected state"):
-        _ensure_registry_active(client, db_version="v1")
-
-
-def test_stage2_row_in_retired_raises(client: FakeClient):
-    """Defensive: if the row was retired between Stage 1 and Stage 2,
-    refuse to activate."""
-    client.seed([
-        _row(db_version="v1", state="RETIRED",
-             retired_at="2026-05-10T00:00:00Z",
-             retired_reason="x"),
-    ])
-    with pytest.raises(RuntimeError, match="unexpected state"):
-        _ensure_registry_active(client, db_version="v1")
 
 
 # ===========================================================================
@@ -388,8 +414,8 @@ def test_full_e2e_stage1_then_stage2_from_scratch(client: FakeClient):
 
     # (manifest flip would happen here in production)
 
-    # Stage 2: VALIDATING -> ACTIVE
-    s2_result = _ensure_registry_active(client, db_version="2026.05.14.fresh")
+    # Stage 2: database-owned atomic promotion.
+    s2_result = _promote_registry_release(client, db_version="2026.05.14.fresh")
     assert s2_result.state == ReleaseState.ACTIVE
     assert s2_result.activated_at is not None
 
@@ -410,7 +436,7 @@ def test_full_e2e_re_run_after_stage1_completed(client: FakeClient):
 
     # Manifest flip happens here
 
-    s2 = _ensure_registry_active(client, db_version="v1")
+    s2 = _promote_registry_release(client, db_version="v1")
     assert s2.state == ReleaseState.ACTIVE
 
 
@@ -425,69 +451,11 @@ def test_full_e2e_re_run_after_full_success_is_pure_noop(client: FakeClient):
     )
     assert s1.state == ReleaseState.ACTIVE  # Stage 1 detects ACTIVE -> no-op
 
-    s2 = _ensure_registry_active(client, db_version="v1")
+    s2 = _promote_registry_release(client, db_version="v1")
     assert s2.state == ReleaseState.ACTIVE  # Stage 2 detects ACTIVE -> no-op
 
     # DB row unchanged from seed (state still ACTIVE)
     assert client.rows()[0]["state"] == "ACTIVE"
-
-
-# ===========================================================================
-# Superseded OTA retirement — keep protected-set registry lean
-# ===========================================================================
-
-
-def test_retire_superseded_ota_releases_retires_only_old_ota_rows(
-    client: FakeClient,
-):
-    client.seed([
-        _row(db_version="2026.current", state="ACTIVE", channel="ota_stable"),
-        _row(db_version="2026.old1", state="ACTIVE", channel="ota_stable"),
-        _row(db_version="2026.old2", state="ACTIVE", channel="ota_stable"),
-        _row(db_version="2026.bundle", state="ACTIVE", channel="bundled"),
-        _row(db_version="2026.validating", state="VALIDATING", channel="ota_stable"),
-    ])
-
-    captured = io.StringIO()
-    with redirect_stdout(captured):
-        retired = _retire_superseded_ota_releases(
-            client, current_db_version="2026.current",
-        )
-
-    assert {r.db_version for r in retired} == {"2026.old1", "2026.old2"}
-    rows = {r["db_version"]: r for r in client.rows()}
-    assert rows["2026.current"]["state"] == "ACTIVE"
-    assert rows["2026.bundle"]["state"] == "ACTIVE"
-    assert rows["2026.validating"]["state"] == "VALIDATING"
-    assert rows["2026.old1"]["state"] == "RETIRED"
-    assert rows["2026.old2"]["state"] == "RETIRED"
-    assert (
-        rows["2026.old1"]["retired_reason"]
-        == "superseded by active release 2026.current"
-    )
-    out = captured.getvalue()
-    assert "retired 2 superseded OTA release" in out
-
-
-def test_retire_superseded_ota_releases_is_noop_when_current_is_only_active_ota(
-    client: FakeClient,
-):
-    client.seed([
-        _row(db_version="2026.current", state="ACTIVE", channel="ota_stable"),
-        _row(db_version="2026.bundle", state="ACTIVE", channel="bundled"),
-    ])
-
-    captured = io.StringIO()
-    with redirect_stdout(captured):
-        retired = _retire_superseded_ota_releases(
-            client, current_db_version="2026.current",
-        )
-
-    assert retired == []
-    rows = {r["db_version"]: r for r in client.rows()}
-    assert rows["2026.current"]["state"] == "ACTIVE"
-    assert rows["2026.bundle"]["state"] == "ACTIVE"
-    assert "no superseded OTA releases" in captured.getvalue()
 
 
 # ===========================================================================
@@ -504,9 +472,9 @@ def test_log_output_includes_db_version_and_transition_arrow(client: FakeClient)
             client, db_version="2026.05.14.log_test",
             detail_index_url="v.json",
         )
-        _ensure_registry_active(client, db_version="2026.05.14.log_test")
+        _promote_registry_release(client, db_version="2026.05.14.log_test")
 
     out = captured.getvalue()
     assert "2026.05.14.log_test" in out
     assert "PENDING -> VALIDATING" in out
-    assert "VALIDATING -> ACTIVE" in out
+    assert "promoting atomically" in out

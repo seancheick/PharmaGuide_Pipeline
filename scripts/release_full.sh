@@ -473,6 +473,12 @@ run_strict_gate "export contract" \
 run_strict_gate "RDA/UL Flutter reference-data parity" \
   "$PG_PYTHON" scripts/sync_flutter_reference_data.py --flutter-repo "$FLUTTER_REPO"
 
+# A fresh per-brand rebuild can materialize score changes from reviewed source
+# data that earlier scored artifacts had not incorporated. Block publication
+# until the snapshot baseline records any such reviewed change.
+run_strict_gate "scoring snapshot contract" \
+  bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
+
 # ---------------------------------------------------------------------------
 # Step 5: Sync to Supabase (upload only; cleanup is post-bundle)
 #
