@@ -15,6 +15,8 @@ Test scenarios per spec:
 6. Skipped rows still available for safety/additive checks
 """
 
+import json
+
 import pytest
 import sys
 from pathlib import Path
@@ -172,6 +174,239 @@ def fixture_blend_only_product():
         ],
         "inactiveIngredients": []
     }
+
+
+def _identity_integrity_active_row(**overrides):
+    row = {
+        "name": "EPA",
+        "raw_source_text": "EPA",
+        "standardName": "EPA (Eicosapentaenoic Acid)",
+        "canonical_id": "epa",
+        "canonical_source_db": "ingredient_quality_map",
+        "quantity": 360.0,
+        "unit": "mg",
+        "source_section": "active",
+        "raw_source_path": "activeIngredients",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "score_exclusion_reason": None,
+        "dose_class": "therapeutic_mass",
+        "raw_taxonomy": {},
+    }
+    row.update(overrides)
+    return row
+
+
+@pytest.fixture
+def fixture_identity_integrity_product():
+    return {
+        "id": "identity-integrity-fish-oil",
+        "fullName": "Fish Oil with Direct EPA and DHA",
+        "activeIngredients": [
+            _identity_integrity_active_row(
+                name="Fish Oil",
+                raw_source_text="Fish Oil",
+                standardName="Fish Oil",
+                canonical_id="fish_oil",
+                ingredientGroup="Fish Oil",
+                quantity=1200.0,
+            ),
+            _identity_integrity_active_row(
+                name="EPA",
+                raw_source_text="EPA",
+                standardName="DHA (Docosahexaenoic Acid)",
+                canonical_id="dha",
+                ingredientGroup="EPA (Eicosapentaenoic Acid)",
+                forms=[{"prefix": "as", "name": "Ethyl Esters"}],
+                quantity=360.0,
+            ),
+            _identity_integrity_active_row(
+                name="DHA",
+                raw_source_text="DHA",
+                standardName="DHA (Docosahexaenoic Acid)",
+                canonical_id="dha",
+                ingredientGroup="DHA (Docosahexaenoic Acid)",
+                quantity=300.0,
+            ),
+        ],
+        "inactiveIngredients": [],
+    }
+
+
+class TestIdentityIntegrityBoundary:
+    def test_identity_integrity_repairs_complete_active_rows_before_scoring(
+        self, enricher, fixture_identity_integrity_product
+    ):
+        active_rows = fixture_identity_integrity_product["activeIngredients"]
+        result = enricher._collect_ingredient_quality_data(
+            fixture_identity_integrity_product
+        )
+        scorable = result["ingredients_scorable"]
+        by_name = {row["name"]: row for row in scorable}
+
+        repaired_epa = by_name["EPA"]
+        assert repaired_epa["identity_disposition"] == "repaired"
+        assert repaired_epa["canonical_id_before"] == "dha"
+        assert repaired_epa["canonical_id_after"] == "epa"
+        assert repaired_epa["canonical_id"] == "epa"
+        assert repaired_epa["standard_name"] == "EPA (Eicosapentaenoic Acid)"
+        assert repaired_epa["form_id"] == "EPA fish oil ethyl ester"
+        assert repaired_epa["bio_score"] == 9
+        assert repaired_epa["name"] == "EPA"
+        assert repaired_epa["source_label_name"] == "EPA"
+        assert repaired_epa["label_display_name"] == "EPA"
+        assert repaired_epa["source_label_form"] == "as Ethyl Esters"
+        assert repaired_epa["label_display_form"] == "as Ethyl Esters"
+
+        assert by_name["DHA"]["identity_disposition"] == "clean"
+        assert by_name["DHA"]["canonical_id"] == "dha"
+        assert by_name["Fish Oil"]["canonical_id"] == "fish_oil"
+        direct_total = sum(
+            row["quantity"]
+            for row in scorable
+            if row["canonical_id"] in {"epa", "dha"}
+        )
+        assert direct_total == 660.0
+
+        repaired_source = active_rows[1]
+        assert repaired_source["name"] == "EPA"
+        assert repaired_source["forms"] == [
+            {"prefix": "as", "name": "Ethyl Esters"}
+        ]
+        assert repaired_source["canonical_id"] == "epa"
+        assert repaired_source["standardName"] == "EPA (Eicosapentaenoic Acid)"
+        assert repaired_source["form_id"] == "EPA fish oil ethyl ester"
+        assert repaired_source["label_display_name"] == "EPA"
+        assert repaired_source["label_display_form"] == "as Ethyl Esters"
+
+    def test_identity_integrity_routes_unresolved_rows_to_skipped_diagnostics(
+        self, enricher
+    ):
+        product = {
+            "id": "identity-integrity-unresolved",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    standardName="DHA (Docosahexaenoic Acid)",
+                    canonical_id="dha",
+                    ingredientGroup=None,
+                ),
+                _identity_integrity_active_row(
+                    name="",
+                    raw_source_text="",
+                    standardName="EPA (Eicosapentaenoic Acid)",
+                    canonical_id="epa",
+                    ingredientGroup=None,
+                    forms=[{"prefix": "as", "name": "Ethyl Esters"}],
+                    quantity=250.0,
+                ),
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        dispositions = {
+            row["identity_disposition"]: row
+            for row in result["ingredients_skipped"]
+        }
+
+        assert "identity_conflict" in dispositions
+        assert "missing_display_label" in dispositions
+        assert not any(
+            row["identity_disposition"]
+            in {"identity_conflict", "missing_display_label"}
+            for row in result["ingredients_scorable"]
+        )
+        assert dispositions["identity_conflict"]["canonical_id_after"] is None
+        assert dispositions["missing_display_label"]["canonical_id_after"] is None
+        assert dispositions["identity_conflict"]["scoreable_identity"] is False
+        assert dispositions["missing_display_label"]["scoreable_identity"] is False
+
+    def test_identity_integrity_stamps_each_active_iqd_row_once_without_copies(
+        self, enricher, fixture_identity_integrity_product
+    ):
+        fixture_identity_integrity_product["activeIngredients"].extend(
+            [
+                _identity_integrity_active_row(
+                    name="EPA conflict",
+                    raw_source_text="EPA",
+                    standardName="DHA (Docosahexaenoic Acid)",
+                    canonical_id="dha",
+                    ingredientGroup=None,
+                    quantity=100.0,
+                ),
+                _identity_integrity_active_row(
+                    name="",
+                    raw_source_text="",
+                    standardName="EPA (Eicosapentaenoic Acid)",
+                    canonical_id="epa",
+                    ingredientGroup=None,
+                    quantity=100.0,
+                ),
+            ]
+        )
+
+        result = enricher._collect_ingredient_quality_data(
+            fixture_identity_integrity_product
+        )
+        all_rows = result["ingredients"]
+        scorable = result["ingredients_scorable"]
+        skipped = result["ingredients_skipped"]
+        required_fields = {
+            "source_label_key",
+            "source_label_name",
+            "source_label_form",
+            "label_display_name",
+            "label_display_form",
+            "identity_disposition",
+            "canonical_id_before",
+            "canonical_id_after",
+            "identity_evidence",
+            "identity_resolution_rationale",
+            "scoreable_identity",
+        }
+
+        assert len(all_rows) == len(
+            fixture_identity_integrity_product["activeIngredients"]
+        )
+        assert len({row["source_label_key"] for row in all_rows}) == len(all_rows)
+        for row in all_rows:
+            assert required_fields.issubset(row)
+            evidence = json.loads(row["identity_evidence"])
+            assert isinstance(evidence, list)
+            assert all(set(item) == {"field", "value", "kind"} for item in evidence)
+            assert sum(candidate is row for candidate in all_rows) == 1
+            assert (
+                sum(candidate is row for candidate in scorable)
+                + sum(candidate is row for candidate in skipped)
+                == 1
+            )
+
+    def test_identity_integrity_rejects_taxonomy_when_unii_is_incoherent(
+        self, enricher
+    ):
+        product = {
+            "id": "identity-integrity-incoherent-unii",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="Opaque label identity",
+                    raw_source_text="Opaque label identity",
+                    standardName="EPA (Eicosapentaenoic Acid)",
+                    canonical_id="epa",
+                    ingredientGroup=None,
+                    uniiCode="AAAAAAAAAA",
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["identity_taxonomy_coherent"] is False
+        assert row["identity_disposition"] == "identity_conflict"
+        assert row["scoreable_identity"] is False
+        assert row not in result["ingredients_scorable"]
+        assert any(candidate is row for candidate in result["ingredients_skipped"])
 
 
 class TestScorableClassificationPass1:
