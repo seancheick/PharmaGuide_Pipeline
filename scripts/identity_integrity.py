@@ -252,12 +252,16 @@ def resolve_identity(
     resolve_candidate: CandidateResolver,
     *,
     taxonomy_coherent: bool = False,
+    allow_unscoreable_taxonomy_only: bool = False,
 ) -> IdentityDecision:
     """Resolve label identity without reproducing the external taxonomy matcher.
 
     ``supplied_canonical_id`` and callback results must already be canonical
     registry IDs; they are compared exactly. ``taxonomy_coherent`` carries the
     caller's canonical/standard-name/form/UNII confidence result.
+    ``allow_unscoreable_taxonomy_only`` is reserved for rows the caller already
+    classified as intentionally non-scorable; it records that context without
+    inferring a canonical identity.
     """
     evidence = extract_label_evidence(row)
     canonical_before = _canonical(supplied_canonical_id)
@@ -291,10 +295,6 @@ def resolve_identity(
         disposition: IdentityDisposition = "missing_display_label"
         canonical_after = None
         rationale = "No displayable literal ingredient-line label was available."
-    elif canonical_before is None:
-        disposition = "identity_conflict"
-        canonical_after = None
-        rationale = "No supplied canonical ID was available to validate or repair."
     elif len(structured_canonicals) > 1:
         disposition = "identity_conflict"
         canonical_after = None
@@ -303,21 +303,45 @@ def resolve_identity(
             + ", ".join(sorted(structured_canonicals))
             + "."
         )
+    elif structured_evidence and structured_canonical is None:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = "Direct structured line evidence could not be resolved."
     elif structured_canonical is not None:
-        canonical_after = structured_canonical
-        if canonical_before == structured_canonical:
+        if canonical_before is None and allow_unscoreable_taxonomy_only:
+            disposition = "taxonomy_only"
+            canonical_after = None
+            rationale = (
+                "The row was intentionally classified as non-scorable; its "
+                "structured label evidence was retained without inferring a "
+                "canonical identity."
+            )
+        elif canonical_before is None:
+            disposition = "identity_conflict"
+            canonical_after = None
+            rationale = "No supplied canonical ID was available to validate or repair."
+        elif canonical_before == structured_canonical:
             disposition = "clean"
+            canonical_after = structured_canonical
             rationale = "Structured line identity agrees with the supplied canonical ID."
         else:
             disposition = "repaired"
+            canonical_after = structured_canonical
             rationale = (
                 "Unambiguous structured line identity replaced the supplied canonical ID "
                 f"{canonical_before!r} with {structured_canonical!r}."
             )
-    elif structured_evidence:
+    elif allow_unscoreable_taxonomy_only:
+        disposition = "taxonomy_only"
+        canonical_after = None
+        rationale = (
+            "The row was intentionally classified as non-scorable; no canonical "
+            "identity was inferred from raw label or form text."
+        )
+    elif canonical_before is None:
         disposition = "identity_conflict"
         canonical_after = None
-        rationale = "Direct structured line evidence could not be resolved."
+        rationale = "No supplied canonical ID was available to validate or repair."
     elif len(raw_canonicals) > 1:
         disposition = "identity_conflict"
         canonical_after = None

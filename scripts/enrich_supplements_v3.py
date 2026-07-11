@@ -3052,8 +3052,18 @@ class SupplementEnricherV3:
         match_result: Optional[Dict],
         quality_map: Dict,
     ) -> bool:
+        match_tier = (
+            match_result.get("match_tier")
+            if isinstance(match_result, dict)
+            else None
+        )
+        strong_match_tier = match_tier in {"exact", "normalized"} or (
+            match_tier == "cleaner_canonical_parent"
+            and match_result.get("cleaner_canonical_enforced") is True
+        )
         if (
             not isinstance(match_result, dict)
+            or not strong_match_tier
             or match_result.get("match_status") == "FORM_UNMAPPED"
             or self._quality_match_identity_confidence(match_result) < 0.9
             or match_result.get("match_ambiguity_candidates")
@@ -3125,6 +3135,8 @@ class SupplementEnricherV3:
         ingredient: Dict,
         match_result: Optional[Dict],
         quality_map: Dict,
+        *,
+        allow_unscoreable_taxonomy_only: bool = False,
     ) -> Tuple[IdentityDecision, Optional[Dict], bool]:
         supplied_canonical_id = (
             match_result.get("canonical_id")
@@ -3139,6 +3151,7 @@ class SupplementEnricherV3:
             supplied_canonical_id,
             self._identity_candidate_resolver(quality_map),
             taxonomy_coherent=taxonomy_coherent,
+            allow_unscoreable_taxonomy_only=allow_unscoreable_taxonomy_only,
         )
 
         if decision.disposition == "repaired" and decision.canonical_id:
@@ -3432,7 +3445,12 @@ class SupplementEnricherV3:
                     self._missing_cleaner_contract_fields(ingredient),
                 )
                 identity_decision, identity_match, taxonomy_coherent = (
-                    self._resolve_iqd_identity(ingredient, None, quality_map)
+                    self._resolve_iqd_identity(
+                        ingredient,
+                        None,
+                        quality_map,
+                        allow_unscoreable_taxonomy_only=True,
+                    )
                 )
                 self._stamp_iqd_identity(
                     skipped_entry,

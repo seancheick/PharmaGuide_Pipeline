@@ -25,6 +25,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from enrich_supplements_v3 import SupplementEnricherV3
+from identity_integrity import resolve_identity
 from constants import (
     SKIP_REASON_ADDITIVE,
     SKIP_REASON_ADDITIVE_TYPE,
@@ -234,6 +235,15 @@ def fixture_identity_integrity_product():
 
 
 class TestIdentityIntegrityBoundary:
+    @staticmethod
+    def _identity_integrity_candidate(candidate):
+        return {
+            "epa": "epa",
+            "epa (eicosapentaenoic acid)": "epa",
+            "dha": "dha",
+            "dha (docosahexaenoic acid)": "dha",
+        }.get(str(candidate).strip().lower())
+
     def test_identity_integrity_repairs_complete_active_rows_before_scoring(
         self, enricher, fixture_identity_integrity_product
     ):
@@ -362,6 +372,7 @@ class TestIdentityIntegrityBoundary:
             "canonical_id_after",
             "identity_evidence",
             "identity_resolution_rationale",
+            "identity_taxonomy_coherent",
             "scoreable_identity",
         }
 
@@ -407,6 +418,154 @@ class TestIdentityIntegrityBoundary:
         assert row["scoreable_identity"] is False
         assert row not in result["ingredients_scorable"]
         assert any(candidate is row for candidate in result["ingredients_skipped"])
+
+    @pytest.mark.parametrize("match_tier", ["pattern", "contains"])
+    def test_identity_integrity_weak_match_tiers_cannot_authorize_taxonomy_only(
+        self, enricher, monkeypatch, match_tier
+    ):
+        weak_match = {
+            "standard_name": "EPA (Eicosapentaenoic Acid)",
+            "canonical_id": "epa",
+            "form_id": "epa (unspecified)",
+            "form_name": "epa (unspecified)",
+            "match_tier": match_tier,
+            "match_ambiguity_candidates": [],
+            "bio_score": 8,
+            "natural": False,
+            "dosage_importance": 1.0,
+            "category": "fatty_acids",
+        }
+
+        def fake_match_quality_map(
+            ing_name,
+            std_name,
+            quality_map,
+            _form_extraction_attempt=False,
+            **kwargs,
+        ):
+            if _form_extraction_attempt:
+                return None
+            return dict(weak_match)
+
+        monkeypatch.setattr(enricher, "_match_quality_map", fake_match_quality_map)
+        product = {
+            "id": f"identity-integrity-{match_tier}",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="Opaque label identity",
+                    raw_source_text="Opaque label identity",
+                    ingredientGroup=None,
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["identity_taxonomy_coherent"] is False
+        assert row["identity_disposition"] == "identity_conflict"
+        assert row["scoreable_identity"] is False
+        assert row not in result["ingredients_scorable"]
+        assert any(candidate is row for candidate in result["ingredients_skipped"])
+
+    def test_identity_integrity_cleaner_parent_requires_explicit_enforcement(
+        self, enricher
+    ):
+        quality_map = enricher.databases["ingredient_quality_map"]
+        base_match = {
+            "standard_name": "EPA (Eicosapentaenoic Acid)",
+            "canonical_id": "epa",
+            "form_id": "epa (unspecified)",
+            "form_name": "epa (unspecified)",
+            "match_tier": "cleaner_canonical_parent",
+            "match_ambiguity_candidates": [],
+        }
+        ingredient = _identity_integrity_active_row(
+            name="Opaque label identity",
+            raw_source_text="Opaque label identity",
+            ingredientGroup=None,
+        )
+
+        assert enricher._identity_taxonomy_coherent(
+            ingredient,
+            {**base_match, "cleaner_canonical_enforced": False},
+            quality_map,
+        ) is False
+        assert enricher._identity_taxonomy_coherent(
+            ingredient,
+            {**base_match, "cleaner_canonical_enforced": True},
+            quality_map,
+        ) is True
+
+    def test_identity_integrity_intentional_skip_context_is_unscoreable_taxonomy_only(
+        self,
+    ):
+        decision = resolve_identity(
+            {"raw_source_text": "Known non-scorable label row"},
+            supplied_canonical_id=None,
+            resolve_candidate=self._identity_integrity_candidate,
+            allow_unscoreable_taxonomy_only=True,
+        )
+
+        assert decision.disposition == "taxonomy_only"
+        assert decision.canonical_id_before is None
+        assert decision.canonical_id_after is None
+        assert decision.scoreable_identity is False
+
+    def test_identity_integrity_intentional_skip_context_preserves_hard_conflicts(
+        self,
+    ):
+        unresolved_structured = resolve_identity(
+            {
+                "raw_source_text": "Known non-scorable label row",
+                "ingredientGroup": "Unknown high-specific identity",
+            },
+            supplied_canonical_id=None,
+            resolve_candidate=self._identity_integrity_candidate,
+            allow_unscoreable_taxonomy_only=True,
+        )
+        conflicting_structured = resolve_identity(
+            {
+                "ingredientGroup": "EPA (Eicosapentaenoic Acid)",
+                "label_nutrient_context": "DHA (Docosahexaenoic Acid)",
+            },
+            supplied_canonical_id=None,
+            resolve_candidate=self._identity_integrity_candidate,
+            allow_unscoreable_taxonomy_only=True,
+        )
+        missing_display = resolve_identity(
+            {"forms": [{"prefix": "as", "name": "Ethyl Esters"}]},
+            supplied_canonical_id=None,
+            resolve_candidate=self._identity_integrity_candidate,
+            allow_unscoreable_taxonomy_only=True,
+        )
+
+        assert unresolved_structured.disposition == "identity_conflict"
+        assert conflicting_structured.disposition == "identity_conflict"
+        assert missing_display.disposition == "missing_display_label"
+        assert unresolved_structured.scoreable_identity is False
+        assert conflicting_structured.scoreable_identity is False
+        assert missing_display.scoreable_identity is False
+
+    def test_identity_integrity_intentionally_skipped_rows_are_non_alarmist(
+        self, enricher, fixture_product_with_additives
+    ):
+        result = enricher._collect_ingredient_quality_data(
+            fixture_product_with_additives
+        )
+        skipped = {row["name"]: row for row in result["ingredients_skipped"]}
+
+        for name in ("Sorbitol", "Stevia leaf extract"):
+            row = skipped[name]
+            assert row["identity_disposition"] == "taxonomy_only"
+            assert row["scoreable_identity"] is False
+            assert row["canonical_id_before"] is None
+            assert row["canonical_id_after"] is None
+            assert row["canonical_id"] is None
+            assert row not in result["ingredients_scorable"]
+
+        assert skipped["Stevia leaf extract"]["recognized_non_scorable"] is True
 
 
 class TestScorableClassificationPass1:
