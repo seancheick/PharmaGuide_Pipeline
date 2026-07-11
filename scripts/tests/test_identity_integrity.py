@@ -20,6 +20,7 @@ CANONICALS = {
     "dha": "dha",
     "dha (docosahexaenoic acid)": "dha",
     "docosahexaenoic acid": "dha",
+    "docosahexaenoic acid ethyl ester": "dha",
     "magnesium": "magnesium",
 }
 
@@ -149,6 +150,47 @@ def test_no_structured_identity_uses_coherent_supplied_taxonomy():
     assert decision.canonical_id == "magnesium"
     assert decision.label_display_name == "Magnesium Citrate"
     assert decision.scoreable_identity is True
+
+
+def test_raw_identity_cannot_repair_conflicting_supplied_canonical():
+    decision = resolve_identity(
+        row={"raw_source_text": "DHA"},
+        supplied_canonical_id="epa",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id_before == "epa"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+
+
+def test_missing_supplied_canonical_is_identity_conflict():
+    decision = resolve_identity(
+        row={"raw_source_text": "Unknown ingredient"},
+        supplied_canonical_id=None,
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+
+
+def test_unresolved_structured_identity_blocks_taxonomy_fallback():
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Unknown ingredient",
+            "ingredientGroup": "Unknown high-specific ingredient",
+        },
+        supplied_canonical_id="epa",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id_before == "epa"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
 
 
 def test_conflicting_structured_canonicals_are_not_scoreable():

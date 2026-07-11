@@ -252,13 +252,21 @@ def resolve_identity(
     structured_evidence = tuple(
         item for item in evidence if item.kind in {"structured_identity", "source_form"}
     )
-    resolved = _resolved_canonicals(structured_evidence, resolve_candidate)
-    if not resolved:
-        raw_evidence = tuple(item for item in evidence if item.kind == "source_name")
-        resolved = _resolved_canonicals(raw_evidence, resolve_candidate)
+    raw_evidence = tuple(item for item in evidence if item.kind == "source_name")
+    structured_canonicals = _resolved_canonicals(
+        structured_evidence,
+        resolve_candidate,
+    )
+    raw_canonicals = _resolved_canonicals(raw_evidence, resolve_candidate)
 
-    sole_canonical = next(iter(resolved)) if len(resolved) == 1 else None
-    source_name = _source_name(evidence, sole_canonical, resolve_candidate)
+    structured_canonical = (
+        next(iter(structured_canonicals))
+        if len(structured_canonicals) == 1
+        else None
+    )
+    raw_canonical = next(iter(raw_canonicals)) if len(raw_canonicals) == 1 else None
+    display_canonical = structured_canonical or raw_canonical
+    source_name = _source_name(evidence, display_canonical, resolve_candidate)
     source_form = next(
         (item.value for item in evidence if item.kind == "source_form"),
         None,
@@ -270,25 +278,52 @@ def resolve_identity(
         disposition: IdentityDisposition = "missing_display_label"
         canonical_after = None
         rationale = "No displayable literal ingredient-line label was available."
-    elif len(resolved) > 1:
+    elif canonical_before is None:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = "No supplied canonical ID was available to validate or repair."
+    elif len(structured_canonicals) > 1:
         disposition = "identity_conflict"
         canonical_after = None
         rationale = (
             "Structured line evidence resolved to conflicting canonical identities: "
-            + ", ".join(sorted(resolved))
+            + ", ".join(sorted(structured_canonicals))
             + "."
         )
-    elif sole_canonical is not None:
-        canonical_after = sole_canonical
-        if canonical_before == sole_canonical:
+    elif structured_canonical is not None:
+        canonical_after = structured_canonical
+        if canonical_before == structured_canonical:
             disposition = "clean"
             rationale = "Structured line identity agrees with the supplied canonical ID."
         else:
             disposition = "repaired"
             rationale = (
                 "Unambiguous structured line identity replaced the supplied canonical ID "
-                f"{canonical_before!r} with {sole_canonical!r}."
+                f"{canonical_before!r} with {structured_canonical!r}."
             )
+    elif structured_evidence:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = "Direct structured line evidence could not be resolved."
+    elif len(raw_canonicals) > 1:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = (
+            "Raw label evidence resolved to conflicting canonical identities: "
+            + ", ".join(sorted(raw_canonicals))
+            + "."
+        )
+    elif raw_canonical is not None and raw_canonical != canonical_before:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = (
+            f"Raw label evidence resolves to {raw_canonical!r} and contradicts the "
+            f"supplied canonical ID {canonical_before!r}."
+        )
+    elif raw_canonical == canonical_before:
+        disposition = "clean"
+        canonical_after = canonical_before
+        rationale = "Raw label identity validates the supplied canonical ID."
     else:
         disposition = "taxonomy_only"
         canonical_after = canonical_before
