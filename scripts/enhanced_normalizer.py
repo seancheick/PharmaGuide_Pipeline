@@ -10,7 +10,7 @@ import string
 import os
 import functools
 from typing import Dict, List, Tuple, Optional, Any, Set, Union
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -292,6 +292,59 @@ def _generate_variations_module_cached(text: str) -> tuple:
 
 logger = logging.getLogger(__name__)
 DAILY_VALUES_PATH = Path(__file__).parent / "data" / "daily_values.json"
+
+_CONTEXT_OVERRIDE_REVIEWER_PLACEHOLDERS = frozenset({
+    "",
+    "(pending)",
+    "pending",
+    "todo",
+    "tbd",
+    "placeholder",
+    "claude",
+    "anthropic",
+    "codex",
+    "ai",
+    "agent",
+    "subagent",
+    "auto",
+    "automated",
+    "none",
+    "n/a",
+    "unknown",
+})
+
+
+def _validate_context_canonical_override_review(
+    entry: Any,
+) -> Tuple[bool, str]:
+    """Validate the single runtime authority contract for context overrides."""
+    if not isinstance(entry, dict):
+        return False, "override entry is not an object"
+
+    override_id = entry.get("id")
+    if not isinstance(override_id, str) or not override_id.strip():
+        return False, "id is missing or empty"
+    if entry.get("clinical_review_status") != "identity_routing_reviewed":
+        return False, "clinical_review_status is not identity_routing_reviewed"
+    if entry.get("review_scope") != "context_identity_routing_only":
+        return False, "review_scope is not context_identity_routing_only"
+
+    reviewer = entry.get("reviewer")
+    if not isinstance(reviewer, str):
+        return False, "reviewer is missing"
+    reviewer_token = reviewer.strip().lower()
+    if reviewer_token in _CONTEXT_OVERRIDE_REVIEWER_PLACEHOLDERS:
+        return False, "reviewer is missing or a placeholder"
+
+    review_date = entry.get("review_date")
+    if not isinstance(review_date, str) or not review_date.strip():
+        return False, "review_date is missing or empty"
+    try:
+        date.fromisoformat(review_date.strip())
+    except ValueError:
+        return False, "review_date is not a valid ISO date"
+
+    return True, "validated"
 
 # These are deliberate active + high-risk overlaps:
 # keep the active identity for scoring/explanation, then apply the safety layer.
@@ -4618,6 +4671,18 @@ class EnhancedDSLDNormalizer:
         ):
             return row
 
+        review_valid, review_reason = _validate_context_canonical_override_review(
+            entry
+        )
+        if not review_valid:
+            logger.warning(
+                "context_canonical_override %s failed runtime review validation: "
+                "%s; refusing to apply.",
+                entry.get("id", "?"),
+                review_reason,
+            )
+            return row
+
         # All three conditions matched. Stamp override fields onto the row
         # AND overwrite the row's canonical_id / canonical_source_db so the
         # enricher's Phase 3 authority (cleaner_canonical_id) sees the new
@@ -4637,6 +4702,13 @@ class EnhancedDSLDNormalizer:
             row["cleaner_match_text_for_iqm_override"] = entry["set_match_text_for_iqm"]
         row["context_override_applied"] = True
         row["context_override_id"] = entry.get("id")
+        row["context_override_review_validated"] = True
+        row["context_override_clinical_review_status"] = entry.get(
+            "clinical_review_status"
+        )
+        row["context_override_review_scope"] = entry.get("review_scope")
+        row["context_override_reviewer"] = entry.get("reviewer")
+        row["context_override_review_date"] = entry.get("review_date")
         row["cleaner_match_method"] = "curated_context_override"
 
         logger.info(

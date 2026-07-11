@@ -1642,6 +1642,21 @@ class SupplementEnricherV3:
             "match_tier": "curated_context_override",
             "context_override_id": override_id,
             "context_override_applied": True,
+            "context_override_review_validated": (
+                ingredient.get("context_override_review_validated") is True
+            ),
+            "context_override_clinical_review_status": ingredient.get(
+                "context_override_clinical_review_status"
+            ),
+            "context_override_review_scope": ingredient.get(
+                "context_override_review_scope"
+            ),
+            "context_override_reviewer": ingredient.get(
+                "context_override_reviewer"
+            ),
+            "context_override_review_date": ingredient.get(
+                "context_override_review_date"
+            ),
         }
 
     @staticmethod
@@ -3109,6 +3124,7 @@ class SupplementEnricherV3:
             isinstance(match_result, dict)
             and match_result.get("match_tier") == "curated_context_override"
             and match_result.get("context_override_applied") is True
+            and match_result.get("context_override_review_validated") is True
             and isinstance(match_result.get("context_override_id"), str)
             and match_result.get("context_override_id").strip()
             and match_result.get("context_override_id") != "?"
