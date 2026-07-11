@@ -3326,3 +3326,111 @@ def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):
         assert json.loads(rows["777"]["cert_programs"]) == ["NSF Certified"], (
             "label-named + registry-verified same program must not duplicate"
         )
+
+
+# ---------------------------------------------------------------------------
+# Label-native identity export (Task 5): the final blob presents the label-first
+# identity the enricher resolved, never the canonical standard_name, and carries
+# the identity audit trail. 179681 is the pinned regression: the source text is
+# the wrong "Docosahexaenoic Acid Ethyl Ester" but structured label evidence
+# repairs it to EPA / as Ethyl Esters with canonical epa.
+# ---------------------------------------------------------------------------
+
+
+def _enriched_with_label_identity(dsld_id="179681", disposition="repaired"):
+    enriched = make_enriched()
+    enriched["dsld_id"] = dsld_id
+    enriched["activeIngredients"] = [
+        {
+            "name": "EPA",
+            "standardName": "Eicosapentaenoic Acid",
+            "raw_source_text": "Docosahexaenoic Acid Ethyl Ester",
+            "forms": [{"name": "Ethyl Esters"}],
+            "quantity": 360,
+            "unit": "mg",
+            "canonical_id": "epa",
+        }
+    ]
+    enriched["ingredient_quality_data"] = {
+        "ingredients": [
+            {
+                "raw_source_text": "Docosahexaenoic Acid Ethyl Ester",
+                "name": "EPA",
+                "standard_name": "Eicosapentaenoic Acid",
+                "canonical_id": "epa",
+                "canonical_id_before": "dha",
+                "canonical_id_after": "epa",
+                "identity_disposition": disposition,
+                "source_label_key": "epa|as ethyl esters",
+                "source_label_name": "EPA",
+                "source_label_form": "as Ethyl Esters",
+                "label_display_name": "EPA",
+                "label_display_form": "as Ethyl Esters",
+                "identity_resolution_rationale": (
+                    "Unambiguous structured line identity replaced 'dha' with 'epa'."
+                ),
+                "identity_taxonomy_coherent": True,
+                "scoreable_identity": True,
+                "mapped": True,
+                "matched_form": "ethyl esters",
+                "bio_score": 20,
+            }
+        ]
+    }
+    return enriched
+
+
+def test_label_identity_display_label_prefers_label_over_canonical():
+    ingredient = build_detail_blob(_enriched_with_label_identity(), make_scored())["ingredients"][0]
+    assert ingredient["display_label"] == "EPA"
+    # The canonical standard_name must never become the display.
+    assert ingredient["display_label"] != "Eicosapentaenoic Acid"
+    assert ingredient["canonical_id"] == "epa"
+
+
+def test_label_identity_display_form_prefers_label_display_form():
+    ingredient = build_detail_blob(_enriched_with_label_identity(), make_scored())["ingredients"][0]
+    assert ingredient["display_form_label"] == "as Ethyl Esters"
+    assert ingredient["form_status"] == "known"
+
+
+def test_label_identity_emits_audit_trail_fields():
+    ingredient = build_detail_blob(_enriched_with_label_identity(), make_scored())["ingredients"][0]
+    assert ingredient["identity_disposition"] == "repaired"
+    assert ingredient["canonical_id_before"] == "dha"
+    assert ingredient["source_label_key"] == "epa|as ethyl esters"
+    assert ingredient["label_display_name"] == "EPA"
+    assert ingredient["label_display_form"] == "as Ethyl Esters"
+    assert ingredient["identity_resolution_rationale"]
+
+
+def test_label_identity_179681_locks_epa_display_with_epa_canonical():
+    blob = build_detail_blob(_enriched_with_label_identity("179681"), make_scored())
+    ingredient = blob["ingredients"][0]
+    assert ingredient["display_label"] == "EPA"
+    assert ingredient["display_form_label"] == "as Ethyl Esters"
+    assert ingredient["canonical_id"] == "epa"
+    # Canonical identity is retained on its own field, never as the display.
+    assert ingredient["standard_name"] == "Eicosapentaenoic Acid"
+
+
+def test_label_identity_conflict_row_never_borrows_canonical_standard_name():
+    from build_final_db import _compute_display_label
+
+    ing = {"name": "", "raw_source_text": "Marine Lipid Concentrate", "standard_name": "Eicosapentaenoic Acid"}
+    match = {
+        "identity_disposition": "identity_conflict",
+        "label_display_name": "Marine Lipid Concentrate",
+        "source_label_name": "Marine Lipid Concentrate",
+    }
+    assert _compute_display_label(ing, match) == "Marine Lipid Concentrate"
+
+
+def test_label_identity_missing_display_never_uses_canonical_standard_name():
+    from build_final_db import _compute_display_label
+
+    ing = {"name": "", "raw_source_text": "", "standard_name": "Eicosapentaenoic Acid"}
+    match = {"identity_disposition": "missing_display_label", "label_display_name": None, "source_label_name": None}
+    result = _compute_display_label(ing, match)
+    assert result != "Eicosapentaenoic Acid"
+    assert result == ""

@@ -162,6 +162,48 @@ def test_display_name_never_canonical(sample_blobs) -> None:
     )
 
 
+def test_label_display_name_drives_display_label(sample_blobs) -> None:
+    """Label-native export: when the identity contract resolved a display name
+    from label evidence, the shipped ``display_label`` must equal it exactly and
+    must be normalization-stable (the reversible label-cleanup contract). The
+    canonical ``standard_name`` may never replace it.
+
+    Activates once the label-native export emits ``label_display_name``.
+    """
+    if not _any_ingredient_has_field(sample_blobs, "label_display_name"):
+        pytest.skip("waiting on label-native export — label_display_name not yet emitted")
+
+    import sys
+    scripts_root = Path(__file__).resolve().parents[1]
+    if str(scripts_root) not in sys.path:
+        sys.path.insert(0, str(scripts_root))
+    from identity_integrity import normalize_label_display
+
+    violations = []
+    for blob in sample_blobs:
+        for ing in blob.get("ingredients", []) or []:
+            label_first = (ing.get("label_display_name") or "").strip()
+            if not label_first:
+                continue
+            display = (ing.get("display_label") or "").strip()
+            standard = (ing.get("standard_name") or ing.get("standardName") or "").strip()
+            if display != label_first:
+                violations.append((blob.get("dsld_id"), "display!=label", label_first, display))
+            elif standard and display == standard and standard != label_first:
+                violations.append((blob.get("dsld_id"), "display==canonical", label_first, display))
+            elif normalize_label_display(display) != display:
+                violations.append((blob.get("dsld_id"), "not_normalized", label_first, display))
+
+    assert not violations, (
+        f"label-native export: {len(violations)} ingredients whose display_label "
+        f"does not faithfully present the resolved label identity. First 5:\n"
+        + "\n".join(
+            f"  [{did}] {why}: label={lab!r} display={disp!r}"
+            for did, why, lab, disp in violations[:5]
+        )
+    )
+
+
 # ---------------------------------------------------------------------------
 # Invariant 2 — no_false_well_dosed_on_undisclosed (E1.2.2)
 # ---------------------------------------------------------------------------

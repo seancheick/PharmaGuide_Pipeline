@@ -64,6 +64,7 @@ from identity.interaction import (
     normalize_catalog_interaction_tag,
 )
 from scoring_input_contract import get_scoring_ingredients
+from identity_integrity import is_identity_scoreable
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows as _fiber_goal_rows,
     has_fiber_context as _has_fiber_goal_context,
@@ -317,6 +318,12 @@ def _compute_form_contract(
       3. Otherwise                          -> unknown
     """
     label_form = _first_form_name(ingredient.get("forms"))
+    # Label-native form (label-first export): the identity contract's approved
+    # display form wins for resolved rows, so "as Ethyl Esters" survives instead
+    # of collapsing to a bare "Ethyl Esters" reconstruction.
+    label_display_form = safe_str(match.get("label_display_form"))
+    if label_display_form and is_identity_scoreable(safe_str(match.get("identity_disposition"))):
+        label_form = label_display_form
     matched = safe_str(match.get("matched_form") or ingredient.get("matched_form"))
     matched_is_real = not _is_placeholder_form(matched)
 
@@ -2683,7 +2690,7 @@ def _strip_trademark_markers(text: str) -> str:
     return _WHITESPACE_RE.sub(" ", text).strip()
 
 
-def _compute_display_label(ingredient: Dict[str, Any]) -> str:
+def _compute_display_label(ingredient: Dict[str, Any], match: Optional[Dict[str, Any]] = None) -> str:
     """Produce the user-facing ingredient label string for Flutter.
 
     Format: ``Brand Base Form``. Preserves branded tokens (KSM-66,
@@ -2704,6 +2711,24 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
          "name_extraction", e.g. just "extract"), we fall back to the
          cleaned raw_source_text so species + plant part are not lost.
     """
+    match = match if isinstance(match, dict) else {}
+    label_display_name = safe_str(match.get("label_display_name"))
+    if label_display_name:
+        # Label-native identity: authoritative over the heuristic and over the
+        # canonical standard_name. Repaired -> corrected label ("EPA"); clean ->
+        # literal label text (branded tokens and plant parts preserved).
+        return label_display_name
+    disposition = safe_str(match.get("identity_disposition"))
+    if disposition in ("identity_conflict", "missing_display_label"):
+        # Never let an unresolved/undisplayable identity borrow the canonical
+        # standard_name as a display; keep the literal label or nothing. The
+        # release audit blocks these before ship; Flutter shows "Identity needs
+        # review".
+        return (
+            safe_str(match.get("source_label_name"))
+            or safe_str(ingredient.get("raw_source_text"))
+            or safe_str(ingredient.get("name"))
+        )
     name = safe_str(ingredient.get("name"))
     raw = safe_str(ingredient.get("raw_source_text"))
     forms = ingredient.get("forms") or []
@@ -4850,8 +4875,19 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
             ),
+            # Label-native identity audit trail (label-first export). Sourced
+            # from the IQD identity stamp so the blob carries how the display was
+            # derived and what canonical was supplied before any repair.
+            "source_label_key": safe_str(m.get("source_label_key")) or None,
+            "source_label_name": m.get("source_label_name"),
+            "source_label_form": m.get("source_label_form"),
+            "label_display_name": m.get("label_display_name"),
+            "label_display_form": m.get("label_display_form"),
+            "identity_disposition": safe_str(m.get("identity_disposition")) or None,
+            "identity_resolution_rationale": m.get("identity_resolution_rationale"),
+            "canonical_id_before": m.get("canonical_id_before"),
             # Sprint E1.2.2.a — pre-computed Flutter display label
-            "display_label": _compute_display_label(ing),
+            "display_label": _compute_display_label(ing, m),
             # Sprint E1.2.2.b — pre-computed Flutter dose label.
             # Probiotic blend members override the generic "Amount not
             # disclosed" copy with "Per-strain dose not listed" so users
