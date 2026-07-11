@@ -294,6 +294,12 @@ step1_needs_run() {
 
 if step1_needs_run; then
   info "Step 1/8: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
+  # Block assembly of any catalog whose active ingredient identities are not
+  # cleanly resolved. Scans the per-brand enriched outputs that triggered this
+  # assembly; a skipped release (else branch) never reaches here, so an absent
+  # products directory cannot fail the gate.
+  run_strict_gate "active identity integrity" \
+    "$PG_PYTHON" scripts/audit_identity_integrity.py --products-dir "$PRODUCTS_DIR"
   # build_all_final_dbs.py defaults its scan dir to scripts/ but per-brand
   # pipeline outputs live in scripts/products/output_*/. Always pass an
   # explicit --scan-dir so the auto-discovery actually finds them.
