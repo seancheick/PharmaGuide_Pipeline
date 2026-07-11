@@ -323,6 +323,122 @@ def _make_row(name, canonical_id=None, canonical_source_db=None):
     }
 
 
+def _runtime_reviewed_override(**overrides):
+    entry = {
+        "id": "runtime_reviewed_override",
+        "raw_ingredient_text": "Runtime Reviewed Ingredient",
+        "product_name_must_contain_any": ["Runtime Reviewed Product"],
+        "set_canonical_id": "diamine_oxidase",
+        "set_canonical_source_db": "ingredient_quality_map",
+        "set_preferred_iqm_form": "diamine oxidase (unspecified)",
+        "clinical_review_status": "identity_routing_reviewed",
+        "review_scope": "context_identity_routing_only",
+        "reviewer": "PharmaGuide Clinician Team",
+        "review_date": "2026-05-24",
+    }
+    entry.update(overrides)
+    return entry
+
+
+def test_runtime_override_missing_review_fields_does_not_apply(
+    normalizer, monkeypatch, caplog
+):
+    entry = _runtime_reviewed_override()
+    for field in (
+        "clinical_review_status",
+        "review_scope",
+        "reviewer",
+        "review_date",
+    ):
+        entry.pop(field)
+    monkeypatch.setattr(
+        normalizer,
+        "_context_canonical_overrides_by_dsld_id",
+        {"runtime-missing-review": entry},
+    )
+    row = _make_row(
+        "Runtime Reviewed Ingredient",
+        canonical_id="original_identity",
+        canonical_source_db="other_ingredients",
+    )
+
+    with caplog.at_level("WARNING"):
+        out = normalizer._apply_context_canonical_override(
+            product_id="runtime-missing-review",
+            product_name="Runtime Reviewed Product",
+            row=row,
+        )
+
+    assert out["canonical_id"] == "original_identity"
+    assert out["canonical_source_db"] == "other_ingredients"
+    assert out.get("context_override_applied") is None
+    assert out.get("context_override_review_validated") is None
+    assert "review" in caplog.text.lower()
+
+
+@pytest.mark.parametrize(
+    "reviewer",
+    ["pending", "TODO", "TBD", "Claude", "Anthropic", "Codex", "agent"],
+)
+def test_runtime_override_placeholder_reviewer_does_not_apply(
+    normalizer, monkeypatch, reviewer
+):
+    monkeypatch.setattr(
+        normalizer,
+        "_context_canonical_overrides_by_dsld_id",
+        {"runtime-placeholder-reviewer": _runtime_reviewed_override(reviewer=reviewer)},
+    )
+    row = _make_row(
+        "Runtime Reviewed Ingredient",
+        canonical_id="original_identity",
+        canonical_source_db="other_ingredients",
+    )
+
+    out = normalizer._apply_context_canonical_override(
+        product_id="runtime-placeholder-reviewer",
+        product_name="Runtime Reviewed Product",
+        row=row,
+    )
+
+    assert out["canonical_id"] == "original_identity"
+    assert out["canonical_source_db"] == "other_ingredients"
+    assert out.get("context_override_applied") is None
+    assert out.get("context_override_review_validated") is None
+
+
+def test_runtime_reviewed_override_applies_with_validated_provenance(
+    normalizer, monkeypatch
+):
+    entry = _runtime_reviewed_override()
+    monkeypatch.setattr(
+        normalizer,
+        "_context_canonical_overrides_by_dsld_id",
+        {"runtime-valid-review": entry},
+    )
+    row = _make_row(
+        "Runtime Reviewed Ingredient",
+        canonical_id="original_identity",
+        canonical_source_db="other_ingredients",
+    )
+
+    out = normalizer._apply_context_canonical_override(
+        product_id="runtime-valid-review",
+        product_name="Runtime Reviewed Product",
+        row=row,
+    )
+
+    assert out["canonical_id"] == "diamine_oxidase"
+    assert out["context_override_applied"] is True
+    assert out["context_override_review_validated"] is True
+    assert (
+        out["context_override_clinical_review_status"]
+        == "identity_routing_reviewed"
+    )
+    assert out["context_override_review_scope"] == "context_identity_routing_only"
+    assert out["context_override_reviewer"] == "PharmaGuide Clinician Team"
+    assert out["context_override_review_date"] == "2026-05-24"
+
+
 def test_positive_265081_biocell_override_fires(normalizer):
     """All three conditions met → stamps the override fields on the row."""
     row = _make_row("Chicken Sternum Collagen extract")
@@ -512,6 +628,32 @@ def _stamped_row(name, parent, form, override_id):
         "context_override_id": override_id,
         "cleaner_match_method": "curated_context_override",
     }
+
+
+def test_enricher_override_without_validated_review_stamp_is_not_authoritative(
+    enricher_with_iqm, iqm
+):
+    row = _stamped_row(
+        "Porcine Kidney Extract",
+        "diamine_oxidase",
+        "diamine oxidase (unspecified)",
+        "unvalidated_runtime_override",
+    )
+
+    match_result = enricher_with_iqm._apply_context_canonical_override_match(
+        row, iqm
+    )
+
+    assert match_result is not None
+    assert match_result["context_override_review_validated"] is False
+    assert (
+        enricher_with_iqm._is_reviewed_context_override_match(match_result)
+        is False
+    )
+    assert (
+        enricher_with_iqm._identity_taxonomy_coherent(row, match_result, iqm)
+        is False
+    )
 
 
 def test_enricher_consumes_265081_biocell_override(enricher_with_iqm, iqm):

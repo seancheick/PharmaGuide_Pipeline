@@ -12,6 +12,7 @@ from scoring_input_contract import (  # noqa: E402
     LEGACY_IQD_SOURCE,
     SCORING_SOURCE,
     build_scoring_classification,
+    derive_product_scoring_evidence,
     get_scoring_ingredients,
     is_nutrition_only_product,
 )
@@ -33,6 +34,7 @@ def _row(**overrides):
         "raw_taxonomy": {"category": "vitamin/mineral"},
         "role_classification": "active_scorable",
         "scoreable_identity": True,
+        "identity_disposition": "clean",
     }
     row.update(overrides)
     return row
@@ -46,6 +48,36 @@ def _product(rows, **extra):
         }
     }
     product.update(extra)
+    iqd = product["ingredient_quality_data"]
+    for collection in ("ingredients_scorable", "ingredients_skipped"):
+        for row in iqd.get(collection, []):
+            if isinstance(row, dict):
+                row.setdefault("identity_disposition", "clean")
+    identity_rows = iqd.setdefault("ingredients", [])
+    known_paths = {
+        row.get("raw_source_path")
+        for row in identity_rows
+        if isinstance(row, dict) and row.get("raw_source_path")
+    }
+    for index, active in enumerate(product.get("activeIngredients", [])):
+        if not isinstance(active, dict):
+            continue
+        source_path = active.setdefault("raw_source_path", f"activeIngredients[{index}]")
+        if source_path in known_paths:
+            continue
+        canonical = active.get("canonical_id")
+        identity_rows.append(
+            {
+                "name": active.get("name"),
+                "raw_source_text": active.get("raw_source_text") or active.get("name"),
+                "raw_source_path": source_path,
+                "canonical_id": canonical,
+                "canonical_id_after": canonical,
+                "identity_disposition": "clean",
+                "scoreable_identity": True,
+            }
+        )
+        known_paths.add(source_path)
     return product
 
 
@@ -844,3 +876,223 @@ def test_nutrition_only_uses_explicit_contract_not_keywords_by_default():
         {"product_name": "Whey Protein Powder"},
         allow_legacy_keyword_fallback=True,
     ) is True
+
+
+# --- Task 3: strict scoring-input identity disposition guard ---
+# _row() defaults scoreable_identity=True, so passing a non-scoreable disposition
+# reproduces the malformed upstream invariant: a row that claims to be scoreable
+# while its identity disposition says otherwise. Strict mode must reject it and
+# fail the contract; non-strict mode keeps the old-batch behavior.
+
+
+def test_identity_integrity_strict_rejects_conflict_disposition_even_when_flag_true():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="identity_conflict")]),
+        strict=True,
+    )
+
+    assert result.rows == []
+    assert any(
+        r.reason.startswith("identity_disposition_not_scoreable")
+        for r in result.rejected_rows
+    )
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_rejects_missing_display_label_disposition():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="missing_display_label")]),
+        strict=True,
+    )
+
+    assert result.rows == []
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_rejects_unrecognized_disposition():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="totally_bogus")]),
+        strict=True,
+    )
+
+    assert result.rows == []
+    assert any(
+        r.reason.startswith("invalid_identity_disposition")
+        for r in result.rejected_rows
+    )
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_rejects_missing_disposition():
+    row = _row()
+    product = _product([row])
+    del product["ingredient_quality_data"]["ingredients_scorable"][0][
+        "identity_disposition"
+    ]
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert any(
+        r.reason == "missing_identity_disposition" for r in result.rejected_rows
+    )
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_accepts_scoreable_dispositions():
+    for disposition in ("clean", "repaired", "taxonomy_only"):
+        result = get_scoring_ingredients(
+            _product([_row(identity_disposition=disposition)]),
+            strict=True,
+        )
+        assert [r["canonical_id"] for r in result.rows] == ["magnesium"], disposition
+        assert result.strict_contract_passed is True, disposition
+
+
+def test_identity_integrity_non_strict_tolerates_conflict_for_old_batch():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="identity_conflict")]),
+        strict=False,
+    )
+
+    assert [r["canonical_id"] for r in result.rows] == ["magnesium"]
+
+
+def test_identity_integrity_non_strict_tolerates_missing_disposition_for_old_batch():
+    row = _row()
+    product = _product([row])
+    del product["ingredient_quality_data"]["ingredients_scorable"][0][
+        "identity_disposition"
+    ]
+
+    result = get_scoring_ingredients(product, strict=False)
+
+    assert [r["canonical_id"] for r in result.rows] == ["magnesium"]
+
+
+def test_identity_integrity_conflict_row_is_not_recovered_into_scoring():
+    # A skipped row with a usable anchor but an unresolved identity must not be
+    # recovered into scoring inputs at all — an unresolved conflict cannot drive
+    # scoring, evidence, or interactions (design contract). Recovering it only to
+    # reject it downstream would still let it briefly claim scoreable_identity.
+    conflict = _row(
+        name="UC-II standardized Cartilage",
+        canonical_id="collagen",
+        identity_disposition="identity_conflict",
+        scoreable_identity=False,
+        raw_source_path="activeIngredients[0]",
+    )
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [conflict],
+        },
+    )
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert not any(
+        r.row.get("scoring_input_kind") == "recovered_active_identity"
+        for r in result.rejected_rows
+    )
+
+
+def test_identity_integrity_scoreable_skipped_row_is_still_recovered():
+    # Control: a skipped row with a resolved identity is still recovered so the
+    # guard does not over-suppress legitimate mapped-active-without-dose rows.
+    clean = _row(
+        name="Vitamin C",
+        canonical_id="vitamin_c",
+        identity_disposition="clean",
+        scoreable_identity=True,
+        quantity=0,
+        unit="NP",
+        raw_source_path="activeIngredients[0]",
+    )
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [clean],
+        },
+    )
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [r["canonical_id"] for r in result.rows] == ["vitamin_c"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"
+
+
+def test_identity_integrity_conflict_cannot_become_derived_product_evidence():
+    product = _product(
+        [],
+        activeIngredients=[
+            {
+                "name": "Magnesium",
+                "raw_source_text": "Magnesium",
+                "raw_source_path": "activeIngredients[0]",
+                "canonical_id": "magnesium",
+                "quantity": 200,
+                "unit": "mg",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+            }
+        ],
+        ingredient_quality_data={
+            "ingredients": [
+                {
+                    "name": "Magnesium",
+                    "raw_source_text": "Magnesium",
+                    "raw_source_path": "activeIngredients[0]",
+                    "canonical_id": None,
+                    "identity_disposition": "identity_conflict",
+                    "scoreable_identity": False,
+                }
+            ],
+            "ingredients_scorable": [],
+            "ingredients_skipped": [],
+        },
+    )
+
+    assert derive_product_scoring_evidence(product) == []
+    assert get_scoring_ingredients(product, strict=True).rows == []
+
+
+def test_derived_active_evidence_carries_its_clean_iqd_disposition():
+    product = _product(
+        [],
+        activeIngredients=[
+            {
+                "name": "Magnesium",
+                "raw_source_text": "Magnesium",
+                "raw_source_path": "activeIngredients[0]",
+                "canonical_id": "magnesium",
+                "quantity": 200,
+                "unit": "mg",
+                "cleaner_row_role": "active_scorable",
+                "score_eligible_by_cleaner": True,
+            }
+        ],
+        ingredient_quality_data={
+            "ingredients": [
+                {
+                    "name": "Magnesium",
+                    "raw_source_text": "Magnesium",
+                    "raw_source_path": "activeIngredients[0]",
+                    "canonical_id": "magnesium",
+                    "canonical_id_after": "magnesium",
+                    "identity_disposition": "clean",
+                    "scoreable_identity": True,
+                }
+            ],
+            "ingredients_scorable": [],
+            "ingredients_skipped": [],
+        },
+    )
+
+    evidence = derive_product_scoring_evidence(product)
+
+    assert evidence[0]["identity_disposition"] == "clean"
+    assert evidence[0]["identity_contract_required"] is True
+    result = get_scoring_ingredients(product, strict=True)
+    assert [row["canonical_id"] for row in result.rows] == ["magnesium"]

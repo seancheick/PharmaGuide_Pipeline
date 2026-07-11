@@ -13,12 +13,17 @@ from functools import lru_cache
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 # Shared, dependency-free reference resolver (contract -> shared resolver <- scorer).
 # Importing it here is safe: the resolver imports nothing from the contract or
 # the scorer and only reads data files lazily.
 from scoring_reference_resolver import has_therapeutic_reference, is_known_botanical
+
+# Single source of truth for identity disposition vocabulary and scoreability.
+# Never copy the disposition list here; the contract must consume the same policy
+# the enricher stamps rows with.
+from identity_integrity import IDENTITY_DISPOSITIONS, is_identity_scoreable
 
 
 _DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -618,6 +623,24 @@ def _evidence_base(
     ):
         if field in row and row.get(field) not in (None, ""):
             item[field] = deepcopy(row.get(field))
+    return _stamp_evidence_identity_contract(item, row)
+
+
+def _is_label_identity_source(row: Dict[str, Any]) -> bool:
+    source_section = _norm(row.get("source_section"))
+    if source_section in {"active", "inactive"}:
+        return True
+    source_path = str(row.get("raw_source_path") or "")
+    return source_path.startswith(("activeIngredients", "inactiveIngredients"))
+
+
+def _stamp_evidence_identity_contract(
+    item: Dict[str, Any], row: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Carry an active label row's shared identity state into derived evidence."""
+    if _is_label_identity_source(row):
+        item["identity_contract_required"] = True
+        item["identity_disposition"] = row.get("identity_disposition")
     return item
 
 
@@ -814,7 +837,7 @@ def _derive_probiotic_cfu_evidence(product: Dict[str, Any]) -> Optional[Dict[str
 
 def _sports_primary_identity_without_dose(row: Dict[str, Any], canonical: str) -> Dict[str, Any]:
     raw_source_path = row.get("raw_source_path") or row.get("source") or "sports_primary_identity"
-    return {
+    item = {
         "evidence_type": "sports_primary_dose",
         "scoreable": False,
         "scoreable_identity": True,
@@ -838,6 +861,7 @@ def _sports_primary_identity_without_dose(row: Dict[str, Any], canonical: str) -
         "evidence_origin": "compatibility_derived",
         "source_section": "product",
     }
+    return _stamp_evidence_identity_contract(item, row)
 
 
 def _is_nested_under(parent_path: str, row: Dict[str, Any]) -> bool:
@@ -1145,8 +1169,69 @@ def derive_product_scoring_evidence(product: Dict[str, Any]) -> List[Dict[str, A
     evidence: List[Dict[str, Any]] = []
     ptype = _primary_type(product)
     iqd = _safe_dict(product.get("ingredient_quality_data"))
-    active_rows = [row for row in _safe_list(product.get("activeIngredients")) if isinstance(row, dict)]
-    skipped_rows = [row for row in _safe_list(iqd.get("ingredients_skipped")) if isinstance(row, dict)]
+    identity_rows = [
+        row for row in _safe_list(iqd.get("ingredients")) if isinstance(row, dict)
+    ]
+    used_identity_rows: set[int] = set()
+
+    def identity_row_for(active_row: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        source_path = str(active_row.get("raw_source_path") or "")
+        source_label_key = active_row.get("source_label_key")
+        raw_source = str(
+            active_row.get("raw_source_text") or active_row.get("name") or ""
+        )
+
+        def claim(predicate: Callable[[Dict[str, Any]], bool]) -> Optional[Dict[str, Any]]:
+            for index, identity_row in enumerate(identity_rows):
+                if index not in used_identity_rows and predicate(identity_row):
+                    used_identity_rows.add(index)
+                    return identity_row
+            return None
+
+        if source_path:
+            matched = claim(
+                lambda row: str(row.get("raw_source_path") or "") == source_path
+            )
+            if matched:
+                return matched
+        if isinstance(source_label_key, str) and source_label_key:
+            matched = claim(lambda row: row.get("source_label_key") == source_label_key)
+            if matched:
+                return matched
+        if raw_source:
+            return claim(
+                lambda row: str(row.get("raw_source_text") or "") == raw_source
+            )
+        return None
+
+    active_rows = []
+    for raw_active in _safe_list(product.get("activeIngredients")):
+        if not isinstance(raw_active, dict):
+            continue
+        active_row = dict(raw_active)
+        identity_row = identity_row_for(raw_active)
+        if identity_row is not None:
+            active_row["identity_disposition"] = identity_row.get(
+                "identity_disposition"
+            )
+            if identity_row.get("canonical_id_after"):
+                active_row["canonical_id"] = identity_row["canonical_id_after"]
+            if identity_row.get("source_label_key"):
+                active_row["source_label_key"] = identity_row["source_label_key"]
+        disposition = active_row.get("identity_disposition")
+        if disposition is not None and not is_identity_scoreable(disposition):
+            continue
+        active_rows.append(active_row)
+
+    skipped_rows = [
+        row
+        for row in _safe_list(iqd.get("ingredients_skipped"))
+        if isinstance(row, dict)
+        and (
+            row.get("identity_disposition") is None
+            or is_identity_scoreable(row.get("identity_disposition"))
+        )
+    ]
     scorable_paths = {
         str(row.get("raw_source_path"))
         for row in _safe_list(iqd.get("ingredients_scorable"))
@@ -1699,6 +1784,32 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     if row.get("scoreable_identity") is False:
         return False, _reject(row, "identity_marked_not_scoreable"), findings
 
+    # Strict mode requires the stamped identity disposition and trusts it over a
+    # possibly-stale scoreable_identity flag. Old batches can use the explicit
+    # non-strict compatibility path; strict callers must never silently score a
+    # row whose identity contract is absent.
+    if strict:
+        disposition = row.get("identity_disposition")
+        is_product_level_evidence = (
+            row.get("scoring_input_kind") == "product_level_evidence"
+        )
+        requires_identity_contract = (
+            row.get("identity_contract_required") is True
+            or not is_product_level_evidence
+        )
+        if disposition is None and requires_identity_contract:
+            reason = "missing_identity_disposition"
+            findings.append(reason)
+            return False, _reject(row, reason), findings
+        if disposition is not None and disposition not in IDENTITY_DISPOSITIONS:
+            reason = f"invalid_identity_disposition:{disposition}"
+            findings.append(reason)
+            return False, _reject(row, reason), findings
+        if disposition is not None and not is_identity_scoreable(disposition):
+            reason = f"identity_disposition_not_scoreable:{disposition}"
+            findings.append(reason)
+            return False, _reject(row, reason), findings
+
     if not _has_identity(row):
         return False, _reject(row, "missing_scoring_identity"), findings
 
@@ -1743,6 +1854,14 @@ def get_scoring_ingredients(
             continue
         anchor_canonical, _ = _anchor_identity(row)
         if not anchor_canonical:
+            continue
+        # Design contract: an unresolved identity (conflict / missing display)
+        # cannot be recovered into scoring — it must not drive scoring, evidence,
+        # interactions, or routing. The strict _evaluate_row guard is the
+        # backstop; skipping recovery here keeps a doomed row from ever claiming
+        # scoreable_identity. Rows with no stamped disposition stay recoverable.
+        disposition = row.get("identity_disposition")
+        if disposition is not None and not is_identity_scoreable(disposition):
             continue
         path = str(row.get("raw_source_path") or "")
         if path and path in product_evidence_linked_paths:

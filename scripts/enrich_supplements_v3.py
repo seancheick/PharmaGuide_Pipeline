@@ -100,6 +100,7 @@ from scoring_input_contract import (
     derive_product_scoring_evidence,
     get_scoring_ingredients,
 )
+from identity_integrity import IdentityDecision, is_identity_scoreable, resolve_identity
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -1641,6 +1642,21 @@ class SupplementEnricherV3:
             "match_tier": "curated_context_override",
             "context_override_id": override_id,
             "context_override_applied": True,
+            "context_override_review_validated": (
+                ingredient.get("context_override_review_validated") is True
+            ),
+            "context_override_clinical_review_status": ingredient.get(
+                "context_override_clinical_review_status"
+            ),
+            "context_override_review_scope": ingredient.get(
+                "context_override_review_scope"
+            ),
+            "context_override_reviewer": ingredient.get(
+                "context_override_reviewer"
+            ),
+            "context_override_review_date": ingredient.get(
+                "context_override_review_date"
+            ),
         }
 
     @staticmethod
@@ -3005,6 +3021,288 @@ class SupplementEnricherV3:
     # SECTION A: INGREDIENT QUALITY DATA COLLECTORS
     # =========================================================================
 
+    @staticmethod
+    def _quality_match_identity_confidence(match_result: Optional[Dict]) -> float:
+        if not isinstance(match_result, dict):
+            return 0.0
+        if match_result.get("match_status") == "FORM_UNMAPPED_FALLBACK":
+            return 0.8
+        return 1.0 if match_result.get("match_tier") == "exact" else 0.9
+
+    @staticmethod
+    def _identity_unii_values(row: Dict) -> set[str]:
+        values = set()
+
+        def add(value: Any) -> None:
+            normalized = _normalize_unii(value)
+            if normalized:
+                values.add(normalized)
+
+        add(row.get("uniiCode"))
+        add(row.get("unii"))
+        external_ids = row.get("external_ids")
+        if isinstance(external_ids, dict):
+            add(external_ids.get("unii"))
+        for form in row.get("forms") or []:
+            if not isinstance(form, dict):
+                continue
+            add(form.get("uniiCode"))
+            add(form.get("unii"))
+            form_external_ids = form.get("external_ids")
+            if isinstance(form_external_ids, dict):
+                add(form_external_ids.get("unii"))
+        raw_taxonomy = row.get("raw_taxonomy")
+        if isinstance(raw_taxonomy, dict):
+            add(raw_taxonomy.get("uniiCode"))
+            add(raw_taxonomy.get("unii"))
+            for form in raw_taxonomy.get("forms") or []:
+                if isinstance(form, dict):
+                    add(form.get("uniiCode"))
+                    add(form.get("unii"))
+        return values
+
+    def _identity_taxonomy_coherent(
+        self,
+        ingredient: Dict,
+        match_result: Optional[Dict],
+        quality_map: Dict,
+    ) -> bool:
+        match_tier = (
+            match_result.get("match_tier")
+            if isinstance(match_result, dict)
+            else None
+        )
+        curated_context_override = self._is_reviewed_context_override_match(
+            match_result
+        )
+        strong_match_tier = match_tier in {"exact", "normalized"} or (
+            match_tier == "cleaner_canonical_parent"
+            and match_result.get("cleaner_canonical_enforced") is True
+        ) or curated_context_override
+        if (
+            not isinstance(match_result, dict)
+            or not strong_match_tier
+            or match_result.get("match_status") == "FORM_UNMAPPED"
+            or self._quality_match_identity_confidence(match_result) < 0.9
+            or match_result.get("match_ambiguity_candidates")
+        ):
+            return False
+
+        canonical_id = match_result.get("canonical_id")
+        registry_entry = quality_map.get(canonical_id)
+        if not canonical_id or not isinstance(registry_entry, dict):
+            return False
+
+        matched_standard = self._normalize_text(match_result.get("standard_name") or "")
+        registry_standard = self._normalize_text(registry_entry.get("standard_name") or "")
+        if not matched_standard or matched_standard != registry_standard:
+            return False
+
+        forms = registry_entry.get("forms") or {}
+        form_id = match_result.get("form_id")
+        selected_form = None
+        if form_id:
+            if not isinstance(forms, dict) or form_id not in forms:
+                return False
+            selected_form = forms[form_id]
+        elif ingredient.get("forms"):
+            return False
+
+        supplied_uniis = self._identity_unii_values(ingredient)
+        if supplied_uniis:
+            registry_uniis = self._identity_unii_values(registry_entry)
+            if isinstance(selected_form, dict):
+                registry_uniis.update(self._identity_unii_values(selected_form))
+            if not registry_uniis or not supplied_uniis.issubset(registry_uniis):
+                return False
+
+        return True
+
+    @staticmethod
+    def _is_reviewed_context_override_match(match_result: Optional[Dict]) -> bool:
+        return bool(
+            isinstance(match_result, dict)
+            and match_result.get("match_tier") == "curated_context_override"
+            and match_result.get("context_override_applied") is True
+            and match_result.get("context_override_review_validated") is True
+            and isinstance(match_result.get("context_override_id"), str)
+            and match_result.get("context_override_id").strip()
+            and match_result.get("context_override_id") != "?"
+        )
+
+    def _identity_candidate_resolver(self, quality_map: Dict):
+        def resolve(candidate: str) -> Optional[str]:
+            match_result = self._match_quality_map(
+                candidate,
+                candidate,
+                quality_map,
+                _form_extraction_attempt=True,
+            )
+            if not isinstance(match_result, dict):
+                return None
+            canonical_id = match_result.get("canonical_id")
+            if (
+                not canonical_id
+                or match_result.get("match_status") == "FORM_UNMAPPED"
+                or match_result.get("match_tier") not in {"exact", "normalized"}
+                or match_result.get("match_ambiguity_candidates")
+            ):
+                return None
+            matched_target = str(match_result.get("matched_target") or "")
+            form_id = str(match_result.get("form_id") or "")
+            if (
+                matched_target.startswith("form_")
+                and form_id
+                and "unspecified" not in form_id.lower()
+            ):
+                return None
+            return canonical_id
+
+        return resolve
+
+    def _resolve_iqd_identity(
+        self,
+        ingredient: Dict,
+        match_result: Optional[Dict],
+        quality_map: Dict,
+        *,
+        allow_unscoreable_taxonomy_only: bool = False,
+    ) -> Tuple[IdentityDecision, Optional[Dict], bool]:
+        supplied_canonical_id = (
+            match_result.get("canonical_id")
+            if isinstance(match_result, dict)
+            else ingredient.get("canonical_id")
+        )
+        taxonomy_coherent = self._identity_taxonomy_coherent(
+            ingredient, match_result, quality_map
+        )
+        resolve_candidate = self._identity_candidate_resolver(quality_map)
+        if (
+            taxonomy_coherent
+            and self._is_reviewed_context_override_match(match_result)
+        ):
+            reviewed_canonical_id = match_result.get("canonical_id")
+            base_resolver = resolve_candidate
+
+            def resolve_candidate(candidate: str) -> Optional[str]:
+                return base_resolver(candidate) or reviewed_canonical_id
+
+        decision = resolve_identity(
+            ingredient,
+            supplied_canonical_id,
+            resolve_candidate,
+            taxonomy_coherent=taxonomy_coherent,
+            allow_unscoreable_taxonomy_only=allow_unscoreable_taxonomy_only,
+        )
+
+        if decision.disposition == "repaired" and decision.canonical_id:
+            approved_name = decision.source_label_name or decision.label_display_name or ""
+            match_result = self._match_quality_map(
+                approved_name,
+                approved_name,
+                quality_map,
+                cleaned_forms=ingredient.get("forms") or [],
+                cleaner_canonical_id=decision.canonical_id,
+            )
+            taxonomy_coherent = self._identity_taxonomy_coherent(
+                ingredient, match_result, quality_map
+            )
+            if (
+                not taxonomy_coherent
+                or not isinstance(match_result, dict)
+                or match_result.get("canonical_id") != decision.canonical_id
+            ):
+                match_result = None
+
+        return decision, match_result, taxonomy_coherent
+
+    def _stamp_iqd_identity(
+        self,
+        entry: Dict,
+        ingredient: Dict,
+        decision: IdentityDecision,
+        match_result: Optional[Dict],
+        taxonomy_coherent: bool,
+    ) -> None:
+        final_canonical_id = decision.canonical_id_after
+        key_ingredient = ingredient
+        supplied_source_label_key = ingredient.get("source_label_key")
+        if not (
+            isinstance(supplied_source_label_key, str)
+            and supplied_source_label_key.strip()
+        ):
+            key_ingredient = dict(ingredient)
+            key_ingredient["canonical_id"] = final_canonical_id
+        coherent_quality_match = bool(
+            isinstance(match_result, dict)
+            and match_result.get("match_status") != "FORM_UNMAPPED"
+            and match_result.get("canonical_id") == final_canonical_id
+        )
+        entry.update(
+            {
+                "source_label_key": self._rda_source_label_key(key_ingredient),
+                "source_label_name": decision.source_label_name,
+                "source_label_form": decision.source_label_form,
+                "label_display_name": decision.label_display_name,
+                "label_display_form": decision.label_display_form,
+                "identity_disposition": decision.disposition,
+                "canonical_id_before": decision.canonical_id_before,
+                "canonical_id_after": final_canonical_id,
+                "canonical_id": final_canonical_id,
+                "identity_evidence": json.dumps(
+                    [
+                        {"field": item.field, "value": item.value, "kind": item.kind}
+                        for item in decision.evidence
+                    ],
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ),
+                "identity_resolution_rationale": decision.rationale,
+                "identity_taxonomy_coherent": taxonomy_coherent,
+                "scoreable_identity": bool(
+                    is_identity_scoreable(decision.disposition)
+                    and final_canonical_id
+                    and coherent_quality_match
+                ),
+            }
+        )
+
+    @staticmethod
+    def _project_repaired_identity_to_active_row(
+        active_row: Dict,
+        entry: Dict,
+        decision: IdentityDecision,
+        match_result: Optional[Dict],
+    ) -> None:
+        if (
+            decision.disposition != "repaired"
+            or entry.get("scoreable_identity") is not True
+            or not isinstance(match_result, dict)
+        ):
+            return
+        active_row.update(
+            {
+                "canonical_id": entry.get("canonical_id"),
+                "canonical_source_db": "ingredient_quality_map",
+                "standardName": entry.get("standard_name"),
+                "form_id": entry.get("form_id"),
+                "matched_form": entry.get("matched_form"),
+                "source_label_key": entry.get("source_label_key"),
+                "source_label_name": entry.get("source_label_name"),
+                "source_label_form": entry.get("source_label_form"),
+                "label_display_name": entry.get("label_display_name"),
+                "label_display_form": entry.get("label_display_form"),
+                "identity_disposition": entry.get("identity_disposition"),
+                "canonical_id_before": entry.get("canonical_id_before"),
+                "canonical_id_after": entry.get("canonical_id_after"),
+                "identity_evidence": entry.get("identity_evidence"),
+                "identity_resolution_rationale": entry.get(
+                    "identity_resolution_rationale"
+                ),
+                "scoreable_identity": entry.get("scoreable_identity"),
+            }
+        )
+
     def _collect_ingredient_quality_data(self, product: Dict) -> Dict:
         """
         Collect ingredient quality data for scoring Section A1-A2.
@@ -3050,7 +3348,8 @@ class SupplementEnricherV3:
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
         product_activity_text = self._get_all_product_text(product)
-        for ingredient in active_ingredients:
+        for source_ingredient in active_ingredients:
+            ingredient = source_ingredient
             if product_activity_text:
                 ingredient = dict(ingredient)
                 ingredient.setdefault("_product_activity_text", product_activity_text)
@@ -3194,7 +3493,23 @@ class SupplementEnricherV3:
                     skipped_entry,
                     self._missing_cleaner_contract_fields(ingredient),
                 )
+                identity_decision, identity_match, taxonomy_coherent = (
+                    self._resolve_iqd_identity(
+                        ingredient,
+                        None,
+                        quality_map,
+                        allow_unscoreable_taxonomy_only=True,
+                    )
+                )
+                self._stamp_iqd_identity(
+                    skipped_entry,
+                    ingredient,
+                    identity_decision,
+                    identity_match,
+                    taxonomy_coherent,
+                )
                 ingredients_skipped.append(skipped_entry)
+                all_quality_data.append(skipped_entry)
                 if recognition_info:
                     skipped_entry["recognized_non_scorable"] = True
                     skipped_entry["skip_reason"] = SKIP_REASON_RECOGNIZED_NON_SCORABLE
@@ -3245,8 +3560,24 @@ class SupplementEnricherV3:
             if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
                 match_result = None
                 context_match_reason = None
+            identity_decision, match_result, taxonomy_coherent = (
+                self._resolve_iqd_identity(ingredient, match_result, quality_map)
+            )
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
+            )
+            self._stamp_iqd_identity(
+                quality_entry,
+                ingredient,
+                identity_decision,
+                match_result,
+                taxonomy_coherent,
+            )
+            self._project_repaired_identity_to_active_row(
+                source_ingredient,
+                quality_entry,
+                identity_decision,
+                match_result,
             )
             if context_match_reason and match_result:
                 quality_entry["identity_decision_reason"] = "product_label_marker_context_match"
@@ -3274,7 +3605,10 @@ class SupplementEnricherV3:
             self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
             self._preserve_cleaner_botanical_canonical(ingredient, quality_entry)
             is_quality_match = bool(
-                match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
+                match_result
+                and isinstance(match_result, dict)
+                and match_result.get("match_status") != "FORM_UNMAPPED"
+                and quality_entry.get("scoreable_identity") is True
             )
 
             if is_quality_match:
@@ -3475,6 +3809,9 @@ class SupplementEnricherV3:
                 )
                 if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
                     match_result = None
+                identity_decision, match_result, taxonomy_coherent = (
+                    self._resolve_iqd_identity(ingredient, match_result, quality_map)
+                )
                 quality_entry = self._build_quality_entry(
                     ingredient, match_result, hierarchy_type,
                     source_section="inactive_promoted",
@@ -3482,10 +3819,20 @@ class SupplementEnricherV3:
                     promotion_confidence=promotion_confidence,
                     dose_present=dose_present
                 )
+                self._stamp_iqd_identity(
+                    quality_entry,
+                    ingredient,
+                    identity_decision,
+                    match_result,
+                    taxonomy_coherent,
+                )
                 self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
                 self._preserve_cleaner_botanical_canonical(ingredient, quality_entry)
                 is_quality_match = bool(
-                    match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
+                    match_result
+                    and isinstance(match_result, dict)
+                    and match_result.get("match_status") != "FORM_UNMAPPED"
+                    and quality_entry.get("scoreable_identity") is True
                 )
 
                 if is_quality_match:
@@ -5493,7 +5840,7 @@ class SupplementEnricherV3:
                 "mapped_identity": True,
                 "scoreable_identity": True,
                 "role_classification": "active_scorable",
-                "identity_confidence": 0.8 if used_form_fallback else (1.0 if match_result.get('match_tier') == "exact" else 0.9),
+                "identity_confidence": self._quality_match_identity_confidence(match_result),
                 "identity_decision_reason": "form_unmapped_fallback" if used_form_fallback else "quality_map_match",
                 "safety_hits": [],
                 "hierarchyType": hierarchy_type,
@@ -15703,7 +16050,7 @@ class SupplementEnricherV3:
         """Return a stable key for one label-declared nutrient row."""
         supplied = ingredient.get("source_label_key")
         if isinstance(supplied, str) and supplied.strip():
-            return supplied.strip()
+            return supplied
 
         canonical = self._normalize_text(
             ingredient.get("canonical_id")
