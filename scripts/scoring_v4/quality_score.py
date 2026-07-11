@@ -22,6 +22,8 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+from scoring_v4.pillar_explanations import attach_pillar_explanations
+
 _CONFIG_PATH = Path(__file__).resolve().parent / "config" / "quality_score.json"
 _CONFIG_CACHE: Optional[Dict[str, Any]] = None
 
@@ -749,6 +751,11 @@ def assemble_quality_score(result: Dict[str, Any]) -> Dict[str, Any]:
             "score_before_cap": score_before_cap,
             "score_after_cap": total,
         }
+
+    # Attach optional, versioned explanation facts sourced from the module
+    # breakdown metadata. Pure adapter over already-computed pillars: it never
+    # changes score/max/reason or the total above.
+    pillars = attach_pillar_explanations(pillars, module_bd, cfg, module)
 
     # Scored (SAFE / CAUTION — CAUTION keeps the score, verdict stays prominent elsewhere)
     result["quality_score_v4_100"] = total
