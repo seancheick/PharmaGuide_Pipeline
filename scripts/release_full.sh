@@ -126,6 +126,21 @@ DIST_PRODUCT_IMAGE_INDEX="$DIST_PRODUCT_IMAGES_DIR/product_image_index.json"
 PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
 RDA_REFERENCE_SOURCE="$REPO_ROOT/scripts/data/rda_optimal_uls.json"
+IDENTITY_AUDIT_SCRIPT="$REPO_ROOT/scripts/audit_identity_integrity.py"
+
+# Code that changes emitted catalog identity, scoring, or explanation fields is
+# a catalog-build input, just like the source product outputs. Without this,
+# a release after an exporter change can incorrectly reuse an older catalog.
+CATALOG_BUILD_SOURCES=(
+  "$REPO_ROOT/scripts/build_all_final_dbs.py"
+  "$REPO_ROOT/scripts/build_final_db.py"
+  "$REPO_ROOT/scripts/enhanced_normalizer.py"
+  "$REPO_ROOT/scripts/enrich_supplements_v3.py"
+  "$REPO_ROOT/scripts/identity_integrity.py"
+  "$REPO_ROOT/scripts/scoring_input_contract.py"
+  "$REPO_ROOT/scripts/scoring_v4/quality_score.py"
+  "$REPO_ROOT/scripts/scoring_v4/pillar_explanations.py"
+)
 
 START_TS=$(date +%s)
 
@@ -238,6 +253,12 @@ run_strict_gate() {
 run_strict_gate "source-of-truth matrix" \
   "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
 
+# This verifies the already-produced enrichment output before any freshness
+# shortcut can reuse it. A catalog rebuild cannot repair stale enrichment, so
+# fail with the actionable upstream requirement instead of restaging old data.
+run_strict_gate "active identity integrity" \
+  "$PG_PYTHON" "$IDENTITY_AUDIT_SCRIPT" --products-dir "$PRODUCTS_DIR"
+
 # ---------------------------------------------------------------------------
 # Step 1: Assemble final DB from per-brand outputs
 #
@@ -289,17 +310,14 @@ step1_needs_run() {
   if is_path_newer_than "$RDA_REFERENCE_SOURCE" "$newest_output"; then
     return 0
   fi
+  if any_newer_input "$newest_output" "${CATALOG_BUILD_SOURCES[@]}"; then
+    return 0
+  fi
   return 1  # safe to skip
 }
 
 if step1_needs_run; then
   info "Step 1/8: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
-  # Block assembly of any catalog whose active ingredient identities are not
-  # cleanly resolved. Scans the per-brand enriched outputs that triggered this
-  # assembly; a skipped release (else branch) never reaches here, so an absent
-  # products directory cannot fail the gate.
-  run_strict_gate "active identity integrity" \
-    "$PG_PYTHON" scripts/audit_identity_integrity.py --products-dir "$PRODUCTS_DIR"
   # build_all_final_dbs.py defaults its scan dir to scripts/ but per-brand
   # pipeline outputs live in scripts/products/output_*/. Always pass an
   # explicit --scan-dir so the auto-discovery actually finds them.
