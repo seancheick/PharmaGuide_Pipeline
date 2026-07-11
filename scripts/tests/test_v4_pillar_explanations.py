@@ -50,7 +50,7 @@ def test_omega_dose_pillar_emits_epa_dha_per_day_fact():
     fact = explanation["facts"][0]
     assert fact["id"] == "epa_dha_per_day"
     assert fact["value_mg"] == 660.0
-    assert "660" in fact["display"] and "mg" in fact["display"]
+    assert fact["value_display"] == "660 mg/day"
 
 
 def test_omega_formulation_pillar_emits_detected_form_fact():
@@ -58,7 +58,7 @@ def test_omega_formulation_pillar_emits_detected_form_fact():
     fact = pillars["Formulation"]["explanation"]["facts"][0]
     assert fact["id"] == "omega_form"
     assert fact["value"] == "ee"
-    assert fact["display"] == "Ethyl ester"
+    assert fact["value_display"] == "Ethyl ester"
 
 
 def test_schema_version_constant_is_one_and_ids_are_stable():

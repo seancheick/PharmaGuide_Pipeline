@@ -47,7 +47,7 @@ def _omega_dose_facts(dose_dim: Dict[str, Any]) -> List[Dict[str, Any]]:
             "id": "epa_dha_per_day",
             "label": "EPA + DHA per day",
             "value_mg": round(per_day, 1),
-            "display": _format_mg_per_day(per_day),
+            "value_display": _format_mg_per_day(per_day),
         }
     ]
 
@@ -63,7 +63,7 @@ def _omega_formulation_facts(formulation_dim: Dict[str, Any]) -> List[Dict[str, 
             "id": "omega_form",
             "label": "Molecular form",
             "value": code,
-            "display": display,
+            "value_display": display,
         }
     ]
 
