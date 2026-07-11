@@ -3057,10 +3057,13 @@ class SupplementEnricherV3:
             if isinstance(match_result, dict)
             else None
         )
+        curated_context_override = self._is_reviewed_context_override_match(
+            match_result
+        )
         strong_match_tier = match_tier in {"exact", "normalized"} or (
             match_tier == "cleaner_canonical_parent"
             and match_result.get("cleaner_canonical_enforced") is True
-        )
+        ) or curated_context_override
         if (
             not isinstance(match_result, dict)
             or not strong_match_tier
@@ -3099,6 +3102,17 @@ class SupplementEnricherV3:
                 return False
 
         return True
+
+    @staticmethod
+    def _is_reviewed_context_override_match(match_result: Optional[Dict]) -> bool:
+        return bool(
+            isinstance(match_result, dict)
+            and match_result.get("match_tier") == "curated_context_override"
+            and match_result.get("context_override_applied") is True
+            and isinstance(match_result.get("context_override_id"), str)
+            and match_result.get("context_override_id").strip()
+            and match_result.get("context_override_id") != "?"
+        )
 
     def _identity_candidate_resolver(self, quality_map: Dict):
         def resolve(candidate: str) -> Optional[str]:
@@ -3146,10 +3160,21 @@ class SupplementEnricherV3:
         taxonomy_coherent = self._identity_taxonomy_coherent(
             ingredient, match_result, quality_map
         )
+        resolve_candidate = self._identity_candidate_resolver(quality_map)
+        if (
+            taxonomy_coherent
+            and self._is_reviewed_context_override_match(match_result)
+        ):
+            reviewed_canonical_id = match_result.get("canonical_id")
+            base_resolver = resolve_candidate
+
+            def resolve_candidate(candidate: str) -> Optional[str]:
+                return base_resolver(candidate) or reviewed_canonical_id
+
         decision = resolve_identity(
             ingredient,
             supplied_canonical_id,
-            self._identity_candidate_resolver(quality_map),
+            resolve_candidate,
             taxonomy_coherent=taxonomy_coherent,
             allow_unscoreable_taxonomy_only=allow_unscoreable_taxonomy_only,
         )
@@ -3184,6 +3209,14 @@ class SupplementEnricherV3:
         taxonomy_coherent: bool,
     ) -> None:
         final_canonical_id = decision.canonical_id_after
+        key_ingredient = ingredient
+        supplied_source_label_key = ingredient.get("source_label_key")
+        if not (
+            isinstance(supplied_source_label_key, str)
+            and supplied_source_label_key.strip()
+        ):
+            key_ingredient = dict(ingredient)
+            key_ingredient["canonical_id"] = final_canonical_id
         coherent_quality_match = bool(
             isinstance(match_result, dict)
             and match_result.get("match_status") != "FORM_UNMAPPED"
@@ -3191,7 +3224,7 @@ class SupplementEnricherV3:
         )
         entry.update(
             {
-                "source_label_key": self._rda_source_label_key(ingredient),
+                "source_label_key": self._rda_source_label_key(key_ingredient),
                 "source_label_name": decision.source_label_name,
                 "source_label_form": decision.source_label_form,
                 "label_display_name": decision.label_display_name,
@@ -16001,7 +16034,7 @@ class SupplementEnricherV3:
         """Return a stable key for one label-declared nutrient row."""
         supplied = ingredient.get("source_label_key")
         if isinstance(supplied, str) and supplied.strip():
-            return supplied.strip()
+            return supplied
 
         canonical = self._normalize_text(
             ingredient.get("canonical_id")

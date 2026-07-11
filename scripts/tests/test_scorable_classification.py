@@ -267,6 +267,8 @@ class TestIdentityIntegrityBoundary:
         assert repaired_epa["label_display_name"] == "EPA"
         assert repaired_epa["source_label_form"] == "as Ethyl Esters"
         assert repaired_epa["label_display_form"] == "as Ethyl Esters"
+        assert repaired_epa["source_label_key"] == "label:epa:epa:360:mg"
+        assert "label:dha:" not in repaired_epa["source_label_key"]
 
         assert by_name["DHA"]["identity_disposition"] == "clean"
         assert by_name["DHA"]["canonical_id"] == "dha"
@@ -288,6 +290,30 @@ class TestIdentityIntegrityBoundary:
         assert repaired_source["form_id"] == "EPA fish oil ethyl ester"
         assert repaired_source["label_display_name"] == "EPA"
         assert repaired_source["label_display_form"] == "as Ethyl Esters"
+
+    def test_identity_integrity_preserves_upstream_source_label_key_verbatim(
+        self, enricher, fixture_identity_integrity_product
+    ):
+        upstream_key = "  upstream:dsld:epa-row:verbatim  "
+        fixture_identity_integrity_product["activeIngredients"][1][
+            "source_label_key"
+        ] = upstream_key
+
+        result = enricher._collect_ingredient_quality_data(
+            fixture_identity_integrity_product
+        )
+        repaired_epa = next(
+            row for row in result["ingredients_scorable"] if row["name"] == "EPA"
+        )
+
+        assert repaired_epa["identity_disposition"] == "repaired"
+        assert repaired_epa["source_label_key"] == upstream_key
+        assert (
+            fixture_identity_integrity_product["activeIngredients"][1][
+                "source_label_key"
+            ]
+            == upstream_key
+        )
 
     def test_identity_integrity_routes_unresolved_rows_to_skipped_diagnostics(
         self, enricher
