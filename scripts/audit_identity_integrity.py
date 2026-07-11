@@ -23,9 +23,9 @@ import json
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Callable, Iterator
+from typing import Any, Callable, Iterator, Optional
 
-from identity_integrity import IDENTITY_DISPOSITIONS
+from identity_integrity import IDENTITY_DISPOSITIONS, normalize_label_display
 from scoring_v4.router import VALID_CLASSES, class_for_product
 
 Classifier = Callable[[dict[str, Any]], str]
@@ -55,7 +55,7 @@ class DispositionRecord:
         return self.violation is not None
 
 
-def _active_rows(product: dict[str, Any]) -> list[dict[str, Any]]:
+def _identity_rows(product: dict[str, Any]) -> list[dict[str, Any]]:
     iqd = product.get("ingredient_quality_data")
     if not isinstance(iqd, dict):
         return []
@@ -63,6 +63,54 @@ def _active_rows(product: dict[str, Any]) -> list[dict[str, Any]]:
     if not isinstance(rows, list):
         return []
     return [row for row in rows if isinstance(row, dict)]
+
+
+def _active_identity_pairs(
+    product: dict[str, Any],
+) -> list[tuple[Optional[dict[str, Any]], Optional[dict[str, Any]], Optional[str]]]:
+    """Match every active label row to at most one stamped IQD row.
+
+    Fresh enriched products have a source path on both representations. The
+    raw-label fallback preserves compatibility with older fixtures while still
+    emitting an explicit failure when no IQD identity row can be reconciled.
+    """
+    identity_rows = _identity_rows(product)
+    active_value = product.get("activeIngredients")
+    if not isinstance(active_value, list):
+        return [(None, row, None) for row in identity_rows]
+
+    active_rows = [row for row in active_value if isinstance(row, dict)]
+    used: set[int] = set()
+    pairs: list[tuple[Optional[dict[str, Any]], Optional[dict[str, Any]], Optional[str]]] = []
+
+    def claim(predicate: Callable[[dict[str, Any]], bool]) -> Optional[dict[str, Any]]:
+        for index, row in enumerate(identity_rows):
+            if index not in used and predicate(row):
+                used.add(index)
+                return row
+        return None
+
+    for active in active_rows:
+        source_path = str(active.get("raw_source_path") or "")
+        source_key = active.get("source_label_key")
+        raw_source = str(active.get("raw_source_text") or active.get("name") or "")
+        identity_row = None
+        if source_path:
+            identity_row = claim(
+                lambda row: str(row.get("raw_source_path") or "") == source_path
+            )
+        if identity_row is None and isinstance(source_key, str) and source_key:
+            identity_row = claim(lambda row: row.get("source_label_key") == source_key)
+        if identity_row is None and raw_source:
+            identity_row = claim(
+                lambda row: str(row.get("raw_source_text") or "") == raw_source
+            )
+        pairs.append((active, identity_row, None if identity_row else "missing_identity_audit_row"))
+
+    for index, identity_row in enumerate(identity_rows):
+        if index not in used:
+            pairs.append((None, identity_row, "orphan_identity_audit_row"))
+    return pairs
 
 
 def _row_violation(row: dict[str, Any]) -> str | None:
@@ -73,6 +121,16 @@ def _row_violation(row: dict[str, Any]) -> str | None:
         return "unresolved_identity_conflict"
     if disposition == "missing_display_label":
         return "missing_display_label"
+    source_label_name = row.get("source_label_name")
+    if not isinstance(source_label_name, str) or not source_label_name.strip():
+        return "missing_literal_source_label"
+    label_display_name = row.get("label_display_name")
+    if label_display_name != normalize_label_display(source_label_name):
+        return "label_display_name_drift"
+    if row.get("scoreable_identity") is True and not str(
+        row.get("source_label_key") or ""
+    ).strip():
+        return "missing_source_label_key"
     # A resolved row must carry the canonical identity the resolver approved from
     # label evidence: the authoritative canonical_id and the post-repair
     # canonical_id_after must agree and be present. taxonomy_only rows are
@@ -98,20 +156,31 @@ def audit_product(
         route = "generic"
     product_id = str(product.get("dsld_id") or product.get("id") or "unknown")
     records: list[DispositionRecord] = []
-    for row in _active_rows(product):
+    for active, row, pair_violation in _active_identity_pairs(product):
+        row = row or {}
+        active = active or {}
         records.append(
             DispositionRecord(
                 product_id=product_id,
                 route=route,
-                source_path=str(row.get("raw_source_path") or source or ""),
-                label_display_name=row.get("label_display_name"),
+                source_path=str(
+                    row.get("raw_source_path")
+                    or active.get("raw_source_path")
+                    or source
+                    or ""
+                ),
+                label_display_name=(
+                    row.get("label_display_name")
+                    or active.get("raw_source_text")
+                    or active.get("name")
+                ),
                 label_display_form=row.get("label_display_form"),
-                supplied_canonical=row.get("canonical_id_before"),
+                supplied_canonical=row.get("canonical_id_before") or active.get("canonical_id"),
                 final_canonical=row.get("canonical_id_after"),
                 disposition=row.get("identity_disposition"),
                 scoreable_identity=bool(row.get("scoreable_identity")),
                 rationale=str(row.get("identity_resolution_rationale") or ""),
-                violation=_row_violation(row),
+                violation=pair_violation or _row_violation(row),
             )
         )
     return records

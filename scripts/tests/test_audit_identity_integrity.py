@@ -20,6 +20,8 @@ def _active_row(disposition="clean", supplied="magnesium", final="magnesium", **
     scoreable = is_identity_scoreable(disposition) and final is not None
     row = {
         "raw_source_path": "activeIngredients[0]",
+        "source_label_key": "label:magnesium:magnesium:200:mg",
+        "source_label_name": "Magnesium",
         "label_display_name": "Magnesium",
         "label_display_form": "as Glycinate",
         "canonical_id_before": supplied,
@@ -114,3 +116,34 @@ def test_audit_over_absent_products_dir_yields_no_records():
     # fail the gate just because there is nothing to scan.
     records = audit_enriched_outputs(products_dir=REPO_ROOT / "does_not_exist_dir")
     assert records == []
+
+
+def test_audit_fails_when_an_active_row_has_no_identity_audit_row():
+    product = {
+        "dsld_id": "MISSING-IQD",
+        "activeIngredients": [
+            {
+                "name": "Magnesium",
+                "raw_source_text": "Magnesium",
+                "raw_source_path": "activeIngredients[0]",
+            }
+        ],
+        "ingredient_quality_data": {"ingredients": []},
+    }
+
+    records = audit_product(product, classify=_force("generic"))
+
+    assert len(records) == 1
+    assert records[0].failed
+    assert records[0].violation == "missing_identity_audit_row"
+
+
+def test_audit_requires_literal_label_identity_and_source_key_for_scorable_rows():
+    missing_label = _active_row(source_label_name=None)
+    missing_key = _active_row(source_label_key="")
+
+    label_records = audit_product(_product([missing_label]), classify=_force("generic"))
+    key_records = audit_product(_product([missing_key]), classify=_force("generic"))
+
+    assert label_records[0].violation == "missing_literal_source_label"
+    assert key_records[0].violation == "missing_source_label_key"
