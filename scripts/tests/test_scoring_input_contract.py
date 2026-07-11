@@ -908,3 +908,56 @@ def test_identity_integrity_non_strict_tolerates_conflict_for_old_batch():
     )
 
     assert [r["canonical_id"] for r in result.rows] == ["magnesium"]
+
+
+def test_identity_integrity_conflict_row_is_not_recovered_into_scoring():
+    # A skipped row with a usable anchor but an unresolved identity must not be
+    # recovered into scoring inputs at all — an unresolved conflict cannot drive
+    # scoring, evidence, or interactions (design contract). Recovering it only to
+    # reject it downstream would still let it briefly claim scoreable_identity.
+    conflict = _row(
+        name="UC-II standardized Cartilage",
+        canonical_id="collagen",
+        identity_disposition="identity_conflict",
+        scoreable_identity=False,
+        raw_source_path="activeIngredients[0]",
+    )
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [conflict],
+        },
+    )
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows == []
+    assert not any(
+        r.row.get("scoring_input_kind") == "recovered_active_identity"
+        for r in result.rejected_rows
+    )
+
+
+def test_identity_integrity_scoreable_skipped_row_is_still_recovered():
+    # Control: a skipped row with a resolved identity is still recovered so the
+    # guard does not over-suppress legitimate mapped-active-without-dose rows.
+    clean = _row(
+        name="Vitamin C",
+        canonical_id="vitamin_c",
+        identity_disposition="clean",
+        scoreable_identity=True,
+        quantity=0,
+        unit="NP",
+        raw_source_path="activeIngredients[0]",
+    )
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [clean],
+        },
+    )
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [r["canonical_id"] for r in result.rows] == ["vitamin_c"]
+    assert result.rows[0]["scoring_input_kind"] == "recovered_active_identity"

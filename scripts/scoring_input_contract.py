@@ -1766,6 +1766,14 @@ def get_scoring_ingredients(
         anchor_canonical, _ = _anchor_identity(row)
         if not anchor_canonical:
             continue
+        # Design contract: an unresolved identity (conflict / missing display)
+        # cannot be recovered into scoring — it must not drive scoring, evidence,
+        # interactions, or routing. The strict _evaluate_row guard is the
+        # backstop; skipping recovery here keeps a doomed row from ever claiming
+        # scoreable_identity. Rows with no stamped disposition stay recoverable.
+        disposition = row.get("identity_disposition")
+        if disposition is not None and not is_identity_scoreable(disposition):
+            continue
         path = str(row.get("raw_source_path") or "")
         if path and path in product_evidence_linked_paths:
             continue
