@@ -152,6 +152,58 @@ def test_no_structured_identity_uses_coherent_supplied_taxonomy():
     assert decision.scoreable_identity is True
 
 
+def test_unresolved_form_does_not_block_raw_identity_validation():
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "EPA",
+            "forms": [{"prefix": "as", "name": "Ethyl Esters"}],
+        },
+        supplied_canonical_id="epa",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "epa"
+    assert decision.source_label_form == "as Ethyl Esters"
+    assert decision.label_display_form == "as Ethyl Esters"
+    assert decision.scoreable_identity is True
+
+
+def test_unresolved_form_does_not_block_taxonomy_compatibility_path():
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Magnesium Citrate",
+            "forms": [{"prefix": "as", "name": "Citrate"}],
+        },
+        supplied_canonical_id="magnesium",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "taxonomy_only"
+    assert decision.canonical_id == "magnesium"
+    assert decision.source_label_form == "as Citrate"
+    assert decision.label_display_form == "as Citrate"
+    assert decision.scoreable_identity is True
+
+
+def test_resolvable_form_cannot_repair_canonical_identity():
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Fish Oil",
+            "forms": [{"name": "DHA"}],
+        },
+        supplied_canonical_id="epa",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "taxonomy_only"
+    assert decision.canonical_id_before == "epa"
+    assert decision.canonical_id == "epa"
+    assert decision.source_label_form == "DHA"
+    assert decision.label_display_form == "DHA"
+    assert decision.scoreable_identity is True
+
+
 def test_raw_identity_cannot_repair_conflicting_supplied_canonical():
     decision = resolve_identity(
         row={"raw_source_text": "DHA"},

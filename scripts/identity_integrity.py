@@ -250,7 +250,7 @@ def resolve_identity(
     canonical_before = _canonical(supplied_canonical_id)
 
     structured_evidence = tuple(
-        item for item in evidence if item.kind in {"structured_identity", "source_form"}
+        item for item in evidence if item.kind == "structured_identity"
     )
     raw_evidence = tuple(item for item in evidence if item.kind == "source_name")
     structured_canonicals = _resolved_canonicals(
