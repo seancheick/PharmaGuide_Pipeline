@@ -52,6 +52,7 @@ from audit_evidence_utils import (
     derive_omega3_audit,
     derive_proprietary_blend_audit,
 )
+from audit_identity_integrity import audit_product
 from inactive_ingredient_resolver import InactiveIngredientResolver
 from identity.safety import (
     has_explicit_form_evidence,
@@ -1437,6 +1438,22 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
 
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
     ingredients = safe_list(iqd.get("ingredients"))
+
+    # Fresh enriched rows carry the shared identity disposition. Reuse the
+    # release audit rather than reproducing its identity rules here: direct
+    # final-DB builds then fail closed on a stamped conflict or missing label,
+    # while legacy fixtures/artifacts without any identity stamps retain their
+    # explicit compatibility path.
+    if any(
+        isinstance(ingredient, dict) and "identity_disposition" in ingredient
+        for ingredient in ingredients
+    ):
+        for record in audit_product(enriched):
+            if record.failed:
+                issues.append(
+                    "review_queue: identity integrity "
+                    f"{record.source_path or 'unknown'}:{record.violation}"
+                )
 
     for idx, ingredient in enumerate(ingredients):
         if not isinstance(ingredient, dict):
@@ -4646,18 +4663,57 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
     # Active ingredients
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
-    iqd_by_raw = {}
-    for si in safe_list(iqd.get("ingredients")):
-        if isinstance(si, dict):
-            key = safe_str(si.get("raw_source_text"))
-            if key:
-                iqd_by_raw[key] = si
-    skipped_by_raw = {}
-    for si in safe_list(iqd.get("ingredients_skipped")):
-        if isinstance(si, dict):
-            key = safe_str(si.get("raw_source_text"))
-            if key and key not in iqd_by_raw:
-                skipped_by_raw[key] = si
+    iqd_rows = [
+        row for row in safe_list(iqd.get("ingredients")) if isinstance(row, dict)
+    ]
+    if not iqd_rows:
+        iqd_rows = [
+            row
+            for row in safe_list(iqd.get("ingredients_skipped"))
+            if isinstance(row, dict)
+        ]
+    used_iqd_rows: set[int] = set()
+
+    def take_iqd_match(ingredient: Dict[str, Any]) -> Dict[str, Any]:
+        """Return one unused IQD row for an active label row.
+
+        Source path is the identity contract's stable row linkage. The label key
+        and literal text fallbacks retain compatibility with older artifacts,
+        while consuming each candidate prevents duplicate raw text from sharing
+        a later row's repaired identity or display form.
+        """
+        source_path = safe_str(ingredient.get("raw_source_path"))
+        source_label_key = safe_str(ingredient.get("source_label_key"))
+        raw_source = safe_str(
+            ingredient.get("raw_source_text") or ingredient.get("name")
+        )
+
+        def claim(predicate) -> Optional[Dict[str, Any]]:
+            for index, row in enumerate(iqd_rows):
+                if index not in used_iqd_rows and predicate(row):
+                    used_iqd_rows.add(index)
+                    return row
+            return None
+
+        if source_path:
+            matched = claim(
+                lambda row: safe_str(row.get("raw_source_path")) == source_path
+            )
+            if matched:
+                return matched
+        if source_label_key:
+            matched = claim(
+                lambda row: safe_str(row.get("source_label_key")) == source_label_key
+            )
+            if matched:
+                return matched
+        if raw_source:
+            matched = claim(
+                lambda row: safe_str(row.get("raw_source_text")) == raw_source
+            )
+            if matched:
+                return matched
+        return {}
 
     harmful_lookup = build_harmful_lookup(enriched)
     contaminant_lookup = build_contaminant_lookup(enriched)
@@ -4732,7 +4788,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             continue
         raw = safe_str(ing.get("raw_source_text"))
         name = safe_str(ing.get("name"), raw)
-        m = iqd_by_raw.get(raw, skipped_by_raw.get(raw, {}))
+        m = take_iqd_match(ing)
         ne = norm_data.get(raw, norm_data.get(name, {}))
         if not isinstance(ne, dict):
             ne = {}

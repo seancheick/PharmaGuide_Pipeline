@@ -3434,3 +3434,72 @@ def test_label_identity_missing_display_never_uses_canonical_standard_name():
     result = _compute_display_label(ing, match)
     assert result != "Eicosapentaenoic Acid"
     assert result == ""
+
+
+def test_label_identity_matches_duplicate_raw_rows_by_source_path():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Omega-3",
+            "raw_source_text": "Omega-3",
+            "raw_source_path": "activeIngredients[0]",
+            "quantity": 360,
+            "unit": "mg",
+        },
+        {
+            "name": "Omega-3",
+            "raw_source_text": "Omega-3",
+            "raw_source_path": "activeIngredients[1]",
+            "quantity": 300,
+            "unit": "mg",
+        },
+    ]
+    enriched["ingredient_quality_data"] = {
+        "ingredients": [
+            {
+                "raw_source_text": "Omega-3",
+                "raw_source_path": "activeIngredients[0]",
+                "name": "EPA",
+                "standard_name": "Eicosapentaenoic Acid",
+                "canonical_id": "epa",
+                "identity_disposition": "clean",
+                "source_label_key": "label:epa:omega-3:360:mg",
+                "source_label_name": "EPA",
+                "label_display_name": "EPA",
+                "label_display_form": "as Ethyl Esters",
+                "matched_form": "ethyl esters",
+                "mapped": True,
+            },
+            {
+                "raw_source_text": "Omega-3",
+                "raw_source_path": "activeIngredients[1]",
+                "name": "DHA",
+                "standard_name": "Docosahexaenoic Acid",
+                "canonical_id": "dha",
+                "identity_disposition": "clean",
+                "source_label_key": "label:dha:omega-3:300:mg",
+                "source_label_name": "DHA",
+                "label_display_name": "DHA",
+                "label_display_form": "as Ethyl Esters",
+                "matched_form": "ethyl esters",
+                "mapped": True,
+            },
+        ]
+    }
+
+    ingredients = build_detail_blob(enriched, make_scored())["ingredients"]
+
+    assert [(item["display_label"], item["canonical_id"]) for item in ingredients] == [
+        ("EPA", "epa"),
+        ("DHA", "dha"),
+    ]
+
+
+def test_export_contract_rejects_unresolved_identity_before_blob_publication():
+    enriched = _enriched_with_label_identity(disposition="identity_conflict")
+    enriched["ingredient_quality_data"]["ingredients"][0]["canonical_id_after"] = None
+    enriched["ingredient_quality_data"]["ingredients"][0]["canonical_id"] = None
+
+    issues = validate_export_contract(enriched, make_scored())
+
+    assert any("identity integrity" in issue for issue in issues)
