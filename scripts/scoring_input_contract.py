@@ -20,6 +20,11 @@ from typing import Any, Dict, List, Optional
 # the scorer and only reads data files lazily.
 from scoring_reference_resolver import has_therapeutic_reference, is_known_botanical
 
+# Single source of truth for identity disposition vocabulary and scoreability.
+# Never copy the disposition list here; the contract must consume the same policy
+# the enricher stamps rows with.
+from identity_integrity import IDENTITY_DISPOSITIONS, is_identity_scoreable
+
 
 _DATA_DIR = Path(__file__).resolve().parent / "data"
 _IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
@@ -1698,6 +1703,23 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
 
     if row.get("scoreable_identity") is False:
         return False, _reject(row, "identity_marked_not_scoreable"), findings
+
+    # Strict mode trusts the stamped identity disposition over a possibly-stale
+    # scoreable_identity flag: a conflict/missing-display row that still claims
+    # scoreable_identity=True is a violated upstream invariant and must not be
+    # scored. Old batches (no disposition) stay tolerated; non-strict callers
+    # keep the legacy scoreable_identity-only behavior.
+    if strict:
+        disposition = row.get("identity_disposition")
+        if disposition is not None:
+            if disposition not in IDENTITY_DISPOSITIONS:
+                reason = f"invalid_identity_disposition:{disposition}"
+                findings.append(reason)
+                return False, _reject(row, reason), findings
+            if not is_identity_scoreable(disposition):
+                reason = f"identity_disposition_not_scoreable:{disposition}"
+                findings.append(reason)
+                return False, _reject(row, reason), findings
 
     if not _has_identity(row):
         return False, _reject(row, "missing_scoring_identity"), findings

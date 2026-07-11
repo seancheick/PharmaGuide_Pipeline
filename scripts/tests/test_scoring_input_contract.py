@@ -844,3 +844,67 @@ def test_nutrition_only_uses_explicit_contract_not_keywords_by_default():
         {"product_name": "Whey Protein Powder"},
         allow_legacy_keyword_fallback=True,
     ) is True
+
+
+# --- Task 3: strict scoring-input identity disposition guard ---
+# _row() defaults scoreable_identity=True, so passing a non-scoreable disposition
+# reproduces the malformed upstream invariant: a row that claims to be scoreable
+# while its identity disposition says otherwise. Strict mode must reject it and
+# fail the contract; non-strict mode keeps the old-batch behavior.
+
+
+def test_identity_integrity_strict_rejects_conflict_disposition_even_when_flag_true():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="identity_conflict")]),
+        strict=True,
+    )
+
+    assert result.rows == []
+    assert any(
+        r.reason.startswith("identity_disposition_not_scoreable")
+        for r in result.rejected_rows
+    )
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_rejects_missing_display_label_disposition():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="missing_display_label")]),
+        strict=True,
+    )
+
+    assert result.rows == []
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_rejects_unrecognized_disposition():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="totally_bogus")]),
+        strict=True,
+    )
+
+    assert result.rows == []
+    assert any(
+        r.reason.startswith("invalid_identity_disposition")
+        for r in result.rejected_rows
+    )
+    assert result.strict_contract_passed is False
+
+
+def test_identity_integrity_strict_accepts_scoreable_dispositions():
+    for disposition in ("clean", "repaired", "taxonomy_only"):
+        result = get_scoring_ingredients(
+            _product([_row(identity_disposition=disposition)]),
+            strict=True,
+        )
+        assert [r["canonical_id"] for r in result.rows] == ["magnesium"], disposition
+        assert result.strict_contract_passed is True, disposition
+
+
+def test_identity_integrity_non_strict_tolerates_conflict_for_old_batch():
+    result = get_scoring_ingredients(
+        _product([_row(identity_disposition="identity_conflict")]),
+        strict=False,
+    )
+
+    assert [r["canonical_id"] for r in result.rows] == ["magnesium"]
