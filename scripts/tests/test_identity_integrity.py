@@ -138,11 +138,24 @@ def test_source_name_stays_literal_while_display_name_is_normalized():
     assert decision.label_display_name == "EPA"
 
 
+def test_parenthetical_label_is_preserved_unless_both_sides_resolve_identically():
+    decision = resolve_identity(
+        row={"ingredientGroup": "Magnesium (as Citrate)"},
+        supplied_canonical_id="magnesium",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.source_label_name == "Magnesium (as Citrate)"
+    assert decision.label_display_name == "Magnesium (as Citrate)"
+
+
 def test_no_structured_identity_uses_coherent_supplied_taxonomy():
     decision = resolve_identity(
         row={"raw_source_text": "Magnesium Citrate"},
         supplied_canonical_id="magnesium",
         resolve_candidate=fake_resolver,
+        taxonomy_coherent=True,
     )
 
     assert decision.disposition == "taxonomy_only"
@@ -177,6 +190,7 @@ def test_unresolved_form_does_not_block_taxonomy_compatibility_path():
         },
         supplied_canonical_id="magnesium",
         resolve_candidate=fake_resolver,
+        taxonomy_coherent=True,
     )
 
     assert decision.disposition == "taxonomy_only"
@@ -196,12 +210,41 @@ def test_resolvable_form_cannot_repair_canonical_identity():
         resolve_candidate=fake_resolver,
     )
 
-    assert decision.disposition == "taxonomy_only"
+    assert decision.disposition == "identity_conflict"
     assert decision.canonical_id_before == "epa"
-    assert decision.canonical_id == "epa"
+    assert decision.canonical_id is None
     assert decision.source_label_form == "DHA"
     assert decision.label_display_form == "DHA"
-    assert decision.scoreable_identity is True
+    assert decision.scoreable_identity is False
+
+
+def test_unresolved_raw_identity_is_blocked_without_explicit_taxonomy_coherence():
+    decision = resolve_identity(
+        row={"raw_source_text": "Magnesium Citrate"},
+        supplied_canonical_id="magnesium",
+        resolve_candidate=fake_resolver,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+
+
+def test_canonical_registry_ids_are_compared_exactly():
+    def noncanonical_resolver(candidate: str) -> str | None:
+        if normalize_label_display(candidate).casefold() == "epa":
+            return "EPA"
+        return None
+
+    decision = resolve_identity(
+        row={"raw_source_text": "EPA"},
+        supplied_canonical_id="epa",
+        resolve_candidate=noncanonical_resolver,
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
 
 
 def test_raw_identity_cannot_repair_conflicting_supplied_canonical():

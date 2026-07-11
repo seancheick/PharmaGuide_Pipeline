@@ -222,12 +222,17 @@ def _source_name(
                 for value in variants
             )
             if any(matches):
-                leading_matches = (
-                    len(variants) > 1
-                    and _canonical(resolve_candidate(variants[1]))
+                wrapper = _PARENTHESIZED_IDENTITY_RE.fullmatch(
+                    normalize_label_display(item.value)
+                )
+                wrapper_sides_match = bool(
+                    wrapper
+                    and _canonical(resolve_candidate(wrapper.group(1)))
+                    == resolved_canonical
+                    and _canonical(resolve_candidate(wrapper.group(2)))
                     == resolved_canonical
                 )
-                if leading_matches:
+                if wrapper_sides_match:
                     literal_match = _LITERAL_PARENTHESIZED_IDENTITY_RE.fullmatch(
                         item.value
                     )
@@ -245,7 +250,15 @@ def resolve_identity(
     row: Mapping[str, Any],
     supplied_canonical_id: str | None,
     resolve_candidate: CandidateResolver,
+    *,
+    taxonomy_coherent: bool = False,
 ) -> IdentityDecision:
+    """Resolve label identity without reproducing the external taxonomy matcher.
+
+    ``supplied_canonical_id`` and callback results must already be canonical
+    registry IDs; they are compared exactly. ``taxonomy_coherent`` carries the
+    caller's canonical/standard-name/form/UNII confidence result.
+    """
     evidence = extract_label_evidence(row)
     canonical_before = _canonical(supplied_canonical_id)
 
@@ -324,13 +337,17 @@ def resolve_identity(
         disposition = "clean"
         canonical_after = canonical_before
         rationale = "Raw label identity validates the supplied canonical ID."
-    else:
+    elif taxonomy_coherent:
         disposition = "taxonomy_only"
         canonical_after = canonical_before
         rationale = (
-            "No line evidence resolved to a more specific identity; retained the supplied "
-            "canonical ID."
+            "No line evidence resolved to a more specific identity; the external "
+            "taxonomy confidence contract permits the supplied canonical ID."
         )
+    else:
+        disposition = "identity_conflict"
+        canonical_after = None
+        rationale = "The external taxonomy confidence contract was not satisfied."
 
     scoreable = is_identity_scoreable(disposition) and canonical_after is not None
     return IdentityDecision(
