@@ -304,9 +304,18 @@ def resolve_identity(
             + "."
         )
     elif structured_evidence and structured_canonical is None:
-        disposition = "identity_conflict"
-        canonical_after = None
-        rationale = "Direct structured line evidence could not be resolved."
+        if taxonomy_coherent and canonical_before is not None:
+            disposition = "taxonomy_only"
+            canonical_after = canonical_before
+            rationale = (
+                "Structured line text did not independently resolve to a canonical "
+                "identity; the verified external taxonomy contract retains the "
+                "supplied canonical ID without repairing it."
+            )
+        else:
+            disposition = "identity_conflict"
+            canonical_after = None
+            rationale = "Direct structured line evidence could not be resolved."
     elif structured_canonical is not None:
         if canonical_before is None and allow_unscoreable_taxonomy_only:
             disposition = "taxonomy_only"

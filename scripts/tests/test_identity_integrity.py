@@ -165,6 +165,24 @@ def test_no_structured_identity_uses_coherent_supplied_taxonomy():
     assert decision.scoreable_identity is True
 
 
+def test_unresolvable_structured_text_uses_verified_taxonomy_without_repairing():
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Nattokinase",
+            "ingredientGroup": "Nattokinase",
+        },
+        supplied_canonical_id="nattokinase",
+        resolve_candidate=lambda _: None,
+        taxonomy_coherent=True,
+    )
+
+    assert decision.disposition == "taxonomy_only"
+    assert decision.canonical_id_before == "nattokinase"
+    assert decision.canonical_id == "nattokinase"
+    assert decision.label_display_name == "Nattokinase"
+    assert decision.scoreable_identity is True
+
+
 def test_unresolved_form_does_not_block_raw_identity_validation():
     decision = resolve_identity(
         row={
