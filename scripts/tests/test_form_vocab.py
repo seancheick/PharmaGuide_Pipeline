@@ -112,8 +112,10 @@ def test_matches_premium_omega3_form_positive_cases():
     for label in (
         "rTG fish oil",
         "re-esterified triglyceride",
+        "Triglycerides",
         "natural triglyceride form",
         "DHA Ethyl Ester",
+        "Ethyl Esters",
         "EE concentrate",
         "krill phospholipid",
         "monoglyceride fish oil",
