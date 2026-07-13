@@ -917,6 +917,36 @@ def test_should_skip_from_scoring_bypasses_when_override_applied(
     )
 
 
+def test_reviewed_context_override_is_authoritative_during_identity_reconciliation(
+    enricher_with_iqm,
+):
+    row = {
+        "name": "Porcine Kidney Extract",
+        "raw_source_text": "Porcine Kidney Extract",
+        "standardName": "Kidney Tissue",
+        "ingredientGroup": "Kidney",
+        "canonical_id": "diamine_oxidase",
+        "canonical_source_db": "ingredient_quality_map",
+        "context_override_applied": True,
+        "context_override_id": "pure_encap_317962_dao_enzyme",
+        "context_override_review_validated": True,
+        "cleaner_canonical_id_override": "diamine_oxidase",
+        "cleaner_preferred_iqm_form_override": "diamine oxidase (unspecified)",
+    }
+    quality_map = enricher_with_iqm.databases["ingredient_quality_map"]
+    match_result = enricher_with_iqm._apply_context_canonical_override_match(
+        row, quality_map
+    )
+
+    decision, _, _ = enricher_with_iqm._resolve_iqd_identity(
+        row, match_result, quality_map
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "diamine_oxidase"
+    assert decision.scoreable_identity is True
+
+
 def test_should_skip_from_scoring_still_skips_when_no_override(
     enricher_with_iqm, iqm, botanicals_db
 ):

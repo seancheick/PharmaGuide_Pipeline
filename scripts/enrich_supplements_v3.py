@@ -3267,10 +3267,9 @@ class SupplementEnricherV3:
             and self._is_reviewed_context_override_match(match_result)
         ):
             reviewed_canonical_id = match_result.get("canonical_id")
-            base_resolver = resolve_candidate
 
             def resolve_candidate(candidate: str) -> Optional[str]:
-                return base_resolver(candidate) or reviewed_canonical_id
+                return reviewed_canonical_id
 
         decision = resolve_identity(
             ingredient,
