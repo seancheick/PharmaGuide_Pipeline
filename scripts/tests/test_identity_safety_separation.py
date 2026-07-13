@@ -53,6 +53,33 @@ def test_cleaner_emits_iqm_chromium_for_generic_chromium_unii():
     assert cleaned["canonical_source_db"] == "ingredient_quality_map"
 
 
+def test_iqm_unii_uses_owning_canonical_not_umbrella_alias():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+
+    cases = (
+        ("Bromelain", "U182GP2CF3", "enzyme", "bromelain"),
+        ("Oleic Acid", "2UMI9U37CP", "fatty acid", "oleic_acid"),
+    )
+    for name, unii, category, expected_canonical in cases:
+        cleaned = normalizer._process_single_ingredient_enhanced(
+            {
+                "name": name,
+                "uniiCode": unii,
+                "ingredientGroup": name,
+                "category": category,
+                "quantity": [{"quantity": 100, "unit": "mg"}],
+                "forms": [],
+            },
+            is_active=True,
+        )
+
+        assert cleaned["canonical_id"] == expected_canonical
+        assert cleaned["canonical_source_db"] == "ingredient_quality_map"
+        assert cleaned["cleaner_match_method"] == "unii_exact_match"
+
+
 def test_cleaner_identity_fields_never_come_from_safety_sources():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 

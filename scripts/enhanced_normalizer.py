@@ -2039,18 +2039,19 @@ class EnhancedDSLDNormalizer:
                 if (parent_data.get("match_rules") or {}).get("deprecated_in_favor_of"):
                     continue
                 parent_std = parent_data.get("standard_name", parent_key)
-                # Use the IQM-tier payload from _fast_exact_lookup if present
-                # via parent_std preprocessing
-                processed_std = self.matcher.preprocess_text(parent_std)
-                payload = self._fast_exact_lookup.get(processed_std)
-                if not payload:
-                    # Build a minimal IQM-tier payload
-                    payload = {
-                        "type": "ingredient",
-                        "standard_name": parent_std,
-                        "mapped": True,
-                        "priority": 4,
-                    }
+                # A UNII identifies this IQM entry directly. Do not round-trip
+                # through the text alias index: an umbrella entry can also own
+                # the specific entry's standard name as an alias (for example,
+                # Digestive Enzymes -> Bromelain), which would silently replace
+                # the exact UNII owner with the umbrella canonical.
+                payload = {
+                    "type": "ingredient",
+                    "standard_name": parent_std,
+                    "canonical_id": parent_key,
+                    "canonical_source_db": "ingredient_quality_map",
+                    "mapped": True,
+                    "priority": 4,
+                }
                 _add(
                     self._identity_unii_to_payload_lookup,
                     _extract_unii(parent_data),
@@ -5889,10 +5890,14 @@ class EnhancedDSLDNormalizer:
         # name-based matching. Bypasses all name-string variation issues
         # for substances DSLD has explicitly identified with an FDA UNII.
         # Result shape mirrors _enhanced_ingredient_mapping: (std_name, mapped, forms).
+        unii_canonical_id = None
+        unii_canonical_source_db = None
         unii_match_result = self._try_unii_match(ing)
         if unii_match_result is not None:
             unii_payload, unii_method = unii_match_result
             standard_name = unii_payload.get("standard_name", name)
+            unii_canonical_id = unii_payload.get("canonical_id")
+            unii_canonical_source_db = unii_payload.get("canonical_source_db")
             mapped = True
             mapped_forms = forms or []
             # Stash match method on the row for downstream ledger reporting.
@@ -6177,9 +6182,15 @@ class EnhancedDSLDNormalizer:
         # umbrella parent ("Omega-3 Fatty Acids") as its standard_name, and
         # the reverse index can still recover the specific parent from the
         # original label text (fish_oil vs omega_3).
-        canonical_id, canonical_source_db = self._resolve_canonical_identity(
-            standard_name, raw_name=raw_name,
-        )
+        if unii_canonical_id:
+            canonical_id = unii_canonical_id
+            canonical_source_db = (
+                unii_canonical_source_db or "ingredient_quality_map"
+            )
+        else:
+            canonical_id, canonical_source_db = self._resolve_canonical_identity(
+                standard_name, raw_name=raw_name,
+            )
         # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
         # Two directions handled atomically:
         #   (a) is_mapped=False → force canonical to None + "unmapped" source.
