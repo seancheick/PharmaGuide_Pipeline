@@ -14404,6 +14404,33 @@
           "quality": "poor"
         }
       },
+      "liposomal curcumin": {
+        "bio_score": 7,
+        "natural": false,
+        "score": 7,
+        "absorption": "low (liposomal-thin; curcumin class-poor baseline)",
+        "notes": "Curcumin encapsulated in lipid vesicles. Despite marketing claims of '50x better' absorption, the only published human PK study of liposomal curcumin used intravenous administration (PMID:25500488, Greil 2014), NOT oral. No rigorous human oral pharmacokinetic data exists to validate absorption enhancement claims. Scored conservatively pending proper oral PK studies. B28 audit 2026-04-25: liposomal-thin + curcumin class-poor.",
+        "aliases": [
+          "nano-curcumin",
+          "curcumin liposome",
+          "nano-encapsulated curcumin",
+          "liposomal turmeric",
+          "advanced delivery curcumin",
+          "lipid-bound curcumin",
+          "high-absorption curcumin",
+          "turmeric phytosome",
+          "microactive turmeric (curcuma longa) extract",
+          "microactive turmeric curcuma longa extract",
+          "curcuminoids microactive turmeric (curcuma longa) extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low"
+        }
+      },
       "curcumin (unspecified)": {
         "bio_score": 5,
         "natural": true,
@@ -14426,7 +14453,6 @@
           "demethoxycurcumin",
           "DMC",
           "curcuminoid II",
-          "liposomal curcumin",
           "curcumin and other curcuminoids",
           "curcumin & other curcuminoids",
           "bisdemethoxy curcumin",
@@ -22522,33 +22548,6 @@
           "range_low": 0.001,
           "range_high": 0.01,
           "quality": "poor"
-        }
-      },
-      "liposomal curcumin": {
-        "bio_score": 7,
-        "natural": false,
-        "score": 7,
-        "absorption": "low (liposomal-thin; curcumin class-poor baseline)",
-        "notes": "Curcumin encapsulated in lipid vesicles. Despite marketing claims of '50x better' absorption, the only published human PK study of liposomal curcumin used intravenous administration (PMID:25500488, Greil 2014), NOT oral. No rigorous human oral pharmacokinetic data exists to validate absorption enhancement claims. Scored conservatively pending proper oral PK studies. B28 audit 2026-04-25: liposomal-thin + curcumin class-poor.",
-        "aliases": [
-          "nano-curcumin",
-          "curcumin liposome",
-          "nano-encapsulated curcumin",
-          "liposomal turmeric",
-          "advanced delivery curcumin",
-          "lipid-bound curcumin",
-          "high-absorption curcumin",
-          "turmeric phytosome",
-          "microactive turmeric (curcuma longa) extract",
-          "microactive turmeric curcuma longa extract",
-          "curcuminoids microactive turmeric (curcuma longa) extract"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.05,
-          "range_low": 0.03,
-          "range_high": 0.1,
-          "quality": "low"
         }
       },
       "curcumin with piperine": {

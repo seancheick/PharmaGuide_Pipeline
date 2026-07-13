@@ -56,8 +56,8 @@ B28_BANDS_VALUED = [
     ('citrus_bioflavonoids', 'citrus bioflavonoids complex', 0.05, 0.15, 'bioflav class-poor'),
     ('citrus_bioflavonoids', 'hesperidin',                   0.03, 0.12, 'hesperidin class-poor'),
     ('citrus_bioflavonoids', 'rutin',                        0.02, 0.10, 'rutin class-poor'),
-    # turmeric
-    ('turmeric', 'liposomal curcumin',                      0.03, 0.10, 'liposomal-thin + curcumin'),
+    # curcumin/turmeric
+    ('curcumin', 'liposomal curcumin',                      0.03, 0.10, 'liposomal-thin + curcumin'),
     ('turmeric', 'curcumin with piperine',                  0.02, 0.08, 'piperine debunked'),
     ('turmeric', 'turmeric (unspecified)',                  0.01, 0.05, 'curcumin class-poor'),
     # black_cohosh

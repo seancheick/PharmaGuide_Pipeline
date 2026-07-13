@@ -166,6 +166,33 @@ class TestRealLabelCorpus:
                 "Curcumin C3 Complex matched both curcumin AND turmeric - double match!"
             )
 
+    def test_liposomal_curcumin_has_one_owner_and_keeps_reviewed_form_score(
+        self,
+        enricher,
+        iqm_data,
+    ):
+        assert "liposomal curcumin" in iqm_data["curcumin"]["forms"]
+        assert "liposomal curcumin" not in iqm_data["turmeric"]["forms"]
+
+        product = {
+            "id": "TEST_LIPOSOMAL_CURCUMIN",
+            "product_name": "Liposomal Curcumin",
+            "activeIngredients": [
+                {
+                    "name": "Liposomal Curcumin",
+                    "quantity": 500,
+                    "unit": "mg",
+                }
+            ],
+        }
+
+        enriched, _ = enricher.enrich_product(product)
+        rows = enriched["ingredient_quality_data"]["ingredients_scorable"]
+        assert len(rows) == 1
+        assert rows[0]["canonical_id"] == "curcumin"
+        assert rows[0]["matched_form"] == "liposomal curcumin"
+        assert rows[0]["bio_score"] == 7
+
 
 # =============================================================================
 # SUITE 2: COLLISION AND SUBSTRING TESTS
