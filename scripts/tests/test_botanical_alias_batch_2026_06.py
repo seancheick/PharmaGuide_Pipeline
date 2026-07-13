@@ -43,6 +43,10 @@ def enricher():
         ("Muira Puama", "muira_puama"),
         ("Ellirose Hibiscus extract", "hibiscus_extract"),
         ("Excelery", "celery"),
+        ("Barley extract", "barley_unspecified"),
+        ("Barley powder", "barley_unspecified"),
+        ("Wheat Germ Oil", "wheat_germ_oil"),
+        ("Oat Fiber", "oat_generic"),
     ],
 )
 def test_botanical_label_recognized_as_identity(enricher, label, expected_id):

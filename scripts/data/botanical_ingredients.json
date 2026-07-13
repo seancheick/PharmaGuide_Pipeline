@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-06-22",
-    "total_entries": 546,
+    "total_entries": 548,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -1015,6 +1015,25 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "barley_unspecified",
+      "standard_name": "Barley (Unspecified Plant Part)",
+      "latin_name": "Hordeum vulgare",
+      "aliases": [
+        "barley",
+        "barley extract",
+        "barley powder"
+      ],
+      "category": "grain",
+      "notes": "Identity-only route for labels that declare barley without identifying grass, grain, bran, malt, or another plant part. This record must not receive barley-grass form or standardization credit.",
+      "last_updated": "2026-07-13",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -9941,6 +9960,8 @@
         "swedish oats beta glucans",
         "oat beta-glucans",
         "oat beta glucans",
+        "oat fiber",
+        "oat fibre",
         "swedish oat",
         "swedish oats"
       ],
@@ -14192,6 +14213,23 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "wheat_germ_oil",
+      "standard_name": "Wheat Germ Oil",
+      "latin_name": "Triticum aestivum",
+      "aliases": [],
+      "category": "oil",
+      "notes": "Identity-only wheat-germ-derived oil. Kept separate from whole wheat germ and vitamin E forms so the oil amount is not treated as an elemental vitamin E dose.",
+      "last_updated": "2026-07-13",
+      "external_ids": {
+        "unii": "14C97E680P"
+      },
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
