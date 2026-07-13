@@ -48,6 +48,7 @@ def test_silibinin_forms_map_to_milk_thistle(enricher, label):
         ("Boswellia serrata AKBA standardized extract", "boswellia"),  # standardized extract, not the bare AKBA marker
         ("LuraLean Propolmannan (Amorphophallus konjac K. Koch, ssp. Amorphophallus japonica) fiber extract", "fiber"),  # purified konjac glucomannan
         ("Bioflavonoid Fruit Extract", "bioflavonoids"),     # generic bioflavonoid active
+        ("Soybean Seed Extract", "soybean"),                 # explicit seed wording for soybean extract
     ],
 )
 # DEFERRED branded items (NOT aliased — would over-credit / unverified marketing salts):
