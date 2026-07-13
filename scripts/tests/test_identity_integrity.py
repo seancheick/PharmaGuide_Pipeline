@@ -286,6 +286,49 @@ def test_equivalence_target_must_exist_in_declared_registry():
         )
 
 
+def test_equivalence_cannot_override_an_iqm_canonical_target():
+    with pytest.raises(ValueError, match="conflicting canonical redirect"):
+        build_canonical_identity_registry(
+            {
+                "ingredient_quality_map": {
+                    "legacy": {
+                        "standard_name": "Legacy",
+                        "aliases": [],
+                        "forms": {},
+                        "match_rules": {"target_id": "preferred"},
+                    },
+                    "preferred": {
+                        "standard_name": "Preferred",
+                        "aliases": [],
+                        "forms": {},
+                        "match_rules": {},
+                    },
+                },
+                "other_ingredients": {
+                    "other_ingredients": [
+                        {
+                            "id": "other_legacy",
+                            "standard_name": "Other Legacy",
+                            "aliases": [],
+                        }
+                    ]
+                },
+                "canonical_equivalences": {
+                    "equivalences": [
+                        {
+                            "source_db": "ingredient_quality_map",
+                            "source_id": "legacy",
+                            "target_db": "other_ingredients",
+                            "target_id": "other_legacy",
+                            "relation": "exact_equivalent",
+                            "basis": "test conflict",
+                        }
+                    ]
+                },
+            }
+        )
+
+
 def test_normalize_label_display_uses_the_approved_operation_order():
     value = "  ＥＰＡ™\t(tm)  ® ℠ (r)\n(sm)  "
 

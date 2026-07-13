@@ -250,7 +250,7 @@ class TestIdentityIntegrityBoundary:
             ("Coenzyme Q-10", "coq10"),
             ("Niacin", "vitamin_b3_niacin"),
             ("Galla chinensis", "galla_chinensis"),
-            ("European Elder", "elderberries"),
+            ("European Elder", "elderberry"),
         ],
     )
     def test_identity_candidate_accepts_exact_aliases_stored_on_iqm_forms(
@@ -265,7 +265,7 @@ class TestIdentityIntegrityBoundary:
 
         assert resolver(label) == expected_canonical
 
-    def test_identity_candidate_rejects_cross_registry_alias_ambiguity(
+    def test_identity_candidate_rejects_unreviewed_cross_registry_alias_ambiguity(
         self,
         enricher,
     ):
@@ -273,7 +273,18 @@ class TestIdentityIntegrityBoundary:
             enricher.databases["ingredient_quality_map"]
         )
 
-        assert resolver("Acerola") is None
+        assert resolver("AKBA") is None
+
+    def test_identity_candidate_accepts_reviewed_cross_registry_equivalence(
+        self,
+        enricher,
+    ):
+        resolver = enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"]
+        )
+
+        assert resolver("Acerola") == "acerola_cherry"
+        assert resolver("Medium Chain Triglycerides") == "mct_oil"
 
     def test_silicon_group_refines_to_label_declared_silica(self, enricher):
         quality_map = enricher.databases["ingredient_quality_map"]

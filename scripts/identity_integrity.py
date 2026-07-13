@@ -41,6 +41,7 @@ class CanonicalIdentityRegistry:
     normalized_preferred_index: Mapping[str, tuple[str, str]]
     verified_preferred_index: Mapping[str, tuple[str, str]]
     candidates_index: Mapping[str, tuple[str, ...]]
+    canonical_redirects: Mapping[tuple[str, str], tuple[str, str]]
 
     @staticmethod
     def _key(value: Any) -> str:
@@ -55,6 +56,20 @@ class CanonicalIdentityRegistry:
 
     def resolve_verified_preferred(self, value: Any) -> tuple[str, str] | None:
         return self.verified_preferred_index.get(self._key(value))
+
+    def canonicalize(
+        self,
+        canonical_id: str,
+        source_db: str,
+    ) -> tuple[str, str]:
+        seen: set[tuple[str, str]] = set()
+        current = (source_db, canonical_id)
+        while current in self.canonical_redirects:
+            if current in seen:
+                raise ValueError(f"cyclic canonical redirect at {current!r}")
+            seen.add(current)
+            current = self.canonical_redirects[current]
+        return current[1], current[0]
 
 
 def build_canonical_identity_registry(
@@ -71,16 +86,37 @@ def build_canonical_identity_registry(
         "other_ingredients": 3,
         "proprietary_blends": 4,
     }
-    equivalence_redirects = _validated_equivalence_redirects(databases)
+    quality_map = databases.get("ingredient_quality_map")
+    canonical_redirects = _validated_equivalence_redirects(databases)
+    if isinstance(quality_map, Mapping):
+        for canonical_id, entry in quality_map.items():
+            if str(canonical_id).startswith("_") or not isinstance(entry, Mapping):
+                continue
+            match_rules = entry.get("match_rules")
+            target_id = (
+                match_rules.get("target_id")
+                if isinstance(match_rules, Mapping)
+                else None
+            )
+            if isinstance(target_id, str) and target_id in quality_map:
+                key = ("ingredient_quality_map", str(canonical_id))
+                target = ("ingredient_quality_map", target_id)
+                existing = canonical_redirects.get(key)
+                if existing is not None and existing != target:
+                    raise ValueError(
+                        f"conflicting canonical redirect for {key!r}: "
+                        f"{existing!r} vs {target!r}"
+                    )
+                canonical_redirects[key] = target
 
     def canonical_owner(canonical_id: str, source_db: str) -> tuple[str, str]:
         seen: set[tuple[str, str]] = set()
         current = (source_db, canonical_id)
-        while current in equivalence_redirects:
+        while current in canonical_redirects:
             if current in seen:
                 raise ValueError(f"cyclic canonical equivalence at {current!r}")
             seen.add(current)
-            target_db, target_id = equivalence_redirects[current]
+            target_db, target_id = canonical_redirects[current]
             current = (target_db, target_id)
         return current[1], current[0]
 
@@ -120,7 +156,6 @@ def build_canonical_identity_registry(
                 resolved[key] = next(iter(best))
         return resolved
 
-    quality_map = databases.get("ingredient_quality_map")
     if isinstance(quality_map, Mapping):
         for canonical_id, entry in quality_map.items():
             if str(canonical_id).startswith("_") or not isinstance(entry, Mapping):
@@ -130,36 +165,21 @@ def build_canonical_identity_registry(
                 "deprecated_in_favor_of"
             ):
                 continue
-            target_id = (
-                match_rules.get("target_id")
-                if isinstance(match_rules, Mapping)
-                else None
-            )
-            registry_canonical_id = (
-                target_id
-                if isinstance(target_id, str) and target_id in quality_map
-                else canonical_id
-            )
             put(
                 entry.get("standard_name") or canonical_id,
-                registry_canonical_id,
+                canonical_id,
                 "ingredient_quality_map",
                 0,
             )
             for alias in entry.get("aliases") or ():
-                put(alias, registry_canonical_id, "ingredient_quality_map", 1)
+                put(alias, canonical_id, "ingredient_quality_map", 1)
             forms = entry.get("forms")
             if isinstance(forms, Mapping):
                 for form_name, form in forms.items():
-                    put(form_name, registry_canonical_id, "ingredient_quality_map", 2)
+                    put(form_name, canonical_id, "ingredient_quality_map", 2)
                     if isinstance(form, Mapping):
                         for alias in form.get("aliases") or ():
-                            put(
-                                alias,
-                                registry_canonical_id,
-                                "ingredient_quality_map",
-                                3,
-                            )
+                            put(alias, canonical_id, "ingredient_quality_map", 3)
 
     source_specs = (
         ("standardized_botanicals", "standardized_botanicals", "aliases"),
@@ -199,6 +219,7 @@ def build_canonical_identity_registry(
         candidates_index={
             key: tuple(sorted(values)) for key, values in candidates.items()
         },
+        canonical_redirects=dict(canonical_redirects),
     )
 
 
