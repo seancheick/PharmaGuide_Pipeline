@@ -45,7 +45,6 @@ class TestWholeFoodRouting:
         ("Brussels",                        {"botanical_ingredients"}),
         ("Green Bean powder",               {"botanical_ingredients"}),
         ("Lima Bean powder",                {"botanical_ingredients"}),
-        ("Cherry puree powder",             {"botanical_ingredients"}),
         ("Beef Protein isolate",            {"other_ingredients"}),
         ("Chicken Protein Isolate",         {"other_ingredients"}),
         ("Chickpea Protein",                {"other_ingredients"}),
@@ -56,6 +55,13 @@ class TestWholeFoodRouting:
         assert r[1] in expected_source_dbs, (
             f"{raw!r} resolved to source_db={r[1]!r}; expected one of {expected_source_dbs}"
         )
+
+    def test_species_ambiguous_cherry_puree_remains_unresolved(
+        self, normalizer
+    ) -> None:
+        assert normalizer._resolve_canonical_identity(
+            "Cherry puree powder", raw_name="Cherry puree powder"
+        ) == (None, None)
 
 
 class TestNewBotanicalEntriesExist:

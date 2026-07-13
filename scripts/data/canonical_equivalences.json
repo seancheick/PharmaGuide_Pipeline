@@ -3,7 +3,7 @@
     "description": "Reviewed exact-identity redirects across pipeline registries.",
     "schema_version": "1.0.0",
     "version": "2026-07-13",
-    "total_entries": 6,
+    "total_entries": 7,
     "purpose": "Reviewed exact-identity redirects across pipeline registries.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
     "last_updated": "2026-07-13"
@@ -61,6 +61,15 @@
       "target_id": "silica",
       "relation": "exact_equivalent",
       "basis": "Shared FDA UNII ETJ7Z6XBU4 and same silicon-dioxide identity; additive classification remains owned by the other-ingredient record.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "botanical_ingredients",
+      "source_id": "blueberry_fruit",
+      "target_db": "botanical_ingredients",
+      "target_id": "blueberry",
+      "relation": "exact_equivalent",
+      "basis": "Both records describe Vaccinium corymbosum fruit/whole-fruit powder and share CUI C1027331; the blueberry record also carries the verified FDA UNII 253RUG1X1A.",
       "scope": "all_identity_contexts"
     }
   ]
