@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-07-13",
-    "total_entries": 710,
+    "total_entries": 715,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -2618,7 +2618,6 @@
       "standard_name": "Brand Complex Descriptor",
       "aliases": [
         "ap-bio",
-        "Brain Shield",
         "cordiart flavonoid glycoside",
         "graminex g60",
         "graminex nax",
@@ -2666,7 +2665,6 @@
         "NeuroFactor whole Coffee fruit extract",
         "PectaSol-C",
         "GlucosaGreen",
-        "Bio-MOS",
         "Arthricor Olive extract",
         "LeanGBB",
         "Lean GBB",
@@ -24579,6 +24577,118 @@
       "external_ids": {},
       "functional_roles": [],
       "is_label_descriptor": true
+    },
+    {
+      "id": "OI_ACETYL_L_CARNITINE_ARGINATE",
+      "standard_name": "Acetyl-L-Carnitine Arginate",
+      "aliases": [
+        "ArginoCarn Acetyl-L-Carnitine Arginate Dihydrochloride",
+        "ArginoCarn Acetyl L-Carnitine Arginate Di-HCl",
+        "Acetyl L-Carnitine Arginate Dihydrochloride",
+        "Acetyl L-Carnitine Arginate Di-HCl",
+        "acetyl-l-carnitine arginate"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Identity-only routing for the arginate salt of acetyl-L-carnitine. Kept separate from the reviewed ALCAR form because the label does not establish equivalent oral pharmacokinetics; no form-quality or dose credit is assigned.",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {
+        "unii": "PIY2W03CO6"
+      },
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "OI_ACETYL_L_CARNITINE_TAURINATE",
+      "standard_name": "Acetyl-L-Carnitine Taurinate",
+      "aliases": [
+        "L-Tauro Acetyl-L-Carnitine Taurinate Hydrochloride",
+        "acetyl l-carnitine taurinate",
+        "acetyl-l-carnitine taurinate hydrochloride"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Identity-only routing for the taurinate salt of acetyl-L-carnitine. Kept separate from the reviewed ALCAR form because the label does not establish equivalent oral pharmacokinetics; no form-quality or dose credit is assigned.",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {
+        "unii": "S3Z3R3X6RL"
+      },
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "OI_GASTRODIN",
+      "standard_name": "Gastrodin",
+      "aliases": [
+        "Gastrodin",
+        "Brain Shield",
+        "Brain Shield Gastrodin"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Label-faithful gastrodin active identity, including the Brain Shield trade name. Identity-only until a reviewed quality and dose rubric exists; no automatic formulation credit is assigned.",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {
+        "unii": "5YS9U2W3RQ"
+      },
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "OI_ALKYLGLYCEROLS",
+      "standard_name": "Alkylglycerols",
+      "aliases": [
+        "alkylglycerol",
+        "alkylglycerols"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Label-faithful identity for the alkylglycerol mixture declared from shark-liver oil. Identity-only because the mixture has no reviewed quality-form rubric; no automatic formulation credit is assigned.",
+      "common_uses": [
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "OI_MOS_YEAST_FRACTION",
+      "standard_name": "Mannan-Oligosaccharide Yeast Fraction",
+      "aliases": [
+        "MOS Yeast Fraction",
+        "Bio-MOS"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Yeast-derived mannan-oligosaccharide fraction declared as an active prebiotic ingredient. Kept distinct from FOS, GOS, XOS, D-mannose, and generic yeast fermentate; identity-only until a reviewed MOS-specific scoring rubric exists.",
+      "common_uses": [
+        "prebiotic support",
+        "active ingredient identity"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
     }
   ]
 }
