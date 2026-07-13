@@ -61,6 +61,7 @@ def test_iqm_unii_uses_owning_canonical_not_umbrella_alias():
     cases = (
         ("Bromelain", "U182GP2CF3", "enzyme", "bromelain"),
         ("Oleic Acid", "2UMI9U37CP", "fatty acid", "oleic_acid"),
+        ("Vitamin K1", "A034SE7857", "vitamin", "vitamin_k"),
     )
     for name, unii, category, expected_canonical in cases:
         cleaned = normalizer._process_single_ingredient_enhanced(
@@ -78,6 +79,22 @@ def test_iqm_unii_uses_owning_canonical_not_umbrella_alias():
         assert cleaned["canonical_id"] == expected_canonical
         assert cleaned["canonical_source_db"] == "ingredient_quality_map"
         assert cleaned["cleaner_match_method"] == "unii_exact_match"
+
+
+def test_cleaner_registry_consumes_reviewed_cross_registry_equivalences():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    registry = normalizer._canonical_identity_registry
+
+    assert registry.resolve_verified_preferred("Medium Chain Triglycerides") == (
+        "mct_oil",
+        "ingredient_quality_map",
+    )
+    assert registry.resolve_verified_preferred("Acerola") == (
+        "acerola_cherry",
+        "botanical_ingredients",
+    )
 
 
 def test_cleaner_identity_fields_never_come_from_safety_sources():

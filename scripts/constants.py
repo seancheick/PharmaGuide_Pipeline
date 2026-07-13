@@ -40,6 +40,7 @@ CERT_CLAIM_RULES = DATA_DIR / "cert_claim_rules.json"  # Versioned rules for cer
 UNIT_CONVERSIONS_DB = DATA_DIR / "unit_conversions.json"  # Nutrient + form specific unit conversions for dosage normalization
 PRODUCT_LABEL_CORRECTIONS = DATA_DIR / "curated_overrides" / "product_label_corrections.json"  # Reviewer-signed per-product label-typo corrections (RC-5)
 PRODUCT_CONTEXT_CANONICAL_OVERRIDES = DATA_DIR / "curated_overrides" / "product_context_canonical_overrides.json"  # Reviewer-signed per-product canonical_id + IQM-form overrides (cleaner-side context routing, 2026-05-24)
+CANONICAL_EQUIVALENCES = DATA_DIR / "canonical_equivalences.json"  # Reviewed exact-identity redirects across reference registries
 
 # Output subdirectories
 OUTPUT_CLEANED = OUTPUT_DIR / "cleaned"

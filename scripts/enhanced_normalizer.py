@@ -73,6 +73,7 @@ from constants import (
     SOURCE_WRAPPER_NAMES,
     PRODUCT_LABEL_CORRECTIONS,
     PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
+    CANONICAL_EQUIVALENCES,
 )
 from identity.safety import has_explicit_form_evidence
 from identity_integrity import build_canonical_identity_registry
@@ -1088,6 +1089,7 @@ class EnhancedDSLDNormalizer:
         self.manufacturers_db = self._load_json(TOP_MANUFACTURERS)
         self.proprietary_blends = self._load_json(PROPRIETARY_BLENDS)
         self.standardized_botanicals = self._load_json(STANDARDIZED_BOTANICALS)
+        self.canonical_equivalences = self._load_json(CANONICAL_EQUIVALENCES)
         self.banned_recalled = self._load_json(BANNED_RECALLED)
         self.other_ingredients = self._load_json(OTHER_INGREDIENTS)  # Merged: non_harmful + passive_inactive
         self.botanical_ingredients = self._load_json(BOTANICAL_INGREDIENTS)
@@ -2039,6 +2041,13 @@ class EnhancedDSLDNormalizer:
                 if (parent_data.get("match_rules") or {}).get("deprecated_in_favor_of"):
                     continue
                 parent_std = parent_data.get("standard_name", parent_key)
+                match_rules = parent_data.get("match_rules") or {}
+                target_id = match_rules.get("target_id")
+                canonical_id = (
+                    target_id
+                    if isinstance(target_id, str) and target_id in quality_map
+                    else parent_key
+                )
                 # A UNII identifies this IQM entry directly. Do not round-trip
                 # through the text alias index: an umbrella entry can also own
                 # the specific entry's standard name as an alias (for example,
@@ -2047,7 +2056,7 @@ class EnhancedDSLDNormalizer:
                 payload = {
                     "type": "ingredient",
                     "standard_name": parent_std,
-                    "canonical_id": parent_key,
+                    "canonical_id": canonical_id,
                     "canonical_source_db": "ingredient_quality_map",
                     "mapped": True,
                     "priority": 4,
@@ -3133,6 +3142,7 @@ class EnhancedDSLDNormalizer:
                 "botanical_ingredients": self.botanical_ingredients,
                 "other_ingredients": self.other_ingredients,
                 "proprietary_blends": self.proprietary_blends,
+                "canonical_equivalences": self.canonical_equivalences,
             }
         )
         self._canonical_id_by_std_name = dict(
