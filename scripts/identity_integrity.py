@@ -616,6 +616,13 @@ def resolve_identity(
         raw_canonicals,
         canonical_parent_of,
     )
+    structured_disambiguated_by_literal = bool(
+        structured_canonical is None
+        and len(structured_canonicals) > 1
+        and raw_canonical in structured_canonicals
+    )
+    if structured_disambiguated_by_literal:
+        structured_canonical = raw_canonical
     display_canonical = structured_canonical or raw_canonical
     source_name = _source_name(evidence, display_canonical, resolve_candidate)
     source_form = next(
@@ -653,7 +660,12 @@ def resolve_identity(
         elif canonical_before == structured_canonical:
             disposition = "clean"
             canonical_after = structured_canonical
-            rationale = "Structured line identity agrees with the supplied canonical ID."
+            rationale = (
+                "The unambiguous literal label selected the matching identity "
+                "from conflicting structured fields."
+                if structured_disambiguated_by_literal
+                else "Structured line identity agrees with the supplied canonical ID."
+            )
         else:
             disposition = "repaired"
             canonical_after = structured_canonical

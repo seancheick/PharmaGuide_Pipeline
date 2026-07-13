@@ -644,6 +644,53 @@ def test_conflicting_structured_canonicals_are_not_scoreable():
     assert "epa" in decision.rationale
 
 
+def test_literal_compound_disambiguates_generic_counterion_taxonomy():
+    canonicals = {
+        "calcium": "calcium",
+        "calcium d-glucarate": "calcium_d_glucarate",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Calcium D-Glucarate",
+            "ingredientGroup": "Calcium",
+            "label_nutrient_context": "Calcium D-Glucarate",
+        },
+        supplied_canonical_id="calcium_d_glucarate",
+        resolve_candidate=lambda value: canonicals.get(
+            normalize_label_display(value).casefold()
+        ),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "calcium_d_glucarate"
+    assert decision.scoreable_identity is True
+
+
+def test_literal_identity_cannot_resolve_unrelated_structured_conflict():
+    canonicals = {
+        "epa": "epa",
+        "dha": "dha",
+        "fish oil": "fish_oil",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Fish Oil",
+            "ingredientGroup": "EPA",
+            "label_nutrient_context": "DHA",
+        },
+        supplied_canonical_id="epa",
+        resolve_candidate=lambda value: canonicals.get(
+            normalize_label_display(value).casefold()
+        ),
+    )
+
+    assert decision.disposition == "identity_conflict"
+    assert decision.canonical_id is None
+    assert decision.scoreable_identity is False
+
+
 def test_missing_literal_display_label_is_not_replaced_by_canonical_name():
     decision = resolve_identity(
         row={"forms": [{"prefix": "as", "name": "Ethyl Esters"}]},
