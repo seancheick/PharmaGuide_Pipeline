@@ -5,6 +5,7 @@ from dataclasses import FrozenInstanceError
 import pytest
 
 from identity_integrity import (
+    build_canonical_identity_registry,
     IdentityDecision,
     extract_label_evidence,
     is_identity_scoreable,
@@ -27,6 +28,70 @@ CANONICALS = {
 
 def fake_resolver(candidate: str) -> str | None:
     return CANONICALS.get(normalize_label_display(candidate).casefold())
+
+
+def test_canonical_identity_registry_has_one_priority_and_ambiguity_contract():
+    registry = build_canonical_identity_registry(
+        {
+            "ingredient_quality_map": {
+                "_metadata": {},
+                "coq10": {
+                    "standard_name": "Coenzyme Q10",
+                    "aliases": ["Shared Alias"],
+                    "forms": {
+                        "ubiquinone": {"aliases": ["Coenzyme Q-10"]},
+                    },
+                    "match_rules": {},
+                },
+            },
+            "standardized_botanicals": {
+                "standardized_botanicals": [
+                    {
+                        "id": "elderberry_std",
+                        "standard_name": "European Elder",
+                        "aliases": ["Shared Alias"],
+                    }
+                ]
+            },
+            "botanical_ingredients": {
+                "botanical_ingredients": [
+                    {
+                        "id": "elderberry",
+                        "standard_name": "Black Elderberry",
+                        "aliases": ["Sambucus nigra"],
+                    }
+                ]
+            },
+            "other_ingredients": {
+                "other_ingredients": [
+                    {
+                        "id": "OI_EDTA",
+                        "standard_name": "EDTA",
+                        "aliases": ["EDTA Disodium"],
+                    }
+                ]
+            },
+            "proprietary_blends": {
+                "proprietary_blend_concerns": [
+                    {
+                        "id": "BLEND_GENERAL",
+                        "standard_name": "General Blend",
+                        "blend_terms": ["Proprietary Blend"],
+                    }
+                ]
+            },
+        }
+    )
+
+    assert registry.resolve_unambiguous("Coenzyme Q-10") == "coq10"
+    assert registry.resolve_unambiguous("Sambucus nigra") == "elderberry"
+    assert registry.resolve_unambiguous("EDTA Disodium") == "OI_EDTA"
+    assert registry.resolve_unambiguous("Proprietary Blend") == "BLEND_GENERAL"
+    assert registry.resolve_unambiguous("Shared Alias") is None
+    assert registry.resolve_preferred("Shared Alias") == (
+        "coq10",
+        "ingredient_quality_map",
+    )
 
 
 def test_normalize_label_display_uses_the_approved_operation_order():

@@ -36,6 +36,87 @@ _LITERAL_PARENTHESIZED_IDENTITY_RE = re.compile(
 
 
 @dataclass(frozen=True, slots=True)
+class CanonicalIdentityRegistry:
+    preferred_index: Mapping[str, tuple[str, str]]
+    candidates_index: Mapping[str, tuple[str, ...]]
+
+    @staticmethod
+    def _key(value: Any) -> str:
+        return normalize_label_display(value).casefold()
+
+    def resolve_preferred(self, value: Any) -> tuple[str, str] | None:
+        return self.preferred_index.get(self._key(value))
+
+    def resolve_unambiguous(self, value: Any) -> str | None:
+        candidates = self.candidates_index.get(self._key(value), ())
+        return candidates[0] if len(candidates) == 1 else None
+
+
+def build_canonical_identity_registry(
+    databases: Mapping[str, Any],
+) -> CanonicalIdentityRegistry:
+    """Build the shared cleaner/enricher identity index from owned registries."""
+    preferred: dict[str, tuple[str, str]] = {}
+    candidates: dict[str, set[str]] = {}
+
+    def put(value: Any, canonical_id: Any, source_db: str) -> None:
+        key = CanonicalIdentityRegistry._key(value)
+        canonical = str(canonical_id or "").strip()
+        if not key or not canonical:
+            return
+        candidates.setdefault(key, set()).add(canonical)
+        preferred.setdefault(key, (canonical, source_db))
+
+    quality_map = databases.get("ingredient_quality_map")
+    if isinstance(quality_map, Mapping):
+        for canonical_id, entry in quality_map.items():
+            if str(canonical_id).startswith("_") or not isinstance(entry, Mapping):
+                continue
+            match_rules = entry.get("match_rules")
+            if isinstance(match_rules, Mapping) and match_rules.get(
+                "deprecated_in_favor_of"
+            ):
+                continue
+            put(entry.get("standard_name") or canonical_id, canonical_id, "ingredient_quality_map")
+            for alias in entry.get("aliases") or ():
+                put(alias, canonical_id, "ingredient_quality_map")
+            forms = entry.get("forms")
+            if isinstance(forms, Mapping):
+                for form_name, form in forms.items():
+                    put(form_name, canonical_id, "ingredient_quality_map")
+                    if isinstance(form, Mapping):
+                        for alias in form.get("aliases") or ():
+                            put(alias, canonical_id, "ingredient_quality_map")
+
+    source_specs = (
+        ("standardized_botanicals", "standardized_botanicals", "aliases"),
+        ("botanical_ingredients", "botanical_ingredients", "aliases"),
+        ("other_ingredients", "other_ingredients", "aliases"),
+        ("proprietary_blends", "proprietary_blend_concerns", "blend_terms"),
+    )
+    for source_db, collection_key, alias_key in source_specs:
+        database = databases.get(source_db)
+        rows = database.get(collection_key) if isinstance(database, Mapping) else None
+        if not isinstance(rows, (list, tuple)):
+            continue
+        for entry in rows:
+            if not isinstance(entry, Mapping):
+                continue
+            standard_name = str(entry.get("standard_name") or "").strip()
+            canonical_id = entry.get("id") or standard_name.lower().replace(" ", "_")
+            put(standard_name, canonical_id, source_db)
+            for alias in entry.get(alias_key) or ():
+                put(alias, canonical_id, source_db)
+
+    return CanonicalIdentityRegistry(
+        preferred_index=dict(preferred),
+        candidates_index={
+            key: tuple(sorted(values)) for key, values in candidates.items()
+        },
+    )
+
+
+@dataclass(frozen=True, slots=True)
 class LabelEvidence:
     field: str
     value: str
