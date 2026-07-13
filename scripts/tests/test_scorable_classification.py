@@ -249,6 +249,8 @@ class TestIdentityIntegrityBoundary:
         [
             ("Coenzyme Q-10", "coq10"),
             ("Niacin", "vitamin_b3_niacin"),
+            ("Galla chinensis", "galla_chinensis"),
+            ("European Elder", "elderberries"),
         ],
     )
     def test_identity_candidate_accepts_exact_aliases_stored_on_iqm_forms(
@@ -262,6 +264,16 @@ class TestIdentityIntegrityBoundary:
         )
 
         assert resolver(label) == expected_canonical
+
+    def test_identity_candidate_rejects_cross_registry_alias_ambiguity(
+        self,
+        enricher,
+    ):
+        resolver = enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"]
+        )
+
+        assert resolver("Acerola") is None
 
     @pytest.mark.parametrize("label", ["as Ethyl Esters", "as Citrate"])
     def test_identity_candidate_does_not_promote_form_modifiers(

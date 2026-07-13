@@ -100,7 +100,12 @@ from scoring_input_contract import (
     derive_product_scoring_evidence,
     get_scoring_ingredients,
 )
-from identity_integrity import IdentityDecision, is_identity_scoreable, resolve_identity
+from identity_integrity import (
+    IdentityDecision,
+    build_canonical_identity_registry,
+    is_identity_scoreable,
+    resolve_identity,
+)
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -3131,6 +3136,13 @@ class SupplementEnricherV3:
         )
 
     def _identity_candidate_resolver(self, quality_map: Dict):
+        if getattr(self, "_canonical_identity_databases", None) is not self.databases:
+            self._canonical_identity_registry = build_canonical_identity_registry(
+                self.databases
+            )
+            self._canonical_identity_databases = self.databases
+        identity_registry = self._canonical_identity_registry
+
         def resolve(candidate: str) -> Optional[str]:
             match_result = self._match_quality_map(
                 candidate,
@@ -3138,17 +3150,16 @@ class SupplementEnricherV3:
                 quality_map,
                 _form_extraction_attempt=True,
             )
-            if not isinstance(match_result, dict):
-                return None
-            canonical_id = match_result.get("canonical_id")
-            if (
-                not canonical_id
-                or match_result.get("match_status") == "FORM_UNMAPPED"
-                or match_result.get("match_tier") not in {"exact", "normalized"}
-                or match_result.get("match_ambiguity_candidates")
-            ):
-                return None
-            return canonical_id
+            if isinstance(match_result, dict):
+                canonical_id = match_result.get("canonical_id")
+                if (
+                    canonical_id
+                    and match_result.get("match_status") != "FORM_UNMAPPED"
+                    and match_result.get("match_tier") in {"exact", "normalized"}
+                    and not match_result.get("match_ambiguity_candidates")
+                ):
+                    return canonical_id
+            return identity_registry.resolve_unambiguous(candidate)
 
         return resolve
 
