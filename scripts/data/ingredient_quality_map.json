@@ -38904,6 +38904,13 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
+    "relationships": [
+      {
+        "type": "category_for",
+        "target_id": "silica",
+        "notes": "DSLD groups label-declared silica (silicon dioxide; UNII ETJ7Z6XBU4) under the broader Silicon ingredient group."
+      }
+    ],
     "aliases": []
   },
   "fluoride": {

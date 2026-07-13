@@ -275,6 +275,30 @@ class TestIdentityIntegrityBoundary:
 
         assert resolver("Acerola") is None
 
+    def test_silicon_group_refines_to_label_declared_silica(self, enricher):
+        quality_map = enricher.databases["ingredient_quality_map"]
+        decision, _, _ = enricher._resolve_iqd_identity(
+            {
+                "raw_source_text": "Silica",
+                "name": "Silica",
+                "ingredientGroup": "Silicon",
+                "label_nutrient_context": "silica",
+                "uniiCode": "ETJ7Z6XBU4",
+                "forms": [],
+            },
+            {
+                "canonical_id": "silica",
+                "standard_name": "Silica",
+                "match_tier": "exact",
+                "match_status": "MATCHED",
+                "match_ambiguity_candidates": [],
+            },
+            quality_map,
+        )
+
+        assert decision.disposition == "clean"
+        assert decision.canonical_id == "silica"
+
     @pytest.mark.parametrize("label", ["as Ethyl Esters", "as Citrate"])
     def test_identity_candidate_does_not_promote_form_modifiers(
         self,
