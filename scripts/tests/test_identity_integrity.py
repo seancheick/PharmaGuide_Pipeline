@@ -182,6 +182,28 @@ def test_resolved_outer_identity_wins_over_parenthetical_acronym():
     assert decision.canonical_id == "mct_oil"
 
 
+def test_declared_group_beats_ambiguous_alternate_name():
+    candidates = {
+        "alpha-linolenic acid": "alpha_linolenic_acid",
+        "ala": "alpha_lipoic_acid",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Alpha-Linolenic Acid",
+            "ingredientGroup": "Alpha-Linolenic Acid",
+            "alternateNames": ["ALA"],
+        },
+        supplied_canonical_id="alpha_linolenic_acid",
+        resolve_candidate=lambda value: candidates.get(
+            normalize_label_display(value).casefold()
+        ),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "alpha_linolenic_acid"
+
+
 def test_normalize_label_display_uses_the_approved_operation_order():
     value = "  ＥＰＡ™\t(tm)  ® ℠ (r)\n(sm)  "
 

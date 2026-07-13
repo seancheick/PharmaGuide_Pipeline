@@ -450,12 +450,28 @@ def resolve_identity(
     structured_evidence = tuple(
         item for item in evidence if item.kind == "structured_identity"
     )
+    primary_structured_evidence = tuple(
+        item
+        for item in structured_evidence
+        if not item.field.startswith("alternateNames")
+    )
+    alternate_name_evidence = tuple(
+        item
+        for item in structured_evidence
+        if item.field.startswith("alternateNames")
+    )
     raw_evidence = tuple(item for item in evidence if item.kind == "source_name")
     structured_canonicals = _resolved_canonicals(
-        structured_evidence,
+        primary_structured_evidence,
         resolve_candidate,
         canonical_parent_of,
     )
+    if not structured_canonicals:
+        structured_canonicals = _resolved_canonicals(
+            alternate_name_evidence,
+            resolve_candidate,
+            canonical_parent_of,
+        )
     raw_canonicals = _resolved_canonicals(
         raw_evidence,
         resolve_candidate,
