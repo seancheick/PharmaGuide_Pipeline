@@ -730,6 +730,48 @@ class TestIdentityIntegrityBoundary:
         assert row["scoreable_identity"] is False
         assert row not in result["ingredients_scorable"]
 
+    def test_identity_integrity_direct_unii_outweighs_unrelated_source_form_uniis(
+        self, enricher
+    ):
+        product = {
+            "id": "arginine-with-protein-sources",
+            "fullName": "Arginine 3 g",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="Arginine",
+                    raw_source_text="Arginine",
+                    standardName="L-Arginine",
+                    canonical_id="l_arginine",
+                    uniiCode="94ZLA3W45F",
+                    ingredientGroup="Arginine",
+                    forms=[
+                        {
+                            "name": "L-Arginine, Micronized",
+                            "ingredientGroup": "Arginine",
+                            "uniiCode": "94ZLA3W45F",
+                        },
+                        {
+                            "name": "Whey Protein Isolate",
+                            "ingredientGroup": "Whey Protein",
+                            "uniiCode": "8617Z5FMF6",
+                        },
+                    ],
+                    quantity=3.0,
+                    unit="g",
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["canonical_id"] == "l_arginine"
+        assert row["identity_disposition"] == "taxonomy_only"
+        assert row["identity_taxonomy_coherent"] is True
+        assert row["scoreable_identity"] is True
+        assert row in result["ingredients_scorable"]
+
 
 class TestScorableClassificationPass1:
     """Test Pass 1: Skip filters for activeIngredients"""

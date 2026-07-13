@@ -3043,7 +3043,11 @@ class SupplementEnricherV3:
         return 1.0 if match_result.get("match_tier") == "exact" else 0.9
 
     @staticmethod
-    def _identity_unii_values(row: Dict) -> set[str]:
+    def _identity_unii_values(
+        row: Dict,
+        *,
+        include_forms: bool = True,
+    ) -> set[str]:
         values = set()
 
         def add(value: Any) -> None:
@@ -3056,22 +3060,24 @@ class SupplementEnricherV3:
         external_ids = row.get("external_ids")
         if isinstance(external_ids, dict):
             add(external_ids.get("unii"))
-        for form in row.get("forms") or []:
-            if not isinstance(form, dict):
-                continue
-            add(form.get("uniiCode"))
-            add(form.get("unii"))
-            form_external_ids = form.get("external_ids")
-            if isinstance(form_external_ids, dict):
-                add(form_external_ids.get("unii"))
+        if include_forms:
+            for form in row.get("forms") or []:
+                if not isinstance(form, dict):
+                    continue
+                add(form.get("uniiCode"))
+                add(form.get("unii"))
+                form_external_ids = form.get("external_ids")
+                if isinstance(form_external_ids, dict):
+                    add(form_external_ids.get("unii"))
         raw_taxonomy = row.get("raw_taxonomy")
         if isinstance(raw_taxonomy, dict):
             add(raw_taxonomy.get("uniiCode"))
             add(raw_taxonomy.get("unii"))
-            for form in raw_taxonomy.get("forms") or []:
-                if isinstance(form, dict):
-                    add(form.get("uniiCode"))
-                    add(form.get("unii"))
+            if include_forms:
+                for form in raw_taxonomy.get("forms") or []:
+                    if isinstance(form, dict):
+                        add(form.get("uniiCode"))
+                        add(form.get("unii"))
         return values
 
     def _identity_taxonomy_coherent(
@@ -3140,7 +3146,11 @@ class SupplementEnricherV3:
         elif ingredient.get("forms"):
             return False
 
-        supplied_uniis = self._identity_unii_values(ingredient)
+        direct_uniis = self._identity_unii_values(
+            ingredient,
+            include_forms=False,
+        )
+        supplied_uniis = direct_uniis or self._identity_unii_values(ingredient)
         if supplied_uniis:
             registry_uniis = self._identity_unii_values(registry_entry)
             if isinstance(selected_form, dict):
