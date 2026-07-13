@@ -8124,7 +8124,7 @@
         "ptychopetalum olacoides",
         "potency wood",
         "marapuama",
-        "muira puama bark extract"
+        "muira puama extract"
       ],
       "category": "herb",
       "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII G582QI158H verified via scripts/data/fda_unii_cache.json. Men's health herb often sold as crude extract (4:1 to 10:1 concentration ratio).",
@@ -9568,16 +9568,13 @@
     },
     {
       "id": "muira_puama_bark",
-      "standard_name": "Muira Puama",
+      "standard_name": "Muira Puama Bark",
       "latin_name": "Ptychopetalum olacoides",
       "aliases": [
-        "muira puama extract",
         "muira puama bark",
         "muira puama bark extract",
-        "ptychopetalum olacoides",
-        "ptychopetalum olacoides extract",
-        "potency wood",
-        "muira puama root powder"
+        "ptychopetalum olacoides bark",
+        "ptychopetalum olacoides bark extract"
       ],
       "category": "bark",
       "notes": "Ptychopetalum olacoides (Olacaceae) bark/root. Amazonian 'potency wood.' Contains muirapuamine and lupeol triterpene. Traditional aphrodisiac and nervine tonic. Limited clinical evidence.",

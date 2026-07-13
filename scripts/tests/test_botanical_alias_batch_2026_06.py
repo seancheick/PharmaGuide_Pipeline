@@ -14,6 +14,7 @@ labels use it inside Triphala contexts for Terminalia chebula/myrobalan, while
 the common name can also mean Terminalia catappa. Keep it unmapped until a
 context-specific routing decision is reviewed.
 """
+import json
 import os
 import sys
 
@@ -39,6 +40,9 @@ def enricher():
         ("Biolut(TM) Marigold Extract", "marigold"),  # branded marigold lutein extract -> marigold botanical (dose-aware)
         ("Chinese Vitex", "nirgundi"),                # Vitex negundo, alias to existing Nirgundi (same CUI C1643782)
         ("Red Currant Fruit Extract", "red_currant"),         # new: Ribes rubrum (C1201367)
+        ("Muira Puama", "muira_puama"),
+        ("Ellirose Hibiscus extract", "hibiscus_extract"),
+        ("Excelery", "celery"),
     ],
 )
 def test_botanical_label_recognized_as_identity(enricher, label, expected_id):
@@ -55,3 +59,21 @@ def test_tropical_almond_stays_unmapped_until_context_review(enricher):
         "Triphala/Chebulic Myrobalan context, while the common name may also "
         "refer to Terminalia catappa."
     )
+
+
+def test_muira_puama_bark_has_a_distinct_standard_name():
+    path = os.path.join(
+        os.path.dirname(__file__), "..", "data", "botanical_ingredients.json"
+    )
+    with open(path, encoding="utf-8") as handle:
+        entries = json.load(handle)["botanical_ingredients"]
+
+    names = {
+        entry["id"]: entry["standard_name"]
+        for entry in entries
+        if entry.get("id") in {"muira_puama", "muira_puama_bark"}
+    }
+    assert names == {
+        "muira_puama": "Muira Puama",
+        "muira_puama_bark": "Muira Puama Bark",
+    }
