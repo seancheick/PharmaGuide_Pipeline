@@ -253,3 +253,32 @@ class TestCleanerRowBuilderHonorsBlendHeaders:
         assert result.get("canonical_id") is not None, (
             f"{name!r}: cleaner must emit canonical_id post-D2.3."
         )
+
+
+def test_expanded_active_forms_keep_source_species_as_provenance(normalizer):
+    parent = {
+        "name": "Marine Oil Concentrate",
+        "ingredientGroup": "Blend",
+        "forms": [
+            {
+                "name": "Squid",
+                "category": "animal part or source",
+                "ingredientGroup": "Squid",
+                "uniiCode": "P5490L96SZ",
+            },
+            {
+                "name": "Docosahexaenoic Acid",
+                "category": "fatty acid",
+                "ingredientGroup": "DHA (Docosahexaenoic Acid)",
+                "uniiCode": "ZAD9OKH9JC",
+            },
+        ],
+    }
+
+    expanded = normalizer._expand_header_forms_for_processing(
+        parent,
+        source_path="ingredientRows[0]",
+    )
+
+    assert [row["name"] for row in expanded] == ["Docosahexaenoic Acid"]
+    assert expanded[0]["category"] == "fatty acid"

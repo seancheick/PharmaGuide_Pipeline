@@ -7127,6 +7127,17 @@ class EnhancedDSLDNormalizer:
         for form in forms:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
+                form_category = str(form.get("category") or "").strip().lower()
+                if is_active_source and form_category in {
+                    "animal part or source",
+                    "plant part",
+                    "source material",
+                }:
+                    # Source species/tissues describe where the parent active
+                    # came from; they are not standalone supplement actives.
+                    # The original form remains attached to the parent/display
+                    # ledger, so only top-level scoring expansion is suppressed.
+                    continue
                 if self._is_zero_dose_omega_molecular_form_attribute(
                     ingredient,
                     form,
@@ -7147,7 +7158,10 @@ class EnhancedDSLDNormalizer:
                             "raw_source_path": form_source_path,
                             "normalized_key": norm_module.make_normalized_key(expanded_name),
                             "name": expanded_name,
+                            "category": form.get("category"),
                             "ingredientGroup": form_group,
+                            "prefix": form.get("prefix"),
+                            "percent": form.get("percent"),
                             "forms": [],
                             "alternateNames": [],
                             "_fromLabelHeader": name,
@@ -7176,7 +7190,10 @@ class EnhancedDSLDNormalizer:
                         "raw_source_path": form_source_path,
                         "normalized_key": norm_module.make_normalized_key(form_name),
                         "name": form_name,
+                        "category": form.get("category"),
                         "ingredientGroup": form_group,
+                        "prefix": form.get("prefix"),
+                        "percent": form.get("percent"),
                         "forms": [],
                         "alternateNames": [],
                         "_fromLabelHeader": name,
