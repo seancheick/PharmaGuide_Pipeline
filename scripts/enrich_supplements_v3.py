@@ -3092,12 +3092,31 @@ class SupplementEnricherV3:
             match_tier == "cleaner_canonical_parent"
             and match_result.get("cleaner_canonical_enforced") is True
         ) or curated_context_override
+        # Ambiguity among FORMS of the SAME canonical identity (e.g. an ashwagandha
+        # row that a "Sensoril" context resolved to the sensoril form while the
+        # unspecified form remained a candidate) does NOT make the identity
+        # incoherent — the canonical is unambiguous, only the form was disambiguated.
+        # Only ambiguity across DIFFERENT canonical identities breaks coherence. Any
+        # candidate that names a different canonical, or names none at all, is treated
+        # conservatively as identity-level ambiguity.
+        matched_canonical_id = (
+            match_result.get("canonical_id") if isinstance(match_result, dict) else None
+        )
+        identity_level_ambiguity = any(
+            (not isinstance(cand, dict))
+            or cand.get("canonical_id") != matched_canonical_id
+            for cand in (
+                match_result.get("match_ambiguity_candidates") or []
+                if isinstance(match_result, dict)
+                else []
+            )
+        )
         if (
             not isinstance(match_result, dict)
             or not strong_match_tier
             or match_result.get("match_status") == "FORM_UNMAPPED"
             or self._quality_match_identity_confidence(match_result) < 0.9
-            or match_result.get("match_ambiguity_candidates")
+            or identity_level_ambiguity
         ):
             return False
 
@@ -3251,6 +3270,7 @@ class SupplementEnricherV3:
         quality_map: Dict,
         *,
         allow_unscoreable_taxonomy_only: bool = False,
+        authoritative_context_override: bool = False,
     ) -> Tuple[IdentityDecision, Optional[Dict], bool]:
         supplied_canonical_id = (
             self._quality_match_scoring_canonical(match_result, quality_map)
@@ -3270,6 +3290,20 @@ class SupplementEnricherV3:
 
             def resolve_candidate(candidate: str) -> Optional[str]:
                 return reviewed_canonical_id
+
+        if authoritative_context_override and supplied_canonical_id:
+            # A deliberate product-context MARKER override (e.g. a kelp-source row
+            # whose product is a standardized "Fucoidan 70%" supplement) has already
+            # replaced the raw-row identity with the clinically-correct scoring
+            # marker. The raw source taxonomy it is CORRECTING (kelp) must not then be
+            # used to "repair" the marker back to its generic source, so the override
+            # canonical is authoritative for re-resolution and the gate confirms it
+            # rather than reverting it. Genuine cross-identity mislabels are still
+            # gated upstream by _is_blocked_botanical_source_marker_match.
+            authoritative_canonical_id = supplied_canonical_id
+
+            def resolve_candidate(candidate: str) -> Optional[str]:
+                return authoritative_canonical_id
 
         decision = resolve_identity(
             ingredient,
@@ -3654,7 +3688,15 @@ class SupplementEnricherV3:
                 match_result = None
                 context_match_reason = None
             identity_decision, match_result, taxonomy_coherent = (
-                self._resolve_iqd_identity(ingredient, match_result, quality_map)
+                self._resolve_iqd_identity(
+                    ingredient,
+                    match_result,
+                    quality_map,
+                    authoritative_context_override=(
+                        context_match_reason == "kelp_fucoidan_marker_context"
+                        and isinstance(match_result, dict)
+                    ),
+                )
             )
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
