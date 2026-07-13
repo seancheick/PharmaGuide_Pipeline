@@ -152,6 +152,19 @@ _CLEANER_MATCH_METHOD_MAP = {
     "alternate_name_match": METHOD_ALTERNATE_NAME,
 }
 
+_SOURCE_DESCRIPTOR_FORM_CATEGORIES = frozenset({
+    "animal part or source",
+    "plant part",
+    "source material",
+})
+_SOURCE_DESCRIPTOR_FORM_PREFIXES = frozenset({
+    "from",
+    "culture of",
+    "and culture of",
+    "naturally occurring from",
+    "derived from",
+})
+
 
 # Sprint E1.3.2 — probiotic CFU adequacy helpers.
 # Pure module-level functions (testable in isolation, no SupplementEnricherV3
@@ -3042,8 +3055,8 @@ class SupplementEnricherV3:
             return 0.8
         return 1.0 if match_result.get("match_tier") == "exact" else 0.9
 
-    @staticmethod
     def _identity_unii_values(
+        self,
         row: Dict,
         *,
         include_forms: bool = True,
@@ -3064,6 +3077,8 @@ class SupplementEnricherV3:
             for form in row.get("forms") or []:
                 if not isinstance(form, dict):
                     continue
+                if self._is_source_descriptor_form(form, parent_row=row):
+                    continue
                 add(form.get("uniiCode"))
                 add(form.get("unii"))
                 form_external_ids = form.get("external_ids")
@@ -3076,9 +3091,49 @@ class SupplementEnricherV3:
             if include_forms:
                 for form in raw_taxonomy.get("forms") or []:
                     if isinstance(form, dict):
+                        if self._is_source_descriptor_form(
+                            form,
+                            parent_row=raw_taxonomy,
+                        ):
+                            continue
                         add(form.get("uniiCode"))
                         add(form.get("unii"))
         return values
+
+    def _is_source_descriptor_form(
+        self,
+        form: Dict,
+        *,
+        parent_row: Optional[Dict] = None,
+    ) -> bool:
+        """Return whether a form identifies provenance rather than the active."""
+        category = str(form.get("category") or "").strip().lower()
+        prefix = str(form.get("prefix") or "").strip().lower()
+        name = str(form.get("name") or "").strip()
+        parent_row = parent_row if isinstance(parent_row, dict) else {}
+        raw_taxonomy = parent_row.get("raw_taxonomy")
+        parent_category = str(
+            parent_row.get("raw_category")
+            or parent_row.get("category")
+            or (
+                raw_taxonomy.get("category")
+                if isinstance(raw_taxonomy, dict)
+                else ""
+            )
+            or ""
+        ).strip().lower()
+
+        if category in _SOURCE_DESCRIPTOR_FORM_CATEGORIES:
+            return True
+        if category == "botanical" and parent_category != "botanical":
+            return True
+        return bool(
+            prefix in _SOURCE_DESCRIPTOR_FORM_PREFIXES
+            and not (
+                prefix == "from"
+                and self._should_keep_from_prefixed_form_as_actual(name)
+            )
+        )
 
     def _identity_taxonomy_coherent(
         self,
@@ -6774,18 +6829,6 @@ class SupplementEnricherV3:
             # matcher produces false fallbacks and audit noise.
             _dsld_category = (form_data.get('dsld_category') or '').lower().strip()
             _dsld_prefix = (form_data.get('dsld_prefix') or '').lower().strip()
-            _SOURCE_CATEGORIES = {
-                'animal part or source',
-                'plant part',
-                'source material',
-            }
-            _SOURCE_PREFIXES = {
-                'from',
-                'culture of',
-                'and culture of',
-                'naturally occurring from',
-                'derived from',
-            }
             # Exception: "from"-prefix forms that are actually DELIVERY
             # TECHNOLOGIES (MicroActive cyclodextrin, phytosome, liposome,
             # chelate, etc.) are real form identifiers even though DSLD
@@ -6795,7 +6838,10 @@ class SupplementEnricherV3:
                 and self._should_keep_from_prefixed_form_as_actual(raw_form_text)
             )
             if (
-                (_dsld_category in _SOURCE_CATEGORIES or _dsld_prefix in _SOURCE_PREFIXES)
+                (
+                    _dsld_category in _SOURCE_DESCRIPTOR_FORM_CATEGORIES
+                    or _dsld_prefix in _SOURCE_DESCRIPTOR_FORM_PREFIXES
+                )
                 and not _is_delivery_tech_from_prefix
             ):
                 # Treat as a generic/source descriptor — do not enter the
@@ -12676,34 +12722,13 @@ class SupplementEnricherV3:
             should not become independent clinical identities.
             """
             out: List[str] = []
-            source_categories = {
-                "animal part or source",
-                "plant part",
-                "source material",
-            }
-            source_prefixes = {
-                "from",
-                "culture of",
-                "and culture of",
-                "naturally occurring from",
-                "derived from",
-            }
             for form in ingredient.get("forms") or []:
                 if not isinstance(form, dict):
                     continue
                 name = str(form.get("name") or "").strip()
                 if not name:
                     continue
-                category = str(form.get("category") or "").strip().lower()
-                prefix = str(form.get("prefix") or "").strip().lower()
-                keep_source_prefixed = (
-                    prefix == "from"
-                    and self._should_keep_from_prefixed_form_as_actual(name)
-                )
-                if (
-                    (category in source_categories or prefix in source_prefixes)
-                    and not keep_source_prefixed
-                ):
+                if self._is_source_descriptor_form(form, parent_row=ingredient):
                     continue
                 out.append(name)
 

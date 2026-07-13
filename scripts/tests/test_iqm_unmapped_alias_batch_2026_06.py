@@ -130,3 +130,47 @@ def test_bare_chicken_sternum_collagen_is_not_global_iqm_alias(enricher):
         assert aliases.isdisjoint(forbidden), (
             f"bare chicken sternum alias found in collagen form {form_name!r}"
         )
+
+
+def test_transglucosidase_routes_to_specific_digestive_enzyme(enricher):
+    iqm = enricher.databases["ingredient_quality_map"]
+    direct_match = enricher._match_quality_map(
+        "Transglucosidase",
+        "Transglucosidase",
+        iqm,
+    )
+    assert direct_match is not None
+    assert direct_match.get("canonical_id") == "digestive_enzymes"
+    assert direct_match.get("form_id") == "specific enzymes"
+
+    source_match = enricher._match_quality_map(
+        "Transglucosidase",
+        "Transglucosidase",
+        iqm,
+        cleaned_forms=[
+            {
+                "name": "Aspergillus niger",
+                "category": "botanical",
+                "ingredientGroup": "Aspergillus niger",
+                "uniiCode": "9IOA40ANG6",
+            }
+        ],
+    )
+    assert source_match is not None
+    assert source_match.get("canonical_id") == "digestive_enzymes"
+    assert enricher._identity_taxonomy_coherent(
+        {
+            "name": "Transglucosidase",
+            "uniiCode": None,
+            "forms": [
+                {
+                    "name": "Aspergillus niger",
+                    "category": "botanical",
+                    "ingredientGroup": "Aspergillus niger",
+                    "uniiCode": "9IOA40ANG6",
+                }
+            ],
+        },
+        source_match,
+        iqm,
+    ) is True
