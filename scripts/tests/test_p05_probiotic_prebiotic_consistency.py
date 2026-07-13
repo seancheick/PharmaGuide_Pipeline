@@ -136,6 +136,42 @@ def test_species_only_probiotic_rows_do_not_get_strain_specific_clinical_ids(enr
     assert "STRAIN_LACTIS_BL04" not in ids
 
 
+def test_distinct_infantis_strain_codes_do_not_cross_match(enricher) -> None:
+    """M-63 must never inherit the unrelated 35624 clinical evidence."""
+    assert enricher._strain_match(
+        "Bifidobacterium longum infantis M-63",
+        "Bifidobacterium infantis 35624",
+        [
+            "B. infantis 35624",
+            "Bifidobacterium longum 35624",
+            "B. longum subsp. infantis 35624",
+        ],
+    ) is False
+
+    product = _probiotic_product(
+        extra_active=[
+            {
+                "name": "Bifidobacterium longum infantis M-63",
+                "standardName": "Bifidobacterium longum infantis M-63",
+                "ingredientGroup": "Bifidobacterium infantis",
+                "category": "probiotic",
+                "quantity": 12.5,
+                "unit": "mg",
+                "nestedIngredients": [],
+                "harvestMethod": "",
+                "notes": "1 billion CFU",
+            }
+        ],
+    )
+
+    clinical_ids = {
+        entry["clinical_id"]
+        for entry in enricher._collect_probiotic_data(product)["clinical_strains"]
+        if entry.get("strain") == "Bifidobacterium longum infantis M-63"
+    }
+    assert "STRAIN_INFANTIS_35624" not in clinical_ids
+
+
 def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enricher) -> None:
     """Seed DS-01 style labels carry exact SD-* strain codes in nested rows.
 

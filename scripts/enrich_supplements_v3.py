@@ -2705,16 +2705,17 @@ class SupplementEnricherV3:
             'saccharomyces': ['s'],
         }
 
-        # Extract strain ID patterns (e.g., "ATCC PTA 5289", "DSM 17938",
-        # "LGG", "HN001", "BL-04"). Keep this list broad enough that a
-        # strain-specific DB target is not mistaken for a species-level target.
+        # Extract strain IDs structurally rather than maintaining a partial
+        # allowlist. Missing one code (for example M-63 or bare 35624) makes two
+        # different strains look species-only and can grant the wrong clinical
+        # evidence. Bounds deliberately exclude one/two-digit dose and CFU text.
         strain_id_pattern = re.compile(
             r'('
-            r'atcc\s*(?:pta\s*)?[\d]+|dsm\s*[\d]+|'
-            r'ncfm|\blgg\b|\bgg\b|\bk12\b|\bm18\b|'
-            r'bb-?12|bb536|hn0?01|hn019|bi-?07|bl-?04|uab[a-z]*-?\d+|de111|299v|'
+            r'atcc\s*(?:pta\s*)?\d+|dsm\s*\d+|mtcc\s*\d+|'
             r'sd-[a-z0-9]+(?:-[a-z0-9]+){1,3}|'
-            r'gbi-?30|mtcc\s*5856|mtcc-?5856|is-?2|lp299v'
+            r'\b[a-z][a-z.]*-?\d+[a-z]?(?::\d+)?\b|'
+            r'\b\d{3,6}[a-z]?(?::\d+)?\b|'
+            r'ncfm|\blgg\b|\bgg\b|\bprodentis\b|\bshirota\b|\bnissle\b'
             r')',
             re.IGNORECASE,
         )
@@ -2736,8 +2737,8 @@ class SupplementEnricherV3:
             target_ids = strain_id_pattern.findall(target_norm)
 
             if strain_ids and target_ids:
-                strain_ids_norm = {re.sub(r'\s+', '', sid.lower()) for sid in strain_ids}
-                target_ids_norm = {re.sub(r'\s+', '', tid.lower()) for tid in target_ids}
+                strain_ids_norm = {re.sub(r'[^a-z0-9]+', '', sid.lower()) for sid in strain_ids}
+                target_ids_norm = {re.sub(r'[^a-z0-9]+', '', tid.lower()) for tid in target_ids}
                 if strain_ids_norm & target_ids_norm:
                     if not species:
                         return True
@@ -2749,8 +2750,8 @@ class SupplementEnricherV3:
                 # Check if strain IDs match (if present in both)
                 if strain_ids and target_ids:
                     # Normalize IDs for comparison
-                    strain_ids_norm = {re.sub(r'\s+', '', sid.lower()) for sid in strain_ids}
-                    target_ids_norm = {re.sub(r'\s+', '', tid.lower()) for tid in target_ids}
+                    strain_ids_norm = {re.sub(r'[^a-z0-9]+', '', sid.lower()) for sid in strain_ids}
+                    target_ids_norm = {re.sub(r'[^a-z0-9]+', '', tid.lower()) for tid in target_ids}
                     if strain_ids_norm & target_ids_norm:  # If any ID matches
                         return True
                 elif not strain_ids and not target_ids:
@@ -2770,8 +2771,8 @@ class SupplementEnricherV3:
             # Check for substring match with strain ID
             if strain_ids:
                 for sid in strain_ids:
-                    sid_norm = re.sub(r'\s+', '', sid.lower())
-                    if sid_norm in re.sub(r'\s+', '', target_norm):
+                    sid_norm = re.sub(r'[^a-z0-9]+', '', sid.lower())
+                    if sid_norm in re.sub(r'[^a-z0-9]+', '', target_norm):
                         # Also verify species matches
                         if species and species in target_norm:
                             return True

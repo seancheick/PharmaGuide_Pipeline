@@ -3068,10 +3068,8 @@ class TestProbioticDataStructureRegressionLock:
         assert scorable[0]['role_classification'] == 'active_scorable'
         assert scorable[0]['fallback_reason'] == 'kelp_fucoidan_marker_context'
 
-    def test_probiotic_data_clinical_strain_lookup_matches_db(self, enricher):
-        """Lactobacillus gasseri and Bifidobacterium longum should match the
-        clinically_relevant_strains.json database. This locks the strain match
-        logic — if the clinical strain DB is ever restructured, this flags it."""
+    def test_species_only_probiotic_rows_do_not_receive_strain_evidence(self, enricher):
+        """Species disclosure alone cannot support a strain-specific claim."""
         product = {
             'id': 'test_clinical_strain_match',
             'product_name': 'Gasseri + Longum Combo',
@@ -3093,11 +3091,8 @@ class TestProbioticDataStructureRegressionLock:
             'inactiveIngredients': [],
         }
         pd = enricher._collect_probiotic_data(product)
-        assert pd['clinical_strain_count'] >= 1, (
-            f"At least Lactobacillus gasseri or Bifidobacterium longum should "
-            f"match clinically_relevant_strains.json; got "
-            f"clinical_strain_count={pd['clinical_strain_count']}"
-        )
+        assert pd['clinical_strain_count'] == 0
+        assert pd['clinical_strains'] == []
 
 
 class TestNarrowExceptionEmptyEnrichmentSchema:
