@@ -159,6 +159,65 @@ def test_nutrition_fact_with_real_bioactive_forms_extracts_children() -> None:
     )
 
 
+def test_nutrition_fact_molecular_form_attributes_stay_display_only() -> None:
+    """Molecular-form attributes describe the skipped omega total.
+
+    They are not standalone DHA/EPA ingredient identities and carry no
+    independent dose, so promoting them creates both identity conflicts and
+    false active rows. True DHA/EPA children remain covered by the preceding
+    rescue test.
+    """
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    raw_product = {
+        "id": "TEST-OMEGA-FORM-ATTRIBUTES",
+        "fullName": "Test Triple Omega",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Total Omega-3",
+                "category": "fatty acid",
+                "ingredientGroup": "Omega-3",
+                "quantity": [{"quantity": 434, "unit": "mg"}],
+                "forms": [
+                    {
+                        "order": 1,
+                        "prefix": "as",
+                        "name": "Ethyl Esters",
+                        "category": "non-nutrient/non-botanical",
+                        "ingredientGroup": "Ethyl Ester",
+                    },
+                    {
+                        "order": 2,
+                        "prefix": "and",
+                        "name": "Triglycerides",
+                        "category": "fat",
+                        "ingredientGroup": "Triglyceride (unspecified)",
+                    },
+                ],
+                "nestedRows": [],
+            }
+        ],
+        "otheringredients": {"text": None, "ingredients": []},
+    }
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw_product)
+    active_names = {
+        str(row.get("name") or "").casefold()
+        for row in cleaned.get("activeIngredients") or []
+    }
+    assert "ethyl esters" not in active_names
+    assert "triglycerides" not in active_names
+
+    omega_display = next(
+        row
+        for row in cleaned.get("display_ingredients") or []
+        if row.get("raw_source_text") == "Total Omega-3"
+    )
+    assert omega_display["score_included"] is False
+    assert omega_display["children"] == ["Ethyl Esters", "Triglycerides"]
+
+
 def test_nutrition_fact_with_summary_forms_still_filters_correctly() -> None:
     """A `Total Omega-3 Fatty Acids` row whose forms contain ONLY
     summary children (e.g., 'Other Omega-3 Fatty Acids') must still

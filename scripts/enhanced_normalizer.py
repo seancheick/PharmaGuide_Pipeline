@@ -7106,6 +7106,12 @@ class EnhancedDSLDNormalizer:
         for form in forms:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
+                if self._is_zero_dose_omega_molecular_form_attribute(
+                    ingredient,
+                    form,
+                    source_path,
+                ):
+                    continue
                 form_group = form.get("ingredientGroup") or ingredient.get("ingredientGroup")
                 form_source_path = form.get("raw_source_path") or source_path
                 inherited_quantity = self._quantity_for_single_form_protein_child(ingredient, forms)
@@ -7203,6 +7209,53 @@ class EnhancedDSLDNormalizer:
             self._stamp_expanded_form_cleaner_contract(row, source_path)
 
         return expanded
+
+    def _is_zero_dose_omega_molecular_form_attribute(
+        self,
+        parent: Dict[str, Any],
+        form: Dict[str, Any],
+        source_path: str,
+    ) -> bool:
+        """Keep omega molecular form disclosures as attributes, not actives.
+
+        DSLD uses ``forms[]`` for both real blend members and molecular-form
+        disclosures. A zero-dose ``Ethyl Esters`` or ``Triglycerides`` child
+        under an omega total describes that total; promoting it invents a
+        standalone ingredient identity. Blend members and independently dosed
+        children remain eligible for expansion.
+        """
+        if self._source_path_is_inactive(source_path):
+            return False
+        if self._has_dsld_blend_group_signal(parent) or self._is_proprietary_blend_name(
+            parent.get("name", "")
+        ):
+            return False
+        form_quantity, _ = self._extract_primary_mass_unit(form)
+        if form_quantity is not None:
+            return False
+
+        parent_context = self.matcher.preprocess_text(
+            " ".join(
+                str(value or "")
+                for value in (
+                    parent.get("name"),
+                    parent.get("ingredientGroup"),
+                    parent.get("category"),
+                )
+            )
+        )
+        parent_tokens = set(parent_context.replace("-", " ").split())
+        if not parent_tokens.intersection({"omega", "epa", "dha"}):
+            return False
+
+        from form_vocab import extract_forms as _vocab_extract_forms
+
+        return bool(
+            _vocab_extract_forms(
+                str(form.get("name") or ""),
+                categories=["omega3_molecular_forms"],
+            )
+        )
 
     def _stamp_expanded_form_cleaner_contract(self, row: Dict[str, Any], source_path: str) -> None:
         """Stamp cleaner-owned row contract on rows expanded from label/header forms."""
