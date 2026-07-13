@@ -772,6 +772,58 @@ class TestIdentityIntegrityBoundary:
         assert row["scoreable_identity"] is True
         assert row in result["ingredients_scorable"]
 
+    def test_identity_integrity_selects_l_ornithine_akg_form(self, enricher):
+        product = {
+            "id": "ornithine-akg",
+            "fullName": "L-Ornithine Alpha-Ketoglutarate",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="L-Ornithine Alpha-Ketoglutarate",
+                    raw_source_text="L-Ornithine Alpha-Ketoglutarate",
+                    standardName="Alpha-Ketoglutarate",
+                    canonical_id="alpha_ketoglutarate",
+                    uniiCode="URK9D85MYO",
+                    ingredientGroup="Ornithine Ketoglutarate",
+                    quantity=1.0,
+                    unit="g",
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["canonical_id"] == "alpha_ketoglutarate"
+        assert row["matched_form"] == "ornithine alpha-ketoglutarate"
+        assert row["identity_disposition"] != "identity_conflict"
+        assert row in result["ingredients_scorable"]
+
+    def test_identity_integrity_keeps_exact_akba_molecule_out_of_boswellia(self, enricher):
+        product = {
+            "id": "exact-akba",
+            "fullName": "AKBA 100 mg",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="Acetyl-11-Keto-Beta-Boswellic Acid",
+                    raw_source_text="Acetyl-11-Keto-Beta-Boswellic Acid",
+                    standardName="AKBA (3-Acetyl-11-Keto-beta-Boswellic Acid)",
+                    canonical_id="akba",
+                    uniiCode="BS16QT99Q1",
+                    ingredientGroup="11-keto-beta-boswellic acid",
+                    quantity=100.0,
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["canonical_id"] == "akba"
+        assert row["identity_disposition"] != "identity_conflict"
+        assert row in result["ingredients_scorable"]
+
 
 class TestScorableClassificationPass1:
     """Test Pass 1: Skip filters for activeIngredients"""

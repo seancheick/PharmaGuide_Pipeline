@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1420,
-      "total_form_aliases": 12179,
+    "total_form_aliases": 12176,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -60,7 +60,7 @@
       "proteins": 16,
       "vitamins": 23
     },
-    "schema_version": "5.4.10",
+  "schema_version": "5.4.11",
     "last_updated": "2026-07-13",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
@@ -26077,6 +26077,7 @@
           "akba",
           "3-O-Acetyl-11-Keto-Beta-Boswellic Acid",
           "3-acetyl-11-keto-beta-boswellic acid",
+          "Acetyl-11-Keto-Beta-Boswellic Acid",
           "acetyl-keto-boswellic acid",
           "3-O-acetyl-11-keto-β-boswellic acid"
         ],
@@ -39614,15 +39615,10 @@
           "5-loxin advanced akba boswellia serrata extract",
           "20% 3-o-acetyl-11-keto-beta-boswellic acid",
           "20% 3-0-acetyl-11-keto-beta-boswellic acid",
-          "3-o-acetyl-11-keto beta-boswellic acid",
           "joint shield 5-loxin advanced boswellia serrata extract",
           "Joint Shield 5-Loxin Advanced",
           "5-Loxin extract of Boswellia serrata",
-          "3-Acetyl-11-Keto-Beta Boswellic Acid",
-          "3-0-Acetyl-11-Keto Beta Boswellic Acid",
-          "Acetyl-Keto-Beta-Boswellic Acid",
-          "3-0-Acetyl-11-Keto-B-Boswellic Acid",
-          "Acetyl-11-Keto-Beta Boswellic Acid"
+          "3-0-Acetyl-11-Keto-B-Boswellic Acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39707,7 +39703,6 @@
           "boswellia serrata akba standardized extract",
           "Beta-Boswellic Acids",
           "AKBA, Beta-Boswellic Acids, total organic and Boswellic Acid",
-          "acetyl-11-keto-beta-boswellic acid",
           "AKBAs",
           "Indian Frankincense (Boswellia serrata) extract",
           "Boswellia serrata, Phospholipid complex"
@@ -48732,7 +48727,7 @@
         "score": 9,
         "absorption": "low-moderate (OKG t1/2 89 min; ornithine carrier)",
         "notes": "Salt combining L-ornithine and alpha-ketoglutarate (OKG). Used in clinical nutrition for wound healing and muscle wasting (enteral/parenteral). OKG serves as dual-substrate for polyamine synthesis and glutamine production. Limited oral supplement evidence vs clinical IV/enteral use. B24 audit 2026-04-25: ornithine carrier modest PK benefit (PMID:9022538, PMID:17513441) over plain AKG.",
-        "aliases": ["ornithine alpha ketoglutarate", "ornithine akg", "okg"],
+        "aliases": ["ornithine alpha ketoglutarate", "l-ornithine alpha-ketoglutarate", "l-ornithine alpha ketoglutarate", "ornithine akg", "okg"],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.25,
