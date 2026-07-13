@@ -204,6 +204,88 @@ def test_declared_group_beats_ambiguous_alternate_name():
     assert decision.canonical_id == "alpha_linolenic_acid"
 
 
+def test_explicit_cross_registry_equivalence_collapses_only_reviewed_identity():
+    registry = build_canonical_identity_registry(
+        {
+            "ingredient_quality_map": {
+                "mct_oil": {
+                    "standard_name": "MCT Oil",
+                    "aliases": [],
+                    "forms": {},
+                    "match_rules": {},
+                }
+            },
+            "other_ingredients": {
+                "other_ingredients": [
+                    {
+                        "id": "PII_MCT",
+                        "standard_name": "Medium Chain Triglycerides",
+                        "aliases": ["MCT"],
+                    }
+                ]
+            },
+            "canonical_equivalences": {
+                "equivalences": [
+                    {
+                        "source_db": "other_ingredients",
+                        "source_id": "PII_MCT",
+                        "target_db": "ingredient_quality_map",
+                        "target_id": "mct_oil",
+                        "relation": "exact_equivalent",
+                        "basis": "same-substance review",
+                    }
+                ]
+            },
+        }
+    )
+
+    assert registry.resolve_verified_preferred("Medium Chain Triglycerides") == (
+        "mct_oil",
+        "ingredient_quality_map",
+    )
+    assert registry.resolve_verified_preferred("MCT") == (
+        "mct_oil",
+        "ingredient_quality_map",
+    )
+
+
+def test_equivalence_target_must_exist_in_declared_registry():
+    with pytest.raises(ValueError, match="target_id"):
+        build_canonical_identity_registry(
+            {
+                "ingredient_quality_map": {
+                    "mct_oil": {
+                        "standard_name": "MCT Oil",
+                        "aliases": [],
+                        "forms": {},
+                        "match_rules": {},
+                    }
+                },
+                "other_ingredients": {
+                    "other_ingredients": [
+                        {
+                            "id": "PII_MCT",
+                            "standard_name": "Medium Chain Triglycerides",
+                            "aliases": [],
+                        }
+                    ]
+                },
+                "canonical_equivalences": {
+                    "equivalences": [
+                        {
+                            "source_db": "other_ingredients",
+                            "source_id": "PII_MCT",
+                            "target_db": "ingredient_quality_map",
+                            "target_id": "missing",
+                            "relation": "exact_equivalent",
+                            "basis": "test",
+                        }
+                    ]
+                },
+            }
+        )
+
+
 def test_normalize_label_display_uses_the_approved_operation_order():
     value = "  ＥＰＡ™\t(tm)  ® ℠ (r)\n(sm)  "
 

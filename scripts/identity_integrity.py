@@ -71,6 +71,18 @@ def build_canonical_identity_registry(
         "other_ingredients": 3,
         "proprietary_blends": 4,
     }
+    equivalence_redirects = _validated_equivalence_redirects(databases)
+
+    def canonical_owner(canonical_id: str, source_db: str) -> tuple[str, str]:
+        seen: set[tuple[str, str]] = set()
+        current = (source_db, canonical_id)
+        while current in equivalence_redirects:
+            if current in seen:
+                raise ValueError(f"cyclic canonical equivalence at {current!r}")
+            seen.add(current)
+            target_db, target_id = equivalence_redirects[current]
+            current = (target_db, target_id)
+        return current[1], current[0]
 
     def put(
         value: Any,
@@ -83,6 +95,7 @@ def build_canonical_identity_registry(
         canonical = str(canonical_id or "").strip()
         if not literal_key or not key or not canonical:
             return
+        canonical, source_db = canonical_owner(canonical, source_db)
         rank = (source_priority[source_db], target_priority)
         candidates.setdefault(key, set()).add(canonical)
         literal_ranked.setdefault(literal_key, []).append(
@@ -172,6 +185,79 @@ def build_canonical_identity_registry(
             key: tuple(sorted(values)) for key, values in candidates.items()
         },
     )
+
+
+def _validated_equivalence_redirects(
+    databases: Mapping[str, Any],
+) -> dict[tuple[str, str], tuple[str, str]]:
+    """Validate and return reviewed exact-identity redirects.
+
+    Equivalence data is intentionally stricter than parent/form relationships:
+    only an explicit ``exact_equivalent`` record may collapse two registry IDs.
+    """
+    document = databases.get("canonical_equivalences")
+    if not isinstance(document, Mapping):
+        return {}
+    rows = document.get("equivalences")
+    if not isinstance(rows, list):
+        raise ValueError("canonical_equivalences.equivalences must be a list")
+
+    collections: dict[str, set[str]] = {}
+    quality_map = databases.get("ingredient_quality_map")
+    if isinstance(quality_map, Mapping):
+        collections["ingredient_quality_map"] = {
+            str(key)
+            for key, value in quality_map.items()
+            if not str(key).startswith("_") and isinstance(value, Mapping)
+        }
+    for source_db, collection_key in (
+        ("standardized_botanicals", "standardized_botanicals"),
+        ("botanical_ingredients", "botanical_ingredients"),
+        ("other_ingredients", "other_ingredients"),
+        ("proprietary_blends", "proprietary_blend_concerns"),
+    ):
+        database = databases.get(source_db)
+        values = database.get(collection_key) if isinstance(database, Mapping) else None
+        collections[source_db] = {
+            str(row.get("id"))
+            for row in values or ()
+            if isinstance(row, Mapping) and row.get("id")
+        }
+
+    redirects: dict[tuple[str, str], tuple[str, str]] = {}
+    for row in rows:
+        if not isinstance(row, Mapping):
+            raise ValueError("canonical equivalence rows must be objects")
+        if row.get("relation") != "exact_equivalent":
+            raise ValueError(
+                "canonical equivalence relation must be exact_equivalent"
+            )
+        source_db = str(row.get("source_db") or "")
+        source_id = str(row.get("source_id") or "")
+        target_db = str(row.get("target_db") or "")
+        target_id = str(row.get("target_id") or "")
+        if not source_db or not source_id or not target_db or not target_id:
+            raise ValueError("canonical equivalence rows require source/target IDs")
+        if source_id not in collections.get(source_db, set()):
+            raise ValueError(f"unknown source_id {source_id!r}")
+        if target_id not in collections.get(target_db, set()):
+            raise ValueError(f"unknown target_id {target_id!r}")
+        key = (source_db, source_id)
+        target = (target_db, target_id)
+        existing = redirects.get(key)
+        if existing is not None and existing != target:
+            raise ValueError(f"conflicting canonical equivalence for {key!r}")
+        redirects[key] = target
+
+    for start in redirects:
+        current = start
+        seen: set[tuple[str, str]] = set()
+        while current in redirects:
+            if current in seen:
+                raise ValueError(f"cyclic canonical equivalence at {current!r}")
+            seen.add(current)
+            current = redirects[current]
+    return redirects
 
 
 @dataclass(frozen=True, slots=True)

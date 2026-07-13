@@ -1,0 +1,65 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "version": "2026-07-13",
+    "purpose": "Reviewed exact-identity redirects across pipeline registries.",
+    "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
+    "last_updated": "2026-07-13"
+  },
+  "equivalences": [
+    {
+      "source_db": "standardized_botanicals",
+      "source_id": "bromelain",
+      "target_db": "ingredient_quality_map",
+      "target_id": "bromelain",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII U182GP2CF3 and identical canonical substance.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "other_ingredients",
+      "source_id": "NHA_WEST_INDIAN_CHERRY",
+      "target_db": "botanical_ingredients",
+      "target_id": "acerola_cherry",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII XDD2WEC9L5 and same Malpighia acerola source; the other-ingredient row is a duplicate natural-ingredient record.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "botanical_ingredients",
+      "source_id": "elderberries",
+      "target_db": "ingredient_quality_map",
+      "target_id": "elderberry",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII BQY1UBX046; both records describe Sambucus nigra fruit, not elderflower.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "other_ingredients",
+      "source_id": "PII_MEDIUM_CHAIN_TRIGLYCERIDES",
+      "target_db": "ingredient_quality_map",
+      "target_id": "mct_oil",
+      "relation": "exact_equivalent",
+      "basis": "The inactive carrier record and active MCT record describe the same medium-chain-triglyceride substance; the IQM canonical is used for active scoring.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "other_ingredients",
+      "source_id": "NHA_OLEIC_ACID",
+      "target_db": "ingredient_quality_map",
+      "target_id": "oleic_acid",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII 2UMI9U37CP and same oleic-acid identity.",
+      "scope": "all_identity_contexts"
+    },
+    {
+      "source_db": "other_ingredients",
+      "source_id": "PII_SILICON_DIOXIDE",
+      "target_db": "ingredient_quality_map",
+      "target_id": "silica",
+      "relation": "exact_equivalent",
+      "basis": "Shared FDA UNII ETJ7Z6XBU4 and same silicon-dioxide identity; additive classification remains owned by the other-ingredient record.",
+      "scope": "all_identity_contexts"
+    }
+  ]
+}
