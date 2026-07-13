@@ -75,6 +75,7 @@ from constants import (
     PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
 )
 from identity.safety import has_explicit_form_evidence
+from identity_integrity import build_canonical_identity_registry
 
 # Import the UnmappedIngredientTracker
 import sys
@@ -3124,93 +3125,21 @@ class EnhancedDSLDNormalizer:
         harmful_additives, allergens, and contaminant tables classify risk;
         they must never provide cleaner identity fields.
         """
-        from typing import Tuple as _Tuple
-        idx: Dict[str, _Tuple[str, str]] = {}
-
-        def _put(std_name: str, canonical_id: str, source_db: str) -> None:
-            if not std_name or not canonical_id:
-                return
-            key = std_name.lower().strip()
-            if not key or key in idx:
-                return
-            idx[key] = (canonical_id, source_db)
-
-        # 1) IQM — iterate self.ingredient_map; key IS canonical_id. Index
-        # every path a cleaner standardName could follow back to its IQM parent:
-        # top-level standard_name, top-level aliases, form names, form aliases.
-        for _iqm_key, _val in (self.ingredient_map or {}).items():
-            if _iqm_key.startswith("_") or not isinstance(_val, dict):
-                continue
-            if (_val.get("match_rules") or {}).get("deprecated_in_favor_of"):
-                continue
-            std = _val.get("standard_name") or _iqm_key
-            _put(std, _iqm_key, "ingredient_quality_map")
-            # Top-level aliases
-            for alias in _val.get("aliases", []) or []:
-                if isinstance(alias, str):
-                    _put(alias, _iqm_key, "ingredient_quality_map")
-            # Form-level names + aliases — when the cleaner returns a form
-            # name as standardName (e.g. "KSM-66 Ashwagandha"), resolve it to
-            # the parent IQM key.
-            for _form_name, _form_data in (_val.get("forms", {}) or {}).items():
-                if not isinstance(_form_data, dict):
-                    continue
-                _put(_form_name, _iqm_key, "ingredient_quality_map")
-                for form_alias in _form_data.get("aliases", []) or []:
-                    if isinstance(form_alias, str):
-                        _put(form_alias, _iqm_key, "ingredient_quality_map")
-
-        # 2) standardized_botanicals
-        for item in (self.standardized_botanicals or {}).get("standardized_botanicals", []):
-            if not isinstance(item, dict):
-                continue
-            std = item.get("standard_name") or ""
-            cid = item.get("id") or std.lower().replace(" ", "_")
-            _put(std, cid, "standardized_botanicals")
-            for alias in item.get("aliases", []) or []:
-                if isinstance(alias, str):
-                    _put(alias, cid, "standardized_botanicals")
-
-        # 3) botanical_ingredients
-        for item in (self.botanical_ingredients or {}).get("botanical_ingredients", []):
-            if not isinstance(item, dict):
-                continue
-            std = item.get("standard_name") or ""
-            cid = item.get("id") or std.lower().replace(" ", "_")
-            _put(std, cid, "botanical_ingredients")
-            for alias in item.get("aliases", []) or []:
-                if isinstance(alias, str):
-                    _put(alias, cid, "botanical_ingredients")
-
-        # 4) other_ingredients — index standard_name + aliases so labels
-        # matching OI aliases (e.g. bare "Natural Colors" → NHA_NATURAL_COLORS)
-        # resolve to a canonical_id.
-        for _val in (self.other_ingredients or {}).get("other_ingredients", []):
-            if not isinstance(_val, dict):
-                continue
-            std = _val.get("standard_name") or ""
-            cid = _val.get("id") or std.lower().replace(" ", "_")
-            _put(std, cid, "other_ingredients")
-            for alias in _val.get("aliases", []) or []:
-                if isinstance(alias, str):
-                    _put(alias, cid, "other_ingredients")
-
-        # 5) proprietary_blends — blend-concern canonicals (BLEND_PROBIOTIC,
-        # BLEND_GENERAL, etc.). Index standard_name + blend_terms so labels
-        # using generic blend names resolve to a canonical_id.
-        for item in (self.proprietary_blends or {}).get("proprietary_blend_concerns", []):
-            if not isinstance(item, dict):
-                continue
-            std = item.get("standard_name") or ""
-            cid = item.get("id") or std.lower().replace(" ", "_")
-            _put(std, cid, "proprietary_blends")
-            for term in item.get("blend_terms", []) or []:
-                if isinstance(term, str):
-                    _put(term, cid, "proprietary_blends")
-
-        self._canonical_id_by_std_name = idx
+        self._canonical_identity_registry = build_canonical_identity_registry(
+            {
+                "ingredient_quality_map": self.ingredient_map,
+                "standardized_botanicals": self.standardized_botanicals,
+                "botanical_ingredients": self.botanical_ingredients,
+                "other_ingredients": self.other_ingredients,
+                "proprietary_blends": self.proprietary_blends,
+            }
+        )
+        self._canonical_id_by_std_name = dict(
+            self._canonical_identity_registry.preferred_index
+        )
         logger.info(
-            "Built canonical_id reverse index with %d entries", len(idx)
+            "Built canonical_id reverse index with %d entries",
+            len(self._canonical_id_by_std_name),
         )
 
     # D2.2: common qualifier tokens that describe PREPARATION or processing,

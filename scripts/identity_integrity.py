@@ -38,6 +38,7 @@ _LITERAL_PARENTHESIZED_IDENTITY_RE = re.compile(
 @dataclass(frozen=True, slots=True)
 class CanonicalIdentityRegistry:
     preferred_index: Mapping[str, tuple[str, str]]
+    normalized_preferred_index: Mapping[str, tuple[str, str]]
     candidates_index: Mapping[str, tuple[str, ...]]
 
     @staticmethod
@@ -45,7 +46,7 @@ class CanonicalIdentityRegistry:
         return normalize_label_display(value).casefold()
 
     def resolve_preferred(self, value: Any) -> tuple[str, str] | None:
-        return self.preferred_index.get(self._key(value))
+        return self.normalized_preferred_index.get(self._key(value))
 
     def resolve_unambiguous(self, value: Any) -> str | None:
         candidates = self.candidates_index.get(self._key(value), ())
@@ -57,15 +58,18 @@ def build_canonical_identity_registry(
 ) -> CanonicalIdentityRegistry:
     """Build the shared cleaner/enricher identity index from owned registries."""
     preferred: dict[str, tuple[str, str]] = {}
+    normalized_preferred: dict[str, tuple[str, str]] = {}
     candidates: dict[str, set[str]] = {}
 
     def put(value: Any, canonical_id: Any, source_db: str) -> None:
+        literal_key = str(value or "").lower().strip()
         key = CanonicalIdentityRegistry._key(value)
         canonical = str(canonical_id or "").strip()
-        if not key or not canonical:
+        if not literal_key or not key or not canonical:
             return
         candidates.setdefault(key, set()).add(canonical)
-        preferred.setdefault(key, (canonical, source_db))
+        preferred.setdefault(literal_key, (canonical, source_db))
+        normalized_preferred.setdefault(key, (canonical, source_db))
 
     quality_map = databases.get("ingredient_quality_map")
     if isinstance(quality_map, Mapping):
@@ -110,6 +114,7 @@ def build_canonical_identity_registry(
 
     return CanonicalIdentityRegistry(
         preferred_index=dict(preferred),
+        normalized_preferred_index=dict(normalized_preferred),
         candidates_index={
             key: tuple(sorted(values)) for key, values in candidates.items()
         },

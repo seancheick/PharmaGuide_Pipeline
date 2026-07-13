@@ -37,7 +37,7 @@ def test_canonical_identity_registry_has_one_priority_and_ambiguity_contract():
                 "_metadata": {},
                 "coq10": {
                     "standard_name": "Coenzyme Q10",
-                    "aliases": ["Shared Alias"],
+                    "aliases": ["Shared Alias", "Branded(TM) CoQ10"],
                     "forms": {
                         "ubiquinone": {"aliases": ["Coenzyme Q-10"]},
                     },
@@ -84,6 +84,11 @@ def test_canonical_identity_registry_has_one_priority_and_ambiguity_contract():
     )
 
     assert registry.resolve_unambiguous("Coenzyme Q-10") == "coq10"
+    assert registry.preferred_index["branded(tm) coq10"] == (
+        "coq10",
+        "ingredient_quality_map",
+    )
+    assert registry.resolve_unambiguous("Branded CoQ10") == "coq10"
     assert registry.resolve_unambiguous("Sambucus nigra") == "elderberry"
     assert registry.resolve_unambiguous("EDTA Disodium") == "OI_EDTA"
     assert registry.resolve_unambiguous("Proprietary Blend") == "BLEND_GENERAL"
