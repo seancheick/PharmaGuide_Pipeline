@@ -3148,17 +3148,51 @@ class SupplementEnricherV3:
                 or match_result.get("match_ambiguity_candidates")
             ):
                 return None
-            matched_target = str(match_result.get("matched_target") or "")
-            form_id = str(match_result.get("form_id") or "")
-            if (
-                matched_target.startswith("form_")
-                and form_id
-                and "unspecified" not in form_id.lower()
-            ):
-                return None
             return canonical_id
 
         return resolve
+
+    def _identity_parent_predicate(self, quality_map: Dict):
+        if getattr(self, "_identity_parent_quality_map", None) is not quality_map:
+            children: Dict[str, set[str]] = {}
+            for canonical_id, entry in quality_map.items():
+                if canonical_id == "_metadata" or not isinstance(entry, dict):
+                    continue
+                match_rules = entry.get("match_rules")
+                parent_id = (
+                    match_rules.get("parent_id")
+                    if isinstance(match_rules, dict)
+                    else None
+                )
+                if isinstance(parent_id, str) and parent_id in quality_map:
+                    children.setdefault(parent_id, set()).add(canonical_id)
+                for relationship in entry.get("relationships") or []:
+                    if not isinstance(relationship, dict):
+                        continue
+                    target_id = relationship.get("target_id")
+                    if (
+                        relationship.get("type") == "category_for"
+                        and isinstance(target_id, str)
+                        and target_id in quality_map
+                    ):
+                        children.setdefault(canonical_id, set()).add(target_id)
+
+            descendants: Dict[str, set[str]] = {}
+            for canonical_id in children:
+                pending = list(children[canonical_id])
+                resolved = set()
+                while pending:
+                    child = pending.pop()
+                    if child in resolved:
+                        continue
+                    resolved.add(child)
+                    pending.extend(children.get(child, ()))
+                descendants[canonical_id] = resolved
+            self._identity_parent_quality_map = quality_map
+            self._identity_parent_descendants = descendants
+
+        descendants = self._identity_parent_descendants
+        return lambda parent, child: child in descendants.get(parent, ())
 
     def _resolve_iqd_identity(
         self,
@@ -3177,6 +3211,7 @@ class SupplementEnricherV3:
             ingredient, match_result, quality_map
         )
         resolve_candidate = self._identity_candidate_resolver(quality_map)
+        canonical_parent_of = self._identity_parent_predicate(quality_map)
         if (
             taxonomy_coherent
             and self._is_reviewed_context_override_match(match_result)
@@ -3193,6 +3228,7 @@ class SupplementEnricherV3:
             resolve_candidate,
             taxonomy_coherent=taxonomy_coherent,
             allow_unscoreable_taxonomy_only=allow_unscoreable_taxonomy_only,
+            canonical_parent_of=canonical_parent_of,
         )
 
         if decision.disposition == "repaired" and decision.canonical_id:

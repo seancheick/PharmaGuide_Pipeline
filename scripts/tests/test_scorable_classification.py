@@ -244,6 +244,37 @@ class TestIdentityIntegrityBoundary:
             "dha (docosahexaenoic acid)": "dha",
         }.get(str(candidate).strip().lower())
 
+    @pytest.mark.parametrize(
+        ("label", "expected_canonical"),
+        [
+            ("Coenzyme Q-10", "coq10"),
+            ("Niacin", "vitamin_b3_niacin"),
+        ],
+    )
+    def test_identity_candidate_accepts_exact_aliases_stored_on_iqm_forms(
+        self,
+        enricher,
+        label,
+        expected_canonical,
+    ):
+        resolver = enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"]
+        )
+
+        assert resolver(label) == expected_canonical
+
+    @pytest.mark.parametrize("label", ["as Ethyl Esters", "as Citrate"])
+    def test_identity_candidate_does_not_promote_form_modifiers(
+        self,
+        enricher,
+        label,
+    ):
+        resolver = enricher._identity_candidate_resolver(
+            enricher.databases["ingredient_quality_map"]
+        )
+
+        assert resolver(label) is None
+
     def test_identity_integrity_repairs_complete_active_rows_before_scoring(
         self, enricher, fixture_identity_integrity_product
     ):
@@ -567,7 +598,9 @@ class TestIdentityIntegrityBoundary:
             allow_unscoreable_taxonomy_only=True,
         )
 
-        assert unresolved_structured.disposition == "identity_conflict"
+        assert unresolved_structured.disposition == "taxonomy_only"
+        assert unresolved_structured.canonical_id is None
+        assert unresolved_structured.scoreable_identity is False
         assert conflicting_structured.disposition == "identity_conflict"
         assert missing_display.disposition == "missing_display_label"
         assert unresolved_structured.scoreable_identity is False
@@ -1396,9 +1429,16 @@ class TestBlendPatternCounterTests:
             'otherIngredients': []
         }
         result = enricher._collect_ingredient_quality_data(product)
-        scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
+        scorable = result['ingredients_scorable']
+        scorable_names = [ing['name'] for ing in scorable]
 
         assert 'Probiotic (L. rhamnosus GG)' in scorable_names
+        row = next(
+            ing for ing in scorable
+            if ing['name'] == 'Probiotic (L. rhamnosus GG)'
+        )
+        assert row['canonical_id'] == 'lactobacillus_rhamnosus'
+        assert row['identity_disposition'] == 'repaired'
 
     def test_fish_oil_concentrate_with_dose_not_skipped(self, enricher):
         """Fish oil concentrate 1000 mg should be scorable."""

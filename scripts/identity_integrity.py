@@ -18,6 +18,7 @@ IdentityDisposition = Literal[
 ]
 EvidenceKind = Literal["source_name", "structured_identity", "source_form"]
 CandidateResolver = Callable[[str], str | None]
+CanonicalParentPredicate = Callable[[str, str], bool]
 
 IDENTITY_DISPOSITIONS: tuple[IdentityDisposition, ...] = (
     "clean",
@@ -208,6 +209,34 @@ def _resolved_canonicals(
     return resolved
 
 
+def _preferred_canonical(
+    canonicals: set[str],
+    canonical_parent_of: CanonicalParentPredicate | None,
+) -> str | None:
+    if len(canonicals) == 1:
+        return next(iter(canonicals))
+    if len(canonicals) < 2 or canonical_parent_of is None:
+        return None
+
+    descendants = {
+        candidate
+        for candidate in canonicals
+        if not any(
+            candidate != other and canonical_parent_of(candidate, other)
+            for other in canonicals
+        )
+    }
+    if len(descendants) != 1:
+        return None
+    specific = next(iter(descendants))
+    if all(
+        candidate == specific or canonical_parent_of(candidate, specific)
+        for candidate in canonicals
+    ):
+        return specific
+    return None
+
+
 def _source_name(
     evidence: tuple[LabelEvidence, ...],
     resolved_canonical: str | None,
@@ -253,6 +282,7 @@ def resolve_identity(
     *,
     taxonomy_coherent: bool = False,
     allow_unscoreable_taxonomy_only: bool = False,
+    canonical_parent_of: CanonicalParentPredicate | None = None,
 ) -> IdentityDecision:
     """Resolve label identity without reproducing the external taxonomy matcher.
 
@@ -276,12 +306,14 @@ def resolve_identity(
     )
     raw_canonicals = _resolved_canonicals(raw_evidence, resolve_candidate)
 
-    structured_canonical = (
-        next(iter(structured_canonicals))
-        if len(structured_canonicals) == 1
-        else None
+    structured_canonical = _preferred_canonical(
+        structured_canonicals,
+        canonical_parent_of,
     )
-    raw_canonical = next(iter(raw_canonicals)) if len(raw_canonicals) == 1 else None
+    raw_canonical = _preferred_canonical(
+        raw_canonicals,
+        canonical_parent_of,
+    )
     display_canonical = structured_canonical or raw_canonical
     source_name = _source_name(evidence, display_canonical, resolve_candidate)
     source_form = next(
@@ -295,7 +327,7 @@ def resolve_identity(
         disposition: IdentityDisposition = "missing_display_label"
         canonical_after = None
         rationale = "No displayable literal ingredient-line label was available."
-    elif len(structured_canonicals) > 1:
+    elif len(structured_canonicals) > 1 and structured_canonical is None:
         disposition = "identity_conflict"
         canonical_after = None
         rationale = (
@@ -304,7 +336,14 @@ def resolve_identity(
             + "."
         )
     elif structured_evidence and structured_canonical is None:
-        if taxonomy_coherent and canonical_before is not None:
+        if allow_unscoreable_taxonomy_only:
+            disposition = "taxonomy_only"
+            canonical_after = None
+            rationale = (
+                "The row was intentionally classified as non-scorable; its "
+                "unresolved structured label text is retained for display."
+            )
+        elif taxonomy_coherent and canonical_before is not None:
             disposition = "taxonomy_only"
             canonical_after = canonical_before
             rationale = (
@@ -351,7 +390,7 @@ def resolve_identity(
         disposition = "identity_conflict"
         canonical_after = None
         rationale = "No supplied canonical ID was available to validate or repair."
-    elif len(raw_canonicals) > 1:
+    elif len(raw_canonicals) > 1 and raw_canonical is None:
         disposition = "identity_conflict"
         canonical_after = None
         rationale = (
@@ -360,12 +399,23 @@ def resolve_identity(
             + "."
         )
     elif raw_canonical is not None and raw_canonical != canonical_before:
-        disposition = "identity_conflict"
-        canonical_after = None
-        rationale = (
-            f"Raw label evidence resolves to {raw_canonical!r} and contradicts the "
-            f"supplied canonical ID {canonical_before!r}."
-        )
+        if canonical_parent_of and canonical_parent_of(
+            canonical_before,
+            raw_canonical,
+        ):
+            disposition = "repaired"
+            canonical_after = raw_canonical
+            rationale = (
+                "Raw label evidence identifies a registered descendant of the "
+                f"supplied canonical ID {canonical_before!r}: {raw_canonical!r}."
+            )
+        else:
+            disposition = "identity_conflict"
+            canonical_after = None
+            rationale = (
+                f"Raw label evidence resolves to {raw_canonical!r} and contradicts the "
+                f"supplied canonical ID {canonical_before!r}."
+            )
     elif raw_canonical == canonical_before:
         disposition = "clean"
         canonical_after = canonical_before
