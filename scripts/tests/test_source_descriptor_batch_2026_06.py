@@ -27,6 +27,10 @@ def enricher():
         ("Calcium Caseinate and Gelatin", "other_ingredients", "NHA_CALCIUM_CASEINATE"),  # casein/gelatin excipient blend
         ("Litesse Polydextrose", "harmful_additives", "ADD_POLYDEXTROSE"),      # Litesse = branded polydextrose
         ("Litesse Polydextrose Fiber", "harmful_additives", "ADD_POLYDEXTROSE"),
+        ("Polyphenolic Flavones", "other_ingredients", "NHA_BERGAMOT_POLYPHENOLIC_FLAVONES_MARKER"),
+        ("Glycoside Conjugates", "other_ingredients", "NHA_WITHANOLIDE_GLYCOSIDE_CONJUGATES_MARKER"),
+        ("40% MCTs", "other_ingredients", "NHA_MCT_PERCENT_COMPOSITION_DESCRIPTOR"),
+        ("Bioactive Ribetril-A", "other_ingredients", "PII_BRAND_COMPLEX_DESCRIPTOR"),
     ],
 )
 def test_source_descriptor_recognized(enricher, label, source, entry_id):

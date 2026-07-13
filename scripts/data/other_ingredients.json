@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-06-23",
-    "total_entries": 707,
+    "last_updated": "2026-07-13",
+    "total_entries": 710,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -2629,7 +2629,7 @@
         "razberi-k",
         "sinetrol xpur c1",
         "vx1",
-        "withanolide glycoside conjugates",
+        "Bioactive Ribetril-A",
         "Sendara",
         "Sustained Energy Support",
         "The Fiber Expert",
@@ -24515,6 +24515,67 @@
         "identity routing"
       ],
       "last_updated": "2026-06-23",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_label_descriptor": true
+    },
+    {
+      "id": "NHA_BERGAMOT_POLYPHENOLIC_FLAVONES_MARKER",
+      "standard_name": "Bergamot Polyphenolic Flavones",
+      "aliases": [
+        "polyphenolic flavones"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "standardization_marker",
+      "allergen": false,
+      "notes": "Standardized polyphenolic-flavone fraction declared under a citrus bergamot extract. The named bergamot extract remains the scored dose owner; this marker row is retained for label fidelity and does not independently score as naringin or another listed constituent.",
+      "common_uses": [
+        "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_label_descriptor": true
+    },
+    {
+      "id": "NHA_WITHANOLIDE_GLYCOSIDE_CONJUGATES_MARKER",
+      "standard_name": "Withanolide Glycoside Conjugates",
+      "aliases": [
+        "glycoside conjugates",
+        "withanolide glycoside conjugates"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "standardization_marker",
+      "allergen": false,
+      "notes": "Constituent marker declared under a standardized ashwagandha extract. The ashwagandha extract remains the scored dose owner; this child marker is retained for label fidelity without independent formulation or dose credit.",
+      "common_uses": [
+        "standardization marker",
+        "identity routing"
+      ],
+      "last_updated": "2026-07-13",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_label_descriptor": true
+    },
+    {
+      "id": "NHA_MCT_PERCENT_COMPOSITION_DESCRIPTOR",
+      "standard_name": "MCT Percentage Composition",
+      "aliases": [
+        "40% MCTs"
+      ],
+      "category": "label_descriptor",
+      "is_additive": false,
+      "additive_type": "content_descriptor",
+      "allergen": false,
+      "notes": "Percentage-only MCT composition declared beneath a parent coconut ingredient. It is not a separately declared MCT dose and therefore must not inherit the parent's full quantity or receive independent MCT scoring credit.",
+      "common_uses": [
+        "content descriptor",
+        "identity routing"
+      ],
+      "last_updated": "2026-07-13",
       "external_ids": {},
       "functional_roles": [],
       "is_label_descriptor": true
