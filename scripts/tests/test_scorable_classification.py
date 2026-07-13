@@ -673,6 +673,63 @@ class TestIdentityIntegrityBoundary:
 
         assert skipped["Stevia leaf extract"]["recognized_non_scorable"] is True
 
+    def test_identity_integrity_reclassifies_recognized_active_without_false_conflict(
+        self, enricher
+    ):
+        product = {
+            "id": "recognized-active-beet",
+            "fullName": "Beet Root 1000 mg",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="Beet",
+                    raw_source_text="Beet",
+                    standardName="Beetroot Powder",
+                    canonical_id="beetroot",
+                    canonical_source_db="standardized_botanicals",
+                    ingredientGroup="Beet",
+                    raw_taxonomy={"category": "botanical", "ingredientGroup": "Beet"},
+                    isAdditive=True,
+                    additiveType="natural_colorant",
+                    quantity=1000.0,
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["role_classification"] == "recognized_non_scorable"
+        assert row["identity_disposition"] == "taxonomy_only"
+        assert row["scoreable_identity"] is False
+        assert row not in result["ingredients_scorable"]
+
+    def test_identity_integrity_keeps_truly_unmapped_active_blocked(self, enricher):
+        product = {
+            "id": "unmapped-active",
+            "fullName": "Unknown Active 100 mg",
+            "activeIngredients": [
+                _identity_integrity_active_row(
+                    name="Unregistered Clinical Active XYZ",
+                    raw_source_text="Unregistered Clinical Active XYZ",
+                    standardName="Unregistered Clinical Active XYZ",
+                    canonical_id=None,
+                    canonical_source_db="unmapped",
+                    ingredientGroup="Unregistered Clinical Active XYZ",
+                    quantity=100.0,
+                )
+            ],
+            "inactiveIngredients": [],
+        }
+
+        result = enricher._collect_ingredient_quality_data(product)
+        row = result["ingredients"][0]
+
+        assert row["role_classification"] == "active_unmapped"
+        assert row["identity_disposition"] == "identity_conflict"
+        assert row["scoreable_identity"] is False
+        assert row not in result["ingredients_scorable"]
+
 
 class TestScorableClassificationPass1:
     """Test Pass 1: Skip filters for activeIngredients"""

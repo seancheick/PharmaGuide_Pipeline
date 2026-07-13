@@ -3782,6 +3782,12 @@ class SupplementEnricherV3:
                     quality_entry['identity_confidence'] = 1.0
                     quality_entry['identity_decision_reason'] = 'proprietary_blend_member'
                     self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'proprietary_blend_member')
+                    self._restamp_recognized_non_scorable_identity(
+                        quality_entry,
+                        ingredient,
+                        match_result,
+                        quality_map,
+                    )
                     recognized_non_scorable_count += 1
                     self._route_non_scorable_iqd_row(
                         quality_entry,
@@ -3824,6 +3830,12 @@ class SupplementEnricherV3:
                     quality_entry['identity_confidence'] = 1.0
                     quality_entry['identity_decision_reason'] = 'source_descriptor_child_row'
                     self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'source_descriptor_child_row')
+                    self._restamp_recognized_non_scorable_identity(
+                        quality_entry,
+                        ingredient,
+                        match_result,
+                        quality_map,
+                    )
                     recognized_non_scorable_count += 1
                     self._route_non_scorable_iqd_row(
                         quality_entry,
@@ -3868,6 +3880,14 @@ class SupplementEnricherV3:
                         self._track_unmapped(ing_name, 'active')
                     else:
                         quality_entry['score_exclusion_reason'] = 'no_dose_evidence'
+
+            if quality_entry.get('recognized_non_scorable') is True:
+                self._restamp_recognized_non_scorable_identity(
+                    quality_entry,
+                    ingredient,
+                    match_result,
+                    quality_map,
+                )
 
             if self._is_contract_scorable_iqd_row(quality_entry):
                 ingredients_scorable.append(quality_entry)
@@ -4013,6 +4033,14 @@ class SupplementEnricherV3:
                             self._track_unmapped(ing_name, 'active_promoted')
                         else:
                             quality_entry['score_exclusion_reason'] = 'no_dose_evidence'
+
+                if quality_entry.get('recognized_non_scorable') is True:
+                    self._restamp_recognized_non_scorable_identity(
+                        quality_entry,
+                        ingredient,
+                        match_result,
+                        quality_map,
+                    )
 
                 if self._is_contract_scorable_iqd_row(quality_entry):
                     ingredients_scorable.append(quality_entry)
@@ -4659,6 +4687,29 @@ class SupplementEnricherV3:
             row["role_classification"] = "recognized_non_scorable"
             self._append_unique_iqd_row(ingredients_recognized_non_scorable, row)
         self._append_unique_iqd_row(ingredients_skipped, row)
+
+    def _restamp_recognized_non_scorable_identity(
+        self,
+        row: Dict,
+        ingredient: Dict,
+        match_result: Optional[Dict],
+        quality_map: Dict,
+    ) -> None:
+        """Reconcile identity after a candidate becomes intentionally non-scorable."""
+        decision, identity_match, taxonomy_coherent = self._resolve_iqd_identity(
+            ingredient,
+            match_result,
+            quality_map,
+            allow_unscoreable_taxonomy_only=True,
+        )
+        self._stamp_iqd_identity(
+            row,
+            ingredient,
+            decision,
+            identity_match,
+            taxonomy_coherent,
+        )
+        row["scoreable_identity"] = False
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals.
