@@ -130,21 +130,36 @@ def build_canonical_identity_registry(
                 "deprecated_in_favor_of"
             ):
                 continue
+            target_id = (
+                match_rules.get("target_id")
+                if isinstance(match_rules, Mapping)
+                else None
+            )
+            registry_canonical_id = (
+                target_id
+                if isinstance(target_id, str) and target_id in quality_map
+                else canonical_id
+            )
             put(
                 entry.get("standard_name") or canonical_id,
-                canonical_id,
+                registry_canonical_id,
                 "ingredient_quality_map",
                 0,
             )
             for alias in entry.get("aliases") or ():
-                put(alias, canonical_id, "ingredient_quality_map", 1)
+                put(alias, registry_canonical_id, "ingredient_quality_map", 1)
             forms = entry.get("forms")
             if isinstance(forms, Mapping):
                 for form_name, form in forms.items():
-                    put(form_name, canonical_id, "ingredient_quality_map", 2)
+                    put(form_name, registry_canonical_id, "ingredient_quality_map", 2)
                     if isinstance(form, Mapping):
                         for alias in form.get("aliases") or ():
-                            put(alias, canonical_id, "ingredient_quality_map", 3)
+                            put(
+                                alias,
+                                registry_canonical_id,
+                                "ingredient_quality_map",
+                                3,
+                            )
 
     source_specs = (
         ("standardized_botanicals", "standardized_botanicals", "aliases"),
