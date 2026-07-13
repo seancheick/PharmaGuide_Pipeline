@@ -375,7 +375,13 @@ def extract_label_evidence(row: Mapping[str, Any]) -> tuple[LabelEvidence, ...]:
     """Extract auditable evidence from ingredient-line fields only."""
     evidence: list[LabelEvidence] = []
 
-    for field in ("raw_source_text", "raw_name", "source_name", "name"):
+    for field in (
+        "raw_source_text",
+        "raw_name",
+        "source_name",
+        "ingredientName",
+        "name",
+    ):
         for value in _text_values(row.get(field)):
             evidence.append(LabelEvidence(field, value, "source_name"))
 
@@ -632,6 +638,17 @@ def resolve_identity(
     display_name = normalize_label_display(source_name) or None
     display_form = normalize_label_display(source_form) or None
 
+    retained_unscoreable_canonical = (
+        canonical_before
+        if canonical_before
+        and (
+            structured_canonical == canonical_before
+            or raw_canonical == canonical_before
+            or taxonomy_coherent
+        )
+        else None
+    )
+
     if display_name is None:
         disposition: IdentityDisposition = "missing_display_label"
         canonical_after = None
@@ -675,11 +692,17 @@ def resolve_identity(
             )
     elif allow_unscoreable_taxonomy_only:
         disposition = "taxonomy_only"
-        canonical_after = None
-        rationale = (
-            "The row was intentionally classified as non-scorable; no canonical "
-            "identity was inferred from raw label or form text."
-        )
+        canonical_after = retained_unscoreable_canonical
+        if canonical_after:
+            rationale = (
+                "The row was intentionally classified as non-scorable; its "
+                "validated source identity was retained for non-scoring lineage."
+            )
+        else:
+            rationale = (
+                "The row was intentionally classified as non-scorable; no canonical "
+                "identity was inferred from raw label or form text."
+            )
     elif canonical_before is None:
         disposition = "identity_conflict"
         canonical_after = None
@@ -726,7 +749,11 @@ def resolve_identity(
         canonical_after = None
         rationale = "The external taxonomy confidence contract was not satisfied."
 
-    scoreable = is_identity_scoreable(disposition) and canonical_after is not None
+    scoreable = (
+        not allow_unscoreable_taxonomy_only
+        and is_identity_scoreable(disposition)
+        and canonical_after is not None
+    )
     return IdentityDecision(
         disposition=disposition,
         source_label_name=source_name,

@@ -392,6 +392,29 @@ def test_extract_label_evidence_falls_back_to_raw_taxonomy_forms():
     ]
 
 
+def test_extract_label_evidence_accepts_legacy_dsld_ingredient_name():
+    evidence = extract_label_evidence({"ingredientName": "Yohimbe"})
+
+    assert ("ingredientName", "Yohimbe", "source_name") in [
+        (item.field, item.value, item.kind) for item in evidence
+    ]
+
+
+def test_intentional_non_scorable_row_preserves_validated_source_canonical():
+    decision = resolve_identity(
+        row={"raw_source_text": "Acerola Cherry Extract"},
+        supplied_canonical_id="acerola_cherry",
+        resolve_candidate=lambda value: (
+            "acerola_cherry" if "acerola" in value.casefold() else None
+        ),
+        allow_unscoreable_taxonomy_only=True,
+    )
+
+    assert decision.disposition == "taxonomy_only"
+    assert decision.canonical_id == "acerola_cherry"
+    assert decision.scoreable_identity is False
+
+
 def test_structured_epa_label_repairs_conflicting_dha_taxonomy():
     decision = resolve_identity(
         row={
