@@ -253,6 +253,22 @@ def test_unresolvable_structured_text_uses_verified_taxonomy_without_repairing()
     assert decision.scoreable_identity is True
 
 
+def test_unresolvable_structured_text_does_not_block_matching_literal_identity():
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "EPA",
+            "ingredientGroup": "Fatty Acid (unspecified)",
+        },
+        supplied_canonical_id="epa",
+        resolve_candidate=fake_resolver,
+        taxonomy_coherent=False,
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "epa"
+    assert decision.scoreable_identity is True
+
+
 def test_unresolved_form_does_not_block_raw_identity_validation():
     decision = resolve_identity(
         row={
