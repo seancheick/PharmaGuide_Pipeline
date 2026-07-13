@@ -84,21 +84,16 @@ class TestRawNamePriority:
         )
         assert result == ("milk_thistle", "ingredient_quality_map")
 
-    def test_dcp_respects_standard_name_when_raw_is_alias(self, normalizer) -> None:
-        # "Dicalcium Phosphate" is an alias under BOTH calcium and phosphorus
-        # IQM parents. Reverse-index collision resolution depends on which
-        # parent is indexed first, so the test asserts a stable (not
-        # arbitrary) outcome — either result is OK as long as it's
-        # consistent with the reverse-index build order.
+    def test_exact_dcp_identity_beats_broader_nutrient_aliases(self, normalizer) -> None:
+        # Dicalcium phosphate has its own IQM canonical. It also appears as a
+        # form alias under calcium and phosphorus, but those broader aliases
+        # must not win by JSON insertion order when the literal identity is
+        # dicalcium phosphate.
         result = normalizer._resolve_canonical_identity(
             standard_name="Phosphorus",
             raw_name="Dicalcium Phosphate",
         )
-        # Whichever parent the reverse index picks, it must be one of
-        # these two IQM canonicals — not None.
-        assert result is not None
-        assert result[0] in ("calcium", "phosphorus")
-        assert result[1] == "ingredient_quality_map"
+        assert result == ("dicalcium_phosphate", "ingredient_quality_map")
 
     def test_empty_raw_name_uses_standard(self, normalizer) -> None:
         # Defensive: empty raw_name must not short-circuit the standard_name path.
