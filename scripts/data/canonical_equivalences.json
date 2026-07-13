@@ -2,6 +2,7 @@
   "_metadata": {
     "schema_version": "1.0.0",
     "version": "2026-07-13",
+    "total_entries": 6,
     "purpose": "Reviewed exact-identity redirects across pipeline registries.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
     "last_updated": "2026-07-13"
