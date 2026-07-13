@@ -168,8 +168,10 @@ def mark_compound_duplicate_rows(rows: list[Any]) -> list[dict[str, Any]]:
       - a bare row exists whose normalized label name equals the canonical
         nutrient name AND carries a positive quantity (the elemental row
         must be able to "win"), and
-      - the row's normalized label name extends the canonical name
-        (``startswith(canonical + " ")``).
+      - the sibling row has a different literal label name. The declared bare
+        nutrient total owns same-canonical source compounds even when the
+        compound name leads with a counterion (for example, Calcium Ascorbate
+        as the source of a declared Vitamin C total).
     Genuinely additive multi-form labels with no bare elemental row
     (e.g. beta-carotene + retinyl palmitate) are untouched.
 
@@ -213,7 +215,7 @@ def mark_compound_duplicate_rows(rows: list[Any]) -> list[dict[str, Any]]:
             continue
         for row in group:
             name = _normalize_text(row.get("name"))
-            if name.startswith(canonical_name + " "):
+            if name != canonical_name:
                 row["is_compound_duplicate"] = True
                 marked.append(row)
     return marked

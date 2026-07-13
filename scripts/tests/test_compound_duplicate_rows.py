@@ -77,6 +77,38 @@ class TestMarkCompoundDuplicateRows:
         assert rows[1].get("is_compound_duplicate") is True
         assert "is_compound_duplicate" not in rows[0]
 
+    def test_marks_source_compound_when_name_does_not_start_with_nutrient(self) -> None:
+        rows = [
+            {
+                "name": "Vitamin C",
+                "standardName": "Vitamin C",
+                "canonical_id": "vitamin_c",
+                "quantity": 900.0,
+                "unit": "mg",
+            },
+            {
+                "name": "Calcium",
+                "standardName": "Calcium",
+                "canonical_id": "calcium",
+                "quantity": 90.0,
+                "unit": "mg",
+            },
+            {
+                "name": "Calcium Ascorbate",
+                "standardName": "Vitamin C",
+                "canonical_id": "vitamin_c",
+                "quantity": 1000.0,
+                "unit": "mg",
+            },
+        ]
+
+        marked = mark_compound_duplicate_rows(rows)
+
+        assert marked == [rows[2]]
+        assert rows[2]["is_compound_duplicate"] is True
+        assert "is_compound_duplicate" not in rows[0]
+        assert "is_compound_duplicate" not in rows[1]
+
     def test_no_marking_without_bare_row(self) -> None:
         # Genuinely additive multi-form label: two compound rows, no bare row.
         rows = [
@@ -157,6 +189,22 @@ class TestSupplementTypeClassification:
         assert result["active_count"] == 1
         assert result["type"] == "single_nutrient"
 
+    def test_counterion_named_source_does_not_add_a_third_active(self) -> None:
+        rows = [
+            {"name": "Vitamin C", "standardName": "Vitamin C",
+             "canonical_id": "vitamin_c", "quantity": 900.0, "unit": "mg"},
+            {"name": "Calcium", "standardName": "Calcium",
+             "canonical_id": "calcium", "quantity": 90.0, "unit": "mg"},
+            {"name": "Calcium Ascorbate", "standardName": "Vitamin C",
+             "canonical_id": "vitamin_c", "quantity": 1000.0, "unit": "mg"},
+        ]
+
+        result = infer_supplement_type(
+            {"activeIngredients": rows, "inactiveIngredients": []}
+        )
+
+        assert result["active_count"] == 2
+
 
 class TestIsScorable:
     def test_compound_duplicate_not_scorable(self) -> None:
@@ -189,6 +237,32 @@ class TestRdaUlCollection:
 
         bare = [r for r in rda_rows if r.get("ingredient") == "Magnesium"]
         assert bare and bare[0]["skip_ul_check"] is False
+
+    def test_counterion_named_source_compound_is_not_a_second_stack_dose(
+        self,
+        enricher,
+    ) -> None:
+        rows = [
+            {"name": "Vitamin C", "standardName": "Vitamin C",
+             "canonical_id": "vitamin_c", "quantity": 900.0, "unit": "mg"},
+            {"name": "Calcium", "standardName": "Calcium",
+             "canonical_id": "calcium", "quantity": 90.0, "unit": "mg"},
+            {"name": "Calcium Ascorbate", "standardName": "Vitamin C",
+             "canonical_id": "vitamin_c", "quantity": 1000.0, "unit": "mg"},
+        ]
+
+        result = enricher._collect_rda_ul_data(
+            {"activeIngredients": rows, "inactiveIngredients": []},
+            min_servings_per_day=1,
+            max_servings_per_day=1,
+        )
+
+        analyzed = result["analyzed_ingredients"]
+        compound = next(
+            row for row in analyzed if row["ingredient"] == "Calcium Ascorbate"
+        )
+        assert compound["skip_ul_check"] is True
+        assert compound["skip_ul_reason"] == "compound_duplicate_row"
 
     def test_true_over_ul_on_bare_row_still_flags(self, enricher) -> None:
         # The dedupe must never mask a REAL breach: a bare elemental row
