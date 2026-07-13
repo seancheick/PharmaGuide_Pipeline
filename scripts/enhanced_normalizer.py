@@ -4286,7 +4286,10 @@ class EnhancedDSLDNormalizer:
 
             # SKIP ENFORCEMENT: Skip items from skip list during flattening
             # This runs after label header check so we don't skip headers with forms
-            if self._should_skip_ingredient(name):
+            if self._should_skip_ingredient(name) and not self._is_dosed_omega_aggregate_owner(
+                ing,
+                ing.get("raw_source_path") or "activeIngredients",
+            ):
                 logger.debug(f"Skipping ingredient during flattening: {name}")
                 if not self._is_nutrition_fact(
                     name,
@@ -5677,7 +5680,14 @@ class EnhancedDSLDNormalizer:
         # SKIP ENFORCEMENT: Check skip list FIRST before any processing
         # Applies processing precedence: skip > empty > header > nutrition > normal
         if self._should_skip_ingredient(name) and not (
-            is_active and self._is_dsld_active_blend_total_row(ing)
+            is_active
+            and (
+                self._is_dsld_active_blend_total_row(ing)
+                or self._is_dosed_omega_aggregate_owner(
+                    ing,
+                    ing.get("raw_source_path") or "activeIngredients",
+                )
+            )
         ):
             logger.debug(f"Skipping ingredient from skip list: {name}")
             if not self._is_nutrition_fact(
@@ -5838,6 +5848,12 @@ class EnhancedDSLDNormalizer:
             dsld_category=ing.get("category"),
             has_forms=_raw_has_forms,
             quantity_g=_quantity_g,
+        ) and not (
+            is_active
+            and self._is_dosed_omega_aggregate_owner(
+                ing,
+                ing.get("raw_source_path") or "activeIngredients",
+            )
         ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
             # Sprint E1.2.5 follow-up (2026-05-13): emit a display
@@ -6394,6 +6410,11 @@ class EnhancedDSLDNormalizer:
             # Hierarchy classification for scoring (source/summary/component)
             "hierarchyType": "blend_header" if is_structural_active_blend_total else self._classify_hierarchy_type(name)
         }
+        if is_active and self._is_dosed_omega_aggregate_owner(
+            ing,
+            ing.get("raw_source_path") or "activeIngredients",
+        ):
+            result["dose_role"] = "declared_total"
         if dose_data_quality:
             result["dose_data_quality"] = dose_data_quality
 
@@ -7255,6 +7276,40 @@ class EnhancedDSLDNormalizer:
                 str(form.get("name") or ""),
                 categories=["omega3_molecular_forms"],
             )
+        )
+
+    def _is_dosed_omega_aggregate_owner(
+        self,
+        ingredient: Dict[str, Any],
+        source_path: str,
+    ) -> bool:
+        """Retain one dosed omega owner when forms are attributes only."""
+        if self._source_path_is_inactive(source_path) or ingredient.get("nestedRows"):
+            return False
+        quantity, unit = self._extract_primary_mass_unit(ingredient)
+        if quantity is None or str(unit or "").strip().lower() not in {
+            "mg",
+            "milligram",
+            "milligrams",
+            "milligram(s)",
+            "g",
+            "gram",
+            "grams",
+            "gram(s)",
+        }:
+            return False
+        forms = [
+            form
+            for form in ingredient.get("forms") or []
+            if isinstance(form, dict) and str(form.get("name") or "").strip()
+        ]
+        return bool(forms) and all(
+            self._is_zero_dose_omega_molecular_form_attribute(
+                ingredient,
+                form,
+                source_path,
+            )
+            for form in forms
         )
 
     def _stamp_expanded_form_cleaner_contract(self, row: Dict[str, Any], source_path: str) -> None:

@@ -3489,7 +3489,11 @@ class SupplementEnricherV3:
 
             skip_reason = (
                 self._cleaner_skip_reason(ingredient)
-                or self._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+                or self._should_skip_from_scoring(
+                    ingredient,
+                    quality_map,
+                    botanicals_db,
+                )
             )
             if pre_context_match_reason:
                 skip_reason = None
@@ -4872,6 +4876,10 @@ class SupplementEnricherV3:
         name_norm = self._normalize_exclusion_text(ing_name)
         std_norm = self._normalize_exclusion_text(std_name)
         raw_source = ingredient.get('raw_source_text', '')
+        cleaner_declared_total = (
+            ingredient.get("score_eligible_by_cleaner") is True
+            and ingredient.get("dose_role") == "declared_total"
+        )
 
         # Some branded delivery systems expose the true active as a single nested child
         # with its own dose. In those cases the parent quantity is the delivery matrix,
@@ -4895,7 +4903,10 @@ class SupplementEnricherV3:
         # Z2/Z3: Excluded label phrases and nutrition-fact rollups.
         for text in (ing_name, std_name, raw_source, name_lower, std_lower):
             exclusion_reason = self._excluded_text_reason(text)
-            if exclusion_reason:
+            if exclusion_reason and not (
+                cleaner_declared_total
+                and exclusion_reason == SKIP_REASON_NUTRITION_FACT
+            ):
                 return exclusion_reason
 
         # =================================================================

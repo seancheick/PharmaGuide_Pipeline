@@ -159,13 +159,13 @@ def test_nutrition_fact_with_real_bioactive_forms_extracts_children() -> None:
     )
 
 
-def test_nutrition_fact_molecular_form_attributes_stay_display_only() -> None:
-    """Molecular-form attributes describe the skipped omega total.
+def test_nutrition_fact_molecular_form_attributes_stay_on_dosed_omega_owner() -> None:
+    """Molecular-form attributes describe the dosed omega total.
 
     They are not standalone DHA/EPA ingredient identities and carry no
     independent dose, so promoting them creates both identity conflicts and
-    false active rows. True DHA/EPA children remain covered by the preceding
-    rescue test.
+    false active rows. The aggregate remains the one dose owner. True DHA/EPA
+    children remain covered by the preceding rescue test.
     """
     from enhanced_normalizer import EnhancedDSLDNormalizer
 
@@ -206,16 +206,31 @@ def test_nutrition_fact_molecular_form_attributes_stay_display_only() -> None:
         str(row.get("name") or "").casefold()
         for row in cleaned.get("activeIngredients") or []
     }
+    assert "total omega-3" in active_names
     assert "ethyl esters" not in active_names
     assert "triglycerides" not in active_names
 
-    omega_display = next(
+    omega_owner = next(
         row
-        for row in cleaned.get("display_ingredients") or []
-        if row.get("raw_source_text") == "Total Omega-3"
+        for row in cleaned.get("activeIngredients") or []
+        if row.get("name") == "Total Omega-3"
     )
-    assert omega_display["score_included"] is False
-    assert omega_display["children"] == ["Ethyl Esters", "Triglycerides"]
+    assert omega_owner["canonical_id"] == "fish_oil"
+    assert omega_owner["quantity"] == 434.0
+    assert omega_owner["unit"] == "mg"
+    assert omega_owner["dose_role"] == "declared_total"
+    assert [form["name"] for form in omega_owner["forms"]] == [
+        "Ethyl Esters",
+        "Triglycerides",
+    ]
+
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    quality = SupplementEnricherV3()._collect_ingredient_quality_data(cleaned)
+    assert [row["name"] for row in quality["ingredients_scorable"]] == [
+        "Total Omega-3"
+    ]
+    assert not quality["ingredients_skipped"]
 
 
 def test_nutrition_fact_with_summary_forms_still_filters_correctly() -> None:
