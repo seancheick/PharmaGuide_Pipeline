@@ -233,6 +233,7 @@ def test_explicit_cross_registry_equivalence_collapses_only_reviewed_identity():
                         "target_id": "mct_oil",
                         "relation": "exact_equivalent",
                         "basis": "same-substance review",
+                        "scope": "all_identity_contexts",
                     }
                 ]
             },
@@ -279,6 +280,7 @@ def test_equivalence_target_must_exist_in_declared_registry():
                             "target_id": "missing",
                             "relation": "exact_equivalent",
                             "basis": "test",
+                            "scope": "all_identity_contexts",
                         }
                     ]
                 },
@@ -322,6 +324,7 @@ def test_equivalence_cannot_override_an_iqm_canonical_target():
                             "target_id": "other_legacy",
                             "relation": "exact_equivalent",
                             "basis": "test conflict",
+                            "scope": "all_identity_contexts",
                         }
                     ]
                 },

@@ -268,12 +268,20 @@ def _validated_equivalence_redirects(
             raise ValueError(
                 "canonical equivalence relation must be exact_equivalent"
             )
+        if not isinstance(row.get("basis"), str) or not row["basis"].strip():
+            raise ValueError("canonical equivalence rows require a review basis")
+        if row.get("scope") != "all_identity_contexts":
+            raise ValueError(
+                "canonical equivalence rows must declare scope=all_identity_contexts"
+            )
         source_db = str(row.get("source_db") or "")
         source_id = str(row.get("source_id") or "")
         target_db = str(row.get("target_db") or "")
         target_id = str(row.get("target_id") or "")
         if not source_db or not source_id or not target_db or not target_id:
             raise ValueError("canonical equivalence rows require source/target IDs")
+        if (source_db, source_id) == (target_db, target_id):
+            raise ValueError("canonical equivalence rows cannot be self-equivalences")
         if source_id not in collections.get(source_db, set()):
             raise ValueError(f"unknown source_id {source_id!r}")
         if target_id not in collections.get(target_db, set()):
