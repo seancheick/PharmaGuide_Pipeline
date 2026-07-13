@@ -165,3 +165,47 @@ def test_non_drug_token_unmapped_flow_unaffected(normalizer):
         f"normal unmapped path should still produce ingredient rows. "
         f"names={names[:20]}"
     )
+
+
+def test_product_scoped_correction_removes_misattributed_source_unii(normalizer):
+    rows = [
+        {
+            "name": "Transglucosidase",
+            "category": "enzyme",
+            "ingredientGroup": "Transglucosidase",
+            "uniiCode": "DTI67O9503",
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    corrected = normalizer._apply_label_corrections(rows, "59047")
+
+    assert corrected[0]["name"] == "Transglucosidase"
+    assert corrected[0]["uniiCode"] is None
+    assert corrected[0]["_pre_correction_unii"] == "DTI67O9503"
+    assert corrected[0]["_label_correction_provenance"] == "source_unii_correction"
+
+    raw_product = _make_raw_product(59047, [])
+    raw_product["fullName"] = "Digestive Enzymes"
+    raw_product["ingredientRows"] = [
+        {
+            "name": "Transglucosidase",
+            "category": "enzyme",
+            "ingredientGroup": "Transglucosidase",
+            "uniiCode": "DTI67O9503",
+            "quantity": [{"quantity": 450, "unit": "TG"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+    normalized = normalizer.normalize_product(raw_product)
+    active = next(
+        row for row in normalized["activeIngredients"]
+        if row.get("raw_source_text") == "Transglucosidase"
+    )
+    assert active["source_correction"] == {
+        "provenance_tag": "source_unii_correction",
+        "original_unii_code": "DTI67O9503",
+        "corrected_unii_code": None,
+    }

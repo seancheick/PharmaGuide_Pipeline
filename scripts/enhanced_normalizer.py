@@ -4484,14 +4484,11 @@ class EnhancedDSLDNormalizer:
         return flattened
     
     def _apply_label_corrections(self, ingredient_rows: List[Dict[str, Any]], product_id: str) -> List[Dict[str, Any]]:
-        """RC-5: rewrite ingredient name where (dsld_id, raw_text) matches.
+        """RC-5: correct a source row where (dsld_id, raw_text) matches.
 
-        Walks the (possibly nested) ingredientRows tree and replaces any
-        row whose ``name`` matches the override's ``raw_ingredient_text``
-        with the ``corrected_ingredient_text``. The original raw text is
-        retained under ``_pre_correction_name`` and the rewrite is tagged
-        ``_label_correction_applied=True`` plus the override's
-        ``provenance_tag`` for downstream audit.
+        Walks the possibly nested ingredientRows tree and applies the reviewed
+        text and/or UNII correction. Original values are retained under
+        ``_pre_correction_*`` and the rewrite is tagged for downstream audit.
 
         Scope is strictly the requested product_id — no global aliasing.
         Case-sensitive on raw_ingredient_text by design (the override file
@@ -4502,7 +4499,10 @@ class EnhancedDSLDNormalizer:
             return ingredient_rows
         raw_target = entry.get("raw_ingredient_text")
         corrected = entry.get("corrected_ingredient_text")
-        if not raw_target or not corrected:
+        has_unii_correction = (
+            "raw_unii_code" in entry and "corrected_unii_code" in entry
+        )
+        if not raw_target or (not corrected and not has_unii_correction):
             return ingredient_rows
         provenance_tag = entry.get("provenance_tag") or "label_correction"
 
@@ -4511,14 +4511,25 @@ class EnhancedDSLDNormalizer:
                 return row
             name = row.get("name")
             if isinstance(name, str) and name == raw_target:
-                row["_pre_correction_name"] = name
-                row["name"] = corrected
-                row["_label_correction_applied"] = True
-                row["_label_correction_provenance"] = provenance_tag
-                logger.info(
-                    "RC-5 label correction applied: pid=%s '%s' → '%s' (tag=%s)",
-                    product_id, raw_target, corrected, provenance_tag,
-                )
+                correction_applied = False
+                if corrected and corrected != name:
+                    row["_pre_correction_name"] = name
+                    row["name"] = corrected
+                    correction_applied = True
+                if (
+                    has_unii_correction
+                    and row.get("uniiCode") == entry.get("raw_unii_code")
+                ):
+                    row["_pre_correction_unii"] = row.get("uniiCode")
+                    row["uniiCode"] = entry.get("corrected_unii_code")
+                    correction_applied = True
+                if correction_applied:
+                    row["_label_correction_applied"] = True
+                    row["_label_correction_provenance"] = provenance_tag
+                    logger.info(
+                        "RC-5 source-row correction applied: pid=%s '%s' (tag=%s)",
+                        product_id, raw_target, provenance_tag,
+                    )
             # Recurse into known nested-row keys
             for nested_key in ("nestedRows", "forms"):
                 nested = row.get(nested_key)
@@ -6417,6 +6428,21 @@ class EnhancedDSLDNormalizer:
             result["dose_role"] = "declared_total"
         if dose_data_quality:
             result["dose_data_quality"] = dose_data_quality
+        if ing.get("_label_correction_applied"):
+            source_correction = {
+                "provenance_tag": ing.get("_label_correction_provenance"),
+            }
+            if "_pre_correction_name" in ing:
+                source_correction["original_ingredient_text"] = ing.get(
+                    "_pre_correction_name"
+                )
+                source_correction["corrected_ingredient_text"] = ing.get("name")
+            if "_pre_correction_unii" in ing:
+                source_correction["original_unii_code"] = ing.get(
+                    "_pre_correction_unii"
+                )
+                source_correction["corrected_unii_code"] = ing.get("uniiCode")
+            result["source_correction"] = source_correction
 
         # Add additive metadata flag (for enrichment phase to use)
         if is_additive:

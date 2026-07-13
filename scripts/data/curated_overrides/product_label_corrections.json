@@ -1,13 +1,13 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "description": "Reviewer-signed corrections for DSLD products where the manufacturer's printed label contains a typographical or transcription defect that produces a clinically dangerous or impossible ingredient.",
-    "purpose": "Per-product label correction with provenance. Each entry rewrites a single (dsld_id, raw_ingredient_text) pair to a corrected ingredient text BEFORE the cleaner does ingredient resolution. The override is scoped to the specific dsld_id — global aliasing of misspelled drug tokens is explicitly NOT supported because it would let future supplement labels silently rename the same token.",
+    "description": "Reviewer-signed corrections for DSLD product rows where label text or a source identifier contains a verified transcription or attribution defect.",
+    "purpose": "Per-product source-row correction with provenance. Each entry targets one (dsld_id, raw_ingredient_text) pair before cleaner identity resolution and may correct label text, a misattributed UNII, or both. Global aliases and global identifier suppression are not supported.",
     "scope": "Only fires for an exact (dsld_id, raw_ingredient_text) tuple match. Case-sensitive on raw_ingredient_text by design — manufacturers may print 'Insulin' in one product and 'INSULIN' in another, and each needs independent reviewer sign-off because the surrounding context (sibling ingredients, product category, regulatory status) must be re-evaluated per occurrence.",
     "review_policy": "Every entry must carry: dsld_id, brand, product_name (for human-readable audit trail), raw_ingredient_text (the label-printed text being corrected), corrected_ingredient_text (the canonical text the cleaner should see instead), evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer (signed by a clinician with the date), review_date (ISO 8601 YYYY-MM-DD).",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
-    "last_updated": "2026-05-22",
-    "total_entries": 1,
+    "last_updated": "2026-07-13",
+    "total_entries": 2,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -25,6 +25,25 @@
       "review_date": "2026-05-22",
       "scope": "dsld_id_only",
       "provenance_tag": "label_typo_correction"
+    },
+    "59047": {
+      "brand": "Life_Extension",
+      "product_name": "Digestive Enzymes",
+      "raw_ingredient_text": "Transglucosidase",
+      "corrected_ingredient_text": "Transglucosidase",
+      "raw_unii_code": "DTI67O9503",
+      "corrected_unii_code": null,
+      "correction_fields": [
+        "uniiCode"
+      ],
+      "evidence": "FDA Substance Registration System identifies DTI67O9503 as alglucosidase alfa, a distinct human lysosomal alpha-glucosidase biologic. The DSLD row itself names Transglucosidase, classifies it as an enzyme, identifies Aspergillus niger as its source, and reports transglucosidase activity units. The source UNII is therefore misattributed and is removed rather than replaced with an unverified identifier.",
+      "sources": [
+        "https://precision.fda.gov/uniisearch/srs?search=DTI67O9503"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-07-13",
+      "scope": "dsld_id_only",
+      "provenance_tag": "source_unii_correction"
     }
   }
 }
