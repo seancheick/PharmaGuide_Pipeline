@@ -84,6 +84,46 @@ def test_active_probiotic_blend_forms_are_preserved_as_scoreable_actives():
     assert "lactobacillus acidophilus" in names
 
 
+def test_nested_dsld_blend_header_is_not_promoted_to_scoreable_active():
+    raw = {
+        "id": "fixture-nested-dsld-blend",
+        "fullName": "Nested Blend Product",
+        "ingredientRows": [
+            {
+                "name": "Thermogenic Activator",
+                "ingredientGroup": "Blend",
+                "category": "blend",
+                "quantity": [{"quantity": 0, "unit": "Not Present"}],
+                "nestedRows": [
+                    {
+                        "name": "Caffeine Anhydrous",
+                        "ingredientGroup": "Caffeine",
+                        "quantity": [{"quantity": 200, "unit": "mg"}],
+                    }
+                ],
+            }
+        ],
+        "otheringredients": {"ingredients": []},
+    }
+
+    cleaned = _clean(raw)
+
+    header = next(
+        row
+        for row in cleaned["activeIngredients"]
+        if row.get("raw_source_text") == "Thermogenic Activator"
+    )
+    child = next(
+        row
+        for row in cleaned["activeIngredients"]
+        if row.get("raw_source_text") == "Caffeine Anhydrous"
+    )
+    assert header["cleaner_row_role"] == "blend_header_total"
+    assert header["score_eligible_by_cleaner"] is False
+    assert header["dose_class"] == "blend_total_weight"
+    assert child["score_eligible_by_cleaner"] is True
+
+
 def test_active_omega_rollup_compound_forms_split_to_epa_and_dha():
     raw = {
         "id": "fixture-omega-compound-forms",

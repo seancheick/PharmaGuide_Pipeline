@@ -9237,6 +9237,12 @@ class EnhancedDSLDNormalizer:
         weak_blend_signal = self._is_proprietary_blend_name(ing.get("name", ""))
         if not (strong_blend_signal or weak_blend_signal):
             return False
+        # The flatten pass preserves a DSLD blend parent for label fidelity and
+        # marks it after extracting its children. At that point the parent is a
+        # structural total/header even when its own quantity is absent; the
+        # children, not the marketing header, own the scoreable doses.
+        if strong_blend_signal and ing.get("_nested_rows_flattened"):
+            return True
         quantity, unit = self._extract_primary_mass_unit(ing)
         if quantity is None or str(unit or "").strip().upper() == "NP":
             # A blend TOTAL is a flat header carrying the aggregate mass. Rows with
