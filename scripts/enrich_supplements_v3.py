@@ -3161,11 +3161,9 @@ class SupplementEnricherV3:
                     and match_result.get("match_tier") in {"exact", "normalized"}
                     and not match_result.get("match_ambiguity_candidates")
                 ):
-                    canonical_id, _ = identity_registry.canonicalize(
-                        canonical_id,
-                        "ingredient_quality_map",
+                    return self._quality_match_scoring_canonical(
+                        match_result, quality_map
                     )
-                    return canonical_id
             preferred = identity_registry.resolve_verified_preferred(candidate)
             return preferred[0] if preferred else None
 
@@ -3179,17 +3177,17 @@ class SupplementEnricherV3:
             self._canonical_identity_databases = self.databases
         return self._canonical_identity_registry
 
-    def _canonicalize_quality_match(
-        self,
-        match_result: Optional[Dict],
-        quality_map: Dict,
-    ) -> Optional[Dict]:
+    @staticmethod
+    def _quality_match_scoring_canonical(
+        match_result: Optional[Dict], quality_map: Dict
+    ) -> Optional[str]:
+        """Project a specific IQM match to its declared scoring parent."""
         if not isinstance(match_result, dict):
-            return match_result
-        matched_entry_id = match_result.get("canonical_id")
-        if not isinstance(matched_entry_id, str) or not matched_entry_id:
-            return match_result
-        matched_entry = quality_map.get(matched_entry_id)
+            return None
+        matched_id = match_result.get("canonical_id")
+        if not isinstance(matched_id, str) or not matched_id:
+            return None
+        matched_entry = quality_map.get(matched_id)
         match_rules = (
             matched_entry.get("match_rules")
             if isinstance(matched_entry, dict)
@@ -3200,28 +3198,9 @@ class SupplementEnricherV3:
             if isinstance(match_rules, dict)
             else None
         )
-        if not isinstance(target_id, str) or not target_id:
-            return match_result
-
-        canonical_id, source_db = (
-            self._current_canonical_identity_registry().canonicalize(
-                matched_entry_id,
-                "ingredient_quality_map",
-            )
-        )
-        if (
-            source_db != "ingredient_quality_map"
-            or canonical_id == matched_entry_id
-            or canonical_id not in quality_map
-        ):
-            return match_result
-
-        canonicalized = dict(match_result)
-        canonicalized["canonical_id"] = canonical_id
-        canonicalized["matched_entry_id"] = matched_entry_id
-        canonicalized["canonical_redirect_from"] = matched_entry_id
-        canonicalized["canonical_redirect_source"] = "match_rules.target_id"
-        return canonicalized
+        if isinstance(target_id, str) and target_id in quality_map:
+            return target_id
+        return matched_id
 
     def _identity_parent_predicate(self, quality_map: Dict):
         if getattr(self, "_identity_parent_quality_map", None) is not quality_map:
@@ -3274,7 +3253,7 @@ class SupplementEnricherV3:
         allow_unscoreable_taxonomy_only: bool = False,
     ) -> Tuple[IdentityDecision, Optional[Dict], bool]:
         supplied_canonical_id = (
-            match_result.get("canonical_id")
+            self._quality_match_scoring_canonical(match_result, quality_map)
             if isinstance(match_result, dict)
             else ingredient.get("canonical_id")
         )
@@ -3317,7 +3296,8 @@ class SupplementEnricherV3:
             if (
                 not taxonomy_coherent
                 or not isinstance(match_result, dict)
-                or match_result.get("canonical_id") != decision.canonical_id
+                or self._quality_match_scoring_canonical(match_result, quality_map)
+                != decision.canonical_id
             ):
                 match_result = None
 
@@ -3343,7 +3323,10 @@ class SupplementEnricherV3:
         coherent_quality_match = bool(
             isinstance(match_result, dict)
             and match_result.get("match_status") != "FORM_UNMAPPED"
-            and match_result.get("canonical_id") == final_canonical_id
+            and self._quality_match_scoring_canonical(
+                match_result, self.databases.get("ingredient_quality_map", {})
+            )
+            == final_canonical_id
         )
         entry.update(
             {
@@ -5851,24 +5834,22 @@ class SupplementEnricherV3:
         elif match_result:
             bio_score = match_result.get('bio_score', 5)
             natural = match_result.get('natural', False)
-            canonical_id = match_result.get('canonical_id')
+            matched_canonical_id = match_result.get('canonical_id')
+            quality_map = self.databases.get('ingredient_quality_map', {})
+            canonical_id = self._quality_match_scoring_canonical(
+                match_result, quality_map
+            )
             matched_entry_id = match_result.get('matched_entry_id')
             canonical_redirect_from = match_result.get('canonical_redirect_from')
             canonical_redirect_source = match_result.get('canonical_redirect_source')
-            if canonical_id and canonical_redirect_from is None:
-                quality_map = self.databases.get('ingredient_quality_map', {})
-                matched_entry = quality_map.get(canonical_id, {})
-                target_id = (matched_entry.get('match_rules') or {}).get('target_id')
-                if (
-                    isinstance(target_id, str)
-                    and target_id
-                    and target_id != canonical_id
-                    and target_id in quality_map
-                ):
-                    canonical_redirect_from = canonical_id
-                    canonical_redirect_source = 'match_rules.target_id'
-                    matched_entry_id = canonical_id
-                    canonical_id = target_id
+            if (
+                matched_canonical_id
+                and canonical_id != matched_canonical_id
+                and canonical_redirect_from is None
+            ):
+                canonical_redirect_from = matched_canonical_id
+                canonical_redirect_source = 'match_rules.target_id'
+                matched_entry_id = matched_canonical_id
             # v3.6.0: `score` is now an alias of bio_score (no natural-source
             # bonus). The legacy formula `bio_score + 3 if natural` was retired
             # because A1/A2/A6 in the scorer now read bio_score directly, and
@@ -7205,13 +7186,10 @@ class SupplementEnricherV3:
             )
         except (TypeError, ValueError):
             # Unserializable argument (rare) → correctness over speed: bypass cache.
-            return self._canonicalize_quality_match(
-                self._match_quality_map_impl(
-                    ing_name, std_name, quality_map, _form_extraction_attempt,
-                    cleaned_forms, preferred_parent, branded_token,
-                    cleaner_canonical_id,
-                ),
-                quality_map,
+            return self._match_quality_map_impl(
+                ing_name, std_name, quality_map, _form_extraction_attempt,
+                cleaned_forms, preferred_parent, branded_token,
+                cleaner_canonical_id,
             )
 
         if key in self._match_quality_cache:
@@ -7221,7 +7199,6 @@ class SupplementEnricherV3:
             ing_name, std_name, quality_map, _form_extraction_attempt,
             cleaned_forms, preferred_parent, branded_token, cleaner_canonical_id,
         )
-        result = self._canonicalize_quality_match(result, quality_map)
         # Store an isolated copy (defends against any impl-side aliasing) and
         # hand every caller its own isolated copy — the cache entry is immutable.
         self._match_quality_cache[key] = copy.deepcopy(result)
