@@ -3159,7 +3159,8 @@ class SupplementEnricherV3:
                     and not match_result.get("match_ambiguity_candidates")
                 ):
                     return canonical_id
-            return identity_registry.resolve_unambiguous(candidate)
+            preferred = identity_registry.resolve_verified_preferred(candidate)
+            return preferred[0] if preferred else None
 
         return resolve
 

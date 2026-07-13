@@ -39,6 +39,7 @@ _LITERAL_PARENTHESIZED_IDENTITY_RE = re.compile(
 class CanonicalIdentityRegistry:
     preferred_index: Mapping[str, tuple[str, str]]
     normalized_preferred_index: Mapping[str, tuple[str, str]]
+    verified_preferred_index: Mapping[str, tuple[str, str]]
     candidates_index: Mapping[str, tuple[str, ...]]
 
     @staticmethod
@@ -52,24 +53,59 @@ class CanonicalIdentityRegistry:
         candidates = self.candidates_index.get(self._key(value), ())
         return candidates[0] if len(candidates) == 1 else None
 
+    def resolve_verified_preferred(self, value: Any) -> tuple[str, str] | None:
+        return self.verified_preferred_index.get(self._key(value))
+
 
 def build_canonical_identity_registry(
     databases: Mapping[str, Any],
 ) -> CanonicalIdentityRegistry:
     """Build the shared cleaner/enricher identity index from owned registries."""
-    preferred: dict[str, tuple[str, str]] = {}
-    normalized_preferred: dict[str, tuple[str, str]] = {}
+    literal_ranked: dict[str, list[tuple[tuple[int, int], str, str]]] = {}
+    normalized_ranked: dict[str, list[tuple[tuple[int, int], str, str]]] = {}
     candidates: dict[str, set[str]] = {}
+    source_priority = {
+        "ingredient_quality_map": 0,
+        "standardized_botanicals": 1,
+        "botanical_ingredients": 2,
+        "other_ingredients": 3,
+        "proprietary_blends": 4,
+    }
 
-    def put(value: Any, canonical_id: Any, source_db: str) -> None:
+    def put(
+        value: Any,
+        canonical_id: Any,
+        source_db: str,
+        target_priority: int,
+    ) -> None:
         literal_key = str(value or "").lower().strip()
         key = CanonicalIdentityRegistry._key(value)
         canonical = str(canonical_id or "").strip()
         if not literal_key or not key or not canonical:
             return
+        rank = (source_priority[source_db], target_priority)
         candidates.setdefault(key, set()).add(canonical)
-        preferred.setdefault(literal_key, (canonical, source_db))
-        normalized_preferred.setdefault(key, (canonical, source_db))
+        literal_ranked.setdefault(literal_key, []).append(
+            (rank, canonical, source_db)
+        )
+        normalized_ranked.setdefault(key, []).append(
+            (rank, canonical, source_db)
+        )
+
+    def preferred(
+        ranked: Mapping[str, list[tuple[tuple[int, int], str, str]]],
+    ) -> dict[str, tuple[str, str]]:
+        resolved: dict[str, tuple[str, str]] = {}
+        for key, rows in ranked.items():
+            best_rank = min(row[0] for row in rows)
+            best = {
+                (canonical, source_db)
+                for rank, canonical, source_db in rows
+                if rank == best_rank
+            }
+            if len(best) == 1:
+                resolved[key] = next(iter(best))
+        return resolved
 
     quality_map = databases.get("ingredient_quality_map")
     if isinstance(quality_map, Mapping):
@@ -81,16 +117,21 @@ def build_canonical_identity_registry(
                 "deprecated_in_favor_of"
             ):
                 continue
-            put(entry.get("standard_name") or canonical_id, canonical_id, "ingredient_quality_map")
+            put(
+                entry.get("standard_name") or canonical_id,
+                canonical_id,
+                "ingredient_quality_map",
+                0,
+            )
             for alias in entry.get("aliases") or ():
-                put(alias, canonical_id, "ingredient_quality_map")
+                put(alias, canonical_id, "ingredient_quality_map", 1)
             forms = entry.get("forms")
             if isinstance(forms, Mapping):
                 for form_name, form in forms.items():
-                    put(form_name, canonical_id, "ingredient_quality_map")
+                    put(form_name, canonical_id, "ingredient_quality_map", 2)
                     if isinstance(form, Mapping):
                         for alias in form.get("aliases") or ():
-                            put(alias, canonical_id, "ingredient_quality_map")
+                            put(alias, canonical_id, "ingredient_quality_map", 3)
 
     source_specs = (
         ("standardized_botanicals", "standardized_botanicals", "aliases"),
@@ -108,13 +149,25 @@ def build_canonical_identity_registry(
                 continue
             standard_name = str(entry.get("standard_name") or "").strip()
             canonical_id = entry.get("id") or standard_name.lower().replace(" ", "_")
-            put(standard_name, canonical_id, source_db)
+            put(standard_name, canonical_id, source_db, 0)
             for alias in entry.get(alias_key) or ():
-                put(alias, canonical_id, source_db)
+                put(alias, canonical_id, source_db, 1)
+
+    literal_preferred = preferred(literal_ranked)
+    normalized_preferred = preferred(normalized_ranked)
+    verified_preferred = {
+        key: selected
+        for key, selected in normalized_preferred.items()
+        if all(
+            canonical == selected[0] or source_db == selected[1]
+            for _, canonical, source_db in normalized_ranked[key]
+        )
+    }
 
     return CanonicalIdentityRegistry(
-        preferred_index=dict(preferred),
-        normalized_preferred_index=dict(normalized_preferred),
+        preferred_index=literal_preferred,
+        normalized_preferred_index=normalized_preferred,
+        verified_preferred_index=verified_preferred,
         candidates_index={
             key: tuple(sorted(values)) for key, values in candidates.items()
         },
@@ -285,13 +338,25 @@ def _candidate_variants(value: str) -> tuple[str, ...]:
 def _resolved_canonicals(
     evidence: Iterable[LabelEvidence],
     resolve_candidate: CandidateResolver,
+    canonical_parent_of: CanonicalParentPredicate | None = None,
 ) -> set[str]:
     resolved: set[str] = set()
     for item in evidence:
+        item_resolved: list[str] = []
         for candidate in _candidate_variants(item.value):
             canonical_id = _canonical(resolve_candidate(candidate))
-            if canonical_id:
-                resolved.add(canonical_id)
+            if not canonical_id or canonical_id in item_resolved:
+                continue
+            if not item_resolved:
+                item_resolved.append(canonical_id)
+                continue
+            first = item_resolved[0]
+            if canonical_parent_of and (
+                canonical_parent_of(first, canonical_id)
+                or canonical_parent_of(canonical_id, first)
+            ):
+                item_resolved.append(canonical_id)
+        resolved.update(item_resolved)
     return resolved
 
 
@@ -389,8 +454,13 @@ def resolve_identity(
     structured_canonicals = _resolved_canonicals(
         structured_evidence,
         resolve_candidate,
+        canonical_parent_of,
     )
-    raw_canonicals = _resolved_canonicals(raw_evidence, resolve_candidate)
+    raw_canonicals = _resolved_canonicals(
+        raw_evidence,
+        resolve_candidate,
+        canonical_parent_of,
+    )
 
     structured_canonical = _preferred_canonical(
         structured_canonicals,

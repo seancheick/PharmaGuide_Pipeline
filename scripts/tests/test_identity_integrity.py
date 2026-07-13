@@ -99,6 +99,89 @@ def test_canonical_identity_registry_has_one_priority_and_ambiguity_contract():
     )
 
 
+def test_registry_prefers_specific_standard_name_over_umbrella_form_alias():
+    registry = build_canonical_identity_registry(
+        {
+            "ingredient_quality_map": {
+                "digestive_enzymes": {
+                    "standard_name": "Digestive Enzymes",
+                    "aliases": [],
+                    "forms": {
+                        "specific enzymes": {"aliases": ["Bromelain"]},
+                    },
+                    "match_rules": {},
+                },
+                "bromelain": {
+                    "standard_name": "Bromelain",
+                    "aliases": ["bromelain enzyme"],
+                    "forms": {},
+                    "match_rules": {},
+                },
+            },
+            "other_ingredients": {
+                "other_ingredients": [
+                    {
+                        "id": "OI_BROMELAIN",
+                        "standard_name": "Bromelain",
+                        "aliases": [],
+                    }
+                ]
+            },
+        }
+    )
+
+    assert registry.resolve_preferred("Bromelain") == (
+        "bromelain",
+        "ingredient_quality_map",
+    )
+    assert registry.resolve_unambiguous("Bromelain") is None
+
+
+def test_registry_rejects_equal_priority_alias_conflicts():
+    registry = build_canonical_identity_registry(
+        {
+            "ingredient_quality_map": {
+                "first": {
+                    "standard_name": "First",
+                    "aliases": ["Shared"],
+                    "forms": {},
+                    "match_rules": {},
+                },
+                "second": {
+                    "standard_name": "Second",
+                    "aliases": ["Shared"],
+                    "forms": {},
+                    "match_rules": {},
+                },
+            }
+        }
+    )
+
+    assert registry.resolve_preferred("Shared") is None
+    assert "shared" not in registry.preferred_index
+
+
+def test_resolved_outer_identity_wins_over_parenthetical_acronym():
+    candidates = {
+        "medium chain triglycerides": "mct_oil",
+        "mct": "other_ingredient_mct",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Medium Chain Triglycerides",
+            "ingredientGroup": "Medium Chain Triglycerides (MCT)",
+        },
+        supplied_canonical_id="mct_oil",
+        resolve_candidate=lambda value: candidates.get(
+            normalize_label_display(value).casefold()
+        ),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "mct_oil"
+
+
 def test_normalize_label_display_uses_the_approved_operation_order():
     value = "  ＥＰＡ™\t(tm)  ® ℠ (r)\n(sm)  "
 
