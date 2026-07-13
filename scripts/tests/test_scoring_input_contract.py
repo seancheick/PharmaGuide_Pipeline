@@ -923,7 +923,7 @@ def test_identity_integrity_strict_rejects_unrecognized_disposition():
     assert result.strict_contract_passed is False
 
 
-def test_identity_integrity_strict_rejects_missing_disposition():
+def test_identity_integrity_strict_reports_missing_disposition_without_erasing_legacy_row():
     row = _row()
     product = _product([row])
     del product["ingredient_quality_data"]["ingredients_scorable"][0][
@@ -932,8 +932,9 @@ def test_identity_integrity_strict_rejects_missing_disposition():
 
     result = get_scoring_ingredients(product, strict=True)
 
-    assert result.rows == []
-    assert any(
+    assert [r["canonical_id"] for r in result.rows] == ["magnesium"]
+    assert "missing_identity_disposition" in result.contract_findings
+    assert not any(
         r.reason == "missing_identity_disposition" for r in result.rejected_rows
     )
     assert result.strict_contract_passed is False

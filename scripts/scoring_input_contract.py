@@ -1784,10 +1784,11 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     if row.get("scoreable_identity") is False:
         return False, _reject(row, "identity_marked_not_scoreable"), findings
 
-    # Strict mode requires the stamped identity disposition and trusts it over a
-    # possibly-stale scoreable_identity flag. Old batches can use the explicit
-    # non-strict compatibility path; strict callers must never silently score a
-    # row whose identity contract is absent.
+    # Strict mode reports an absent disposition as contract drift, while still
+    # allowing an otherwise valid old-batch row to be evaluated. Current release
+    # artifacts are blocked independently by audit_identity_integrity.py. A
+    # present disposition is authoritative and unresolved/invalid identities
+    # are always rejected here as a scoring backstop.
     if strict:
         disposition = row.get("identity_disposition")
         is_product_level_evidence = (
@@ -1798,9 +1799,7 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
             or not is_product_level_evidence
         )
         if disposition is None and requires_identity_contract:
-            reason = "missing_identity_disposition"
-            findings.append(reason)
-            return False, _reject(row, reason), findings
+            findings.append("missing_identity_disposition")
         if disposition is not None and disposition not in IDENTITY_DISPOSITIONS:
             reason = f"invalid_identity_disposition:{disposition}"
             findings.append(reason)
