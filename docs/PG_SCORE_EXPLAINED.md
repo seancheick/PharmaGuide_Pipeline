@@ -497,7 +497,7 @@ When we add a new bonus or penalty, we can't flip it on immediately — it would
 | Full Mapping Required            | **ON**  | Any unmapped active ingredient = NOT_SCORED                                      |
 | Extended Probiotic Scoring       | **OFF** | Expanded probiotic bonus (max +10 instead of +3)                                 |
 | Non-Probiotic Probiotic Bonus    | **ON**  | Non-probiotic products CAN earn probiotic bonus with strict evidence gates       |
-| Shadow Mode                      | **ON**  | Gated features computed silently for comparison, without affecting actual scores |
+| Shadow Comparison CLI            | **EXPLICIT** | Baseline and candidate scorers run only through `shadow_score_comparison.py` |
 | Non-GMO Bonus                    | **OFF** | +0.5 for Non-GMO Project Verified — data not fully enriched yet                  |
 | Hypoallergenic Bonus             | **OFF** | +0.5 for allergen-free products — pending full validation pipeline               |
 | Trusted Manufacturer Middle Tier | **OFF** | +1.0 for verifiable GMP/NSF/USP evidence — pending database expansion            |
@@ -612,8 +612,8 @@ Aggregate:
 - Zero verdict changes (SAFE→UNSAFE, etc.) that aren't intentional
 - Category-specific shifts are understood and documented
 
-`shadow_mode` in `scoring_config.json` is only a feature gate. A real shadow run now
-requires an explicit baseline scorer or config difference, for example:
+There is no runtime `shadow_mode` setting. A shadow comparison requires an
+explicit baseline scorer or config difference, for example:
 
 ```bash
 python3 scripts/shadow_score_comparison.py scripts/output_brand_enriched/enriched \

@@ -650,17 +650,16 @@ class TestEdgeCases:
         return CoverageGate()
 
     def test_missing_match_ledger(self, gate):
-        """Test handling of product without match_ledger."""
+        """A missing ledger cannot vacuously authorize scoring."""
         product = {
             "dsld_id": 1
         }
 
         result = gate.check_product(product)
 
-        # Should handle gracefully
         assert result.product_id == "1"
-        # With no data, should be able to score
-        assert result.can_score
+        assert not result.can_score
+        assert "Missing or malformed match_ledger" in result.blocking_issues
 
     def test_empty_batch(self, gate):
         """Test handling of empty batch."""

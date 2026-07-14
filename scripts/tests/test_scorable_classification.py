@@ -2099,7 +2099,7 @@ class TestParentTotalFlagging:
         def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
             return {
                 "standard_name": "Folate",
-                "canonical_id": "folate",
+                "canonical_id": "vitamin_b9_folate",
                 "form_id": "unspecified",
                 "form_name": "(unspecified)",
                 "match_tier": "exact",
@@ -2144,7 +2144,7 @@ class TestParentTotalFlagging:
         def fake_match_quality_map(ing_name, std_name, quality_map, cleaned_forms=None, branded_token=None, **kwargs):
             return {
                 "standard_name": "Niacin",
-                "canonical_id": "niacin",
+                "canonical_id": "vitamin_b3_niacin",
                 "form_id": "unspecified",
                 "form_name": "(unspecified)",
                 "match_tier": "exact",

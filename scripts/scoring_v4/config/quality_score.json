@@ -277,7 +277,7 @@
     "multi_prenatal": {
       "cap_formulation": 25.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
       "cap_premium_form_diversity": 4.0, "cap_key_form_support": 5.0, "cap_panel_disclosure_structure": 2.0,
-      "cap_dosage_form_suitability": 2.0, "panel_form_smoothing_factor": 0.7, "panel_form_neutral_floor": 9.0,
+      "cap_dosage_form_suitability": 2.0, "panel_form_neutral_floor": 9.0,
       "bio_score_max": 15.0, "premium_form_threshold": 12.0, "premium_points_per_additional": 0.5,
       "gummy_formulation_penalty": 3.0
     },

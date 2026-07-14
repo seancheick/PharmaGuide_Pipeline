@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 import re
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -47,6 +47,36 @@ def safety_normalize_text(text: Any) -> str:
     normalized = re.sub(r"[^a-z0-9()+/\\-]+", " ", normalized)
     normalized = re.sub(r"\s+", " ", normalized).strip()
     return normalized
+
+
+def safety_jurisdiction_projection(
+    entry: Dict[str, Any], market_code: str = "US"
+) -> Dict[str, Any]:
+    """Project one safety rule into market applicability plus advisories.
+
+    Legacy rules without structured jurisdictions retain their historic US
+    applicability. Once jurisdictions are declared, only matching country or
+    subdivision codes may drive the market verdict; all others remain visible
+    as regional advisories.
+    """
+    jurisdictions = [
+        dict(item)
+        for item in (entry.get("jurisdictions") or [])
+        if isinstance(item, dict)
+    ]
+    market = str(market_code or "US").upper().strip()
+
+    def _applies(item: Dict[str, Any]) -> bool:
+        code = str(item.get("jurisdiction_code") or "").upper().strip()
+        return code == market or code.startswith(f"{market}-")
+
+    applicable = [item for item in jurisdictions if _applies(item)]
+    regional = [item for item in jurisdictions if not _applies(item)]
+    return {
+        "jurisdictions": jurisdictions,
+        "us_applicable": bool(applicable) if jurisdictions else True,
+        "regional_advisories": regional,
+    }
 
 
 def _normalize_safety_enum(value: Any) -> str:
@@ -156,6 +186,9 @@ class SafetySignal:
     review_required: bool   # match_resolution == review_only
     inactive_policy: str    # e.g. "excipient_acceptable" / ""
     evidence_text: str
+    us_applicable: bool = True
+    jurisdictions: List[Dict[str, Any]] = field(default_factory=list)
+    regional_advisories: List[Dict[str, Any]] = field(default_factory=list)
 
     def to_dict(self) -> Dict[str, Any]:
         return asdict(self)
@@ -218,6 +251,9 @@ def build_safety_signal(
     subject_role: Any = "unknown",
     inactive_policy: Any = "",
     evidence_text: Any = "",
+    us_applicable: Any = True,
+    jurisdictions: Any = None,
+    regional_advisories: Any = None,
 ) -> SafetySignal:
     status_norm = _normalize_safety_enum(status)
     resolution = match_resolution_for(match_type, entry_id, confidence)
@@ -233,6 +269,11 @@ def build_safety_signal(
         review_required=resolution == "review_only",
         inactive_policy=_normalize_safety_enum(inactive_policy),
         evidence_text=str(evidence_text or ""),
+        us_applicable=us_applicable is not False,
+        jurisdictions=[dict(v) for v in (jurisdictions or []) if isinstance(v, dict)],
+        regional_advisories=[
+            dict(v) for v in (regional_advisories or []) if isinstance(v, dict)
+        ],
     )
 
 
@@ -291,6 +332,9 @@ def normalize_safety_signals(
             severity=s.get("severity_level") or s.get("severity"),
             subject_role=s.get("source_section") or s.get("role") or "active",
             evidence_text=(s.get("banned_name") or s.get("ingredient") or s.get("name") or ""),
+            us_applicable=s.get("us_applicable", True),
+            jurisdictions=s.get("jurisdictions"),
+            regional_advisories=s.get("regional_advisories"),
         ))
 
     # 2. safety_flags (top-level + per-substance), banned_recalled source only
@@ -310,6 +354,9 @@ def normalize_safety_signals(
             severity=f.get("severity"),
             subject_role=f.get("subject_role") or "active",
             evidence_text=(f.get("matched_variant") or f.get("evidence_text") or f.get("entry_id") or ""),
+            us_applicable=f.get("us_applicable", True),
+            jurisdictions=f.get("jurisdictions"),
+            regional_advisories=f.get("regional_advisories"),
         ))
 
     # 3. resolver hits (already canonical-resolved → treat as confirmed)

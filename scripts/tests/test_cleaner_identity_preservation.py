@@ -257,3 +257,20 @@ def test_standardized_botanicals_no_source_aliases_under_markers():
         "identity_bioactivity_split: source-botanical aliases under marker "
         "entries in standardized_botanicals.json:\n  " + "\n  ".join(violations)
     )
+
+
+def test_verified_branded_token_does_not_replace_printed_name(normalizer) -> None:
+    printed = "KSM-66 Ashwagandha Root Extract"
+    result = normalizer._process_single_ingredient_enhanced(
+        {
+            "name": printed,
+            "quantity": [{"quantity": 600, "unit": "mg"}],
+            "forms": [],
+        },
+        is_active=True,
+    )
+
+    assert isinstance(result, dict)
+    assert result["name"] == printed
+    assert result["raw_source_text"] == printed
+    assert result["branded_token_extracted"] == "KSM-66"

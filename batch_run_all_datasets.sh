@@ -218,7 +218,7 @@ for folder in "${sorted_folders[@]}"; do
     echo ""
 
     # Run pipeline
-    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" 2>&1 | tee -a "$SUMMARY_FILE"; then
+    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" --strict-release-gates 2>&1 | tee -a "$SUMMARY_FILE"; then
         echo -e "${GREEN}${PROGRESS} ✓ SUCCESS: ${folder_name}${NC}"
         PASSED+=("$folder_name")
     else

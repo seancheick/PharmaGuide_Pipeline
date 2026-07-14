@@ -82,7 +82,7 @@ def test_formulation_payload_shape_and_phase() -> None:
     assert payload["score"] <= 25.0
 
 
-def test_panel_form_quality_uses_v3_multivitamin_smoothing() -> None:
+def test_panel_form_quality_uses_neutral_value_as_a_true_floor() -> None:
     from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
     product = _product(ingredients=[
@@ -92,8 +92,21 @@ def test_panel_form_quality_uses_v3_multivitamin_smoothing() -> None:
 
     payload = score_formulation(product)
 
-    # avg=12; smoothed=0.7*12 + 0.3*9 = 11.1; scaled to cap 12 => 8.88
-    assert payload["components"]["panel_form_quality"] == 8.88
+    # avg=12 already exceeds the neutral floor, so it must not be reduced.
+    assert payload["components"]["panel_form_quality"] == 9.6
+
+
+def test_panel_form_quality_floor_never_reduces_premium_panel() -> None:
+    from scoring_v4.modules.multi_prenatal_formulation import score_formulation
+
+    product = _product(ingredients=[
+        _ingredient("vitamin_a", bio_score=15),
+        _ingredient("vitamin_c", bio_score=15),
+    ])
+
+    payload = score_formulation(product)
+
+    assert payload["components"]["panel_form_quality"] == 12.0
 
 
 def test_premium_form_diversity_skip_first_and_caps_at_4() -> None:

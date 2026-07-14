@@ -44,6 +44,12 @@ from scoring_input_contract import (
     get_scoring_ingredients,
     is_nutrition_only_product,
 )
+from stage_manifest import select_stage_input_files
+from run_artifacts import (
+    atomic_write_json,
+    ensure_run_id,
+    report_run_directory,
+)
 
 try:
     from match_ledger import (
@@ -1303,6 +1309,9 @@ class SupplementScorer:
                 or "unknown"
             )
             seen_hits.add(self._safety_hit_key(name, status))
+            if safety_flag.get("us_applicable") is False:
+                flags.append("B0_REGIONAL_ADVISORY")
+                continue
 
             if match_type not in {"exact", "alias", "explicit_form_evidence", "legacy_projection"}:
                 review_needed = True
@@ -1349,6 +1358,9 @@ class SupplementScorer:
             if key in seen_hits:
                 continue
             seen_hits.add(key)
+            if substance.get("us_applicable") is False:
+                flags.append("B0_REGIONAL_ADVISORY")
+                continue
 
             # Interim behavior: non exact/alias hits are review-only.
             if match_type not in {"exact", "alias"}:
@@ -1572,13 +1584,10 @@ class SupplementScorer:
         avg_raw = sum(s * w for s, w in weighted_values) / denom
         a1_cfg = self.config.get("section_A_ingredient_quality", {}).get("A1_bioavailability_form", {})
         if supp_type in self._MULTI_TYPES:
-            smoothing = as_float(a1_cfg.get("multivitamin_smoothing_factor"), 0.7)
-            if smoothing is None or smoothing < 0.0 or smoothing > 1.0:
-                smoothing = 0.7
             floor = as_float(a1_cfg.get("multivitamin_floor"), 9.0)
             if floor is None:
                 floor = 9.0
-            avg_raw = smoothing * avg_raw + (1.0 - smoothing) * floor
+            avg_raw = max(avg_raw, floor)
 
         max_points = as_float(
             a1_cfg.get("max"),
@@ -2872,7 +2881,18 @@ class SupplementScorer:
 
         gmp_level = norm_text(product.get("gmp_level"))
         gmp = cert.get("gmp", {})
-        if gmp_level == "certified" or bool(gmp.get("nsf_gmp") or gmp.get("claimed")):
+        # H1: an FDA-registered facility is NOT full GMP certification. The
+        # enricher folds fda_registered into gmp.claimed, so crediting the 4.0
+        # "certified" tier on bare `claimed` over-credited every FDA-registered
+        # label and made the fda_registered → 2.0 tier unreachable. Use the same
+        # precise signal as the v4 scorer (generic_trust.py): full GMP requires
+        # nsf_gmp / gmp_certified_or_compliant / a claim that is NOT merely
+        # fda_registered.
+        if gmp_level == "certified" or bool(
+            gmp.get("nsf_gmp")
+            or gmp.get("gmp_certified_or_compliant")
+            or (gmp.get("claimed") and not gmp.get("fda_registered"))
+        ):
             b4b = float(b4b_certified)
         elif gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
             b4b = float(b4b_fda_registered)
@@ -5563,7 +5583,13 @@ class SupplementScorer:
             "output_file": output_file,
         }
 
-    def process_all(self, input_path: str, output_dir: str) -> Dict[str, Any]:
+    def process_all(
+        self,
+        input_path: str,
+        output_dir: str,
+        run_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        effective_run_id = ensure_run_id(run_id)
         script_dir = Path(__file__).parent
 
         if not os.path.isabs(input_path):
@@ -5576,11 +5602,13 @@ class SupplementScorer:
             input_files = [input_path]
         elif os.path.isdir(input_path):
             input_files = [
-                os.path.join(input_path, filename)
-                for filename in os.listdir(input_path)
-                if filename.endswith(".json") and not filename.startswith(".")
+                str(path)
+                for path in select_stage_input_files(
+                    Path(input_path),
+                    "enrich",
+                    patterns=("*.json",),
+                )
             ]
-            input_files.sort()
         else:
             raise FileNotFoundError(f"Input path not found: {input_path}")
 
@@ -5618,6 +5646,7 @@ class SupplementScorer:
         summary = {
             "processing_info": {
                 "scoring_version": self.VERSION,
+                "run_id": effective_run_id,
                 "files_processed": len(input_files),
                 "duration_seconds": round((datetime.now(timezone.utc) - start_time).total_seconds(), 2),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -5640,15 +5669,16 @@ class SupplementScorer:
             },
         }
 
-        reports_dir = os.path.join(output_dir, "reports")
-        os.makedirs(reports_dir, exist_ok=True)
+        reports_dir = str(report_run_directory(
+            Path(output_dir) / "reports",
+            effective_run_id,
+        ))
 
         summary_file = os.path.join(
             reports_dir,
             "scoring_summary.json",
         )
-        with open(summary_file, "w", encoding="utf-8") as f:
-            json.dump(summary, f, indent=2, ensure_ascii=False)
+        atomic_write_json(Path(summary_file), summary)
 
         self.logger.info("Scoring complete: %s products", total_products)
         self.logger.info("Average quality: %.2f/80", overall_avg_80)
@@ -5783,6 +5813,7 @@ def main() -> None:
     parser.add_argument("--baseline-dir", help="Baseline scored directory for impact comparison")
     parser.add_argument("--impact-threshold", type=float, default=2.0)
     parser.add_argument("--impact-pct-threshold", type=float, default=10.0)
+    parser.add_argument("--run-id", help="Path-safe pipeline run identifier")
 
     args = parser.parse_args()
 
@@ -5822,11 +5853,13 @@ def main() -> None:
             threshold_pct_change=args.impact_pct_threshold,
         )
 
-        report_dir = Path(output_dir) / "reports"
-        report_dir.mkdir(parents=True, exist_ok=True)
+        effective_run_id = ensure_run_id(args.run_id)
+        report["run_id"] = effective_run_id
+        report_dir = report_run_directory(
+            Path(output_dir) / "reports", effective_run_id
+        )
         report_file = report_dir / "impact_report.json"
-        with open(report_file, "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=2, ensure_ascii=False)
+        atomic_write_json(report_file, report)
 
         scorer.logger.info("Impact report saved: %s", report_file)
         scorer.logger.info("Gate status: %s", "PASS" if report["pass_gate"] else "FAIL")
@@ -5835,7 +5868,7 @@ def main() -> None:
             sys.exit(2)
         return
 
-    scorer.process_all(input_path, output_dir)
+    scorer.process_all(input_path, output_dir, run_id=args.run_id)
 
 
 if __name__ == "__main__":

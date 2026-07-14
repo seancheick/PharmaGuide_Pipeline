@@ -21,7 +21,6 @@ Version: 3.0.0
 """
 
 import copy
-import fnmatch
 import json
 import os
 import sys
@@ -92,6 +91,8 @@ from constants import (
     PROMOTE_REASON_ABSORPTION_ENHANCER,
     BRANDED_INGREDIENT_TOKENS,
 )
+from stage_manifest import select_stage_input_files
+from run_artifacts import ensure_run_id, report_run_directory
 from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
@@ -144,7 +145,18 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
-from identity.safety import has_explicit_form_evidence, safety_flag_from_banned_match
+from identity.safety import (
+    has_explicit_form_evidence,
+    safety_flag_from_banned_match,
+    safety_jurisdiction_projection,
+)
+
+_RDA_REFERENCE_PROFILE = {
+    "id": "adult_neutral_compatibility",
+    "age_range": "19-30",
+    "adequacy_basis": "higher_sourced_adult_male_female_rda_ai",
+    "ul_basis": "lower_sourced_adult_male_female_ul",
+}
 
 # Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
 _CLEANER_MATCH_METHOD_MAP = {
@@ -1592,7 +1604,24 @@ class SupplementEnricherV3:
             return False
         resolved_id = match_result.get("canonical_id")
         blocked_markers = BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST.get(source_id)
-        return bool(blocked_markers and resolved_id in blocked_markers)
+        if not blocked_markers:
+            return False
+        if resolved_id in blocked_markers:
+            return True
+
+        # Priority-first matching may correctly select the botanical parent
+        # from the row name before considering a marker-valued form. The form
+        # still declares the contradictory marker lineage and must trigger the
+        # same fail-safe.
+        blocked_form_names = {
+            marker.replace("_", " ").casefold() for marker in blocked_markers
+        }
+        declared_form_names = {
+            re.sub(r"[^a-z0-9]+", " ", str(form.get("name") or "").casefold()).strip()
+            for form in ingredient.get("forms") or []
+            if isinstance(form, dict)
+        }
+        return bool(blocked_form_names & declared_form_names)
 
     def _apply_context_canonical_override_match(
         self,
@@ -1935,12 +1964,9 @@ class SupplementEnricherV3:
                             per_form = remaining / len(forms_without_percent)
                             for f in forms_without_percent:
                                 f['percent_share'] = per_form
-                    elif not forms_without_percent and abs(total_explicit_percent - 1.0) > 0.01:
-                        # All have percentages but don't sum to 100 - normalize
-                        if total_explicit_percent > 0:
-                            for f in forms_with_percent:
-                                if f['percent_share'] is not None:
-                                    f['percent_share'] /= total_explicit_percent
+                    # When every form has an authored percentage, preserve it
+                    # exactly. Any remainder is unknown form mass; normalizing
+                    # the known forms to 100% overstates their evidence.
 
                 result['extracted_forms'] = forms_with_percent
             else:
@@ -2092,69 +2118,6 @@ class SupplementEnricherV3:
             best_score = max(score, partial_score)
 
         return best_score >= threshold, best_score
-
-    def _fuzzy_ingredient_match(
-        self,
-        ingredient_name: str,
-        target_name: str,
-        aliases: List[str],
-        threshold: float = 0.85,
-        review_threshold: float = 0.90
-    ) -> Optional[Dict]:
-        """
-        Fuzzy match ingredient names as a FALLBACK for quality matching.
-
-        NOT USED FOR: Banned substance detection (safety-critical - use exact only)
-        USED FOR: Ingredient quality/form matching where typos may occur
-
-        Args:
-            ingredient_name: The ingredient name to match
-            target_name: The canonical target name
-            aliases: List of known aliases
-            threshold: Minimum score (0-1) to accept match (default 0.85)
-            review_threshold: Matches below this score are flagged for review
-
-        Returns:
-            Dict with match details or None if no match above threshold.
-            Includes: method, matched_alias, score, needs_review
-        """
-        if not ingredient_name or not target_name:
-            return None
-
-        ing_norm = self._normalize_text(ingredient_name)
-        if not ing_norm:
-            return None
-
-        candidates = [target_name] + aliases
-        best_match = None
-        best_score = 0.0
-
-        for candidate in candidates:
-            cand_norm = self._normalize_text(candidate)
-            if not cand_norm:
-                continue
-
-            if RAPIDFUZZ_AVAILABLE:
-                # Use token_sort_ratio for word order flexibility
-                # "Vitamin B12" should match "B12 Vitamin"
-                score = rf_fuzz.token_sort_ratio(ing_norm, cand_norm) / 100.0
-            else:
-                # Fallback to difflib
-                score = SequenceMatcher(None, ing_norm, cand_norm).ratio()
-
-            if score > best_score:
-                best_score = score
-                best_match = candidate
-
-        if best_score < threshold:
-            return None
-
-        return {
-            "method": "fuzzy",
-            "matched_alias": best_match if best_match != target_name else None,
-            "score": best_score,
-            "needs_review": best_score < review_threshold
-        }
 
     def _exact_match(self, ingredient_name: str, target_name: str, aliases: List[str]) -> bool:
         """Perform exact matching against name and aliases"""
@@ -3728,6 +3691,29 @@ class SupplementEnricherV3:
                     identity_match,
                     taxonomy_coherent,
                 )
+                if (
+                    recognition_info
+                    and recognition_info.get("recognition_source")
+                    == "banned_recalled_ingredients"
+                    and ingredient.get("canonical_id")
+                    and ingredient.get("canonical_source_db")
+                    not in {"banned_recalled_ingredients", "harmful_additives"}
+                ):
+                    # Safety classification is orthogonal to identity. Retain
+                    # the cleaner's non-safety canonical while carrying the
+                    # safety-table identity in its own field.
+                    skipped_entry["canonical_id"] = ingredient.get("canonical_id")
+                    skipped_entry["canonical_source_db"] = ingredient.get(
+                        "canonical_source_db"
+                    )
+                    skipped_entry["safety_identity_id"] = recognition_info.get(
+                        "matched_entry_id"
+                    )
+                    skipped_entry["mapped_identity"] = True
+                    skipped_entry["scoreable_identity"] = False
+                    skipped_entry["identity_decision_reason"] = (
+                        "safety_identity_excluded_from_scoring"
+                    )
                 ingredients_skipped.append(skipped_entry)
                 all_quality_data.append(skipped_entry)
                 if recognition_info:
@@ -3777,7 +3763,12 @@ class SupplementEnricherV3:
                 )
                 if context_match:
                     match_result = context_match
-            if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
+            blocked_botanical_marker_match = (
+                self._is_blocked_botanical_source_marker_match(
+                    ingredient, match_result
+                )
+            )
+            if blocked_botanical_marker_match:
                 match_result = None
                 context_match_reason = None
             identity_decision, match_result, taxonomy_coherent = (
@@ -3801,6 +3792,39 @@ class SupplementEnricherV3:
                 match_result,
                 taxonomy_coherent,
             )
+            if blocked_botanical_marker_match:
+                # The botanical remains the lineage authority, but a marker
+                # form (for example Green Tea / Caffeine) cannot be promoted
+                # into either a marker score or a repaired extract score.
+                source_id = ingredient.get("canonical_id")
+                quality_entry.update({
+                    "canonical_id": source_id,
+                    "canonical_id_after": source_id,
+                    "canonical_source_db": ingredient.get("canonical_source_db"),
+                    "scoreable_identity": False,
+                    "recognized_non_scorable": True,
+                    "mapped": True,
+                    "mapped_identity": True,
+                    "role_classification": "recognized_non_scorable",
+                    "recognition_source": ingredient.get("canonical_source_db"),
+                    "recognition_type": "botanical_marker_lineage",
+                    "recognition_reason": "botanical_marker_is_secondary_metadata",
+                    "identity_decision_reason": "botanical_marker_is_secondary_metadata",
+                })
+                self._tag_fallback_decision(
+                    quality_entry,
+                    "clinical_fail_safe",
+                    "botanical_marker_is_secondary_metadata",
+                )
+                recognized_non_scorable_count += 1
+                self._route_non_scorable_iqd_row(
+                    quality_entry,
+                    ingredients_skipped,
+                    ingredients_recognized_non_scorable,
+                    skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+                )
+                all_quality_data.append(quality_entry)
+                continue
             self._project_repaired_identity_to_active_row(
                 source_ingredient,
                 quality_entry,
@@ -6964,16 +6988,29 @@ class SupplementEnricherV3:
         else:
             aggregation_method = 'equal'
 
-        # Calculate weighted average of bio_score and score
-        total_weight = sum(f['percent_share'] for f in matched_forms)
+        # Calculate against the full authored composition. Any unmatched or
+        # undeclared share retains conservative unspecified-form quality (5)
+        # instead of being silently redistributed across matched forms.
+        matched_weight = sum(f['percent_share'] for f in matched_forms)
+        declared_weight = sum(
+            float(f.get('percent_share') or 0.0) for f in extracted_forms
+        )
+        if declared_weight <= 1.0:
+            unmatched_weight = max(0.0, 1.0 - matched_weight)
+        else:
+            unmatched_weight = max(0.0, declared_weight - matched_weight)
+        total_weight = matched_weight + unmatched_weight
         if total_weight > 0:
             final_bio_score = sum(
                 f['bio_score'] * f['percent_share'] for f in matched_forms
+            )
+            final_bio_score = (
+                final_bio_score + (5.0 * unmatched_weight)
             ) / total_weight
-            # Use pre-computed score from database (weighted average)
             final_score = sum(
                 f['score'] * f['percent_share'] for f in matched_forms
-            ) / total_weight
+            )
+            final_score = (final_score + (5.0 * unmatched_weight)) / total_weight
         else:
             if matched_forms:
                 final_bio_score = sum(f['bio_score'] for f in matched_forms) / len(matched_forms)
@@ -7031,6 +7068,8 @@ class SupplementEnricherV3:
             'unmapped_forms': unmapped_forms,
             'aggregation_method': aggregation_method,
             'final_form_bio_score': final_bio_score,
+            'matched_percent_total': matched_weight,
+            'unmatched_percent_total': unmatched_weight,
 
             # Additional forms beyond primary (for transparency)
             'additional_forms': [
@@ -7390,12 +7429,9 @@ class SupplementEnricherV3:
         Match ingredient against quality map using explicit precedence rules.
 
         Precedence (highest to lowest):
-        1. Form-level exact match (name/alias)
-        2. Parent-level exact match (name/alias)
-        3. Form-level normalized match
-        4. Parent-level normalized match
-        5. Form-level pattern/contains match (if present in DB)
-        6. Parent-level pattern/contains match (if present in DB)
+        1. Configured match_rules priority
+        2. Exact, normalized, then bounded pattern/contains tier
+        3. Raw-label, standard-name, then base-name source
 
         Tie-breakers (within same tier):
         1. Context parent preference (when available)
@@ -8041,9 +8077,9 @@ class SupplementEnricherV3:
             # vitamin_c wins; when it's "Calcium", calcium wins.
             parent_pref = 0 if (preferred_parent and candidate["parent_key"] == preferred_parent) else 1
             return (
-                candidate["tier"],                      # 1. Tier (exact > normalized > contains/pattern)
-                candidate.get("match_source", 1),       # 2. Match source (raw > std > base)
-                candidate.get("priority", 1),           # 3. Priority from match_rules (0 > 1 > 2)
+                candidate.get("priority", 1),           # 1. Configured priority (0 > 1 > 2)
+                candidate["tier"],                      # 2. Tier (exact > normalized > contains/pattern)
+                candidate.get("match_source", 1),       # 3. Match source (raw > std > base)
                 parent_pref,                            # 4. Prefer parent matching base ingredient
                 -candidate["alias_len"],                # 5. Longer alias wins within same priority
                 0 if candidate["form_key"] else 1,      # 6. Form-level beats parent-level
@@ -8623,8 +8659,24 @@ class SupplementEnricherV3:
         Collect enhanced delivery system data for scoring Section A3.
         """
         delivery_db = self.databases.get('enhanced_delivery', {})
-        all_text = self._get_all_product_text_lower(product)
         physical_state = product.get('physicalState', {}).get('langualCodeDescription', '').lower()
+
+        evidence_sources: List[Tuple[str, str]] = []
+        for field in ("name", "fullName", "productName"):
+            value = product.get(field)
+            if isinstance(value, str) and value.strip():
+                evidence_sources.append((field, value))
+        for index, ingredient in enumerate(
+            self._primary_active_ingredients_for_enrichment(product)
+        ):
+            if not isinstance(ingredient, dict):
+                continue
+            row_text = " ".join(
+                str(ingredient.get(field) or "")
+                for field in ("name", "raw_source_text", "standardName", "notes")
+            ).strip()
+            if row_text:
+                evidence_sources.append((f"activeIngredients[{index}]", row_text))
 
         matched_systems = []
 
@@ -8632,22 +8684,32 @@ class SupplementEnricherV3:
             if delivery_name.startswith("_") or not isinstance(delivery_data, dict):
                 continue
 
-            delivery_lower = delivery_name.lower()
+            delivery_lower = delivery_name.lower().strip()
+            pattern = re.compile(
+                r"(?<![a-z0-9])" + re.escape(delivery_lower) + r"(?![a-z0-9])",
+                flags=re.IGNORECASE,
+            )
 
-            # Check if delivery system mentioned in product
-            # LABEL NAME PRESERVATION: Track WHERE the match was found
             match_source = None
-            if delivery_lower in all_text:
-                match_source = "product_text"
-            elif delivery_lower in physical_state:
+            matched_text = None
+            physical_match = pattern.search(physical_state)
+            if physical_match:
                 match_source = "physical_state"
+                matched_text = physical_match.group(0)
+            else:
+                for source_path, source_text in evidence_sources:
+                    row_match = pattern.search(source_text)
+                    if row_match:
+                        match_source = source_path
+                        matched_text = row_match.group(0)
+                        break
 
             if match_source:
                 matched_systems.append({
                     # LABEL NAME PRESERVATION:
                     "name": delivery_name,  # Canonical from DB (used for scoring)
                     "canonical_name": delivery_name,  # Explicit canonical field
-                    "raw_source_text": delivery_lower,  # What was matched in product
+                    "raw_source_text": matched_text,
                     "match_source": match_source,  # Where it was found
                     "tier": delivery_data.get('tier', 3),
                     "category": delivery_data.get('category', 'delivery'),
@@ -9288,6 +9350,12 @@ class SupplementEnricherV3:
         """Collect synergy cluster data"""
         synergy_db = self.databases.get('synergy_cluster', {})
         clusters = synergy_db.get('synergy_clusters', [])
+        # Per-nutrient unit for each min_effective_dose threshold (single source of
+        # truth; default "mg"). Thresholds are authored in native units — most mg,
+        # but methylcobalamin/folate/B12/biotin/iodine/chromium/selenium/K2 in mcg,
+        # vitamin D in IU, probiotics in CFU. Used to convert the product amount to
+        # the threshold's unit before the adequacy comparison.
+        dose_units = synergy_db.get('min_effective_dose_units', {}) or {}
 
         # Cluster-ingredient alias map (Solution A): canonical-form → variants
         # used by supplement labels in the wild. Recovers products where DSLD
@@ -9362,15 +9430,20 @@ class SupplementEnricherV3:
             # explicitly dosed (e.g. "magnesium glycinate" inherits
             # min_dose from "magnesium"). Falls back to 0 when no dose is
             # defined anywhere.
-            def _resolve_min_dose(cluster_ing_norm: str, cluster_ing_raw: str) -> float:
+            def _resolve_min_dose(cluster_ing_norm: str, cluster_ing_raw: str):
+                """Return (min_dose, matched_key) for a cluster ingredient.
+
+                The matched key selects the threshold's unit from ``dose_units``.
+                """
                 # 1) exact normalized key
                 if cluster_ing_norm in min_doses:
-                    return min_doses[cluster_ing_norm]
+                    return min_doses[cluster_ing_norm], cluster_ing_norm
                 # 2) exact raw key (legacy compat)
                 if cluster_ing_raw in min_doses:
-                    return min_doses[cluster_ing_raw]
+                    return min_doses[cluster_ing_raw], cluster_ing_raw
                 # 3) longest prefix match from available dose keys
                 best = 0
+                best_key = None
                 best_key_len = 0
                 for k, v in min_doses.items():
                     if not isinstance(k, str):
@@ -9378,8 +9451,9 @@ class SupplementEnricherV3:
                     k_norm = self._normalize_text(k)
                     if k_norm and k_norm in cluster_ing_norm and len(k_norm) > best_key_len:
                         best = v
+                        best_key = k
                         best_key_len = len(k_norm)
-                return best
+                return best, best_key
 
             for cluster_ing in cluster_ingredients:
                 cluster_ing_norm = self._normalize_text(cluster_ing)
@@ -9451,7 +9525,10 @@ class SupplementEnricherV3:
                     if is_match:
                         # Found match
                         quantity = ing_data['quantity']
-                        min_dose = _resolve_min_dose(cluster_ing_norm, cluster_ing)
+                        min_dose, min_dose_key = _resolve_min_dose(cluster_ing_norm, cluster_ing)
+                        # The threshold's own unit (default mg; see dose_units above).
+                        min_dose_unit = dose_units.get(min_dose_key, "mg") if min_dose_key else "mg"
+                        target_unit = self._normalize_threshold_unit(min_dose_unit) or "mg"
 
                         # Adequacy gate:
                         #   - If a min_dose is defined (>0): require quantity >= min_dose
@@ -9462,8 +9539,33 @@ class SupplementEnricherV3:
                             qty_num = float(quantity) if quantity is not None else 0.0
                         except (TypeError, ValueError):
                             qty_num = 0.0
+                        evaluated_quantity = qty_num
+                        evaluated_unit = self._normalize_threshold_unit(ing_data['unit'])
+                        dose_evaluable = qty_num > 0
                         if min_dose > 0:
-                            meets_min = qty_num >= min_dose
+                            # Compare in the THRESHOLD's unit (mg/mcg/IU/CFU), never a
+                            # forced mg: forcing mg mis-scaled every non-mg threshold
+                            # (methylcobalamin mcg, vitamin d IU, probiotics CFU) and
+                            # dropped ~19/58 clusters' synergy bonus.
+                            converted, _conversion_reason = self._convert_amount_to_target_unit(
+                                amount=qty_num,
+                                from_unit=ing_data['unit'],
+                                target_unit=target_unit,
+                                ingredient_name=ing_data['name'],
+                                standard_name=ing_key,
+                            )
+                            if converted is not None:
+                                evaluated_quantity, evaluated_unit = converted, target_unit
+                                dose_evaluable = True
+                                meets_min = converted >= min_dose
+                            else:
+                                # Unbridgeable unit (a CFU threshold, or a product unit
+                                # with no conversion rule) → compare in the threshold's
+                                # native scale; never drop the credit on a convention we
+                                # cannot convert.
+                                evaluated_quantity, evaluated_unit = qty_num, target_unit
+                                dose_evaluable = qty_num > 0
+                                meets_min = qty_num >= min_dose
                         else:
                             meets_min = qty_num > 0
 
@@ -9473,6 +9575,10 @@ class SupplementEnricherV3:
                             "quantity": quantity,
                             "unit": ing_data['unit'],
                             "min_effective_dose": min_dose,
+                            "min_effective_dose_unit": target_unit if min_dose > 0 else None,
+                            "evaluated_quantity": evaluated_quantity,
+                            "evaluated_unit": evaluated_unit,
+                            "dose_evaluable": dose_evaluable,
                             "meets_minimum": meets_min
                         })
                         doses_adequate.append(meets_min)
@@ -9522,7 +9628,7 @@ class SupplementEnricherV3:
                         single_ingredient_match = True
                     else:
                         try:
-                            sole_qty = float(sole.get("quantity") or 0)
+                            sole_qty = float(sole.get("evaluated_quantity") or 0)
                         except (TypeError, ValueError):
                             sole_qty = 0.0
                         try:
@@ -9937,6 +10043,8 @@ class SupplementEnricherV3:
                         matched_variant=matched_variant,
                         evidence_text=candidate_ing_name,
                     ).to_dict()
+                    jurisdiction = safety_jurisdiction_projection(banned_item)
+                    safety_flag.update(jurisdiction)
 
                     found.append({
                         "ingredient": candidate_ing_name,
@@ -9972,6 +10080,7 @@ class SupplementEnricherV3:
                         "safety_warning": banned_item.get('safety_warning'),
                         "safety_warning_one_liner": banned_item.get('safety_warning_one_liner'),
                         "ban_context": banned_item.get('ban_context'),
+                        **jurisdiction,
                     })
 
         return {
@@ -10311,53 +10420,11 @@ class SupplementEnricherV3:
             parsed = label_text.get('parsed', {})
             parsed_allergens = parsed.get('allergens', [])
 
-            # CRITICAL FIX: Build set of negated allergen terms from multiple sources
-            # This prevents detecting allergens when product claims to be free of them
-            # Example: Product with "dairy-free" claim should NOT detect milk allergen
-            negated_terms = set()
-
-            # Source 1: labelText.parsed.allergenFree (from upstream parser)
-            allergen_free_raw = parsed.get('allergenFree', [])
-            for free_claim in allergen_free_raw:
-                if isinstance(free_claim, str):
-                    negated_terms.add(free_claim.lower().strip())
-
-            # Source 2: compliance_data.allergen_free_claims (authoritative enrichment source)
-            # This catches edge cases where parsed allergenFree might be incomplete
-            compliance_data = product.get('compliance_data', {})
-            for claim in compliance_data.get('allergen_free_claims', []):
-                if isinstance(claim, str):
-                    negated_terms.add(claim.lower().strip())
-
-            # Source 3: targetGroups for "X Free" claims
-            target_groups = product.get('targetGroups', [])
-            for tg in target_groups:
-                tg_text = tg if isinstance(tg, str) else (tg.get('text', '') if isinstance(tg, dict) else '')
-                tg_lower = tg_text.lower()
-                # Extract "X" from "X Free" or "X-Free" patterns
-                free_match = re.search(r'(\w+)[\s-]*free', tg_lower)
-                if free_match:
-                    negated_terms.add(free_match.group(1))
-
             for allergen_text in parsed_allergens:
                 if isinstance(allergen_text, str):
                     allergen_lower = allergen_text.lower().strip()
                     if allergen_lower in allergen_lookup:
                         allergen = allergen_lookup[allergen_lower]
-
-                        # Check if this allergen is negated by a "free" claim
-                        # Compare against allergen name AND all its aliases
-                        allergen_name_lower = allergen.get('standard_name', '').lower()
-                        allergen_aliases = [a.lower() for a in allergen.get('aliases', [])]
-                        all_allergen_terms = {allergen_lower, allergen_name_lower} | set(allergen_aliases)
-
-                        # If any allergen term matches any negated term, skip this allergen
-                        if negated_terms & all_allergen_terms:
-                            self.logger.debug(
-                                f"Skipping negated allergen '{allergen_text}' "
-                                f"(free claims: {negated_terms & all_allergen_terms})"
-                            )
-                            continue
 
                         found.append({
                             "allergen_id": allergen.get('id', ''),
@@ -10406,7 +10473,22 @@ class SupplementEnricherV3:
         - "Free from milk and soy" -> NOT added
         - "Does not contain milk" -> NOT added
         """
-        text_lower = text.lower()
+        text_lower = text.lower().strip()
+
+        # Scope negation to its own clause. A product can legitimately say
+        # "Made without gluten. Contains milk"; the first clause must not erase
+        # the independent positive declaration in the second.
+        clauses = [
+            clause.strip()
+            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+', text_lower)
+            if clause.strip()
+        ]
+        if len(clauses) > 1:
+            for clause in clauses:
+                self._parse_allergen_statement(
+                    clause, allergen_lookup, found, source
+                )
+            return
 
         # CRITICAL: Check for negation patterns FIRST - skip entire statement if negated
         # These statements list allergens the product is FREE FROM, not containing
@@ -15111,8 +15193,9 @@ class SupplementEnricherV3:
                 serving.get('normalizedServing') or
                 0
             )
-            if qty > max_qty:
-                max_qty = qty
+            numeric_qty = self._to_float_safe(qty)
+            if numeric_qty is not None and numeric_qty > max_qty:
+                max_qty = numeric_qty
                 max_serving = serving
 
         return max_serving or (serving_sizes[0] if serving_sizes else None)
@@ -15210,10 +15293,17 @@ class SupplementEnricherV3:
         amount = sugar_info.get('amount', 0) or 0
         unit = sugar_info.get('unit', 'Gram(s)')
 
-        # Normalize to grams
+        # Normalize to grams via the single mass-conversion authority
+        # (_normalize_threshold_unit → canonicalize_mass_unit → _convert_mass).
+        # C7.2: substring unit detection ('mg' in unit) left spelled-out and
+        # mcg units unconverted — "5 Milligram(s)" stayed 5 g → false High
+        # Sugar. Unknown/empty units fall back to the panel default (g).
         amount_g = float(amount) if amount else 0.0
-        if 'mg' in str(unit).lower():
-            amount_g = amount_g / 1000
+        converted = self._convert_mass(
+            amount_g, self._normalize_threshold_unit(unit), "g"
+        )
+        if converted is not None:
+            amount_g = converted
 
         # Check if sugar is in inactive ingredients FIRST (needed for guardrail)
         sugar_in_ingredients = self._find_sugar_in_ingredients(product)
@@ -15257,10 +15347,18 @@ class SupplementEnricherV3:
         amount = sodium_info.get('amount', 0) or 0
         unit = sodium_info.get('unit', 'mg')
 
-        # Normalize to mg
+        # Normalize to mg via the single mass-conversion authority
+        # (_normalize_threshold_unit → canonicalize_mass_unit → _convert_mass).
+        # C7.2: substring unit detection ('g' in / 'mg' not in) mis-scaled
+        # spelled-out and mcg units 1000x — "55 Milligram(s)" → 55,000 mg →
+        # false High Sodium / hypertension. Unknown/empty units fall back to
+        # the panel default (mg), leaving the value unchanged.
         amount_mg = float(amount) if amount else 0.0
-        if 'g' in str(unit).lower() and 'mg' not in str(unit).lower():
-            amount_mg = amount_mg * 1000
+        converted = self._convert_mass(
+            amount_mg, self._normalize_threshold_unit(unit), "mg"
+        )
+        if converted is not None:
+            amount_mg = converted
 
         # Determine level based on FDA/AHA thresholds
         if amount_mg < self.SODIUM_THRESHOLDS["sodium_free"]:
@@ -15609,16 +15707,12 @@ class SupplementEnricherV3:
         }
 
     def _normalize_threshold_unit(self, unit: Any) -> str:
-        text = str(unit or "").strip().lower()
-        text = text.replace("µg", "mcg").replace("μg", "mcg").replace(" ", "").replace("_", "")
+        raw = str(unit or "").strip()
+        mass_unit = norm_module.canonicalize_mass_unit(raw)
+        if mass_unit in {"mcg", "mg", "g"}:
+            return mass_unit
+        text = raw.lower().replace(" ", "").replace("_", "")
         alias_map = {
-            "ug": "mcg",
-            "microgram": "mcg",
-            "micrograms": "mcg",
-            "milligram": "mg",
-            "milligrams": "mg",
-            "gram": "g",
-            "grams": "g",
             "internationalunits": "iu",
             "internationalunit": "iu",
         }
@@ -16308,6 +16402,7 @@ class SupplementEnricherV3:
             "conversion_evidence": [],
             "safety_flags": [],
             "has_over_ul": False,
+            "reference_profile": dict(_RDA_REFERENCE_PROFILE),
             "collection_enabled": False,
             "collection_reason": reason
         }
@@ -16611,14 +16706,40 @@ class SupplementEnricherV3:
                     per_day_min = converted_amount * servings_min
                     per_day_max = converted_amount * servings_max
                     amount_for_ul = per_day_max or per_day_min or converted_amount
-
                     adequacy = self.rda_calculator.compute_nutrient_adequacy(
                         nutrient=std_name,
+                        amount=per_day_min or converted_amount,
+                        unit=converted_unit,
+                        age_group=_RDA_REFERENCE_PROFILE["age_range"],
+                        sex="adult_neutral",
+                    )
+                    safety = self.rda_calculator.compute_nutrient_adequacy(
+                        nutrient=std_name,
                         amount=amount_for_ul,
-                        unit=converted_unit
+                        unit=converted_unit,
+                        age_group=_RDA_REFERENCE_PROFILE["age_range"],
+                        sex="adult_neutral",
                     )
 
                     adequacy_dict = adequacy.to_dict()
+                    adequacy_dict.update({
+                        "ul": safety.ul,
+                        "ul_status": safety.ul_status,
+                        "pct_ul": safety.pct_ul,
+                        "over_ul": safety.over_ul,
+                        "over_ul_amount": safety.over_ul_amount,
+                        "warnings": safety.warnings,
+                        "adequacy_exposure": {
+                            "per_day": per_day_min,
+                            "unit": converted_unit,
+                        },
+                        "safety_exposure": {
+                            "per_day": per_day_max,
+                            "unit": converted_unit,
+                        },
+                        "reference_profile": dict(_RDA_REFERENCE_PROFILE),
+                        "data_by_group": list(_nutrient_record.get("data") or []),
+                    })
                     if skip_ul_check:
                         adequacy_dict.update({
                             "rda_ai": None,
@@ -16659,16 +16780,16 @@ class SupplementEnricherV3:
                     # with a single aggregated flag if multiple forms of
                     # the same canonical combine to exceed UL.
                     _row_canonical = ingredient.get('canonical_id')
-                    if not skip_ul_check and adequacy.over_ul:
-                        pct_ul_val = adequacy.pct_ul or 0
-                        over_ul_amount = adequacy.over_ul_amount or 0
+                    if not skip_ul_check and safety.over_ul:
+                        pct_ul_val = safety.pct_ul or 0
+                        over_ul_amount = safety.over_ul_amount or 0
                         _staged_row_flags.append((
                             _row_canonical,
                             {
                                 "nutrient": ing_name,
                                 "amount": amount_for_ul,
                                 "unit": converted_unit,
-                                "ul": adequacy.ul,
+                                "ul": safety.ul,
                                 "pct_ul": pct_ul_val,
                                 "over_amount": over_ul_amount,
                                 "warning": f"Exceeds UL by {over_ul_amount:.1f}",
@@ -16696,7 +16817,7 @@ class SupplementEnricherV3:
                                 "total_amount": 0.0,
                                 "rows": [],
                                 "incompatible_units": False,
-                                "ul": adequacy.ul,  # from first row; all rows share canonical so UL is same
+                                "ul": safety.ul,  # from first row; all rows share canonical so UL is same
                             },
                         )
                         if group["unit"] != converted_unit:
@@ -16712,7 +16833,7 @@ class SupplementEnricherV3:
                                 "ingredient": ing_name,
                                 "amount": amount_for_ul,
                                 "unit": converted_unit,
-                                "pct_ul_individual": adequacy.pct_ul,
+                                "pct_ul_individual": safety.pct_ul,
                                 "dv_present": _dv_present,
                             })
 
@@ -16758,13 +16879,14 @@ class SupplementEnricherV3:
                         # so consumers can distinguish "profile-specific UL"
                         # from "conservative absolute UL".
                         "ul_for_default_profile": (
-                            None if skip_ul_check else adequacy.ul
+                            None if skip_ul_check else safety.ul
                         ),
                         "optimal_range": f"{adequacy.optimal_min}-{adequacy.optimal_max}" if adequacy.optimal_min else "",
                         "pct_rda": None if skip_ul_check else adequacy.pct_rda,
                         "adequacy_band": "unknown" if skip_ul_check else adequacy.adequacy_band,
-                        "warnings": [] if skip_ul_check else adequacy.warnings,
-                        "data_by_group": [],  # Deprecated in new format
+                        "warnings": [] if skip_ul_check else safety.warnings,
+                        "data_by_group": list(_nutrient_record.get("data") or []),
+                        "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
                         "is_servings_estimated": servings_estimated,
                     })
@@ -16797,6 +16919,8 @@ class SupplementEnricherV3:
                             nutrient=group["std_name"],
                             amount=group["total_amount"],
                             unit=group["unit"],
+                            age_group=_RDA_REFERENCE_PROFILE["age_range"],
+                            sex="adult_neutral",
                         )
                     except Exception as agg_err:
                         self.logger.debug(
@@ -16852,6 +16976,7 @@ class SupplementEnricherV3:
                     "safety_flags": safety_flags,
                     "has_over_ul": len(safety_flags) > 0,
                     "is_servings_estimated": servings_estimated,
+                    "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                 }
 
             except Exception as e:
@@ -16918,6 +17043,7 @@ class SupplementEnricherV3:
             "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
             "count": len(rda_data),
             "is_servings_estimated": servings_estimated,
+            "reference_profile": dict(_RDA_REFERENCE_PROFILE),
         }
 
     # =========================================================================
@@ -17768,8 +17894,14 @@ class SupplementEnricherV3:
             )
             raise
 
-    def process_all(self, input_path: str, output_dir: str) -> Dict:
+    def process_all(
+        self,
+        input_path: str,
+        output_dir: str,
+        run_id: Optional[str] = None,
+    ) -> Dict:
         """Process all files in input path"""
+        effective_run_id = ensure_run_id(run_id)
         script_dir = Path(__file__).parent
 
         # Handle relative paths
@@ -17787,9 +17919,12 @@ class SupplementEnricherV3:
                 self.config.get("paths", {}).get("input_file_pattern", "*.json")
             ).strip() or "*.json"
             input_files = [
-                os.path.join(input_path, f)
-                for f in os.listdir(input_path)
-                if fnmatch.fnmatch(f, input_pattern)
+                str(path)
+                for path in select_stage_input_files(
+                    Path(input_path),
+                    "clean",
+                    patterns=(input_pattern,),
+                )
             ]
         else:
             raise FileNotFoundError(f"Input path not found: {input_path}")
@@ -17825,6 +17960,7 @@ class SupplementEnricherV3:
         summary = {
             "processing_info": {
                 "version": self.VERSION,
+                "run_id": effective_run_id,
                 "files_processed": len(input_files),
                 "duration_seconds": round(duration, 2),
                 "timestamp": end_time.isoformat().replace("+00:00", "Z")
@@ -17841,8 +17977,10 @@ class SupplementEnricherV3:
         summary_file = None
 
         if generate_reports:
-            reports_dir = os.path.join(output_dir, reports_folder)
-            os.makedirs(reports_dir, exist_ok=True)
+            reports_dir = str(report_run_directory(
+                Path(output_dir) / reports_folder,
+                effective_run_id,
+            ))
 
             summary_file = os.path.join(
                 reports_dir,
@@ -18009,6 +18147,7 @@ Examples:
     parser.add_argument('--output-dir', help='Output directory (overrides config)')
     parser.add_argument('--dry-run', action='store_true',
                         help='Test run without writing files')
+    parser.add_argument('--run-id', help='Path-safe pipeline run identifier')
 
     args = parser.parse_args()
 
@@ -18035,7 +18174,7 @@ Examples:
             return
 
         # Process all files
-        enricher.process_all(input_path, output_dir)
+        enricher.process_all(input_path, output_dir, run_id=args.run_id)
 
     except FileNotFoundError as e:
         logging.error(f"File or directory not found: {e}")

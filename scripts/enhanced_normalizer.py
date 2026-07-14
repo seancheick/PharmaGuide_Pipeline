@@ -75,7 +75,7 @@ from constants import (
     PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
     CANONICAL_EQUIVALENCES,
 )
-from identity.safety import has_explicit_form_evidence
+from identity.safety import has_explicit_form_evidence, safety_normalize_text
 from identity_integrity import build_canonical_identity_registry
 
 # Import the UnmappedIngredientTracker
@@ -457,6 +457,12 @@ STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "marine oil and plant oil blend",
     # GNC blend containers with child ingredients (unmapped resolution 2026-04-03)
     "100% whey protein blend",
+})
+
+STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES = frozenset({
+    "safflower/sunflower oil",
+    "total omega-3-5-6-7-8-9-11",
+    "palmitic acid stearic acid",
 })
 
 STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES = frozenset({
@@ -1621,7 +1627,7 @@ class EnhancedDSLDNormalizer:
             self._group_exact_lookup[normalized] = payload
 
         def add_safety_exact(key: str, payload: Dict[str, Any]) -> None:
-            processed = self.matcher.preprocess_text(key)
+            processed = safety_normalize_text(key)
             if not processed:
                 return
             existing = self._safety_exact_lookup.get(processed)
@@ -3002,22 +3008,17 @@ class EnhancedDSLDNormalizer:
         for additive in self.harmful_additives.get("harmful_additives", []) or []:
             standard_name = additive["standard_name"]
 
-            # Add standard name variations
-            name_variations = self.matcher.generate_variations(
-                self.matcher.preprocess_text(standard_name)
-            )
-            for variation in name_variations:
-                self.harmful_lookup[variation] = additive
+            standard_key = safety_normalize_text(standard_name)
+            if standard_key:
+                self.harmful_lookup[standard_key] = additive
 
             # Add alias variations to harmful_lookup ONLY (not main ingredient lookup)
             # ARCHITECTURAL FIX: Keep harmful additive detection separate from ingredient identity mapping
             # This prevents "synthetic colors" alias from polluting the main lookup with variations like "colors"
             for alias in additive.get("aliases", []) or []:
-                alias_variations = self.matcher.generate_variations(
-                    self.matcher.preprocess_text(alias)
-                )
-                for variation in alias_variations:
-                    self.harmful_lookup[variation] = additive
+                alias_key = safety_normalize_text(alias)
+                if alias_key:
+                    self.harmful_lookup[alias_key] = additive
                 # NOTE: Removed addition to ingredient_alias_lookup to prevent false standardName mappings
                 # Harmful additive classification should happen in enrichment, not cleaning
         
@@ -3472,6 +3473,10 @@ class EnhancedDSLDNormalizer:
         # The capitalization/shape guard and botanical-only lookup prevent
         # generic form parentheticals such as ``(as Citrate)`` from becoming
         # an independent identity fallback.
+        exact_identity_result = self._fast_ingredient_lookup(name)
+        if exact_identity_result.get("mapped", False):
+            return exact_identity_result["standard_name"], True, forms or []
+
         latin_parenthetical = re.search(
             r"\(([A-Z][a-z]+(?:\s+(?:x\s+)?[a-z][a-z-]+){1,2})\)",
             name,
@@ -3602,7 +3607,7 @@ class EnhancedDSLDNormalizer:
         # the label; it must not own canonical identity fields.
         harmful_info = self._enhanced_harmful_check(name)
         if harmful_info["category"] != "none":
-            processed_name = self.matcher.preprocess_text(name)
+            processed_name = safety_normalize_text(name)
             if processed_name in self.harmful_lookup:
                 canonical_name = self.harmful_lookup[processed_name].get("standard_name", name)
             else:
@@ -3632,7 +3637,7 @@ class EnhancedDSLDNormalizer:
             logger.debug(f"Found '{name}' in {result_type} database -> '{standard_name}' (priority: {fast_result.get('priority', 'N/A')})")
             return standard_name, True, forms
 
-        safety_result = self._safety_exact_lookup.get(self.matcher.preprocess_text(name), {})
+        safety_result = self._safety_exact_lookup.get(safety_normalize_text(name), {})
         if safety_result.get("mapped", False):
             result_type = safety_result.get("type", "unknown")
             standard_name = safety_result.get("standard_name", name)
@@ -3712,7 +3717,7 @@ class EnhancedDSLDNormalizer:
                     )
                     return standard_name, True, forms
                 safety_group_result = self._safety_exact_lookup.get(
-                    self.matcher.preprocess_text(ingredient_group), {}
+                    safety_normalize_text(ingredient_group), {}
                 )
                 if safety_group_result.get("mapped", False):
                     negative_terms = (
@@ -3863,7 +3868,7 @@ class EnhancedDSLDNormalizer:
             "severity_level": None
         }
 
-        processed_name = self.matcher.preprocess_text(name)
+        processed_name = safety_normalize_text(name)
 
         # Try exact match
         if processed_name in self.harmful_lookup:
@@ -4085,7 +4090,7 @@ class EnhancedDSLDNormalizer:
     def _safety_lookup_for_priority_classification(
         self, name: str, forms: List[str]
     ) -> Dict[str, Any]:
-        result = self._safety_exact_lookup.get(self.matcher.preprocess_text(name), {})
+        result = self._safety_exact_lookup.get(safety_normalize_text(name), {})
         if not result.get("mapped", False):
             return {}
         if result.get("type") != "banned":
@@ -4251,10 +4256,15 @@ class EnhancedDSLDNormalizer:
             # surface as standalone actives in cleaned output.
             if self._is_structural_active_container(name, nested):
                 logger.debug(f"Flattening structural active container without parent: {name}")
+                processed_name = self.matcher.preprocess_text(name)
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="activeIngredients",
-                    display_type="structural_container",
+                    display_type=(
+                        "summary_wrapper"
+                        if processed_name in STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES
+                        else "structural_container"
+                    ),
                     score_included=False,
                     children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
                 )
@@ -5109,16 +5119,32 @@ class EnhancedDSLDNormalizer:
                 if re.search(r"use only as directed", notes, re.I):
                     all_warnings.append("Use only as directed on label")
 
-                # Extract allergens from "Contains:" warnings
+                # Extract allergens from "Contains:" warnings.
+                # C3: only from a genuine POSITIVE declaration. A negated context
+                # ("Contains no milk", a Does-NOT-Contain statement, or "free of /
+                # without X") is an allergen-FREE claim (handled above); running the
+                # positive extractor on it laundered the negation into a false
+                # "Contains: Milk" that also contradicted the allergenFree list.
                 contains_match = re.search(r"contains:?\s+([^.]+)", notes, re.I)
-                if contains_match:
+                contains_is_negated = bool(
+                    stmt.get("type") == "Formulation re: Does NOT Contain"
+                    or (contains_match and re.match(
+                        r"\s*(?:no|none|not|non|free|without|zero|0)\b",
+                        contains_match.group(1), re.I,
+                    ))
+                    or re.search(
+                        r"\b(?:free\s+of|without|does\s+not|doesn'?t|do\s+not|no)\b[^.]*\bcontain",
+                        notes, re.I,
+                    )
+                )
+                if contains_match and not contains_is_negated:
                     contains_text = contains_match.group(1).strip()
 
                     # Only add "Contains:" warnings for actual allergens, not marketing fluff
                     is_real_allergen_warning = False
 
-                    # Check for FDA major allergens
-                    if re.search(r"\b(milk|dairy|whey|casein)\b", contains_text, re.I):
+                    # Check for FDA major allergens ("milk thistle" is a botanical, not dairy)
+                    if re.search(r"\b(milk(?!\s+thistle)|dairy|whey|casein)\b", contains_text, re.I):
                         if "milk" not in all_allergens:
                             all_allergens.append("milk")
                         # Clean up milk warning text
@@ -5433,12 +5459,39 @@ class EnhancedDSLDNormalizer:
             logger.error(f"Error normalizing product {raw_data.get('id', 'unknown')}: {str(e)}")
             raise
     
+    def _record_nutrition_fact(
+        self,
+        info: Dict[str, Any],
+        key: str,
+        quantity: Any,
+        unit: Any,
+        default_unit: str,
+    ) -> None:
+        """Record one Nutrition-Facts panel field (single source of truth).
+
+        C6: a quantity-less row is processed to ``(0.0, 'unspecified')``; it must
+        never overwrite an already-captured *real* value (one with a genuine
+        unit) — e.g. a bare inactive "Sugar" zeroing a real "Sugars 5 g", or a
+        second bare "Sodium" zeroing a real 140 mg. A real value may still
+        upgrade a previously-stored placeholder.
+        """
+        incoming_is_real = bool(unit) and unit != "unspecified"
+        existing = info.get(key)
+        if existing is not None and not incoming_is_real:
+            existing_unit = existing.get("unit")
+            if bool(existing_unit) and existing_unit != "unspecified":
+                return  # keep the real value; don't let a placeholder erase it
+        info[key] = {"amount": quantity, "unit": unit or default_unit}
+
     def _extract_nutritional_info(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
         """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
         nutritional_info = {}
 
         for ing in ingredient_rows:
+            if not isinstance(ing, dict):
+                continue
             name = ing.get("name", "").lower()
+            nutrient_name = re.sub(r"\s+", " ", name).strip()
 
             # Extract quantities
             quantity_data = ing.get("quantity", [])
@@ -5449,46 +5502,31 @@ class EnhancedDSLDNormalizer:
 
             quantity, unit, _, _ = self._process_quantity(quantity_data)
 
-            # Capture nutritional facts
-            if "calorie" in name:
-                nutritional_info["calories"] = {
-                    "amount": quantity,
-                    "unit": unit or "kcal"
-                }
+            # Capture nutritional facts. Every panel field records through the
+            # single _record_nutrition_fact authority (C6: identity-bound match +
+            # placeholder never overwrites a real value). Sugars/calories/sodium
+            # are identity-bound via fullmatch so ingredient rows ("Cane Sugar",
+            # "Sodium Benzoate", "Calories from Fat") cannot hijack the panel field.
+            if re.fullmatch(r"(?:total\s+)?calories?", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "calories", quantity, unit, "kcal")
             elif "total carbohydrate" in name or "carbohydrates" in name:
-                nutritional_info["totalCarbohydrates"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
-            elif name == "sugar" or "sugars" in name:
-                nutritional_info["sugars"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g")
+            elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "sugars", quantity, unit, "g")
             elif "total fat" in name:
-                nutritional_info["totalFat"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g")
             elif "protein" in name:
-                nutritional_info["protein"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
-            elif "sodium" in name:
-                nutritional_info["sodium"] = {
-                    "amount": quantity,
-                    "unit": unit or "mg"
-                }
+                self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g")
+            elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg")
             elif "fiber" in name or "dietary fiber" in name:
-                nutritional_info["dietaryFiber"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "dietaryFiber", quantity, unit, "g")
 
             # P0.2: Check nestedRows for sugar/fiber (commonly nested under Total Carbohydrates)
             nested_rows = ing.get("nestedRows", [])
             for nested in nested_rows:
+                if not isinstance(nested, dict):
+                    continue
                 nested_name = nested.get("name", "").lower()
 
                 # Process nested quantity
@@ -6407,7 +6445,9 @@ class EnhancedDSLDNormalizer:
             "raw_taxonomy": raw_taxonomy,
 
             # Basic ingredient info
-            "name": branded_token if branded_token else name,  # Use branded token as primary name if extracted
+            # Label identity is immutable. A verified brand token is separate
+            # matching metadata and must never replace the printed name.
+            "name": name,
             "standardName": standard_name,  # From our database mapping
             "ingredientGroup": ing.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
 
@@ -8666,7 +8706,7 @@ class EnhancedDSLDNormalizer:
         # route it to a separate recognized bucket instead of the "add to IQM"
         # queue. Not dropped: a watchlist row may still be a real active.
         safety_lookup = getattr(self, "_safety_exact_lookup", None) or {}
-        safety_entry = safety_lookup.get(processed_name)
+        safety_entry = safety_lookup.get(safety_normalize_text(name))
         if safety_entry:
             detail["recognized_non_identity"] = True
             detail["recognition_standard_name"] = safety_entry.get("standard_name")
@@ -9280,7 +9320,10 @@ class EnhancedDSLDNormalizer:
         if not name or not nested_rows:
             return False
         processed_name = self.matcher.preprocess_text(name)
-        return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
+        return processed_name in (
+            STRUCTURAL_ACTIVE_CONTAINER_NAMES
+            | STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES
+        )
 
     def _is_structural_active_blend_leaf(self, ing: Dict[str, Any]) -> bool:
         """Identify exact active blend leaf names that should stay display-only."""
@@ -9490,6 +9533,9 @@ class EnhancedDSLDNormalizer:
         """
         group = (ing.get("ingredientGroup") or "").lower()
         if not ing.get("nestedRows"):
+            return False
+        processed_name = self.matcher.preprocess_text(ing.get("name", ""))
+        if processed_name in STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES:
             return False
         return "proprietary blend" in group or group.startswith("blend")
 

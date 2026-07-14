@@ -71,7 +71,6 @@
       "range_score_field": "0-15",
       "score_field": "bio_score",
       "_score_field_note": "Scorer reads ingredient.bio_score (form quality, 0-15). The legacy 'score' field (= bio_score + 3 if natural; 0-18) is deprecated and emitted as an alias of bio_score for backward compatibility.",
-      "multivitamin_smoothing_factor": 0.7,
       "multivitamin_floor": 9
     },
     "A2_premium_forms": {

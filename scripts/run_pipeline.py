@@ -38,7 +38,15 @@ import argparse
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
+from stage_manifest import (
+    StageManifestError,
+    quarantine_stage_outputs,
+    select_stage_input_files,
+    write_stage_manifest_from_directory,
+)
+from run_artifacts import ensure_run_id
 
 # Setup logging
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -231,7 +239,13 @@ class PipelineRunner:
 
         return self._run_script(script, args, dry_run)
 
-    def run_enrich(self, cleaned_dir: str, output_dir: str, dry_run: bool = False) -> bool:
+    def run_enrich(
+        self,
+        cleaned_dir: str,
+        output_dir: str,
+        dry_run: bool = False,
+        run_id: Optional[str] = None,
+    ) -> bool:
         """
         Stage 2: Enrich cleaned data
 
@@ -249,6 +263,8 @@ class PipelineRunner:
             "--input-dir", cleaned_dir,
             "--output-dir", output_dir
         ]
+        if run_id:
+            args.extend(["--run-id", run_id])
 
         # Add config if exists
         config_path = self.script_dir / config_file
@@ -257,12 +273,124 @@ class PipelineRunner:
 
         return self._run_script(script, args, dry_run)
 
+    def _load_products_for_gates(
+        self, enriched_dir: str, require_manifest: bool = False
+    ) -> Tuple[Optional[List[Dict[str, Any]]], Optional[Dict[str, Any]]]:
+        """Load the enriched batch once for every pre-score authority.
+
+        Contract validation and coverage must inspect the same in-memory
+        products. A missing, corrupt, or malformed input is a blocking input
+        failure rather than something either gate may silently skip.
+        """
+        enriched_path = self._resolve_path(enriched_dir)
+        try:
+            json_files = select_stage_input_files(
+                enriched_path,
+                "enrich",
+                require_manifest=require_manifest,
+                patterns=("*.json",),
+            )
+        except StageManifestError as exc:
+            return None, {
+                "error": "stage_ownership_invalid",
+                "path": str(enriched_path),
+                "detail": str(exc),
+            }
+        products: List[Dict[str, Any]] = []
+        failed_files: List[str] = []
+
+        for json_file in json_files:
+            try:
+                with open(json_file, "r", encoding="utf-8") as handle:
+                    data = json.load(handle)
+            except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+                logger.error("Failed to load enriched input %s: %s", json_file, exc)
+                failed_files.append(json_file.name)
+                continue
+
+            rows = data if isinstance(data, list) else [data]
+            if not rows or any(not isinstance(row, dict) for row in rows):
+                logger.error("Malformed enriched product payload: %s", json_file)
+                failed_files.append(json_file.name)
+                continue
+            products.extend(rows)
+
+        if failed_files:
+            return None, {
+                "error": "enriched_json_load_failed",
+                "failed_files": failed_files,
+                "discovered_files": len(json_files),
+            }
+        if not products:
+            return None, {
+                "error": "no_enriched_products",
+                "discovered_files": len(json_files),
+            }
+        return products, None
+
+    def run_enrichment_contract_gate(
+        self,
+        products: List[Dict[str, Any]],
+        strict_mode: bool = False,
+    ) -> Tuple[bool, Dict[str, Any]]:
+        """Run the authoritative enrichment contract validator."""
+        logger.info("=" * 60)
+        logger.info("STAGE 2.4: ENRICHMENT CONTRACT GATE")
+        logger.info("=" * 60)
+
+        try:
+            from enrichment_contract_validator import EnrichmentContractValidator
+        except ImportError as exc:
+            logger.error("Required enrichment contract gate unavailable: %s", exc)
+            return False, {
+                "error": "required_gate_unavailable",
+                "gate": "enrichment_contract",
+            }
+
+        try:
+            validator = EnrichmentContractValidator(strict_mode=strict_mode)
+            violations_by_product = validator.validate_batch(products)
+            violations = [
+                violation
+                for product_violations in violations_by_product.values()
+                for violation in product_violations
+            ]
+            errors = sum(
+                1 for violation in violations if violation.severity == "error"
+            )
+            warnings = sum(
+                1 for violation in violations if violation.severity == "warning"
+            )
+            summary = {
+                "products_checked": len(products),
+                "products_with_violations": len(violations_by_product),
+                "errors": errors,
+                "warnings": warnings,
+            }
+            can_proceed = errors == 0 and (not strict_mode or warnings == 0)
+            if not can_proceed:
+                logger.error(
+                    "Enrichment contract gate FAILED: %d errors, %d warnings",
+                    errors,
+                    warnings,
+                )
+            return can_proceed, summary
+        except Exception as exc:
+            logger.error("Enrichment contract gate failed: %s", exc)
+            return False, {
+                "error": "gate_execution_failed",
+                "gate": "enrichment_contract",
+            }
+
     def run_coverage_gate(
         self,
         enriched_dir: str,
         output_dir: str,
         block_on_failure: bool = True,
-        dry_run: bool = False
+        dry_run: bool = False,
+        strict_mode: bool = False,
+        products: Optional[List[Dict[str, Any]]] = None,
+        run_id: Optional[str] = None,
     ) -> Tuple[bool, Optional[Dict]]:
         """
         Stage 2.5: Coverage gate check (AC5 compliance)
@@ -285,39 +413,31 @@ class PipelineRunner:
 
         try:
             from coverage_gate import CoverageGate
-        except ImportError:
-            logger.warning("coverage_gate module not available, skipping coverage check")
-            return True, None
+        except ImportError as exc:
+            logger.error("Required coverage gate unavailable: %s", exc)
+            return False, {
+                "error": "required_gate_unavailable",
+                "gate": "coverage",
+            }
 
         try:
-            # Load enriched products
-            enriched_path = self._resolve_path(enriched_dir)
-            products = []
-
-            for json_file in enriched_path.glob("*.json"):
-                try:
-                    with open(json_file, 'r', encoding='utf-8') as f:
-                        data = json.load(f)
-                        if isinstance(data, list):
-                            products.extend(data)
-                        else:
-                            products.append(data)
-                except Exception as e:
-                    logger.warning(f"Failed to load {json_file}: {e}")
-
-            if not products:
-                logger.warning("No enriched products found for coverage check")
-                return True, None
+            if products is None:
+                products, load_error = self._load_products_for_gates(enriched_dir)
+                if load_error is not None:
+                    logger.error("Coverage input rejected: %s", load_error)
+                    return False, load_error
 
             logger.info(f"Checking coverage for {len(products)} products...")
 
             # Run coverage gate
-            gate = CoverageGate()
+            gate = CoverageGate(strict_mode=strict_mode)
             result = gate.check_batch(products)
 
             # Generate reports
             report_dir = self._resolve_path(output_dir) / "reports"
-            json_path, md_path = gate.generate_report(result, report_dir)
+            json_path, md_path = gate.generate_report(
+                result, report_dir, run_id=run_id
+            )
 
             # Log summary
             logger.info(f"Coverage Gate Results:")
@@ -352,9 +472,18 @@ class PipelineRunner:
 
         except Exception as e:
             logger.error(f"Coverage gate failed: {e}")
-            return not block_on_failure, None
+            return False, {
+                "error": "gate_execution_failed",
+                "gate": "coverage",
+            }
 
-    def run_score(self, enriched_dir: str, output_dir: str, dry_run: bool = False) -> bool:
+    def run_score(
+        self,
+        enriched_dir: str,
+        output_dir: str,
+        dry_run: bool = False,
+        run_id: Optional[str] = None,
+    ) -> bool:
         """
         Stage 3: Score enriched data
 
@@ -372,6 +501,8 @@ class PipelineRunner:
             "--input-dir", enriched_dir,
             "--output-dir", output_dir
         ]
+        if run_id:
+            args.extend(["--run-id", run_id])
 
         # Add config if exists
         config_path = self.script_dir / config_file
@@ -387,7 +518,9 @@ class PipelineRunner:
         output_prefix: str = None,
         dry_run: bool = False,
         skip_coverage_gate: bool = False,
-        coverage_gate_warn_only: bool = False
+        coverage_gate_warn_only: bool = False,
+        strict_release_gates: bool = False,
+        run_id: Optional[str] = None,
     ) -> Dict:
         """
         Run the complete pipeline or specified stages.
@@ -402,6 +535,7 @@ class PipelineRunner:
             Summary dict with timing and status
         """
         start_time = datetime.now(timezone.utc)
+        effective_run_id = ensure_run_id(run_id)
 
         # Use defaults if not provided
         stages = stages or self.config["stages"]
@@ -437,8 +571,16 @@ class PipelineRunner:
             "stages_completed": [],
             "stages_failed": [],
             "dry_run": dry_run,
+            "run_id": effective_run_id,
             "success": False
         }
+
+        if strict_release_gates and (skip_coverage_gate or coverage_gate_warn_only):
+            logger.error(
+                "Strict release gates cannot be skipped or changed to warn-only"
+            )
+            results["stages_failed"].append("release_gate_configuration")
+            return results
 
         # Preflight validation: Check data directory
         if not dry_run:
@@ -468,7 +610,37 @@ class PipelineRunner:
                     results["stages_failed"].append("enrich")
                     logger.error("Pipeline stopped: Enrichment input not found")
                     return results
-            success = self.run_enrich(enrich_input, f"{output_prefix}_enriched", dry_run)
+            if strict_release_gates and not dry_run:
+                try:
+                    select_stage_input_files(
+                        Path(enrich_input),
+                        "clean",
+                        require_manifest=True,
+                        patterns=("*.json",),
+                    )
+                except StageManifestError as exc:
+                    results["stages_failed"].append("clean_stage_ownership")
+                    logger.error("Cleaning ownership manifest failed: %s", exc)
+                    return results
+            if not dry_run:
+                quarantine_stage_outputs(Path(enriched_dir))
+            success = self.run_enrich(
+                enrich_input,
+                f"{output_prefix}_enriched",
+                dry_run,
+                run_id=effective_run_id,
+            )
+            if success and not dry_run:
+                try:
+                    write_stage_manifest_from_directory(
+                        Path(enriched_dir),
+                        "enrich",
+                        patterns=("*.json",),
+                        run_id=effective_run_id,
+                    )
+                except StageManifestError as exc:
+                    logger.error("Enrichment ownership manifest failed: %s", exc)
+                    success = False
             if success:
                 results["stages_completed"].append("enrich")
             else:
@@ -477,15 +649,38 @@ class PipelineRunner:
                     logger.error("Pipeline stopped due to enrichment failure")
                     return results
 
-        # Stage 2.5: Coverage Gate (AC5)
+        # Stages 2.4-2.5: load once, then validate contract and coverage.
+        if "score" in stages and not dry_run:
+            products, load_error = self._load_products_for_gates(
+                enriched_dir,
+                require_manifest=strict_release_gates,
+            )
+            if load_error is not None:
+                results["pre_score_input"] = load_error
+                results["stages_failed"].append("pre_score_input")
+                logger.error("Pipeline stopped: Enriched gate input is invalid")
+                return results
+
+            contract_ok, contract_summary = self.run_enrichment_contract_gate(
+                products,
+                strict_mode=strict_release_gates,
+            )
+            results["enrichment_contract_gate"] = contract_summary
+            if not contract_ok:
+                results["stages_failed"].append("enrichment_contract_gate")
+                logger.error("Pipeline stopped: Enrichment contract gate failed")
+                return results
+
         if "score" in stages and not dry_run and not skip_coverage_gate:
-            # Run coverage gate before scoring
             block_on_failure = not coverage_gate_warn_only
             can_proceed, coverage_summary = self.run_coverage_gate(
                 enriched_dir,
                 f"{output_prefix}_enriched",
                 block_on_failure=block_on_failure,
-                dry_run=dry_run
+                dry_run=dry_run,
+                strict_mode=strict_release_gates,
+                products=products,
+                run_id=effective_run_id,
             )
             results["coverage_gate"] = coverage_summary
 
@@ -507,7 +702,26 @@ class PipelineRunner:
                     results["stages_failed"].append("score")
                     logger.error("Pipeline stopped: Scoring input not found")
                     return results
-            success = self.run_score(score_input, scored_dir, dry_run)
+            scored_output_dir = Path(scored_dir) / "scored"
+            if not dry_run:
+                quarantine_stage_outputs(scored_output_dir)
+            success = self.run_score(
+                score_input,
+                scored_dir,
+                dry_run,
+                run_id=effective_run_id,
+            )
+            if success and not dry_run:
+                try:
+                    write_stage_manifest_from_directory(
+                        scored_output_dir,
+                        "score",
+                        patterns=("*.json",),
+                        run_id=effective_run_id,
+                    )
+                except StageManifestError as exc:
+                    logger.error("Scoring ownership manifest failed: %s", exc)
+                    success = False
             if success:
                 results["stages_completed"].append("score")
             else:
@@ -595,6 +809,15 @@ Pipeline Flow:
         action='store_true',
         help='Run coverage gate but only warn, do not block scoring'
     )
+    parser.add_argument(
+        '--strict-release-gates',
+        action='store_true',
+        help='Fail closed on every required pre-score gate and warning',
+    )
+    parser.add_argument(
+        '--run-id',
+        help='Path-safe run ID shared by enrichment, gates, scoring, and reports',
+    )
 
     args = parser.parse_args()
 
@@ -624,7 +847,9 @@ Pipeline Flow:
         output_prefix=args.output_prefix,
         dry_run=args.dry_run,
         skip_coverage_gate=args.skip_coverage_gate,
-        coverage_gate_warn_only=args.coverage_gate_warn_only
+        coverage_gate_warn_only=args.coverage_gate_warn_only,
+        strict_release_gates=args.strict_release_gates,
+        run_id=args.run_id,
     )
 
     # Exit with appropriate code

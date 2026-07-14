@@ -19,6 +19,7 @@ SCRIPTS_DIR = REPO_ROOT / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
+import run_pipeline as pipeline_module  # noqa: E402
 from run_pipeline import PipelineRunner  # noqa: E402
 
 
@@ -34,6 +35,14 @@ def _capture_runner(monkeypatch):
     monkeypatch.setattr(PipelineRunner, "_validate_data_dir", lambda self: True)
     monkeypatch.setattr(
         PipelineRunner, "_validate_input_dir", lambda self, d, s: True
+    )
+    monkeypatch.setattr(
+        pipeline_module, "quarantine_stage_outputs", lambda *_args: []
+    )
+    monkeypatch.setattr(
+        pipeline_module,
+        "write_stage_manifest_from_directory",
+        lambda *_args, **_kwargs: Path(".stage_manifest.json"),
     )
 
     return PipelineRunner(), captured

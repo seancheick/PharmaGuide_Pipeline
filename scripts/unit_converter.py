@@ -33,6 +33,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
+from normalization import canonicalize_mass_unit
+
 logger = logging.getLogger(__name__)
 
 
@@ -182,7 +184,7 @@ class UnitConverter:
         """
         # Normalize inputs
         nutrient_lower = nutrient.lower().strip()
-        from_unit_lower = from_unit.lower().strip()
+        from_unit_lower = canonicalize_mass_unit(from_unit)
         ingredient_text = ingredient_name or nutrient
 
         # Find matching conversion rule
@@ -194,10 +196,10 @@ class UnitConverter:
             # No specific vitamin/mineral conversion rule found.
             # Try mass conversion if a different target unit was requested
             # (e.g. mg → mcg for "Generic" nutrient).
-            standard_mass_units = {'mg', 'mcg', 'g', 'ug', 'µg'}
+            standard_mass_units = {'mg', 'mcg', 'g'}
             target_for_fallback = to_unit or from_unit
             if from_unit_lower in standard_mass_units:
-                target_lower = target_for_fallback.lower().strip()
+                target_lower = canonicalize_mass_unit(target_for_fallback)
                 # If from and to are the same unit (or to is unspecified),
                 # this is an identity pass-through — nutrient is already in
                 # its canonical unit (e.g. Vitamin C in mg, Calcium in mg).
@@ -207,14 +209,14 @@ class UnitConverter:
                         original_value=amount,
                         original_unit=from_unit,
                         converted_value=amount,
-                        converted_unit=from_unit,
+                        converted_unit=from_unit_lower,
                         conversion_rule_id="identity_mass_passthrough",
                         conversion_factor=1.0,
                         nutrient_detected=nutrient,
                         form_detected=None,
                         form_detection_source="no_conversion_needed",
                         confidence="high",
-                        notes=[f"Nutrient already in standard mass unit ({from_unit}); no conversion rule required"]
+                        notes=[f"Nutrient already in standard mass unit ({from_unit_lower}); no conversion rule required"]
                     )
                 # Different target unit — try mass conversion (e.g. mg → mcg)
                 mass_result = self.convert_mass(amount, from_unit, target_for_fallback)
@@ -260,8 +262,8 @@ class UnitConverter:
                 warnings.extend(rule_data['warnings'])
 
             handling = rule_data.get('handling', '')
-            from_normalized = from_unit_lower.replace('µg', 'mcg').replace(' ', '_').strip()
-            target_normalized = target_unit.lower().replace('µg', 'mcg').replace(' ', '_').strip()
+            from_normalized = canonicalize_mass_unit(from_unit_lower).replace(' ', '_')
+            target_normalized = canonicalize_mass_unit(target_unit).replace(' ', '_')
 
             if handling == "flag_for_review":
                 return ConversionResult(
@@ -524,8 +526,8 @@ class UnitConverter:
 
     def _get_conversion_key(self, from_unit: str, to_unit: str) -> str:
         """Get the conversion key for the database lookup."""
-        from_normalized = from_unit.lower().replace('µg', 'mcg').replace(' ', '_').strip()
-        to_normalized = to_unit.lower().replace('µg', 'mcg').replace(' ', '_').strip()
+        from_normalized = canonicalize_mass_unit(from_unit).replace(' ', '_')
+        to_normalized = canonicalize_mass_unit(to_unit).replace(' ', '_')
 
         return f"{from_normalized}_to_{to_normalized}"
 
@@ -550,8 +552,8 @@ class UnitConverter:
         Returns:
             ConversionResult with converted value
         """
-        from_lower = from_unit.lower().replace('µg', 'mcg').strip()
-        to_lower = to_unit.lower().replace('µg', 'mcg').strip()
+        from_lower = canonicalize_mass_unit(from_unit)
+        to_lower = canonicalize_mass_unit(to_unit)
 
         # Same unit - no conversion needed
         if from_lower == to_lower:
@@ -560,7 +562,7 @@ class UnitConverter:
                 original_value=amount,
                 original_unit=from_unit,
                 converted_value=amount,
-                converted_unit=to_unit,
+                converted_unit=to_lower,
                 conversion_rule_id="same_unit",
                 conversion_factor=1.0,
                 nutrient_detected=None,
@@ -598,7 +600,7 @@ class UnitConverter:
             original_value=amount,
             original_unit=from_unit,
             converted_value=amount * factor,
-            converted_unit=to_unit,
+            converted_unit=to_lower,
             conversion_rule_id="mass_conversion",
             conversion_factor=factor,
             nutrient_detected=None,
