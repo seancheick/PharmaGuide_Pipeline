@@ -2881,7 +2881,18 @@ class SupplementScorer:
 
         gmp_level = norm_text(product.get("gmp_level"))
         gmp = cert.get("gmp", {})
-        if gmp_level == "certified" or bool(gmp.get("nsf_gmp") or gmp.get("claimed")):
+        # H1: an FDA-registered facility is NOT full GMP certification. The
+        # enricher folds fda_registered into gmp.claimed, so crediting the 4.0
+        # "certified" tier on bare `claimed` over-credited every FDA-registered
+        # label and made the fda_registered → 2.0 tier unreachable. Use the same
+        # precise signal as the v4 scorer (generic_trust.py): full GMP requires
+        # nsf_gmp / gmp_certified_or_compliant / a claim that is NOT merely
+        # fda_registered.
+        if gmp_level == "certified" or bool(
+            gmp.get("nsf_gmp")
+            or gmp.get("gmp_certified_or_compliant")
+            or (gmp.get("claimed") and not gmp.get("fda_registered"))
+        ):
             b4b = float(b4b_certified)
         elif gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
             b4b = float(b4b_fda_registered)
