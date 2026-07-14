@@ -292,6 +292,49 @@ def test_p2_2_gated_cleanup_passing_gates_quarantines_only_unprotected(tmp_path)
             f"protected hash {h[:8]}... was moved/deleted"
 
 
+def test_gated_cleanup_delete_action_requires_expected_count_and_batch_deletes(tmp_path):
+    from cleanup_old_versions import cleanup_orphan_blobs_with_gates
+    from release_safety import AuditLog, read_audit_log
+
+    bundled_and_dist = [_h(i) for i in range(100)]
+    extra_orphans = [_h(i) for i in range(1000, 1003)]
+
+    flutter_repo = tmp_path / "flutter"
+    flutter_repo.mkdir()
+    _git_init(flutter_repo)
+    _commit_bundle(flutter_repo, bundled_and_dist, db_version="vMATCHED")
+
+    dist_dir = tmp_path / "dist"
+    _make_dist(dist_dir, bundled_and_dist, db_version="vMATCHED")
+
+    storage_hashes = set(bundled_and_dist) | set(extra_orphans)
+    client, bucket = _make_mock_client_with_active_storage(storage_hashes)
+
+    audit = AuditLog(tmp_path / "audit.jsonl", release_id="delete_path")
+    deleted, failed = cleanup_orphan_blobs_with_gates(
+        client=client,
+        current_version="vMATCHED",
+        flutter_repo_path=flutter_repo,
+        dist_dir=dist_dir,
+        expected_count=3,
+        audit_log=audit,
+        lock_path=tmp_path / ".release.lock",
+        run_date="2026-05-12",
+        orphan_action="delete",
+    )
+
+    assert deleted == 3
+    assert failed == 0
+    for orphan in extra_orphans:
+        assert _active_path(orphan) not in bucket.objects
+        assert _quarantine_path("2026-05-12", orphan) not in bucket.objects
+    for h in bundled_and_dist:
+        assert _active_path(h) in bucket.objects
+
+    events = read_audit_log(audit.path)
+    assert any(e["event_type"] == "orphan_delete_completed" for e in events)
+
+
 # ===========================================================================
 # Test 2 — failing gates: returns (0, 0), NO quarantine activity
 # ===========================================================================
@@ -612,14 +655,14 @@ def test_orphan_cleanup_passes_retained_versions_to_gates(tmp_path, monkeypatch)
 
 
 # ===========================================================================
-# Test 7 — unexpected exception in gated path returns (0, 0) at main() level
+# Test 7 — unexpected exception in gated path exits nonzero
 # ===========================================================================
 
 
 def test_p1_6_unexpected_exception_in_gated_path_blocks_deletion(tmp_path, monkeypatch, capsys):
     """If cleanup_orphan_blobs_with_gates raises unexpectedly, main()'s
-    try/except catches it and the script reports zero deletions instead
-    of crashing mid-cleanup. Fail-closed per ADR-0001 P1.6."""
+    try/except catches it, reports zero deletions, and exits nonzero.
+    Fail-closed per ADR-0001 P1.6."""
     import cleanup_old_versions as cov
 
     monkeypatch.setattr(cov, "get_supabase_client", lambda: object())
@@ -634,13 +677,15 @@ def test_p1_6_unexpected_exception_in_gated_path_blocks_deletion(tmp_path, monke
         raise RuntimeError("simulated gate machinery explosion")
     monkeypatch.setattr(cov, "cleanup_orphan_blobs_with_gates", boom)
 
-    cov.main([
-        "--execute",
-        "--cleanup-orphan-blobs",
-        "--keep", "1",
-        "--flutter-repo", str(tmp_path / "flutter"),
-        "--dist-dir", str(tmp_path / "dist"),
-    ])
+    with pytest.raises(SystemExit) as exc:
+        cov.main([
+            "--execute",
+            "--cleanup-orphan-blobs",
+            "--keep", "1",
+            "--flutter-repo", str(tmp_path / "flutter"),
+            "--dist-dir", str(tmp_path / "dist"),
+        ])
+    assert exc.value.code == 1
 
     out = capsys.readouterr().out
     assert "Unexpected error" in out

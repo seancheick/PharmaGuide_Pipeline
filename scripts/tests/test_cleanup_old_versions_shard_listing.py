@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import sys
 import json
+import pytest
 
 _scripts_dir = os.path.join(os.path.dirname(__file__), "..")
 if _scripts_dir not in sys.path:
@@ -118,3 +119,26 @@ def test_cleanup_orphan_blobs_dry_run_suppresses_large_path_listing(capsys):
     assert out.count("[DRY-RUN] Would delete orphan") == ORPHAN_DRY_RUN_SAMPLE_LIMIT
     assert "more orphan blob(s)" in out
     assert "exact count preserved" in out
+
+
+def test_list_blobs_in_shard_strict_raises_on_repeated_page_failure(monkeypatch):
+    import cleanup_old_versions as cov
+
+    client = _Client(set())
+    attempts = []
+
+    def fail_page(_bucket, prefix, offset, timeout_seconds=None):
+        attempts.append((prefix, offset))
+        raise cov.StorageListPageTimeout("injected storage timeout")
+
+    monkeypatch.setattr(cov, "_list_storage_page", fail_page)
+    monkeypatch.setattr(cov.time, "sleep", lambda _seconds: None)
+
+    with pytest.raises(RuntimeError, match="Blob listing failed"):
+        cov.list_blobs_in_shard(client, "ab", max_retries=3, strict=True)
+
+    assert attempts == [
+        ("shared/details/sha256/ab", 0),
+        ("shared/details/sha256/ab", 0),
+        ("shared/details/sha256/ab", 0),
+    ]

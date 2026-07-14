@@ -69,6 +69,7 @@ Public API
 
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -82,6 +83,9 @@ from typing import List, Optional, Tuple
 DEFAULT_BUCKET = "pharmaguide"
 ACTIVE_PREFIX = "shared/details/sha256"
 QUARANTINE_PREFIX = "shared/quarantine"
+STORAGE_OPERATION_TIMEOUT_SECONDS = int(
+    os.environ.get("PG_STORAGE_OPERATION_TIMEOUT_SECONDS", "30")
+)
 
 # Active blob path: shared/details/sha256/{2-char shard}/{64-hex hash}.json
 _ACTIVE_PATH_RE = re.compile(
@@ -207,7 +211,20 @@ def _validate_run_date(run_date: str) -> None:
 def _copy_storage_object(client, bucket: str, src: str, dst: str) -> Tuple[bool, Optional[str]]:
     """COPY one object inside a bucket. Returns (success, error)."""
     try:
-        client.storage.from_(bucket).copy(src, dst)
+        bucket_proxy = client.storage.from_(bucket)
+        if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
+            bucket_proxy._request(
+                "POST",
+                ["object", "copy"],
+                json={
+                    "bucketId": bucket_proxy.id,
+                    "sourceKey": src,
+                    "destinationKey": dst,
+                },
+                timeout=STORAGE_OPERATION_TIMEOUT_SECONDS,
+            )
+        else:
+            bucket_proxy.copy(src, dst)
         return True, None
     except Exception as e:  # noqa: BLE001 — pass-through error reporting
         return False, f"{type(e).__name__}: {e}"
@@ -216,10 +233,41 @@ def _copy_storage_object(client, bucket: str, src: str, dst: str) -> Tuple[bool,
 def _remove_storage_object(client, bucket: str, path: str) -> Tuple[bool, Optional[str]]:
     """DELETE one object from a bucket. Returns (success, error)."""
     try:
-        client.storage.from_(bucket).remove([path])
+        bucket_proxy = client.storage.from_(bucket)
+        if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
+            bucket_proxy._request(
+                "DELETE",
+                ["object", bucket_proxy.id],
+                json={"prefixes": [path]},
+                timeout=STORAGE_OPERATION_TIMEOUT_SECONDS,
+            )
+        else:
+            bucket_proxy.remove([path])
         return True, None
     except Exception as e:  # noqa: BLE001
         return False, f"{type(e).__name__}: {e}"
+
+
+def _list_storage_objects(client, bucket: str, parent: str) -> list:
+    bucket_proxy = client.storage.from_(bucket)
+    if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
+        response = bucket_proxy._request(
+            "POST",
+            ["object", "list", bucket_proxy.id],
+            json={
+                "limit": 1000,
+                "offset": 0,
+                "sortBy": {"column": "name", "order": "asc"},
+                "prefix": parent,
+            },
+            headers={"Content-Type": "application/json"},
+            timeout=STORAGE_OPERATION_TIMEOUT_SECONDS,
+        )
+        return response.json()
+    return bucket_proxy.list(
+        path=parent,
+        options={"limit": 1000, "offset": 0},
+    )
 
 
 def _object_exists(client, bucket: str, path: str) -> bool:
@@ -231,10 +279,7 @@ def _object_exists(client, bucket: str, path: str) -> bool:
     """
     parent, _, leaf = path.rpartition("/")
     try:
-        items = client.storage.from_(bucket).list(
-            path=parent,
-            options={"limit": 1000, "offset": 0},
-        )
+        items = _list_storage_objects(client, bucket, parent)
     except Exception:  # noqa: BLE001 — treat list errors as "unknown"; caller decides
         return False
     if not items:

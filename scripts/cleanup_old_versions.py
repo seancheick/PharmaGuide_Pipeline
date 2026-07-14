@@ -25,6 +25,30 @@ from release_safety import sweep_quarantine  # noqa: E402
 
 BUCKET = "pharmaguide"
 
+# Supabase storage list calls can hang in SSL reads at production scale.
+# Keep page reads bounded so cleanup either progresses visibly or fails closed.
+STORAGE_LIST_PAGE_TIMEOUT_SECONDS = int(
+    os.environ.get("PG_STORAGE_LIST_PAGE_TIMEOUT_SECONDS", "45")
+)
+STORAGE_LIST_PROGRESS_EVERY_SHARDS = int(
+    os.environ.get("PG_STORAGE_LIST_PROGRESS_EVERY_SHARDS", "16")
+)
+STORAGE_LIST_MAX_RETRIES = int(
+    os.environ.get("PG_STORAGE_LIST_MAX_RETRIES", "8")
+)
+SUPABASE_TABLE_MAX_RETRIES = int(
+    os.environ.get("PG_SUPABASE_TABLE_MAX_RETRIES", "5")
+)
+QUARANTINE_PROGRESS_EVERY_BLOBS = int(
+    os.environ.get("PG_QUARANTINE_PROGRESS_EVERY_BLOBS", "1000")
+)
+ORPHAN_DELETE_BATCH_SIZE = int(
+    os.environ.get("PG_ORPHAN_DELETE_BATCH_SIZE", "500")
+)
+ORPHAN_DELETE_TIMEOUT_SECONDS = int(
+    os.environ.get("PG_ORPHAN_DELETE_TIMEOUT_SECONDS", "60")
+)
+
 
 # ---------------------------------------------------------------------------
 # Query helpers
@@ -35,13 +59,29 @@ def fetch_all_versions(client):
 
     Each row is a dict with at least: db_version, created_at, is_current.
     """
-    response = (
-        client.table("export_manifest")
-        .select("db_version, created_at, is_current")
-        .order("created_at", desc=True)
-        .execute()
-    )
-    return response.data or []
+    last_exc = None
+    for attempt in range(SUPABASE_TABLE_MAX_RETRIES):
+        try:
+            response = (
+                client.table("export_manifest")
+                .select("db_version, created_at, is_current")
+                .order("created_at", desc=True)
+                .execute()
+            )
+            return response.data or []
+        except Exception as exc:  # noqa: BLE001 — transient API failures.
+            last_exc = exc
+            if attempt == SUPABASE_TABLE_MAX_RETRIES - 1:
+                break
+            print(
+                f"  [WARN] export_manifest fetch failed "
+                f"({type(exc).__name__}: {exc}); retrying..."
+            )
+            time.sleep(min(0.5 * (2 ** attempt), 5.0))
+    raise RuntimeError(
+        f"Could not fetch export_manifest after "
+        f"{SUPABASE_TABLE_MAX_RETRIES} attempts: {last_exc}"
+    ) from last_exc
 
 
 def partition_versions(rows, keep):
@@ -156,6 +196,61 @@ def delete_manifest_row(client, db_version, dry_run):
         return False, str(exc)
 
 
+def _remove_storage_batch(client, paths):
+    bucket_proxy = client.storage.from_(BUCKET)
+    if hasattr(bucket_proxy, "_request") and hasattr(bucket_proxy, "id"):
+        bucket_proxy._request(
+            "DELETE",
+            ["object", bucket_proxy.id],
+            json={"prefixes": paths},
+            timeout=ORPHAN_DELETE_TIMEOUT_SECONDS,
+        )
+    else:
+        bucket_proxy.remove(paths)
+
+
+def delete_orphan_blob_batch(client, blob_hashes):
+    """Hard-delete reviewed orphan hashes in storage batches.
+
+    This path is only for large historical backlogs after release-safety gates
+    pass with an explicit reviewed expected count. Quarantine remains the
+    default because it is recoverable.
+    """
+    hashes = sorted(blob_hashes)
+    total = len(hashes)
+    deleted = 0
+    failed = 0
+    failed_paths = []
+    for start in range(0, total, ORPHAN_DELETE_BATCH_SIZE):
+        batch_hashes = hashes[start:start + ORPHAN_DELETE_BATCH_SIZE]
+        paths = [
+            f"{BLOB_STORAGE_PREFIX}/{blob_hash[:2]}/{blob_hash}.json"
+            for blob_hash in batch_hashes
+        ]
+        try:
+            _remove_storage_batch(client, paths)
+            deleted += len(paths)
+        except Exception as exc:  # noqa: BLE001 — report and continue.
+            failed += len(paths)
+            failed_paths.extend(paths[:20])
+            print(
+                f"  [ERROR] Failed to delete orphan batch "
+                f"{start + 1}-{start + len(paths)}: "
+                f"{type(exc).__name__}: {exc}"
+            )
+        processed = min(start + len(batch_hashes), total)
+        if (
+            processed == total
+            or processed == len(batch_hashes)
+            or processed % (ORPHAN_DELETE_BATCH_SIZE * 10) == 0
+        ):
+            print(
+                f"  Delete progress: {processed}/{total} processed; "
+                f"{deleted} deleted, {failed} failed."
+            )
+    return deleted, failed, failed_paths
+
+
 # ---------------------------------------------------------------------------
 # Orphan blob detection
 # ---------------------------------------------------------------------------
@@ -192,7 +287,41 @@ def list_all_blob_shard_dirs(client):
     return list(HEX_BLOB_SHARDS)
 
 
-def list_blobs_in_shard(client, shard, max_retries=4):
+class StorageListPageTimeout(TimeoutError):
+    """Raised when a single Supabase storage page list exceeds the timeout."""
+
+
+def _list_storage_page(bucket, prefix, offset, timeout_seconds=None):
+    """List one storage page with a bounded wall-clock timeout.
+
+    Supabase-py's public ``bucket.list()`` does not expose a per-call timeout.
+    The bucket proxy's private request path is the same endpoint with timeout
+    pass-through, so production clients use that. Test doubles fall back to the
+    public ``list()`` method.
+    """
+    if timeout_seconds is None:
+        timeout_seconds = STORAGE_LIST_PAGE_TIMEOUT_SECONDS
+
+    options = {"limit": 1000, "offset": offset}
+    if not hasattr(bucket, "_request") or not hasattr(bucket, "id"):
+        return bucket.list(path=prefix, options=options)
+
+    response = bucket._request(
+        "POST",
+        ["object", "list", bucket.id],
+        json={
+            "limit": 1000,
+            "offset": offset,
+            "sortBy": {"column": "name", "order": "asc"},
+            "prefix": prefix,
+        },
+        headers={"Content-Type": "application/json"},
+        timeout=timeout_seconds,
+    )
+    return response.json()
+
+
+def list_blobs_in_shard(client, shard, max_retries=None, *, strict=False):
     """List all blob paths in a shard directory.
 
     Retries transient Supabase storage failures (DatabaseTimeout etc.) with
@@ -203,21 +332,30 @@ def list_blobs_in_shard(client, shard, max_retries=4):
     prefix = f"{BLOB_STORAGE_PREFIX}/{shard}"
     paths = []
     offset = 0
+    bucket = client.storage.from_(BUCKET)
+    if max_retries is None:
+        max_retries = STORAGE_LIST_MAX_RETRIES
     while True:
         items = None
         for attempt in range(max_retries):
             try:
-                items = client.storage.from_(BUCKET).list(
-                    path=prefix,
-                    options={"limit": 1000, "offset": offset},
-                )
+                items = _list_storage_page(bucket, prefix, offset)
                 break
             except Exception as exc:
                 if attempt == max_retries - 1:
-                    print(f"  [WARN] Blob listing failed at offset {offset} in shard {shard} after {max_retries} attempts: {exc}")
-                    print(f"  Returning {len(paths)} blobs found so far (listing may be incomplete).")
+                    message = (
+                        f"Blob listing failed at offset {offset} in shard "
+                        f"{shard} after {max_retries} attempts: {exc}"
+                    )
+                    print(f"  [WARN] {message}")
+                    if strict:
+                        raise RuntimeError(message) from exc
+                    print(
+                        f"  Returning {len(paths)} blobs found so far "
+                        "(listing may be incomplete)."
+                    )
                     return paths
-                time.sleep(0.5 * (2 ** attempt))  # 0.5s, 1s, 2s backoff
+                time.sleep(min(0.5 * (2 ** attempt), 5.0))
         if not items:
             break
         for item in items:
@@ -307,6 +445,7 @@ def cleanup_orphan_blobs_with_gates(
     lock_path=None,
     run_date=None,
     retained_versions=(),
+    orphan_action="quarantine",
 ):
     """Run release-safety gates THEN move orphaned detail blobs to quarantine.
 
@@ -357,9 +496,9 @@ def cleanup_orphan_blobs_with_gates(
             must be protected from the orphan sweep.
 
     Returns:
-        ``(quarantined_count, failed_count)``. Both 0 if gates rejected.
+    ``(processed_count, failed_count)``. Both 0 if gates rejected.
 
-    Never raises in normal use — gate failures and per-blob quarantine
+    Never raises in normal use — gate failures and per-blob quarantine/delete
     errors are caught and reported. Unexpected exceptions from the gate
     machinery propagate; callers should wrap in try/except + return
     (0, 0) per ADR-0001 P1.6 fail-closed requirement.
@@ -381,12 +520,23 @@ def cleanup_orphan_blobs_with_gates(
     # the same date directory so the sweeper can drain them as a unit.
     if run_date is None:
         run_date = _datetime.now(_timezone.utc).strftime("%Y-%m-%d")
+    if orphan_action not in {"quarantine", "delete"}:
+        raise ValueError(
+            "orphan_action must be 'quarantine' or 'delete', "
+            f"got {orphan_action!r}"
+        )
+    if orphan_action == "delete" and expected_count is None:
+        raise ValueError(
+            "orphan_action='delete' requires --expected-count so the "
+            "reviewed blast-radius override is explicit."
+        )
 
     print("\n=== Gated orphan-blob cleanup (ADR-0001 P1.6 + P2.2) ===")
     print(f"  flutter_repo:     {flutter_repo_path}")
     print(f"  dist_dir:         {dist_dir}")
     print(f"  branch:           {branch}")
     print(f"  run_date:         {run_date}")
+    print(f"  orphan action:    {orphan_action}")
     retained_versions = tuple(v for v in retained_versions if v)
     if retained_versions:
         print(f"  retained versions: {', '.join(retained_versions)}")
@@ -397,8 +547,19 @@ def cleanup_orphan_blobs_with_gates(
     print("\nListing all blobs in Supabase storage...")
     shards = list_all_blob_shard_dirs(client)
     storage_paths = []
-    for shard in shards:
-        storage_paths.extend(list_blobs_in_shard(client, shard))
+    shard_total = len(shards)
+    for idx, shard in enumerate(shards, start=1):
+        shard_paths = list_blobs_in_shard(client, shard, strict=True)
+        storage_paths.extend(shard_paths)
+        if (
+            idx == 1
+            or idx == shard_total
+            or idx % STORAGE_LIST_PROGRESS_EVERY_SHARDS == 0
+        ):
+            print(
+                f"  Listed {idx}/{shard_total} shard(s); "
+                f"{len(storage_paths)} blob object(s) seen so far."
+            )
     storage_hashes = set()
     for path in storage_paths:
         leaf = path.rsplit("/", 1)[-1]
@@ -451,6 +612,31 @@ def cleanup_orphan_blobs_with_gates(
     # hard delete. Recoverable for DEFAULT_QUARANTINE_TTL_DAYS (30) days
     # via release_safety.recover_blob(client, blob_hash).
     actual_orphans = result.deletion_candidates
+    if orphan_action == "delete":
+        print(
+            f"\n[release-safety] Gates passed. "
+            f"Hard-deleting {len(actual_orphans)} reviewed orphan blob(s) "
+            f"in batches of {ORPHAN_DELETE_BATCH_SIZE} "
+            f"(of {len(candidate_hashes)} pre-gate candidates; "
+            f"{len(candidate_hashes) - len(actual_orphans)} protected by "
+            "release-safety sources)."
+        )
+        deleted, failed, failed_paths = delete_orphan_blob_batch(
+            client, actual_orphans
+        )
+        print(
+            f"\n[release-safety] Batch delete complete: "
+            f"{deleted} deleted, {failed} failed."
+        )
+        if audit_log is not None:
+            audit_log.event(
+                "orphan_delete_completed",
+                deleted_count=deleted,
+                failed_count=failed,
+                failed_paths_sample=failed_paths[:20],
+            )
+        return deleted, failed
+
     print(
         f"\n[release-safety] Gates passed. "
         f"Quarantining {len(actual_orphans)} blob(s) "
@@ -463,7 +649,8 @@ def cleanup_orphan_blobs_with_gates(
     quarantined = 0
     failed = 0
     failed_paths: list = []
-    for blob_hash in sorted(actual_orphans):
+    actual_orphan_count = len(actual_orphans)
+    for idx, blob_hash in enumerate(sorted(actual_orphans), start=1):
         shard = blob_hash[:2]
         path = f"shared/details/sha256/{shard}/{blob_hash}.json"
         ok, err = quarantine_blob(client, path, run_date=run_date)
@@ -475,6 +662,15 @@ def cleanup_orphan_blobs_with_gates(
             print(f"  [ERROR] Failed to quarantine orphan {path}: {err}")
             failed += 1
             failed_paths.append(path)
+        if (
+            idx == 1
+            or idx == actual_orphan_count
+            or idx % QUARANTINE_PROGRESS_EVERY_BLOBS == 0
+        ):
+            print(
+                f"  Quarantine progress: {idx}/{actual_orphan_count} "
+                f"processed; {quarantined} moved/idempotent, {failed} failed."
+            )
 
     print(
         f"\n[release-safety] Quarantine complete: "
@@ -531,7 +727,22 @@ def parse_args(argv=None):
         action="store_true",
         default=False,
         dest="cleanup_orphan_blobs",
-        help="Detect and delete orphaned detail blobs not referenced by the current detail_index (default: false).",
+        help=(
+            "Detect orphaned detail blobs not referenced by the current "
+            "detail_index (default: false). Execute mode defaults to "
+            "recoverable quarantine unless --orphan-blob-action=delete is set."
+        ),
+    )
+    parser.add_argument(
+        "--orphan-blob-action",
+        choices=("quarantine", "delete"),
+        default="quarantine",
+        dest="orphan_blob_action",
+        help=(
+            "Action for gated orphan blobs in execute mode. 'quarantine' is "
+            "recoverable and remains the default. 'delete' hard-deletes in "
+            "batches and requires --expected-count."
+        ),
     )
     # ADR-0001 P1.6 — release-safety gate inputs.
     # These are REQUIRED when --cleanup-orphan-blobs --execute is given.
@@ -651,6 +862,7 @@ def main(argv=None):
     total_failed = 0
     total_db_deleted = 0
     total_db_failed = 0
+    gated_cleanup_error = False
 
     for row in safe_old_rows:
         db_version = row["db_version"]
@@ -718,9 +930,11 @@ def main(argv=None):
                                 r["db_version"] for r in keep_rows
                                 if r.get("db_version")
                             ),
+                            orphan_action=args.orphan_blob_action,
                         )
                     )
                 except Exception as exc:
+                    gated_cleanup_error = True
                     print(
                         f"\n[release-safety] Unexpected error during gated "
                         f"orphan cleanup: {type(exc).__name__}: {exc}"
@@ -781,11 +995,14 @@ def main(argv=None):
             # count reflects what WOULD have been deleted.
             print(f"  Orphan blobs would delete:      {total_orphans_quarantined}")
         else:
-            # Execute path (P2.2): orphans were MOVED to quarantine, not
-            # deleted. Recoverable for 30 days via release_safety.recover_blob.
-            print(f"  Orphan blobs quarantined:       {total_orphans_quarantined}")
+            if args.orphan_blob_action == "delete":
+                print(f"  Orphan blobs deleted:           {total_orphans_quarantined}")
+            else:
+                # Execute path (P2.2): orphans were MOVED to quarantine, not
+                # deleted. Recoverable for 30 days via release_safety.recover_blob.
+                print(f"  Orphan blobs quarantined:       {total_orphans_quarantined}")
         if total_orphans_failed:
-            verb = "delete" if dry_run else "quarantine"
+            verb = "delete" if dry_run else args.orphan_blob_action
             print(f"  Orphan blob {verb} failures:  {total_orphans_failed}")
     if not dry_run and (sweep_deleted or sweep_failed):
         print(f"  Quarantine swept (hard-delete): {sweep_deleted}")
@@ -816,14 +1033,21 @@ def main(argv=None):
         #                                failures is the wrong call.
         if total_orphans_failed > 0:
             orphan_total = total_orphans_quarantined + total_orphans_failed
+            orphan_action_label = (
+                "batch deletes"
+                if args.orphan_blob_action == "delete"
+                else "quarantine moves"
+            )
             print(
                 f"  Note: {total_orphans_failed}/{orphan_total} orphan-blob "
-                f"quarantine moves failed — typically transient HTTP/2 stream-limit "
+                f"{orphan_action_label} failed — typically transient HTTP/2 stream-limit "
                 f"or response-parse issues. Treating as non-blocking; the "
                 f"stragglers retry on the next cleanup run (idempotent)."
             )
 
         blocking_failures = total_failed + total_db_failed
+        if gated_cleanup_error:
+            blocking_failures += 1
         if blocking_failures == 0:
             print("Cleanup complete.")
         else:

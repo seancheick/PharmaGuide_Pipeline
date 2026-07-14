@@ -43,11 +43,11 @@ The batch driver `batch_run_all_datasets.sh` is the canonical entry point. It pr
 
 **Phase 1 — Per-brand pipeline (repeats × N brands, sequentially, smallest first):**
 
-| Step | Script | Reads | Writes |
-|---:|---|---|---|
-| 1.1 | `clean_dsld_data.py` | `staging/brands/<brand>/` raw DSLD JSON | `scripts/products/output_<brand>_cleaned/` |
-| 1.2 | `enrich_supplements_v3.py` | cleaned | `scripts/products/output_<brand>_enriched/enriched/` |
-| 1.3 | `score_supplements.py` | enriched | `scripts/products/output_<brand>_scored/scored/` |
+| Step | Script                     | Reads                                   | Writes                                               |
+| ---: | -------------------------- | --------------------------------------- | ---------------------------------------------------- |
+|  1.1 | `clean_dsld_data.py`       | `staging/brands/<brand>/` raw DSLD JSON | `scripts/products/output_<brand>_cleaned/`           |
+|  1.2 | `enrich_supplements_v3.py` | cleaned                                 | `scripts/products/output_<brand>_enriched/enriched/` |
+|  1.3 | `score_supplements.py`     | enriched                                | `scripts/products/output_<brand>_scored/scored/`     |
 
 Each brand runs through all three stages before the next brand starts. Brand outputs are independent — a failure in one brand doesn't stop the others (tracked, reported in summary).
 
@@ -55,11 +55,11 @@ Each brand runs through all three stages before the next brand starts. Brand out
 
 Triggered automatically at end of Phase 1 **only if every brand succeeded** (see "Guards" below). Calls `rebuild_dashboard_snapshot.sh`, which executes:
 
-| Step | Script | Reads | Writes |
-|---:|---|---|---|
-| 2.1 | `build_final_db.py` | **every** `*_enriched/enriched` + `*_scored/scored` pair across all brands | `/tmp/pg_dashboard_snapshot_<pid>/` — staging dir with `pharmaguide_core.db`, `detail_blobs/`, `detail_index.json`, `export_manifest.json`, `export_audit_report.json` |
-| 2.2 | `release_catalog_artifact.py` | `/tmp/pg_dashboard_snapshot_<pid>/` | `scripts/dist/pharmaguide_core.db`, `scripts/dist/export_manifest.json`, `scripts/dist/RELEASE_NOTES.md` — validates + stages atomically |
-| 2.3 | bash copy | `/tmp/…/detail_blobs/` + `/tmp/…/detail_index.json` + `/tmp/…/export_audit_report.json` | `scripts/dist/detail_blobs/`, `scripts/dist/detail_index.json`, `scripts/dist/export_audit_report.json` — these are dashboard-only (Flutter bundle doesn't need them, but the Streamlit dashboard does) |
+| Step | Script                        | Reads                                                                                   | Writes                                                                                                                                                                                                  |
+| ---: | ----------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|  2.1 | `build_final_db.py`           | **every** `*_enriched/enriched` + `*_scored/scored` pair across all brands              | `/tmp/pg_dashboard_snapshot_<pid>/` — staging dir with `pharmaguide_core.db`, `detail_blobs/`, `detail_index.json`, `export_manifest.json`, `export_audit_report.json`                                  |
+|  2.2 | `release_catalog_artifact.py` | `/tmp/pg_dashboard_snapshot_<pid>/`                                                     | `scripts/dist/pharmaguide_core.db`, `scripts/dist/export_manifest.json`, `scripts/dist/RELEASE_NOTES.md` — validates + stages atomically                                                                |
+|  2.3 | bash copy                     | `/tmp/…/detail_blobs/` + `/tmp/…/detail_index.json` + `/tmp/…/export_audit_report.json` | `scripts/dist/detail_blobs/`, `scripts/dist/detail_index.json`, `scripts/dist/export_audit_report.json` — these are dashboard-only (Flutter bundle doesn't need them, but the Streamlit dashboard does) |
 
 `rebuild_dashboard_snapshot.sh` now runs strict source-of-truth gates before it returns success: source-of-truth matrix, cleaner/IQD row contract, clinical drift contract, stamped export manifests, export contract, and catalog freshness.
 
@@ -188,15 +188,15 @@ staging/brands/<brand>/  ──clean──▶  *_cleaned/  ──enrich──▶
 
 ## Schema version history
 
-| Version | Date       | Columns | Summary                                                                                                                                                                                                      |
-| ------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| v1.3.0  | 2026-04-07 | 87      | Stack interaction, social sharing, search/filter, goal matching, dosing/allergen summary                                                                                                                     |
-| v1.3.1  | 2026-04-10 | 89      | `serving_info` phantom key bugfix (`dosing_summary` + `servings_per_container` now populate) + `net_contents_*`                                                                                              |
-| v1.3.2  | 2026-04-10 | 90      | Nutrition hybrid (`calories_per_serving` column + `nutrition_detail` blob) + `unmapped_actives` blob transparency                                                                                            |
-| v1.3.3  | 2026-04-14 | 90      | Interaction safety expansion: 127 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571)                                                                |
-| v1.3.4  | 2026-04-14 | 90      | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining (40 supplements, 90% coverage), CAERS dashboard audit view |
-| v1.4.0  | 2026-04-15 | 91      | `image_thumbnail_url` column added; IQM expanded to 589 entries; branded ingredient bio-score prioritization fix (KSM-66, Sensoril, Bergavit); 31 new IQM aliases; normalize_upc pipeline step               |
-| v1.5.0  | 2026-05-05 | 91      | Canonical active + inactive ingredient contract on the detail blob: `display_form_label`, `form_status`, `form_match_status`, `dose_status` on actives; `display_label`, `display_role_label`, `severity_status`, `is_safety_concern` on inactives. Flutter renders these directly without local inference. Legacy `form` / `is_harmful` retained for back-compat then deprecated. Drives `MATCHING_PRECEDENCE.md` + `INTERACTION_RULE_AUTHORING_SOP.md`. |
+| Version | Date       | Columns | Summary                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ------- | ---------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| v1.3.0  | 2026-04-07 | 87      | Stack interaction, social sharing, search/filter, goal matching, dosing/allergen summary                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| v1.3.1  | 2026-04-10 | 89      | `serving_info` phantom key bugfix (`dosing_summary` + `servings_per_container` now populate) + `net_contents_*`                                                                                                                                                                                                                                                                                                                                                                                                             |
+| v1.3.2  | 2026-04-10 | 90      | Nutrition hybrid (`calories_per_serving` column + `nutrition_detail` blob) + `unmapped_actives` blob transparency                                                                                                                                                                                                                                                                                                                                                                                                           |
+| v1.3.3  | 2026-04-14 | 90      | Interaction safety expansion: 127 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571)                                                                                                                                                                                                                                                                                                                                                                               |
+| v1.3.4  | 2026-04-14 | 90      | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining (40 supplements, 90% coverage), CAERS dashboard audit view                                                                                                                                                                                                                                                                                                                |
+| v1.4.0  | 2026-04-15 | 91      | `image_thumbnail_url` column added; IQM expanded to 589 entries; branded ingredient bio-score prioritization fix (KSM-66, Sensoril, Bergavit); 31 new IQM aliases; normalize_upc pipeline step                                                                                                                                                                                                                                                                                                                              |
+| v1.5.0  | 2026-05-05 | 91      | Canonical active + inactive ingredient contract on the detail blob: `display_form_label`, `form_status`, `form_match_status`, `dose_status` on actives; `display_label`, `display_role_label`, `severity_status`, `is_safety_concern` on inactives. Flutter renders these directly without local inference. Legacy `form` / `is_harmful` retained for back-compat then deprecated. Drives `MATCHING_PRECEDENCE.md` + `INTERACTION_RULE_AUTHORING_SOP.md`.                                                                   |
 | v1.6.0  | 2026-05-12 | 91      | `profile_gate` passthrough on `interaction` and `drug_interaction` warning entries so Flutter routes condition/drug-class hits without re-evaluating thresholds. Coverage gate: products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate. `canonical_id` + `delivers_markers` now emitted at blob level on active ingredients (identity vs bioactivity split, 8-phase migration — see `reports/identity_vs_bioactivity_impact_report.md`). |
 
 Runtime source of truth: `CORE_COLUMN_COUNT` in `build_final_db.py` plus `EXPORT_SCHEMA_VERSION`. See `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
@@ -599,6 +599,7 @@ RENDER_ZOOM = 8.0                      # ← image-quality knob #3
 
 **`RENDER_ZOOM` (currently 8.0)** — multiplier applied to PDF source
 resolution before LANCZOS downscale. Higher = sharper edges and text.
+
 - 2.0 = 144 DPI source render (visibly blurry)
 - 4.0 = 288 DPI (readable)
 - **8.0 = 576 DPI (current, sharp)**
@@ -612,6 +613,7 @@ resolution before LANCZOS downscale. Higher = sharper edges and text.
 
 **`MAX_WIDTH_PX` (currently 900)** — output width in pixels. Aspect
 ratio is preserved. This is the dominant file-size driver.
+
 - 600 = ~25 KB/img, ~200 MB total (was the v1 default — too small,
   visibly soft on retina screens)
 - **900 = ~80 KB/img, ~640 MB total (current)**
@@ -621,6 +623,7 @@ ratio is preserved. This is the dominant file-size driver.
 - **Speed impact: small** — encoding is fast.
 
 **`WEBP_QUALITY` (currently 88)** — WebP encoder quality, 0-100.
+
 - 80 = small files, soft text edges (was the v1 default)
 - 85 = balanced (≈ -10% size vs 88, slightly softer text)
 - **88 = sharp text edges, modest file size (current)**
@@ -655,11 +658,11 @@ open /tmp/quality_test/    # visual inspect
 
 ### Settings history
 
-| Date | RENDER_ZOOM | MAX_WIDTH_PX | WEBP_QUALITY | Avg KB | Notes |
-|---|---|---|---|---|---|
-| original | 2.0 | 600 | 80 | ~25 | Visibly blurry, text unreadable on retina |
-| 2026-04-29 | 4.0 | 900 | 85 | ~60 | First sharpening pass — readable |
-| 2026-04-30 | 8.0 | 900 | 88 | ~80 | Current — sharp text, modest file growth |
+| Date       | RENDER_ZOOM | MAX_WIDTH_PX | WEBP_QUALITY | Avg KB | Notes                                     |
+| ---------- | ----------- | ------------ | ------------ | ------ | ----------------------------------------- |
+| original   | 2.0         | 600          | 80           | ~25    | Visibly blurry, text unreadable on retina |
+| 2026-04-29 | 4.0         | 900          | 85           | ~60    | First sharpening pass — readable          |
+| 2026-04-30 | 8.0         | 900          | 88           | ~80    | Current — sharp text, modest file growth  |
 
 ### Troubleshooting
 
@@ -677,7 +680,7 @@ open /tmp/quality_test/    # visual inspect
   string.
 - **PDF cache eats too much disk** — `/tmp/dsld_pdf_cache/` is ~7,000
   PDFs at ~500 KB each (~3.5 GB). Safe to delete (`rm -rf
-  /tmp/dsld_pdf_cache`); next run will re-download from NIH. Keep it
+/tmp/dsld_pdf_cache`); next run will re-download from NIH. Keep it
   if you plan to re-render soon.
 
 ---
@@ -1542,18 +1545,18 @@ These are the main scripts that make up the 3-stage pipeline (Clean → Enrich �
 
 ### 11.1 Pipeline Stages
 
-| Script                     | Stage        | What it does                                                                                            |
-| -------------------------- | ------------ | ------------------------------------------------------------------------------------------------------- |
-| `run_pipeline.py`          | Orchestrator | Runs Clean → Enrich → Score in sequence. Use `--raw-dir` and `--output-prefix`.                         |
-| `clean_dsld_data.py`       | Stage 1      | Normalizes raw DSLD JSON labels. Strips dead fields, normalizes units, extracts ingredients.            |
-| `enrich_supplements_v3.py` | Stage 2      | Matches ingredients against IQM, classifies forms, resolves aliases, adds clinical data. ~12K lines.    |
+| Script                     | Stage        | What it does                                                                                                                |
+| -------------------------- | ------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `run_pipeline.py`          | Orchestrator | Runs Clean → Enrich → Score in sequence. Use `--raw-dir` and `--output-prefix`.                                             |
+| `clean_dsld_data.py`       | Stage 1      | Normalizes raw DSLD JSON labels. Strips dead fields, normalizes units, extracts ingredients.                                |
+| `enrich_supplements_v3.py` | Stage 2      | Matches ingredients against IQM, classifies forms, resolves aliases, adds clinical data. ~12K lines.                        |
 | `score_supplements.py`     | Stage 3      | Legacy arithmetic scaffolding plus safety verdicts. Production V4 scoring is applied in final export through `scoring_v4/`. |
 
 ### 11.2 Build & Release
 
 | Script                            | What it does                                                                                                                                           |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `build_final_db.py`               | Converts scored JSON + V4 adapter output → SQLite `pharmaguide_core.db` + detail blobs + manifest.                                                    |
+| `build_final_db.py`               | Converts scored JSON + V4 adapter output → SQLite `pharmaguide_core.db` + detail blobs + manifest.                                                     |
 | `build_all_final_dbs.py`          | Auto-discovers enriched/scored pairs, builds all or selected brands. Supports `--changed-only`, `--per-pair-output-root`, `--assemble-release-output`. |
 | `assemble_final_db_release.py`    | Merges per-pair build outputs into one combined release artifact.                                                                                      |
 | `release_catalog_artifact.py`     | Validates final DB + manifest, stages to `scripts/dist/` atomically.                                                                                   |
