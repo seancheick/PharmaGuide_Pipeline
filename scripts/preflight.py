@@ -26,6 +26,8 @@ from pathlib import Path
 from datetime import datetime, timezone
 from typing import Dict, List, Tuple
 
+from reference_data_schema import validate_reference_schema_version
+
 
 # Path to scripts directory (where this file lives)
 SCRIPTS_DIR = Path(__file__).parent.resolve()
@@ -130,8 +132,8 @@ DEPRECATED_FIELDS = {
     "published_support",
 }
 
-# Database files expected to have _metadata wrapper with schema_version 5.x
-SCHEMA_V5_DATABASES = [
+# Reference databases checked for metadata and deprecated root fields.
+REFERENCE_DATABASES = [
     "absorption_enhancers.json",
     "allergens.json",
     "backed_clinical_studies.json",
@@ -284,10 +286,10 @@ def validate_iqm_br_collision(data_dir: Path = DATA_DIR) -> Dict:
 
 def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
     """
-    Validate that JSON database files conform to v5.x schema conventions.
+    Validate that JSON database files conform to shared schema conventions.
 
     Checks:
-    - _metadata wrapper present with schema_version starting with '5.'
+    - _metadata wrapper present with a version in the file-owned namespace
     - No deprecated fields (risk_level, synonyms, canonical_name, database_info, violation_severity, published_support)
     - Entity entries have standard_name where applicable
 
@@ -296,7 +298,7 @@ def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
     """
     results = {"passed": [], "failed": [], "ok": True}
 
-    for filename in SCHEMA_V5_DATABASES:
+    for filename in REFERENCE_DATABASES:
         path = data_dir / filename
         if not path.exists():
             continue  # File existence is checked separately
@@ -317,8 +319,9 @@ def validate_database_schema(data_dir: Path = DATA_DIR) -> Dict:
             issues.append("Missing _metadata wrapper")
         else:
             sv = metadata.get("schema_version", "")
-            if not str(sv).startswith("5."):
-                issues.append(f"schema_version '{sv}' does not start with '5.'")
+            schema_issue = validate_reference_schema_version(filename, sv)
+            if schema_issue:
+                issues.append(schema_issue)
 
         # Check for deprecated fields at root level
         for dep in DEPRECATED_FIELDS:

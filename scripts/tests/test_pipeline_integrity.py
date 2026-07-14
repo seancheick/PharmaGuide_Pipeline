@@ -24,44 +24,11 @@ import pytest
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from constants import DATA_DIR, SCRIPTS_DIR
+from reference_data_schema import validate_reference_schema_version
 
 # ---------------------------------------------------------------------------
 # Shared helpers
 # ---------------------------------------------------------------------------
-
-REQUIRED_SCHEMA_VERSIONS = {
-    "1.0.0",
-    "1.1.0",
-    "5.0.0",
-    "5.1.0",
-    "5.2.0",
-    "5.2.1",
-    "5.3.0",
-    "5.4.0",
-    "5.4.1",
-    "5.4.2",
-    "5.4.6",
-    "5.4.7",
-    "5.4.8",
-    "5.4.9",
-    "5.4.10",  # ingredient_quality_map.json — ongoing IQM audit-batch bumps
-    "6.0.0",
-    "6.1.0",
-    "6.1.1",
-    "6.1.3",
-    "6.2.0",  # ingredient_interaction_rules.json — smart-flagging Phase 2 direction/materiality
-    "6.2.1",  # ingredient_interaction_rules.json — broad serotonergic class support
-    "6.2.2",  # ingredient_interaction_rules.json — nattokinase bleeding profile gates
-    "6.2.3",  # ingredient_interaction_rules.json — thyroid mineral emitted floors
-}
-
-# Files that belong to a different subsystem and carry their own schema
-# versioning namespace independent of the main enrichment pipeline (5.x).
-# The interaction DB subsystem (INTERACTION_DB_SPEC v2.2.0) uses its own
-# schema_version "1.0.0" — aligned with interaction_db.sqlite — so files
-# under that subsystem must be skipped by the main pipeline's 5.x uniformity
-# test. See scripts/build_interaction_db.SCHEMA_VERSION.
-INTERACTION_DB_SUBSYSTEM_FILES = {"drug_classes.json"}
 
 # Required fields inside every _metadata block
 REQUIRED_METADATA_FIELDS = ("description", "purpose", "schema_version")
@@ -184,34 +151,38 @@ class TestDatabaseSchemaIntegrity:
         )
 
     # ------------------------------------------------------------------
-    # 1b. schema_version must be uniform across all databases
+    # 1b. schema_version must conform to the file-owned namespace
     # ------------------------------------------------------------------
-    def test_schema_version_uniform(self, db_files):
-        """All database files must declare a recognized schema_version.
-
-        Files in INTERACTION_DB_SUBSYSTEM_FILES are exempt — they belong to
-        the separately-versioned interaction DB subsystem (schema 1.0.0).
-        """
+    def test_schema_version_contract(self, db_files):
+        """All database files must declare a valid version in their namespace."""
         mismatches = []
         for fp in db_files:
-            if fp.name in INTERACTION_DB_SUBSYSTEM_FILES:
-                continue
             data = _load_json(fp)
             if data is None or not isinstance(data, dict):
                 continue
             meta = data.get("_metadata", {})
             sv = meta.get("schema_version")
-            if sv is None:
-                mismatches.append(f"{fp.name}: schema_version not declared")
-            elif sv not in REQUIRED_SCHEMA_VERSIONS:
-                mismatches.append(
-                    f"{fp.name}: schema_version='{sv}'"
-                    f" (expected one of {REQUIRED_SCHEMA_VERSIONS})"
-                )
+            issue = validate_reference_schema_version(fp.name, sv)
+            if issue:
+                mismatches.append(issue)
 
         assert not mismatches, (
             f"{len(mismatches)} schema_version mismatch(es):\n  " + "\n  ".join(mismatches)
         )
+
+    @pytest.mark.parametrize(
+        ("filename", "version", "valid"),
+        [
+            ("ingredient_quality_map.json", "5.4.11", True),
+            ("ingredient_quality_map.json", "1.0.0", False),
+            ("ingredient_interaction_rules.json", "6.2.3", True),
+            ("ingredient_interaction_rules.json", "7.0.0", False),
+            ("severity_vocab.json", "1.1", False),
+        ],
+    )
+    def test_schema_namespace_contract_examples(self, filename, version, valid):
+        issue = validate_reference_schema_version(filename, version)
+        assert (issue is None) is valid
 
     # ------------------------------------------------------------------
     # 1c. No duplicate IDs inside any single database file
