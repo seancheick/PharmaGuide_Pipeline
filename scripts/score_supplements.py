@@ -1303,6 +1303,9 @@ class SupplementScorer:
                 or "unknown"
             )
             seen_hits.add(self._safety_hit_key(name, status))
+            if safety_flag.get("us_applicable") is False:
+                flags.append("B0_REGIONAL_ADVISORY")
+                continue
 
             if match_type not in {"exact", "alias", "explicit_form_evidence", "legacy_projection"}:
                 review_needed = True
@@ -1349,6 +1352,9 @@ class SupplementScorer:
             if key in seen_hits:
                 continue
             seen_hits.add(key)
+            if substance.get("us_applicable") is False:
+                flags.append("B0_REGIONAL_ADVISORY")
+                continue
 
             # Interim behavior: non exact/alias hits are review-only.
             if match_type not in {"exact", "alias"}:

@@ -22,15 +22,15 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from enrich_supplements_v3 import SupplementEnricherV3 as SupplementEnricher
 
 
-class TestAllergenNegationWithParsedAllergens:
-    """Tests for allergen negation using labelText.parsed.allergenFree."""
+class TestParsedAllergenPositiveEvidence:
+    """Positive parsed evidence survives contradictory free-claim metadata."""
 
     @pytest.fixture
     def enricher(self):
         """Create enricher instance with allergen database loaded."""
         return SupplementEnricher()
 
-    def test_dairy_free_claim_prevents_milk_detection(self, enricher):
+    def test_free_claim_does_not_erase_parsed_contains_evidence(self, enricher):
         """
         CRITICAL: Product with dairy-free claim should NOT detect milk allergen.
 
@@ -52,16 +52,14 @@ class TestAllergenNegationWithParsedAllergens:
         detected_names = [a["allergen_name"].lower() for a in result]
         detected_ids = [a["allergen_id"] for a in result]
 
-        # Should NOT contain milk (dairy-free claim), eggs (egg-free claim), or soy (soy-free claim)
-        assert "milk" not in detected_names, "Dairy-free claim should prevent milk detection"
-        assert "ALLERGEN_MILK" not in detected_ids, "Dairy-free claim should prevent milk detection"
-        assert "eggs" not in detected_names, "Egg-free claim should prevent egg detection"
-        assert "ALLERGEN_EGGS" not in detected_ids, "Egg-free claim should prevent egg detection"
-        assert "soy & soy lecithin" not in detected_names, "Soy-free claim should prevent soy detection"
-        assert "ALLERGEN_SOY" not in detected_ids, "Soy-free claim should prevent soy detection"
+        assert "milk" in detected_names
+        assert "ALLERGEN_MILK" in detected_ids
+        assert "eggs" in detected_names
+        assert "ALLERGEN_EGGS" in detected_ids
+        assert "soy & soy lecithin" in detected_names
+        assert "ALLERGEN_SOY" in detected_ids
 
-    def test_gluten_free_claim_prevents_wheat_detection(self, enricher):
-        """Product with gluten-free claim should NOT detect wheat allergen."""
+    def test_gluten_free_claim_does_not_erase_parsed_wheat(self, enricher):
         product = {
             "labelText": {
                 "parsed": {
@@ -75,10 +73,9 @@ class TestAllergenNegationWithParsedAllergens:
         result = enricher._extract_allergen_presence_from_text(product)
 
         detected_ids = [a["allergen_id"] for a in result]
-        assert "ALLERGEN_WHEAT" not in detected_ids, "Gluten/wheat-free claim should prevent wheat detection"
+        assert "ALLERGEN_WHEAT" in detected_ids
 
-    def test_target_groups_free_claims_work(self, enricher):
-        """Free claims from targetGroups alone should prevent detection."""
+    def test_target_groups_do_not_override_parsed_contains_evidence(self, enricher):
         product = {
             "labelText": {
                 "parsed": {
@@ -92,10 +89,10 @@ class TestAllergenNegationWithParsedAllergens:
         result = enricher._extract_allergen_presence_from_text(product)
 
         detected_ids = [a["allergen_id"] for a in result]
-        assert "ALLERGEN_CRUSTACEANS" not in detected_ids, "Shellfish-free targetGroup should prevent shellfish detection"
-        assert "ALLERGEN_PEANUTS" not in detected_ids, "Peanut-free targetGroup should prevent peanut detection"
+        assert "ALLERGEN_CRUSTACEANS" in detected_ids
+        assert "ALLERGEN_PEANUTS" in detected_ids
 
-    def test_partial_free_claims_only_filter_matching(self, enricher):
+    def test_partial_free_claims_are_kept_for_conflict_detection(self, enricher):
         """
         Products with SOME free claims should still detect OTHER allergens.
 
@@ -117,12 +114,9 @@ class TestAllergenNegationWithParsedAllergens:
 
         detected_ids = [a["allergen_id"] for a in result]
 
-        # Should NOT contain milk (dairy-free)
-        assert "ALLERGEN_MILK" not in detected_ids, "Dairy-free claim should prevent milk detection"
-
-        # Should STILL contain soy and tree nuts (not claimed free)
-        assert "ALLERGEN_SOY" in detected_ids, "Soy should still be detected (not claimed free)"
-        assert "ALLERGEN_TREE_NUTS" in detected_ids, "Tree nuts should still be detected (not claimed free)"
+        assert "ALLERGEN_MILK" in detected_ids
+        assert "ALLERGEN_SOY" in detected_ids
+        assert "ALLERGEN_TREE_NUTS" in detected_ids
 
 
 class TestAllergenNegationInStatements:
@@ -208,6 +202,35 @@ class TestAllergenNegationInStatements:
         assert "ALLERGEN_MILK" in detected_ids, "'Contains milk' should detect milk"
         assert "ALLERGEN_SOY" in detected_ids, "'Contains soy' should detect soy"
 
+    def test_negated_clause_does_not_hide_later_positive_clause(self, enricher):
+        product = {
+            "statements": [
+                {"text": "Made without gluten. Contains milk and soy."}
+            ],
+            "labelText": {"parsed": {}},
+        }
+
+        result = enricher._extract_allergen_presence_from_text(product)
+        detected_ids = {entry["allergen_id"] for entry in result}
+
+        assert "ALLERGEN_MILK" in detected_ids
+        assert "ALLERGEN_SOY" in detected_ids
+
+    def test_positive_parsed_allergen_survives_conflicting_free_claim(self, enricher):
+        product = {
+            "labelText": {
+                "parsed": {
+                    "allergens": ["milk"],
+                    "allergenFree": ["dairy"],
+                }
+            },
+            "targetGroups": ["Dairy Free"],
+        }
+
+        result = enricher._extract_allergen_presence_from_text(product)
+
+        assert "ALLERGEN_MILK" in {entry["allergen_id"] for entry in result}
+
     def test_may_contain_warning_still_works(self, enricher):
         """'May contain X' warnings should still be detected."""
         product = {
@@ -251,7 +274,8 @@ class TestProduct10040Simulation:
         - labelText.parsed.allergenFree: ["dairy", "egg", "wheat", "shellfish", "gluten", "soy", "yeast"]
         - Statement: "Contains no sugar, salt, starch, yeast, wheat, gluten, soy, milk, egg, shellfish or preservatives."
 
-        Result: Should NOT detect any of the negated allergens.
+        Result: parsed positive declarations remain present so compliance can
+        surface the contradictory free claims.
         """
         product = {
             "targetGroups": ["Vegan", "Vegetarian", "Dairy Free", "Gluten Free", "Sugar Free"],
@@ -271,28 +295,15 @@ class TestProduct10040Simulation:
         # Get all detected allergen IDs
         detected_ids = set(a["allergen_id"] for a in result)
 
-        # NONE of these should be detected (all have free claims)
-        negated_allergens = {
+        parsed_positive_allergens = {
             "ALLERGEN_MILK",        # dairy-free
             "ALLERGEN_EGGS",        # egg-free
             "ALLERGEN_WHEAT",       # wheat/gluten-free
             "ALLERGEN_CRUSTACEANS", # shellfish-free
             "ALLERGEN_SOY",         # soy-free
-            "ALLERGEN_YEAST",       # yeast-free (from statement)
         }
-
-        wrongly_detected = detected_ids & negated_allergens
-        assert len(wrongly_detected) == 0, (
-            f"Allergens with free claims should NOT be detected. "
-            f"Wrongly detected: {wrongly_detected}"
-        )
-
-        # Verify the result is empty or only contains Natural Flavors (hidden allergen from ingredients)
-        # Since we're only testing _extract_allergen_presence_from_text, no ingredients are processed
-        assert len(result) == 0, (
-            f"Product with comprehensive free claims should have no detected allergens from text parsing. "
-            f"Got: {[a['allergen_name'] for a in result]}"
-        )
+        assert parsed_positive_allergens <= detected_ids
+        assert "ALLERGEN_YEAST" not in detected_ids
 
 
 if __name__ == "__main__":

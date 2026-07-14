@@ -206,6 +206,59 @@ class BatchProcessor:
         for directory in dirs:
             directory.mkdir(parents=True, exist_ok=True)
 
+    def _prepare_fresh_run_outputs(self) -> List[Path]:
+        """Move materialized batch outputs out of the next fresh run's scope."""
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        quarantine_root = self.output_dir / "quarantine" / "stale_outputs" / timestamp
+        moved: List[Path] = []
+        patterns_by_dir = {
+            "cleaned": ("cleaned_batch_*.json", "cleaned_batch_*.jsonl"),
+            "needs_review": ("needs_review_batch_*.json", "needs_review_batch_*.jsonl"),
+            "incomplete": ("incomplete_batch_*.json", "incomplete_batch_*.jsonl"),
+        }
+        for directory_name, patterns in patterns_by_dir.items():
+            source_dir = self.output_dir / directory_name
+            for pattern in patterns:
+                for source in sorted(source_dir.glob(pattern)):
+                    destination_dir = quarantine_root / directory_name
+                    destination_dir.mkdir(parents=True, exist_ok=True)
+                    destination = destination_dir / source.name
+                    source.replace(destination)
+                    moved.append(destination)
+
+        manifest = self.output_dir / "cleaned" / ".stage_manifest.json"
+        if manifest.exists():
+            destination_dir = quarantine_root / "cleaned"
+            destination_dir.mkdir(parents=True, exist_ok=True)
+            manifest.replace(destination_dir / manifest.name)
+        return moved
+
+    def _write_stage_manifest(self, summary: Dict[str, Any]) -> Path:
+        """Atomically record the cleaned files owned by this run."""
+        cleaned_dir = self.output_dir / "cleaned"
+        owned_paths = sorted(cleaned_dir.glob("cleaned_batch_*.json"))
+        owned_paths.extend(sorted(cleaned_dir.glob("cleaned_batch_*.jsonl")))
+        owned_paths = sorted(set(owned_paths), key=lambda path: path.name)
+        manifest = {
+            "schema_version": "1.0.0",
+            "stage": "clean",
+            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            "processing_complete": bool(summary.get("processing_complete", False)),
+            "owned_files": [path.name for path in owned_paths],
+            "content_sha256": {
+                path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                for path in owned_paths
+            },
+        }
+        manifest_path = cleaned_dir / ".stage_manifest.json"
+        temp_path = cleaned_dir / ".stage_manifest.json.tmp"
+        with open(temp_path, "w", encoding="utf-8") as handle:
+            json.dump(manifest, handle, indent=2, ensure_ascii=False)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(temp_path, manifest_path)
+        return manifest_path
+
     def _write_quarantine_file(self, file_path: str, error: StructuredError):
         """
         D4: Write failed file metadata to quarantine directory for reprocessing.
@@ -641,6 +694,7 @@ class BatchProcessor:
                         logger.info("File manifest validated - safe to resume")
 
         if not state:
+            self._prepare_fresh_run_outputs()
             logger.info("Building file manifest fingerprint for fresh run...")
             manifest_build_start = time.time()
             state = self.create_initial_state(files)
@@ -737,6 +791,8 @@ class BatchProcessor:
         
         # Generate detailed review report
         self._generate_detailed_review_report()
+
+        self._write_stage_manifest(summary)
         
         logger.info(f"Processing complete! Total time: {total_time:.2f}s")
         

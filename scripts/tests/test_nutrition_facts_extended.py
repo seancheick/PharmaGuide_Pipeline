@@ -199,6 +199,26 @@ class TestBracedAndBareUnits:
         ) is True
 
 
+class TestNutrientIdentityBinding:
+    """C6: panel nutrients bind by identity, never by a contained word."""
+
+    def test_sodium_benzoate_does_not_overwrite_sodium(self, normalizer) -> None:
+        result = normalizer._extract_nutritional_info([
+            {"name": "Sodium", "quantity": 140, "unit": "mg"},
+            {"name": "Sodium Benzoate", "quantity": 0, "unit": "mg"},
+        ])
+
+        assert result["sodium"] == {"amount": 140.0, "unit": "mg"}
+
+    def test_calories_from_fat_does_not_overwrite_total_calories(self, normalizer) -> None:
+        result = normalizer._extract_nutritional_info([
+            {"name": "Calories", "quantity": 120, "unit": "Calories"},
+            {"name": "Calories from Fat", "quantity": 15, "unit": "Calories"},
+        ])
+
+        assert result["calories"] == {"amount": 120.0, "unit": "Calories"}
+
+
 # ---------------------------------------------------------------------------
 # Data invariants — severity_level="low" on formulation sugar/fat entries
 # ---------------------------------------------------------------------------

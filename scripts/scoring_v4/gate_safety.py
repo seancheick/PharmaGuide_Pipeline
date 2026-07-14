@@ -494,6 +494,10 @@ def _apply_signal_policy(result: SafetyResult, sig: SafetySignal) -> None:
     """
     status = sig.status
 
+    if not sig.us_applicable:
+        _append_signal(result, "B0_REGIONAL_ADVISORY")
+        return
+
     # Inactive excipients with an acceptable policy are warning-only for the
     # soft statuses (e.g. a high_risk excipient used as a capsule colorant).
     if (sig.subject_role == "inactive"

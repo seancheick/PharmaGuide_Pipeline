@@ -298,7 +298,7 @@ class ProprietaryBlendDetector:
             elif isinstance(stmt, str):
                 search_fields.append(("statements", [{"name": stmt}]))
 
-        seen_blends = set()  # Avoid duplicate detection
+        seen_blends = set()  # DetectedBlend.dedupe_key values
 
         for field_name, field_data in search_fields:
             if not field_data:
@@ -308,9 +308,9 @@ class ProprietaryBlendDetector:
                 for i, item in enumerate(field_data):
                     source_field = f"{field_name}[{i}]"
                     blend = self._analyze_ingredient_for_blend(item, source_field, seen_blends)
-                    if blend:
+                    if blend and blend.dedupe_key not in seen_blends:
                         detected_blends.append(blend)
-                        seen_blends.add(blend.blend_name.lower())
+                        seen_blends.add(blend.dedupe_key)
 
         # Calculate totals
         total_penalty = sum(b.penalty_applicable for b in detected_blends)
@@ -372,10 +372,6 @@ class ProprietaryBlendDetector:
                 matched_text = match.group(0)
 
                 if not self._source_scope_allows_match(source_field, text_to_search):
-                    continue
-
-                # Skip if already seen
-                if matched_text.lower() in seen_blends:
                     continue
 
                 # Analyze disclosure level
@@ -495,7 +491,7 @@ class ProprietaryBlendDetector:
                     if amount_match:
                         result["with_amounts"].append({
                             "name": sub,
-                            "amount": float(amount_match.group(1)),
+                            "amount": float(amount_match.group(1).replace(",", "")),
                             "unit": amount_match.group(2)
                         })
                     else:

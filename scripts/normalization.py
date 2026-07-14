@@ -16,6 +16,31 @@ from typing import Tuple
 
 VERSION = "1.0.0"
 
+_MASS_UNIT_ALIASES = {
+    "g": "g",
+    "gm": "g",
+    "gram": "g",
+    "grams": "g",
+    "mg": "mg",
+    "milligram": "mg",
+    "milligrams": "mg",
+    "mcg": "mcg",
+    "ug": "mcg",
+    "µg": "mcg",
+    "μg": "mcg",
+    "microgram": "mcg",
+    "micrograms": "mcg",
+}
+
+
+@lru_cache(maxsize=128)
+def canonicalize_mass_unit(unit: str) -> str:
+    """Return the canonical ``g``/``mg``/``mcg`` token for known aliases."""
+    if not unit:
+        return ""
+    normalized = unicodedata.normalize("NFKC", str(unit)).lower().strip().rstrip(".")
+    return _MASS_UNIT_ALIASES.get(normalized, normalized)
+
 # Pre-built translation table for smart quotes, primes, and apostrophe variants.
 # Built once at module load — used by normalize_text() on every uncached call.
 # Includes prime characters (U+2032/2033) for chemical nomenclature

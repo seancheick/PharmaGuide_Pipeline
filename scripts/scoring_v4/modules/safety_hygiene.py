@@ -130,6 +130,8 @@ def _has_product_payload(product: Dict[str, Any]) -> bool:
 
 def _passes_no_b0_safety_match(product: Dict[str, Any]) -> bool:
     for sig in normalize_safety_signals(product):
+        if not sig.us_applicable:
+            continue
         if not (sig.policy_eligible or sig.review_required):
             continue
         if sig.status in {"banned", "high_risk", "watchlist"}:
@@ -139,6 +141,8 @@ def _passes_no_b0_safety_match(product: Dict[str, Any]) -> bool:
 
 def _passes_no_recalled_match(product: Dict[str, Any]) -> bool:
     for sig in normalize_safety_signals(product):
+        if not sig.us_applicable:
+            continue
         if not (sig.policy_eligible or sig.review_required):
             continue
         if sig.status == "recalled":

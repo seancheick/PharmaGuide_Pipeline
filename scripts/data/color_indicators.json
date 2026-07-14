@@ -4,7 +4,7 @@
     "purpose": "scoring_classification",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_color_indicators_contract.py",
-    "last_updated": "2026-02-18",
+    "last_updated": "2026-07-14",
     "total_natural": 140,
     "total_artificial": 120,
     "total_entries": 66
@@ -173,7 +173,8 @@
   ],
   "explicit_artificial_dyes": [
     "Allura Red",
-    "Amaranth",
+    "Amaranth Dye",
+    "Amaranth Colorant",
     "Azorubine",
     "Black PN",
     "Blue 1",

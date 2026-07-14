@@ -147,6 +147,43 @@ def test_safety_normalization_preserves_qualified_chromium_forms():
     assert "e171" in safety_normalize_text("Titanium Dioxide E171")
 
 
+def test_qualified_safety_entries_do_not_collapse_to_generic_nutrients():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from identity.safety import safety_normalize_text
+
+    normalizer = EnhancedDSLDNormalizer()
+
+    for generic in ("chromium", "vitamins", "b vitamins", "green tea"):
+        result = normalizer._safety_exact_lookup.get(safety_normalize_text(generic))
+        assert result is None, f"generic identity {generic!r} collapsed to {result!r}"
+
+
+def test_explicit_qualified_safety_labels_remain_reachable():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from identity.safety import safety_normalize_text
+
+    normalizer = EnhancedDSLDNormalizer()
+
+    expected = {
+        "Chromium (VI) — Hexavalent Chromium": "HM_CHROMIUM_HEXAVALENT",
+        "Green Tea Extract (High Dose)": "RISK_GREEN_TEA_EXTRACT_HIGH",
+    }
+    for label, entry_id in expected.items():
+        result = normalizer._safety_exact_lookup.get(safety_normalize_text(label))
+        assert result is not None
+        assert result["id"] == entry_id
+
+
+def test_generic_vitamin_terms_are_not_harmful_additive_matches():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+
+    assert normalizer._enhanced_harmful_check("vitamins")["category"] == "none"
+    assert normalizer._enhanced_harmful_check("b vitamins")["category"] == "none"
+    assert normalizer._enhanced_harmful_check("synthetic b vitamins")["category"] != "none"
+
+
 def test_derived_standard_name_is_not_safety_evidence_for_mapped_iqm_active():
     from build_final_db import (
         _active_banned_recall_evidence_terms,

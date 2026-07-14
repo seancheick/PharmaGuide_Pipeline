@@ -144,7 +144,11 @@ from match_ledger import (
     METHOD_UNII_FORM_EXACT,
     METHOD_ALTERNATE_NAME,
 )
-from identity.safety import has_explicit_form_evidence, safety_flag_from_banned_match
+from identity.safety import (
+    has_explicit_form_evidence,
+    safety_flag_from_banned_match,
+    safety_jurisdiction_projection,
+)
 
 # Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
 _CLEANER_MATCH_METHOD_MAP = {
@@ -9937,6 +9941,8 @@ class SupplementEnricherV3:
                         matched_variant=matched_variant,
                         evidence_text=candidate_ing_name,
                     ).to_dict()
+                    jurisdiction = safety_jurisdiction_projection(banned_item)
+                    safety_flag.update(jurisdiction)
 
                     found.append({
                         "ingredient": candidate_ing_name,
@@ -9972,6 +9978,7 @@ class SupplementEnricherV3:
                         "safety_warning": banned_item.get('safety_warning'),
                         "safety_warning_one_liner": banned_item.get('safety_warning_one_liner'),
                         "ban_context": banned_item.get('ban_context'),
+                        **jurisdiction,
                     })
 
         return {
@@ -10311,53 +10318,11 @@ class SupplementEnricherV3:
             parsed = label_text.get('parsed', {})
             parsed_allergens = parsed.get('allergens', [])
 
-            # CRITICAL FIX: Build set of negated allergen terms from multiple sources
-            # This prevents detecting allergens when product claims to be free of them
-            # Example: Product with "dairy-free" claim should NOT detect milk allergen
-            negated_terms = set()
-
-            # Source 1: labelText.parsed.allergenFree (from upstream parser)
-            allergen_free_raw = parsed.get('allergenFree', [])
-            for free_claim in allergen_free_raw:
-                if isinstance(free_claim, str):
-                    negated_terms.add(free_claim.lower().strip())
-
-            # Source 2: compliance_data.allergen_free_claims (authoritative enrichment source)
-            # This catches edge cases where parsed allergenFree might be incomplete
-            compliance_data = product.get('compliance_data', {})
-            for claim in compliance_data.get('allergen_free_claims', []):
-                if isinstance(claim, str):
-                    negated_terms.add(claim.lower().strip())
-
-            # Source 3: targetGroups for "X Free" claims
-            target_groups = product.get('targetGroups', [])
-            for tg in target_groups:
-                tg_text = tg if isinstance(tg, str) else (tg.get('text', '') if isinstance(tg, dict) else '')
-                tg_lower = tg_text.lower()
-                # Extract "X" from "X Free" or "X-Free" patterns
-                free_match = re.search(r'(\w+)[\s-]*free', tg_lower)
-                if free_match:
-                    negated_terms.add(free_match.group(1))
-
             for allergen_text in parsed_allergens:
                 if isinstance(allergen_text, str):
                     allergen_lower = allergen_text.lower().strip()
                     if allergen_lower in allergen_lookup:
                         allergen = allergen_lookup[allergen_lower]
-
-                        # Check if this allergen is negated by a "free" claim
-                        # Compare against allergen name AND all its aliases
-                        allergen_name_lower = allergen.get('standard_name', '').lower()
-                        allergen_aliases = [a.lower() for a in allergen.get('aliases', [])]
-                        all_allergen_terms = {allergen_lower, allergen_name_lower} | set(allergen_aliases)
-
-                        # If any allergen term matches any negated term, skip this allergen
-                        if negated_terms & all_allergen_terms:
-                            self.logger.debug(
-                                f"Skipping negated allergen '{allergen_text}' "
-                                f"(free claims: {negated_terms & all_allergen_terms})"
-                            )
-                            continue
 
                         found.append({
                             "allergen_id": allergen.get('id', ''),
@@ -10406,7 +10371,22 @@ class SupplementEnricherV3:
         - "Free from milk and soy" -> NOT added
         - "Does not contain milk" -> NOT added
         """
-        text_lower = text.lower()
+        text_lower = text.lower().strip()
+
+        # Scope negation to its own clause. A product can legitimately say
+        # "Made without gluten. Contains milk"; the first clause must not erase
+        # the independent positive declaration in the second.
+        clauses = [
+            clause.strip()
+            for clause in re.split(r'(?<=[.!?])\s+|;\s*|\s+\bbut\b\s+', text_lower)
+            if clause.strip()
+        ]
+        if len(clauses) > 1:
+            for clause in clauses:
+                self._parse_allergen_statement(
+                    clause, allergen_lookup, found, source
+                )
+            return
 
         # CRITICAL: Check for negation patterns FIRST - skip entire statement if negated
         # These statements list allergens the product is FREE FROM, not containing

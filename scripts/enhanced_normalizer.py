@@ -75,7 +75,7 @@ from constants import (
     PRODUCT_CONTEXT_CANONICAL_OVERRIDES,
     CANONICAL_EQUIVALENCES,
 )
-from identity.safety import has_explicit_form_evidence
+from identity.safety import has_explicit_form_evidence, safety_normalize_text
 from identity_integrity import build_canonical_identity_registry
 
 # Import the UnmappedIngredientTracker
@@ -1621,7 +1621,7 @@ class EnhancedDSLDNormalizer:
             self._group_exact_lookup[normalized] = payload
 
         def add_safety_exact(key: str, payload: Dict[str, Any]) -> None:
-            processed = self.matcher.preprocess_text(key)
+            processed = safety_normalize_text(key)
             if not processed:
                 return
             existing = self._safety_exact_lookup.get(processed)
@@ -3002,22 +3002,17 @@ class EnhancedDSLDNormalizer:
         for additive in self.harmful_additives.get("harmful_additives", []) or []:
             standard_name = additive["standard_name"]
 
-            # Add standard name variations
-            name_variations = self.matcher.generate_variations(
-                self.matcher.preprocess_text(standard_name)
-            )
-            for variation in name_variations:
-                self.harmful_lookup[variation] = additive
+            standard_key = safety_normalize_text(standard_name)
+            if standard_key:
+                self.harmful_lookup[standard_key] = additive
 
             # Add alias variations to harmful_lookup ONLY (not main ingredient lookup)
             # ARCHITECTURAL FIX: Keep harmful additive detection separate from ingredient identity mapping
             # This prevents "synthetic colors" alias from polluting the main lookup with variations like "colors"
             for alias in additive.get("aliases", []) or []:
-                alias_variations = self.matcher.generate_variations(
-                    self.matcher.preprocess_text(alias)
-                )
-                for variation in alias_variations:
-                    self.harmful_lookup[variation] = additive
+                alias_key = safety_normalize_text(alias)
+                if alias_key:
+                    self.harmful_lookup[alias_key] = additive
                 # NOTE: Removed addition to ingredient_alias_lookup to prevent false standardName mappings
                 # Harmful additive classification should happen in enrichment, not cleaning
         
@@ -3602,7 +3597,7 @@ class EnhancedDSLDNormalizer:
         # the label; it must not own canonical identity fields.
         harmful_info = self._enhanced_harmful_check(name)
         if harmful_info["category"] != "none":
-            processed_name = self.matcher.preprocess_text(name)
+            processed_name = safety_normalize_text(name)
             if processed_name in self.harmful_lookup:
                 canonical_name = self.harmful_lookup[processed_name].get("standard_name", name)
             else:
@@ -3632,7 +3627,7 @@ class EnhancedDSLDNormalizer:
             logger.debug(f"Found '{name}' in {result_type} database -> '{standard_name}' (priority: {fast_result.get('priority', 'N/A')})")
             return standard_name, True, forms
 
-        safety_result = self._safety_exact_lookup.get(self.matcher.preprocess_text(name), {})
+        safety_result = self._safety_exact_lookup.get(safety_normalize_text(name), {})
         if safety_result.get("mapped", False):
             result_type = safety_result.get("type", "unknown")
             standard_name = safety_result.get("standard_name", name)
@@ -3712,7 +3707,7 @@ class EnhancedDSLDNormalizer:
                     )
                     return standard_name, True, forms
                 safety_group_result = self._safety_exact_lookup.get(
-                    self.matcher.preprocess_text(ingredient_group), {}
+                    safety_normalize_text(ingredient_group), {}
                 )
                 if safety_group_result.get("mapped", False):
                     negative_terms = (
@@ -3863,7 +3858,7 @@ class EnhancedDSLDNormalizer:
             "severity_level": None
         }
 
-        processed_name = self.matcher.preprocess_text(name)
+        processed_name = safety_normalize_text(name)
 
         # Try exact match
         if processed_name in self.harmful_lookup:
@@ -4085,7 +4080,7 @@ class EnhancedDSLDNormalizer:
     def _safety_lookup_for_priority_classification(
         self, name: str, forms: List[str]
     ) -> Dict[str, Any]:
-        result = self._safety_exact_lookup.get(self.matcher.preprocess_text(name), {})
+        result = self._safety_exact_lookup.get(safety_normalize_text(name), {})
         if not result.get("mapped", False):
             return {}
         if result.get("type") != "banned":
@@ -5439,6 +5434,7 @@ class EnhancedDSLDNormalizer:
 
         for ing in ingredient_rows:
             name = ing.get("name", "").lower()
+            nutrient_name = re.sub(r"\s+", " ", name).strip()
 
             # Extract quantities
             quantity_data = ing.get("quantity", [])
@@ -5450,7 +5446,7 @@ class EnhancedDSLDNormalizer:
             quantity, unit, _, _ = self._process_quantity(quantity_data)
 
             # Capture nutritional facts
-            if "calorie" in name:
+            if re.fullmatch(r"(?:total\s+)?calories?", nutrient_name):
                 nutritional_info["calories"] = {
                     "amount": quantity,
                     "unit": unit or "kcal"
@@ -5475,7 +5471,7 @@ class EnhancedDSLDNormalizer:
                     "amount": quantity,
                     "unit": unit or "g"
                 }
-            elif "sodium" in name:
+            elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
                 nutritional_info["sodium"] = {
                     "amount": quantity,
                     "unit": unit or "mg"
@@ -8666,7 +8662,7 @@ class EnhancedDSLDNormalizer:
         # route it to a separate recognized bucket instead of the "add to IQM"
         # queue. Not dropped: a watchlist row may still be a real active.
         safety_lookup = getattr(self, "_safety_exact_lookup", None) or {}
-        safety_entry = safety_lookup.get(processed_name)
+        safety_entry = safety_lookup.get(safety_normalize_text(name))
         if safety_entry:
             detail["recognized_non_identity"] = True
             detail["recognition_standard_name"] = safety_entry.get("standard_name")
