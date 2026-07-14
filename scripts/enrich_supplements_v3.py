@@ -16770,7 +16770,7 @@ class SupplementEnricherV3:
                         re.search(r"\bfolic acid\b", _folate_label_text)
                     )
                     _explicit_non_folic_folate = bool(re.search(
-                        r"\b(?:methylfolate|5 mthf|methyltetrahydrofolate|metafolin|quatrefolic|food folate|natural folate)\b",
+                        r"\b(?:methylfolate|5 mthf|methyltetrahydrofolate|metafolin|quatrefolic|folinic|folinate|leucovorin|food folate|natural folate)\b",
                         _folate_label_text,
                     ))
                     unknown_form = (

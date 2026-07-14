@@ -110,6 +110,11 @@ def test_comma_joined_precaution_preserves_recommended_dose(
     [
         ("Methylfolate", "5-MTHF", "mcg", "non_folic_acid_folate_ul_basis"),
         ("Food Folate", "food folate", "mcg", "non_folic_acid_folate_ul_basis"),
+        # Folinic acid / calcium folinate / leucovorin are reduced folates, not
+        # synthetic folic acid — the synthetic folic-acid UL must not apply.
+        ("Folinic Acid", "folinic acid", "mcg DFE", "non_folic_acid_folate_ul_basis"),
+        ("Calcium Folinate", "calcium folinate", "mcg DFE", "non_folic_acid_folate_ul_basis"),
+        ("Leucovorin", "leucovorin", "mcg DFE", "non_folic_acid_folate_ul_basis"),
         ("Folate", "standard", "mcg DFE", "unknown_folate_form_lineage"),
     ],
 )
