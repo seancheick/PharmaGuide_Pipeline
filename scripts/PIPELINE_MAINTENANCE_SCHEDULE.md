@@ -649,18 +649,18 @@ python3 scripts/sync_to_supabase.py <build_output_dir>
 
 ---
 
-### 24. Regression Snapshot
+### 24. Frozen-Product Regression Gate
 
-**What:** Captures the current score state as a baseline for future comparisons.
+**What:** Compares current scored products with the reviewed frozen-product baseline.
 
 ```bash
-python3 scripts/regression_snapshot.py <scored_file>
+bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
 ```
 
 **What to do with results:**
 
-- The snapshot is saved automatically
-- Use it with shadow_score_comparison.py (task 17) in the next release cycle
+- Unexpected per-product drift blocks the release
+- Intentional drift is reviewed and frozen with `scripts/tests/freeze_contract_snapshots.py`
 
 ---
 
@@ -801,6 +801,6 @@ python3 -m pytest scripts/tests/ -v
 python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
 python3 scripts/sync_to_supabase.py <build_output_dir>
 
-# 9. Snapshot
-python3 scripts/regression_snapshot.py <scored_file>
+# 9. Frozen-product regression gate
+bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
 ```

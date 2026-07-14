@@ -1974,7 +1974,7 @@ These are imported by `enrich_supplements_v3.py` — you don't run them directly
 | `enrichment_contract_validator.py` | Validates enriched output has all required sections and correct structure.                                  | After enrichment changes     |
 | `coverage_gate.py`                 | Enforces quality thresholds (ingredient match rate ≥99.5%, scoring coverage, etc.).                         | Before release               |
 | `preflight.py`                     | Pre-run checks (dependencies, config files, data files present).                                            | Before pipeline run          |
-| `regression_snapshot.py`           | Captures scoring snapshots for before/after comparison.                                                     | Before scoring changes       |
+| `tests/test_scoring_snapshot_v1.py`| Compares scored products with the reviewed frozen-product baseline.                                        | Before release               |
 | `shadow_score_comparison.py`       | Phase 0 validation — compares old vs new scoring side-by-side.                                              | During scoring recalibration |
 
 ```bash
@@ -1990,8 +1990,8 @@ python3 scripts/coverage_gate.py <scored_file>
 # Pre-flight check
 python3 scripts/preflight.py
 
-# Capture regression snapshot before changes
-python3 scripts/regression_snapshot.py --output snapshots/before_change.json
+# Run the authoritative frozen-product regression gate
+bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
 
 # Compare scoring before/after
 python3 scripts/shadow_score_comparison.py --before snapshots/before.json --after snapshots/after.json

@@ -109,7 +109,7 @@ EVALUATION_STAGE_UNKNOWN = "unknown"
 #
 # CRITICAL: If you modify these, update:
 # - build() method in MatchLedgerBuilder
-# - regression_snapshot.py
+# - tests/test_scoring_snapshot_v1.py
 # - coverage_gate.py report generation
 # - Any UI components that display coverage
 # =============================================================================

@@ -188,7 +188,7 @@ scripts/
   build_interaction_db.py      # Interaction rules DB assembly
   unii_cache.py                # FDA UNII offline cache management
   shadow_score_comparison.py   # Historical comparison tool; v4 is now production
-  regression_snapshot.py       # Scoring regression snapshots
+  tests/test_scoring_snapshot_v1.py # Authoritative frozen-product regression gate
   preflight.py                 # Pre-pipeline validation checks
   unmapped_ingredient_tracker.py # Unmapped ingredient diagnostics
   config/
