@@ -92,6 +92,7 @@ from constants import (
     BRANDED_INGREDIENT_TOKENS,
 )
 from stage_manifest import select_stage_input_files
+from run_artifacts import ensure_run_id, report_run_directory
 from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
@@ -17854,8 +17855,14 @@ class SupplementEnricherV3:
             )
             raise
 
-    def process_all(self, input_path: str, output_dir: str) -> Dict:
+    def process_all(
+        self,
+        input_path: str,
+        output_dir: str,
+        run_id: Optional[str] = None,
+    ) -> Dict:
         """Process all files in input path"""
+        effective_run_id = ensure_run_id(run_id)
         script_dir = Path(__file__).parent
 
         # Handle relative paths
@@ -17914,6 +17921,7 @@ class SupplementEnricherV3:
         summary = {
             "processing_info": {
                 "version": self.VERSION,
+                "run_id": effective_run_id,
                 "files_processed": len(input_files),
                 "duration_seconds": round(duration, 2),
                 "timestamp": end_time.isoformat().replace("+00:00", "Z")
@@ -17930,8 +17938,10 @@ class SupplementEnricherV3:
         summary_file = None
 
         if generate_reports:
-            reports_dir = os.path.join(output_dir, reports_folder)
-            os.makedirs(reports_dir, exist_ok=True)
+            reports_dir = str(report_run_directory(
+                Path(output_dir) / reports_folder,
+                effective_run_id,
+            ))
 
             summary_file = os.path.join(
                 reports_dir,
@@ -18098,6 +18108,7 @@ Examples:
     parser.add_argument('--output-dir', help='Output directory (overrides config)')
     parser.add_argument('--dry-run', action='store_true',
                         help='Test run without writing files')
+    parser.add_argument('--run-id', help='Path-safe pipeline run identifier')
 
     args = parser.parse_args()
 
@@ -18124,7 +18135,7 @@ Examples:
             return
 
         # Process all files
-        enricher.process_all(input_path, output_dir)
+        enricher.process_all(input_path, output_dir, run_id=args.run_id)
 
     except FileNotFoundError as e:
         logging.error(f"File or directory not found: {e}")

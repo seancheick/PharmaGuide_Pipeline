@@ -31,6 +31,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
+from run_artifacts import (
+    atomic_write_json,
+    atomic_write_text,
+    ensure_run_id,
+    report_run_directory,
+)
+
 logger = logging.getLogger(__name__)
 
 
@@ -695,7 +702,8 @@ class CoverageGate:
         self,
         batch_result: BatchCoverageResult,
         output_dir: Path,
-        filename_prefix: str = "coverage_report"
+        filename_prefix: str = "coverage_report",
+        run_id: Optional[str] = None,
     ) -> Tuple[Path, Path]:
         """
         Generate coverage report files (JSON and Markdown).
@@ -708,20 +716,19 @@ class CoverageGate:
         Returns:
             Tuple of (json_path, markdown_path)
         """
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
+        effective_run_id = ensure_run_id(run_id)
+        output_dir = report_run_directory(Path(output_dir), effective_run_id)
 
         # Generate JSON report
         json_report = self._build_json_report(batch_result)
+        json_report["run_id"] = effective_run_id
         json_path = output_dir / f"{filename_prefix}.json"
-        with open(json_path, 'w') as f:
-            json.dump(json_report, f, indent=2)
+        atomic_write_json(json_path, json_report)
 
         # Generate Markdown report
         md_report = self._build_markdown_report(batch_result)
         md_path = output_dir / f"{filename_prefix}.md"
-        with open(md_path, 'w') as f:
-            f.write(md_report)
+        atomic_write_text(md_path, md_report)
 
         logger.info(f"Generated coverage reports: {json_path}, {md_path}")
         return json_path, md_path

@@ -45,6 +45,11 @@ from scoring_input_contract import (
     is_nutrition_only_product,
 )
 from stage_manifest import select_stage_input_files
+from run_artifacts import (
+    atomic_write_json,
+    ensure_run_id,
+    report_run_directory,
+)
 
 try:
     from match_ledger import (
@@ -5567,7 +5572,13 @@ class SupplementScorer:
             "output_file": output_file,
         }
 
-    def process_all(self, input_path: str, output_dir: str) -> Dict[str, Any]:
+    def process_all(
+        self,
+        input_path: str,
+        output_dir: str,
+        run_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        effective_run_id = ensure_run_id(run_id)
         script_dir = Path(__file__).parent
 
         if not os.path.isabs(input_path):
@@ -5624,6 +5635,7 @@ class SupplementScorer:
         summary = {
             "processing_info": {
                 "scoring_version": self.VERSION,
+                "run_id": effective_run_id,
                 "files_processed": len(input_files),
                 "duration_seconds": round((datetime.now(timezone.utc) - start_time).total_seconds(), 2),
                 "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -5646,15 +5658,16 @@ class SupplementScorer:
             },
         }
 
-        reports_dir = os.path.join(output_dir, "reports")
-        os.makedirs(reports_dir, exist_ok=True)
+        reports_dir = str(report_run_directory(
+            Path(output_dir) / "reports",
+            effective_run_id,
+        ))
 
         summary_file = os.path.join(
             reports_dir,
             "scoring_summary.json",
         )
-        with open(summary_file, "w", encoding="utf-8") as f:
-            json.dump(summary, f, indent=2, ensure_ascii=False)
+        atomic_write_json(Path(summary_file), summary)
 
         self.logger.info("Scoring complete: %s products", total_products)
         self.logger.info("Average quality: %.2f/80", overall_avg_80)
@@ -5789,6 +5802,7 @@ def main() -> None:
     parser.add_argument("--baseline-dir", help="Baseline scored directory for impact comparison")
     parser.add_argument("--impact-threshold", type=float, default=2.0)
     parser.add_argument("--impact-pct-threshold", type=float, default=10.0)
+    parser.add_argument("--run-id", help="Path-safe pipeline run identifier")
 
     args = parser.parse_args()
 
@@ -5828,11 +5842,13 @@ def main() -> None:
             threshold_pct_change=args.impact_pct_threshold,
         )
 
-        report_dir = Path(output_dir) / "reports"
-        report_dir.mkdir(parents=True, exist_ok=True)
+        effective_run_id = ensure_run_id(args.run_id)
+        report["run_id"] = effective_run_id
+        report_dir = report_run_directory(
+            Path(output_dir) / "reports", effective_run_id
+        )
         report_file = report_dir / "impact_report.json"
-        with open(report_file, "w", encoding="utf-8") as f:
-            json.dump(report, f, indent=2, ensure_ascii=False)
+        atomic_write_json(report_file, report)
 
         scorer.logger.info("Impact report saved: %s", report_file)
         scorer.logger.info("Gate status: %s", "PASS" if report["pass_gate"] else "FAIL")
@@ -5841,7 +5857,7 @@ def main() -> None:
             sys.exit(2)
         return
 
-    scorer.process_all(input_path, output_dir)
+    scorer.process_all(input_path, output_dir, run_id=args.run_id)
 
 
 if __name__ == "__main__":

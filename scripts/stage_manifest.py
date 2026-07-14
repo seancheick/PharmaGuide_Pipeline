@@ -9,6 +9,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, List, Sequence
 
+from run_artifacts import ensure_run_id
+
 
 MANIFEST_NAME = ".stage_manifest.json"
 SCHEMA_VERSION = "1.0.0"
@@ -28,6 +30,7 @@ def write_stage_manifest(
     owned_files: Iterable[Path],
     *,
     processing_complete: bool = True,
+    run_id: str | None = None,
 ) -> Path:
     """Atomically record the exact files produced by one stage run."""
     stage_dir = Path(stage_dir).resolve()
@@ -52,6 +55,8 @@ def write_stage_manifest(
         "owned_files": [path.name for path in resolved_files],
         "content_sha256": {path.name: _sha256(path) for path in resolved_files},
     }
+    if run_id is not None:
+        manifest["run_id"] = ensure_run_id(run_id)
     manifest_path = stage_dir / MANIFEST_NAME
     temp_path = stage_dir / f"{MANIFEST_NAME}.tmp"
     with open(temp_path, "w", encoding="utf-8") as handle:
@@ -67,6 +72,7 @@ def write_stage_manifest_from_directory(
     stage: str,
     *,
     patterns: Sequence[str] = ("*.json",),
+    run_id: str | None = None,
 ) -> Path:
     """Write ownership for the materialized top-level outputs of a stage."""
     stage_dir = Path(stage_dir).resolve()
@@ -81,7 +87,7 @@ def write_stage_manifest_from_directory(
     ) if stage_dir.is_dir() else []
     if not owned:
         raise StageManifestError(f"Stage produced no owned files: {stage_dir}")
-    return write_stage_manifest(stage_dir, stage, owned)
+    return write_stage_manifest(stage_dir, stage, owned, run_id=run_id)
 
 
 def quarantine_stage_outputs(

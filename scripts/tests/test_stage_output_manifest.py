@@ -92,6 +92,20 @@ def test_manifest_content_hash_is_verified(tmp_path: Path) -> None:
         raise AssertionError("changed content must invalidate stage ownership")
 
 
+def test_stage_manifest_can_be_correlated_to_pipeline_run(tmp_path: Path) -> None:
+    stage_dir = tmp_path / "enriched"
+    stage_dir.mkdir()
+    owned = stage_dir / "enriched_batch_1.json"
+    owned.write_text("[]", encoding="utf-8")
+
+    manifest_path = write_stage_manifest(
+        stage_dir, "enrich", [owned], run_id="review-run-1"
+    )
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert manifest["run_id"] == "review-run-1"
+
+
 def test_required_manifest_cannot_be_missing(tmp_path: Path) -> None:
     stage_dir = tmp_path / "enriched"
     stage_dir.mkdir()

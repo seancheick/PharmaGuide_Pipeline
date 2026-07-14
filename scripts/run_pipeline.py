@@ -46,6 +46,7 @@ from stage_manifest import (
     select_stage_input_files,
     write_stage_manifest_from_directory,
 )
+from run_artifacts import ensure_run_id
 
 # Setup logging
 LOG_FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -238,7 +239,13 @@ class PipelineRunner:
 
         return self._run_script(script, args, dry_run)
 
-    def run_enrich(self, cleaned_dir: str, output_dir: str, dry_run: bool = False) -> bool:
+    def run_enrich(
+        self,
+        cleaned_dir: str,
+        output_dir: str,
+        dry_run: bool = False,
+        run_id: Optional[str] = None,
+    ) -> bool:
         """
         Stage 2: Enrich cleaned data
 
@@ -256,6 +263,8 @@ class PipelineRunner:
             "--input-dir", cleaned_dir,
             "--output-dir", output_dir
         ]
+        if run_id:
+            args.extend(["--run-id", run_id])
 
         # Add config if exists
         config_path = self.script_dir / config_file
@@ -381,6 +390,7 @@ class PipelineRunner:
         dry_run: bool = False,
         strict_mode: bool = False,
         products: Optional[List[Dict[str, Any]]] = None,
+        run_id: Optional[str] = None,
     ) -> Tuple[bool, Optional[Dict]]:
         """
         Stage 2.5: Coverage gate check (AC5 compliance)
@@ -425,7 +435,9 @@ class PipelineRunner:
 
             # Generate reports
             report_dir = self._resolve_path(output_dir) / "reports"
-            json_path, md_path = gate.generate_report(result, report_dir)
+            json_path, md_path = gate.generate_report(
+                result, report_dir, run_id=run_id
+            )
 
             # Log summary
             logger.info(f"Coverage Gate Results:")
@@ -465,7 +477,13 @@ class PipelineRunner:
                 "gate": "coverage",
             }
 
-    def run_score(self, enriched_dir: str, output_dir: str, dry_run: bool = False) -> bool:
+    def run_score(
+        self,
+        enriched_dir: str,
+        output_dir: str,
+        dry_run: bool = False,
+        run_id: Optional[str] = None,
+    ) -> bool:
         """
         Stage 3: Score enriched data
 
@@ -483,6 +501,8 @@ class PipelineRunner:
             "--input-dir", enriched_dir,
             "--output-dir", output_dir
         ]
+        if run_id:
+            args.extend(["--run-id", run_id])
 
         # Add config if exists
         config_path = self.script_dir / config_file
@@ -500,6 +520,7 @@ class PipelineRunner:
         skip_coverage_gate: bool = False,
         coverage_gate_warn_only: bool = False,
         strict_release_gates: bool = False,
+        run_id: Optional[str] = None,
     ) -> Dict:
         """
         Run the complete pipeline or specified stages.
@@ -514,6 +535,7 @@ class PipelineRunner:
             Summary dict with timing and status
         """
         start_time = datetime.now(timezone.utc)
+        effective_run_id = ensure_run_id(run_id)
 
         # Use defaults if not provided
         stages = stages or self.config["stages"]
@@ -549,6 +571,7 @@ class PipelineRunner:
             "stages_completed": [],
             "stages_failed": [],
             "dry_run": dry_run,
+            "run_id": effective_run_id,
             "success": False
         }
 
@@ -601,11 +624,19 @@ class PipelineRunner:
                     return results
             if not dry_run:
                 quarantine_stage_outputs(Path(enriched_dir))
-            success = self.run_enrich(enrich_input, f"{output_prefix}_enriched", dry_run)
+            success = self.run_enrich(
+                enrich_input,
+                f"{output_prefix}_enriched",
+                dry_run,
+                run_id=effective_run_id,
+            )
             if success and not dry_run:
                 try:
                     write_stage_manifest_from_directory(
-                        Path(enriched_dir), "enrich", patterns=("*.json",)
+                        Path(enriched_dir),
+                        "enrich",
+                        patterns=("*.json",),
+                        run_id=effective_run_id,
                     )
                 except StageManifestError as exc:
                     logger.error("Enrichment ownership manifest failed: %s", exc)
@@ -649,6 +680,7 @@ class PipelineRunner:
                 dry_run=dry_run,
                 strict_mode=strict_release_gates,
                 products=products,
+                run_id=effective_run_id,
             )
             results["coverage_gate"] = coverage_summary
 
@@ -673,11 +705,19 @@ class PipelineRunner:
             scored_output_dir = Path(scored_dir) / "scored"
             if not dry_run:
                 quarantine_stage_outputs(scored_output_dir)
-            success = self.run_score(score_input, scored_dir, dry_run)
+            success = self.run_score(
+                score_input,
+                scored_dir,
+                dry_run,
+                run_id=effective_run_id,
+            )
             if success and not dry_run:
                 try:
                     write_stage_manifest_from_directory(
-                        scored_output_dir, "score", patterns=("*.json",)
+                        scored_output_dir,
+                        "score",
+                        patterns=("*.json",),
+                        run_id=effective_run_id,
                     )
                 except StageManifestError as exc:
                     logger.error("Scoring ownership manifest failed: %s", exc)
@@ -774,6 +814,10 @@ Pipeline Flow:
         action='store_true',
         help='Fail closed on every required pre-score gate and warning',
     )
+    parser.add_argument(
+        '--run-id',
+        help='Path-safe run ID shared by enrichment, gates, scoring, and reports',
+    )
 
     args = parser.parse_args()
 
@@ -805,6 +849,7 @@ Pipeline Flow:
         skip_coverage_gate=args.skip_coverage_gate,
         coverage_gate_warn_only=args.coverage_gate_warn_only,
         strict_release_gates=args.strict_release_gates,
+        run_id=args.run_id,
     )
 
     # Exit with appropriate code

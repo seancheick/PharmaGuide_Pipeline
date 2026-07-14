@@ -113,6 +113,7 @@ def test_pipeline_runs_contract_then_coverage_on_same_loaded_products(
         dry_run=False,
         strict_mode=False,
         products=None,
+        run_id=None,
     ):
         calls.append(("coverage", products, strict_mode))
         return True, {"ok": True}
@@ -167,3 +168,26 @@ def test_strict_enrichment_requires_clean_stage_manifest(tmp_path, monkeypatch):
 
     assert result["success"] is False
     assert result["stages_failed"] == ["clean_stage_ownership"]
+
+
+def test_pipeline_propagates_one_run_id_to_every_stage(tmp_path, monkeypatch):
+    runner = PipelineRunner()
+    captured = []
+    monkeypatch.setattr(runner, "_validate_data_dir", lambda: True)
+    monkeypatch.setattr(runner, "_validate_input_dir", lambda *_args: True)
+
+    def fake_run_script(_script, args, _dry_run=False):
+        captured.append(args[args.index("--run-id") + 1])
+        return True
+
+    monkeypatch.setattr(runner, "_run_script", fake_run_script)
+
+    result = runner.run_pipeline(
+        stages=["enrich", "score"],
+        output_prefix=str(tmp_path / "output_Test"),
+        dry_run=True,
+        run_id="review-run-1",
+    )
+
+    assert result["run_id"] == "review-run-1"
+    assert captured == ["review-run-1", "review-run-1"]
