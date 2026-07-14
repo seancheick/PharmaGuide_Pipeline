@@ -7,7 +7,7 @@
     "review_policy": "Every entry must carry: dsld_id, brand, product_name (for human-readable audit trail), raw_ingredient_text (the label-printed text being corrected), corrected_ingredient_text (the canonical text the cleaner should see instead), evidence (free-text rationale with regulatory citations), sources (authoritative URLs — FDA, NIH, DailyMed, etc.), reviewer (signed by a clinician with the date), review_date (ISO 8601 YYYY-MM-DD).",
     "unmatched_drug_tokens_policy": "When a row's raw_ingredient_text matches a known regulated-drug name (e.g., 'Insulin', 'Acetaminophen', 'Ibuprofen') and there is NO matching override for the product, the row must NOT be silently mapped. The cleaner emits the row to a quarantine path with reason='requires_human_review_drug_token_in_supplement' and excludes the product from scoring. New occurrences enter the reviewer pipeline via the same schema.",
     "last_updated": "2026-07-13",
-    "total_entries": 2,
+    "total_entries": 3,
     "loaded_by": "scripts/enhanced_normalizer.py via _load_label_corrections (cached on first product)"
   },
   "corrections": {
@@ -44,6 +44,23 @@
       "review_date": "2026-07-13",
       "scope": "dsld_id_only",
       "provenance_tag": "source_unii_correction"
+    },
+    "64551": {
+      "brand": "Nature's Way",
+      "product_name": "Standardized Triphala",
+      "raw_ingredient_text": "Tropical Almond",
+      "corrected_ingredient_text": "Tropical Almond (Terminalia chebula)",
+      "correction_fields": [
+        "name"
+      ],
+      "evidence": "The official DSLD label image prints 'Tropical Almond (Terminalia chebula) 500 mg'. The DSLD JSON API row retained only 'Tropical Almond', omitting the parenthetical Latin identity and leaving an otherwise ambiguous common name. This correction restores the source label text exactly before cleaner identity resolution; it does not create a global alias for bare 'Tropical Almond'.",
+      "sources": [
+        "https://api.ods.od.nih.gov/dsld/s3/pdf/64551.pdf"
+      ],
+      "reviewer": "PharmaGuide data integrity review (Sean Cheick, owner of record)",
+      "review_date": "2026-07-13",
+      "scope": "dsld_id_only",
+      "provenance_tag": "source_label_omission_correction"
     }
   }
 }

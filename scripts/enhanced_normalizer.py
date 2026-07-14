@@ -3464,6 +3464,26 @@ class EnhancedDSLDNormalizer:
                         mapped_forms.append(self.ingredient_forms_lookup[processed_form])
                 
                 return mapped_name, True, mapped_forms or forms
+
+        # Some DSLD API rows preserve a label's common name plus its
+        # authoritative botanical identity, e.g. ``Tropical Almond
+        # (Terminalia chebula)``. Keep the complete label text for display,
+        # but allow the exact Latin binomial/trinomial to resolve identity.
+        # The capitalization/shape guard and botanical-only lookup prevent
+        # generic form parentheticals such as ``(as Citrate)`` from becoming
+        # an independent identity fallback.
+        latin_parenthetical = re.search(
+            r"\(([A-Z][a-z]+(?:\s+(?:x\s+)?[a-z][a-z-]+){1,2})\)",
+            name,
+        )
+        if latin_parenthetical:
+            latin_name = latin_parenthetical.group(1)
+            latin_result = self._fast_ingredient_lookup(latin_name)
+            if latin_result.get("type") in {
+                "botanical",
+                "standardized_botanical",
+            }:
+                return latin_result["standard_name"], True, forms or []
         
         # NOTE: Fuzzy matching for active ingredients is INTENTIONALLY DISABLED for safety.
         # The "active" category is NOT in safe_fuzzy_categories, so this returns (None, 0).

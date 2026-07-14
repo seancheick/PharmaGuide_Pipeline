@@ -209,3 +209,70 @@ def test_product_scoped_correction_removes_misattributed_source_unii(normalizer)
         "original_unii_code": "DTI67O9503",
         "corrected_unii_code": None,
     }
+
+
+def test_botanical_latin_parenthetical_resolves_without_replacing_label_name(normalizer):
+    raw_product = _make_raw_product(99999997, [])
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row(
+                "Tropical Almond (Terminalia chebula)",
+                category="botanical",
+            ),
+            "ingredientGroup": "Tropical Almond",
+            "quantity": [{"quantity": 500, "unit": "mg"}],
+            "nestedRows": [],
+            "forms": [],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+
+    active = normalized["activeIngredients"][0]
+    assert active["raw_source_text"] == "Tropical Almond (Terminalia chebula)"
+    assert active["name"] == "Tropical Almond (Terminalia chebula)"
+    assert active["standardName"] == "Chebulic Myrobalan"
+    assert active["canonical_id"] == "chebulic_myrobalan"
+    assert active["canonical_source_db"] == "botanical_ingredients"
+
+
+def test_nested_64551_row_restores_omitted_latin_identity(normalizer):
+    raw_product = _make_raw_product(64551, [])
+    raw_product["fullName"] = "Standardized Triphala"
+    raw_product["brandName"] = "Nature's Way"
+    raw_product["ingredientRows"] = [
+        {
+            **_make_ingredient_row(
+                "Triphala fruit extract Blend",
+                category="blend",
+            ),
+            "ingredientGroup": "Blend (Herb/Botanical)",
+            "quantity": [{"quantity": 1.5, "unit": "Gram(s)"}],
+            "forms": [],
+            "nestedRows": [
+                {
+                    **_make_ingredient_row(
+                        "Tropical Almond",
+                        category="botanical",
+                    ),
+                    "ingredientGroup": "Tropical Almond",
+                    "quantity": [{"quantity": 500, "unit": "mg"}],
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ]
+
+    normalized = normalizer.normalize_product(raw_product)
+
+    active = next(
+        row for row in normalized["activeIngredients"]
+        if row.get("canonical_id") == "chebulic_myrobalan"
+    )
+    assert active["raw_source_text"] == "Tropical Almond (Terminalia chebula)"
+    assert active["source_correction"] == {
+        "provenance_tag": "source_label_omission_correction",
+        "original_ingredient_text": "Tropical Almond",
+        "corrected_ingredient_text": "Tropical Almond (Terminalia chebula)",
+    }
