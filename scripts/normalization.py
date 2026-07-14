@@ -39,6 +39,7 @@ def canonicalize_mass_unit(unit: str) -> str:
     if not unit:
         return ""
     normalized = unicodedata.normalize("NFKC", str(unit)).lower().strip().rstrip(".")
+    normalized = re.sub(r"\(s\)$", "s", normalized)
     return _MASS_UNIT_ALIASES.get(normalized, normalized)
 
 # Pre-built translation table for smart quotes, primes, and apostrophe variants.

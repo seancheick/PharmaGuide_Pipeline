@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
-"""Formulation-variant magnitudes config hoist (2026-07-04) — drift + value guards.
-
-PURE REFACTOR: category-specific formulation/profile caps, form-quality points,
-standardization tiers and botanical dose-band credits across the variant
-score_formulation / botanical / collagen modules moved into
-scoring_v4/config/quality_score.json (`formulation_variant_magnitudes.<module>`).
-Empty diff (846 entrypoint×product pairs) verified neutral.
-
-Pins config to pre-hoist values + runtime parity; canonical-ID sets stay in code.
-"""
+"""Formulation-variant configuration contract and runtime parity guards."""
 import json
 import sys
 from pathlib import Path
@@ -28,7 +19,7 @@ ORIGINAL = {
     "multi_prenatal": {
         "cap_formulation": 25.0, "formulation_presence_floor": 2.0, "cap_panel_form_quality": 12.0,
         "cap_premium_form_diversity": 4.0, "cap_key_form_support": 5.0, "cap_panel_disclosure_structure": 2.0,
-        "cap_dosage_form_suitability": 2.0, "panel_form_smoothing_factor": 0.7, "panel_form_neutral_floor": 9.0,
+        "cap_dosage_form_suitability": 2.0, "panel_form_neutral_floor": 9.0,
         "bio_score_max": 15.0, "premium_form_threshold": 12.0, "premium_points_per_additional": 0.5,
         "gummy_formulation_penalty": 3.0,
     },
@@ -47,7 +38,7 @@ ORIGINAL = {
 }
 
 
-def test_config_matches_pre_hoist_values():
+def test_config_matches_reviewed_values():
     for mod, vals in ORIGINAL.items():
         assert FVM[mod] == vals, f"formulation_variant_magnitudes.{mod} drifted from pre-hoist values"
 
@@ -55,7 +46,7 @@ def test_config_matches_pre_hoist_values():
 def test_runtime_constants_read_from_config_no_drift():
     assert multi_prenatal_formulation.CAP_FORMULATION == 25.0
     assert multi_prenatal_formulation.GUMMY_FORMULATION_PENALTY == 3.0
-    assert multi_prenatal_formulation.PANEL_FORM_SMOOTHING_FACTOR == 0.7
+    assert multi_prenatal_formulation.PANEL_FORM_NEUTRAL_FLOOR == 9.0
     assert omega_formulation.DATA_LIMITED_FORM_MIN_EPA_DHA_MG == 750.0
     assert probiotic_formulation.CAP_FORMULATION == 25.0
     assert sports_formulation.DIMENSION_CAP == 30.0

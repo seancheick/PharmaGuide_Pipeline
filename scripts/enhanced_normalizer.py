@@ -5433,6 +5433,8 @@ class EnhancedDSLDNormalizer:
         nutritional_info = {}
 
         for ing in ingredient_rows:
+            if not isinstance(ing, dict):
+                continue
             name = ing.get("name", "").lower()
             nutrient_name = re.sub(r"\s+", " ", name).strip()
 
@@ -5485,6 +5487,8 @@ class EnhancedDSLDNormalizer:
             # P0.2: Check nestedRows for sugar/fiber (commonly nested under Total Carbohydrates)
             nested_rows = ing.get("nestedRows", [])
             for nested in nested_rows:
+                if not isinstance(nested, dict):
+                    continue
                 nested_name = nested.get("name", "").lower()
 
                 # Process nested quantity
@@ -6403,7 +6407,9 @@ class EnhancedDSLDNormalizer:
             "raw_taxonomy": raw_taxonomy,
 
             # Basic ingredient info
-            "name": branded_token if branded_token else name,  # Use branded token as primary name if extracted
+            # Label identity is immutable. A verified brand token is separate
+            # matching metadata and must never replace the printed name.
+            "name": name,
             "standardName": standard_name,  # From our database mapping
             "ingredientGroup": ing.get("ingredientGroup"),  # PRESERVE from DSLD (even if wrong)
 

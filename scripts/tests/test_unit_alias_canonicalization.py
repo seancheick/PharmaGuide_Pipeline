@@ -17,7 +17,10 @@ def converter() -> UnitConverter:
     return UnitConverter()
 
 
-@pytest.mark.parametrize("alias", ["mcg", "ug", "µg", "μg", "microgram", "micrograms"])
+@pytest.mark.parametrize(
+    "alias",
+    ["mcg", "ug", "µg", "μg", "microgram", "micrograms", "Microgram(s)"],
+)
 def test_microgram_aliases_share_one_canonical_unit(converter: UnitConverter, alias: str) -> None:
     result = converter.convert_mass(25, alias, "mcg")
 
@@ -25,7 +28,7 @@ def test_microgram_aliases_share_one_canonical_unit(converter: UnitConverter, al
     assert result.converted_value == pytest.approx(25)
 
 
-@pytest.mark.parametrize("alias", ["g", "gram", "grams", "gm"])
+@pytest.mark.parametrize("alias", ["g", "gram", "grams", "gm", "Gram(s)"])
 def test_gram_aliases_convert_to_milligrams(converter: UnitConverter, alias: str) -> None:
     result = converter.convert_mass(2, alias, "mg")
 
@@ -46,3 +49,10 @@ def test_nutrient_conversion_uses_the_same_alias_canonicalizer(
     assert result.success is True
     assert result.converted_value == pytest.approx(500)
     assert result.converted_unit == "mcg"
+
+
+def test_parenthetical_milligram_alias_is_canonicalized(converter: UnitConverter) -> None:
+    result = converter.convert_mass(2, "Milligram(s)", "mg")
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(2)

@@ -30,6 +30,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
+from normalization import canonicalize_mass_unit
+
 logger = logging.getLogger(__name__)
 
 
@@ -48,13 +50,6 @@ ADEQUACY_BANDS = {
 # because unit_converter.convert_nutrient is a no-op for plain minerals. These
 # support converting the label amount into the table unit before any pct math.
 _MASS_TO_MCG = {"g": 1_000_000.0, "mg": 1_000.0, "mcg": 1.0}
-_MASS_UNIT_SYNONYMS = {
-    "g": "g", "gram": "g", "grams": "g", "gm": "g",
-    "mg": "mg", "milligram": "mg", "milligrams": "mg",
-    "mcg": "mcg", "ug": "mcg", "microgram": "mcg", "micrograms": "mcg",
-}
-
-
 @dataclass
 class NutrientAdequacyResult:
     """Result of nutrient adequacy calculation."""
@@ -163,6 +158,7 @@ class RDAULCalculator:
         "female": "Female",
         "f": "Female",
         "both": "Male",  # Use male as default when both
+        "adult_neutral": "Adult neutral",
         "default": "Male"
     }
 
@@ -239,10 +235,11 @@ class RDAULCalculator:
         """
         if not unit:
             return None
-        s = str(unit).strip().lower().replace("µg", "mcg").replace("μg", "mcg")
+        s = str(unit).strip().lower()
         parts = s.split()
         token = parts[0] if parts else s
-        return _MASS_UNIT_SYNONYMS.get(token)
+        canonical = canonicalize_mass_unit(token)
+        return canonical if canonical in _MASS_TO_MCG else None
 
     @staticmethod
     def _reconcile_amount_to_reference(
@@ -513,6 +510,31 @@ class RDAULCalculator:
     ) -> Tuple[Optional[float], Optional[float]]:
         """Get RDA/AI and UL for specific age/sex group."""
         data_list = nutrient_data.get("data", [])
+
+        if sex == "Adult neutral":
+            adult_rows = [
+                entry
+                for entry in data_list
+                if entry.get("group") in {"Male", "Female"}
+                and entry.get("age_range") == age_group
+            ]
+            rda_values = [
+                entry.get("rda_ai")
+                for entry in adult_rows
+                if isinstance(entry.get("rda_ai"), (int, float))
+            ]
+            ul_values = [
+                entry.get("ul")
+                for entry in adult_rows
+                if isinstance(entry.get("ul"), (int, float))
+            ]
+            if adult_rows:
+                # Compatibility profile: adequacy must satisfy the higher
+                # sourced adult reference; safety uses the lower sourced UL.
+                return (
+                    max(rda_values) if rda_values else None,
+                    min(ul_values) if ul_values else None,
+                )
 
         for entry in data_list:
             if entry.get("group") == sex and entry.get("age_range") == age_group:

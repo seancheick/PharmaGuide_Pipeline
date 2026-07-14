@@ -209,14 +209,14 @@ class UnitConverter:
                         original_value=amount,
                         original_unit=from_unit,
                         converted_value=amount,
-                        converted_unit=from_unit,
+                        converted_unit=from_unit_lower,
                         conversion_rule_id="identity_mass_passthrough",
                         conversion_factor=1.0,
                         nutrient_detected=nutrient,
                         form_detected=None,
                         form_detection_source="no_conversion_needed",
                         confidence="high",
-                        notes=[f"Nutrient already in standard mass unit ({from_unit}); no conversion rule required"]
+                        notes=[f"Nutrient already in standard mass unit ({from_unit_lower}); no conversion rule required"]
                     )
                 # Different target unit — try mass conversion (e.g. mg → mcg)
                 mass_result = self.convert_mass(amount, from_unit, target_for_fallback)

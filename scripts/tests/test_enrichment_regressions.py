@@ -561,7 +561,10 @@ class TestRDAULPerDayBasis:
         adequacy = result['adequacy_results'][0]
         assert adequacy['per_day_min'] == pytest.approx(per_serving)
         assert adequacy['per_day_max'] == pytest.approx(per_serving * max_servings)
-        assert adequacy['amount'] == pytest.approx(per_serving * max_servings)
+        assert adequacy['amount'] == pytest.approx(per_serving)
+        assert adequacy['safety_exposure']['per_day'] == pytest.approx(
+            per_serving * max_servings
+        )
         assert result['has_over_ul'] is True
         assert result['safety_flags'][0]['amount'] == pytest.approx(per_serving * max_servings)
 
@@ -635,9 +638,9 @@ class TestNonRdaNutrientSkipsUL:
         assert adequacy['pct_rda'] is not None
         assert adequacy['pct_ul'] is None
         analyzed = result['analyzed_ingredients'][0]
-        assert analyzed['conversion_evidence']['confidence'] == 'not_applicable'
-        assert analyzed['conversion_evidence']['nonfatal_reason'] == 'no_official_ul_reference'
-        assert result['conversion_evidence'][0]['confidence'] == 'not_applicable'
+        assert analyzed['conversion_evidence']['confidence'] == 'high'
+        assert analyzed['converted_unit'] == 'g'
+        assert result['conversion_evidence'][0]['confidence'] == 'high'
 
 
 class TestManufacturerNormalization:

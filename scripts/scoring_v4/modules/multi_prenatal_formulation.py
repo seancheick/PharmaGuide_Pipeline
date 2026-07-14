@@ -3,9 +3,8 @@
 Formulation for multis and prenatals is panel-aware:
 
   - Score average form quality across dose-bearing micronutrients.
-  - Smooth multivitamin bio_score toward the v3 neutral floor so products
-    with many standard-but-acceptable nutrient forms are not punished too
-    hard.
+  - Apply the neutral value as a true floor without reducing panels whose
+    sourced form quality is already higher.
   - Cap premium-form diversity so stacked panels cannot inflate endlessly.
   - Credit a small set of key form signals (methylfolate, methyl-B12, D3,
     K2, chelated minerals) without treating dose adequacy as formulation.
@@ -45,7 +44,6 @@ CAP_KEY_FORM_SUPPORT = _FVM["cap_key_form_support"]
 CAP_PANEL_DISCLOSURE_STRUCTURE = _FVM["cap_panel_disclosure_structure"]
 CAP_DOSAGE_FORM_SUITABILITY = _FVM["cap_dosage_form_suitability"]
 
-PANEL_FORM_SMOOTHING_FACTOR = _FVM["panel_form_smoothing_factor"]
 PANEL_FORM_NEUTRAL_FLOOR = _FVM["panel_form_neutral_floor"]
 BIO_SCORE_MAX = _FVM["bio_score_max"]
 PREMIUM_FORM_THRESHOLD = _FVM["premium_form_threshold"]
@@ -162,11 +160,7 @@ def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | None, float | None]:
-    """Panel-wide A1 analogue. Mirrors v3's multivitamin smoothing:
-
-        smoothed_avg = 0.7 * avg_bio_score + 0.3 * 9
-        score = smoothed_avg / 15 * 12
-    """
+    """Panel-wide A1 analogue with a non-decreasing neutral floor."""
     rows = _scorable_ingredients(product)
     if not rows:
         return 0.0, None, None
@@ -185,9 +179,9 @@ def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | N
     if denom <= 0:
         return 0.0, None, None
     avg = sum(score * weight for score, weight in weighted) / denom
-    smoothed = PANEL_FORM_SMOOTHING_FACTOR * avg + (1.0 - PANEL_FORM_SMOOTHING_FACTOR) * PANEL_FORM_NEUTRAL_FLOOR
-    contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (smoothed / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
-    return _round(contribution), _round(avg), _round(smoothed)
+    effective = max(avg, PANEL_FORM_NEUTRAL_FLOOR)
+    contribution = _clamp(0.0, CAP_PANEL_FORM_QUALITY, (effective / BIO_SCORE_MAX) * CAP_PANEL_FORM_QUALITY)
+    return _round(contribution), _round(avg), _round(effective)
 
 
 def _score_premium_form_diversity(product: Dict[str, Any]) -> tuple[float, int]:

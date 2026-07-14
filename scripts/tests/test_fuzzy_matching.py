@@ -117,61 +117,16 @@ class TestFuzzyMatchIngredient:
             assert result["score"] >= 90
 
 
-class TestEnrichmentFuzzyIntegration:
-    """Test fuzzy matching integration in SupplementEnricherV3."""
+class TestEnrichmentIdentityMatchingPolicy:
+    """Ingredient identity must not expose a fuzzy fallback."""
 
     @pytest.fixture
     def enricher(self):
         from enrich_supplements_v3 import SupplementEnricherV3
         return SupplementEnricherV3()
 
-    def test_fuzzy_ingredient_match_exists(self, enricher):
-        """Verify _fuzzy_ingredient_match method exists."""
-        assert hasattr(enricher, '_fuzzy_ingredient_match')
-
-    def test_fuzzy_ingredient_match_basic(self, enricher):
-        """Test basic fuzzy ingredient matching."""
-        result = enricher._fuzzy_ingredient_match(
-            "Methylcobalamin",
-            "Methylcobalamin",
-            ["Methyl B12", "MeB12"]
-        )
-        assert result is not None
-        assert result["score"] == 1.0  # Exact match normalized
-
-    def test_fuzzy_ingredient_match_alias(self, enricher):
-        """Test fuzzy matching against aliases."""
-        result = enricher._fuzzy_ingredient_match(
-            "Methyl B12",
-            "Methylcobalamin",
-            ["Methyl B12", "MeB12"]
-        )
-        assert result is not None
-        assert result["score"] >= 0.85
-
-    def test_fuzzy_ingredient_match_threshold(self, enricher):
-        """Test that low-score matches are rejected."""
-        result = enricher._fuzzy_ingredient_match(
-            "Calcium Citrate",  # Unrelated
-            "Methylcobalamin",
-            ["Methyl B12"]
-        )
-        assert result is None
-
-    def test_fuzzy_ingredient_match_review_flag(self, enricher):
-        """Test that borderline matches are flagged for review."""
-        # This tests with a slightly misspelled name
-        result = enricher._fuzzy_ingredient_match(
-            "Methylcobalamn",  # Typo
-            "Methylcobalamin",
-            [],
-            threshold=0.80,
-            review_threshold=0.95
-        )
-        if result:
-            # Should be flagged for review if score < 0.95
-            if result["score"] < 0.95:
-                assert result["needs_review"] is True
+    def test_fuzzy_ingredient_identity_fallback_is_absent(self, enricher):
+        assert not hasattr(enricher, '_fuzzy_ingredient_match')
 
 
 class TestBannedSubstancesNoFuzzy:

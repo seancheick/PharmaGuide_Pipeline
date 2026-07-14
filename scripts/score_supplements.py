@@ -1578,13 +1578,10 @@ class SupplementScorer:
         avg_raw = sum(s * w for s, w in weighted_values) / denom
         a1_cfg = self.config.get("section_A_ingredient_quality", {}).get("A1_bioavailability_form", {})
         if supp_type in self._MULTI_TYPES:
-            smoothing = as_float(a1_cfg.get("multivitamin_smoothing_factor"), 0.7)
-            if smoothing is None or smoothing < 0.0 or smoothing > 1.0:
-                smoothing = 0.7
             floor = as_float(a1_cfg.get("multivitamin_floor"), 9.0)
             if floor is None:
                 floor = 9.0
-            avg_raw = smoothing * avg_raw + (1.0 - smoothing) * floor
+            avg_raw = max(avg_raw, floor)
 
         max_points = as_float(
             a1_cfg.get("max"),
