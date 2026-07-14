@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life MyKind Organics",
   "breakdown": {
     "A": {
-      "A1": 10.28,
+      "A1": 10.33,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
@@ -16,7 +16,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 13.53,
+      "core_quality": 13.58,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -40,7 +40,7 @@
             "strain_identity": true
           },
           "strict_gate_inputs": {
-            "clinical_strain_count": 2,
+            "clinical_strain_count": 1,
             "guarantee_type": null,
             "is_probiotic_product": true,
             "strain_id_count": 0,
@@ -53,7 +53,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 13.53
+      "score": 13.58
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -176,7 +176,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 44.16,
+    "quality_raw": 44.21,
     "violation_penalty": 0.0
   },
   "dsld_id": "204571",
@@ -190,7 +190,7 @@
   "output_schema_version": "3.6.0",
   "product_name": "Adrenal Daily Balance",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 55.2,
+  "score_100_equivalent": 55.3,
   "score_80": 44.2,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
@@ -198,9 +198,9 @@
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 13.53,
+      "core_quality": 13.58,
       "max": 25.0,
-      "score": 13.53
+      "score": 13.58
     },
     "B_safety_purity": {
       "max": 30.0,

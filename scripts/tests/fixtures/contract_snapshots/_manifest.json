@@ -399,6 +399,24 @@
         "Fresh full-pipeline batch run"
       ],
       "notes": "Re-froze two May fixtures after the fresh pipeline materialized the existing low-severity inactive-additive data. Spring Valley Korean Panax Ginseng (239741) now has three low-tier processing-aid penalties totaling 1.5 rather than stale 2.0. Garden of Life Wobenzym N Joint Health (321405) now has one low-tier stearic-acid penalty of 0.5 rather than stale 1.0. The current reference data and B1 risk map already carried these low tiers when the prior fixtures were frozen; this is a stale-artifact correction, not a new clinical downgrade. Both products remain SAFE with the same grade."
+    },
+    {
+      "date": "2026-07-13",
+      "action": "refrozen_reviewed_identity_and_probiotic_corrections",
+      "products": [
+        180417,
+        288344,
+        241353,
+        204571,
+        274498,
+        298070
+      ],
+      "sprints_covered": [
+        "Canonical identity specificity and explicit-form preservation",
+        "Exact probiotic strain-code matching and CFU provenance",
+        "Probiotic blend/header deduplication and taxonomy routing"
+      ],
+      "notes": "Re-froze only the six products whose post-fix drift was reviewed against freshly regenerated brand outputs. Nature Made Ginkgo (180417) now retains its IQM-backed ginkgo active instead of being incorrectly stamped recognized_non_scorable. Vitamin Code Men (288344) and Raw Organic Perfect Food (241353) preserve the reviewed moderate clinical-support metadata rather than overstating it as high; scores are unchanged. Adrenal Daily Balance (204571) removes one false strain-specific clinical match and carries a 0.05 A1 calibration change. Plant Collagen Builder (274498) retains its explicit beta-carotene child identity instead of being collapsed into parent Vitamin A; the remaining score change is 47.0 to 46.9 from current IQM calibration. FloraMend (298070) is correctly routed as a probiotic using its label-derived 5 billion live cells at expiration, three disclosed strains, zero unsupported clinical-strain claims, and one physical proprietary blend; score_80 changes 30.9 to 34.0. Athletic Pure Pack (182730) and Thorne Green Tea (336337) returned exactly to their prior snapshots after the identity root fix and were deliberately not refrozen."
     }
   ]
 }

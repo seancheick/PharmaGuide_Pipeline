@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life MyKind Organics",
   "breakdown": {
     "A": {
-      "A1": 9.71,
+      "A1": 9.68,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -16,7 +16,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.21,
+      "core_quality": 15.18,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -37,7 +37,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 15.21
+      "score": 15.18
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -167,7 +167,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 46.97,
+    "quality_raw": 46.94,
     "violation_penalty": 0.0
   },
   "dsld_id": "274498",
@@ -181,16 +181,16 @@
   "product_name": "Organic Plant Collagen Builder",
   "safety_verdict": "SAFE",
   "score_100_equivalent": 58.7,
-  "score_80": 47.0,
+  "score_80": 46.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.21,
+      "core_quality": 15.18,
       "max": 25.0,
-      "score": 15.21
+      "score": 15.18
     },
     "B_safety_purity": {
       "max": 30.0,

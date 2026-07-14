@@ -15,7 +15,7 @@
       "A5e": 0.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 0.0,
+      "category_bonus_total": 3.0,
       "core_quality": 2.0,
       "max": 25.0,
       "omega3_breakdown": {
@@ -23,37 +23,23 @@
         "omega3_dose_bonus": 0.0
       },
       "omega3_dose_bonus": 0.0,
-      "probiotic_bonus": 0.0,
+      "probiotic_bonus": 3.0,
       "probiotic_breakdown": {
-        "cfu": 0.0,
+        "cfu": 1.0,
+        "cfu_adequacy_contributions": [],
+        "cfu_adequacy_points": 0.0,
         "clinical_strains": 0.0,
-        "diversity": 0.0,
+        "diversity": 1.0,
         "eligibility": {
-          "eligible": false,
-          "mode": "non_probiotic",
-          "reason": "strict_gate_failed",
-          "strict_gate_checks": {
-            "cfu_guarantee": false,
-            "dose_context": false,
-            "explicit_intent": true,
-            "require_viable_cfu": false,
-            "strain_identity": true
-          },
-          "strict_gate_inputs": {
-            "clinical_strain_count": 4,
-            "guarantee_type": null,
-            "is_probiotic_product": true,
-            "strain_id_count": 0,
-            "supp_type": "probiotic",
-            "total_billion_count": 0.0,
-            "total_strain_count": 6
-          }
+          "eligible": true,
+          "mode": "probiotic",
+          "reason": "supplement_type_probiotic"
         },
-        "prebiotic": 0.0,
-        "probiotic_bonus": 0.0,
-        "survivability": 0.0
+        "prebiotic": 1.0,
+        "probiotic_bonus": 3.0,
+        "survivability": 1.0
       },
-      "score": 2.0
+      "score": 5.0
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -75,7 +61,7 @@
           "class_multiplier_applied": 0.4,
           "computed_blend_penalty": -1.55,
           "computed_blend_penalty_magnitude": 1.55,
-          "dedupe_fingerprint": "proprietary blend|bifidobacterium bifidum g9 1,bifidobacterium longum mm 2,lactobacillus gasseri ks 13|0.000|activeingredients[0]",
+          "dedupe_fingerprint": "proprietary blend|bifidobacterium bifidum g9 1,bifidobacterium longum mm 2,lactobacillus gasseri ks 13|0.000|activeingredients[1]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": null,
@@ -85,7 +71,7 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[0]",
+          "source_path": "activeIngredients[1]",
           "unit_conversion_failed": false
         }
       ],
@@ -124,7 +110,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 30.95,
+    "quality_raw": 33.95,
     "violation_penalty": 0.0
   },
   "dsld_id": "298070",
@@ -138,17 +124,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "FloraMend Prime Probiotic",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 38.7,
-  "score_80": 30.9,
+  "score_100_equivalent": 42.4,
+  "score_80": 34.0,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 0.0,
+      "category_bonus_total": 3.0,
       "core_quality": 2.0,
       "max": 25.0,
-      "score": 2.0
+      "score": 5.0
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -169,8 +155,8 @@
       "score": 0.0
     }
   },
-  "supp_type": "general_supplement",
+  "supp_type": "probiotic",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
-  "verdict": "POOR"
+  "verdict": "SAFE"
 }
