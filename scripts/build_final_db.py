@@ -5792,6 +5792,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             ),
             "conversion_evidence": safe_list(rda_ul_data.get("conversion_evidence")),
             "safety_flags": safe_list(rda_ul_data.get("safety_flags")),
+            "ul_review_flags": safe_list(rda_ul_data.get("ul_review_flags")),
             "has_over_ul": rda_ul_data.get("has_over_ul"),
         }
 

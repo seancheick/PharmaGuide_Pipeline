@@ -401,7 +401,11 @@ class UnitConverter:
             nutrient_detected=nutrient,
             form_detected=rule_data.get('standard_name'),
             form_detection_source=form_source,
-            confidence="high" if rule_id != 'vitamin_a_unknown' else "low",
+            confidence=(
+                "low"
+                if rule_id in {'vitamin_a_unknown', 'vitamin_e_unknown', 'folate_unknown'}
+                else "high"
+            ),
             warnings=warnings,
             notes=[rule_data.get('notes', '')] if rule_data.get('notes') else []
         )
@@ -513,16 +517,22 @@ class UnitConverter:
         """Detect Folate form."""
         text_lower = ingredient_text.lower()
 
+        if any(x in text_lower for x in ['food folate', 'natural folate']):
+            return 'folate_food', self.vitamin_conversions.get('folate_food', {})
+
         # Methylfolate
-        if any(x in text_lower for x in ['methylfolate', '5-mthf', 'metafolin', 'quatrefolic']):
+        if any(x in text_lower for x in [
+            'methylfolate', 'methyltetrahydrofolate', '5-mthf', 'metafolin', 'quatrefolic'
+        ]):
             return 'folate_methylfolate', self.vitamin_conversions.get('folate_methylfolate', {})
 
         # Folic acid
         if 'folic acid' in text_lower:
             return 'folate_folic_acid', self.vitamin_conversions.get('folate_folic_acid', {})
 
-        # Default to folic acid
-        return 'folate_folic_acid', self.vitamin_conversions.get('folate_folic_acid', {})
+        # Bare Folate is not evidence of folic acid. Preserve explicit DFE
+        # amounts, but keep the form lineage unknown for UL assessment.
+        return 'folate_unknown', self.vitamin_conversions.get('folate_unknown', {})
 
     def _get_conversion_key(self, from_unit: str, to_unit: str) -> str:
         """Get the conversion key for the database lookup."""

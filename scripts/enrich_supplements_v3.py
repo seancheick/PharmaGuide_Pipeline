@@ -159,6 +159,68 @@ _RDA_REFERENCE_PROFILE = {
     "ul_basis": "lower_sourced_adult_male_female_ul",
 }
 
+# FDA/NIH labeling basis: 1,000 mcg synthetic folic acid is the adult UL;
+# current Supplement Facts labels express its equivalent as 1,700 mcg DFE.
+# These values only SCREEN an unknown-form row for review. They never establish
+# that the product is over UL.
+_FOLIC_ACID_ADULT_UL_MCG = 1000.0
+_FOLIC_ACID_LABEL_DFE_FACTOR = 1.7
+_FOLATE_DAILY_VALUE_DFE_MCG = 400.0
+
+
+def _unknown_folate_ul_screening(
+    quantity: float,
+    unit: str,
+    daily_value: Any = None,
+) -> Optional[Dict[str, float | str]]:
+    """Return worst-case folic-acid screening exposure for an ambiguous row."""
+    raw_unit = str(unit or "").lower().strip()
+    label_declares_dfe = "dfe" in raw_unit
+    mass_token = re.sub(r"\bdfe\b", "", raw_unit).strip()
+    canonical_unit = norm_module.canonicalize_mass_unit(mass_token)
+    factors_to_mcg = {"g": 1_000_000.0, "mg": 1_000.0, "mcg": 1.0}
+    factor = factors_to_mcg.get(canonical_unit)
+    if factor is None:
+        return None
+
+    declared_mcg = float(quantity) * factor
+    try:
+        declared_daily_value = float(daily_value)
+    except (TypeError, ValueError):
+        declared_daily_value = None
+    expected_dfe_daily_value = (
+        declared_mcg / _FOLATE_DAILY_VALUE_DFE_MCG * 100.0
+    )
+    dfe_inferred_from_daily_value = bool(
+        not label_declares_dfe
+        and declared_daily_value is not None
+        and abs(declared_daily_value - expected_dfe_daily_value)
+        <= max(1.0, expected_dfe_daily_value * 0.02)
+    )
+    uses_dfe_basis = label_declares_dfe or dfe_inferred_from_daily_value
+    screening_amount = (
+        declared_mcg / _FOLIC_ACID_LABEL_DFE_FACTOR
+        if uses_dfe_basis
+        else declared_mcg
+    )
+    return {
+        "screening_amount": screening_amount,
+        "screening_unit": "mcg folic acid",
+        "screening_ul": _FOLIC_ACID_ADULT_UL_MCG,
+        "potential_pct_ul": (
+            screening_amount / _FOLIC_ACID_ADULT_UL_MCG * 100.0
+        ),
+        "screening_basis": (
+            "label_declared_dfe"
+            if label_declares_dfe
+            else (
+                "dfe_inferred_from_daily_value"
+                if dfe_inferred_from_daily_value
+                else "bare_mass_worst_case"
+            )
+        ),
+    }
+
 # Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
 _CLEANER_MATCH_METHOD_MAP = {
     "unii_exact_match": METHOD_UNII_EXACT,
@@ -15249,7 +15311,7 @@ class SupplementEnricherV3:
         # Precaution ceilings are safety instructions, not recommended intake.
         # Remove only the affected clause so an independent positive direction
         # in the same label remains available ("Take 2... Do not exceed 6").
-        clauses = re.split(r"(?<=[.!?;])\s+|[\r\n]+", text_lower)
+        clauses = re.split(r"(?<=[.!?;,])\s+|[\r\n]+", text_lower)
         precaution = re.compile(
             r"\b(?:(?:do|should|must)\s+not\s+exceed|not\s+to\s+exceed)\b"
         )
@@ -16442,6 +16504,7 @@ class SupplementEnricherV3:
             "adequacy_results": [],
             "conversion_evidence": [],
             "safety_flags": [],
+            "ul_review_flags": [],
             "has_over_ul": False,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
             "collection_enabled": False,
@@ -16593,6 +16656,7 @@ class SupplementEnricherV3:
         rda_data = []
         adequacy_results = []
         safety_flags = []
+        ul_review_flags = []
         conversion_evidence = []
         try:
             servings_min = float(min_servings_per_day) if min_servings_per_day is not None else None
@@ -16706,7 +16770,7 @@ class SupplementEnricherV3:
                         re.search(r"\bfolic acid\b", _folate_label_text)
                     )
                     _explicit_non_folic_folate = bool(re.search(
-                        r"\b(?:methylfolate|5 mthf|methyltetrahydrofolate|metafolin|quatrefolic)\b",
+                        r"\b(?:methylfolate|5 mthf|methyltetrahydrofolate|metafolin|quatrefolic|food folate|natural folate)\b",
                         _folate_label_text,
                     ))
                     unknown_form = (
@@ -16759,12 +16823,6 @@ class SupplementEnricherV3:
                         # dose; checking/summing this row double-counts.
                         skip_ul_check = True
                         skip_ul_reason = "compound_duplicate_row"
-                    elif unknown_form:
-                        skip_ul_check = True
-                        skip_ul_reason = "unknown_vitamin_form"
-                    elif conversion_failed:
-                        skip_ul_check = True
-                        skip_ul_reason = "conversion_failed"
                     elif _is_folate and not _explicit_folic_acid:
                         # The adult folate UL applies to synthetic folic acid,
                         # not methylfolate/food folate or an unidentified form.
@@ -16777,10 +16835,34 @@ class SupplementEnricherV3:
                             if _explicit_non_folic_folate
                             else "unknown_folate_form_lineage"
                         )
+                    elif unknown_form:
+                        skip_ul_check = True
+                        skip_ul_reason = "unknown_vitamin_form"
+                    elif conversion_failed:
+                        skip_ul_check = True
+                        skip_ul_reason = "conversion_failed"
 
                     per_day_min = converted_amount * servings_min
                     per_day_max = converted_amount * servings_max
                     amount_for_ul = per_day_max or per_day_min or converted_amount
+                    folate_ul_screening = None
+                    if (
+                        _is_folate
+                        and not _explicit_folic_acid
+                        and not _explicit_non_folic_folate
+                    ):
+                        folate_ul_screening = _unknown_folate_ul_screening(
+                            quantity_float,
+                            unit,
+                            ingredient.get("dailyValue"),
+                        )
+                        if folate_ul_screening:
+                            folate_ul_screening["screening_amount"] *= servings_max
+                            folate_ul_screening["potential_pct_ul"] = (
+                                folate_ul_screening["screening_amount"]
+                                / _FOLIC_ACID_ADULT_UL_MCG
+                                * 100.0
+                            )
                     adequacy = self.rda_calculator.compute_nutrient_adequacy(
                         nutrient=std_name,
                         amount=per_day_min or converted_amount,
@@ -16816,16 +16898,69 @@ class SupplementEnricherV3:
                         "data_by_group": list(_nutrient_record.get("data") or []),
                     })
                     if skip_ul_check and ul_only_skip:
+                        is_indeterminate_folate = (
+                            skip_ul_reason == "unknown_folate_form_lineage"
+                        )
+                        potential_pct_ul = (
+                            folate_ul_screening.get("potential_pct_ul")
+                            if folate_ul_screening
+                            else None
+                        )
+                        potential_ul_concern = bool(
+                            potential_pct_ul is not None and potential_pct_ul >= 100.0
+                        )
                         adequacy_dict.update({
                             "ul": None,
-                            "ul_status": f"skipped_{skip_ul_reason}",
+                            "ul_status": (
+                                f"indeterminate_{skip_ul_reason}"
+                                if is_indeterminate_folate
+                                else f"not_applicable_{skip_ul_reason}"
+                            ),
                             "pct_ul": None,
                             "over_ul": False,
                             "over_ul_amount": None,
-                            "warnings": [],
+                            "warnings": (
+                                [
+                                    "Folate UL assessment is indeterminate because "
+                                    "the synthetic folic-acid contribution is not identified."
+                                ]
+                                if is_indeterminate_folate
+                                else []
+                            ),
                             "skip_ul_check": True,
                             "skip_ul_reason": skip_ul_reason,
+                            "ul_assessment_status": (
+                                "indeterminate"
+                                if is_indeterminate_folate
+                                else "not_applicable"
+                            ),
+                            "potential_ul_concern": potential_ul_concern,
                         })
+                        if (
+                            is_indeterminate_folate
+                            and folate_ul_screening
+                            and folate_ul_screening.get("screening_basis")
+                            == "bare_mass_worst_case"
+                        ):
+                            # A legacy bare-mass Folate declaration does not say
+                            # whether the mass is total folate or folic acid.
+                            # Do not let the converter's fallback guess adequacy.
+                            adequacy_dict.update({
+                                "rda_ai": None,
+                                "rda_ai_source": "unknown",
+                                "pct_rda": None,
+                                "adequacy_band": "unknown",
+                                "scoring_eligible": False,
+                                "point_recommendation": 0,
+                            })
+                        if is_indeterminate_folate and potential_ul_concern:
+                            ul_review_flags.append({
+                                "nutrient": "Folate",
+                                "assessment_status": "indeterminate",
+                                "reason": skip_ul_reason,
+                                **folate_ul_screening,
+                                "review_required": True,
+                            })
                     elif skip_ul_check:
                         adequacy_dict.update({
                             "rda_ai": None,
@@ -17060,6 +17195,7 @@ class SupplementEnricherV3:
                     "adequacy_results": adequacy_results,
                     "conversion_evidence": conversion_evidence,
                     "safety_flags": safety_flags,
+                    "ul_review_flags": ul_review_flags,
                     "has_over_ul": len(safety_flags) > 0,
                     "is_servings_estimated": servings_estimated,
                     "reference_profile": dict(_RDA_REFERENCE_PROFILE),
@@ -17128,6 +17264,9 @@ class SupplementEnricherV3:
             "ingredients_with_rda": rda_data,
             "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
             "count": len(rda_data),
+            "safety_flags": [],
+            "ul_review_flags": [],
+            "has_over_ul": False,
             "is_servings_estimated": servings_estimated,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
         }

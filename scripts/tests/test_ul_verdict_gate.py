@@ -56,3 +56,24 @@ def test_missing_eligibility_does_not_force_caution_until_reenriched():
     # drive the new verdict gate; a fresh enrich must explicitly mark eligibility.
     r = evaluate_safety_gate(_prod([{"nutrient": "X", "pct_ul": 200}]))
     assert r.verdict != "CAUTION"
+
+
+def test_indeterminate_folate_at_possible_ul_forces_review_caution():
+    product = {
+        "rda_ul_data": {
+            "safety_flags": [],
+            "ul_review_flags": [{
+                "nutrient": "Folate",
+                "assessment_status": "indeterminate",
+                "reason": "unknown_folate_form_lineage",
+                "potential_pct_ul": 100,
+                "review_required": True,
+            }],
+        }
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict == "CAUTION"
+    assert result.needs_review is True
+    assert "FOLATE_UL_FORM_REVIEW" in result.safety_signals

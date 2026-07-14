@@ -40,6 +40,10 @@ from identity.safety import (
     normalize_safety_source,
     safety_flag_matches_status,
 )
+from rda_ul_calculator import (
+    UL_REVIEW_FOLATE_FORM,
+    get_actionable_ul_review_signals,
+)
 from scoring_input_contract import (
     get_scoring_ingredients,
     is_nutrition_only_product,
@@ -1459,6 +1463,10 @@ class SupplementScorer:
                     b0_cfg.get("watchlist_penalty"), 5.0
                 )
                 flags.append("B0_WATCHLIST_SUBSTANCE")
+
+        for signal in get_actionable_ul_review_signals(product.get("rda_ul_data")):
+            if signal not in flags:
+                flags.append(signal)
 
         # If a hard fail was triggered, moderate/low advisory flags are not relevant.
         if blocked or unsafe:
@@ -4955,6 +4963,8 @@ class SupplementScorer:
         if mapping_gate.get("stop"):
             return "NOT_SCORED"
         if "BANNED_MATCH_REVIEW_NEEDED" in flags:
+            return "CAUTION"
+        if UL_REVIEW_FOLATE_FORM in flags:
             return "CAUTION"
         if any(f in flags for f in ("B0_MODERATE_SUBSTANCE", "B0_HIGH_RISK_SUBSTANCE",
                                      "B0_WATCHLIST_SUBSTANCE")):

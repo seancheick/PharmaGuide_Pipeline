@@ -27,6 +27,7 @@ Policy (see _apply_signal_policy for the authoritative implementation):
   low_confidence                            →  audit signal only
   inactive excipient_acceptable + high_risk/watchlist  →  warning only
   has_disease_claims                        →  CAUTION  (scoring continues)
+  material indeterminate folate UL          →  CAUTION + needs_review
 
 The signal SOURCE is shared with v3, but the verdict policy here is v4-owned.
 """
@@ -45,6 +46,7 @@ from identity.safety import (
     SafetySignal,
     normalize_safety_signals,
 )
+from rda_ul_calculator import get_actionable_ul_review_signals
 
 
 # Verdict precedence — index = severity rank.
@@ -593,6 +595,18 @@ def _apply_ul_dose_policy(result: SafetyResult, product: Dict[str, Any]) -> None
         )
 
 
+def _apply_ul_review_policy(result: SafetyResult, product: Dict[str, Any]) -> None:
+    """Route material, indeterminate UL assessments to CAUTION/review.
+
+    This is separate from ``safety_flags`` because an unknown folate form is
+    not proof of an over-UL dose and must not incur an over-UL score penalty.
+    """
+    for signal in get_actionable_ul_review_signals(product.get("rda_ul_data")):
+        result.verdict = _max_verdict(result.verdict, "CAUTION")
+        result.needs_review = True
+        _append_signal(result, signal)
+
+
 def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
     """Evaluate the v4 Layer 1 safety gate on an enriched product.
 
@@ -618,6 +632,7 @@ def evaluate_safety_gate(product: Dict[str, Any]) -> SafetyResult:
 
     _apply_stimulant_policy(result, product)
     _apply_ul_dose_policy(result, product)
+    _apply_ul_review_policy(result, product)
 
     # Disease claims → CAUTION. v3 routes this through B6 marketing
     # penalty + verdict adjustment; v4 surfaces it as a Layer 1 signal.

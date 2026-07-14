@@ -164,6 +164,27 @@ def _minimal_scored():
     }
 
 
+def test_blob_preserves_indeterminate_ul_review_flags() -> None:
+    enriched = _minimal_enriched()
+    review_flag = {
+        "nutrient": "Folate",
+        "assessment_status": "indeterminate",
+        "reason": "unknown_folate_form_lineage",
+        "review_required": True,
+    }
+    enriched["rda_ul_data"] = {
+        "count": 1,
+        "adequacy_results": [{"nutrient": "Folate"}],
+        "safety_flags": [],
+        "ul_review_flags": [review_flag],
+        "has_over_ul": False,
+    }
+
+    blob = build_detail_blob(enriched, _minimal_scored())
+
+    assert blob["rda_ul_data"]["ul_review_flags"] == [review_flag]
+
+
 def test_discontinued_produces_top_level_product_status_not_warning() -> None:
     """Discontinued products emit top-level `product_status` dict, not a
     warning. Schema: {type, date, display} — `type` (not `status`) for

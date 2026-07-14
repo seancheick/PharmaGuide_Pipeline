@@ -43,6 +43,13 @@ one or the other; never let them disagree silently.
 - **Never** use `is_recalled` — implies product-level recall, unsupported in v1.
 - **Verdict precedence (deterministic):** BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.
 
+## Dose-safety assessment terms
+
+| Term | Meaning |
+|---|---|
+| **Indeterminate UL assessment** | The pipeline has an applicable UL reference but lacks the form or source lineage required to compare the label dose honestly. It must not emit `over_ul=true` or silently treat the dose as cleared. |
+| **UL review flag** | An additive `rda_ul_data.ul_review_flags[]` record emitted when an indeterminate assessment reaches a clinically relevant screening threshold. It routes the product to `CAUTION`/review without asserting that the UL was exceeded. |
+
 ## Production scoring pillars (v4)
 
 | Pillar | Max | What it measures |

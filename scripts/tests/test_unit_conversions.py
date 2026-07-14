@@ -25,6 +25,39 @@ from constants import UNIT_CONVERSIONS_DB
 from unit_converter import UnitConverter
 
 
+def test_bare_folate_dfe_preserves_unknown_form_lineage() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Folate",
+        amount=1700,
+        from_unit="mcg DFE",
+        ingredient_name="Folate",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(1700)
+    assert result.converted_unit == "mcg DFE"
+    assert result.form_detected == "Folate (Form Unknown)"
+    assert result.confidence == "low"
+
+
+def test_explicit_food_folate_uses_natural_folate_conversion() -> None:
+    converter = UnitConverter()
+
+    result = converter.convert_nutrient(
+        nutrient="Folate",
+        amount=400,
+        from_unit="mcg",
+        ingredient_name="Food Folate",
+    )
+
+    assert result.success is True
+    assert result.converted_value == pytest.approx(400)
+    assert result.converted_unit == "mcg DFE"
+    assert result.form_detected == "Folate (from food)"
+
+
 def test_folate_mg_dfe_converts_to_mcg_dfe() -> None:
     """Labels can disclose folate as mg DFE (Thorne Basic Prenatal: 1.7 mg
     DFE). This must be scaled to mcg DFE before RDA/UL math; treating 1.7 mg as
