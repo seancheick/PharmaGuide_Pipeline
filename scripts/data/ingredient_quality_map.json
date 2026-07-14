@@ -39,8 +39,8 @@
     },
     "statistics": {
       "total_parents": 629,
-      "total_forms": 1420,
-    "total_form_aliases": 12176,
+      "total_forms": 1421,
+      "total_form_aliases": 12183,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 23
     },
   "schema_version": "5.4.11",
-    "last_updated": "2026-07-13",
+    "last_updated": "2026-07-14",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",

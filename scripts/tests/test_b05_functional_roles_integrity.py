@@ -123,4 +123,6 @@ def test_botanical_total_count_unchanged(botanicals):
     # existing nirgundi. Bare Tropical Almond remains deferred because DSLD uses
     # it in Triphala/Chebulic Myrobalan contexts while the common name can also
     # mean Terminalia catappa.
-    assert len(botanicals) == 546
+    # 548 after the grain-source identity closure: barley_unspecified and
+    # wheat_germ_oil are retained as non-scoring botanical identities.
+    assert len(botanicals) == 548
