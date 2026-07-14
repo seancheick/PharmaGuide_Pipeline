@@ -5119,16 +5119,32 @@ class EnhancedDSLDNormalizer:
                 if re.search(r"use only as directed", notes, re.I):
                     all_warnings.append("Use only as directed on label")
 
-                # Extract allergens from "Contains:" warnings
+                # Extract allergens from "Contains:" warnings.
+                # C3: only from a genuine POSITIVE declaration. A negated context
+                # ("Contains no milk", a Does-NOT-Contain statement, or "free of /
+                # without X") is an allergen-FREE claim (handled above); running the
+                # positive extractor on it laundered the negation into a false
+                # "Contains: Milk" that also contradicted the allergenFree list.
                 contains_match = re.search(r"contains:?\s+([^.]+)", notes, re.I)
-                if contains_match:
+                contains_is_negated = bool(
+                    stmt.get("type") == "Formulation re: Does NOT Contain"
+                    or (contains_match and re.match(
+                        r"\s*(?:no|none|not|non|free|without|zero|0)\b",
+                        contains_match.group(1), re.I,
+                    ))
+                    or re.search(
+                        r"\b(?:free\s+of|without|does\s+not|doesn'?t|do\s+not|no)\b[^.]*\bcontain",
+                        notes, re.I,
+                    )
+                )
+                if contains_match and not contains_is_negated:
                     contains_text = contains_match.group(1).strip()
 
                     # Only add "Contains:" warnings for actual allergens, not marketing fluff
                     is_real_allergen_warning = False
 
-                    # Check for FDA major allergens
-                    if re.search(r"\b(milk|dairy|whey|casein)\b", contains_text, re.I):
+                    # Check for FDA major allergens ("milk thistle" is a botanical, not dairy)
+                    if re.search(r"\b(milk(?!\s+thistle)|dairy|whey|casein)\b", contains_text, re.I):
                         if "milk" not in all_allergens:
                             all_allergens.append("milk")
                         # Clean up milk warning text
