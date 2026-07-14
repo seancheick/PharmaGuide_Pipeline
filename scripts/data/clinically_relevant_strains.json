@@ -3,11 +3,11 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-06-05",
-    "total_entries": 48,
+    "last_updated": "2026-07-13",
+    "total_entries": 49,
     "data_source": null,
-    "version": "2.2.6",
-    "signoff_status_note": "42/48 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). 2026-06-05 Seed DS-01 exact-code batch added 4 formula-backed SD-* strains pending Dr Pham review; PMIDs 40944126 and 41750436 are DS-01 product/formula RCTs, not isolated strain-specific trials.",
+    "version": "2.2.7",
+    "signoff_status_note": "42/49 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). 2026-06-05 Seed DS-01 exact-code batch added 4 formula-backed SD-* strains pending Dr Pham review; PMIDs 40944126 and 41750436 are DS-01 product/formula RCTs, not isolated strain-specific trials. 2026-07-13 added exact M-63 identity with two content-verified single-strain RCTs (PMIDs 36986131 and 42056537), conservatively classified moderate pending clinician review.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
   },
@@ -885,6 +885,66 @@
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
         "dr_pham_signoff_verification_note": "PMID 28166427 verified, title-match=YES"
+      }
+    },
+    {
+      "id": "STRAIN_INFANTIS_M63",
+      "standard_name": "Bifidobacterium longum subsp. infantis M-63",
+      "aliases": [
+        "Bifidobacterium infantis M-63",
+        "B. infantis M-63",
+        "Bifidobacterium longum infantis M-63",
+        "Bifidobacterium longum infantis M63",
+        "M-63"
+      ],
+      "evidence_level": "moderate",
+      "key_benefits": [
+        "infant gut microbiota development",
+        "bowel function during weaning"
+      ],
+      "notable_studies": "Two single-strain randomized, double-blind, placebo-controlled trials in healthy infants and toddlers; clinical outcomes remain modest or exploratory.",
+      "cfu_thresholds": {
+        "indication_primary": "infant gut microbiota development and bowel function",
+        "dose_basis": "clinical_study",
+        "tiers_cfu_per_day": {
+          "low": {
+            "upper_exclusive": 1000000000
+          },
+          "adequate": {
+            "lower_inclusive": 1000000000,
+            "upper_exclusive": 5000000000
+          },
+          "good": {
+            "lower_inclusive": 5000000000
+          }
+        },
+        "evidence": {
+          "type": "strain_specific_randomized_trials",
+          "source_short": "Nutrients 2023 term-infant RCT at 1 billion CFU/day; Pediatric Research 2026 exploratory weaning RCT at 5 billion CFU/day.",
+          "pmid": "36986131",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36986131/",
+          "additional_pmids": [
+            "42056537"
+          ],
+          "verified_date": "2026-07-13",
+          "verified_by": "agent:openai-codex",
+          "evidence_strength": "medium",
+          "clinical_support_level": "moderate",
+          "clinical_validation": {
+            "q1_strain_explicit": "YES",
+            "q2_outcome_relevant": "YES",
+            "q3_human_clinical": "YES",
+            "q4_dose_mentioned": "YES",
+            "q4_dose_sample": "1 billion CFU/day for term neonates; 5 billion CFU/day during weaning.",
+            "score_yes_count": 4,
+            "validated_by": "agent:openai-codex",
+            "validated_date": "2026-07-13",
+            "framework": "4-question clinical validation (strain-explicit / outcome-relevant / human-clinical / dose-mentioned)"
+          }
+        },
+        "notes": "Dose tiers follow the two content-verified single-strain RCT doses rather than the generic 1B/10B/50B industry bands. No excellent tier is asserted because no higher single-strain clinical anchor was verified.",
+        "dr_pham_signoff": false,
+        "dr_pham_signoff_verification_note": "Pending clinician review. Evidence and dose anchors were content-verified against PubMed records 36986131 and 42056537 on 2026-07-13; classification is deliberately moderate."
       }
     },
     {

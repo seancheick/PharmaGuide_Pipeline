@@ -172,6 +172,45 @@ def test_distinct_infantis_strain_codes_do_not_cross_match(enricher) -> None:
     assert "STRAIN_INFANTIS_35624" not in clinical_ids
 
 
+def test_m63_resolves_to_its_own_reviewed_identity_and_evidence(enricher) -> None:
+    product = _probiotic_product(
+        extra_active=[
+            {
+                "name": "Bifidobacterium longum infantis M-63",
+                "standardName": "Bifidobacterium longum infantis M-63",
+                "ingredientGroup": "Bifidobacterium infantis",
+                "category": "probiotic",
+                "quantity": 12.5,
+                "unit": "mg",
+                "nestedIngredients": [],
+                "harvestMethod": "",
+                "notes": "1 billion CFU",
+            }
+        ],
+    )
+
+    clinical_rows = [
+        entry
+        for entry in enricher._collect_probiotic_data(product)["clinical_strains"]
+        if entry.get("strain") == "Bifidobacterium longum infantis M-63"
+    ]
+    assert len(clinical_rows) == 1
+    assert clinical_rows[0]["clinical_id"] == "STRAIN_INFANTIS_M63"
+    assert clinical_rows[0]["clinical_support_level"] == "moderate"
+    assert clinical_rows[0]["cfu_per_day"] == 1_000_000_000
+    assert clinical_rows[0]["adequacy_tier"] == "adequate"
+
+    match = enricher._match_quality_map(
+        "Bifidobacterium longum infantis M-63",
+        "Bifidobacterium longum infantis M-63",
+        enricher.databases["ingredient_quality_map"],
+    )
+    assert match is not None
+    assert match["canonical_id"] == "bifidobacterium_longum"
+    assert match["form_id"] == "bifidobacterium longum infantis m-63"
+    assert match["bio_score"] == 12
+
+
 def test_seed_ds01_sd_strain_codes_resolve_to_exact_formula_backed_strains(enricher) -> None:
     """Seed DS-01 style labels carry exact SD-* strain codes in nested rows.
 

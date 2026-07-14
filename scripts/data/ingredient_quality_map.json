@@ -37950,6 +37950,27 @@
           "quality": "good"
         }
       },
+      "bifidobacterium longum infantis m-63": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "live organism; infant gut colonization demonstrated",
+        "notes": "B. longum subsp. infantis M-63. Exact strain identity is supported by single-strain randomized placebo-controlled trials in healthy term infants at 1 billion CFU/day (PMID 36986131) and during weaning at 5 billion CFU/day (PMID 42056537). Bio score remains at the reviewed subspecies baseline; the evidence does not justify an unreviewed formulation uplift.",
+        "aliases": [
+          "Bifidobacterium infantis M-63",
+          "B. infantis M-63",
+          "Bifidobacterium longum subsp. infantis M-63",
+          "Bifidobacterium longum infantis M63",
+          "M-63"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        }
+      },
       "bifidobacterium longum infantis 35624": {
         "bio_score": 7,
         "natural": true,
