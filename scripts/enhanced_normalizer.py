@@ -459,6 +459,12 @@ STRUCTURAL_ACTIVE_CONTAINER_NAMES = frozenset({
     "100% whey protein blend",
 })
 
+STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES = frozenset({
+    "safflower/sunflower oil",
+    "total omega-3-5-6-7-8-9-11",
+    "palmitic acid stearic acid",
+})
+
 STRUCTURAL_ACTIVE_FORM_DISPLAY_ONLY_NAMES = frozenset({
     "aquacelle",
 })
@@ -3467,6 +3473,10 @@ class EnhancedDSLDNormalizer:
         # The capitalization/shape guard and botanical-only lookup prevent
         # generic form parentheticals such as ``(as Citrate)`` from becoming
         # an independent identity fallback.
+        exact_identity_result = self._fast_ingredient_lookup(name)
+        if exact_identity_result.get("mapped", False):
+            return exact_identity_result["standard_name"], True, forms or []
+
         latin_parenthetical = re.search(
             r"\(([A-Z][a-z]+(?:\s+(?:x\s+)?[a-z][a-z-]+){1,2})\)",
             name,
@@ -4246,10 +4256,15 @@ class EnhancedDSLDNormalizer:
             # surface as standalone actives in cleaned output.
             if self._is_structural_active_container(name, nested):
                 logger.debug(f"Flattening structural active container without parent: {name}")
+                processed_name = self.matcher.preprocess_text(name)
                 self._queue_display_ingredient(
                     raw_source_text=name,
                     source_section="activeIngredients",
-                    display_type="structural_container",
+                    display_type=(
+                        "summary_wrapper"
+                        if processed_name in STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES
+                        else "structural_container"
+                    ),
                     score_included=False,
                     children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
                 )
@@ -9282,7 +9297,10 @@ class EnhancedDSLDNormalizer:
         if not name or not nested_rows:
             return False
         processed_name = self.matcher.preprocess_text(name)
-        return processed_name in STRUCTURAL_ACTIVE_CONTAINER_NAMES
+        return processed_name in (
+            STRUCTURAL_ACTIVE_CONTAINER_NAMES
+            | STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES
+        )
 
     def _is_structural_active_blend_leaf(self, ing: Dict[str, Any]) -> bool:
         """Identify exact active blend leaf names that should stay display-only."""
@@ -9492,6 +9510,9 @@ class EnhancedDSLDNormalizer:
         """
         group = (ing.get("ingredientGroup") or "").lower()
         if not ing.get("nestedRows"):
+            return False
+        processed_name = self.matcher.preprocess_text(ing.get("name", ""))
+        if processed_name in STRUCTURAL_ACTIVE_SUMMARY_WRAPPER_NAMES:
             return False
         return "proprietary blend" in group or group.startswith("blend")
 
