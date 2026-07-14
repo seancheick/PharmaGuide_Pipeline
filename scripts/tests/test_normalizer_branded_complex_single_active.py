@@ -94,11 +94,12 @@ def test_genuine_blend_stays_proprietary_and_opaque(normalizer, name):
     )
 
 
-def test_undisclosed_dose_complex_stays_proprietary(normalizer):
-    """A 'Complex' with NO disclosed amount (unit NP) is genuinely undisclosed —
-    the guard requires a real disclosed dose, so the flag stays."""
+def test_undisclosed_dose_single_active_is_not_reclassified_as_a_blend(normalizer):
+    """Missing dose is a completeness defect, not evidence of blend opacity."""
     row = _process(normalizer, "Curcumin C3 Complex", qty=0, unit="NP")
-    assert row.get("proprietaryBlend") is True
+    assert row.get("mapped") is True
+    assert row.get("proprietaryBlend") is False
+    assert row.get("disclosureLevel") in (None, "", "full")
 
 
 def test_complex_with_nested_children_stays_proprietary(normalizer):

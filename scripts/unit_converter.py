@@ -33,7 +33,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
-from normalization import canonicalize_mass_unit
+from normalization import (
+    FOLATE_FORM_FOLIC_ACID,
+    FOLATE_FORM_FOOD,
+    FOLATE_FORM_METHYLFOLATE,
+    canonicalize_mass_unit,
+    classify_folate_form,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -515,23 +521,20 @@ class UnitConverter:
         ingredient_text: str
     ) -> Tuple[Optional[str], Optional[Dict]]:
         """Detect Folate form."""
-        text_lower = ingredient_text.lower()
+        form = classify_folate_form(ingredient_text)
 
-        if any(x in text_lower for x in ['food folate', 'natural folate']):
+        if form == FOLATE_FORM_FOOD:
             return 'folate_food', self.vitamin_conversions.get('folate_food', {})
 
-        # Methylfolate
-        if any(x in text_lower for x in [
-            'methylfolate', 'methyltetrahydrofolate', '5-mthf', 'metafolin', 'quatrefolic'
-        ]):
+        if form == FOLATE_FORM_METHYLFOLATE:
             return 'folate_methylfolate', self.vitamin_conversions.get('folate_methylfolate', {})
 
-        # Folic acid
-        if 'folic acid' in text_lower:
+        if form == FOLATE_FORM_FOLIC_ACID:
             return 'folate_folic_acid', self.vitamin_conversions.get('folate_folic_acid', {})
 
-        # Bare Folate is not evidence of folic acid. Preserve explicit DFE
-        # amounts, but keep the form lineage unknown for UL assessment.
+        # Bare folate and recognized forms without an authorized conversion
+        # factor (including folinic acid) stay conversion-unknown. Preserve an
+        # explicit DFE declaration, but never borrow methylfolate's factor.
         return 'folate_unknown', self.vitamin_conversions.get('folate_unknown', {})
 
     def _get_conversion_key(self, from_unit: str, to_unit: str) -> str:

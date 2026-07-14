@@ -1880,6 +1880,15 @@ class SupplementEnricherV3:
             'cfu_billion': re.compile(r'(\d+(?:\.\d+)?)\s*billion\s*(CFU|cfus|cfu|live|bacteria|cultures)?', re.I),
             'cfu_billion_abbrev': re.compile(r'(\d+(?:\.\d+)?)\s*B\s*(CFU|cfus|cfu)\b', re.I),  # "1.5 B CFU" format
             'cfu_million': re.compile(r'(\d+(?:\.\d+)?)\s*million\s*(CFU|cfus|cfu|live|bacteria|cultures)?', re.I),
+            'cfu_scientific': re.compile(
+                r'(?P<coefficient>\d+(?:\.\d+)?)\s*'
+                r'(?:'
+                r'[x×]\s*10\s*(?:(?:\^|\*\*)\s*(?P<ascii_exponent>[+-]?\d+)|(?P<superscript_exponent>[⁰¹²³⁴⁵⁶⁷⁸⁹]+))'
+                r'|e\s*(?P<e_exponent>[+-]?\d+)'
+                r')\s*'
+                r'(?:cfu(?:s)?|colony[\s-]*forming\s+unit(?:s)?)\b',
+                re.I,
+            ),
             'cfu_expiration': re.compile(r'(until\s+expiration|through\s+shelf\s+life|at\s+expiration|guaranteed\s+through)', re.I),
             'cfu_manufacture': re.compile(r'(at\s+manufacture|when\s+manufactured|at\s+time\s+of\s+manufacture)', re.I),
 
@@ -14460,6 +14469,39 @@ class SupplementEnricherV3:
 
         return False
 
+    def _parse_cfu_text_count(self, text: str) -> Optional[float]:
+        """Return the first label-declared CFU count from supported notation."""
+        candidates: List[Tuple[int, float]] = []
+        for pattern_key, multiplier in (
+            ("cfu_billion", 1e9),
+            ("cfu_billion_abbrev", 1e9),
+            ("cfu_million", 1e6),
+        ):
+            match = self.compiled_patterns[pattern_key].search(text)
+            if match:
+                candidates.append((match.start(), float(match.group(1)) * multiplier))
+
+        scientific = self.compiled_patterns["cfu_scientific"].search(text)
+        if scientific:
+            raw_exponent = scientific.group("ascii_exponent") or scientific.group("e_exponent")
+            if raw_exponent is None:
+                superscript_digits = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+                raw_exponent = scientific.group("superscript_exponent").translate(
+                    str.maketrans(superscript_digits, "0123456789")
+                )
+            exponent = int(raw_exponent)
+            # CFU labels are whole-cell counts. Reject negative exponents and
+            # absurd magnitudes before exponentiation so malformed OCR cannot
+            # crash enrichment or fabricate an infinite dose.
+            if 0 <= exponent <= 18:
+                count = float(scientific.group("coefficient")) * (10 ** exponent)
+                if math.isfinite(count):
+                    candidates.append((scientific.start(), count))
+
+        if not candidates:
+            return None
+        return min(candidates, key=lambda item: item[0])[1]
+
     def _extract_cfu(
         self,
         text: str,
@@ -14504,50 +14546,20 @@ class SupplementEnricherV3:
 
         self.logger.debug("CFU extraction result: %s", result)
 
-        # Also check text for CFU mentions
+        # Also check row-local text for CFU mentions through one parser.
         if text:
-            # Extract billion count from text (full word "billion")
-            match = self.compiled_patterns['cfu_billion'].search(text)
-            if match:
-                billion_from_text = float(match.group(1))
-                # Only override if ingredient didn't provide CFU or text has higher value
-                if not result["has_cfu"] or billion_from_text > result["billion_count"]:
-                    result["has_cfu"] = True
-                    result["billion_count"] = billion_from_text
-                    result["cfu_count"] = billion_from_text * 1e9
-                    _mark_source(
-                        "activeIngredients.notes" if ingredient else "statements",
-                        source_path or (ingredient or {}).get("raw_source_path"),
-                        evidence_scope or ("row_level" if ingredient else "product_level"),
-                    )
-
-            # Also check abbreviated billion format (e.g., "1.5 B CFU")
-            if not result["has_cfu"]:
-                abbrev_match = self.compiled_patterns['cfu_billion_abbrev'].search(text)
-                if abbrev_match:
-                    billion_from_text = float(abbrev_match.group(1))
-                    result["has_cfu"] = True
-                    result["billion_count"] = billion_from_text
-                    result["cfu_count"] = billion_from_text * 1e9
-                    _mark_source(
-                        "activeIngredients.notes" if ingredient else "statements",
-                        source_path or (ingredient or {}).get("raw_source_path"),
-                        evidence_scope or ("row_level" if ingredient else "product_level"),
-                    )
-
-            # Also check for million CFU (e.g., "500 Million CFUs")
-            if not result["has_cfu"]:
-                million_match = self.compiled_patterns['cfu_million'].search(text)
-                if million_match:
-                    million_from_text = float(million_match.group(1))
-                    result["has_cfu"] = True
-                    result["billion_count"] = million_from_text / 1000  # Convert to billions
-                    result["cfu_count"] = million_from_text * 1e6
-                    _mark_source(
-                        "activeIngredients.notes" if ingredient else "statements",
-                        source_path or (ingredient or {}).get("raw_source_path"),
-                        evidence_scope or ("row_level" if ingredient else "product_level"),
-                    )
+            count_from_text = self._parse_cfu_text_count(text)
+            if count_from_text is not None and (
+                not result["has_cfu"] or count_from_text > result["cfu_count"]
+            ):
+                result["has_cfu"] = True
+                result["cfu_count"] = count_from_text
+                result["billion_count"] = count_from_text / 1e9
+                _mark_source(
+                    "activeIngredients.notes" if ingredient else "statements",
+                    source_path or (ingredient or {}).get("raw_source_path"),
+                    evidence_scope or ("row_level" if ingredient else "product_level"),
+                )
 
             # P1.1: Enhanced guarantee type parsing
             result["guarantee_type"] = self._extract_guarantee_type(text)
@@ -16766,13 +16778,15 @@ class SupplementEnricherV3:
                     _is_folate = _canonical_for_ul in {
                         "folate", "vitamin b9 folate", "vitamin_b9_folate"
                     }
-                    _explicit_folic_acid = bool(
-                        re.search(r"\bfolic acid\b", _folate_label_text)
+                    _folate_form = norm_module.classify_folate_form(_folate_label_text)
+                    _explicit_folic_acid = (
+                        _folate_form == norm_module.FOLATE_FORM_FOLIC_ACID
                     )
-                    _explicit_non_folic_folate = bool(re.search(
-                        r"\b(?:methylfolate|5 mthf|methyltetrahydrofolate|metafolin|quatrefolic|folinic|folinate|leucovorin|food folate|natural folate)\b",
-                        _folate_label_text,
-                    ))
+                    _explicit_non_folic_folate = _folate_form in {
+                        norm_module.FOLATE_FORM_METHYLFOLATE,
+                        norm_module.FOLATE_FORM_FOLINIC,
+                        norm_module.FOLATE_FORM_FOOD,
+                    }
                     unknown_form = (
                         'unknown' in rule_id or
                         'unknown' in form_detected or
@@ -16824,10 +16838,10 @@ class SupplementEnricherV3:
                         skip_ul_check = True
                         skip_ul_reason = "compound_duplicate_row"
                     elif _is_folate and not _explicit_folic_acid:
-                        # The adult folate UL applies to synthetic folic acid,
-                        # not methylfolate/food folate or an unidentified form.
-                        # Keep adequacy from the label-declared DFE exposure,
-                        # but suppress an unsupported UL conclusion.
+                        # This pipeline applies the folic-acid UL only to an
+                        # identified folic-acid contribution. Preserve adequacy
+                        # only when conversion produced verified DFE lineage;
+                        # suppress an unsupported UL conclusion independently.
                         skip_ul_check = True
                         ul_only_skip = True
                         skip_ul_reason = (
@@ -16952,6 +16966,24 @@ class SupplementEnricherV3:
                                 "adequacy_band": "unknown",
                                 "scoring_eligible": False,
                                 "point_recommendation": 0,
+                            })
+                        elif _explicit_non_folic_folate and conversion_failed:
+                            # A known non-folic identity does not authorize a
+                            # guessed DFE factor. Bare-mass folinic/folinate/
+                            # leucovorin therefore keeps its UL disposition but
+                            # cannot earn adequacy credit.
+                            adequacy_dict.update({
+                                "rda_ai": None,
+                                "rda_ai_source": "unknown",
+                                "pct_rda": None,
+                                "adequacy_band": "unknown",
+                                "scoring_eligible": False,
+                                "point_recommendation": 0,
+                                "notes": [
+                                    *list(adequacy_dict.get("notes") or []),
+                                    "Adequacy not assessed: no verified conversion "
+                                    "from the declared folate mass to mcg DFE."
+                                ],
                             })
                         if is_indeterminate_folate and potential_ul_concern:
                             ul_review_flags.append({

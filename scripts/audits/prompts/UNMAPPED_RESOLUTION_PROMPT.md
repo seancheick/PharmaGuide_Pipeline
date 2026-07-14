@@ -1215,7 +1215,6 @@ Prefer the exact current run folder first, because that is the operator's workin
 | `supplement_type_utils.py`         | Thin wrapper around SP-4 normalizer           | Read-time canonicalization       |
 | `scoring_v4/router.py`             | Taxonomy-first v4 module routing              | Investigate v4 routing bugs      |
 | `constants.py`                     | Shared constants and mappings                 | Check canonical aliases/mappings |
-| `fuzzy_matcher.py`                 | Fuzzy string matching                         | Investigate match failures       |
 | `unii_cache.py`                    | Local-first UNII lookup (~172K offline)       | Fast UNII resolution without API |
 | `unmapped_ingredient_tracker.py`   | Track unmapped ingredient state               | Audit unmapped backlogs          |
 | `functional_grouping_handler.py`   | Functional grouping logic                     | Investigate grouping bugs        |

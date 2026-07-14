@@ -21,6 +21,15 @@ class TestEnrichmentIdentityMatchingPolicy:
     def test_standalone_fuzzy_identity_module_is_retired(self):
         assert not (Path(__file__).parent.parent / "fuzzy_matcher.py").exists()
 
+    def test_active_scripts_docs_do_not_reference_retired_fuzzy_module(self):
+        scripts_dir = Path(__file__).parent.parent
+        stale = [
+            path
+            for path in scripts_dir.rglob("*.md")
+            if "fuzzy_matcher.py" in path.read_text(encoding="utf-8")
+        ]
+        assert stale == []
+
 
 class TestBannedSubstancesNoFuzzy:
     """

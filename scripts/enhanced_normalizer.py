@@ -6086,23 +6086,20 @@ class EnhancedDSLDNormalizer:
         # Defense-in-depth (B5 opacity): a marketing suffix token
         # ("Complex"/"Matrix"/"Formula"/...) does not make a recognized single
         # ingredient an opaque proprietary blend. When the proprietary signal came
-        # ONLY from the name token, the row resolved to a known single ingredient
-        # whose canonical name is itself NOT a blend/proprietary label, it lists no
-        # nested sub-ingredients, and it carries a real disclosed dose, it hides
-        # nothing — clear the weak flag (e.g. "Curcumin C3 Complex" = curcumin,
+        # ONLY from the name token or an NP quantity placeholder, the row resolved
+        # to a known single ingredient whose canonical name is itself NOT a
+        # blend/proprietary label, and it lists no nested sub-ingredients, it hides
+        # no composition — clear the weak flag (e.g. "Curcumin C3 Complex" = curcumin,
         # "Boron Complex" = boron, "EpiCor ... Complex" = yeast fermentate).
+        # Missing dose remains a completeness defect; it is not blend evidence.
         # Genuine blends either don't resolve, or resolve to a blend-category name
         # ("General Proprietary Blends", "Stimulant Blends"), and keep the flag.
         # The enricher's chemical-identity gate is the authoritative scoring backstop.
         if (
             is_proprietary
-            and unit != "NP"
-            and isinstance(quantity, (int, float))
-            and quantity > 0
             and not nested_rows
             and mapped
             and standard_name
-            and self._is_proprietary_blend_name(name)
             and not self._is_proprietary_blend_name(standard_name)
         ):
             is_proprietary = False

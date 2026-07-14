@@ -1954,7 +1954,6 @@ These are imported by `enrich_supplements_v3.py` — you don't run them directly
 | `constants.py`                   | Shared constants, mappings, category lists, regex patterns (~1.5K lines). Defines `DATA_DIR`, `SCRIPTS_DIR`. |
 | `dosage_normalizer.py`           | Parses dosage strings ("500mg", "1,000 IU") into structured `(amount, unit)` tuples.                         |
 | `unit_converter.py`              | Converts between units (mg↔g, mcg↔mg, IU↔mcg for fat-solubles).                                              |
-| `fuzzy_matcher.py`               | RapidFuzz-based fuzzy string matching for ingredient resolution.                                             |
 | `match_ledger.py`                | Records how each ingredient was matched (exact, alias, fuzzy, unmatched) for audit trail.                    |
 | `normalization.py`               | Lower-level text normalization helpers.                                                                      |
 | `proprietary_blend_detector.py`  | Identifies and flags proprietary/branded blends in ingredient lists.                                         |

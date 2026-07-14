@@ -418,6 +418,15 @@ class RDAULCalculator:
         # Handle "no UL" policy
         if ul_status == "not_determined":
             notes.append("No UL established for this nutrient")
+            if adequacy_band == "excessive":
+                # Do not turn an RDA multiple into a toxicity proxy when the
+                # authoritative reference has no UL. Retain reduced high-dose
+                # adequacy credit without implying that the exposure is safe.
+                adequacy_band = "high"
+                notes.append(
+                    "Adequacy band capped at high because no UL is established; "
+                    "this is not a safety conclusion."
+                )
             # Flag extreme doses (>10x RDA) for information only
             if pct_rda and pct_rda > 1000:
                 notes.append(f"Note: Amount is {pct_rda/100:.1f}x RDA (informational only, no UL applies)")
