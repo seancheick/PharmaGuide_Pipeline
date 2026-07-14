@@ -21,7 +21,6 @@ Version: 3.0.0
 """
 
 import copy
-import fnmatch
 import json
 import os
 import sys
@@ -92,6 +91,7 @@ from constants import (
     PROMOTE_REASON_ABSORPTION_ENHANCER,
     BRANDED_INGREDIENT_TOKENS,
 )
+from stage_manifest import select_stage_input_files
 from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement
 from form_factor_normalizer import canonicalize_form_factor
@@ -1603,7 +1603,24 @@ class SupplementEnricherV3:
             return False
         resolved_id = match_result.get("canonical_id")
         blocked_markers = BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST.get(source_id)
-        return bool(blocked_markers and resolved_id in blocked_markers)
+        if not blocked_markers:
+            return False
+        if resolved_id in blocked_markers:
+            return True
+
+        # Priority-first matching may correctly select the botanical parent
+        # from the row name before considering a marker-valued form. The form
+        # still declares the contradictory marker lineage and must trigger the
+        # same fail-safe.
+        blocked_form_names = {
+            marker.replace("_", " ").casefold() for marker in blocked_markers
+        }
+        declared_form_names = {
+            re.sub(r"[^a-z0-9]+", " ", str(form.get("name") or "").casefold()).strip()
+            for form in ingredient.get("forms") or []
+            if isinstance(form, dict)
+        }
+        return bool(blocked_form_names & declared_form_names)
 
     def _apply_context_canonical_override_match(
         self,
@@ -3745,7 +3762,12 @@ class SupplementEnricherV3:
                 )
                 if context_match:
                     match_result = context_match
-            if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
+            blocked_botanical_marker_match = (
+                self._is_blocked_botanical_source_marker_match(
+                    ingredient, match_result
+                )
+            )
+            if blocked_botanical_marker_match:
                 match_result = None
                 context_match_reason = None
             identity_decision, match_result, taxonomy_coherent = (
@@ -3769,6 +3791,39 @@ class SupplementEnricherV3:
                 match_result,
                 taxonomy_coherent,
             )
+            if blocked_botanical_marker_match:
+                # The botanical remains the lineage authority, but a marker
+                # form (for example Green Tea / Caffeine) cannot be promoted
+                # into either a marker score or a repaired extract score.
+                source_id = ingredient.get("canonical_id")
+                quality_entry.update({
+                    "canonical_id": source_id,
+                    "canonical_id_after": source_id,
+                    "canonical_source_db": ingredient.get("canonical_source_db"),
+                    "scoreable_identity": False,
+                    "recognized_non_scorable": True,
+                    "mapped": True,
+                    "mapped_identity": True,
+                    "role_classification": "recognized_non_scorable",
+                    "recognition_source": ingredient.get("canonical_source_db"),
+                    "recognition_type": "botanical_marker_lineage",
+                    "recognition_reason": "botanical_marker_is_secondary_metadata",
+                    "identity_decision_reason": "botanical_marker_is_secondary_metadata",
+                })
+                self._tag_fallback_decision(
+                    quality_entry,
+                    "clinical_fail_safe",
+                    "botanical_marker_is_secondary_metadata",
+                )
+                recognized_non_scorable_count += 1
+                self._route_non_scorable_iqd_row(
+                    quality_entry,
+                    ingredients_skipped,
+                    ingredients_recognized_non_scorable,
+                    skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+                )
+                all_quality_data.append(quality_entry)
+                continue
             self._project_repaired_identity_to_active_row(
                 source_ingredient,
                 quality_entry,
@@ -17818,9 +17873,12 @@ class SupplementEnricherV3:
                 self.config.get("paths", {}).get("input_file_pattern", "*.json")
             ).strip() or "*.json"
             input_files = [
-                os.path.join(input_path, f)
-                for f in os.listdir(input_path)
-                if fnmatch.fnmatch(f, input_pattern)
+                str(path)
+                for path in select_stage_input_files(
+                    Path(input_path),
+                    "clean",
+                    patterns=(input_pattern,),
+                )
             ]
         else:
             raise FileNotFoundError(f"Input path not found: {input_path}")

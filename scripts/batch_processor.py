@@ -27,6 +27,7 @@ from constants import (
     VALID_INPUT_EXTENSIONS,
     VALIDATION_THRESHOLDS
 )
+from stage_manifest import write_stage_manifest
 import traceback
 import os
 import hashlib
@@ -234,30 +235,16 @@ class BatchProcessor:
         return moved
 
     def _write_stage_manifest(self, summary: Dict[str, Any]) -> Path:
-        """Atomically record the cleaned files owned by this run."""
+        """Record cleaned ownership through the shared manifest authority."""
         cleaned_dir = self.output_dir / "cleaned"
         owned_paths = sorted(cleaned_dir.glob("cleaned_batch_*.json"))
         owned_paths.extend(sorted(cleaned_dir.glob("cleaned_batch_*.jsonl")))
-        owned_paths = sorted(set(owned_paths), key=lambda path: path.name)
-        manifest = {
-            "schema_version": "1.0.0",
-            "stage": "clean",
-            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-            "processing_complete": bool(summary.get("processing_complete", False)),
-            "owned_files": [path.name for path in owned_paths],
-            "content_sha256": {
-                path.name: hashlib.sha256(path.read_bytes()).hexdigest()
-                for path in owned_paths
-            },
-        }
-        manifest_path = cleaned_dir / ".stage_manifest.json"
-        temp_path = cleaned_dir / ".stage_manifest.json.tmp"
-        with open(temp_path, "w", encoding="utf-8") as handle:
-            json.dump(manifest, handle, indent=2, ensure_ascii=False)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temp_path, manifest_path)
-        return manifest_path
+        return write_stage_manifest(
+            cleaned_dir,
+            "clean",
+            owned_paths,
+            processing_complete=bool(summary.get("processing_complete", False)),
+        )
 
     def _write_quarantine_file(self, file_path: str, error: StructuredError):
         """

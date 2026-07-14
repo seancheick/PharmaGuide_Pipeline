@@ -164,8 +164,9 @@ class TestSafetyInvariantScoringUnaffected:
         # Walk backwards and confirm we're inside the `else:` of the
         # `if is_quality_match:` dispatch — the only place where routing
         # a row to recognized_non_scorable has no scoring side-effect.
-        preamble = source[max(0, d210_start - 3000):d210_start]
-        assert "if is_quality_match:" in preamble, (
+        quality_dispatch = source.rfind("if is_quality_match:", 0, d210_start)
+        no_match_branch = source.find("else:", quality_dispatch, d210_start)
+        assert quality_dispatch >= 0 and no_match_branch >= 0, (
             "D2.10 safety invariant: the source-descriptor fix must live "
             "inside the no-quality-match branch so it cannot accidentally "
             "suppress real A1/A2 scoring contributions."

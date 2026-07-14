@@ -282,13 +282,18 @@ class CoverageGate:
         """
         product_id = str(product.get("dsld_id", product.get("id", "unknown")))
 
-        # Get match ledger
-        match_ledger = product.get("match_ledger", {})
-        domains = match_ledger.get("domains", {})
+        # A missing producer ledger is not evidence of complete coverage.
+        match_ledger = product.get("match_ledger")
+        ledger_valid = isinstance(match_ledger, dict) and isinstance(
+            match_ledger.get("domains"), dict
+        )
+        domains = match_ledger.get("domains", {}) if ledger_valid else {}
 
         # Check each domain
         domain_results = {}
-        blocking_issues = []
+        blocking_issues = (
+            [] if ledger_valid else ["Missing or malformed match_ledger"]
+        )
         warnings = []
 
         for domain_name, config in self.thresholds.items():
@@ -371,7 +376,7 @@ class CoverageGate:
                 warnings.append(f"[{issue.issue_type}] {issue.description}")
 
         # Calculate overall coverage
-        summary = match_ledger.get("summary", {})
+        summary = match_ledger.get("summary", {}) if ledger_valid else {}
         overall_coverage = summary.get("coverage_percent", 0.0)
 
         can_score = len(blocking_issues) == 0

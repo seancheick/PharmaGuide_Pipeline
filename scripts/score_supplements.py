@@ -44,6 +44,7 @@ from scoring_input_contract import (
     get_scoring_ingredients,
     is_nutrition_only_product,
 )
+from stage_manifest import select_stage_input_files
 
 try:
     from match_ledger import (
@@ -5579,11 +5580,13 @@ class SupplementScorer:
             input_files = [input_path]
         elif os.path.isdir(input_path):
             input_files = [
-                os.path.join(input_path, filename)
-                for filename in os.listdir(input_path)
-                if filename.endswith(".json") and not filename.startswith(".")
+                str(path)
+                for path in select_stage_input_files(
+                    Path(input_path),
+                    "enrich",
+                    patterns=("*.json",),
+                )
             ]
-            input_files.sort()
         else:
             raise FileNotFoundError(f"Input path not found: {input_path}")
 

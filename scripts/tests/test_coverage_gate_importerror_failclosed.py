@@ -42,3 +42,27 @@ def test_transitive_importerror_during_gate_fails_closed(tmp_path, monkeypatch):
         "A transitive ImportError during coverage checking must fail CLOSED "
         "(block scoring), not be swallowed by the module-missing ImportError catch"
     )
+
+
+def test_gate_execution_failure_cannot_be_downgraded_to_warn_only(
+    tmp_path, monkeypatch
+):
+    enr = tmp_path / "enr"
+    enr.mkdir()
+    (enr / "p.json").write_text(json.dumps([{"id": "1"}]), encoding="utf-8")
+
+    class BoomGate:
+        def __init__(self, strict_mode=False):
+            pass
+
+        def check_batch(self, products):
+            raise RuntimeError("required gate crashed")
+
+    monkeypatch.setattr(coverage_gate, "CoverageGate", BoomGate)
+
+    can_proceed, summary = PipelineRunner().run_coverage_gate(
+        str(enr), str(tmp_path), block_on_failure=False
+    )
+
+    assert can_proceed is False
+    assert summary["error"] == "gate_execution_failed"
