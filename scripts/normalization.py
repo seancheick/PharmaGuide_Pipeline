@@ -171,8 +171,13 @@ def make_normalized_key(raw: str) -> str:
     # Remove brackets but keep contents
     text = re.sub(r'[\[\]]', ' ', text)
 
-    # Remove all punctuation except hyphens (convert to space first)
-    # Keep alphanumeric, hyphens, and spaces
+    # Preserve semantic separators as token boundaries before removing the
+    # remaining punctuation. Deleting them joined distinct identities
+    # (``10:1`` -> ``101`` and ``D/K2`` -> ``dk2``).
+    text = re.sub(r'[:/]', ' ', text)
+
+    # Remove all remaining punctuation except hyphens.
+    # Keep alphanumeric, hyphens, and spaces.
     text = re.sub(r'[^\w\s-]', '', text)
 
     # Replace spaces and hyphens with underscores

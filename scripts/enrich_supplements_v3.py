@@ -5283,9 +5283,14 @@ class SupplementEnricherV3:
         is_structural_blend = (
             ingredient.get('proprietaryBlend', False)
             or ingredient.get('isProprietaryBlend', False)
-            or ('blend' in ingredient_group and 'blend' not in name_lower.split()[-1:])
+            or ('blend' in ingredient_group)
         )
-        hierarchy_type = ingredient.get('hierarchyType', '')
+        hierarchy_type_raw = ingredient.get('hierarchyType', '')
+        hierarchy_type = (
+            hierarchy_type_raw.get('type', '')
+            if isinstance(hierarchy_type_raw, dict)
+            else hierarchy_type_raw
+        )
         is_header_hierarchy = hierarchy_type in ('summary', 'blend_header')
 
         if has_dose and (is_structural_blend or is_header_hierarchy):
@@ -12918,7 +12923,12 @@ class SupplementEnricherV3:
                         }
                         if (
                             not row_level_brand_match
-                            and not self._brand_mentioned(study_name, study_aliases, product)
+                            and not self._brand_mentioned(
+                                study_name,
+                                study_aliases,
+                                product,
+                                brand_tokens=study.get("brand_tokens"),
+                            )
                         ):
                             continue
 
@@ -13070,12 +13080,29 @@ class SupplementEnricherV3:
             "unsubstantiated_claims": unsubstantiated
         }
 
-    def _brand_mentioned(self, study_name: str, aliases: List[str], product: Dict) -> bool:
-        """Check if brand is explicitly mentioned in product"""
-        all_text = self._get_all_product_text_lower(product)
+    def _brand_mentioned(
+        self,
+        study_name: str,
+        aliases: List[str],
+        product: Dict,
+        brand_tokens: Optional[List[str]] = None,
+    ) -> bool:
+        """Return whether the label explicitly names the studied brand.
 
-        terms = [study_name.lower()] + [a.lower() for a in aliases]
-        return any(term in all_text for term in terms)
+        ``aliases`` remains the identity-discovery surface and may legitimately
+        contain a generic ingredient name. A BRAND_ study instead gates on its
+        curated ``brand_tokens`` when present. Older records fall back to their
+        study name/aliases, with every match token bounded.
+        """
+        all_text = self._get_all_product_text_lower(product)
+        terms = brand_tokens if brand_tokens else [study_name, *aliases]
+        for term in terms:
+            normalized = str(term or "").strip().lower()
+            if normalized and re.search(
+                rf"(?<!\w){re.escape(normalized)}(?!\w)", all_text
+            ):
+                return True
+        return False
 
     def _check_unsubstantiated_claims(self, text: str) -> Dict:
         """Check for egregious unsubstantiated claims"""
@@ -13415,7 +13442,7 @@ class SupplementEnricherV3:
             # Try to extract specific EU country
             eu_match = self.compiled_patterns['made_eu'].search(all_text)
             if eu_match:
-                country = eu_match.group(0)
+                country = eu_match.group(3)
 
         # Fallback: read structured contacts for Manufacturer address
         if not country:
@@ -15219,6 +15246,19 @@ class SupplementEnricherV3:
         """
         text_lower = text.lower()
 
+        # Precaution ceilings are safety instructions, not recommended intake.
+        # Remove only the affected clause so an independent positive direction
+        # in the same label remains available ("Take 2... Do not exceed 6").
+        clauses = re.split(r"(?<=[.!?;])\s+|[\r\n]+", text_lower)
+        precaution = re.compile(
+            r"\b(?:(?:do|should|must)\s+not\s+exceed|not\s+to\s+exceed)\b"
+        )
+        text_lower = " ".join(
+            clause for clause in clauses if clause.strip() and not precaution.search(clause)
+        )
+        if not text_lower:
+            return None
+
         # First convert word numbers to digits for easier parsing
         for word, num in self.WORD_TO_NUM.items():
             text_lower = re.sub(rf'\b{word}\b', str(num), text_lower)
@@ -16648,6 +16688,27 @@ class SupplementEnricherV3:
                     # Step 2: Compute adequacy with converted amount
                     rule_id = (conversion.conversion_rule_id or '').lower()
                     form_detected = (conversion.form_detected or '').lower()
+                    _canonical_for_ul = self._normalize_text(
+                        ingredient.get("canonical_id") or std_name
+                    )
+                    _folate_label_text = self._normalize_text(" ".join(
+                        str(value or "")
+                        for value in (
+                            ing_name,
+                            matched_form,
+                            ingredient.get("raw_source_text"),
+                        )
+                    ))
+                    _is_folate = _canonical_for_ul in {
+                        "folate", "vitamin b9 folate", "vitamin_b9_folate"
+                    }
+                    _explicit_folic_acid = bool(
+                        re.search(r"\bfolic acid\b", _folate_label_text)
+                    )
+                    _explicit_non_folic_folate = bool(re.search(
+                        r"\b(?:methylfolate|5 mthf|methyltetrahydrofolate|metafolin|quatrefolic)\b",
+                        _folate_label_text,
+                    ))
                     unknown_form = (
                         'unknown' in rule_id or
                         'unknown' in form_detected or
@@ -16686,6 +16747,7 @@ class SupplementEnricherV3:
                     conv_evidence.update(dose_lineage)
                     skip_ul_check = False
                     skip_ul_reason = None
+                    ul_only_skip = False
                     if dose_lineage["dose_role"] == "form_component":
                         # The label-declared DFE total owns this form-derived
                         # conversion. Retain the row for label context but do
@@ -16703,6 +16765,18 @@ class SupplementEnricherV3:
                     elif conversion_failed:
                         skip_ul_check = True
                         skip_ul_reason = "conversion_failed"
+                    elif _is_folate and not _explicit_folic_acid:
+                        # The adult folate UL applies to synthetic folic acid,
+                        # not methylfolate/food folate or an unidentified form.
+                        # Keep adequacy from the label-declared DFE exposure,
+                        # but suppress an unsupported UL conclusion.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = (
+                            "non_folic_acid_folate_ul_basis"
+                            if _explicit_non_folic_folate
+                            else "unknown_folate_form_lineage"
+                        )
 
                     per_day_min = converted_amount * servings_min
                     per_day_max = converted_amount * servings_max
@@ -16741,7 +16815,18 @@ class SupplementEnricherV3:
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "data_by_group": list(_nutrient_record.get("data") or []),
                     })
-                    if skip_ul_check:
+                    if skip_ul_check and ul_only_skip:
+                        adequacy_dict.update({
+                            "ul": None,
+                            "ul_status": f"skipped_{skip_ul_reason}",
+                            "pct_ul": None,
+                            "over_ul": False,
+                            "over_ul_amount": None,
+                            "warnings": [],
+                            "skip_ul_check": True,
+                            "skip_ul_reason": skip_ul_reason,
+                        })
+                    elif skip_ul_check:
                         adequacy_dict.update({
                             "rda_ai": None,
                             "rda_ai_source": "unknown",
@@ -17795,6 +17880,38 @@ class SupplementEnricherV3:
             )
 
         # =====================================================================
+        # CLAIMS DOMAIN
+        # =====================================================================
+        # Claims are auditable label assertions, not scorable ingredient
+        # identities. Record each one as recognized/non-scorable so coverage is
+        # based on inspected source claims instead of a vacuous empty domain.
+        for index, claim in enumerate(product.get("claims", []) or []):
+            if isinstance(claim, str):
+                raw_text = claim.strip()
+            elif isinstance(claim, dict):
+                raw_text = str(
+                    claim.get("text")
+                    or claim.get("langualCodeDescription")
+                    or claim.get("notes")
+                    or ""
+                ).strip()
+            else:
+                raw_text = ""
+            if not raw_text:
+                continue
+
+            ledger.record_recognized_non_scorable(
+                domain=DOMAIN_CLAIMS,
+                raw_source_text=raw_text,
+                raw_source_path=f"claims[{index}]",
+                recognition_source="claim_scope_audit",
+                recognition_reason="label_claim_audited_not_identity_scorable",
+                canonical_id="label_claim",
+                matched_to_name=raw_text,
+                normalized_key=norm_module.make_normalized_key(raw_text),
+            )
+
+        # =====================================================================
         # BUILD FINAL OUTPUT
         # =====================================================================
         match_ledger = ledger.build()
@@ -18128,6 +18245,18 @@ def _verify_working_directory(config_path: str) -> None:
 
 
 
+def _resolve_cli_paths(args: argparse.Namespace, config: Dict[str, Any]) -> Tuple[str, str]:
+    """Resolve input/output overrides independently instead of all-or-nothing."""
+    paths = config.get("paths", {})
+    input_path = args.input_dir or paths.get(
+        "input_directory", "output_Lozenges/cleaned"
+    )
+    output_dir = args.output_dir or paths.get(
+        "output_directory", "output_Lozenges_enriched"
+    )
+    return input_path, output_dir
+
+
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
@@ -18159,14 +18288,7 @@ Examples:
         # Initialize enricher
         enricher = SupplementEnricherV3(args.config)
 
-        # Determine paths
-        if args.input_dir and args.output_dir:
-            input_path = args.input_dir
-            output_dir = args.output_dir
-        else:
-            paths = enricher.config.get('paths', {})
-            input_path = paths.get('input_directory', 'output_Lozenges/cleaned')
-            output_dir = paths.get('output_directory', 'output_Lozenges_enriched')
+        input_path, output_dir = _resolve_cli_paths(args, enricher.config)
 
         if args.dry_run:
             enricher.logger.info("DRY RUN MODE")

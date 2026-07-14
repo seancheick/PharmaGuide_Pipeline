@@ -59,25 +59,6 @@ DISPLAY_LEDGER_SOURCE_SECTIONS = frozenset({
     DISPLAY_LEDGER_SOURCE_PRODUCT_NAME,
 })
 
-# Field mappings for normalization
-UNIT_CONVERSIONS = {
-    # Vitamin-specific IU conversions (context-aware)
-    "IU": {
-        "vitamin d": 0.025, "vitamin d3": 0.025, "vitamin d2": 0.025,  # IU to mcg
-        "vitamin a": 0.3, "retinol": 0.3,  # IU to mcg RAE
-        "vitamin e": 0.67, "alpha-tocopherol": 0.67,  # IU to mg
-        "beta carotene": 0.6  # IU to mcg
-    },
-    # Standard metric conversions
-    "gram": {"mg": 1000, "mcg": 1000000, "g": 1},
-    "milligram": {"mg": 1, "mcg": 1000, "g": 0.001},
-    "microgram": {"mcg": 1, "mg": 0.001, "g": 0.000001},
-    # Additional units
-    "kilogram": {"g": 1000, "mg": 1000000, "mcg": 1000000000},
-    "ounce": {"g": 28.35, "mg": 28350},
-    "pound": {"g": 453.6, "mg": 453600}
-}
-
 # Ingredient names that typically serve as wrappers/carriers for actual actives
 # Used to unwrap forms[] when the parent is just a source material
 SOURCE_WRAPPER_NAMES = {
@@ -1223,9 +1204,9 @@ NON_THERAPEUTIC_ACTIVE_PATTERNS = [
 # HIGH-SIGNAL potency markers - strong therapeutic indicators
 # These patterns indicate a real therapeutic ingredient, not an excipient
 POTENCY_MARKERS_HIGH_SIGNAL = [
-    r"\d+\s*(mg|mcg|g|μg|iu)",    # Numeric dose with therapeutic unit
-    r"\d+\s*%",                    # Percentage standardization
-    r"\d+:\d+",                    # Extract ratio like 10:1, 4:1
+    r"(?<![\w.])\d+(?:\.\d+)?\s*(mg|mcg|g|μg|iu)(?![a-z])",  # Bounded therapeutic dose
+    r"(?<![\w.])\d+(?:\.\d+)?\s*%",  # Percentage standardization
+    r"(?<![\w.])\d+\s*:\s*\d+",  # Extract ratio like 10:1, 4:1
     r"standardized\s+to",          # "Standardized to X%"
     r"\d+\s*cfu",                  # Probiotic CFU
     r"\d+\s*billion",              # Probiotic billions

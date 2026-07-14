@@ -118,6 +118,16 @@ def test_methylated_folate_takes_precedence_over_folic_acid(normalizer):
     assert "folic acid" not in forms
 
 
+def test_source_parenthetical_is_not_promoted_to_chemical_form(normalizer):
+    forms = normalizer._extract_forms_from_ingredient_name(
+        "Calcium (as calcium citrate) (from limestone)"
+    )
+
+    assert "calcium citrate" in forms
+    assert "from limestone" not in forms
+    assert "limestone" not in forms
+
+
 # -- Mineral salt long tail (was TODO(M9-DEFER)) -----------------------------
 
 @pytest.mark.parametrize("label, expected", [

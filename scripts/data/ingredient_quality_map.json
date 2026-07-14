@@ -4214,7 +4214,7 @@
         }
       }
     },
-    "aliases": ["folate and folic acid", "folic acid", "Folate", "folate"],
+    "aliases": ["folate and folic acid", "folic acid", "folate"],
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -14490,7 +14490,7 @@
       "last_reviewed": "2026-02-28",
       "research_status": "validated"
     },
-    "aliases": ["curcumin", "Curcumin", "full spectrum curcumin"],
+    "aliases": ["curcumin", "full spectrum curcumin"],
     "external_ids": {
       "unii": "IT942ZTH98"
     },
@@ -16549,7 +16549,7 @@
       "last_reviewed_at": "2026-02-27",
       "research_status": "validated"
     },
-    "aliases": ["betaine", "Betaine", "trimethylglycine"],
+    "aliases": ["betaine", "trimethylglycine"],
     "cui_note": "Corrected from unrelated TMG shorthand code to betaine / trimethylglycine concept.",
     "external_ids": {
       "unii": "3SCV180C9W"
@@ -18600,7 +18600,6 @@
     },
     "aliases": [
       "trans-lutein",
-      "Trans-Lutein",
       "trans lutein",
       "all-trans lutein"
     ],
@@ -41210,8 +41209,6 @@
       "epa omega-3",
       "epa from fish oil",
       "omega-3 epa",
-      "Omega-3 EPA",
-      "Omega-3 Eicosapentaenoic Acid",
       "omega-3 eicosapentaenoic acid"
     ],
     "forms": {
@@ -41940,9 +41937,7 @@
       "calamari oil",
       "total calamari oil",
       "calamarine",
-      "CalaMarine Oil concentrate",
-      "Calamarine Oil concentrate",
-      "CalaMarine Oil Concentrate"
+      "calamarine oil concentrate"
     ],
     "forms": {
       "calamari oil phospholipid": {
@@ -58349,7 +58344,7 @@
     "standard_name": "OptiBerry",
     "category": "antioxidants",
     "category_enum": "antioxidants",
-    "aliases": ["optiberry", "optibery", "opriberry", "OpriBerry"],
+    "aliases": ["optiberry", "optibery", "opriberry"],
     "notes": "OptiBerry (originally InterHealth Nutraceuticals; now Lonza Group) is a standardized multi-berry anthocyanin blend combining wild blueberry (Vaccinium angustifolium), bilberry (V. myrtillus), cranberry (V. macrocarpon), elderberry (Sambucus nigra), raspberry seeds (Rubus idaeus), and strawberry (Fragaria × ananassa). ~60% anthocyanin phenolic content. In vitro/in vivo anti-angiogenic and antioxidant activity. 'OpriBerry' is a common OCR/label misread of OptiBerry.",
     "cui_note": "No confirmed exact UMLS concept found for the proprietary OptiBerry blend.",
     "rxcui_note": "No RxNorm concept for branded botanical blend",

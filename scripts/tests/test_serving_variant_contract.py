@@ -72,3 +72,71 @@ def test_adequacy_uses_minimum_and_ul_safety_uses_maximum(enricher) -> None:
     assert result["safety_flags"][0]["amount"] == pytest.approx(3000)
     assert row["data_by_group"]
     assert result["reference_profile"]["id"] == "adult_neutral_compatibility"
+
+
+def test_precaution_ceiling_is_not_parsed_as_recommended_dose(enricher) -> None:
+    parsed = enricher._parse_dosage_from_directions(
+        "Do not exceed 6 tablets in 24 hours. Take 2 tablets daily."
+    )
+
+    assert parsed == {"min": 2, "max": 2}
+
+
+def test_precaution_without_recommended_dose_returns_none(enricher) -> None:
+    parsed = enricher._parse_dosage_from_directions(
+        "Do not exceed 6 tablets in 24 hours."
+    )
+
+    assert parsed is None
+
+
+@pytest.mark.parametrize(
+    "name,matched_form,unit,expected_reason",
+    [
+        ("Methylfolate", "5-MTHF", "mcg", "non_folic_acid_folate_ul_basis"),
+        ("Folate", "standard", "mcg DFE", "unknown_folate_form_lineage"),
+    ],
+)
+def test_non_folic_acid_folate_retains_adequacy_but_suppresses_ul(
+    enricher, name, matched_form, unit, expected_reason
+) -> None:
+    result = enricher._collect_rda_ul_data({
+        "activeIngredients": [{
+            "name": name,
+            "standardName": "Folate",
+            "canonical_id": "vitamin_b9_folate",
+            "matched_form": matched_form,
+            "quantity": 1200,
+            "unit": unit,
+            "dailyValue": 300,
+        }],
+        "inactiveIngredients": [],
+    })
+    row = result["adequacy_results"][0]
+
+    assert row["rda_ai"] is not None
+    assert row["ul"] is None
+    assert row["pct_ul"] is None
+    assert row["over_ul"] is False
+    assert row["skip_ul_reason"] == expected_reason
+    assert result["has_over_ul"] is False
+
+
+def test_identified_folic_acid_still_uses_synthetic_ul_basis(enricher) -> None:
+    result = enricher._collect_rda_ul_data({
+        "activeIngredients": [{
+            "name": "Folic Acid",
+            "standardName": "Folate",
+            "canonical_id": "vitamin_b9_folate",
+            "matched_form": "folic acid",
+            "quantity": 1100,
+            "unit": "mcg",
+            "dailyValue": 275,
+        }],
+        "inactiveIngredients": [],
+    })
+    row = result["adequacy_results"][0]
+
+    assert row["skip_ul_check"] is False
+    assert row["over_ul"] is True
+    assert result["has_over_ul"] is True
