@@ -56,6 +56,22 @@ def test_detector_header_and_cleaning_body_merge(enricher):
     assert len(merged[0].get("child_ingredients") or []) == 3
 
 
+def test_detector_category_name_uses_matched_label_for_header_body_merge(enricher):
+    detector = _blend("General Proprietary Blends", None, [], source="detector")
+    detector["evidence"] = {"matched_text": "Proprietary Blend"}
+    cleaning = _blend(
+        "Proprietary Blend",
+        None,
+        ["Lactobacillus gasseri KS-13", "Bifidobacterium longum MM-2"],
+    )
+
+    merged = enricher._merge_blend_evidence([detector], [cleaning])
+
+    assert len(merged) == 1
+    assert merged[0]["name"] == "Proprietary Blend"
+    assert len(merged[0].get("child_ingredients") or []) == 2
+
+
 def test_distinct_blends_stay_separate(enricher):
     a = _blend("Adaptogen Blend", 100, ["x"])
     b = _blend("Antioxidant Blend", 100, ["y"])

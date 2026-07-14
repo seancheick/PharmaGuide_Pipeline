@@ -3243,6 +3243,11 @@ class SupplementEnricherV3:
         identity_registry = self._current_canonical_identity_registry()
 
         def resolve(candidate: str) -> Optional[str]:
+            literal_preferred = identity_registry.preferred_index.get(
+                str(candidate or "").lower().strip()
+            )
+            if literal_preferred:
+                return literal_preferred[0]
             match_result = self._match_quality_map(
                 candidate,
                 candidate,
@@ -12274,6 +12279,11 @@ class SupplementEnricherV3:
         """
         merged = {}
 
+        def label_identity(blend: Dict) -> str:
+            evidence = blend.get("evidence") or {}
+            matched_text = evidence.get("matched_text")
+            return str(matched_text or blend.get("name") or "").lower().strip()
+
         def dedupe_key(blend: Dict) -> tuple:
             """Generate deduplication key matching B4 scoring logic.
 
@@ -12281,7 +12291,7 @@ class SupplementEnricherV3:
             stay separate; the header/body split is collapsed by the post-merge
             consolidation pass below, not here.
             """
-            name = (blend.get("name") or "").lower().strip()
+            name = label_identity(blend)
             mg = blend.get("total_weight")
             # 5mg bucket to tolerate parsing variance
             mg_bucket = int(round(mg / 5.0) * 5) if mg and mg > 0 else None
@@ -12361,7 +12371,7 @@ class SupplementEnricherV3:
         groups: Dict[tuple, List[Dict]] = {}
         order: List[tuple] = []
         for b in merged.values():
-            gkey = ((b.get("name") or "").lower().strip(), _consol_bucket(b))
+            gkey = (label_identity(b), _consol_bucket(b))
             groups.setdefault(gkey, [])
             if gkey not in order:
                 order.append(gkey)
@@ -13554,7 +13564,11 @@ class SupplementEnricherV3:
             # strain names) using bounded terms. Substring matching made
             # "casein decapeptide" look like L. casei and polluted route
             # classification with false probiotic_data.
-            is_probiotic = _is_probiotic_identity(ingredient)
+            ingredient_source_path = ingredient.get("raw_source_path") or "activeIngredients"
+            is_probiotic = _is_probiotic_identity(ingredient) or (
+                _is_blend_header_total(ingredient)
+                and ingredient_source_path in flattened_child_parent_paths
+            )
 
             if is_probiotic:
                 nested = ingredient.get('nestedIngredients', [])
@@ -13563,7 +13577,6 @@ class SupplementEnricherV3:
 
                 # P1.1: Extract CFU from per-strain text only (not product statements)
                 cfu_text = harvest + ' ' + notes
-                ingredient_source_path = ingredient.get("raw_source_path") or "activeIngredients"
                 cfu_data = self._extract_cfu(
                     cfu_text,
                     ingredient=ingredient,

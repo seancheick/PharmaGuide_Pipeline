@@ -153,6 +153,37 @@ def test_BUG_3_probiotic_name_with_np_strains_misclassifies_as_general():
     )
 
 
+def test_probiotic_name_and_enriched_strain_identity_survive_empty_scorable_rows():
+    product = {
+        "product_name": "FloraMend Prime Probiotic",
+        "activeIngredients": [
+            {
+                "name": "Lactobacillus gasseri KS-13",
+                "canonical_id": "lactobacillus_gasseri",
+                "category": "bacteria",
+                "quantity": 0,
+                "unit": "NP",
+                "score_eligible_by_cleaner": False,
+                "cleaner_row_role": "nested_display_only",
+            }
+        ],
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients": [],
+        },
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_strain_count": 3,
+            "total_cfu": 0,
+        },
+    }
+
+    result = classify_supplement(product)
+
+    assert result["primary_type"] == "probiotic"
+    assert result["classification_confidence"] >= 0.6
+
+
 # ============================================================================
 # BUG-4: BCAA / Essential Amino Acids → general_supplement
 # ============================================================================

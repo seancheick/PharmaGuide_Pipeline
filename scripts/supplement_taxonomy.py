@@ -676,6 +676,11 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         and probiotic_row_identity
         and not _has_non_probiotic_eligible_active(product)
     )
+    probiotic_identity_only_signal = (
+        probiotic_name_signal
+        and probiotic_row_identity
+        and not _has_non_probiotic_eligible_active(product)
+    )
     # Require a real probiotic-majority panel, not just a minority strain set
     # alongside non-probiotic actives. Single-active products where the only
     # active is a strain still route correctly.
@@ -688,7 +693,11 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     if (
         (active_count == 0 or support_only_active)
         and (probiotic_name_signal or probiotic_row_identity)
-        and (non_quantified_probiotic_count > 0 or probiotic_cfu_identity_ok)
+        and (
+            non_quantified_probiotic_count > 0
+            or probiotic_cfu_identity_ok
+            or probiotic_identity_only_signal
+        )
     ):
         primary_type = "probiotic"
         confidence = 0.8 if probiotic_cfu_identity_ok else 0.65
@@ -697,6 +706,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 reasons.append("probiotic name + product-level CFU evidence")
             else:
                 reasons.append("probiotic row identity + product-level CFU evidence")
+        elif probiotic_identity_only_signal:
+            reasons.append("probiotic name + enriched strain identity")
         else:
             reasons.append(
                 f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"

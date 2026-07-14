@@ -789,6 +789,36 @@ def test_literal_specific_identity_is_not_replaced_by_structured_parent():
     assert decision.scoreable_identity is True
 
 
+def test_explicit_form_validates_specific_child_of_structured_parent():
+    canonicals = {
+        "vitamin a": "vitamin_a",
+        "vitamin a (unspecified)": "vitamin_a",
+        "beta-carotene": "beta_carotene",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Vitamin A",
+            "ingredientGroup": "Vitamin A (unspecified)",
+            "forms": [{"name": "Beta-Carotene"}],
+        },
+        supplied_canonical_id="beta_carotene",
+        resolve_candidate=lambda value: canonicals.get(
+            normalize_label_display(value).casefold()
+        ),
+        canonical_parent_of=lambda parent, child: (
+            parent,
+            child,
+        )
+        == ("vitamin_a", "beta_carotene"),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "beta_carotene"
+    assert decision.source_label_name == "Vitamin A (unspecified)"
+    assert decision.source_label_form == "Beta-Carotene"
+
+
 def test_literal_identity_cannot_resolve_unrelated_structured_conflict():
     canonicals = {
         "epa": "epa",

@@ -659,6 +659,7 @@ def resolve_identity(
         if item.field.startswith("alternateNames")
     )
     raw_evidence = tuple(item for item in evidence if item.kind == "source_name")
+    form_evidence = tuple(item for item in evidence if item.kind == "source_form")
     structured_canonicals = _resolved_canonicals(
         primary_structured_evidence,
         resolve_candidate,
@@ -698,6 +699,18 @@ def resolve_identity(
         and structured_canonical != canonical_before
         and canonical_parent_of
         and canonical_parent_of(structured_canonical, canonical_before)
+    )
+    form_validates_specific_over_structured_parent = bool(
+        canonical_before
+        and structured_canonical
+        and structured_canonical != canonical_before
+        and canonical_parent_of
+        and canonical_parent_of(structured_canonical, canonical_before)
+        and any(
+            _canonical(resolve_candidate(candidate)) == canonical_before
+            for item in form_evidence
+            for candidate in _candidate_variants(item.value)
+        )
     )
     display_canonical = (
         raw_canonical
@@ -751,6 +764,7 @@ def resolve_identity(
         elif (
             canonical_before == structured_canonical
             or literal_specific_over_structured_parent
+            or form_validates_specific_over_structured_parent
         ):
             disposition = "clean"
             canonical_after = canonical_before
@@ -762,7 +776,12 @@ def resolve_identity(
                     "The literal label validates the supplied specific identity; "
                     "the structured line identity is its registered parent."
                     if literal_specific_over_structured_parent
-                    else "Structured line identity agrees with the supplied canonical ID."
+                    else (
+                        "An explicit label form validates the supplied specific identity; "
+                        "the structured line identity is its registered parent."
+                        if form_validates_specific_over_structured_parent
+                        else "Structured line identity agrees with the supplied canonical ID."
+                    )
                 )
             )
         else:

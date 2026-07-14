@@ -2517,6 +2517,16 @@ def test_reviewed_botanical_parents_do_not_override_specific_iqm_extracts():
     assert not parent_of("green_tea", "grape_seed_extract")
 
 
+def test_identity_resolver_prefers_exact_registry_identity_over_parent_form_match():
+    enricher = SupplementEnricherV3()
+    resolver = enricher._identity_candidate_resolver(
+        enricher.databases["ingredient_quality_map"]
+    )
+
+    assert resolver("Beta-Carotene") == "beta_carotene"
+    assert resolver("Vitamin A") == "vitamin_a"
+
+
 def test_pure_encapsulations_form_fallback_aliases_map_without_fallback():
     enricher = SupplementEnricherV3()
     qm = enricher.databases["ingredient_quality_map"]

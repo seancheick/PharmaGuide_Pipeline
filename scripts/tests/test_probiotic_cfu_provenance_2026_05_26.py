@@ -185,6 +185,47 @@ def test_blend_header_total_does_not_double_count_nested_strain_cfus(enricher):
     }["Bifidobacterium animalis lactis HN019"] == pytest.approx(5_000_000_000)
 
 
+def test_generic_flattened_header_carries_aggregate_live_cell_guarantee(enricher):
+    product = {
+        "id": "floramend_like",
+        "product_name": "FloraMend Prime Probiotic",
+        "statements": [],
+        "activeIngredients": [
+            {
+                "name": "Proprietary Blend",
+                "standardName": "General Proprietary Blends",
+                "category": "blend",
+                "quantity": 0,
+                "unit": "NP",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "hierarchyType": "blend_header",
+                "score_exclusion_reason": "blend_header_total",
+                "nestedIngredients": [],
+                "notes": "5 billion live cells at time of expiration",
+            },
+            {
+                "name": "Lactobacillus gasseri KS-13",
+                "standardName": "Lactobacillus Gasseri",
+                "category": "bacteria",
+                "quantity": 0,
+                "unit": "NP",
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "parentBlend": "Proprietary Blend",
+                "nestedIngredients": [],
+            },
+        ],
+        "inactiveIngredients": [],
+    }
+
+    probiotic_data = enricher._collect_probiotic_data(product)
+
+    assert probiotic_data["total_strain_count"] == 1
+    assert probiotic_data["total_billion_count"] == pytest.approx(5.0)
+    assert probiotic_data["guarantee_type"] == "at_expiration"
+    assert probiotic_data["cfu_raw_source_path"] == "ingredientRows[0]"
+
+
 def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enricher):
     enriched = {
         "activeIngredients": [
