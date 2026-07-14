@@ -11,6 +11,7 @@ from identity_integrity import (
     is_identity_scoreable,
     normalize_label_display,
     resolve_identity,
+    validated_canonical_parent_relationships,
 )
 
 
@@ -327,6 +328,77 @@ def test_equivalence_cannot_override_an_iqm_canonical_target():
                             "scope": "all_identity_contexts",
                         }
                     ]
+                },
+            }
+        )
+
+
+def test_reviewed_parent_relationships_are_validated_across_registries():
+    relationships = validated_canonical_parent_relationships(
+        {
+            "ingredient_quality_map": {
+                "green_tea_extract": {
+                    "standard_name": "Green Tea Extract",
+                    "aliases": [],
+                    "forms": {},
+                    "match_rules": {},
+                }
+            },
+            "botanical_ingredients": {
+                "botanical_ingredients": [
+                    {
+                        "id": "green_tea",
+                        "standard_name": "Green Tea",
+                        "aliases": [],
+                    }
+                ]
+            },
+            "canonical_equivalences": {
+                "equivalences": [],
+                "relationships": [
+                    {
+                        "parent_db": "botanical_ingredients",
+                        "parent_id": "green_tea",
+                        "child_db": "ingredient_quality_map",
+                        "child_id": "green_tea_extract",
+                        "relation": "broader_than",
+                        "basis": "Reviewed whole-plant to extract relationship.",
+                        "scope": "specificity_resolution_only",
+                    }
+                ],
+            },
+        }
+    )
+
+    assert relationships == {("green_tea", "green_tea_extract")}
+
+
+def test_parent_relationship_requires_existing_registry_ids():
+    with pytest.raises(ValueError, match="child_id"):
+        validated_canonical_parent_relationships(
+            {
+                "botanical_ingredients": {
+                    "botanical_ingredients": [
+                        {
+                            "id": "green_tea",
+                            "standard_name": "Green Tea",
+                            "aliases": [],
+                        }
+                    ]
+                },
+                "canonical_equivalences": {
+                    "equivalences": [],
+                    "relationships": [
+                        {
+                            "parent_db": "botanical_ingredients",
+                            "parent_id": "green_tea",
+                            "child_db": "ingredient_quality_map",
+                            "child_id": "missing_extract",
+                            "relation": "broader_than",
+                            "basis": "test",
+                            "scope": "specificity_resolution_only",
+                        }
+                    ],
                 },
             }
         )
@@ -687,6 +759,33 @@ def test_literal_compound_disambiguates_generic_counterion_taxonomy():
 
     assert decision.disposition == "clean"
     assert decision.canonical_id == "calcium_d_glucarate"
+    assert decision.scoreable_identity is True
+
+
+def test_literal_specific_identity_is_not_replaced_by_structured_parent():
+    canonicals = {
+        "green tea phytosome": "green_tea_extract",
+        "green tea": "green_tea",
+    }
+
+    decision = resolve_identity(
+        row={
+            "raw_source_text": "Green Tea Phytosome",
+            "ingredientGroup": "Green Tea",
+        },
+        supplied_canonical_id="green_tea_extract",
+        resolve_candidate=lambda value: canonicals.get(
+            normalize_label_display(value).casefold()
+        ),
+        canonical_parent_of=lambda parent, child: (
+            parent,
+            child,
+        )
+        == ("green_tea", "green_tea_extract"),
+    )
+
+    assert decision.disposition == "clean"
+    assert decision.canonical_id == "green_tea_extract"
     assert decision.scoreable_identity is True
 
 

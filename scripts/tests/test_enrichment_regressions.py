@@ -2506,6 +2506,17 @@ def test_capsules_high_confidence_form_variants_map_after_alias_updates():
         assert not match.get("form_unmapped_fallback"), raw_name
 
 
+def test_reviewed_botanical_parents_do_not_override_specific_iqm_extracts():
+    enricher = SupplementEnricherV3()
+    parent_of = enricher._identity_parent_predicate(
+        enricher.databases["ingredient_quality_map"]
+    )
+
+    assert parent_of("green_tea", "green_tea_extract")
+    assert parent_of("grape", "grape_seed_extract")
+    assert not parent_of("green_tea", "grape_seed_extract")
+
+
 def test_pure_encapsulations_form_fallback_aliases_map_without_fallback():
     enricher = SupplementEnricherV3()
     qm = enricher.databases["ingredient_quality_map"]

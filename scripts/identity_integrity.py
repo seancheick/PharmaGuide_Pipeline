@@ -238,27 +238,7 @@ def _validated_equivalence_redirects(
     if not isinstance(rows, list):
         raise ValueError("canonical_equivalences.equivalences must be a list")
 
-    collections: dict[str, set[str]] = {}
-    quality_map = databases.get("ingredient_quality_map")
-    if isinstance(quality_map, Mapping):
-        collections["ingredient_quality_map"] = {
-            str(key)
-            for key, value in quality_map.items()
-            if not str(key).startswith("_") and isinstance(value, Mapping)
-        }
-    for source_db, collection_key in (
-        ("standardized_botanicals", "standardized_botanicals"),
-        ("botanical_ingredients", "botanical_ingredients"),
-        ("other_ingredients", "other_ingredients"),
-        ("proprietary_blends", "proprietary_blend_concerns"),
-    ):
-        database = databases.get(source_db)
-        values = database.get(collection_key) if isinstance(database, Mapping) else None
-        collections[source_db] = {
-            str(row.get("id"))
-            for row in values or ()
-            if isinstance(row, Mapping) and row.get("id")
-        }
+    collections = _canonical_registry_collections(databases)
 
     redirects: dict[tuple[str, str], tuple[str, str]] = {}
     for row in rows:
@@ -302,6 +282,88 @@ def _validated_equivalence_redirects(
             seen.add(current)
             current = redirects[current]
     return redirects
+
+
+def _canonical_registry_collections(
+    databases: Mapping[str, Any],
+) -> dict[str, set[str]]:
+    collections: dict[str, set[str]] = {}
+    quality_map = databases.get("ingredient_quality_map")
+    if isinstance(quality_map, Mapping):
+        collections["ingredient_quality_map"] = {
+            str(key)
+            for key, value in quality_map.items()
+            if not str(key).startswith("_") and isinstance(value, Mapping)
+        }
+    for source_db, collection_key in (
+        ("standardized_botanicals", "standardized_botanicals"),
+        ("botanical_ingredients", "botanical_ingredients"),
+        ("other_ingredients", "other_ingredients"),
+        ("proprietary_blends", "proprietary_blend_concerns"),
+    ):
+        database = databases.get(source_db)
+        values = database.get(collection_key) if isinstance(database, Mapping) else None
+        collections[source_db] = {
+            str(row.get("id"))
+            for row in values or ()
+            if isinstance(row, Mapping) and row.get("id")
+        }
+    return collections
+
+
+def validated_canonical_parent_relationships(
+    databases: Mapping[str, Any],
+) -> set[tuple[str, str]]:
+    """Return reviewed broad-to-specific identity relationships."""
+    document = databases.get("canonical_equivalences")
+    if not isinstance(document, Mapping):
+        return set()
+    rows = document.get("relationships", [])
+    if not isinstance(rows, list):
+        raise ValueError("canonical_equivalences.relationships must be a list")
+
+    collections = _canonical_registry_collections(databases)
+    relationships: set[tuple[str, str]] = set()
+    for row in rows:
+        if not isinstance(row, Mapping):
+            raise ValueError("canonical relationship rows must be objects")
+        if row.get("relation") != "broader_than":
+            raise ValueError("canonical relationship must be broader_than")
+        if not isinstance(row.get("basis"), str) or not row["basis"].strip():
+            raise ValueError("canonical relationship rows require a review basis")
+        if row.get("scope") != "specificity_resolution_only":
+            raise ValueError(
+                "canonical relationship rows must declare "
+                "scope=specificity_resolution_only"
+            )
+        parent_db = str(row.get("parent_db") or "")
+        parent_id = str(row.get("parent_id") or "")
+        child_db = str(row.get("child_db") or "")
+        child_id = str(row.get("child_id") or "")
+        if parent_id not in collections.get(parent_db, set()):
+            raise ValueError(f"unknown parent_id {parent_id!r}")
+        if child_id not in collections.get(child_db, set()):
+            raise ValueError(f"unknown child_id {child_id!r}")
+        if parent_id == child_id:
+            raise ValueError("canonical relationship cannot be self-referential")
+        relationships.add((parent_id, child_id))
+
+    for parent, child in relationships:
+        pending = [child]
+        seen: set[str] = set()
+        while pending:
+            current = pending.pop()
+            if current == parent:
+                raise ValueError(f"cyclic canonical relationship at {parent!r}")
+            if current in seen:
+                continue
+            seen.add(current)
+            pending.extend(
+                descendant
+                for ancestor, descendant in relationships
+                if ancestor == current
+            )
+    return relationships
 
 
 @dataclass(frozen=True, slots=True)
@@ -629,7 +691,19 @@ def resolve_identity(
     )
     if structured_disambiguated_by_literal:
         structured_canonical = raw_canonical
-    display_canonical = structured_canonical or raw_canonical
+    literal_specific_over_structured_parent = bool(
+        canonical_before
+        and raw_canonical == canonical_before
+        and structured_canonical
+        and structured_canonical != canonical_before
+        and canonical_parent_of
+        and canonical_parent_of(structured_canonical, canonical_before)
+    )
+    display_canonical = (
+        raw_canonical
+        if literal_specific_over_structured_parent
+        else structured_canonical or raw_canonical
+    )
     source_name = _source_name(evidence, display_canonical, resolve_candidate)
     source_form = next(
         (item.value for item in evidence if item.kind == "source_form"),
@@ -674,14 +748,22 @@ def resolve_identity(
             disposition = "identity_conflict"
             canonical_after = None
             rationale = "No supplied canonical ID was available to validate or repair."
-        elif canonical_before == structured_canonical:
+        elif (
+            canonical_before == structured_canonical
+            or literal_specific_over_structured_parent
+        ):
             disposition = "clean"
-            canonical_after = structured_canonical
+            canonical_after = canonical_before
             rationale = (
                 "The unambiguous literal label selected the matching identity "
                 "from conflicting structured fields."
                 if structured_disambiguated_by_literal
-                else "Structured line identity agrees with the supplied canonical ID."
+                else (
+                    "The literal label validates the supplied specific identity; "
+                    "the structured line identity is its registered parent."
+                    if literal_specific_over_structured_parent
+                    else "Structured line identity agrees with the supplied canonical ID."
+                )
             )
         else:
             disposition = "repaired"

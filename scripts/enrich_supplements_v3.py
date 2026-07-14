@@ -105,6 +105,7 @@ from identity_integrity import (
     build_canonical_identity_registry,
     is_identity_scoreable,
     resolve_identity,
+    validated_canonical_parent_relationships,
 )
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
@@ -3298,7 +3299,12 @@ class SupplementEnricherV3:
         return matched_id
 
     def _identity_parent_predicate(self, quality_map: Dict):
-        if getattr(self, "_identity_parent_quality_map", None) is not quality_map:
+        relationship_document = self.databases.get("canonical_equivalences")
+        if (
+            getattr(self, "_identity_parent_quality_map", None) is not quality_map
+            or getattr(self, "_identity_parent_relationship_document", None)
+            is not relationship_document
+        ):
             children: Dict[str, set[str]] = {}
             for canonical_id, entry in quality_map.items():
                 if canonical_id == "_metadata" or not isinstance(entry, dict):
@@ -3322,6 +3328,11 @@ class SupplementEnricherV3:
                     ):
                         children.setdefault(canonical_id, set()).add(target_id)
 
+            for parent_id, child_id in validated_canonical_parent_relationships(
+                self.databases
+            ):
+                children.setdefault(parent_id, set()).add(child_id)
+
             descendants: Dict[str, set[str]] = {}
             for canonical_id in children:
                 pending = list(children[canonical_id])
@@ -3334,6 +3345,7 @@ class SupplementEnricherV3:
                     pending.extend(children.get(child, ()))
                 descendants[canonical_id] = resolved
             self._identity_parent_quality_map = quality_map
+            self._identity_parent_relationship_document = relationship_document
             self._identity_parent_descendants = descendants
 
         descendants = self._identity_parent_descendants

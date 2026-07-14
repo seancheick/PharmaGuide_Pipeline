@@ -1,10 +1,11 @@
 {
   "_metadata": {
-    "description": "Reviewed exact-identity redirects across pipeline registries.",
+    "description": "Reviewed identity equivalences and specificity relationships across pipeline registries.",
     "schema_version": "1.0.0",
     "version": "2026-07-13",
     "total_entries": 7,
-    "purpose": "Reviewed exact-identity redirects across pipeline registries.",
+    "total_relationships": 2,
+    "purpose": "Prevent cleaner/enricher identity drift using reviewed exact-identity and broad-to-specific contracts.",
     "policy": "Only exact same-substance records may be redirected. Parent, form, preparation, and context relationships require separate handling.",
     "last_updated": "2026-07-13"
   },
@@ -71,6 +72,26 @@
       "relation": "exact_equivalent",
       "basis": "Both records describe Vaccinium corymbosum fruit/whole-fruit powder and share CUI C1027331; the blueberry record also carries the verified FDA UNII 253RUG1X1A.",
       "scope": "all_identity_contexts"
+    }
+  ],
+  "relationships": [
+    {
+      "parent_db": "botanical_ingredients",
+      "parent_id": "green_tea",
+      "child_db": "ingredient_quality_map",
+      "child_id": "green_tea_extract",
+      "relation": "broader_than",
+      "basis": "Green Tea is the broad plant identity. A literal extract or phytosome label that independently resolves to green_tea_extract must retain that more-specific preparation identity.",
+      "scope": "specificity_resolution_only"
+    },
+    {
+      "parent_db": "botanical_ingredients",
+      "parent_id": "grape",
+      "child_db": "ingredient_quality_map",
+      "child_id": "grape_seed_extract",
+      "relation": "broader_than",
+      "basis": "Grape is the broad plant identity. A literal grape-seed extract label that independently resolves to grape_seed_extract must retain that more-specific plant-part and preparation identity.",
+      "scope": "specificity_resolution_only"
     }
   ]
 }
