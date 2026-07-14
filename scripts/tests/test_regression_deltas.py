@@ -126,6 +126,56 @@ class TestSnapshotGeneration:
         assert dist["verdicts"]["SAFE"] == 2
         assert dist["verdicts"]["CAUTION"] == 1
 
+    def test_manifest_hashes_ignore_generation_timestamps(self, generator):
+        first = generator.generate_coverage_summary()
+        second = dict(first)
+        second["generated_at"] = "2099-01-01T00:00:00Z"
+
+        hash1 = generator._generate_manifest({"coverage": first})["file_hashes"]["coverage"]
+        hash2 = generator._generate_manifest({"coverage": second})["file_hashes"]["coverage"]
+
+        assert hash1 == hash2
+
+    def test_v4_score_field_is_authoritative(self, generator):
+        generator.products = [{
+            "id": "v4",
+            "quality_score_v4_100": 0,
+            "score_100_equivalent": 88,
+            "quality_score_status": "suppressed_safety",
+        }]
+
+        baseline = generator.generate_product_baseline()["products"]["v4"]
+
+        assert baseline["score"] == 0
+        assert baseline["quality_score_status"] == "suppressed_safety"
+
+    def test_load_products_ignores_stage_manifest_dotfile(self, tmp_path):
+        (tmp_path / "scored.json").write_text(
+            json.dumps({"id": "visible", "quality_score_v4_100": 50}),
+            encoding="utf-8",
+        )
+        (tmp_path / ".stage_manifest.json").write_text(
+            json.dumps({"stage": "score", "processing_complete": True}),
+            encoding="utf-8",
+        )
+
+        generator = RegressionSnapshotGenerator()
+        assert generator.load_products(str(tmp_path)) == 1
+        assert generator.products[0]["id"] == "visible"
+
+    def test_product_baseline_reads_current_compliance_allergens(self, generator):
+        generator.products = [{
+            "id": "allergen",
+            "quality_score_v4_100": 50,
+            "compliance_data": {
+                "allergens_detected": [{"allergen_type": "milk"}]
+            },
+        }]
+
+        baseline = generator.generate_product_baseline()["products"]["allergen"]
+
+        assert baseline["allergen_findings"] == ["milk"]
+
 
 class TestSnapshotComparison:
     """Tests for snapshot comparison."""
@@ -157,6 +207,9 @@ class TestSnapshotComparison:
         with open(snapshot_dir / "contradictions_top20.json", "w") as f:
             json.dump({"total_contradictions": 5}, f)
 
+        with open(snapshot_dir / "product_baseline.json", "w") as f:
+            json.dump({"products": {"same": {"score": 70, "verdict": "SAFE"}}}, f)
+
         return str(snapshot_dir)
 
     @pytest.fixture
@@ -183,6 +236,9 @@ class TestSnapshotComparison:
         with open(snapshot_dir / "contradictions_top20.json", "w") as f:
             json.dump({"total_contradictions": 6}, f)  # +1 - no alert
 
+        with open(snapshot_dir / "product_baseline.json", "w") as f:
+            json.dump({"products": {"same": {"score": 70, "verdict": "SAFE"}}}, f)
+
         return str(snapshot_dir)
 
     @pytest.fixture
@@ -208,6 +264,9 @@ class TestSnapshotComparison:
 
         with open(snapshot_dir / "contradictions_top20.json", "w") as f:
             json.dump({"total_contradictions": 15}, f)  # +10 - ALERT
+
+        with open(snapshot_dir / "product_baseline.json", "w") as f:
+            json.dump({"products": {"same": {"score": 70, "verdict": "SAFE"}}}, f)
 
         return str(snapshot_dir)
 
@@ -247,6 +306,44 @@ class TestSnapshotComparison:
 
         assert any("Contradiction" in alert for alert in comparison["alerts"])
         assert comparison["deltas"]["contradictions"]["delta"] == 10
+
+    def test_missing_or_corrupt_snapshot_is_blocking(self, baseline_snapshot, tmp_path):
+        corrupt = tmp_path / "corrupt"
+        corrupt.mkdir()
+        (corrupt / "coverage_summary.json").write_text("{", encoding="utf-8")
+
+        comparison = RegressionSnapshotGenerator.compare_snapshots(
+            baseline_snapshot, str(corrupt)
+        )
+
+        assert comparison["passed"] is False
+        assert any("Snapshot read error" in alert for alert in comparison["alerts"])
+
+    def test_offsetting_product_score_changes_and_missing_product_are_blocking(self, tmp_path):
+        baseline = tmp_path / "baseline_products"
+        current = tmp_path / "current_products"
+        baseline.mkdir()
+        current.mkdir()
+        stable_files = {
+            "coverage_summary.json": {"domain_coverage": {}},
+            "score_distribution.json": {"histogram": {}, "stats": {"mean": 50}},
+            "contradictions_top20.json": {"total_contradictions": 0},
+        }
+        for filename, payload in stable_files.items():
+            (baseline / filename).write_text(json.dumps(payload), encoding="utf-8")
+            (current / filename).write_text(json.dumps(payload), encoding="utf-8")
+        (baseline / "product_baseline.json").write_text(json.dumps({"products": {
+            "up": {"score": 40}, "down": {"score": 60}, "missing": {"score": 50},
+        }}), encoding="utf-8")
+        (current / "product_baseline.json").write_text(json.dumps({"products": {
+            "up": {"score": 60}, "down": {"score": 40},
+        }}), encoding="utf-8")
+
+        comparison = RegressionSnapshotGenerator.compare_snapshots(str(baseline), str(current))
+
+        assert comparison["passed"] is False
+        assert comparison["deltas"]["products"]["missing"] == ["missing"]
+        assert set(comparison["deltas"]["products"]["changed"]) == {"up", "down"}
 
 
 class TestEndToEndSnapshot:

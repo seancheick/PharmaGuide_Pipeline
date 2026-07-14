@@ -58,6 +58,8 @@ class RegressionSnapshotGenerator:
         "grade_shift_count": 10,
         # Contradiction increase threshold (count)
         "contradiction_increase_count": 5,
+        # Per-product changes cannot be hidden by offsetting aggregate shifts.
+        "per_product_score_drift_points": 0.01,
     }
 
     def __init__(self, alert_thresholds: Optional[Dict] = None):
@@ -83,7 +85,16 @@ class RegressionSnapshotGenerator:
         self.products = []
         input_path = Path(input_dir)
 
-        for json_file in input_path.glob("*.json"):
+        if not input_path.is_dir():
+            raise FileNotFoundError(f"Snapshot input directory does not exist: {input_path}")
+
+        json_files = sorted(
+            path for path in input_path.glob("*.json")
+            if path.is_file() and not path.name.startswith(".")
+        )
+        if not json_files:
+            raise FileNotFoundError(f"Snapshot input contains no JSON files: {input_path}")
+        for json_file in json_files:
             try:
                 with open(json_file, 'r') as f:
                     data = json.load(f)
@@ -92,9 +103,94 @@ class RegressionSnapshotGenerator:
                     elif isinstance(data, dict):
                         self.products.append(data)
             except (json.JSONDecodeError, IOError) as e:
-                print(f"Warning: Could not load {json_file}: {e}")
+                raise ValueError(f"Could not load snapshot input {json_file}: {e}") from e
+
+        ids = [self._product_id(product) for product in self.products]
+        if any(product_id == "unknown" for product_id in ids):
+            raise ValueError("Snapshot input contains a product without id/dsld_id")
+        duplicates = sorted(product_id for product_id, count in Counter(ids).items() if count > 1)
+        if duplicates:
+            raise ValueError(f"Snapshot input contains duplicate product IDs: {duplicates[:10]}")
 
         return len(self.products)
+
+    @staticmethod
+    def _product_id(product: Dict) -> str:
+        return str(product.get("dsld_id") or product.get("id") or "unknown")
+
+    @staticmethod
+    def _product_score(product: Dict) -> Optional[float]:
+        for field in ("quality_score_v4_100", "score_100_equivalent", "score_display_100_equivalent"):
+            value = product.get(field)
+            if value is not None:
+                try:
+                    return float(value)
+                except (TypeError, ValueError):
+                    return None
+        return None
+
+    def generate_product_baseline(self) -> Dict:
+        """Capture the minimum auditable contract for every product."""
+        products: Dict[str, Dict] = {}
+        for product in self.products:
+            product_id = self._product_id(product)
+            ledger_domains = (product.get("match_ledger") or {}).get("domains") or {}
+            unmatched_counts = {
+                name: int(data.get("unmatched", 0) or 0)
+                for name, data in sorted(ledger_domains.items())
+                if isinstance(data, dict)
+            }
+            iqd = product.get("ingredient_quality_data") or {}
+            canonical_ids = sorted({
+                str(row.get("canonical_id"))
+                for row in (iqd.get("ingredients_scorable") or iqd.get("ingredients") or [])
+                if isinstance(row, dict) and row.get("canonical_id")
+            })
+            compliance = product.get("compliance_data") or {}
+            allergen_rows = compliance.get("allergens_detected") or []
+            if not allergen_rows:
+                contaminant = product.get("contaminant_data") or {}
+                allergen_payload = contaminant.get("allergens") or {}
+                allergen_rows = (
+                    allergen_payload.get("allergens") or []
+                    if isinstance(allergen_payload, dict)
+                    else []
+                )
+            allergen_findings = sorted({
+                str(
+                    row.get("allergen_type")
+                    or row.get("allergen")
+                    or row.get("name")
+                    or row.get("type")
+                )
+                for row in allergen_rows
+                if isinstance(row, dict) and (
+                    row.get("allergen_type")
+                    or row.get("allergen")
+                    or row.get("name")
+                    or row.get("type")
+                )
+            })
+            products[product_id] = {
+                "score": self._product_score(product),
+                "quality_score_status": product.get("quality_score_status"),
+                "verdict": product.get("verdict")
+                or product.get("safety_verdict")
+                or (product.get("scoring_metadata") or {}).get("safety_verdict"),
+                "safety_flags": sorted(
+                    json.dumps(flag, sort_keys=True) if isinstance(flag, dict) else str(flag)
+                    for flag in (product.get("flags") or [])
+                ),
+                "allergen_findings": allergen_findings,
+                "canonical_ids": canonical_ids,
+                "unmatched_counts": unmatched_counts,
+            }
+        return {
+            "schema_version": self.SCHEMA_VERSION,
+            "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            "total_products": len(products),
+            "products": products,
+        }
 
     def generate_coverage_summary(self) -> Dict:
         """Generate domain coverage summary with dual metrics."""
@@ -205,11 +301,9 @@ class RegressionSnapshotGenerator:
         verdicts = Counter()
 
         for product in self.products:
-            # Get score (try both formats)
-            score = product.get("score_100_equivalent") or product.get("score_80")
+            # Production v4 score first; compatibility fields are fallback only.
+            score = self._product_score(product)
             if score is not None:
-                if "score_80" in product and "score_100_equivalent" not in product:
-                    score = score * 100 / 80  # Convert to 100 scale
                 scores.append(score)
 
                 # Categorize into bucket
@@ -312,6 +406,11 @@ class RegressionSnapshotGenerator:
             json.dump(contradictions, f, indent=2)
         snapshots["contradictions_top20"] = contradictions
 
+        product_baseline = self.generate_product_baseline()
+        with open(output_path / "product_baseline.json", "w") as f:
+            json.dump(product_baseline, f, indent=2)
+        snapshots["product_baseline"] = product_baseline
+
         # Generate manifest with hashes
         manifest = self._generate_manifest(snapshots)
         with open(output_path / "manifest.json", "w") as f:
@@ -321,9 +420,20 @@ class RegressionSnapshotGenerator:
 
     def _generate_manifest(self, snapshots: Dict) -> Dict:
         """Generate manifest with content hashes for comparison."""
+        def stable_content(value):
+            if isinstance(value, dict):
+                return {
+                    key: stable_content(item)
+                    for key, item in value.items()
+                    if key not in {"generated_at", "compared_at", "timestamp"}
+                }
+            if isinstance(value, list):
+                return [stable_content(item) for item in value]
+            return value
+
         hashes = {}
         for name, data in snapshots.items():
-            content = json.dumps(data, sort_keys=True)
+            content = json.dumps(stable_content(data), sort_keys=True)
             hashes[name] = hashlib.sha256(content.encode()).hexdigest()[:16]
 
         return {
@@ -355,6 +465,7 @@ class RegressionSnapshotGenerator:
         mean_threshold = alert_config["mean_score_drift_points"]
         grade_threshold = alert_config["grade_shift_count"]
         contradiction_threshold = alert_config["contradiction_increase_count"]
+        product_score_threshold = alert_config["per_product_score_drift_points"]
 
         comparison = {
             "schema_version": "4.0.0",
@@ -385,6 +496,7 @@ class RegressionSnapshotGenerator:
             comparison["deltas"]["coverage"] = cov_deltas
         except (FileNotFoundError, json.JSONDecodeError) as e:
             comparison["deltas"]["coverage"] = {"error": str(e)}
+            comparison["alerts"].append(f"Snapshot read error (coverage): {e}")
 
         # Compare score distribution
         try:
@@ -421,6 +533,7 @@ class RegressionSnapshotGenerator:
 
         except (FileNotFoundError, json.JSONDecodeError) as e:
             comparison["deltas"]["score_distribution"] = {"error": str(e)}
+            comparison["alerts"].append(f"Snapshot read error (score distribution): {e}")
 
         # Compare contradiction counts
         try:
@@ -443,6 +556,59 @@ class RegressionSnapshotGenerator:
 
         except (FileNotFoundError, json.JSONDecodeError) as e:
             comparison["deltas"]["contradictions"] = {"error": str(e)}
+            comparison["alerts"].append(f"Snapshot read error (contradictions): {e}")
+
+        # Per-product comparison is required: aggregate means can hide equal
+        # and opposite score changes or a product silently disappearing.
+        try:
+            with open(path1 / "product_baseline.json") as f:
+                products1 = (json.load(f).get("products") or {})
+            with open(path2 / "product_baseline.json") as f:
+                products2 = (json.load(f).get("products") or {})
+            missing = sorted(set(products1) - set(products2))
+            added = sorted(set(products2) - set(products1))
+            changed = {}
+            for product_id in sorted(set(products1) & set(products2)):
+                before = products1[product_id]
+                after = products2[product_id]
+                fields = {}
+                score1, score2 = before.get("score"), after.get("score")
+                if score1 is None or score2 is None:
+                    if score1 != score2:
+                        fields["score"] = {"baseline": score1, "current": score2}
+                elif abs(float(score2) - float(score1)) > product_score_threshold:
+                    fields["score"] = {
+                        "baseline": score1,
+                        "current": score2,
+                        "delta": round(float(score2) - float(score1), 4),
+                    }
+                for field in (
+                    "quality_score_status", "verdict", "safety_flags",
+                    "allergen_findings", "canonical_ids", "unmatched_counts",
+                ):
+                    if before.get(field) != after.get(field):
+                        fields[field] = {
+                            "baseline": before.get(field),
+                            "current": after.get(field),
+                        }
+                if fields:
+                    changed[product_id] = fields
+            comparison["deltas"]["products"] = {
+                "missing": missing,
+                "added": added,
+                "changed": changed,
+            }
+            if missing:
+                comparison["alerts"].append(f"Missing products: {missing[:10]}")
+            if added:
+                comparison["alerts"].append(f"Unexpected added products: {added[:10]}")
+            if changed:
+                comparison["alerts"].append(
+                    f"Per-product contract changed for {len(changed)} product(s)"
+                )
+        except (FileNotFoundError, json.JSONDecodeError, AttributeError) as e:
+            comparison["deltas"]["products"] = {"error": str(e)}
+            comparison["alerts"].append(f"Snapshot read error (products): {e}")
 
         comparison["passed"] = len(comparison["alerts"]) == 0
         return comparison

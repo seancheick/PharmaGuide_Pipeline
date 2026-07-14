@@ -31,6 +31,7 @@ from stage_manifest import write_stage_manifest
 import traceback
 import os
 import hashlib
+import signal
 
 logger = logging.getLogger(__name__)
 
@@ -163,6 +164,9 @@ class BatchProcessor:
         self.config = config
         self.batch_size = config["processing"]["batch_size"]
         self.max_workers = config["processing"]["max_workers"]
+        self.worker_timeout_seconds = float(
+            config.get("processing", {}).get("worker_timeout_seconds", 300)
+        )
         self.output_dir = Path(config["paths"]["output_directory"])
         self.log_dir = Path(config["paths"]["log_directory"])
 
@@ -473,7 +477,11 @@ class BatchProcessor:
         
         files = []
         for ext in VALID_INPUT_EXTENSIONS:
-            files.extend(input_path.glob(f"*{ext}"))
+            files.extend(
+                path
+                for path in input_path.glob(f"*{ext}")
+                if path.is_file() and not path.name.startswith(".")
+            )
         
         # Sort for consistent processing order
         files.sort()
@@ -867,7 +875,11 @@ class BatchProcessor:
                     )
                     continue
 
-                result = process_single_file(str(file_path), str(self.output_dir))
+                result = process_single_file_with_timeout(
+                    str(file_path),
+                    str(self.output_dir),
+                    self.worker_timeout_seconds,
+                )
                 try:
                     self._categorize_result(
                         result,
@@ -926,7 +938,12 @@ class BatchProcessor:
             ) as executor:
                 # Submit only validated files
                 future_to_file = {
-                    executor.submit(process_single_file, str(f), str(self.output_dir)): f
+                    executor.submit(
+                        process_single_file_with_timeout,
+                        str(f),
+                        str(self.output_dir),
+                        self.worker_timeout_seconds,
+                    ): f
                     for f in valid_files
                 }
 
@@ -1423,7 +1440,12 @@ class BatchProcessor:
         
         try:
             # Find all needs_review files (both .json and .jsonl)
-            review_files = list(needs_review_dir.glob("*.json*"))
+            review_files = sorted(
+                path
+                for pattern in ("*.json", "*.jsonl")
+                for path in needs_review_dir.glob(pattern)
+                if path.is_file() and not path.name.startswith(".")
+            )
             if not review_files:
                 logger.info("No products need review - skipping detailed review report")
                 return
@@ -1970,3 +1992,38 @@ def process_single_file(file_path: str, output_dir: str = None) -> ProcessingRes
             processing_time=processing_time,
             error_stage=stage  # P2: Include stage context for debugging
         )
+
+
+class _WorkerTimeout(BaseException):
+    """Escapes broad per-file Exception containment when the deadline expires."""
+
+
+def process_single_file_with_timeout(
+    file_path: str,
+    output_dir: str = None,
+    timeout_seconds: float = 300,
+) -> ProcessingResult:
+    """Run one file with a hard worker-local deadline on Unix platforms."""
+    if timeout_seconds <= 0 or not hasattr(signal, "SIGALRM"):
+        return process_single_file(file_path, output_dir)
+
+    def _raise_timeout(_signum, _frame):
+        raise _WorkerTimeout()
+
+    previous_handler = signal.signal(signal.SIGALRM, _raise_timeout)
+    signal.setitimer(signal.ITIMER_REAL, timeout_seconds)
+    started = time.time()
+    try:
+        return process_single_file(file_path, output_dir)
+    except _WorkerTimeout:
+        return ProcessingResult(
+            success=False,
+            status=STATUS_ERROR,
+            error=f"Worker timed out after {timeout_seconds:g} seconds",
+            file_path=file_path,
+            processing_time=time.time() - started,
+            error_stage="timeout",
+        )
+    finally:
+        signal.setitimer(signal.ITIMER_REAL, 0)
+        signal.signal(signal.SIGALRM, previous_handler)

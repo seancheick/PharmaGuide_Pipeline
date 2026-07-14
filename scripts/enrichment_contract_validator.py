@@ -573,7 +573,14 @@ class EnrichmentContractValidator:
         violations = []
 
         serving_basis = product.get("serving_basis", {}) or {}
-        form_factor = (serving_basis.get("form_factor", "") or "").lower()
+        # Enricher owns form factor at the product level. Keep the legacy
+        # nested lookup only as a compatibility fallback.
+        form_factor = str(
+            product.get("form_factor_canonical")
+            or product.get("form_factor")
+            or serving_basis.get("form_factor")
+            or ""
+        ).lower()
         basis_unit = (serving_basis.get("basis_unit", "") or "").lower()
         canonical_qty = serving_basis.get("canonical_serving_size_quantity")
 
