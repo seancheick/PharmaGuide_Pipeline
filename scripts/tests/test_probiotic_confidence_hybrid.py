@@ -175,6 +175,51 @@ def test_dose_basis_never_clinical_with_current_industry_bands() -> None:
                 )
 
 
+def test_explicit_clinical_threshold_basis_is_preserved() -> None:
+    out = _compute_probiotic_confidence_hybrid(
+        cfu_per_day=1_000_000_000,
+        adequacy_tier="adequate",
+        clinical_support_level="moderate",
+        threshold_dose_basis="clinical",
+    )
+    assert out == {
+        "cfu_confidence": "moderate",
+        "dose_basis": "clinical",
+        "ui_copy_hint": "studied_range",
+    }
+
+
+def test_m63_registry_emits_clinical_dose_basis() -> None:
+    from enrich_supplements_v3 import SupplementEnricherV3
+
+    product = {
+        "id": "m63-dose-basis",
+        "product_name": "M-63 Infant Probiotic",
+        "fullName": "M-63 Infant Probiotic",
+        "bundleName": "",
+        "statements": [],
+        "activeIngredients": [
+            {
+                "name": "Bifidobacterium longum infantis M-63",
+                "standardName": "Bifidobacterium longum infantis M-63",
+                "ingredientGroup": "Bifidobacterium infantis",
+                "category": "probiotic",
+                "quantity": 12.5,
+                "unit": "mg",
+                "nestedIngredients": [],
+                "harvestMethod": "",
+                "notes": "1 billion CFU",
+            }
+        ],
+        "inactiveIngredients": [],
+    }
+
+    rows = SupplementEnricherV3()._collect_probiotic_data(product)["clinical_strains"]
+    assert len(rows) == 1
+    assert rows[0]["clinical_id"] == "STRAIN_INFANTIS_M63"
+    assert rows[0]["dose_basis"] == "clinical"
+
+
 # ---------------------------------------------------------------------------
 # Canary — 19067 L. plantarum 299v 10B must get coherent fields
 # ---------------------------------------------------------------------------

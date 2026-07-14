@@ -905,7 +905,7 @@
       "notable_studies": "Two single-strain randomized, double-blind, placebo-controlled trials in healthy infants and toddlers; clinical outcomes remain modest or exploratory.",
       "cfu_thresholds": {
         "indication_primary": "infant gut microbiota development and bowel function",
-        "dose_basis": "clinical_study",
+        "dose_basis": "clinical",
         "tiers_cfu_per_day": {
           "low": {
             "upper_exclusive": 1000000000

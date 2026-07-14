@@ -341,7 +341,10 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
 
 
 def _compute_probiotic_confidence_hybrid(
-    cfu_per_day, adequacy_tier, clinical_support_level,
+    cfu_per_day,
+    adequacy_tier,
+    clinical_support_level,
+    threshold_dose_basis="industry_standard",
 ) -> Dict[str, str]:
     """Derive (cfu_confidence, dose_basis, ui_copy_hint) deterministically
     from the upstream adequacy signal.
@@ -356,17 +359,24 @@ def _compute_probiotic_confidence_hybrid(
          ``cfu_confidence="low"``, ``dose_basis="inferred"``.
       3. tier-matched: ``cfu_confidence`` mirrors ``clinical_support_level``
          with "weak" → "low"; ``ui_copy_hint="studied_range"`` on
-         high/moderate, ``"limited_evidence"`` on weak; ``dose_basis=
-         "industry_standard"`` (current threshold source).
+         high/moderate, ``"limited_evidence"`` on weak. ``dose_basis``
+         preserves an explicit validated clinical threshold source and
+         otherwise defaults to ``"industry_standard"``.
 
     The output enums are the only allowed values; anything else is a
     programming error and should fail tests immediately.
     """
+    dose_basis = (
+        "clinical"
+        if str(threshold_dose_basis or "").strip().lower() == "clinical"
+        else "industry_standard"
+    )
+
     # Case 1 — multi-strain blend (per-member CFU unknown)
     if cfu_per_day is None:
         return {
             "cfu_confidence": "low",
-            "dose_basis": "industry_standard",
+            "dose_basis": dose_basis,
             "ui_copy_hint": "blend_not_individually_disclosed",
         }
 
@@ -391,7 +401,7 @@ def _compute_probiotic_confidence_hybrid(
         hint = "limited_evidence"
     return {
         "cfu_confidence": cfu_conf,
-        "dose_basis": "industry_standard",
+        "dose_basis": dose_basis,
         "ui_copy_hint": hint,
     }
 
@@ -13678,7 +13688,10 @@ class SupplementEnricherV3:
                         support_level = _derive_clinical_support_level(clinical)
                         # Sprint E1.3.2.b — hybrid confidence layer.
                         hybrid = _compute_probiotic_confidence_hybrid(
-                            per_strain_cfu, adequacy_tier, support_level,
+                            per_strain_cfu,
+                            adequacy_tier,
+                            support_level,
+                            threshold_dose_basis=thresholds.get("dose_basis"),
                         )
                         entry = {
                             "strain": strain,
