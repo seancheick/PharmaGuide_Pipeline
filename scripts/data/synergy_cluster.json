@@ -27,6 +27,28 @@
       "primary_ingredients_review": "v5.2.0 — primary_ingredients reviewed and refined by Dr Pham (pharmaguide_clinical_team) on 2026-04-24. Headliner = ingredient that earns solo-headliner status via allow_single_ingredient; supportive ingredients stay in the cluster.ingredients list but do not earn solo match on their own."
     }
   },
+  "min_effective_dose_units": {
+    "_comment": "Unit for each min_effective_dose threshold. Default is mg; only the non-mg conventions are listed. mcg = canonical microgram micronutrients; iu = vitamin D; cfu = probiotic strains.",
+    "methylcobalamin": "mcg",
+    "methylfolate": "mcg",
+    "vitamin b12": "mcg",
+    "folate": "mcg",
+    "biotin": "mcg",
+    "iodine": "mcg",
+    "chromium": "mcg",
+    "selenium": "mcg",
+    "vitamin k2": "mcg",
+    "vitamin d": "iu",
+    "vitamin d3": "iu",
+    "bifidobacterium bifidum": "cfu",
+    "bifidobacterium longum": "cfu",
+    "lactobacillus acidophilus": "cfu",
+    "lactobacillus helveticus": "cfu",
+    "lactobacillus plantarum": "cfu",
+    "lactobacillus rhamnosus gg": "cfu",
+    "probiotics": "cfu",
+    "saccharomyces boulardii": "cfu"
+  },
   "synergy_clusters": [
     {
       "id": "curcumin_absorption",

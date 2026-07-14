@@ -9350,6 +9350,12 @@ class SupplementEnricherV3:
         """Collect synergy cluster data"""
         synergy_db = self.databases.get('synergy_cluster', {})
         clusters = synergy_db.get('synergy_clusters', [])
+        # Per-nutrient unit for each min_effective_dose threshold (single source of
+        # truth; default "mg"). Thresholds are authored in native units — most mg,
+        # but methylcobalamin/folate/B12/biotin/iodine/chromium/selenium/K2 in mcg,
+        # vitamin D in IU, probiotics in CFU. Used to convert the product amount to
+        # the threshold's unit before the adequacy comparison.
+        dose_units = synergy_db.get('min_effective_dose_units', {}) or {}
 
         # Cluster-ingredient alias map (Solution A): canonical-form → variants
         # used by supplement labels in the wild. Recovers products where DSLD
@@ -9424,15 +9430,20 @@ class SupplementEnricherV3:
             # explicitly dosed (e.g. "magnesium glycinate" inherits
             # min_dose from "magnesium"). Falls back to 0 when no dose is
             # defined anywhere.
-            def _resolve_min_dose(cluster_ing_norm: str, cluster_ing_raw: str) -> float:
+            def _resolve_min_dose(cluster_ing_norm: str, cluster_ing_raw: str):
+                """Return (min_dose, matched_key) for a cluster ingredient.
+
+                The matched key selects the threshold's unit from ``dose_units``.
+                """
                 # 1) exact normalized key
                 if cluster_ing_norm in min_doses:
-                    return min_doses[cluster_ing_norm]
+                    return min_doses[cluster_ing_norm], cluster_ing_norm
                 # 2) exact raw key (legacy compat)
                 if cluster_ing_raw in min_doses:
-                    return min_doses[cluster_ing_raw]
+                    return min_doses[cluster_ing_raw], cluster_ing_raw
                 # 3) longest prefix match from available dose keys
                 best = 0
+                best_key = None
                 best_key_len = 0
                 for k, v in min_doses.items():
                     if not isinstance(k, str):
@@ -9440,8 +9451,9 @@ class SupplementEnricherV3:
                     k_norm = self._normalize_text(k)
                     if k_norm and k_norm in cluster_ing_norm and len(k_norm) > best_key_len:
                         best = v
+                        best_key = k
                         best_key_len = len(k_norm)
-                return best
+                return best, best_key
 
             for cluster_ing in cluster_ingredients:
                 cluster_ing_norm = self._normalize_text(cluster_ing)
@@ -9513,7 +9525,10 @@ class SupplementEnricherV3:
                     if is_match:
                         # Found match
                         quantity = ing_data['quantity']
-                        min_dose = _resolve_min_dose(cluster_ing_norm, cluster_ing)
+                        min_dose, min_dose_key = _resolve_min_dose(cluster_ing_norm, cluster_ing)
+                        # The threshold's own unit (default mg; see dose_units above).
+                        min_dose_unit = dose_units.get(min_dose_key, "mg") if min_dose_key else "mg"
+                        target_unit = self._normalize_threshold_unit(min_dose_unit) or "mg"
 
                         # Adequacy gate:
                         #   - If a min_dose is defined (>0): require quantity >= min_dose
@@ -9528,20 +9543,29 @@ class SupplementEnricherV3:
                         evaluated_unit = self._normalize_threshold_unit(ing_data['unit'])
                         dose_evaluable = qty_num > 0
                         if min_dose > 0:
-                            evaluated_quantity, _conversion_reason = (
-                                self._convert_amount_to_target_unit(
-                                    amount=qty_num,
-                                    from_unit=ing_data['unit'],
-                                    target_unit="mg",
-                                    ingredient_name=ing_data['name'],
-                                    standard_name=ing_key,
-                                )
+                            # Compare in the THRESHOLD's unit (mg/mcg/IU/CFU), never a
+                            # forced mg: forcing mg mis-scaled every non-mg threshold
+                            # (methylcobalamin mcg, vitamin d IU, probiotics CFU) and
+                            # dropped ~19/58 clusters' synergy bonus.
+                            converted, _conversion_reason = self._convert_amount_to_target_unit(
+                                amount=qty_num,
+                                from_unit=ing_data['unit'],
+                                target_unit=target_unit,
+                                ingredient_name=ing_data['name'],
+                                standard_name=ing_key,
                             )
-                            evaluated_unit = "mg"
-                            dose_evaluable = evaluated_quantity is not None
-                            meets_min = bool(
-                                dose_evaluable and evaluated_quantity >= min_dose
-                            )
+                            if converted is not None:
+                                evaluated_quantity, evaluated_unit = converted, target_unit
+                                dose_evaluable = True
+                                meets_min = converted >= min_dose
+                            else:
+                                # Unbridgeable unit (a CFU threshold, or a product unit
+                                # with no conversion rule) → compare in the threshold's
+                                # native scale; never drop the credit on a convention we
+                                # cannot convert.
+                                evaluated_quantity, evaluated_unit = qty_num, target_unit
+                                dose_evaluable = qty_num > 0
+                                meets_min = qty_num >= min_dose
                         else:
                             meets_min = qty_num > 0
 
@@ -9551,7 +9575,7 @@ class SupplementEnricherV3:
                             "quantity": quantity,
                             "unit": ing_data['unit'],
                             "min_effective_dose": min_dose,
-                            "min_effective_dose_unit": "mg" if min_dose > 0 else None,
+                            "min_effective_dose_unit": target_unit if min_dose > 0 else None,
                             "evaluated_quantity": evaluated_quantity,
                             "evaluated_unit": evaluated_unit,
                             "dose_evaluable": dose_evaluable,
