@@ -374,6 +374,15 @@ class ProprietaryBlendDetector:
                 if not self._source_scope_allows_match(source_field, text_to_search):
                     continue
 
+                # C10.3: a blend term immediately followed by a flavor/color word
+                # ("Natural Tropical Fruit Blend Flavor") is a formulation
+                # flavoring/coloring, not a scored proprietary active blend — never
+                # penalize it. A genuine blend that merely lists "(natural flavors)"
+                # in a parenthetical is unaffected (the term is not adjacent).
+                tail = text_to_search[match.end():].lstrip()
+                if re.match(r"(?:flavou?r|flavou?ring|colou?r|colou?ring)s?\b", tail, re.IGNORECASE):
+                    continue
+
                 # Analyze disclosure level
                 disclosure_info = self._analyze_disclosure(
                     ingredient if isinstance(ingredient, dict) else {"name": ingredient},
