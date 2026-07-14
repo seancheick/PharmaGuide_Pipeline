@@ -5443,6 +5443,30 @@ class EnhancedDSLDNormalizer:
             logger.error(f"Error normalizing product {raw_data.get('id', 'unknown')}: {str(e)}")
             raise
     
+    def _record_nutrition_fact(
+        self,
+        info: Dict[str, Any],
+        key: str,
+        quantity: Any,
+        unit: Any,
+        default_unit: str,
+    ) -> None:
+        """Record one Nutrition-Facts panel field (single source of truth).
+
+        C6: a quantity-less row is processed to ``(0.0, 'unspecified')``; it must
+        never overwrite an already-captured *real* value (one with a genuine
+        unit) — e.g. a bare inactive "Sugar" zeroing a real "Sugars 5 g", or a
+        second bare "Sodium" zeroing a real 140 mg. A real value may still
+        upgrade a previously-stored placeholder.
+        """
+        incoming_is_real = bool(unit) and unit != "unspecified"
+        existing = info.get(key)
+        if existing is not None and not incoming_is_real:
+            existing_unit = existing.get("unit")
+            if bool(existing_unit) and existing_unit != "unspecified":
+                return  # keep the real value; don't let a placeholder erase it
+        info[key] = {"amount": quantity, "unit": unit or default_unit}
+
     def _extract_nutritional_info(self, ingredient_rows: List[Dict]) -> Dict[str, Any]:
         """Extract nutritional information (Calories, Carbs, Sugar, etc.) from ingredients"""
         nutritional_info = {}
@@ -5462,42 +5486,25 @@ class EnhancedDSLDNormalizer:
 
             quantity, unit, _, _ = self._process_quantity(quantity_data)
 
-            # Capture nutritional facts
+            # Capture nutritional facts. Every panel field records through the
+            # single _record_nutrition_fact authority (C6: identity-bound match +
+            # placeholder never overwrites a real value). Sugars/calories/sodium
+            # are identity-bound via fullmatch so ingredient rows ("Cane Sugar",
+            # "Sodium Benzoate", "Calories from Fat") cannot hijack the panel field.
             if re.fullmatch(r"(?:total\s+)?calories?", nutrient_name):
-                nutritional_info["calories"] = {
-                    "amount": quantity,
-                    "unit": unit or "kcal"
-                }
+                self._record_nutrition_fact(nutritional_info, "calories", quantity, unit, "kcal")
             elif "total carbohydrate" in name or "carbohydrates" in name:
-                nutritional_info["totalCarbohydrates"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
-            elif name == "sugar" or "sugars" in name:
-                nutritional_info["sugars"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g")
+            elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "sugars", quantity, unit, "g")
             elif "total fat" in name:
-                nutritional_info["totalFat"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g")
             elif "protein" in name:
-                nutritional_info["protein"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g")
             elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
-                nutritional_info["sodium"] = {
-                    "amount": quantity,
-                    "unit": unit or "mg"
-                }
+                self._record_nutrition_fact(nutritional_info, "sodium", quantity, unit, "mg")
             elif "fiber" in name or "dietary fiber" in name:
-                nutritional_info["dietaryFiber"] = {
-                    "amount": quantity,
-                    "unit": unit or "g"
-                }
+                self._record_nutrition_fact(nutritional_info, "dietaryFiber", quantity, unit, "g")
 
             # P0.2: Check nestedRows for sugar/fiber (commonly nested under Total Carbohydrates)
             nested_rows = ing.get("nestedRows", [])

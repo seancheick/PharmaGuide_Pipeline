@@ -218,6 +218,39 @@ class TestNutrientIdentityBinding:
 
         assert result["calories"] == {"amount": 120.0, "unit": "Calories"}
 
+    def test_quantityless_sugar_row_does_not_zero_real_sugar(self, normalizer) -> None:
+        # C6: a bare inactive "Sugar" (no quantity → 0.0/'unspecified') must not
+        # overwrite a real "Sugars 5 g".
+        result = normalizer._extract_nutritional_info([
+            {"name": "Sugars", "quantity": 5, "unit": "g"},
+            {"name": "Sugar"},
+        ])
+        assert result["sugars"]["amount"] == 5.0, result["sugars"]
+
+    def test_real_sugar_upgrades_a_leading_placeholder(self, normalizer) -> None:
+        # Order-independent: a real value still wins even if the placeholder came first.
+        result = normalizer._extract_nutritional_info([
+            {"name": "Sugar"},
+            {"name": "Sugars", "quantity": 5, "unit": "g"},
+        ])
+        assert result["sugars"]["amount"] == 5.0, result["sugars"]
+
+    def test_quantityless_sodium_row_does_not_zero_real_sodium(self, normalizer) -> None:
+        # Same placeholder class for sodium (identity match already binds it).
+        result = normalizer._extract_nutritional_info([
+            {"name": "Sodium", "quantity": 140, "unit": "mg"},
+            {"name": "Sodium"},
+        ])
+        assert result["sodium"]["amount"] == 140.0, result["sodium"]
+
+    def test_cane_sugar_does_not_bind_the_sugars_panel_field(self, normalizer) -> None:
+        # Identity binding: "Cane Sugar" is an ingredient, not the panel "Sugars" total.
+        result = normalizer._extract_nutritional_info([
+            {"name": "Sugars", "quantity": 5, "unit": "g"},
+            {"name": "Cane Sugar", "quantity": 2, "unit": "g"},
+        ])
+        assert result["sugars"]["amount"] == 5.0, result["sugars"]
+
 
 # ---------------------------------------------------------------------------
 # Data invariants — severity_level="low" on formulation sugar/fat entries

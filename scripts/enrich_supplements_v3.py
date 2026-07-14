@@ -15269,10 +15269,17 @@ class SupplementEnricherV3:
         amount = sugar_info.get('amount', 0) or 0
         unit = sugar_info.get('unit', 'Gram(s)')
 
-        # Normalize to grams
+        # Normalize to grams via the single mass-conversion authority
+        # (_normalize_threshold_unit → canonicalize_mass_unit → _convert_mass).
+        # C7.2: substring unit detection ('mg' in unit) left spelled-out and
+        # mcg units unconverted — "5 Milligram(s)" stayed 5 g → false High
+        # Sugar. Unknown/empty units fall back to the panel default (g).
         amount_g = float(amount) if amount else 0.0
-        if 'mg' in str(unit).lower():
-            amount_g = amount_g / 1000
+        converted = self._convert_mass(
+            amount_g, self._normalize_threshold_unit(unit), "g"
+        )
+        if converted is not None:
+            amount_g = converted
 
         # Check if sugar is in inactive ingredients FIRST (needed for guardrail)
         sugar_in_ingredients = self._find_sugar_in_ingredients(product)
@@ -15316,10 +15323,18 @@ class SupplementEnricherV3:
         amount = sodium_info.get('amount', 0) or 0
         unit = sodium_info.get('unit', 'mg')
 
-        # Normalize to mg
+        # Normalize to mg via the single mass-conversion authority
+        # (_normalize_threshold_unit → canonicalize_mass_unit → _convert_mass).
+        # C7.2: substring unit detection ('g' in / 'mg' not in) mis-scaled
+        # spelled-out and mcg units 1000x — "55 Milligram(s)" → 55,000 mg →
+        # false High Sodium / hypertension. Unknown/empty units fall back to
+        # the panel default (mg), leaving the value unchanged.
         amount_mg = float(amount) if amount else 0.0
-        if 'g' in str(unit).lower() and 'mg' not in str(unit).lower():
-            amount_mg = amount_mg * 1000
+        converted = self._convert_mass(
+            amount_mg, self._normalize_threshold_unit(unit), "mg"
+        )
+        if converted is not None:
+            amount_mg = converted
 
         # Determine level based on FDA/AHA thresholds
         if amount_mg < self.SODIUM_THRESHOLDS["sodium_free"]:
