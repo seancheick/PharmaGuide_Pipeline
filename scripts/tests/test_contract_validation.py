@@ -934,6 +934,30 @@ class TestDisplayLedgerContract:
         rule_violations = [v for v in violations if v.rule.startswith("H.")]
         assert len(rule_violations) == 0
 
+    def test_H_product_name_fallback_is_a_valid_display_source(self, validator):
+        product = {
+            "id": "test_display_product_name",
+            "display_ingredients": [
+                {
+                    "raw_source_text": "Vitamin D3 1000 IU",
+                    "display_name": "Vitamin D3",
+                    "source_section": "product_name",
+                    "display_type": "inferred_from_name",
+                    "resolution_type": "product_name_fallback",
+                    "score_included": False,
+                    "mapped_to": {
+                        "standard_name": "Vitamin D3",
+                        "source_section": "inferred",
+                        "raw_source_path": "product_name",
+                    },
+                }
+            ],
+        }
+
+        violations = validator.validate(product)
+
+        assert [v for v in violations if v.rule.startswith("H.")] == []
+
     def test_H_invalid_display_row_missing_required_field(self, validator):
         product = {
             "id": "test_display_invalid_missing",

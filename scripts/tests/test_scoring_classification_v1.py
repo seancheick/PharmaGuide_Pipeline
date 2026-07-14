@@ -859,6 +859,25 @@ def test_enrichment_validator_accepts_native_classification_contract():
     assert [v for v in violations if v.rule.startswith("J.")] == []
 
 
+def test_enrichment_validator_accepts_every_authoritative_scoring_route():
+    from enrichment_contract_validator import EnrichmentContractValidator
+    from scoring_input_contract import SCORING_ROUTE_MODULES
+
+    validator = EnrichmentContractValidator()
+    for route_module in SCORING_ROUTE_MODULES:
+        product = _product("Route contract", [_row("zinc", "Zinc", 15, "mg")])
+        classification = build_scoring_classification(
+            product,
+            classification_origin="native_enrichment",
+        )
+        classification["route_module"] = route_module
+        product["product_scoring_classification"] = classification
+
+        violations = validator.validate(product)
+
+        assert not any(v.rule == "J.3" for v in violations), route_module
+
+
 def test_enrichment_validator_rejects_failed_nongeneric_classification():
     from enrichment_contract_validator import EnrichmentContractValidator
 

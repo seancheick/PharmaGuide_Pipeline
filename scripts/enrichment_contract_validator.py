@@ -28,6 +28,9 @@ import re
 from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 
+from constants import DISPLAY_LEDGER_SOURCE_SECTIONS
+from scoring_input_contract import SCORING_ROUTE_MODULES
+
 logger = logging.getLogger(__name__)
 
 
@@ -135,10 +138,7 @@ class EnrichmentContractValidator:
         "score_included",
     })
 
-    DISPLAY_LEDGER_ALLOWED_SOURCE_SECTIONS = frozenset({
-        "activeIngredients",
-        "inactiveIngredients",
-    })
+    DISPLAY_LEDGER_ALLOWED_SOURCE_SECTIONS = DISPLAY_LEDGER_SOURCE_SECTIONS
 
     CLEANER_ALLOWED_SOURCE_SECTIONS = frozenset({
         "active",
@@ -172,13 +172,7 @@ class EnrichmentContractValidator:
         "percent_dv_only",
     })
 
-    VALID_SCORING_CLASSIFICATION_ROUTES = frozenset({
-        "generic",
-        "probiotic",
-        "multi_or_prenatal",
-        "omega",
-        "sports",
-    })
+    VALID_SCORING_CLASSIFICATION_ROUTES = SCORING_ROUTE_MODULES
 
     VALID_SCORING_CLASSIFICATION_ORIGINS = frozenset({
         "compatibility_derived",

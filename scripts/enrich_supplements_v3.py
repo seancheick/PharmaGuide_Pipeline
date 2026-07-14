@@ -90,6 +90,7 @@ from constants import (
     PROMOTE_REASON_PRODUCT_TYPE_RESCUE,
     PROMOTE_REASON_ABSORPTION_ENHANCER,
     BRANDED_INGREDIENT_TOKENS,
+    DISPLAY_LEDGER_SOURCE_PRODUCT_NAME,
 )
 from stage_manifest import select_stage_input_files
 from run_artifacts import ensure_run_id, report_run_directory
@@ -9323,7 +9324,7 @@ class SupplementEnricherV3:
             synthetic_display.append({
                 'raw_source_text': name,
                 'display_name':    canonical_name,
-                'source_section':  'product_name',
+                'source_section':  DISPLAY_LEDGER_SOURCE_PRODUCT_NAME,
                 'display_type':    'inferred_from_name',
                 'resolution_type': 'product_name_fallback',
                 'score_included':  False,

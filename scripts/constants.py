@@ -48,6 +48,17 @@ OUTPUT_NEEDS_REVIEW = OUTPUT_DIR / "needs_review"
 OUTPUT_INCOMPLETE = OUTPUT_DIR / "incomplete"
 OUTPUT_UNMAPPED = OUTPUT_DIR / "unmapped"
 
+# Display-ledger provenance vocabulary shared by producers and validators.
+# Keep this contract here rather than duplicating allowlists in each stage.
+DISPLAY_LEDGER_SOURCE_ACTIVE = "activeIngredients"
+DISPLAY_LEDGER_SOURCE_INACTIVE = "inactiveIngredients"
+DISPLAY_LEDGER_SOURCE_PRODUCT_NAME = "product_name"
+DISPLAY_LEDGER_SOURCE_SECTIONS = frozenset({
+    DISPLAY_LEDGER_SOURCE_ACTIVE,
+    DISPLAY_LEDGER_SOURCE_INACTIVE,
+    DISPLAY_LEDGER_SOURCE_PRODUCT_NAME,
+})
+
 # Field mappings for normalization
 UNIT_CONVERSIONS = {
     # Vitamin-specific IU conversions (context-aware)
