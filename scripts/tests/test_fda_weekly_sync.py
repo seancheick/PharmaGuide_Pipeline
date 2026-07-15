@@ -2,6 +2,7 @@
 """Regression tests for FDA weekly sync relevance and extraction logic."""
 
 import os
+import subprocess
 import sys
 import types
 from pathlib import Path
@@ -112,9 +113,36 @@ def test_classify_filters_allergen_only_supplement_recall():
     assert classify_record(record) == (False, "", [])
 
 
-def test_run_fda_sync_reads_current_summary_key():
+def test_run_fda_sync_is_report_only_and_reads_current_summary_key():
     runner = Path(__file__).resolve().parents[1] / "run_fda_sync.sh"
     content = runner.read_text()
 
     assert "requiring_claude_review" in content
     assert "new_substances_requiring_review" not in content
+    assert "dangerously-skip-permissions" not in content
+    assert "git add" not in content
+    assert "git commit" not in content
+    assert "REPORT-ONLY" in content
+
+
+def test_run_fda_sync_rejects_unknown_arguments_before_network_access():
+    runner = Path(__file__).resolve().parents[1] / "run_fda_sync.sh"
+
+    result = subprocess.run(
+        ["bash", str(runner), "--not-a-real-option"],
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert result.returncode == 2
+    assert "Unknown option" in result.stderr
+
+
+def test_fda_report_contract_uses_operator_neutral_review_language():
+    script = Path(__file__).resolve().parents[1] / "api_audit" / "fda_weekly_sync.py"
+    content = script.read_text()
+
+    assert '"requiring_review"' in content
+    assert '"review_instructions"' in content
+    assert "Run /fda-weekly-sync in Claude Code" not in content

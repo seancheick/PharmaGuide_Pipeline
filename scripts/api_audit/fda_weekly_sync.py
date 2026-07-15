@@ -9,8 +9,9 @@ Fetches supplement and medication-related safety data from multiple sources:
   - FDA Safety Alerts RSS      (warning letters, safety communications)
   - DEA Federal Register RSS   (new scheduling actions)
 
-Generates a structured sync report for Claude (/fda-weekly-sync skill) to review
-and apply to banned_recalled_ingredients.json.
+Generates a structured regulatory-signal report for explicit operator and
+clinical review. The report is evidence input; this collector never applies
+changes to banned_recalled_ingredients.json.
 
 Usage:
     python scripts/api_audit/fda_weekly_sync.py [--days 7] [--output report.json]
@@ -952,7 +953,7 @@ def _classify_and_crossref(records: list, existing_index: dict) -> tuple:
         else:
             entry["note"] = (
                 "Signal category detected but substance name not extracted"
-                " — Claude review needed"
+                " — operator review needed"
             )
             new_records.append(entry)
 
@@ -1030,7 +1031,7 @@ def _fetch_all_sources(date_start: str, date_end: str,
 
 def main():
     parser = argparse.ArgumentParser(
-        description="FDA Weekly Sync - generates multi-source recall report for Claude review"
+        description="FDA Weekly Sync - generates a multi-source regulatory review report"
     )
     parser.add_argument("--days", type=int, default=7,
                         help="Days to look back (default: 7)")
@@ -1094,6 +1095,9 @@ def main():
         "summary": {
             "total_fetched": len(all_records),
             "skipped_not_relevant": skipped_count,
+            "requiring_review": len(new_records),
+            # Compatibility key for existing audit consumers. New callers use
+            # requiring_review; neither key authorizes automatic data writes.
             "requiring_claude_review": len(new_records),
             "already_tracked": len(tracked_records),
             "stale_recalled_entries_to_verify": len(stale_recalls),
@@ -1102,7 +1106,7 @@ def main():
         "new_records_requiring_review": new_records,
         "records_for_tracked_substances": tracked_records,
         "stale_recalls_to_verify": stale_recalls,
-        "claude_instructions": (
+        "review_instructions": (
             "Review 'new_records_requiring_review'. Each entry has a 'primary_category' that maps "
             "to a source_category in banned_recalled_ingredients.json and 'signal_categories' listing "
             "all detected concern types. "
@@ -1121,7 +1125,7 @@ def main():
     # ── Summary ───────────────────────────────────────────────────────────────
 
     print("\n[FDA Sync] ─── Results ────────────────────────────────────────")
-    print(f"  Requiring Claude review  : {len(new_records)}")
+    print(f"  Requiring operator review: {len(new_records)}")
     print(f"  Already tracked (info)   : {len(tracked_records)}")
     print(f"  Stale recalls to verify  : {len(stale_recalls)}")
     print(f"  Skipped (not relevant)   : {skipped_count}")
@@ -1135,7 +1139,7 @@ def main():
     wada_warning = check_wada_staleness()
     if wada_warning:
         print(f"\n  ⚠️  WADA WARNING: {wada_warning}")
-    print("[FDA Sync] Done. Run /fda-weekly-sync in Claude Code to apply.")
+    print("[FDA Sync] Done. Review the report against primary sources before any curated-data change.")
 
     return 0
 
