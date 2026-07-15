@@ -61,7 +61,7 @@
           "class_multiplier_applied": 0.4,
           "computed_blend_penalty": -1.55,
           "computed_blend_penalty_magnitude": 1.55,
-          "dedupe_fingerprint": "proprietary blend|bifidobacterium bifidum g9 1,bifidobacterium longum mm 2,lactobacillus gasseri ks 13|0.000|activeingredients[1]",
+          "dedupe_fingerprint": "proprietary blend|bifidobacterium bifidum g9 1,bifidobacterium longum mm 2,lactobacillus gasseri ks 13|0.000|activeingredients[0]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": null,
@@ -71,7 +71,7 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[1]",
+          "source_path": "activeIngredients[0]",
           "unit_conversion_failed": false
         }
       ],

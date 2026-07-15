@@ -13,16 +13,16 @@
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
-      "A5": 1.0,
+      "A5": 4.0,
       "A5a": 0.0,
-      "A5b": 0.0,
+      "A5b": 3.0,
       "A5c": 0.0,
       "A5d": 0.0,
       "A5e": 1.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 11.32,
+      "core_quality": 14.32,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 11.32
+      "score": 14.32
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -93,7 +93,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 49.25,
+    "quality_raw": 52.25,
     "violation_penalty": -1.5
   },
   "dsld_id": "245156",
@@ -107,17 +107,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Ashwagandha Gummies Mixed Berry",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 61.6,
-  "score_80": 49.2,
+  "score_100_equivalent": 65.3,
+  "score_80": 52.3,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 11.32,
+      "core_quality": 14.32,
       "max": 25.0,
-      "score": 11.32
+      "score": 14.32
     },
     "B_safety_purity": {
       "max": 30.0,

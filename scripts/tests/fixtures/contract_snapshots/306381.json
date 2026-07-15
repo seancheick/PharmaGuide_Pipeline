@@ -9,7 +9,7 @@
   "brand_name": "Nutricost Performance",
   "breakdown": {
     "A": {
-      "A1": 13.8,
+      "A1": 13.48,
       "A2": 2.5,
       "A3": 0.0,
       "A4": 0.0,
@@ -22,7 +22,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 17.05,
+      "core_quality": 16.73,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 17.05
+      "score": 16.73
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -101,7 +101,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 62.29,
+    "quality_raw": 61.97,
     "violation_penalty": 0.0
   },
   "dsld_id": "306381",
@@ -114,17 +114,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "PRE Pre-Workout Complex Blue Raspberry",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 77.9,
-  "score_80": 62.3,
+  "score_100_equivalent": 77.5,
+  "score_80": 62.0,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 17.05,
+      "core_quality": 16.73,
       "max": 25.0,
-      "score": 17.05
+      "score": 16.73
     },
     "B_safety_purity": {
       "max": 30.0,

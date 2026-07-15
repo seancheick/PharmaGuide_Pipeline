@@ -9,7 +9,7 @@
   "brand_name": "CVS Health",
   "breakdown": {
     "A": {
-      "A1": 9.85,
+      "A1": 10.8,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 3.0,
@@ -22,7 +22,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 13.6,
+      "core_quality": 14.55,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 13.6
+      "score": 14.55
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -102,7 +102,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 57.12,
+    "quality_raw": 58.07,
     "violation_penalty": 0.0
   },
   "dsld_id": "239600",
@@ -115,17 +115,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Men's Daily Gummies Complete Multivitamin",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 71.4,
-  "score_80": 57.1,
+  "score_100_equivalent": 72.6,
+  "score_80": 58.1,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 13.6,
+      "core_quality": 14.55,
       "max": 25.0,
-      "score": 13.6
+      "score": 14.55
     },
     "B_safety_purity": {
       "max": 30.0,

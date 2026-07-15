@@ -9,7 +9,7 @@
   "brand_name": "Pure Encapsulations",
   "breakdown": {
     "A": {
-      "A1": 10.8,
+      "A1": 9.84,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
@@ -22,7 +22,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.8,
+      "core_quality": 14.84,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 15.8
+      "score": 14.84
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -92,7 +92,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 54.6,
+    "quality_raw": 53.64,
     "violation_penalty": 0.0
   },
   "dsld_id": "183275",
@@ -105,17 +105,17 @@
   "output_schema_version": "3.6.0",
   "product_name": "Silymarin",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 68.2,
-  "score_80": 54.6,
+  "score_100_equivalent": 67.0,
+  "score_80": 53.6,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.8,
+      "core_quality": 14.84,
       "max": 25.0,
-      "score": 15.8
+      "score": 14.84
     },
     "B_safety_purity": {
       "max": 30.0,
