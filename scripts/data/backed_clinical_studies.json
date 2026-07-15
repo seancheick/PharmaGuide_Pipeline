@@ -1093,6 +1093,9 @@
         "bioastin",
         "zanthin"
       ],
+      "brand_tokens": [
+        "astareal"
+      ],
       "category": "eye_health",
       "evidence_level": "branded-rct",
       "published_studies": [
@@ -1734,6 +1737,9 @@
         "quatrefolic",
         "5-mthf",
         "methylfolate"
+      ],
+      "brand_tokens": [
+        "quatrefolic"
       ],
       "category": "vitamin_supplement",
       "evidence_level": "branded-rct",
@@ -2581,6 +2587,9 @@
         "citicoline",
         "cdp-choline"
       ],
+      "brand_tokens": [
+        "cognizin"
+      ],
       "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
       "published_studies": [
@@ -2656,6 +2665,9 @@
       "aliases": [
         "suntheanine",
         "l-theanine"
+      ],
+      "brand_tokens": [
+        "suntheanine"
       ],
       "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
@@ -4015,6 +4027,10 @@
         "menaq7",
         "mk-7",
         "nattopharma k2"
+      ],
+      "brand_tokens": [
+        "menaq7",
+        "mena q7"
       ],
       "category": "joint_bone",
       "evidence_level": "product-human",

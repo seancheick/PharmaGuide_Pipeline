@@ -175,6 +175,16 @@ class TestAliasQuality:
             + "\n".join(f"  '{a}': {i}" for a, i in list(duplicates.items())[:10])
         )
 
+    def test_parent_aliases_are_case_insensitively_unique(self, entries):
+        duplicates = {}
+        for ingredient_id, entry in entries.items():
+            aliases = [str(alias).strip().lower() for alias in entry.get("aliases", [])]
+            repeated = sorted({alias for alias in aliases if aliases.count(alias) > 1})
+            if repeated:
+                duplicates[ingredient_id] = repeated
+
+        assert duplicates == {}
+
     def test_no_empty_aliases_on_forms(self, entries):
         """Every form must have at least one alias."""
         empty_alias_forms = []

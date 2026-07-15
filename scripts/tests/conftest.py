@@ -26,62 +26,11 @@ _SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 if str(_SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS_DIR))
 
-
-SLOW_TEST_FILES = {
-    # Heavy real-catalog / V4-canary integration tests. Kept in sync with
-    # scripts/test.sh SLOW_FILES. Expanded 2026-06-24 from a --durations=40 pass
-    # (worst offenders ran 25s-485s each).
-    "test_canonical_id_e2e_continuity.py",
-    "test_clean_unmapped_alias_regressions.py",
-    "test_dsld_317006_piperine_demotion_2026_05_25.py",
-    "test_enrichment_regressions.py",
-    "test_pipeline_regressions.py",
-    "test_scorable_classification.py",
-    "test_score_supplements.py",
-    "test_scoring_evidence_contract_v1.py",
-    "test_unii_match_method_in_ledger.py",
-    "test_v4_banned_form_evidence_gate.py",
-    "test_v4_cross_module_canary_diversity.py",
-    "test_v4_gate_canary_diversity.py",
-    "test_v4_multi_prenatal_canary_diversity_p3.py",
-    "test_v4_omega_canary_diversity_p161.py",
-    "test_v4_omega_dose_p162.py",
-    "test_v4_omega_evidence_p163.py",
-    "test_v4_omega_final_assembly_p166.py",
-    "test_v4_omega_transparency_p165.py",
-    "test_v4_omega_trust_p164.py",
-    "test_v4_opaque_stimulant_blend.py",
-    "test_v4_probiotic_final_assembly_p26.py",
-}
-
-RELEASE_TEST_FILES = {
-    "test_active_banned_recalled_parity.py",
-    "test_cert_audit_canary.py",
-    "test_final_db_integrity_gate.py",
-    "test_manifest_contract.py",
-    "test_python_runtime_contract.py",
-    "test_release_export_parity.py",
-    "test_release_gate_banned_safe_contradictions.py",
-    "test_source_of_truth_contract.py",
-    "test_v4_canary_coverage.py",
-    "test_v4_safety_parity_release.py",
-}
-
-ARTIFACT_TEST_FILES = {
-    "test_active_banned_recalled_parity.py",
-    "test_cert_audit_canary.py",
-    "test_dashboard_smoke.py",
-    "test_d53_detail_blob_top_level_contract.py",
-    "test_d54_dr_pham_fields_propagate.py",
-    "test_form_sensitive_nutrient_gate.py",
-    "test_graceful_degradation.py",
-    "test_label_fidelity_contract.py",
-    "test_release_export_parity.py",
-    "test_release_gate_banned_safe_contradictions.py",
-    "test_safety_audit_gates.py",
-    "test_safety_copy_contract.py",
-    "test_v4_canary_coverage.py",
-}
+from test_profiles import (  # noqa: E402
+    ARTIFACT_TEST_FILES,
+    RELEASE_TEST_FILES,
+    SLOW_TEST_FILES,
+)
 
 
 def pytest_configure(config: pytest.Config) -> None:  # noqa: ARG001

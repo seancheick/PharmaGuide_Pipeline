@@ -4837,9 +4837,6 @@ class EnhancedDSLDNormalizer:
             # Generate image URL
             image_url = self._generate_image_url(raw_data.get("thumbnail", ""), product_id)
             
-            # Process contacts
-            contacts = self._process_contacts(raw_data.get("contacts", []) or [])
-            
             # Flatten and process ingredients with enhanced mapping
             raw_ingredients = raw_data.get("ingredientRows", []) or []
             self._stamp_raw_source_paths(raw_ingredients, "ingredientRows")
@@ -5327,23 +5324,9 @@ class EnhancedDSLDNormalizer:
 
             # Build proprietary blend disclosure summary
             proprietary_blends = [ing for ing in active_ingredients if ing.get("proprietaryBlend")]
-            proprietary_blend_disclosure = None
-            if proprietary_blends:
-                blend = proprietary_blends[0]  # Take first blend for summary
-                nested_ings = blend.get("nestedIngredients", [])
-
-                # Check if individual amounts are provided
-                # If ANY nested ingredient has quantityProvided=False or unit="NP", then "Not Provided"
-                any_not_provided = any(
-                    not n.get("quantityProvided", False) or n.get("unit") == "NP"
-                    for n in nested_ings
-                )
-
-                proprietary_blend_disclosure = {
-                    "totalAmount": f"{blend.get('quantity', 0)}{blend.get('unit', '')}",
-                    "individualAmounts": "Not Provided" if any_not_provided else "Provided",
-                    "ingredients": [n["name"] for n in nested_ings]
-                }
+            proprietary_blend_disclosure = self._build_proprietary_blend_disclosure(
+                proprietary_blends
+            )
 
             # Build cleaned product - PRESERVE ORIGINAL DSLD FIELDS
             cleaned = {
@@ -5513,8 +5496,14 @@ class EnhancedDSLDNormalizer:
                 self._record_nutrition_fact(nutritional_info, "totalCarbohydrates", quantity, unit, "g")
             elif re.fullmatch(r"(?:total\s+|added\s+)?sugars?", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "sugars", quantity, unit, "g")
-            elif "total fat" in name:
+            elif re.fullmatch(r"(?:total\s+)?fat", nutrient_name):
                 self._record_nutrition_fact(nutritional_info, "totalFat", quantity, unit, "g")
+            elif re.fullmatch(r"saturated\s+fat", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "saturatedFat", quantity, unit, "g")
+            elif re.fullmatch(r"trans\s+fat", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "transFat", quantity, unit, "g")
+            elif re.fullmatch(r"cholesterol", nutrient_name):
+                self._record_nutrition_fact(nutritional_info, "cholesterol", quantity, unit, "mg")
             elif "protein" in name:
                 self._record_nutrition_fact(nutritional_info, "protein", quantity, unit, "g")
             elif re.fullmatch(r"sodium(?:\s*\([^)]*\))?", nutrient_name):
@@ -6097,23 +6086,20 @@ class EnhancedDSLDNormalizer:
         # Defense-in-depth (B5 opacity): a marketing suffix token
         # ("Complex"/"Matrix"/"Formula"/...) does not make a recognized single
         # ingredient an opaque proprietary blend. When the proprietary signal came
-        # ONLY from the name token, the row resolved to a known single ingredient
-        # whose canonical name is itself NOT a blend/proprietary label, it lists no
-        # nested sub-ingredients, and it carries a real disclosed dose, it hides
-        # nothing — clear the weak flag (e.g. "Curcumin C3 Complex" = curcumin,
+        # ONLY from the name token or an NP quantity placeholder, the row resolved
+        # to a known single ingredient whose canonical name is itself NOT a
+        # blend/proprietary label, and it lists no nested sub-ingredients, it hides
+        # no composition — clear the weak flag (e.g. "Curcumin C3 Complex" = curcumin,
         # "Boron Complex" = boron, "EpiCor ... Complex" = yeast fermentate).
+        # Missing dose remains a completeness defect; it is not blend evidence.
         # Genuine blends either don't resolve, or resolve to a blend-category name
         # ("General Proprietary Blends", "Stimulant Blends"), and keep the flag.
         # The enricher's chemical-identity gate is the authoritative scoring backstop.
         if (
             is_proprietary
-            and unit != "NP"
-            and isinstance(quantity, (int, float))
-            and quantity > 0
             and not nested_rows
             and mapped
             and standard_name
-            and self._is_proprietary_blend_name(name)
             and not self._is_proprietary_blend_name(standard_name)
         ):
             is_proprietary = False
@@ -6555,13 +6541,24 @@ class EnhancedDSLDNormalizer:
                 # Skip invalid entries
                 continue
 
-        # OPTIMIZATION: Use parallel processing for large ingredient lists
-        # ✅ THREAD-SAFE: Now using @lru_cache decorators for all caching - safe for parallel processing
-        if len(normalized_ingredients) >= self._parallel_threshold:
-            logger.info(f"🚀 Using parallel processing for {len(normalized_ingredients)} ingredients")
-            return self._process_ingredients_parallel(normalized_ingredients)
-        else:
-            return self._process_ingredients_sequential(normalized_ingredients)
+        # One authoritative cleaning path for every list size. The old
+        # threshold-dependent path expanded functional groups only for large
+        # lists, so identical label text normalized differently by list shape.
+        expanded_ingredients = []
+        for ingredient in normalized_ingredients:
+            grouping_data = self.grouping_handler.process_ingredient_for_cleaning(
+                ingredient.get("name", "")
+            )
+            if grouping_data["type"] == "functional_group_with_details":
+                for specific_ingredient in grouping_data["ingredients"]:
+                    expanded_ingredients.append({
+                        **ingredient,
+                        "name": specific_ingredient,
+                    })
+            else:
+                expanded_ingredients.append(ingredient)
+
+        return self._process_ingredients_sequential(expanded_ingredients)
 
     def _process_ingredients_parallel(self, ingredients: List[Dict]) -> List[Dict]:
         """Process ingredients using parallel execution with functional grouping support"""
@@ -7856,68 +7853,6 @@ class EnhancedDSLDNormalizer:
         # PRESERVE ORIGINAL STRUCTURE - NO TRANSFORMATION
         return net_contents
     
-    def _process_contacts(self, contacts: List[Dict]) -> List[Dict]:
-        """Process manufacturer contact information"""
-        if not contacts:
-            return []
-        
-        processed_contacts = []
-        
-        # Process all contacts (not just first one)
-        for contact in contacts:
-            # Handle both nested contactDetails and flat structure
-            if "contactDetails" in contact:
-                details = contact["contactDetails"]
-                name = details.get("name", "")
-                city = details.get("city", "")
-                state = details.get("state", "")
-                country = details.get("country", "")
-                phone = details.get("phoneNumber", "")
-                web = details.get("webAddress", "")
-            else:
-                # Flat structure (like our test data)
-                name = contact.get("name", "")
-                city = contact.get("city", "")
-                state = contact.get("state", "")
-                country = contact.get("country", "")
-                phone = contact.get("phoneNumber", "")
-                web = contact.get("webAddress", "")
-                
-            # Also preserve the type from flat structure if available
-            contact_type = contact.get("type", "")
-            
-            # Look up manufacturer score
-            manufacturer_score = None
-            if name:
-                # Search in top manufacturers database
-                # Handle both array and object formats
-                manufacturers = self.manufacturers_db
-                if isinstance(self.manufacturers_db, dict):
-                    manufacturers = self.manufacturers_db.get("manufacturers", [])
-                
-                for mfr in manufacturers:
-                    mfr_name = mfr.get("standard_name", "")
-                    if name.lower() in mfr_name.lower():
-                        manufacturer_score = mfr.get("score_contribution", None)
-                        break
-            
-            # Build processed contact
-            processed_contact = {
-                "name": name,
-                "type": contact_type,
-                "webAddress": web,
-                "city": city,
-                "state": state,
-                "country": country,
-                "phoneNumber": phone,
-                "isGMP": False,  # Will be set from statements
-                "manufacturerScore": manufacturer_score
-            }
-            
-            processed_contacts.append(processed_contact)
-        
-        return processed_contacts
-    
     def _process_quantity(self, quantities) -> Tuple[float, str, Optional[float], List[Dict]]:
         """
         Extract quantity, unit, daily value, and all quantity variants from various formats.
@@ -8328,6 +8263,48 @@ class EnhancedDSLDNormalizer:
                 return canonical
         return None
 
+    @staticmethod
+    def _build_proprietary_blend_disclosure(
+        proprietary_blends: List[Dict[str, Any]],
+    ) -> Optional[Dict[str, Any]]:
+        """Preserve disclosure status for every blend on the label."""
+        if not proprietary_blends:
+            return None
+
+        disclosures = []
+        for blend in proprietary_blends:
+            nested = [
+                row for row in (blend.get("nestedIngredients") or [])
+                if isinstance(row, dict)
+            ]
+            quantity = blend.get("quantity")
+            unit = str(blend.get("unit") or "").strip()
+            try:
+                quantity_value = float(quantity)
+                has_total = quantity_value > 0 and unit.upper() not in {"", "NP"}
+            except (TypeError, ValueError):
+                quantity_value = 0.0
+                has_total = False
+
+            individual_disclosed = bool(nested) and all(
+                row.get("quantityProvided") is True
+                and str(row.get("unit") or "").strip().upper() not in {"", "NP"}
+                for row in nested
+            )
+            disclosures.append({
+                "name": blend.get("name") or blend.get("standardName") or "Proprietary blend",
+                "totalAmount": f"{quantity_value:g} {unit}" if has_total else "Not disclosed",
+                "individualAmounts": "Disclosed" if individual_disclosed else "Not disclosed",
+                "ingredients": [
+                    row.get("name") for row in nested if row.get("name")
+                ],
+            })
+
+        return {
+            "blendCount": len(disclosures),
+            "blends": disclosures,
+        }
+
     def _calculate_transparency_metrics(self, proprietary_blends: List[Dict], active_ingredients: List[Dict]) -> Dict[str, Any]:
         """
         Calculate transparency metrics for product metadata.
@@ -8525,7 +8502,7 @@ class EnhancedDSLDNormalizer:
         claims = []
 
         # Parse compound "No X, Y, Z" statements (e.g., "No salt, yeast, wheat, soy, dairy products, artificial colors, flavors, or preservatives")
-        no_compound_match = re.search(r'No\s+([^.!?]+(?:,\s*(?:or\s+)?[^.!?]+)+)', label_text, re.I)
+        no_compound_match = re.search(r'\bNo\s+([^.!?]+(?:,\s*(?:or\s+)?[^.!?]+)+)', label_text, re.I)
         if no_compound_match:
             items_text = no_compound_match.group(1)
             # Split by comma or "or"

@@ -132,7 +132,9 @@ class TestMakeNormalizedKeyGoldenFixtures:
         ("5-HTP", "5_htp"),
 
         # Complex cases
-        ("Omega-3 Fatty Acids (EPA/DHA)", "omega_3_fatty_acids_epadha"),  # Slash removed by punctuation filter
+        ("Omega-3 Fatty Acids (EPA/DHA)", "omega_3_fatty_acids_epa_dha"),
+        ("10:1 Extract", "10_1_extract"),
+        ("Vitamin D/K2", "vitamin_d_k2"),
         ("Vitamin B-Complex", "vitamin_b_complex"),
         ("N-Acetyl Cysteine (NAC)", "n_acetyl_cysteine_nac"),
 

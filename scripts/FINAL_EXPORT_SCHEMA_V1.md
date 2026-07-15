@@ -820,6 +820,10 @@ ambiguity.
 - `rda_ul_data` is included when enrichment emitted an RDA/UL analysis block. It may still
   contain `collection_enabled: false` with a reason. When absent entirely, the app treats it
   as unavailable.
+- `rda_ul_data.ul_review_flags[]` is separate from `safety_flags[]`. It records a clinically
+  material but indeterminate UL assessment (currently unknown-form folate at or above the
+  possible synthetic-folic-acid threshold). It routes the catalog verdict to `CAUTION` and
+  review without asserting `over_ul=true` or applying an over-UL score penalty.
 - `warnings` include banned/recalled/high-risk/watchlist ingredient hits, allergens, harmful
   additives, interaction warnings, drug interaction warnings, dietary warnings, and product
   status warnings. Each warning type carries specific provenance fields (see examples above).

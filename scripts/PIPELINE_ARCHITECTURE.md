@@ -299,7 +299,7 @@ New scripts added to `scripts/` beyond the core pipeline stages:
 | `build_interaction_db.py` | Assembles interaction rules reference DB for Flutter export |
 | `unii_cache.py` | Manages `fda_unii_cache.json` offline UNII registry |
 | `shadow_score_comparison.py` | Compares two scored outputs for regression detection |
-| `regression_snapshot.py` | Takes a scoring baseline snapshot for regression testing |
+| `tests/test_scoring_snapshot_v1.py` | Authoritative frozen-product regression gate used by release |
 | `preflight.py` | Pre-pipeline data contract validation |
 | `unmapped_ingredient_tracker.py` | Tracks and reports unmapped ingredient trends |
 | `release_catalog_artifact.py` | Assembles release artifacts for catalog deploys |

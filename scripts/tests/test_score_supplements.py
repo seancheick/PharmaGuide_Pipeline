@@ -292,6 +292,24 @@ class TestV30Scoring:
         result = scorer._evaluate_safety_gate(product)
         assert result["moderate_penalty"] == pytest.approx(15.0)
 
+    def test_indeterminate_folate_ul_review_is_caution_without_b0_penalty(self, scorer):
+        product = make_base_product()
+        product["rda_ul_data"] = {
+            "safety_flags": [],
+            "ul_review_flags": [{
+                "nutrient": "Folate",
+                "assessment_status": "indeterminate",
+                "reason": "unknown_folate_form_lineage",
+                "review_required": True,
+            }],
+        }
+
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "CAUTION"
+        assert "FOLATE_UL_FORM_REVIEW" in result["flags"]
+        assert result["breakdown"]["B"].get("B0_moderate_penalty", 0) == 0
+
     def test_b0_moderate_penalties_stack_additively(self, scorer):
         """Multiple moderate-severity substances should stack penalties, not just take max."""
         product = make_base_product()

@@ -35,6 +35,31 @@ from normalization import canonicalize_mass_unit
 logger = logging.getLogger(__name__)
 
 
+UL_REVIEW_FOLATE_FORM = "FOLATE_UL_FORM_REVIEW"
+
+
+def get_actionable_ul_review_signals(rda_ul_data: Any) -> List[str]:
+    """Return stable review signals from the shared RDA/UL review contract."""
+    if not isinstance(rda_ul_data, dict):
+        return []
+    signals: List[str] = []
+    flags = rda_ul_data.get("ul_review_flags")
+    if not isinstance(flags, list):
+        return signals
+    for flag in flags:
+        if not isinstance(flag, dict) or flag.get("review_required") is not True:
+            continue
+        assessment = str(flag.get("assessment_status") or "").strip().lower()
+        reason = str(flag.get("reason") or "").strip().lower()
+        if (
+            assessment == "indeterminate"
+            and reason == "unknown_folate_form_lineage"
+            and UL_REVIEW_FOLATE_FORM not in signals
+        ):
+            signals.append(UL_REVIEW_FOLATE_FORM)
+    return signals
+
+
 # Adequacy bands per spec
 ADEQUACY_BANDS = {
     "deficient": {"min_pct": 0, "max_pct": 25, "points": 0},
@@ -393,6 +418,15 @@ class RDAULCalculator:
         # Handle "no UL" policy
         if ul_status == "not_determined":
             notes.append("No UL established for this nutrient")
+            if adequacy_band == "excessive":
+                # Do not turn an RDA multiple into a toxicity proxy when the
+                # authoritative reference has no UL. Retain reduced high-dose
+                # adequacy credit without implying that the exposure is safe.
+                adequacy_band = "high"
+                notes.append(
+                    "Adequacy band capped at high because no UL is established; "
+                    "this is not a safety conclusion."
+                )
             # Flag extreme doses (>10x RDA) for information only
             if pct_rda and pct_rda > 1000:
                 notes.append(f"Note: Amount is {pct_rda/100:.1f}x RDA (informational only, no UL applies)")

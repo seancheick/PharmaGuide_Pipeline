@@ -265,7 +265,7 @@ Before adding an alias to an existing entry, verify the alias actually refers to
 
 If you change cleaner, normalizer, enricher, batch processor, scorer contract, matching logic, **or any canonical vocab**, you must run a small shadow verification on an affected dataset slice and compare before/after.
 
-Use `scripts/shadow_score_comparison.py` and `scripts/regression_snapshot.py` for automated before/after diffing.
+Use `scripts/shadow_score_comparison.py` for the exploratory before/after diff, then run the authoritative `scripts/tests/test_scoring_snapshot_v1.py` release gate.
 
 **Vocab-change shadow check:** if you touch any canonical vocab JSON, also run:
 
@@ -1215,7 +1215,6 @@ Prefer the exact current run folder first, because that is the operator's workin
 | `supplement_type_utils.py`         | Thin wrapper around SP-4 normalizer           | Read-time canonicalization       |
 | `scoring_v4/router.py`             | Taxonomy-first v4 module routing              | Investigate v4 routing bugs      |
 | `constants.py`                     | Shared constants and mappings                 | Check canonical aliases/mappings |
-| `fuzzy_matcher.py`                 | Fuzzy string matching                         | Investigate match failures       |
 | `unii_cache.py`                    | Local-first UNII lookup (~172K offline)       | Fast UNII resolution without API |
 | `unmapped_ingredient_tracker.py`   | Track unmapped ingredient state               | Audit unmapped backlogs          |
 | `functional_grouping_handler.py`   | Functional grouping logic                     | Investigate grouping bugs        |
@@ -1224,7 +1223,7 @@ Prefer the exact current run folder first, because that is the operator's workin
 | `dosage_normalizer.py`             | Dose normalization                            | Investigate dose parsing         |
 | `match_ledger.py`                  | Match tracking/auditing                       | Trace match decisions            |
 | `shadow_score_comparison.py`       | Before/after scoring diff                     | Verify shadow-run deltas         |
-| `regression_snapshot.py`           | Regression baseline snapshots                 | Guard against regressions        |
+| `tests/test_scoring_snapshot_v1.py`| Reviewed frozen-product baseline gate          | Guard against regressions        |
 | `db_integrity_sanity_check.py`     | Schema and data validation                    | Mandatory after every edit       |
 | `coverage_gate.py`                 | Quality/coverage threshold enforcement        | Quality gate checking            |
 | `enrichment_contract_validator.py` | Enrichment output validation                  | Verify enrichment contracts      |

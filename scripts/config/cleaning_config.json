@@ -11,8 +11,8 @@
     "workflow": "1. CLEANING (this phase) → 2. ENRICHMENT → 3. SCORING → 4. DEPLOYMENT"
   },
   "paths": {
-    "input_directory": "/Users/seancheick/Documents/DataSetDsld/Lozenges-978labels-11-11-25",
-    "output_directory": "output_Lozenges/cleaned",
+    "input_directory": "raw_data",
+    "output_directory": "output_Lozenges",
     "reference_data": "data",
     "log_directory": "products/logs"
   },
@@ -20,6 +20,7 @@
     "_comment": "batch_size controls files per batch, max_workers controls parallel processes",
     "batch_size": 500,
     "max_workers": 4,
+    "worker_timeout_seconds": 300,
     "min_files_per_worker": 50,
     "_comment_min_files_per_worker": "Size the pool to the batch: ~1 worker per 50 files, so small brands run in-process (one reference-data load, no spawn warmup) instead of spawning all max_workers. 0 disables (always max_workers). Output is identical either way.",
     "manifest_content_fingerprint": false

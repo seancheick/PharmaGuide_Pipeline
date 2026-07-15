@@ -33,7 +33,13 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
-from normalization import canonicalize_mass_unit
+from normalization import (
+    FOLATE_FORM_FOLIC_ACID,
+    FOLATE_FORM_FOOD,
+    FOLATE_FORM_METHYLFOLATE,
+    canonicalize_mass_unit,
+    classify_folate_form,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -401,7 +407,11 @@ class UnitConverter:
             nutrient_detected=nutrient,
             form_detected=rule_data.get('standard_name'),
             form_detection_source=form_source,
-            confidence="high" if rule_id != 'vitamin_a_unknown' else "low",
+            confidence=(
+                "low"
+                if rule_id in {'vitamin_a_unknown', 'vitamin_e_unknown', 'folate_unknown'}
+                else "high"
+            ),
             warnings=warnings,
             notes=[rule_data.get('notes', '')] if rule_data.get('notes') else []
         )
@@ -511,18 +521,21 @@ class UnitConverter:
         ingredient_text: str
     ) -> Tuple[Optional[str], Optional[Dict]]:
         """Detect Folate form."""
-        text_lower = ingredient_text.lower()
+        form = classify_folate_form(ingredient_text)
 
-        # Methylfolate
-        if any(x in text_lower for x in ['methylfolate', '5-mthf', 'metafolin', 'quatrefolic']):
+        if form == FOLATE_FORM_FOOD:
+            return 'folate_food', self.vitamin_conversions.get('folate_food', {})
+
+        if form == FOLATE_FORM_METHYLFOLATE:
             return 'folate_methylfolate', self.vitamin_conversions.get('folate_methylfolate', {})
 
-        # Folic acid
-        if 'folic acid' in text_lower:
+        if form == FOLATE_FORM_FOLIC_ACID:
             return 'folate_folic_acid', self.vitamin_conversions.get('folate_folic_acid', {})
 
-        # Default to folic acid
-        return 'folate_folic_acid', self.vitamin_conversions.get('folate_folic_acid', {})
+        # Bare folate and recognized forms without an authorized conversion
+        # factor (including folinic acid) stay conversion-unknown. Preserve an
+        # explicit DFE declaration, but never borrow methylfolate's factor.
+        return 'folate_unknown', self.vitamin_conversions.get('folate_unknown', {})
 
     def _get_conversion_key(self, from_unit: str, to_unit: str) -> str:
         """Get the conversion key for the database lookup."""

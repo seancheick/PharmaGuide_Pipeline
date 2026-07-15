@@ -66,10 +66,11 @@ class FunctionalGroupingHandler:
                 # Check if there are actual ingredient details
                 has_details = bool(after_colon) and after_colon.lower() != 'not specified'
 
-                # Split by commas to get individual ingredients
+                # Split only at top-level commas. Parenthesized source lists
+                # such as ``Citrus Oils (Orange, Lemon)`` are one ingredient.
                 ingredients = []
                 if has_details:
-                    ingredients = [ing.strip() for ing in after_colon.split(',') if ing.strip()]
+                    ingredients = self._split_top_level_commas(after_colon)
 
                 return {
                     'type': pattern_info['config']['type'],
@@ -81,6 +82,30 @@ class FunctionalGroupingHandler:
                 }
 
         return None
+
+    @staticmethod
+    def _split_top_level_commas(text: str) -> List[str]:
+        parts: List[str] = []
+        start = 0
+        matching = {")": "(", "]": "[", "}": "{"}
+        openings = set(matching.values())
+        stack: List[str] = []
+
+        for index, char in enumerate(text):
+            if char in openings:
+                stack.append(char)
+            elif char in matching and stack and stack[-1] == matching[char]:
+                stack.pop()
+            elif char == "," and not stack:
+                value = text[start:index].strip()
+                if value:
+                    parts.append(value)
+                start = index + 1
+
+        value = text[start:].strip()
+        if value:
+            parts.append(value)
+        return parts
 
     def check_for_vague_terms(self, ingredient_text: str) -> List[Dict]:
         """Check if ingredient uses vague terms without details"""

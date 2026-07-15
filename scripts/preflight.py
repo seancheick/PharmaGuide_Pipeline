@@ -84,7 +84,6 @@ CONFIG_FILES = [
     ("enrichment_config.json", "Enrichment stage configuration"),
     ("scoring_config.json", "Scoring stage configuration"),
     ("cleaning_config.json", "Cleaning stage configuration"),
-    ("cleaning_config_seq_tmp.json", "Sequential cleaning config"),
 ]
 
 # Required script files
@@ -413,10 +412,16 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
             results["critical"]["failed"].append(entry)
 
     if quick:
-        # Quick mode: only check critical files
-        results["summary"]["critical_ok"] = len(results["critical"]["failed"]) == 0
-        results["summary"]["all_ok"] = results["summary"]["critical_ok"]
-        results["summary"]["exit_code"] = 0 if results["summary"]["critical_ok"] else 1
+        # Quick mode still validates critical JSON content; existence alone is
+        # not sufficient for a clinical-data preflight.
+        critical_ok = len(results["critical"]["failed"]) == 0
+        json_ok = len(results["json_valid"]["failed"]) == 0
+        results["summary"].update({
+            "critical_ok": critical_ok,
+            "json_valid": json_ok,
+            "all_ok": critical_ok and json_ok,
+            "exit_code": 0 if critical_ok and json_ok else 1,
+        })
         return results
 
     # Check important data files
@@ -528,7 +533,7 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
     # at priority 1 in _fast_exact_lookup — no functional incorrect routing occurs.
     # Collisions represent data authoring issues that need human review, not
     # pipeline-breaking failures.
-    if not critical_ok or not json_ok:
+    if not critical_ok or not json_ok or not configs_ok or not scripts_ok or not schema_ok:
         exit_code = 1
     elif not collision_ok or len(results["important"]["failed"]) > 0:
         exit_code = 2

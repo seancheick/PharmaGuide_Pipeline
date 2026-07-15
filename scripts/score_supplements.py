@@ -40,6 +40,10 @@ from identity.safety import (
     normalize_safety_source,
     safety_flag_matches_status,
 )
+from rda_ul_calculator import (
+    UL_REVIEW_FOLATE_FORM,
+    get_actionable_ul_review_signals,
+)
 from scoring_input_contract import (
     get_scoring_ingredients,
     is_nutrition_only_product,
@@ -1173,7 +1177,10 @@ class SupplementScorer:
         ledger_entries = safe_list(match_ledger.get("domains", {}).get("ingredients", {}).get("entries"))
         has_unmapped_inactive = any(
             (
-                "inactive" in norm_text(e.get("raw_source_path"))
+                (
+                    "inactive" in norm_text(e.get("raw_source_path"))
+                    or norm_text(e.get("source_section")) in {"inactive", "inactive promoted"}
+                )
                 and e.get("decision") in {"unmatched", "rejected"}
             )
             for e in ledger_entries
@@ -1331,7 +1338,7 @@ class SupplementScorer:
                 ).get("B0_immediate_fail", {})
                 moderate_penalty += as_float(
                     b0_cfg.get("high_risk_penalty"), 10.0
-                ) or 10.0
+                )
                 flags.append("B0_HIGH_RISK_SUBSTANCE")
             elif safety_flag_matches_status(safety_flag, ("watchlist",)):
                 b0_cfg = self.config.get(
@@ -1339,7 +1346,7 @@ class SupplementScorer:
                 ).get("B0_immediate_fail", {})
                 moderate_penalty += as_float(
                     b0_cfg.get("watchlist_penalty"), 5.0
-                ) or 5.0
+                )
                 flags.append("B0_WATCHLIST_SUBSTANCE")
 
         for substance in substances:
@@ -1388,7 +1395,7 @@ class SupplementScorer:
                 ).get("B0_immediate_fail", {})
                 moderate_penalty += as_float(
                     b0_cfg.get("high_risk_penalty"), 10.0
-                ) or 10.0
+                )
                 flags.append("B0_HIGH_RISK_SUBSTANCE")
             elif status == "watchlist":
                 # L3 (2026-04): config-driven via
@@ -1400,7 +1407,7 @@ class SupplementScorer:
                 ).get("B0_immediate_fail", {})
                 moderate_penalty += as_float(
                     b0_cfg.get("watchlist_penalty"), 5.0
-                ) or 5.0
+                )
                 flags.append("B0_WATCHLIST_SUBSTANCE")
             else:
                 # Fallback for pre-5.0 enriched data (severity-based)
@@ -1443,7 +1450,7 @@ class SupplementScorer:
                 ).get("B0_immediate_fail", {})
                 moderate_penalty += as_float(
                     b0_cfg.get("high_risk_penalty"), 10.0
-                ) or 10.0
+                )
                 flags.append("B0_HIGH_RISK_SUBSTANCE")
             elif status == "watchlist":
                 if role == "inactive" and inactive_policy == "excipient_acceptable":
@@ -1454,8 +1461,12 @@ class SupplementScorer:
                 ).get("B0_immediate_fail", {})
                 moderate_penalty += as_float(
                     b0_cfg.get("watchlist_penalty"), 5.0
-                ) or 5.0
+                )
                 flags.append("B0_WATCHLIST_SUBSTANCE")
+
+        for signal in get_actionable_ul_review_signals(product.get("rda_ul_data")):
+            if signal not in flags:
+                flags.append(signal)
 
         # If a hard fail was triggered, moderate/low advisory flags are not relevant.
         if blocked or unsafe:
@@ -1592,7 +1603,7 @@ class SupplementScorer:
         max_points = as_float(
             a1_cfg.get("max"),
             18.0,
-        ) or 18.0
+        )
         # v3.6.0 default: range_score_field is "0-15" (bio_score scale).
         # A1 budget rescales (avg_bio_score / 15) * 18 to preserve the
         # per-product budget while reading the cleaner field.
@@ -1614,13 +1625,13 @@ class SupplementScorer:
         # bio_score=11, score=14 — into the "premium" count). Default
         # threshold dropped 14→12 to match the same percentile on the
         # cleaner field (12 on /15 = 80% = Flutter UI Excellent tier).
-        threshold_score = as_float(a2_cfg.get("threshold_score"), 12.0) or 12.0
+        threshold_score = as_float(a2_cfg.get("threshold_score"), 12.0)
         points_per_form = as_float(
             a2_cfg.get("points_per_additional_premium_form"), 0.5
         )
         if points_per_form is None:
             points_per_form = 0.5
-        a2_max = as_float(a2_cfg.get("max"), 3.0) or 3.0
+        a2_max = as_float(a2_cfg.get("max"), 3.0)
         skip_first = bool(a2_cfg.get("skip_first_premium_form", True))
 
         premium_keys = set()
@@ -1670,7 +1681,7 @@ class SupplementScorer:
         if pts is None:
             # Fallback to legacy default if config has no tier_points entry
             pts = {1: 3.0, 2: 2.0, 3: 1.0}.get(tier_int, 0.0)
-        a3_max = as_float(a3_cfg.get("max"), 3.0) or 3.0
+        a3_max = as_float(a3_cfg.get("max"), 3.0)
         return clamp(0.0, a3_max, float(pts))
 
     def _compute_absorption_bonus(self, product: Dict[str, Any]) -> float:
@@ -1679,7 +1690,7 @@ class SupplementScorer:
             .get("A4_absorption_enhancer", {})
             or {}
         )
-        points_if_paired = as_float(a4_cfg.get("points_if_paired"), 3.0) or 3.0
+        points_if_paired = as_float(a4_cfg.get("points_if_paired"), 3.0)
         if "absorption_enhancer_paired" in product:
             return float(points_if_paired) if bool(product.get("absorption_enhancer_paired")) else 0.0
         qualifies = bool(product.get("absorption_data", {}).get("qualifies_for_bonus", False))
@@ -1809,7 +1820,7 @@ class SupplementScorer:
         # Fallback: top-level boolean grants identity-only credit when the
         # detailed per-item list is absent (older enriched payloads).
         if std_bonus == 0.0 and bool(product.get("has_standardized_botanical", False)):
-            std_bonus = min(_tier_pts("identity_only") or 1.0, std_max)
+            std_bonus = min(_tier_pts("identity_only"), std_max)
         std_bonus = min(std_bonus, std_max)
 
         synergy_bonus = self._synergy_cluster_qualified(product)
@@ -1829,7 +1840,7 @@ class SupplementScorer:
             .get("A5_formulation_excellence", {})
             or {}
         )
-        natural_pts = as_float(a5e_cfg.get("natural_source"), 1.0) or 1.0
+        natural_pts = as_float(a5e_cfg.get("natural_source"), 1.0)
         natural_count = 0
         scorable_count = 0
         for ing in self._get_active_ingredients(product):
@@ -1909,7 +1920,7 @@ class SupplementScorer:
             parsed_tiers.append((threshold, float(pts_val)))
         parsed_tiers.sort(key=lambda kv: kv[0], reverse=True)
 
-        a6_max = as_float(a6_cfg.get("max"), 3.0) or 3.0
+        a6_max = as_float(a6_cfg.get("max"), 3.0)
 
         for threshold, pts in parsed_tiers:
             if form_score >= threshold:
@@ -1945,10 +1956,10 @@ class SupplementScorer:
         )
 
         require_viable_cfu = bool(cfg.get("require_viable_cfu", True))
-        min_total_billion = as_float(cfg.get("min_total_billion_count"), 1.0) or 1.0
+        min_total_billion = as_float(cfg.get("min_total_billion_count"), 1.0)
         require_strain_identity = bool(cfg.get("require_strain_level_identity", True))
-        min_clinical_strain_count = int(as_float(cfg.get("min_clinical_strain_count"), 1) or 1)
-        min_strain_id_count = int(as_float(cfg.get("min_strain_id_count"), 1) or 1)
+        min_clinical_strain_count = int(as_float(cfg.get("min_clinical_strain_count"), 1))
+        min_strain_id_count = int(as_float(cfg.get("min_strain_id_count"), 1))
         require_cfu_guarantee = bool(cfg.get("require_cfu_guarantee", True))
         accepted_guarantee_types = {
             norm_text(v) for v in safe_list(cfg.get("accepted_guarantee_types", ["at_expiration"])) if norm_text(v)
@@ -2876,8 +2887,8 @@ class SupplementScorer:
         b4a = clamp(0.0, float(self._B4A_CAP), b4a_raw)
 
         b4b_cfg = b4_cfg.get("B4b_gmp", {}) if isinstance(b4_cfg, dict) else {}
-        b4b_certified = as_float(b4b_cfg.get("certified"), 4.0) or 4.0
-        b4b_fda_registered = as_float(b4b_cfg.get("fda_registered"), 2.0) or 2.0
+        b4b_certified = as_float(b4b_cfg.get("certified"), 4.0)
+        b4b_fda_registered = as_float(b4b_cfg.get("fda_registered"), 2.0)
 
         gmp_level = norm_text(product.get("gmp_level"))
         gmp = cert.get("gmp", {})
@@ -2900,8 +2911,8 @@ class SupplementScorer:
             b4b = 0.0
 
         b4c_cfg = b4_cfg.get("B4c_batch_traceability", {}) if isinstance(b4_cfg, dict) else {}
-        b4c_coa_points = as_float(b4c_cfg.get("coa"), 1.0) or 1.0
-        b4c_batch_lookup_points = as_float(b4c_cfg.get("batch_lookup"), 1.0) or 1.0
+        b4c_coa_points = as_float(b4c_cfg.get("coa"), 1.0)
+        b4c_batch_lookup_points = as_float(b4c_cfg.get("batch_lookup"), 1.0)
 
         has_coa = bool(product.get("has_coa", cert.get("batch_traceability", {}).get("has_coa", False)))
         has_batch_lookup = bool(
@@ -3649,9 +3660,9 @@ class SupplementScorer:
         flags: List[str],
     ) -> Dict[str, Any]:
         section_b_cfg = self.config.get("section_B_safety_purity", {}) or {}
-        max_points = as_float(section_b_cfg.get("_max"), 30.0) or 30.0
-        base_score = as_float(section_b_cfg.get("base_score"), 25.0) or 25.0
-        bonus_pool_cap = as_float(section_b_cfg.get("bonus_pool_cap"), 5.0) or 5.0
+        max_points = as_float(section_b_cfg.get("_max"), 30.0)
+        base_score = as_float(section_b_cfg.get("base_score"), 25.0)
+        bonus_pool_cap = as_float(section_b_cfg.get("bonus_pool_cap"), 5.0)
 
         b1_evidence: List[Dict[str, Any]] = []
         b1 = self._compute_harmful_additives_penalty(
@@ -3665,15 +3676,15 @@ class SupplementScorer:
                 flags.append(f)
 
         b3_cfg = section_b_cfg.get("B3_claim_compliance", {}) or {}
-        b3_allergen_pts = as_float(b3_cfg.get("allergen_free"), 2.0) or 2.0
-        b3_gluten_pts = as_float(b3_cfg.get("gluten_free"), 1.0) or 1.0
-        b3_vegan_pts = as_float(b3_cfg.get("vegan_vegetarian"), 1.0) or 1.0
+        b3_allergen_pts = as_float(b3_cfg.get("allergen_free"), 2.0)
+        b3_gluten_pts = as_float(b3_cfg.get("gluten_free"), 1.0)
+        b3_vegan_pts = as_float(b3_cfg.get("vegan_vegetarian"), 1.0)
         b3 = float(
             (b3_allergen_pts if allergen_valid else 0.0)
             + (b3_gluten_pts if gluten_valid else 0.0)
             + (b3_vegan_pts if vegan_valid else 0.0)
         )
-        b3_cap = as_float(b3_cfg.get("cap"), 4.0) or 4.0
+        b3_cap = as_float(b3_cfg.get("cap"), 4.0)
         b3 = clamp(0.0, b3_cap, b3)
 
         b_hypoallergenic = 0.0
@@ -3858,9 +3869,9 @@ class SupplementScorer:
 
     def _compute_evidence_score(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
         section_c_cfg = self.config.get("section_C_evidence_research", {}) or {}
-        cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 7.0) or 7.0
-        cap_total = as_float(section_c_cfg.get("cap_total"), 20.0) or 20.0
-        supra_multiple = as_float(section_c_cfg.get("supra_clinical_multiple"), 3.0) or 3.0
+        cap_per_ingredient = as_float(section_c_cfg.get("cap_per_ingredient"), 7.0)
+        cap_total = as_float(section_c_cfg.get("cap_total"), 20.0)
+        supra_multiple = as_float(section_c_cfg.get("supra_clinical_multiple"), 3.0)
         matches = safe_list(product.get("evidence_data", {}).get("clinical_matches", []))
 
         # Top-N diminishing returns weights: best match at 100%, second at 50%, third at 25%.
@@ -4060,10 +4071,10 @@ class SupplementScorer:
         # fully trusted manufacturers receive D1 credit.
         d1_trusted_value = as_float(
             section_d_cfg.get("D1_manufacturer_reputation"), 2.0
-        ) or 2.0
+        )
         d1_mid_tier_value = as_float(
             section_d_cfg.get("D1_mid_tier_reputation"), 1.0
-        ) or 1.0
+        )
 
         d1 = 0.0
         if bool(product.get("is_trusted_manufacturer", False)):
@@ -4108,7 +4119,7 @@ class SupplementScorer:
             "D4_high_standard_region"
         )
         if isinstance(d4_cfg, dict):
-            d4_value = as_float(d4_cfg.get("points"), 1.0) or 1.0
+            d4_value = as_float(d4_cfg.get("points"), 1.0)
             configured_regions = d4_cfg.get("accepted_regions")
             if isinstance(configured_regions, list) and configured_regions:
                 high_std_regions = {
@@ -4118,7 +4129,7 @@ class SupplementScorer:
                 high_std_regions = default_high_std_regions
         else:
             # Legacy scalar form
-            d4_value = as_float(d4_cfg, 1.0) or 1.0
+            d4_value = as_float(d4_cfg, 1.0)
             high_std_regions = default_high_std_regions
 
         d4 = 0.0
@@ -4127,12 +4138,13 @@ class SupplementScorer:
         elif region in high_std_regions:
             d4 = d4_value
 
-        d5 = 0.5 if bool(product.get("has_sustainable_packaging", bonus_features.get("sustainability_claim", False))) else 0.0
+        d5_value = as_float(section_d_cfg.get("D5_sustainability"), 0.5)
+        d5 = d5_value if bool(product.get("has_sustainable_packaging", bonus_features.get("sustainability_claim", False))) else 0.0
 
         tail_cap = as_float(
             self.config.get("section_D_brand_trust", {}).get("D3_D4_D5_combined_cap"),
             2.0,
-        ) or 2.0
+        )
         tail = min(tail_cap, d3 + d4 + d5)
         total = min(section_max, d1 + d2 + tail)
 
@@ -4952,6 +4964,8 @@ class SupplementScorer:
             return "NOT_SCORED"
         if "BANNED_MATCH_REVIEW_NEEDED" in flags:
             return "CAUTION"
+        if UL_REVIEW_FOLATE_FORM in flags:
+            return "CAUTION"
         if any(f in flags for f in ("B0_MODERATE_SUBSTANCE", "B0_HIGH_RISK_SUBSTANCE",
                                      "B0_WATCHLIST_SUBSTANCE")):
             return "CAUTION"
@@ -4961,7 +4975,10 @@ class SupplementScorer:
         )
         if poor_threshold is None:
             poor_threshold = 32.0
-        if quality_score is not None and quality_score < poor_threshold:
+        # Verdict and display use the same one-decimal score boundary. Without
+        # this, 31.96 displayed as 32.0/80 while still receiving POOR.
+        verdict_score = round(quality_score, 1) if quality_score is not None else None
+        if verdict_score is not None and verdict_score < poor_threshold:
             return "POOR"
         # Track A.1 / A.2a verdict ceiling — anchor products are never SAFE.
         # If the math would otherwise verdict SAFE, force CAUTION so the
@@ -5422,7 +5439,7 @@ class SupplementScorer:
                     .get(anchor_cfg_key, {})
                     or {}
                 )
-                display_cap = as_float(anchor_cfg.get("display_cap"), 60.0) or 60.0
+                display_cap = as_float(anchor_cfg.get("display_cap"), 60.0)
                 quality_cap = (display_cap / 100.0) * 80.0
                 if quality_score > quality_cap:
                     quality_score = quality_cap
@@ -5831,7 +5848,12 @@ def main() -> None:
     if args.impact_report:
         current_results: List[Dict[str, Any]] = []
         input_p = Path(input_path)
-        for json_file in sorted(input_p.glob("*.json")):
+        current_files = (
+            [input_p]
+            if input_p.is_file()
+            else select_stage_input_files(input_p, "enrich", patterns=("*.json",))
+        )
+        for json_file in current_files:
             with open(json_file, "r", encoding="utf-8") as f:
                 data = json.load(f)
             products = data if isinstance(data, list) else [data]
@@ -5841,6 +5863,8 @@ def main() -> None:
         if args.baseline_dir:
             baseline_results = []
             for json_file in sorted(Path(args.baseline_dir).glob("**/*.json")):
+                if any(part.startswith(".") for part in json_file.relative_to(args.baseline_dir).parts):
+                    continue
                 with open(json_file, "r", encoding="utf-8") as f:
                     data = json.load(f)
                 products = data if isinstance(data, list) else [data]

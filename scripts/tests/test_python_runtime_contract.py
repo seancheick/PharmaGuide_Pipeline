@@ -33,6 +33,25 @@ def test_test_runner_uses_shared_runtime_and_named_profiles():
         assert f"{profile})" in text
 
 
+def test_test_profiles_use_one_manifest_and_classify_generated_artifacts():
+    manifest = REPO_ROOT / "scripts" / "test_profiles.py"
+    assert manifest.exists(), "test profile ownership must live in one Python manifest"
+
+    runner_text = (REPO_ROOT / "scripts" / "test.sh").read_text()
+    conftest_text = (REPO_ROOT / "scripts" / "tests" / "conftest.py").read_text()
+    assert "test_profiles.py" in runner_text
+    assert "from test_profiles import" in conftest_text
+
+    from test_profiles import ARTIFACT_TEST_FILES
+
+    assert {
+        "test_scoring_snapshot_v1.py",
+        "test_unii_cache.py",
+        "test_dsld_278523_folate_parent_total_2026_05_25.py",
+        "test_unii_exoneration_allowlist.py",
+    } <= ARTIFACT_TEST_FILES
+
+
 def test_pytest_suite_auto_marks_heavy_release_and_artifact_tests():
     conftest = (REPO_ROOT / "scripts" / "tests" / "conftest.py").read_text()
     pytest_ini = (REPO_ROOT / "pytest.ini").read_text()

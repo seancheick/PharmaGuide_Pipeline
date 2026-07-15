@@ -159,6 +159,68 @@ _RDA_REFERENCE_PROFILE = {
     "ul_basis": "lower_sourced_adult_male_female_ul",
 }
 
+# FDA/NIH labeling basis: 1,000 mcg synthetic folic acid is the adult UL;
+# current Supplement Facts labels express its equivalent as 1,700 mcg DFE.
+# These values only SCREEN an unknown-form row for review. They never establish
+# that the product is over UL.
+_FOLIC_ACID_ADULT_UL_MCG = 1000.0
+_FOLIC_ACID_LABEL_DFE_FACTOR = 1.7
+_FOLATE_DAILY_VALUE_DFE_MCG = 400.0
+
+
+def _unknown_folate_ul_screening(
+    quantity: float,
+    unit: str,
+    daily_value: Any = None,
+) -> Optional[Dict[str, float | str]]:
+    """Return worst-case folic-acid screening exposure for an ambiguous row."""
+    raw_unit = str(unit or "").lower().strip()
+    label_declares_dfe = "dfe" in raw_unit
+    mass_token = re.sub(r"\bdfe\b", "", raw_unit).strip()
+    canonical_unit = norm_module.canonicalize_mass_unit(mass_token)
+    factors_to_mcg = {"g": 1_000_000.0, "mg": 1_000.0, "mcg": 1.0}
+    factor = factors_to_mcg.get(canonical_unit)
+    if factor is None:
+        return None
+
+    declared_mcg = float(quantity) * factor
+    try:
+        declared_daily_value = float(daily_value)
+    except (TypeError, ValueError):
+        declared_daily_value = None
+    expected_dfe_daily_value = (
+        declared_mcg / _FOLATE_DAILY_VALUE_DFE_MCG * 100.0
+    )
+    dfe_inferred_from_daily_value = bool(
+        not label_declares_dfe
+        and declared_daily_value is not None
+        and abs(declared_daily_value - expected_dfe_daily_value)
+        <= max(1.0, expected_dfe_daily_value * 0.02)
+    )
+    uses_dfe_basis = label_declares_dfe or dfe_inferred_from_daily_value
+    screening_amount = (
+        declared_mcg / _FOLIC_ACID_LABEL_DFE_FACTOR
+        if uses_dfe_basis
+        else declared_mcg
+    )
+    return {
+        "screening_amount": screening_amount,
+        "screening_unit": "mcg folic acid",
+        "screening_ul": _FOLIC_ACID_ADULT_UL_MCG,
+        "potential_pct_ul": (
+            screening_amount / _FOLIC_ACID_ADULT_UL_MCG * 100.0
+        ),
+        "screening_basis": (
+            "label_declared_dfe"
+            if label_declares_dfe
+            else (
+                "dfe_inferred_from_daily_value"
+                if dfe_inferred_from_daily_value
+                else "bare_mass_worst_case"
+            )
+        ),
+    }
+
 # Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
 _CLEANER_MATCH_METHOD_MAP = {
     "unii_exact_match": METHOD_UNII_EXACT,
@@ -1818,6 +1880,15 @@ class SupplementEnricherV3:
             'cfu_billion': re.compile(r'(\d+(?:\.\d+)?)\s*billion\s*(CFU|cfus|cfu|live|bacteria|cultures)?', re.I),
             'cfu_billion_abbrev': re.compile(r'(\d+(?:\.\d+)?)\s*B\s*(CFU|cfus|cfu)\b', re.I),  # "1.5 B CFU" format
             'cfu_million': re.compile(r'(\d+(?:\.\d+)?)\s*million\s*(CFU|cfus|cfu|live|bacteria|cultures)?', re.I),
+            'cfu_scientific': re.compile(
+                r'(?P<coefficient>\d+(?:\.\d+)?)\s*'
+                r'(?:'
+                r'[x×]\s*10\s*(?:(?:\^|\*\*)\s*(?P<ascii_exponent>[+-]?\d+)|(?P<superscript_exponent>[⁰¹²³⁴⁵⁶⁷⁸⁹]+))'
+                r'|e\s*(?P<e_exponent>[+-]?\d+)'
+                r')\s*'
+                r'(?:cfu(?:s)?|colony[\s-]*forming\s+unit(?:s)?)\b',
+                re.I,
+            ),
             'cfu_expiration': re.compile(r'(until\s+expiration|through\s+shelf\s+life|at\s+expiration|guaranteed\s+through)', re.I),
             'cfu_manufacture': re.compile(r'(at\s+manufacture|when\s+manufactured|at\s+time\s+of\s+manufacture)', re.I),
 
@@ -5283,9 +5354,14 @@ class SupplementEnricherV3:
         is_structural_blend = (
             ingredient.get('proprietaryBlend', False)
             or ingredient.get('isProprietaryBlend', False)
-            or ('blend' in ingredient_group and 'blend' not in name_lower.split()[-1:])
+            or ('blend' in ingredient_group)
         )
-        hierarchy_type = ingredient.get('hierarchyType', '')
+        hierarchy_type_raw = ingredient.get('hierarchyType', '')
+        hierarchy_type = (
+            hierarchy_type_raw.get('type', '')
+            if isinstance(hierarchy_type_raw, dict)
+            else hierarchy_type_raw
+        )
         is_header_hierarchy = hierarchy_type in ('summary', 'blend_header')
 
         if has_dose and (is_structural_blend or is_header_hierarchy):
@@ -12918,7 +12994,12 @@ class SupplementEnricherV3:
                         }
                         if (
                             not row_level_brand_match
-                            and not self._brand_mentioned(study_name, study_aliases, product)
+                            and not self._brand_mentioned(
+                                study_name,
+                                study_aliases,
+                                product,
+                                brand_tokens=study.get("brand_tokens"),
+                            )
                         ):
                             continue
 
@@ -13070,12 +13151,29 @@ class SupplementEnricherV3:
             "unsubstantiated_claims": unsubstantiated
         }
 
-    def _brand_mentioned(self, study_name: str, aliases: List[str], product: Dict) -> bool:
-        """Check if brand is explicitly mentioned in product"""
-        all_text = self._get_all_product_text_lower(product)
+    def _brand_mentioned(
+        self,
+        study_name: str,
+        aliases: List[str],
+        product: Dict,
+        brand_tokens: Optional[List[str]] = None,
+    ) -> bool:
+        """Return whether the label explicitly names the studied brand.
 
-        terms = [study_name.lower()] + [a.lower() for a in aliases]
-        return any(term in all_text for term in terms)
+        ``aliases`` remains the identity-discovery surface and may legitimately
+        contain a generic ingredient name. A BRAND_ study instead gates on its
+        curated ``brand_tokens`` when present. Older records fall back to their
+        study name/aliases, with every match token bounded.
+        """
+        all_text = self._get_all_product_text_lower(product)
+        terms = brand_tokens if brand_tokens else [study_name, *aliases]
+        for term in terms:
+            normalized = str(term or "").strip().lower()
+            if normalized and re.search(
+                rf"(?<!\w){re.escape(normalized)}(?!\w)", all_text
+            ):
+                return True
+        return False
 
     def _check_unsubstantiated_claims(self, text: str) -> Dict:
         """Check for egregious unsubstantiated claims"""
@@ -13415,7 +13513,7 @@ class SupplementEnricherV3:
             # Try to extract specific EU country
             eu_match = self.compiled_patterns['made_eu'].search(all_text)
             if eu_match:
-                country = eu_match.group(0)
+                country = eu_match.group(3)
 
         # Fallback: read structured contacts for Manufacturer address
         if not country:
@@ -14371,6 +14469,39 @@ class SupplementEnricherV3:
 
         return False
 
+    def _parse_cfu_text_count(self, text: str) -> Optional[float]:
+        """Return the first label-declared CFU count from supported notation."""
+        candidates: List[Tuple[int, float]] = []
+        for pattern_key, multiplier in (
+            ("cfu_billion", 1e9),
+            ("cfu_billion_abbrev", 1e9),
+            ("cfu_million", 1e6),
+        ):
+            match = self.compiled_patterns[pattern_key].search(text)
+            if match:
+                candidates.append((match.start(), float(match.group(1)) * multiplier))
+
+        scientific = self.compiled_patterns["cfu_scientific"].search(text)
+        if scientific:
+            raw_exponent = scientific.group("ascii_exponent") or scientific.group("e_exponent")
+            if raw_exponent is None:
+                superscript_digits = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+                raw_exponent = scientific.group("superscript_exponent").translate(
+                    str.maketrans(superscript_digits, "0123456789")
+                )
+            exponent = int(raw_exponent)
+            # CFU labels are whole-cell counts. Reject negative exponents and
+            # absurd magnitudes before exponentiation so malformed OCR cannot
+            # crash enrichment or fabricate an infinite dose.
+            if 0 <= exponent <= 18:
+                count = float(scientific.group("coefficient")) * (10 ** exponent)
+                if math.isfinite(count):
+                    candidates.append((scientific.start(), count))
+
+        if not candidates:
+            return None
+        return min(candidates, key=lambda item: item[0])[1]
+
     def _extract_cfu(
         self,
         text: str,
@@ -14415,50 +14546,20 @@ class SupplementEnricherV3:
 
         self.logger.debug("CFU extraction result: %s", result)
 
-        # Also check text for CFU mentions
+        # Also check row-local text for CFU mentions through one parser.
         if text:
-            # Extract billion count from text (full word "billion")
-            match = self.compiled_patterns['cfu_billion'].search(text)
-            if match:
-                billion_from_text = float(match.group(1))
-                # Only override if ingredient didn't provide CFU or text has higher value
-                if not result["has_cfu"] or billion_from_text > result["billion_count"]:
-                    result["has_cfu"] = True
-                    result["billion_count"] = billion_from_text
-                    result["cfu_count"] = billion_from_text * 1e9
-                    _mark_source(
-                        "activeIngredients.notes" if ingredient else "statements",
-                        source_path or (ingredient or {}).get("raw_source_path"),
-                        evidence_scope or ("row_level" if ingredient else "product_level"),
-                    )
-
-            # Also check abbreviated billion format (e.g., "1.5 B CFU")
-            if not result["has_cfu"]:
-                abbrev_match = self.compiled_patterns['cfu_billion_abbrev'].search(text)
-                if abbrev_match:
-                    billion_from_text = float(abbrev_match.group(1))
-                    result["has_cfu"] = True
-                    result["billion_count"] = billion_from_text
-                    result["cfu_count"] = billion_from_text * 1e9
-                    _mark_source(
-                        "activeIngredients.notes" if ingredient else "statements",
-                        source_path or (ingredient or {}).get("raw_source_path"),
-                        evidence_scope or ("row_level" if ingredient else "product_level"),
-                    )
-
-            # Also check for million CFU (e.g., "500 Million CFUs")
-            if not result["has_cfu"]:
-                million_match = self.compiled_patterns['cfu_million'].search(text)
-                if million_match:
-                    million_from_text = float(million_match.group(1))
-                    result["has_cfu"] = True
-                    result["billion_count"] = million_from_text / 1000  # Convert to billions
-                    result["cfu_count"] = million_from_text * 1e6
-                    _mark_source(
-                        "activeIngredients.notes" if ingredient else "statements",
-                        source_path or (ingredient or {}).get("raw_source_path"),
-                        evidence_scope or ("row_level" if ingredient else "product_level"),
-                    )
+            count_from_text = self._parse_cfu_text_count(text)
+            if count_from_text is not None and (
+                not result["has_cfu"] or count_from_text > result["cfu_count"]
+            ):
+                result["has_cfu"] = True
+                result["cfu_count"] = count_from_text
+                result["billion_count"] = count_from_text / 1e9
+                _mark_source(
+                    "activeIngredients.notes" if ingredient else "statements",
+                    source_path or (ingredient or {}).get("raw_source_path"),
+                    evidence_scope or ("row_level" if ingredient else "product_level"),
+                )
 
             # P1.1: Enhanced guarantee type parsing
             result["guarantee_type"] = self._extract_guarantee_type(text)
@@ -15218,6 +15319,19 @@ class SupplementEnricherV3:
         For multi-group directions, extracts the adult/max dosage.
         """
         text_lower = text.lower()
+
+        # Precaution ceilings are safety instructions, not recommended intake.
+        # Remove only the affected clause so an independent positive direction
+        # in the same label remains available ("Take 2... Do not exceed 6").
+        clauses = re.split(r"(?<=[.!?;,])\s+|[\r\n]+", text_lower)
+        precaution = re.compile(
+            r"\b(?:(?:do|should|must)\s+not\s+exceed|not\s+to\s+exceed)\b"
+        )
+        text_lower = " ".join(
+            clause for clause in clauses if clause.strip() and not precaution.search(clause)
+        )
+        if not text_lower:
+            return None
 
         # First convert word numbers to digits for easier parsing
         for word, num in self.WORD_TO_NUM.items():
@@ -16402,6 +16516,7 @@ class SupplementEnricherV3:
             "adequacy_results": [],
             "conversion_evidence": [],
             "safety_flags": [],
+            "ul_review_flags": [],
             "has_over_ul": False,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
             "collection_enabled": False,
@@ -16553,6 +16668,7 @@ class SupplementEnricherV3:
         rda_data = []
         adequacy_results = []
         safety_flags = []
+        ul_review_flags = []
         conversion_evidence = []
         try:
             servings_min = float(min_servings_per_day) if min_servings_per_day is not None else None
@@ -16648,6 +16764,29 @@ class SupplementEnricherV3:
                     # Step 2: Compute adequacy with converted amount
                     rule_id = (conversion.conversion_rule_id or '').lower()
                     form_detected = (conversion.form_detected or '').lower()
+                    _canonical_for_ul = self._normalize_text(
+                        ingredient.get("canonical_id") or std_name
+                    )
+                    _folate_label_text = self._normalize_text(" ".join(
+                        str(value or "")
+                        for value in (
+                            ing_name,
+                            matched_form,
+                            ingredient.get("raw_source_text"),
+                        )
+                    ))
+                    _is_folate = _canonical_for_ul in {
+                        "folate", "vitamin b9 folate", "vitamin_b9_folate"
+                    }
+                    _folate_form = norm_module.classify_folate_form(_folate_label_text)
+                    _explicit_folic_acid = (
+                        _folate_form == norm_module.FOLATE_FORM_FOLIC_ACID
+                    )
+                    _explicit_non_folic_folate = _folate_form in {
+                        norm_module.FOLATE_FORM_METHYLFOLATE,
+                        norm_module.FOLATE_FORM_FOLINIC,
+                        norm_module.FOLATE_FORM_FOOD,
+                    }
                     unknown_form = (
                         'unknown' in rule_id or
                         'unknown' in form_detected or
@@ -16686,6 +16825,7 @@ class SupplementEnricherV3:
                     conv_evidence.update(dose_lineage)
                     skip_ul_check = False
                     skip_ul_reason = None
+                    ul_only_skip = False
                     if dose_lineage["dose_role"] == "form_component":
                         # The label-declared DFE total owns this form-derived
                         # conversion. Retain the row for label context but do
@@ -16697,6 +16837,18 @@ class SupplementEnricherV3:
                         # dose; checking/summing this row double-counts.
                         skip_ul_check = True
                         skip_ul_reason = "compound_duplicate_row"
+                    elif _is_folate and not _explicit_folic_acid:
+                        # This pipeline applies the folic-acid UL only to an
+                        # identified folic-acid contribution. Preserve adequacy
+                        # only when conversion produced verified DFE lineage;
+                        # suppress an unsupported UL conclusion independently.
+                        skip_ul_check = True
+                        ul_only_skip = True
+                        skip_ul_reason = (
+                            "non_folic_acid_folate_ul_basis"
+                            if _explicit_non_folic_folate
+                            else "unknown_folate_form_lineage"
+                        )
                     elif unknown_form:
                         skip_ul_check = True
                         skip_ul_reason = "unknown_vitamin_form"
@@ -16707,6 +16859,24 @@ class SupplementEnricherV3:
                     per_day_min = converted_amount * servings_min
                     per_day_max = converted_amount * servings_max
                     amount_for_ul = per_day_max or per_day_min or converted_amount
+                    folate_ul_screening = None
+                    if (
+                        _is_folate
+                        and not _explicit_folic_acid
+                        and not _explicit_non_folic_folate
+                    ):
+                        folate_ul_screening = _unknown_folate_ul_screening(
+                            quantity_float,
+                            unit,
+                            ingredient.get("dailyValue"),
+                        )
+                        if folate_ul_screening:
+                            folate_ul_screening["screening_amount"] *= servings_max
+                            folate_ul_screening["potential_pct_ul"] = (
+                                folate_ul_screening["screening_amount"]
+                                / _FOLIC_ACID_ADULT_UL_MCG
+                                * 100.0
+                            )
                     adequacy = self.rda_calculator.compute_nutrient_adequacy(
                         nutrient=std_name,
                         amount=per_day_min or converted_amount,
@@ -16741,7 +16911,89 @@ class SupplementEnricherV3:
                         "reference_profile": dict(_RDA_REFERENCE_PROFILE),
                         "data_by_group": list(_nutrient_record.get("data") or []),
                     })
-                    if skip_ul_check:
+                    if skip_ul_check and ul_only_skip:
+                        is_indeterminate_folate = (
+                            skip_ul_reason == "unknown_folate_form_lineage"
+                        )
+                        potential_pct_ul = (
+                            folate_ul_screening.get("potential_pct_ul")
+                            if folate_ul_screening
+                            else None
+                        )
+                        potential_ul_concern = bool(
+                            potential_pct_ul is not None and potential_pct_ul >= 100.0
+                        )
+                        adequacy_dict.update({
+                            "ul": None,
+                            "ul_status": (
+                                f"indeterminate_{skip_ul_reason}"
+                                if is_indeterminate_folate
+                                else f"not_applicable_{skip_ul_reason}"
+                            ),
+                            "pct_ul": None,
+                            "over_ul": False,
+                            "over_ul_amount": None,
+                            "warnings": (
+                                [
+                                    "Folate UL assessment is indeterminate because "
+                                    "the synthetic folic-acid contribution is not identified."
+                                ]
+                                if is_indeterminate_folate
+                                else []
+                            ),
+                            "skip_ul_check": True,
+                            "skip_ul_reason": skip_ul_reason,
+                            "ul_assessment_status": (
+                                "indeterminate"
+                                if is_indeterminate_folate
+                                else "not_applicable"
+                            ),
+                            "potential_ul_concern": potential_ul_concern,
+                        })
+                        if (
+                            is_indeterminate_folate
+                            and folate_ul_screening
+                            and folate_ul_screening.get("screening_basis")
+                            == "bare_mass_worst_case"
+                        ):
+                            # A legacy bare-mass Folate declaration does not say
+                            # whether the mass is total folate or folic acid.
+                            # Do not let the converter's fallback guess adequacy.
+                            adequacy_dict.update({
+                                "rda_ai": None,
+                                "rda_ai_source": "unknown",
+                                "pct_rda": None,
+                                "adequacy_band": "unknown",
+                                "scoring_eligible": False,
+                                "point_recommendation": 0,
+                            })
+                        elif _explicit_non_folic_folate and conversion_failed:
+                            # A known non-folic identity does not authorize a
+                            # guessed DFE factor. Bare-mass folinic/folinate/
+                            # leucovorin therefore keeps its UL disposition but
+                            # cannot earn adequacy credit.
+                            adequacy_dict.update({
+                                "rda_ai": None,
+                                "rda_ai_source": "unknown",
+                                "pct_rda": None,
+                                "adequacy_band": "unknown",
+                                "scoring_eligible": False,
+                                "point_recommendation": 0,
+                                "notes": [
+                                    *list(adequacy_dict.get("notes") or []),
+                                    "Adequacy not assessed: no verified conversion "
+                                    "from the declared folate mass to mcg DFE."
+                                ],
+                            })
+                        if is_indeterminate_folate and potential_ul_concern:
+                            ul_review_flags.append({
+                                "nutrient": "Folate",
+                                "assessment_status": "indeterminate",
+                                "reason": skip_ul_reason,
+                                **folate_ul_screening,
+                                "review_required": True,
+                            })
+                    elif skip_ul_check:
                         adequacy_dict.update({
                             "rda_ai": None,
                             "rda_ai_source": "unknown",
@@ -16975,6 +17227,7 @@ class SupplementEnricherV3:
                     "adequacy_results": adequacy_results,
                     "conversion_evidence": conversion_evidence,
                     "safety_flags": safety_flags,
+                    "ul_review_flags": ul_review_flags,
                     "has_over_ul": len(safety_flags) > 0,
                     "is_servings_estimated": servings_estimated,
                     "reference_profile": dict(_RDA_REFERENCE_PROFILE),
@@ -17043,6 +17296,9 @@ class SupplementEnricherV3:
             "ingredients_with_rda": rda_data,
             "analyzed_ingredients": rda_data,  # AC3: Canonical field name for scoring
             "count": len(rda_data),
+            "safety_flags": [],
+            "ul_review_flags": [],
+            "has_over_ul": False,
             "is_servings_estimated": servings_estimated,
             "reference_profile": dict(_RDA_REFERENCE_PROFILE),
         }
@@ -17795,6 +18051,38 @@ class SupplementEnricherV3:
             )
 
         # =====================================================================
+        # CLAIMS DOMAIN
+        # =====================================================================
+        # Claims are auditable label assertions, not scorable ingredient
+        # identities. Record each one as recognized/non-scorable so coverage is
+        # based on inspected source claims instead of a vacuous empty domain.
+        for index, claim in enumerate(product.get("claims", []) or []):
+            if isinstance(claim, str):
+                raw_text = claim.strip()
+            elif isinstance(claim, dict):
+                raw_text = str(
+                    claim.get("text")
+                    or claim.get("langualCodeDescription")
+                    or claim.get("notes")
+                    or ""
+                ).strip()
+            else:
+                raw_text = ""
+            if not raw_text:
+                continue
+
+            ledger.record_recognized_non_scorable(
+                domain=DOMAIN_CLAIMS,
+                raw_source_text=raw_text,
+                raw_source_path=f"claims[{index}]",
+                recognition_source="claim_scope_audit",
+                recognition_reason="label_claim_audited_not_identity_scorable",
+                canonical_id="label_claim",
+                matched_to_name=raw_text,
+                normalized_key=norm_module.make_normalized_key(raw_text),
+            )
+
+        # =====================================================================
         # BUILD FINAL OUTPUT
         # =====================================================================
         match_ledger = ledger.build()
@@ -18128,6 +18416,18 @@ def _verify_working_directory(config_path: str) -> None:
 
 
 
+def _resolve_cli_paths(args: argparse.Namespace, config: Dict[str, Any]) -> Tuple[str, str]:
+    """Resolve input/output overrides independently instead of all-or-nothing."""
+    paths = config.get("paths", {})
+    input_path = args.input_dir or paths.get(
+        "input_directory", "output_Lozenges/cleaned"
+    )
+    output_dir = args.output_dir or paths.get(
+        "output_directory", "output_Lozenges_enriched"
+    )
+    return input_path, output_dir
+
+
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
@@ -18159,14 +18459,7 @@ Examples:
         # Initialize enricher
         enricher = SupplementEnricherV3(args.config)
 
-        # Determine paths
-        if args.input_dir and args.output_dir:
-            input_path = args.input_dir
-            output_dir = args.output_dir
-        else:
-            paths = enricher.config.get('paths', {})
-            input_path = paths.get('input_directory', 'output_Lozenges/cleaned')
-            output_dir = paths.get('output_directory', 'output_Lozenges_enriched')
+        input_path, output_dir = _resolve_cli_paths(args, enricher.config)
 
         if args.dry_run:
             enricher.logger.info("DRY RUN MODE")

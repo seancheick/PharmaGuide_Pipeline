@@ -10,6 +10,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from enrich_supplements_v3 import SupplementEnricherV3
+from enhanced_normalizer import EnhancedDSLDNormalizer
 
 
 @pytest.fixture(scope="module")
@@ -44,3 +45,53 @@ def test_unmatched_form_mass_remains_in_multi_form_aggregation(enricher) -> None
     assert result["matched_percent_total"] == pytest.approx(0.2)
     assert result["unmatched_percent_total"] == pytest.approx(0.8)
     assert result["matched_forms"][0]["percent_share"] == pytest.approx(0.2)
+
+
+def test_potency_unit_requires_a_token_boundary(enricher) -> None:
+    assert enricher._has_high_signal_potency("Omega-3 Gold") is False
+    assert enricher._has_high_signal_potency("Serves 5 guests") is False
+    assert enricher._has_high_signal_potency("Omega-3 500 mg") is True
+
+
+def test_dict_hierarchy_blend_header_with_dose_is_not_scorable(enricher) -> None:
+    ingredient = {
+        "name": "Energy Complex",
+        "quantity": 500,
+        "unit": "mg",
+        "amount": {"value": 500, "unit": "mg"},
+        "hierarchyType": {"type": "blend_header"},
+    }
+
+    reason = enricher._should_skip_from_scoring(
+        ingredient,
+        enricher.databases["ingredient_quality_map"],
+        enricher.databases["standardized_botanicals"],
+    )
+
+    assert reason == "blend_header_total_weight_only"
+
+
+def test_dosed_energy_blend_suffix_is_structural_header(enricher) -> None:
+    ingredient = {
+        "name": "Energy Blend",
+        "ingredientGroup": "Proprietary Blend",
+        "quantity": 500,
+        "unit": "mg",
+        "amount": {"value": 500, "unit": "mg"},
+    }
+
+    reason = enricher._should_skip_from_scoring(
+        ingredient,
+        enricher.databases["ingredient_quality_map"],
+        enricher.databases["standardized_botanicals"],
+    )
+
+    assert reason == "blend_header_total_weight_only"
+
+
+def test_amino_acids_text_does_not_synthesize_soy_free_claim(enricher) -> None:
+    claims = EnhancedDSLDNormalizer()._extract_clean_claims(
+        "Contains Amino Acids, Soy Lecithin."
+    )
+
+    assert "Soy Free" not in claims

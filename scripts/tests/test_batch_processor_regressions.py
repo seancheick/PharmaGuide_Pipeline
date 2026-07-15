@@ -5,7 +5,12 @@ import sys
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from batch_processor import BatchProcessor, BatchState
+from batch_processor import (
+    BatchProcessor,
+    BatchState,
+    ProcessingResult,
+    process_single_file_with_timeout,
+)
 
 
 def _make_config(tmp_path):
@@ -25,6 +30,35 @@ def _make_config(tmp_path):
         "output_format": {},
         "ui": {"show_progress_bar": False},
     }
+
+
+def test_input_discovery_excludes_dotfiles_and_temporary_json(tmp_path):
+    processor = BatchProcessor(_make_config(tmp_path))
+    input_dir = tmp_path / "input"
+    input_dir.mkdir()
+    (input_dir / "visible.json").write_text("{}", encoding="utf-8")
+    (input_dir / ".stale.json").write_text("{}", encoding="utf-8")
+    (input_dir / "partial.json.tmp").write_text("{}", encoding="utf-8")
+
+    assert [path.name for path in processor.get_input_files(str(input_dir))] == [
+        "visible.json"
+    ]
+
+
+def test_worker_timeout_contains_pathological_file(monkeypatch):
+    import time
+    import batch_processor
+
+    def stuck(_file_path, _output_dir=None):
+        time.sleep(0.2)
+        return ProcessingResult(success=True, status="success")
+
+    monkeypatch.setattr(batch_processor, "process_single_file", stuck)
+    result = process_single_file_with_timeout("stuck.json", None, 0.01)
+
+    assert result.success is False
+    assert result.error_stage == "timeout"
+    assert "timed out" in (result.error or "").lower()
 
 
 def test_resume_does_not_skip_remaining_files(tmp_path, monkeypatch):

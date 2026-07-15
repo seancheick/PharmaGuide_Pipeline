@@ -27,59 +27,6 @@ FLUTTER_REPO="${FLUTTER_REPO:-/Users/seancheick/PharmaGuide ai}"
 PYTEST_BASE=(scripts/tests -q --tb=line)
 USER_TARGETS=()
 USER_OPTIONS=()
-SLOW_FILES=(
-  # Heavy real-catalog / V4-canary integration tests. Excluded from `fast`;
-  # run via `slow`/`full`. Expanded 2026-06-24 from a full --durations=40 pass
-  # — worst offenders ran 25s to 485s each and were not previously listed.
-  scripts/tests/test_canonical_id_e2e_continuity.py
-  scripts/tests/test_clean_unmapped_alias_regressions.py
-  scripts/tests/test_dsld_317006_piperine_demotion_2026_05_25.py
-  scripts/tests/test_enrichment_regressions.py
-  scripts/tests/test_pipeline_regressions.py
-  scripts/tests/test_scorable_classification.py
-  scripts/tests/test_score_supplements.py
-  scripts/tests/test_scoring_evidence_contract_v1.py
-  scripts/tests/test_unii_match_method_in_ledger.py
-  scripts/tests/test_v4_banned_form_evidence_gate.py
-  scripts/tests/test_v4_cross_module_canary_diversity.py
-  scripts/tests/test_v4_gate_canary_diversity.py
-  scripts/tests/test_v4_multi_prenatal_canary_diversity_p3.py
-  scripts/tests/test_v4_omega_canary_diversity_p161.py
-  scripts/tests/test_v4_omega_dose_p162.py
-  scripts/tests/test_v4_omega_evidence_p163.py
-  scripts/tests/test_v4_omega_final_assembly_p166.py
-  scripts/tests/test_v4_omega_transparency_p165.py
-  scripts/tests/test_v4_omega_trust_p164.py
-  scripts/tests/test_v4_opaque_stimulant_blend.py
-  scripts/tests/test_v4_probiotic_final_assembly_p26.py
-)
-RELEASE_FILES=(
-  scripts/tests/test_active_banned_recalled_parity.py
-  scripts/tests/test_cert_audit_canary.py
-  scripts/tests/test_final_db_integrity_gate.py
-  scripts/tests/test_manifest_contract.py
-  scripts/tests/test_python_runtime_contract.py
-  scripts/tests/test_release_export_parity.py
-  scripts/tests/test_release_gate_banned_safe_contradictions.py
-  scripts/tests/test_source_of_truth_contract.py
-  scripts/tests/test_v4_canary_coverage.py
-  scripts/tests/test_v4_safety_parity_release.py
-)
-ARTIFACT_FILES=(
-  scripts/tests/test_active_banned_recalled_parity.py
-  scripts/tests/test_cert_audit_canary.py
-  scripts/tests/test_dashboard_smoke.py
-  scripts/tests/test_d53_detail_blob_top_level_contract.py
-  scripts/tests/test_d54_dr_pham_fields_propagate.py
-  scripts/tests/test_form_sensitive_nutrient_gate.py
-  scripts/tests/test_graceful_degradation.py
-  scripts/tests/test_label_fidelity_contract.py
-  scripts/tests/test_release_export_parity.py
-  scripts/tests/test_release_gate_banned_safe_contradictions.py
-  scripts/tests/test_safety_audit_gates.py
-  scripts/tests/test_safety_copy_contract.py
-  scripts/tests/test_v4_canary_coverage.py
-)
 
 has_xdist() {
   "$PG_PYTHON" - <<'PY' >/dev/null 2>&1
@@ -278,17 +225,11 @@ run_release_artifact_gates() {
 }
 
 fast_test_files() {
-  "$PG_PYTHON" - "${SLOW_FILES[@]}" "${RELEASE_FILES[@]}" "${ARTIFACT_FILES[@]}" <<'PY'
-from pathlib import Path
-import sys
+  "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" fast
+}
 
-excluded = {Path(p).name for p in sys.argv[1:]}
-for path in sorted(Path("scripts/tests").glob("test_*.py")):
-    name = path.name
-    if name in excluded or name.endswith("_live.py"):
-        continue
-    print(path)
-PY
+profile_test_files() {
+  "$PG_PYTHON" "$REPO_ROOT/scripts/test_profiles.py" "$1"
 }
 
 # Per-profile hang guards. fast = dev loop (no test should exceed 2 min);
@@ -324,7 +265,10 @@ case "$PROFILE" in
     if ((${#USER_TARGETS[@]} > 0)); then
       files=("${USER_TARGETS[@]}")
     else
-      files=("${RELEASE_FILES[@]}")
+      files=()
+      while IFS= read -r file; do
+        files+=("$file")
+      done < <(profile_test_files release)
     fi
     "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     run_release_artifact_gates
@@ -347,7 +291,10 @@ case "$PROFILE" in
     if ((${#USER_TARGETS[@]} > 0)); then
       files=("${USER_TARGETS[@]}")
     else
-      files=("${SLOW_FILES[@]}")
+      files=()
+      while IFS= read -r file; do
+        files+=("$file")
+      done < <(profile_test_files slow)
     fi
     "${NICE[@]+"${NICE[@]}"}" "$PG_PYTHON" -m pytest "${files[@]}" -q --tb=line "${TIMEOUT_HEAVY[@]+"${TIMEOUT_HEAVY[@]}"}" "${USER_OPTIONS[@]+"${USER_OPTIONS[@]}"}"
     ;;

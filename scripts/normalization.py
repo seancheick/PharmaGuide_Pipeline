@@ -32,6 +32,12 @@ _MASS_UNIT_ALIASES = {
     "micrograms": "mcg",
 }
 
+FOLATE_FORM_FOLIC_ACID = "folic_acid"
+FOLATE_FORM_METHYLFOLATE = "methylfolate"
+FOLATE_FORM_FOLINIC = "folinic"
+FOLATE_FORM_FOOD = "food_folate"
+FOLATE_FORM_UNKNOWN = "unknown"
+
 
 @lru_cache(maxsize=128)
 def canonicalize_mass_unit(unit: str) -> str:
@@ -136,6 +142,30 @@ def normalize_text(raw: str) -> str:
     return text.strip()
 
 
+@lru_cache(maxsize=1024)
+def classify_folate_form(raw: str) -> str:
+    """Classify label-explicit folate lineage without assigning a DFE factor.
+
+    This is the shared identity decision used by conversion and UL scoping.
+    Conversion remains a separate policy: a recognized reduced folate such as
+    folinic acid can be identified here while still having no authorized
+    mass-to-DFE conversion rule.
+    """
+    text = normalize_text(str(raw or ""))
+    if re.search(r"\bfolic\s+acid\b", text):
+        return FOLATE_FORM_FOLIC_ACID
+    if re.search(
+        r"\b(?:methylfolate|methyltetrahydrofolate|5[-\s]?mthf|metafolin|quatrefolic)\b",
+        text,
+    ):
+        return FOLATE_FORM_METHYLFOLATE
+    if re.search(r"\b(?:folinic(?:\s+acid)?|folinate|leucovorin)\b", text):
+        return FOLATE_FORM_FOLINIC
+    if re.search(r"\b(?:food|natural)\s+folate\b", text):
+        return FOLATE_FORM_FOOD
+    return FOLATE_FORM_UNKNOWN
+
+
 @lru_cache(maxsize=65536)
 def make_normalized_key(raw: str) -> str:
     """
@@ -171,8 +201,13 @@ def make_normalized_key(raw: str) -> str:
     # Remove brackets but keep contents
     text = re.sub(r'[\[\]]', ' ', text)
 
-    # Remove all punctuation except hyphens (convert to space first)
-    # Keep alphanumeric, hyphens, and spaces
+    # Preserve semantic separators as token boundaries before removing the
+    # remaining punctuation. Deleting them joined distinct identities
+    # (``10:1`` -> ``101`` and ``D/K2`` -> ``dk2``).
+    text = re.sub(r'[:/]', ' ', text)
+
+    # Remove all remaining punctuation except hyphens.
+    # Keep alphanumeric, hyphens, and spaces.
     text = re.sub(r'[^\w\s-]', '', text)
 
     # Replace spaces and hyphens with underscores
