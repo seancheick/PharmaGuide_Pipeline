@@ -88,6 +88,7 @@ SKIP_FLUTTER=0
 SKIP_PRODUCT_IMAGES=0
 SUPABASE_DRY_RUN=0
 KEEP_VERSIONS=2
+SCORING_SNAPSHOT_GATE_RAN=0
 
 # ---------------------------------------------------------------------------
 # CLI parsing
@@ -320,6 +321,7 @@ step1_needs_run() {
 if step1_needs_run; then
   info "Step 1/8: Catalog refresh required — gating and building candidates..."
   bash scripts/rebuild_dashboard_snapshot.sh
+  SCORING_SNAPSHOT_GATE_RAN=1
   ok "Catalog candidates gated and promoted"
 else
   skip "Step 1/8: Catalog up to date with per-brand outputs — skipping assembly"
@@ -360,6 +362,7 @@ step2_needs_run() {
 if step2_needs_run; then
   info "Step 2/8: final/dist mismatch — rebuilding through the gated candidate path..."
   bash scripts/rebuild_dashboard_snapshot.sh
+  SCORING_SNAPSHOT_GATE_RAN=1
   ok "Catalog candidates gated and promoted"
 else
   skip "Step 2/8: dist/ catalog already current — skipping stage"
@@ -498,8 +501,12 @@ run_strict_gate "RDA/UL Flutter reference-data parity" \
 # A fresh per-brand rebuild can materialize score changes from reviewed source
 # data that earlier scored artifacts had not incorporated. Block publication
 # until the snapshot baseline records any such reviewed change.
-run_strict_gate "scoring snapshot contract" \
-  bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
+if (( SCORING_SNAPSHOT_GATE_RAN == 0 )); then
+  run_strict_gate "scoring snapshot contract" \
+    bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
+else
+  skip "Strict gate: scoring snapshot contract already passed before candidate promotion"
+fi
 
 # ---------------------------------------------------------------------------
 # Step 5: Sync to Supabase (upload only; cleanup is post-bundle)

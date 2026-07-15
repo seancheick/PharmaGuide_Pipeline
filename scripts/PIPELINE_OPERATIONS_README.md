@@ -87,16 +87,18 @@ bash scripts/rebuild_dashboard_snapshot.sh
 
 The snapshot script:
 
-1. runs source-of-truth, row-contract, clinical, identity, and RDA/UL gates
+1. runs source-of-truth, row-contract, clinical, identity, RDA/UL, and scoring
+   snapshot gates
 2. discovers all current enriched/scored brand outputs
 3. builds `final_db_output` and `dist` candidates
 4. validates/stamps both candidates
 5. checks export contract and freshness
 6. atomically promotes both candidates together
 
-No candidate touches the live snapshot before every required gate passes. If
-the snapshot fails, the batch exits non-zero and full release is not started;
-the last good live snapshot remains in place.
+No candidate touches the live snapshot before every required gate passes,
+including the per-product scoring snapshot contract. If the snapshot fails,
+the batch exits non-zero and full release is not started; the last good live
+snapshot remains in place.
 
 ### 2.5 Full release
 
