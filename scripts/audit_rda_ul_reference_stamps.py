@@ -13,13 +13,15 @@ from reference_data_contract import (
     assert_emitted_reference_stamp,
     validate_declared_reference_stamp,
 )
+from stage_manifest import select_stage_files
 
 
 DEFAULT_REFERENCE = Path(__file__).parent / "data" / "rda_optimal_uls.json"
 
 
 def _enriched_files(products_dir: Path) -> Iterator[Path]:
-    yield from sorted(products_dir.glob("output_*_enriched/enriched/*.json"))
+    stage_dirs = products_dir.glob("output_*_enriched/enriched")
+    yield from select_stage_files(stage_dirs, "enrich")
 
 
 def audit_emitted_stamps(*, products_dir: Path, reference_path: Path) -> tuple[int, list[str]]:

@@ -201,3 +201,29 @@ def select_stage_input_files(
     if not owned:
         raise StageManifestError("Stage manifest owns no consumable files")
     return sorted(owned, key=lambda path: path.name)
+
+
+def select_stage_files(
+    stage_dirs: Iterable[Path],
+    expected_stage: str,
+    *,
+    require_manifest: bool = False,
+    patterns: Sequence[str] = ("*.json",),
+) -> List[Path]:
+    """Select product artifacts from multiple stage directories.
+
+    This is the shared release-audit boundary: control files are never product
+    payloads, and a present manifest remains authoritative for ownership,
+    completeness, and content hashes.
+    """
+    selected: List[Path] = []
+    for stage_dir in sorted({Path(path) for path in stage_dirs}, key=str):
+        selected.extend(
+            select_stage_input_files(
+                stage_dir,
+                expected_stage,
+                require_manifest=require_manifest,
+                patterns=patterns,
+            )
+        )
+    return sorted(selected, key=str)

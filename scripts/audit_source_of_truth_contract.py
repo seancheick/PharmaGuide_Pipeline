@@ -19,6 +19,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
+from stage_manifest import select_stage_files
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MATRIX = REPO_ROOT / "scripts" / "contracts" / "source_of_truth_matrix.json"
@@ -236,22 +238,31 @@ def as_products(payload: Any) -> list[dict[str, Any]]:
 
 def iter_json_files(paths: Iterable[Path]) -> Iterable[Path]:
     for path in paths:
-        if path.is_file() and path.suffix.lower() == ".json":
+        if path.is_file() and path.suffix.lower() == ".json" and not path.name.startswith("."):
             yield path
         elif path.is_dir():
-            yield from sorted(p for p in path.rglob("*.json") if p.is_file())
+            yield from sorted(
+                p for p in path.rglob("*.json")
+                if p.is_file() and not p.name.startswith(".")
+            )
 
 
 def enriched_files_from_products_dir(products_dir: Path) -> list[Path]:
     if not products_dir.exists():
         return []
-    return sorted(products_dir.glob("*_enriched/enriched/*.json"))
+    return select_stage_files(
+        products_dir.glob("*_enriched/enriched"),
+        "enrich",
+    )
 
 
 def scored_files_from_products_dir(products_dir: Path) -> list[Path]:
     if not products_dir.exists():
         return []
-    return sorted(products_dir.glob("*_scored/scored/*.json"))
+    return select_stage_files(
+        products_dir.glob("*_scored/scored"),
+        "score",
+    )
 
 
 def collect_product_files(args: argparse.Namespace, *, prefer_enriched: bool = True) -> list[Path]:
@@ -1217,7 +1228,7 @@ def audit_freshness(args: argparse.Namespace) -> list[Finding]:
 
     product_files = []
     if products_dir.exists():
-        product_files = sorted(products_dir.glob("*_enriched/enriched/*.json")) + sorted(products_dir.glob("*_scored/scored/*.json"))
+        product_files = enriched_files_from_products_dir(products_dir) + scored_files_from_products_dir(products_dir)
     newest_product = newest_mtime(product_files)
     if newest_product and newest_product > catalog_db.stat().st_mtime:
         findings.append(Finding("FRESHNESS_PRODUCTS_NEWER_THAN_DIST", "enriched/scored outputs are newer than scripts/dist catalog DB", str(products_dir)))

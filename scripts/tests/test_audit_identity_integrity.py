@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -14,6 +15,7 @@ from audit_identity_integrity import (  # noqa: E402
 )
 from identity_integrity import is_identity_scoreable  # noqa: E402
 from scoring_v4.router import VALID_CLASSES  # noqa: E402
+from stage_manifest import write_stage_manifest  # noqa: E402
 
 
 def _active_row(disposition="clean", supplied="magnesium", final="magnesium", **overrides):
@@ -116,6 +118,22 @@ def test_audit_over_absent_products_dir_yields_no_records():
     # fail the gate just because there is nothing to scan.
     records = audit_enriched_outputs(products_dir=REPO_ROOT / "does_not_exist_dir")
     assert records == []
+
+
+def test_audit_reads_only_manifest_owned_enriched_batches(tmp_path):
+    stage_dir = tmp_path / "output_Test_enriched" / "enriched"
+    stage_dir.mkdir(parents=True)
+    batch = stage_dir / "enriched_batch_1.json"
+    batch.write_text(json.dumps([_product([_active_row()])]), encoding="utf-8")
+    write_stage_manifest(stage_dir, "enrich", [batch], run_id="identity-audit-run")
+
+    records = audit_enriched_outputs(
+        products_dir=tmp_path,
+        classify=_force("generic"),
+    )
+
+    assert len(records) == 1
+    assert records[0].product_id == "TEST"
 
 
 def test_audit_fails_when_an_active_row_has_no_identity_audit_row():

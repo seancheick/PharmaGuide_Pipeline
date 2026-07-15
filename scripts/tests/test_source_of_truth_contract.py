@@ -21,6 +21,8 @@ assert spec.loader is not None
 sys.modules[spec.name] = audit
 spec.loader.exec_module(audit)
 
+from stage_manifest import write_stage_manifest  # noqa: E402
+
 
 def write_json(path: Path, payload):
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -31,6 +33,24 @@ def sha256(path: Path) -> str:
     digest = hashlib.sha256()
     digest.update(path.read_bytes())
     return digest.hexdigest()
+
+
+def test_product_file_discovery_excludes_stage_control_manifest(tmp_path):
+    stage_dir = tmp_path / "output_Test_enriched" / "enriched"
+    stage_dir.mkdir(parents=True)
+    batch = stage_dir / "enriched_batch_1.json"
+    write_json(batch, [])
+    write_stage_manifest(stage_dir, "enrich", [batch], run_id="source-audit-run")
+
+    assert audit.enriched_files_from_products_dir(tmp_path) == [batch]
+
+
+def test_generic_json_discovery_excludes_hidden_control_files(tmp_path):
+    batch = tmp_path / "enriched_batch_1.json"
+    write_json(batch, [])
+    write_json(tmp_path / ".stage_manifest.json", {"stage": "enrich"})
+
+    assert list(audit.iter_json_files([tmp_path])) == [batch]
 
 
 def test_source_of_truth_matrix_is_complete():

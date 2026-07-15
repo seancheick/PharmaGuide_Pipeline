@@ -27,6 +27,7 @@ from typing import Any, Callable, Iterator, Optional
 
 from identity_integrity import IDENTITY_DISPOSITIONS, normalize_label_display
 from scoring_v4.router import VALID_CLASSES, class_for_product
+from stage_manifest import select_stage_files
 
 Classifier = Callable[[dict[str, Any]], str]
 
@@ -187,7 +188,8 @@ def audit_product(
 
 
 def _enriched_files(products_dir: Path) -> Iterator[Path]:
-    yield from sorted(products_dir.glob("output_*_enriched/enriched/*.json"))
+    stage_dirs = products_dir.glob("output_*_enriched/enriched")
+    yield from select_stage_files(stage_dirs, "enrich")
 
 
 def audit_enriched_outputs(

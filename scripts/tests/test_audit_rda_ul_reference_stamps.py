@@ -10,6 +10,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from audit_rda_ul_reference_stamps import audit_emitted_stamps  # noqa: E402
 from reference_data_contract import reference_stamp  # noqa: E402
+from stage_manifest import write_stage_manifest  # noqa: E402
 
 
 def _reference() -> dict:
@@ -57,6 +58,25 @@ def test_audit_accepts_current_emitted_stamps(tmp_path: Path) -> None:
 
     checked, failures = audit_emitted_stamps(
         products_dir=tmp_path / "products", reference_path=reference_path
+    )
+
+    assert checked == 1
+    assert failures == []
+
+
+def test_audit_ignores_stage_manifest_control_file(tmp_path: Path) -> None:
+    reference = _reference()
+    reference_path = tmp_path / "rda.json"
+    reference_path.write_text(json.dumps(reference))
+    products_dir = tmp_path / "products"
+    _write_batch(products_dir, [{"id": "current", "rda_ul_data": reference_stamp(reference)}])
+    stage_dir = products_dir / "output_Test_enriched" / "enriched"
+    batch = stage_dir / "enriched_batch.json"
+    write_stage_manifest(stage_dir, "enrich", [batch], run_id="rda-audit-run")
+
+    checked, failures = audit_emitted_stamps(
+        products_dir=products_dir,
+        reference_path=reference_path,
     )
 
     assert checked == 1
