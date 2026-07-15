@@ -50,6 +50,9 @@ Before writing anything to `dist/`, the script enforces:
 7. The manifest's `db_version` matches the DB's `export_manifest.db_version`
 8. The manifest's `product_count` matches `SELECT COUNT(*) FROM products_core`
 9. The DB's actual SHA-256 on disk matches the manifest's `checksum`
+10. The export audit has zero unresolved contract failures
+11. Every deliberate contract quarantine is represented in the manifest and
+    absent from both `products_core` and `detail_index.json`
 
 Any failure aborts with a non-zero exit code and a clear error. `dist/` is
 left untouched so a broken build never replaces a good one.
@@ -323,6 +326,145 @@ def validate_release_candidate(
         "was modified after the manifest was written.",
     )
 
+    # Contract-invalid products may be deliberately quarantined, but only when
+    # the builder proves that every one is excluded from both catalog surfaces.
+    # Unresolved failures, mismatched ledgers, or a quarantined ID that leaked
+    # into products_core/detail_index are release blockers.
+    audit_path = input_dir / "export_audit_report.json"
+    _require(
+        audit_path.is_file(),
+        f"Release candidate missing export_audit_report.json at {audit_path}. "
+        "The contract-quarantine ledger is required for release.",
+    )
+    try:
+        audit_report = json.loads(audit_path.read_text())
+    except json.JSONDecodeError as exc:
+        raise ReleaseValidationError(
+            f"export_audit_report.json is not valid JSON: {exc}"
+        ) from exc
+    _require(
+        isinstance(audit_report, dict),
+        "export_audit_report.json must contain a JSON object.",
+    )
+
+    integrity_contract = manifest.get("integrity")
+    _require(
+        isinstance(integrity_contract, dict),
+        "export_manifest.json is missing the integrity contract.",
+    )
+    unresolved_manifest = int(integrity_contract.get("contract_failures", 0) or 0)
+    unresolved_audit = audit_report.get("contract_failures")
+    _require(
+        isinstance(unresolved_audit, list),
+        "export_audit_report.contract_failures must be a list.",
+    )
+    _require(
+        unresolved_manifest == 0 and not unresolved_audit,
+        "Release candidate has unresolved contract failures; refusing promotion.",
+    )
+
+    contract_quarantines = audit_report.get("contract_quarantines")
+    _require(
+        isinstance(contract_quarantines, list),
+        "export_audit_report.contract_quarantines must be a list.",
+    )
+    quarantine_ids = [
+        str(entry.get("dsld_id") or "").strip()
+        for entry in contract_quarantines
+        if isinstance(entry, dict)
+    ]
+    _require(
+        all(quarantine_ids) and len(quarantine_ids) == len(contract_quarantines)
+        if contract_quarantines
+        else True,
+        "Every contract quarantine must carry a non-empty dsld_id.",
+    )
+    _require(
+        len(quarantine_ids) == len(set(quarantine_ids)),
+        "Contract quarantine ledger contains duplicate dsld_id values.",
+    )
+    quarantine_count = int(
+        integrity_contract.get("contract_quarantine_count", 0) or 0
+    )
+    audit_counts = audit_report.get("counts")
+    _require(
+        isinstance(audit_counts, dict),
+        "export_audit_report.counts must be an object.",
+    )
+    audit_quarantine_count = int(
+        audit_counts.get("export_contract_quarantined", 0) or 0
+    )
+    _require(
+        quarantine_count == audit_quarantine_count == len(quarantine_ids),
+        "Contract quarantine counts disagree between manifest, audit, and ledger.",
+    )
+    _require(
+        int(audit_counts.get("export_contract_invalid", 0) or 0) == 0,
+        "export audit reports unresolved invalid contract products.",
+    )
+
+    excluded_by_gate = manifest.get("excluded_by_gate")
+    _require(
+        isinstance(excluded_by_gate, list),
+        "export_manifest.excluded_by_gate must be a list.",
+    )
+    excluded_ids = {
+        str(entry.get("dsld_id") or "").strip()
+        for entry in excluded_by_gate
+        if isinstance(entry, dict)
+    }
+    _require(
+        int(integrity_contract.get("excluded_by_gate_count", 0) or 0)
+        == len(excluded_by_gate),
+        "excluded_by_gate count disagrees with the manifest ledger.",
+    )
+    _require(
+        set(quarantine_ids).issubset(excluded_ids),
+        "Contract quarantine ledger is not fully represented in excluded_by_gate.",
+    )
+
+    if quarantine_ids:
+        placeholders = ",".join("?" for _ in quarantine_ids)
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        try:
+            present_rows = conn.execute(
+                f"SELECT dsld_id FROM products_core WHERE dsld_id IN ({placeholders})",
+                quarantine_ids,
+            ).fetchall()
+        finally:
+            conn.close()
+        _require(
+            not present_rows,
+            "A contract-quarantined product is still present in products_core: "
+            + ", ".join(str(row[0]) for row in present_rows[:10]),
+        )
+
+        detail_index_path = input_dir / "detail_index.json"
+        _require(
+            detail_index_path.is_file(),
+            f"Release candidate missing detail_index.json at {detail_index_path}.",
+        )
+        try:
+            detail_index = json.loads(detail_index_path.read_text())
+        except json.JSONDecodeError as exc:
+            raise ReleaseValidationError(
+                f"detail_index.json is not valid JSON: {exc}"
+            ) from exc
+        if isinstance(detail_index, dict) and isinstance(
+            detail_index.get("products"), dict
+        ):
+            detail_index = detail_index["products"]
+        _require(
+            isinstance(detail_index, dict),
+            "detail_index.json must contain a product mapping.",
+        )
+        leaked_detail_ids = sorted(set(quarantine_ids) & set(detail_index))
+        _require(
+            not leaked_detail_ids,
+            "A contract-quarantined product is still present in detail_index: "
+            + ", ".join(leaked_detail_ids[:10]),
+        )
+
     return {
         "db_path": db_path,
         "manifest_path": manifest_path,
@@ -331,6 +473,7 @@ def validate_release_candidate(
         "checksum_sha256": actual_checksum,
         "product_count": product_count,
         "integrity": integrity,
+        "contract_quarantine_count": quarantine_count,
     }
 
 
@@ -390,6 +533,7 @@ def stage_release(
     *,
     validation: Dict[str, Any],
     output_dir: Path,
+    preserve_assets_from: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Write the validated release into output_dir atomically.
 
@@ -465,11 +609,10 @@ def stage_release(
         shutil.copy2(src_detail_index, staging_dir / "detail_index.json")
         shutil.copytree(src_detail_blobs, staging_dir / "detail_blobs")
 
-        # `export_audit_report.json` is optional debug context — carry it
-        # forward if present, but a missing file does not block release.
+        # The validator requires this contract-quarantine ledger. Carry the
+        # already-validated report into the release candidate.
         src_audit_report = source_dir / "export_audit_report.json"
-        if src_audit_report.is_file():
-            shutil.copy2(src_audit_report, staging_dir / "export_audit_report.json")
+        shutil.copy2(src_audit_report, staging_dir / "export_audit_report.json")
 
         # Preserve the rendered product image cache across the rename-swap.
         # `product_images/` is expensive to regenerate (PDF→WebP for ~8 K
@@ -483,9 +626,31 @@ def stage_release(
         # `interaction_db.sqlite` is correctly wiped — step 4 of the
         # release runner (rebuild_interaction_db) regenerates it from
         # the curated interaction inputs, not from the catalog DB.
-        preserved_image_dir = output_dir / "product_images"
+        preserved_image_root = (
+            preserve_assets_from.resolve()
+            if preserve_assets_from is not None
+            else output_dir
+        )
+        preserved_image_dir = preserved_image_root / "product_images"
         if preserved_image_dir.is_dir():
-            shutil.move(str(preserved_image_dir), str(staging_dir / "product_images"))
+            if preserve_assets_from is None:
+                shutil.move(
+                    str(preserved_image_dir),
+                    str(staging_dir / "product_images"),
+                )
+            else:
+                def link_or_copy(source: str, destination: str) -> str:
+                    try:
+                        os.link(source, destination)
+                        return destination
+                    except OSError:
+                        return shutil.copy2(source, destination)
+
+                shutil.copytree(
+                    preserved_image_dir,
+                    staging_dir / "product_images",
+                    copy_function=link_or_copy,
+                )
 
         if output_dir.exists():
             shutil.rmtree(output_dir)
@@ -575,6 +740,13 @@ def _parse_args(argv: Optional[list] = None) -> argparse.Namespace:
         help="Release staging directory (default: scripts/dist).",
     )
     p.add_argument(
+        "--preserve-assets-from",
+        help=(
+            "Copy reusable product_images/ from this release directory into "
+            "the candidate without mutating the live directory."
+        ),
+    )
+    p.add_argument(
         "--min-products",
         type=int,
         default=500,
@@ -634,7 +806,15 @@ def main(argv: Optional[list] = None) -> int:
         return 1
 
     try:
-        result = stage_release(validation=validation, output_dir=output_dir)
+        result = stage_release(
+            validation=validation,
+            output_dir=output_dir,
+            preserve_assets_from=(
+                Path(args.preserve_assets_from)
+                if args.preserve_assets_from
+                else None
+            ),
+        )
     except ReleaseValidationError as exc:
         print(f"[release] STAGING FAILED: {exc}", file=sys.stderr)
         return 1

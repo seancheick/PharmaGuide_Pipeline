@@ -126,11 +126,32 @@ def _write_manifest_json(
         # this field after the fixture writes it (see freshness-guard tests).
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "checksum": checksum,
+        "integrity": {
+            "contract_failures": 0,
+            "contract_quarantine_count": 0,
+            "excluded_by_gate_count": 0,
+        },
+        "excluded_by_gate": [],
     }
     if drop_key:
         manifest.pop(drop_key, None)
     manifest_path.write_text(json.dumps(manifest, indent=2))
     return manifest
+
+
+def _write_empty_audit(input_dir: Path) -> None:
+    (input_dir / "export_audit_report.json").write_text(
+        json.dumps(
+            {
+                "counts": {
+                    "export_contract_invalid": 0,
+                    "export_contract_quarantined": 0,
+                },
+                "contract_failures": [],
+                "contract_quarantines": [],
+            }
+        )
+    )
 
 
 @pytest.fixture
@@ -152,6 +173,7 @@ def good_release_dir(tmp_path: Path) -> Path:
     # existence, not content shape.
     (input_dir / "detail_index.json").write_text('{"products": {}}\n')
     (input_dir / "detail_blobs").mkdir()
+    _write_empty_audit(input_dir)
     return input_dir
 
 
@@ -229,6 +251,85 @@ def test_validate_release_candidate_happy_path(good_release_dir: Path) -> None:
     assert result["integrity"] == "ok"
     assert isinstance(result["checksum_sha256"], str)
     assert len(result["checksum_sha256"]) == 64
+
+
+def test_validate_accepts_proven_contract_quarantine(good_release_dir: Path) -> None:
+    manifest_path = good_release_dir / "export_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["integrity"].update(
+        contract_quarantine_count=1,
+        excluded_by_gate_count=1,
+    )
+    manifest["excluded_by_gate"] = [
+        {"dsld_id": "QUARANTINED", "error": "review_queue: NOT_SCORED"}
+    ]
+    manifest_path.write_text(json.dumps(manifest))
+    (good_release_dir / "export_audit_report.json").write_text(
+        json.dumps(
+            {
+                "counts": {
+                    "export_contract_invalid": 0,
+                    "export_contract_quarantined": 1,
+                },
+                "contract_failures": [],
+                "contract_quarantines": [
+                    {"dsld_id": "QUARANTINED", "issues": ["review_queue: NOT_SCORED"]}
+                ],
+            }
+        )
+    )
+
+    result = rca.validate_release_candidate(
+        input_dir=good_release_dir, min_products=500
+    )
+
+    assert result["contract_quarantine_count"] == 1
+
+
+def test_validate_rejects_quarantine_that_is_present_in_catalog(
+    good_release_dir: Path,
+) -> None:
+    manifest_path = good_release_dir / "export_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    manifest["integrity"].update(
+        contract_quarantine_count=1,
+        excluded_by_gate_count=1,
+    )
+    manifest["excluded_by_gate"] = [
+        {"dsld_id": "ID00001", "error": "review_queue: invalid contract"}
+    ]
+    manifest_path.write_text(json.dumps(manifest))
+    (good_release_dir / "export_audit_report.json").write_text(
+        json.dumps(
+            {
+                "counts": {
+                    "export_contract_invalid": 0,
+                    "export_contract_quarantined": 1,
+                },
+                "contract_failures": [],
+                "contract_quarantines": [
+                    {"dsld_id": "ID00001", "issues": ["review_queue: invalid contract"]}
+                ],
+            }
+        )
+    )
+
+    with pytest.raises(rca.ReleaseValidationError, match="still present in products_core"):
+        rca.validate_release_candidate(input_dir=good_release_dir, min_products=500)
+
+
+def test_validate_rejects_unresolved_contract_failures(
+    good_release_dir: Path,
+) -> None:
+    audit_path = good_release_dir / "export_audit_report.json"
+    audit = json.loads(audit_path.read_text())
+    audit["contract_failures"] = [
+        {"dsld_id": "BROKEN", "issues": ["escaped containment"]}
+    ]
+    audit_path.write_text(json.dumps(audit))
+
+    with pytest.raises(rca.ReleaseValidationError, match="unresolved contract failures"):
+        rca.validate_release_candidate(input_dir=good_release_dir, min_products=500)
 
 
 def test_validate_fails_when_db_missing(tmp_path: Path) -> None:
@@ -433,6 +534,28 @@ def test_stage_release_replaces_existing_output_dir(
     # Previous contents are replaced, not merged.
     assert not stale.exists()
     assert (output_dir / "pharmaguide_core.db").is_file()
+
+
+def test_stage_release_copies_preserved_images_without_mutating_live_dist(
+    good_release_dir: Path, tmp_path: Path
+) -> None:
+    live_dist = tmp_path / "live-dist"
+    live_images = live_dist / "product_images"
+    live_images.mkdir(parents=True)
+    (live_images / "123.webp").write_bytes(b"existing-render")
+    candidate = tmp_path / ".dist-candidate"
+    validation = rca.validate_release_candidate(
+        input_dir=good_release_dir, min_products=500
+    )
+
+    rca.stage_release(
+        validation=validation,
+        output_dir=candidate,
+        preserve_assets_from=live_dist,
+    )
+
+    assert (candidate / "product_images" / "123.webp").read_bytes() == b"existing-render"
+    assert (live_images / "123.webp").read_bytes() == b"existing-render"
 
 
 # ---------------------------------------------------------------------------
@@ -693,6 +816,7 @@ def test_main_exits_1_when_input_dir_is_stale(
     )
     manifest_dict["generated_at"] = _iso_utc(-48)
     (input_dir / "export_manifest.json").write_text(json.dumps(manifest_dict, indent=2))
+    _write_empty_audit(input_dir)
 
     exit_code = rca.main(
         [
@@ -725,6 +849,7 @@ def test_main_succeeds_when_stale_input_with_allow_stale(
     # Detail artifacts that stage_release() requires alongside the DB.
     (input_dir / "detail_index.json").write_text('{"products": {}}\n')
     (input_dir / "detail_blobs").mkdir()
+    _write_empty_audit(input_dir)
 
     exit_code = rca.main(
         [

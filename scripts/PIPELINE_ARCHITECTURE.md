@@ -14,7 +14,7 @@ PharmaGuide runs a cleaner-first pipeline with 3 compute stages plus snapshot/re
 4. `rebuild_dashboard_snapshot.sh` (Build Final DB + stage catalog snapshot)
 5. `release_full.sh` (catalog staging, product images, interaction DB, Supabase, Flutter bundle)
 
-Operational orchestration is handled by `batch_run_all_datasets.sh` for full-corpus or targeted brand runs. `run_pipeline.py` remains a single-brand/stage runner for local iteration, while `build_final_db.py` is an internal/manual builder called by snapshot/release flows rather than the normal ship path.
+Operational orchestration is handled by `batch_run_all_datasets.sh`. Full-corpus runs continue through snapshot/release; targeted brand runs are pipeline-only unless `--release` is explicit. `run_pipeline.py` remains a single-brand/stage runner for local iteration, while `build_final_db.py` is an internal/manual builder called by snapshot/release flows rather than the normal ship path.
 
 ```text
 raw_data/*.json
@@ -313,7 +313,8 @@ New scripts added to `scripts/` beyond the core pipeline stages:
 ```bash
 # Full-corpus or targeted operational pipeline
 bash batch_run_all_datasets.sh
-bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score  # pipeline only
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score --release
 
 # Snapshot and release stages
 bash scripts/rebuild_dashboard_snapshot.sh

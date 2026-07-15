@@ -8,14 +8,13 @@
 # up-to-date and accurate output without shortcuts.
 #
 # Steps (in order):
-#   1. Assemble final DB           (build_all_final_dbs.py)
+#   1. Gate, assemble, and promote (rebuild_dashboard_snapshot.sh)
 #                                  AUTO-SKIPS when dist/ catalog is already
 #                                  fresh relative to per-brand outputs.
-#   2. Stage catalog to dist/      (release_catalog_artifact.py)
-#                                  AUTO-SKIPS when dist/ catalog is already
-#                                  in sync with final_db_output/ (or when
-#                                  another upstream — e.g. snapshot — staged
-#                                  it directly).
+#                                  The snapshot path validates candidates before
+#                                  atomically promoting dist/final_db_output.
+#   2. Confirm catalog parity      No direct staging; the same safe snapshot
+#                                  path handles any final/dist mismatch.
 #   3. Extract DSLD product images (extract_product_images.py)
 #                                  AUTO-SKIPS when dist/ image backfill is
 #                                  already complete and current.
@@ -138,8 +137,10 @@ CATALOG_BUILD_SOURCES=(
   "$REPO_ROOT/scripts/enrich_supplements_v3.py"
   "$REPO_ROOT/scripts/identity_integrity.py"
   "$REPO_ROOT/scripts/scoring_input_contract.py"
+  "$REPO_ROOT/scripts/scoring_v4/export_adapter.py"
   "$REPO_ROOT/scripts/scoring_v4/quality_score.py"
   "$REPO_ROOT/scripts/scoring_v4/pillar_explanations.py"
+  "$REPO_ROOT/scripts/release_catalog_artifact.py"
 )
 
 START_TS=$(date +%s)
@@ -317,12 +318,9 @@ step1_needs_run() {
 }
 
 if step1_needs_run; then
-  info "Step 1/8: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
-  # build_all_final_dbs.py defaults its scan dir to scripts/ but per-brand
-  # pipeline outputs live in scripts/products/output_*/. Always pass an
-  # explicit --scan-dir so the auto-discovery actually finds them.
-  "$PG_PYTHON" scripts/build_all_final_dbs.py --scan-dir scripts/products --output-dir scripts/final_db_output
-  ok "Final DB assembled (scripts/final_db_output/)"
+  info "Step 1/8: Catalog refresh required — gating and building candidates..."
+  bash scripts/rebuild_dashboard_snapshot.sh
+  ok "Catalog candidates gated and promoted"
 else
   skip "Step 1/8: Catalog up to date with per-brand outputs — skipping assembly"
 fi
@@ -360,9 +358,9 @@ step2_needs_run() {
 }
 
 if step2_needs_run; then
-  info "Step 2/8: final_db_output newer than dist/ — staging catalog..."
-  "$PG_PYTHON" scripts/release_catalog_artifact.py
-  ok "Catalog staged"
+  info "Step 2/8: final/dist mismatch — rebuilding through the gated candidate path..."
+  bash scripts/rebuild_dashboard_snapshot.sh
+  ok "Catalog candidates gated and promoted"
 else
   skip "Step 2/8: dist/ catalog already current — skipping stage"
 fi

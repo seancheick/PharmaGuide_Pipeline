@@ -15,13 +15,17 @@
 #   bash batch_run_all_datasets.sh                          # Full pipeline → snapshot → full release
 #   bash batch_run_all_datasets.sh score                    # Score-only on all brands
 #   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score only
-#   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands only
+#   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands, pipeline only (safe default)
+#   bash batch_run_all_datasets.sh --targets Thorne,Olly --release  # Explicit catalog + release
+#   bash batch_run_all_datasets.sh --pipeline-only          # All brands, no snapshot/release
 #   bash batch_run_all_datasets.sh --stages score --targets Nature_Made
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
 #   bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
 #
 # Release-stage flags (apply after pipeline + strict snapshot gates succeed):
+#   --release                 Explicitly release after a targeted run
+#   --pipeline-only           Stop after Clean/Enrich/Score
 #   --skip-release            Skip the full release (snapshot only — old behavior)
 #   --skip-product-images     Run release without DSLD image extract/backfill
 #   --skip-supabase           Run snapshot + images + interaction DB + Flutter, but no Supabase sync
@@ -61,6 +65,8 @@ RELEASE_SKIP_SUPABASE=0
 RELEASE_SKIP_FLUTTER=0
 RELEASE_SUPABASE_DRY_RUN=0
 RELEASE_FLUTTER_REPO=""      # empty = use release_full.sh default
+PIPELINE_ONLY=0
+RELEASE_EXPLICIT=0
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -79,6 +85,14 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-release)
             SKIP_RELEASE_FLAG=1
+            shift
+            ;;
+        --pipeline-only)
+            PIPELINE_ONLY=1
+            shift
+            ;;
+        --release)
+            RELEASE_EXPLICIT=1
             shift
             ;;
         --skip-product-images)
@@ -107,6 +121,17 @@ while [[ $# -gt 0 ]]; do
             ;;
     esac
 done
+
+if [ "$PIPELINE_ONLY" = "1" ] && [ "$RELEASE_EXPLICIT" = "1" ]; then
+    echo "ERROR: --pipeline-only and --release cannot be used together." >&2
+    exit 2
+fi
+
+# A targeted rerun is normally an iteration step, not authorization to rebuild
+# and ship the entire catalog. Require --release to opt into downstream work.
+if [ -n "$TARGET_DATASETS" ] && [ "$RELEASE_EXPLICIT" != "1" ]; then
+    PIPELINE_ONLY=1
+fi
 
 # Colors for output
 RED='\033[0;31m'
@@ -267,6 +292,9 @@ echo ""
 
 SKIP_SNAPSHOT="${SKIP_SNAPSHOT:-0}"
 SKIP_RELEASE="${SKIP_RELEASE:-0}"
+if [ "$PIPELINE_ONLY" = "1" ]; then
+    SKIP_SNAPSHOT=1
+fi
 SNAPSHOT_SCRIPT="$SCRIPTS_DIR/rebuild_dashboard_snapshot.sh"
 RELEASE_SCRIPT="$SCRIPTS_DIR/release_full.sh"
 SNAPSHOT_OK=0
@@ -287,7 +315,14 @@ fi
 
 # Step A: dashboard snapshot
 if [ "$SKIP_SNAPSHOT" = "1" ]; then
-    echo -e "${YELLOW}Snapshot rebuild skipped (SKIP_SNAPSHOT=1)${NC}"
+    if [ "$PIPELINE_ONLY" = "1" ]; then
+        echo -e "${YELLOW}Pipeline-only run complete; snapshot and release were not started.${NC}"
+        if [ -n "$TARGET_DATASETS" ] && [ "$RELEASE_EXPLICIT" != "1" ]; then
+            echo -e "${YELLOW}Targeted runs use this safe default. Add --release only when you intend to rebuild and ship the full catalog.${NC}"
+        fi
+    else
+        echo -e "${YELLOW}Snapshot rebuild skipped (SKIP_SNAPSHOT=1)${NC}"
+    fi
     echo -e "${YELLOW}  Run manually when ready: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
     echo -e "${YELLOW}Full release also skipped (snapshot is its prerequisite).${NC}"
     echo ""

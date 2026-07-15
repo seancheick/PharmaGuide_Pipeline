@@ -126,9 +126,10 @@ pip install -r requirements-dev.txt
 ### Run the Pipeline
 
 ```bash
-# Full-corpus or targeted operational run (Clean -> Enrich -> Score -> snapshot -> release)
+# Full corpus continues through release; targeted runs stop after pipeline unless --release is explicit
 bash batch_run_all_datasets.sh
-bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score
+bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score  # pipeline only
+bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score --release
 bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
 
 # Rebuild the catalog/dashboard snapshot from existing brand outputs
@@ -153,14 +154,14 @@ python3 scripts/sync_to_supabase.py scripts/dist --dry-run
 ### Run Tests
 
 ```bash
-# All 5100+ tests
-python3 -m pytest scripts/tests/
+# Fast development suite (pinned Python)
+scripts/test.sh fast
 
 # Specific module
-python3 -m pytest scripts/tests/test_score_supplements.py -v
+scripts/test.sh fast scripts/tests/test_score_supplements.py
 
 # By keyword
-python3 -m pytest scripts/tests/ -k "banned"
+scripts/test.sh fast -k banned
 ```
 
 ---

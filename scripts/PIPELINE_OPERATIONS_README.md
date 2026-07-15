@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-05-22
+Updated: 2026-07-15
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for running and releasing the PharmaGuide pipeline.
@@ -33,13 +33,16 @@ cd /Users/seancheick/Downloads/dsld_clean
 # ONE command — does everything below in order
 bash batch_run_all_datasets.sh
 
-# Targeted/small-batch iteration that still preserves the same downstream gates
+# Targeted/small-batch iteration stops after pipeline stages by default
 bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score
+
+# Explicitly rebuild and ship after a targeted run
+bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score --release
 ```
 
 ### What actually runs (and in what order)
 
-The batch driver `batch_run_all_datasets.sh` is the canonical entry point. It preserves `--targets`, `--stages`, `--root`, `SKIP_SNAPSHOT`, and `--skip-release`, then orchestrates three phases:
+The batch driver `batch_run_all_datasets.sh` is the canonical entry point. Full-corpus runs continue through snapshot and release. Targeted runs are pipeline-only by default; add `--release` only when the full catalog should be rebuilt and shipped.
 
 **Phase 1 — Per-brand pipeline (repeats × N brands, sequentially, smallest first):**
 
@@ -57,11 +60,13 @@ Triggered automatically at end of Phase 1 **only if every brand succeeded** (see
 
 | Step | Script                        | Reads                                                                                   | Writes                                                                                                                                                                                                  |
 | ---: | ----------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-|  2.1 | `build_final_db.py`           | **every** `*_enriched/enriched` + `*_scored/scored` pair across all brands              | `/tmp/pg_dashboard_snapshot_<pid>/` — staging dir with `pharmaguide_core.db`, `detail_blobs/`, `detail_index.json`, `export_manifest.json`, `export_audit_report.json`                                  |
-|  2.2 | `release_catalog_artifact.py` | `/tmp/pg_dashboard_snapshot_<pid>/`                                                     | `scripts/dist/pharmaguide_core.db`, `scripts/dist/export_manifest.json`, `scripts/dist/RELEASE_NOTES.md` — validates + stages atomically                                                                |
-|  2.3 | bash copy                     | `/tmp/…/detail_blobs/` + `/tmp/…/detail_index.json` + `/tmp/…/export_audit_report.json` | `scripts/dist/detail_blobs/`, `scripts/dist/detail_index.json`, `scripts/dist/export_audit_report.json` — these are dashboard-only (Flutter bundle doesn't need them, but the Streamlit dashboard does) |
+|  2.1 | source gates                  | every current cleaner/enriched/scored output                                            | no live release mutation                                                                                                                   |
+|  2.2 | `build_final_db.py`           | **every** `*_enriched/enriched` + `*_scored/scored` pair across all brands              | sibling `final_db_output` candidate                                                                                                         |
+|  2.3 | `release_catalog_artifact.py` | final candidate                                                                          | sibling `dist` candidate; existing image cache is copied without mutating live `dist/`                                                     |
+|  2.4 | artifact gates                | both candidates                                                                           | stamped and verified candidates; contract quarantines must be proven absent from DB and detail index                                      |
+|  2.5 | `promote_release_artifacts.py`| both fully gated candidates                                                               | rollback-safe promotion into `scripts/dist/` and `scripts/final_db_output/`                                                                |
 
-`rebuild_dashboard_snapshot.sh` now runs strict source-of-truth gates before it returns success: source-of-truth matrix, cleaner/IQD row contract, clinical drift contract, stamped export manifests, export contract, and catalog freshness.
+`rebuild_dashboard_snapshot.sh` runs all source gates before building, then all export/freshness gates against candidates. Live `scripts/dist/` and `scripts/final_db_output/` are replaced only after every gate passes.
 
 **Phase 3 — Release-stage work (runs once, after snapshot succeeds unless skipped):**
 
@@ -88,11 +93,14 @@ The Flutter import script (`PharmaGuide ai/scripts/import_catalog_artifact.sh`) 
 ### Running with fewer brands / specific brands
 
 ```bash
-# Process one brand only (e.g., while iterating on enricher)
+# Process one brand only; pipeline-only is the safe default
 bash batch_run_all_datasets.sh --targets Olly
 
 # Process a subset
 bash batch_run_all_datasets.sh --targets Olly,Thorne,Pure
+
+# Opt in to snapshot + release after a targeted run
+bash batch_run_all_datasets.sh --targets Olly,Thorne,Pure --release
 
 # Use a different brands root
 bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
@@ -107,8 +115,8 @@ bash batch_run_all_datasets.sh --stages enrich,score --targets Nature_Made
 ### Skipping the automated snapshot rebuild
 
 ```bash
-# Skip the Phase 2 snapshot rebuild (useful for single-brand iteration loops)
-SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh --targets Olly
+# Explicit pipeline-only run (also the automatic behavior for --targets)
+bash batch_run_all_datasets.sh --pipeline-only
 
 # Later, rebuild the snapshot manually when you're ready
 bash scripts/rebuild_dashboard_snapshot.sh
@@ -118,9 +126,10 @@ bash scripts/rebuild_dashboard_snapshot.sh
 
 Phase 2 does **not** run if:
 
-1. **Any brand failed in Phase 1** — a partial catalog snapshot would be misleading. You'll see: `Dashboard snapshot NOT rebuilt because some brands failed.`
-2. **`SKIP_SNAPSHOT=1`** — caller opted out.
-3. **`rebuild_dashboard_snapshot.sh` is not executable** — fix with `chmod +x scripts/rebuild_dashboard_snapshot.sh`.
+1. **Any brand failed in Phase 1** — a partial catalog snapshot would be misleading.
+2. **A targeted run omitted `--release`** — targeted work is pipeline-only by default.
+3. **`--pipeline-only` or legacy `SKIP_SNAPSHOT=1`** — caller opted out.
+4. **`rebuild_dashboard_snapshot.sh` is not executable** — fix with `chmod +x scripts/rebuild_dashboard_snapshot.sh`.
 
 If Phase 2 is skipped and you later want the snapshot, run `bash scripts/rebuild_dashboard_snapshot.sh` manually. It is idempotent and safe to rerun.
 
@@ -132,7 +141,7 @@ Contains the full per-brand pipeline log + the Phase 2 snapshot log. Useful for 
 
 ### After a successful batch run
 
-1. **Verify** — check `scripts/dist/export_audit_report.json` for `contract_failures: 0` and review the `counts.total_errors` value
+1. **Verify** — `contract_failures` must be empty; review `contract_quarantines` as deliberate, proven exclusions and confirm `counts.total_errors` is zero
 2. **Scope-report** (optional, E1+) — see the command below
 3. **Canary shadow-diff** (optional, E1+) — see the command below
 4. **Dry-run sync** — `python3 scripts/sync_to_supabase.py scripts/dist --dry-run`
@@ -226,7 +235,7 @@ What actually moves:
 **Rollout checks** (run before a production sync):
 
 1. Local build produces `export_manifest.json` with `schema_version: "1.6.0"`, `pipeline_version: "3.4.0"`, `scoring_version: "3.4.0"`
-2. Full test suite green: `python3 -m pytest scripts/tests/ -q`
+2. Release suite green: `scripts/test.sh release`
 3. Dry-run sync: `python3 scripts/sync_to_supabase.py ~/Documents/DataSetDsld/builds/release_output --dry-run`
 4. Flutter release gate passes: `flutter test test/release_gate/bundled_catalog_test.dart`
 5. If schema version changed, regen Drift: `dart run build_runner build --delete-conflicting-outputs`
@@ -259,7 +268,12 @@ git add .gitattributes
 
 `assets/db/*.db filter=lfs` should appear in `.gitattributes`. Verify with `git lfs track`.
 
-### Manual fallback only
+### Incident/debug fallback only
+
+The commands below may be used to inspect a temporary build, but they are not
+an alternate promotion path. Production catalog mutation must return through
+`rebuild_dashboard_snapshot.sh`, which gates candidates before replacing live
+artifacts.
 
 > **Critical:** `--assemble-release-output` MUST be on the same command line as
 > `build_all_final_dbs.py`. If you paste it as a second shell line, zsh treats it
@@ -276,48 +290,22 @@ python3 scripts/build_all_final_dbs.py \
   --per-pair-output-root ~/Documents/DataSetDsld/builds/pair_outputs \
   --assemble-release-output ~/Documents/DataSetDsld/builds/release_output
 
-# 2. Run full test suite (3894+ tests).
-python3 -m pytest scripts/tests/ -q
+# 2. Run the pinned release suite.
+scripts/test.sh release
 
-# 3. Package the catalog artifact (validates DB + manifest + checksum,
-#    writes scripts/dist/ atomically). Requires --input-dir.
+# 3. Inspect a candidate outside scripts/dist/ (never promote this manually).
 python3 scripts/release_catalog_artifact.py \
-  --input-dir ~/Documents/DataSetDsld/builds/release_output
+  --input-dir ~/Documents/DataSetDsld/builds/release_output \
+  --output-dir /tmp/pharmaguide_catalog_candidate
 
-# 4. Package the interaction artifact.
-python3 scripts/release_interaction_artifact.py
-
-# Exit 0 on both means scripts/dist/ is ready.
-# Any validation failure aborts with a clear error; dist/ is left untouched.
-
-# 5. Dry-run Supabase sync to confirm what would upload.
-python3 scripts/sync_to_supabase.py \
-  ~/Documents/DataSetDsld/builds/release_output \
-  --dry-run
-
-# 6. Real sync. Add --cleanup to prune old Supabase versions (see §7B).
-python3 scripts/sync_to_supabase.py \
-  ~/Documents/DataSetDsld/builds/release_output
-
-# ── Flutter side (PharmaGuide-ai repo) ───────────────────────────────────────
-
-# 7. Import artifacts. Re-validates every gate (SHA-256, integrity, row count,
-#    version alignment) before copying into assets/db/.
-cd "/Users/seancheick/PharmaGuide ai"
-./scripts/import_catalog_artifact.sh \
-  /Users/seancheick/Downloads/dsld_clean/scripts/dist
-
-# 8. Run the Flutter release gate test.
-flutter test test/release_gate/bundled_catalog_test.dart
-
-# 9. Regenerate Drift code only if the schema version changed.
-dart run build_runner build --delete-conflicting-outputs
-
-# 10. Commit and push.
-git add assets/db/
-git commit -m "chore(catalog): bundle v<db_version> (schema <schema_version>, <product_count> products)"
-git push origin main
+# 4. Return to the single production path for promotion and release.
+bash scripts/rebuild_dashboard_snapshot.sh
+bash scripts/release_full.sh
 ```
+
+`release_full.sh` owns the downstream Supabase and Flutter steps so the same
+gate result controls the final exit status. Do not sync the diagnostic
+`release_output` directory directly.
 
 ### Validation gates enforced at each step
 
@@ -730,8 +718,10 @@ Current standard flow:
 
 ```bash
 bash batch_run_all_datasets.sh
-# or for scoped iteration:
+# Scoped iteration is pipeline-only by default:
 bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
+# Opt in when that scoped run should rebuild and ship the full catalog:
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score --release
 ```
 
 If you intentionally skipped release during the batch run:
@@ -741,28 +731,9 @@ bash scripts/rebuild_dashboard_snapshot.sh
 bash scripts/release_full.sh
 ```
 
-The older assembled-release commands below are fallback/debug references.
-
-Standard flow (all-brands full release):
-
-```bash
-# Build + assemble (one command)
-python3 scripts/build_all_final_dbs.py \
-  --scan-dir scripts/products \
-  --per-pair-output-root ~/Documents/DataSetDsld/builds/pair_outputs \
-  --assemble-release-output ~/Documents/DataSetDsld/builds/release_output
-
-# Package artifacts
-python3 scripts/release_catalog_artifact.py \
-  --input-dir ~/Documents/DataSetDsld/builds/release_output
-python3 scripts/release_interaction_artifact.py
-
-# Sync
-python3 scripts/sync_to_supabase.py \
-  ~/Documents/DataSetDsld/builds/release_output --dry-run
-python3 scripts/sync_to_supabase.py \
-  ~/Documents/DataSetDsld/builds/release_output
-```
+Direct assembled-release and direct-sync commands are diagnostic internals,
+not a second ship workflow. The production owner is always
+`rebuild_dashboard_snapshot.sh` followed by `release_full.sh`.
 
 Partial release (one or two brands only, then re-assemble everything):
 
@@ -1559,7 +1530,7 @@ These are the main scripts that make up the 3-stage pipeline (Clean → Enrich �
 | `build_final_db.py`               | Converts scored JSON + V4 adapter output → SQLite `pharmaguide_core.db` + detail blobs + manifest.                                                     |
 | `build_all_final_dbs.py`          | Auto-discovers enriched/scored pairs, builds all or selected brands. Supports `--changed-only`, `--per-pair-output-root`, `--assemble-release-output`. |
 | `assemble_final_db_release.py`    | Merges per-pair build outputs into one combined release artifact.                                                                                      |
-| `release_catalog_artifact.py`     | Validates final DB + manifest, stages to `scripts/dist/` atomically.                                                                                   |
+| `release_catalog_artifact.py`     | Validates final DB, quarantine ledger, and manifest; the canonical snapshot flow stages to a candidate before promotion.                              |
 | `release_interaction_artifact.py` | Same as above but for the interaction DB. Stages `scripts/interaction_db_output/` → `scripts/dist/`.                                                   |
 | `cleanup_old_versions.py`         | Removes old PharmaGuide versions from Supabase Storage. Use `--dry-run` first.                                                                         |
 

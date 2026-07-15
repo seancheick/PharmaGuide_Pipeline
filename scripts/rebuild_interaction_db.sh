@@ -137,15 +137,12 @@ if (( DO_IMPORT == 1 )); then
 
   # Ensure catalog DB is also in dist/ (required by import script)
   if [[ ! -f "$DIST_DIR/pharmaguide_core.db" ]]; then
-    info "Catalog DB not in dist/ — attempting to stage from final_db_output/..."
-    if [[ -f "scripts/final_db_output/pharmaguide_core.db" ]]; then
-      "$PG_PYTHON" scripts/release_catalog_artifact.py
-      ok "Catalog staged"
+    info "Catalog DB not in dist/ — rebuilding through the gated candidate path..."
+    if compgen -G "scripts/products/*_enriched/enriched" > /dev/null; then
+      bash scripts/rebuild_dashboard_snapshot.sh
+      ok "Catalog candidates gated and promoted"
     else
-      err "No catalog DB available. Run the catalog pipeline first, or"
-      err "copy the existing bundled catalog:"
-      err "  cp \"$FLUTTER_REPO/assets/db/pharmaguide_core.db\" $DIST_DIR/"
-      err "  cp \"$FLUTTER_REPO/assets/db/export_manifest.json\" $DIST_DIR/"
+      err "No catalog outputs available. Run the catalog pipeline first."
       exit 1
     fi
   fi
