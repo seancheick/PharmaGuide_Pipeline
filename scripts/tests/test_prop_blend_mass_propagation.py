@@ -158,6 +158,93 @@ def test_enricher_recovers_children_when_only_parent_header_is_proprietary(enric
         "Lycopene",
         "Zeaxanthin",
     ]
+    assert blend["disclosure_level"] == "partial"
+    assert blend["source_field"] == "activeIngredients[0]"
+
+
+def test_parent_header_owns_full_disclosure_for_dosed_flattened_child(enricher) -> None:
+    blend_name = "Flaxseed and Fish Oil Omega Fatty Acid Blend"
+    product = {
+        "id": "TEST_PARENT_FULL_DISCLOSURE",
+        "product_name": "Parent-owned full disclosure",
+        "activeIngredients": [
+            {
+                "name": blend_name,
+                "quantity": 300,
+                "unit": "mg",
+                "proprietaryBlend": True,
+                "disclosureLevel": "full",
+                "isNestedIngredient": False,
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Alpha-Linolenic Acid",
+                "quantity": 50,
+                "unit": "mg",
+                "proprietaryBlend": False,
+                "disclosureLevel": None,
+                "isNestedIngredient": True,
+                "parentBlend": blend_name,
+                "parentBlendMass": 300,
+                "parentBlendUnit": "mg",
+                "nestedIngredients": [],
+            },
+        ],
+        "inactiveIngredients": [],
+    }
+
+    result = enricher._collect_proprietary_data(product)
+
+    matching = [row for row in result["blends"] if row["name"] == blend_name]
+    assert len(matching) == 1
+    blend = matching[0]
+    assert blend["disclosure_level"] == "full"
+    assert blend["source_field"] == "activeIngredients[0]"
+    assert blend["child_ingredients"] == [
+        {"name": "Alpha-Linolenic Acid", "amount": 50.0, "unit": "mg"}
+    ]
+
+
+def test_detector_alias_and_structured_cleaner_row_merge_by_shared_source(enricher) -> None:
+    detector = {
+        "name": "General Proprietary Blends",
+        "disclosure_level": "none",
+        "nested_count": 0,
+        "total_weight": None,
+        "source_field": "activeIngredients[4]",
+        "sources": ["detector"],
+        "evidence": {
+            "matched_text": "fatty acid blend",
+            "source_field": "activeIngredients[4]",
+        },
+    }
+    cleaner = {
+        "name": "Flaxseed and Fish Oil Omega Fatty Acid Blend",
+        "disclosure_level": "full",
+        "nested_count": 1,
+        "total_weight": 300,
+        "unit": "mg",
+        "source_field": "activeIngredients[4]",
+        "sources": ["cleaning"],
+        "child_ingredients": [
+            {"name": "Alpha-Linolenic Acid", "amount": 50.0, "unit": "mg"}
+        ],
+        "evidence": {
+            "source_field": "activeIngredients[4]",
+            "ingredients_with_amounts": [
+                {"name": "Alpha-Linolenic Acid", "amount": 50.0, "unit": "mg"}
+            ],
+            "ingredients_without_amounts": [],
+        },
+    }
+
+    merged = enricher._merge_blend_evidence([detector], [cleaner])
+
+    assert len(merged) == 1
+    assert merged[0]["name"] == cleaner["name"]
+    assert merged[0]["disclosure_level"] == "full"
+    assert set(merged[0]["sources"]) == {"detector", "cleaning"}
+    assert merged[0]["detector_group"] == "General Proprietary Blends"
 
 
 def test_enricher_ignores_missing_parent_blend_mass(enricher) -> None:

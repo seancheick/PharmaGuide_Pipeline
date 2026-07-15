@@ -94,12 +94,9 @@ The snapshot script:
 5. checks export contract and freshness
 6. atomically promotes both candidates together
 
-No candidate touches the live snapshot before every required gate passes.
-
-Current caveat: if snapshot fails inside the batch, release is skipped and the
-last good snapshot remains, but the batch wrapper currently exits zero after
-reporting that post-pipeline failure. Always read the final snapshot/release
-section, not only the brand pass count.
+No candidate touches the live snapshot before every required gate passes. If
+the snapshot fails, the batch exits non-zero and full release is not started;
+the last good live snapshot remains in place.
 
 ### 2.5 Full release
 
@@ -274,6 +271,7 @@ are quarantined and a new manifest is written.
 ### Snapshot gate fails
 
 - Live `dist/` and `final_db_output/` remain the previous good pair.
+- A full batch exits non-zero and does not start release.
 - Read the first failing source/candidate gate.
 - Fix upstream product data or the contract; do not copy candidate artifacts
   into place manually.

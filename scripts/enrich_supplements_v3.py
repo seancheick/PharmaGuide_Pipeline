@@ -8755,6 +8755,24 @@ class SupplementEnricherV3:
             if row_text:
                 evidence_sources.append((f"activeIngredients[{index}]", row_text))
 
+        # Structured DSLD label statements are product-authored evidence. Keep
+        # them separate from the broad synthesized product text, which also
+        # contains reference notes and can manufacture delivery matches. An
+        # untyped/free-form statement is deliberately not trusted here.
+        trusted_statement_types = {
+            "Formulation re: Other",
+            "Suggested/Recommended/Usage/Directions",
+            "FDA Statement of Identity",
+        }
+        for index, statement in enumerate(product.get("statements", [])):
+            if not isinstance(statement, dict):
+                continue
+            if statement.get("type") not in trusted_statement_types:
+                continue
+            notes = statement.get("notes")
+            if isinstance(notes, str) and notes.strip():
+                evidence_sources.append((f"statements[{index}]", notes))
+
         matched_systems = []
 
         for delivery_name, delivery_data in delivery_db.items():
@@ -12138,6 +12156,31 @@ class SupplementEnricherV3:
             ("activeIngredients", active_ingredients),
             ("inactiveIngredients", inactive_ingredients),
         ):
+            # The cleaner owns structural disclosure on the parent header.
+            # Flattened children carry the relationship, but their own
+            # disclosureLevel describes the child (or is absent) and must not
+            # replace the parent blend's tier or provenance.
+            parent_headers: Dict[str, Dict[str, Any]] = {}
+            for header_idx, candidate in enumerate(ingredient_list):
+                if not isinstance(candidate, dict):
+                    continue
+                if candidate.get("isNestedIngredient"):
+                    continue
+                candidate_name = (candidate.get("name", "") or "").strip()
+                if not candidate_name:
+                    continue
+                if not (
+                    candidate.get("proprietaryBlend", False)
+                    or candidate.get("isProprietaryBlend", False)
+                ):
+                    continue
+                parent_headers[self._normalize_exclusion_text(candidate_name)] = {
+                    "disclosure_level": candidate.get("disclosureLevel"),
+                    "quantity": candidate.get("quantity"),
+                    "unit": candidate.get("unit", "") or "",
+                    "source_field": f"{source_name}[{header_idx}]",
+                }
+
             for idx, ingredient in enumerate(ingredient_list):
                 is_nested = bool(ingredient.get('isNestedIngredient', False))
                 parent_blend = (ingredient.get('parentBlend', '') or '').strip()
@@ -12216,9 +12259,25 @@ class SupplementEnricherV3:
                     # (every child amount withheld). `_keyword_blend` records
                     # whether the name matched so disclosed keyword-less
                     # aggregates drop out.
+                    parent_header = parent_headers.get(
+                        self._normalize_exclusion_text(parent_blend)
+                    )
+                    parent_disclosure = (
+                        parent_header.get("disclosure_level")
+                        if parent_header
+                        else None
+                    )
+                    if parent_disclosure in {"none", "partial", "full"}:
+                        disclosure = parent_disclosure
+
                     group_key = (parent_blend.lower(), disclosure)
                     group = nested_parent_groups.get(group_key)
                     if not group:
+                        parent_source_field = (
+                            parent_header.get("source_field")
+                            if parent_header
+                            else source_field
+                        )
                         group = {
                             "name": parent_blend,
                             "disclosure_level": disclosure,
@@ -12226,10 +12285,11 @@ class SupplementEnricherV3:
                             "total_weight": 0.0,
                             "unit": "",
                             "hidden_count": 0,
-                            "source_field": source_field,
-                            "source_path": source_field,
+                            "source_field": parent_source_field,
+                            "source_path": parent_source_field,
                             "sources": ["cleaning"],
                             "_keyword_blend": parent_looks_like_blend,
+                            "_parent_source_field": parent_source_field,
                             "_source_fields": set(),
                             "_children_with_amounts": [],
                             "_children_without_amounts": set(),
@@ -12237,6 +12297,8 @@ class SupplementEnricherV3:
                         nested_parent_groups[group_key] = group
 
                     group["_source_fields"].add(source_field)
+                    if parent_header and parent_header.get("source_field"):
+                        group["_source_fields"].add(parent_header["source_field"])
                     child_name = (ingredient.get('name', '') or '').strip()
                     child_qty = ingredient.get('quantity')
                     child_unit = ingredient.get('unit', '') or ''
@@ -12312,8 +12374,12 @@ class SupplementEnricherV3:
             if not keyword_blend and not is_opaque:
                 continue
             source_fields = sorted(group.pop("_source_fields", set()))
+            parent_source_field = group.pop("_parent_source_field", None)
             group["source_fields"] = source_fields
-            if source_fields:
+            if parent_source_field:
+                group["source_field"] = parent_source_field
+                group["source_path"] = parent_source_field
+            elif source_fields:
                 group["source_field"] = source_fields[0]
                 group["source_path"] = source_fields[0]
             group["child_ingredients"] = [
@@ -12429,9 +12495,9 @@ class SupplementEnricherV3:
         This matches the dedupe logic in B4 scoring.
 
         Merge Precedence:
-        - disclosure_level: prefer detector (more accurate)
-        - blend_total_amount: prefer detector if parsed
-        - blend_ingredient_count: prefer detector if available
+        - disclosure/amount/children: prefer the cleaner's structured parent
+          ownership when present
+        - classification: preserve detector_group from the detector
         - blend_name: prefer cleaning (better UI display, label-facing)
         - detector_group: preserve detector's classification category
         - sources: union of both
@@ -12462,6 +12528,35 @@ class SupplementEnricherV3:
             nested = blend.get("nested_count", 0)
             return (name, mg_bucket, nested)
 
+        def blend_source_paths(blend: Dict) -> set[str]:
+            paths = {
+                str(path)
+                for path in blend.get("source_fields", [])
+                if path
+            }
+            if blend.get("source_field"):
+                paths.add(str(blend["source_field"]))
+            return paths
+
+        def same_source_detector_alias(detector: Dict, cleaner: Dict) -> bool:
+            if not (blend_source_paths(detector) & blend_source_paths(cleaner)):
+                return False
+            detector_evidence = detector.get("evidence") or {}
+            matched_text = self._normalize_exclusion_text(
+                str(detector_evidence.get("matched_text") or "")
+            )
+            cleaner_name = self._normalize_exclusion_text(
+                str(cleaner.get("name") or "")
+            )
+            if not matched_text or not cleaner_name:
+                return False
+            return bool(
+                re.search(
+                    r"(?<![a-z0-9])" + re.escape(matched_text) + r"(?![a-z0-9])",
+                    cleaner_name,
+                )
+            )
+
         # Add detector blends first (higher precedence for most fields)
         for blend in detector_blends:
             key = dedupe_key(blend)
@@ -12474,6 +12569,19 @@ class SupplementEnricherV3:
         for cleaning_blend in cleaning_blends:
             key = dedupe_key(cleaning_blend)
 
+            if key not in merged:
+                alias_key = next(
+                    (
+                        existing_key
+                        for existing_key, existing in merged.items()
+                        if existing.get("detector_group") is not None
+                        and same_source_detector_alias(existing, cleaning_blend)
+                    ),
+                    None,
+                )
+                if alias_key is not None:
+                    key = alias_key
+
             if key in merged:
                 # Blend exists from detector - merge sources and prefer cleaning name
                 existing = merged[key]
@@ -12482,15 +12590,15 @@ class SupplementEnricherV3:
                 existing_sources.add("cleaning")
                 existing["sources"] = list(existing_sources)
                 # Preserve source field provenance.
-                source_paths = set(existing.get("source_fields", []))
+                merged_source_paths = set(existing.get("source_fields", []))
                 if existing.get("source_field"):
-                    source_paths.add(existing["source_field"])
+                    merged_source_paths.add(existing["source_field"])
                 if cleaning_blend.get("source_field"):
-                    source_paths.add(cleaning_blend["source_field"])
+                    merged_source_paths.add(cleaning_blend["source_field"])
                 for path in cleaning_blend.get("source_fields", []):
                     if path:
-                        source_paths.add(path)
-                existing["source_fields"] = sorted(source_paths)
+                        merged_source_paths.add(path)
+                existing["source_fields"] = sorted(merged_source_paths)
                 if existing.get("source_fields"):
                     existing["source_field"] = existing["source_fields"][0]
                     existing["source_path"] = existing["source_fields"][0]
@@ -12501,6 +12609,11 @@ class SupplementEnricherV3:
                 # Prefer richer child payload from cleaning when available.
                 if cleaning_blend.get("child_ingredients"):
                     existing["child_ingredients"] = cleaning_blend.get("child_ingredients", [])
+                    if cleaning_blend.get("disclosure_level") in {"none", "partial", "full"}:
+                        existing["disclosure_level"] = cleaning_blend["disclosure_level"]
+                    for field in ("nested_count", "total_weight", "unit"):
+                        if cleaning_blend.get(field) is not None:
+                            existing[field] = cleaning_blend[field]
                     existing["hidden_count"] = cleaning_blend.get("hidden_count", existing.get("hidden_count", 0))
                     cleaning_evidence = cleaning_blend.get("evidence") or {}
                     existing_evidence = existing.get("evidence") or {}

@@ -345,9 +345,8 @@ if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
 else
     echo -e "${RED}✗ Snapshot rebuild failed — pipeline outputs are fresh but scripts/dist/ may be stale${NC}"
     echo -e "${RED}  Rerun manually: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
-    # Don't fail the whole batch for snapshot issues; pipeline stages succeeded.
-    # But skip the full release since dist/ is suspect.
-    SKIP_RELEASE=1
+    echo -e "${RED}  Full release was not started.${NC}"
+    exit 1
 fi
 echo ""
 

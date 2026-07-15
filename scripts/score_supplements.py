@@ -15,9 +15,15 @@ import os
 import re
 import sys
 from collections import defaultdict
+from decimal import Decimal, ROUND_HALF_UP
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
+
+
+def _round_score_one_decimal(value: float) -> float:
+    """Round user-visible scores in decimal space at the documented boundary."""
+    return float(Decimal(str(value)).quantize(Decimal("0.1"), rounding=ROUND_HALF_UP))
 
 
 # Optional tqdm import for progress bars
@@ -4994,7 +5000,7 @@ class SupplementScorer:
             poor_threshold = 32.0
         # Verdict and display use the same one-decimal score boundary. Without
         # this, 31.96 displayed as 32.0/80 while still receiving POOR.
-        verdict_score = round(quality_score, 1) if quality_score is not None else None
+        verdict_score = _round_score_one_decimal(quality_score) if quality_score is not None else None
         if verdict_score is not None and verdict_score < poor_threshold:
             return "POOR"
         # Track A.1 / A.2a verdict ceiling — anchor products are never SAFE.
@@ -5057,7 +5063,7 @@ class SupplementScorer:
             display_100 = "N/A"
         else:
             score_100_equivalent = round((quality_score / 80.0) * 100.0, 1)
-            display = f"{round(quality_score, 1)}/80"
+            display = f"{_round_score_one_decimal(quality_score)}/80"
             display_100 = f"{score_100_equivalent}/100"
 
         if verdict in {"BLOCKED", "UNSAFE"}:
@@ -5135,8 +5141,8 @@ class SupplementScorer:
             "dsld_id": product_id,
             "product_name": product_name,
             "brand_name": product.get("brand_name") or product.get("brandName", ""),
-            "quality_score": round(quality_score, 1) if quality_score is not None else None,
-            "score_80": round(quality_score, 1) if quality_score is not None else None,
+            "quality_score": _round_score_one_decimal(quality_score) if quality_score is not None else None,
+            "score_80": _round_score_one_decimal(quality_score) if quality_score is not None else None,
             "score_100_equivalent": score_100_equivalent,
             "display": display,
             "display_100": display_100,

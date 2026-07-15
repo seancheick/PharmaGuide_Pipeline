@@ -39,6 +39,35 @@ def test_row_local_liposomal_label_evidence_is_retained(enricher) -> None:
     assert liposomal["match_source"] == "activeIngredients[0]"
 
 
+@pytest.mark.parametrize(
+    ("statement_type", "notes", "system_name"),
+    [
+        ("Formulation re: Other", "Delayed-release capsule design", "delayed-release"),
+        ("Formulation re: Other", "This product is in an acid-resistant capsule", "acid-resistant"),
+        (
+            "Suggested/Recommended/Usage/Directions",
+            "Suggested use: Take 2 drops daily. Invert bottle to dispense individual drops.",
+            "drops",
+        ),
+        ("FDA Statement of Identity", "Whole Food Supplements", "whole food"),
+    ],
+)
+def test_structured_label_statement_delivery_evidence_is_retained(
+    enricher,
+    statement_type: str,
+    notes: str,
+    system_name: str,
+) -> None:
+    result = enricher._collect_delivery_data({
+        "activeIngredients": [{"name": "Vitamin C", "standardName": "Vitamin C"}],
+        "statements": [{"type": statement_type, "notes": notes}],
+        "physicalState": {"langualCodeDescription": "Tablet"},
+    })
+
+    system = next(row for row in result["systems"] if row["name"] == system_name)
+    assert system["match_source"] == "statements[0]"
+
+
 def test_generic_astaxanthin_alias_cannot_unlock_astareal_study(enricher) -> None:
     study = next(
         row

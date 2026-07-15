@@ -58,12 +58,43 @@ def test_zero_point_configuration_is_not_replaced_by_default(scorer) -> None:
         a4["points_if_paired"] = old_a4_points
 
 
-def test_verdict_uses_same_rounding_boundary_as_display(scorer) -> None:
+@pytest.mark.parametrize(
+    ("quality_score", "expected"),
+    [
+        (31.94, "POOR"),
+        (31.95, "SAFE"),
+        (31.96, "SAFE"),
+    ],
+)
+def test_verdict_uses_decimal_half_up_display_boundary(
+    scorer,
+    quality_score: float,
+    expected: str,
+) -> None:
     verdict = scorer._derive_verdict(
         b0={"blocked": False, "unsafe": False},
         mapping_gate={"stop": False},
         flags=[],
-        quality_score=31.96,
+        quality_score=quality_score,
     )
 
-    assert verdict == "SAFE"
+    assert verdict == expected
+
+
+def test_serialized_score_uses_same_decimal_half_up_boundary(scorer) -> None:
+    output = scorer._build_core_output(
+        product={"dsld_id": "ROUNDING", "product_name": "Rounding Boundary"},
+        quality_score=31.95,
+        verdict="SAFE",
+        breakdown={},
+        flags=[],
+        supp_type="targeted",
+        unmapped_actives=[],
+        unmapped_actives_total=0,
+        unmapped_actives_excluding_banned_exact_alias=0,
+        mapped_coverage=1.0,
+    )
+
+    assert output["quality_score"] == 32.0
+    assert output["score_80"] == 32.0
+    assert output["display"] == "32.0/80"
