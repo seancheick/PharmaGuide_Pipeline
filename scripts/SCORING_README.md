@@ -1,557 +1,204 @@
-# PharmaGuide Scoring README (v4 production / v3 scaffolding)
+# PharmaGuide Scoring README
 
-> Last updated: 2026-06-09
+> Operational summary | Last verified: 2026-07-15
 
-## Production scoring contract
+## The short version
 
-The shipped catalog score is V4:
+PharmaGuide ships one public score: the v4 six-pillar `/100` quality score.
 
-- Code: `scripts/score_supplements_v4.py`, `scripts/scoring_v4/quality_score.py`,
-  `scripts/scoring_v4/export_adapter.py`
-- Config: `scripts/scoring_v4/config/quality_score.json`
-- Export fields: `quality_score_v4_100`, `quality_score_status`, `quality_pillars_v4`
-- Contract: `scripts/FINAL_EXPORT_SCHEMA_V1.md` v2.0.0
+```text
+Enriched product
+  ├─ legacy scorer → audit/review/detail scaffolding
+  └─ v4 scorer     → authoritative public score + pillars + status
+                         ↓
+                 export adapter overlays v4 once
+                         ↓
+                   final SQLite + detail blob
+```
 
-The legacy `/80` export columns (`score_quality_80`, `score_display_80`) are
-dropped. Flutter must read the V4 fields only.
+The live legacy scorer is not an alternative consumer score. It remains a
+dependency of review queues and detail/export diagnostics until that
+scaffolding is deliberately migrated. Do not calculate, display, rank, or
+compare products using its internal `/80` value.
 
-## Legacy scorer scaffolding
+## Public export contract
 
-The rest of this document describes the legacy deterministic scorer that still
-runs for review queues, verdict history, detail-blob scaffolding, and audit
-compatibility:
+| Field | Meaning |
+|---|---|
+| `quality_score_v4_100` | Canonical shipped score, finite only when status is `scored` |
+| `quality_score_status` | `scored`, `suppressed_safety`, or `not_scored` |
+| `quality_pillars_v4` | Six consumer-facing pillar scores and explanations |
+| `quality_tier` | Elite, Excellent, Strong, Acceptable, Weak, or Poor |
+| `raw_score_v4_100` | Audit-only module math; never a display fallback |
+| `score_100_equivalent` | Compatibility mirror of `quality_score_v4_100` |
+| `score_display_100_equivalent` | Compatibility display mirror of the v4 score |
 
-- Code: `scripts/score_supplements.py`
-- Config: `scripts/config/scoring_config.json`
-- Spec: `scripts/SCORING_ENGINE_SPEC.md`
+Frozen rule: `score_quality_80` and `score_display_80` are retired export
+fields and must not return.
 
-It is aligned to the current `v3.6.0` legacy-scaffolding behavior in code and
-config. Do not use the `/80` formulas below as the production app score.
+## Six pillars
 
-## v3.6.0 changes (2026-05-04) — bio_score / score honesty pass
+| Pillar | Max | Purpose |
+|---|---:|---|
+| Formulation | 20 | Form quality, delivery, and formulation fit |
+| Dose | 20 | Category-aware dose adequacy and excessive-dose handling |
+| Evidence | 20 | Verified human evidence and category fit |
+| Transparency | 15 | Amount disclosure, proprietary blend opacity, completeness |
+| Verification | 15 | Verified third-party testing, COA, GMP, certifications |
+| Safety/Hygiene | 10 | Product safety hygiene and bounded clean-label concerns |
 
-The legacy `score` field combined two unrelated signals: form quality (`bio_score`, 0-15)
-plus a +3 sourcing bonus when `natural=true`. Reading `score` in A1 inflated per-ingredient
-form/absorption claims with sourcing — methylcobalamin (synthetic premium) scored below
-food-folate (natural mid). v3.6.0 separates the two cleanly:
+The score is the bounded sum of the six category-aware pillars. Pillar
+adapters normalize against what each product archetype can honestly achieve;
+they are not a cosmetic stretch of legacy section totals.
 
-- **A1 reads pure `bio_score` (0-15).** A1.max stays 18; the `(avg_bio_score / 15) × 18`
-  rescale preserves the per-product budget. Synthetic premium forms now get the full A1
-  credit they earn.
-- **A2 reads `bio_score`, threshold 14→12.** Same 80% percentile, applied to the cleaner
-  field. Stops counting natural-mid forms as premium.
-- **A5.max raised 3→4 with new A5e_natural_source +1.** Sourcing signal lives where it
-  conceptually belongs (alongside organic, standardized, non-GMO). Tiebreaker, not tier.
-  Detection: majority of active scorable ingredients have `natural=true`.
-- **A6 tiers recalibrated to bio_score scale.** `>=14`/`>=12`/`>=10` → 3/2/1 (was
-  `>=16`/`>=14`/`>=12` against legacy 0-18 score; the old >=16 tier was unreachable on
-  bio_score).
-- **IQM keeps both fields, but scoring reads `bio_score`.** In
-  `ingredient_quality_map.json`, `score = bio_score + (natural ? 3 : 0)`, capped at 18.
-  The scorer/enriched ingredient-quality math uses `bio_score` for A1/A2/A6 so sourcing
-  does not inflate absorption/form quality. `score` is a legacy/display total only.
-- **Data schema 5.4.1 Vitamin A reconciliation (2026-06-02).** Vitamin A family forms now
-  keep preformed retinoids, delivery-tech forms, and provitamin A carotenoids on the same
-  absorption-only scale. Standalone `alpha_carotene` and `cryptoxanthin` remain exact
-  identity parents, linked to `vitamin_a` without duplicate generic aliases or CUI/UNII IDs.
-- **Flutter `FormAbsorptionSection` updated** — `maxScore` 18→15, explainer copy `0–18`→
-  `0–15`, tier ranges adjusted. Per-ingredient bars now agree with Section A's pillar math.
+## Runtime ownership
 
-Empirical impact (250-product live sample): synthetic-premium products gain ~2-3pt in
-Section A (deserved); natural-mid products lose ~0.5-1pt (corrected — they weren't
-actually premium); natural-premium products unchanged. Mean Section A nudges slightly up;
-no big losers (>2pt drops eliminated).
+| Concern | Authority |
+|---|---|
+| Cleaner row role and score eligibility | `enhanced_normalizer.py` |
+| Canonical enriched scoring rows | `scoring_input_contract.py` |
+| Product taxonomy | `supplement_taxonomy.py` |
+| V4 module dispatch | `scoring_v4/router.py` |
+| Safety identity normalization | `identity/safety.py` |
+| V4 safety policy | `scoring_v4/gate_safety.py` |
+| Completeness policy | `scoring_v4/gate_completeness.py` |
+| V4 scoring configuration | `scoring_v4/config/quality_score.json` |
+| Public score assembly | `scoring_v4/quality_score.py` |
+| V4/legacy export seam | `scoring_v4/export_adapter.py` |
+| Final contract and quarantine | `build_final_db.py` |
+| Legacy diagnostic arithmetic | `score_supplements.py` + `config/scoring_config.json` |
 
-## v3.5.1 changes (2026-04-30) — display layer only, no scoring impact
+Do not add a second classifier in a scorer or exporter. When classification is
+wrong, fix the owning taxonomy/scoring-input/router boundary and add a
+cross-stage regression test.
 
-- **`functional_roles[]` field added** to `harmful_additives.json` (5.2.0), `other_ingredients.json` (5.1.0), `botanical_ingredients.json` (5.1.0). Multi-valued role IDs from new `data/functional_roles_vocab.json` v1.0.0 (32 LOCKED roles, clinician sign-off 2026-04-30). Display-only — no scoring impact in V1; populated per Phase 3 backfill batches under `scripts/audits/functional_roles/`.
-- **`additive_type` dropped from Flutter blob** (`build_final_db.py:2294-2331`). Replaced by `functional_roles[]` which expresses multi-valued roles correctly. Internal pipeline references kept until Phase 4.
-- **B8 CAERS penalty disabled** (`enabled: false`) — raw report counts confound popularity with risk; calcium/vit D/fiber/fish oil hit the same penalty bucket as kratom. Genuine danger covered by B0 + B1.
-- **Allergen `evidence` field user-facing** — was leaking dotted dev path `labelText.parsed.allergens: fish` into UI; now reads `Contains: Fish` matching FDA label convention.
+## V4 execution order
 
-## v3.5.0 changes (2026-04-29)
+1. `class_for_product()` selects one module.
+2. The safety gate consumes canonical safety signals.
+3. BLOCKED or UNSAFE short-circuits numeric scoring.
+4. CAUTION is carried forward while score math continues.
+5. The completeness gate excludes rows without a usable product/ingredient
+   contract; missing disclosure that can be represented honestly remains soft
+   debt instead of being invented.
+6. One category module computes its rubric result.
+7. Confidence and provenance are attached.
+8. The six public pillars and tier are assembled.
+9. The export adapter overlays the v4 contract onto a copy of legacy
+   scaffolding exactly once.
+10. `build_final_db.py` validates the frozen export and quarantines products
+    that cannot ship truthfully.
 
-Three-batch accuracy uplift:
+## Module routing
 
-1. **Active/inactive role gate** in `enrich_supplements_v3.py:_check_banned_substances`.
-   Banned-substance entries marked `match_mode: 'active'` no longer fire on
-   ingredients tagged `_source_section: 'inactive'`. Eliminates ~2,000+
-   false-positive HIGH_RISK fires across the catalog (talc as tablet
-   glidant, titanium dioxide as inactive coating, simethicone/PDMS as
-   softgel defoamer).
+Current routing priority is implemented only in `scoring_v4/router.py`:
 
-2. **Section C evidence retune** in `scoring_config.json`:
-   - `evidence_level_multipliers.ingredient-human`: `0.65` → `0.80`
-   - `evidence_level_multipliers.branded-rct`: `0.80` → `0.90`
-   - `top_n_weights`: `[1.0, 0.5, 0.25]` → `[1.0, 0.7, 0.5, 0.3]`
-   Rewards evidence-rich premium formulations (Thorne, Pure Encapsulations,
-   Transparent Labs) without inflating multivitamins (5th+ ingredient still 0).
+1. probiotic
+2. prenatal multi intent
+3. B-complex
+4. multivitamin
+5. sports
+6. fiber/digestive
+7. omega-3
+8. generic fallback
 
-3. **Final-DB data integrity gate** in `build_final_db.py:validate_export_contract`.
-   `verdict='NOT_SCORED'`, null score on a non-blocked verdict, and
-   incomplete A/B/C/D breakdowns are now quarantined to `excluded_by_gate`
-   (review_queue) and never reach Flutter. Ensures the contract:
-   *"if a number/verdict appears in final_db, it is correct."*
-   BLOCKED, UNSAFE, CAUTION, POOR, SAFE all continue to ship with their
-   verdict + reason payload.
+The router uses canonical taxonomy and panel composition before guarded label
+signals. `general_supplement` is a fallback identity, not evidence that a
+product belongs in the generic module.
 
-4. **Heavy-metal alias hardening** in `banned_recalled_ingredients.json`:
-   removed dangerous single/two-letter chemistry-symbol aliases (`as`,
-   `pb`, `hg`, `cd`) that posed FP collision risk.
+## Status and verdict rules
 
-## 1) What The Scorer Does
+| Condition | Status | Public score |
+|---|---|---|
+| Confirmed banned or recalled safety condition | `suppressed_safety` | null |
+| Required identity/payload is unusable | `not_scored` | null and quarantined |
+| Scoreable SAFE, POOR, or CAUTION product | `scored` | finite `/100` |
 
-The scorer is deterministic arithmetic + gate logic + batch-level percentile post-processing.
-It does not perform enrichment/matching NLP.
+Verdict precedence is:
 
-### Is scoring fully config-driven?
+```text
+BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE
+```
 
-**Almost.** Every numeric value — section caps, subsection caps, tier points,
-penalty magnitudes, bonus values, thresholds, multipliers, bands, accepted-region
-lists, prebiotic-term lists, eligible-parent-blend lists, enzyme activity units,
-grade scale cutoffs, verdict POOR threshold — lives in
-`config/scoring_config.json`. Hardcoded literals in Python remain **only as
-safety defaults** when a config key is missing (`as_float(cfg.get("max"), 15.0)`).
+Never replace a null suppressed score with `raw_score_v4_100`, a legacy score,
+zero, or a cohort fallback. Safety verdict and evidence remain visible without
+a rankable number.
 
-Retuning the scorer (rebalancing caps, adding a new category bonus, toggling a
-gate, changing B1 sugar penalties, adjusting C evidence multipliers, moving D4
-region list, swapping CAERS data file) requires **only a JSON edit** — no code
-changes.
+## Safety applicability
 
-Not config-driven (structural, not values): the final-score formula shape,
-verdict precedence order, gate ordering (B0 → mapping → regression guard →
-sections), per-section aggregation algorithms, output payload shape, flag
-names, badge structure.
+The primary verdict is based on US federal/state applicability. Safety matches
+retain:
 
-It consumes enriched products and produces:
+- `jurisdictions`
+- `us_applicable`
+- `regional_advisories`
 
-- `quality_score` (`score_80`)
-- `score_100_equivalent`
-- `verdict` / `safety_verdict`
-- `badges` (including `FULL_DISCLOSURE` when applicable)
-- `category_percentile` (batch-cohort percentile context)
-- `percentile_category*` audit fields from enrichment (`category`, `label`, `source`, `confidence`, `signals`)
-- section breakdown (`A`, `B`, `C`, `D`, `E`)
-- scoring flags and metadata
+Non-US restrictions remain evidence/advisory metadata; they do not silently
+become a US ban. CBD and similarly non-scorable supplement identities retain
+canonical identity and interaction metadata while remaining ineligible for
+quality scoring; B0/safety precedence remains authoritative.
 
-## 2) Run Commands
+## Dose, RDA/AI, and UL policy
 
-From `/scripts`:
+- Adequacy uses minimum/recommended daily exposure (`per_day_min`).
+- UL and safety checks use maximum daily exposure (`per_day_max`).
+- `rda_ul_data.data_by_group` preserves demographic references.
+- `reference_profile` names the adult-neutral compatibility summary.
+- Unit input must pass through the shared canonicalizer before conversion.
+- A malformed row is contained; it must not erase unrelated adequacy or safety
+  findings.
+
+### Folate and folinic forms
+
+The pipeline applies the folic-acid UL only to an identified folic-acid
+contribution.
+
+- Label-declared mcg DFE is preserved for adequacy.
+- Explicit mcg DFE folinic acid/folinate/leucovorin rows may retain adequacy,
+  but the folic-acid UL is not applied.
+- Bare mcg folinic/folinate/leucovorin without a verified DFE conversion has
+  adequacy `unknown` and `scoring_eligible=false`.
+- Absent or inconsistent `%DV` does not authorize a guessed conversion.
+- No folinic UL is invented.
+- A future `%DV` recovery rule must be named, tested, and consistency-checked.
+- Unknown-form folate at a clinically material level produces an indeterminate
+  UL review signal rather than a guessed exceedance or silent clearance.
+
+## Config discipline
+
+`scoring_v4/config/quality_score.json` is the public scoring configuration.
+Every live key must have a behavioral test. Remove obsolete knobs instead of
+wiring them merely because they exist.
+
+`config/scoring_config.json` controls legacy scaffolding only. Its `/80`
+display strings, old combined-score commentary, and section totals are not the
+mobile export contract.
+
+## Making a scoring change
+
+1. Identify the owning layer in the table above.
+2. Add a focused regression test and confirm it fails for the intended reason.
+3. Make the smallest owner-level change.
+4. Run the focused test through `scripts/test.sh fast`.
+5. Run `scripts/test.sh fast` at the phase boundary.
+6. For a release candidate, run `scripts/test.sh release` and then the required
+   full profile.
+7. Rebuild only through the canonical snapshot/release workflow.
+8. Review per-product score, status, verdict, safety, module, and pillar deltas.
+9. Re-freeze `test_scoring_snapshot_v1.py` only for named, reviewed changes.
+
+Never accept an aggregate-only comparison: offsetting product changes can hide
+clinical or classification drift.
+
+## Supported verification commands
 
 ```bash
-python3 score_supplements.py
-python3 score_supplements.py --input-dir path/to/enriched --output-dir path/to/scored
-python3 score_supplements.py --dry-run
+scripts/test.sh fast -k scoring_v4
+scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
+scripts/test.sh release
+scripts/test.sh full
 ```
 
-From repo root:
-
-```bash
-python3 scripts/score_supplements.py
-python3 scripts/score_supplements.py --input-dir scripts/path/to/enriched --output-dir scripts/path/to/scored
-```
-
-## 3) High-Level Scoring Flow
-
-For each product:
-
-1. Validate required product identity (`dsld_id`, `product_name`, enrichment metadata).
-2. Run B0 immediate safety gate (blocked/unsafe/moderate/review semantics).
-3. Run mapping gate (`require_full_mapping` behavior).
-4. Apply unmapped+banned exact/alias regression guard.
-5. Score sections A/B/C/D.
-6. Compute omega-3 dose adequacy inside Section A when applicable, then emit legacy `E_dose_adequacy` output for backward compatibility.
-7. Apply manufacturer violation penalty.
-8. Derive final verdict and output payload.
-
-## 4) Legacy Score Model (v3.4 / v3.6 scaffolding)
-
-Final score:
-
-```text
-quality_raw = A + B + C + D + violation_penalty
-quality_score = clamp(0, 80, quality_raw)
-score_100_equivalent = (quality_score / 80) * 100
-```
-
-Section caps:
-
-| Section                | Max    | Notes                                                               |
-| ---------------------- | ------ | ------------------------------------------------------------------- |
-| A: Ingredient Quality  | 25     |                                                                     |
-| B: Safety & Purity     | 30     |                                                                     |
-| C: Evidence & Research | 20     |                                                                     |
-| D: Brand Trust         | 5      |                                                                     |
-| E: Dose Adequacy       | 3      | Legacy output only; score contribution is now folded into Section A |
-| **Total ceiling**      | **80** | All sections clamped together at 80                                 |
-
-Omega-3 dose adequacy is now a category bonus inside Section A. `E_dose_adequacy`
-is still emitted in `breakdown`/`section_scores` so existing consumers do not break,
-but it is no longer added as a standalone term in `quality_raw`.
-
-## 5) Section Details
-
-### Section A: Ingredient Quality (max 25)
-
-```text
-core_quality = A1 + A2 + A3 + A4 + A5 + A6
-category_bonus_total = min(5, probiotic_bonus + omega3_dose_bonus + future_bonus_terms...)
-A = min(25, core_quality + category_bonus_total)
-```
-
-- A1 (max 18, config-driven): weighted bioavailability score. **v3.6.0:** reads pure
-  `bio_score` (0-15, form quality only). Natural-source bonus moved to A5e — A1 measures
-  form/absorption only.
-  - Excludes blend containers (`is_proprietary_blend=true`).
-  - Excludes rows without usable individual dose.
-  - Excludes parent-total rows (`is_parent_total=true`) to prevent double-counting
-    when a label lists both a nutrient total and its sub-forms.
-  - Mapped row uses `bio_score` and `dosage_importance` (falls back to legacy `score`
-    field for blobs from pre-v3.6.0 pipelines).
-  - Unmapped row fallback is bio_score `9.0`, weight `1.0`.
-  - `single` and `single_nutrient`: force all weights to `1.0`.
-  - `multivitamin`: smoothing `avg = 0.7*avg + 0.3*9.0` (factor and floor both config-driven).
-  - Final: `clamp(0, max, (avg / range_max) * max)` where `range_max` comes from
-    `range_score_field` (v3.6.0: `0-15`). The (avg_bio_score / 15) × 18 rescale preserves
-    the per-product budget without per-ingredient bias.
-- A2 (max 5, config-driven): premium forms bonus. **v3.6.0:** reads `bio_score` (was
-  `score`); default threshold dropped 14→12 (same 80% percentile, cleaner field). Stops
-  counting natural-mid forms (food-folate, etc.) as premium.
-  - count of unique ingredients with `bio_score >= threshold_score` (default 12)
-  - scored as `points_per_additional_premium_form * max(0, count - 1)` when `skip_first_premium_form=true`
-  - excludes blend containers (`is_proprietary_blend=true`)
-  - excludes parent-total rows (`is_parent_total=true`)
-  - requires usable individual dose (same dose-anchored rule as A1/A6)
-  - stacking 4+ premium forms can reach the full 5 pts
-- A3 (max 3): delivery tier points (tier 1 → 3, tier 2 → 2, tier 3 → 1).
-- A4 (max 3): absorption enhancer paired boolean.
-- A5 (max 4): organic + standardized botanical + synergy cluster + non-GMO + natural-source.
-  **v3.6.0:** cap raised 3→4 to absorb new A5e_natural_source signal (moved from A1).
-- A6 (max 3): single-ingredient efficiency bonus for `supp_type in {single, single_nutrient}`.
-  **v3.6.0:** tiers recalibrated to bio_score (0-15) scale: `>=14`=3, `>=12`=2, `>=10`=1.
-  Old `>=16` tier removed (unreachable on bio_score; was only reachable via legacy +3
-  natural bonus on `score`).
-  - uses `bio_score` as primary value
-  - falls back to legacy `score` only when `bio_score` is missing (older blobs)
-- Category bonus pool (`category_bonus_pool.max_contribution`, default **5**):
-  - Pools `probiotic_bonus + omega3_dose_bonus + enzyme_recognition_bonus + probiotic_cfu_adequacy_uplift`
-  - Prevents stacked niche bonuses from dominating core ingredient quality
-  - `A = min(25, core_quality + category_bonus_total)`
-- **Probiotic bonus:**
-  - default mode max 3
-  - extended mode max 10 (gated by `probiotic_extended_scoring`)
-  - non-probiotic strict-gate path enabled by `allow_non_probiotic_probiotic_bonus_with_strict_gate`
-- **Probiotic CFU adequacy uplift** (Sprint E1.3.2.c, max 5 — config-driven):
-  - per-strain CFU credit layered on probiotic_bonus
-  - tier points: `low=0`, `adequate=1`, `good=2`, `excellent=3`
-  - support-level caps: `high=1.0x`, `moderate=0.75x`, `weak=0.5x`
-  - hard gates: blend-member without individual dose → 0; tier=None → 0; blend-total inference forbidden
-- **Omega-3 dose bonus** (max 2 — config-driven; clinician cap 2026-05-01):
-  - only for products with explicit labelled EPA / DHA / EPA+DHA
-  - bands: `≥4000`=2.0 (+`PRESCRIPTION_DOSE_OMEGA3`), `≥2000`=1.75, `≥1000`=1.6, `≥500`=1.0, `≥250`=0.5
-  - **Cap rationale**: AHA evidence-based dose for cardiovascular protection is 1g/day. Above that, marginal benefit is unclear and bleeding risk rises (anticoagulant interaction). The 80-pt quality-led model shouldn't be derailed by a single nutrient's dose; prescription-dose products still surface the `PRESCRIPTION_DOSE_OMEGA3` flag for visibility. Bands redistributed within 0–2 to preserve tier differentiation.
-  - parent-mass fallback (Sprint E1.3.3): when EPA/DHA individually NP but parent fish/krill oil carries total mass, infer `EPA+DHA = parent_mass * epa_dha_fraction_of_parent` (default 0.5); flags `omega3_dose_source="inferred_from_parent_mass"`. Krill-oil entries also carry per-form `epa_percent`/`dha_percent` (Aker/Neptune published composition; `confidence_level=inferred`).
-  - opacity transparency: when EPA/DHA bonus is 0 because the omega-class ingredient is buried in an opaque proprietary blend (`disclosure_level=none`), scorer emits `bonus_missed_due_to_opacity=true` + flag `OMEGA3_BONUS_MISSED_OPAQUE_BLEND` so the UI can distinguish "doesn't contain omega-3" from "contains omega-3 but undisclosed".
-  - contributes through the Section A category bonus pool
-- **Enzyme recognition bonus** (Sprint E1.3.4, max 2.5 — config-driven):
-  - small credit for enzyme-containing products whose individual enzyme doses are labelled NP
-  - `per_enzyme_points=0.5`, deduped by canonical enzyme name, cap 2.5
-  - `min_activity_gate` currently disabled (placeholder until activity-unit audit data lands)
-
-### Section B: Safety & Purity (max 30)
-
-Sign convention: penalties are positive magnitudes and are subtracted once.
-
-```text
-B_raw = base_score + bonuses - penalties
-B = clamp(0, 30, B_raw)
-base_score = 25
-bonuses = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
-penalties = B0_moderate + B1 + B2 + B5 + B6 + B7 + B8   # B8 = 0 since 2026-04-30 (disabled — see B8 note below)
-```
-
-- B0: immediate safety gate logic.
-  - v5.0 status-based: `banned` -> UNSAFE, `recalled` -> BLOCKED, `high_risk` -> -10 + CAUTION, `watchlist` -> -5 + CAUTION.
-  - Pre-5.0 severity fallback: `critical/high` -> UNSAFE, `moderate` -> -10 + CAUTION, `low` -> advisory.
-  - Non-exact/alias matches -> review-only (`BANNED_MATCH_REVIEW_NEEDED`).
-  - Source: `banned_recalled_ingredients.json` (143 entries, schema 5.0.0).
-- B1: harmful additives penalty (cap **15**, config-driven via `B1_harmful_additives.cap`).
-  - Named-sweetener / additive match path: risk points `high` = 2.0, `moderate` = 1.0, `low` = 0.5 (no critical tier — critical hazards use B0 gate; `critical=3.0` still accepted for pre-5.1 backward compat).
-  - Source-aware suppression: low/moderate additives sourced from the Supplement Facts active panel are suppressed (already captured by IQM). High/critical still fire for actives.
-  - Deduplicated by `additive_id` (highest severity wins).
-  - Source: `harmful_additives.json` (115 entries, schema 5.1.0, 20 categories, all deep-audited).
-  - Cap raised from 8 → 15 so products stacking 5+ critical additives take the full penalty without being compressed.
-  - **Amount-based sugar penalty (v3.4.1, 2026-04-10)**: layered on top of the named-sweetener path. Reads `dietary_sensitivity_data.sugar.level` from the enricher and docks:
-    - `moderate` level (3 g < sugar_g ≤ 5 g) → `-0.5`
-    - `high` level (sugar_g > 5 g) → `-1.5`
-    - `sugar_free`/`low` or missing data → no penalty (safe default).
-    - Emits flags `SUGAR_LEVEL_MODERATE` / `SUGAR_LEVEL_HIGH` and an evidence entry with `type="dietary_sugar"`, `level`, `amount_g`, `penalty`.
-    - Combined with the named-sweetener penalty, the total B1 penalty is still clamped to the existing B1 cap (8).
-    - **Config-driven** via `section_B_safety_purity.B1_dietary_sugar_penalty` in `scoring_config.json` (keys: `enabled`, `moderate_penalty`, `high_penalty`, `cap`). This enables future per-user personalization — e.g. a stronger penalty for diabetic profiles — without touching scoring code.
-    - Rationale: a gummy with 6 g added sugar previously received the same quality score as an identical 0 g formulation because the scorer ignored `dietary_sensitivity_data`. Users saw the "High Sugar" warning in `top_warnings` but the score didn't reflect it. This closes the UI-vs-score gap.
-- B2: allergen penalty (capped at 2).
-- B3: claim compliance bonus (max 4 inside shared bonus pool).
-- B4: quality certifications (computed internally, pooled under bonus cap).
-- B5: proprietary blend transparency penalty (max 10).
-- B6: disease/marketing claim penalty (max 5).
-- B7: dose safety penalty (max 3). Penalises products with ingredients exceeding 150% of highest adult UL. Per ingredient: -2.0, capped at -3.0 total. Below 150%, UL enforcement is deferred to phone-side Section E1 (user-profile-aware). Source: `rda_ul_data.safety_flags` from enricher, verified against `rda_optimal_uls.json`.
-- B8: **DISABLED 2026-04-30** (`enabled: false` in `B8_caers_adverse_events`). Originally a CAERS adverse-event penalty (max −5) graduated by serious_reports volume (`strong` ≥100 → −4, `moderate` 25-99 → −2, `weak` 10-24 → −1). **Why dropped:** raw CAERS counts are confounded by exposure base-rate, not risk. The `strong` tier penalized RDA staples (calcium 2,145 reports, vitamin D 1,301, fiber 1,252, fish-oil 831, magnesium 610, protein 505, vitamin C 378) at the same magnitude as kratom (759, with 261 deaths) — popularity-as-harm. A plain multivitamin instantly hit the −5 cap with zero attributable risk. Genuinely dangerous CAERS ingredients (kratom, ephedra, yohimbe, garcinia, DMAA, DHEA at high dose) are already covered by B0 banned_recalled and B1 harmful_additives, so disabling B8 does not weaken safety enforcement. Source data (`caers_adverse_event_signals.json`, 159 ingredients) is preserved and the penalty math + tests remain wired so re-enabling is a one-line config flip — but only after rebuilding the dataset with PRR/ROR (proportional reporting ratio) normalization or a curated causally-attributable allowlist. Penalty math, schema, and `B8_penalty` / `B8_caers_evidence` keys still ship in Section B output (always `0.0` / `[]`) so the Flutter contract is unchanged.
-- Optional gated `B_hypoallergenic` contribution can be added to bonus pool.
-
-#### B5 proprietary blend model
-
-Per blend:
-
-```text
-hidden_mass_mg = max(blend_total_mg - disclosed_child_mg_sum, 0)
-impact = clamp(hidden_mass_mg / total_active_mg, 0, 1)  # mg-share path
-if hidden_mass_mg > 0 and impact < 0.1: impact = 0.1
-
-fallback impact = clamp(hidden_count / max(total_active_count, 8), 0, 1)  # count-share path
-
-presence = {full:0, partial:1, none:2}
-coef = {full:0, partial:3, none:5}
-blend_penalty = presence + coef * impact
-B5 = clamp(0, 10, sum(blend_penalty))
-```
-
-The scorer also emits per-blend evidence payloads used for explainability.
-
-### Section C: Evidence & Research (max 20)
-
-- Match source: `evidence_data.clinical_matches[]`
-- Reference DB: `backed_clinical_studies.json` (197 entries, 100% with PMID-backed key endpoints)
-- Per-match formula (all multipliers config-driven):
-  `raw = study_base_points * evidence_level_multiplier * effect_direction_multiplier * enrollment_quality_multiplier`
-- **Effect-direction multipliers** (new in v3.4, `effect_direction_multipliers`): `positive_strong=1.0`, `positive_weak=0.85`, `mixed=0.6`, `null=0.25`, `negative=0.0`. Missing field defaults to `positive_strong`.
-- **Enrollment quality bands** (new in v3.4, `enrollment_quality_bands`, RCT / meta only): `<50→0.6x`, `50-199→0.8x`, `200-499→1.0x`, `500-999→1.1x`, `≥1000→1.2x`. Observational / preclinical bypass this adjustment.
-- Sub-clinical dose guard: multiply by `sub_clinical_dose_guard_multiplier` (default 0.25) when product dose < `min_clinical_dose`. Adds `SUB_CLINICAL_DOSE_DETECTED`.
-- Supra-clinical flag: adds `SUPRA_CLINICAL_DOSE` when product dose > `supra_clinical_multiple` × max studied dose (default 3.0, informational only).
-- Per-ingredient cap: `cap_per_ingredient` (default **7**).
-- **Top-N diminishing-returns aggregation** (`top_n_weights`, v3.5 default `[1.0, 0.7, 0.5, 0.3]`): per-ingredient scores sorted descending and multiplied by positional weights before summing. Prevents multivitamin inflation while rewarding targeted formulations — best ingredient 100%, 2nd 70%, 3rd 50%, 4th 30%, 5th+ 0%. (Pre-v3.5 was `[1.0, 0.5, 0.25]`.)
-- **Depth bonus** (new in v3.4, `depth_bonus_bands` `[[20, 0.25], [40, 0.5]]`): reads `published_studies_count` from matched reference entry. 0-19 trials → +0.0, 20-39 → +0.25, ≥40 → +0.5. Added after top-N aggregation.
-- Section cap: `cap_total` (default **20**).
-
-Evidence DB coverage (as of 2026-04-02):
-- 197 entries: 132 ingredient-human, 38 branded-rct, 17 product-human, 6 strain-clinical, 4 preclinical
-- All 197 entries have `key_endpoints` populated with PubMed PMID-backed clinical outcome data
-- All 197 entries have `references_structured` with verified citations
-- All 197 entries have `effect_direction` classified (128 positive_strong, 40 positive_weak, 25 mixed, 4 null)
-- Section C depth bonus reads numeric counts from `published_studies_count` when present. Legacy `published_studies` remains a human-readable evidence-tag field and is not parsed as a count.
-- Discovery/enrichment tooling now keeps `registry_completed_trials_count` separate from `published_studies_count` and can carry `effect_direction_rationale`, `effect_direction_confidence`, and `endpoint_relevance_tags` for operator auditability.
-- Auto-discovery via `discover_clinical_evidence.py` now auto-populates `key_endpoints` from
-  ClinicalTrials.gov outcome measures with PubMed PMID cross-references (no manual review needed for endpoints)
-
-### Section D: Brand Trust (max 5)
-
-```text
-D = min(5, D1 + D2 + min(2.0, D3 + D4 + D5))
-```
-
-- D1: trusted manufacturer path.
-  - `2` for trusted/exact match.
-  - optional gated middle-tier `1` for verifiable NSF/USP/GMP evidence.
-- D2: full disclosure.
-- D3: physician formulated.
-- D4: high-standard region contribution.
-- D5: sustainability.
-
-### Legacy Section E Output: Dose Adequacy — EPA+DHA
-
-`E_dose_adequacy` is now a backward-compatibility output only. The same EPA/DHA
-math still runs, but the actual score contribution is stored in `A.omega3_dose_bonus`
-and included in Section A through the category bonus pool.
-
-Legacy E is **not applicable** to products with no labelled EPA or DHA quantities
-(`score=0.0`, `max=0.0`, `applicable=false`).
-
-```text
-per_day_mid = (per_day_min + per_day_max) / 2
-where:
-  per_day_min = (EPA_mg + DHA_mg) per unit × min_servings_per_day
-  per_day_max = (EPA_mg + DHA_mg) per unit × max_servings_per_day
-```
-
-Band table (highest matching threshold wins):
-
-| Threshold (mg/day EPA+DHA) | Score | Label               | Clinical Anchor                                                                                              |
-| -------------------------- | ----- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
-| ≥ 4000                     | 2.0   | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; cap reached, also adds `PRESCRIPTION_DOSE_OMEGA3` flag             |
-| ≥ 2000                     | 1.75  | `high_clinical`     | EFSA health claim for blood triglycerides; clear step above 1g without dominating cap                        |
-| ≥ 1000                     | 1.6   | `aha_cvd`           | AHA recommendation for CVD patients (anchor "high adequacy"; clean separation from 500 mg)                   |
-| ≥ 500                      | 1.0   | `general_health`    | FDA qualified health claim minimum (solid general intake)                                                    |
-| ≥ 250                      | 0.5   | `efsa_ai_zone`      | EFSA Adequate Intake for general population (baseline adequacy)                                              |
-| ≥ 0                        | 0.0   | `below_efsa_ai`     | Below EFSA AI                                                                                                |
-
-> **Cap = 2.0** (clinician decision 2026-05-01). AHA evidence-based dose is 1 g/day; above that, marginal benefit is unclear and bleeding risk rises. Bands redistributed within the 0–2 cap rather than expanding to 3.0. Prescription-dose products still flagged `PRESCRIPTION_DOSE_OMEGA3` for visibility.
-
-Ingredient inclusion rules for the EPA+DHA sum:
-
-- canonical_ids `"epa"`, `"dha"`, or `"epa_dha"` (combined node contributes to both buckets)
-- Excludes `is_proprietary_blend`, `is_blend_header`, and `is_parent_total` rows
-- Only `mg`, `g`, or `mcg` units accepted; others skipped
-
-Serving basis resolution (in priority order):
-
-1. `product.serving_basis.min_servings_per_day` / `max_servings_per_day`
-2. `product.dosage_normalization.serving_basis.servings_per_day_min` / `_max`
-3. Default: 1.0
-
-### Output badges
-
-- `FULL_DISCLOSURE` badge is emitted when:
-  - product is not `BLOCKED`, `UNSAFE`, or `NOT_SCORED`
-  - disclosure evaluation is true:
-    - if enriched `has_full_disclosure` exists, scorer uses it directly
-    - otherwise scorer computes from:
-      - all non-blend active ingredients have usable individual doses
-      - no proprietary blend is `partial` or `none`
-
-Badge payload:
-
-```json
-{
-  "id": "FULL_DISCLOSURE",
-  "label": "FULL DISCLOSURE",
-  "description": "This product lists exact amounts for every active ingredient."
-}
-```
-
-### Category percentile output
-
-Percentile is assigned after each batch is fully scored (cohort-aware pass).
-
-- Cohort key priority:
-  1. `percentile_category` from enrichment (recommended)
-  2. scorer fallback inference chain
-- Uses score on 100-equivalent scale.
-- `top_percent` is lower-is-better (example: `Top 35%`).
-- Requires minimum cohort size of `5`; otherwise scorer returns
-  `category_percentile.available=false` with reason `insufficient_cohort_size`.
-- `category_percentile` includes `category_source`, `category_confidence`, and `category_signals` for auditability.
-
-## 6) Gates And Defaults (Current)
-
-From current config (`feature_gates` block):
-
-- `require_full_mapping = true` — any unmapped active returns `NOT_SCORED`
-- `probiotic_extended_scoring = false`
-- `allow_non_probiotic_probiotic_bonus_with_strict_gate = true`
-- `enable_non_gmo_bonus = true` — A5d: +0.5 for Non-GMO Project Verified
-- `enable_hypoallergenic_bonus = false`
-- `enable_d1_middle_tier = true` — D1 middle-tier reputation (+1) for verifiable NSF GMP / FDA registered / USP / named GMP evidence
-
-Non-gate config switches (same file, other sections):
-
-- `section_A_ingredient_quality.category_bonus_pool.max_contribution = 5`
-- `section_A_ingredient_quality.enzyme_recognition.enabled = true`
-- `section_A_ingredient_quality.enzyme_recognition.min_activity_gate.enabled = false`
-- `section_A_ingredient_quality.probiotic_cfu_adequacy.enabled = true`
-- `section_A_ingredient_quality.omega3_dose_bonus.fish_oil_parent_mass_fallback.enabled = true`
-- `section_B_safety_purity.B1_dietary_sugar_penalty.enabled = true`
-- `section_B_safety_purity.B8_caers_adverse_events.enabled = false`  *(disabled 2026-04-30 — see B8 note above)*
-
-## 7) Verdicts
-
-Precedence:
-
-1. `BLOCKED` — recalled substance (B0)
-2. `UNSAFE` — banned substance (B0)
-3. `NOT_SCORED` — mapping gate failed
-4. `CAUTION` — `B0_HIGH_RISK_SUBSTANCE`, `B0_WATCHLIST_SUBSTANCE`, `B0_MODERATE_SUBSTANCE`, or `BANNED_MATCH_REVIEW_NEEDED`
-5. `POOR` (`quality_score < 32`)
-6. `SAFE`
-
-Grade words (only for non-blocked, non-unsafe, non-not_scored):
-
-- > = 90: Exceptional
-- > = 80: Excellent
-- > = 70: Good
-- > = 60: Fair
-- > = 50: Below Avg
-- > = 32: Low
-- < 32: Very Poor
-
-## 8) Output Structure
-
-Scored files:
-
-```text
-<output_dir>/
-  scored/
-    scored_<batch_name>.json
-  reports/
-    scoring_summary_<timestamp>.json
-```
-
-Core output fields include:
-
-- `quality_score`, `score_80`, `score_100_equivalent`
-- `verdict`, `safety_verdict`
-- `badges`
-- `category_percentile`, `category_percentile_text`
-- `percentile_category`, `percentile_category_label`, `percentile_category_source`, `percentile_category_confidence`, `percentile_category_signals`
-- `breakdown` (A/B/C/D plus legacy E compatibility output and penalties)
-- `section_scores` (with config-driven max values)
-- `flags` (including `PRESCRIPTION_DOSE_OMEGA3` when applicable)
-- mapping KPI fields (`unmapped_actives_total`, `mapped_coverage`, etc.)
-
-Legacy Section E fields in `section_scores.E_dose_adequacy`:
-
-```json
-{
-  "score": 1.5,
-  "max": 2.0,
-  "applicable": true,
-  "dose_band": "aha_cvd",
-  "per_day_mid_mg": 1080.0,
-  "per_day_min_mg": 900.0,
-  "per_day_max_mg": 1260.0,
-  "epa_mg_per_unit": 180.0,
-  "dha_mg_per_unit": 120.0,
-  "prescription_dose": false
-}
-```
-
-When not applicable (no explicit EPA/DHA dose):
-
-```json
-{
-  "score": 0.0,
-  "max": 0.0,
-  "applicable": false
-}
-```
-
-## 9) Backward Compatibility Notes
-
-- B and C section max values changed (B: 35 -> 30, C: 15 -> 20).
-- `section_scores.*.max` now resolves from config, not hardcoded constants.
-- B5 exposes both signed and magnitude penalty fields in evidence:
-  - `computed_blend_penalty` (signed)
-  - `computed_blend_penalty_magnitude` (positive)
-- `E_dose_adequacy` remains exported for backward compatibility, but its score now comes from
-  `A.omega3_dose_bonus` rather than a standalone scoring term.
-- `is_parent_total` field on ingredients is new in v3.2.0 (propagated by enricher post-pass).
-  Older enriched files without this field will have `is_parent_total` default to falsy via
-  `.get()`, retaining old A1 behavior with no crash.
-
-## 10) Interaction Layer (Non-Scoring)
-
-The scorer does NOT apply interaction-based penalties. Interactions are handled separately:
-
-- **Enrichment:** `enrich_supplements_v3.py` evaluates `ingredient_interaction_rules.json` and emits `interaction_profile` per product
-- **Export:** `build_final_db.py` includes `condition_summary`, `drug_class_summary`, and per-ingredient interaction warnings in the detail blob
-- **App:** Section F "fit score" is computed on-device based on user's health profile + `reference_data.interaction_rules`
-
-This separation ensures the quality score (A/B/C/D plus legacy E compatibility output) remains objective and context-free, while the interaction layer provides personalized safety warnings.
-
-## 11) Validation Commands
-
-```bash
-# Score tests only
-cd scripts && python3 -m pytest tests/test_score_supplements.py -q
-
-# Full suite (3906+ tests)
-cd scripts && python3 -m pytest tests/ -q
-```
+Operational pipeline, snapshot, and release commands are documented in
+`PIPELINE_OPERATIONS_README.md`. Do not use raw pytest or direct ad-hoc export
+commands as release evidence.

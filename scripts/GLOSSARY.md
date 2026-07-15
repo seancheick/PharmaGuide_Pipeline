@@ -1,122 +1,126 @@
 # PharmaGuide Glossary
 
-Ubiquitous language for the IQM / scoring / enrichment domain. Every term here
-should be used consistently in code, tests, commit messages, and conversation
-with AI. When introducing a new term, add it here first.
+> Last verified against executable code: 2026-07-15
 
-This file is the source of truth for terminology — read it before audits,
-refactors, or PRD writing. If a term in code drifts from this glossary, update
-one or the other; never let them disagree silently.
+This is the canonical vocabulary for pipeline, enrichment, scoring, release,
+tests, and operator communication. Add a term here before introducing a new
+contract name elsewhere.
 
-## Core data structures
+## Pipeline and release terms
 
 | Term | Meaning |
 |---|---|
-| **IQM** | Ingredient Quality Map — `scripts/data/ingredient_quality_map.json`. The 610-parent quality scoring database. |
-| **Parent** | A canonical ingredient family keyed by snake_case name (e.g., `vitamin_a`, `magnesium`, `boswellia_serrata`). Each parent has `standard_name`, `category`, `cui`, `rxcui`, `forms`. |
-| **Form** | A specific salt / chelate / extract under a parent (e.g., `magnesium_glycinate`, `beta-carotene from mixed carotenoids`). The unit at which `bio_score` and `absorption_structured` are assigned. |
-| **Form name** | The IQM key for a form. Enricher match priority: literal `form_name` → `aliases` → fallback to `(unspecified)` form. |
-| **Aliases** | Alternative strings the enricher normalizes to this form. Includes Greek letters (β-carotene), spacing variants, brand names (Betatene), regional spellings. |
-| **(unspecified) form** | Catch-all form for a parent when no specific form matches. Receives conservative `bio_score` 5–7 due to quality uncertainty. |
+| **Full-corpus run** | `bash batch_run_all_datasets.sh` with no `--targets`. Runs Clean → Enrich → Score for every eligible brand directory, then rebuilds the snapshot and starts the full release if every brand succeeded. |
+| **Targeted run** | A batch run with `--targets`. It is pipeline-only by default; downstream snapshot/release work requires explicit `--release`. |
+| **Pipeline-only** | Clean/Enrich/Score work without rebuilding or publishing the catalog. Selected explicitly with `--pipeline-only`; also the safe default for targeted runs. |
+| **Strict release gates** | Fail-closed pre-score validation selected by `--strict-release-gates`. Batch runs always enable it. Contract, coverage, or stage-ownership failures stop that brand before scoring completes. |
+| **Stage manifest** | `.stage_manifest.json`, the checksum-bearing ownership record for one successful Clean, Enrich, or Score run. It is a control file, never a product. |
+| **Owned output** | A product JSON named and hashed by the current stage manifest. Unowned, missing, changed, or stale JSON is rejected in strict mode. |
+| **Run ID** | Path-safe identifier shared across enrichment, gates, scoring, and reports for one operational run. |
+| **Snapshot** | The paired catalog artifacts in `scripts/final_db_output/` and `scripts/dist/`, built from all current per-brand Enrich/Score outputs. |
+| **Candidate** | A temporary sibling directory used to build and gate a proposed snapshot without touching the live snapshot. |
+| **Promotion** | Atomic replacement of both live snapshot directories after every candidate gate passes. Failed candidates are deleted; the last good live snapshot remains. |
+| **Release** | The auto-smart workflow in `scripts/release_full.sh`: ensure the snapshot is current, update images and interactions when needed, run strict gates, then sync Supabase and import the Flutter bundle. |
+| **Auto-smart** | A release step runs only when inputs, checksums, or manifests show that its output is stale. It is not permission to skip gates. |
+| **Contract quarantine** | A product intentionally excluded from the shipped catalog because its output cannot satisfy the export contract, while the build continues and records the exclusion. |
+| **Contract failure** | A systemic or required-contract error that stops candidate promotion or release. |
+| **Scoring snapshot contract** | Per-product regression fixtures checked immediately before Supabase/Flutter publication. Intentional deltas must be reviewed and explicitly re-frozen. |
+| **Artifact freshness** | Proof that catalog, manifest, interactions, and upstream product outputs describe the same current state. |
 
-## Scoring fields (IQM-level, per form)
+## Canonical stages
 
-| Field | Range | Meaning |
+| Stage | Authority | Input → output |
 |---|---|---|
-| `bio_score` | 1–15 | Form-quality score. For systemic actives, this means absorption/bioavailability. For local/matrix actives (fibers, prebiotics, mushrooms, demulcents, phytosterols), this means active-form quality and delivery-to-site confidence rather than serum absorption. **14–15** = premium; **11–13** = high quality; **8–10** = standard; **5–7** = basic / unspecified; **1–4** = poor. |
-| `natural` | bool | Whether the form is naturally derived (food / plant / whole-food / naturally-occurring chelate). |
-| `natural_bonus` | +3 | Added to `score` if `natural: true`. |
-| `score` | 1–18 | `bio_score + natural_bonus`. Max possible = 18. |
-| `absorption` | string | Human-readable absorption rate, e.g., `"8.7-65%"`. |
-| `absorption_structured` | object | `{value, range_low, range_high, quality, notes}`. `quality` enum: `{excellent, very_good, good, moderate, low, poor, variable, unknown}`. |
-| `dosage_importance` | enum | How much dosing precision matters for this form's effect. |
+| **Clean** | `clean_dsld_data.py` + `enhanced_normalizer.py` | Raw DSLD JSON → normalized rows and source-of-truth row roles |
+| **Enrich** | `enrich_supplements_v3.py` | Clean rows → canonical identity, safety, RDA/UL, evidence, taxonomy, and scorer inputs |
+| **Pre-score gates** | `enrichment_contract_validator.py`, `coverage_gate.py`, `stage_manifest.py` | Enriched outputs → pass/fail decision before Score |
+| **Score** | `score_supplements.py` | Enriched rows → legacy arithmetic/audit scaffolding and verdict history |
+| **Build** | `build_final_db.py` + `scoring_v4/export_adapter.py` | Enriched + legacy scored rows → v4-scored export candidates |
+| **Snapshot** | `rebuild_dashboard_snapshot.sh` | All per-brand outputs → gated `final_db_output/` + `dist/` |
+| **Release** | `release_full.sh` | Gated `dist/` → product images, interaction DB, Supabase, Flutter bundle |
 
-## Scoring fields (product-level export — v2.0.0 v4 production)
-
-- `quality_score_v4_100` — **canonical shipped score** (six-pillar /100). The primary export/ranking field.
-- `quality_score_status` — `scored` | `suppressed_safety` | `not_scored`.
-- `quality_tier` — Elite/Excellent/Strong/Acceptable/Weak/Poor.
-- `raw_score_v4_100` — audit/debug only; **never** the shipped score and never shown when `quality_score_status` suppresses display.
-- `score_100_equivalent` / `score_display_100_equivalent` — honest /100 compat mirrors of `quality_score_v4_100`.
-- `score_quality_80` — **DROPPED at v2.0.0** (legacy /80 column). Do not reintroduce; use `quality_score_v4_100`.
-- `has_banned_substance` / `has_recalled_ingredient` — ingredient-level safety flags.
-- **Never** use `is_recalled` — implies product-level recall, unsupported in v1.
-- **Verdict precedence (deterministic):** BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE.
-
-## Dose-safety assessment terms
+## Identity and ingredient terms
 
 | Term | Meaning |
 |---|---|
-| **Indeterminate UL assessment** | The pipeline has an applicable UL reference but lacks the form or source lineage required to compare the label dose honestly. It must not emit `over_ul=true` or silently treat the dose as cleared. |
-| **UL review flag** | An additive `rda_ul_data.ul_review_flags[]` record emitted when an indeterminate assessment reaches a clinically relevant screening threshold. It routes the product to `CAUTION`/review without asserting that the UL was exceeded. |
-| **No-UL adequacy cap** | When the authoritative reference establishes an RDA/AI but no UL, dose adequacy may be capped at `high` instead of being treated as toxic or `excessive`. This is a scoring rule, not a safety conclusion; interaction and contraindication evidence remains independent. |
+| **IQM** | Ingredient Quality Map: `scripts/data/ingredient_quality_map.json`. Current metadata: schema 5.4.11, 629 parents. |
+| **Parent** | Canonical ingredient family identified by a stable snake-case key, such as `magnesium`. |
+| **Form** | A specific salt, chelate, extract, strain, source, or delivery form under a parent. |
+| **Canonical ID** | Stable machine identity selected by deterministic exact/canonical/bounded-alias matching. Display text is not identity. |
+| **Printed name** | Full ingredient name as printed on the label. It is retained even when a verified branded token is extracted. |
+| **Branded token** | Separately stored verified brand marker; it never replaces the printed name. |
+| **Marker contribution** | A bioactive delivered by a source ingredient. The source keeps its identity; the marker is not promoted into a duplicate active row. |
+| **Parent-total row** | A declared nutrient total that groups subforms. It is preserved for label fidelity but excluded from duplicate scoring when its children carry the form detail. |
+| **Blend header** | A declared proprietary/structural blend container. It is not an individually dosed active. |
+| **Blend member** | A child ingredient linked to a blend header by stable parent linkage. A display-only child may remain visible without becoming independently scoreable. |
+| **Scorable row** | An active ingredient row that satisfies cleaner/enrichment eligibility and the shared scoring-input contract. |
+| **Display-only row** | A label-faithful row retained for explanation but excluded from independent score math. |
+| **Mapped coverage** | Fraction of score-eligible active rows with a usable canonical mapping, computed by the shared scoring-input contract. |
 
-## Production scoring pillars (v4)
+## IQM form fields
 
-| Pillar | Max | What it measures |
-|---|---|---|
-| Formulation | 20 | Ingredient form quality, delivery, formulation fit |
-| Dose | 20 | Category-aware dosing adequacy and excess-dose handling |
-| Evidence | 20 | Verified clinical support and category fit |
-| Transparency | 15 | Label disclosure, proprietary blend opacity, completeness |
-| Verification | 15 | Verified third-party testing, COA, GMP/certification signals |
-| Safety/Hygiene | 10 | Product-level safety hygiene and clean-label penalties |
+| Field | Contract |
+|---|---|
+| `bio_score` | 0–15 form-quality signal. For systemic actives it represents absorption/bioavailability evidence; for local/matrix actives it represents relevant form and delivery-to-site confidence. |
+| `natural` | Whether the form is supported as naturally derived. |
+| `score` | Legacy `bio_score + 3` when `natural=true`, capped at 18. Do not use this value as pure bioavailability. |
+| `absorption_structured` | Structured value/range/quality/notes evidence. It must not claim more precision than the supporting source. |
 
-Config: `scripts/scoring_v4/config/quality_score.json`.
-
-The legacy `score_supplements.py` 80-point model still runs for review queues,
-detail-blob scaffolding, verdict history, and audits. It is not the shipped score
-contract.
-
-## Audit terminology (used during IQM batches)
+## Production scoring terms
 
 | Term | Meaning |
 |---|---|
-| **Ghost reference** | A PMID that exists on PubMed but does NOT support the claim it's cited for (wrong topic, wrong species, misattribution). Detected by *content* verification, not existence alone. |
-| **Phantom citation** | Synonym for ghost reference. Preferred in test names: `test_*_phantom_citation_*`. |
-| **Framework category error** | An ingredient placed in the wrong taxonomic / regulatory class (e.g., manuka honey treated as a botanical when it's a food product). Surfaces as inappropriate scoring rules. |
-| **Bridge question** | A cross-cluster query the audit prompt makes (e.g., "every PMID in IQM also appears in `backed_clinical_studies`"). Verifies internal consistency across data files. |
-| **BRC class** | Brown Rice Chelate forms — `<mineral>_brown_rice_chelate`. Invariant: `bio_score = 11`. `absorption_structured.quality` varies by mineral (zinc=moderate, manganese=low, iron=low, selenium=moderate). |
-| **Class-based absorption constraint** | A regression assertion that holds across an entire ingredient class, not just one form (e.g., "all chelates ≥ moderate absorption"). |
-| **Conflation** | Two distinct claims merged into one (e.g., "rat-only BBB-crossing" cited as "BBB-crossing in humans"). Triggers a phantom-citation verdict. |
-| **Source-descriptor prefix** | A `from <source>` form name (e.g., `iron from brown rice chelate`). The enricher's `prefix='from'` rule currently blocks these from matching their proper IQM form. See `project_enricher_prefix_from_bug` memory. |
-| **Marketing claim** | An unqualified efficacy claim in `notes` not backed by cited evidence. Caught by phantom-citation tests with audit-trail context. |
+| **V4 quality score** | The only shipped public score. Produced by `score_supplements_v4.py`/`scoring_v4/` during Build and exported as `quality_score_v4_100`. |
+| **Legacy scaffolding** | The live output of `score_supplements.py` v3.6.0 used for review queues, diagnostic/detail fields, verdict history, and compatibility. It is not a second public score. |
+| **Quality score status** | `scored`, `suppressed_safety`, or `not_scored`. Status controls whether a public number is allowed. |
+| **Raw v4 score** | `raw_score_v4_100`; audit math only. It is never substituted for a suppressed public score. |
+| **Compatibility mirrors** | `score_100_equivalent` and `score_display_100_equivalent`; exact /100 mirrors of the v4 public score, not a legacy /80 conversion. |
+| **Quality pillars** | Formulation 20, Dose 20, Evidence 20, Transparency 15, Verification 15, Safety/Hygiene 10. |
+| **V4 module** | One category-aware scoring route: `generic`, `probiotic`, `multi_or_prenatal`, `b_complex`, `sports`, `fiber_digestive`, or `omega`. |
+| **Router** | `scoring_v4/router.py`, the sole authority for v4 module dispatch. |
+| **Safety suppression** | BLOCKED/UNSAFE products retain verdict/evidence but ship a null public score with `quality_score_status=suppressed_safety`. |
+| **Completeness exclusion** | Products without usable identity/payload become `NOT_SCORED` and are quarantined from the live catalog. Missing disclosure can instead remain scoreable as explicit soft debt. |
+| **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. |
 
-## Pipeline stages
+Deprecated `/80` export fields (`score_quality_80`, `score_display_80`) must
+never be reintroduced. Internal v3 values may remain only behind the export
+boundary for scaffolding consumers.
 
-| Stage | Script | Input → Output |
-|---|---|---|
-| **Clean** | `clean_dsld_data.py` | Raw DSLD JSON → normalized records |
-| **Enrich** | `enrich_supplements_v3.py` | Cleaned records → matched / classified / enriched ingredients (~13K lines) |
-| **Score** | `score_supplements.py` | Enriched records → legacy scaffolding + verdicts (~4K lines) |
-| **Build** | `build_final_db.py` | Scored records + V4 adapter → Flutter SQLite blob |
-| **Sync** | `sync_to_supabase.py` | Build output → Supabase (offline-first cache) |
+## Dose and folate terms
 
-## External identifier types
+| Term | Meaning |
+|---|---|
+| **Adequacy exposure** | Minimum/recommended daily exposure (`per_day_min`) used for adequacy. |
+| **Safety exposure** | Maximum daily exposure (`per_day_max`) used for UL and other safety comparisons. |
+| **Reference profile** | Named adult-neutral compatibility profile emitted alongside `data_by_group`; it is not a claim that one demographic fits everyone. |
+| **Indeterminate UL assessment** | A UL exists but form/source lineage is insufficient for an honest comparison. The pipeline does not guess `over_ul`. |
+| **UL review flag** | Explicit review signal for a clinically material indeterminate UL case; may carry CAUTION without asserting an exceedance. |
+| **Folic-acid contribution** | The portion of declared folate positively identified as folic acid. This pipeline applies the folic-acid UL only to an identified folic-acid contribution. |
+| **Folinic form** | Folinic acid, folinate, or leucovorin. Explicit mcg DFE may support adequacy; bare mcg without a verified DFE conversion is adequacy-unknown and not scoring-eligible. No folic-acid UL is guessed for a folinic form. |
 
-| Type | Source | Verifier |
-|---|---|---|
-| **CUI** | UMLS concept identifier | `verify_cui.py` (UMLS API) |
-| **RXCUI** | RxNorm ingredient ID | `verify_interactions.py` (RxNorm API) |
-| **PMID** | PubMed article ID | `verify_pubmed_references.py`, `verify_all_citations_content.py` |
-| **CID / CAS** | PubChem compound IDs | `verify_pubchem.py` |
-| **UNII** | FDA Unique Ingredient ID | `verify_unii.py` |
-| **NCT ID** | ClinicalTrials.gov registration | `verify_clinical_trials.py` |
+## Safety and evidence terms
 
-**Critical rule:** every identifier in production data MUST be verified by *content*, not just existence. PMIDs that "exist" but are about a different topic are ghost references. See `critical_no_hallucinated_citations` and `critical_clinical_data_integrity` memories.
+| Term | Meaning |
+|---|---|
+| **Safety signal** | Canonical identity + applicability + confidence evidence consumed by the v4 safety gate. Raw matcher implementation details do not own verdict policy. |
+| **US applicable** | Whether the regulatory evidence applies to the primary shipped US verdict. Other jurisdictions remain as regional advisories. |
+| **Ingredient-level recall flag** | `has_banned_substance` or `has_recalled_ingredient`. Never use `is_recalled`, which implies an unsupported product-level recall. |
+| **Ghost reference / phantom citation** | A real identifier whose content does not support the claim. Existence alone is not verification. |
+| **Content verification** | Confirming that a PMID/CUI/RXCUI/UNII/NCT/CAS/CID identifies and supports the intended entity or claim. |
+| **Clinical source of truth** | Primary regulatory or scientific evidence plus curated, tested local data. Generated reports are review queues, not authoritative data. |
 
-## Schema versioning
+## Versions and tests
 
-- Most data files: `schema_version` in `_metadata` block, range **5.0.0 – 5.3.0**
-- `user_goals_to_clusters.json`: **6.0.0** (separate evolution)
-- Scoring engine version: **3.4.0** (`scripts/config/scoring_config.json`)
-- Pipeline version: **3.4.0** (`scripts/FINAL_EXPORT_SCHEMA_V1.md` manifest)
+| Contract | Current code value |
+|---|---|
+| Export schema | `2.0.0` (`build_final_db.py`) |
+| Export core columns | `110` (`build_final_db.py`) |
+| Pipeline manifest version | `3.4.0` (`build_final_db.py`) |
+| Enrichment version | `3.1.0` (`enrich_supplements_v3.py`) |
+| V4 scoring engine | `4.1.0` (`score_supplements_v4.py`) |
+| V4 quality config | `1.0.4-sports-subtypes` (`quality_score.json`) |
+| Legacy scorer config | `3.6.0` (`scoring_config.json`) |
 
-When changing schema: bump `schema_version`, update `last_updated`, recompute `total_entries`, run `db_integrity_sanity_check.py`.
-
-## Test naming conventions
-
-- `test_<topic>_integrity.py` — regression suites per IQM batch (e.g., `test_boswellia_absorption_integrity.py`)
-- `test_<topic>_phantom_citation_*` — content-verified PMID assertions
-- `test_*_class_absorption_*` — class-based absorption constraints
-- Snapshot tests: `test_scoring_snapshot_v1.py` — refresh via `freeze_contract_snapshots.py <product_id>` after intentional scoring changes
+All tests run through `scripts/test.sh`. `fast` is the development profile;
+`release` and `full` are pre-ship profiles. Direct raw pytest commands are not
+part of the supported operator contract.

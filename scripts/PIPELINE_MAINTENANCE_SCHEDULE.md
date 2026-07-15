@@ -1,806 +1,322 @@
-# Pipeline Maintenance Schedule
+# PharmaGuide Pipeline Maintenance Schedule
 
-**Owner:** Sean Cheick Baradji
-**Last Updated:** 2026-04-14
-**Repo:** PharmaGuide_Pipeline (`dsld_clean`)
+> Owner: Sean Cheick Baradji | Last verified: 2026-07-15
 
-This is the single source of truth for keeping the PharmaGuide pipeline healthy. Every recurring task, every script, exact commands, what to do with results, and how to fix problems.
+This schedule separates data collection, clinical review, code verification,
+and release. External reports create review queues; they never become curated
+clinical truth automatically.
 
-**For Claude Code:** If you're an AI agent running maintenance, follow each task sequentially. After running each command, check the output against the "Success looks like" criteria. If it doesn't match, follow the "If it fails" instructions before moving on.
+## Operating rules
 
----
+1. Verify identity and claim content, not merely identifier existence.
+2. Prefer primary FDA/NIH/NLM/GSRS/ClinicalTrials sources.
+3. Make one reviewed data/code change at a time with a regression test.
+4. Use the shared project Python runtime for audit tools.
+5. Run tests only through `scripts/test.sh`.
+6. Publish only through snapshot + release owners.
+7. Never let an automated reviewer edit and commit safety data unattended.
 
-## Quick Reference
+For audit commands in this document, initialize the pinned runtime once:
 
-| Frequency          | Task                                                                     | Time    | Priority |
-| ------------------ | ------------------------------------------------------------------------ | ------- | -------- |
-| **Weekly**         | [1. FDA recall sync](#1-fda-recall--enforcement-sync)                    | ~2 min  | Critical |
-| **Weekly**         | [2. Manufacturer violations sync](#2-manufacturer-violations-sync)       | ~1 min  | High     |
-| **Monthly**        | [3. CAERS adverse event refresh](#3-caers-adverse-event-refresh)         | ~3 min  | High     |
-| **Monthly**        | [4. UNII cache refresh](#4-unii-cache-refresh)                           | ~1 min  | Medium   |
-| **Monthly**        | [5. Citation content verification](#5-citation-content-verification)     | ~10 min | Critical |
-| **Monthly**        | [6. SUPPai re-ingestion check](#6-suppai-re-ingestion-check)             | ~5 min  | Medium   |
-| **Quarterly**      | [7. Drug label interaction mining](#7-drug-label-interaction-mining)     | ~5 min  | Medium   |
-| **Quarterly**      | [8. Drug class expansion check](#8-drug-class-expansion-check)           | ~5 min  | Medium   |
-| **Quarterly**      | [9. Clinical evidence discovery](#9-clinical-evidence-discovery)         | ~15 min | Medium   |
-| **Quarterly**      | [10. ChEMBL bioactivity enrichment](#10-chembl-bioactivity-enrichment)   | ~10 min | Low      |
-| **Quarterly**      | [11. IQM alias expansion](#11-iqm-alias-expansion)                       | ~10 min | Low      |
-| **Quarterly**      | [12. Botanical enrichment](#12-botanical-enrichment)                     | ~10 min | Low      |
-| **Before release** | [13. Preflight checks](#13-preflight-checks)                             | ~1 min  | Critical |
-| **Before release** | [14. Full pipeline run](#14-full-pipeline-run)                           | ~30 min | Critical |
-| **Before release** | [15. Enrichment contract validation](#15-enrichment-contract-validation) | ~1 min  | Critical |
-| **Before release** | [16. Coverage gate](#16-coverage-gate)                                   | ~1 min  | Critical |
-| **Before release** | [17. Shadow score comparison](#17-shadow-score-comparison)               | ~5 min  | High     |
-| **Before release** | [18. Build final DB](#18-build-final-db)                                 | ~10 min | Critical |
-| **Before release** | [19. DB integrity check](#19-db-integrity-check)                         | ~2 min  | Critical |
-| **Before release** | [20. Build interaction DB](#20-build-interaction-db)                     | ~3 min  | Critical |
-| **Before release** | [21. Assemble release artifact](#21-assemble-release-artifact)           | ~2 min  | Critical |
-| **Before release** | [22. Test suite](#22-test-suite)                                         | ~5 min  | Critical |
-| **After release**  | [23. Sync to Supabase](#23-sync-to-supabase)                             | ~10 min | Critical |
-| **After release**  | [24. Regression snapshot](#24-regression-snapshot)                       | ~2 min  | High     |
+```bash
+source scripts/python_env.sh
+```
 
----
+## Schedule at a glance
 
-## Weekly Tasks
+| Frequency | Work | Blocking standard |
+|---|---|---|
+| Weekly | FDA/DEA signal collection and review | Every unresolved signal is reviewed or remains explicitly open |
+| Weekly | Manufacturer enforcement review | Exact/approved manufacturer identity and applicability verified |
+| Monthly | CAERS refresh/review | New material signals reviewed; no automated causality claim |
+| Monthly | Citation content verification | Zero ghost references in changed/released scope |
+| Monthly | UNII/identity quality review | Exact GSRS identity or governed null; no forced broad match |
+| Quarterly | RDA/UL and regulatory reference audit | Primary-source values, units, group, and stamp parity verified |
+| Quarterly | Interaction/evidence discovery | Candidates remain non-production until content review |
+| Quarterly | IQM alias/species/collision audit | No unsafe cross-identity alias introduced |
+| Before release | Full strict pipeline + candidate snapshot + release gates | All intended products and artifacts pass |
+| After release | Manifest, Supabase, Flutter, and retention review | Published versions/checksums align |
 
-### 1. FDA Recall & Enforcement Sync
+## Weekly
 
-**What:** Downloads new FDA supplement recalls, enforcement actions, and DEA scheduling. Updates `banned_recalled_ingredients.json`.
-
-**Why:** A recalled supplement could be in your app right now showing "SAFE."
+### 1. FDA and DEA regulatory signals
 
 ```bash
 bash scripts/run_fda_sync.sh
 ```
 
-**Options:**
+Optional wider lookback:
 
 ```bash
-bash scripts/run_fda_sync.sh --days 14      # Look back 14 days
-bash scripts/run_fda_sync.sh --no-commit     # Report only, don't auto-commit
-bash scripts/run_fda_sync.sh --no-claude     # Skip AI review
+bash scripts/run_fda_sync.sh --days 30
 ```
 
-**Success looks like:**
+The command is report-only and writes a timestamped
+`scripts/fda_sync_report_*.json`.
 
-- Output file: `scripts/reports/fda_weekly_sync_report.json`
-- Report shows 0-3 new entries (normal week) or 10-20 (enforcement wave)
-- No API errors in output
+- Exit 0: no new/stale records require review.
+- Exit 3: report succeeded and review is required.
+- Exit 1/2: operational or argument failure.
 
-**What to do with results:**
+For every candidate:
 
-1. Open the report: `cat scripts/reports/fda_weekly_sync_report.json | python3 -m json.tool | head -50`
-2. For each new entry, verify:
-   - Is the ingredient name correct? (not a brand name or product name)
-   - Is the status right? (`banned`, `recalled`, `high_risk`, `watchlist`)
-   - Is the severity appropriate for the harm level?
-3. If entries look correct → `git add scripts/data/banned_recalled_ingredients.json && git commit -m "chore: FDA weekly sync $(date +%Y-%m-%d)"`
-4. If an entry looks wrong → edit it manually, then commit
-5. After committing → run `python3 -m pytest scripts/tests/test_banned_schema_v3.py -v` to verify schema
+1. Open its linked primary FDA/DEA source.
+2. Verify whether it is a substance, a product-specific recall, or irrelevant.
+3. Verify aliases, status, recall scope, dates, US applicability, and whether a
+   historical action is still active.
+4. Check existing curated entries before adding anything.
+5. Add a focused data regression before changing
+   `banned_recalled_ingredients.json`.
+6. Run the banned/recalled audit and relevant fast tests.
+7. Review the diff and metadata before approval.
 
-**If it fails:**
+The collector does not modify or commit the curated database.
 
-- `OPENFDA_API_KEY` missing → add to `.env` at repo root
-- 429 rate limit → wait 1 hour, retry
-- Schema mismatch → check `DATABASE_SCHEMA.md` section 5 for the current schema
+### 2. Manufacturer enforcement signals
 
----
-
-### 2. Manufacturer Violations Sync
-
-**What:** Pulls FDA warning letters against supplement manufacturers. Updates `manufacturer_violations.json` for Section D brand trust scoring.
+Start in report/dry-run mode supported by the current tool:
 
 ```bash
-python3 scripts/api_audit/fda_manufacturer_violations_sync.py
+"$PG_PYTHON" scripts/api_audit/fda_manufacturer_violations_sync.py --help
 ```
 
-**Success looks like:**
+Review every proposed manufacturer match. A warning letter for a similarly
+named company must not penalize an unrelated brand. Only normalized exact or
+approved-family aliases may affect scoring.
 
-- Script completes without errors
-- Reports how many new violations found
-
-**What to do with results:**
-
-1. Review each new violation — is it a real supplement manufacturer? (Some FDA letters are for food/cosmetic companies)
-2. If valid → commit the updated `manufacturer_violations.json`
-3. Run `python3 -m pytest scripts/tests/ -k "manufacturer" -v` to verify
-
-**If it fails:**
-
-- Same API key fix as task 1
-- Duplicate manufacturer name → check existing entries first
-
----
-
-## Monthly Tasks
-
-### 3. CAERS Adverse Event Refresh
-
-**What:** Re-downloads FDA CAERS bulk data and regenerates adverse event signals. Updates the B8 scoring penalty data.
+Verification:
 
 ```bash
-python3 scripts/api_audit/ingest_caers.py --refresh
+scripts/test.sh fast -k manufacturer
 ```
 
-**Success looks like:**
+## Monthly
 
-- Downloads ~8.5 MB zip
-- Output: `scripts/data/caers_adverse_event_signals.json`
-- Shows "Ingredients with signals: 159+" and "Supplement reports: 48,000+"
-- Top 15 ingredients listed with serious report counts
-
-**What to do with results:**
-
-1. Compare signal counts to last run — any big jumps?
-   ```bash
-   python3 -c "
-   import json
-   with open('scripts/data/caers_adverse_event_signals.json') as f:
-       d = json.load(f)
-   strong = [k for k, v in d['signals'].items() if v['signal_strength'] == 'strong']
-   print(f'Strong signals: {len(strong)}')
-   for s in sorted(strong): print(f'  {s}: {d[\"signals\"][s][\"serious_reports\"]} serious')
-   "
-   ```
-2. Check for NEW strong signals (ingredients that crossed the 100-serious threshold)
-3. Any new strong signal → check if it's in `banned_recalled_ingredients.json`. If not, consider adding it.
-4. Commit: `git add scripts/data/caers_adverse_event_signals.json && git commit -m "chore: CAERS monthly refresh $(date +%Y-%m-%d)"`
-5. Run tests: `python3 -m pytest scripts/tests/test_caers_integration.py -v`
-
-**If it fails:**
-
-- Download URL changed → check `https://api.fda.gov/download.json` under `/food/event`
-- Match rate drops below 25% → OpenFDA may have changed product name format; update `MULTI_INGREDIENT_KEYWORDS` in `ingest_caers.py`
-
----
-
-### 4. UNII Cache Refresh
-
-**What:** Re-downloads the FDA UNII substance registry (172K+ substances) for offline lookups.
+### 3. CAERS adverse-event signals
 
 ```bash
-python3 scripts/api_audit/build_unii_cache.py --refresh
+"$PG_PYTHON" scripts/api_audit/ingest_caers.py --help
 ```
 
-**Success looks like:**
-
-- Downloads ~3.4 MB zip
-- Validation: 4/4 known substances pass
-- Output: `scripts/data/fda_unii_cache.json` (gitignored, ~15 MB)
-
-**What to do with results:**
-
-- No action needed — the cache is used automatically by `verify_unii.py` and `unii_cache.py`
-- If substance count increased significantly → run IQM alias expansion (task 11) to fill newly-available UNIIs
-
-**If it fails:**
-
-- URL changed → check `https://api.fda.gov/download.json` under `/other/unii`
-- Corrupt cache → `rm scripts/data/fda_unii_cache.json` and re-run
-
----
-
-### 5. Citation Content Verification
-
-**What:** Verifies every PMID across all data files matches the claimed topic (not just exists).
+Refresh only through a supported explicit option. Compare the resulting signal
+distribution to the previous reviewed artifact. CAERS is surveillance evidence,
+not proof of causality; unusual growth, identity collisions, and reporting-
+bias changes require review before scoring data moves.
 
 ```bash
-python3 scripts/api_audit/verify_all_citations_content.py
+scripts/test.sh fast -k caers
 ```
 
-**Success looks like:**
-
-- Output: `76/76 pass, 0 mismatch` (or higher if new PMIDs added)
-- 100% pass rate is the ONLY acceptable result
-
-**What to do with results:**
-
-1. If 100% pass → no action needed
-2. If ANY PMID fails:
-   - Look up the failed PMID: `https://pubmed.ncbi.nlm.nih.gov/<PMID>/`
-   - Read the paper title — does it match the claimed interaction/evidence?
-   - If wrong → find the correct PMID via PubMed search
-   - Replace ONE PMID at a time in the data file
-   - Re-run this script to verify the fix
-   - NEVER batch-replace PMIDs
-3. After fixing → commit: `git commit -m "fix: replace hallucinated PMID <old> with verified <new>"`
-
-**Mandatory triggers:** Run after ANY change to: `curated_interactions_v1.json`, `med_med_pairs_v1.json`, `medication_depletions.json`, `backed_clinical_studies.json`
-
-**If it fails:**
-
-- `PUBMED_API_KEY` missing → add to `.env`
-- Rate limited → reduce batch size or wait
-
----
-
-### 6. SUPPai Re-ingestion Check
-
-**What:** Re-ingests the SUPPai research pairs database and checks if coverage improved since last run.
+### 4. Citation content verification
 
 ```bash
-python3 scripts/ingest_suppai.py
+"$PG_PYTHON" scripts/api_audit/verify_all_citations_content.py
+"$PG_PYTHON" scripts/api_audit/verify_backed_studies_citations.py
+"$PG_PYTHON" scripts/api_audit/verify_interaction_rules_citations.py
 ```
 
-**Success looks like:**
+Any mismatch is blocking in the affected release scope. Read the title,
+abstract/full context, population, intervention, comparator, outcome, and
+species. Replace a wrong PMID one claim at a time; never batch-substitute IDs.
 
-- Shows research pair count (30K+ as of Sprint 22)
-- Shows supplement anchor count (537+)
-
-**What to do with results:**
-
-1. If pair count increased → IQM aliases may need updating to capture new matches
-2. If pair count decreased → data format changed; investigate
-3. Commit if changed: `git add scripts/data/curated_interactions/ && git commit -m "chore: SUPPai re-ingestion"`
-
----
-
-## Quarterly Tasks
-
-### 7. Drug Label Interaction Mining
-
-**What:** Scans FDA drug labels for supplement-drug interaction mentions. Finds gaps in our interaction rules.
+### 5. UNII and canonical identity quality
 
 ```bash
-# Download data (first time or refresh — 130 MB per partition, 3 is enough)
-mkdir -p scripts/data/fda_drug_labels
-cd scripts/data/fda_drug_labels
-for i in 0001 0002 0003; do
-  curl -L -o "drug-label-${i}-of-0013.json.zip" \
-    "https://download.open.fda.gov/drug/label/drug-label-${i}-of-0013.json.zip"
-  unzip -o "drug-label-${i}-of-0013.json.zip"
-done
-cd ../../..
-
-# Run the miner
-python3 scripts/api_audit/mine_drug_label_interactions.py
+"$PG_PYTHON" scripts/api_audit/build_unii_cache.py --help
+"$PG_PYTHON" scripts/api_audit/verify_unii.py --help
+"$PG_PYTHON" scripts/api_audit/audit_unii_data_quality.py --help
+"$PG_PYTHON" scripts/api_audit/audit_unii_same_tier_conflicts.py --help
 ```
 
-**Success looks like:**
-
-- Output: `scripts/reports/drug_label_interaction_candidates.json`
-- Shows "Unique supplements: 40+, Already in rules: 36+ (90%+)"
-- Lists new candidates with drug names and context
-
-**What to do with results:**
-
-1. Open the report: `cat scripts/reports/drug_label_interaction_candidates.json | python3 -m json.tool | head -100`
-2. Focus on `new_candidates` section — these are gaps in your rules
-3. For each new candidate:
-   - Read the `context` — is it a REAL interaction warning or just a passing mention?
-   - Passing mention (e.g., "grape seed oil" in a cosmetic ingredient list) → SKIP
-   - Real interaction (e.g., "omega-3 may prolong bleeding time") → ADD RULE
-4. To add a rule: edit `scripts/data/ingredient_interaction_rules.json`, follow the existing rule format (see `RULE_IQM_FISH_OIL_BLEEDING` as a template)
-5. After adding rules → verify: `python3 scripts/api_audit/verify_interactions.py`
-6. Re-run the miner to confirm the gap closed
-
-**If it fails:**
-
-- Memory error → use `--file` flag to process one partition at a time
-- No files found → check `scripts/data/fda_drug_labels/` directory exists
-
----
-
-### 8. Drug Class Expansion Check
-
-**What:** Verifies all drug classes referenced by interaction rules actually exist.
+An exact GSRS synonym may be accepted after content verification. Ingredient
+families, blends, tissues, or source extracts that lack one exact GSRS
+substance keep a governed null instead of a misleading UNII.
 
 ```bash
-# List current classes
-python3 -c "
-import json
-with open('scripts/data/drug_classes.json') as f:
-    d = json.load(f)
-classes = d.get('classes', {})
-print(f'Drug classes: {len(classes)}')
-for cid in sorted(classes.keys()):
-    print(f'  {cid}')
-"
-
-# Check for orphaned references (rules referencing non-existent classes)
-python3 -c "
-import json
-with open('scripts/data/ingredient_interaction_rules.json') as f:
-    rules = json.load(f)
-with open('scripts/data/drug_classes.json') as f:
-    classes = set(json.load(f).get('classes', {}).keys())
-missing = set()
-for r in rules['interaction_rules']:
-    for dc in r.get('drug_class_rules', []):
-        cid = 'class:' + dc['drug_class_id']
-        if cid not in classes:
-            missing.add(dc['drug_class_id'])
-if missing:
-    print(f'MISSING CLASSES: {missing}')
-else:
-    print('All referenced drug classes exist.')
-"
+scripts/test.sh fast -k unii
 ```
 
-**Success looks like:**
-
-- "All referenced drug classes exist."
-- 28+ drug classes listed
-
-**What to do with results:**
-
-1. If all classes exist → no action needed
-2. If missing classes found:
-   ```bash
-   python3 scripts/api_audit/seed_drug_classes.py --class-id <MISSING_CLASS_NAME>
-   ```
-3. After adding → run: `python3 -m pytest scripts/tests/test_drug_classes_schema.py -v`
-4. Also update `SchemaIds.dart` in Flutter if users need to select the new class
-
----
-
-### 9. Clinical Evidence Discovery
-
-**What:** Queries ClinicalTrials.gov for completed supplement trials. Cross-refs with PubMed for published results.
+### 6. Notes and safety-language alignment
 
 ```bash
-python3 scripts/api_audit/discover_clinical_evidence.py discover --min-trials 3
+"$PG_PYTHON" scripts/api_audit/audit_notes_alignment.py --all
+"$PG_PYTHON" scripts/api_audit/audit_safety_oneliner_tone.py
+"$PG_PYTHON" scripts/api_audit/audit_standardname_safety_separation.py
 ```
 
-**Success looks like:**
+Structured fields own logic; prose must explain them and must not create an
+extra matcher or stronger clinical claim.
 
-- Shows candidates with NCT IDs, enrollment, PMIDs
-- Typical: 5-15 new candidates per quarter
+## Quarterly
 
-**What to do with results:**
-
-1. Review each candidate — does the ingredient have enough evidence to add to `backed_clinical_studies.json`?
-2. If yes, use `--apply` flag to auto-add the skeleton entry
-3. **CRITICAL:** After `--apply`, run `python3 scripts/api_audit/verify_all_citations_content.py` to verify all new PMIDs
-4. Manually review each added entry for:
-   - `study_type` classification (rct_single, observational, etc.)
-   - `effect_direction` (positive_strong, mixed, null, etc.)
-   - `key_endpoints` accuracy
-5. Commit one entry at a time if doing manual additions
-
----
-
-### 10. ChEMBL Bioactivity Enrichment
-
-**What:** Queries ChEMBL for mechanism-of-action data on IQM ingredients. Adds pharmacological context.
+### 7. RDA/AI/UL references
 
 ```bash
-python3 scripts/api_audit/enrich_chembl_bioactivity.py
+"$PG_PYTHON" scripts/api_audit/verify_rda_uls.py --help
+"$PG_PYTHON" scripts/audit_rda_ul_reference_stamps.py --products-dir scripts/products
 ```
 
-**What to do with results:**
+Verify value, unit, demographic group, source version, supplemental-only basis,
+and form lineage. Special folate review must preserve these rules:
 
-- Review suggested enrichments — is the mechanism of action correct for the supplement context (not the pharmaceutical context)?
-- ChEMBL data is pharma-oriented; sometimes the mechanism is for a different use
-- Add verified mechanisms to IQM entries manually
+- adequacy uses minimum/recommended exposure
+- safety uses maximum exposure
+- explicit folinic DFE may support adequacy without a folic-acid UL
+- bare mcg folinic/folinate/leucovorin is adequacy-unknown and not scoreable
+- absent/inconsistent `%DV` does not authorize a conversion
+- unknown folate lineage is reviewable, not guessed
 
----
-
-### 11. IQM Alias Expansion
-
-**What:** Find IQM entries missing aliases/UNII codes and fill them.
+### 8. Clinical evidence discovery
 
 ```bash
-# Check coverage
-python3 -c "
-import json
-with open('scripts/data/ingredient_quality_map.json') as f:
-    iqm = json.load(f)
-no_alias = [k for k,v in iqm.items() if k!='_metadata' and not v.get('aliases')]
-no_unii = [k for k,v in iqm.items() if k!='_metadata' and not (v.get('external_ids',{}) or {}).get('unii')]
-print(f'No aliases: {len(no_alias)}/{len(iqm)-1}')
-print(f'No UNII: {len(no_unii)}/{len(iqm)-1}')
-"
-
-# Verify UNII mappings (uses local cache + GSRS API)
-python3 scripts/api_audit/verify_unii.py --file scripts/data/ingredient_quality_map.json --mode iqm
-
-# Audit alias accuracy
-python3 scripts/api_audit/audit_alias_accuracy.py
+"$PG_PYTHON" scripts/api_audit/discover_clinical_evidence.py --help
+"$PG_PYTHON" scripts/api_audit/verify_clinical_trials.py --help
+"$PG_PYTHON" scripts/api_audit/audit_clinical_evidence_strength.py --help
 ```
 
-**What to do with results:**
+Discovery output is a candidate queue. Before any production entry, verify NCT
+and PMID content, population, dose/form, endpoints, status, enrollment, and
+whether results actually support the scored claim.
 
-- `NAME_EXACT` and `SYNONYM_EXACT` matches → safe to batch-add as aliases
-- `TOKEN_OVERLAP_80` matches → **manual chemistry review required** (e.g., "linolenic acid" vs "gamma_linolenic_acid" are different compounds)
-- New UNII codes → add to `entry["external_ids"]["unii"]`
-- Run tests after: `python3 -m pytest scripts/tests/test_ingredient_quality_map_schema.py -v`
-
----
-
-### 12. Botanical Enrichment
-
-**What:** Enriches botanical ingredient entries with taxonomy, traditional use, and standardization data.
+### 9. Interaction sources and drug classes
 
 ```bash
-python3 scripts/api_audit/enrich_botanicals.py
+"$PG_PYTHON" scripts/api_audit/mine_drug_label_interactions.py --help
+"$PG_PYTHON" scripts/api_audit/verify_interactions.py --help
 ```
 
-**What to do with results:**
+Passing mentions, excipient references, and adjacent ingredients are not
+interactions. New rules require a source-backed mechanism/clinical warning,
+exact supplement identity, tested drug-class references, and Flutter schema
+coordination when a new user-selectable class is introduced.
 
-- Review each botanical enrichment for accuracy
-- Verify genus/species names are correct
-- Do NOT auto-apply — review each entry individually
-
----
-
-## Before Every Release
-
-### 13. Preflight Checks
-
-**What:** Validates data file consistency, detects schema mismatches, and checks for known issues before running the pipeline.
+### 10. IQM identity and alias health
 
 ```bash
-python3 scripts/preflight.py
+"$PG_PYTHON" scripts/api_audit/audit_alias_accuracy.py
+"$PG_PYTHON" scripts/api_audit/audit_species_alignment.py
+"$PG_PYTHON" scripts/api_audit/iqm_identifier_sweep.py --help
 ```
 
-**Success looks like:** All checks pass, no warnings except intentional dual-classifications.
-
-**If it fails:** Fix the reported issue before proceeding. Do NOT skip preflight.
-
----
-
-### 14. Full Pipeline Run
-
-**What:** Run Clean → Enrich → Score on the latest dataset.
+Token overlap is a review hint, never safe auto-identity. Check salts, isomers,
+species, source botanicals, marker compounds, brand tokens, and shared aliases.
 
 ```bash
-python3 scripts/run_pipeline.py <dataset_dir>
+scripts/test.sh fast -k "ingredient_quality_map or alias or identity"
 ```
 
-**Success looks like:**
-
-- No errors in output
-- All products processed
-- Score distribution is reasonable
-
-**What to do with results:**
-
-1. Check the enrichment summary in `<output>/reports/`
-2. Check the scoring summary
-3. Compare verdict distribution to previous run:
-   ```bash
-   python3 -c "
-   import json
-   with open('<output>/scored_output.json') as f:
-       products = json.load(f)
-   from collections import Counter
-   verdicts = Counter(p.get('verdict','?') for p in products)
-   for v, c in verdicts.most_common():
-       print(f'  {v}: {c}')
-   "
-   ```
-
----
-
-### 15. Enrichment Contract Validation
-
-**What:** Verifies the enricher output matches the expected contract schema.
+### 11. External bioactivity and botanical enrichment
 
 ```bash
-python3 scripts/enrichment_contract_validator.py <enriched_file>
+"$PG_PYTHON" scripts/api_audit/enrich_chembl_bioactivity.py --help
+"$PG_PYTHON" scripts/api_audit/enrich_botanicals.py --help
+"$PG_PYTHON" scripts/api_audit/verify_botanical_composition.py --help
 ```
 
-**Success looks like:** All contract checks pass.
+These tools generate enrichment candidates. Pharmaceutical bioactivity,
+animal-only PK, traditional use, and ingredient-composition claims must not be
+promoted into human clinical effectiveness without appropriate evidence.
 
-**If it fails:** The enricher produced unexpected output. Check enricher logs for the failing product.
+## Before every release
 
----
+### 12. Code and data review
 
-### 16. Coverage Gate
+- Confirm the intended branch/commit.
+- Review all clinical/reference-data diffs.
+- Confirm every identifier is content-verified.
+- Confirm no deprecated `/80` export field is reintroduced.
+- Confirm scoring config changes have behavioral tests.
+- Confirm expected per-product changes are named.
 
-**What:** Checks that quality thresholds are met (mapping rate, score distribution, etc.).
+### 13. Test profiles
+
+During development:
 
 ```bash
-python3 scripts/coverage_gate.py <scored_file>
+scripts/test.sh fast
 ```
 
-**Success looks like:** "PASS" with coverage ≥ 99.5%.
-
-**If it fails:** Report shows which metric is below threshold. Fix the pipeline issue, don't lower the threshold.
-
----
-
-### 17. Shadow Score Comparison
-
-**What:** Compares current scores against a baseline to detect unexpected shifts.
+Before release:
 
 ```bash
-python3 scripts/shadow_score_comparison.py <current_scored> <baseline_scored>
+scripts/test.sh release
+scripts/test.sh full
 ```
 
-**What to do with results:**
+Do not substitute direct pytest invocations; the runner owns Python 3.13 and
+the heavy-test profiles.
 
-1. Products with score changes > 5 points → investigate why
-2. If change is from B8 CAERS → expected (new penalty)
-3. If change is unexplained → check what data files changed since baseline
+### 14. Pipeline and candidate snapshot
 
----
-
-### 18. Build Final DB
-
-**What:** Builds the SQLite database and detail blobs for Flutter and Supabase.
+Full corpus and release:
 
 ```bash
-python3 scripts/build_final_db.py <scored_input> <output_dir>
+bash batch_run_all_datasets.sh
 ```
 
-**Success looks like:**
-
-- `pharmaguide_core.db` created
-- `detail_blobs/` directory with one JSON per product
-- `export_manifest.json` with row counts and checksums
-
-**What to do with results:**
-
-1. Run integrity check (task 19)
-2. Spot-check a few products: `python3 -c "import sqlite3; ..."`
-
----
-
-### 19. DB Integrity Check
-
-**What:** Validates final SQLite schema and data.
+If compute outputs are already current:
 
 ```bash
-python3 scripts/db_integrity_sanity_check.py
+bash scripts/rebuild_dashboard_snapshot.sh
+bash scripts/release_full.sh
 ```
 
-**Success looks like:**
+Targeted work defaults to pipeline-only and must be reviewed before the
+snapshot/release commands.
 
-- Column count = 90
-- No NULL in required fields
-- Score ranges valid (0-80 for score_80, 0-100 for score_100)
+### 15. Artifact review
 
----
+Required review includes:
 
-### 20. Build Interaction DB
+- product count and contract quarantine count
+- zero systemic contract failures
+- per-product score/status/verdict/module/pillar deltas
+- banned/recalled and regional applicability changes
+- allergen and RDA/UL changes
+- mapped/unmatched counts and classification routes
+- export manifest/version/checksum consistency
+- absence of deprecated `/80` fields
 
-**What:** Builds the interaction database SQLite artifact for Flutter.
+The scoring snapshot can be re-frozen only after this review.
 
-```bash
-bash scripts/rebuild_interaction_db.sh --offline --import
-```
+### 16. Release gates
 
-**Or step by step:**
+`release_full.sh` owns and orders publication gates. Do not run Supabase sync or
+copy Flutter DB files manually to work around a failure. Fix the first failing
+gate and rerun release; current steps auto-skip by freshness/checksum.
 
-```bash
-python3 scripts/build_interaction_db.py
-python3 scripts/release_interaction_artifact.py
-```
+## After release
 
-**Success looks like:**
+### 17. Verify distribution alignment
 
-- `interaction_db.sqlite` created with 129+ rules
-- Checksum matches
+Confirm:
 
-**What to do with results:**
+- release process exited zero
+- Supabase sync completed or was intentionally skipped/dry-run
+- Flutter bundle parity passed or Flutter was intentionally skipped
+- catalog and interaction manifest versions/checksums match
+- the local Flutter bundle commit is reviewed and pushed deliberately
+- cleanup did not report an unresolved alignment problem
 
-- Copy to Flutter: `cp scripts/interaction_db_output/interaction_db.sqlite "/Users/seancheick/PharmaGuide ai/assets/db/"`
-- Run Flutter interaction tests
+### 18. Retain evidence
 
----
+Keep the timestamped batch summary, release audit records, reviewed scoring
+snapshot change, and relevant external-source report. Archive or remove stale
+temporary research after the batch ships so it cannot become implementation
+truth.
 
-### 21. Assemble Release Artifact
+## Incident triggers
 
-**What:** Packages the final DB, manifest, and metadata into a release bundle.
+Run the relevant maintenance work immediately, outside the cadence, when:
 
-```bash
-python3 scripts/assemble_final_db_release.py <build_output_dir>
-```
+- FDA/DEA issues a material supplement action
+- a citation or identifier is challenged
+- score/verdict distribution shifts unexpectedly
+- mapped coverage or product count drops
+- a stage manifest reports unowned/stale files
+- catalog/Flutter/Supabase checksums diverge
+- a new schema/config version lands
+- a clinical source changes its recommendation or labeling convention
 
-**Or for all datasets:**
-
-```bash
-python3 scripts/build_all_final_dbs.py
-```
-
-**Success looks like:**
-
-- Release artifact created in `scripts/dist/`
-- Manifest includes checksums and row counts
-
----
-
-### 22. Test Suite
-
-**What:** Run all tests.
-
-```bash
-python3 -m pytest scripts/tests/ -v
-```
-
-**Success looks like:** 598+ tests pass. Only known failures are Python 3.9 `datetime.UTC` import errors (41 files, not data issues).
-
-**If new tests fail:**
-
-1. Read the error message — is it a test bug or a real data issue?
-2. Data issue → fix the data, re-run
-3. Test bug → fix the test assertion
-4. NEVER skip failing tests for a release
-
----
-
-## After Release
-
-### 23. Sync to Supabase
-
-**What:** Uploads the built DB and detail blobs to Supabase for the Flutter app.
-
-```bash
-# Dry run first
-python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
-
-# If dry run looks good
-python3 scripts/sync_to_supabase.py <build_output_dir>
-```
-
-**Success looks like:**
-
-- All products uploaded
-- All detail blobs uploaded
-- Zero sync errors
-
-**What to do with results:**
-
-1. Check the sync report for errors
-2. Verify a product in the Flutter app — does the score match?
-3. If sync fails mid-way → it's safe to re-run (idempotent)
-
----
-
-### 24. Frozen-Product Regression Gate
-
-**What:** Compares current scored products with the reviewed frozen-product baseline.
-
-```bash
-bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
-```
-
-**What to do with results:**
-
-- Unexpected per-product drift blocks the release
-- Intentional drift is reviewed and frozen with `scripts/tests/freeze_contract_snapshots.py`
-
----
-
-## API Audit Scripts Reference
-
-Run these when you modify the corresponding data file.
-
-| Script                                | Data File                          | External API          | When to Run               |
-| ------------------------------------- | ---------------------------------- | --------------------- | ------------------------- |
-| `verify_cui.py`                       | `ingredient_quality_map.json`      | UMLS                  | After IQM changes         |
-| `verify_pubchem.py`                   | `ingredient_quality_map.json`      | PubChem               | After adding CAS/CID      |
-| `verify_unii.py`                      | `ingredient_quality_map.json`      | GSRS / local cache    | After IQM changes         |
-| `verify_rda_uls.py`                   | `rda_optimal_uls.json`             | USDA FoodData Central | After dosing changes      |
-| `verify_efsa.py`                      | `harmful_additives.json`           | EFSA                  | After additive changes    |
-| `verify_clinical_trials.py`           | `backed_clinical_studies.json`     | ClinicalTrials.gov    | After evidence changes    |
-| `verify_interactions.py`              | `curated_interactions_v1.json`     | RxNorm + UMLS         | After interaction changes |
-| `verify_depletion_timing_pmids.py`    | `medication_depletions.json`       | PubMed                | After depletion changes   |
-| `verify_pubmed_references.py`         | Multiple files                     | PubMed                | After any PMID changes    |
-| `verify_comptox.py`                   | IQM / harmful_additives            | EPA CompTox           | After adding chemical IDs |
-| `verify_all_citations_content.py`     | All PMID files                     | PubMed                | **Before EVERY release**  |
-| `audit_banned_recalled_accuracy.py`   | `banned_recalled_ingredients.json` | openFDA               | Before release            |
-| `audit_clinical_evidence_strength.py` | `backed_clinical_studies.json`     | PubMed                | Quarterly                 |
-| `audit_clinical_sources.py`           | `backed_clinical_studies.json`     | —                     | Quarterly                 |
-| `audit_alias_accuracy.py`             | `ingredient_quality_map.json`      | —                     | After alias changes       |
-| `audit_notes_alignment.py`            | Multiple data files                | —                     | Before release            |
-| `normalize_clinical_pubmed.py`        | `backed_clinical_studies.json`     | PubMed                | After evidence changes    |
-
----
-
-## DSLD API Data Sync
-
-**What:** Downloads fresh product data from the NIH DSLD API for processing.
-
-```bash
-# Sync new/updated products
-python3 scripts/dsld_api_sync.py --output <dataset_dir>
-
-# Check API status
-python3 scripts/dsld_api_client.py --status
-```
-
-**When to run:** Before a new pipeline run if you want the latest DSLD data.
-
----
-
-## API Keys
-
-All keys are in `.env` at the repo root. **Never commit this file.**
-
-| Key               | Source                                               | Used By                                                                  |
-| ----------------- | ---------------------------------------------------- | ------------------------------------------------------------------------ |
-| `UMLS_API_KEY`    | [UMLS License](https://uts.nlm.nih.gov/)             | verify_cui.py, verify_interactions.py                                    |
-| `OPENFDA_API_KEY` | [openFDA](https://open.fda.gov/apis/authentication/) | fda_weekly_sync.py, fda_manufacturer_violations_sync.py, ingest_caers.py |
-| `PUBMED_API_KEY`  | [NCBI](https://www.ncbi.nlm.nih.gov/account/)        | All PubMed verification scripts                                          |
-
----
-
-## Troubleshooting
-
-### "enricher takes too long"
-
-- Rebuild UNII cache: `python3 scripts/api_audit/build_unii_cache.py --refresh`
-- Check for API rate limits (429 errors in `scripts/logs/`)
-
-### "test_score_supplements fails with datetime.UTC"
-
-- You're on Python 3.9. Use Python 3.13 for full test coverage.
-- This is a runtime issue, not a data issue. The 41 affected test files all pass on 3.13.
-
-### "CAERS signals file is empty or missing"
-
-- Re-run: `python3 scripts/api_audit/ingest_caers.py --refresh`
-- The raw data is in `scripts/data/fda_caers/` (gitignored — must download locally)
-
-### "UNII cache not found"
-
-- Run: `python3 scripts/api_audit/build_unii_cache.py`
-- Gitignored — each machine builds its own cache
-
-### "Drug label files missing"
-
-- Download partitions from `https://download.open.fda.gov/drug/label/`
-- Place in `scripts/data/fda_drug_labels/` (gitignored, ~130 MB per file)
-
-### "Score distribution shifted unexpectedly"
-
-- Run shadow comparison: `python3 scripts/shadow_score_comparison.py <current> <baseline>`
-- If B8 CAERS is the cause → expected, verify via dashboard CAERS tab
-- If unexplained → check what data files changed: `git diff --stat HEAD~5`
-
-### "Coverage gate fails"
-
-- Check which metric is below threshold
-- Usually: unmapped ingredients → add to IQM or update aliases
-- Never lower the threshold to pass
-
-### "Supabase sync errors"
-
-- Check `SUPABASE_URL` and `SUPABASE_SERVICE_KEY` in `.env`
-- Re-run is safe (idempotent uploads)
-- If specific products fail → check their detail blob JSON for invalid characters
-
----
-
-## Full Maintenance Cycle (copy-paste checklist)
-
-Run this monthly or before any release:
-
-```bash
-# 1. Weekly syncs
-bash scripts/run_fda_sync.sh
-python3 scripts/api_audit/fda_manufacturer_violations_sync.py
-
-# 2. Monthly refreshes
-python3 scripts/api_audit/ingest_caers.py --refresh
-python3 scripts/api_audit/build_unii_cache.py --refresh
-python3 scripts/api_audit/verify_all_citations_content.py
-
-# 3. Preflight
-python3 scripts/preflight.py
-
-# 4. Pipeline run
-python3 scripts/run_pipeline.py <dataset_dir>
-
-# 5. Quality gates
-python3 scripts/enrichment_contract_validator.py <enriched_file>
-python3 scripts/coverage_gate.py <scored_file>
-
-# 6. Build
-python3 scripts/build_final_db.py <scored_input> <output_dir>
-python3 scripts/db_integrity_sanity_check.py
-bash scripts/rebuild_interaction_db.sh --offline --import
-
-# 7. Tests
-python3 -m pytest scripts/tests/ -v
-
-# 8. Deploy
-python3 scripts/sync_to_supabase.py <build_output_dir> --dry-run
-python3 scripts/sync_to_supabase.py <build_output_dir>
-
-# 9. Frozen-product regression gate
-bash scripts/test.sh fast scripts/tests/test_scoring_snapshot_v1.py
-```
+Clinical accuracy outranks schedule. Keep unresolved evidence visible and
+blocked instead of filling gaps with assumptions.

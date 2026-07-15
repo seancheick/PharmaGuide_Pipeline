@@ -1,334 +1,304 @@
-# PIPELINE_ARCHITECTURE.md
+# PharmaGuide Pipeline Architecture
 
-> Last updated: 2026-06-08 | Export schema: **v2.0.0** (v4 production; 102 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`; concept ownership source of truth: `scripts/contracts/source_of_truth_matrix.json`.
->
-> **v4 production:** `build_final_db.py` always emits the six-pillar /100 score (`quality_score_v4_100`) via `scoring_v4/export_adapter.py`. The legacy /80 export columns were dropped. The Clean→Enrich→legacy-score stages below still provide review-queue and detail-blob scaffolding used by the v4 export adapter; the shipped score contract is v4. See `FINAL_EXPORT_SCHEMA_V1.md` (v2.0.0).
+> Last verified: 2026-07-15
+> Export schema: 2.0.0 | Core columns: 110 | Pipeline manifest: 3.4.0
 
-## Overview
+## 1. System boundary
 
-PharmaGuide runs a cleaner-first pipeline with 3 compute stages plus snapshot/release stages:
-
-1. `clean_dsld_data.py` (Clean)
-2. `enrich_supplements_v3.py` (Enrich)
-3. `score_supplements.py` (legacy score scaffolding + safety gates)
-4. `rebuild_dashboard_snapshot.sh` (Build Final DB + stage catalog snapshot)
-5. `release_full.sh` (catalog staging, product images, interaction DB, Supabase, Flutter bundle)
-
-Operational orchestration is handled by `batch_run_all_datasets.sh`. Full-corpus runs continue through snapshot/release; targeted brand runs are pipeline-only unless `--release` is explicit. `run_pipeline.py` remains a single-brand/stage runner for local iteration, while `build_final_db.py` is an internal/manual builder called by snapshot/release flows rather than the normal ship path.
+PharmaGuide converts raw NIH DSLD product labels into a gated, offline-first
+catalog and a separate interaction database used by the Flutter app.
 
 ```text
-raw_data/*.json
-  -> [CLEAN] clean_dsld_data.py  (uses enhanced_normalizer.py)
-output_*/cleaned/*.json
-  -> [ENRICH] enrich_supplements_v3.py
-output_*_enriched/enriched/*.json
-  -> [COVERAGE GATE] coverage_gate.py (optional, can block scoring)
-  -> [SCORE] score_supplements.py  (legacy scaffolding)
-output_*_scored/scored/*.json
-  -> [SNAPSHOT] rebuild_dashboard_snapshot.sh
-  -> [BUILD FINAL DB] build_final_db.py
-final_db_output/
-  ├── pharmaguide_core.db        (SQLite, 102-col products_core)
-  ├── detail_blobs/*.json        (per-product JSON blobs)
-  ├── detail_index.json
-  ├── export_manifest.json       (schema_version="2.0.0")
-  └── export_audit_report.json
-  -> [STRICT GATES] audit_source_of_truth_contract.py
-  -> [RELEASE] release_full.sh
-  -> [SUPABASE SYNC] sync_to_supabase.py
-Supabase Storage: pharmaguide/v{version}/pharmaguide_core.db
-                  pharmaguide/shared/details/sha256/{hash}.json
-Supabase Postgres: export_manifest row inserted via rotate_manifest RPC
-  -> [FLUTTER APP] downloads SQLite + queries locally via Drift
+DSLD brand folders
+  → Clean
+  → Enrich
+  → pre-score contract + coverage gates
+  → legacy Score scaffolding
+  → candidate Build with v4 production scoring
+  → candidate gates
+  → atomic Snapshot promotion
+  → images + interaction DB + release gates
+  → Supabase + Flutter bundle
 ```
 
-### Source-of-truth principle (2026-05)
-
-Raw DSLD row classification is owned by the cleaner. `enhanced_normalizer.py` must emit `source_section`, `raw_source_path`, `cleaner_row_role`, `score_eligible_by_cleaner`, `score_exclusion_reason`, `dose_class`, and `raw_taxonomy`. Enrich, taxonomy, score, export, and Flutter consume these fields; they must not rediscover clinical row role from names or display labels.
-
-The ownership map lives in `scripts/contracts/source_of_truth_matrix.json` and is validated by `scripts/audit_source_of_truth_contract.py`. Snapshot/release strict mode gates matrix completeness, cleaner/IQD row eligibility, clinical drift checks, export manifest contract fields, artifact freshness, interaction DB parity, and Flutter bundle parity.
-
-### Silent-failure audit principle (2026-04 → 2026-05)
-
-Every field must flow across all 5 stage boundaries (Raw → Clean → Enrich → Score → Final DB → Flutter) without being silently dropped. If a stage computes a signal that a downstream stage ignores, users see a mismatch between warnings and scores. A field-level cross-reference audit in 2026-04 identified and fixed 18 such drops (including the original probiotic `clinical_strain_count` bug, the `serving_info` phantom key in `build_final_db.py`, and the amount-based sugar scoring gap). The 8-phase Identity-vs-Bioactivity split (2026-05) extended this principle to alias-routing: source botanicals (kelp, marigold, citrus extract, broccoli sprout) now route to `botanical_ingredients.json` rather than IQM marker entries, with bioactive contributions surfaced through `botanical_marker_contributions.json` and emitted at blob level as `canonical_id` + `delivers_markers`. See `reports/identity_vs_bioactivity_impact_report.md` for the migration record and `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
-
-## Stage Responsibilities
-
-### Stage 1: Clean
-
-Primary script: `clean_dsld_data.py`  
-Core normalization module: `enhanced_normalizer.py`
-
-What it does:
-- Normalizes raw DSLD fields into stable canonical structure.
-- Parses ingredient records and standardizes ingredient text.
-- Produces cleaned product files that become the only input for enrichment.
-
-What it must not do:
-- No final section scoring arithmetic.
-- No final verdict assignment.
-
-### Stage 2: Enrich
-
-Primary script: `enrich_supplements_v3.py`
-
-What it does:
-- Loads reference databases from `scripts/data/`.
-- Performs matching and classification.
-- Builds structured domain outputs used by scoring.
-- Projects scorer-friendly flattened fields on each product.
-
-What it must not do:
-- No final `score_80` arithmetic.
-
-Enrichment fail-fast critical DBs:
-- `ingredient_quality_map`
-- `harmful_additives`
-- `allergens`
-- `banned_recalled_ingredients`
-- `color_indicators`
-
-Default DB set loaded by enrichment:
-- `ingredient_quality_map.json`
-- `absorption_enhancers.json`
-- `enhanced_delivery.json`
-- `standardized_botanicals.json`
-- `synergy_cluster.json`
-- `banned_recalled_ingredients.json`
-- `banned_match_allowlist.json`
-- `harmful_additives.json`
-- `allergens.json`
-- `backed_clinical_studies.json`
-- `top_manufacturers_data.json`
-- `manufacturer_violations.json` (exact-match penalties plus curated `manufacturer_family_*` and non-scoring `related_brand_cluster_*` metadata)
-- `rda_optimal_uls.json`
-- `clinically_relevant_strains.json`
-- `color_indicators.json`
-- `cert_claim_rules.json`
-- `other_ingredients.json`
-
-Additional detector-backed data used in enrichment:
-- `proprietary_blends.json` via `proprietary_blend_detector.py`
-- `fda_unii_cache.json` via `unii_cache.py` — offline UNII identity resolution (172K substances, avoids live FDA API calls during enrichment)
-
-### Stage 2.5: Coverage Gate (Optional but recommended)
-
-Primary script: `coverage_gate.py`
-
-What it does:
-- Checks enriched outputs for coverage and quality thresholds.
-- Can run in enforce or warn-only mode.
-
-### Stage 3: Score
-
-Primary script: `score_supplements.py`
-Config: `config/scoring_config.json`
-
-What it does:
-- Legacy arithmetic scoring, review-queue scaffolding, and verdict assignment.
-- Reads enriched product fields and scorer config.
-- Does not perform fuzzy matching or database matching.
-
-Production V4 scoring is applied during final export through
-`scoring_v4/quality_score.py` and `scoring_v4/export_adapter.py`. The shipped
-Flutter contract reads `quality_score_v4_100`, `quality_score_status`, and
-`quality_pillars_v4`; legacy /80 export columns are no longer present.
-
-What it reads directly:
-- Enriched JSON input files
-- `scoring_config.json`
-
-What it does not load directly:
-- `scripts/data/*.json` scoring reference databases
-
-## Enrichment-to-Scoring Contract
-
-Scorer expects enriched domain blocks plus projected convenience fields.
-
-Common projected fields consumed by scorer:
-- `delivery_tier`
-- `absorption_enhancer_paired`
-- `has_standardized_botanical`
-- `synergy_cluster_qualified`
-- `claim_allergen_free_validated`
-- `claim_gluten_free_validated`
-- `claim_vegan_validated`
-- `named_cert_programs`
-- `gmp_level`
-- `has_coa`
-- `has_batch_lookup`
-- `proprietary_blends`
-- `has_disease_claims`
-- `is_trusted_manufacturer`
-- `has_full_disclosure`
-- `claim_physician_formulated`
-- `has_sustainable_packaging`
-- `manufacturing_region`
-
-Core domain blocks consumed by scorer:
-- `ingredient_quality_data`
-- `contaminant_data`
-- `compliance_data`
-- `certification_data`
-- `evidence_data`
-- `manufacturer_data`
-- `probiotic_data`
-- `match_ledger` (for diagnostics/flags)
-
-### Inactive ingredient resolver (v1.6.1, 2026-05-12)
-
-`scripts/inactive_ingredient_resolver.py` is the single safety + role
-classification path for inactive ingredients in the blob builder. Imported
-once at module load; a shared instance is built lazily inside
-`build_final_db.py` (`_get_shared_inactive_resolver()`) and reused for
-every inactive across every product in the build run.
-
-Priority order (highest authority wins; first match returns):
-
-1. `banned_recalled_ingredients.json` — `status` ∈ {banned, high_risk, recalled, watchlist}; skips `match_mode` ∈ {disabled, historical}
-2. `harmful_additives.json` — `severity_level` ∈ {high, critical, moderate, low}
-3. `other_ingredients.json` — 679 curated excipient role classifications
-
-Match rules: `standard_name` + `aliases` ONLY, normalized exact match.
-NEVER matches on notes / mechanism_of_harm / safety_summary text — that
-bleed-through was the original Candurin Silver / Titanium Dioxide
-false-positive risk.
-
-Emits four new blob fields on every inactive entry: `is_banned`,
-`safety_reason`, `matched_source`, `matched_rule_id`. See
-`FINAL_EXPORT_SCHEMA_V1.md` §"Inactive contract additions (v1.6.1)" for
-the per-field contract. CI gate: `scripts/audit_inactive_safety.py`.
-
-## Scoring Pipeline Logic (High-Level)
-
-`score_product()` order:
-
-1. Validate enriched product minimum contract (`dsld_id`, `product_name`, enrichment metadata).
-2. Run B0 banned/recalled gate.
-3. Run mapping gate.
-4. Apply regression guard for unmatched active overlapping banned `exact/alias`.
-5. If early-stop conditions are met, return `BLOCKED`/`UNSAFE`/`NOT_SCORED`.
-6. Score sections A/B/C/D.
-7. Apply manufacturer violation deduction.
-8. Clamp final score to `[0, 80]`.
-9. Derive verdict by precedence.
-10. Emit output with breakdown, flags, and scoring metadata.
-
-## Current Scoring Gate Settings
-
-From `config/scoring_config.json`:
-- `require_full_mapping: true`
-- `probiotic_extended_scoring: false`
-
-Operational effect:
-- Full mapping gate is enforced.
-- Probiotic bonus runs in default mode (not extended mode).
-
-## Mapping KPI Semantics (Current)
-
-Scorer outputs both:
-- `unmapped_actives_total`
-- `unmapped_actives_excluding_banned_exact_alias`
-
-Purpose:
-- Distinguish true mapping gaps from unmatched actives that are already captured as banned exact/alias safety events.
-
-Guardrail:
-- If unmatched active overlaps banned `exact/alias`, scorer forces unsafe path and prevents counting this as a normal mapping miss.
-
-## Score Structure
-
-Quality score formula:
+There is one supported operator chain:
 
 ```text
-quality_raw = A + B + C + D + violation_penalty
-quality_score = clamp(0, 80, quality_raw)
+batch_run_all_datasets.sh
+  ├─ run_pipeline.py per brand
+  ├─ rebuild_dashboard_snapshot.sh
+  └─ release_full.sh
 ```
 
-Section caps:
-- A: 25
-- B: 30
-- C: 20
-- D: 5
+Lower-level Python scripts are implementation/debugging boundaries, not an
+alternative release process.
 
-For detailed formulas and subcomponents, see:
-- `SCORING_ENGINE_SPEC.md`
+## 2. Authority map
 
-## Stage 4: Distribute (sync_to_supabase.py)
+| Concern | Single authority |
+|---|---|
+| Raw row role and score eligibility | Cleaner (`enhanced_normalizer.py`) |
+| Stage output ownership | `stage_manifest.py` |
+| Canonical enriched ingredient contract | `scoring_input_contract.py` |
+| Supplement taxonomy | `supplement_taxonomy.py` |
+| V4 module dispatch | `scoring_v4/router.py` |
+| Safety identity normalization | `identity/safety.py` |
+| V4 safety verdict policy | `scoring_v4/gate_safety.py` |
+| Production score | `score_supplements_v4.py` + `scoring_v4/` |
+| Public score overlay | `scoring_v4/export_adapter.py` |
+| Export schema/quarantine | `build_final_db.py` |
+| Snapshot promotion | `rebuild_dashboard_snapshot.sh` + `promote_release_artifacts.py` |
+| Release sequencing | `release_full.sh` |
+| Source-of-truth rules | `contracts/source_of_truth_matrix.json` |
 
-**Input:** Build output from build_final_db.py (pharmaguide_core.db + detail_blobs/ + export_manifest.json)
-**Output:** Versioned artifacts in Supabase Storage + manifest row in PostgreSQL
+No later stage should rediscover an upstream decision from product-name text.
+It may validate, explain, or fail the contract; it must not create a competing
+classifier.
 
-**Workflow:**
-1. Read export_manifest.json from build directory
-2. Compare version to current Supabase manifest (is_current=true)
-3. If newer: upload .db file and detail blobs to Supabase Storage
-4. Insert new manifest row, mark previous as not current
+## 3. Compute stages
 
-**Environment:** Requires SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in .env
+### 3.1 Clean
 
-**CLI:**
-```bash
-python scripts/sync_to_supabase.py <build_output_dir>          # Full sync
-python scripts/sync_to_supabase.py <build_output_dir> --dry-run # Preview only
+Authority:
+
+- `clean_dsld_data.py`
+- `enhanced_normalizer.py`
+- `config/cleaning_config.json`
+
+Responsibilities:
+
+- normalize raw DSLD shapes and text
+- preserve printed ingredient identity
+- bind nutrients by canonical identity
+- classify source section and row role
+- emit score eligibility, exclusion reason, dose class, and raw taxonomy
+- scope allergen negation and positive evidence by clause
+- write cleaned product JSON and ownership manifest
+
+The cleaner does not assign the final product score or verdict.
+
+### 3.2 Enrich
+
+Authority:
+
+- `enrich_supplements_v3.py` (version 3.1.0)
+- deterministic reference matchers in `scripts/data/` and helper modules
+- `config/enrichment_config.json`
+
+Responsibilities:
+
+- canonical ingredient/form identity
+- branded-token metadata without replacing the printed name
+- product taxonomy and category features
+- safety matches with US applicability and regional advisories
+- RDA/AI/UL exposure by group and reference profile
+- evidence, certification, manufacturer, allergen, delivery, synergy, and blend
+  structures
+- shared scorer inputs and match ledgers
+- write enriched JSON and ownership manifest
+
+Matching is exact/canonical/bounded-alias and deterministic. Dormant fuzzy
+identity fallback is not part of the production contract.
+
+### 3.3 Pre-score gates
+
+`run_pipeline.py` loads the enriched batch once and runs:
+
+1. stage-manifest ownership/checksum validation in strict mode
+2. `enrichment_contract_validator.py`
+3. `coverage_gate.py`
+
+`batch_run_all_datasets.sh` always invokes the runner with
+`--strict-release-gates`; required gates cannot be skipped or reduced to
+warn-only in that mode.
+
+### 3.4 Score scaffolding
+
+Authority:
+
+- `score_supplements.py`
+- `config/scoring_config.json` (legacy version 3.6.0)
+
+This stage produces deterministic legacy arithmetic, review-queue/detail
+scaffolding, verdict history, and audit metadata. It writes scored JSON and a
+stage manifest. Its internal `/80` value is not a public export score.
+
+### 3.5 V4 production score and final build
+
+Authority:
+
+- `score_supplements_v4.py` (engine 4.1.0)
+- `scoring_v4/`
+- `build_final_db.py`
+
+V4 is evaluated during final DB construction. The adapter overlays the v4
+public contract onto a copy of current legacy scaffolding once per product.
+Final outputs include:
+
+- `quality_score_v4_100`
+- `quality_score_status`
+- `quality_pillars_v4`
+- `/100` compatibility mirrors
+- v4 safety, confidence, module, and provenance data
+
+Ranking/dedup use only v4-scored products. Deprecated `/80` export columns are
+absent.
+
+## 4. Stage ownership and stale-output containment
+
+Each stage directory contains product JSON plus `.stage_manifest.json`.
+
+The manifest records:
+
+- schema and stage name
+- completion state
+- current run ID
+- exact owned filenames
+- SHA-256 for every owned file
+
+Before a new Enrich or Score run, prior materialized outputs are moved into a
+timestamped quarantine. In strict mode, missing, corrupt, incomplete, wrong-
+stage, checksum-mismatched, missing, or unowned files stop consumption.
+
+Control files beginning with `.` are never product payloads. Audits must select
+products through `stage_manifest.py`, not a blind `*.json` directory scan.
+
+## 5. Batch orchestration
+
+`batch_run_all_datasets.sh` discovers eligible child directories under the
+dataset root and runs them sequentially in filesystem lexical order. It skips
+infrastructure/hidden directories and invokes:
+
+```text
+run_pipeline.py
+  --raw-dir <brand>
+  --output-prefix scripts/products/output_<brand>
+  --stages <requested>
+  --strict-release-gates
 ```
 
-**Safety:** Uses upsert mode. Re-running is idempotent. The Flutter app reads the manifest to detect new versions and downloads in background — never blocks the user.
+Every brand is attempted. Success/failure is recorded in a timestamped summary.
+If any brand fails, snapshot and release are skipped and the batch exits
+non-zero.
 
-## Export Schema Version History
+Targeted runs default to pipeline-only. Full-corpus runs continue to Snapshot
+and Release unless explicitly stopped.
 
-| Version | Date | Columns | Changes |
-|---------|------|---------|---------|
-| v1.3.2 | 2026-04-10 | 90 | `calories_per_serving` column + `nutrition_detail` / `unmapped_actives` blob subkeys |
-| v1.3.3 | 2026-04-14 | 90 | Interaction safety expansion: 129 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571) |
-| v1.3.4 | 2026-04-14 | 90 | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining |
-| v1.4.0 | 2026-04-15 | 91 | `image_thumbnail_url` column added; `normalize_upc` field added; image upload pipeline |
-| v1.5.0 | 2026-05-05 | 91 | Canonical active + inactive ingredient contract: `display_form_label`, `form_status`, `form_match_status`, `dose_status` on actives; `display_label`, `display_role_label`, `severity_status`, `is_safety_concern` on inactives. Flutter renders these without local inference; legacy `form` / `is_harmful` kept for back-compat then deprecated. |
-| v1.6.0 | 2026-05-12 | 91 | `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries so Flutter routes condition/drug-class hits without re-evaluating thresholds. Coverage gate: products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate. `canonical_id` + `delivers_markers` now emitted at blob level on active ingredients (identity vs bioactivity split). |
+## 6. Snapshot architecture
 
-Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
+`rebuild_dashboard_snapshot.sh` is the only normal catalog build/promotion
+path.
 
-## Utility Scripts
+### 6.1 Source gates
 
-New scripts added to `scripts/` beyond the core pipeline stages:
+Before assembly it runs:
 
-| Script | Purpose |
-|--------|---------|
-| `backfill_upc.py` | UPC backfilling for existing products |
-| `extract_product_images.py` | Product image extraction and Supabase upload |
-| `build_interaction_db.py` | Assembles interaction rules reference DB for Flutter export |
-| `unii_cache.py` | Manages `fda_unii_cache.json` offline UNII registry |
-| `shadow_score_comparison.py` | Compares two scored outputs for regression detection |
-| `tests/test_scoring_snapshot_v1.py` | Authoritative frozen-product regression gate used by release |
-| `preflight.py` | Pre-pipeline data contract validation |
-| `unmapped_ingredient_tracker.py` | Tracks and reports unmapped ingredient trends |
-| `release_catalog_artifact.py` | Assembles release artifacts for catalog deploys |
-| `release_interaction_artifact.py` | Assembles interaction rule artifacts for release |
-| `assemble_final_db_release.py` | Packages final DB release artifacts |
-| `build_all_final_dbs.py` | Runs `build_final_db.py` across multiple dataset directories |
-| `audit_source_of_truth_contract.py` | Validates cleaner-first source-of-truth and release gates |
+- source-of-truth matrix
+- cleaner/IQD row contract
+- enrichment/IQD contract
+- clinical drift contract
+- active identity integrity
+- RDA/UL emitted-reference stamp parity
 
-## CLI Quick Reference
+### 6.2 Candidate build
 
-```bash
-# Full-corpus or targeted operational pipeline
-bash batch_run_all_datasets.sh
-bash batch_run_all_datasets.sh --targets Brand --stages enrich,score  # pipeline only
-bash batch_run_all_datasets.sh --targets Brand --stages enrich,score --release
+It discovers current enriched/scored brand directories and builds into
+same-filesystem sibling candidates:
 
-# Snapshot and release stages
-bash scripts/rebuild_dashboard_snapshot.sh
-bash scripts/release_full.sh
+- `scripts/.final_db_output.candidate.<pid>`
+- `scripts/.dist.candidate.<pid>`
 
-# Single-brand/stage local iteration
-python scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand>
+`build_final_db.py` creates the internal candidate. Then
+`release_catalog_artifact.py` becomes the single owner of the distributable
+candidate, while preserving valid static assets from the previous `dist/`.
 
-# Run enrichment + scoring only
-python scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand> --stages enrich,score
+### 6.3 Candidate gates and promotion
 
-# Score-only run (requires existing enriched outputs)
-python scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand> --stages score
+Both candidates are stamped and checked for export contract and freshness.
+Only after all gates pass does `promote_release_artifacts.py` atomically replace
+both live directories. If either replacement fails, rollback preserves the
+last good pair. Shell cleanup removes abandoned candidates.
 
-# Skip coverage gate
-python run_pipeline.py --skip-coverage-gate
+Live `dist/` is never populated before candidate gates pass.
+
+## 7. Release architecture
+
+`release_full.sh` is auto-smart and fail-fast. It does include the snapshot
+rebuild, but only when freshness/parity checks require it.
+
+1. Run source matrix and active identity gates.
+2. If product/build inputs are newer than the catalog, invoke
+   `rebuild_dashboard_snapshot.sh`.
+3. If `final_db_output/` and `dist/` disagree, invoke the same safe snapshot
+   path again rather than copying an unvalidated artifact.
+4. Refresh product images when catalog/image evidence is stale.
+5. Mirror image-mutated catalog/manifest back to `final_db_output/`.
+6. Rebuild the interaction DB when its rule inputs changed.
+7. Run cleaner, enrichment, clinical, interaction, freshness, manifest, export,
+   RDA/UL Flutter parity, and scoring snapshot gates.
+8. Sync Supabase unless skipped/dry-run.
+9. Import and verify the Flutter bundle unless skipped.
+10. Prune local `.previous` backups.
+11. Commit the Flutter bundle locally, then perform aligned recoverable storage
+    cleanup; push remains manual.
+
+If a preceding snapshot just produced a fresh matched pair, release steps 2–3
+auto-skip. This is why running snapshot and then release is not a duplicate
+catalog build.
+
+## 8. Release artifacts
+
+Canonical live catalog artifacts:
+
+```text
+scripts/final_db_output/
+scripts/dist/
+  pharmaguide_core.db
+  export_manifest.json
+  export_audit_report.json
+  detail_index.json
+  detail_blobs/
+  product_images/
+  interaction_db.sqlite
+  interaction_db_manifest.json
 ```
+
+The Flutter app bundles the catalog and interaction database under its
+`assets/db/` directory and reads the SQLite catalog locally first. Supabase is
+the remote distribution/hydration path, not the phone's only source of data.
+
+## 9. Failure semantics
+
+| Failure | Result |
+|---|---|
+| Brand Clean/Enrich/Score/gate fails | Other brands may finish; no snapshot/release; batch exits non-zero |
+| Snapshot source/candidate gate fails | No live promotion; last good snapshot remains |
+| Snapshot fails inside the batch | Release is skipped; current batch script reports pipeline success and exits zero—operator must treat the printed snapshot failure as unresolved |
+| Release gate fails before Supabase | No Supabase or Flutter publication from later steps |
+| Flutter parity/import fails | Release exits non-zero; no successful completion claim |
+| Storage cleanup fails | Warning only; cleanup is recoverable and does not invalidate already-gated artifacts |
+
+The snapshot-exit behavior above is current executable behavior, not the
+preferred long-term contract. Do not infer publication success from a brand
+pipeline summary alone.
+
+## 10. Verification ownership
+
+Tests always run through `scripts/test.sh`:
+
+- `fast`: normal development loop
+- `release`: release gates and heavier contract checks
+- `full`: complete suite, parallelized
+- `slow`: heavy integration subset
+
+Artifact audits operate on a fresh candidate/live build and include:
+
+- `audit_contract_sync.py`
+- `audit_raw_to_final.py`
+- `audit_inactive_safety.py`
+- `audit_source_of_truth_contract.py`
+- `db_integrity_sanity_check.py`
+- `coverage_gate.py`
+
+Generated reports and archived planning documents are evidence/history, not
+runtime specifications.
