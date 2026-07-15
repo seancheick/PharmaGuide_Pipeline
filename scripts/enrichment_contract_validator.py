@@ -125,8 +125,25 @@ class EnrichmentContractValidator:
     }
 
     # Gummy form factor normalized variants
+    # basis_unit is LABEL-FAITHFUL (the unit the label declares); form_factor is
+    # the canonical form. DSLD gummy labels legitimately declare servings by
+    # shape/marketing name ("1 Jelly Bean", "Nordic Berries") and sometimes by
+    # mass ("2.2 Gram(s)" for 2 gummies, servingQuantitySource="label"). None of
+    # those are normalization failures, so they must not warn. D.1a still fails
+    # closed on genuinely truncated/garbled units.
     GUMMY_UNIT_VARIANTS = {
-        "gummy", "gummies", "gummy(ies)", "gummie", "gummie(s)"
+        "gummy", "gummies", "gummy(ies)", "gummie", "gummie(s)",
+        # Shape / marketing count units observed on real DSLD labels. Kept
+        # evidence-based: add a term only when the corpus shows it, so the rule
+        # still flags genuinely unnormalized units (e.g. "piece").
+        "jelly bean", "jelly beans",   # CVS 239580, Natures_Bounty 308199
+        "swirly bear",                 # CVS 25945 "Gummy Swirls"
+        "chewable bear",               # Garden_of_life 321386
+        "chew", "chews",               # GNC 228076
+        "nordic berry", "nordic berries",  # nordic-naturals 221659
+        # Label-declared mass servings (Pure_Encapsulations 278384: the label
+        # declares 2.2 Gram(s) == 2 gummies @ 1.1 g, servingQuantitySource="label")
+        "gram", "grams",
     }
 
     DISPLAY_LEDGER_REQUIRED_FIELDS = frozenset({
@@ -532,8 +549,14 @@ class EnrichmentContractValidator:
 
             # Check if there's evidence for the artificial color flag
             has_artificial_standardname = std_name == "artificial colors"
+            # Labels write dyes as "Red #40" / "Blue #1"; the tokens are stored
+            # unhashed ("red 40"), so a raw substring test never matched and a
+            # literal FD&C dye was reported as lacking evidence that it is a dye.
+            normalized_ing_name = re.sub(
+                r"\s+", " ", flagged_ing_name.replace("#", " ")
+            ).strip()
             has_explicit_dye = any(
-                token in flagged_ing_name
+                token in normalized_ing_name
                 for token in explicit_dye_tokens
             )
 

@@ -1051,5 +1051,99 @@ class TestDisplayLedgerContract:
         assert len(rule_violations) == 0
 
 
+class TestArtificialColorEvidenceAcceptsHashDyeNames:
+    """C.2: a dye's own name IS the explicit-dye evidence.
+
+    Labels write dyes as "Red #40" / "Blue #1". The token set stores them
+    unhashed ("red 40"), so ``"red 40" in "red #40"`` was False and a literal
+    FD&C dye was reported as "lacking evidence" that it is a dye.
+    """
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    @pytest.mark.parametrize("dye_name,additive_id", [
+        ("red #40", "ADD_RED40"),
+        ("blue #1", "ADD_BLUE1"),
+        ("yellow #5", "ADD_YELLOW5"),
+        ("red 40", "ADD_RED40"),      # unhashed form must keep working
+        ("FD&C Red #40", "ADD_RED40"),
+    ])
+    def test_dye_name_counts_as_explicit_evidence(self, validator, dye_name, additive_id):
+        product = {
+            "dsld_id": "TEST_C2",
+            "contaminant_data": {
+                "harmful_additives": {
+                    "additives": [
+                        {"ingredient": dye_name, "additive_id": additive_id}
+                    ]
+                }
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule == "C.2"], (
+            f"{dye_name!r} is an explicit dye token; must not warn 'lacks evidence'"
+        )
+
+
+class TestGummyBasisUnitAcceptsLabelFaithfulUnits:
+    """D.1b: basis_unit is label-faithful; form_factor is canonical.
+
+    DSLD labels declare gummy servings by shape/marketing name ("1 Jelly Bean",
+    "Nordic Berries") and sometimes by mass ("2.2 Gram(s)" for 2 gummies).
+    Both are legitimate label data, not normalization failures. D.1a (truncated
+    unit -> error) remains the rule that catches genuine parse garbage.
+    """
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    @pytest.mark.parametrize("basis_unit", [
+        "jelly bean",     # CVS 239580, Natures_Bounty 308199 ("Immune Jelly Beans")
+        "swirly bear",    # CVS 25945 ("Gummy Swirls")
+        "chewable bear",  # Garden_of_life 321386
+        "chew",           # GNC 228076
+        "nordic berry",   # nordic-naturals 221659 ("Nordic Berries")
+        "gram",           # Pure_Encapsulations 278384: label declares 2.2 Gram(s)
+        "gummy",          # canonical form must keep passing
+    ])
+    def test_legitimate_label_gummy_units_do_not_warn(self, validator, basis_unit):
+        product = {
+            "dsld_id": "TEST_D1B",
+            "form_factor_canonical": "gummy",
+            "serving_basis": {
+                "basis_unit": basis_unit,
+                "canonical_serving_size_quantity": 2,
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule == "D.1b"], (
+            f"{basis_unit!r} is a legitimate label-declared gummy unit"
+        )
+
+    def test_truncated_gummy_unit_still_errors(self, validator):
+        """Guard: relaxing D.1b must not blind D.1a to real parse garbage."""
+        product = {
+            "dsld_id": "TEST_D1A",
+            "form_factor_canonical": "gummy",
+            "serving_basis": {
+                "basis_unit": "gummy(ie",
+                "canonical_serving_size_quantity": 2,
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert [
+            v for v in violations if v.rule == "D.1a" and v.severity == "error"
+        ], "truncated basis_unit must still be a hard error"
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])
