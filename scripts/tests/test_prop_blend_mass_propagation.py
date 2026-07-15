@@ -97,6 +97,69 @@ def test_enricher_recovers_total_weight_from_parent_blend_mass(enricher) -> None
     assert blend["unit"].lower() == "mg"
 
 
+def test_enricher_recovers_children_when_only_parent_header_is_proprietary(enricher) -> None:
+    """Current cleaner contract: nested members are display-only, not blends.
+
+    The parent header owns ``proprietaryBlend`` while flattened children retain
+    only their explicit ``parentBlend`` relationship.  Enrichment must still
+    preserve those children as withheld blend members so B5 opacity scoring
+    cannot mistake an opaque blend for an empty partially disclosed header.
+    """
+    blend_name = "Proprietary Mixed Carotenoid Blend"
+    product = {
+        "id": "TEST_PARENT_OWNS_BLEND_FLAG",
+        "product_name": "Parent-owned blend flag",
+        "activeIngredients": [
+            {
+                "name": blend_name,
+                "quantity": 289,
+                "unit": "mcg",
+                "proprietaryBlend": True,
+                "disclosureLevel": "partial",
+                "isNestedIngredient": False,
+                "nestedIngredients": [],
+            },
+            *[
+                {
+                    "name": child_name,
+                    "quantity": 0,
+                    "unit": "NP",
+                    "proprietaryBlend": False,
+                    "isNestedIngredient": True,
+                    "parentBlend": blend_name,
+                    "parentBlendMass": 289,
+                    "parentBlendUnit": "mcg",
+                    "nestedIngredients": [],
+                }
+                for child_name in ("Lutein", "Lycopene", "Zeaxanthin")
+            ],
+        ],
+        "inactiveIngredients": [],
+    }
+
+    result = enricher._collect_proprietary_data(product)
+
+    matching = [
+        blend
+        for blend in result["blends"]
+        if blend["name"].lower() == blend_name.lower()
+    ]
+    assert len(matching) == 1
+    blend = matching[0]
+    assert blend["total_weight"] == 289.0
+    assert blend["unit"] == "mcg"
+    assert [child["name"] for child in blend["child_ingredients"]] == [
+        "Lutein",
+        "Lycopene",
+        "Zeaxanthin",
+    ]
+    assert blend["evidence"]["ingredients_without_amounts"] == [
+        "Lutein",
+        "Lycopene",
+        "Zeaxanthin",
+    ]
+
+
 def test_enricher_ignores_missing_parent_blend_mass(enricher) -> None:
     """Back-compat: pre-fix shape (no parentBlendMass) still aggregates
     what it can; doesn't crash, doesn't invent mass."""

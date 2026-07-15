@@ -12139,17 +12139,22 @@ class SupplementEnricherV3:
             ("inactiveIngredients", inactive_ingredients),
         ):
             for idx, ingredient in enumerate(ingredient_list):
+                is_nested = bool(ingredient.get('isNestedIngredient', False))
+                parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 is_blend = (
                     ingredient.get('proprietaryBlend', False) or
                     ingredient.get('isProprietaryBlend', False)
                 )
-                if not is_blend:
+                # The cleaner assigns blend ownership to the parent header.
+                # Flattened display-only members deliberately remain
+                # ``proprietaryBlend=False`` and carry the structural relation
+                # through ``isNestedIngredient`` + ``parentBlend`` instead.
+                # Keep those linked children so opacity evidence is not lost.
+                if not is_blend and not (is_nested and parent_blend):
                     continue
 
                 disclosure = ingredient.get('disclosureLevel', 'none')
                 nested = ingredient.get('nestedIngredients', [])
-                is_nested = bool(ingredient.get('isNestedIngredient', False))
-                parent_blend = (ingredient.get('parentBlend', '') or '').strip()
                 quantity = ingredient.get('quantity', 0) or 0
                 unit = ingredient.get('unit', '') or ''
                 ingredient_group = ingredient.get('ingredientGroup', '') or ''
