@@ -217,6 +217,52 @@ def test_v3_scaffolding_is_preserved(monkeypatch):
     assert out["score_80"] == 64.0
 
 
+def test_current_enriched_contract_replaces_stale_v3_contract_diagnostics(monkeypatch):
+    _patch(monkeypatch, _canned_v4())
+    enriched = {
+        "dsld_id": "current-contract",
+        "ingredient_quality_data": {
+            "ingredients": [],
+            "ingredients_skipped": [],
+            "ingredients_scorable": [
+                {
+                    "name": "Vitamin C",
+                    "canonical_id": "vitamin_c",
+                    "mapped": True,
+                    "quantity": 250,
+                    "unit": "mg",
+                    "source_section": "active",
+                    "raw_source_path": "ingredientRows[0]",
+                    "cleaner_row_role": "active_scorable",
+                    "score_eligible_by_cleaner": True,
+                    "dose_class": "therapeutic_mass",
+                    "role_classification": "active_scorable",
+                    "scoreable_identity": True,
+                    "identity_disposition": "clean",
+                }
+            ],
+        },
+    }
+    stale_v3 = _v3_scored()
+    stale_v3["strict_scoring_contract"] = {
+        "passed": False,
+        "findings": ["missing_identity_disposition"],
+    }
+    stale_v3["scoring_metadata"] = {
+        **stale_v3["scoring_metadata"],
+        "strict_scoring_contract": stale_v3["strict_scoring_contract"],
+    }
+
+    out = overlay_v4_scored(enriched, stale_v3)
+
+    assert out["strict_scoring_contract"]["passed"] is True
+    assert out["strict_scoring_contract"]["findings"] == []
+    assert (
+        out["scoring_metadata"]["strict_scoring_contract"]
+        == out["strict_scoring_contract"]
+    )
+
+
 def test_probiotic_full_nested_disclosure_removes_stale_proprietary_flag(monkeypatch):
     v4 = _canned_v4()
     v4["v4_module"] = "probiotic"

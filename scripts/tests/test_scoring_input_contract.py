@@ -526,8 +526,106 @@ def test_stale_native_anchor_evidence_is_repaired_with_active_context():
     contract = build_scoring_classification(product)
 
     assert result.rows[0]["raw_taxonomy"]["category"] == "botanical"
+    assert result.rows[0]["identity_disposition"] == "clean"
+    assert result.rows[0]["identity_contract_required"] is True
+    assert result.strict_contract_passed is True
+    assert "missing_identity_disposition" not in result.contract_findings
     assert contract["ingredients"][0]["botanical_source"]["value"] is True
     assert contract["profile_eligibility"]["botanical"]["eligible"] is True
+
+
+def test_product_evidence_identity_is_backfilled_only_from_matching_iqd_identity():
+    product = _product(
+        [],
+        ingredient_quality_data={
+            "ingredients_scorable": [],
+            "ingredients_skipped": [],
+            "ingredients": [
+                {
+                    "name": "Milk Thistle extract",
+                    "canonical_id": "milk_thistle",
+                    "canonical_id_after": "milk_thistle",
+                    "identity_disposition": "clean",
+                    "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                }
+            ],
+        },
+        product_scoring_evidence=[
+            {
+                "evidence_type": "blend_anchor_mass",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 760,
+                "dose_unit": "mg",
+                "source": "proprietary_blends",
+                "raw_source_path": "activeIngredients[0]",
+                "evidence_scope": "blend_level",
+                "linked_rows": ["activeIngredients[0]"],
+                "confidence": "low",
+                "reason": "proprietary_blend_total_from_botanical_child",
+                "name": "Milk Thistle extract",
+                "canonical_id": "milk_thistle",
+                "clean_identity_id": "milk_thistle",
+                "scoring_parent_id": "milk_thistle",
+                "evidence_canonical_id": "milk_thistle",
+                "canonical_source_db": "botanical_ingredients",
+                "evidence_origin": "compatibility_derived",
+                "source_section": "product",
+                "identity_contract_required": True,
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert result.rows[0]["identity_disposition"] == "clean"
+    assert result.strict_contract_passed is True
+    assert "missing_identity_disposition" not in result.contract_findings
+
+
+def test_unsupported_product_evidence_is_contained_without_erasing_valid_rows():
+    valid_row = _row(name="Vitamin C", canonical_id="vitamin_c")
+    product = _product(
+        [valid_row],
+        product_scoring_evidence=[
+            {
+                "evidence_type": "blend_anchor_mass",
+                "scoreable": True,
+                "scoreable_identity": True,
+                "score_eligible_by_cleaner": True,
+                "dose_class": "therapeutic_mass",
+                "dose_value": 60,
+                "dose_unit": "mg",
+                "source": "proprietary_blends",
+                "raw_source_path": "activeIngredients[32]",
+                "evidence_scope": "blend_level",
+                "linked_rows": ["activeIngredients[32]"],
+                "confidence": "low",
+                "reason": "proprietary_blend_total_from_botanical_child",
+                "name": "Vitex Chasteberry",
+                "canonical_id": "chaste_tree",
+                "clean_identity_id": "chaste_tree",
+                "scoring_parent_id": "chaste_tree",
+                "evidence_canonical_id": "chaste_tree",
+                "canonical_source_db": "botanical_ingredients",
+                "evidence_origin": "compatibility_derived",
+                "source_section": "product",
+                "identity_contract_required": True,
+            }
+        ],
+    )
+
+    result = get_scoring_ingredients(product, strict=True)
+
+    assert [row["canonical_id"] for row in result.rows] == ["vitamin_c"]
+    assert result.strict_contract_passed is True
+    assert "missing_identity_disposition" not in result.contract_findings
+    assert any(
+        rejected.reason == "product_evidence_missing_verified_identity"
+        for rejected in result.rejected_rows
+    )
 
 
 def test_stale_embedded_classification_is_rederived_after_contract_bump():

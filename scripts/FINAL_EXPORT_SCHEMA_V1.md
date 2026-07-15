@@ -942,12 +942,15 @@ python3 scripts/build_all_final_dbs.py \
 ### CI validation
 
 ```bash
-pytest scripts/tests/test_export_gate.py -q --tb=short
-# Check audit report for contract failures:
+scripts/test.sh fast scripts/tests/test_export_gate.py
+# Unresolved failures must be empty. Contract quarantines are deliberate
+# exclusions whose absence from the DB/detail index is verified at staging.
 python3 -c "
 import json
 r = json.load(open('/tmp/final_db_all/export_audit_report.json'))
 assert r['counts']['export_contract_invalid'] == 0
+assert r['contract_failures'] == []
+print('contract quarantines:', len(r['contract_quarantines']))
 "
 ```
 

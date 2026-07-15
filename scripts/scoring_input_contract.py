@@ -1635,6 +1635,68 @@ def _missing_product_evidence_fields(item: Dict[str, Any]) -> List[str]:
     return sorted(set(missing))
 
 
+def _backfill_product_evidence_identity(
+    product: Dict[str, Any], item: Dict[str, Any]
+) -> None:
+    """Carry a verified same-product IQD identity onto derived evidence.
+
+    Compatibility evidence can use a synthetic provenance path (for example,
+    ``activeIngredients[0]`` for a proprietary-blend projection) that cannot be
+    joined to the cleaner row by path.  Canonical identity is the only fallback
+    join permitted here, and it is accepted only when the product's identity
+    ledger contains a scoreable disposition and no conflicting disposition for
+    that canonical identity.  This keeps identity policy in the shared ledger
+    instead of re-resolving label text inside the scoring adapter.
+    """
+    if item.get("identity_disposition") is not None:
+        return
+    if item.get("identity_contract_required") is not True:
+        return
+
+    canonical_ids = {
+        _norm(item.get(field_name))
+        for field_name in (
+            "clean_identity_id",
+            "canonical_id",
+            "evidence_canonical_id",
+            "scoring_parent_id",
+        )
+        if _norm(item.get(field_name))
+    }
+    if not canonical_ids:
+        return
+
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    dispositions: List[str] = []
+    for identity_row in _safe_list(iqd.get("ingredients")):
+        if not isinstance(identity_row, dict):
+            continue
+        canonical = _norm(
+            identity_row.get("canonical_id_after")
+            or identity_row.get("canonical_id")
+        )
+        if canonical not in canonical_ids:
+            continue
+        disposition = identity_row.get("identity_disposition")
+        if disposition in IDENTITY_DISPOSITIONS:
+            dispositions.append(disposition)
+
+    if not dispositions or any(
+        not is_identity_scoreable(disposition) for disposition in dispositions
+    ):
+        return
+
+    # Preserve the weakest verified disposition when several label rows share
+    # the same canonical identity.  All three remain scoreable, while the
+    # ordering avoids overstating the evidence quality in diagnostics.
+    disposition_priority = ("taxonomy_only", "repaired", "clean")
+    item["identity_disposition"] = next(
+        disposition
+        for disposition in disposition_priority
+        if disposition in dispositions
+    )
+
+
 def _product_scoring_evidence_rows(
     product: Dict[str, Any],
     *,
@@ -1670,6 +1732,13 @@ def _product_scoring_evidence_rows(
         "standard_name",
         "raw_source_text",
         "anchor_risk_class",
+        # Native evidence may have been emitted before the shared identity
+        # contract was added.  The freshly derived row is linked to the same
+        # cleaner-owned label row, so it is the authoritative compatibility
+        # source for these fields.  Backfill only absent values; never replace
+        # an explicit native disposition.
+        "identity_disposition",
+        "identity_contract_required",
     )
     for item in native_evidence_rows:
         derived_item = derived_by_key.get(evidence_key(item))
@@ -1688,6 +1757,7 @@ def _product_scoring_evidence_rows(
     for idx, item in enumerate(evidence_rows):
         if not isinstance(item, dict):
             continue
+        _backfill_product_evidence_identity(product, item)
         evidence_type = _norm(item.get("evidence_type") or item.get("dose_class"))
         dose_class = _norm(item.get("dose_class"))
         if item.get("scoreable") is False:
@@ -1707,6 +1777,18 @@ def _product_scoring_evidence_rows(
             rejected.append(_reject(item, "malformed_product_scoring_evidence", sorted(set(missing))))
             if strict:
                 findings.append(f"malformed_product_scoring_evidence:{idx}:{','.join(sorted(set(missing)))}")
+            continue
+        if (
+            item.get("identity_contract_required") is True
+            and item.get("identity_disposition") is None
+        ):
+            # A compatibility projection may identify a possible blend child
+            # that the cleaner-owned identity ledger cannot verify.  Contain
+            # that row and retain unrelated verified scoring rows; do not turn
+            # one low-confidence projection into a product-wide failure.
+            rejected.append(
+                _reject(item, "product_evidence_missing_verified_identity")
+            )
             continue
 
         row = {

@@ -8268,6 +8268,7 @@ def init_audit_counts() -> Dict[str, int]:
         "has_watchlist_hit": 0,
         "has_high_risk_hit": 0,
         "export_contract_invalid": 0,
+        "export_contract_quarantined": 0,
         "verdict_blocked": 0,
         "verdict_unsafe": 0,
         "verdict_caution": 0,
@@ -8278,9 +8279,11 @@ def init_audit_counts() -> Dict[str, int]:
 def update_audit_state(
     counts: Dict[str, int],
     products_with_warnings_sample: List[Dict],
-    contract_failures_sample: List[Dict],
+    contract_quarantines: List[Dict],
+    contract_failures: List[Dict],
     products_with_warnings_count: int,
-    contract_failures_count: int,
+    contract_quarantine_count: int,
+    contract_failure_count: int,
     pid: str,
     enriched: Dict,
     scored: Dict,
@@ -8288,10 +8291,15 @@ def update_audit_state(
     """Update audit counters incrementally for a matched enriched/scored product."""
     issues = validate_export_contract(enriched, scored)
     if issues:
-        counts["export_contract_invalid"] += 1
-        contract_failures_count += 1
-        if len(contract_failures_sample) < 50:
-            contract_failures_sample.append({"dsld_id": pid, "issues": issues[:5]})
+        entry = {"dsld_id": pid, "issues": issues[:5]}
+        if _classify_export_error("; ".join(issues)) == "excluded_by_gate":
+            counts["export_contract_quarantined"] += 1
+            contract_quarantine_count += 1
+            contract_quarantines.append(entry)
+        else:
+            counts["export_contract_invalid"] += 1
+            contract_failure_count += 1
+            contract_failures.append(entry)
 
     if has_banned_substance(enriched):
         counts["has_banned_substance"] += 1
@@ -8335,15 +8343,21 @@ def update_audit_state(
                 "warnings": top,
             })
 
-    return products_with_warnings_count, contract_failures_count
+    return (
+        products_with_warnings_count,
+        contract_quarantine_count,
+        contract_failure_count,
+    )
 
 
 def write_audit_report(
     output_dir: str,
     exported_at: str,
     counts: Dict[str, int],
-    contract_failures_sample: List[Dict],
-    contract_failures_count: int,
+    contract_quarantines: List[Dict],
+    contract_quarantine_count: int,
+    contract_failures: List[Dict],
+    contract_failure_count: int,
     products_with_warnings_count: int,
     products_with_warnings_sample: List[Dict],
 ) -> Dict:
@@ -8357,7 +8371,8 @@ def write_audit_report(
         "pipeline_version": PIPELINE_VERSION,
         "export_schema_version": EXPORT_SCHEMA_VERSION,
         "counts": counts,
-        "contract_failures": contract_failures_sample[:50],
+        "contract_failures": contract_failures,
+        "contract_quarantines": contract_quarantines,
         "products_with_warnings_count": products_with_warnings_count,
         "products_with_warnings_sample": products_with_warnings_sample[:100],
     }
@@ -8365,8 +8380,14 @@ def write_audit_report(
     audit_path = os.path.join(output_dir, "export_audit_report.json")
     with open(audit_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2, ensure_ascii=False)
-    logger.info("Audit report: %s (%d products with warnings, %d contract failures)",
-                audit_path, products_with_warnings_count, contract_failures_count)
+    logger.info(
+        "Audit report: %s (%d products with warnings, %d contract quarantines, "
+        "%d contract failures)",
+        audit_path,
+        products_with_warnings_count,
+        contract_quarantine_count,
+        contract_failure_count,
+    )
 
     return {"audit_path": audit_path, "report": report}
 
@@ -8484,9 +8505,11 @@ def build_final_db(
         exported_at = datetime.now(timezone.utc).isoformat()
         audit_counts = init_audit_counts()
         products_with_warnings_sample: List[Dict] = []
-        contract_failures_sample: List[Dict] = []
+        contract_quarantines: List[Dict] = []
+        contract_failures: List[Dict] = []
         products_with_warnings_count = 0
-        contract_failures_count = 0
+        contract_quarantine_count = 0
+        contract_failure_count = 0
         enriched_only_samples: List[str] = []
 
         for pid, enriched in iter_staged_products(stage_conn, "enriched_stage"):
@@ -8511,12 +8534,18 @@ def build_final_db(
                 scored = suppress_v4_for_hard_block(scored, reason="banned_substance")
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
-            products_with_warnings_count, contract_failures_count = update_audit_state(
+            (
+                products_with_warnings_count,
+                contract_quarantine_count,
+                contract_failure_count,
+            ) = update_audit_state(
                 audit_counts,
                 products_with_warnings_sample,
-                contract_failures_sample,
+                contract_quarantines,
+                contract_failures,
                 products_with_warnings_count,
-                contract_failures_count,
+                contract_quarantine_count,
+                contract_failure_count,
                 pid,
                 enriched,
                 scored,
@@ -8852,6 +8881,9 @@ def build_final_db(
             "has_banned_substance": audit_counts.get("has_banned_substance", 0),
             "has_recalled_ingredient": audit_counts.get("has_recalled_ingredient", 0),
             "contract_failures": audit_counts.get("export_contract_invalid", 0),
+            "contract_quarantine_count": audit_counts.get(
+                "export_contract_quarantined", 0
+            ),
             "scoring_config_checksum": scoring_config_checksum,
         },
         # Sprint E1.5 — three-bucket error classification. Sync gate
@@ -8876,8 +8908,10 @@ def build_final_db(
         output_dir=output_dir,
         exported_at=exported_at,
         counts=audit_counts,
-        contract_failures_sample=contract_failures_sample,
-        contract_failures_count=contract_failures_count,
+        contract_quarantines=contract_quarantines,
+        contract_quarantine_count=contract_quarantine_count,
+        contract_failures=contract_failures,
+        contract_failure_count=contract_failure_count,
         products_with_warnings_count=products_with_warnings_count,
         products_with_warnings_sample=products_with_warnings_sample,
     )

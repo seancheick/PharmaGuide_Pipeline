@@ -1510,15 +1510,32 @@ class SupplementScorer:
         if not ingredients:
             return 0.0
 
-        # Warn once per scoring run when enriched data pre-dates parent-total dedup
-        if (not self._parent_total_warned
-                and ingredients
-                and "is_parent_total" not in ingredients[0]):
-            self.logger.warning(
-                "Enriched data missing 'is_parent_total' field — "
-                "parent-total dedup inactive. Re-enrich to enable A1/A2 dedup."
+        # Diagnose the producer-owned IQD rows, not the adapted scoring list.
+        # Product-level evidence and recovered identities legitimately omit this
+        # structural label flag, so inspecting the first adapted row produced a
+        # false "dedup inactive" warning even when every IQD row was complete.
+        if not self._parent_total_warned:
+            iqd = product.get("ingredient_quality_data")
+            if not isinstance(iqd, dict):
+                iqd = {}
+            iqd_rows = [
+                row
+                for row in safe_list(iqd.get("ingredients_scorable"))
+                if isinstance(row, dict)
+            ]
+            missing_parent_flag = sum(
+                "is_parent_total" not in row for row in iqd_rows
             )
-            self._parent_total_warned = True
+            if missing_parent_flag:
+                self.logger.warning(
+                    "Enriched IQD contract incomplete: %d/%d "
+                    "ingredients_scorable rows omit 'is_parent_total'; only "
+                    "explicitly flagged parent totals are excluded. Re-enrich "
+                    "to restore complete parent-total diagnostics.",
+                    missing_parent_flag,
+                    len(iqd_rows),
+                )
+                self._parent_total_warned = True
 
         is_single = supp_type in self._SINGLE_TYPES
         # Pre-compute: count of NON-blend candidates that would otherwise

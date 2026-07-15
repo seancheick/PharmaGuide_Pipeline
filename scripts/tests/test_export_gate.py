@@ -34,7 +34,10 @@ from build_final_db import (
     derive_blocking_reason,
     has_banned_substance,
     has_recalled_ingredient,
+    init_audit_counts,
+    update_audit_state,
     validate_export_contract,
+    write_audit_report,
 )
 
 
@@ -158,6 +161,81 @@ def _base_scored(**overrides):
     }
     data.update(overrides)
     return data
+
+
+def test_expected_review_queue_exclusions_are_reported_as_quarantines(
+    tmp_path: Path,
+):
+    counts = init_audit_counts()
+    quarantine_sample = []
+    failure_sample = []
+    warning_sample = []
+    warning_count, quarantine_count, failure_count = update_audit_state(
+        counts,
+        warning_sample,
+        quarantine_sample,
+        failure_sample,
+        0,
+        0,
+        0,
+        "EG001",
+        _base_enriched(),
+        _base_scored(verdict="NOT_SCORED", score_100_equivalent=None),
+    )
+
+    result = write_audit_report(
+        output_dir=str(tmp_path),
+        exported_at="2026-07-15T00:00:00Z",
+        counts=counts,
+        contract_quarantines=quarantine_sample,
+        contract_quarantine_count=quarantine_count,
+        contract_failures=failure_sample,
+        contract_failure_count=failure_count,
+        products_with_warnings_count=warning_count,
+        products_with_warnings_sample=warning_sample,
+    )["report"]
+
+    assert counts["export_contract_quarantined"] == 1
+    assert counts["export_contract_invalid"] == 0
+    assert result["contract_failures"] == []
+    assert result["contract_quarantines"][0]["dsld_id"] == "EG001"
+
+
+def test_uncontained_export_contract_issue_remains_a_blocking_failure(
+    tmp_path: Path,
+):
+    counts = init_audit_counts()
+    quarantines = []
+    failures = []
+    warning_count, quarantine_count, failure_count = update_audit_state(
+        counts,
+        [],
+        quarantines,
+        failures,
+        0,
+        0,
+        0,
+        "EG-BROKEN",
+        _base_enriched(dsld_id=""),
+        _base_scored(),
+    )
+
+    report = write_audit_report(
+        output_dir=str(tmp_path),
+        exported_at="2026-07-15T00:00:00Z",
+        counts=counts,
+        contract_quarantines=quarantines,
+        contract_quarantine_count=quarantine_count,
+        contract_failures=failures,
+        contract_failure_count=failure_count,
+        products_with_warnings_count=warning_count,
+        products_with_warnings_sample=[],
+    )["report"]
+
+    assert counts["export_contract_invalid"] == 1
+    assert counts["export_contract_quarantined"] == 0
+    assert report["contract_quarantines"] == []
+    assert report["contract_failures"][0]["dsld_id"] == "EG-BROKEN"
 
 
 COLUMNS = [

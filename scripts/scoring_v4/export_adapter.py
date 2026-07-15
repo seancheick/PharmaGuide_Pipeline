@@ -31,6 +31,7 @@ import json
 from typing import Any, Dict, Optional
 
 from score_supplements_v4 import score_product_v4
+from scoring_input_contract import get_scoring_ingredients
 
 SCORE_MODEL_V4 = "v4"
 OMEGA3_FORM_NOT_DISCLOSED_FLAG = "OMEGA3_FORM_NOT_DISCLOSED"
@@ -227,11 +228,37 @@ def reconcile_v4_flags(
     return out
 
 
+def _refresh_strict_scoring_contract(
+    enriched: Dict[str, Any], scored: Dict[str, Any]
+) -> None:
+    """Refresh stale v3 diagnostics from the current shared scoring input.
+
+    The legacy scored artifact remains useful scaffolding, but its contract
+    diagnostics may predate a corrected enriched artifact or adapter.  Export
+    must gate the same current rows that v4 just scored, not a historical v3
+    verdict about those rows.  Old fixtures without the current IQD list retain
+    their compatibility behavior.
+    """
+    iqd = _safe_dict(enriched.get("ingredient_quality_data"))
+    if not isinstance(iqd.get("ingredients_scorable"), list):
+        return
+
+    diagnostics = get_scoring_ingredients(enriched, strict=True).diagnostics()
+    strict_contract = dict(diagnostics["strict_scoring_contract"])
+    scored["strict_scoring_contract"] = strict_contract
+    scoring_metadata = dict(_safe_dict(scored.get("scoring_metadata")))
+    scoring_metadata["strict_scoring_contract"] = strict_contract
+    scored["scoring_metadata"] = scoring_metadata
+
+
 def overlay_v4_scored(enriched: Dict[str, Any], scored_v3: Dict[str, Any]) -> Dict[str, Any]:
     """Run v4 on ``enriched`` and overlay its public contract onto a copy of
     ``scored_v3``. Returns the new dict; never mutates either input."""
     v4 = score_product_v4(enriched if isinstance(enriched, dict) else {})
     scored = reconcile_v4_flags(scored_v3, v4)
+    _refresh_strict_scoring_contract(
+        enriched if isinstance(enriched, dict) else {}, scored
+    )
 
     breakdown = v4.get("v4_breakdown") or {}
     safety_gate = breakdown.get("safety_gate") or {}

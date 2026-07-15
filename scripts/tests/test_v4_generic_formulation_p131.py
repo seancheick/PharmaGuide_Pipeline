@@ -1291,31 +1291,40 @@ def test_blend_anchor_pancreatin_gets_iqm_formulation_credit() -> None:
     form quality instead of reporting a false 0/30 formulation."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
-    payload = score_formulation(
-        _product(
-            ingredients=[],
-            activeIngredients=[
-                {
-                    "name": "Pancreatin",
-                    "standardName": "Digestive Enzymes",
-                    "canonical_id": "digestive_enzymes",
-                    "canonical_source_db": "ingredient_quality_map",
-                    "quantity": 1.0,
-                    "unit": "Gram(s)",
-                    "source_section": "active",
-                    "raw_source_path": "ingredientRows[0]",
-                    "cleaner_row_role": "blend_header_total",
-                    "score_eligible_by_cleaner": False,
-                    "dose_class": "blend_total_weight",
-                    "raw_taxonomy": {
-                        "category": "blend",
-                        "ingredientGroup": "Blend (non-nutrient/non-botanical)",
-                        "forms": [{"name": "Porcine"}],
-                    },
-                }
-            ],
-        )
+    product = _product(
+        ingredients=[],
+        activeIngredients=[
+            {
+                "name": "Pancreatin",
+                "standardName": "Digestive Enzymes",
+                "canonical_id": "digestive_enzymes",
+                "canonical_source_db": "ingredient_quality_map",
+                "quantity": 1.0,
+                "unit": "Gram(s)",
+                "source_section": "active",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "score_eligible_by_cleaner": False,
+                "dose_class": "blend_total_weight",
+                "raw_taxonomy": {
+                    "category": "blend",
+                    "ingredientGroup": "Blend (non-nutrient/non-botanical)",
+                    "forms": [{"name": "Porcine"}],
+                },
+            }
+        ],
     )
+    product["ingredient_quality_data"]["ingredients"] = [
+        {
+            "name": "Pancreatin",
+            "canonical_id": "digestive_enzymes",
+            "canonical_id_after": "digestive_enzymes",
+            "identity_disposition": "clean",
+            "raw_source_path": "ingredientRows[0]",
+        }
+    ]
+
+    payload = score_formulation(product)
 
     assert payload["components"]["A1_bio_score"] == 11.0
     assert payload["score"] > 0.0

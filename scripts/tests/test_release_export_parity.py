@@ -7,7 +7,13 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from build_final_db import build_detail_blob, resolve_export_supplement_type
+from build_final_db import (
+    build_detail_blob,
+    has_banned_substance,
+    resolve_export_supplement_type,
+)
+from scoring_v4.export_adapter import overlay_v4_scored, suppress_v4_for_hard_block
+from stage_manifest import select_stage_input_files
 
 
 BUILD_ROOT = Path("scripts/final_db_output")
@@ -37,8 +43,13 @@ def _build_is_full_corpus() -> bool:
     enriched_dirs, scored_dirs = _discover_pair_dirs()
     enriched_lookup = _load_products(enriched_dirs)
     scored_lookup = _load_products(scored_dirs)
-    full_corpus = max(len(enriched_lookup), len(scored_lookup))
-    return manifest.get("product_count") == full_corpus and full_corpus > 0
+    integrity = manifest.get("integrity") or {}
+    return (
+        len(enriched_lookup) > 0
+        and len(enriched_lookup) == len(scored_lookup)
+        and integrity.get("enriched_input_count") == len(enriched_lookup)
+        and integrity.get("scored_input_count") == len(scored_lookup)
+    )
 
 
 _FULL_CORPUS_SKIP_MSG = (
@@ -66,7 +77,8 @@ ENRICHED_DIRS, SCORED_DIRS = _discover_pair_dirs()
 def _load_products(directories: list[Path]) -> dict[str, dict]:
     products: dict[str, dict] = {}
     for directory in directories:
-        for path in sorted(directory.glob("*.json")):
+        expected_stage = "enrich" if directory.parent.name.endswith("_enriched") else "score"
+        for path in select_stage_input_files(directory, expected_stage):
             data = json.loads(path.read_text())
             rows = data if isinstance(data, list) else data.get("products", [])
             for row in rows:
@@ -90,13 +102,42 @@ def test_release_export_counts_and_index_parity():
     finally:
         conn.close()
 
-    assert row_count == len(enriched_lookup) == len(scored_lookup)
+    integrity = manifest["integrity"]
+    dedup_removed = audit["counts"].get("upc_dedup", {}).get(
+        "duplicates_removed", 0
+    )
+    expected_rows = (
+        len(enriched_lookup)
+        - integrity["enriched_only_count"]
+        - integrity["error_count"]
+        - integrity["excluded_by_gate_count"]
+        - integrity["warning_count"]
+        - dedup_removed
+    )
+
+    assert len(enriched_lookup) == len(scored_lookup)
+    assert integrity["enriched_input_count"] == len(enriched_lookup)
+    assert integrity["scored_input_count"] == len(scored_lookup)
+    assert row_count == expected_rows
     assert row_count == blob_count == len(index)
     assert manifest["product_count"] == row_count
     assert manifest["detail_blob_count"] == row_count
     assert manifest["detail_blob_unique_count"] == row_count
     assert audit["counts"]["total_errors"] == 0
     assert not audit["contract_failures"]
+    assert (
+        len(audit["contract_quarantines"])
+        == integrity["contract_quarantine_count"]
+    )
+
+
+def _expected_export_scored(enriched: dict, scored: dict) -> dict:
+    expected = overlay_v4_scored(enriched, scored)
+    if has_banned_substance(enriched):
+        expected = suppress_v4_for_hard_block(
+            expected, reason="banned_substance"
+        )
+    return expected
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
@@ -123,7 +164,7 @@ def test_release_export_matches_source_scored_and_resolved_type():
     for row in rows:
         dsld_id = str(row["dsld_id"])
         enriched = enriched_lookup[dsld_id]
-        scored = scored_lookup[dsld_id]
+        scored = _expected_export_scored(enriched, scored_lookup[dsld_id])
         expected_type = resolve_export_supplement_type(enriched, scored)
 
         assert row["supplement_type"] == expected_type
@@ -153,6 +194,11 @@ def test_release_detail_blobs_match_recomputed_export_contract():
     for path in blob_paths:
         actual = json.loads(path.read_text())
         dsld_id = str(actual["dsld_id"])
-        expected = build_detail_blob(enriched_lookup[dsld_id], scored_lookup[dsld_id])
+        expected = build_detail_blob(
+            enriched_lookup[dsld_id],
+            _expected_export_scored(
+                enriched_lookup[dsld_id], scored_lookup[dsld_id]
+            ),
+        )
 
         assert actual == expected, dsld_id

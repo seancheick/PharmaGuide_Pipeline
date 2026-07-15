@@ -1561,6 +1561,60 @@ class TestA1ParentTotalExclusion:
     def scorer(self):
         return SupplementScorer()
 
+    def test_product_evidence_without_parent_flag_does_not_trigger_iqd_warning(
+        self, scorer, monkeypatch, caplog
+    ):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Vitamin A",
+                "is_parent_total": True,
+            },
+            {
+                "name": "Retinyl Palmitate",
+                "is_parent_total": False,
+            },
+        ]
+        monkeypatch.setattr(
+            scorer,
+            "_get_active_ingredients",
+            lambda _product: [
+                {
+                    "name": "Product evidence",
+                    "scoring_input_kind": "product_level_evidence",
+                    "score": 10,
+                },
+                {
+                    "name": "Vitamin A",
+                    "is_parent_total": True,
+                    "score": 10,
+                },
+            ],
+        )
+
+        scorer._compute_bioavailability_score(p, "targeted")
+
+        assert "parent-total" not in caplog.text.lower()
+
+    def test_incomplete_iqd_parent_flags_report_precise_row_count(
+        self, scorer, monkeypatch, caplog
+    ):
+        p = make_base_product()
+        p["ingredient_quality_data"]["ingredients_scorable"] = [
+            {"name": "Vitamin A", "is_parent_total": True},
+            {"name": "Retinyl Palmitate"},
+        ]
+        monkeypatch.setattr(
+            scorer,
+            "_get_active_ingredients",
+            lambda _product: [{"name": "Retinyl Palmitate", "score": 10}],
+        )
+
+        scorer._compute_bioavailability_score(p, "targeted")
+
+        assert "1/2 ingredients_scorable rows omit 'is_parent_total'" in caplog.text
+        assert "dedup inactive" not in caplog.text.lower()
+
     def test_a1_skips_parent_total_rows(self, scorer):
         p = make_base_product()
         p["ingredient_quality_data"]["ingredients_scorable"] = [
