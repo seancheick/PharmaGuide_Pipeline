@@ -419,7 +419,53 @@ fiber-primary-with-accessory-probiotics; **and the 17 electrolyte candidates in
 > under review. It is intentionally the last classifier change and is **not**
 > appropriate for autonomous execution. The 0a prerequisite (SoT gate off the
 > path literal) is already done, so nothing blocks a future reviewed pass.
+>
+> **RC1 must also make R7a's unresolved count identity-aware** (adversarial-audit
+> catch, latent today). `is_single_scorable_active` derives
+> `unresolved_active_count` by counting unresolved ROWS. Today classification
+> reads only mapped rows, so that count is 0 corpus-wide and the fact is correct.
+> Once RC1 feeds unmapped-but-dosed rows in, a genuinely single-identity product
+> whose one nutrient appears as one mapped + one unmapped row would get
+> `unresolved_active_count = 1` → `is_single_scorable_active = False` → silently
+> denied the single floor. The RC1 pass must resolve unmapped-row identity (or
+> collapse same-nutrient mapped/unmapped pairs) before counting, or the fact
+> will under-credit exactly the products RC1 is meant to recover.
 
 Each rule lands as its own RED-first slice with its positive **and** near-miss
 fixtures, measured on the corpus via
 `scripts/audits/supptype_drift_preview.py compare --score`.
+
+---
+
+## 10. Adversarial audit (2026-07-16, fresh-context opus reviewer)
+
+Ran an independent adversarial reviewer over the whole branch diff before the
+Phase 2 checkpoint. Verdict: **no CRITICAL or HIGH defects; the completed work
+(0a/0b/0c/0d-R1–R4/R7a/Phase 1) is safe to present for merge review.** The
+reviewer empirically re-verified on the full corpus: §10 gate = 0 (both
+interpretations), `is_single_scorable_active` internally consistent (0
+violations), R1/R2/R3/R7a fixtures correct on real data, distribution matches
+the measured predictions, 159 targeted tests green.
+
+Findings and dispositions:
+
+- **MEDIUM — collagen title clause deviated from spec R5** (title alone minted
+  collagen over a rival identity; the in-code comment misrepresented it as
+  compliant). **FIXED** in commit `fix(taxonomy): collagen title clause must not
+  override a rival identity`: the clause now fires only when every non-collagen
+  active is a micronutrient adjunct. 11 products collagen→general_supplement;
+  near-miss test added.
+- **LOW — R7a unresolved count is row-based, latent RC1 false-negative.**
+  Recorded in the RC1 section above; the RC1 pass must make it identity-aware.
+- **LOW — Phase 1 guard tests are wiring/grep, not behavioral.** Accepted: the
+  real behavioral coverage lives in `test_v4_generic_formulation_p131.py` (ported
+  to inject the taxonomy fact and run the actual scoring functions); the new
+  file's value is the source guards and the helper contract.
+- **LOW — strict-release version gate skips taxonomy-less products.** Accepted as
+  narrow: a product with no `supplement_taxonomy` escapes *this* staleness check,
+  but other schema gates catch a taxonomy-less product. Not hardened to avoid
+  duplicate findings on validation-failed products.
+- **LOW/informational — `0.0 or fallback` confidence bug in
+  `score_supplements.py` (not owned by this branch).** The branch increases the
+  0.0-confidence population to ~1,776, so a truthful zero is coalesced to the
+  fallback. Flagged as a separate task; out of scope for this branch.
