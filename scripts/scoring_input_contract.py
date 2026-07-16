@@ -433,21 +433,58 @@ def _botanical_phrase_patterns() -> tuple[tuple[str, re.Pattern[str], Dict[str, 
     return tuple(patterns)
 
 
+def _botanical_child_variants(name: Any) -> List[str]:
+    """Lookup keys for a blend child name, MOST SPECIFIC FIRST.
+
+    Order is the contract, not an implementation detail. Each step discards more
+    of the label (parentheticals, then blend-noise words like
+    "powder"/"extract"/"bark"), so an earlier match uses more of what the label
+    actually said and is the stronger identity claim. Curated aliases exist to
+    be honoured over a generic stem match: "Cinnamon powder" is an explicit
+    alias of `cinnamon_bark` and must not be reduced to `cinnamon` by stripping
+    "powder".
+
+    This was a set. Set iteration order depends on the interpreter's string-hash
+    seed, so when a name matched several variants resolving to DIFFERENT
+    identities the winner was random — the same product, same code, scored
+    differently between runs (dsld 28986 "Refine" gained or lost a 328.34mg
+    dose-bearing blend_anchor_mass row depending on the seed). Do not re-derive
+    this list from a set, and do not "tidy" it with sorted(): alphabetical order
+    is arbitrary and would silently pick an identity the label does not support.
+    """
+    text = _norm(name)
+    if not text:
+        return []
+
+    paren_free = re.sub(r"\([^)]*\)", " ", text)
+    paren_free = re.sub(r"\s+", " ", paren_free).strip()
+    stripped = _BOTANICAL_BLEND_NAME_STRIP_RE.sub(" ", text)
+    stripped = re.sub(r"\s+", " ", stripped).strip()
+
+    ordered = [
+        text,                 # 1. the label as written
+        _slug(text),
+        paren_free,           # 2. parentheticals dropped
+        _slug(paren_free),
+        stripped,             # 3. blend-noise words dropped — last resort
+        _slug(stripped),
+    ]
+
+    seen: set[str] = set()
+    variants: List[str] = []
+    for variant in ordered:
+        if variant and variant not in seen:
+            seen.add(variant)
+            variants.append(variant)
+    return variants
+
+
 def _botanical_child_identity(name: Any) -> Optional[Dict[str, str]]:
     text = _norm(name)
     if not text:
         return None
     lookup = _botanical_identity_lookup()
-    variants = {
-        text,
-        _slug(text),
-        _norm(re.sub(r"\([^)]*\)", " ", text)),
-        _slug(re.sub(r"\([^)]*\)", " ", text)),
-    }
-    stripped = _BOTANICAL_BLEND_NAME_STRIP_RE.sub(" ", text)
-    stripped = re.sub(r"\s+", " ", stripped).strip()
-    variants.update({stripped, _slug(stripped)})
-    for variant in variants:
+    for variant in _botanical_child_variants(text):
         if variant in lookup:
             return lookup[variant]
 
