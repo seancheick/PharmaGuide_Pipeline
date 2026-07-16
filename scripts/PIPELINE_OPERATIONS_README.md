@@ -4,15 +4,15 @@
 
 ## 1. Which command should I run?
 
-| Intent | Command | What follows automatically |
-|---|---|---|
-| Reprocess and release the complete catalog | `bash batch_run_all_datasets.sh` | All brands Clean → Enrich → Score → Snapshot → Release |
-| Reprocess every brand but stop before catalog build | `bash batch_run_all_datasets.sh --pipeline-only` | Pipeline only |
-| Reprocess selected brands safely | `bash batch_run_all_datasets.sh --targets Brand_A,Brand_B --stages enrich,score` | Pipeline only by default |
-| Reprocess selected brands and intentionally release the full catalog | Add `--release` to the targeted command | Target pipeline → Snapshot → Release |
-| Rebuild the catalog from existing brand outputs | `bash scripts/rebuild_dashboard_snapshot.sh` | Candidate build/gates/promotion only |
-| Finish/retry downstream release work | `bash scripts/release_full.sh` | Auto-detect snapshot need, images, interactions, gates, Supabase, Flutter |
-| Collect weekly FDA/DEA regulatory signals | `bash scripts/run_fda_sync.sh` | Report only; exits 3 when clinical review is required |
+| Intent                                                               | Command                                                                          | What follows automatically                                                |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| Reprocess and release the complete catalog                           | `bash batch_run_all_datasets.sh`                                                 | All brands Clean → Enrich → Score → Snapshot → Release                    |
+| Reprocess every brand but stop before catalog build                  | `bash batch_run_all_datasets.sh --pipeline-only`                                 | Pipeline only                                                             |
+| Reprocess selected brands safely                                     | `bash batch_run_all_datasets.sh --targets Brand_A,Brand_B --stages enrich,score` | Pipeline only by default                                                  |
+| Reprocess selected brands and intentionally release the full catalog | Add `--release` to the targeted command                                          | Target pipeline → Snapshot → Release                                      |
+| Rebuild the catalog from existing brand outputs                      | `bash scripts/rebuild_dashboard_snapshot.sh`                                     | Candidate build/gates/promotion only                                      |
+| Finish/retry downstream release work                                 | `bash scripts/release_full.sh`                                                   | Auto-detect snapshot need, images, interactions, gates, Supabase, Flutter |
+| Collect weekly FDA/DEA regulatory signals                            | `bash scripts/run_fda_sync.sh`                                                   | Report only; exits 3 when clinical review is required                     |
 
 `release_full.sh` does include `rebuild_dashboard_snapshot.sh`. It calls it only
 when the current catalog is missing, stale, or inconsistent. When you already
