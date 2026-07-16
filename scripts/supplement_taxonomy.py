@@ -33,6 +33,11 @@ from supplement_type_utils import (
     _safe_list,
     _ingredient_name,
 )
+from scoring_input_contract import (
+    CLASSIFICATION_INPUT_CONTRACT,
+    CLASSIFICATION_INPUT_SOURCE,
+    get_classification_ingredients,
+)
 
 # ============================================================================
 # STRUCTURED CLASSIFICATION EVIDENCE CONTRACT
@@ -40,7 +45,7 @@ from supplement_type_utils import (
 # Release gates consume THIS, not prose. Bump the version when the meaning of
 # an existing field changes; strict release mode accepts only the current
 # version (see audit_source_of_truth_contract.py).
-CLASSIFICATION_CONTRACT_VERSION = "1.1.0"
+CLASSIFICATION_CONTRACT_VERSION = "1.2.0"
 
 # Stable, contract-level identifiers for the row population classification
 # consumed. Policy branches on these; `classification_input_source` stays a
@@ -50,16 +55,23 @@ CLASSIFICATION_CONTRACT_VERSION = "1.1.0"
 INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS = "score_eligible_rows"
 INPUT_CONTRACT_IQD_ALL_ROWS = "iqd_all_rows_fallback"
 INPUT_CONTRACT_RAW_LABEL_ACTIVES = "raw_label_actives"
+INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES = CLASSIFICATION_INPUT_CONTRACT
 
 _INPUT_SOURCE_TO_CONTRACT = {
     "ingredient_quality_data.ingredients_scorable": INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
     "ingredient_quality_data.ingredients_fallback": INPUT_CONTRACT_IQD_ALL_ROWS,
     "activeIngredients": INPUT_CONTRACT_RAW_LABEL_ACTIVES,
+    CLASSIFICATION_INPUT_SOURCE: INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES,
 }
 
 # Populations whose rows carry validated, score-eligible identities. A gate that
 # needs "the taxonomy saw trustworthy scorable input" tests membership here.
-SCORE_ELIGIBLE_INPUT_CONTRACTS = frozenset({INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS})
+SCORE_ELIGIBLE_INPUT_CONTRACTS = frozenset({
+    INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
+    # Contains the strict score-eligible subset plus explicitly unresolved
+    # label actives. Gates still verify score eligibility on row evidence.
+    INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES,
+})
 
 # Why a label row was or was not counted as a classification active. Enumerated
 # so audits can branch on a value instead of parsing a sentence.
@@ -84,6 +96,7 @@ REASON_CODE_NO_QUANTIFIED_ACTIVE_EVIDENCE = "no_quantified_active_evidence"
 REASON_CODE_UNCLASSIFIED_RESIDUAL = "no_matching_classification_rule"
 REASON_CODE_IDENTITY_DEDUP = "identity_dedup_applied"
 REASON_CODE_NON_QUANTIFIED_EXCLUDED = "non_quantified_base_excluded"
+REASON_CODE_UNRESOLVED_LABEL_ACTIVE = "unresolved_label_active_included"
 
 _PROBIOTIC_IDENTITY_RE = re.compile(
     r"\b("
@@ -92,6 +105,10 @@ _PROBIOTIC_IDENTITY_RE = re.compile(
     r"lactococcus|acidophilus|reuteri|rhamnosus|plantarum|casei|salivarius|"
     r"coagulans|subtilis|bifidus|cfu|live\s+cultures?|viable\s+cells?"
     r")\b",
+    re.IGNORECASE,
+)
+_NON_LIVE_PROBIOTIC_DERIVATIVE_RE = re.compile(
+    r"\b(epicor|postbiotic|dried\s+yeast\s+fermentate|yeast\s+fermentate)\b",
     re.IGNORECASE,
 )
 
@@ -378,16 +395,25 @@ def _is_non_quantified(row: dict[str, Any]) -> bool:
     return False
 
 
-def _row_has_probiotic_identity(row: dict[str, Any]) -> bool:
-    category = canonical_category(row.get("category"))
+def _row_has_probiotic_identity(
+    row: dict[str, Any],
+    category: str | None = None,
+) -> bool:
+    category = category or canonical_category(row.get("category"))
     if category in {"probiotic", "bacteria"}:
         return True
     text = _normalize_text(
         " ".join(
             str(row.get(key) or "")
-            for key in ("name", "standardName", "standard_name", "canonical_id", "raw_source_text")
+            for key in (
+                "name", "raw_source_text", "source_label_name",
+                "label_display_name", "standardName", "standard_name",
+                "canonical_id",
+            )
         )
     )
+    if _NON_LIVE_PROBIOTIC_DERIVATIVE_RE.search(text):
+        return False
     return bool(_PROBIOTIC_IDENTITY_RE.search(text))
 
 
@@ -529,6 +555,9 @@ def _cid_in_product_name(cid: str, product_name: str) -> bool:
         "vitamin_b12": "b12", "vitamin_b12_cobalamin": "b12",
         "vitamin_d": "vitamin d", "vitamin_d3": "d3",
         "vitamin_c": "vitamin c", "vitamin_k2": "k2",
+        "vitamin_b5": "b5", "vitamin_b5_pantothenic": "b5",
+        "vitamin_b5_pantothenic_acid": "b5",
+        "pantothenic_acid": "pantothenic acid",
         "vitamin_b6": "b6", "vitamin_b7_biotin": "biotin",
         "tmg_betaine": "betaine",
     }
@@ -587,11 +616,14 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     non_quantified_rows: list[dict[str, Any]] = []
     category_row_counts: dict[str, int] = {}
     canonical_ids: list[str] = []
+    score_eligible_canonical_ids: set[str] = set()
     non_quantified_probiotic_count = 0
     row_evidence: list[dict[str, Any]] = []
 
     for row in rows:
-        category = canonical_category(row.get("category"))
+        category = canonical_category(
+            row.get("classification_category") or row.get("category")
+        )
         role = _normalize_text(row.get("role_classification"))
         name = _ingredient_name(row)
         if row.get("score_eligible_by_cleaner") is False:
@@ -607,9 +639,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             row_evidence.append(
                 _row_evidence(row, category, ROW_ROLE_EXCLUDED_STRUCTURAL))
             continue
-        is_probiotic_strain = category in {"probiotic", "bacteria"} or (
-            name and bool(_PROBIOTIC_IDENTITY_RE.search(name))
-        )
+        is_probiotic_strain = _row_has_probiotic_identity(row, category)
 
         # Skip truly non-scorable
         if category in NON_SCORABLE_CATEGORIES:
@@ -663,9 +693,11 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         )
 
         # Track canonical IDs for secondary type and category detection
-        cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
+        cid = _classification_canonical_id(row)
         if cid:
             canonical_ids.append(cid)
+            if _row_is_score_eligible(row):
+                score_eligible_canonical_ids.add(cid)
 
     # R1 — count distinct IDENTITIES, not label rows.
     #
@@ -689,9 +721,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # separately: never under-count actives.
     identity_keys: list[str] = []
     for index, row in enumerate(quantified_rows):
-        canonical = _normalize_text(
-            row.get("canonical_id") or row.get("iqm_parent_key") or ""
-        )
+        canonical = _classification_canonical_id(row)
         identity_keys.append(canonical or f"__unresolved_row_{index}")
 
     # Every ratio below uses the same identity denominator as ``active_count``.
@@ -702,13 +732,19 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # raw row breakdown separately for diagnostics.
     identity_category_votes: dict[str, Counter[str]] = {}
     for identity_key, row in zip(identity_keys, quantified_rows):
-        category = canonical_category(row.get("category")) or "uncategorized"
+        category = canonical_category(
+            row.get("classification_category") or row.get("category")
+        ) or "uncategorized"
         identity_category_votes.setdefault(identity_key, Counter())[category] += 1
 
     identity_categories: dict[str, str] = {}
     category_counts: dict[str, int] = {}
     for identity_key, votes in identity_category_votes.items():
-        selected = min(votes, key=lambda category: (-votes[category], category))
+        selected = (
+            "enzyme"
+            if identity_key in _SYSTEMIC_ENZYME_CANONICAL_IDS
+            else min(votes, key=lambda category: (-votes[category], category))
+        )
         identity_categories[identity_key] = selected
         category_counts[selected] = category_counts.get(selected, 0) + 1
 
@@ -731,8 +767,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     probiotic_count = len({
         identity_key
         for identity_key, row in zip(identity_keys, quantified_rows)
-        if canonical_category(row.get("category")) in {"probiotic", "bacteria"}
-        or bool(_PROBIOTIC_IDENTITY_RE.search(_ingredient_name(row)))
+        if _row_has_probiotic_identity(
+            row,
+            canonical_category(
+                row.get("classification_category") or row.get("category")
+            ),
+        )
     })
 
     quantified_row_count = len(quantified_rows)
@@ -762,7 +802,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     vitamin_ids = cid_set & _VITAMIN_CANONICAL_IDS
     mineral_ids = cid_set & _MINERAL_CANONICAL_IDS
     b_vitamin_ids = cid_set & _B_VITAMIN_IDS
-    omega_ids = cid_set & _OMEGA_CANONICAL_IDS
+    # An unresolved or taxonomy-incoherent omega repair can establish that a
+    # label contains another active, but cannot by itself claim the EPA/DHA
+    # scoring cohort.  This blocks plant omega rows repaired to ``fish_oil``
+    # from turning a vegan D3 spray into fish oil while preserving every
+    # score-eligible EPA/DHA identity. R5 separately specifies title-backed
+    # unresolved EPA/DHA evidence.
+    omega_ids = cid_set & _OMEGA_CANONICAL_IDS & score_eligible_canonical_ids
     amino_ids = cid_set & _AMINO_ACID_IDS
     collagen_ids = cid_set & _COLLAGEN_IDS
 
@@ -864,12 +910,17 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     probiotic_majority = (
         non_support_active_count > 0
         and probiotic_count >= 2
-        and probiotic_count >= ceil(non_support_active_count * 0.5)
+        and (
+            probiotic_count > non_support_active_count * 0.5
+            or (
+                (probiotic_name_signal or probiotic_flag)
+                and probiotic_count >= ceil(non_support_active_count * 0.5)
+            )
+        )
     )
     sole_active_is_strain = (
         non_support_active_count == 1
         and probiotic_count == 1
-        and (probiotic_name_signal or probiotic_flag or probiotic_row_identity)
     )
     if (
         (active_count == 0 or support_only_active)
@@ -1118,6 +1169,18 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             decision_code = "single_joint_support_identity"
             confidence = 0.9
             reasons.append(f"single joint-support ingredient: {cid}")
+        elif any(
+            token in " ".join(str(quantified_rows[0].get(key) or "") for key in (
+                "name", "raw_source_text", "source_label_name", "label_display_name"
+            )).lower()
+            for token in _JOINT_NAME_TOKENS
+        ):
+            primary_type = "joint_support"
+            decision_code = "single_joint_name_and_label_active"
+            confidence = 0.8
+            reasons.append(
+                f"single label active with bounded joint/cartilage title: {product_name}"
+            )
         elif cid in _COLLAGEN_IDS:
             # Collagen before protein — collagen is a specific protein subset
             primary_type = "collagen"
@@ -1207,6 +1270,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 primary_type = "omega_3"
             elif dominant_cid in _PROTEIN_IDS:
                 primary_type = "protein_powder"
+            elif dominant_category == "vitamin":
+                primary_type = "single_vitamin"
+            elif dominant_category == "mineral":
+                primary_type = "single_mineral"
+            elif dominant_category == "amino_acid":
+                primary_type = "amino_acid"
             elif dominant_category in ("herb", "botanical"):
                 primary_type = "herbal_botanical"
             else:
@@ -1451,13 +1520,27 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         for item in included_evidence
         if item["score_eligible"] and item["canonical_id"]
     }
-    unresolved_active_count = sum(
-        1 for item in included_evidence if not item["score_eligible"]
-    )
+    unresolved_identity_keys = {
+        item.get("canonical_id")
+        or "unresolved:" + str(
+            item.get("source_path") or item.get("row_id") or index
+        )
+        for index, item in enumerate(included_evidence)
+        if not item["score_eligible"]
+    }
+    # A mapped and an unresolved representation of the same canonical identity
+    # is one label active and must not falsely defeat the single-scorable fact.
+    unresolved_identity_keys -= scorable_identities
+    unresolved_active_count = len(unresolved_identity_keys)
     scorable_active_count = len(scorable_identities)
     is_single_scorable_active = (
         scorable_active_count == 1 and unresolved_active_count == 0
     )
+    if unresolved_active_count:
+        reasons.append(
+            f"included {unresolved_active_count} unresolved quantified label active(s)"
+        )
+        reason_codes.append(REASON_CODE_UNRESOLVED_LABEL_ACTIVE)
 
     return {
         "primary_type": primary_type,
@@ -1719,11 +1802,25 @@ def _row_is_score_eligible(row: dict[str, Any]) -> bool:
     reject. Keeping the two facts separate is what lets
     `is_single_scorable_active` stay honest.
     """
+    if "_classification_score_eligible" in row:
+        return row.get("_classification_score_eligible") is True
     if row.get("score_eligible_by_cleaner") is False:
         return False
     if row.get("mapped") is False:
         return False
     return bool(_normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or ""))
+
+
+def _classification_canonical_id(row: dict[str, Any]) -> str:
+    """Canonical identity permitted to drive taxonomy decisions.
+
+    RC1 rows can retain a repaired scoring canonical for lineage while naming a
+    safer pre-repair identity for classification. Presence matters: an explicit
+    empty marker means "count this active, but do not trust a canonical route."
+    """
+    if "_classification_canonical_id" in row:
+        return _normalize_text(row.get("_classification_canonical_id"))
+    return _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
 
 
 def _row_evidence(row: dict[str, Any], category: str, role: str) -> dict[str, Any]:
@@ -1778,20 +1875,10 @@ def percentile_label_for(percentile_category: Any) -> str:
 # ============================================================================
 
 def _iter_classification_rows_v2(product: dict[str, Any]) -> tuple[list[dict[str, Any]], str]:
-    """Get classification rows, preferring ingredient_quality_data.
+    """Return both label-active and score-eligible views from one owner.
 
-    Unlike v1, this returns the RAW rows without filtering — the caller
-    handles NP/non-quantified filtering to partition into quantified vs base.
+    ``scoring_input_contract`` owns the population boundary.  Taxonomy must not
+    rediscover scoring eligibility or scan the broad IQD population itself.
     """
-    iqd = product.get("ingredient_quality_data", {})
-    iqd_scorable_rows = _safe_list(iqd.get("ingredients_scorable"))
-    if isinstance(iqd, dict) and "ingredients_scorable" in iqd:
-        return [row for row in iqd_scorable_rows if isinstance(row, dict)], "ingredient_quality_data.ingredients_scorable"
-    if iqd_scorable_rows:
-        return [row for row in iqd_scorable_rows if isinstance(row, dict)], "ingredient_quality_data.ingredients_scorable"
-    iqd_fallback_rows = _safe_list(iqd.get("ingredients"))
-    if iqd_fallback_rows:
-        return [row for row in iqd_fallback_rows if isinstance(row, dict)], "ingredient_quality_data.ingredients_fallback"
-
-    active_rows = _safe_list(product.get("activeIngredients"))
-    return [row for row in active_rows if isinstance(row, dict)], "activeIngredients"
+    result = get_classification_ingredients(product)
+    return result.rows, result.source

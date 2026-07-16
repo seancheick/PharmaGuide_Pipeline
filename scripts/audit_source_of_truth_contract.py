@@ -24,6 +24,7 @@ from stage_manifest import select_stage_files
 from supplement_taxonomy import (
     CLASSIFICATION_CONTRACT_VERSION,
     INPUT_CONTRACT_IQD_ALL_ROWS,
+    INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES,
     INPUT_CONTRACT_RAW_LABEL_ACTIVES,
     INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
     ROW_ROLE_INCLUDED_ACTIVE,
@@ -962,6 +963,7 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                         )
                         if input_contract not in {
                             INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
+                            INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES,
                             INPUT_CONTRACT_IQD_ALL_ROWS,
                             INPUT_CONTRACT_RAW_LABEL_ACTIVES,
                         }:

@@ -31,6 +31,8 @@ _IQM_PATH = _DATA_DIR / "ingredient_quality_map.json"
 SCORING_SOURCE = "ingredient_quality_data.ingredients_scorable"
 LEGACY_IQD_SOURCE = "ingredient_quality_data.ingredients"
 PRODUCT_EVIDENCE_SOURCE = "product_scoring_evidence"
+CLASSIFICATION_INPUT_SOURCE = "scoring_input_contract.quantified_label_active_rows"
+CLASSIFICATION_INPUT_CONTRACT = "quantified_label_actives"
 PRODUCT_EVIDENCE_SCOPES = {"product_level", "blend_level", "row_level"}
 PRODUCT_EVIDENCE_SECTION_SUPPORT = {
     "probiotic_cfu": ["probiotic_dose_adequacy"],
@@ -1612,6 +1614,16 @@ class ScoringInputResult:
         }
 
 
+@dataclass
+class ClassificationInputResult:
+    """The label-active and score-eligible views from one contract owner."""
+
+    rows: List[Dict[str, Any]]
+    source: str
+    input_contract: str
+    scoring_contract_findings: List[str] = field(default_factory=list)
+
+
 def _has_identity(row: Dict[str, Any]) -> bool:
     if row.get("mapped_identity") is False:
         return False
@@ -2072,6 +2084,193 @@ def get_scoring_ingredients(
         unmapped_count=unmapped_count,
         mapped_coverage=mapped_coverage,
         contract_findings=contract_findings,
+    )
+
+
+def _classification_row_key(row: Dict[str, Any], index: int) -> str:
+    """Stable row identity for population union/deduplication."""
+    for key in ("raw_source_path", "row_id", "ingredientId", "source_label_key"):
+        value = str(row.get(key) or "").strip()
+        if value:
+            return f"{key}:{value}"
+    return "fallback:" + "|".join((
+        _norm(row.get("name") or row.get("raw_source_text")),
+        _norm(row.get("canonical_id")),
+        str(row.get("quantity") or ""),
+        _norm(row.get("unit")),
+        str(index),
+    ))
+
+
+def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
+    """RC1 boundary: a real label active unresolved only for scoring.
+
+    Cleaner/enrichment already own active-vs-excipient/structural decisions.
+    Requiring their explicit ``active_unmapped`` disposition and
+    ``no_quality_map_match`` reason excludes nutrition facts, recognized
+    non-scorables, additives, blend headers and other intentionally dropped
+    rows from the broad candidate pool.
+    """
+    if row.get("score_eligible_by_cleaner") is not True:
+        return False
+    if _norm(row.get("cleaner_row_role")) != "active_scorable":
+        return False
+    if _norm(row.get("source_section")) != "active":
+        return False
+    if _norm(row.get("role_classification")) != "active_unmapped":
+        return False
+    if _norm(row.get("skip_reason") or row.get("score_exclusion_reason")) != "no_quality_map_match":
+        return False
+    if bool(row.get("is_excipient")):
+        return False
+    if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
+        return False
+
+    quantity = _as_float(row.get("quantity"))
+    activity_quantity = _as_float(row.get("activity_quantity"))
+    return bool(row.get("has_dose")) or (quantity is not None and quantity > 0) or (
+        activity_quantity is not None and activity_quantity > 0
+    )
+
+
+def _canonical_token_is_bounded_in_text(canonical_id: Any, text: Any) -> bool:
+    token = re.sub(r"[_\W]+", " ", _norm(canonical_id)).strip()
+    probe = re.sub(r"[_\W]+", " ", _norm(text)).strip()
+    if not token or not probe:
+        return False
+    return bool(re.search(rf"(?:^|\s){re.escape(token)}(?:$|\s)", probe))
+
+
+def _classification_identity_for_incoherent_row(row: Dict[str, Any]) -> str:
+    """Choose only a label-supported side of an incoherent identity repair.
+
+    ``canonical_id_before`` may be a child form (Horsetail -> silica), while
+    ``canonical_id_after`` may be an over-broad repaired parent (Omega-3 plant
+    oil -> fish_oil).  Prefer the identity stated in the row label; if neither
+    side is label-supported, accept a pre-repair identity only when a structured
+    form names it exactly. Otherwise fail closed with no routing identity.
+    """
+    before = _norm(row.get("canonical_id_before"))
+    after = _norm(row.get("canonical_id_after") or row.get("canonical_id"))
+    label_text = " ".join(str(row.get(key) or "") for key in (
+        "name", "raw_source_text", "source_label_name", "label_display_name"
+    ))
+    if _canonical_token_is_bounded_in_text(after, label_text):
+        return after
+    if _canonical_token_is_bounded_in_text(before, label_text):
+        return before
+
+    for form in _safe_list(_safe_dict(row.get("raw_taxonomy")).get("forms")):
+        if not isinstance(form, dict):
+            continue
+        form_text = " ".join(str(form.get(key) or "") for key in (
+            "name", "ingredientGroup"
+        ))
+        if _canonical_token_is_bounded_in_text(before, form_text):
+            return before
+    return ""
+
+
+def get_classification_ingredients(product: Dict[str, Any]) -> ClassificationInputResult:
+    """Return label actives without creating a second scoring engine.
+
+    The mapped subset comes from :func:`get_scoring_ingredients`. The only
+    additive population is cleaner-approved, dose-bearing ``active_unmapped``
+    rows rejected specifically because no quality-map match exists. They inform
+    product identity but remain ineligible for every score.
+    """
+    product = product or {}
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    scoring = get_scoring_ingredients(
+        product,
+        strict=True,
+        allow_legacy_fallback=False,
+    )
+    original_scorable_keys = {
+        _classification_row_key(row, index)
+        for index, row in enumerate(_safe_list(iqd.get("ingredients_scorable")))
+        if isinstance(row, dict)
+    }
+
+    rows: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for index, source_row in enumerate(scoring.rows):
+        if _norm(source_row.get("scoring_input_kind")) == "product_level_evidence":
+            continue
+        # The scorer may recover additional mapped identities from
+        # ``ingredients_skipped`` for dose/evidence assembly.  RC1 is narrower:
+        # preserve taxonomy's already-reviewed mapped population, but validate
+        # that population through the authoritative strict scoring contract.
+        # Admitting every recovered row here reintroduces decorative probiotic
+        # bases and turns ``quantified_label_actives`` into an NP-row union.
+        key = _classification_row_key(source_row, index)
+        if key not in original_scorable_keys:
+            continue
+        row = dict(source_row)
+        row["_classification_score_eligible"] = True
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(row)
+
+    for index, source_row in enumerate(_safe_list(iqd.get("ingredients"))):
+        if not isinstance(source_row, dict) or not _is_genuine_unresolved_label_active(source_row):
+            continue
+        row = dict(source_row)
+        row["_classification_score_eligible"] = False
+        if row.get("identity_taxonomy_coherent") is False:
+            # A repaired canonical that contradicts structured label taxonomy
+            # is useful lineage, not a trustworthy classification identity.
+            # Prefer the pre-repair label identity for classification while the
+            # emitted row evidence continues to expose the repaired canonical.
+            row["_classification_canonical_id"] = (
+                _classification_identity_for_incoherent_row(row)
+            )
+        raw_category = _safe_dict(row.get("raw_taxonomy")).get("category")
+        if raw_category:
+            row["classification_category"] = raw_category
+        key = _classification_row_key(row, index)
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append(row)
+
+    if rows or isinstance(iqd.get("ingredients_scorable"), list):
+        return ClassificationInputResult(
+            rows=rows,
+            source=CLASSIFICATION_INPUT_SOURCE,
+            input_contract=CLASSIFICATION_INPUT_CONTRACT,
+            scoring_contract_findings=list(scoring.contract_findings),
+        )
+
+    # Explicit old-artifact/fixture compatibility. Production strict artifacts
+    # always carry ``ingredients_scorable`` and therefore cannot enter this
+    # branch. Preserve the historical IQD-all-rows diagnostic contract for
+    # inspection instead of silently pretending these rows were validated by
+    # the current scoring contract.
+    legacy_iqd_rows = [
+        dict(row)
+        for row in _safe_list(iqd.get("ingredients"))
+        if isinstance(row, dict)
+    ]
+    if legacy_iqd_rows:
+        return ClassificationInputResult(
+            rows=legacy_iqd_rows,
+            source=LEGACY_IQD_SOURCE,
+            input_contract="iqd_all_rows_fallback",
+            scoring_contract_findings=list(scoring.contract_findings),
+        )
+
+    raw_rows = [
+        dict(row)
+        for row in _safe_list(product.get("activeIngredients"))
+        if isinstance(row, dict)
+    ]
+    return ClassificationInputResult(
+        rows=raw_rows,
+        source="activeIngredients",
+        input_contract="raw_label_actives",
+        scoring_contract_findings=list(scoring.contract_findings),
     )
 
 

@@ -317,7 +317,9 @@ class TestMultivitamin:
         }
         result = classify_supplement(p)
         assert result["primary_type"] == "multivitamin"
-        assert result["classification_input_source"] == "ingredient_quality_data.ingredients_scorable"
+        assert result["classification_input_source"] == (
+            "scoring_input_contract.quantified_label_active_rows"
+        )
 
 
 # ============================================================================

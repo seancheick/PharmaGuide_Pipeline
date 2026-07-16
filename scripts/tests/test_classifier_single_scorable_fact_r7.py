@@ -39,15 +39,37 @@ def _row(name, canonical_id, category, qty=100.0, unit="mg", **extra):
         "role_classification": "active_scorable",
         "cleaner_row_role": "active_scorable",
         "score_eligible_by_cleaner": True,
+        "source_section": "active",
+        "raw_source_path": f"ingredientRows[{name}]",
+        "dose_class": "therapeutic_mass",
+        "scoreable_identity": bool(canonical_id),
+        "mapped_identity": bool(canonical_id),
+        "identity_disposition": "clean" if canonical_id else "unresolved",
     }
     row.update(extra)
     return row
 
 
 def _product(name, rows):
+    scorable = [row for row in rows if row.get("mapped") is not False]
+    unresolved = []
+    for row in rows:
+        if row.get("mapped") is not False:
+            continue
+        unresolved_row = dict(row)
+        unresolved_row.update({
+            "role_classification": "active_unmapped",
+            "skip_reason": "no_quality_map_match",
+            "has_dose": True,
+        })
+        unresolved.append(unresolved_row)
     return {
         "dsld_id": 930001, "product_name": name, "fullName": name,
-        "ingredient_quality_data": {"ingredients_scorable": rows},
+        "ingredient_quality_data": {
+            "ingredients_scorable": scorable,
+            "ingredients": scorable + unresolved,
+            "ingredients_skipped": unresolved,
+        },
         "probiotic_data": {"is_probiotic_product": False, "total_cfu": 0},
     }
 

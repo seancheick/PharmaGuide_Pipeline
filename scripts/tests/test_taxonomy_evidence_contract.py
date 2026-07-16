@@ -34,6 +34,7 @@ import audit_source_of_truth_contract as sot  # noqa: E402
 from supplement_taxonomy import (  # noqa: E402
     CLASSIFICATION_CONTRACT_VERSION,
     INPUT_CONTRACT_IQD_ALL_ROWS,
+    INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES,
     INPUT_CONTRACT_RAW_LABEL_ACTIVES,
     INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
     ROW_ROLE_EXCLUDED_NON_QUANTIFIED,
@@ -92,7 +93,7 @@ def test_taxonomy_emits_the_contract(omega_product):
     taxonomy = classify_supplement(omega_product)
 
     assert taxonomy["classification_contract_version"] == CLASSIFICATION_CONTRACT_VERSION
-    assert taxonomy["classification_input_contract"] == INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS
+    assert taxonomy["classification_input_contract"] == INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES
     assert isinstance(taxonomy["classification_row_evidence"], list)
     assert taxonomy["unresolved_quantified_active_count"] == 0
 
@@ -107,6 +108,7 @@ def test_input_contract_is_stable_id_not_a_physical_path(omega_product):
     assert "ingredient_quality_data" not in contract
     assert contract in {
         INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
+        INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES,
         INPUT_CONTRACT_IQD_ALL_ROWS,
         INPUT_CONTRACT_RAW_LABEL_ACTIVES,
     }
@@ -115,7 +117,9 @@ def test_input_contract_is_stable_id_not_a_physical_path(omega_product):
 def test_physical_source_is_still_emitted_for_diagnostics(omega_product):
     """Kept — but as a diagnostic, not policy."""
     taxonomy = classify_supplement(omega_product)
-    assert taxonomy["classification_input_source"] == "ingredient_quality_data.ingredients_scorable"
+    assert taxonomy["classification_input_source"] == (
+        "scoring_input_contract.quantified_label_active_rows"
+    )
 
 
 def test_row_evidence_records_every_row_with_an_explicit_role(omega_product):
@@ -131,11 +135,13 @@ def test_row_evidence_records_every_row_with_an_explicit_role(omega_product):
     taxonomy = classify_supplement(product)
     evidence = taxonomy["classification_row_evidence"]
 
-    assert len(evidence) == 4, "every input row must be accounted for"
+    # The structural blend header is rejected by the authoritative scoring
+    # input owner before it becomes classification input. Taxonomy accounts for
+    # every row it receives; it does not recreate the scoring rejection rules.
+    assert len(evidence) == 3
     roles = {item["canonical_id"]: item["role"] for item in evidence}
     assert roles["epa"] == ROW_ROLE_INCLUDED_ACTIVE
     assert roles["dha"] == ROW_ROLE_INCLUDED_ACTIVE
-    assert roles["blend_x"] == ROW_ROLE_EXCLUDED_STRUCTURAL
     assert roles["rosemary"] == ROW_ROLE_EXCLUDED_NON_QUANTIFIED
 
     for item in evidence:
@@ -149,9 +155,22 @@ def test_row_evidence_separates_score_eligibility_from_being_an_active(omega_pro
     """A dose-bearing row with an unresolved identity is a genuine label active
     that the SCORER must still reject. RC1 depends on these staying distinct."""
     product = copy.deepcopy(omega_product)
-    product["ingredient_quality_data"]["ingredients_scorable"].append(
-        _row("Mystery Herb", "", "botanical", 300.0, mapped=False)
+    unresolved = _row(
+        "Mystery Herb",
+        "",
+        "botanical",
+        300.0,
+        mapped=False,
+        mapped_identity=False,
+        scoreable_identity=False,
+        identity_disposition="unresolved",
+        source_section="active",
+        role_classification="active_unmapped",
+        skip_reason="no_quality_map_match",
+        has_dose=True,
     )
+    product["ingredient_quality_data"]["ingredients"] = [unresolved]
+    product["ingredient_quality_data"]["ingredients_skipped"] = [unresolved]
 
     taxonomy = classify_supplement(product)
     unresolved = [
@@ -232,6 +251,9 @@ def test_iqd_fallback_detection_uses_the_contract():
     assert not sot.taxonomy_used_iqd_fallback(
         {"classification_input_contract": INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS}
     )
+    assert not sot.taxonomy_used_iqd_fallback(
+        {"classification_input_contract": INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES}
+    )
     # pre-contract artifact
     assert sot.taxonomy_used_iqd_fallback(
         {"classification_input_source": "ingredient_quality_data.ingredients_fallback"}
@@ -240,6 +262,7 @@ def test_iqd_fallback_detection_uses_the_contract():
 
 def test_score_eligible_contract_set_is_not_empty():
     assert SCORE_ELIGIBLE_INPUT_CONTRACTS
+    assert INPUT_CONTRACT_QUANTIFIED_LABEL_ACTIVES in SCORE_ELIGIBLE_INPUT_CONTRACTS
     assert INPUT_CONTRACT_IQD_ALL_ROWS not in SCORE_ELIGIBLE_INPUT_CONTRACTS
     assert INPUT_CONTRACT_RAW_LABEL_ACTIVES not in SCORE_ELIGIBLE_INPUT_CONTRACTS
 
