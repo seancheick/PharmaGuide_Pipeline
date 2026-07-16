@@ -194,6 +194,14 @@ _COLLAGEN_IDS = frozenset({
     "type_i_collagen", "type_iii_collagen",
 })
 
+# Ingredients formulated ALONGSIDE collagen to support it, not to compete with
+# it for the product's identity: vitamin C is a collagen-synthesis cofactor, and
+# hyaluronic acid is the standard joint/skin partner. Evidence-only — these are
+# the adjuncts actually observed on the corpus's collagen SKUs (269491, 19435).
+# Keep this tight: every id added here is one more thing that cannot outvote
+# collagen.
+_COLLAGEN_COFACTOR_IDS = frozenset({"vitamin_c", "hyaluronic_acid"})
+
 # Name-based signals for functional categories
 _SLEEP_NAME_TOKENS = {"sleep", "melatonin", "nighttime", "night time", "calm sleep"}
 # Short tokens that need word-boundary matching (avoid "forest" -> "rest").
@@ -983,6 +991,37 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         confidence = 0.9
         reasons.append(f"named amino acid with cofactors: {sorted(named_amino_ids)}")
 
+    # --- Collagen (R3) ---
+    # Precedence, deliberately: a broad vitamin/mineral panel outranks collagen
+    # (an incidental collagen row must not hijack a multivitamin — 68 real ones
+    # carry it), and so does a functional TITLE. "Hair Skin Nails" with biotin +
+    # collagen is a beauty product that contains collagen; "Collagen Types 1 & 3"
+    # is a collagen product. The title states the purpose; the ingredient does
+    # not get to overrule it.
+    #
+    # But collagen DOES outrank everything below, all of which used to claim
+    # genuine collagen SKUs first:
+    #   * the protein branch fires on the bare `protein` CATEGORY, which collagen
+    #     carries, at 0.9 confidence with zero protein identities — the reason
+    #     literally read "protein powder signal: ids=[]";
+    #   * the 2-active band named collagen as dominant in its own reason string
+    #     and still emitted general_supplement, having no word for it.
+    elif collagen_ids and (
+        # dominant by identity share
+        len(collagen_ids) * 2 >= active_count
+        # or the only actives besides collagen are its cofactors
+        or not (cid_set - collagen_ids - _COLLAGEN_COFACTOR_IDS)
+        # or the title corroborates the identity that IS present. Intent alone is
+        # never sufficient (spec R5): this branch is unreachable without a
+        # collagen canonical id on the label.
+        or "collagen" in product_name
+    ):
+        primary_type = "collagen"
+        confidence = 0.85
+        reasons.append(
+            f"collagen dominant: {sorted(collagen_ids)} of {active_count} active(s)"
+        )
+
     # --- Single nutrient (active_count == 1) ---
     elif active_count == 1:
         cid = canonical_ids[0] if canonical_ids else ""
@@ -1055,14 +1094,33 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             dominant_cid = None
 
         if dominant_cid:
+            # This band had vocabulary for only vitamin/mineral/amino, so every
+            # other dominant identity fell to `general_supplement` — while the
+            # reason string cheerfully named the ingredient it had just
+            # identified ("name-dominant single ingredient: collagen (other=
+            # vitamin_c not named)"). It knew the answer and had no word for it.
+            # Spec R2: when the band identifies a dominant named identity, emit
+            # that identity's type.
+            dominant_category = canonical_categories.get(dominant_cid, "")
             if dominant_cid in _VITAMIN_CANONICAL_IDS:
                 primary_type = "single_vitamin"
             elif dominant_cid in _MINERAL_CANONICAL_IDS:
                 primary_type = "single_mineral"
             elif dominant_cid in _AMINO_ACID_IDS:
                 primary_type = "amino_acid"
+            elif dominant_cid in _COLLAGEN_IDS:
+                primary_type = "collagen"
+            elif dominant_cid in _OMEGA_CANONICAL_IDS:
+                primary_type = "omega_3"
+            elif dominant_cid in _PROTEIN_IDS:
+                primary_type = "protein_powder"
+            elif dominant_category in ("herb", "botanical"):
+                primary_type = "herbal_botanical"
             else:
+                # Still no vocabulary for this identity — say so instead of
+                # implying a rule decided (§10).
                 primary_type = "general_supplement"
+                reason_codes.append(REASON_CODE_UNCLASSIFIED_RESIDUAL)
             confidence = 0.85
             other_cid = cid_b if dominant_cid == cid_a else cid_a
             reasons.append(f"name-dominant single ingredient: {dominant_cid} (other={other_cid} not named)")
@@ -1123,7 +1181,10 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         reasons.append(f"pre-workout signal: ids={sorted(cid_set & _PRE_WORKOUT_IDS)}")
 
     # --- Protein powder ---
-    elif any(t in product_name for t in _PROTEIN_NAME_TOKENS) or category_counts.get("protein", 0) > 0 or (cid_set & _PROTEIN_IDS):
+    # Requires a protein IDENTITY or an explicit protein name token. The bare
+    # `protein` CATEGORY is not evidence of a protein powder: collagen carries it
+    # too, which is exactly how this branch used to fire with an empty id set.
+    elif any(t in product_name for t in _PROTEIN_NAME_TOKENS) or (cid_set & _PROTEIN_IDS):
         primary_type = "protein_powder"
         confidence = 0.9
         reasons.append(f"protein powder signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
@@ -1146,11 +1207,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         confidence = 0.8
         reasons.append(f"amino acid dominant: {sorted(amino_ids)}")
 
-    # --- Collagen ---
-    elif collagen_ids:
-        primary_type = "collagen"
-        confidence = 0.85
-        reasons.append(f"collagen: {sorted(collagen_ids)}")
+    # (The old ungated `elif collagen_ids:` lived here. It has been replaced by
+    # the dominance-gated branch above, which runs before protein. An ungated
+    # rule this late meant ANY collagen row could claim a leftover product — the
+    # "incidental collagen row hijacks" failure the plan warns about — while
+    # genuine collagen SKUs never reached it because protein grabbed them first.
+    # Collagen that is present but NOT dominant now falls through to the
+    # reason-coded residual rather than silently owning the product.)
 
     # --- Functional category detection from product name ---
     elif active_count >= 2:
