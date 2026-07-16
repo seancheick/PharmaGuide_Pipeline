@@ -116,6 +116,39 @@ def test_incidental_collagen_row_does_not_hijack_a_multivitamin():
     )
 
 
+def test_title_naming_collagen_does_not_override_a_competing_identity():
+    """R5: the title corroborates, it does not suffice. A product named for
+    collagen but carrying a competing STRUCTURAL identity (glucosamine = joint)
+    must not be minted collagen by the title alone.
+
+    Real case 328282 "ArthroMax Advanced NT2 Collagen & ApresFlex": collagen +
+    glucosamine + boswellia + boron. The title clause fires only when every
+    non-collagen active is a micronutrient adjunct (vitamin/mineral/cofactor);
+    glucosamine is neither, so this routes on its own merits, not to collagen.
+    """
+    taxonomy = classify_supplement(_product("ArthroMax Advanced NT2 Collagen", [
+        _row("Collagen", "collagen", "protein", 40.0),
+        _row("Glucosamine", "glucosamine", "joint", 1500.0),
+        _row("Boswellia", "boswellia", "botanical", 100.0),
+    ]))
+    assert taxonomy["primary_type"] != "collagen", (
+        "the title alone minted collagen over a competing joint identity (R5)"
+    )
+
+
+def test_title_collagen_with_only_micronutrient_adjuncts_is_collagen():
+    """The kept case: a mass-dominant collagen SKU diluted by trace vitamins
+    (250086 "Collagen Natural Berry": collagen + vitamin A + vitamin E) that
+    count-based dominance can't see. Every non-collagen active is a
+    micronutrient, so the title legitimately corroborates."""
+    taxonomy = classify_supplement(_product("Collagen Natural Berry", [
+        _row("Collagen Peptides", "collagen", "protein", 10000.0),
+        _row("Vitamin A", "vitamin_a", "vitamin", 900.0),
+        _row("Vitamin E", "vitamin_e", "vitamin", 15.0),
+    ]))
+    assert taxonomy["primary_type"] == "collagen"
+
+
 def test_whey_protein_is_still_protein_powder():
     """R3 must not cost the protein branch its real work."""
     taxonomy = classify_supplement(_product("Gold Standard Whey Protein Powder", [

@@ -1019,10 +1019,25 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         len(collagen_ids) * 2 >= active_count
         # or the only actives besides collagen are its cofactors
         or not (cid_set - collagen_ids - _COLLAGEN_COFACTOR_IDS)
-        # or the title corroborates the identity that IS present. Intent alone is
-        # never sufficient (spec R5): this branch is unreachable without a
-        # collagen canonical id on the label.
-        or "collagen" in product_name
+        # or the title names collagen AND every other active is a plausible
+        # micronutrient ADJUNCT — a vitamin, a mineral, or a declared cofactor.
+        # This corroborates a mass-dominant collagen SKU (10 g collagen + trace
+        # vitamin A/E) that count-based dominance can't see, WITHOUT letting the
+        # title override a competing structural/functional identity: a product
+        # carrying glucosamine (joint) or a protein alongside collagen fails this
+        # clause and routes on its own merits. Title is corroborating, never
+        # sufficient on its own (spec R5) — collagen must be present, and nothing
+        # here may be a rival hero.
+        or (
+            "collagen" in product_name
+            and not (
+                cid_set
+                - collagen_ids
+                - _COLLAGEN_COFACTOR_IDS
+                - _VITAMIN_CANONICAL_IDS
+                - _MINERAL_CANONICAL_IDS
+            )
+        )
     ):
         primary_type = "collagen"
         confidence = 0.85
