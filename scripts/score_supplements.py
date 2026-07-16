@@ -161,6 +161,19 @@ def clamp(low: float, high: float, value: float) -> float:
     return max(low, min(high, value))
 
 
+def _first_present(*values: Any) -> Any:
+    """Return the first argument that is not None (NOT the first truthy one).
+
+    For fields where zero/empty is a real value, `a or b` is a bug: it treats
+    0.0, [], "" and False as "missing" and silently substitutes the fallback.
+    Use this when only None means absent.
+    """
+    for value in values:
+        if value is not None:
+            return value
+    return None
+
+
 def as_float(value: Any, default: Optional[float] = 0.0) -> Optional[float]:
     if value is None:
         return default
@@ -5162,13 +5175,21 @@ class SupplementScorer:
                 "taxonomy_v2" if product.get("supplement_taxonomy", {}).get("percentile_category")
                 else product.get("percentile_category_source")
             ),
-            "percentile_category_confidence": (
-                product.get("supplement_taxonomy", {}).get("classification_confidence")
-                or product.get("percentile_category_confidence")
+            # Fall back only when the taxonomy value is genuinely ABSENT.
+            # These used `or`, which tests truthiness — so a confidence of 0.0
+            # and an empty reason list were treated as "missing" and replaced by
+            # the legacy percentile inference's own values. Zero is meaningful
+            # here: the classifier emits 0.0 when it has no quantified evidence,
+            # a truthful "I don't know". Coalescing it away substituted a
+            # confident-looking number (e.g. 0.85) for that honest zero, which is
+            # worse than a null — it is a plausible lie in the scored artifact.
+            "percentile_category_confidence": _first_present(
+                product.get("supplement_taxonomy", {}).get("classification_confidence"),
+                product.get("percentile_category_confidence"),
             ),
-            "percentile_category_signals": (
-                product.get("supplement_taxonomy", {}).get("classification_reasons")
-                or product.get("percentile_category_signals")
+            "percentile_category_signals": _first_present(
+                product.get("supplement_taxonomy", {}).get("classification_reasons"),
+                product.get("percentile_category_signals"),
             ),
             "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
             "scoring_status": scoring_status,
