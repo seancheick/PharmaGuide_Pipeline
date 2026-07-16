@@ -18,7 +18,8 @@ The next agent can execute this plan end to end, subject to the two explicit use
 3. Inspect `git status --short`. At the documented baseline, `scripts/PIPELINE_OPERATIONS_README.md` has an unrelated user-owned modification. Preserve it, do not stage it, and do not overwrite it. Re-evaluate live status because the user may have changed it since this plan was written.
 4. Confirm no pipeline or release process is running before changing operational entrypoints. The shipped baseline is already green; do **not** rerun the full pipeline during development. The user owns the full-corpus pipeline execution and production release/promotion unless they explicitly authorize the agent to run them in the active session.
 5. Add this plan to the working plan and execute one atomic RED-first slice at a time. Use only `scripts/test.sh` for tests.
-6. Begin at **Phase -1**, not Phase 0a. The existing harness score path is explicitly untrusted until Phase -1 exits green.
+6. ~~Begin at **Phase -1**, not Phase 0a.~~ **Phase -1 and Phase 0a are COMPLETE, committed, and green as of 2026-07-15** (see §8's "PHASE -1 IS COMPLETE" note and §9's "0a AS BUILT" note). The harness is trustworthy and has a zero noise floor; the SoT gate is off the path literal and off prose. **Begin at Phase 0c**, then 0b (0b depends on the 0c ordering change — a decorator cannot run before what it decorates), then 0d. Do not re-derive what those notes already measured; verify the symbols still exist, then continue.
+   **The next slice is Phase 0d's classifier precedence specification** (decision table/ADR + `classification_reason_codes`, deliberately deferred from 0a because 0d rewrites the 45 branch sites the codes must name). Do not open 0d code without it.
 7. Stop for user review after Phase 2 and again before Phase 3. A request to execute the plan does not waive those safety checkpoints.
 8. The sole full-corpus rebuild belongs to Phase 5 and is launched by the user under the standing operating agreement. The agent prepares the command, waits for completion, and verifies the resulting artifacts. Targeted temporary artifact generation and read-only corpus audits are allowed earlier; promotion is not.
 
@@ -233,6 +234,16 @@ $PG_PYTHON scripts/audits/supptype_drift_preview.py baseline --score
 # ... one RED-first implementation slice ...
 $PG_PYTHON scripts/audits/supptype_drift_preview.py compare --score --json-out <ledger-path>
 ```
+
+> **PHASE -1 IS COMPLETE AND GREEN** (2026-07-15). Measured, not estimated:
+> `baseline --score` = **222.6s**, `compare --score` = **~36s** (8 workers), classification-only ≈ 28s.
+> Two consecutive no-op compares report **0/14,193 — a zero noise floor**, so any drift the harness reports now is a real consequence of your change.
+>
+> - The harness **re-execs under `PYTHONHASHSEED=0`**; do not remove that without reading `_pin_hash_seed`'s docstring (an unrelated production non-determinism in `scoring_input_contract._botanical_child_identity` flips 2/14,193 products at random — tracked separately, do **not** fix it here: it lives in the checkpoint-protected `mapped_coverage` owner).
+> - `baseline` **refuses to freeze** when the artifact's embedded taxonomy differs from what current code recomputes, and names the drifting FIELDS. Today: 13,631/14,193 identical + 562 cosmetic (`classification_reasons` only, from the determinism fix) → `--allow-baseline-drift` is currently justified for exactly that reason. If a **DECISION FIELD** ever appears in that list, stop: the artifacts were written by a different classifier.
+> - Selection is fact-level, not `primary_type`-level. Phase 0a proved this matters: it changed 14,193/14,193 products with **0** `primary_type` changes — a type-only diff would have reported nothing at all.
+> - Exact-path canary (`test_supptype_preview_exact_path_canary.py`, **slow** profile) proves the preview reproduces the **shipped** `products_core` rows for all 30 frozen fixtures. Run it after any scoring-path change; if it fails, the harness is no longer evidence.
+> - Contract tests: `test_supptype_drift_preview_harness.py` (fast). Both files are deleted with the harness at cutover.
 
 The harness is a fast preflight, not a release gate. Iterate against it and use targeted artifact canaries at checkpoints. At cutover, the user runs the full 14,193-product pipeline exactly once; the agent verifies its output.
 
