@@ -17,6 +17,7 @@ SLOW_TEST_FILES: FrozenSet[str] = frozenset({
     "test_scorable_classification.py",
     "test_score_supplements.py",
     "test_scoring_evidence_contract_v1.py",
+    "test_supptype_preview_exact_path_canary.py",
     "test_unii_match_method_in_ledger.py",
     "test_v4_banned_form_evidence_gate.py",
     "test_v4_cross_module_canary_diversity.py",

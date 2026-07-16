@@ -14485,6 +14485,29 @@ class SupplementEnricherV3:
                 classification_origin="native_enrichment",
             )
 
+    def apply_taxonomy_projection(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
+        """Classify with the canonical taxonomy and emit everything derived from it.
+
+        Single owner of the taxonomy -> derived-field projection. `enrich_product`
+        calls this, and so does the temporary consolidation drift harness, so a
+        preview can never diverge from what the pipeline would actually write.
+        Mutates and returns `enriched`.
+
+        PRECONDITION (ordering invariant, do not reorder): `ingredient_quality_data`
+        and `probiotic_data` must already be populated. `classify_supplement`
+        consumes `probiotic_data` (is_probiotic_product / total_cfu /
+        total_strain_count) for its NP-exemption gate on probiotic strains, and
+        `_collect_product_scoring_evidence` in turn reads the taxonomy's
+        primary_type to decide whether product-level CFU evidence is scoreable.
+        """
+        taxonomy = classify_supplement(enriched)
+        enriched["supplement_taxonomy"] = taxonomy
+        enriched["primary_type"] = taxonomy["primary_type"]
+        enriched["secondary_type"] = taxonomy["secondary_type"]
+        enriched["product_scoring_evidence"] = self._collect_product_scoring_evidence(enriched)
+        enriched["product_scoring_classification"] = self._collect_product_scoring_classification(enriched)
+        return enriched
+
     @staticmethod
     def _has_probiotic_identity_text(row: Dict[str, Any]) -> bool:
         text = " ".join(
@@ -17585,14 +17608,10 @@ class SupplementEnricherV3:
             enriched["probiotic_data"] = self._collect_probiotic_data(product)
 
             # Canonical taxonomy classification (v2) — NP-filtered, expanded types
-            # MUST run AFTER probiotic_data so the NP exemption gate for
-            # probiotic strains (is_probiotic_product) can fire correctly.
-            taxonomy = classify_supplement(enriched)
-            enriched["supplement_taxonomy"] = taxonomy
-            enriched["primary_type"] = taxonomy["primary_type"]
-            enriched["secondary_type"] = taxonomy["secondary_type"]
-            enriched["product_scoring_evidence"] = self._collect_product_scoring_evidence(enriched)
-            enriched["product_scoring_classification"] = self._collect_product_scoring_classification(enriched)
+            # — plus every field derived from it. MUST run AFTER probiotic_data
+            # so the NP exemption gate for probiotic strains (is_probiotic_product)
+            # can fire correctly. See apply_taxonomy_projection's precondition.
+            self.apply_taxonomy_projection(enriched)
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
