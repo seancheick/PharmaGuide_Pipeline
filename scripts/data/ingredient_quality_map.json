@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1421,
-      "total_form_aliases": 12183,
+      "total_form_aliases": 12126,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 23
     },
   "schema_version": "5.4.11",
-    "last_updated": "2026-07-14",
+    "last_updated": "2026-07-16",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -15148,6 +15148,7 @@
     "cui": "C2717875",
     "forms": {
       "fructooligosaccharides (FOS)": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 12,
         "natural": true,
         "score": 15,
@@ -18732,9 +18733,7 @@
           "sulforaphane precursor",
           "GR",
           "Sulforaphane Glucosinolate",
-          "Sulforaphane Glucosinate",
-          "TrueBroc",
-          "TrueBroc Broccoli extract"
+          "Sulforaphane Glucosinate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18758,7 +18757,6 @@
           "GR + Myr",
           "dual broccoli complex",
           "sulforaphane activation blend",
-          "BroccoVital Myrosinase Broccoli extract",
           "avmacol"
         ],
         "dosage_importance": 1.0,
@@ -20834,9 +20832,6 @@
           "hydrolyzed type ii collagen",
           "hydrolyzed type 2 collagen",
           "type ii collagen hydrolyzed",
-          "koact calcium collagen chelate",
-          "koact",
-          "calcium collagen chelate",
           "collagen, hydrolysate",
           "hydrolysed collagen",
           "hydrolysed fish collagen",
@@ -20923,7 +20918,6 @@
         "aliases": [
           "collagen",
           "tendoguard",
-          "KoAct(R) Calcium Collagen Chelate",
           "l-hydroxylysine",
           "hydrolyzed Gelatin"
         ],
@@ -21417,8 +21411,6 @@
           "chondroitin sulphate",
           "chrondroitin sulfate",
           "chondroitin sodium sulfate",
-          "shark cartilage",
-          "bovine cartilage",
           "CS-A",
           "CS-C",
           "standard chondroitin",
@@ -23560,10 +23552,6 @@
           "Lactase, Fungal",
           "fungal lactase",
           "lactase fungal",
-          "Ananas comosus",
-          "ananas comosus stem",
-          "pineapple stem extract",
-          "ananas comosus stem extract",
           "dipeptidyl peptidase-iv",
           "dpp-4",
           "Protease 3.0",
@@ -26312,9 +26300,7 @@
           "1 deoxynojirimycin",
           "dnj",
           "deoxynojirimycin",
-          "mulberry dnj",
-          "reducose",
-          "reducose mulberry extract"
+          "mulberry dnj"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28693,12 +28679,7 @@
         "absorption": "~low; rapidly hydrolyzed to caffeic and quinic acids",
         "notes": "Cynarin is rapidly hydrolyzed in the gut; choleretic and lipid-lowering effects are mediated by metabolites chlorogenic acid and caffeic acid (PMID 15693705). Artichoke leaf extract 600 mg/day RCT: −18.5% LDL vs placebo (PMID 23195882). Pycrinil is a branded artichoke extract standardized to cynarin content.",
         "aliases": [
-          "cynarin",
-          "artichoke ext.",
-          "artichoke extract",
-          "pycrinil artichoke extract",
-          "pycrinil",
-          "artichoke leaf extract"
+          "cynarin"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -29213,13 +29194,7 @@
         "aliases": [
           "eugenol",
           "eugenols",
-          "clovinol",
-          "clovinol clove flower bud extract",
-          "clove flower bud extract",
-          "clove oil extract",
-          "clove bud extract polyphenols",
-          "eugenol extract",
-          "syzygium aromaticum extract"
+          "eugenol extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -29662,17 +29637,9 @@
         "notes": "Sulfated polysaccharide from brown seaweed (Undaria pinnatifida/wakame). Branded: Maritech 926 (Marinova, 85% fucoidan), InSea2 (depolymerized LMWF, better bioavailability). TLR4 agonism activates dendritic/NK cells (PMC8779234). Systematic review (PMC9140503, 4 human studies) found safety and possible QoL benefit as cancer adjunct. Oral F highly MW-dependent.",
         "aliases": [
           "fucoidan",
-          "Maritech 926 wild-harvested Patagonian Wakame",
-          "Maritech 926 wild-harvested Patagonian Wakame 100% water extraction",
-          "Maritech 926",
           "insea2",
           "insea 2",
           "insea2 brown seaweed extract",
-          "maritech 926 wakame",
-          "maritech wakame extract",
-          "wakame extract",
-          "undaria pinnatifida extract",
-          "patagonian wakame",
           "fucoidan extract",
           "fucoidan polysaccharide",
           "brown seaweed fucoidan",
@@ -30397,12 +30364,6 @@
         "aliases": [
           "icariin",
           "icariins",
-          "horny goat weed aerial plant extract",
-          "horny goat weed herb extract",
-          "epimedium leaf extract",
-          "horny goat weed p.e.",
-          "horny goat weed leaf extract",
-          "Horny Goat Weed Leaf, Stem Extract",
           "epimedium icariin",
           "icariin standardized",
           "icariside II",
@@ -31213,13 +31174,7 @@
         "absorption": "moderate (~40%)",
         "notes": "Monoterpene comprising ~25-40% of lavender essential oil. Primary constituent of Silexan (oral lavender oil capsule), with 5 Phase III RCTs (524+ participants) showing significant anxiolytic effects vs. placebo for generalized anxiety (Scientific Reports 2019 meta-analysis). Mechanism: VGCC inhibition + serotonin 5-HT1A + GABA potentiation. Oral Tmax ~1 h, half-life ~3.9 h (PMC10538094 2023 human PK).",
         "aliases": [
-          "linalool",
-          "lavandula angustifolia oil",
-          "lavandula oil",
-          "silexan",
-          "lavandula angustifolia extract",
-          "linalyl acetate",
-          "lavender linalyl acetate"
+          "linalool"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -34290,7 +34245,6 @@
         "notes": "Enteric-coated stabilized NADH (Birkmayer patent). Gut sac experiments show ~5% concentration-independent absorption (PMID 18508468). Oral NADH did not increase urinary nicotinamide excretion, suggesting decomposition in digestive organs (PMID 16802695). Enteric coating protects against gastric acid but no published human PK quantifies absolute F. CFS trial (PMID 10071523) showed marginal clinical benefit. Not sublingual — this is an oral enteric-coated tablet.",
         "aliases": [
           "nadh supplement",
-          "nicotinamide adenine dinucleotide",
           "reduced nad",
           "coenzyme 1",
           "nadh lozenges",
@@ -34298,7 +34252,6 @@
           "nadh sublingual",
           "stabilized nadh",
           "enada nadh supplement",
-          "nicotinamide adenine dinucleotide supplement",
           "reduced nad supplement",
           "coenzyme 1 supplement",
           "nadh lozenges supplement",
@@ -37068,6 +37021,7 @@
     "cui": "C1134651",
     "forms": {
       "beta-glucan": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 8,
         "natural": true,
         "score": 11,
@@ -37083,7 +37037,6 @@
           "1,3/1,6 beta-glucan",
           "beta 1,3/1,6 glucan",
           "oat beta-glucan",
-          "nutrim oat bran",
           "beta glucan",
           "beta glucans",
           "wellmune wgp",
@@ -37102,6 +37055,7 @@
           "Beta Glucan 3/6/9",
           "Beta Glucan 1,3",
           "beta-1,3/1,6-d-glucan",
+          "beta-1,3-1,6-d-glucan",
           "beta 1,3/1,6 d-glucan",
           "Mushroom Beta Glucan",
           "mushroom beta-glucan",
@@ -41026,7 +40980,6 @@
     "aliases": [
       "docosahexaenoic acid",
       "dha",
-      "life'sdha",
       "algal dha",
       "dha from algae",
       "dha from fish oil",
@@ -41040,10 +40993,20 @@
         "absorption": "high; algal DHA-TG bioequivalent to fish oil DHA-TG",
         "notes": "DHA from microalgae (Schizochytrium or Crypthecodinium) in triglyceride form. Bioequivalent to fish oil TG — GMR 112% (96-130%) in 93-adult RCT (PMID 41096614). Vegan/vegetarian source. Free of ocean contaminants (mercury, PCBs). Life's DHA (DSM) is the leading brand. Environmental advantage over fish-derived DHA. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
-          "life's omega",
           "life'sdha dha",
           "life's dha dha",
           "docosahexaenoic",
+          "algal docosahexaenoic acid"
+        ],
+        "same_identity_aliases": [
+          "life'sdha dha",
+          "life's dha dha",
+          "docosahexaenoic",
+          "algal docosahexaenoic acid"
+        ],
+        "source_form_aliases": [
+          "Schizochytrium sp. Oil",
+          "life's omega",
           "life'sDHA",
           "life's dha",
           "lifes dha",
@@ -46358,6 +46321,7 @@
     "rxcui": "283677",
     "forms": {
       "corn silk extract": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 7,
         "natural": true,
         "score": 10,
@@ -46370,6 +46334,7 @@
           "organic cornsilk zea mays (stigma and style) extract",
           "Cornsilk Zea mays Stigma and Style Extract",
           "corn silk",
+          "Corn Silk, Powder",
           "corn silk (zea mays) extract"
         ],
         "dosage_importance": 0.8,
@@ -48298,13 +48263,19 @@
           "schizochytrium spp. oil",
           "high dha algal oil",
           "dha algal oil",
-          "algal docosahexaenoic acid",
           "purealgaeomega3",
           "dha rich oil",
           "OPTI-3 Choice",
           "Elantria",
           "Onavita",
           "Life'sDHA Omega 3 Fatty Acids",
+          "life's omega",
+          "life'sDHA",
+          "life's dha",
+          "lifes dha",
+          "LifesDHA",
+          "DSM life's dha",
+          "life's algal dha",
           "Algal OMEGATEX0053TGCH",
           "vegan omega-3",
           "plant-based omega-3",
@@ -48929,6 +48900,7 @@
     "rxcui": "1992",
     "forms": {
       "capsimax": {
+        "alias_identity_scope": "source_preparation",
         "bio_score": 7,
         "natural": true,
         "score": 10,
@@ -50839,16 +50811,8 @@
         "aliases": [
           "rhaponticin",
           "rhapontigenin",
-          "rheum rhaponticum extract",
-          "rhapontic rhubarb extract",
-          "siberian rhubarb extract",
-          "err 731",
-          "err731",
           "desoxy-rhaponticin",
           "deoxyrhaponticin",
-          "rhapontic rhubarb root extract",
-          "rhapontic rhubarb (rheum rhaponticum l.) root extract",
-          "ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract",
           "Desoxyrhaponticin"
         ],
         "dosage_importance": 1.0,
@@ -51010,6 +50974,7 @@
     "cui": "C0772090",
     "forms": {
       "bile extract (unspecified)": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 7,
         "natural": true,
         "score": 10,
@@ -51024,6 +50989,7 @@
           "ox bile powder",
           "bile",
           "bovine bile extract",
+          "bovine bile concentrate",
           "desiccated bile"
         ],
         "dosage_importance": 1.0,
@@ -54212,9 +54178,6 @@
         "notes": "Malus domestica fruit polyphenol extract; contains phlorizin, chlorogenic acid, quercetin glycosides, and epicatechin. Evidence for postprandial glucose reduction and lipid oxidation. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
           "apple polyphenols",
-          "apple extract",
-          "apple whole fruit extract",
-          "apple fruit extract",
           "apple polyphenol extract"
         ],
         "dosage_importance": 1.0,
@@ -56298,6 +56261,7 @@
     "cui": "C0253326",
     "forms": {
       "phenylethylamine (unspecified)": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 5,
         "natural": true,
         "score": 8,
@@ -58549,6 +58513,7 @@
     "dosage_importance": 1.0,
     "forms": {
       "blood orange extract (unspecified)": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 7,
         "natural": true,
         "score": 10,
@@ -60022,6 +59987,7 @@
     "dosage_importance": 1.5,
     "forms": {
       "nad+": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 7,
         "natural": true,
         "score": 10,
@@ -62545,6 +62511,7 @@
     "cui_note": "Wave 6.Y Batch 2C (2026-05-27): C1446590 had no token overlap with the IQM entry under strict-mode guards. UMLS exact-search returns no concept for 'Purple Corn Extract', 'Zea mays purple', or 'Purple corn'. Marker compounds (C0003161 Anthocyanins, C0056650 cyanidin) exist but are class-broader or narrower-specific — not the extract itself. Deferred to clinician/ontology review per null-CUI policy.",
     "forms": {
       "purple corn extract (unspecified)": {
+        "alias_identity_scope": "same_identity",
         "bio_score": 5,
         "natural": true,
         "score": 8,

@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-07-14",
-    "total_entries": 548,
+    "last_updated": "2026-07-16",
+    "total_entries": 551,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -2105,6 +2105,11 @@
         "broccoli seed, sprout extract",
         "broccoli bud, stem extract",
         "broccoli (brassica oleracea) floret and stalk concentrate",
+        "TrueBroc",
+        "TrueBroc Broccoli extract",
+        "BroccoVital Myrosinase Broccoli extract",
+        "Broccoli Aerial Parts, Plant, Seed Extract Concentrate",
+        "Broccoli Plant, Seed Extract Concentrate",
         "Brassica oleracea var. italica"
       ],
       "category": "vegetable",
@@ -3013,7 +3018,12 @@
         "capsimax red pepper extract",
         "capsimax cayenne pepper fruit extract",
         "capsimax(tm) capsicum extract",
-        "capsimax capsicum (capsicum annuum) fruit extract"
+        "capsimax capsicum (capsicum annuum) fruit extract",
+        "Capsimax",
+        "Capsimax fruit extract",
+        "Capsimax capsaicin beadlet",
+        "Capsimax OmniActive",
+        "capsimax(tm) fruit extract"
       ],
       "category": "spice",
       "notes": "Capsicum annuum (Solanaceae) fruit. Contains capsaicin (8-methyl-N-vanillyl-6-nonenamide) at 0.1-1% in cayenne varieties. Thermogenic and circulatory stimulant. Botanical powder, not standardized to capsaicin.",
@@ -3789,7 +3799,9 @@
         "clove bud oil",
         "clove supercritical extract",
         "clove aqueous extract",
-        "clovinol clove extract"
+        "clovinol clove extract",
+        "clovinol",
+        "clovinol clove flower bud extract"
       ],
       "category": "herb",
       "notes": "Syzygium aromaticum (Myrtaceae) flower bud. Contains eugenol (72-90% of essential oil), beta-caryophyllene, and acetyl eugenol. Powerful antimicrobial and analgesic spice. Botanical whole-bud form.",
@@ -6056,6 +6068,8 @@
         "Artichoke aerial extract",
         "Artichoke (Cynara scolymus) aerial part extract",
         "Artichoke fruit leaf extract",
+        "Artichoke Leaf, Stem Extract",
+        "Artichoke whole herb extract",
         "Artichoke Whole Extract",
         "Artichoke (Cynara scolymus) (leaf) aqueous extract",
         "Cynara scolymus"
@@ -7092,6 +7106,11 @@
         "horny goat weed extract",
         "horny goat weed aerial parts extract",
         "epimedium stem and leaf extract",
+        "horny goat weed aerial plant extract",
+        "horny goat weed herb extract",
+        "horny goat weed p.e.",
+        "horny goat weed leaf extract",
+        "Horny Goat Weed Leaf, Stem Extract",
         "epimedium grandiflorum",
         "epimedium sagittatum",
         "Epimedium brevicornu",
@@ -8516,6 +8535,7 @@
         "english lavender flower essential oil",
         "english lavender aerial extract",
         "lavender flower",
+        "silexan",
         "lavender"
       ],
       "category": "herb",
@@ -10000,6 +10020,7 @@
         "avena sativa bran",
         "oat bran powder",
         "organic oat bran",
+        "nutrim oat bran",
         "Avena sativa"
       ],
       "category": "grain",
@@ -11943,7 +11964,9 @@
     {
       "id": "red_algae",
       "standard_name": "Red Algae",
-      "aliases": [],
+      "aliases": [
+        "Red Algae Calcified"
+      ],
       "category": "algae",
       "notes": "Rhodophyta division covering non-specific red algae/seaweed labels. May include Chondrus, Lithothamnion, or Palmaria species. Natural calcium and mineral source. Identity mapping only.",
       "last_updated": "2026-03-01",
@@ -14049,7 +14072,13 @@
       "aliases": [
         "wakame powder",
         "Undaria pinnatifida",
-        "brown kelp undaria pinnatifida powder"
+        "brown kelp undaria pinnatifida powder",
+        "Maritech 926",
+        "Maritech 926 wild-harvested Patagonian Wakame",
+        "Maritech 926 wild-harvested Patagonian Wakame 100% water extraction",
+        "maritech 926 wakame",
+        "maritech wakame extract",
+        "patagonian wakame"
       ],
       "category": "seaweed",
       "notes": "Undaria pinnatifida (Alariaceae) thallus. Japanese edible brown seaweed containing fucoxanthin carotenoid and fucoidan polysaccharide. RCT evidence for metabolic support (PMID 19840063).",
@@ -16358,6 +16387,68 @@
       "last_updated": "2026-06-23",
       "external_ids": {},
       "cui": "C1201367",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "pineapple",
+      "standard_name": "Pineapple",
+      "latin_name": "Ananas comosus",
+      "aliases": [
+        "Ananas comosus",
+        "ananas comosus stem",
+        "ananas comosus stem extract",
+        "pineapple stem extract"
+      ],
+      "category": "fruit",
+      "notes": "Ananas comosus fruit/stem source identity. A source label does not establish a bromelain or digestive-enzyme dose; those compounds require their own explicit declaration.",
+      "last_updated": "2026-07-16",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "siberian_rhubarb",
+      "standard_name": "Siberian Rhubarb",
+      "latin_name": "Rheum rhaponticum",
+      "aliases": [
+        "Rheum rhaponticum",
+        "rheum rhaponticum extract",
+        "rhapontic rhubarb extract",
+        "siberian rhubarb extract",
+        "err 731",
+        "err731",
+        "rhapontic rhubarb root extract",
+        "rhapontic rhubarb (rheum rhaponticum l.) root extract",
+        "ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract"
+      ],
+      "category": "root",
+      "notes": "Rheum rhaponticum source identity, distinct from Chinese rhubarb (Rheum palmatum). The source-extract mass is not treated as an isolated rhaponticin dose.",
+      "last_updated": "2026-07-16",
+      "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "apple_fruit",
+      "standard_name": "Apple Fruit",
+      "latin_name": "Malus domestica",
+      "aliases": [
+        "apple fruit",
+        "apple extract",
+        "apple fruit extract",
+        "apple whole fruit extract"
+      ],
+      "category": "fruit",
+      "notes": "Malus domestica whole-fruit source identity. Whole-fruit or generic extract mass is not treated as a declared apple-polyphenol dose.",
+      "last_updated": "2026-07-16",
+      "external_ids": {},
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

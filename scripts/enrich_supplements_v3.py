@@ -272,25 +272,6 @@ IQM_CANONICAL_CROSS_PARENT_ALLOWLIST: Dict[Tuple[str, str], Tuple[str, ...]] = {
 # metadata unless the cleaner has resolved the row directly to the marker's IQM
 # canonical. This protects non-IQM source canonicals, which are outside the IQM
 # parent hard-stop above.
-BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST: Dict[str, Tuple[str, ...]] = {
-    "acerola_cherry": ("vitamin_c",),
-    "tomato": ("lycopene",),
-    "broccoli": ("sulforaphane",),
-    "cayenne_pepper": ("capsaicin",),
-    "cistanche": ("echinacea",),
-    "green_tea": ("caffeine", "egcg", "epigallocatechin", "gallocatechin"),
-    "green_tea_leaf": ("caffeine", "egcg", "epigallocatechin", "gallocatechin"),
-    "horny_goat_weed": ("flavones",),
-    "coffee_fruit": ("caffeine",),
-    "japanese_knotweed": ("resveratrol",),
-    "kanna_sceletium": ("mesembrine",),
-    "lemon": ("vitamin_b9_folate",),
-    "moringa": ("vitamin_a",),
-    "sophora_japonica": ("quercetin",),
-    "yerba_mate": ("caffeine",),
-    "yerba_mate_leaf": ("caffeine",),
-}
-
 BOTANICAL_CANONICAL_SOURCE_DBS = {
     "botanical_ingredients",
     "standardized_botanicals",
@@ -1561,6 +1542,32 @@ class SupplementEnricherV3:
 
         self._nonscorable_index = nonscorable_idx
 
+        # standardized_botanicals is a mixed historical registry: most rows
+        # are source botanicals, while some branded/non-botanical rows point
+        # explicitly to their authoritative IQM parent.  Keep that structured
+        # equivalence available to the source-marker guard so it does not
+        # mistake a same-identity brand (for example Levagen/PEA) for a
+        # different botanical source.
+        standardized_iqm_parents: Dict[str, str] = {}
+        standardized_db = self.databases.get("standardized_botanicals", {})
+        standardized_entries = (
+            standardized_db.get("standardized_botanicals", [])
+            if isinstance(standardized_db, dict)
+            else []
+        )
+        for entry in standardized_entries:
+            if not isinstance(entry, dict) or not entry.get("id"):
+                continue
+            attributes = entry.get("attributes") or {}
+            iqm_parent_id = (
+                attributes.get("iqm_parent_id")
+                if isinstance(attributes, dict)
+                else None
+            )
+            if isinstance(iqm_parent_id, str) and iqm_parent_id:
+                standardized_iqm_parents[str(entry["id"])] = iqm_parent_id
+        self._standardized_botanical_iqm_parents = standardized_iqm_parents
+
         # ── Sprint 1: UNII-anchored non-scorable index ──
         # Walk the same 4 reference DBs + banned_recalled and index by
         # entry's external_ids.unii. Higher recognition_priority wins on
@@ -1644,8 +1651,41 @@ class SupplementEnricherV3:
             "banned_recalled_ingredients",
         }
 
-    @staticmethod
+    def _botanical_source_identity(
+        self,
+        ingredient: Dict,
+    ) -> Optional[Tuple[str, str]]:
+        source_db = ingredient.get("canonical_source_db")
+        source_id = ingredient.get("canonical_id")
+        if (
+            source_db in BOTANICAL_CANONICAL_SOURCE_DBS
+            and isinstance(source_id, str)
+            and source_id
+        ):
+            return source_id, source_db
+
+        # Fail-safe for replaying older cleaned artifacts: current exact raw
+        # source identity outranks a stale marker-valued standardName/canonical.
+        raw_label = ingredient.get("raw_source_text") or ingredient.get("name") or ""
+        recognition = self._is_recognized_non_scorable(
+            raw_label,
+            raw_label,
+            raw_row=ingredient,
+        )
+        if (
+            recognition
+            and recognition.get("recognition_source")
+            in BOTANICAL_CANONICAL_SOURCE_DBS
+            and recognition.get("matched_entry_id")
+        ):
+            return (
+                recognition["matched_entry_id"],
+                recognition["recognition_source"],
+            )
+        return None
+
     def _is_blocked_botanical_source_marker_match(
+        self,
         ingredient: Dict,
         match_result: Optional[Dict],
     ) -> bool:
@@ -1659,32 +1699,54 @@ class SupplementEnricherV3:
         """
         if not match_result or not isinstance(match_result, dict):
             return False
-        source_db = ingredient.get("canonical_source_db")
-        if source_db not in BOTANICAL_CANONICAL_SOURCE_DBS:
+        source_identity = self._botanical_source_identity(ingredient)
+        if not source_identity:
             return False
-        source_id = ingredient.get("canonical_id")
-        if not isinstance(source_id, str) or not source_id:
-            return False
+        source_id, _source_db = source_identity
         resolved_id = match_result.get("canonical_id")
-        blocked_markers = BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST.get(source_id)
-        if not blocked_markers:
+        if (
+            _source_db == "standardized_botanicals"
+            and self._standardized_botanical_iqm_parents.get(source_id)
+            == resolved_id
+        ):
             return False
-        if resolved_id in blocked_markers:
-            return True
+        if self._identity_parent_predicate(
+            self.databases.get("ingredient_quality_map", {})
+        )(source_id, resolved_id):
+            # Reviewed broad-source → specific-preparation relationships (for
+            # example green_tea → green_tea_extract) remain valid.  The guard
+            # targets source→marker substitution, not reviewed specificity.
+            return False
 
-        # Priority-first matching may correctly select the botanical parent
-        # from the row name before considering a marker-valued form. The form
-        # still declares the contradictory marker lineage and must trigger the
-        # same fail-safe.
-        blocked_form_names = {
-            marker.replace("_", " ").casefold() for marker in blocked_markers
-        }
-        declared_form_names = {
-            re.sub(r"[^a-z0-9]+", " ", str(form.get("name") or "").casefold()).strip()
-            for form in ingredient.get("forms") or []
-            if isinstance(form, dict)
-        }
-        return bool(blocked_form_names & declared_form_names)
+        raw_label = ingredient.get("raw_source_text") or ingredient.get("name") or ""
+        literal_match = self._match_quality_map(
+            raw_label,
+            raw_label,
+            self.databases.get("ingredient_quality_map", {}),
+            _form_extraction_attempt=True,
+        )
+        if (
+            isinstance(literal_match, dict)
+            and literal_match.get("match_status") != "FORM_UNMAPPED"
+            and literal_match.get("match_tier") in {"exact", "normalized"}
+            and not literal_match.get("match_ambiguity_candidates")
+            and self._quality_match_scoring_canonical(
+                literal_match,
+                self.databases.get("ingredient_quality_map", {}),
+            )
+            == resolved_id
+        ):
+            # The printed label independently establishes this IQM identity.
+            # Do not let a broader source registry veto explicit turmeric,
+            # psyllium, garlic, curcumin, etc. declarations.
+            return False
+        # The cleaner's canonical source identity is authoritative.  A source
+        # botanical can carry marker contributions in delivers_markers[], but
+        # an IQM cross-parent match must not replace the declared source or
+        # reinterpret its full mass as an isolated marker dose.  Same-ID IQM
+        # models remain eligible when a source and IQM intentionally share a
+        # canonical identifier.
+        return bool(resolved_id and resolved_id != source_id)
 
     def _apply_context_canonical_override_match(
         self,
@@ -3168,6 +3230,98 @@ class SupplementEnricherV3:
             "total omega 3 fatty acids",
         }
 
+    def _is_reviewed_same_identity_alias_match(
+        self,
+        ingredient: Dict,
+        match_result: Optional[Dict],
+        quality_map: Dict,
+    ) -> bool:
+        """Return whether a matched alias is curated as the same identity.
+
+        Normal IQM aliases remain recognition candidates only. A form may opt
+        into stronger identity authority with
+        ``alias_identity_scope="same_identity"``. This deliberately excludes
+        source-to-marker shortcuts such as artichoke→cynarin or clove→eugenol.
+        """
+        if (
+            not isinstance(match_result, dict)
+            or match_result.get("match_tier") not in {"exact", "normalized"}
+        ):
+            return False
+        canonical_id = match_result.get("canonical_id")
+        if any(
+            not isinstance(candidate, dict)
+            or candidate.get("canonical_id") != canonical_id
+            for candidate in match_result.get("match_ambiguity_candidates") or []
+        ):
+            return False
+        form_id = match_result.get("form_id")
+        matched_alias = match_result.get("matched_alias")
+        entry = quality_map.get(canonical_id)
+        forms = entry.get("forms") if isinstance(entry, dict) else None
+        form = forms.get(form_id) if isinstance(forms, dict) else None
+        scoped_aliases = (
+            form.get("same_identity_aliases") or []
+            if isinstance(form, dict)
+            else []
+        )
+        if (
+            not isinstance(form, dict)
+            or not matched_alias
+            or (
+                form.get("alias_identity_scope") != "same_identity"
+                and norm_module.normalize_exact_text(matched_alias)
+                not in {
+                    norm_module.normalize_exact_text(alias)
+                    for alias in scoped_aliases
+                }
+            )
+        ):
+            return False
+        literal_label = (
+            ingredient.get("raw_source_text")
+            or ingredient.get("name")
+            or ""
+        )
+        return norm_module.normalize_exact_text(
+            literal_label
+        ) == norm_module.normalize_exact_text(matched_alias)
+
+    def _reviewed_same_identity_parent_for_label(
+        self,
+        label: str,
+        quality_map: Dict,
+    ) -> Optional[str]:
+        """Resolve an exact printed label curated as the parent identity."""
+        label_key = norm_module.normalize_exact_text(label)
+        if not label_key:
+            return None
+        parents: set[str] = set()
+        for parent_id, form_id, alias, _priority, _match_mode in (
+            self._iqm_exact_index.get(label_key, [])
+        ):
+            if not form_id or norm_module.normalize_exact_text(alias) != label_key:
+                continue
+            parent = quality_map.get(parent_id)
+            form = (
+                (parent.get("forms") or {}).get(form_id)
+                if isinstance(parent, dict)
+                else None
+            )
+            if (
+                isinstance(form, dict)
+                and (
+                    form.get("alias_identity_scope") == "same_identity"
+                    or label_key
+                    in {
+                        norm_module.normalize_exact_text(alias)
+                        for alias in form.get("same_identity_aliases") or []
+                    }
+                )
+            ):
+                parents.add(parent_id)
+        return next(iter(parents)) if len(parents) == 1 else None
+
     def _is_source_descriptor_form(
         self,
         form: Dict,
@@ -3217,6 +3371,11 @@ class SupplementEnricherV3:
         curated_context_override = self._is_reviewed_context_override_match(
             match_result
         )
+        reviewed_identity_alias = self._is_reviewed_same_identity_alias_match(
+            ingredient,
+            match_result,
+            quality_map,
+        )
         strong_match_tier = match_tier in {"exact", "normalized"} or (
             match_tier == "cleaner_canonical_parent"
             and match_result.get("cleaner_canonical_enforced") is True
@@ -3244,7 +3403,10 @@ class SupplementEnricherV3:
             not isinstance(match_result, dict)
             or not strong_match_tier
             or match_result.get("match_status") == "FORM_UNMAPPED"
-            or self._quality_match_identity_confidence(match_result) < 0.9
+            or (
+                self._quality_match_identity_confidence(match_result) < 0.9
+                and not reviewed_identity_alias
+            )
             or identity_level_ambiguity
         ):
             return False
@@ -3508,6 +3670,16 @@ class SupplementEnricherV3:
             supplied_canonical_id=supplied_canonical_id,
         )
         canonical_parent_of = self._identity_parent_predicate(quality_map)
+        if self._is_reviewed_same_identity_alias_match(
+            ingredient,
+            match_result,
+            quality_map,
+        ) and supplied_canonical_id:
+            authoritative_reviewed_alias_id = supplied_canonical_id
+
+            def resolve_candidate(candidate: str) -> Optional[str]:
+                return authoritative_reviewed_alias_id
+
         if (
             supplied_canonical_id == "fish_oil"
             and self._is_generic_unspecified_omega3(ingredient)
@@ -3900,28 +4072,13 @@ class SupplementEnricherV3:
                     identity_match,
                     taxonomy_coherent,
                 )
-                if (
-                    recognition_info
-                    and recognition_info.get("recognition_source")
-                    == "banned_recalled_ingredients"
-                    and ingredient.get("canonical_id")
-                    and ingredient.get("canonical_source_db")
-                    not in {"banned_recalled_ingredients", "harmful_additives"}
-                ):
-                    # Safety classification is orthogonal to identity. Retain
-                    # the cleaner's non-safety canonical while carrying the
-                    # safety-table identity in its own field.
-                    skipped_entry["canonical_id"] = ingredient.get("canonical_id")
-                    skipped_entry["canonical_source_db"] = ingredient.get(
-                        "canonical_source_db"
-                    )
-                    skipped_entry["safety_identity_id"] = recognition_info.get(
-                        "matched_entry_id"
-                    )
-                    skipped_entry["mapped_identity"] = True
-                    skipped_entry["scoreable_identity"] = False
-                    skipped_entry["identity_decision_reason"] = (
-                        "safety_identity_excluded_from_scoring"
+                if recognition_info:
+                    self._restamp_recognized_non_scorable_identity(
+                        skipped_entry,
+                        ingredient,
+                        identity_match,
+                        quality_map,
+                        recognition=recognition_info,
                     )
                 ingredients_skipped.append(skipped_entry)
                 all_quality_data.append(skipped_entry)
@@ -4021,17 +4178,21 @@ class SupplementEnricherV3:
                 # The botanical remains the lineage authority, but a marker
                 # form (for example Green Tea / Caffeine) cannot be promoted
                 # into either a marker score or a repaired extract score.
-                source_id = ingredient.get("canonical_id")
+                source_identity = self._botanical_source_identity(ingredient)
+                source_id, source_db = source_identity or (
+                    ingredient.get("canonical_id"),
+                    ingredient.get("canonical_source_db"),
+                )
                 quality_entry.update({
                     "canonical_id": source_id,
                     "canonical_id_after": source_id,
-                    "canonical_source_db": ingredient.get("canonical_source_db"),
+                    "canonical_source_db": source_db,
                     "scoreable_identity": False,
                     "recognized_non_scorable": True,
                     "mapped": True,
                     "mapped_identity": True,
                     "role_classification": "recognized_non_scorable",
-                    "recognition_source": ingredient.get("canonical_source_db"),
+                    "recognition_source": source_db,
                     "recognition_type": "botanical_marker_lineage",
                     "recognition_reason": "botanical_marker_is_secondary_metadata",
                     "identity_decision_reason": "botanical_marker_is_secondary_metadata",
@@ -4087,6 +4248,7 @@ class SupplementEnricherV3:
                 and match_result.get("match_status") != "FORM_UNMAPPED"
                 and quality_entry.get("scoreable_identity") is True
             )
+            recognition = None
 
             if is_quality_match:
                 match_tier = match_result.get('match_tier')
@@ -4192,20 +4354,13 @@ class SupplementEnricherV3:
                 # Before marking as unmapped, check if recognized in other databases
                 recognition = self._is_recognized_non_scorable(ing_name, std_name)
                 if recognition:
-                    # Recognized but non-scorable - don't count as unmapped
-                    # Mark in quality_entry for transparency
-                    quality_entry['recognized_non_scorable'] = True
-                    quality_entry['recognition_source'] = recognition.get('recognition_source')
-                    quality_entry['recognition_reason'] = recognition.get('recognition_reason')
-                    quality_entry['recognition_type'] = recognition.get('recognition_type')
-                    quality_entry['matched_entry_id'] = recognition.get('matched_entry_id')
-                    quality_entry['matched_entry_name'] = recognition.get('matched_entry_name')
-                    quality_entry['mapped'] = True
-                    quality_entry['mapped_identity'] = True
-                    quality_entry['scoreable_identity'] = False
-                    quality_entry['role_classification'] = 'recognized_non_scorable'
-                    quality_entry['identity_confidence'] = 1.0
-                    quality_entry['identity_decision_reason'] = recognition.get('recognition_reason') or 'recognized_non_scorable'
+                    self._restamp_recognized_non_scorable_identity(
+                        quality_entry,
+                        ingredient,
+                        match_result,
+                        quality_map,
+                        recognition=recognition,
+                    )
                     self._tag_fallback_decision(
                         quality_entry,
                         'clinical_fail_safe',
@@ -4223,7 +4378,10 @@ class SupplementEnricherV3:
                     else:
                         quality_entry['score_exclusion_reason'] = 'no_dose_evidence'
 
-            if quality_entry.get('recognized_non_scorable') is True:
+            if (
+                quality_entry.get('recognized_non_scorable') is True
+                and not recognition
+            ):
                 self._restamp_recognized_non_scorable_identity(
                     quality_entry,
                     ingredient,
@@ -4331,6 +4489,7 @@ class SupplementEnricherV3:
                     and match_result.get("match_status") != "FORM_UNMAPPED"
                     and quality_entry.get("scoreable_identity") is True
                 )
+                recognition = None
 
                 if is_quality_match:
                     match_tier = match_result.get('match_tier')
@@ -4348,19 +4507,12 @@ class SupplementEnricherV3:
                     # that are recognized in non-quality DBs.
                     recognition = self._is_recognized_non_scorable(ing_name, std_name)
                     if recognition:
-                        quality_entry['recognized_non_scorable'] = True
-                        quality_entry['recognition_source'] = recognition.get('recognition_source')
-                        quality_entry['recognition_reason'] = recognition.get('recognition_reason')
-                        quality_entry['recognition_type'] = recognition.get('recognition_type')
-                        quality_entry['matched_entry_id'] = recognition.get('matched_entry_id')
-                        quality_entry['matched_entry_name'] = recognition.get('matched_entry_name')
-                        quality_entry['mapped'] = True
-                        quality_entry['mapped_identity'] = True
-                        quality_entry['scoreable_identity'] = False
-                        quality_entry['role_classification'] = 'recognized_non_scorable'
-                        quality_entry['identity_confidence'] = 1.0
-                        quality_entry['identity_decision_reason'] = (
-                            recognition.get('recognition_reason') or 'recognized_non_scorable'
+                        self._restamp_recognized_non_scorable_identity(
+                            quality_entry,
+                            ingredient,
+                            match_result,
+                            quality_map,
+                            recognition=recognition,
                         )
                         self._tag_fallback_decision(
                             quality_entry,
@@ -4376,7 +4528,10 @@ class SupplementEnricherV3:
                         else:
                             quality_entry['score_exclusion_reason'] = 'no_dose_evidence'
 
-                if quality_entry.get('recognized_non_scorable') is True:
+                if (
+                    quality_entry.get('recognized_non_scorable') is True
+                    and not recognition
+                ):
                     self._restamp_recognized_non_scorable_identity(
                         quality_entry,
                         ingredient,
@@ -5036,8 +5191,16 @@ class SupplementEnricherV3:
         ingredient: Dict,
         match_result: Optional[Dict],
         quality_map: Dict,
+        *,
+        recognition: Optional[Dict] = None,
     ) -> None:
-        """Reconcile identity after a candidate becomes intentionally non-scorable."""
+        """Reconcile identity after a candidate becomes intentionally non-scorable.
+
+        Recognition is the authoritative primary-identity lane when an IQM
+        candidate did not qualify for scoring.  Safety-table matches remain
+        orthogonal: they suppress scoring but do not replace a valid cleaner
+        identity with a regulatory-record identifier.
+        """
         decision, identity_match, taxonomy_coherent = self._resolve_iqd_identity(
             ingredient,
             match_result,
@@ -5052,6 +5215,51 @@ class SupplementEnricherV3:
             taxonomy_coherent,
         )
         row["scoreable_identity"] = False
+        if not recognition:
+            return
+
+        recognition_source = recognition.get("recognition_source")
+        recognition_reason = (
+            recognition.get("recognition_reason") or "recognized_non_scorable"
+        )
+        matched_entry_id = recognition.get("matched_entry_id")
+        matched_entry_name = recognition.get("matched_entry_name")
+        row.update({
+            "recognized_non_scorable": True,
+            "recognition_source": recognition_source,
+            "recognition_reason": recognition_reason,
+            "recognition_type": recognition.get("recognition_type"),
+            "recognized_entry_id": matched_entry_id,
+            "recognized_entry_name": matched_entry_name,
+            "matched_entry_id": matched_entry_id,
+            "matched_entry_name": matched_entry_name,
+            "mapped": True,
+            "mapped_identity": True,
+            "scoreable_identity": False,
+            "role_classification": "recognized_non_scorable",
+            "identity_confidence": 1.0,
+            "identity_decision_reason": recognition_reason,
+        })
+
+        if (
+            recognition_source == "banned_recalled_ingredients"
+            and ingredient.get("canonical_id")
+            and ingredient.get("canonical_source_db")
+            not in {"banned_recalled_ingredients", "harmful_additives"}
+        ):
+            row.update({
+                "canonical_id": ingredient.get("canonical_id"),
+                "canonical_id_after": ingredient.get("canonical_id"),
+                "canonical_source_db": ingredient.get("canonical_source_db"),
+                "safety_identity_id": matched_entry_id,
+                "identity_decision_reason": "safety_identity_excluded_from_scoring",
+            })
+        elif matched_entry_id and recognition_source:
+            row.update({
+                "canonical_id": matched_entry_id,
+                "canonical_id_after": matched_entry_id,
+                "canonical_source_db": recognition_source,
+            })
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals.
@@ -6955,6 +7163,51 @@ class SupplementEnricherV3:
             if abs(disclosed_child_mass_mg - parent_mass_mg) <= tolerance_mg:
                 result.add(id(parent))
 
+        # Source oils often disclose a larger carrier-oil mass alongside
+        # nested EPA/DHA amounts under a separate "Total Omega-3" heading.
+        # Exact mass reconciliation is impossible because the oil matrix also
+        # contains non-EPA/DHA material. When there is one unambiguous source
+        # parent and its mass contains the disclosed nested EPA/DHA mass, keep
+        # the source row for label fidelity but mark it as a parent total.
+        source_oil_ids = {"fish_oil", "algae_oil", "omega_3", "epa_dha"}
+        source_parents = [
+            row
+            for row in rows
+            if row.get("isNestedIngredient") is not True
+            and row.get("canonical_id") in source_oil_ids
+            and _normalize_parent_blend_mg(row.get("quantity"), row.get("unit"))
+            is not None
+        ]
+        omega_children = [
+            row
+            for row in rows
+            if row.get("isNestedIngredient") is True
+            and row.get("canonical_id") in {"epa", "dha"}
+            and "total" in self._normalize_text(row.get("parentBlend") or "")
+            and "omega" in self._normalize_text(row.get("parentBlend") or "")
+        ]
+        if len(source_parents) == 1 and omega_children:
+            parent = source_parents[0]
+            parent_mass_mg = _normalize_parent_blend_mg(
+                parent.get("quantity"), parent.get("unit")
+            )
+            child_masses_mg = [
+                mass
+                for row in omega_children
+                if (
+                    mass := _normalize_parent_blend_mg(
+                        row.get("quantity"), row.get("unit")
+                    )
+                )
+                is not None
+            ]
+            if (
+                parent_mass_mg is not None
+                and child_masses_mg
+                and parent_mass_mg + 1e-6 >= sum(child_masses_mg)
+            ):
+                result.add(id(parent))
+
         return result
 
     def _mark_parent_total_rows(self, ingredients_scorable: List[Dict[str, Any]]) -> None:
@@ -7827,6 +8080,15 @@ class SupplementEnricherV3:
             and not cleaner_canonical_id.startswith("_")
         ):
             cleaner_iqm_canonical = cleaner_canonical_id
+        reviewed_label_parent = self._reviewed_same_identity_parent_for_label(
+            ing_name,
+            quality_map,
+        )
+        if reviewed_label_parent:
+            # Printed label identity outranks a broader cleaner/source-form
+            # canonical. This must happen before structured form selection so
+            # source_form_aliases are evaluated only inside the reviewed parent.
+            cleaner_iqm_canonical = reviewed_label_parent
         cleaner_form_constraint_enforced = False
         cleaner_form_constraint_fallback = False
 
@@ -8496,6 +8758,11 @@ class SupplementEnricherV3:
             for cand_val, _ in normalized_candidates:
                 for entry in self._iqm_norm_index.get(cand_val, []):
                     _candidate_parent_keys.add(entry[0])  # parent_key
+            if cleaner_iqm_canonical:
+                # Parent-scoped source_form_aliases are intentionally absent
+                # from the global identity indexes. Keep the already-resolved
+                # parent in the candidate scan so those local aliases can run.
+                _candidate_parent_keys.add(cleaner_iqm_canonical)
             # Pattern/contains aliases can't be indexed, so if no exact/norm hits,
             # fall back to full scan to allow pattern matches
             if not _candidate_parent_keys:
@@ -8571,7 +8838,17 @@ class SupplementEnricherV3:
 
             # Form-level matches
             for form_name, form_data in forms.items():
-                form_aliases = form_data.get('aliases', [])
+                form_aliases = list(form_data.get('aliases', []) or [])
+                if parent_key == cleaner_iqm_canonical:
+                    # Source-form clues may select a form only after the
+                    # cleaner has already established the parent identity.
+                    # They are deliberately excluded from global identity
+                    # indexes, preventing Schizochytrium oil from becoming a
+                    # standalone DHA identity while still selecting DHA's
+                    # algal-triglyceride form on an explicitly declared DHA row.
+                    form_aliases.extend(
+                        form_data.get('source_form_aliases', []) or []
+                    )
                 form_pattern_aliases = form_data.get('pattern_aliases', [])
                 form_contains_aliases = form_data.get('contains_aliases', [])
 

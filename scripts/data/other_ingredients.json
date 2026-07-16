@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-07-13",
-    "total_entries": 715,
+    "last_updated": "2026-07-16",
+    "total_entries": 716,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -24686,6 +24686,27 @@
         "active ingredient identity"
       ],
       "last_updated": "2026-07-13",
+      "external_ids": {},
+      "functional_roles": [],
+      "is_active_only": true
+    },
+    {
+      "id": "OI_SHARK_CARTILAGE",
+      "standard_name": "Shark Cartilage",
+      "aliases": [
+        "shark cartilage"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": true,
+      "allergen_type": "fish",
+      "notes": "Animal-tissue source identity. Shark-cartilage mass is not equivalent to a purified chondroitin-sulfate dose; explicit chondroitin declarations are resolved separately.",
+      "common_uses": [
+        "joint support",
+        "marine tissue ingredient"
+      ],
+      "last_updated": "2026-07-16",
       "external_ids": {},
       "functional_roles": [],
       "is_active_only": true

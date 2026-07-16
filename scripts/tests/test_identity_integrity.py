@@ -138,6 +138,45 @@ def test_registry_prefers_specific_standard_name_over_umbrella_form_alias():
     assert registry.resolve_unambiguous("Bromelain") is None
 
 
+def test_registry_excludes_source_preparation_forms_from_primary_identity():
+    registry = build_canonical_identity_registry(
+        {
+            "ingredient_quality_map": {
+                "capsaicin": {
+                    "standard_name": "Capsaicin",
+                    "aliases": [],
+                    "forms": {
+                        "capsimax": {
+                            "alias_identity_scope": "source_preparation",
+                            "aliases": ["Capsimax fruit extract"],
+                        },
+                    },
+                    "match_rules": {},
+                },
+            },
+            "botanical_ingredients": {
+                "botanical_ingredients": [
+                    {
+                        "id": "cayenne_pepper",
+                        "standard_name": "Cayenne Pepper",
+                        "aliases": ["Capsimax", "Capsimax fruit extract"],
+                    }
+                ]
+            },
+        }
+    )
+
+    assert registry.resolve_preferred("Capsimax") == (
+        "cayenne_pepper",
+        "botanical_ingredients",
+    )
+    assert registry.resolve_preferred("Capsimax fruit extract") == (
+        "cayenne_pepper",
+        "botanical_ingredients",
+    )
+    assert registry.resolve_unambiguous("Capsaicin") == "capsaicin"
+
+
 def test_registry_rejects_equal_priority_alias_conflicts():
     registry = build_canonical_identity_registry(
         {

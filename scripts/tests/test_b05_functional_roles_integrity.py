@@ -125,4 +125,7 @@ def test_botanical_total_count_unchanged(botanicals):
     # mean Terminalia catappa.
     # 548 after the grain-source identity closure: barley_unspecified and
     # wheat_germ_oil are retained as non-scoring botanical identities.
-    assert len(botanicals) == 548
+    # 551 after the source/marker separation closure: pineapple,
+    # siberian_rhubarb, and apple_fruit retain their printed source identity
+    # without promoting the full source mass into a marker-compound dose.
+    assert len(botanicals) == 551

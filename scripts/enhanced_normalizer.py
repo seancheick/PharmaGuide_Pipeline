@@ -2905,6 +2905,16 @@ class EnhancedDSLDNormalizer:
             
             # Add all form aliases and their variations
             for form_name, form_data in (vitamin_data.get("forms", {}) or {}).items():
+                if (
+                    isinstance(form_data, dict)
+                    and form_data.get("alias_identity_scope")
+                    == "source_preparation"
+                ):
+                    # Keep source/preparation aliases available to the
+                    # downstream formulation matcher, but do not let this
+                    # cleaner identity index turn the full preparation dose
+                    # into an isolated marker dose (Capsimax -> capsaicin).
+                    continue
                 form_name_raw_lower = form_name.lower().strip()
                 form_variations = self.matcher.generate_variations(
                     self.matcher.preprocess_text(form_name)
@@ -3363,6 +3373,18 @@ class EnhancedDSLDNormalizer:
         # Check if ingredient name matches an explicit natural dye
         is_explicit_natural = any(dye in name_lower for dye in explicit_natural_lower)
         if is_explicit_natural:
+            exact_identity = self._fast_ingredient_lookup(name)
+            if exact_identity.get("mapped") and exact_identity.get("type") in {
+                "ingredient",
+                "standardized_botanical",
+                "botanical",
+                "other_ingredient",
+            }:
+                # Natural color sources are still ingredient identities when
+                # the label exactly names a known source.  Color is a
+                # functional role, not permission to replace Reducose
+                # mulberry, blood orange, etc. with a generic color identity.
+                return exact_identity["standard_name"], True, forms
             matched_dye = next(
                 (d for d in self.EXPLICIT_NATURAL_DYES if d.lower() in name_lower),
                 None

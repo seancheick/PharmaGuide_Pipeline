@@ -66,6 +66,20 @@ SOURCE_BOTANICAL_CASES = [
     ("Asian Knotweed Root Extract",  "knotweed", "source botanical alias, not resveratrol marker"),
     ("Japanese Knotweed Extract 50% resveratrol", "knotweed", "standardized source extract remains japanese_knotweed identity"),
     ("Polygonum cuspidatum root extract", "knotweed", "stdbot resveratrol had 'polygonum cuspidatum extract' alias"),
+    ("TrueBroc Broccoli extract",      "broccoli", "branded broccoli preparation, not a sulforaphane dose"),
+    ("BroccoVital Myrosinase Broccoli extract", "broccoli", "branded broccoli preparation, not a sulforaphane dose"),
+    ("Capsimax fruit extract",         "cayenne", "capsicum preparation, not a declared capsaicin dose"),
+    ("Silexan",                        "lavender", "lavender oil preparation, not isolated linalool"),
+    ("Pycrinil Artichoke extract",     "artichoke", "artichoke preparation, not isolated cynarin"),
+    ("Clovinol Clove Flower Bud Extract", "clove", "clove preparation, not isolated eugenol"),
+    ("Reducose Mulberry extract",      "mulberry", "mulberry preparation, not a declared DNJ dose"),
+    ("Horny Goat Weed Leaf, Stem Extract", "horny goat weed", "source botanical, not isolated icariin"),
+    ("Nutrim Oat Bran",                "oat bran", "oat-bran preparation, not a declared beta-glucan dose"),
+    ("ERr 731",                        "siberian rhubarb", "rhubarb preparation, not isolated rhaponticin"),
+    ("Apple Whole Fruit Extract",      "apple", "whole-fruit preparation, not a declared polyphenol dose"),
+    ("Ananas comosus",                 "pineapple", "source fruit, not a declared digestive-enzyme dose"),
+    ("Maritech 926 wild-harvested Patagonian Wakame", "wakame", "seaweed preparation, not a pure fucoidan dose"),
+    ("Shark Cartilage",                "shark cartilage", "animal tissue source, not pure chondroitin sulfate"),
 ]
 
 
@@ -142,6 +156,20 @@ MARKER_FORBIDDEN_FOR_SOURCE = [
     ("Horse Chestnut Extract standardized to 20% aescin", "aescin"),
     ("Japanese Knotweed Extract 50% resveratrol", "resveratrol"),
     ("Tomato powder",                "lycopene"),
+    ("TrueBroc Broccoli extract",    "sulforaphane"),
+    ("BroccoVital Myrosinase Broccoli extract", "sulforaphane"),
+    ("Capsimax fruit extract",       "capsaicin"),
+    ("Silexan",                      "linalool"),
+    ("Pycrinil Artichoke extract",   "cynarin"),
+    ("Clovinol Clove Flower Bud Extract", "eugenol"),
+    ("Reducose Mulberry extract",    "dnj"),
+    ("Horny Goat Weed Leaf, Stem Extract", "icariin"),
+    ("Nutrim Oat Bran",              "beta glucan"),
+    ("ERr 731",                      "rhaponticin"),
+    ("Apple Whole Fruit Extract",    "polyphenol"),
+    ("Ananas comosus",               "digestive enzyme"),
+    ("Maritech 926 wild-harvested Patagonian Wakame", "fucoidan"),
+    ("Shark Cartilage",              "chondroitin"),
 ]
 
 
@@ -179,7 +207,11 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
         iqm = json.load(f)
 
     MARKERS = ["vitamin_c", "curcumin", "sulforaphane", "capsaicin",
-               "lycopene", "quercetin", "aescin", "resveratrol"]
+               "lycopene", "quercetin", "aescin", "resveratrol",
+               "linalool", "cynarin", "eugenol",
+               "dnj_1_deoxynojirimycin", "icariin", "beta_glucan",
+               "rhaponticin", "apple_polyphenols", "digestive_enzymes",
+               "fucoidan", "chondroitin"]
     FORBIDDEN_PATTERNS = [
         ("acerola", "acerola"),       # bare acerola anywhere
         ("camu camu", "camu_camu"),
@@ -190,6 +222,25 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
         ("sophora japonica", "sophora_japonica"),
         ("horse chestnut", "horse_chestnut_seed"),
         ("polygonum cuspidatum", "japanese_knotweed"),
+        ("truebroc", "broccoli"),
+        ("broccovital", "broccoli"),
+        ("capsimax", "cayenne_pepper"),
+        ("silexan", "lavender"),
+        ("pycrinil", "globe_artichoke"),
+        ("clovinol", "cloves"),
+        ("reducose", "mulberry"),
+        ("horny goat weed", "horny_goat_weed"),
+        ("nutrim oat bran", "oat_bran"),
+        ("err 731", "siberian_rhubarb"),
+        ("err731", "siberian_rhubarb"),
+        ("siberian rhubarb", "siberian_rhubarb"),
+        ("rheum rhaponticum", "siberian_rhubarb"),
+        ("apple whole fruit", "apple_fruit"),
+        ("ananas comosus", "pineapple"),
+        ("pineapple stem", "pineapple"),
+        ("maritech", "wakame"),
+        ("patagonian wakame", "wakame"),
+        ("shark cartilage", "shark_cartilage"),
     ]
 
     import re
@@ -206,6 +257,8 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
         entry = iqm.get(marker, {})
         forms = entry.get("forms", {})
         for fname, fdata in forms.items():
+            if fdata.get("alias_identity_scope") == "source_preparation":
+                continue
             # Check form_name itself
             for needle, target in FORBIDDEN_PATTERNS:
                 if needle in fname.lower():

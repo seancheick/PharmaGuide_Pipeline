@@ -176,6 +176,16 @@ def build_canonical_identity_registry(
             forms = entry.get("forms")
             if isinstance(forms, Mapping):
                 for form_name, form in forms.items():
+                    if (
+                        isinstance(form, Mapping)
+                        and form.get("alias_identity_scope")
+                        == "source_preparation"
+                    ):
+                        # A branded/source preparation may be useful to the
+                        # formulation matcher without being the chemical
+                        # identity of the declared dose.  The source registry
+                        # owns primary identity for these labels.
+                        continue
                     put(form_name, canonical_id, "ingredient_quality_map", 2)
                     if isinstance(form, Mapping):
                         for alias in form.get("aliases") or ():

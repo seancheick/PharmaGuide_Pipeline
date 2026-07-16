@@ -1,6 +1,6 @@
 # PharmaGuide Glossary
 
-> Last verified against executable code: 2026-07-15
+> Last verified against executable code: 2026-07-16
 
 This is the canonical vocabulary for pipeline, enrichment, scoring, release,
 tests, and operator communication. Add a term here before introducing a new
@@ -50,6 +50,8 @@ contract name elsewhere.
 | **Printed name** | Full ingredient name as printed on the label. It is retained even when a verified branded token is extracted. |
 | **Branded token** | Separately stored verified brand marker; it never replaces the printed name. |
 | **Marker contribution** | A bioactive delivered by a source ingredient. The source keeps its identity; the marker is not promoted into a duplicate active row. |
+| **Same-identity alias** | A reviewed exact printed-name alias that identifies the IQM parent itself. It may override a broader structured source/group identity only through `alias_identity_scope="same_identity"` or the form's explicit `same_identity_aliases`. |
+| **Source-preparation alias** | A source, carrier, brand preparation, or botanical-to-marker clue that may select a form only after primary parent identity is established. It never creates primary identity by itself. |
 | **Parent-total row** | A declared nutrient total that groups subforms. It is preserved for label fidelity but excluded from duplicate scoring when its children carry the form detail. |
 | **Blend header** | A declared proprietary/structural blend container. It is not an individually dosed active. |
 | **Blend member** | A child ingredient linked to a blend header by stable parent linkage. A display-only child may remain visible without becoming independently scoreable. |
@@ -65,6 +67,9 @@ contract name elsewhere.
 | `natural` | Whether the form is supported as naturally derived. |
 | `score` | Legacy `bio_score + 3` when `natural=true`, capped at 18. Do not use this value as pure bioavailability. |
 | `absorption_structured` | Structured value/range/quality/notes evidence. It must not claim more precision than the supporting source. |
+| `alias_identity_scope` | Reviewed identity authority for a form alias. `same_identity` permits exact parent-identity recovery; `source_preparation` excludes the form and its aliases from primary identity indexes. |
+| `same_identity_aliases` | Narrow per-alias alternative to form-wide `same_identity`; only exact listed labels receive parent-identity authority. |
+| `source_form_aliases` | Parent-scoped form-selection clues evaluated only after the cleaner/reviewer has established that IQM parent. They are absent from global identity indexes. |
 
 ## Production scoring terms
 

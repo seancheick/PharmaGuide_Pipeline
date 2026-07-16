@@ -200,6 +200,66 @@ def test_generic_omega3_without_children_uses_unspecified_form(
     assert "eicosatrienoic" not in str(row["matched_form"]).lower()
 
 
+def test_algal_source_oil_above_nested_epa_dha_mass_is_parent_total(
+    enricher: SupplementEnricherV3,
+) -> None:
+    parent = _active_row(
+        name="life's OMEGA",
+        raw_source_text="life's OMEGA",
+        standardName="Algae Oil",
+        canonical_id="algae_oil",
+        cleaner_match_method=None,
+        quantity=1400.0,
+        forms=[
+            {
+                "name": "Algal Oil Concentrate",
+                "category": "fat",
+                "ingredientGroup": "Algal Oil",
+                "uniiCode": None,
+            }
+        ],
+        ingredientGroup="Algal Oil",
+    )
+    dha = _active_row(
+        name="Docosahexaenoic Acid",
+        raw_source_text="Docosahexaenoic Acid",
+        standardName="DHA (Docosahexaenoic Acid)",
+        canonical_id="dha",
+        quantity=420.0,
+        forms=[],
+        isNestedIngredient=True,
+        parentBlend="Total Omega-3 Fatty Acids",
+    )
+    epa = _active_row(
+        name="Eicosapentaenoic Acid",
+        raw_source_text="Eicosapentaenoic Acid",
+        standardName="EPA (Eicosapentaenoic Acid)",
+        canonical_id="epa",
+        quantity=210.0,
+        forms=[],
+        isNestedIngredient=True,
+        parentBlend="Total Omega-3 Fatty Acids",
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "326301",
+            "fullName": "Vegan Omega + D3",
+            "activeIngredients": [parent, dha, epa],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    row = next(
+        item
+        for item in result["ingredients_scorable"]
+        if item["name"] == "life's OMEGA"
+    )
+    assert row["canonical_id"] == "algae_oil"
+    assert row["is_parent_total"] is True
+
+
 def test_nutrient_parent_identity_survives_multiple_source_form_uniis(
     enricher: SupplementEnricherV3,
 ) -> None:
@@ -546,3 +606,230 @@ def test_exact_label_identity_beats_source_or_salt_form_identity(
     mapped = result["ingredients_scorable"][0]
     assert mapped["canonical_id"] == expected_canonical
     assert mapped["scoreable_identity"] is True
+
+
+@pytest.mark.parametrize(
+    ("name", "group", "canonical_id", "standard_name", "expected_canonical"),
+    [
+        ("Corn Silk", "Corn", "corn_silk", "Corn Silk", "corn_silk"),
+        (
+            "Sicilian Blood Orange fruit and peel extract",
+            "Sweet Orange",
+            "blood_orange_extract",
+            "Blood Orange Extract",
+            "blood_orange_extract",
+        ),
+        (
+            "Phenylethylamine Hydrochloride",
+            "Phenethylamine (PEA)",
+            "phenylethylamine",
+            "Phenylethylamine",
+            "phenylethylamine",
+        ),
+        (
+            "Bovine Bile concentrate",
+            "Bovine (not specified)",
+            "bile_extract",
+            "Bile Extract",
+            "bile_extract",
+        ),
+        (
+            "Purple Corn extract",
+            "Corn",
+            "purple_corn_extract",
+            "Purple Corn Extract",
+            "purple_corn_extract",
+        ),
+        (
+            "NutraFlora scFOS",
+            "Fructo-Oligosaccharides (FOS)",
+            "prebiotics",
+            "Prebiotics",
+            "prebiotics",
+        ),
+        (
+            "Beta-1,3-1,6-D-Glucan",
+            "Beta-Glucans",
+            "brewers_yeast",
+            "Brewer's Yeast",
+            "beta_glucan",
+        ),
+        (
+            "Algal Docosahexaenoic Acid",
+            "DHA",
+            "algae_oil",
+            "Algae Oil",
+            "dha",
+        ),
+        (
+            "Nicotinamide Adenine Dinucleotide",
+            "Nicotinamide Adenine Dinucleotide",
+            "nadh",
+            "NADH",
+            "nad",
+        ),
+    ],
+)
+def test_reviewed_same_identity_alias_beats_broader_source_group(
+    enricher: SupplementEnricherV3,
+    name: str,
+    group: str,
+    canonical_id: str,
+    standard_name: str,
+    expected_canonical: str,
+) -> None:
+    forms = (
+        [
+            {
+                "name": "Schizochytrium sp. Oil",
+                "category": "other",
+                "ingredientGroup": "Schizochytrium",
+                "uniiCode": None,
+            }
+        ]
+        if expected_canonical == "dha"
+        else []
+    )
+    row = _active_row(
+        name=name,
+        raw_source_text=name,
+        standardName=standard_name,
+        canonical_id=canonical_id,
+        cleaner_match_method=None,
+        quantity=100.0,
+        ingredientGroup=group,
+        forms=forms,
+        raw_taxonomy={
+            "category": "botanical",
+            "ingredientGroup": group,
+            "forms": forms,
+        },
+    )
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": f"reviewed-alias-{expected_canonical}",
+            "fullName": name,
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    assert len(result["ingredients_scorable"]) == 1
+    mapped = result["ingredients_scorable"][0]
+    assert mapped["canonical_id"] == expected_canonical
+    assert mapped["scoreable_identity"] is True
+    if expected_canonical == "dha":
+        assert mapped["form_id"] == "algal triglyceride"
+
+
+@pytest.mark.parametrize(
+    (
+        "name",
+        "source_group",
+        "marker_canonical",
+        "expected_source_canonical",
+        "expected_source_db",
+    ),
+    [
+        ("Silexan", "English Lavender", "linalool", "lavender", "botanical_ingredients"),
+        (
+            "Artichoke Leaf, Stem Extract",
+            "Artichoke",
+            "cynarin",
+            "globe_artichoke",
+            "botanical_ingredients",
+        ),
+        (
+            "Shark Cartilage",
+            "Cartilage",
+            "chondroitin",
+            "OI_SHARK_CARTILAGE",
+            "other_ingredients",
+        ),
+        (
+            "Clovinol Clove Flower Bud Extract",
+            "Clove",
+            "eugenol",
+            "cloves",
+            "botanical_ingredients",
+        ),
+    ],
+)
+def test_source_extract_alias_does_not_become_marker_identity(
+    enricher: SupplementEnricherV3,
+    name: str,
+    source_group: str,
+    marker_canonical: str,
+    expected_source_canonical: str,
+    expected_source_db: str,
+) -> None:
+    row = _active_row(
+        name=name,
+        raw_source_text=name,
+        standardName=name,
+        canonical_id=marker_canonical,
+        cleaner_match_method=None,
+        quantity=100.0,
+        ingredientGroup=source_group,
+        forms=[],
+        raw_taxonomy={
+            "category": "botanical",
+            "ingredientGroup": source_group,
+            "forms": [],
+        },
+    )
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": f"source-marker-{marker_canonical}",
+            "fullName": name,
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert all(
+        item.get("canonical_id") != marker_canonical
+        for item in result["ingredients_scorable"]
+    )
+    assert result["unmapped_scorable_count"] == 0
+    recognized = result["ingredients_recognized_non_scorable"]
+    assert len(recognized) == 1
+    assert recognized[0]["canonical_id"] == expected_source_canonical
+    assert recognized[0]["canonical_source_db"] == expected_source_db
+    assert recognized[0]["mapped_identity"] is True
+    assert recognized[0]["scoreable_identity"] is False
+    assert recognized[0]["role_classification"] == "recognized_non_scorable"
+
+
+@pytest.mark.parametrize(
+    ("source_id", "marker_id"),
+    [
+        ("lavender", "linalool"),
+        ("globe_artichoke", "cynarin"),
+        ("cloves", "eugenol"),
+        ("mulberry", "dnj_1_deoxynojirimycin"),
+        ("horny_goat_weed", "icariin"),
+        ("siberian_rhubarb", "rhaponticin"),
+        ("wakame", "fucoidan"),
+    ],
+)
+def test_botanical_source_identity_blocks_any_iqm_cross_parent(
+    enricher: SupplementEnricherV3,
+    source_id: str,
+    marker_id: str,
+) -> None:
+    ingredient = {
+        "canonical_id": source_id,
+        "canonical_source_db": "botanical_ingredients",
+        "forms": [],
+    }
+
+    assert enricher._is_blocked_botanical_source_marker_match(
+        ingredient,
+        {"canonical_id": marker_id},
+    ) is True
+    assert enricher._is_blocked_botanical_source_marker_match(
+        ingredient,
+        {"canonical_id": source_id},
+    ) is False
