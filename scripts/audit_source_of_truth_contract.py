@@ -24,6 +24,8 @@ from stage_manifest import select_stage_files
 from supplement_taxonomy import (
     CLASSIFICATION_CONTRACT_VERSION,
     INPUT_CONTRACT_IQD_ALL_ROWS,
+    INPUT_CONTRACT_RAW_LABEL_ACTIVES,
+    INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
     ROW_ROLE_INCLUDED_ACTIVE,
     SCORE_ELIGIBLE_INPUT_CONTRACTS,
 )
@@ -928,6 +930,9 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
             continue
         stale_contract_versions: Counter[str] = Counter()
         stale_contract_sample: list[str] = []
+        invalid_contract_issues: Counter[str] = Counter()
+        invalid_contract_products = 0
+        invalid_contract_sample: list[str] = []
         for product in products:
             pid = product_identity(product)
 
@@ -938,12 +943,43 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
             # one artifact-wide condition, and 14k identical findings would bury
             # the per-product findings that actually differ.
             taxonomy_payload = product.get("supplement_taxonomy")
-            if getattr(args, "strict_release", False) and isinstance(taxonomy_payload, dict):
-                found_version = taxonomy_payload.get("classification_contract_version")
-                if found_version != CLASSIFICATION_CONTRACT_VERSION:
-                    stale_contract_versions[str(found_version)] += 1
-                    if len(stale_contract_sample) < 5:
-                        stale_contract_sample.append(pid)
+            if getattr(args, "strict_release", False):
+                if not isinstance(taxonomy_payload, dict):
+                    invalid_contract_issues["supplement_taxonomy"] += 1
+                    invalid_contract_products += 1
+                    if len(invalid_contract_sample) < 5:
+                        invalid_contract_sample.append(pid)
+                else:
+                    found_version = taxonomy_payload.get("classification_contract_version")
+                    if found_version != CLASSIFICATION_CONTRACT_VERSION:
+                        stale_contract_versions[str(found_version)] += 1
+                        if len(stale_contract_sample) < 5:
+                            stale_contract_sample.append(pid)
+                    else:
+                        issues: list[str] = []
+                        input_contract = taxonomy_payload.get(
+                            "classification_input_contract"
+                        )
+                        if input_contract not in {
+                            INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
+                            INPUT_CONTRACT_IQD_ALL_ROWS,
+                            INPUT_CONTRACT_RAW_LABEL_ACTIVES,
+                        }:
+                            issues.append("classification_input_contract")
+                        if not isinstance(
+                            taxonomy_payload.get("classification_row_evidence"), list
+                        ):
+                            issues.append("classification_row_evidence")
+                        reason_codes = taxonomy_payload.get(
+                            "classification_reason_codes"
+                        )
+                        if not isinstance(reason_codes, list) or not reason_codes:
+                            issues.append("classification_reason_codes")
+                        if issues:
+                            invalid_contract_products += 1
+                            invalid_contract_issues.update(issues)
+                            if len(invalid_contract_sample) < 5:
+                                invalid_contract_sample.append(pid)
 
             rows = scorable_rows(product)
             row_ids = {canonical_id(row) for row in rows}
@@ -995,6 +1031,20 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                 f"(found: {seen}; e.g. {', '.join(stale_contract_sample)}). "
                 "Re-enrich before release: an artifact written by an older "
                 "classifier cannot be gated on the current contract.",
+                str(file_path),
+            ))
+        if invalid_contract_issues:
+            issue_summary = ", ".join(
+                f"{name}x{count}"
+                for name, count in sorted(invalid_contract_issues.items())
+            )
+            findings.append(Finding(
+                "CLINICAL_TAXONOMY_CONTRACT_INVALID",
+                f"{invalid_contract_products} product(s) have a missing or "
+                f"malformed taxonomy contract (issues: {issue_summary}; e.g. "
+                f"{', '.join(invalid_contract_sample)}). Re-enrich before "
+                "release; strict mode never falls back from a current contract "
+                "to path literals or prose evidence.",
                 str(file_path),
             ))
     return findings

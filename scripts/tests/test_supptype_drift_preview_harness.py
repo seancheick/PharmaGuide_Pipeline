@@ -309,6 +309,26 @@ def test_selection_covers_every_declared_classification_fact():
         )
 
 
+def test_harness_captures_every_taxonomy_count_contract_field(enricher, amino_multi):
+    facts = harness.classification_facts(
+        harness.project_current_taxonomy(amino_multi, enricher)
+    )
+
+    required = {
+        "distinct_active_identity_count",
+        "quantified_active_row_count",
+        "quantified_label_active_count",
+        "scorable_active_count",
+        "unresolved_quantified_active_count",
+        "category_breakdown",
+        "category_row_breakdown",
+    }
+    assert required <= facts.keys(), (
+        "the drift ledger omits a taxonomy count field that can explain or "
+        "drive classification changes"
+    )
+
+
 def test_derived_projection_change_is_selected(enricher, amino_multi):
     """product_scoring_evidence is taxonomy-derived AND score-driving (it gates
     probiotic CFU evidence on primary_type). A change there must be selected

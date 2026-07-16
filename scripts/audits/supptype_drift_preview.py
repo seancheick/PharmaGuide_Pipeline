@@ -96,7 +96,7 @@ DEFAULT_BASELINE = SCRIPTS_DIR / "products" / "reports" / "supptype_baseline.jso
 
 # Bump when the captured fact/score vocabulary changes. A baseline written by a
 # different schema is rejected rather than silently compared.
-SCHEMA_VERSION = "2"
+SCHEMA_VERSION = "3"
 
 
 class HarnessError(RuntimeError):
@@ -121,12 +121,15 @@ CLASSIFICATION_FACT_KEYS: Tuple[str, ...] = (
     "classification_input_contract",    # Phase 0a — stable contract-level id
     "classification_contract_version",  # Phase 0a
     "quantified_active_count",
+    "distinct_active_identity_count",   # R1 — decision denominator
+    "quantified_active_row_count",      # raw panel-breadth input
     "quantified_label_active_count",    # Phase 0d — classification population
     "scorable_active_count",            # Phase 0d — score-eligible population
     "is_single_scorable_active",        # Phase 0d — the canonical single fact
     "unresolved_quantified_active_count",  # Phase 0a — dosed but unresolved
     "non_quantified_base_count",
     "category_breakdown",
+    "category_row_breakdown",           # raw diagnostic beside identity counts
     "dsld_product_type",
 )
 
@@ -172,6 +175,8 @@ _DECISION_FIELDS = frozenset({
     "percentile_category",
     "classification_confidence",
     "quantified_active_count",
+    "distinct_active_identity_count",
+    "quantified_active_row_count",
     "quantified_label_active_count",
     "scorable_active_count",
     "is_single_scorable_active",

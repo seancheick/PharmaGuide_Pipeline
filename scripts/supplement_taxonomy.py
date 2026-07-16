@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import os
 import re
+from collections import Counter
 from math import ceil
 from typing import Any
 
@@ -39,7 +40,7 @@ from supplement_type_utils import (
 # Release gates consume THIS, not prose. Bump the version when the meaning of
 # an existing field changes; strict release mode accepts only the current
 # version (see audit_source_of_truth_contract.py).
-CLASSIFICATION_CONTRACT_VERSION = "1.0.0"
+CLASSIFICATION_CONTRACT_VERSION = "1.1.0"
 
 # Stable, contract-level identifiers for the row population classification
 # consumed. Policy branches on these; `classification_input_source` stays a
@@ -584,10 +585,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # Partition into quantified (therapeutic) vs non-quantified (base/NP)
     quantified_rows: list[dict[str, Any]] = []
     non_quantified_rows: list[dict[str, Any]] = []
-    category_counts: dict[str, int] = {}
+    category_row_counts: dict[str, int] = {}
     canonical_ids: list[str] = []
-    canonical_categories: dict[str, str] = {}
-    probiotic_count = 0
     non_quantified_probiotic_count = 0
     row_evidence: list[dict[str, Any]] = []
 
@@ -659,19 +658,14 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         quantified_rows.append(row)
         row_evidence.append(_row_evidence(row, category, ROW_ROLE_INCLUDED_ACTIVE))
         counted_category = category or "uncategorized"
-        category_counts[counted_category] = category_counts.get(counted_category, 0) + 1
+        category_row_counts[counted_category] = (
+            category_row_counts.get(counted_category, 0) + 1
+        )
 
         # Track canonical IDs for secondary type and category detection
         cid = _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "")
         if cid:
             canonical_ids.append(cid)
-            canonical_categories.setdefault(cid, counted_category)
-
-        # Probiotic counting
-        if category in {"probiotic", "bacteria"}:
-            probiotic_count += 1
-        elif _PROBIOTIC_IDENTITY_RE.search(name):
-            probiotic_count += 1
 
     # R1 — count distinct IDENTITIES, not label rows.
     #
@@ -699,6 +693,47 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             row.get("canonical_id") or row.get("iqm_parent_key") or ""
         )
         identity_keys.append(canonical or f"__unresolved_row_{index}")
+
+    # Every ratio below uses the same identity denominator as ``active_count``.
+    # Keeping row-count categories beside an identity-count denominator lets a
+    # duplicated form vote twice: one herb declared in two rows plus two other
+    # actives becomes a fake 2/3 herbal majority. Select one deterministic
+    # category per identity (majority category, lexical tie-break) and retain the
+    # raw row breakdown separately for diagnostics.
+    identity_category_votes: dict[str, Counter[str]] = {}
+    for identity_key, row in zip(identity_keys, quantified_rows):
+        category = canonical_category(row.get("category")) or "uncategorized"
+        identity_category_votes.setdefault(identity_key, Counter())[category] += 1
+
+    identity_categories: dict[str, str] = {}
+    category_counts: dict[str, int] = {}
+    for identity_key, votes in identity_category_votes.items():
+        selected = min(votes, key=lambda category: (-votes[category], category))
+        identity_categories[identity_key] = selected
+        category_counts[selected] = category_counts.get(selected, 0) + 1
+
+    # These mappings are part of the emitted taxonomy and are interpolated into
+    # human-readable reasons. Preserve a canonical key order so label row order
+    # cannot create a cosmetic contract drift even when every decision is the
+    # same. (The raw row counts remain diagnostic, but must be deterministic too.)
+    category_counts = dict(sorted(category_counts.items()))
+    category_row_counts = dict(sorted(category_row_counts.items()))
+
+    # Canonical IDs are a set of identities, not label order. Sorting makes all
+    # downstream selection deterministic; a label's row order must never decide
+    # a secondary type or a reason payload.
+    canonical_ids = sorted(set(canonical_ids))
+    canonical_categories = {
+        cid: identity_categories[cid]
+        for cid in canonical_ids
+        if cid in identity_categories
+    }
+    probiotic_count = len({
+        identity_key
+        for identity_key, row in zip(identity_keys, quantified_rows)
+        if canonical_category(row.get("category")) in {"probiotic", "bacteria"}
+        or bool(_PROBIOTIC_IDENTITY_RE.search(_ingredient_name(row)))
+    })
 
     quantified_row_count = len(quantified_rows)
     active_count = len(set(identity_keys))
@@ -737,9 +772,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     enzyme_identity_count = sum(1 for cid in canonical_ids if cid in _ENZYME_CANONICAL_IDS)
     digestive_enzyme_category_count = sum(
         1
-        for row in quantified_rows
-        if canonical_category(row.get("category")) == "enzyme"
-        and _normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or "") not in _SYSTEMIC_ENZYME_CANONICAL_IDS
+        for identity_key, category in identity_categories.items()
+        if category == "enzyme" and identity_key not in _SYSTEMIC_ENZYME_CANONICAL_IDS
     )
     enzyme_count = max(digestive_enzyme_category_count, enzyme_identity_count)
     enzyme_name_signal = any(t in product_name for t in _DIGESTIVE_ENZYME_NAME_TOKENS)
@@ -765,6 +799,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     primary_type: str | None = None
     secondary_type = None
     confidence = 0.0
+    decision_code: str | None = None
 
     multi_panel_signal = (
         # Panel BREADTH is deliberately measured in label rows, not identities.
@@ -817,15 +852,25 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         and probiotic_row_identity
         and not _has_non_probiotic_eligible_active(product)
     )
+    support_identity_keys = {
+        identity_key
+        for identity_key, row in zip(identity_keys, quantified_rows)
+        if _is_probiotic_cfu_support_row(row)
+    }
+    non_support_active_count = max(0, active_count - len(support_identity_keys))
     # Require a real probiotic-majority panel, not just a minority strain set
     # alongside non-probiotic actives. Single-active products where the only
     # active is a strain still route correctly.
     probiotic_majority = (
-        active_count > 0
+        non_support_active_count > 0
         and probiotic_count >= 2
-        and probiotic_count >= ceil(active_count * 0.5)
+        and probiotic_count >= ceil(non_support_active_count * 0.5)
     )
-    sole_active_is_strain = (active_count == 1 and probiotic_count == 1)
+    sole_active_is_strain = (
+        non_support_active_count == 1
+        and probiotic_count == 1
+        and (probiotic_name_signal or probiotic_flag or probiotic_row_identity)
+    )
     if (
         (active_count == 0 or support_only_active)
         and (probiotic_name_signal or probiotic_row_identity)
@@ -836,6 +881,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         )
     ):
         primary_type = "probiotic"
+        decision_code = "probiotic_product_level_identity"
         confidence = 0.8 if probiotic_cfu_identity_ok else 0.65
         if probiotic_cfu_identity_ok:
             if probiotic_name_signal:
@@ -854,6 +900,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0) and probiotic_majority)
     ):
         primary_type = "probiotic"
+        decision_code = "probiotic_active_identity"
         confidence = 0.9 if probiotic_majority else 0.7
         reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
 
@@ -884,12 +931,14 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         # rescues B-complex-plus-adjuncts products from the multivitamin bucket.
         if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2 and len(non_b_active_ids) <= 3:
             primary_type = "b_complex"
+            decision_code = "b_complex_panel"
             confidence = 0.9 if "complex" in product_name else 0.75
             reasons.append(
                 f"b-complex: {len(b_vitamin_ids)} B-vitamins, {len(non_b_active_ids)} non-B actives"
             )
         else:
             primary_type = "multivitamin"
+            decision_code = "multivitamin_b_complex_extras"
             confidence = 0.7
             reasons.append(
                 f"multivitamin (b-complex + extras): {len(vitamin_ids)} vitamins + {len(mineral_ids)} minerals"
@@ -900,6 +949,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # count, but the product identity is protein. Name signal overrides.
     elif (cid_set & _PROTEIN_IDS) and any(t in product_name for t in _PROTEIN_NAME_TOKENS):
         primary_type = "protein_powder"
+        decision_code = "protein_name_and_identity"
         confidence = 0.9
         reasons.append(f"protein name+id signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
 
@@ -909,6 +959,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # multivitamin.
     elif _has_greens_powder_signal(product_name, cid_set, category_counts):
         primary_type = "greens_powder"
+        decision_code = "greens_identity_signal"
         confidence = 0.9
         reasons.append(f"greens/superfood signal: ids={sorted(cid_set & _GREENS_IDS)}")
 
@@ -920,6 +971,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal")
         )
         primary_type = "multivitamin"
+        decision_code = "multivitamin_panel"
         confidence = 0.95 if name_signal else 0.75
         reasons.append(
             f"multivitamin: {len(vitamin_ids)} vitamins, {len(mineral_ids)} minerals, {active_count} actives"
@@ -950,6 +1002,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         omega_signal = len(omega_ids)
         name_signal = any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
         primary_type = "omega_3"
+        decision_code = "omega_identity"
         confidence = 0.95 if (omega_signal and name_signal) else 0.8
         reasons.append(f"omega-3: ids={sorted(omega_ids)}, name_match={name_signal}")
 
@@ -958,11 +1011,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # E.g. "Hair Skin & Nails with Biotin" is beauty, not vitamin_mineral_combo.
     elif active_count >= 2 and _has_functional_name_signal(product_name):
         primary_type, confidence, reason = _detect_functional_name(product_name)
+        decision_code = f"functional_name_{primary_type}"
         reasons.append(reason)
 
     # --- Sleep-support compounds with cofactors ---
     elif cid_set & _SLEEP_SINGLE_IDS:
         primary_type = "sleep_support"
+        decision_code = "sleep_support_identity"
         confidence = 0.9
         reasons.append(f"sleep-support ingredient with cofactors: {sorted(cid_set & _SLEEP_SINGLE_IDS)}")
 
@@ -973,12 +1028,14 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         or enzyme_with_mineral_carrier_only
     ):
         primary_type = "fiber_digestive"
+        decision_code = "digestive_enzyme_identity"
         confidence = 0.85 if enzyme_name_signal else 0.75
         reasons.append(f"digestive enzyme evidence: {enzyme_count}/{active_count} enzyme rows")
 
     # --- Digestive support formulas with no scored enzyme dose ---
     elif active_count > 0 and enzyme_name_signal:
         primary_type = "fiber_digestive"
+        decision_code = "digestive_name_signal"
         confidence = 0.75
         reasons.append(f"digestive support name signal in '{product_name}'")
 
@@ -996,6 +1053,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         }
     ):
         primary_type = "amino_acid"
+        decision_code = "named_amino_with_cofactors"
         confidence = 0.9
         reasons.append(f"named amino acid with cofactors: {sorted(named_amino_ids)}")
 
@@ -1016,7 +1074,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     #     and still emitted general_supplement, having no word for it.
     elif collagen_ids and (
         # dominant by identity share
-        len(collagen_ids) * 2 >= active_count
+        len(collagen_ids) * 2 > active_count
         # or the only actives besides collagen are its cofactors
         or not (cid_set - collagen_ids - _COLLAGEN_COFACTOR_IDS)
         # or the title names collagen AND every other active is a plausible
@@ -1029,7 +1087,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         # sufficient on its own (spec R5) — collagen must be present, and nothing
         # here may be a rival hero.
         or (
-            "collagen" in product_name
+            any(token in product_name for token in ("collagen", "gelatin"))
             and not (
                 cid_set
                 - collagen_ids
@@ -1040,6 +1098,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         )
     ):
         primary_type = "collagen"
+        decision_code = "collagen_dominant_identity"
         confidence = 0.85
         reasons.append(
             f"collagen dominant: {sorted(collagen_ids)} of {active_count} active(s)"
@@ -1051,35 +1110,43 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         cat = list(category_counts.keys())[0] if category_counts else ""
         if cid in _SLEEP_SINGLE_IDS:
             primary_type = "sleep_support"
+            decision_code = "single_sleep_support_identity"
             confidence = 0.9
             reasons.append(f"single sleep-support ingredient: {cid}")
         elif cid in _JOINT_SINGLE_IDS:
             primary_type = "joint_support"
+            decision_code = "single_joint_support_identity"
             confidence = 0.9
             reasons.append(f"single joint-support ingredient: {cid}")
         elif cid in _COLLAGEN_IDS:
             # Collagen before protein — collagen is a specific protein subset
             primary_type = "collagen"
+            decision_code = "single_collagen_identity"
             confidence = 0.9
             reasons.append(f"collagen: {cid}")
         elif cid in _PROTEIN_IDS or cat == "protein":
             primary_type = "protein_powder"
+            decision_code = "single_protein_identity"
             confidence = 0.9
             reasons.append(f"single protein ingredient: {cid or cat}")
         elif cid in _VITAMIN_CANONICAL_IDS or cat == "vitamin":
             primary_type = "single_vitamin"
+            decision_code = "single_vitamin_identity"
             confidence = 0.95
             reasons.append(f"single vitamin: {cid or cat}")
         elif cid in _MINERAL_CANONICAL_IDS or cat == "mineral":
             primary_type = "single_mineral"
+            decision_code = "single_mineral_identity"
             confidence = 0.95
             reasons.append(f"single mineral: {cid or cat}")
         elif cid in _AMINO_ACID_IDS or cat == "amino_acid":
             primary_type = "amino_acid"
+            decision_code = "single_amino_identity"
             confidence = 0.9
             reasons.append(f"single amino acid: {cid or cat}")
         elif cat in ("herb", "botanical"):
             primary_type = "herbal_botanical"
+            decision_code = "single_botanical_identity"
             confidence = 0.9
             reasons.append(f"single herbal/botanical: {cid or cat}")
         elif cat == "antioxidant":
@@ -1091,14 +1158,17 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             })
             if cid in _BOTANICAL_ANTIOXIDANTS:
                 primary_type = "herbal_botanical"
+                decision_code = "single_botanical_antioxidant"
                 confidence = 0.85
                 reasons.append(f"botanical antioxidant: {cid}")
             else:
                 primary_type = "general_supplement"
+                decision_code = "single_non_botanical_antioxidant"
                 confidence = 0.7
                 reasons.append(f"non-botanical antioxidant: {cid or cat}")
         else:
             primary_type = "general_supplement"
+            decision_code = "single_uncategorized_identity"
             confidence = 0.5
             reasons.append(f"single ingredient, uncategorized: {cid or cat}")
 
@@ -1144,6 +1214,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 # implying a rule decided (§10).
                 primary_type = "general_supplement"
                 reason_codes.append(REASON_CODE_UNCLASSIFIED_RESIDUAL)
+            decision_code = "name_dominant_identity"
             confidence = 0.85
             other_cid = cid_b if dominant_cid == cid_a else cid_a
             reasons.append(f"name-dominant single ingredient: {dominant_cid} (other={other_cid} not named)")
@@ -1152,25 +1223,43 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             if vm_count >= active_count * 0.7:
                 if mineral_ids and not vitamin_ids:
                     primary_type = "single_mineral"
+                    decision_code = "homogeneous_mineral_panel"
                     confidence = 0.8
                     reasons.append(f"mineral combo: {sorted(mineral_ids)}")
                 elif vitamin_ids and not mineral_ids:
                     primary_type = "single_vitamin"
+                    decision_code = "homogeneous_vitamin_panel"
                     confidence = 0.8
                     reasons.append(f"vitamin combo: {sorted(vitamin_ids)}")
                 else:
                     primary_type = "vitamin_mineral_combo"
+                    decision_code = "vitamin_mineral_panel"
                     confidence = 0.8
                     reasons.append(f"vitamin+mineral combo: {sorted(vitamin_ids | mineral_ids)}")
+        elif amino_ids and len(amino_ids) == active_count:
+            primary_type = "amino_acid"
+            decision_code = "homogeneous_amino_panel"
+            confidence = 0.8
+            reasons.append(f"amino acid panel: {sorted(amino_ids)}")
+        elif category_counts and all(
+            category in {"herb", "botanical"}
+            for category in category_counts
+        ):
+            primary_type = "herbal_botanical"
+            decision_code = "homogeneous_botanical_panel"
+            confidence = 0.8
+            reasons.append(f"botanical panel: {sorted(cid_set)}")
 
     # --- Vitamin + Mineral Combo (2-5 actives, mixed vitamins/minerals) ---
     elif 2 <= active_count <= 5 and (vitamin_ids or mineral_ids):
         if any(t in product_name for t in _ELECTROLYTE_NAME_TOKENS):
             primary_type = "electrolyte"
+            decision_code = "electrolyte_name_signal"
             confidence = 0.9
             reasons.append(f"electrolyte/hydration name signal in '{product_name}'")
         elif len(cid_set & _ELECTROLYTE_IDS) >= 3 and "hydration" in product_name:
             primary_type = "electrolyte"
+            decision_code = "electrolyte_panel_with_hydration"
             confidence = 0.85
             reasons.append(f"electrolyte mineral panel: {sorted(cid_set & _ELECTROLYTE_IDS)}")
         else:
@@ -1178,28 +1267,34 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             if vm_count >= active_count * 0.7:
                 if mineral_ids and not vitamin_ids:
                     primary_type = "single_mineral"
+                    decision_code = "homogeneous_mineral_panel"
                     confidence = 0.8
                     reasons.append(f"mineral combo: {sorted(mineral_ids)}")
                 elif vitamin_ids and not mineral_ids:
                     primary_type = "single_vitamin"
+                    decision_code = "homogeneous_vitamin_panel"
                     confidence = 0.8
                     reasons.append(f"vitamin combo: {sorted(vitamin_ids)}")
                 else:
                     primary_type = "vitamin_mineral_combo"
+                    decision_code = "vitamin_mineral_panel"
                     confidence = 0.8
                     reasons.append(f"vitamin+mineral combo: {sorted(vitamin_ids | mineral_ids)}")
             elif herb_count > vm_count:
                 primary_type = "herbal_botanical"
+                decision_code = "herbal_over_vitamin_mineral_panel"
                 confidence = 0.7
                 reasons.append(f"herbal dominant: {herb_count} herbs vs {vm_count} vitamins/minerals")
             else:
                 primary_type = "general_supplement"
+                decision_code = "mixed_targeted_panel"
                 confidence = 0.5
                 reasons.append(f"mixed targeted: {dict(category_counts)}")
 
     # --- Pre-workout ---
     elif any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) or len(cid_set & _PRE_WORKOUT_IDS) >= 3:
         primary_type = "pre_workout"
+        decision_code = "pre_workout_signal"
         confidence = 0.9 if any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) else 0.75
         reasons.append(f"pre-workout signal: ids={sorted(cid_set & _PRE_WORKOUT_IDS)}")
 
@@ -1209,24 +1304,28 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # too, which is exactly how this branch used to fire with an empty id set.
     elif any(t in product_name for t in _PROTEIN_NAME_TOKENS) or (cid_set & _PROTEIN_IDS):
         primary_type = "protein_powder"
+        decision_code = "protein_identity_signal"
         confidence = 0.9
         reasons.append(f"protein powder signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
 
     # --- Greens powder ---
     elif _has_greens_powder_signal(product_name, cid_set, category_counts):
         primary_type = "greens_powder"
+        decision_code = "greens_identity_signal"
         confidence = 0.85
         reasons.append(f"greens/superfood signal: ids={sorted(cid_set & _GREENS_IDS)}")
 
     # --- Herbal blend (>60% herbs) ---
     elif active_count >= 2 and herb_count > active_count * 0.6:
         primary_type = "herbal_botanical"
+        decision_code = "herbal_identity_majority"
         confidence = 0.85
         reasons.append(f"herbal blend: {herb_count}/{active_count} herbs")
 
     # --- Amino acid dominant ---
     elif amino_ids and len(amino_ids) >= active_count * 0.5:
         primary_type = "amino_acid"
+        decision_code = "amino_identity_dominance"
         confidence = 0.8
         reasons.append(f"amino acid dominant: {sorted(amino_ids)}")
 
@@ -1244,6 +1343,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             product_name, category_counts, active_count, herb_count,
             vitamin_count, mineral_count
         )
+        decision_code = f"functional_composition_{primary_type}"
         if reason:
             reasons.append(reason)
 
@@ -1253,10 +1353,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif active_count == 0:
         if _has_functional_name_signal(product_name) or _has_sleep_signal(product_name) or _has_beauty_signal(product_name):
             primary_type, confidence, reason = _detect_functional_name(product_name)
+            decision_code = f"zero_active_name_{primary_type}"
             confidence *= 0.7  # lower confidence — no quantified backing
             reasons.append(f"name-only classification (0 quantified actives): {reason}")
         else:
             primary_type = "general_supplement"
+            decision_code = REASON_CODE_NO_QUANTIFIED_ACTIVE_EVIDENCE
             confidence = 0.0
             reasons.append("no quantified active ingredients")
             reason_codes.append(REASON_CODE_NO_QUANTIFIED_ACTIVE_EVIDENCE)
@@ -1268,6 +1370,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # is not. State the evidence that was on the table so the gap is diagnosable.
     if primary_type is None:
         primary_type = "general_supplement"
+        decision_code = REASON_CODE_UNCLASSIFIED_RESIDUAL
         confidence = 0.0
         reasons.append(
             f"{REASON_CODE_UNCLASSIFIED_RESIDUAL}: no rule matched "
@@ -1276,6 +1379,17 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             f"ids={sorted(cid_set)[:6]}"
         )
         reason_codes.append(REASON_CODE_UNCLASSIFIED_RESIDUAL)
+
+    if decision_code is None:
+        # Programmer error, not malformed product data. A branch that can emit a
+        # type without naming its decision rule would recreate the exact
+        # untraceable contract this consolidation is removing. Fail closed in
+        # tests/development instead of publishing an unexplained classification.
+        raise RuntimeError(
+            f"classification branch emitted {primary_type!r} without a reason code"
+        )
+    reason_codes.append(decision_code)
+    reason_codes = list(dict.fromkeys(reason_codes))
 
     # =========================================================================
     # SECONDARY TYPE
@@ -1304,6 +1418,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # =========================================================================
     percentile_category = _derive_percentile_category(primary_type, secondary_type, product_name)
 
+    row_evidence = sorted(
+        row_evidence,
+        key=lambda item: tuple(
+            str(item.get(key) or "")
+            for key in ("role", "canonical_id", "category", "source_path", "row_id")
+        ),
+    )
     included_evidence = [
         item for item in row_evidence if item["role"] == ROW_ROLE_INCLUDED_ACTIVE
     ]
@@ -1357,6 +1478,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         "quantified_active_row_count": quantified_row_count,
         "non_quantified_base_count": nq_count,
         "category_breakdown": category_counts,
+        "category_row_breakdown": category_row_counts,
         "dsld_product_type": dsld_product_type or None,
         # ── structured evidence contract (policy-grade) ──────────────────────
         "classification_contract_version": CLASSIFICATION_CONTRACT_VERSION,
@@ -1422,6 +1544,13 @@ def _infer_secondary_type(
     """Infer secondary_type from the dominant canonical ingredient or product name."""
     canonical_categories = canonical_categories or {}
 
+    # Category-owned secondary identities are deterministic for the whole
+    # family; they do not depend on which ingredient row happened to be first.
+    if primary_type == "omega_3" and set(canonical_ids) & _OMEGA_CANONICAL_IDS:
+        return "fish_oil_epa_dha"
+    if primary_type == "collagen" and set(canonical_ids) & _COLLAGEN_IDS:
+        return "collagen"
+
     if primary_type == "fiber_digestive":
         enzyme_name_map = {
             "serrapeptase": "serrapeptase",
@@ -1486,19 +1615,12 @@ def _infer_secondary_type(
             if not negated:
                 return stype
 
-    # For multi-ingredient (non-multivitamin), use first canonical ID if it maps.
-    # Multivitamins have too many ingredients — picking the first mapped one
-    # would be arbitrary and misleading.
-    if primary_type not in {"multivitamin"}:
-        for cid in canonical_ids:
-            if (
-                primary_type == "general_supplement"
-                and (cid in _ENZYME_CANONICAL_IDS or canonical_categories.get(cid) == "enzyme")
-                and not any(t in product_name for t in _DIGESTIVE_ENZYME_NAME_TOKENS)
-            ):
-                continue
-            if cid in _SECONDARY_TYPE_MAP:
-                return _SECONDARY_TYPE_MAP[cid]
+    # A multi-ingredient product gets a secondary type only when the product
+    # name identifies it above. Falling back to the "first" canonical row made
+    # label presentation order a clinical decision: reversing zinc + vitamin C
+    # changed the secondary type from zinc to vitamin_c. Alphabetically sorting
+    # would be deterministic but still arbitrary, so absence is the honest
+    # result when no named differentiator exists.
 
     return None
 

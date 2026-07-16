@@ -302,6 +302,34 @@ def test_strict_release_accepts_a_current_artifact(tmp_path, omega_product):
     assert "CLINICAL_TAXONOMY_CONTRACT_VERSION" not in codes
 
 
+def test_strict_release_rejects_missing_taxonomy(tmp_path, omega_product):
+    product = copy.deepcopy(omega_product)
+    product.pop("supplement_taxonomy", None)
+
+    findings = sot.audit_clinical(_clinical_args(tmp_path, product, strict=True))
+    assert "CLINICAL_TAXONOMY_CONTRACT_INVALID" in [f.code for f in findings]
+
+
+def test_strict_release_rejects_current_version_with_missing_evidence(
+    tmp_path, omega_product
+):
+    product = copy.deepcopy(omega_product)
+    taxonomy = classify_supplement(product)
+    taxonomy.pop("classification_input_contract")
+    taxonomy.pop("classification_row_evidence")
+    taxonomy["classification_reason_codes"] = []
+    product["supplement_taxonomy"] = taxonomy
+
+    findings = sot.audit_clinical(_clinical_args(tmp_path, product, strict=True))
+    invalid = [
+        f for f in findings if f.code == "CLINICAL_TAXONOMY_CONTRACT_INVALID"
+    ]
+    assert len(invalid) == 1
+    assert "classification_input_contract" in invalid[0].message
+    assert "classification_row_evidence" in invalid[0].message
+    assert "classification_reason_codes" in invalid[0].message
+
+
 def test_contract_version_findings_are_aggregated_not_per_product(tmp_path, omega_product):
     """One artifact-wide condition should not emit 14k identical findings and
     bury the per-product findings that actually differ."""
