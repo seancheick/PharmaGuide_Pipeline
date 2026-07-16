@@ -342,6 +342,13 @@ The taxonomy must emit at least:
 
 > **`is_single_scorable_active = true` only when there is exactly one score-eligible active AND no second unresolved quantified active.** Otherwise a product with one mapped + one unmapped active would incorrectly receive single-ingredient bonuses.
 
+> **✅ SPEC AUTHORED 2026-07-16 — `scripts/CLASSIFIER_PRECEDENCE_SPEC.md`.** Read it before writing any 0d code; it carries the corpus measurements, the rules (R1–R7), fixtures, and the implementation order. Headlines that change this plan:
+> - **§7's severity ratings do not match the corpus.** #3 (rated HIGH) is **8 products**; #4 (rated MED-HIGH) has **~0 real defects**; the worst defect is the #2 2-active band at **749**, and **503 products violate §10's "reasons are never empty" gate today** (1,776 sit at 0.0 confidence).
+> - **RC2 *causes* #2.** Products named "Vitamin B3", "Choline L-Bitartrate 600 mg" (the plan's own cited case), "Pure Collagen Types 1 and 3" have `actives=2, distinct_ids=1` → `general_supplement` @ **0.0 with `reasons=[]`**. `classify_supplement` references `mark_compound_duplicate_rows` **zero** times. Fix RC2 first, then re-measure — it likely collapses a large share of the 503.
+> - **#4 electrolyte: DO NOT FIX.** Only 17 candidates exist and they are correctly classified (BCAA/protein/botanical products with adjunct electrolytes). §2's "`electrolyte`=5 is an investigation target" is **not supported** — promoting them would be TRAP 4. `pre_workout` (12) *is* supported: real pre-workouts are absorbed by `multivitamin` via the panel gate.
+> - **#5 is not RC2.** 0/346 `single_*`-with-≥2-actives are duplicate rows; all 346 are genuinely multi-identity. This is the Phase 1 driver for `is_single_scorable_active`.
+> - **Vocabulary decision: add no new term.** Mineral-only panels affect 8 products; §13's evidence-only rule says do not mint `mineral_complex` for 8. No GLOSSARY change needed.
+
 **Classifier precedence specification (required before 0d code).** Branch reordering alone is not an implementation specification. Add a checked-in decision table/ADR for every affected category with:
 
 - required canonical identity evidence;
