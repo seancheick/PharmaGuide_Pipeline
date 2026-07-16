@@ -91,14 +91,15 @@ def _spy_on(monkeypatch, enricher, method_name, capture):
     return capture
 
 
-def test_percentile_inference_runs_after_the_taxonomy(monkeypatch, enricher, product):
+def test_percentile_projection_runs_after_the_taxonomy(monkeypatch, enricher, product):
     """§5 step 5: percentile fields are emitted FROM the taxonomy.
 
     RED before Phase 0c: the call sat ~25 lines above the taxonomy write, so it
-    could never see one.
+    could never see one. Phase 0b then renamed the method to
+    `_decorate_percentile_category` — it projects, it no longer infers.
     """
     seen: Dict[str, Any] = {}
-    _spy_on(monkeypatch, enricher, "_infer_percentile_category", seen)
+    _spy_on(monkeypatch, enricher, "_decorate_percentile_category", seen)
 
     enricher.enrich_product(product)
 

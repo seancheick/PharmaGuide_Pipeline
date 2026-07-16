@@ -95,7 +95,7 @@ from constants import (
 from stage_manifest import select_stage_input_files
 from run_artifacts import ensure_run_id, report_run_directory
 from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
-from supplement_taxonomy import classify_supplement
+from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
 from scoring_input_contract import (
     build_scoring_classification,
@@ -14748,247 +14748,56 @@ class SupplementEnricherV3:
                 return "at_manufacture"
 
         return None
+    def _decorate_percentile_category(self, enriched: Dict[str, Any]) -> Dict[str, Any]:
+        """Project the canonical taxonomy's percentile cohort onto the artifact.
+
+        NOT a decider. `classify_supplement` owns product class; this only
+        restates its `percentile_category` plus the compatibility fields older
+        consumers read. Every value here is derived from the taxonomy — never
+        from a product name, ingredient list, or form factor.
+
+        This replaced an independent inference engine that scored name tokens
+        and ingredients against data/percentile_categories.json. That config
+        knows 9 categories while the taxonomy map has 20, so everything it could
+        not express (herbal_botanical, amino_acid, single_vitamin, ...) fell back
+        to `general_supplement`: the two disagreed on 7,975/14,193 products
+        (56.2%). Neither the export (build_final_db.py) nor the scorer
+        (score_supplements._resolve_percentile_category, "SP-2.8: taxonomy is the
+        source of truth") ever trusted it, so retiring it aligns the artifact
+        with what already ships rather than moving the shipped cohort.
+
+        PRECONDITION: run AFTER apply_taxonomy_projection (plan §5).
+        """
+        taxonomy = enriched.get("supplement_taxonomy")
+        taxonomy = taxonomy if isinstance(taxonomy, dict) else {}
+        category = str(taxonomy.get("percentile_category") or "").strip()
+
+        if not category:
+            # Truthful zero rather than an invented cohort (plan TRAP 3).
+            return {
+                "percentile_category": None,
+                "percentile_category_label": None,
+                "percentile_category_source": "taxonomy_unavailable",
+                "percentile_category_confidence": 0.0,
+                "percentile_category_signals": ["no_taxonomy_percentile_category"],
+            }
+
+        reasons = taxonomy.get("classification_reasons")
+        return {
+            "percentile_category": category,
+            "percentile_category_label": percentile_label_for(category),
+            "percentile_category_source": "taxonomy_v2",
+            "percentile_category_confidence": taxonomy.get("classification_confidence"),
+            "percentile_category_signals": (
+                [str(item) for item in reasons if item is not None]
+                if isinstance(reasons, list) else []
+            ),
+        }
+
 
     # =========================================================================
     # SUPPLEMENT TYPE CLASSIFIER
     # =========================================================================
-
-    def _canonical_token(self, value: Any) -> str:
-        """Normalize free text to a stable underscore token for deterministic matching."""
-        normalized = self._normalize_text(str(value or ""))
-        return re.sub(r"[^a-z0-9]+", "_", normalized).strip("_")
-
-    def _word_token_match(self, token: str, haystack: str) -> bool:
-        """Word-boundary token match that tolerates spaces/hyphens in tokens."""
-        normalized = self._normalize_text(token)
-        if not normalized:
-            return False
-        pattern = r"\b" + re.escape(normalized).replace(r"\ ", r"[\s\-]+") + r"\b"
-        return bool(re.search(pattern, haystack, re.IGNORECASE))
-
-    def _percentile_category_fallback_id(self, categories: Dict[str, Any]) -> str:
-        for category_id, category_def in categories.items():
-            if isinstance(category_def, dict) and category_def.get("is_fallback"):
-                return str(category_id)
-        return "general_supplement"
-
-    def _collect_percentile_context(
-        self,
-        product: Dict[str, Any],
-        enriched: Dict[str, Any],
-    ) -> Dict[str, Any]:
-        """Collect normalized context fields used for percentile category inference."""
-        name_blob = " ".join(
-            str(v)
-            for v in (
-                product.get("fullName"),
-                product.get("product_name"),
-                product.get("bundleName"),
-                enriched.get("product_name"),
-            )
-            if v
-        )
-        normalized_name = self._normalize_text(name_blob)
-
-        canonical_ingredients: set[str] = set()
-        iqd = enriched.get("ingredient_quality_data", {}) or {}
-        ingredient_rows = iqd.get("ingredients_scorable") or []
-        for ingredient in ingredient_rows:
-            if not isinstance(ingredient, dict):
-                continue
-            for key in ("canonical_id", "standard_name", "standardName", "name"):
-                token = self._canonical_token(ingredient.get(key))
-                if token:
-                    canonical_ingredients.add(token)
-
-        supp_type = (
-            enriched.get("supplement_type", {}).get("type")
-            if isinstance(enriched.get("supplement_type"), dict)
-            else enriched.get("supplement_type")
-        )
-        supplement_type = self._normalize_text(supp_type)
-
-        form_factor = self._normalize_text(
-            enriched.get("form_factor")
-            or product.get("form_factor")
-            or product.get("product_form")
-            or ""
-        )
-
-        return {
-            "normalized_name": normalized_name,
-            "canonical_ingredients": canonical_ingredients,
-            "supplement_type": supplement_type,
-            "form_factor": form_factor,
-        }
-
-    def _infer_percentile_category(self, product: Dict, enriched: Dict) -> Dict[str, Any]:
-        """
-        Infer a stable percentile category for cohort scoring.
-
-        Priority:
-        1) explicit percentile_category in source payload (if valid)
-        2) deterministic rule inference from percentile_categories database
-        3) fallback category
-        """
-        db = self.databases.get("percentile_categories", {}) or {}
-        categories = db.get("categories") if isinstance(db, dict) else None
-        rules = db.get("classification_rules") if isinstance(db, dict) else None
-
-        if not isinstance(categories, dict) or not categories:
-            return {
-                "percentile_category": "general_supplement",
-                "percentile_category_label": "General Supplements",
-                "percentile_category_source": "fallback",
-                "percentile_category_confidence": 0.0,
-                "percentile_category_signals": ["missing_percentile_categories_config"],
-            }
-
-        fallback_category = self._percentile_category_fallback_id(categories)
-        fallback_label = str(
-            (categories.get(fallback_category) or {}).get("label") or "General Supplements"
-        )
-
-        explicit_category = self._canonical_token(
-            product.get("percentile_category") or enriched.get("percentile_category")
-        )
-        if explicit_category and explicit_category in categories:
-            explicit_def = categories.get(explicit_category) or {}
-            return {
-                "percentile_category": explicit_category,
-                "percentile_category_label": str(explicit_def.get("label") or explicit_category),
-                "percentile_category_source": "explicit",
-                "percentile_category_confidence": 1.0,
-                "percentile_category_signals": ["explicit_field"],
-            }
-
-        context = self._collect_percentile_context(product, enriched)
-        name_blob = context["normalized_name"]
-        canonical_ingredients = context["canonical_ingredients"]
-        supplement_type = context["supplement_type"]
-        form_factor = context["form_factor"]
-
-        candidates: List[Dict[str, Any]] = []
-        for category_id, category_def in categories.items():
-            if not isinstance(category_def, dict):
-                continue
-            if category_def.get("is_fallback"):
-                continue
-
-            required = category_def.get("required") or {}
-            required_forms = required.get("form") if isinstance(required, dict) else None
-            if required_forms:
-                form_values = {
-                    self._canonical_token(v)
-                    for v in (required_forms if isinstance(required_forms, list) else [required_forms])
-                    if v
-                }
-                if self._canonical_token(form_factor) not in form_values:
-                    continue
-
-            evidence_score = 0.0
-            matched_signals: List[str] = []
-            evidence = category_def.get("evidence") or {}
-
-            name_evidence = evidence.get("name_tokens") if isinstance(evidence, dict) else None
-            if isinstance(name_evidence, dict):
-                weight = float(name_evidence.get("weight", 0))
-                for token in name_evidence.get("values", []) or []:
-                    if self._word_token_match(str(token), name_blob):
-                        evidence_score += weight
-                        matched_signals.append(f"name:{self._normalize_text(token)}")
-
-            ing_evidence = evidence.get("canonical_ingredients") if isinstance(evidence, dict) else None
-            if isinstance(ing_evidence, dict):
-                weight = float(ing_evidence.get("weight", 0))
-                min_match = int(ing_evidence.get("min_match", 1) or 1)
-                configured = {
-                    self._canonical_token(value)
-                    for value in (ing_evidence.get("values") or [])
-                    if value
-                }
-                matches = sorted(configured & canonical_ingredients)
-                if len(matches) >= min_match:
-                    evidence_score += weight * len(matches)
-                    matched_signals.extend([f"ingredient:{m}" for m in matches])
-
-            type_evidence = evidence.get("supplement_types") if isinstance(evidence, dict) else None
-            if isinstance(type_evidence, dict):
-                weight = float(type_evidence.get("weight", 0))
-                configured_types = {
-                    self._normalize_text(value) for value in (type_evidence.get("values") or []) if value
-                }
-                if supplement_type and supplement_type in configured_types:
-                    evidence_score += weight
-                    matched_signals.append(f"supp_type:{supplement_type}")
-
-            min_evidence_score = float(category_def.get("min_evidence_score", 0) or 0)
-            if evidence_score < min_evidence_score:
-                continue
-
-            candidates.append(
-                {
-                    "category": str(category_id),
-                    "label": str(category_def.get("label") or category_id),
-                    "score": evidence_score,
-                    "signals": matched_signals,
-                    "priority": int(category_def.get("priority", 999)),
-                }
-            )
-
-        if not candidates:
-            return {
-                "percentile_category": fallback_category,
-                "percentile_category_label": fallback_label,
-                "percentile_category_source": "fallback",
-                "percentile_category_confidence": 0.0,
-                "percentile_category_signals": [],
-            }
-
-        candidates.sort(key=lambda item: (-item["score"], item["priority"], item["category"]))
-        best = candidates[0]
-        second = candidates[1] if len(candidates) > 1 else None
-
-        rules = rules if isinstance(rules, dict) else {}
-        margin_threshold = float(rules.get("margin_threshold", 2.0) or 2.0)
-        confidence_threshold = float(rules.get("confidence_threshold", 0.4) or 0.4)
-        score_normalizer = float(rules.get("score_normalizer", 12.0) or 12.0)
-        second_score = float(second["score"]) if second else 0.0
-        margin = float(best["score"]) - second_score
-
-        if (
-            second
-            and best["score"] == second["score"]
-            and best["priority"] == second["priority"]
-            and margin < margin_threshold
-        ):
-            return {
-                "percentile_category": fallback_category,
-                "percentile_category_label": fallback_label,
-                "percentile_category_source": "fallback",
-                "percentile_category_confidence": 0.0,
-                "percentile_category_signals": ["ambiguous_tie"],
-            }
-
-        raw_confidence = min(float(best["score"]) / max(score_normalizer, 1.0), 1.0)
-        margin_factor = 1.0 if not second else min(margin / max(margin_threshold, 1.0), 1.0)
-        confidence = round(raw_confidence * max(margin_factor, 0.0), 2)
-        if confidence < confidence_threshold:
-            return {
-                "percentile_category": fallback_category,
-                "percentile_category_label": fallback_label,
-                "percentile_category_source": "fallback",
-                "percentile_category_confidence": confidence,
-                "percentile_category_signals": best["signals"] + ["low_confidence"],
-            }
-
-        return {
-            "percentile_category": best["category"],
-            "percentile_category_label": best["label"],
-            "percentile_category_source": "inferred",
-            "percentile_category_confidence": confidence,
-            "percentile_category_signals": best["signals"],
-        }
 
     def _classify_supplement_type(self, product: Dict) -> Dict:
         """
@@ -17611,11 +17420,9 @@ class SupplementEnricherV3:
             self.apply_taxonomy_projection(enriched)
 
             # Percentile category (cohort ranking). MUST run AFTER the taxonomy:
-            # the canonical classification is the input this is meant to decorate,
-            # not a competing opinion. It sat above the taxonomy historically and
-            # grew into an independent third decider as a result — see
-            # SUPP_TYPE_CONSOLIDATION_PLAN.md §5/§6 and the 0b note.
-            enriched.update(self._infer_percentile_category(product, enriched))
+            # this projects the canonical classification, it does not compete
+            # with it. See _decorate_percentile_category and plan §5/§6.
+            enriched.update(self._decorate_percentile_category(enriched))
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)

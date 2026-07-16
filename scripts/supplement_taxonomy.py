@@ -1420,6 +1420,25 @@ def _derive_percentile_category(
     return _PERCENTILE_CATEGORY_MAP.get(primary_type, "general_supplement")
 
 
+def percentile_label_for(percentile_category: Any) -> str:
+    """Human-readable label for a percentile cohort. Single owner.
+
+    This is the derivation the catalog already ships: products_core carries
+    "Herbal Botanical" / "Fish Oil" / "General Supplement", produced by
+    score_supplements._resolve_percentile_category title-casing the taxonomy
+    category. Keeping one implementation means the enriched artifact, the
+    scored artifact and the export cannot disagree about what a cohort is
+    called.
+
+    Deliberately NOT the curated labels in data/percentile_categories.json
+    ("General Supplements", "Fish Oil & Omega-3s"): those belong to the retired
+    9-category inference config and have never reached the catalog. Reviving
+    them here would put a different label in the artifact than the one users
+    actually see.
+    """
+    return re.sub(r"[_-]+", " ", str(percentile_category or "")).strip().title()
+
+
 # ============================================================================
 # CLASSIFICATION ROW ITERATOR (v2 — passes raw rows for NP filtering)
 # ============================================================================
