@@ -56,18 +56,75 @@ A product named "Vitamin B3" is unclassified with zero stated reason. RC2's fix
 collapses each pair to one active, which routes it into the existing and
 already-correct single-active branch.
 
-**RULE R1 — deduplicate identity before counting actives.**
-- **Evidence required:** two or more included rows resolving to the same
-  canonical identity (elemental/compound sibling per `mark_compound_duplicate_rows`).
-- **Action:** count them as **one** active. Reuse the existing
-  `supplement_type_utils.mark_compound_duplicate_rows` — do not reimplement
-  (plan §9 keeps that helper alive for enrich's UL path).
-- **Output/reason code:** `compound_duplicate_rows_collapsed`.
-- **Positive fixture:** `252532` Choline L-Bitartrate → `single_vitamin` (choline).
-- **Near-miss negative:** magnesium glycinate + **zinc** (2 distinct identities)
-  must stay 2 actives and must **not** become `single_mineral`.
-- **Invariance:** row order must not change the collapse; a decorative
-  zero-dose sibling must not resurrect the second count.
+**RULE R1 — count distinct IDENTITIES, not label rows.**
+
+> ### ✅ R1 SHIPPED 2026-07-16 — and it is **not** what RC2 prescribed
+>
+> **RC2's nominated fix does not work.** Measured against the 503 empty-reason
+> products: `mark_compound_duplicate_rows` collapses **19**; counting distinct
+> identities collapses **216**. The helper misses products literally named
+> "Vitamin B3" / "Niacin (Vitamin B3)" (`marked=0, distinct=1`) because it
+> requires a *bare* row named exactly like the canonical, and only for DRI
+> canonicals — it does not cover collagen at all.
+>
+> **Why: it answers a different question.** The helper is a DOSE rule — "is this
+> row a restatement of the same amount, so don't sum it?" — and it deliberately
+> leaves genuinely additive multi-form labels alone. Niacin + niacinamide are two
+> additive **doses** of one **identity**: the dose path must sum them; the
+> classifier must see one ingredient. Using a dose helper to count identities is
+> a category error, which is exactly why it under-reaches. The helper stays the
+> owner of enrich's UL/dose path; R1 does not touch it.
+
+- **Action:** `active_count = len({canonical identity of each quantified row})`.
+  Rows with no canonical id each count separately — an unresolved row cannot be
+  *proven* to be the same ingredient, so never under-count.
+- **Emitted:** `distinct_active_identity_count` (the decision) and
+  `quantified_active_row_count` (raw rows, diagnostic only — a gate that counts
+  rows re-creates this defect). `quantified_active_count` now means identities.
+- **Reason code:** `identity dedup: N label rows -> M distinct active(s)`.
+- **Positive fixtures:** `252532` Choline L-Bitartrate (elemental + salt);
+  `242284` "Vitamin B3" (niacin + niacinamide — the helper misses this one);
+  `269490` Pure Collagen Types I+III (not a DRI canonical at all).
+- **Near-miss negative:** magnesium + **zinc** stay 2 identities.
+- **Invariance:** row order does not change the collapse; a decorative NP
+  sibling does not resurrect the count. Both tested.
+
+**Panel breadth stays measured in ROWS — deliberately.** `multi_panel_signal`
+asks "does the label present a broad panel?", and a prenatal declaring
+Folate + Folic Acid still presents one. Switching it to identities silently
+re-calibrated the threshold and dropped a real prenatal into `omega_3` on its
+DHA row. Lowering `>=6` to `>=5` to compensate **over-corrected**: measured, it
+recovered 3 products but minted **13 bogus multivitamins**, 6 of them
+beauty/hair/nails. So the gate reads `quantified_row_count >= 6`; whether that
+threshold should change at all is **R4's** call, with R4's evidence. R1 must not
+re-tune panel routing on the way past — and it does not: `multivitamin` is
+**1463 → 1463**.
+
+### R1 measured impact (full corpus)
+
+| | before | after |
+|---|---|---|
+| `general_supplement` with **empty reasons** (§10 gate) | **503** | **287** (−216) |
+| `general_supplement` total | 4264 | **3999** (−265) |
+| `multivitamin` | 1463 | **1463** (untouched) |
+| products reclassified | — | 296 / 14,193 (2.1%) |
+
+Recovered into real cohorts: herbal_botanical +137, single_vitamin +76,
+single_mineral +43, vitamin_mineral_combo +18, amino_acid +7, collagen +1.
+
+**Four products move TO the residual. None is an R1 defect — R1 removed a wrong
+answer and exposed the gap underneath. They are canaries for the next rules:**
+
+| dsld | product | was | now | owner |
+|---|---|---|---|---|
+| `64848` | Gamma E Mixed Tocopherols (7 rows → `vitamin_e`×6 + `lignans`) | `vitamin_mineral_combo` | `general_supplement` | **R2** — the 2-identity band must name vitamin E |
+| `250086` | Collagen Natural Berry | `protein_powder` (the `category='protein'` hijack) | `general_supplement` | **R3** — must reach `collagen` |
+| `60843` | Immune Senescence (reishi ×2) | `immune_support` | `general_supplement` | reason says *"single ingredient, **uncategorized**: reishi"* — a category-vocabulary gap, not a branch bug |
+| `297666` | Beets Detox (5 mixed identities) | `vitamin_mineral_combo` | `general_supplement` | genuinely mixed; defensible |
+
+`74660` "Elderberry Fruit 550 mg" (`immune_support` → `herbal_botanical`, one of
+18) is **not** a regression: it is a single-botanical product, and
+herbal_botanical is the more honest answer than a functional category.
 
 ---
 

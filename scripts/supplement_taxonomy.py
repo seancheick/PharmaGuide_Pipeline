@@ -651,11 +651,44 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         elif _PROBIOTIC_IDENTITY_RE.search(name):
             probiotic_count += 1
 
-    active_count = len(quantified_rows)
+    # R1 — count distinct IDENTITIES, not label rows.
+    #
+    # A label routinely declares one nutrient twice: the FDA-mandated elemental
+    # row beside the source compound ("Magnesium" 60mg + "Magnesium Glycinate"
+    # 400mg), two forms of one vitamin ("Niacin" + "Niacinamide", both
+    # vitamin_b3), or two types of one protein ("Collagen Type I" + "Type III").
+    # Those are additive DOSES of a single INGREDIENT. Counting rows dropped such
+    # products into the vocabulary-less active_count==2 band, which emitted
+    # `general_supplement` at 0.0 confidence with empty reasons — 503 products,
+    # including ones literally named "Vitamin B3" and "Pure Collagen".
+    #
+    # This deliberately does NOT use `mark_compound_duplicate_rows`, which RC2
+    # nominated: that helper answers a DOSE question ("is this a restatement, so
+    # don't sum it?") and by design leaves genuinely additive multi-form labels
+    # alone. Measured, it collapses 19 of those 503 while identity counting
+    # collapses 216 — it under-reaches because it is answering a different
+    # question. It stays the owner of the UL/dose path; identity is owned here.
+    #
+    # Unresolved rows cannot be PROVEN to be the same ingredient, so each counts
+    # separately: never under-count actives.
+    identity_keys: list[str] = []
+    for index, row in enumerate(quantified_rows):
+        canonical = _normalize_text(
+            row.get("canonical_id") or row.get("iqm_parent_key") or ""
+        )
+        identity_keys.append(canonical or f"__unresolved_row_{index}")
+
+    quantified_row_count = len(quantified_rows)
+    active_count = len(set(identity_keys))
     nq_count = len(non_quantified_rows)
-    support_only_active = active_count > 0 and all(
+    support_only_active = quantified_row_count > 0 and all(
         _is_probiotic_cfu_support_row(row) for row in quantified_rows
     )
+    if quantified_row_count > active_count:
+        reasons.append(
+            f"identity dedup: {quantified_row_count} label rows -> {active_count} "
+            f"distinct active(s)"
+        )
 
     if nq_count > 0:
         reasons.append(f"excluded {nq_count} non-quantified base ingredients from classification")
@@ -705,7 +738,19 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     confidence = 0.0
 
     multi_panel_signal = (
-        active_count >= 6
+        # Panel BREADTH is deliberately measured in label rows, not identities.
+        # This asks "does the label present a broad panel?", and a prenatal that
+        # declares Folate + Folic Acid (one nutrient, two rows) still presents a
+        # broad panel. Switching this to identities silently re-calibrated the
+        # threshold and cost real products (a prenatal fell through to omega_3
+        # on its DHA row). Lowering it to >=5 to compensate over-corrected:
+        # measured, it recovered 3 products but minted 13 bogus multivitamins,
+        # including 6 beauty/hair/nails products.
+        #
+        # Whether this threshold should itself change is spec rule R4's call,
+        # with its own evidence. R1 owns the active_count==2 band and must not
+        # quietly re-tune panel routing on the way past.
+        quantified_row_count >= 6
         and len(vitamin_ids) + len(mineral_ids) >= 4
         and (
             len(vitamin_ids) + len(mineral_ids) >= 6
@@ -1147,7 +1192,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         "classification_reasons": reasons,
         # Human-readable only. NOT a gate input — see the contract fields below.
         "classification_input_source": source,  # physical path; diagnostics only
+        # Distinct identities (R1). This is what every branch means by "how many
+        # actives" — one nutrient declared twice is one ingredient.
         "quantified_active_count": active_count,
+        "distinct_active_identity_count": active_count,
+        # Raw label rows, before identity dedup. Diagnostic only: a gate that
+        # counts rows re-creates the defect R1 fixed.
+        "quantified_active_row_count": quantified_row_count,
         "non_quantified_base_count": nq_count,
         "category_breakdown": category_counts,
         "dsld_product_type": dsld_product_type or None,
