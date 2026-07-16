@@ -33,6 +33,44 @@ from supplement_type_utils import (
     _ingredient_name,
 )
 
+# ============================================================================
+# STRUCTURED CLASSIFICATION EVIDENCE CONTRACT
+# ============================================================================
+# Release gates consume THIS, not prose. Bump the version when the meaning of
+# an existing field changes; strict release mode accepts only the current
+# version (see audit_source_of_truth_contract.py).
+CLASSIFICATION_CONTRACT_VERSION = "1.0.0"
+
+# Stable, contract-level identifiers for the row population classification
+# consumed. Policy branches on these; `classification_input_source` stays a
+# DIAGNOSTIC physical path and must never be string-matched as policy — the
+# consolidation's RC1 fix repopulates those rows and would silently flip any
+# gate that pinned the literal.
+INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS = "score_eligible_rows"
+INPUT_CONTRACT_IQD_ALL_ROWS = "iqd_all_rows_fallback"
+INPUT_CONTRACT_RAW_LABEL_ACTIVES = "raw_label_actives"
+
+_INPUT_SOURCE_TO_CONTRACT = {
+    "ingredient_quality_data.ingredients_scorable": INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS,
+    "ingredient_quality_data.ingredients_fallback": INPUT_CONTRACT_IQD_ALL_ROWS,
+    "activeIngredients": INPUT_CONTRACT_RAW_LABEL_ACTIVES,
+}
+
+# Populations whose rows carry validated, score-eligible identities. A gate that
+# needs "the taxonomy saw trustworthy scorable input" tests membership here.
+SCORE_ELIGIBLE_INPUT_CONTRACTS = frozenset({INPUT_CONTRACT_SCORE_ELIGIBLE_ROWS})
+
+# Why a label row was or was not counted as a classification active. Enumerated
+# so audits can branch on a value instead of parsing a sentence.
+ROW_ROLE_INCLUDED_ACTIVE = "included_quantified_active"
+ROW_ROLE_EXCLUDED_CLEANER_INELIGIBLE = "excluded_cleaner_score_ineligible"
+ROW_ROLE_EXCLUDED_STRUCTURAL = "excluded_structural_row"
+ROW_ROLE_EXCLUDED_NON_SCORABLE_CATEGORY = "excluded_non_scorable_category"
+ROW_ROLE_EXCLUDED_NON_SCORABLE_ROLE = "excluded_non_scorable_role"
+ROW_ROLE_EXCLUDED_BLEND_HEADER = "excluded_blend_header"
+ROW_ROLE_EXCLUDED_UNIDENTIFIED = "excluded_unidentified_row"
+ROW_ROLE_EXCLUDED_NON_QUANTIFIED = "excluded_non_quantified_base"
+
 _PROBIOTIC_IDENTITY_RE = re.compile(
     r"\b("
     r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
@@ -529,12 +567,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     canonical_categories: dict[str, str] = {}
     probiotic_count = 0
     non_quantified_probiotic_count = 0
+    row_evidence: list[dict[str, Any]] = []
 
     for row in rows:
         category = canonical_category(row.get("category"))
         role = _normalize_text(row.get("role_classification"))
         name = _ingredient_name(row)
         if row.get("score_eligible_by_cleaner") is False:
+            row_evidence.append(
+                _row_evidence(row, category, ROW_ROLE_EXCLUDED_CLEANER_INELIGIBLE))
             continue
         cleaner_role = _normalize_text(row.get("cleaner_row_role"))
         if cleaner_role in {
@@ -542,6 +583,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             "source_descriptor", "nutrition_rollup", "excipient", "inactive",
             "label_header",
         }:
+            row_evidence.append(
+                _row_evidence(row, category, ROW_ROLE_EXCLUDED_STRUCTURAL))
             continue
         is_probiotic_strain = category in {"probiotic", "bacteria"} or (
             name and bool(_PROBIOTIC_IDENTITY_RE.search(name))
@@ -549,13 +592,21 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
 
         # Skip truly non-scorable
         if category in NON_SCORABLE_CATEGORIES:
+            row_evidence.append(
+                _row_evidence(row, category, ROW_ROLE_EXCLUDED_NON_SCORABLE_CATEGORY))
             continue
         if role in {"recognized_non_scorable", "inactive_non_scorable"}:
+            row_evidence.append(
+                _row_evidence(row, category, ROW_ROLE_EXCLUDED_NON_SCORABLE_ROLE))
             continue
         if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
+            row_evidence.append(
+                _row_evidence(row, category, ROW_ROLE_EXCLUDED_BLEND_HEADER))
             continue
 
         if not name and not category:
+            row_evidence.append(
+                _row_evidence(row, category, ROW_ROLE_EXCLUDED_UNIDENTIFIED))
             continue
 
         # Check NP/zero-potency — these go to base, not actives.
@@ -579,9 +630,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 if is_probiotic_strain:
                     non_quantified_probiotic_count += 1
                 non_quantified_rows.append(row)
+                row_evidence.append(
+                    _row_evidence(row, category, ROW_ROLE_EXCLUDED_NON_QUANTIFIED))
                 continue
 
         quantified_rows.append(row)
+        row_evidence.append(_row_evidence(row, category, ROW_ROLE_INCLUDED_ACTIVE))
         counted_category = category or "uncategorized"
         category_counts[counted_category] = category_counts.get(counted_category, 0) + 1
 
@@ -1081,17 +1135,33 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # =========================================================================
     percentile_category = _derive_percentile_category(primary_type, secondary_type, product_name)
 
+    included_evidence = [
+        item for item in row_evidence if item["role"] == ROW_ROLE_INCLUDED_ACTIVE
+    ]
+
     return {
         "primary_type": primary_type,
         "secondary_type": secondary_type,
         "percentile_category": percentile_category,
         "classification_confidence": round(confidence, 2),
         "classification_reasons": reasons,
-        "classification_input_source": source,
+        # Human-readable only. NOT a gate input — see the contract fields below.
+        "classification_input_source": source,  # physical path; diagnostics only
         "quantified_active_count": active_count,
         "non_quantified_base_count": nq_count,
         "category_breakdown": category_counts,
         "dsld_product_type": dsld_product_type or None,
+        # ── structured evidence contract (policy-grade) ──────────────────────
+        "classification_contract_version": CLASSIFICATION_CONTRACT_VERSION,
+        "classification_input_contract": _INPUT_SOURCE_TO_CONTRACT.get(source, source),
+        "classification_row_evidence": row_evidence,
+        # Genuine label actives the classifier counted but the scorer cannot
+        # credit (unresolved identity). Zero while classification reads the
+        # already-mapped scorable rows; RC1 makes it meaningful, and
+        # `is_single_scorable_active` will depend on it staying explicit.
+        "unresolved_quantified_active_count": sum(
+            1 for item in included_evidence if not item["score_eligible"]
+        ),
     }
 
 
@@ -1305,6 +1375,40 @@ _PERCENTILE_CATEGORY_MAP = {
     "beauty_hair_skin_nails": "beauty_hair_skin_nails",
     "general_supplement": "general_supplement",
 }
+
+
+def _row_is_score_eligible(row: dict[str, Any]) -> bool:
+    """Does this row carry a resolved, score-eligible identity?
+
+    Distinct from "is a genuine label active": RC1 will feed classification
+    unmapped-but-dosed rows, which are real actives the SCORER must still
+    reject. Keeping the two facts separate is what lets
+    `is_single_scorable_active` stay honest.
+    """
+    if row.get("score_eligible_by_cleaner") is False:
+        return False
+    if row.get("mapped") is False:
+        return False
+    return bool(_normalize_text(row.get("canonical_id") or row.get("iqm_parent_key") or ""))
+
+
+def _row_evidence(row: dict[str, Any], category: str, role: str) -> dict[str, Any]:
+    """One structured, auditable record of how a label row was treated.
+
+    Replaces prose grepping: a gate asks for canonical_id/category/role here
+    rather than searching a rendered sentence for a substring.
+    """
+    return {
+        "source_path": str(row.get("raw_source_path") or "") or None,
+        "row_id": str(row.get("row_id") or row.get("ingredientId") or "") or None,
+        "canonical_id": _normalize_text(
+            row.get("canonical_id") or row.get("iqm_parent_key") or ""
+        ) or None,
+        "category": category or None,
+        "quantified": not _is_non_quantified(row),
+        "score_eligible": _row_is_score_eligible(row),
+        "role": role,
+    }
 
 
 def _derive_percentile_category(

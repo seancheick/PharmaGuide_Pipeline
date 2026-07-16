@@ -124,6 +124,7 @@ CLASSIFICATION_FACT_KEYS: Tuple[str, ...] = (
     "quantified_label_active_count",    # Phase 0d — classification population
     "scorable_active_count",            # Phase 0d — score-eligible population
     "is_single_scorable_active",        # Phase 0d — the canonical single fact
+    "unresolved_quantified_active_count",  # Phase 0a — dosed but unresolved
     "non_quantified_base_count",
     "category_breakdown",
     "dsld_product_type",
@@ -174,6 +175,7 @@ _DECISION_FIELDS = frozenset({
     "quantified_label_active_count",
     "scorable_active_count",
     "is_single_scorable_active",
+    "unresolved_quantified_active_count",
     "non_quantified_base_count",
     "category_breakdown",
 })
@@ -342,6 +344,9 @@ def classification_facts(projected: Dict[str, Any]) -> Dict[str, Any]:
     facts["derived_digest"] = _digest(
         {key: projected.get(key) for key in DERIVED_PROJECTION_KEYS}
     )
+    # Per-row evidence is the SoT gate's input, so a change to it must select
+    # the product — but it is far too bulky to inline in a 14k-product ledger.
+    facts["row_evidence_digest"] = _digest(taxonomy.get("classification_row_evidence"))
     return facts
 
 

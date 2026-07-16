@@ -15,11 +15,18 @@ import re
 import sqlite3
 import subprocess
 import sys
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Iterable
 
 from stage_manifest import select_stage_files
+from supplement_taxonomy import (
+    CLASSIFICATION_CONTRACT_VERSION,
+    INPUT_CONTRACT_IQD_ALL_ROWS,
+    ROW_ROLE_INCLUDED_ACTIVE,
+    SCORE_ELIGIBLE_INPUT_CONTRACTS,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -620,7 +627,7 @@ def audit_enrichment(args: argparse.Namespace) -> list[Finding]:
                     findings.append(Finding("ENRICHMENT_SCORABLE_MISSING_DOSE", f"{pid}: scorable row lacks dose evidence ({name})", str(file_path)))
 
             taxonomy = product.get("supplement_taxonomy")
-            if isinstance(taxonomy, dict) and taxonomy.get("classification_input_source") == "ingredient_quality_data.ingredients_fallback":
+            if isinstance(taxonomy, dict) and taxonomy_used_iqd_fallback(taxonomy):
                 findings.append(Finding("ENRICHMENT_TAXONOMY_USED_IQD_FALLBACK", f"{pid}: taxonomy consumed IQD ingredients fallback", str(file_path)))
 
             scoring_diag = product.get("iqd_contract_diagnostics")
@@ -829,21 +836,74 @@ def safety_text(product: dict[str, Any]) -> str:
     return " ".join(pieces)
 
 
+def taxonomy_used_iqd_fallback(taxonomy: dict[str, Any]) -> bool:
+    """Did the classifier fall back to the unfiltered IQD ingredient list?
+
+    Contract identifier first; the physical path is only consulted for
+    pre-contract artifacts.
+    """
+    contract = taxonomy.get("classification_input_contract")
+    if contract is None:
+        return (
+            taxonomy.get("classification_input_source")
+            == "ingredient_quality_data.ingredients_fallback"
+        )
+    return contract == INPUT_CONTRACT_IQD_ALL_ROWS
+
+
+def taxonomy_saw_score_eligible_input(taxonomy: dict[str, Any]) -> bool:
+    """Did the classifier consume a validated score-eligible row population?
+
+    Tests the stable CONTRACT identifier, never the physical JSON path. The
+    consolidation's RC1 fix repopulates classification's rows; a gate pinned to
+    the old `ingredient_quality_data.ingredients_scorable` literal would stop
+    matching and block the release for a change that is in fact correct.
+    """
+    contract = taxonomy.get("classification_input_contract")
+    if contract is None:
+        # Pre-contract artifact: fall back to the physical path ONLY here, so
+        # exactly one place understands the legacy shape.
+        return (
+            taxonomy.get("classification_input_source")
+            == "ingredient_quality_data.ingredients_scorable"
+        )
+    return contract in SCORE_ELIGIBLE_INPUT_CONTRACTS
+
+
 def taxonomy_has_omega_scorable_evidence(product: dict[str, Any]) -> bool:
     """Return true when taxonomy preserved explicit omega ingredient evidence.
 
     Scored artifacts do not always carry full IQD rows. In that shape, the
-    clinical drift gate should still accept taxonomy that declares strict
-    scorable input plus EPA/DHA/fish-oil evidence in its structured reasons.
+    clinical drift gate should still accept taxonomy that declares
+    score-eligible input plus EPA/DHA/fish-oil evidence.
+
+    Consumes the structured evidence contract. The previous implementation
+    grepped rendered prose (`"omega-3:" in " ".join(reasons)`), which made a
+    human-readable sentence a release input — and those sentences were not even
+    deterministic until 2026-07-15.
     """
     taxonomy = product.get("supplement_taxonomy")
     if not isinstance(taxonomy, dict):
         return False
-    if taxonomy.get("classification_input_source") != "ingredient_quality_data.ingredients_scorable":
+    if not taxonomy_saw_score_eligible_input(taxonomy):
         return False
     breakdown = taxonomy.get("category_breakdown")
     if isinstance(breakdown, dict) and numeric_value(breakdown.get("fatty_acid"), 0.0) > 0:
         return True
+
+    row_evidence = taxonomy.get("classification_row_evidence")
+    if isinstance(row_evidence, list):
+        return any(
+            isinstance(item, dict)
+            and item.get("role") == ROW_ROLE_INCLUDED_ACTIVE
+            and item.get("score_eligible") is True
+            and str(item.get("canonical_id") or "") in OMEGA_CANONICAL_HINTS
+            for item in row_evidence
+        )
+
+    # Pre-contract artifact (no structured row evidence). Kept narrow and
+    # explicit; the strict release gate rejects these outright (see
+    # audit_contract_version below), so this only serves non-release inspection.
     reasons = taxonomy.get("classification_reasons")
     if not isinstance(reasons, list):
         return False
@@ -866,8 +926,25 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
         except Exception as exc:
             findings.append(Finding("CLINICAL_JSON_ERROR", f"cannot read product JSON: {exc}", str(file_path)))
             continue
+        stale_contract_versions: Counter[str] = Counter()
+        stale_contract_sample: list[str] = []
         for product in products:
             pid = product_identity(product)
+
+            # Strict release mode accepts only the current structured contract.
+            # Old artifacts stay readable for inspection (the helpers above fall
+            # back explicitly), but they must never satisfy a release gate by
+            # quietly re-entering the prose path. Aggregated per file: this is
+            # one artifact-wide condition, and 14k identical findings would bury
+            # the per-product findings that actually differ.
+            taxonomy_payload = product.get("supplement_taxonomy")
+            if getattr(args, "strict_release", False) and isinstance(taxonomy_payload, dict):
+                found_version = taxonomy_payload.get("classification_contract_version")
+                if found_version != CLASSIFICATION_CONTRACT_VERSION:
+                    stale_contract_versions[str(found_version)] += 1
+                    if len(stale_contract_sample) < 5:
+                        stale_contract_sample.append(pid)
+
             rows = scorable_rows(product)
             row_ids = {canonical_id(row) for row in rows}
             text = product_text(product)
@@ -905,6 +982,21 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
             canonical_form = str(product.get("form_factor_canonical") or "").lower()
             if "softgel" in legacy_form and canonical_form and canonical_form != "softgel":
                 findings.append(Finding("FORM_FACTOR_CANONICAL_NOT_SOFTGEL", f"{pid}: softgel legacy form exported with canonical {canonical_form}", str(file_path)))
+
+        if stale_contract_versions:
+            total = sum(stale_contract_versions.values())
+            seen = ", ".join(
+                f"{version}x{count}" for version, count in sorted(stale_contract_versions.items())
+            )
+            findings.append(Finding(
+                "CLINICAL_TAXONOMY_CONTRACT_VERSION",
+                f"{total} product(s) carry a taxonomy classification contract "
+                f"version other than {CLASSIFICATION_CONTRACT_VERSION!r} "
+                f"(found: {seen}; e.g. {', '.join(stale_contract_sample)}). "
+                "Re-enrich before release: an artifact written by an older "
+                "classifier cannot be gated on the current contract.",
+                str(file_path),
+            ))
     return findings
 
 
