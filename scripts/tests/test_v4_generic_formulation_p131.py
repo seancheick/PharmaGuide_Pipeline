@@ -57,19 +57,38 @@ def _ingredient(
     return row
 
 
+# Legacy supp_type -> the taxonomy's canonical single fact. Phase 1 repointed
+# generic_formulation's single-ingredient gates off the legacy `supplement_type`
+# onto `supplement_taxonomy.is_single_scorable_active`. The single-ingredient
+# supp_types these tests used ("single"/"single_nutrient") are exactly the ones
+# that should now carry is_single_scorable_active=True; everything else False.
+# Projecting here keeps all 29 call sites meaningful AND makes them exercise the
+# real (taxonomy) path instead of the retired one. `is_single` in extra can
+# override for the cases that test the disagreement directly.
+_SINGLE_SUPP_TYPES = frozenset({"single", "single_nutrient"})
+
+
 def _product(
     *,
     supp_type: str = "single_nutrient",
     ingredients: list | None = None,
     form_factor: str = "capsule",
+    is_single: bool | None = None,
     **extra,
 ) -> dict:
     rows = ingredients if ingredients is not None else [_ingredient()]
+    if is_single is None:
+        is_single = supp_type in _SINGLE_SUPP_TYPES
     product = {
         "status": "active",
         "form_factor": form_factor,
         "form_factor_canonical": form_factor,
         "supplement_type": {"type": supp_type},
+        "supplement_taxonomy": {
+            "primary_type": "single_mineral" if is_single else "general_supplement",
+            "is_single_scorable_active": is_single,
+            "scorable_active_count": 1 if is_single else len(rows),
+        },
         "ingredient_quality_data": {
             "total_active": len(rows),
             "ingredients_scorable": rows,

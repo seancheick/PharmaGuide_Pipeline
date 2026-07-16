@@ -65,7 +65,7 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
     is_scorable,
     scorable_ingredients,
-    supp_type_of,
+    is_single_scorable_active_of,
     _as_float,
     _norm_text,
     _safe_dict,
@@ -160,7 +160,6 @@ PREMIUM_FORM_SKIP_FIRST = True
 
 DELIVERY_TIER_POINTS = {int(k): v for k, v in _FM["a3_delivery_tier_points"].items()}
 
-SINGLE_INGREDIENT_SUPP_TYPES = frozenset({"single", "single_nutrient"})
 
 # A5 rollup sub-credits (sum can exceed CAP_EXCELLENCE; we clamp at the end).
 A5A_ORGANIC = _FM["a5a_organic"]
@@ -418,7 +417,7 @@ def _score_single_ingredient_efficiency(
     flat +1 (gate 14). A1 already pays the form's quality; this is the focus
     bonus on top, compensating for the A2 breadth bonus a single can never earn.
     """
-    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+    if not is_single_scorable_active_of(product):
         return 0.0
     # Proprietary-blend containers are not transparent singles — keep them out
     # of the focus bonus even when their parent fills the A1 slot (v3 parity).
@@ -449,7 +448,7 @@ def _premium_single_floor_target(
 
     It does not lift weak forms, multis, or proprietary blend containers.
     """
-    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+    if not is_single_scorable_active_of(product):
         return 0.0
     scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
     if len(scorable) != 1:
@@ -491,7 +490,7 @@ def _standard_single_floor_target(
 
 
 def _single_scorable_active(product: Dict[str, Any]) -> Dict[str, Any] | None:
-    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+    if not is_single_scorable_active_of(product):
         return None
     scorable = [i for i in get_active_ingredients(product) if is_scorable(i)]
     if len(scorable) != 1:
@@ -605,7 +604,7 @@ def _keys_include_dri_like(keys: set[str]) -> bool:
 def _score_enzyme_recognition(product: Dict[str, Any]) -> float:
     """Named-enzyme recognition for single-ingredient generic products.
     Dedupes enzyme families and caps at 2 points in v4."""
-    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+    if not is_single_scorable_active_of(product):
         return 0.0
     seen: set[str] = set()
     for ing in get_active_ingredients(product):
