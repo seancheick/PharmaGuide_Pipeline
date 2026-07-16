@@ -7925,14 +7925,13 @@ def build_core_row(
         # high/critical/contraindicated/avoid). Bitter orange, DHEA, Titanium
         # Dioxide watchlist, etc. cannot ship as SAFE on the catalog row.
         #
-        # Two paths to SAFE need to be guarded:
-        #   1. verdict == "SAFE"           → catalog reads SAFE directly.
-        #   2. verdict == "POOR"           → score_supplements.py auto-derives
-        #                                    safety_verdict = "SAFE" because the
-        #                                    quality drop didn't come from a
-        #                                    safety signal. A hard-safety warning
-        #                                    must override this derivation so
-        #                                    safety_verdict no longer says SAFE.
+        # Two v4-artifact paths to SAFE need to be guarded:
+        #   1. verdict == "SAFE"          → catalog reads SAFE directly.
+        #   2. verdict == "POOR"          → safety_verdict may still be "SAFE"
+        #                                   when the quality drop did not come
+        #                                   from a safety signal. A hard-safety
+        #                                   warning must override that projection
+        #                                   so safety_verdict no longer says SAFE.
         # In both cases the verdict drops to CAUTION (clear non-SAFE signal
         # short of a hard block) — keeping POOR-verdict products at POOR would
         # leave safety_verdict=SAFE under the derivation rule and re-introduce
