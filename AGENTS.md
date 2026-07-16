@@ -20,7 +20,7 @@ runs every heavy test (one alone is ~8 min) — that is why ad-hoc runs balloon 
 ```bash
 scripts/test.sh fast            # dev loop — ~3–5 min (DEFAULT; use this)
 scripts/test.sh fast -k banned  # filter by keyword
-scripts/test.sh fast scripts/tests/test_score_supplements.py   # one file
+scripts/test.sh fast scripts/tests/test_v4_scored_artifact.py  # one file
 scripts/test.sh release         # release gates before a ship / commit
 scripts/test.sh full            # entire suite, parallel (-n auto) — pre-ship / CI
 scripts/test.sh slow            # only the heavy integration tests
@@ -55,7 +55,7 @@ python3 scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/
 # Run individual pipeline stages
 python3 scripts/clean_dsld_data.py <input> <output>
 python3 scripts/enrich_supplements_v3.py <cleaned_input> <output>
-python3 scripts/score_supplements.py <enriched_input> <output>
+python3 scripts/score_products_v4.py --input-dir <enriched_dir> --output-dir <scored_dir>
 
 # Manual/internal final DB export; normal shipping goes through rebuild_dashboard_snapshot.sh + release_full.sh
 python3 scripts/build_final_db.py --enriched-dir <enriched_dir> --scored-dir <scored_dir> --output-dir <output>
@@ -105,7 +105,8 @@ docs/                         # Technical deep-dives and infographics
 | `run_pipeline.py`              | Single-brand/stage Clean → Enrich → Score runner             |
 | `clean_dsld_data.py`           | Stage 1: normalize raw DSLD JSON                            |
 | `enrich_supplements_v3.py`     | Stage 2: match ingredients, classify, enrich (~13K lines)   |
-| `score_supplements.py`         | Stage 3: arithmetic scoring, verdict assignment (~4K lines) |
+| `score_products_v4.py`         | Stage 3: v4 artifact batch I/O and atomic writes            |
+| `scoring_v4/scored_artifact.py` | Single scored-artifact assembly and verdict/coverage contract |
 | `enhanced_normalizer.py`       | Core text normalization engine (~7K lines)                  |
 | `build_final_db.py`            | Internal/manual final DB builder used by snapshot/release flows |
 | `audit_source_of_truth_contract.py` | Cleaner-first source-of-truth and strict release gates  |
@@ -147,7 +148,9 @@ Verification scripts that call external APIs to validate data accuracy:
 ## Production Scoring System (v4)
 
 The shipped catalog score is the v4 six-pillar /100 model emitted through
-`scripts/scoring_v4/` and `scripts/scoring_v4/export_adapter.py`.
+`scripts/score_products_v4.py` and
+`scripts/scoring_v4/scored_artifact.py`. Final DB export consumes that artifact
+directly and never runs a second scorer.
 
 - **Formulation** (20): ingredient form quality, delivery, formulation fit
 - **Dose** (20): category-aware dosing adequacy and excess-dose handling
@@ -163,15 +166,15 @@ Canonical exported fields:
 - `quality_pillars_v4` — six-pillar detail surface for Flutter
 - `score_100_equivalent` and `score_display_100_equivalent` — compatibility mirrors of the v4 score
 
-The legacy `score_supplements.py` /80 scorer still runs as deterministic
-scaffolding for review queues, detail blobs, verdict history, and audit
-compatibility. It is not the production score contract. Do not reintroduce
-`score_quality_80` or `score_display_80` into final exports.
+`score_supplements.py` is retired from every operational entrypoint. It may
+remain temporarily only for Phase-5 test disposition after the v4 corpus
+rebuild; do not invoke it, restore it as fallback, or build compatibility
+logic around it. Do not reintroduce `score_quality_80` or `score_display_80`.
 
 Verdicts: BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE (deterministic precedence)
 
-Config: `scripts/scoring_v4/config/quality_score.json` for production v4 scoring;
-`scripts/config/scoring_config.json` for legacy scaffolding.
+Config: `scripts/scoring_v4/config/quality_score.json` is the sole production
+scoring configuration.
 
 ## Key Documentation
 
@@ -240,7 +243,7 @@ These override speed when they conflict.
 - **No hallucinated identifiers — ever.** PMIDs, CUIs, RXCUIs, UNIIs, NCT IDs, CAS, CIDs must be content-verified against the live API (PubMed/UMLS/RxNorm/FDA/ClinicalTrials.gov). Existence is not enough — a real PMID about the wrong topic is a *ghost reference* and is a defect. Use `scripts/api_audit/verify_*.py`. This is a clinical product; one corrupt entry = a red flag for the whole product. See `critical_no_hallucinated_citations` and `critical_clinical_data_integrity` memories.
 - **Code is not cheap.** AI velocity is real, but bad code is *more* expensive than ever because AI works best in good codebases. Optimize for maintainability and the next reader, not lines-per-minute. Boring, idiomatic code beats clever code.
 - **Small batches, decomposed problems.** Solve one thing at a time. Atomic commits. Localize blast radius. The IQM batch cadence is the right shape — keep it.
-- **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py` 13K, `score_supplements.py` 4K, `enhanced_normalizer.py` 7K): treat them as gray boxes — design and lock the interface, delegate implementation, verify at the boundary with tests.
+- **Deep modules over shallow ones.** Prefer few large modules with simple interfaces (Ousterhout). When working on the mega-files (`enrich_supplements_v3.py` 13K, `enhanced_normalizer.py` 7K): treat them as gray boxes — design and lock the interface, verify at the boundary with tests.
 - **Watch for cognitive debt and code bloat.** Generating code is nearly free; understanding it isn't. If a change adds volume without removing complexity, push back. If a CLAUDE.md / doc / config grows without being read, slim it.
 - **AI is an amplifier, not a fixer.** Discipline doesn't get optional with AI — it gets more important. Specs-to-code without humans reviewing produces entropy.
 

@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Operations
 
-> Canonical operator runbook | Last verified: 2026-07-15
+> Canonical operator runbook | Last verified: 2026-07-16
 
 ## 1. Which command should I run?
 
@@ -56,8 +56,10 @@ That means:
 4. Load the enriched batch once.
 5. Run the enrichment contract validator.
 6. Run the strict coverage gate.
-7. Quarantine stale Score outputs and generate legacy score scaffolding.
-8. Write the Score stage ownership manifest.
+7. Quarantine stale Score outputs and generate complete v4 scored artifacts
+   through `score_products_v4.py`.
+8. Atomically write the Score outputs and ownership manifest. A partial or
+   failed batch cannot leave a promotable manifest.
 
 The batch attempts every discovered brand even if one fails. It records each
 result in:

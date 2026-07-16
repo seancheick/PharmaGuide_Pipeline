@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Architecture
 
-> Last verified: 2026-07-15
+> Last verified: 2026-07-16
 > Export schema: 2.0.0 | Core columns: 110 | Pipeline manifest: 3.4.0
 
 ## 1. System boundary
@@ -13,8 +13,8 @@ DSLD brand folders
   → Clean
   → Enrich
   → pre-score contract + coverage gates
-  → legacy Score scaffolding
-  → candidate Build with v4 production scoring
+  → v4 Stage-3 scored artifacts
+  → candidate Build (no rescoring)
   → candidate gates
   → atomic Snapshot promotion
   → images + interaction DB + release gates
@@ -45,7 +45,8 @@ alternative release process.
 | Safety identity normalization | `identity/safety.py` |
 | V4 safety verdict policy | `scoring_v4/gate_safety.py` |
 | Production score | `score_supplements_v4.py` + `scoring_v4/` |
-| Public score overlay | `scoring_v4/export_adapter.py` |
+| Complete scored artifact | `scoring_v4/scored_artifact.py` |
+| Stage-3 batch I/O | `score_products_v4.py` |
 | Export schema/quarantine | `build_final_db.py` |
 | Snapshot promotion | `rebuild_dashboard_snapshot.sh` + `promote_release_artifacts.py` |
 | Release sequencing | `release_full.sh` |
@@ -112,28 +113,33 @@ identity fallback is not part of the production contract.
 `--strict-release-gates`; required gates cannot be skipped or reduced to
 warn-only in that mode.
 
-### 3.4 Score scaffolding
+### 3.4 V4 Stage-3 score
 
 Authority:
 
-- `score_supplements.py`
-- `config/scoring_config.json` (legacy version 3.6.0)
-
-This stage produces deterministic legacy arithmetic, review-queue/detail
-scaffolding, verdict history, and audit metadata. It writes scored JSON and a
-stage manifest. Its internal `/80` value is not a public export score.
-
-### 3.5 V4 production score and final build
-
-Authority:
-
+- `score_products_v4.py`
+- `scoring_v4/scored_artifact.py`
 - `score_supplements_v4.py` (engine 4.1.0)
 - `scoring_v4/`
+- `scoring_v4/config/quality_score.json`
+
+`build_scored_artifact()` is the single production seam. It runs the v4 scorer
+once, consumes shared coverage/strict diagnostics, applies verdict and safety
+precedence, and emits the complete score/status/pillar/provenance contract.
+The CLI owns only input validation, atomic batch writes, failure reporting,
+and the stage manifest. Failed or partial batches cannot produce a promotable
+manifest.
+
+### 3.5 Final build
+
+Authority:
+
 - `build_final_db.py`
 
-V4 is evaluated during final DB construction. The adapter overlays the v4
-public contract onto a copy of current legacy scaffolding once per product.
-Final outputs include:
+Final build pairs enriched rows with v4-native Stage-3 artifacts. It never
+invokes a scorer. It validates the six-pillar contract, coverage bounds,
+status/verdict consistency, hard-block suppression, and export schema before
+producing:
 
 - `quality_score_v4_100`
 - `quality_score_status`

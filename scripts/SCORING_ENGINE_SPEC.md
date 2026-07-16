@@ -2,9 +2,9 @@
 
 > Production scoring engine: **4.1.0**
 > V4 quality configuration: **1.0.4-sports-subtypes**
-> Legacy scaffolding configuration: **3.6.0**
 > Export schema: **2.0.0** / **110 core columns**
-> Last verified against code: **2026-07-15**
+> Stage-3 artifact schema: **4.0.0**
+> Last verified against code: **2026-07-16**
 
 ## 1. Scope
 
@@ -19,11 +19,12 @@ Primary implementation:
 - `scoring_v4/gate_completeness.py`
 - `scoring_v4/modules/`
 - `scoring_v4/quality_score.py`
-- `scoring_v4/export_adapter.py`
+- `scoring_v4/scored_artifact.py`
+- `score_products_v4.py`
 - `build_final_db.py`
 
-The production score is v4 `/100`. `score_supplements.py` still produces live
-legacy scaffolding but does not own the public score, ranking, tier, or display.
+The production score is v4 `/100`. Stage 3 produces the complete v4 artifact;
+final export consumes it directly and never invokes a second scorer.
 
 ## 2. Non-negotiable invariants
 
@@ -58,8 +59,8 @@ cleaner-owned role/eligibility fields and emits:
 - mapped coverage
 - diagnostics and strict contract metadata
 
-The same contract is used by pre-score validation, legacy scaffolding, v4, and
-export diagnostics. A downstream consumer may explain an exclusion but may not
+The same contract is used by pre-score validation, v4, the artifact assembler,
+and export diagnostics. A downstream consumer may explain an exclusion but may not
 reclassify the row with a second heuristic.
 
 ### 3.2 Required upstream domains
@@ -95,7 +96,7 @@ to avoid a null.
 8. evaluate confidence
 9. attach engine/config provenance
 10. assemble six public pillars, score, tier, and status
-11. overlay public fields once at the export seam
+11. project the complete Stage-3 artifact once
 
 The input dict is not mutated.
 
@@ -138,7 +139,8 @@ Primary verdict applicability is US federal/state. Regional evidence remains in
 `jurisdictions` and `regional_advisories`.
 
 The final export also enforces banned-substance parity. If export evidence is
-broader than the native v4 gate, `suppress_v4_for_hard_block()` collapses the
+broader than the native v4 gate,
+`suppress_scored_artifact_for_hard_block()` collapses the
 public contract to BLOCKED + null score; a banned product can never retain a
 finite ranking value.
 
@@ -273,25 +275,21 @@ Every v4 result carries:
 Provenance is emitted even for early safety/completeness returns so a dispute
 can reconstruct the exact policy state.
 
-## 13. Legacy boundary
+## 13. Stage-3 artifact boundary
 
-The legacy `score_supplements.py` v3.6.0 process remains live because final DB
-construction still consumes diagnostics such as review-queue sections,
-historical flags, selected detail fields, and strict scoring metadata.
+`scoring_v4/scored_artifact.py` is the only production seam that turns one
+enriched product into one scored product artifact. It:
 
-`export_adapter.overlay_v4_scored()`:
+1. invokes `score_product_v4()` exactly once
+2. obtains coverage and strict diagnostics from `scoring_input_contract.py`
+3. verifies completeness coverage agrees with that shared result
+4. applies public verdict precedence, including the `<0.3` trust floor
+5. emits the v4 score, six pillars, status, provenance, and compatibility mirrors
+6. contains hard-block suppression so every public/reserved surface agrees
 
-1. scores the enriched product with v4 exactly once
-2. copies the legacy scored dict
-3. refreshes shared-contract diagnostics from current enriched rows
-4. reconciles stale legacy flags to v4 evidence
-5. writes v4 verdict, `/100` compatibility mirrors, and reserved `_v4_*` data
-6. preserves only the legacy internals still required by downstream audit/detail
-
-This boundary provides one public score authority, but it is not yet one
-physical scoring implementation. Removing the legacy engine requires proving
-and migrating every live scaffolding consumer; it must not be deleted based on
-import counts alone.
+`score_products_v4.py` owns only batch discovery, validation, atomic writes,
+and summary reporting. `build_final_db.py` validates and exports the artifact;
+it does not rescore or overlay another result.
 
 ## 14. Export contract
 
@@ -335,7 +333,7 @@ At minimum, preserve coverage for:
 - proprietary blend dedupe and display-only linkage
 - unit canonicalization and serving ranges
 - folate/folinic adequacy and UL lineage
-- v4 pillar math and export adapter
+- v4 pillar math and scored-artifact assembly
 - absence of deprecated `/80` fields
 - per-product scoring snapshots
 

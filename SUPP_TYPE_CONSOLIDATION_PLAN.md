@@ -1,11 +1,14 @@
 # Supplement-Type Consolidation — Implementation Plan
 
-**Status (2026-07-16):** mandatory review checkpoint after Phase 1. Phases -1,
-0a, 0b, 0c, 0d-R1/R2/R3/R4/R7a, and Phase 1 are complete. Phase 2 has **not**
-started. RC1 and the separate R5 evidence, R6 panel-policy, and R7b vocabulary
-decisions remain open and must be resolved before the destructive
-legacy-classifier retirement.
-**Branch:** `supp-type-consolidation`, cut from main `e2583594`. Resolve the live branch tip with `git rev-parse --short HEAD`; do not trust a copied commit hash in this document.
+**Status (2026-07-16):** Phases -1 through 2 are complete. Phase 3 (single
+v4-native scored-artifact assembler) and Phase 4 (v4 Stage-3 producer/runtime
+cutover) are implemented and verified by the full fast suite: **10,786 passed,
+127 skipped, 1 xfailed**. The next blocking action is the user-owned full-corpus
+rebuild and expected-change review in Phase 5. The product pipeline has not been
+run by the agent.
+**Branch:** `codex/supp-type-completion` in worktree
+`worktrees/codex-supp-type-completion`. Resolve the live branch tip with
+`git rev-parse --short HEAD`; do not trust a copied commit hash in this document.
 **Plan baseline:** catalog `v2026.07.15.200540`. The branch was independently
 reviewed through local commit `4ed09667`; resolve the live tip rather than
 assuming that hash is still current. The temporary audit harness is now
@@ -27,16 +30,10 @@ The next agent can execute this plan end to end, subject to the two explicit use
 4. Confirm no pipeline or release process is running before changing operational entrypoints. The shipped baseline is already green; do **not** rerun the full pipeline during development. The user owns the full-corpus pipeline execution and production release/promotion unless they explicitly authorize the agent to run them in the active session.
 5. Add this plan to the working plan and execute one atomic RED-first slice at a time. Use only `scripts/test.sh` for tests.
 6. Do **not** restart completed phases. Read the as-built notes and
-   `scripts/CLASSIFIER_PRECEDENCE_SPEC.md`, then execute the remaining work in
-   this order:
-   1. RC1 definition/inventory pass (no classifier edit until the included and
-      excluded row populations are specified and tested);
-   2. record separate dispositions for R5 (pre-workout/hydration evidence), R6
-      (B-complex panel policy), and R7b (multi-identity family vocabulary);
-   3. regenerate a schema-3 harness baseline from the exact comparison commit,
-      then review the complete classifier/score ledger;
-   4. Phase 2 reader migration and legacy-classifier retirement;
-   5. stop at the formal Phase-2 checkpoint before any Phase-3 work.
+   `scripts/CLASSIFIER_PRECEDENCE_SPEC.md`, then execute only the remaining
+   Phase-5 work: user rebuild, read-only artifact verification, expected-change
+   review, explicit snapshot approval, retired scorer/test deletion, and final
+   release verification.
 
    The percentile third brain is already retired, every current classifier
    branch emits a machine reason code, and the formulation scorer already reads
@@ -48,7 +45,8 @@ The next agent can execute this plan end to end, subject to the two explicit use
    - Cleaned products key on **`id` / `fullName`**, not `dsld_id` / `product_name` (`validate_product` accepts both). Feed `enrich_product` the wrong shape and it returns an `EMPTY_ENRICHMENT_SCHEMA` placeholder that never reaches the taxonomy — a **vacuous A/B that looks like a clean pass**. Always assert the probe reached `supplement_taxonomy`.
    - `enriched_date`, `enrichment_metadata.generated_at` and `match_ledger.generated_at` are volatile. A blob digest must strip them recursively or **every** product looks changed.
    - Never `git stash pop` bare in this repo — there are 5 pre-existing user/codex stashes and a failed `stash push` will let `pop` restore the wrong one over your tree. Use file copies for before/after probes.
-7. Stop for user review after Phase 2 and again before Phase 3. A request to execute the plan does not waive those safety checkpoints.
+7. The Phase-2/Phase-3 checkpoints have been satisfied by the user's direct
+   v4-only instruction. Do not recreate a rollback path or a second assembler.
 8. The sole full-corpus rebuild belongs to Phase 5 and is launched by the user under the standing operating agreement. The agent prepares the command, waits for completion, and verifies the resulting artifacts. Targeted temporary artifact generation and read-only corpus audits are allowed earlier; promotion is not.
 
 ---
@@ -176,7 +174,13 @@ Each of these was a real, verified near-miss. They exist because someone (Claude
 
 6. **Line numbers are NOT execution order.** `14782` is a method *definition*, reached via `_collect_percentile_context` → `_infer_percentile_category` → `enrich_product:17567`. Trace call chains.
 
-7. **v3 is NOT dead code.** It is the live Stage-3 producer; `build_final_db.py` → `overlay_v4_scored(enriched, scored_v3)` (`export_adapter.py:230/255`) starts from a **copy of the v3 dict** and inherits ~13 v3-native fields including the safety-critical **`mapped_coverage`** (`build_final_db.py:8105`), which drives *"never show safe when `mapped_coverage < 0.3`"*. Removing v3 is a **migration**, not a deletion.
+7. **Historical trap, now resolved:** v3 was live through a subprocess and could
+   not safely be deleted as an import-only cleanup. The migration is now
+   implemented: `run_pipeline.py` invokes `score_products_v4.py`,
+   `build_scored_artifact()` emits shared `mapped_coverage`, and
+   `build_final_db.py` consumes that artifact without an overlay. The inactive
+   `score_supplements.py` file remains only until the Phase-5 corpus rebuild and
+   test-disposition gate; it is not a rollback target.
 
 ---
 
@@ -435,7 +439,7 @@ is still undefined.
 
 | Reader family | Required disposition |
 |---|---|
-| Seven `score_supplements.py` reads | Migrate each decision/diagnostic to taxonomy fields, structured facts, or the mechanical mirror while v3 remains the live rollback producer. No independent fallback classification. |
+| Seven former `score_supplements.py` reads | Completed before runtime cutover: decisions use taxonomy fields, structured facts, or the mechanical mirror; no independent fallback classification. |
 | `generic_formulation.py` | Completed in Phase 1: consume `is_single_scorable_active`; remove type-name inference and redundant single-count decisions. |
 | `scoring_input_contract.py` and `scoring_v4/router.py` legacy multivitamin fallbacks | Replace with canonical taxonomy plus panel-evidence rules; preserve themed-multivitamin behavior with positive and near-miss tests, then delete the fallback readers. |
 | `scoring_v4/confidence.py` | Use structured taxonomy confidence/reason codes. Any old-blob compatibility belongs in an explicit adapter, not the production decision path. |
@@ -449,15 +453,23 @@ The Phase 2 gate is source search + runtime entrypoint/subprocess inventory + fo
 
 🛑 **CHECKPOINT — formal, non-shipping.** Commit and review the **classifier-only audit** (harness output; not a pipeline rebuild). **Never ship or merge a code+artifact combination known to be out of sync.** Proceed only after approval.
 
-### Phase 3 — one scored-artifact assembler (safety-critical)
+### Phase 3 — one scored-artifact assembler (safety-critical) ✅
 Build **one deep interface**:
 ```
 build_scored_artifact(enriched_product) -> complete scored artifact
 ```
 It owns: v4 scoring; shared coverage + strict-contract diagnostics; safety/verdict precedence; compatibility projections; the inventoried v3-native fields.
 
+> **COMPLETE 2026-07-16.** `scoring_v4/scored_artifact.py` owns the complete
+> artifact. Shared scoring input now counts genuine unresolved dose-bearing
+> label actives in the coverage denominator without promoting them into scoring.
+> The assembler checks v4 completeness coverage against that shared result and
+> prevents `SAFE` below `mapped_coverage < 0.3`. Hard-block suppression updates
+> all public/reserved surfaces through the same module.
+
 - The Stage-3 **CLI handles only** batch I/O, manifests, atomic writes, failure reporting. **Do not assemble compatibility fields in the CLI** — that just builds a second assembler while removing the first.
-- `build_final_db.py` **consumes the artifact directly** instead of overlaying v4 onto a v3 dict (`export_adapter.py:255`).
+- `build_final_db.py` **consumes the artifact directly** and never invokes a
+  scorer or overlay.
 - **`mapped_coverage`: expose the EXISTING shared result — never re-implement.** Authoritative calc lives in `scoring_input_contract.py`; v4's `gate_completeness.py:192` already consumes it; ownership declared in `scripts/contracts/source_of_truth_matrix.json` (`mapping_coverage_contract`).
 - **Inventory all 13 inherited fields BEFORE coding** — table per field: current producer | canonical future owner | downstream consumers | required vs optional | missing/malformed behavior | parity test | retirement condition. Safety verdicts, diagnostics, `score_basis`, strict-contract results, unmapped counts and coverage must **not** hide under "carry 13 fields."
 - Add targeted Stage-3 artifact generation over frozen fixtures and representative canaries for every route module, hard safety state, malformed/missing coverage state, and changed classification family. This exercises CLI I/O/manifests and the assembler without a full-corpus rebuild.
@@ -465,14 +477,22 @@ It owns: v4 scoring; shared coverage + strict-contract diagnostics; safety/verdi
 
 🛑 **CHECKPOINT before Phase 3 begins** — do not touch the `mapped_coverage` producer without approval.
 
-### Phase 4 — add and repoint the v4 producer; retain v3 for rollback
+### Phase 4 — add and repoint the v4 producer ✅
 Order is mandatory:
 
 1. Add the v4 producer.
 2. **Verify it on frozen and targeted artifacts**, including exact final-build parity.
 3. Repoint Stage 3 (`run_pipeline.py:173`) + `preflight.py:93`.
 4. Run a targeted release-path dry run + artifact audits against v4-produced temporary artifacts.
-5. Keep `score_supplements.py` present but inactive as a rollback artifact until the single full-corpus v4 rebuild and delta review pass in Phase 5. The production entrypoint and preflight must already point to v4.
+5. Keep `score_supplements.py` present but inactive only until the single
+   full-corpus v4 rebuild proves artifact parity and the old tests are disposed.
+   It is not an authorized rollback path.
+
+> **COMPLETE 2026-07-16.** `score_products_v4.py` owns atomic batch I/O;
+> `run_pipeline.py` and `preflight.py` point to it; release freshness tracks the
+> producer and assembler; `build_final_db.py` no longer scores or overlays; the
+> retired `export_adapter.py` and its tests are deleted. The full fast suite is
+> green. No product pipeline was run.
 
 The historical `reports/canary_rebuild.py` reference is stale; that file does not exist at the documented baseline. Search live runtime/tool references before cutover and repoint only canaries that actually exist. Do not create a replacement solely to satisfy this old path.
 
@@ -489,12 +509,22 @@ A **temporary read-only parity harness** is allowed during migration. It must ne
 
 Order is mandatory and preserves the one-rebuild rule:
 
-1. With Stage 3 repointed to v4 **and v3 still present but inactive**, stop and give the user the exact canonical full-rebuild command. The user launches the single 14,193-product rebuild. Do not run it as the agent unless the user explicitly changes this instruction. Wait for the user's completion output, then verify the resulting manifests and artifacts before continuing.
+1. With Stage 3 repointed to v4 and the retired scorer inactive, stop and give
+   the user this exact compute-only command:
+   `bash batch_run_all_datasets.sh --pipeline-only`. It rebuilds every brand
+   through Clean → Enrich → v4 Score but cannot enter snapshot/release before
+   delta review. The user launches it; the agent does not. Wait for the user's
+   completion output, then verify manifests and artifacts before continuing.
 2. Run the complete artifact audits and the hardened drift harness. Require exact product-ID/count parity and generate the complete expected-change ledger.
 3. Review safety/status/verdict changes individually. Review score/tier/pillar changes by reason-coded bucket plus named canaries, with every changed product still represented in the machine-readable ledger.
 4. Re-freeze only explicitly approved fixture deltas.
 5. Delete v3 (`score_supplements.py` drops as a unit), repoint any remaining canary/tool reference, and delete obsolete v3 tests according to their Phase 4 classification. The full rebuild has already proven the v4 producer across the corpus, so deleting the now-inactive file does not require another rebuild.
-6. Run `scripts/test.sh fast`, `scripts/test.sh release`, and strict read-only artifact audits against the approved fresh artifacts. Prepare the canonical `release_full.sh` command and its expected gates for the user. Production release/promotion remains user-owned unless explicitly authorized; any code-path or schema failure blocks promotion.
+6. Run `scripts/test.sh fast`, `scripts/test.sh release`, and strict read-only
+   artifact audits against the approved fresh artifacts. After the reviewed
+   snapshot fixture is updated, the user runs
+   `bash scripts/rebuild_dashboard_snapshot.sh`, followed by
+   `bash scripts/release_full.sh`. Production promotion remains user-owned
+   unless explicitly authorized; any code-path or schema failure blocks it.
 7. Delete `scripts/audits/supptype_drift_preview.py` and any other temporary parity tooling only after cutover acceptance. Complete the dead-code sweep and documentation update in separate cleanup commits.
 
 ---
@@ -587,7 +617,7 @@ Review policy:
 | Percentile inference (3rd brain) | `enrich_supplements_v3.py:14752, 14782, 14802`; called at `17567` |
 | SoT audit trap | `audit_source_of_truth_contract.py:63, 839+` |
 | v3 invoked by subprocess | `run_pipeline.py:173, 497`; required by `preflight.py:93` |
-| v4 overlays the v3 dict | `export_adapter.py:230, 255`; `build_final_db.py:8493, 8503` |
+| V4 artifact assembly | `scoring_v4/scored_artifact.py`; Stage-3 I/O in `score_products_v4.py` |
 | `mapped_coverage` inherited | `build_final_db.py:8105` |
 | `mapped_coverage` true owner | `scoring_input_contract.py`; consumed `gate_completeness.py:192`; declared by `mapping_coverage_contract` in `scripts/contracts/source_of_truth_matrix.json` |
 | Export type resolver | `build_final_db.py:846` |

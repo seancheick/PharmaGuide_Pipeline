@@ -1,5 +1,12 @@
 # Handoff: Retire V3 scoring, finish V4, fix blend grouping, align tests
 
+> **Historical handoff — implementation superseded 2026-07-16.** Production
+> Stage 3 now uses `score_products_v4.py` and
+> `scoring_v4/scored_artifact.py`; final export consumes the v4-native artifact
+> directly. Do not use the runtime/path claims below as current instructions.
+> The remaining deletion/test-disposition work is tracked in
+> `SUPP_TYPE_CONSOLIDATION_PLAN.md` Phase 5.
+
 **Audience:** an engineer/agent taking over the V3→V4 cutover.
 **Author context:** written 2026-06-24 after verifying Codex's
 `05433a3c` (pipeline) / `4874d41` (Flutter) "centralize primary active

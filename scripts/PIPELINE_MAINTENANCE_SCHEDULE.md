@@ -1,6 +1,6 @@
 # PharmaGuide Pipeline Maintenance Schedule
 
-> Owner: Sean Cheick Baradji | Last verified: 2026-07-15
+> Owner: Sean Cheick Baradji | Last verified: 2026-07-16
 
 This schedule separates data collection, clinical review, code verification,
 and release. External reports create review queues; they never become curated

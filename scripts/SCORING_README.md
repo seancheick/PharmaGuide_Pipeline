@@ -1,6 +1,6 @@
 # PharmaGuide Scoring README
 
-> Operational summary | Last verified: 2026-07-15
+> Operational summary | Last verified: 2026-07-16
 
 ## The short version
 
@@ -8,18 +8,15 @@ PharmaGuide ships one public score: the v4 six-pillar `/100` quality score.
 
 ```text
 Enriched product
-  ├─ legacy scorer → audit/review/detail scaffolding
-  └─ v4 scorer     → authoritative public score + pillars + status
-                         ↓
-                 export adapter overlays v4 once
-                         ↓
-                   final SQLite + detail blob
+  → score_products_v4.py (Stage-3 batch owner)
+  → scoring_v4.scored_artifact.build_scored_artifact()
+  → one v4 score + pillars + status + diagnostics
+  → final SQLite + detail blob
 ```
 
-The live legacy scorer is not an alternative consumer score. It remains a
-dependency of review queues and detail/export diagnostics until that
-scaffolding is deliberately migrated. Do not calculate, display, rank, or
-compare products using its internal `/80` value.
+`score_supplements.py` is no longer an operational entrypoint. It may remain in
+the tree temporarily for post-rebuild test disposition, but production,
+preflight, release, export, and audit-preview paths do not invoke it.
 
 ## Public export contract
 
@@ -64,9 +61,9 @@ they are not a cosmetic stretch of legacy section totals.
 | Completeness policy | `scoring_v4/gate_completeness.py` |
 | V4 scoring configuration | `scoring_v4/config/quality_score.json` |
 | Public score assembly | `scoring_v4/quality_score.py` |
-| V4/legacy export seam | `scoring_v4/export_adapter.py` |
+| Complete Stage-3 artifact | `scoring_v4/scored_artifact.py` |
+| Stage-3 batch I/O + atomic writes | `score_products_v4.py` |
 | Final contract and quarantine | `build_final_db.py` |
-| Legacy diagnostic arithmetic | `score_supplements.py` + `config/scoring_config.json` |
 
 Do not add a second classifier in a scorer or exporter. When classification is
 wrong, fix the owning taxonomy/scoring-input/router boundary and add a
@@ -84,9 +81,10 @@ cross-stage regression test.
 6. One category module computes its rubric result.
 7. Confidence and provenance are attached.
 8. The six public pillars and tier are assembled.
-9. The export adapter overlays the v4 contract onto a copy of legacy
-   scaffolding exactly once.
-10. `build_final_db.py` validates the frozen export and quarantines products
+9. `scored_artifact.py` projects the result, shared coverage, strict diagnostics,
+   compatibility mirrors, safety precedence, and provenance exactly once.
+10. `build_final_db.py` consumes that artifact without rescoring, validates the
+    frozen export, and quarantines products
     that cannot ship truthfully.
 
 ## Module routing
@@ -120,8 +118,8 @@ Verdict precedence is:
 BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE
 ```
 
-Never replace a null suppressed score with `raw_score_v4_100`, a legacy score,
-zero, or a cohort fallback. Safety verdict and evidence remain visible without
+Never replace a null suppressed score with `raw_score_v4_100`, zero, or a
+cohort fallback. Safety verdict and evidence remain visible without
 a rankable number.
 
 ## Safety applicability
@@ -170,9 +168,9 @@ contribution.
 Every live key must have a behavioral test. Remove obsolete knobs instead of
 wiring them merely because they exist.
 
-`config/scoring_config.json` controls legacy scaffolding only. Its `/80`
-display strings, old combined-score commentary, and section totals are not the
-mobile export contract.
+`config/scoring_config.json` is retained only for non-production historical
+tests until the retired scorer is deleted. It is not read by the Stage-3
+producer, final export, or release path.
 
 ## Making a scoring change
 

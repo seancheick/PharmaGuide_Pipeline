@@ -1,7 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
 > Version: 2.0.0 — 2026-06-08
-> Consumes: v4 six-pillar scorer (`score_supplements_v4` + `scoring_v4/`) via the export adapter; enrichment schema v5.1.0+
+> Consumes: v4-native Stage-3 artifacts from `score_products_v4.py` +
+> `scoring_v4/scored_artifact.py`; enrichment schema v5.1.0+. Final export does
+> not rescore or overlay another scoring engine.
 > Status: ACTIVE — **v2.0.0 BREAKING:** the production catalog is v4 only. The legacy /80 columns `score_quality_80` + `score_display_80` are **DROPPED**; the canonical shipped score is `quality_score_v4_100` (/100), with `score_100_equivalent` / `score_display_100_equivalent` as honest /100 compat mirrors. New `products_core` columns: `quality_score_v4_100`, `quality_score_status` (scored/suppressed_safety/not_scored), `quality_tier`, `quality_score_suppressed_reason`, `raw_score_v4_100` (audit only), `v4_module`, `v4_confidence`, `score_model_version`, `quality_score_version`, `scoring_engine_version`, `classification_schema_version`, `v4_config_fingerprint`, `safety_signal_reason`. New detail-blob keys: `quality_pillars_v4`, `clean_label_flags_v4`, `raw_score_v4_100`, `v4_safety_gate`, `v4_completeness_gate`, `v4_score_provenance`, `v4_score_explanation`. Ranking/dedup/index move to `quality_score_v4_100`. Flutter must read `quality_score_v4_100`, rank/exclude on `quality_score_status`, and render the six `quality_pillars_v4`.
 >
 > Status (v1 history): v1.6.1 landed the unified inactive-ingredient resolver + Vitamin A IU→mcg RAE form-aware conversion + canonical_id / delivers_markers propagation.
@@ -381,11 +383,11 @@ Required rows:
 | ------------------ | ---------------------- |
 | `db_version`       | `2026.03.29.232343`    |
 | `pipeline_version` | `3.4.0`                |
-| `scoring_version`  | `3.4.0`                |
+| `scoring_version`  | `4.1.0`                |
 | `generated_at`     | `2026-03-29T22:33:24Z` |
 | `product_count`    | `180423`               |
 | `min_app_version`  | `1.0.0`                |
-| `schema_version`   | `1`                    |
+| `schema_version`   | `2.0.0`                |
 
 `db_version` is generated from the UTC build timestamp as `YYYY.MM.DD.HHMMSS`.
 The SQLite `export_manifest` table intentionally omits `checksum`, because the

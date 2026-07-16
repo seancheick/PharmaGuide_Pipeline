@@ -34,8 +34,8 @@ contract name elsewhere.
 | **Clean** | `clean_dsld_data.py` + `enhanced_normalizer.py` | Raw DSLD JSON → normalized rows and source-of-truth row roles |
 | **Enrich** | `enrich_supplements_v3.py` | Clean rows → canonical identity, safety, RDA/UL, evidence, taxonomy, and scorer inputs |
 | **Pre-score gates** | `enrichment_contract_validator.py`, `coverage_gate.py`, `stage_manifest.py` | Enriched outputs → pass/fail decision before Score |
-| **Score** | `score_supplements.py` | Enriched rows → legacy arithmetic/audit scaffolding and verdict history |
-| **Build** | `build_final_db.py` + `scoring_v4/export_adapter.py` | Enriched + legacy scored rows → v4-scored export candidates |
+| **Score** | `score_products_v4.py` + `scoring_v4/scored_artifact.py` | Enriched rows → complete v4 scored artifacts |
+| **Build** | `build_final_db.py` | Enriched + v4 scored artifacts → validated export candidates; no rescoring |
 | **Snapshot** | `rebuild_dashboard_snapshot.sh` | All per-brand outputs → gated `final_db_output/` + `dist/` |
 | **Release** | `release_full.sh` | Gated `dist/` → product images, interaction DB, Supabase, Flutter bundle |
 
@@ -70,8 +70,8 @@ contract name elsewhere.
 
 | Term | Meaning |
 |---|---|
-| **V4 quality score** | The only shipped public score. Produced by `score_supplements_v4.py`/`scoring_v4/` during Build and exported as `quality_score_v4_100`. |
-| **Legacy scaffolding** | The live output of `score_supplements.py` v3.6.0 used for review queues, diagnostic/detail fields, verdict history, and compatibility. It is not a second public score. |
+| **V4 quality score** | The only shipped public score. Produced during Stage 3 by `score_products_v4.py`/`scoring_v4/` and exported unchanged as `quality_score_v4_100`. |
+| **Scored artifact** | The sole Stage-3 output produced by `build_scored_artifact()`: v4 score/status/pillars, shared coverage and strict diagnostics, safety/verdict state, provenance, and compatibility mirrors. |
 | **Quality score status** | `scored`, `suppressed_safety`, or `not_scored`. Status controls whether a public number is allowed. |
 | **Raw v4 score** | `raw_score_v4_100`; audit math only. It is never substituted for a suppressed public score. |
 | **Compatibility mirrors** | `score_100_equivalent` and `score_display_100_equivalent`; exact /100 mirrors of the v4 public score, not a legacy /80 conversion. |
@@ -83,8 +83,7 @@ contract name elsewhere.
 | **Verdict precedence** | BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE. |
 
 Deprecated `/80` export fields (`score_quality_80`, `score_display_80`) must
-never be reintroduced. Internal v3 values may remain only behind the export
-boundary for scaffolding consumers.
+never be reintroduced. Final export rejects any non-v4 Stage-3 artifact.
 
 ## Dose and folate terms
 
