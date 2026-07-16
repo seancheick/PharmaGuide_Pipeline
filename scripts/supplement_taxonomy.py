@@ -765,7 +765,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif (cid_set & _PROTEIN_IDS) and any(t in product_name for t in _PROTEIN_NAME_TOKENS):
         primary_type = "protein_powder"
         confidence = 0.9
-        reasons.append(f"protein name+id signal: ids={list(cid_set & _PROTEIN_IDS)}")
+        reasons.append(f"protein name+id signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
 
     # --- Greens powder (name-driven, before multivitamin) ---
     # Fortified greens can carry vitamin/mineral/probiotic panels, but the
@@ -774,7 +774,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif _has_greens_powder_signal(product_name, cid_set, category_counts):
         primary_type = "greens_powder"
         confidence = 0.9
-        reasons.append(f"greens/superfood signal: ids={list(cid_set & _GREENS_IDS)}")
+        reasons.append(f"greens/superfood signal: ids={sorted(cid_set & _GREENS_IDS)}")
 
     # --- Multivitamin / prenatal panel ---
     # Checked before omega so prenatal multis with DHA don't become omega_3.
@@ -815,7 +815,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         name_signal = any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
         primary_type = "omega_3"
         confidence = 0.95 if (omega_signal and name_signal) else 0.8
-        reasons.append(f"omega-3: ids={list(omega_ids)}, name_match={name_signal}")
+        reasons.append(f"omega-3: ids={sorted(omega_ids)}, name_match={name_signal}")
 
     # --- Functional name-based categories (sleep, immune, beauty, joint, fiber) ---
     # Checked early because name intent overrides composition-based inference.
@@ -828,7 +828,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif cid_set & _SLEEP_SINGLE_IDS:
         primary_type = "sleep_support"
         confidence = 0.9
-        reasons.append(f"sleep-support ingredient with cofactors: {list(cid_set & _SLEEP_SINGLE_IDS)}")
+        reasons.append(f"sleep-support ingredient with cofactors: {sorted(cid_set & _SLEEP_SINGLE_IDS)}")
 
     # --- Digestive enzymes / enzyme-forward formulas ---
     elif enzyme_count > 0 and (
@@ -861,7 +861,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     ):
         primary_type = "amino_acid"
         confidence = 0.9
-        reasons.append(f"named amino acid with cofactors: {list(named_amino_ids)}")
+        reasons.append(f"named amino acid with cofactors: {sorted(named_amino_ids)}")
 
     # --- Single nutrient (active_count == 1) ---
     elif active_count == 1:
@@ -952,15 +952,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 if mineral_ids and not vitamin_ids:
                     primary_type = "single_mineral"
                     confidence = 0.8
-                    reasons.append(f"mineral combo: {list(mineral_ids)}")
+                    reasons.append(f"mineral combo: {sorted(mineral_ids)}")
                 elif vitamin_ids and not mineral_ids:
                     primary_type = "single_vitamin"
                     confidence = 0.8
-                    reasons.append(f"vitamin combo: {list(vitamin_ids)}")
+                    reasons.append(f"vitamin combo: {sorted(vitamin_ids)}")
                 else:
                     primary_type = "vitamin_mineral_combo"
                     confidence = 0.8
-                    reasons.append(f"vitamin+mineral combo: {list(vitamin_ids | mineral_ids)}")
+                    reasons.append(f"vitamin+mineral combo: {sorted(vitamin_ids | mineral_ids)}")
 
     # --- Vitamin + Mineral Combo (2-5 actives, mixed vitamins/minerals) ---
     elif 2 <= active_count <= 5 and (vitamin_ids or mineral_ids):
@@ -971,22 +971,22 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         elif len(cid_set & _ELECTROLYTE_IDS) >= 3 and "hydration" in product_name:
             primary_type = "electrolyte"
             confidence = 0.85
-            reasons.append(f"electrolyte mineral panel: {list(cid_set & _ELECTROLYTE_IDS)}")
+            reasons.append(f"electrolyte mineral panel: {sorted(cid_set & _ELECTROLYTE_IDS)}")
         else:
             vm_count = len(vitamin_ids) + len(mineral_ids)
             if vm_count >= active_count * 0.7:
                 if mineral_ids and not vitamin_ids:
                     primary_type = "single_mineral"
                     confidence = 0.8
-                    reasons.append(f"mineral combo: {list(mineral_ids)}")
+                    reasons.append(f"mineral combo: {sorted(mineral_ids)}")
                 elif vitamin_ids and not mineral_ids:
                     primary_type = "single_vitamin"
                     confidence = 0.8
-                    reasons.append(f"vitamin combo: {list(vitamin_ids)}")
+                    reasons.append(f"vitamin combo: {sorted(vitamin_ids)}")
                 else:
                     primary_type = "vitamin_mineral_combo"
                     confidence = 0.8
-                    reasons.append(f"vitamin+mineral combo: {list(vitamin_ids | mineral_ids)}")
+                    reasons.append(f"vitamin+mineral combo: {sorted(vitamin_ids | mineral_ids)}")
             elif herb_count > vm_count:
                 primary_type = "herbal_botanical"
                 confidence = 0.7
@@ -1000,19 +1000,19 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) or len(cid_set & _PRE_WORKOUT_IDS) >= 3:
         primary_type = "pre_workout"
         confidence = 0.9 if any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) else 0.75
-        reasons.append(f"pre-workout signal: ids={list(cid_set & _PRE_WORKOUT_IDS)}")
+        reasons.append(f"pre-workout signal: ids={sorted(cid_set & _PRE_WORKOUT_IDS)}")
 
     # --- Protein powder ---
     elif any(t in product_name for t in _PROTEIN_NAME_TOKENS) or category_counts.get("protein", 0) > 0 or (cid_set & _PROTEIN_IDS):
         primary_type = "protein_powder"
         confidence = 0.9
-        reasons.append(f"protein powder signal: ids={list(cid_set & _PROTEIN_IDS)}")
+        reasons.append(f"protein powder signal: ids={sorted(cid_set & _PROTEIN_IDS)}")
 
     # --- Greens powder ---
     elif _has_greens_powder_signal(product_name, cid_set, category_counts):
         primary_type = "greens_powder"
         confidence = 0.85
-        reasons.append(f"greens/superfood signal: ids={list(cid_set & _GREENS_IDS)}")
+        reasons.append(f"greens/superfood signal: ids={sorted(cid_set & _GREENS_IDS)}")
 
     # --- Herbal blend (>60% herbs) ---
     elif active_count >= 2 and herb_count > active_count * 0.6:
@@ -1024,13 +1024,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif amino_ids and len(amino_ids) >= active_count * 0.5:
         primary_type = "amino_acid"
         confidence = 0.8
-        reasons.append(f"amino acid dominant: {list(amino_ids)}")
+        reasons.append(f"amino acid dominant: {sorted(amino_ids)}")
 
     # --- Collagen ---
     elif collagen_ids:
         primary_type = "collagen"
         confidence = 0.85
-        reasons.append(f"collagen: {list(collagen_ids)}")
+        reasons.append(f"collagen: {sorted(collagen_ids)}")
 
     # --- Functional category detection from product name ---
     elif active_count >= 2:
