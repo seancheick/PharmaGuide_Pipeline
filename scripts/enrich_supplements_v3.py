@@ -17586,9 +17586,6 @@ class SupplementEnricherV3:
                 "form_factor_canonical", "unknown"
             )
 
-            # Percentile category (config-driven, deterministic inference for cohort ranking)
-            enriched.update(self._infer_percentile_category(product, enriched))
-
             # Section E: User Profile Data (for device-side scoring)
             collect_rda_ul_data = self.config.get("processing_config", {}).get("collect_rda_ul_data", True)
             if collect_rda_ul_data:
@@ -17612,6 +17609,13 @@ class SupplementEnricherV3:
             # so the NP exemption gate for probiotic strains (is_probiotic_product)
             # can fire correctly. See apply_taxonomy_projection's precondition.
             self.apply_taxonomy_projection(enriched)
+
+            # Percentile category (cohort ranking). MUST run AFTER the taxonomy:
+            # the canonical classification is the input this is meant to decorate,
+            # not a competing opinion. It sat above the taxonomy historically and
+            # grew into an independent third decider as a result — see
+            # SUPP_TYPE_CONSOLIDATION_PLAN.md §5/§6 and the 0b note.
+            enriched.update(self._infer_percentile_category(product, enriched))
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
