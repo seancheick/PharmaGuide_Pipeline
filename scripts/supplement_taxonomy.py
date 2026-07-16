@@ -780,6 +780,14 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         # with its own evidence. R1 owns the active_count==2 band and must not
         # quietly re-tune panel routing on the way past.
         quantified_row_count >= 6
+        # R4: a multivitamin must contain VITAMINS. Without this, a pure 6+-mineral
+        # panel ("Trace Minerals") satisfied `vit+min >= 6` and was called a
+        # multivitamin — a contradiction that also mis-seeds the multivitamin
+        # peer cohort. A mineral-only panel has no vocabulary term yet
+        # (`mineral_complex` is deferred with R6/R7b as a user decision), so it
+        # falls to the reason-coded residual: an honest "not a multivitamin"
+        # rather than a wrong-specific label.
+        and len(vitamin_ids) >= 1
         and len(vitamin_ids) + len(mineral_ids) >= 4
         and (
             len(vitamin_ids) + len(mineral_ids) >= 6

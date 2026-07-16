@@ -221,6 +221,15 @@ hydration-brand ingest lands. **No new vocabulary; no GLOSSARY change.**
 
 ## 6. Panels: `multivitamin` vs `vitamin_mineral_combo` vs `b_complex`
 
+> ### ✅ R4 SHIPPED 2026-07-16
+> One-line bound `len(vitamin_ids) >= 1` added to `multi_panel_signal`. Measured:
+> 8 products, all `multivitamin → vitamin_mineral_combo` ("Trace Minerals", "Only
+> Trace Minerals", …). multivitamin 1463 → 1455; §10 empty-reason gate stays 0.
+> The mineral-only panel lands on `vitamin_mineral_combo` (the closest existing
+> term) rather than a new `mineral_complex` — that refinement is the R6/R7b
+> vocabulary decision below. Near-miss negatives pinned: one vitamin is enough to
+> stay `multivitamin`; a real multivitamin is unaffected.
+
 **RULE R4 — `multivitamin` requires vitamins.** `multi_panel_signal`
 (`supplement_taxonomy.py:707`) fires on
 `len(vitamin_ids) + len(mineral_ids) >= 6` with **zero vitamins required**, so a
@@ -253,7 +262,41 @@ B-vitamins + ≥3 minerals to `multivitamin`. **33 products.** Decide explicitly
 `b_complex` (B-dominant) vs `vitamin_mineral_combo`. Requires the vocabulary
 decision below before code.
 
-### Vocabulary decision (required by §9, still OPEN)
+> ### ⏸ R5 and R6 DEFERRED 2026-07-16 — one user decision, not two agent fixes
+>
+> Both were re-measured post-R1/R3 (R5 = 24 products, R6 = 33) and both are
+> genuinely ambiguous in a way R4 was not:
+>
+> **R5 (name contradicts panel).** The 24 are hydration/pre-workout products with
+> a vitamin panel (`316790 "Amplified Hydration"`, `18529 "Amplified Endurance
+> Booster"`). "multivitamin" is wrong for them — but where they *should* go is
+> the open `pre_workout`/`electrolyte` identity question. §5 already declined to
+> route to `electrolyte` on this corpus, and vetoing the panel only sends them to
+> the residual, trading a wrong-specific label for a vague one with no clear win.
+> Needs the `pre_workout` identity rule §2 flagged as a real (12-product) target
+> — additive work, not a veto.
+>
+> **R6 (b-complex + ≥3 minerals).** The 33 are genuine broad panels —
+> `239602 "Vitamin C Fizzy"` is 7 vitamins + 6 minerals — so "multivitamin" may
+> be *correct*, or they are `vitamin_mineral_combo`. This is exactly the
+> vocabulary decision below, not a branch bug.
+>
+> Forcing either would violate TRAP 4 (don't reclassify to reshape a
+> distribution) and could make a legitimately-broad-panel product *worse*. They
+> wait on the same decision as R7b.
+
+### Vocabulary decision (required by §9, still OPEN — bundles R4-landing, R6, R7b)
+
+> **CONSOLIDATED — this is ONE user decision.** R4's mineral-only landing, R6's
+> b-complex-vs-combo, and R7b's 346 mislabeled `single_*` products all reduce to:
+> *what do we call a broad mineral-only or mineral-dominant panel, and do we want
+> a `mineral_complex`/`multimineral` term at all?* §13's evidence-only rule now
+> **supports** a term — R7b alone is a 346-product base — but minting one is a
+> cross-repo contract change (`scripts/GLOSSARY.md` first per §9, then
+> `product_type_vocab.json`, which ships to Flutter), so it is the user's call,
+> not the agent's. Until then every affected product has a correct *fact* and an
+> imprecise *label*; nothing is mis-scored.
+
 
 Pure multi-mineral, pure multi-vitamin, and B-plus-mineral panels need an
 explicit vocabulary call backed by corpus evidence. The existing vocab has
