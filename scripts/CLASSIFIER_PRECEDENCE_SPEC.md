@@ -431,6 +431,29 @@ fiber-primary-with-accessory-probiotics; **and the 17 electrolyte candidates in
 > collapse same-nutrient mapped/unmapped pairs) before counting, or the fact
 > will under-credit exactly the products RC1 is meant to recover.
 
+### RC1 entry/exit contract for the next agent
+
+Do not implement RC1 as a union of `ingredients_scorable` plus every dosed row.
+That would create a second eligibility engine and admit known excipients. Use
+one authoritative row-role resolver and expose two views from the same result:
+
+1. `quantified_label_active_rows`: genuine label actives, including unresolved
+   identities, after structural/excipient/non-quantified exclusions;
+2. `score_eligible_rows`: the mapped, validated scoring subset already owned by
+   `get_scoring_ingredients(strict=True)`.
+
+Before code, produce a reason-bucket inventory of all 3,662 candidates and
+manually review a stratified sample from every bucket. RED fixtures must include
+Nattokinase `294772` and Horsetail `294422` as included positives, and EDTA,
+Calcium Disodium EDTA, a filler/carrier, a blend header, and a nutrition rollup
+as excluded negatives. The helper must return stable source paths and exclusion
+codes so the SoT gate can audit the result without parsing prose.
+
+RC1 exits only when: unresolved identities cannot earn score; mapped/unmapped
+rows for the same identity cannot falsely defeat `is_single_scorable_active`;
+row order remains invariant; the schema-3 full-corpus ledger is reviewed; and
+every primary/score/safety delta is attributable to a named reason-code bucket.
+
 Each rule lands as its own RED-first slice with its positive **and** near-miss
 fixtures, measured on the corpus via
 `scripts/audits/supptype_drift_preview.py compare --score`.
@@ -461,11 +484,54 @@ Findings and dispositions:
   real behavioral coverage lives in `test_v4_generic_formulation_p131.py` (ported
   to inject the taxonomy fact and run the actual scoring functions); the new
   file's value is the source guards and the helper contract.
-- **LOW — strict-release version gate skips taxonomy-less products.** Accepted as
-  narrow: a product with no `supplement_taxonomy` escapes *this* staleness check,
-  but other schema gates catch a taxonomy-less product. Not hardened to avoid
-  duplicate findings on validation-failed products.
+- **LOW — strict-release version gate skipped taxonomy-less products.** A later
+  independent review rejected this disposition and **fixed it**: strict mode now
+  fails closed for missing taxonomy and malformed current-version contracts.
 - **LOW/informational — `0.0 or fallback` confidence bug in
-  `score_supplements.py` (not owned by this branch).** The branch increases the
-  0.0-confidence population to ~1,776, so a truthful zero is coalesced to the
-  fallback. Flagged as a separate task; out of scope for this branch.
+  `score_supplements.py`.** Fixed on a separate branch and cherry-picked into
+  this branch as `4ed09667`: first-non-`None` semantics preserve truthful `0.0`
+  confidence and an intentionally empty signal list.
+
+## 11. Independent implementation review (2026-07-16)
+
+A second review did not accept aggregate green tests as sufficient and found
+four contract defects in the completed classifier work:
+
+1. category numerators were still counted by rows while the denominator used
+   distinct identities, allowing duplicate forms to manufacture dominance;
+2. `secondary_type` used the first ingredient row, creating 1,442 corpus drifts
+   when ingredient order was reversed;
+3. 10,664 products had no decisive `classification_reason_codes` (117 of 421
+   type-changed products), so the expected-change ledger was not auditable;
+4. strict SoT mode accepted missing taxonomy and malformed current-version
+   evidence, while the harness omitted the new identity/raw-row count fields.
+
+All four are fixed. Category decisions use one deterministic category vote per
+identity and emit raw `category_row_breakdown` separately; multi-ingredient
+secondary type is absent unless product-name or family evidence identifies it;
+every branch emits a decision code or raises; strict SoT fails closed; and the
+harness is schema 3. The contract version is `1.1.0` because these are semantic,
+not cosmetic, changes.
+
+Adversarial canaries added during this review include duplicate botanical forms,
+two-botanical and two-amino panels, probiotic-plus-fiber support, collagen ties,
+gelatin title corroboration, malformed/missing taxonomy contracts, and complete
+row-order invariance. A full 14,193-product reversal now yields **0 drift** in
+all classification facts and evidence. No canonical identity carried conflicting
+categories in the reviewed corpus.
+
+Relative to Claude tip `33ca27ca`, the corrected code changes 114 primary types
+and only four score-preview surfaces. There are **0** safety/verdict/status/
+suppression/blocking/coverage flips. Explicit quality review items:
+
+- `28479` Acid Defense: `fiber_digestive` → `general_supplement`, 57.3 → 58.7;
+- `29032` Raw Candida Cleanse: `fiber_digestive` → `general_supplement`,
+  70.0 Acceptable → 67.5 Weak;
+- `298079` and `336322` Metabolic Health: `general_supplement` →
+  `herbal_botanical`, confidence `moderate` → `high`, score unchanged.
+
+Verification: one clean `scripts/test.sh fast` run = 10,835 passed, 42 skipped,
+one strict R7b xfail; focused evidence/harness/adversarial suite = 48 passed. A
+later run after two full-corpus score previews had two unrelated 120-second test
+timeouts; the exact two tests passed in isolation (2/2 in 2.29s). Do not treat a
+repeated timeout on a rested host as accepted.

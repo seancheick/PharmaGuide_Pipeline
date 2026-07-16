@@ -1,9 +1,16 @@
 # Supplement-Type Consolidation — Implementation Plan
 
-**Status:** approved architecture; begin with mandatory Phase -1 harness hardening before classifier work.
+**Status (2026-07-16):** mandatory review checkpoint after Phase 1. Phases -1,
+0a, 0b, 0c, 0d-R1/R2/R3/R4/R7a, and Phase 1 are complete. Phase 2 has **not**
+started. RC1 and the R5/R6/R7b vocabulary decision remain open and must be
+resolved before the destructive legacy-classifier retirement.
 **Branch:** `supp-type-consolidation`, cut from main `e2583594`. Resolve the live branch tip with `git rev-parse --short HEAD`; do not trust a copied commit hash in this document.
-**Plan baseline:** catalog `v2026.07.15.200540`; plan last reconciled at commit `e6257728` before the amendments in this document.
-**No production classifier code had been modified at that baseline.** The existing audit harness is temporary and read-only, but its score-comparison path is not yet trustworthy; Phase -1 fixes it before it is used as evidence.
+**Plan baseline:** catalog `v2026.07.15.200540`. The branch was independently
+reviewed through local commit `4ed09667`; resolve the live tip rather than
+assuming that hash is still current. The temporary audit harness is now
+fail-closed and score-path capable, at schema 3. Its checked-in default baseline
+may still be an obsolete pre-schema artifact, so every run must validate the
+baseline schema/content hash and refuse an incompatible file.
 
 > Reviewed across multiple investigation and architecture-review rounds. Symbol names are authoritative; line numbers are navigation hints tied to the baseline and will drift as implementation proceeds. Resolve every symbol against live code before editing. Where a claim was later disproven, the correction is recorded rather than deleted — read the **TRAPS** section before touching anything.
 
@@ -18,8 +25,22 @@ The next agent can execute this plan end to end, subject to the two explicit use
 3. Inspect `git status --short`. At the documented baseline, `scripts/PIPELINE_OPERATIONS_README.md` has an unrelated user-owned modification. Preserve it, do not stage it, and do not overwrite it. Re-evaluate live status because the user may have changed it since this plan was written.
 4. Confirm no pipeline or release process is running before changing operational entrypoints. The shipped baseline is already green; do **not** rerun the full pipeline during development. The user owns the full-corpus pipeline execution and production release/promotion unless they explicitly authorize the agent to run them in the active session.
 5. Add this plan to the working plan and execute one atomic RED-first slice at a time. Use only `scripts/test.sh` for tests.
-6. ~~Begin at **Phase -1**, not Phase 0a.~~ **Phases -1, 0a, 0b and 0c are COMPLETE, committed, and green as of 2026-07-16** (see §8's "PHASE -1 IS COMPLETE" note and the "0a AS BUILT" / "0b DONE" / "0c DONE" notes in §9). The harness is trustworthy with a zero noise floor; the SoT gate is off the path literal and off prose; the §5 dependency order is enforced and behaviourally guarded; **the percentile third brain is retired — one brain now decides product class.** **Begin at Phase 0d**, which has named canaries waiting (see the 0d note). Do not re-derive what those notes already measured; verify the symbols still exist, then continue.
-   **Before any 0d code: write the classifier precedence specification** (decision table/ADR + `classification_reason_codes`, deliberately deferred from 0a because 0d rewrites the 45 branch sites the codes must name).
+6. Do **not** restart completed phases. Read the as-built notes and
+   `scripts/CLASSIFIER_PRECEDENCE_SPEC.md`, then execute the remaining work in
+   this order:
+   1. RC1 definition/inventory pass (no classifier edit until the included and
+      excluded row populations are specified and tested);
+   2. resolve R5/R6/R7b vocabulary or explicitly retain the conservative
+      reason-coded labels;
+   3. regenerate a schema-3 harness baseline from the exact comparison commit,
+      then review the complete classifier/score ledger;
+   4. Phase 2 reader migration and legacy-classifier retirement;
+   5. stop at the formal Phase-2 checkpoint before any Phase-3 work.
+
+   The percentile third brain is already retired, every current classifier
+   branch emits a machine reason code, and the formulation scorer already reads
+   the canonical `is_single_scorable_active` fact. Do not recreate any of those
+   decisions in a compatibility adapter.
 
    ⚠️ **Verification traps that cost real time — read before writing any enrich A/B:**
    - The enricher's database paths are **config-relative**. Run it with `cwd=repo-root` and it silently loads **22 databases instead of 29**, then fails products with `unknown target_id 'acerola_cherry'`. Always run enrichment probes from `scripts/`.
@@ -86,6 +107,23 @@ Catalog `v2026.07.15.200540` is **ACTIVE** on Supabase (13,272 products). All re
 ```
 Those low counts are an **investigation signal**, not a quota or proof by themselves. Reproduced fixtures show that generic vitamin/mineral and protein branches can preempt more specific branches, but each proposed reclassification still requires positive evidence and a near-miss negative test. Do not increase a category merely to make its distribution look more plausible.
 
+### Current reviewed branch preview (not a shipped artifact)
+
+After the completed classifier slices plus the independent review corrections,
+the read-only harness reports 14,193 products with this leading distribution:
+`general_supplement=3924`, `herbal_botanical=2381`, `multivitamin=1455`,
+`amino_acid=1291`, `single_vitamin=1279`, `single_mineral=882`,
+`omega_3=668`, `probiotic=351`, and `collagen=96`.
+
+Relative to Claude's pre-review branch tip (`33ca27ca`), the review corrections
+change 114 primary types. The score preview changes only four products and has
+**zero** verdict, safety-verdict, suppression, blocking, status, or
+`mapped_coverage` flips. One quality-tier change requires explicit review:
+DSLD `29032` (Raw Candida Cleanse), `Acceptable` 70.0 → `Weak` 67.5 after
+`fiber_digestive` → conservative `general_supplement`. Do not accept or freeze
+that delta by aggregate; inspect its row evidence during the expected-change
+review.
+
 ---
 
 ## 3. The two brains
@@ -100,7 +138,15 @@ Those low counts are an **investigation signal**, not a quota or proof by themse
 
 ### Root causes of drift
 
-- **RC1 (~1.0%)** — `_iter_classification_rows_v2` reads only `ingredients_scorable` (requires `mapped=True`), silently dropping **unmapped-but-dosed** rows that carry `cleaner_row_role="active_scorable"` / `score_eligible_by_cleaner=True`. Clear single-ingredient products become `general_supplement` / 0 actives. *e.g. Nattokinase dsld `294772`, Horsetail `294422`.*
+- **RC1 (scope unresolved; old ~1.0% estimate disproven)** —
+  `_iter_classification_rows_v2` reads only `ingredients_scorable`
+  (`mapped=True`). A broad detector found dropped dose-bearing rows in 3,662
+  products (25.80%), but that pool mixes genuine unmapped actives with correctly
+  excluded excipients/structural rows. The next pass must define
+  `quantified_label_active_rows` from explicit cleaner roles and exclusion
+  reasons, not include every dosed row. Named positive canaries remain
+  Nattokinase `294772` and Horsetail `294422`; EDTA chelators/fillers are named
+  negatives.
 - **RC2 (~1.9%; 21 cross single/multi)** — `classify_supplement` **never calls `mark_compound_duplicate_rows`**, so elemental + compound salt counts as two actives. *e.g. Magnesium Glycinate `315678`, Choline L-Bitartrate `252532`.* (Same family as the tracked elemental/compound bug.)
 - **RC3 (~0.26%, reverse — taxonomy is RIGHT)** — the legacy iterator lacks `nested_display_only`/`composition_leaf` exclusion and double-counts EPA+DHA sub-rows. *e.g. Fish Oil `13801`.*
 - **7 branch-ordering / coverage bugs** in `classify_supplement` (details §7).
@@ -321,7 +367,7 @@ Implement and test the complete harness contract in §8 before changing classifi
 
 Strict release mode accepts only the current structured contract version. If temporary old-artifact inspection is necessary, expose it through an explicit non-release compatibility option; never silently dual-read prose in the strict gate.
 
-> **0a AS BUILT** (2026-07-15; commit `feat(taxonomy): structured evidence contract; migrate SoT gate off prose (0a)` — resolve the live hash with `git log --oneline`, per §4). Shipped: `classification_contract_version` (`1.0.0`), `classification_input_contract` (stable ids `score_eligible_rows` / `iqd_all_rows_fallback` / `raw_label_actives`, with `SCORE_ELIGIBLE_INPUT_CONTRACTS` as the policy set), `classification_row_evidence` (per row: source_path, row_id, canonical_id, category, quantified, score_eligible, role — every input row gets an enumerated inclusion/exclusion role), and `unresolved_quantified_active_count`. `classification_input_source` is retained but demoted to a diagnostic. The SoT audit's omega gate and IQD-fallback check now read the contract; the prose grep survives only as an explicitly-scoped pre-contract fallback that strict release mode rejects outright. Verified on the full corpus: 14,193/14,193 products change **only** `classification_contract_version` + `classification_input_contract`; **0 decision-field changes, 0 primary_type changes** — behaviour-preserving as required.
+> **0a AS BUILT** (2026-07-15; commit `feat(taxonomy): structured evidence contract; migrate SoT gate off prose (0a)` — resolve the live hash with `git log --oneline`, per §4). The contract began at `1.0.0` and is now **`1.1.0`** after the independent review corrected identity-vs-row category semantics. It emits `classification_input_contract` (stable ids `score_eligible_rows` / `iqd_all_rows_fallback` / `raw_label_actives`), `classification_row_evidence` (source_path, row_id, canonical_id, category, quantified, score_eligible, role), `classification_reason_codes`, identity and row counts, and `unresolved_quantified_active_count`. `classification_input_source` is retained but demoted to a diagnostic. Strict release mode rejects a missing taxonomy and any malformed current-version evidence contract; it never falls back to prose or path literals.
 >
 > **DEFERRED to 0d, deliberately:** `classification_reason_codes`. The vocabulary must name the *decisive branch*, and there are 45 `primary_type` assignment sites that **0d itself reorders and rewrites** (§7). Authoring codes against the pre-0d branch structure would mean writing them twice and reviewing them against a tree that is about to change. The release-blocking half of 0a — getting the strict gate off the path literal and off prose — is complete and independent of the codes. The §10 gate "every changed product ID has a named classification reason code" is an *after-Phase-2* gate, so the codes must land with the 0d rewrite that gives them meaning. Do not open 0d without them.
 >
@@ -364,7 +410,17 @@ In particular, an incidental collagen row must not hijack a multivitamin, and th
 ### Phase 1 — migrate the formulation scoring split
 Replace `supp_type_of()` + `SINGLE_INGREDIENT_SUPP_TYPES` in `generic_formulation.py:421/452/494/608` with the taxonomy-emitted **`is_single_scorable_active`** fact. Modules **consume** the fact; they never rebuild it.
 
+> **✅ COMPLETE 2026-07-16.** All four gates now consume the canonical fact.
+> Corpus measurement found 550 legacy-name/fact disagreements: 470 products
+> were denied a single floor and 80 were over-credited. Shared fixtures were
+> ported to inject the taxonomy fact and exercise real scoring behavior.
+
 ### Phase 2 — retire the legacy classifier ✅ one brain
+
+**Entry gate:** RC1 must either be completed under its reviewed row-population
+contract or explicitly deferred with a blocking rationale; R5/R6/R7b must have
+a recorded vocabulary disposition. Do not delete the rollback brain while the
+canonical brain's intended input population is still undefined.
 
 - Delete `infer_supplement_type()` + its iterator + `supp_type_of()`.
 - **Keep the `supplement_type` field/DB column** (`build_final_db.py:1920` — final-DB + dashboard contract) as a **pure mechanical mirror of the taxonomy with no independent logic**. Include canonical counts/reasons in the mirror if compatibility requires.
@@ -473,6 +529,31 @@ Order is mandatory and preserves the one-rebuild rule:
 - No missing products or silent partial outputs.
 - No deprecated `/80` export fields.
 - **Per-product expected-change ledger reviewed.**
+
+### Independent review gates already added (2026-07-16)
+
+- The classification contract is now `1.1.0`. The bump is intentional: category
+  counts and category-derived decisions now use distinct identities, while raw
+  label-row counts are emitted separately as `category_row_breakdown`.
+- Strict SoT mode fails closed for missing taxonomy, an unknown input contract,
+  missing row evidence, empty/missing reason codes, or a stale contract version.
+  It aggregates artifact-wide defects instead of emitting 14,193 duplicates.
+- Every decision branch must set a machine reason code. A branch that omits one
+  raises `RuntimeError` in development/tests rather than publishing an
+  unexplained classification.
+- Reversing all ingredient rows across all 14,193 products produces **0** drift
+  in primary/secondary type, percentile category, confidence, reasons, reason
+  codes, counts, category maps, or row evidence.
+- The schema-3 harness captures both identity counts and raw row counts. A
+  schema-2 baseline is incompatible by design and must not be coerced or
+  silently re-frozen.
+- A clean `scripts/test.sh fast` run completed with **10,835 passed, 42 skipped,
+  1 strict xfail**. The xfail is the explicitly deferred R7b vocabulary issue,
+  not an untriaged failure. A later post-documentation run, immediately after
+  two full-corpus score previews, completed 10,834 tests but two unrelated tests
+  hit their 120-second timeout; both passed in isolation in 2.29 seconds.
+  Focused contract/review suite: 48 passed. Treat the latter as measured host
+  resource contention, not as a license to ignore future repeated timeouts.
 
 ---
 
