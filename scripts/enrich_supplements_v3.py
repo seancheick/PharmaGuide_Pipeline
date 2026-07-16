@@ -3147,6 +3147,27 @@ class SupplementEnricherV3:
                         add(form.get("unii"))
         return values
 
+    def _is_generic_unspecified_omega3(self, ingredient: Dict) -> bool:
+        """Return whether the label declares an omega-3 total, not a species.
+
+        The ``omega_3`` IQM parent is intentionally limited to named minor
+        omega-3 fatty acids and SPM precursors. Generic totals belong to the
+        existing conservative ``fish_oil (unspecified)`` compatibility bucket;
+        otherwise parent fallback fabricates a specific minor fatty acid.
+        """
+        label = self._normalize_text(
+            ingredient.get("raw_source_text") or ingredient.get("name") or ""
+        )
+        label = re.sub(r"[^a-z0-9]+", " ", label).strip()
+        return label in {
+            "omega 3",
+            "omega 3 fatty acid",
+            "omega 3 fatty acids",
+            "total omega 3",
+            "total omega 3 fatty acid",
+            "total omega 3 fatty acids",
+        }
+
     def _is_source_descriptor_form(
         self,
         form: Dict,
@@ -3238,6 +3259,42 @@ class SupplementEnricherV3:
         if not matched_standard or matched_standard != registry_standard:
             return False
 
+        # The printed active name outranks a source/salt form identity. DSLD
+        # frequently attaches a source-form UNII to the nutrient or activity
+        # being declared: calcium can include calcium pantothenate, protease
+        # can be sourced from B. subtilis, and EPA/DHA/ALA rows can carry a
+        # generic omega-3 form. If the label itself has an unambiguous exact
+        # IQM match to another parent, the supplied form-derived parent is not
+        # coherent and must go through normal identity repair.
+        literal_identity_confirms_selected = False
+        if not self._is_generic_unspecified_omega3(ingredient):
+            literal_label = (
+                ingredient.get("raw_source_text")
+                or ingredient.get("name")
+                or ""
+            )
+            literal_match = self._match_quality_map(
+                literal_label,
+                literal_label,
+                quality_map,
+                _form_extraction_attempt=True,
+            )
+            if (
+                isinstance(literal_match, dict)
+                and literal_match.get("match_status") != "FORM_UNMAPPED"
+                and literal_match.get("match_tier") in {"exact", "normalized"}
+                and not literal_match.get("match_ambiguity_candidates")
+            ):
+                literal_canonical_id = self._quality_match_scoring_canonical(
+                    literal_match,
+                    quality_map,
+                )
+                if literal_canonical_id and literal_canonical_id != canonical_id:
+                    return False
+                literal_identity_confirms_selected = (
+                    literal_canonical_id == canonical_id
+                )
+
         forms = registry_entry.get("forms") or {}
         form_id = match_result.get("form_id")
         selected_form = None
@@ -3249,23 +3306,37 @@ class SupplementEnricherV3:
             return False
 
         # A direct row UNII identifies the active parent and therefore must be
-        # consistent with the selected IQM parent.  UNIIs carried only by
-        # ``forms`` identify source salts/forms instead (for example a
-        # Phosphorus row sourced from calcium, potassium and sodium phosphate).
-        # Requiring every source-form UNII to belong to the nutrient parent
-        # conflates identity with formulation and rejects otherwise exact,
-        # structured nutrient rows.  Form validity is already enforced above
-        # by the selected IQM form and strong match tier.
+        # consistent with the selected IQM parent. Form UNIIs normally remain
+        # part of the coherence check as well: they prevent a Natto Extract
+        # carrying a nattokinase form from being repaired to generic soybean.
+        #
+        # The narrow exception is an explicit literal parent label such as
+        # ``Phosphorus`` whose forms are source salts (calcium/potassium/sodium
+        # phosphate). In that case the literal parent identity is exact and the
+        # form UNIIs describe formulation rather than a competing identity.
         direct_uniis = self._identity_unii_values(
             ingredient,
             include_forms=False,
         )
-        if direct_uniis:
+        supplied_uniis = direct_uniis or self._identity_unii_values(ingredient)
+        if (
+            supplied_uniis
+            and not ingredient.get("_structural_parent_total")
+            and not self._is_generic_unspecified_omega3(ingredient)
+        ):
             registry_uniis = self._identity_unii_values(registry_entry)
             if isinstance(selected_form, dict):
                 registry_uniis.update(self._identity_unii_values(selected_form))
-            if not registry_uniis or not direct_uniis.issubset(registry_uniis):
-                return False
+            if (
+                (not registry_uniis or not supplied_uniis.issubset(registry_uniis))
+                and not literal_identity_confirms_selected
+            ):
+                literal_parent = self._infer_preferred_parent_from_context_cached(
+                    ingredient.get("raw_source_text") or ingredient.get("name"),
+                    quality_map,
+                )
+                if direct_uniis or literal_parent != canonical_id:
+                    return False
 
         return True
 
@@ -3438,6 +3509,36 @@ class SupplementEnricherV3:
         )
         canonical_parent_of = self._identity_parent_predicate(quality_map)
         if (
+            supplied_canonical_id == "fish_oil"
+            and self._is_generic_unspecified_omega3(ingredient)
+        ):
+
+            def resolve_candidate(candidate: str) -> Optional[str]:
+                return "fish_oil"
+
+        authoritative_iqm_unii = bool(
+            supplied_canonical_id
+            and taxonomy_coherent
+            and not ingredient.get("_structural_parent_total")
+            and not self._is_generic_unspecified_omega3(ingredient)
+            and ingredient.get("canonical_source_db") == "ingredient_quality_map"
+            and ingredient.get("cleaner_match_method")
+            in {"unii_exact_match", "unii_form_exact_match"}
+        )
+        if authoritative_iqm_unii:
+            # A cleaner IQM identity backed by a coherent direct/form UNII is
+            # stronger than a broader DSLD ingredientGroup. Examples: PEA is
+            # grouped under Palmitic Acid, and nattokinase is grouped under its
+            # soy source. Keep the verified IQM substance rather than repairing
+            # it to the source family. The coherence requirement prevents this
+            # exception from firing for mixed-source rows such as Phosphorus,
+            # where the cleaner initially selected calcium from one form.
+            authoritative_canonical_id = supplied_canonical_id
+
+            def resolve_candidate(candidate: str) -> Optional[str]:
+                return authoritative_canonical_id
+
+        if (
             taxonomy_coherent
             and self._is_reviewed_context_override_match(match_result)
         ):
@@ -3598,6 +3699,9 @@ class SupplementEnricherV3:
         botanicals_db = self.databases.get('standardized_botanicals', {})
         active_ingredients = product.get('activeIngredients', [])
         inactive_ingredients = product.get('inactiveIngredients', [])
+        structural_parent_total_row_ids = self._structural_parent_total_row_ids(
+            active_ingredients
+        )
 
         # Track classification results. Contract semantics:
         # - ingredients_scorable: scoring/taxonomy inputs only.
@@ -3628,9 +3732,15 @@ class SupplementEnricherV3:
         product_activity_text = self._get_all_product_text(product)
         for source_ingredient in active_ingredients:
             ingredient = source_ingredient
-            if product_activity_text:
+            is_structural_parent_total = (
+                id(source_ingredient) in structural_parent_total_row_ids
+            )
+            if product_activity_text or is_structural_parent_total:
                 ingredient = dict(ingredient)
+            if product_activity_text:
                 ingredient.setdefault("_product_activity_text", product_activity_text)
+            if is_structural_parent_total:
+                ingredient["_structural_parent_total"] = True
             # Use branded_token_extracted for matching if present AND it differs from name.
             # When branded_token_extracted == name the clean stage collapsed the full label
             # to just the brand prefix (e.g. "Albion" from "Albion Magnesium Bisglycinate Chelate").
@@ -3829,11 +3939,18 @@ class SupplementEnricherV3:
             # constraint so text-inferred cross-parent matches cannot win.
             # Only passed when the cleaner resolved via IQM — botanical /
             # other / harmful canonicals route through their own DBs.
-            _cleaner_iqm_cid = (
-                ingredient.get('canonical_id')
-                if ingredient.get('canonical_source_db') == 'ingredient_quality_map'
-                else None
-            )
+            if self._is_generic_unspecified_omega3(ingredient):
+                _cleaner_iqm_cid = "fish_oil"
+            else:
+                _cleaner_iqm_cid = (
+                    ingredient.get('canonical_id')
+                    if (
+                        ingredient.get('canonical_source_db')
+                        == 'ingredient_quality_map'
+                        and not ingredient.get("_structural_parent_total")
+                    )
+                    else None
+                )
             # 2026-05-24: BEFORE normal IQM matching, check for a
             # reviewer-signed cleaner-stamped context override. If present
             # AND the (parent + preferred form) resolve in quality_map, use
@@ -3848,10 +3965,19 @@ class SupplementEnricherV3:
                 ingredient, quality_map
             )
             if match_result is None:
-                match_result = self._match_quality_map(
-                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
-                    branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
-                )
+                if self._is_generic_unspecified_omega3(ingredient):
+                    match_result = self._match_quality_map(
+                        "fish oil",
+                        "fish oil",
+                        quality_map,
+                        cleaned_forms=[],
+                        cleaner_canonical_id="fish_oil",
+                    )
+                else:
+                    match_result = self._match_quality_map(
+                        ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
+                        branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
+                    )
             context_match_reason = pre_context_match_reason
             if context_match_reason == "kelp_fucoidan_marker_context":
                 context_match = self._match_quality_map(
@@ -6132,7 +6258,9 @@ class SupplementEnricherV3:
                     ingredient.get("parentBlendMass"),
                     ingredient.get("parentBlendUnit"),
                 ),
-                "is_parent_total": False,
+                "is_parent_total": bool(
+                    ingredient.get("_structural_parent_total")
+                ),
                 "form_extraction_used": True,
                 "is_dual_form": bool(match_result.get("is_dual_form")),
                 "original_label": match_result.get("original_label"),
@@ -6267,7 +6395,9 @@ class SupplementEnricherV3:
                     ingredient.get("parentBlendMass"),
                     ingredient.get("parentBlendUnit"),
                 ),
-                "is_parent_total": False,
+                "is_parent_total": bool(
+                    ingredient.get("_structural_parent_total")
+                ),
                 # Multi-form contract fields (if present)
                 "form_extraction_used": match_result.get('form_extraction_used', False),
                 "is_dual_form": match_result.get('is_dual_form', False),
@@ -6331,7 +6461,9 @@ class SupplementEnricherV3:
                     ingredient.get("parentBlendMass"),
                     ingredient.get("parentBlendUnit"),
                 ),
-                "is_parent_total": False,
+                "is_parent_total": bool(
+                    ingredient.get("_structural_parent_total")
+                ),
                 "form_extraction_used": False,
                 "is_dual_form": False,
                 "original_label": raw_source_text,
@@ -6760,6 +6892,70 @@ class SupplementEnricherV3:
             "forms_differ": would_differ,
             "audit_noise_reason": None,
         }
+
+    def _structural_parent_total_row_ids(
+        self,
+        active_ingredients: List[Dict[str, Any]],
+    ) -> set[int]:
+        """Identify exact parent-mass restatements before IQM matching.
+
+        DSLD flattens nested disclosures into ``activeIngredients``. A row such
+        as ``Omega-3 Fatty Acids 500 mg`` can therefore appear beside nested
+        ``EPA 325 mg`` and ``DHA 175 mg`` rows. The parent is real label data,
+        but it is not a fourth independently scoreable dose. Detect only the
+        high-confidence case where nested children explicitly point to the
+        parent by name and their converted mass reconciles to the parent mass.
+        """
+        rows = [row for row in active_ingredients if isinstance(row, dict)]
+        result: set[int] = set()
+
+        for parent in rows:
+            if parent.get("isNestedIngredient") is True:
+                continue
+            parent_mass_mg = _normalize_parent_blend_mg(
+                parent.get("quantity"),
+                parent.get("unit"),
+            )
+            if parent_mass_mg is None:
+                continue
+            parent_names = {
+                self._normalize_text(value)
+                for value in (
+                    parent.get("raw_source_text"),
+                    parent.get("name"),
+                    parent.get("standardName"),
+                    parent.get("ingredientGroup"),
+                )
+                if value
+            }
+            parent_names.discard("")
+            if not parent_names:
+                continue
+
+            child_masses_mg = []
+            for child in rows:
+                if child.get("isNestedIngredient") is not True:
+                    continue
+                parent_blend = self._normalize_text(
+                    child.get("parentBlend") or ""
+                )
+                if not parent_blend or parent_blend not in parent_names:
+                    continue
+                child_mass_mg = _normalize_parent_blend_mg(
+                    child.get("quantity"),
+                    child.get("unit"),
+                )
+                if child_mass_mg is not None:
+                    child_masses_mg.append(child_mass_mg)
+
+            if not child_masses_mg:
+                continue
+            disclosed_child_mass_mg = sum(child_masses_mg)
+            tolerance_mg = max(1e-6, parent_mass_mg * 0.02)
+            if abs(disclosed_child_mass_mg - parent_mass_mg) <= tolerance_mg:
+                result.add(id(parent))
+
+        return result
 
     def _mark_parent_total_rows(self, ingredients_scorable: List[Dict[str, Any]]) -> None:
         """
