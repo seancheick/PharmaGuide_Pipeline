@@ -395,6 +395,31 @@ fiber-primary-with-accessory-probiotics; **and the 17 electrolyte candidates in
    stable, and re-measure everything. The 0a contract already carries
    `unresolved_quantified_active_count` for it.
 
+> ### ⛔ RC1 HELD FOR A DEDICATED, REVIEWED PASS — do NOT land it in a loop
+>
+> Measured 2026-07-16: **3,662 products (25.80%)** carry a dose-bearing row that
+> classification currently drops — **~25× the plan §4 estimate of "~1.0%"**, and
+> it touches the whole distribution (multivitamin 606, protein_powder 323,
+> omega_3 143). Two things make this a stop-and-review item, not a mechanical
+> fix:
+>
+> 1. **The estimate is off by an order of magnitude.** Either the fix is far
+>    broader than scoped, or "unmapped-but-dosed active" needs a much tighter
+>    definition than "any dropped dose-bearing row".
+> 2. **It entangles active-vs-excipient disambiguation.** The dropped rows
+>    include genuine unmapped actives (the plan's Nattokinase `294772`, Horsetail
+>    `294422`) AND things that are correctly excluded — `EDTA Disodium`,
+>    `Calcium Disodium EDTA` (chelators/preservatives), fillers like "Carrot
+>    Powder". Pulling all of them into classification would corrupt it. Telling
+>    them apart is per-row clinical judgment, exactly the "review individually"
+>    work Phase 5 is built for.
+>
+> RC1 interacts with every branch R1–R4 and the R7a fact (all count identities
+> over this row set), so it must land AFTER them (done) and be re-measured whole,
+> under review. It is intentionally the last classifier change and is **not**
+> appropriate for autonomous execution. The 0a prerequisite (SoT gate off the
+> path literal) is already done, so nothing blocks a future reviewed pass.
+
 Each rule lands as its own RED-first slice with its positive **and** near-miss
 fixtures, measured on the corpus via
 `scripts/audits/supptype_drift_preview.py compare --score`.
