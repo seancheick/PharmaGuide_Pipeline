@@ -2,9 +2,9 @@
 
 Before T5: confidence drop fired only on legacy `supplement_type.confidence < 0.80`.
 
-After T5: prefers `supplement_taxonomy.classification_confidence` (canonical signal,
-threshold 0.70). Falls back to legacy `supplement_type.confidence` when taxonomy
-is absent (old enriched batches).
+After Phase 2: reads only `supplement_taxonomy.classification_confidence`
+(canonical signal, threshold 0.70). A compatibility mirror is not confidence
+evidence when taxonomy is absent.
 """
 
 from __future__ import annotations
@@ -52,16 +52,14 @@ def test_taxonomy_zero_confidence_drops_moderate():
     assert "taxonomy_classification_low_confidence" in drivers
 
 
-def test_no_taxonomy_falls_back_to_legacy_supp_conf():
-    """Old enriched batch without taxonomy — legacy supp.confidence applies."""
+def test_no_taxonomy_does_not_read_compatibility_mirror_confidence():
     drivers = _supp_type_driver(_make_product(taxonomy_present=False, supp_conf=0.50))
-    assert "supplement_type_low_confidence" in drivers
+    assert drivers == []
 
 
-def test_no_taxonomy_high_legacy_does_not_drop():
-    """Old batch with high legacy supp.confidence — no drop."""
+def test_no_taxonomy_high_mirror_confidence_does_not_drop():
     drivers = _supp_type_driver(_make_product(taxonomy_present=False, supp_conf=0.95))
-    assert "supplement_type_low_confidence" not in drivers
+    assert drivers == []
 
 
 def test_taxonomy_present_legacy_low_does_not_double_drop():

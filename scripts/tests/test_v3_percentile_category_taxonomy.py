@@ -5,9 +5,10 @@ Before this commit: the scorer derived percentile_category from
 `supplement_type.category` / `subtype` / `type`. The taxonomy classifier's
 `supplement_taxonomy.percentile_category` was ignored even when present.
 
-After this commit: prefers `supplement_taxonomy.percentile_category`,
-which aligns the scorer with build_final_db and the taxonomy classifier
-itself. Legacy paths remain as fallback for old enriched batches.
+The scorer prefers `supplement_taxonomy.percentile_category`, which aligns it
+with build_final_db and the taxonomy classifier itself. An explicit percentile
+field remains a compatibility input, but the legacy type mirror cannot derive a
+peer group.
 
 The source string for taxonomy-derived categories is `taxonomy_v2` so
 audit consumers can see which signal won.
@@ -93,14 +94,14 @@ def test_no_taxonomy_falls_back_to_explicit_field(scorer):
     assert confidence == 0.8
 
 
-def test_no_taxonomy_falls_back_to_supplement_type(scorer):
-    """Old batch with no taxonomy AND no explicit category — derives from
-    legacy supplement_type."""
+def test_no_taxonomy_does_not_derive_from_legacy_supplement_type(scorer):
+    """A legacy mirror cannot independently assign a percentile peer group."""
     product = {
         "supplement_type": {"type": "multivitamin"},
     }
-    key, _, _, _, _ = scorer._resolve_percentile_category(product, {})
-    assert key == "multivitamin"
+    key, _, source, _, _ = scorer._resolve_percentile_category(product, {})
+    assert key == "all_supplements"
+    assert source == "fallback_scorer"
 
 
 def test_taxonomy_with_empty_percentile_category_falls_through(scorer):

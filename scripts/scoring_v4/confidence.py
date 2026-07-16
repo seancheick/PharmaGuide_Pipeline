@@ -432,15 +432,11 @@ def _identity_confidence(
 
 
 _TAXONOMY_CONFIDENCE_THRESHOLD = 0.70
-_LEGACY_SUPP_CONFIDENCE_THRESHOLD = 0.80
-
-
 def _supp_type_driver(product: Any) -> List[str]:
     """Return the product-class confidence driver, if one should be emitted.
 
-    Taxonomy confidence is the canonical signal for current enriched batches.
-    Legacy `supplement_type.confidence` is kept only as a fallback for old
-    blobs that do not have taxonomy yet.
+    Taxonomy confidence is the sole product-class confidence signal. Artifacts
+    without the current taxonomy contract are rejected upstream.
     """
     if not isinstance(product, dict):
         return []
@@ -453,11 +449,6 @@ def _supp_type_driver(product: Any) -> List[str]:
                 return ["taxonomy_classification_low_confidence"]
             return []
 
-    supp = product.get("supplement_type")
-    if isinstance(supp, dict):
-        supp_conf = _as_float(supp.get("confidence"), None)
-        if supp_conf is not None and supp_conf < _LEGACY_SUPP_CONFIDENCE_THRESHOLD:
-            return ["supplement_type_low_confidence"]
     return []
 
 

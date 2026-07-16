@@ -71,7 +71,7 @@ REQUIRED_CONCEPTS = {
     "ingredient_category",
     "form_factor_canonical",
     "supplement_taxonomy",
-    "legacy_supplement_type",
+    "supplement_type_compatibility_mirror",
     "active_safety_classification",
     "inactive_safety_classification",
     "interaction_rules",
@@ -812,7 +812,7 @@ def taxonomy_primary(product: dict[str, Any]) -> str:
             value = taxonomy.get(key)
             if isinstance(value, str) and value:
                 return value
-    for key in ("primary_type", "percentile_category", "supplement_type"):
+    for key in ("primary_type", "percentile_category"):
         value = product.get(key)
         if isinstance(value, str) and value:
             return value
@@ -977,6 +977,22 @@ def audit_clinical(args: argparse.Namespace) -> list[Finding]:
                         )
                         if not isinstance(reason_codes, list) or not reason_codes:
                             issues.append("classification_reason_codes")
+                        primary_type = str(
+                            taxonomy_payload.get("primary_type") or ""
+                        ).strip().lower()
+                        top_level_type = str(
+                            product.get("primary_type") or ""
+                        ).strip().lower()
+                        mirror = product.get("supplement_type")
+                        mirror_type = (
+                            str(mirror.get("type") or "").strip().lower()
+                            if isinstance(mirror, dict)
+                            else ""
+                        )
+                        if not primary_type or top_level_type != primary_type:
+                            issues.append("primary_type_projection")
+                        if mirror_type != primary_type:
+                            issues.append("supplement_type_compatibility_mirror")
                         if issues:
                             invalid_contract_products += 1
                             invalid_contract_issues.update(issues)

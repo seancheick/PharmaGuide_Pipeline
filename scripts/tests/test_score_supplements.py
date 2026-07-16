@@ -820,7 +820,7 @@ class TestV30Scoring:
             "category_breakdown": {"probiotic": 3},
         }
 
-        assert scorer._classify_supplement_type(product) == "probiotic"
+        assert scorer._primary_type_from_product(product) == "probiotic"
 
         scored = scorer.score_product(product)
         assert scored["supp_type"] == "probiotic"
@@ -2190,7 +2190,13 @@ class TestCategoryPercentiles:
             product = make_base_product()
             product["dsld_id"] = f"pct-{idx}"
             product["product_name"] = f"Greens Powder {idx}"
-            product["supplement_type"] = {"type": "greens"}
+            product["primary_type"] = "greens_powder"
+            product["supplement_taxonomy"] = {
+                "primary_type": "greens_powder",
+                "percentile_category": "greens_powder",
+                "classification_confidence": 0.9,
+                "classification_reasons": ["greens identity"],
+            }
             product["form"] = "powder"
             for ingredient in product["ingredient_quality_data"]["ingredients_scorable"]:
                 ingredient["bio_score"] = bio_score
@@ -2208,9 +2214,9 @@ class TestCategoryPercentiles:
 
         assert top_entry["category_percentile"]["available"] is True
         assert top_entry["category_percentile"]["cohort_size"] == 5
-        assert top_entry["category_percentile"]["category_source"] == "fallback_scorer"
+        assert top_entry["category_percentile"]["category_source"] == "taxonomy_v2"
         assert top_entry["category_percentile"]["top_percent"] == pytest.approx(20.0)
-        assert "Among greens powders: Top 20.0%" == top_entry["category_percentile"]["text"]
+        assert "Among Greens Powder: Top 20.0%" == top_entry["category_percentile"]["text"]
 
     def test_batch_marks_percentile_unavailable_for_small_cohort(self, scorer, tmp_path):
         products = []
@@ -2218,7 +2224,13 @@ class TestCategoryPercentiles:
             product = make_base_product()
             product["dsld_id"] = f"small-{idx}"
             product["product_name"] = f"Small Cohort {idx}"
-            product["supplement_type"] = {"type": "greens"}
+            product["primary_type"] = "greens_powder"
+            product["supplement_taxonomy"] = {
+                "primary_type": "greens_powder",
+                "percentile_category": "greens_powder",
+                "classification_confidence": 0.9,
+                "classification_reasons": ["greens identity"],
+            }
             product["form"] = "powder"
             products.append(product)
 
@@ -2240,7 +2252,6 @@ class TestCategoryPercentiles:
             product = make_base_product()
             product["dsld_id"] = f"exp-{idx}"
             product["product_name"] = f"Explicit Category {idx}"
-            product["supplement_type"] = {"type": "targeted"}
             product["percentile_category"] = "greens_powder"
             product["percentile_category_label"] = "Greens Powders"
             product["percentile_category_source"] = "inferred"

@@ -52,10 +52,8 @@ from sp2_adoption_audit import enumerate_sp2_legacy_reads, hits_grouped_by_file
 #                replaced with `router.class_for_product` delegation +
 #                sports overlay)
 EXPECTED_HITS_PER_FILE = {
-    "scripts/build_final_db.py": 16,
-    "scripts/scoring_v4/confidence.py": 1,
-    "scripts/scoring_v4/modules/generic_helpers.py": 1,
-    "scripts/scoring_v4/router.py": 1,
+    # Storage/audit/export-column references only. Decision readers are zero.
+    "scripts/build_final_db.py": 10,
 }
 
 
@@ -117,18 +115,17 @@ def test_sp2_inventory_doc_exists():
     )
 
 
-def test_sp2_router_legacy_read_is_only_themed_multi_broad_panel_fallback():
-    """The router reads taxonomy first. Its only legacy read is the explicitly
-    guarded themed-multivitamin fallback, which also requires broad-panel
-    physical evidence."""
+def test_sp2_router_has_no_legacy_type_read_and_keeps_physical_panel_gate():
+    """Themed multis use disclosed panel evidence, never a legacy type."""
     import pathlib
     router = pathlib.Path(__file__).resolve().parents[1] / "scoring_v4" / "router.py"
     src = router.read_text()
     primary_type_idx = src.find("_read_primary_type(product)")
     assert primary_type_idx != -1, "Router must call _read_primary_type"
     assert "_read_legacy_supp_type(product)" not in src
-    assert src.count('get("supplement_type")') == 1
-    assert "_has_broad_legacy_multivitamin_panel" in src
+    assert src.count('get("supplement_type")') == 0
+    assert "_has_broad_multivitamin_panel" in src
+    assert "_has_broad_legacy_multivitamin_panel" not in src
     assert 'get("primary_category")' not in src
 
 

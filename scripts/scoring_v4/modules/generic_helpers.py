@@ -193,21 +193,6 @@ def canonical_key(ingredient: Dict[str, Any]) -> str:
     return ""
 
 
-def supp_type_of(product: Dict[str, Any]) -> str:
-    """Return the normalized supplement_type string ('single_nutrient',
-    'probiotic', etc.) from the enriched payload. Handles both the dict
-    shape (`supplement_type.type`) and the legacy string shape.
-
-    Legacy helper. Prefer `primary_type_of()` for taxonomy-aware new code.
-    """
-    payload = (product or {}).get("supplement_type")
-    if isinstance(payload, dict):
-        return _norm_text(payload.get("type"))
-    if isinstance(payload, str):
-        return _norm_text(payload)
-    return ""
-
-
 def is_single_scorable_active_of(product: Any) -> bool:
     """Return the taxonomy's canonical single-active fact.
 
@@ -237,7 +222,7 @@ def primary_type_of(product: Any) -> str:
     Current enriched blobs write the value both at top level and under
     `supplement_taxonomy.primary_type`; prefer the top-level field and use
     the nested path as a defensive fallback. Callers that need old-batch
-    compatibility can explicitly fall back to `supp_type_of()`.
+    pre-taxonomy artifacts are rejected by the strict enrichment contract.
     """
     if not isinstance(product, dict):
         return ""

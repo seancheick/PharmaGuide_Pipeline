@@ -892,14 +892,6 @@ def _is_multivitamin_route_eligible(product: Dict[str, Any], name_text: str) -> 
     return False
 
 
-def _read_legacy_multivitamin_type(product: Dict[str, Any]) -> str:
-    payload = (product or {}).get("supplement_type")
-    if not isinstance(payload, dict):
-        return ""
-    value = payload.get("type")
-    return str(value or "").strip().lower()
-
-
 def _multi_panel_group_count(canonicals: set[str]) -> int:
     groups = set()
     if canonicals & _B_VITAMIN_CANONICALS:
@@ -913,16 +905,8 @@ def _multi_panel_group_count(canonicals: set[str]) -> int:
     return len(groups)
 
 
-def _has_broad_legacy_multivitamin_panel(product: Dict[str, Any]) -> bool:
-    """True only for old enriched themed multi-packs with a real broad panel.
-
-    This is the sole v4 router legacy-type fallback. It fixes products whose
-    normalized taxonomy stores the theme (immune/sleep/herbal) while legacy
-    type still correctly says multivitamin. The broad-panel gate prevents the
-    old over-classification failures from returning.
-    """
-    if _read_legacy_multivitamin_type(product) != "multivitamin":
-        return False
+def _has_broad_multivitamin_panel(product: Dict[str, Any]) -> bool:
+    """Return true for a disclosed broad panel without legacy type input."""
     if _read_primary_type(product) in _LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES:
         return False
     canonicals = _positive_canonicals(product)
@@ -1233,7 +1217,7 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     if (
         primary_type == "multivitamin"
         and _is_multivitamin_route_eligible(product, name_text)
-    ) or _has_broad_legacy_multivitamin_panel(product):
+    ) or _has_broad_multivitamin_panel(product):
         return "multi_or_prenatal"
 
     if _is_fiber_digestive_class(product, name_text):
@@ -1267,7 +1251,7 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
             # _is_omega_class unless EPA/DHA is actually disclosed.
             if _is_omega_class(product, name_text):
                 return "omega"
-            if _has_broad_legacy_multivitamin_panel(product):
+            if _has_broad_multivitamin_panel(product):
                 return "multi_or_prenatal"
             return "generic"
         # Unknown taxonomy type: fall through to legacy omega / multi fallback
@@ -1280,7 +1264,7 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
     # EPA/DHA fallbacks catch labels where canonicalization didn't run.
     if _is_omega_class(product, name_text):
         return "omega"
-    if _has_broad_legacy_multivitamin_panel(product):
+    if _has_broad_multivitamin_panel(product):
         return "multi_or_prenatal"
 
     # Priority 5: generic catch-all.

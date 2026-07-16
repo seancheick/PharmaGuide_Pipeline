@@ -7,9 +7,9 @@ Pins the contract that:
   2. Piperine > 10 mg is NOT demoted (stays scorable as a therapeutic active).
   3. Demotion preserves product["activeIngredients"] so cluster matching
      and interaction analysis still see the ingredient.
-  4. supplement_type is re-classified based on post-demotion scorable count
-     — a single-ingredient + sub-threshold enhancer product becomes
-     "single_nutrient" (unlocking the A6 bonus).
+  4. The canonical taxonomy's ``is_single_scorable_active`` fact is computed
+     from the post-demotion row population. The compatibility mirror remains
+     a mechanical projection of the taxonomy; it does not classify again.
   5. Demotion never touches ingredients with independent nutritional value
      (Vitamin C, Vitamin D, MK7, amino acids) — those lack the
      ``non_scorable_when_sub_threshold`` field in absorption_enhancers.json.
@@ -103,23 +103,19 @@ def test_demotion_preserves_activeIngredients_for_cluster_matching(enricher):
     )
 
 
-def test_demotion_flips_supp_type_to_single_nutrient(enricher):
-    """1 real active + 1 sub-threshold enhancer should classify as
-    single_nutrient (not targeted), unlocking the A6 bonus downstream."""
+def test_demotion_sets_canonical_single_scorable_fact(enricher):
+    """One real active plus one demoted enhancer is canonically single-active."""
     product = _build("Test Ashwagandha 600 mg", [
         {"name": "Ashwagandha", "quantity": 600.0, "unit": "mg"},
         {"name": "BioPerine", "quantity": 5.0, "unit": "mg"},
     ])
     enriched, _ = enricher.enrich_product(product)
-    st = enriched.get("supplement_type", {})
-    stype = st.get("type") if isinstance(st, dict) else st
-    active_count = st.get("active_count") if isinstance(st, dict) else None
-    assert stype == "single_nutrient", (
-        f"Expected single_nutrient after demotion, got {stype!r}"
-    )
-    assert active_count == 1, (
-        f"Expected active_count=1 (post-demotion scorable count), got {active_count}"
-    )
+    taxonomy = enriched["supplement_taxonomy"]
+    mirror = enriched["supplement_type"]
+    assert taxonomy["is_single_scorable_active"] is True
+    assert taxonomy["quantified_label_active_count"] == 1
+    assert mirror["type"] == taxonomy["primary_type"]
+    assert mirror["active_count"] == taxonomy["quantified_label_active_count"]
 
 
 def test_demotion_ignored_for_therapeutic_enhancers(enricher):

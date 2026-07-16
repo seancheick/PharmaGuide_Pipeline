@@ -820,17 +820,24 @@ def _supported_safety_flags(flags: Any) -> List[Dict[str, Any]]:
 
 
 def build_supplement_type_audit(enriched: Dict, scored: Optional[Dict] = None) -> Dict[str, Any]:
+    """Expose canonical taxonomy plus its compatibility projection for audit."""
     supplement_type = enriched.get("supplement_type")
-    enriched_type = ""
+    mirror_type = ""
     if isinstance(supplement_type, dict):
-        enriched_type = safe_str(supplement_type.get("type"))
+        mirror_type = safe_str(supplement_type.get("type"))
     elif supplement_type is not None:
-        enriched_type = safe_str(supplement_type)
+        mirror_type = safe_str(supplement_type)
 
     taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}
 
     return {
-        "enriched_type": enriched_type,
+        # Retained as an additive compatibility alias for existing audit
+        # consumers. It is never used to resolve the exported type.
+        "enriched_type": mirror_type,
+        "compatibility_mirror_type": mirror_type,
+        "compatibility_mirror_matches_taxonomy": (
+            not mirror_type or mirror_type == safe_str(taxonomy.get("primary_type"))
+        ),
         "scored_type": safe_str((scored or {}).get("supp_type")),
         "export_type": resolve_export_supplement_type(enriched, scored),
         "primary_type": safe_str(taxonomy.get("primary_type")),
@@ -844,32 +851,10 @@ def build_supplement_type_audit(enriched: Dict, scored: Optional[Dict] = None) -
 
 
 def resolve_export_supplement_type(enriched: Dict, scored: Optional[Dict] = None) -> str:
-    # Prefer taxonomy v2 primary_type (NP-filtered, expanded types) when available
+    """Return the canonical taxonomy type, never a legacy rescue value."""
     taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}
     primary_type = normalize_text(taxonomy.get("primary_type"))
-    if primary_type and primary_type != "general_supplement":
-        return primary_type
-
-    # Fall back to scored supp_type (legacy v1 classification)
-    scored_type = normalize_text((scored or {}).get("supp_type"))
-
-    # Fall back to enriched supplement_type.type
-    enriched_type = ""
-    supplement_type = enriched.get("supplement_type")
-    if isinstance(supplement_type, dict):
-        enriched_type = normalize_text(supplement_type.get("type"))
-    elif supplement_type is not None:
-        enriched_type = normalize_text(supplement_type)
-
-    # If taxonomy said general_supplement, still use it over unknown/specialty
-    if primary_type == "general_supplement":
-        return primary_type
-
-    if scored_type and scored_type != "unknown":
-        return scored_type
-    if enriched_type and enriched_type != "unknown":
-        return enriched_type
-    return enriched_type or scored_type or "unknown"
+    return primary_type or "unknown"
 
 
 def contaminant_matches(enriched: Dict) -> List[Dict]:
@@ -4560,13 +4545,11 @@ def _present_only_coverage(coverage: Dict[str, Any]) -> Dict[str, Any]:
 
 def _has_multivitamin_shape(enriched: Dict, ingredients: List[Dict]) -> bool:
     taxonomy = safe_dict(enriched.get("supplement_taxonomy"))
-    stype = safe_dict(enriched.get("supplement_type"))
     text = " ".join(
         safe_str(value)
         for value in (
             taxonomy.get("primary_type"),
             taxonomy.get("secondary_type"),
-            stype.get("type"),
             enriched.get("product_name"),
         )
     )

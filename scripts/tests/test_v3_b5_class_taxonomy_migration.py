@@ -130,17 +130,16 @@ def test_prenatal_dha_keeps_omega_3_b5_class(scorer):
     assert scorer._b5_class_for_product(product) == "generic"
 
 
-# --- Old-batch fallback (no taxonomy field at all) ---
+# --- Pre-taxonomy compatibility mirrors are not decision inputs ---
 
-def test_old_batch_legacy_multivit_still_routes_multi(scorer):
-    """No primary_type field — falls through to legacy supp_type."""
+def test_old_batch_legacy_multivit_does_not_route_multi(scorer):
     product = _product(supp_type="multivitamin")
-    assert scorer._b5_class_for_product(product) == "multi_or_prenatal"
+    assert scorer._b5_class_for_product(product) == "generic"
 
 
-def test_old_batch_legacy_probiotic_still_wins(scorer):
+def test_old_batch_legacy_probiotic_does_not_route_probiotic(scorer):
     product = _product(supp_type="probiotic")
-    assert scorer._b5_class_for_product(product) == "probiotic"
+    assert scorer._b5_class_for_product(product) == "generic"
 
 
 def test_product_level_probiotic_evidence_overrides_underclassified_taxonomy(scorer):
@@ -181,6 +180,7 @@ def test_probiotic_content_does_not_override_explicit_multivitamin_signal(scorer
     """Garden greens/multi products can contain probiotic strains, but a real
     multivitamin panel still uses the multi opacity tier."""
     product = _product(
+        primary_type="multivitamin",
         supp_type="multivitamin",
         primary_category="multivitamin",
         product_name="Raw Organic Perfect Food Green Superfood Chocolate",
@@ -207,11 +207,10 @@ def test_probiotic_content_does_not_override_explicit_greens_taxonomy(scorer):
     assert scorer._b5_class_for_product(product) == "generic"
 
 
-def test_old_batch_primary_category_multivit_fallback(scorer):
-    """GoL MyKind pattern — no taxonomy, supp_type=specialty, primary_category=multivitamin."""
+def test_old_batch_primary_category_does_not_rescue_missing_taxonomy(scorer):
     product = _product(supp_type="specialty", primary_category="multivitamin",
                        product_name="MyKind Men's Multi")
-    assert scorer._b5_class_for_product(product) == "multi_or_prenatal"
+    assert scorer._b5_class_for_product(product) == "generic"
 
 
 def test_old_batch_unknown_supp_type_returns_generic(scorer):

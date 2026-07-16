@@ -4,7 +4,8 @@ Codex's P0.1d work landed the cert-overcredit fix. P0.2 closes the opacity
 side: a hidden CFU on a probiotic and a hidden stimulant dose are NOT the
 same risk and should NOT earn the same penalty.
 
-Class router (derived from supp_type + product-name fallbacks):
+Class router (derived from canonical taxonomy, native scoring classification,
+and B5-local product-name overlays):
 
   - probiotic        → multiplier 0.4  (strain-named + aggregate CFU is
                                         industry norm, modest penalty)
@@ -19,8 +20,9 @@ not the ceiling — heavy opacity in a sports product still capped, but
 mild opacity in a probiotic stays well below it.
 
 These tests exercise ``_compute_proprietary_blend_penalty`` directly
-with minimal blend dicts.  The class-router signal lives on the
-product (``supplement_type.type`` + product name), not the blend.
+with minimal blend dicts. The class-router signal lives on the product, not
+the blend. The legacy ``supplement_type`` mirror and ``primary_category``
+field are deliberately not decision inputs.
 """
 
 from __future__ import annotations
@@ -116,23 +118,20 @@ def _full_blend(name: str = "Transparent Blend") -> Dict[str, Any]:
 
 def _product(
     blends: List[Dict[str, Any]],
-    supp_type: Optional[str] = None,
+    primary_type: Optional[str] = None,
     product_name: str = "Example Product",
     brand_name: str = "Example Brand",
     total_active_mg: float = 2000.0,
     total_active_ingredients: int = 5,
-    primary_category: Optional[str] = None,
+    scoring_route: Optional[str] = None,
+    legacy_supp_type: Optional[str] = None,
+    legacy_primary_category: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Minimal product the B5 path expects."""
+    """Minimal product using current contracts, plus opt-in legacy decoys."""
     base = {
         "product_name": product_name,
         "fullName": f"{brand_name} {product_name}",
         "brand_name": brand_name,
-        "supplement_type": (
-            {"type": supp_type, "active_count": total_active_ingredients}
-            if supp_type is not None
-            else {}
-        ),
         "proprietary_blends": blends,
         "proprietary_data": {
             "blends": blends,
@@ -144,8 +143,18 @@ def _product(
             "ingredients_scorable": [],
         },
     }
-    if primary_category is not None:
-        base["primary_category"] = primary_category
+    if primary_type is not None:
+        base["primary_type"] = primary_type
+        base["supplement_taxonomy"] = {"primary_type": primary_type}
+    if scoring_route is not None:
+        base["product_scoring_classification"] = {"route_module": scoring_route}
+    if legacy_supp_type is not None:
+        base["supplement_type"] = {
+            "type": legacy_supp_type,
+            "active_count": total_active_ingredients,
+        }
+    if legacy_primary_category is not None:
+        base["primary_category"] = legacy_primary_category
     return base
 
 
@@ -168,15 +177,15 @@ def _v3_penalty_for_partial() -> float:
 def test_b5_generic_unchanged_for_unclassified_product(scorer: SupplementScorer) -> None:
     """A product with no class signal scores the same as v3 (multiplier 1.0).
     This is the regression-prevention anchor."""
-    product = _product(blends=[_opaque_blend()], supp_type=None)
+    product = _product(blends=[_opaque_blend()])
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
     assert penalty == pytest.approx(_v3_penalty_for_opaque() * 1.0, rel=1e-6)
 
 
 def test_b5_specialty_unclassified_uses_generic_multiplier(scorer: SupplementScorer) -> None:
-    """`specialty` / `targeted` / `unknown` supp_types route to generic (1.0x)."""
-    product = _product(blends=[_opaque_blend()], supp_type="specialty")
+    """An unrecognized taxonomy type routes to generic (1.0x)."""
+    product = _product(blends=[_opaque_blend()], primary_type="specialty")
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
     assert penalty == pytest.approx(_v3_penalty_for_opaque() * 1.0, rel=1e-6)
@@ -190,7 +199,7 @@ def test_b5_probiotic_opaque_blend_reduced_to_04x(scorer: SupplementScorer) -> N
     a `Probiotic Blend` container without per-strain CFU) gets 40% of the
     v3 penalty.  Strain-level CFU opacity is a category norm — partial
     transparency is genuinely better than hidden, but not the worst case."""
-    product = _product(blends=[_opaque_blend()], supp_type="probiotic")
+    product = _product(blends=[_opaque_blend()], primary_type="probiotic")
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
     assert penalty == pytest.approx(_v3_penalty_for_opaque() * 0.4, rel=1e-6)
@@ -198,7 +207,7 @@ def test_b5_probiotic_opaque_blend_reduced_to_04x(scorer: SupplementScorer) -> N
 
 def test_b5_probiotic_partial_blend_reduced_to_04x(scorer: SupplementScorer) -> None:
     """Probiotic with partial-disclosure blend → 40% of v3."""
-    product = _product(blends=[_partial_blend()], supp_type="probiotic")
+    product = _product(blends=[_partial_blend()], primary_type="probiotic")
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
     assert penalty == pytest.approx(_v3_penalty_for_partial() * 0.4, rel=1e-6)
@@ -207,7 +216,7 @@ def test_b5_probiotic_partial_blend_reduced_to_04x(scorer: SupplementScorer) -> 
 def test_b5_probiotic_full_disclosure_zero(scorer: SupplementScorer) -> None:
     """Class multiplier doesn't matter when the base penalty is zero —
     a probiotic with all per-strain CFU disclosed still scores 0."""
-    product = _product(blends=[_full_blend()], supp_type="probiotic")
+    product = _product(blends=[_full_blend()], primary_type="probiotic")
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
     assert penalty == 0.0
@@ -219,14 +228,14 @@ def test_b5_probiotic_full_disclosure_zero(scorer: SupplementScorer) -> None:
 def test_b5_multivitamin_opaque_amplified_to_13x(scorer: SupplementScorer) -> None:
     """Multivitamins have well-known RDAs per nutrient. An opaque blend
     hides expected per-vitamin dosing → 1.3x v3."""
-    product = _product(blends=[_opaque_blend()], supp_type="multivitamin")
+    product = _product(blends=[_opaque_blend()], primary_type="multivitamin")
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
     assert penalty == pytest.approx(_v3_penalty_for_opaque() * 1.3, rel=1e-6)
 
 
 def test_b5_prenatal_multivit_with_panel_uses_multi_class(scorer: SupplementScorer) -> None:
-    """A genuine prenatal multivitamin (primary_category='multivitamin')
+    """A genuine prenatal multivitamin with canonical taxonomy
     routes to multi_or_prenatal (1.3x) — the safety/dose-expectation
     profile of a vitamin/mineral panel justifies the tier.
 
@@ -234,15 +243,12 @@ def test_b5_prenatal_multivit_with_panel_uses_multi_class(scorer: SupplementScor
     multi" override (former Priority 5 of _b5_class_for_product) was
     retired because it mis-classified single-active prenatal omegas and
     probiotic-marketed-as-prenatal products. To trigger multi_or_prenatal,
-    the product now needs a real multi-vitamin signal — primary_type=
-    multivitamin (Priority 4) or primary_category=multivitamin (Priority 6
-    legacy fallback). See test_b5_prenatal_dha_omega_routes_generic_not_multi
-    for the inverse case.
+    the product now needs canonical multivitamin taxonomy or a native verified
+    broad-panel scoring classification. See the inverse test below.
     """
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="specialty",
-        primary_category="multivitamin",
+        primary_type="multivitamin",
         product_name="Prenatal Multivitamin DHA",
     )
     flags: List[str] = []
@@ -256,9 +262,8 @@ def test_b5_prenatal_dha_omega_routes_generic_not_multi(scorer: SupplementScorer
     omega module owns this explicitly."""
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="targeted",
+        primary_type="omega_3",
         product_name="Prenatal DHA Unflavored Formula",
-        primary_category="omega-3",
     )
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
@@ -266,11 +271,11 @@ def test_b5_prenatal_dha_omega_routes_generic_not_multi(scorer: SupplementScorer
 
 
 def test_b5_prenatal_multivit_does_not_double_amp(scorer: SupplementScorer) -> None:
-    """If BOTH supp_type=multivitamin AND name='Prenatal', stay at 1.3x —
+    """If taxonomy=multivitamin and name='Prenatal', stay at 1.3x —
     multi_or_prenatal is one class, not two stacked signals."""
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="multivitamin",
+        primary_type="multivitamin",
         product_name="Prenatal Multivitamin",
     )
     flags: List[str] = []
@@ -285,9 +290,9 @@ def test_b5_enzyme_primary_category_misclassified_as_multi_routes_generic(
     though the label/product name is enzyme-specific. Do not amplify as a multi."""
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="specialty",
+        primary_type="digestive_enzyme",
         product_name="Digestive Enzymes Ultra",
-        primary_category="multivitamin",
+        legacy_primary_category="multivitamin",
     )
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
@@ -301,9 +306,10 @@ def test_b5_joint_support_misclassified_as_multivitamin_routes_generic(
     in v3 artifacts; opacity semantics are generic joint-support, not multi."""
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="multivitamin",
+        primary_type="joint_support",
         product_name="Triple Strength Glucosamine Chondroitin MSM",
-        primary_category="collagen",
+        legacy_supp_type="multivitamin",
+        legacy_primary_category="collagen",
     )
     flags: List[str] = []
     penalty = scorer._compute_proprietary_blend_penalty(product, flags)
@@ -318,7 +324,7 @@ def test_b5_pre_workout_opaque_heaviest_15x(scorer: SupplementScorer) -> None:
     products are the WORST opacity case — they actively hide stim dose."""
     product = _product(
         blends=[_opaque_blend(name="Energy Matrix")],
-        supp_type="specialty",
+        primary_type="general_supplement",
         product_name="Hyper Pre-Workout Energy Matrix",
     )
     flags: List[str] = []
@@ -330,7 +336,7 @@ def test_b5_bcaa_keyword_routes_to_sports(scorer: SupplementScorer) -> None:
     """Product named '… BCAA Blend' → sports_active class."""
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="specialty",
+        primary_type="general_supplement",
         product_name="MaxLife BCAA Recovery Blend",
     )
     flags: List[str] = []
@@ -341,7 +347,7 @@ def test_b5_bcaa_keyword_routes_to_sports(scorer: SupplementScorer) -> None:
 def test_b5_creatine_keyword_routes_to_sports(scorer: SupplementScorer) -> None:
     product = _product(
         blends=[_opaque_blend()],
-        supp_type="specialty",
+        primary_type="general_supplement",
         product_name="PowerLab Creatine Stack",
     )
     flags: List[str] = []
@@ -358,7 +364,7 @@ def test_b5_cap_holds_even_for_sports_with_many_blends(scorer: SupplementScorer)
     blends = [_opaque_blend(name=f"Blend {i}") for i in range(4)]
     product = _product(
         blends=blends,
-        supp_type="specialty",
+        primary_type="general_supplement",
         product_name="MegaPre Pre-Workout",
     )
     flags: List[str] = []
@@ -372,7 +378,7 @@ def test_b5_cap_holds_even_for_sports_with_many_blends(scorer: SupplementScorer)
 def test_b5_evidence_includes_class_routing(scorer: SupplementScorer) -> None:
     """Each blend's evidence should record the routed class + multiplier,
     so the score-delta report can explain why penalties shifted post-P0.2."""
-    product = _product(blends=[_opaque_blend()], supp_type="probiotic")
+    product = _product(blends=[_opaque_blend()], primary_type="probiotic")
     flags: List[str] = []
     scorer._compute_proprietary_blend_penalty(product, flags)
     assert scorer._last_b5_blend_evidence, "evidence list must be populated"
@@ -402,65 +408,64 @@ def test_b5_config_documents_class_multipliers() -> None:
 def test_b5_no_blends_returns_zero(scorer: SupplementScorer) -> None:
     """Product with no blends returns 0 regardless of class — multiplier
     must never resurrect a zero penalty."""
-    for supp_type in ("probiotic", "multivitamin", "specialty", None):
-        product = _product(blends=[], supp_type=supp_type)
+    for primary_type in ("probiotic", "multivitamin", "specialty", None):
+        product = _product(blends=[], primary_type=primary_type)
         flags: List[str] = []
         penalty = scorer._compute_proprietary_blend_penalty(product, flags)
-        assert penalty == 0.0, f"non-zero for supp_type={supp_type}"
+        assert penalty == 0.0, f"non-zero for primary_type={primary_type}"
 
 
 # --- Direct class router unit tests ----------------------------------------
 
 
 def test_class_router_probiotic(scorer: SupplementScorer) -> None:
-    assert scorer._b5_class_for_product(_product([], supp_type="probiotic")) == "probiotic"
+    assert scorer._b5_class_for_product(_product([], primary_type="probiotic")) == "probiotic"
 
 
 def test_class_router_multivitamin(scorer: SupplementScorer) -> None:
-    assert scorer._b5_class_for_product(_product([], supp_type="multivitamin")) == "multi_or_prenatal"
+    assert scorer._b5_class_for_product(_product([], primary_type="multivitamin")) == "multi_or_prenatal"
 
 
 def test_class_router_prenatal_name_alone_does_not_override(scorer: SupplementScorer) -> None:
-    """Locked 2026-05-23: a "Prenatal Care DHA"-style product with no
-    multi-vitamin panel (supp_type=specialty, no primary_category=
-    multivitamin) routes to `generic`, NOT `multi_or_prenatal`. The legacy
+    """Locked 2026-05-23: a "Prenatal Care DHA"-style canonical omega product
+    routes to `generic`, NOT `multi_or_prenatal`. The legacy
     prenatal-name-keyword override (former Priority 5 of
     _b5_class_for_product) was retired because it mis-rated single-active
     prenatal omegas and probiotic-marketed-as-prenatal products. Genuine
-    prenatal multivitamins still route correctly via primary_type or
-    primary_category."""
+    prenatal multivitamins still route correctly via taxonomy or the native
+    scoring classification."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="specialty", product_name="Prenatal Care DHA")
+        _product([], primary_type="omega_3", product_name="Prenatal Care DHA")
     ) == "generic"
 
 
 def test_class_router_sports_pre_workout(scorer: SupplementScorer) -> None:
     assert scorer._b5_class_for_product(
-        _product([], supp_type="specialty", product_name="Hyper Pre-Workout")
+        _product([], primary_type="general_supplement", product_name="Hyper Pre-Workout")
     ) == "sports_active"
 
 
 def test_class_router_sports_bcaa(scorer: SupplementScorer) -> None:
     assert scorer._b5_class_for_product(
-        _product([], supp_type="targeted", product_name="BCAA Recovery 2:1:1")
+        _product([], primary_type="general_supplement", product_name="BCAA Recovery 2:1:1")
     ) == "sports_active"
 
 
 def test_class_router_generic_default(scorer: SupplementScorer) -> None:
     assert scorer._b5_class_for_product(
-        _product([], supp_type="specialty", product_name="Vitamin C 1000mg")
+        _product([], primary_type="single_vitamin", product_name="Vitamin C 1000mg")
     ) == "generic"
 
 
 def test_class_router_unknown_supp_type_default(scorer: SupplementScorer) -> None:
-    assert scorer._b5_class_for_product(_product([], supp_type=None)) == "generic"
+    assert scorer._b5_class_for_product(_product([])) == "generic"
 
 
 def test_class_router_probiotic_beats_pre_workout_name(scorer: SupplementScorer) -> None:
     """If supp_type classifier says probiotic, that wins over any product-name
     keyword (the type classifier already inspected the ingredient panel)."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="probiotic", product_name="Pre-Workout Probiotic")
+        _product([], primary_type="probiotic", product_name="Pre-Workout Probiotic")
     ) == "probiotic"
 
 
@@ -478,7 +483,7 @@ def test_class_router_sports_keyword_beats_multivitamin_supp_type(
     functionally a pre-workout stack — opacity here hides per-component
     stim / amino doses. Sports class (1.5x) wins over multi (1.3x)."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="multivitamin", product_name="Hyper Pre-Workout Energy Matrix")
+        _product([], primary_type="multivitamin", product_name="Hyper Pre-Workout Energy Matrix")
     ) == "sports_active"
 
 
@@ -488,7 +493,7 @@ def test_class_router_bcaa_name_beats_multivitamin_supp_type(
     """GNC Beyond Raw Precision BCAA Gummy (DSLD 211334) — supp_type=multivit
     because gummy + vitamin co-pack. Sports keyword wins."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="multivitamin", product_name="Precision BCAA Gummy")
+        _product([], primary_type="multivitamin", product_name="Precision BCAA Gummy")
     ) == "sports_active"
 
 
@@ -499,54 +504,49 @@ def test_class_router_whey_name_beats_multivitamin_supp_type(
     whey + added vitamins/minerals. Sports class wins because protein blend
     opacity is a sports-stack concern, not a multi-panel concern."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="multivitamin", product_name="Whey Protein Isolate Chocolate")
+        _product([], primary_type="multivitamin", product_name="Whey Protein Isolate Chocolate")
     ) == "sports_active"
 
 
-def test_class_router_falls_back_to_primary_category_multivitamin(
+def test_class_router_ignores_legacy_primary_category_multivitamin(
     scorer: SupplementScorer,
 ) -> None:
-    """GoL Men's Multi (DSLD 173888) — supp_type=specialty but
-    primary_category=multivitamin. The router falls back to
-    primary_category when supp_type doesn't give a strong signal."""
+    """A legacy primary_category cannot independently route B5."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="specialty", product_name="Men's Multi Organic Berry",
-                 primary_category="multivitamin")
-    ) == "multi_or_prenatal"
+        _product([], legacy_supp_type="specialty", product_name="Men's Multi Organic Berry",
+                 legacy_primary_category="multivitamin")
+    ) == "generic"
 
 
-def test_class_router_targeted_with_multivit_primary_category(
+def test_class_router_native_broad_panel_routes_multivitamin(
     scorer: SupplementScorer,
 ) -> None:
-    """Same fallback works for supp_type=targeted."""
+    """The native scoring contract can route a verified broad panel."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="targeted", product_name="Daily Foundation Multi",
-                 primary_category="multivitamin")
+        _product([], scoring_route="multi_or_prenatal", product_name="Daily Foundation Multi",
+                 legacy_supp_type="targeted", legacy_primary_category="multivitamin")
     ) == "multi_or_prenatal"
 
 
 def test_class_router_primary_category_fallback_doesnt_overreach(
     scorer: SupplementScorer,
 ) -> None:
-    """Only primary_category=multivitamin triggers the fallback. Other
-    primary_category values (omega-3, protein, collagen, etc.) stay generic
-    unless a name keyword fires."""
+    """Other legacy categories stay generic unless a B5-local name rule fires."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="specialty", product_name="Fish Oil EPA",
-                 primary_category="omega-3")
+        _product([], legacy_supp_type="specialty", product_name="Fish Oil EPA",
+                 legacy_primary_category="omega-3")
     ) == "generic"
     assert scorer._b5_class_for_product(
-        _product([], supp_type="targeted", product_name="Collagen Peptides",
-                 primary_category="collagen")
+        _product([], legacy_supp_type="targeted", product_name="Collagen Peptides",
+                 legacy_primary_category="collagen")
     ) == "generic"
 
 
-def test_class_router_probiotic_supp_type_still_wins_over_primary_category(
+def test_class_router_canonical_probiotic_wins_over_legacy_category(
     scorer: SupplementScorer,
 ) -> None:
-    """Defense check: probiotic supp_type stays priority 1 even if a buggy
-    enricher writes primary_category=multivitamin on a probiotic product."""
+    """Canonical probiotic taxonomy wins over a stale legacy category."""
     assert scorer._b5_class_for_product(
-        _product([], supp_type="probiotic", product_name="Probiotic 50B",
-                 primary_category="multivitamin")
+        _product([], primary_type="probiotic", product_name="Probiotic 50B",
+                 legacy_primary_category="multivitamin")
     ) == "probiotic"

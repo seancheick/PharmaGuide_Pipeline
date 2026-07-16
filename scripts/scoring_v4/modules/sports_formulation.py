@@ -106,7 +106,6 @@ def _is_protein_context(product: Dict[str, Any]) -> bool:
     ptype = _norm_text(
         (product or {}).get("primary_type")
         or taxonomy.get("primary_type")
-        or (product or {}).get("supplement_type")
     )
     category = _norm_text(taxonomy.get("percentile_category"))
     name = _norm_text((product or {}).get("product_name") or (product or {}).get("fullName"))

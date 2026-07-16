@@ -94,7 +94,7 @@ from constants import (
 )
 from stage_manifest import select_stage_input_files
 from run_artifacts import ensure_run_id, report_run_directory
-from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
+from supplement_type_utils import mark_compound_duplicate_rows
 from supplement_taxonomy import classify_supplement, percentile_label_for
 from form_factor_normalizer import canonicalize_form_factor
 from scoring_input_contract import (
@@ -6018,7 +6018,7 @@ class SupplementEnricherV3:
         """Infer ingredient category from name when IQM match is unavailable.
 
         Used for unmapped ingredients so that supplement type classification
-        (_classify_supplement_type) gets useful category data instead of 'unknown'.
+        the canonical taxonomy gets useful category data instead of 'unknown'.
         """
         text = f"{ing_name} {std_name}".lower()
         for category, keywords in SupplementEnricherV3._CATEGORY_KEYWORDS.items():
@@ -14504,6 +14504,25 @@ class SupplementEnricherV3:
         enriched["supplement_taxonomy"] = taxonomy
         enriched["primary_type"] = taxonomy["primary_type"]
         enriched["secondary_type"] = taxonomy["secondary_type"]
+        # Compatibility surface only.  This is a projection of the taxonomy,
+        # never an independently computed type.  It remains in enriched blobs
+        # until downstream old-artifact adapters are retired, and the final DB
+        # keeps its scalar ``supplement_type`` column for Flutter/dashboard.
+        raw_active_count = taxonomy.get("quantified_active_row_count", 0)
+        inactive_rows = enriched.get("inactiveIngredients")
+        inactive_count = len(inactive_rows) if isinstance(inactive_rows, list) else 0
+        enriched["supplement_type"] = {
+            "type": taxonomy["primary_type"],
+            "active_count": taxonomy.get("quantified_label_active_count", 0),
+            "raw_active_count": raw_active_count,
+            "total_count": raw_active_count + inactive_count,
+            "category_breakdown": dict(taxonomy.get("category_breakdown") or {}),
+            "source": "supplement_taxonomy",
+            "confidence": taxonomy.get("classification_confidence"),
+            "classification_reason_codes": list(
+                taxonomy.get("classification_reason_codes") or []
+            ),
+        }
         enriched["product_scoring_evidence"] = self._collect_product_scoring_evidence(enriched)
         enriched["product_scoring_classification"] = self._collect_product_scoring_classification(enriched)
         return enriched
@@ -14794,18 +14813,6 @@ class SupplementEnricherV3:
             ),
         }
 
-
-    # =========================================================================
-    # SUPPLEMENT TYPE CLASSIFIER
-    # =========================================================================
-
-    def _classify_supplement_type(self, product: Dict) -> Dict:
-        """
-        Classify supplement type for context-aware scoring.
-        Uses the richer ingredient_quality_data projection when present so
-        missing raw active categories do not collapse the product to specialty.
-        """
-        return infer_supplement_type(product)
 
     # =========================================================================
     # DIETARY SENSITIVITY DATA COLLECTOR (Sugar/Sodium for Diabetes/Hypertension)
@@ -17337,23 +17344,8 @@ class SupplementEnricherV3:
             enriched["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             enriched["reference_versions"] = self.reference_versions  # Track data file versions for auditability
 
-            # Classify supplement type (determines scoring adjustments)
-            enriched["supplement_type"] = self._classify_supplement_type(product)
-
             # Section A: Ingredient Quality
             enriched["ingredient_quality_data"] = self._collect_ingredient_quality_data(product)
-
-            # Sprint E1.23 — Re-classify supplement_type using the
-            # post-demotion scorable set. The first _classify_supplement_type
-            # call above runs on raw activeIngredients and counts absorption
-            # enhancers (e.g. BioPerine 5mg) as actives, bumping 1-ingredient
-            # products into 'targeted' and blocking A6. After
-            # _collect_ingredient_quality_data runs (and applies the
-            # enhancer demotion inside it), the classifier reads
-            # ingredient_quality_data.ingredients[*].role_classification
-            # and correctly skips demoted rows, yielding single_nutrient for
-            # KSM-66 + BioPerine, Curcumin + sub-threshold piperine, etc.
-            enriched["supplement_type"] = self._classify_supplement_type(enriched)
 
             enriched["delivery_data"] = self._collect_delivery_data(product)
             enriched["absorption_data"] = self._collect_absorption_data(enriched)
@@ -17551,7 +17543,7 @@ class SupplementEnricherV3:
         """Calculate data completeness percentage"""
         checks = [
             enriched.get("ingredient_quality_data", {}).get("total_active", 0) > 0,
-            enriched.get("supplement_type", {}).get("type") != "unknown",
+            bool(enriched.get("supplement_taxonomy", {}).get("primary_type")),
             enriched.get("manufacturer_data", {}).get("brand_name", "") != "",
             enriched.get("certification_data") is not None,
             enriched.get("contaminant_data") is not None

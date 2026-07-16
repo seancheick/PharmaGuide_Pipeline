@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from enrich_supplements_v3 import SupplementEnricherV3
 from constants import SKIP_REASON_RECOGNIZED_NON_SCORABLE
+from supplement_taxonomy import classify_supplement
 
 # Mega-file: full SupplementEnricherV3 boot per test class (loads all 26
 # reference databases). Marked slow so `pytest -m "not slow"` skips for
@@ -236,19 +237,19 @@ class TestProbioticCFU:
             "inactiveIngredients": [{"name": "Rice Flour"}],
             "ingredient_quality_data": {
                 "ingredients": [
-                    {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "category": "probiotics"},
-                    {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "category": "probiotics"},
-                    {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "category": "probiotics"},
+                    {"name": "Lactobacillus gasseri", "standard_name": "Lactobacillus Gasseri", "canonical_id": "lactobacillus_gasseri", "category": "probiotics", "quantity": 1, "unit": "billion cfu"},
+                    {"name": "Bifidobacterium longum", "standard_name": "Bifidobacterium Longum", "canonical_id": "bifidobacterium_longum", "category": "probiotics", "quantity": 1, "unit": "billion cfu"},
+                    {"name": "Bifidobacterium bifidum", "standard_name": "Bifidobacterium Bifidum", "canonical_id": "bifidobacterium_bifidum", "category": "probiotics", "quantity": 1, "unit": "billion cfu"},
                 ]
             },
             "probiotic_data": {"is_probiotic_product": True},
         }
 
-        result = enricher._classify_supplement_type(product)
+        result = classify_supplement(product)
 
-        assert result["type"] == "probiotic"
-        assert result["active_count"] == 3
-        assert result["source"] == "ingredient_quality_data"
+        assert result["primary_type"] == "probiotic"
+        assert result["quantified_active_count"] == 3
+        assert result["classification_input_source"] == "ingredient_quality_data.ingredients"
         assert result["category_breakdown"]["probiotic"] == 3
 
     def test_classifier_keeps_scorable_proprietary_blend_members(self, enricher):
@@ -265,6 +266,9 @@ class TestProbioticCFU:
                         "name": "Bifidobacterium lactis HN019",
                         "standard_name": "Bifidobacterium Lactis",
                         "category": "probiotics",
+                        "canonical_id": "bifidobacterium_lactis",
+                        "quantity": 1,
+                        "unit": "billion cfu",
                         "is_proprietary_blend": True,
                         "role_classification": "active_scorable",
                     },
@@ -272,6 +276,9 @@ class TestProbioticCFU:
                         "name": "Lactobacillus acidophilus NCFM",
                         "standard_name": "Lactobacillus Acidophilus",
                         "category": "probiotics",
+                        "canonical_id": "lactobacillus_acidophilus",
+                        "quantity": 1,
+                        "unit": "billion cfu",
                         "is_proprietary_blend": True,
                         "role_classification": "active_scorable",
                     },
@@ -279,6 +286,9 @@ class TestProbioticCFU:
                         "name": "Lactobacillus rhamnosus GG",
                         "standard_name": "Lactobacillus Rhamnosus",
                         "category": "probiotics",
+                        "canonical_id": "lactobacillus_rhamnosus",
+                        "quantity": 1,
+                        "unit": "billion cfu",
                         "is_proprietary_blend": True,
                         "role_classification": "active_scorable",
                     },
@@ -288,10 +298,10 @@ class TestProbioticCFU:
             "inactiveIngredients": [],
         }
 
-        result = enricher._classify_supplement_type(product)
+        result = classify_supplement(product)
 
-        assert result["type"] == "probiotic"
-        assert result["active_count"] == 3
+        assert result["primary_type"] == "probiotic"
+        assert result["quantified_active_count"] == 3
 
     def test_guarantee_at_manufacture(self, enricher):
         """'At the time of manufacture.' sets guarantee_type"""
@@ -321,10 +331,10 @@ class TestProbioticCFU:
             ],
         }
 
-        result = enricher._classify_supplement_type(product)
+        result = classify_supplement(product)
 
-        assert result['type'] == 'probiotic'
-        assert result['active_count'] == 3
+        assert result['primary_type'] == 'probiotic'
+        assert result['quantified_active_count'] == 3
 
 
 class TestServingBasis:
@@ -2799,11 +2809,16 @@ class TestProbioticClassificationHijack:
             "Zinc", "Iron", "Selenium", "Chromium", "Copper",
             "Manganese", "Iodine", "Molybdenum", "Potassium", "Phosphorus",
         ]
-        active = [{'name': v, 'standardName': v, 'category': 'vitamin'} for v in vitamin_names]
+        active = [
+            {'name': v, 'standardName': v, 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'}
+            for v in vitamin_names
+        ]
         active.append({
             'name': 'Lactobacillus acidophilus',
             'standardName': 'Lactobacillus acidophilus',
             'category': 'probiotic',
+            'quantity': 1,
+            'unit': 'billion cfu',
         })
         product_name = "Probiotic Multivitamin Complete" if probiotic_name_in_product else "Daily Multivitamin Complete"
         return {
@@ -2820,9 +2835,9 @@ class TestProbioticClassificationHijack:
         """25-ingredient multivitamin with 1 probiotic strain and 'probiotic' in name
         should NOT be classified as 'probiotic' (1/26 = 3.8% < 25% threshold)."""
         product = self._make_multivitamin_with_one_probiotic(probiotic_name_in_product=True)
-        result = enricher._classify_supplement_type(product)
-        assert result['type'] != 'probiotic', (
-            f"Multivitamin with 1/26 probiotic ingredient should not be classified as 'probiotic', got '{result['type']}'"
+        result = classify_supplement(product)
+        assert result['primary_type'] != 'probiotic', (
+            f"Multivitamin with 1/26 probiotic ingredient should not be classified as 'probiotic', got '{result['primary_type']}'"
         )
 
     def test_majority_probiotic_still_classified(self, enricher):
@@ -2840,9 +2855,9 @@ class TestProbioticClassificationHijack:
             ],
             'inactiveIngredients': [],
         }
-        result = enricher._classify_supplement_type(product)
-        assert result['type'] == 'probiotic', (
-            f"2/3 probiotic ingredients should be classified as 'probiotic', got '{result['type']}'"
+        result = classify_supplement(product)
+        assert result['primary_type'] == 'probiotic', (
+            f"2/3 probiotic ingredients should be classified as 'probiotic', got '{result['primary_type']}'"
         )
 
 
@@ -3247,28 +3262,32 @@ class TestProbioticClassificationBoundaryStrict:
             'bundleName': '',
             'statements': [],
             'activeIngredients': [
-                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic'},
-                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic'},
-                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin'},
-                {'name': 'Vitamin D3', 'standardName': 'Vitamin D', 'category': 'vitamin'},
-                {'name': 'Zinc', 'standardName': 'Zinc', 'category': 'mineral'},
-                {'name': 'Selenium', 'standardName': 'Selenium', 'category': 'mineral'},
-                {'name': 'Magnesium', 'standardName': 'Magnesium', 'category': 'mineral'},
-                {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'category': 'vitamin'},
-                {'name': 'Vitamin A', 'standardName': 'Vitamin A', 'category': 'vitamin'},
+                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic', 'quantity': 1, 'unit': 'billion cfu'},
+                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic', 'quantity': 1, 'unit': 'billion cfu'},
+                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Vitamin D3', 'standardName': 'Vitamin D', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Zinc', 'standardName': 'Zinc', 'category': 'mineral', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Selenium', 'standardName': 'Selenium', 'category': 'mineral', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Magnesium', 'standardName': 'Magnesium', 'category': 'mineral', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Vitamin A', 'standardName': 'Vitamin A', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
             ],
             'inactiveIngredients': [],
         }
-        result = enricher._classify_supplement_type(product)
-        assert result['type'] != 'probiotic', (
+        result = classify_supplement(product)
+        assert result['primary_type'] != 'probiotic', (
             f"9-ingredient supplement with 2/9 = 22% probiotics (below 25% "
             f"threshold) and 'Probiotic' in the name must not be classified "
-            f"as 'probiotic'; got '{result['type']}'"
+            f"as 'probiotic'; got '{result['primary_type']}'"
         )
 
-    def test_nine_ingredients_with_three_probiotics_is_probiotic(self, enricher):
-        """Same shape, 3/9 = 33% — at/above threshold. Must classify as probiotic.
-        Boundary locks the decision at the 25% threshold."""
+    def test_nine_ingredients_with_three_probiotics_is_not_probiotic(self, enricher):
+        """Three accessory strains do not own a six-nutrient formula.
+
+        The retired classifier used a 25% name-assisted threshold.  Canonical
+        taxonomy requires majority/product-level probiotic identity, preventing
+        a probiotic word from hijacking the product family.
+        """
         product = {
             'id': 'boundary_3_of_9',
             'product_name': 'Probiotic Support Complex',
@@ -3276,23 +3295,23 @@ class TestProbioticClassificationBoundaryStrict:
             'bundleName': '',
             'statements': [],
             'activeIngredients': [
-                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic'},
-                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic'},
-                {'name': 'Lactobacillus rhamnosus', 'standardName': 'Lactobacillus rhamnosus', 'category': 'probiotic'},
-                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin'},
-                {'name': 'Vitamin D3', 'standardName': 'Vitamin D', 'category': 'vitamin'},
-                {'name': 'Zinc', 'standardName': 'Zinc', 'category': 'mineral'},
-                {'name': 'Selenium', 'standardName': 'Selenium', 'category': 'mineral'},
-                {'name': 'Magnesium', 'standardName': 'Magnesium', 'category': 'mineral'},
-                {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'category': 'vitamin'},
+                {'name': 'Lactobacillus acidophilus', 'standardName': 'Lactobacillus acidophilus', 'category': 'probiotic', 'quantity': 1, 'unit': 'billion cfu'},
+                {'name': 'Bifidobacterium lactis', 'standardName': 'Bifidobacterium lactis', 'category': 'probiotic', 'quantity': 1, 'unit': 'billion cfu'},
+                {'name': 'Lactobacillus rhamnosus', 'standardName': 'Lactobacillus rhamnosus', 'category': 'probiotic', 'quantity': 1, 'unit': 'billion cfu'},
+                {'name': 'Vitamin C', 'standardName': 'Vitamin C', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Vitamin D3', 'standardName': 'Vitamin D', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Zinc', 'standardName': 'Zinc', 'category': 'mineral', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Selenium', 'standardName': 'Selenium', 'category': 'mineral', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Magnesium', 'standardName': 'Magnesium', 'category': 'mineral', 'quantity': 1, 'unit': 'mg'},
+                {'name': 'Vitamin E', 'standardName': 'Vitamin E', 'category': 'vitamin', 'quantity': 1, 'unit': 'mg'},
             ],
             'inactiveIngredients': [],
         }
-        result = enricher._classify_supplement_type(product)
-        assert result['type'] == 'probiotic', (
-            f"9-ingredient supplement with 3/9 = 33% probiotics (at threshold) "
-            f"and 'Probiotic' in the name should classify as probiotic; got "
-            f"'{result['type']}'"
+        result = classify_supplement(product)
+        assert result['primary_type'] != 'probiotic', (
+            f"9-ingredient supplement with 3/9 probiotic accessories "
+            f"must not classify as probiotic; got "
+            f"'{result['primary_type']}'"
         )
 
 

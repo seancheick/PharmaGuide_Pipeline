@@ -394,7 +394,7 @@ def test_share_metadata_evidence_copy_uses_grammatical_v4_signal():
     assert "with clinically-backed" not in high["share_description"]
 
 
-def test_export_prefers_resolved_supplement_type_over_stale_specialty():
+def test_export_uses_taxonomy_over_stale_compatibility_values():
     enriched = make_enriched()
     enriched["supplement_type"] = {"type": "specialty", "active_count": 0}
     enriched["product_name"] = "Restore"
@@ -425,6 +425,13 @@ def test_export_prefers_resolved_supplement_type_over_stale_specialty():
     ]
     scored = make_scored()
     scored["supp_type"] = "probiotic"
+    enriched["supplement_taxonomy"] = {
+        "primary_type": "probiotic",
+        "secondary_type": None,
+        "classification_confidence": 0.9,
+        "classification_reasons": ["probiotic identity"],
+    }
+    enriched["primary_type"] = "probiotic"
 
     assert resolve_export_supplement_type(enriched, scored) == "probiotic"
     row = row_as_dict(build_core_row(enriched, scored, "2026-04-09T00:00:00Z"))

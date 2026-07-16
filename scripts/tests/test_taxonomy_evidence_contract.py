@@ -319,10 +319,39 @@ def test_non_strict_inspection_tolerates_a_pre_contract_artifact(tmp_path, omega
 
 def test_strict_release_accepts_a_current_artifact(tmp_path, omega_product):
     product = copy.deepcopy(omega_product)
-    product["supplement_taxonomy"] = classify_supplement(product)
+    taxonomy = classify_supplement(product)
+    product["supplement_taxonomy"] = taxonomy
+    product["primary_type"] = taxonomy["primary_type"]
+    product["supplement_type"] = {
+        "type": taxonomy["primary_type"],
+        "source": "supplement_taxonomy",
+    }
     findings = sot.audit_clinical(_clinical_args(tmp_path, product, strict=True))
     codes = [f.code for f in findings]
     assert "CLINICAL_TAXONOMY_CONTRACT_VERSION" not in codes
+    assert "CLINICAL_TAXONOMY_CONTRACT_INVALID" not in codes
+
+
+def test_strict_release_rejects_a_divergent_compatibility_mirror(
+    tmp_path, omega_product
+):
+    product = copy.deepcopy(omega_product)
+    taxonomy = classify_supplement(product)
+    product["supplement_taxonomy"] = taxonomy
+    product["primary_type"] = taxonomy["primary_type"]
+    product["supplement_type"] = {
+        "type": "multivitamin",
+        "source": "supplement_taxonomy",
+    }
+
+    findings = sot.audit_clinical(_clinical_args(tmp_path, product, strict=True))
+    invalid = [
+        finding
+        for finding in findings
+        if finding.code == "CLINICAL_TAXONOMY_CONTRACT_INVALID"
+    ]
+    assert len(invalid) == 1
+    assert "supplement_type_compatibility_mirror" in invalid[0].message
 
 
 def test_strict_release_rejects_missing_taxonomy(tmp_path, omega_product):

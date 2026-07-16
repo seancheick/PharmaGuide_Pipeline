@@ -563,26 +563,6 @@ class SupplementScorer:
     _MULTI_TYPES = frozenset({"multivitamin"})
     _PROBIOTIC_TYPES = frozenset({"probiotic"})
 
-    def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
-        """Resolve supplement type for scoring — always returns taxonomy primary_type.
-
-        Current enriched products should provide supplement_taxonomy. Legacy
-        supplement_type fallback is retained only for old batches and is
-        surfaced through scoring diagnostics/audits.
-        """
-        taxonomy = product.get("supplement_taxonomy") or {}
-        primary_type = norm_text(taxonomy.get("primary_type"))
-        if primary_type:
-            return primary_type
-
-        # Pre-taxonomy products (no supplement_taxonomy field at all)
-        st = product.get("supplement_type", {})
-        if isinstance(st, str):
-            return norm_text(st) or "unknown"
-        if isinstance(st, dict):
-            return norm_text(st.get("type")) or "unknown"
-        return "unknown"
-
     def _scoring_input(self, product: Dict[str, Any]):
         return get_scoring_ingredients(product, strict=True, allow_legacy_fallback=False)
 
@@ -2055,18 +2035,11 @@ class SupplementScorer:
             "explicit_intent": explicit_intent,
         }
 
-        supp_type_payload = product.get("supplement_type", {})
-        supp_type_value = (
-            supp_type_payload.get("type")
-            if isinstance(supp_type_payload, dict)
-            else supp_type_payload
-        )
-
         allowed = all(checks.values())
         details = {
             "strict_gate_checks": checks,
             "strict_gate_inputs": {
-                "supp_type": norm_text(supp_type_value),
+                "primary_type": self._primary_type_from_product(product),
                 "is_probiotic_product": bool(pdata.get("is_probiotic_product")),
                 "total_billion_count": round(total_billion, 6),
                 "total_strain_count": strain_count,
@@ -2107,12 +2080,8 @@ class SupplementScorer:
         ingredient_count = max(len([name for name in ingredient_names if name]), 1)
         dominant_formula = probiotic_like_count >= max(2, ingredient_count)
 
-        supp_type_payload = product.get("supplement_type", {})
-        active_count = (
-            supp_type_payload.get("active_count")
-            if isinstance(supp_type_payload, dict)
-            else None
-        )
+        taxonomy = product.get("supplement_taxonomy") or {}
+        active_count = taxonomy.get("quantified_label_active_count")
         if active_count in (0, None):
             active_count = ingredient_count
 
@@ -3134,31 +3103,22 @@ class SupplementScorer:
         """Route a product to one of the B5 opacity classes:
         probiotic / multi_or_prenatal / sports_active / generic.
 
-        SP-2.7 (2026-05-21): taxonomy-first. Reads
-        `supplement_taxonomy.primary_type` (the canonical signal emitted by
-        the enricher post-2026-05-20) before falling back to the legacy
-        supplement_type / primary_category / name-keyword heuristics. Old
-        enriched batches without taxonomy keep the original v3 routing
-        intact — none of the legacy paths were removed, only a higher-
-        priority taxonomy check was added.
+        Phase 2: taxonomy and the native scoring-classification contract are
+        the only product-class signals.  Product-name overlays remain local to
+        this opacity rule; the compatibility mirror is never read.
 
         Priority order:
-          1. probiotic (taxonomy primary_type OR legacy supp_type).
+          1. probiotic (taxonomy or explicit product-level evidence).
           2. Sports name keyword overlay (pre-workout / BCAA / creatine
              stacks have their own 1.5x opacity tier; beats multi).
-          3. GENERIC_OVERRIDE (legacy v3 safety net for products that
+          3. GENERIC_OVERRIDE (B5-local safety net for products that
              carry a broad category signal but are not RDA-panel multis —
              omega / enzyme / joint / collagen / protein). Kept active
-             across both taxonomy and legacy paths because it protects
+             across taxonomy and name-overlay paths because it protects
              against any future taxonomy mis-classification.
           4. Taxonomy primary_type in {multivitamin, b_complex} -> multi.
-          5. Prenatal name keyword -> multi (catches Prenatal DHA where
-             taxonomy might classify as omega_3).
-          6. Legacy fallback (taxonomy absent or non-multi-class):
-                supp_type in _MULTI_TYPES                  -> multi
-                primary_category == multivitamin           -> multi
-                (GoL MyKind Men's/Women's Multi pattern)
-          7. Fallback: generic.
+          5. Native scoring-classification broad-panel route -> multi.
+          6. Fallback: generic.
 
         Taxonomy primary_type in {omega_3, collagen, joint_support, ...}
         naturally falls through to generic at step 7 — B5 has no separate
@@ -3166,21 +3126,13 @@ class SupplementScorer:
         """
         primary_type = self._primary_type_from_product(product)
 
-        st_payload = product.get("supplement_type", {})
-        supp_type = (
-            st_payload.get("type") if isinstance(st_payload, dict) else st_payload
-        ) or product.get("supp_type") or ""
-        supp_type = str(supp_type).strip().lower()
-
-        # Priority 1: probiotic (taxonomy first, legacy fallback, then
-        # product-level probiotic evidence). The product-level path is a
+        # Priority 1: probiotic (taxonomy, then product-level evidence). The product-level path is a
         # narrow rescue for probiotic-dominant products whose taxonomy falls
         # back to general_supplement because only the prebiotic carrier row is
         # scorable after strict-contract filtering; it must not override a
         # strong non-probiotic taxonomy class such as greens_powder.
         if (
             primary_type == "probiotic"
-            or supp_type in self._PROBIOTIC_TYPES
             or self._has_b5_probiotic_product_signal(product)
         ):
             return "probiotic"
@@ -3194,8 +3146,6 @@ class SupplementScorer:
         if self._B5_SPORTS_KEYWORDS.search(name_text):
             return "sports_active"
 
-        primary_category = str(product.get("primary_category") or "").strip().lower()
-
         # Priority 3: GENERIC_OVERRIDE safety net. Routes products with a
         # narrow primary identity (omega / protein / collagen / joint /
         # enzyme / fiber) to the 1.0x generic opacity tier.
@@ -3208,7 +3158,7 @@ class SupplementScorer:
         # primary_category set ('omega_3', etc., now in DB format) — that
         # branch is NOT suppressed by the prenatal keyword.
         if (
-            primary_category in self._B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES
+            primary_type in self._B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES
             or (
                 self._B5_GENERIC_OVERRIDE_KEYWORDS.search(name_text)
                 and not self._B5_PRENATAL_KEYWORDS.search(name_text)
@@ -3226,15 +3176,15 @@ class SupplementScorer:
         # prenatal (274081 Garden Once Daily Prenatal, has product-level
         # CFU evidence and no multi panel) and single-active prenatal
         # omegas (74124 Nordic Prenatal DHA, where B5 has no blends).
-        # Genuine prenatal multivitamins carry primary_category=
-        # multivitamin and are still caught by Priority 6 below.
+        # Genuine prenatal multivitamins carry canonical multivitamin
+        # taxonomy or a verified native broad-panel scoring route.
         # Locked by test_v4_canary_coverage::test_canary_expected_b5_class_matches_router
         # and test_v3_b5_class_taxonomy_migration::test_prenatal_dha_keeps_omega_3_b5_class.
 
-        # Priority 6: legacy fallback for old batches without taxonomy.
-        if supp_type in self._MULTI_TYPES:
-            return "multi_or_prenatal"
-        if primary_category == "multivitamin":
+        scoring_classification = product.get("product_scoring_classification")
+        if isinstance(scoring_classification, dict) and norm_text(
+            scoring_classification.get("route_module")
+        ) in {"multi_or_prenatal", "b_complex"}:
             return "multi_or_prenatal"
 
         return "generic"
@@ -3256,21 +3206,9 @@ class SupplementScorer:
         the shipped catalog's boolean product flags.
         """
         primary_type = cls._primary_type_from_product(product)
-        st_payload = product.get("supplement_type", {})
-        supp_type = (
-            st_payload.get("type") if isinstance(st_payload, dict) else st_payload
-        ) or product.get("supp_type") or ""
-        supp_type = str(supp_type).strip().lower()
-        primary_category = str(product.get("primary_category") or "").strip().lower()
         if primary_type and primary_type not in ("general_supplement", "probiotic"):
             return False
-        if (
-            primary_type in ("multivitamin", "b_complex")
-            or supp_type in cls._MULTI_TYPES
-            or primary_category == "multivitamin"
-        ):
-            return False
-        if primary_category and primary_category not in ("general_supplement", "probiotic"):
+        if primary_type in ("multivitamin", "b_complex"):
             return False
 
         pdata = product.get("probiotic_data") or product.get("probiotic_detail")
@@ -4692,26 +4630,7 @@ class SupplementScorer:
             source = explicit_source or "explicit"
             return category_key, category_label, source, explicit_confidence, explicit_signals
 
-        category = ""
-        supplement_type = product.get("supplement_type", {})
-        if isinstance(supplement_type, dict):
-            for key in ("category", "subtype", "sub_type", "type"):
-                value = norm_text(supplement_type.get(key))
-                if value:
-                    category = value
-                    break
-        else:
-            category = norm_text(supplement_type)
-
-        if not category:
-            for key in ("product_category", "category", "primary_category"):
-                value = norm_text(product.get(key))
-                if value:
-                    category = value
-                    break
-
-        if not category:
-            category = norm_text(scored.get("supp_type")) or "all supplements"
+        category = "all supplements"
 
         form = ""
         for key in ("dosage_form", "form", "product_form", "serving_form"):
@@ -5301,15 +5220,7 @@ class SupplementScorer:
 
         try:
             flags: List[str] = []
-            existing_supp_type = ""
-            raw_supp_type = product.get("supplement_type", {})
-            if isinstance(raw_supp_type, dict):
-                existing_supp_type = norm_text(raw_supp_type.get("type"))
-            elif isinstance(raw_supp_type, str):
-                existing_supp_type = norm_text(raw_supp_type)
-            supp_type = self._classify_supplement_type(product)
-            if existing_supp_type and existing_supp_type != norm_text(supp_type):
-                flags.append("SUPPLEMENT_TYPE_REINFERRED")
+            supp_type = self._primary_type_from_product(product) or "unknown"
 
             # Step 1: B0 immediate fail
             b0 = self._evaluate_safety_gate(product)

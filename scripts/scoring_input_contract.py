@@ -3152,11 +3152,6 @@ def _route_is_multivitamin_eligible(product: Dict[str, Any], name_text: str) -> 
     return False
 
 
-def _route_read_legacy_multivitamin_type(product: Dict[str, Any]) -> str:
-    payload = _safe_dict((product or {}).get("supplement_type"))
-    return _norm(payload.get("type"))
-
-
 def _route_multi_panel_group_count(canonicals: set[str]) -> int:
     groups = set()
     if canonicals & _ROUTE_B_VITAMIN_CANONICALS:
@@ -3170,16 +3165,13 @@ def _route_multi_panel_group_count(canonicals: set[str]) -> int:
     return len(groups)
 
 
-def _route_has_broad_legacy_multivitamin_panel(product: Dict[str, Any]) -> bool:
-    """Compatibility fallback for themed multi-packs.
+def _route_has_broad_multivitamin_panel(product: Dict[str, Any]) -> bool:
+    """Return true for a physically broad multi-nutrient panel.
 
-    Some enriched products correctly retain legacy type=multivitamin while the
-    normalized taxonomy uses the product theme (immune_support, sleep_support,
-    herbal_botanical). Trust that legacy signal only when the physical panel is
-    broad enough to be a real multivitamin, so old false positives stay generic.
+    This preserves themed multi-pack routing without trusting the retired
+    legacy classifier.  The canonical taxonomy supplies the family/exclusion;
+    disclosed scoring rows supply the positive panel evidence.
     """
-    if _route_read_legacy_multivitamin_type(product) != "multivitamin":
-        return False
     if _primary_type(product) in _ROUTE_LEGACY_MULTI_FALLBACK_EXCLUDED_PRIMARY_TYPES:
         return False
     canonicals = _route_positive_canonicals(product)
@@ -3363,11 +3355,11 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
     ):
         return "multi_or_prenatal", "taxonomy:multivitamin", ["taxonomy:multivitamin"]
 
-    if _route_has_broad_legacy_multivitamin_panel(product):
+    if _route_has_broad_multivitamin_panel(product):
         return (
             "multi_or_prenatal",
-            "legacy_multivitamin_broad_panel",
-            ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
+            "broad_multivitamin_panel",
+            ["broad_multi_panel"],
         )
 
     if _route_is_fiber_digestive_class(product, name_text):
@@ -3398,21 +3390,21 @@ def _classify_route_module(product: Dict[str, Any]) -> tuple[str, str, List[str]
         if module == "generic":
             if _route_is_omega_class(product, name_text):
                 return "omega", f"taxonomy:{primary_type}:omega_evidence_override", [f"taxonomy:{primary_type}", "omega_evidence"]
-            if _route_has_broad_legacy_multivitamin_panel(product):
+            if _route_has_broad_multivitamin_panel(product):
                 return (
                     "multi_or_prenatal",
-                    "legacy_multivitamin_broad_panel",
-                    ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
+                    "broad_multivitamin_panel",
+                    ["broad_multi_panel"],
                 )
             return "generic", f"taxonomy:{primary_type}", [f"taxonomy:{primary_type}"]
 
     if _route_is_omega_class(product, name_text):
         return "omega", "profile_content:omega", ["omega_evidence"]
-    if _route_has_broad_legacy_multivitamin_panel(product):
+    if _route_has_broad_multivitamin_panel(product):
         return (
             "multi_or_prenatal",
-            "legacy_multivitamin_broad_panel",
-            ["legacy_supplement_type:multivitamin", "broad_multi_panel"],
+            "broad_multivitamin_panel",
+            ["broad_multi_panel"],
         )
     return "generic", "generic_safe_default", ["generic_safe_default"]
 

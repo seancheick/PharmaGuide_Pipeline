@@ -37,7 +37,8 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from supplement_type_utils import infer_supplement_type, mark_compound_duplicate_rows
+from supplement_type_utils import mark_compound_duplicate_rows
+from supplement_taxonomy import classify_supplement
 from scoring_v4.modules.generic_helpers import is_scorable
 from enrich_supplements_v3 import SupplementEnricherV3
 
@@ -185,9 +186,9 @@ class TestSupplementTypeClassification:
             "activeIngredients": _mag_rows(),
             "inactiveIngredients": [],
         }
-        result = infer_supplement_type(product)
-        assert result["active_count"] == 1
-        assert result["type"] == "single_nutrient"
+        result = classify_supplement(product)
+        assert result["quantified_active_count"] == 1
+        assert result["primary_type"] == "single_mineral"
 
     def test_counterion_named_source_does_not_add_a_third_active(self) -> None:
         rows = [
@@ -199,11 +200,11 @@ class TestSupplementTypeClassification:
              "canonical_id": "vitamin_c", "quantity": 1000.0, "unit": "mg"},
         ]
 
-        result = infer_supplement_type(
+        result = classify_supplement(
             {"activeIngredients": rows, "inactiveIngredients": []}
         )
 
-        assert result["active_count"] == 2
+        assert result["quantified_active_count"] == 2
 
 
 class TestIsScorable:

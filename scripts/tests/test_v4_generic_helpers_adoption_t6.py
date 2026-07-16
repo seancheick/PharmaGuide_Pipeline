@@ -2,15 +2,14 @@
 
 T6 adds a `primary_type_of(product)` helper that reads
 `supplement_taxonomy.primary_type` (canonical signal) with a fallback to
-the top-level `primary_type` field. The existing `supp_type_of()` helper
-is left intact — this is additive, callers migrate progressively.
+the top-level `primary_type` field. Phase 2 removes the legacy reader helper.
 
 Contract:
   1. Prefer top-level `primary_type` field (set by enricher post-2026-05-20).
   2. Else read `supplement_taxonomy.primary_type` (nested fallback path).
   3. Else return "" — taxonomy absent (old enriched batch).
 
-The helper is normalized lowercase / stripped, like `supp_type_of`.
+The helper is normalized lowercase / stripped.
 """
 
 from __future__ import annotations
@@ -20,7 +19,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
-from scoring_v4.modules.generic_helpers import primary_type_of, supp_type_of
+from scoring_v4.modules.generic_helpers import primary_type_of
 
 
 def test_top_level_primary_type_wins():
@@ -68,24 +67,3 @@ def test_none_product_is_defensive():
 
 def test_non_dict_product_is_defensive():
     assert primary_type_of("not a dict") == ""
-
-
-# --- Co-existence with supp_type_of ---
-
-def test_supp_type_of_still_works():
-    """T6 is additive — supp_type_of must remain functional for callers
-    that haven't migrated yet."""
-    product = {"supplement_type": {"type": "multivitamin"}}
-    assert supp_type_of(product) == "multivitamin"
-
-
-def test_supp_type_of_and_primary_type_of_can_disagree():
-    """Documented co-existence: legacy supp_type may say one thing,
-    taxonomy primary_type may say another. Both helpers return their
-    respective signal; caller decides precedence."""
-    product = {
-        "primary_type": "general_supplement",
-        "supplement_type": {"type": "multivitamin"},  # legacy mis-classification
-    }
-    assert primary_type_of(product) == "general_supplement"
-    assert supp_type_of(product) == "multivitamin"

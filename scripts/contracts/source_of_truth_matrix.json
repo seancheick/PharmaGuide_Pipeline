@@ -27,7 +27,7 @@
     "ingredient_category",
     "form_factor_canonical",
     "supplement_taxonomy",
-    "legacy_supplement_type",
+    "supplement_type_compatibility_mirror",
     "active_safety_classification",
     "inactive_safety_classification",
     "interaction_rules",
@@ -227,17 +227,17 @@
       "retirement_status": "active"
     },
     {
-      "concept_id": "legacy_supplement_type",
-      "owner": "scripts/score_supplements.py",
-      "first_created_stage": "scored",
+      "concept_id": "supplement_type_compatibility_mirror",
+      "owner": "scripts/enrich_supplements_v3.py",
+      "first_created_stage": "enriched",
       "field_kind": "derived",
       "source_data_files": ["derived from supplement_taxonomy for legacy compatibility"],
-      "consumers": ["scripts/build_final_db.py"],
-      "forbidden_recomputation": ["legacy supplement_type is compatibility display/routing only and cannot override supplement_taxonomy"],
+      "consumers": ["scripts/build_final_db.py", "scripts/dashboard"],
+      "forbidden_recomputation": ["supplement_type is a mechanical compatibility projection and cannot be read for routing, scoring, confidence, or taxonomy decisions"],
       "fallback_class": "flutter_backward_compat",
       "release_gate": "scripts/audit_source_of_truth_contract.py matrix",
-      "tests": ["scripts/tests/test_source_of_truth_contract.py"],
-      "retirement_status": "retire_candidate"
+      "tests": ["scripts/tests/test_supp_type_one_brain_phase2.py", "scripts/tests/test_taxonomy_evidence_contract.py"],
+      "retirement_status": "active"
     },
     {
       "concept_id": "active_safety_classification",
