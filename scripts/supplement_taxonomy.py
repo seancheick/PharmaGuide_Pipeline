@@ -71,6 +71,19 @@ ROW_ROLE_EXCLUDED_BLEND_HEADER = "excluded_blend_header"
 ROW_ROLE_EXCLUDED_UNIDENTIFIED = "excluded_unidentified_row"
 ROW_ROLE_EXCLUDED_NON_QUANTIFIED = "excluded_non_quantified_base"
 
+# Enumerated classification reason codes. Machine-readable counterparts to
+# `classification_reasons` prose — audits and release gates branch on THESE.
+#
+# The vocabulary starts with the codes §10 makes mandatory: a `general_supplement`
+# result must always be explained, and zero confidence is only truthful when it
+# carries a code. Per-branch codes for the confident paths land with the branch
+# rewrites that give them meaning (spec R3-R6); a code authored against a branch
+# that is about to be restructured would have to be written twice.
+REASON_CODE_NO_QUANTIFIED_ACTIVE_EVIDENCE = "no_quantified_active_evidence"
+REASON_CODE_UNCLASSIFIED_RESIDUAL = "no_matching_classification_rule"
+REASON_CODE_IDENTITY_DEDUP = "identity_dedup_applied"
+REASON_CODE_NON_QUANTIFIED_EXCLUDED = "non_quantified_base_excluded"
+
 _PROBIOTIC_IDENTITY_RE = re.compile(
     r"\b("
     r"probiotic|lactobacillus|bifidobacterium|streptococcus|saccharomyces|"
@@ -552,6 +565,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     """
     rows, source = _iter_classification_rows_v2(product)
     reasons: list[str] = []
+    reason_codes: list[str] = []
 
     # DSLD productType signal (if available from raw data or preserved by enricher)
     dsld_product_type = ""
@@ -689,9 +703,11 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             f"identity dedup: {quantified_row_count} label rows -> {active_count} "
             f"distinct active(s)"
         )
+        reason_codes.append(REASON_CODE_IDENTITY_DEDUP)
 
     if nq_count > 0:
         reasons.append(f"excluded {nq_count} non-quantified base ingredients from classification")
+        reason_codes.append(REASON_CODE_NON_QUANTIFIED_EXCLUDED)
 
     # Product name analysis
     product_name = _normalize_text(
@@ -733,7 +749,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # CLASSIFICATION DECISION TREE
     # =========================================================================
 
-    primary_type = "general_supplement"
+    # Sentinel, not a default. `general_supplement` used to be the initial value,
+    # and the chain below has no terminal `else` — so a product no branch claimed
+    # silently inherited "general_supplement" @0.0 with reasons=[], which reads
+    # exactly like a rule decided it. 287 products (503 before R1) landed there.
+    # Starting from None forces the fallthrough to be handled explicitly.
+    primary_type: str | None = None
     secondary_type = None
     confidence = 0.0
 
@@ -1152,6 +1173,23 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             primary_type = "general_supplement"
             confidence = 0.0
             reasons.append("no quantified active ingredients")
+            reason_codes.append(REASON_CODE_NO_QUANTIFIED_ACTIVE_EVIDENCE)
+
+    # --- Terminal residual: no rule claimed this product ---
+    # The chain above has no `else`, so this is the only thing standing between a
+    # fallthrough and a silent `general_supplement` @0.0 with empty reasons
+    # (§10's hard gate). "I don't know" is an acceptable answer; saying nothing
+    # is not. State the evidence that was on the table so the gap is diagnosable.
+    if primary_type is None:
+        primary_type = "general_supplement"
+        confidence = 0.0
+        reasons.append(
+            f"{REASON_CODE_UNCLASSIFIED_RESIDUAL}: no rule matched "
+            f"{active_count} distinct active(s); "
+            f"categories={dict(sorted(category_counts.items()))}; "
+            f"ids={sorted(cid_set)[:6]}"
+        )
+        reason_codes.append(REASON_CODE_UNCLASSIFIED_RESIDUAL)
 
     # =========================================================================
     # SECONDARY TYPE
@@ -1190,6 +1228,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         "percentile_category": percentile_category,
         "classification_confidence": round(confidence, 2),
         "classification_reasons": reasons,
+        # Machine-readable counterpart. Gates branch on these, never on prose.
+        "classification_reason_codes": reason_codes,
         # Human-readable only. NOT a gate input — see the contract fields below.
         "classification_input_source": source,  # physical path; diagnostics only
         # Distinct identities (R1). This is what every branch means by "how many
