@@ -2,8 +2,9 @@
 
 **Status (2026-07-16):** mandatory review checkpoint after Phase 1. Phases -1,
 0a, 0b, 0c, 0d-R1/R2/R3/R4/R7a, and Phase 1 are complete. Phase 2 has **not**
-started. RC1 and the R5/R6/R7b vocabulary decision remain open and must be
-resolved before the destructive legacy-classifier retirement.
+started. RC1 and the separate R5 evidence, R6 panel-policy, and R7b vocabulary
+decisions remain open and must be resolved before the destructive
+legacy-classifier retirement.
 **Branch:** `supp-type-consolidation`, cut from main `e2583594`. Resolve the live branch tip with `git rev-parse --short HEAD`; do not trust a copied commit hash in this document.
 **Plan baseline:** catalog `v2026.07.15.200540`. The branch was independently
 reviewed through local commit `4ed09667`; resolve the live tip rather than
@@ -30,8 +31,8 @@ The next agent can execute this plan end to end, subject to the two explicit use
    this order:
    1. RC1 definition/inventory pass (no classifier edit until the included and
       excluded row populations are specified and tested);
-   2. resolve R5/R6/R7b vocabulary or explicitly retain the conservative
-      reason-coded labels;
+   2. record separate dispositions for R5 (pre-workout/hydration evidence), R6
+      (B-complex panel policy), and R7b (multi-identity family vocabulary);
    3. regenerate a schema-3 harness baseline from the exact comparison commit,
       then review the complete classifier/score ledger;
    4. Phase 2 reader migration and legacy-classifier retirement;
@@ -418,9 +419,10 @@ Replace `supp_type_of()` + `SINGLE_INGREDIENT_SUPP_TYPES` in `generic_formulatio
 ### Phase 2 — retire the legacy classifier ✅ one brain
 
 **Entry gate:** RC1 must either be completed under its reviewed row-population
-contract or explicitly deferred with a blocking rationale; R5/R6/R7b must have
-a recorded vocabulary disposition. Do not delete the rollback brain while the
-canonical brain's intended input population is still undefined.
+contract or explicitly deferred with a blocking rationale. R5, R6, and R7b must
+each have a recorded disposition; they are not one vocabulary decision. Do not
+delete the rollback brain while the canonical brain's intended input population
+is still undefined.
 
 - Delete `infer_supplement_type()` + its iterator + `supp_type_of()`.
 - **Keep the `supplement_type` field/DB column** (`build_final_db.py:1920` — final-DB + dashboard contract) as a **pure mechanical mirror of the taxonomy with no independent logic**. Include canonical counts/reasons in the mirror if compatibility requires.

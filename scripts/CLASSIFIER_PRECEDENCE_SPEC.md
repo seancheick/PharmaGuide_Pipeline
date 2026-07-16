@@ -262,7 +262,7 @@ B-vitamins + ≥3 minerals to `multivitamin`. **33 products.** Decide explicitly
 `b_complex` (B-dominant) vs `vitamin_mineral_combo`. Requires the vocabulary
 decision below before code.
 
-> ### ⏸ R5 and R6 DEFERRED 2026-07-16 — one user decision, not two agent fixes
+> ### ⏸ R5 and R6 DEFERRED 2026-07-16 — separate evidence decisions
 >
 > Both were re-measured post-R1/R3 (R5 = 24 products, R6 = 33) and both are
 > genuinely ambiguous in a way R4 was not:
@@ -273,29 +273,29 @@ decision below before code.
 > the open `pre_workout`/`electrolyte` identity question. §5 already declined to
 > route to `electrolyte` on this corpus, and vetoing the panel only sends them to
 > the residual, trading a wrong-specific label for a vague one with no clear win.
-> Needs the `pre_workout` identity rule §2 flagged as a real (12-product) target
-> — additive work, not a veto.
+> Needs a bounded `pre_workout`/hydration rule using positive identity evidence
+> plus intent, with near-miss negatives. The vocabulary already exists; this is
+> an evidence/precedence decision, not a request for `mineral_complex`.
 >
 > **R6 (b-complex + ≥3 minerals).** The 33 are genuine broad panels —
 > `239602 "Vitamin C Fizzy"` is 7 vitamins + 6 minerals — so "multivitamin" may
 > be *correct*, or they are `vitamin_mineral_combo`. This is exactly the
-> vocabulary decision below, not a branch bug.
+> panel-policy decision below, not a new-label decision.
 >
 > Forcing either would violate TRAP 4 (don't reclassify to reshape a
-> distribution) and could make a legitimately-broad-panel product *worse*. They
-> wait on the same decision as R7b.
+> distribution) and could make a legitimately-broad-panel product *worse*.
+> R5 and R6 require independent rules and must not be resolved by R7b's label.
 
-### Vocabulary decision (required by §9, still OPEN — bundles R4-landing, R6, R7b)
+### Vocabulary decision (required by §9, still OPEN — R7b only)
 
-> **CONSOLIDATED — this is ONE user decision.** R4's mineral-only landing, R6's
-> b-complex-vs-combo, and R7b's 346 mislabeled `single_*` products all reduce to:
-> *what do we call a broad mineral-only or mineral-dominant panel, and do we want
-> a `mineral_complex`/`multimineral` term at all?* §13's evidence-only rule now
-> **supports** a term — R7b alone is a 346-product base — but minting one is a
-> cross-repo contract change (`scripts/GLOSSARY.md` first per §9, then
-> `product_type_vocab.json`, which ships to Flutter), so it is the user's call,
-> not the agent's. Until then every affected product has a correct *fact* and an
-> imprecise *label*; nothing is mis-scored.
+> **R7b is the only cross-repo vocabulary call here.** Its 346 mislabeled
+> `single_*` products ask what to call homogeneous multi-identity vitamin and
+> mineral families. That may require `mineral_complex` and/or `vitamin_complex`,
+> with `scripts/GLOSSARY.md` first and `product_type_vocab.json`/Flutter updated
+> atomically. R5 already has `pre_workout`/`electrolyte` vocabulary and needs
+> evidence; R6 can be expressed with existing `b_complex`, `multivitamin`, and
+> `vitamin_mineral_combo` labels after a dominance policy is chosen. Do not use
+> a new mineral label as a shortcut for either problem.
 
 
 Pure multi-mineral, pure multi-vitamin, and B-plus-mineral panels need an
