@@ -3248,16 +3248,23 @@ class SupplementEnricherV3:
         elif ingredient.get("forms"):
             return False
 
+        # A direct row UNII identifies the active parent and therefore must be
+        # consistent with the selected IQM parent.  UNIIs carried only by
+        # ``forms`` identify source salts/forms instead (for example a
+        # Phosphorus row sourced from calcium, potassium and sodium phosphate).
+        # Requiring every source-form UNII to belong to the nutrient parent
+        # conflates identity with formulation and rejects otherwise exact,
+        # structured nutrient rows.  Form validity is already enforced above
+        # by the selected IQM form and strong match tier.
         direct_uniis = self._identity_unii_values(
             ingredient,
             include_forms=False,
         )
-        supplied_uniis = direct_uniis or self._identity_unii_values(ingredient)
-        if supplied_uniis:
+        if direct_uniis:
             registry_uniis = self._identity_unii_values(registry_entry)
             if isinstance(selected_form, dict):
                 registry_uniis.update(self._identity_unii_values(selected_form))
-            if not registry_uniis or not supplied_uniis.issubset(registry_uniis):
+            if not registry_uniis or not direct_uniis.issubset(registry_uniis):
                 return False
 
         return True
@@ -3274,10 +3281,27 @@ class SupplementEnricherV3:
             and match_result.get("context_override_id") != "?"
         )
 
-    def _identity_candidate_resolver(self, quality_map: Dict):
+    def _identity_candidate_resolver(
+        self,
+        quality_map: Dict,
+        supplied_canonical_id: Optional[str] = None,
+    ):
         identity_registry = self._current_canonical_identity_registry()
 
         def resolve(candidate: str) -> Optional[str]:
+            # Structured taxonomy fields such as ``ingredientGroup`` name an
+            # ingredient identity, not a form.  When that field resolves back
+            # to the already-supplied IQM parent, accept it before consulting
+            # the cross-database preferred index, whose flattened aliases also
+            # include form names.  The equality guard is essential: it fixes
+            # "Alpha-GPC" without newly trusting ambiguous standalone markers
+            # such as AKBA.
+            parent_preferred = self._infer_preferred_parent_from_context_cached(
+                candidate,
+                quality_map,
+            )
+            if parent_preferred and parent_preferred == supplied_canonical_id:
+                return parent_preferred
             literal_preferred = identity_registry.preferred_index.get(
                 str(candidate or "").lower().strip()
             )
@@ -3408,7 +3432,10 @@ class SupplementEnricherV3:
         taxonomy_coherent = self._identity_taxonomy_coherent(
             ingredient, match_result, quality_map
         )
-        resolve_candidate = self._identity_candidate_resolver(quality_map)
+        resolve_candidate = self._identity_candidate_resolver(
+            quality_map,
+            supplied_canonical_id=supplied_canonical_id,
+        )
         canonical_parent_of = self._identity_parent_predicate(quality_map)
         if (
             taxonomy_coherent
@@ -17600,7 +17627,12 @@ class SupplementEnricherV3:
                 candidates.extend(aliases)
 
             for raw in candidates:
-                normed = self._normalize_text(raw)
+                # Parent-context identity is punctuation-insensitive: DSLD
+                # routinely emits ``Alpha-GPC`` while the IQM parent is
+                # ``Alpha GPC``.  The general text normalizer deliberately
+                # preserves hyphens for form matching, so use the stable key
+                # canonicalizer at this identity-only boundary.
+                normed = norm_module.make_normalized_key(str(raw or ""))
                 if normed and normed not in index:
                     index[normed] = parent_key
         return index
@@ -17609,7 +17641,7 @@ class SupplementEnricherV3:
         self, context_name: Optional[str], quality_map: Dict
     ) -> Optional[str]:
         """Infer preferred parent via cached normalized context index."""
-        context_norm = self._normalize_text(context_name or "")
+        context_norm = norm_module.make_normalized_key(str(context_name or ""))
         if not context_norm:
             return None
 
