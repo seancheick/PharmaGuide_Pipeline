@@ -1946,6 +1946,37 @@ def _evaluate_row(row: Dict[str, Any], *, strict: bool) -> tuple[bool, Optional[
     return True, None, findings
 
 
+def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
+    """RC1 boundary: a real label active unresolved only for scoring.
+
+    Cleaner/enrichment already own active-vs-excipient/structural decisions.
+    Requiring their explicit ``active_unmapped`` disposition and
+    ``no_quality_map_match`` reason excludes nutrition facts, recognized
+    non-scorables, additives, blend headers and other intentionally dropped
+    rows from the broad candidate pool.
+    """
+    if row.get("score_eligible_by_cleaner") is not True:
+        return False
+    if _norm(row.get("cleaner_row_role")) != "active_scorable":
+        return False
+    if _norm(row.get("source_section")) != "active":
+        return False
+    if _norm(row.get("role_classification")) != "active_unmapped":
+        return False
+    if _norm(row.get("skip_reason") or row.get("score_exclusion_reason")) != "no_quality_map_match":
+        return False
+    if bool(row.get("is_excipient")):
+        return False
+    if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
+        return False
+
+    quantity = _as_float(row.get("quantity"))
+    activity_quantity = _as_float(row.get("activity_quantity"))
+    return bool(row.get("has_dose")) or (quantity is not None and quantity > 0) or (
+        activity_quantity is not None and activity_quantity > 0
+    )
+
+
 def get_scoring_ingredients(
     product: Dict[str, Any],
     *,
@@ -2054,6 +2085,25 @@ def get_scoring_ingredients(
         elif rejection is not None:
             rejected.append(rejection)
 
+    # Coverage is a label-completeness fact, not a count of only the rows that
+    # survived scoring eligibility. Cleaner-approved, dose-bearing label
+    # actives that are unresolved specifically because no quality-map identity
+    # exists must remain in the denominator. They never enter ``rows`` and
+    # therefore cannot influence any score, route, adequacy, or safety lookup.
+    unresolved_coverage_keys = {
+        _classification_row_key(item.row, index)
+        for index, item in enumerate(rejected)
+        if item.reason == "missing_scoring_identity"
+    }
+    for index, row in enumerate(_safe_list(iqd.get("ingredients"))):
+        if not isinstance(row, dict) or not _is_genuine_unresolved_label_active(row):
+            continue
+        key = _classification_row_key(row, index)
+        if key in unresolved_coverage_keys:
+            continue
+        rejected.append(RejectedScoringRow(row=row, reason="missing_scoring_identity"))
+        unresolved_coverage_keys.add(key)
+
     unmapped_count = sum(1 for item in rejected if item.reason == "missing_scoring_identity")
     mapped_count = len(rows)
     denominator = mapped_count + unmapped_count
@@ -2100,37 +2150,6 @@ def _classification_row_key(row: Dict[str, Any], index: int) -> str:
         _norm(row.get("unit")),
         str(index),
     ))
-
-
-def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
-    """RC1 boundary: a real label active unresolved only for scoring.
-
-    Cleaner/enrichment already own active-vs-excipient/structural decisions.
-    Requiring their explicit ``active_unmapped`` disposition and
-    ``no_quality_map_match`` reason excludes nutrition facts, recognized
-    non-scorables, additives, blend headers and other intentionally dropped
-    rows from the broad candidate pool.
-    """
-    if row.get("score_eligible_by_cleaner") is not True:
-        return False
-    if _norm(row.get("cleaner_row_role")) != "active_scorable":
-        return False
-    if _norm(row.get("source_section")) != "active":
-        return False
-    if _norm(row.get("role_classification")) != "active_unmapped":
-        return False
-    if _norm(row.get("skip_reason") or row.get("score_exclusion_reason")) != "no_quality_map_match":
-        return False
-    if bool(row.get("is_excipient")):
-        return False
-    if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
-        return False
-
-    quantity = _as_float(row.get("quantity"))
-    activity_quantity = _as_float(row.get("activity_quantity"))
-    return bool(row.get("has_dose")) or (quantity is not None and quantity > 0) or (
-        activity_quantity is not None and activity_quantity > 0
-    )
 
 
 def _canonical_token_is_bounded_in_text(canonical_id: Any, text: Any) -> bool:

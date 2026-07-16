@@ -210,7 +210,6 @@ def test_stage_products_by_id_supports_lookup_and_unmatched_count():
 
 
 def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates(monkeypatch):
-    _patch_v4_by_id(monkeypatch, {"999": _canned_v4()})
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         enriched_dir = root / "enriched"
@@ -267,6 +266,10 @@ def test_build_final_db_streaming_path_preserves_last_write_wins_duplicates(monk
         assert manifest["detail_blob_count"] == 1
         assert manifest["detail_blob_unique_count"] == 1
         assert manifest["detail_index_checksum"].startswith("sha256:")
+        assert manifest["scoring_version"] == "4.1.0"
+        assert manifest["quality_score_config_checksum"].startswith("sha256:")
+        assert "scoring_config_checksum" not in manifest
+        assert "scoring_config_checksum" not in manifest["integrity"]
 
 
 def test_build_backfills_v4_category_percentiles(monkeypatch):
@@ -278,7 +281,6 @@ def test_build_backfills_v4_category_percentiles(monkeypatch):
     ranked = [("801", 95.0), ("802", 85.0), ("803", 75.0), ("804", 65.0), ("805", 55.0)]
     canned = {pid: _canned_v4(status="scored", quality_100=sc) for pid, sc in ranked}
     canned["806"] = _canned_v4(status="scored", quality_100=70.0)  # solo cohort -> unranked
-    _patch_v4_by_id(monkeypatch, canned)
 
     def _enriched(pid, upc, category):
         e = make_enriched()
@@ -292,9 +294,7 @@ def test_build_backfills_v4_category_percentiles(monkeypatch):
         return e
 
     def _scored(pid):
-        s = make_scored()
-        s["dsld_id"] = pid
-        return s
+        return _artifact_from_canned(pid, canned[pid])
 
     enriched_list = [
         _enriched(pid, f"11111111{i:05d}", "fish_oil") for i, (pid, _) in enumerate(ranked)
@@ -798,6 +798,14 @@ def make_enriched():
 
 
 def make_scored(verdict="SAFE"):
+    pillars = {
+        "formulation": {"score": 15.0, "max": 20.0},
+        "dose": {"score": 15.0, "max": 20.0},
+        "evidence": {"score": 15.0, "max": 20.0},
+        "transparency": {"score": 10.0, "max": 15.0},
+        "verification": {"score": 10.0, "max": 15.0},
+        "safety_hygiene": {"score": 10.0, "max": 10.0},
+    }
     return {
         "score_80": 60.0,
         "display": "60.0/80",
@@ -807,6 +815,24 @@ def make_scored(verdict="SAFE"):
         "verdict": verdict,
         "safety_verdict": verdict,
         "mapped_coverage": 1.0,
+        "score_basis": "v4_six_pillar",
+        "output_schema_version": "4.0.0",
+        "quality_score_v4_100": 75.0,
+        "quality_score_status": "scored",
+        "quality_pillars_v4": pillars,
+        "_score_model_version": "v4",
+        "_v4_quality_score_100": 75.0,
+        "_v4_quality_status": "scored",
+        "_v4_quality_tier": "Good",
+        "_v4_raw_score_100": 75.0,
+        "_v4_module": "generic",
+        "_v4_confidence": "high",
+        "_v4_quality_version": "test",
+        "_v4_scoring_engine_version": "4.1.0",
+        "_v4_classification_schema_version": "1.2.0",
+        "_v4_pillars": pillars,
+        "_v4_safety_gate": {"verdict": verdict, "safety_signals": []},
+        "_v4_completeness_gate": {"mapped_coverage": 1.0},
         "badges": [{"id": "FULL_DISCLOSURE", "label": "Full Disclosure"}],
         "flags": ["TEST_FLAG"],
         "section_scores": {
@@ -934,7 +960,8 @@ def test_banned_inactive_forces_blocked_core_verdict_when_scorer_says_safe():
     assert row["blocking_reason"] == "banned_ingredient"
     assert row["score_100_equivalent"] is None
     assert row["score_display_100_equivalent"] == "N/A"
-    assert row["score_safety_purity"] == 0.0
+    assert row["quality_score_status"] == "suppressed_safety"
+    assert row["quality_score_v4_100"] is None
     assert any(
         w.get("type") == "banned_substance" and w.get("severity") == "critical"
         for w in blob["warnings_profile_gated"]
@@ -2315,7 +2342,6 @@ def test_build_final_db_strict_mode_raises_on_enriched_scored_mismatch():
 
 def test_build_final_db_default_mode_allows_enriched_scored_mismatch(monkeypatch):
     """Default (non-strict) mode exports matched products without raising."""
-    _patch_v4_by_id(monkeypatch, {"999": _canned_v4()})
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         enriched_dir = root / "enriched"
@@ -2846,20 +2872,21 @@ class TestDetailBlobNutritionAndUnmapped:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# v4 export wiring integration (export schema v2.0.0)
-#
-# build_final_db runs the export adapter, which calls score_product_v4.
-# We monkeypatch that scorer with canned, per-dsld_id results so the test
-# deterministically exercises the FULL wiring (overlay
-# → review-queue gate → build_core_row → build_detail_blob → dedup) without
-# depending on whether a synthetic fixture happens to be v4-complete.
+# v4-native scored-artifact integration (export schema v2.0.0)
 # ─────────────────────────────────────────────────────────────────────────────
-
-from scoring_v4 import export_adapter as _v4_export_adapter  # noqa: E402
 
 
 def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
                safety_verdict=None, blocking_reason=None, suppressed_reason=None):
+    ratio = float(quality_100 or 0.0) / 100.0
+    pillars = {
+        "formulation": {"score": round(20.0 * ratio, 3), "max": 20.0},
+        "dose": {"score": round(20.0 * ratio, 3), "max": 20.0},
+        "evidence": {"score": round(20.0 * ratio, 3), "max": 20.0},
+        "transparency": {"score": round(15.0 * ratio, 3), "max": 15.0},
+        "verification": {"score": round(15.0 * ratio, 3), "max": 15.0},
+        "safety_hygiene": {"score": round(10.0 * ratio, 3), "max": 10.0},
+    }
     return {
         "raw_score_v4_100": quality_100 if quality_100 is not None else 88.0,
         "v4_module": "generic",
@@ -2890,11 +2917,7 @@ def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
         },
         "raw_score_v4_100": quality_100,
         "quality_score_v4_100": quality_100,
-        "quality_pillars_v4": (
-            {"formulation": {"score": 18.0, "max": 20, "reason": "good purpose-fit"},
-             "evidence": {"score": 10.0, "max": 20, "reason": "moderate evidence"}}
-            if status == "scored" else None
-        ),
+        "quality_pillars_v4": pillars if status == "scored" else None,
         "quality_tier": tier,
         "quality_score_status": status,
         "quality_score_suppressed_reason": suppressed_reason,
@@ -2903,131 +2926,39 @@ def _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong",
     }
 
 
-def _patch_v4_by_id(monkeypatch, by_id):
-    """Make the export adapter's v4 scorer return canned results keyed by dsld_id."""
-    def fake(enriched):
-        return by_id[str(enriched.get("dsld_id"))]
-    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", fake)
+def _artifact_from_canned(dsld_id: str, v4_result: dict) -> dict:
+    """Build a native Stage-3 artifact without invoking a second scorer."""
+    from scoring_v4.scored_artifact import assemble_scored_artifact
 
-
-def test_v4_overlay_removes_stale_omega_form_flag_when_v4_detects_form(monkeypatch):
-    """The exported legacy flags must not contradict v4's omega form detector."""
-    scored_v4 = _canned_v4(status="scored", quality_100=90.3, verdict="SAFE", tier="Excellent")
-    scored_v4["v4_module"] = "omega"
-    scored_v4["v4_breakdown"]["provenance"]["module_route"] = "omega"
-    scored_v4["v4_breakdown"]["module"] = {
-        "dimensions": {
-            "formulation": {"metadata": {"form_detected": "rtg"}},
-            "transparency": {"components": {"form_disclosed": 3.0}},
-        }
+    row = {
+        "name": "Magnesium",
+        "standard_name": "Magnesium",
+        "canonical_id": "magnesium",
+        "mapped_identity": True,
+        "identity_disposition": "clean",
+        "source_section": "active",
+        "cleaner_row_role": "active_scorable",
+        "score_eligible_by_cleaner": True,
+        "dose_class": "therapeutic_mass",
+        "role_classification": "active_scorable",
+        "scoreable_identity": True,
+        "quantity": 200,
+        "unit": "mg",
+        "raw_source_path": "ingredientRows[0]",
     }
-    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", lambda _enriched: scored_v4)
-
-    overlaid = _v4_export_adapter.overlay_v4_scored(
-        {"dsld_id": "omega-rtg"},
-        {"flags": ["OMEGA3_FORM_NOT_DISCLOSED", "SUPPLEMENT_TYPE_REINFERRED"]},
-    )
-
-    assert overlaid["flags"] == ["SUPPLEMENT_TYPE_REINFERRED"]
-
-
-def test_v4_overlay_keeps_omega_form_flag_when_v4_form_is_undefined(monkeypatch):
-    """True undefined-form omega products should still carry the disclosure flag."""
-    scored_v4 = _canned_v4(status="scored", quality_100=85.9, verdict="SAFE", tier="Strong")
-    scored_v4["v4_module"] = "omega"
-    scored_v4["v4_breakdown"]["provenance"]["module_route"] = "omega"
-    scored_v4["v4_breakdown"]["module"] = {
-        "dimensions": {
-            "formulation": {"metadata": {"form_detected": "undefined"}},
-            "transparency": {"components": {}},
-        }
-    }
-    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", lambda _enriched: scored_v4)
-
-    overlaid = _v4_export_adapter.overlay_v4_scored({"dsld_id": "omega-undefined"}, {"flags": []})
-
-    assert overlaid["flags"] == ["OMEGA3_FORM_NOT_DISCLOSED"]
-
-
-def test_v4_overlay_removes_stale_section_a_zero_flag_when_v4_scores(monkeypatch):
-    """Legacy v3 Section-A-zero flags must not ship on v4-live products."""
-    scored_v4 = _canned_v4(status="scored", quality_100=90.7, verdict="SAFE", tier="Excellent")
-    scored_v4["v4_module"] = "fiber_digestive"
-    scored_v4["v4_breakdown"]["provenance"]["module_route"] = "fiber_digestive"
-    scored_v4["v4_breakdown"]["completeness_gate"] = {
-        "module": "fiber_digestive",
-        "is_live_eligible": True,
-    }
-    monkeypatch.setattr(_v4_export_adapter, "score_product_v4", lambda _enriched: scored_v4)
-
-    overlaid = _v4_export_adapter.overlay_v4_scored(
-        {"dsld_id": "psyllium-live"},
-        {"flags": ["SECTION_A_ZERO_NO_SCORABLE_INGREDIENTS", "SUPPLEMENT_TYPE_REINFERRED"]},
-    )
-
-    assert overlaid["flags"] == ["SUPPLEMENT_TYPE_REINFERRED"]
-
-
-def test_build_core_row_reconciles_stale_v3_flags_from_v4_contract():
-    """The final products_core flags column must follow v4, not stale v3 diagnostics."""
-    enriched = make_enriched()
-    scored = make_scored()
-    scored.update({
-        "flags": [
-            "SECTION_A_ZERO_NO_SCORABLE_INGREDIENTS",
-            "OMEGA3_FORM_NOT_DISCLOSED",
-            "PROPRIETARY_BLEND_PRESENT",
-            "SUPPLEMENT_TYPE_REINFERRED",
-        ],
-        "_v4_quality_status": "scored",
-        "_v4_quality_score_100": 90.7,
-        "_v4_module": "omega",
-        "_v4_module_breakdown": {
-            "dimensions": {
-                "formulation": {"metadata": {"form_detected": "rtg"}},
-                "transparency": {
-                    "components": {
-                        "form_disclosed": 3.0,
-                        "strain_identities_named": 8.0,
-                        "per_strain_cfu_on_label": 7.0,
-                    },
-                },
-            },
+    product = {
+        "dsld_id": dsld_id,
+        "product_name": f"Fixture {dsld_id}",
+        "supplement_taxonomy": {
+            "primary_type": "single_mineral",
+            "percentile_category": "single_mineral",
         },
-    })
-
-    row = row_as_dict(build_core_row(enriched, scored, "2026-06-30T12:00:00Z"))
-
-    assert json.loads(row["flags"]) == [
-        "PROPRIETARY_BLEND_PRESENT",
-        "SUPPLEMENT_TYPE_REINFERRED",
-    ]
-
-
-def test_build_core_row_reconciles_probiotic_proprietary_flag_from_v4_contract():
-    """Fully disclosed probiotic labels must not ship stale proprietary-blend flags."""
-    enriched = make_enriched()
-    scored = make_scored()
-    scored.update({
-        "flags": ["PROPRIETARY_BLEND_PRESENT", "SUPPLEMENT_TYPE_REINFERRED"],
-        "_v4_quality_status": "scored",
-        "_v4_quality_score_100": 91.2,
-        "_v4_module": "probiotic",
-        "_v4_module_breakdown": {
-            "dimensions": {
-                "transparency": {
-                    "components": {
-                        "strain_identities_named": 8.0,
-                        "per_strain_cfu_on_label": 7.0,
-                    },
-                },
-            },
+        "ingredient_quality_data": {
+            "ingredients": [row],
+            "ingredients_scorable": [row],
         },
-    })
-
-    row = row_as_dict(build_core_row(enriched, scored, "2026-06-30T12:00:00Z"))
-
-    assert json.loads(row["flags"]) == ["SUPPLEMENT_TYPE_REINFERRED"]
+    }
+    return assemble_scored_artifact(product, v4_result)
 
 
 def _run_build(tmp, enriched_list, scored_list):
@@ -3058,22 +2989,22 @@ def test_v4_build_populates_columns_and_quarantines_not_scored(monkeypatch):
     e3 = make_enriched(); e3["dsld_id"] = "777"; e3["product_name"] = "NotScored P"
     # Distinct UPCs so the three are not collapsed by UPC dedup.
     e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"; e3["upcSku"] = "333333333333"
-    s1 = make_scored(); s1["dsld_id"] = "999"
-    s2 = make_scored(); s2["dsld_id"] = "888"
-    s3 = make_scored(); s3["dsld_id"] = "777"
     scored_live = _canned_v4(status="scored", quality_100=88.0, verdict="SAFE", tier="Strong")
     scored_live["quality_score_cap_v4"] = {
         "id": "generic_astaxanthin_single",
         "cap": 85.0,
         "applied": True,
     }
-    _patch_v4_by_id(monkeypatch, {
-        "999": scored_live,
-        "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
-                          tier=None, safety_verdict="BLOCKED",
-                          blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
-        "777": _canned_v4(status="not_scored", quality_100=None, verdict="NOT_SCORED", tier=None),
-    })
+    s1 = _artifact_from_canned("999", scored_live)
+    s2 = _artifact_from_canned(
+        "888",
+        _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
+                   tier=None, safety_verdict="BLOCKED",
+                   blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
+    )
+    s3 = _artifact_from_canned(
+        "777", _canned_v4(status="not_scored", quality_100=None, verdict="NOT_SCORED", tier=None)
+    )
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e1, e2, e3], [s1, s2, s3])
         cols = ["dsld_id", "quality_score_v4_100", "quality_score_status", "quality_tier",
@@ -3132,26 +3063,25 @@ def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypa
     e1 = make_enriched()  # dsld_id 999 — scored
     e2 = make_enriched(); e2["dsld_id"] = "888"; e2["product_name"] = "Blocked P"
     e1["upcSku"] = "111111111111"; e2["upcSku"] = "222222222222"
-    s1 = make_scored(); s1["dsld_id"] = "999"
-    s2 = make_scored(); s2["dsld_id"] = "888"
 
     # The real scorer always emits all six pillars for a scored product; the
     # shared _canned_v4 only carries two, so build a six-pillar result here.
     scored_v4 = _canned_v4(status="scored", quality_100=88.0)
     scored_v4["quality_pillars_v4"] = {
         "formulation": {"score": 18.0, "max": 20},
-        "dose": {"score": 16.0, "max": 20},
-        "evidence": {"score": 10.0, "max": 20},
-        "transparency": {"score": 12.0, "max": 15},
-        "verification": {"score": 9.0, "max": 15},
+        "dose": {"score": 18.0, "max": 20},
+        "evidence": {"score": 16.0, "max": 20},
+        "transparency": {"score": 13.0, "max": 15},
+        "verification": {"score": 13.0, "max": 15},
         "safety_hygiene": {"score": 10.0, "max": 10},
     }
-    _patch_v4_by_id(monkeypatch, {
-        "999": scored_v4,
-        "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
-                          tier=None, safety_verdict="BLOCKED",
-                          blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
-    })
+    s1 = _artifact_from_canned("999", scored_v4)
+    s2 = _artifact_from_canned(
+        "888",
+        _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
+                   tier=None, safety_verdict="BLOCKED",
+                   blocking_reason="banned_ingredient", suppressed_reason="banned_ingredient"),
+    )
 
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e1, e2], [s1, s2])
@@ -3160,10 +3090,10 @@ def test_v4_pillar_columns_projected_for_scored_and_null_for_suppressed(monkeypa
         # Scored: all six columns populated, each within [0, max], matching scores.
         scored = rows["999"]
         assert scored["pillar_formulation_v4"] == 18.0
-        assert scored["pillar_dose_v4"] == 16.0
-        assert scored["pillar_evidence_v4"] == 10.0
-        assert scored["pillar_transparency_v4"] == 12.0
-        assert scored["pillar_verification_v4"] == 9.0
+        assert scored["pillar_dose_v4"] == 18.0
+        assert scored["pillar_evidence_v4"] == 16.0
+        assert scored["pillar_transparency_v4"] == 13.0
+        assert scored["pillar_verification_v4"] == 13.0
         assert scored["pillar_safety_hygiene_v4"] == 10.0
         for col in pillar_cols:
             assert scored[col] is not None, f"scored product missing {col}"
@@ -3181,13 +3111,13 @@ def test_v4_dedup_keeps_scored_over_blocked_same_upc(monkeypatch):
     upc = "012345678905"
     e_scored["upcSku"] = upc; e_scored["status"] = "active"
     e_blocked["upcSku"] = upc; e_blocked["status"] = "active"
-    s1 = make_scored(); s1["dsld_id"] = "999"
-    s2 = make_scored(); s2["dsld_id"] = "888"
-    _patch_v4_by_id(monkeypatch, {
-        "999": _canned_v4(status="scored", quality_100=70.0, verdict="SAFE", tier="Acceptable"),
-        "888": _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
-                          tier=None, safety_verdict="BLOCKED", blocking_reason="banned_ingredient"),
-    })
+    s1 = _artifact_from_canned(
+        "999", _canned_v4(status="scored", quality_100=70.0, verdict="SAFE", tier="Acceptable")
+    )
+    s2 = _artifact_from_canned(
+        "888", _canned_v4(status="suppressed_safety", quality_100=None, verdict="BLOCKED",
+                          tier=None, safety_verdict="BLOCKED", blocking_reason="banned_ingredient")
+    )
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e_scored, e_blocked], [s1, s2])
         rows = _core_rows(out, ["dsld_id"])
@@ -3197,10 +3127,9 @@ def test_v4_dedup_keeps_scored_over_blocked_same_upc(monkeypatch):
 
 def test_build_always_stamps_v4_score_model(monkeypatch):
     e = make_enriched()
-    s = make_scored(verdict="SAFE"); s["dsld_id"] = "999"
-    _patch_v4_by_id(monkeypatch, {
-        "999": _canned_v4(status="scored", quality_100=75.0, verdict="SAFE", tier="Strong"),
-    })
+    s = _artifact_from_canned(
+        "999", _canned_v4(status="scored", quality_100=75.0, verdict="SAFE", tier="Strong")
+    )
     with tempfile.TemporaryDirectory() as tmp:
         result, out = _run_build(tmp, [e], [s])
         assert result["product_count"] == 1
@@ -3257,12 +3186,11 @@ def test_v4_banned_substance_suppresses_score_even_when_v4_gate_scored(monkeypat
         "substances": [],
         "safety_flags": e["activeIngredients"][0]["safety_flags"],
     }
-    s = make_scored(); s["dsld_id"] = "999"
     # v4 *scoring* gate did NOT block it — it returns a finite scored result
     # (the real divergence: v4's gate is narrower than the export banned signal).
-    _patch_v4_by_id(monkeypatch, {
-        "999": _canned_v4(status="scored", quality_100=70.5, verdict="SAFE", tier="Acceptable"),
-    })
+    s = _artifact_from_canned(
+        "999", _canned_v4(status="scored", quality_100=70.5, verdict="SAFE", tier="Acceptable")
+    )
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e], [s])
         rows = _core_rows(out, ["dsld_id", "quality_score_v4_100", "quality_score_status",
@@ -3313,10 +3241,9 @@ def test_registry_verified_certs_drive_third_party_display_columns(monkeypatch):
     e3["verified_cert_programs"] = [
         {"program": "NSF Certified", "scope": "product_line", "matched_brand": "Test Brand, Inc."},
     ]
-    scored = []
-    for d in ("999", "888", "777"):
-        s = make_scored(); s["dsld_id"] = d; scored.append(s)
-    _patch_v4_by_id(monkeypatch, {d: _canned_v4() for d in ("999", "888", "777")})
+    scored = [
+        _artifact_from_canned(d, _canned_v4()) for d in ("999", "888", "777")
+    ]
     with tempfile.TemporaryDirectory() as tmp:
         _result, out = _run_build(tmp, [e1, e2, e3], scored)
         rows = _core_rows(out, ["dsld_id", "has_third_party_testing", "cert_programs"])

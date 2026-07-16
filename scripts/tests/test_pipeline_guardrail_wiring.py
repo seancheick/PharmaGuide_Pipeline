@@ -23,6 +23,13 @@ def test_pre_score_loader_rejects_corrupt_json(tmp_path):
     assert error["failed_files"] == ["corrupt.json"]
 
 
+def test_stage3_runtime_points_only_to_v4_producer():
+    runner = PipelineRunner()
+
+    assert runner.config["scripts"]["score"] == "score_products_v4.py"
+    assert "score" not in runner.config["configs"]
+
+
 def test_pre_score_loader_rejects_empty_directory(tmp_path):
     enriched = tmp_path / "enriched"
     enriched.mkdir()

@@ -12,7 +12,7 @@ from build_final_db import (
     has_banned_substance,
     resolve_export_supplement_type,
 )
-from scoring_v4.export_adapter import overlay_v4_scored, suppress_v4_for_hard_block
+from scoring_v4.scored_artifact import suppress_scored_artifact_for_hard_block
 from stage_manifest import select_stage_input_files
 
 
@@ -132,9 +132,9 @@ def test_release_export_counts_and_index_parity():
 
 
 def _expected_export_scored(enriched: dict, scored: dict) -> dict:
-    expected = overlay_v4_scored(enriched, scored)
+    expected = dict(scored)
     if has_banned_substance(enriched):
-        expected = suppress_v4_for_hard_block(
+        expected = suppress_scored_artifact_for_hard_block(
             expected, reason="banned_substance"
         )
     return expected

@@ -33,6 +33,7 @@ from reference_data_schema import validate_reference_schema_version
 SCRIPTS_DIR = Path(__file__).parent.resolve()
 DATA_DIR = SCRIPTS_DIR / "data"
 CONFIG_DIR = SCRIPTS_DIR / "config"
+V4_CONFIG_DIR = SCRIPTS_DIR / "scoring_v4" / "config"
 
 
 # Critical data files - pipeline will fail without these
@@ -82,7 +83,7 @@ OPTIONAL_DATA_FILES = [
 # Required config files
 CONFIG_FILES = [
     ("enrichment_config.json", "Enrichment stage configuration"),
-    ("scoring_config.json", "Scoring stage configuration"),
+    ("quality_score.json", "V4 scoring configuration"),
     ("cleaning_config.json", "Cleaning stage configuration"),
 ]
 
@@ -90,7 +91,7 @@ CONFIG_FILES = [
 SCRIPT_FILES = [
     ("clean_dsld_data.py", "Stage 1: Cleaning"),
     ("enrich_supplements_v3.py", "Stage 2: Enrichment"),
-    ("score_supplements.py", "Stage 3: Scoring"),
+    ("score_products_v4.py", "Stage 3: v4 scored-artifact production"),
     ("run_pipeline.py", "Pipeline orchestrator"),
     ("constants.py", "Constants and configuration"),
 ]
@@ -468,7 +469,11 @@ def run_preflight(verbose: bool = False, quick: bool = False) -> Dict:
 
     # Check config files
     for filename, description in CONFIG_FILES:
-        path = CONFIG_DIR / filename
+        path = (
+            V4_CONFIG_DIR / filename
+            if filename == "quality_score.json"
+            else CONFIG_DIR / filename
+        )
         exists, size = check_file(path)
         entry = {
             "file": filename,

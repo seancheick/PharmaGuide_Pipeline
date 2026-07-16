@@ -2,10 +2,10 @@
 Review follow-up — don't ship the V3-basis "Top X%" percentile next to a V4 score.
 
 `category_percentile` is frozen at score time by
-score_supplements._attach_category_percentiles, which ranks on
-`score_100_equivalent` (= the retired V3 score). export_adapter later overwrites
-the score with the V4 value but never recomputes the percentile, so the frozen
-rank is ranked by a different model than the score shown.
+the retired scorer's percentile path, which ranked on its own
+`score_100_equivalent`. The v4-native artifact now owns that compatibility
+field, but old on-disk artifacts can still carry a percentile frozen under the
+retired model. That rank must not be paired with the v4 score shown.
 
 build_core_row must therefore emit percentile_rank / top_pct / cohort as NULL —
 the shippable V4 percentile is BACKFILLED after the insert loop by

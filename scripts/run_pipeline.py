@@ -10,7 +10,7 @@ with proper error handling and progress reporting.
 PIPELINE STAGES:
 1. CLEAN   - clean_dsld_data.py: Raw DSLD data → Cleaned JSON
 2. ENRICH  - enrich_supplements_v3.py: Cleaned data → Enriched data with quality metadata
-3. SCORE   - score_supplements.py: Enriched data → Final scores
+3. SCORE   - score_products_v4.py: Enriched data → v4 scored artifacts
 
 Usage:
     # Run complete pipeline
@@ -170,12 +170,11 @@ class PipelineRunner:
             "scripts": {
                 "clean": "clean_dsld_data.py",
                 "enrich": "enrich_supplements_v3.py",
-                "score": "score_supplements.py"
+                "score": "score_products_v4.py"
             },
             "configs": {
                 "clean": "config/cleaning_config.json",
                 "enrich": "config/enrichment_config.json",
-                "score": "config/scoring_config.json"
             }
         }
 
@@ -495,19 +494,12 @@ class PipelineRunner:
         logger.info("=" * 60)
 
         script = self.config["scripts"]["score"]
-        config_file = self.config["configs"]["score"]
-
         args = [
             "--input-dir", enriched_dir,
             "--output-dir", output_dir
         ]
         if run_id:
             args.extend(["--run-id", run_id])
-
-        # Add config if exists
-        config_path = self.script_dir / config_file
-        if config_path.exists():
-            args.extend(["--config", str(config_path)])
 
         return self._run_script(script, args, dry_run)
 

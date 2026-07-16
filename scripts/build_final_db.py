@@ -73,6 +73,10 @@ from scoring_v4.modules.fiber_digestive_helpers import (
     total_fiber_grams as _total_fiber_goal_grams,
 )
 from scoring_v4.modules.generic_formulation import _dietary_sugar_penalty_detail
+from scoring_v4.scored_artifact import (
+    SCORING_ENGINE_VERSION,
+    suppress_scored_artifact_for_hard_block,
+)
 # supplement_type_utils is no longer called directly — taxonomy is the
 # single source of truth for classification in the final DB export.
 # The import remains available for backward-compat callers but is unused.
@@ -1376,8 +1380,7 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     Products are QUARANTINED (excluded_by_gate; never reach Flutter) when:
       - verdict == NOT_SCORED  (mapping/dosage gate failure upstream)
       - score_100_equivalent is None on a non-BLOCKED/UNSAFE verdict
-      - any breakdown.{A,B,C,D}.score is missing or non-numeric on
-        non-BLOCKED/UNSAFE verdicts
+      - the Stage-3 artifact is not the v4-native six-pillar contract
 
     BLOCKED/UNSAFE products may legitimately have null scores — the recall
     or ban reason is the data the user needs.
@@ -1458,8 +1461,11 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         if isinstance(ing, dict)
     ) or any(safe_str(ing.get("canonical_id")) for ing in active_ingredients)
 
-    if "section_scores" not in scored:
-        issues.append("missing scored.section_scores")
+    if scored.get("score_basis") != "v4_six_pillar":
+        issues.append(
+            "review_queue: scored artifact is not v4-native "
+            "(score_basis must equal v4_six_pillar)."
+        )
     if "scoring_metadata" not in scored:
         issues.append("missing scored.scoring_metadata")
     scoring_diag = safe_dict(scored.get("iqd_contract_diagnostics"))
@@ -1502,8 +1508,13 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
     #   scored           → require a finite quality_score_v4_100 (asserted here);
     #   suppressed_safety → BLOCKED/UNSAFE, null score is legitimate (score_optional below);
     #   not_scored        → verdict is NOT_SCORED, quarantined by the block below.
-    # The verdict-keyed checks still apply because the adapter overlays `verdict`.
+    # The verdict-keyed checks still apply to the v4-native Stage-3 artifact.
     v4_status = scored.get("_v4_quality_status")
+    if v4_status not in {"scored", "suppressed_safety", "not_scored"}:
+        issues.append(
+            "review_queue: missing or invalid v4 quality_score_status on "
+            "Stage-3 artifact."
+        )
     if v4_status == "scored":
         q = scored.get("_v4_quality_score_100")
         try:
@@ -1515,6 +1526,50 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                 f"review_queue: v4 quality_score_status=scored requires a finite "
                 f"quality_score_v4_100 but got {q!r} (v4 data integrity gate)."
             )
+        pillar_keys = (
+            "formulation",
+            "dose",
+            "evidence",
+            "transparency",
+            "verification",
+            "safety_hygiene",
+        )
+        pillars = safe_dict(scored.get("_v4_pillars"))
+        pillar_scores: List[float] = []
+        for pillar_key in pillar_keys:
+            value = safe_dict(pillars.get(pillar_key)).get("score")
+            try:
+                number = float(value)
+            except (TypeError, ValueError):
+                issues.append(
+                    f"review_queue: quality_pillars_v4.{pillar_key}.score "
+                    "is missing or non-numeric."
+                )
+                continue
+            if not math.isfinite(number):
+                issues.append(
+                    f"review_queue: quality_pillars_v4.{pillar_key}.score is not finite."
+                )
+                continue
+            pillar_scores.append(number)
+        if q_ok and len(pillar_scores) == len(pillar_keys):
+            if abs(sum(pillar_scores) - float(q)) > 0.011:
+                issues.append(
+                    "review_queue: six v4 pillars do not reconcile to "
+                    "quality_score_v4_100."
+                )
+
+    coverage = scored.get("mapped_coverage")
+    try:
+        coverage_number = float(coverage)
+        coverage_ok = math.isfinite(coverage_number) and 0.0 <= coverage_number <= 1.0
+    except (TypeError, ValueError):
+        coverage_number = 0.0
+        coverage_ok = False
+    if not coverage_ok:
+        issues.append("review_queue: mapped_coverage must be numeric within [0,1].")
+    elif safe_str(scored.get("verdict")).upper() == "SAFE" and coverage_number < 0.3:
+        issues.append("review_queue: SAFE verdict is forbidden below mapped_coverage 0.3.")
 
     if verdict == "NOT_SCORED":
         issues.append(
@@ -1548,46 +1603,6 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
                 issues.append(
                     f"review_queue: score_100_equivalent={s100!r} is not "
                     "a number (Batch 3 data integrity gate)."
-                )
-
-        # Section scores: the public-facing score breakdown that
-        # build_core_row writes into products_core. Each must carry a
-        # finite numeric score.
-        ss = safe_dict(scored.get("section_scores"))
-        section_keys = (
-            "A_ingredient_quality",
-            "B_safety_purity",
-            "C_evidence_research",
-            "D_brand_trust",
-        )
-        for sk in section_keys:
-            sec_obj = ss.get(sk)
-            if not isinstance(sec_obj, dict):
-                issues.append(
-                    f"review_queue: section_scores.{sk} missing or not an "
-                    "object (Batch 3 data integrity gate)."
-                )
-                continue
-            sec_score = sec_obj.get("score")
-            if sec_score is None:
-                issues.append(
-                    f"review_queue: section_scores.{sk}.score is null "
-                    "(Batch 3 data integrity gate)."
-                )
-                continue
-            try:
-                f = float(sec_score)
-                if not math.isfinite(f):
-                    issues.append(
-                        f"review_queue: section_scores.{sk}.score="
-                        f"{sec_score!r} is not finite "
-                        "(Batch 3 data integrity gate)."
-                    )
-            except (TypeError, ValueError):
-                issues.append(
-                    f"review_queue: section_scores.{sk}.score="
-                    f"{sec_score!r} is not a number "
-                    "(Batch 3 data integrity gate)."
                 )
 
     return issues
@@ -7820,12 +7835,6 @@ def registry_verified_cert_display_programs(enriched: Dict) -> List[str]:
     return out
 
 
-def _reconcile_scored_export_flags(scored: Dict) -> Dict:
-    from scoring_v4.export_adapter import reconcile_v4_flags
-
-    return reconcile_v4_flags(scored)
-
-
 def compute_v4_category_percentiles(
     rows: List[Tuple[str, Optional[str], float]],
     min_cohort: int = 5,
@@ -7903,40 +7912,12 @@ def build_core_row(
     )
     effective_scored = dict(scored)
     if has_export_banned_signal:
-        section_scores = dict(safe_dict(scored.get("section_scores")))
-        for section_key in (
-            "A_ingredient_quality",
-            "B_safety_purity",
-            "C_evidence_research",
-            "D_brand_trust",
-        ):
-            section = dict(safe_dict(section_scores.get(section_key)))
-            section["score"] = 0.0
-            section_scores[section_key] = section
-        effective_scored.update({
-            "score_80": None,
-            "display": "N/A",
-            "display_100": "N/A",
-            "score_100_equivalent": None,
-            "grade": "Blocked",
-            "verdict": "BLOCKED",
-            "safety_verdict": "BLOCKED",
-            "section_scores": section_scores,
-            # P0-3: suppress the v4 public contract too. This branch fires on the
-            # BROADER has_export_banned_signal (has_banned_substance OR a blob
-            # critical banned warning); suppress_v4_for_hard_block only ran on the
-            # narrow has_banned_substance signal, so a product banned via a
-            # resolver-detected inactive (titanium-dioxide class) would otherwise
-            # keep a finite, rankable quality_score_v4_100 with status='scored' and
-            # stay in idx_core_cat_score. _v4_pillars / _v4_raw_score_100 are kept
-            # as an audit trail, matching the native suppressed_safety contract.
-            "_v4_quality_score_100": None,
-            "_v4_quality_status": "suppressed_safety",
-            "_v4_quality_tier": None,
-            "_v4_suppressed_reason": (
-                effective_scored.get("_v4_suppressed_reason") or "banned_substance"
-            ),
-        })
+        # The blob resolver can detect a broader hard-block signal than the
+        # scorer. Collapse every public score surface through the same v4-native
+        # artifact boundary so core rows and detail blobs cannot disagree.
+        effective_scored = suppress_scored_artifact_for_hard_block(
+            effective_scored, reason="banned_substance"
+        )
     elif blob_has_profile_gated_hard_safety_warning(detail_blob):
         # Release-gate invariant: SAFE on either verdict or safety_verdict is
         # incompatible with a hard-safety warning (banned/recalled/adulterant/
@@ -7963,8 +7944,6 @@ def build_core_row(
                 "verdict": "CAUTION",
                 "safety_verdict": "CAUTION",
             })
-
-    effective_scored = _reconcile_scored_export_flags(effective_scored)
 
     score_100 = safe_float(effective_scored.get("score_100_equivalent"))
     ss = safe_dict(effective_scored.get("section_scores"))
@@ -8086,7 +8065,7 @@ def build_core_row(
         safe_str(effective_scored.get("verdict")),
         safe_str(effective_scored.get("safety_verdict")),
         safe_float(effective_scored.get("mapped_coverage")),
-        # V4 scoring contract — populated by the export adapter.
+        # V4 scoring contract — populated by the Stage-3 artifact assembler.
         safe_float(effective_scored.get("_v4_quality_score_100")),
         safe_str(effective_scored.get("_v4_quality_status")) or None,
         safe_str(effective_scored.get("_v4_quality_tier")) or None,
@@ -8121,7 +8100,7 @@ def build_core_row(
         # cohort. The frozen category_percentile (score_supplements) ranks on the
         # retired V3 score_100_equivalent and its cohort_size counts the V3-scored
         # set, so neither its rank NOR its cohort can ship next to a V4 score.
-        # Category/label (cohort identity) are basis-independent and still ship.
+        # Category/label (cohort identity) come from canonical taxonomy.
         None,  # percentile_rank      (backfilled: V4 recompute)
         None,  # percentile_top_pct   (backfilled: V4 recompute)
         safe_str((enriched.get("supplement_taxonomy") or {}).get("percentile_category")) or safe_str(cp.get("category_key")),
@@ -8423,11 +8402,6 @@ def build_final_db(
     script_dir: str,
     strict: bool = False,
 ):
-    from scoring_v4.export_adapter import (
-        overlay_v4_scored,
-        suppress_v4_for_hard_block,
-    )
-
     score_model = "v4"
     logger.info("Scoring model for export: v4")
 
@@ -8503,10 +8477,8 @@ def build_final_db(
                     enriched_only_samples.append(pid)
                 continue
 
-            # Overlay the production six-pillar /100 score/verdict and stash
-            # the public v4 contract under _v4_* keys. One call makes every
-            # downstream consumer v4-aware.
-            scored = overlay_v4_scored(enriched, scored)
+            # Stage 3 now emits the complete v4-native scored artifact. Final
+            # export consumes it directly and never runs a second scorer.
             # The export's banned-substance gate is broader than the v4 scoring
             # safety gate (v4 doesn't block every banned_recalled substance, e.g.
             # Boron / PHOs). When the export will hard-block a banned product, the
@@ -8514,7 +8486,9 @@ def build_final_db(
             # ranks a banned product by a finite quality_score_v4_100. Done here,
             # before build_detail_blob / build_core_row, so both surfaces agree.
             if has_banned_substance(enriched):
-                scored = suppress_v4_for_hard_block(scored, reason="banned_substance")
+                scored = suppress_scored_artifact_for_hard_block(
+                    scored, reason="banned_substance"
+                )
 
             mark_staged_product_matched(stage_conn, "scored_stage", pid)
             (
@@ -8726,11 +8700,15 @@ def build_final_db(
     # Reference data
     ref_rows = load_reference_data(script_dir)
 
-    # Scoring config fingerprint for build reproducibility
-    scoring_config_path = os.path.join(script_dir, "config", "scoring_config.json")
-    scoring_config_checksum = None
-    if os.path.exists(scoring_config_path):
-        scoring_config_checksum = f"sha256:{compute_file_sha256(scoring_config_path)}"
+    # Canonical v4 scoring-config fingerprint for build reproducibility.
+    quality_config_path = os.path.join(
+        script_dir, "scoring_v4", "config", "quality_score.json"
+    )
+    quality_score_config_checksum = None
+    if os.path.exists(quality_config_path):
+        quality_score_config_checksum = (
+            f"sha256:{compute_file_sha256(quality_config_path)}"
+        )
 
     for row in ref_rows:
         c.execute("INSERT OR REPLACE INTO reference_data VALUES (?,?,?,?)", row)
@@ -8744,7 +8722,7 @@ def build_final_db(
     local_manifest_rows = [
         ("db_version", db_version),
         ("pipeline_version", PIPELINE_VERSION),
-        ("scoring_version", PIPELINE_VERSION),
+        ("scoring_version", SCORING_ENGINE_VERSION),
         ("generated_at", manifest_now.isoformat()),
         ("product_count", str(inserted)),
         ("min_app_version", MIN_APP_VERSION),
@@ -8816,7 +8794,7 @@ def build_final_db(
     manifest_dict = {
         "db_version": db_version,
         "pipeline_version": PIPELINE_VERSION,
-        "scoring_version": PIPELINE_VERSION,
+        "scoring_version": SCORING_ENGINE_VERSION,
         "generated_at": manifest_now.isoformat(),
         "product_count": inserted,
         "checksum": f"sha256:{db_checksum}",
@@ -8833,7 +8811,7 @@ def build_final_db(
         "min_app_version": MIN_APP_VERSION,
         "schema_version": EXPORT_SCHEMA_VERSION,
         "score_model": score_model,
-        "scoring_config_checksum": scoring_config_checksum,
+        "quality_score_config_checksum": quality_score_config_checksum,
         # Pipeline integrity signals
         "integrity": {
             "enriched_input_count": enriched_unique,
@@ -8867,7 +8845,7 @@ def build_final_db(
             "contract_quarantine_count": audit_counts.get(
                 "export_contract_quarantined", 0
             ),
-            "scoring_config_checksum": scoring_config_checksum,
+            "quality_score_config_checksum": quality_score_config_checksum,
         },
         # Sprint E1.5 — three-bucket error classification. Sync gate
         # reads `errors[]` only. See _EXPORT_ERROR_TAXONOMY for the

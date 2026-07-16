@@ -292,12 +292,6 @@ def make_enricher():
     return SupplementEnricherV3()
 
 
-def make_scorer():
-    from score_supplements import SupplementScorer
-
-    return SupplementScorer()
-
-
 def project_current_taxonomy(product: Dict[str, Any], enricher) -> Dict[str, Any]:
     """Recompute the taxonomy and every field derived from it, on a copy.
 
@@ -308,25 +302,24 @@ def project_current_taxonomy(product: Dict[str, Any], enricher) -> Dict[str, Any
     return projected
 
 
-def preview_scored(projected: Dict[str, Any], scorer, strict: bool = True) -> Dict[str, Any]:
-    """The real production score assembly, in-process.
-
-    Mirrors `build_final_db.py`: v3 scaffolding -> v4 export adapter -> the
-    export-only banned-substance hard block. Scoring errors propagate; the
-    harness must never turn a crash into a data row.
-    """
+def preview_scored(projected: Dict[str, Any], strict: bool = True) -> Dict[str, Any]:
+    """Run the single production v4 Stage-3 artifact assembly in-process."""
     from build_final_db import has_banned_substance
-    from scoring_v4.export_adapter import overlay_v4_scored, suppress_v4_for_hard_block
+    from scoring_v4.scored_artifact import (
+        build_scored_artifact,
+        suppress_scored_artifact_for_hard_block,
+    )
 
     if strict and not isinstance(projected, dict):
         raise HarnessError(f"not a product: {type(projected).__name__}")
     if strict and projected.get("dsld_id") is None:
         raise HarnessError("not a product: missing dsld_id")
 
-    scored_v3 = scorer.score_product(copy.deepcopy(projected))
-    scored = overlay_v4_scored(projected, scored_v3)
+    scored = build_scored_artifact(copy.deepcopy(projected))
     if has_banned_substance(projected):
-        scored = suppress_v4_for_hard_block(scored, reason="banned_substance")
+        scored = suppress_scored_artifact_for_hard_block(
+            scored, reason="banned_substance"
+        )
     return scored
 
 
@@ -501,13 +494,11 @@ _WORKER: Dict[str, Any] = {}
 
 def _worker_init() -> None:
     _WORKER["enricher"] = make_enricher()
-    _WORKER["scorer"] = make_scorer()
 
 
 def _process_files(args: Tuple[List[str], bool, Optional[List[str]]]) -> Dict[str, Any]:
     paths, do_score, only_ids = args
     enricher = _WORKER.get("enricher") or make_enricher()
-    scorer = _WORKER.get("scorer") or make_scorer()
     wanted = set(only_ids) if only_ids is not None else None
 
     out: Dict[str, Any] = {}
@@ -524,7 +515,7 @@ def _process_files(args: Tuple[List[str], bool, Optional[List[str]]]) -> Dict[st
                 "embedded_drift": _embedded_drift_fields(product, projected),
             }
             if do_score:
-                row["scores"] = score_facts(preview_scored(projected, scorer))
+                row["scores"] = score_facts(preview_scored(projected))
             out[pid] = row
     return out
 

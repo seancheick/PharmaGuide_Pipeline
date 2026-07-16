@@ -68,8 +68,8 @@ from scoring_v4.display_calibration import calibrate_display
 from scoring_v4.quality_score import assemble_quality_score
 
 
-# Schema lock — these are the v4 scorer result fields consumed by
-# scoring_v4/export_adapter.py before projection into products_core.
+# Schema lock — these are the v4 scorer result fields consumed by the single
+# Stage-3 artifact assembler in scoring_v4/scored_artifact.py.
 V4_SCORER_KEYS = (
     "raw_score_v4_100",
     "v4_module",

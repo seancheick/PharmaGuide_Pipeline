@@ -119,6 +119,14 @@ def _base_enriched(**overrides):
 
 
 def _base_scored(**overrides):
+    pillars = {
+        "formulation": {"score": 12.5, "max": 20.0},
+        "dose": {"score": 12.5, "max": 20.0},
+        "evidence": {"score": 12.5, "max": 20.0},
+        "transparency": {"score": 10.0, "max": 15.0},
+        "verification": {"score": 8.0, "max": 15.0},
+        "safety_hygiene": {"score": 7.0, "max": 10.0},
+    }
     data = {
         "score_80": 50.0,
         "display": "50.0/80",
@@ -128,6 +136,16 @@ def _base_scored(**overrides):
         "verdict": "SAFE",
         "safety_verdict": "SAFE",
         "mapped_coverage": 1.0,
+        "score_basis": "v4_six_pillar",
+        "output_schema_version": "4.0.0",
+        "quality_score_v4_100": 62.5,
+        "quality_score_status": "scored",
+        "quality_pillars_v4": pillars,
+        "_score_model_version": "v4",
+        "_v4_quality_score_100": 62.5,
+        "_v4_quality_status": "scored",
+        "_v4_quality_tier": "Fair",
+        "_v4_pillars": pillars,
         "badges": [],
         "flags": [],
         "section_scores": {
@@ -138,8 +156,8 @@ def _base_scored(**overrides):
         },
         "category_percentile": {"available": False},
         "scoring_metadata": {
-            "scoring_version": "3.1.0",
-            "output_schema_version": "5.0.0",
+            "scoring_version": "4.1.0",
+            "output_schema_version": "4.0.0",
             "scored_date": "2026-03-17T00:00:00Z",
             "scoring_ingredients_source": "ingredient_quality_data.ingredients_scorable",
             "strict_scoring_contract": {"passed": True, "findings": []},
@@ -402,11 +420,11 @@ class TestExportContractValidator:
         assert blob["unverified_ingredient"] is False
         assert blob["proprietary_blend"] is False
 
-    def test_missing_section_scores_flagged(self):
+    def test_missing_v4_pillars_flagged(self):
         s = _base_scored()
-        del s["section_scores"]
+        del s["_v4_pillars"]
         issues = validate_export_contract(_base_enriched(), s)
-        assert any("section_scores" in i for i in issues)
+        assert any("quality_pillars_v4" in i for i in issues)
 
     def test_missing_scoring_metadata_flagged(self):
         s = _base_scored()

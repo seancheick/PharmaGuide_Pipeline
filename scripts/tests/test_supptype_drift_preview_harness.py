@@ -92,11 +92,6 @@ def enricher():
     return harness.make_enricher()
 
 
-@pytest.fixture(scope="module")
-def scorer():
-    return harness.make_scorer()
-
-
 @pytest.fixture
 def amino_multi():
     """Amino-acid product with TWO distinct scorable actives."""
@@ -187,7 +182,7 @@ def test_enrich_product_uses_the_seam():
 
 
 def test_the_scorer_receives_the_recomputed_taxonomy_not_the_stale_blob(
-    enricher, scorer, mineral_single, monkeypatch
+    enricher, mineral_single, monkeypatch
 ):
     """Baseline defect #1, pinned at the seam: classify_row() recomputed the
     taxonomy but score_products() scored the ORIGINAL product, so scoring could
@@ -208,20 +203,20 @@ def test_the_scorer_receives_the_recomputed_taxonomy_not_the_stale_blob(
 
     seen: dict = {}
 
-    import scoring_v4.export_adapter as adapter
+    import scoring_v4.scored_artifact as artifact_module
 
-    original = adapter.overlay_v4_scored
+    original = artifact_module.build_scored_artifact
 
-    def spy(enriched, scored_v3):
+    def spy(enriched):
         seen["primary_type"] = enriched.get("primary_type")
         seen["taxonomy_primary"] = (enriched.get("supplement_taxonomy") or {}).get(
             "primary_type"
         )
-        return original(enriched, scored_v3)
+        return original(enriched)
 
-    monkeypatch.setattr(adapter, "overlay_v4_scored", spy)
+    monkeypatch.setattr(artifact_module, "build_scored_artifact", spy)
 
-    harness.preview_scored(harness.project_current_taxonomy(stale, enricher), scorer)
+    harness.preview_scored(harness.project_current_taxonomy(stale, enricher))
 
     assert seen["primary_type"] == "single_mineral", (
         f"the production scorer was handed primary_type={seen['primary_type']!r} — "
@@ -231,7 +226,7 @@ def test_the_scorer_receives_the_recomputed_taxonomy_not_the_stale_blob(
 
 
 def test_a_recomputed_taxonomy_change_alters_the_v4_preview(
-    enricher, scorer, taxonomy_routed_probiotic, monkeypatch
+    enricher, taxonomy_routed_probiotic, monkeypatch
 ):
     """§8 case 1, end to end: the blob carries a stale taxonomy, current code
     classifies it differently, and the v4 preview must follow CURRENT code.
@@ -256,11 +251,11 @@ def test_a_recomputed_taxonomy_change_alters_the_v4_preview(
     )
 
     preview = harness.score_facts(
-        harness.preview_scored(harness.project_current_taxonomy(stale, enricher), scorer)
+        harness.preview_scored(harness.project_current_taxonomy(stale, enricher))
     )
 
     monkeypatch.undo()
-    stale_preview = harness.score_facts(harness.preview_scored(stale, scorer))
+    stale_preview = harness.score_facts(harness.preview_scored(stale))
 
     assert preview["_v4_module"] == "generic", (
         "the preview must follow the recomputed taxonomy"
@@ -423,11 +418,11 @@ def test_reconcile_ids_accepts_exact_parity():
     harness.reconcile_ids({"1", "2"}, {"2", "1"})  # must not raise
 
 
-def test_scoring_error_is_not_swallowed(scorer):
+def test_scoring_error_is_not_swallowed():
     """Baseline: score_products() caught every exception into a string field.
     A crash must surface, not become a row in the report."""
     with pytest.raises(Exception):
-        harness.preview_scored({"this": "is not a product"}, scorer, strict=True)
+        harness.preview_scored({"this": "is not a product"}, strict=True)
 
 
 def test_baseline_schema_mismatch_fails_closed(tmp_path):
@@ -443,7 +438,7 @@ def test_baseline_schema_mismatch_fails_closed(tmp_path):
 # ---------------------------------------------------------------------------
 
 
-def test_baseline_is_deterministic_and_self_describing(enricher, scorer, mineral_single):
+def test_baseline_is_deterministic_and_self_describing(enricher, mineral_single):
     rows = {"900002": harness.classification_facts(
         harness.project_current_taxonomy(mineral_single, enricher)
     )}
