@@ -1285,6 +1285,36 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         item for item in row_evidence if item["role"] == ROW_ROLE_INCLUDED_ACTIVE
     ]
 
+    # R7a — the canonical single-active fact.
+    #
+    # Phase 1 replaces generic_formulation's legacy `supp_type_of()` gate (the A6
+    # focus bonus and the premium/standard single floors) with THIS. It must
+    # never be derived from the type name: 346 products are `single_mineral` /
+    # `single_vitamin` while carrying 2+ distinct identities — a 3-mineral blend
+    # is called `single_mineral` while its own reason string says "mineral
+    # combo". Anything trusting the name hands all 346 a single-ingredient bonus.
+    #
+    # Two populations, deliberately distinct (plan §9):
+    #   quantified_label_active_count — what CLASSIFICATION sees, including
+    #     dose-bearing rows whose identity is unresolved;
+    #   scorable_active_count — the validated, score-eligible subset.
+    # `is_single_scorable_active` is true only when there is exactly ONE
+    # score-eligible identity AND no second unresolved quantified active —
+    # otherwise one mapped + one unmapped active would collect the single
+    # bonus (plan §9's explicit carve-out).
+    scorable_identities = {
+        item["canonical_id"]
+        for item in included_evidence
+        if item["score_eligible"] and item["canonical_id"]
+    }
+    unresolved_active_count = sum(
+        1 for item in included_evidence if not item["score_eligible"]
+    )
+    scorable_active_count = len(scorable_identities)
+    is_single_scorable_active = (
+        scorable_active_count == 1 and unresolved_active_count == 0
+    )
+
     return {
         "primary_type": primary_type,
         "secondary_type": secondary_type,
@@ -1311,11 +1341,16 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         "classification_row_evidence": row_evidence,
         # Genuine label actives the classifier counted but the scorer cannot
         # credit (unresolved identity). Zero while classification reads the
-        # already-mapped scorable rows; RC1 makes it meaningful, and
-        # `is_single_scorable_active` will depend on it staying explicit.
-        "unresolved_quantified_active_count": sum(
-            1 for item in included_evidence if not item["score_eligible"]
-        ),
+        # already-mapped scorable rows; RC1 makes it meaningful.
+        "unresolved_quantified_active_count": unresolved_active_count,
+        # ── the two populations + the canonical single fact (R7a) ────────────
+        # What CLASSIFICATION sees (includes unresolved dose-bearing actives).
+        "quantified_label_active_count": active_count,
+        # The validated, score-eligible subset.
+        "scorable_active_count": scorable_active_count,
+        # Phase 1 consumes THIS instead of the legacy type name. Never re-derive
+        # single-ness from `primary_type` — 346 products would lie.
+        "is_single_scorable_active": is_single_scorable_active,
     }
 
 

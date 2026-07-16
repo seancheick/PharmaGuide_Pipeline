@@ -276,7 +276,44 @@ affected. Do not add vocabulary for 8 products (**TRAP 4** / §13
 **RULE R7.** 346 products are `single_mineral`/`single_vitamin` with **≥2
 distinct** canonical identities (223 + 123). Verified: **0** are explained by
 duplicate rows, so this is *not* RC2 — it is the homogeneous-combo collapse
-(§7 #5).
+(§7 #5). The branch contradicts itself in one breath:
+
+    primary_type = "single_mineral"
+    reasons.append(f"mineral combo: {sorted(mineral_ids)}")   # says "combo"
+
+> ### R7 SPLIT — ✅ R7a SHIPPED 2026-07-16 / ⏸ R7b DEFERRED (needs vocabulary)
+>
+> **R7a — the fact (done).** The *clinical* harm is `is_single=True` granting a
+> single-ingredient bonus to a multi-ingredient product, and that flows from
+> `is_single_scorable_active`, not the type name. Emitted now, derived from
+> distinct score-eligible identities after R1 dedup, plus the plan's carve-out
+> (one mapped + one unmapped active is **not** single). Also emits the two
+> populations: `quantified_label_active_count` (what classification sees,
+> including unresolved actives) and `scorable_active_count` (the validated
+> subset). **Phase 1 is unblocked.**
+>
+> **Measured: 542 products** — not 346 — would take a bogus single bonus from the
+> type name, because `amino_acid` counts too. The cleanest proof is
+> **"BCAA 2:1:1" → `amino_acid` with 3 scorable actives** (leucine, isoleucine,
+> valine): a BCAA product is three amino acids. This is exactly §8's harness
+> requirement ("a multi-active amino-acid product is not reported as single from
+> its type name"), now confirmed on real data.
+>
+> **R7b — the type name (deferred, with evidence).** Renaming the 346 needs a
+> vocabulary call and neither available option is acceptable unilaterally:
+> - route them to `general_supplement` → **+346 to the catch-all**, undoing the
+>   −348 that R1–R3 just won, and it is less honest than `single_mineral`
+>   ("Cal Mag Zinc" is a mineral product, not a general supplement);
+> - mint `mineral_complex` / `multimineral` → a **cross-repo contract change**
+>   (`scripts/GLOSSARY.md` first per §9, then `product_type_vocab.json`, which
+>   ships to Flutter).
+>
+> §13's evidence-only rule now *supports* a term — 346 products is a real base,
+> unlike the 8 that R4's pure-panel case would have justified. **This is a user
+> decision, not an agent one.** Until then the name stays and the fact is
+> correct, so no scoring is wrong; only the cohort label is imprecise.
+> `test_classifier_identity_count_r1.py::test_r7_distinct_identities_must_not_yield_a_single_type`
+> is a **strict xfail** holding the place — it fails loudly the moment R7b lands.
 
 - **Action:** a homogeneous 2–5 combo of *distinct* identities is not "single".
   It keeps its family type only if one identity is dominant; otherwise it is a
