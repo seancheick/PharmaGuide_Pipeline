@@ -8203,7 +8203,21 @@ class SupplementEnricherV3:
         }
         ing_norm = self._normalize_text(ing_name)
         std_norm = self._normalize_text(std_name)
-        if ing_norm in generic_form_only_descriptors and std_norm in generic_form_only_descriptors:
+        # A bare generic form phrase must never create an ingredient identity.
+        # It is valid evidence, however, once the cleaner has already supplied
+        # an authoritative IQM parent (for example EPA + "Triglyceride form").
+        # Keeping that distinction here avoids a second omega identity matcher.
+        has_authoritative_parent = bool(
+            cleaner_canonical_id
+            and isinstance(cleaner_canonical_id, str)
+            and cleaner_canonical_id in quality_map
+            and not cleaner_canonical_id.startswith("_")
+        )
+        if (
+            ing_norm in generic_form_only_descriptors
+            and std_norm in generic_form_only_descriptors
+            and not has_authoritative_parent
+        ):
             return None
 
         # Phase 3: resolve the cleaner's IQM canonical_id up-front so every
