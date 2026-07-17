@@ -3757,11 +3757,59 @@ class SupplementEnricherV3:
             supplied_canonical_id=supplied_canonical_id,
         )
         canonical_parent_of = self._identity_parent_predicate(quality_map)
-        if self._is_reviewed_same_identity_alias_match(
-            ingredient,
-            match_result,
+        literal_label = (
+            ingredient.get("raw_source_text")
+            or ingredient.get("name")
+            or ""
+        )
+        reviewed_label_parent = self._reviewed_same_identity_parent_for_label(
+            literal_label,
             quality_map,
-        ) and supplied_canonical_id:
+        )
+        if reviewed_label_parent and reviewed_label_parent != supplied_canonical_id:
+            reviewed_match = self._match_quality_map(
+                literal_label,
+                literal_label,
+                quality_map,
+                cleaned_forms=ingredient.get("forms") or [],
+                cleaner_canonical_id=reviewed_label_parent,
+            )
+            if (
+                isinstance(reviewed_match, dict)
+                and reviewed_match.get("match_status") != "FORM_UNMAPPED"
+                and self._quality_match_scoring_canonical(
+                    reviewed_match,
+                    quality_map,
+                )
+                == reviewed_label_parent
+            ):
+                # A reviewer-scoped exact printed alias is stronger than a
+                # stale cleaner canonical or a broader DSLD group. This is not
+                # fuzzy recovery: only a unique alias explicitly marked
+                # ``same_identity`` can enter this branch.
+                match_result = reviewed_match
+                supplied_canonical_id = reviewed_label_parent
+                taxonomy_coherent = self._identity_taxonomy_coherent(
+                    ingredient,
+                    match_result,
+                    quality_map,
+                )
+        if (
+            supplied_canonical_id
+            and (
+                self._is_reviewed_same_identity_alias_match(
+                    ingredient,
+                    match_result,
+                    quality_map,
+                )
+                or reviewed_label_parent == supplied_canonical_id
+            )
+        ):
+            # The selected structured-form match can legitimately be stamped as
+            # ``cleaner_canonical_parent`` instead of retaining the literal
+            # alias that established the parent. Re-check the exact printed
+            # label against the reviewed IQM alias index so a broad DSLD group
+            # (Corn, Soy, Naringenin) cannot replace that curated identity.
             authoritative_reviewed_alias_id = supplied_canonical_id
 
             def resolve_candidate(candidate: str) -> Optional[str]:
@@ -4274,6 +4322,11 @@ class SupplementEnricherV3:
                     "canonical_id": source_id,
                     "canonical_id_after": source_id,
                     "canonical_source_db": source_db,
+                    "identity_disposition": "taxonomy_only",
+                    "identity_resolution_rationale": (
+                        "The printed botanical source is retained as mapped "
+                        "taxonomy while its marker remains secondary metadata."
+                    ),
                     "scoreable_identity": False,
                     "recognized_non_scorable": True,
                     "mapped": True,

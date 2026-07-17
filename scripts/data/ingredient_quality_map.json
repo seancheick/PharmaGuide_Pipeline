@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1421,
-      "total_form_aliases": 12126,
+      "total_form_aliases": 12123,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -6242,6 +6242,7 @@
         }
       },
       "vitamin k (unspecified)": {
+        "same_identity_aliases": ["vitamin k"],
         "bio_score": 6,
         "natural": false,
         "score": 6,
@@ -7317,8 +7318,6 @@
           "as Magnesium Creatine Chelate",
           "elemental magnesium",
           "magnesio",
-          "tri-mg",
-          "tri-mg(tm)",
           "Magnesium Caprylate",
           "Magnesium Beta Hydroxybutyrate",
           "dimagnesium phosphate"
@@ -9781,9 +9780,7 @@
           "creatine pyruvate supplement",
           "ot2 creatine monohydrate",
           "ot2 creatine",
-          "ot2(tm) creatine",
-          "micronized alpha-ketogluarate",
-          "micronized alpha-ketoglutarate"
+          "ot2(tm) creatine"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -10054,6 +10051,9 @@
     "rxcui": "318",
     "forms": {
       "atp disodium salt": {
+        "same_identity_aliases": [
+          "adenosine 5'-triphosphate disodium"
+        ],
         "bio_score": 7,
         "natural": false,
         "score": 7,
@@ -15071,7 +15071,6 @@
         "absorption": "poor to moderate",
         "notes": "Yogurt/cheese starter cultures (S. thermophilus, L. bulgaricus). Some lactose digestion benefits but limited gut survival compared to dedicated probiotic strains. Not intended as therapeutic probiotics.",
         "aliases": [
-          "S. thermophilus",
           "SD5210",
           "streptococcus thermophilus supplement"
         ],
@@ -15337,6 +15336,7 @@
         }
       },
       "prebiotics (unspecified)": {
+        "same_identity_aliases": ["prebiotic"],
         "bio_score": 9,
         "natural": false,
         "score": 9,
@@ -16425,6 +16425,10 @@
     "rxcui": "1512",
     "forms": {
       "betaine anhydrous": {
+        "same_identity_aliases": [
+          "tri-mg",
+          "tri-mg(tm)"
+        ],
         "score": 13,
         "natural": false,
         "absorption": "excellent (Tmax ~0.9h, t1/2 ~14h; EMA modeled ~100% oral bioavailability)",
@@ -16443,7 +16447,9 @@
           "BetaPure Betaine Anhydrous",
           "betapure betaine",
           "betapower betaine anhydrous",
-          "betapower"
+          "betapower",
+          "tri-mg",
+          "tri-mg(tm)"
         ],
         "context_include": [
           "betaine",
@@ -18626,6 +18632,7 @@
     "rxcui": "39918",
     "forms": {
       "zeaxanthin (unspecified)": {
+        "same_identity_aliases": ["zeaxanthin"],
         "bio_score": 8,
         "natural": false,
         "score": 8,
@@ -23412,7 +23419,6 @@
           "pancreatin",
           "animal enzymes",
           "porcine enzymes",
-          "ox bile extract",
           "animal-derived enzymes",
           "pancreatic enzyme blend",
           "porcine pancreatin",
@@ -23421,7 +23427,6 @@
           "pancreatic enzymes supplement",
           "animal enzymes supplement",
           "porcine enzymes supplement",
-          "ox bile extract supplement",
           "animal-derived enzymes supplement",
           "pancreatic enzyme blend supplement",
           "porcine pancreatin supplement",
@@ -23729,6 +23734,10 @@
     "rxcui": "53553",
     "forms": {
       "nattokinase standard": {
+        "same_identity_aliases": [
+          "natto extract",
+          "fermented soybean powder"
+        ],
         "bio_score": 9,
         "natural": true,
         "score": 12,
@@ -23824,8 +23833,7 @@
           "plant squalene",
           "olive squalene",
           "shark squalene",
-          "amaranth squalene",
-          "highly refined Shark Liver Oil"
+          "amaranth squalene"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26496,6 +26504,10 @@
     "dosage_importance": 0.1,
     "forms": {
       "opc (unspecified)": {
+        "same_identity_aliases": [
+          "oligomeric proanthocyanidins",
+          "masquelier's original opcs"
+        ],
         "bio_score": 5,
         "natural": true,
         "score": 8,
@@ -26720,6 +26732,7 @@
     "dosage_importance": 0.1,
     "forms": {
       "rg3 (unspecified)": {
+        "same_identity_aliases": ["ginsenoside rg3"],
         "bio_score": 5,
         "natural": true,
         "score": 8,
@@ -28802,8 +28815,6 @@
         "aliases": [
           "delphinidin",
           "delphinidins",
-          "delphinol",
-          "delphinol maqui berry extract",
           "maqui berry delphinidin",
           "delphinidin 3-glucoside",
           "delphinidin 3-sambubioside"
@@ -29952,7 +29963,6 @@
         "notes": "Predominant soy isoflavone. Branded: geniVida (DSM, 99% pure, GRAS). Oral F ~25% (PMID 8207540; SCCS 2023). ERalpha:ERbeta selectivity ~1:6 (preferential ERbeta). DB-RCT (PMC3549413, n=58, 6 mo): geniVida + cofactors increased femoral neck BMD +3.4% vs placebo. Hot flash DB-RCT: 51% reduction at 12 wk. Phase I (PMID 14652284): well tolerated up to 800 mg. Less bioavailable than daidzein (~52% F). Estrogenic: caution in hormone-sensitive populations.",
         "aliases": [
           "genistein",
-          "Virtiva",
           "genistin",
           "genivida genistein",
           "Genistein/Genistin",
@@ -30567,6 +30577,13 @@
     "dosage_importance": 1.0,
     "forms": {
       "isoflavones (unspecified)": {
+        "same_identity_aliases": [
+          "soy germ extract",
+          "soy germ isoflavones concentrate",
+          "novasoy soy isoflavone concentrate",
+          "soy natto extract",
+          "standardized soy isoflavone extract"
+        ],
         "bio_score": 8,
         "natural": true,
         "score": 11,
@@ -31533,6 +31550,9 @@
     "dosage_importance": 0.1,
     "forms": {
       "naringin (unspecified)": {
+        "same_identity_aliases": [
+          "naringin"
+        ],
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -34991,6 +35011,7 @@
     "cui": "C0002712",
     "forms": {
       "alpha-amylase enzyme": {
+        "same_identity_aliases": ["alpha-amylase"],
         "bio_score": 12,
         "natural": true,
         "score": 15,
@@ -38440,12 +38461,13 @@
         }
       },
       "streptococcus thermophilus (unspecified)": {
+        "same_identity_aliases": ["s. thermophilus"],
         "bio_score": 11,
         "natural": true,
         "score": 14,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
-        "aliases": ["streptococcus thermophilus"],
+        "aliases": ["streptococcus thermophilus", "s. thermophilus"],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.2,
@@ -38707,6 +38729,7 @@
     "category": "proteins",
     "forms": {
       "fermented goat whey protein": {
+        "same_identity_aliases": ["fermented goat's milk whey"],
         "bio_score": 8,
         "natural": true,
         "score": 11,
@@ -39253,6 +39276,7 @@
     "cui": "C4056511",
     "forms": {
       "omega 9 fatty acids (standard)": {
+        "same_identity_aliases": ["omega-9 fatty acids"],
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -48223,6 +48247,7 @@
     },
     "forms": {
       "algae oil (dha)": {
+        "same_identity_aliases": ["Elantria"],
         "bio_score": 12,
         "score": 15,
         "natural": true,
@@ -48686,6 +48711,10 @@
     "rxcui": "17511",
     "forms": {
       "alpha-ketoglutarate (unspecified)": {
+        "same_identity_aliases": [
+          "micronized alpha-ketogluarate",
+          "micronized alpha-ketoglutarate"
+        ],
         "bio_score": 9,
         "natural": false,
         "score": 9,
@@ -48699,7 +48728,9 @@
           "alpha ketoglutaric acid",
           "akg",
           "calcium alpha-ketoglutarate",
-          "a-ketoglutarate"
+          "a-ketoglutarate",
+          "micronized alpha-ketogluarate",
+          "micronized alpha-ketoglutarate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -50983,6 +51014,7 @@
         "aliases": [
           "bile extract",
           "ox bile",
+          "ox bile extract",
           "bovine bile",
           "bile salts",
           "bile acid extract",
@@ -51328,6 +51360,7 @@
     "cui": "C5433892",
     "forms": {
       "methylliberine (unspecified)": {
+        "same_identity_aliases": ["methyliberine"],
         "bio_score": 9,
         "natural": true,
         "score": 12,
@@ -54484,6 +54517,10 @@
     "dosage_importance": 0.1,
     "forms": {
       "maqui berry (unspecified)": {
+        "same_identity_aliases": [
+          "delphinol",
+          "delphinol maqui berry extract"
+        ],
         "bio_score": 5,
         "natural": true,
         "score": 8,
@@ -54497,7 +54534,9 @@
           "maquibright",
           "maquibright aristotelia chilensis berry standardized extract",
           "maquibright berry standardized extract",
-          "aristotelia chilensis berry extract"
+          "aristotelia chilensis berry extract",
+          "delphinol",
+          "delphinol maqui berry extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -58650,6 +58689,7 @@
     "dosage_importance": 1.0,
     "forms": {
       "epigallocatechin (unspecified)": {
+        "same_identity_aliases": ["epigallocatechin"],
         "bio_score": 5,
         "natural": true,
         "score": 8,
@@ -59101,6 +59141,7 @@
     "dosage_importance": 1.0,
     "forms": {
       "touchi extract (unspecified)": {
+        "same_identity_aliases": ["touchi extract"],
         "bio_score": 5,
         "natural": true,
         "score": 8,

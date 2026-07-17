@@ -724,6 +724,233 @@ def test_reviewed_same_identity_alias_beats_broader_source_group(
 
 
 @pytest.mark.parametrize(
+    ("name", "standard_name", "source_group", "expected_canonical"),
+    [
+        ("Corn Silk Powder", "Corn Silk", "Corn", "corn_silk"),
+        ("Natto extract", "Nattokinase", "Soy", "nattokinase"),
+        ("Naringin", "Naringin", "Naringenin", "naringin"),
+        ("Soy germ extract", "Isoflavones", "Soy", "isoflavones"),
+        (
+            "Adenosine 5'-Triphosphate Disodium",
+            "ATP (Adenosine Triphosphate)",
+            "Adenosine",
+            "atp",
+        ),
+        (
+            "Oligomeric proanthocyanidins",
+            "OPCs (Oligomeric Proanthocyanidins)",
+            "Proanthocyanidins (unspecified)",
+            "opc",
+        ),
+        ("Prebiotic", "Prebiotics", "Fiber (unspecified)", "prebiotics"),
+        ("Zeaxanthin", "Zeaxanthin", "Lutein", "zeaxanthin"),
+        ("Alpha-Amylase", "Alpha-Amylase", "Amylase", "alpha_amylase"),
+        (
+            "Epigallocatechin",
+            "Epigallocatechin (EGC)",
+            "EGCG",
+            "epigallocatechin",
+        ),
+        ("Methyliberine", "Methylliberine", "Caffeine", "methylliberine"),
+        (
+            "Omega-9 Fatty Acids",
+            "Omega-9 Fatty Acids",
+            "Omega-9",
+            "omega_9_fatty_acids",
+        ),
+        ("Vitamin K", "Brewer's Yeast", "Vitamin K", "vitamin_k"),
+        (
+            "fermented Soybean powder",
+            "Nattokinase",
+            "Soy",
+            "nattokinase",
+        ),
+        ("Touchi extract", "Touchi Extract", "Soy", "touchi_extract"),
+        ("Ginsenoside Rg3", "Ginsenoside Rg3", "Ginsenosides", "rg3"),
+        (
+            "Fermented Goat's Milk Whey",
+            "Goat Whey Protein",
+            "Whey",
+            "goat_whey_protein",
+        ),
+        (
+            "S. thermophilus",
+            "Probiotics",
+            "Streptococcus Thermophilus",
+            "streptococcus_thermophilus",
+        ),
+    ],
+)
+def test_exact_reviewed_label_is_not_repaired_to_broader_source_group(
+    enricher: SupplementEnricherV3,
+    name: str,
+    standard_name: str,
+    source_group: str,
+    expected_canonical: str,
+) -> None:
+    """Reduced July-16 misses: literal curated identity outranks DSLD grouping."""
+    row = _active_row(
+        name=name,
+        raw_source_text=name,
+        standardName=standard_name,
+        canonical_id=expected_canonical,
+        cleaner_match_method=None,
+        quantity=100.0,
+        ingredientGroup=source_group,
+        forms=[],
+        raw_taxonomy={
+            "category": "botanical",
+            "ingredientGroup": source_group,
+            "forms": [],
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": f"literal-authority-{expected_canonical}",
+            "fullName": name,
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    assert len(result["ingredients_scorable"]) == 1
+    mapped = result["ingredients_scorable"][0]
+    assert mapped["canonical_id"] == expected_canonical
+    assert mapped["identity_disposition"] in {"clean", "repaired"}
+    assert mapped["scoreable_identity"] is True
+
+
+@pytest.mark.parametrize(
+    ("name", "standard_name", "initial_canonical", "group", "forms", "expected"),
+    [
+        (
+            "Tri-MG(TM)",
+            "Magnesium",
+            "magnesium",
+            "Betaine",
+            [{"name": "Betaine Anhydrous", "ingredientGroup": "Betaine Anhydrous"}],
+            "tmg_betaine",
+        ),
+        (
+            "Micronized alpha-Ketoglutarate",
+            "Creatine Monohydrate",
+            "creatine_monohydrate",
+            "Alpha-Ketoglutarate",
+            [],
+            "alpha_ketoglutarate",
+        ),
+        (
+            "Delphinol",
+            "Delphinidin",
+            "delphinidin",
+            "Maqui",
+            [],
+            "maqui_berry",
+        ),
+        (
+            "Ox Bile extract",
+            "Digestive Enzymes",
+            "digestive_enzymes",
+            "Bile",
+            [],
+            "bile_extract",
+        ),
+        (
+            "Elantria",
+            "Algae Oil",
+            "algae_oil",
+            "Fish Oil",
+            [],
+            "algae_oil",
+        ),
+    ],
+)
+def test_reviewed_literal_corrects_stale_or_broader_cleaner_identity(
+    enricher: SupplementEnricherV3,
+    name: str,
+    standard_name: str,
+    initial_canonical: str,
+    group: str,
+    forms: list[dict],
+    expected: str,
+) -> None:
+    row = _active_row(
+        name=name,
+        raw_source_text=name,
+        standardName=standard_name,
+        canonical_id=initial_canonical,
+        canonical_source_db="ingredient_quality_map",
+        cleaner_match_method=None,
+        quantity=100.0,
+        ingredientGroup=group,
+        forms=forms,
+        raw_taxonomy={
+            "category": "non-nutrient/non-botanical",
+            "ingredientGroup": group,
+            "forms": forms,
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": f"reviewed-correction-{expected}",
+            "fullName": name,
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    assert [item["canonical_id"] for item in result["ingredients_scorable"]] == [
+        expected
+    ]
+
+
+def test_percent_probiotic_child_keeps_reviewed_strain_identity(
+    enricher: SupplementEnricherV3,
+) -> None:
+    row = _active_row(
+        name="S. thermophilus",
+        raw_source_text="S. thermophilus",
+        standardName="Probiotics",
+        canonical_id="probiotics",
+        cleaner_match_method=None,
+        quantity=10.0,
+        unit="%",
+        ingredientGroup="Streptococcus Thermophilus",
+        forms=[],
+        parentBlend="Probiotic Complex Blend",
+        parentBlendMass=4_000_000_000,
+        parentBlendUnit="Organism(s)",
+        isNestedIngredient=True,
+        raw_taxonomy={
+            "category": "bacteria",
+            "ingredientGroup": "Streptococcus Thermophilus",
+            "forms": [],
+            "parentBlend": "Probiotic Complex Blend",
+            "isNestedIngredient": True,
+            "quantityVariants": [{"quantity": 10.0, "unit": "%"}],
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "799",
+            "fullName": "Probiotic Complex 4",
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    assert [item["canonical_id"] for item in result["ingredients_scorable"]] == [
+        "streptococcus_thermophilus"
+    ]
+
+
+@pytest.mark.parametrize(
     (
         "name",
         "source_group",
@@ -800,6 +1027,47 @@ def test_source_extract_alias_does_not_become_marker_identity(
     assert recognized[0]["mapped_identity"] is True
     assert recognized[0]["scoreable_identity"] is False
     assert recognized[0]["role_classification"] == "recognized_non_scorable"
+
+
+def test_botanical_marker_demotion_replaces_stale_identity_conflict(
+    enricher: SupplementEnricherV3,
+) -> None:
+    """Reduced GNC row: source lineage is mapped, but never marker-scored."""
+    row = _active_row(
+        name="Cinnamon bark powder",
+        raw_source_text="Cinnamon bark powder",
+        standardName="Cinnamon",
+        canonical_id="cinnamon",
+        canonical_source_db="ingredient_quality_map",
+        cleaner_match_method=None,
+        quantity=500.0,
+        ingredientGroup="Cinnamomum burmanii",
+        forms=[],
+        raw_taxonomy={
+            "category": "botanical",
+            "ingredientGroup": "Cinnamomum burmanii",
+            "forms": [],
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "gnc-cinnamon-marker-lineage",
+            "fullName": "Cinnamon",
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["ingredients_scorable"] == []
+    recognized = result["ingredients_recognized_non_scorable"]
+    assert len(recognized) == 1
+    assert recognized[0]["canonical_id"] == "cinnamon_bark"
+    assert recognized[0]["identity_disposition"] == "taxonomy_only"
+    assert recognized[0]["identity_decision_reason"] == (
+        "botanical_marker_is_secondary_metadata"
+    )
+    assert recognized[0]["scoreable_identity"] is False
 
 
 def test_stale_botanical_source_recovery_uses_bounded_identity_index(

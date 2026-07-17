@@ -154,6 +154,65 @@ def test_active_omega_rollup_compound_forms_split_to_epa_and_dha():
     assert "other omega-3 fatty acids" not in names
 
 
+def test_other_fatty_acids_is_a_composition_rollup_not_an_active():
+    raw = {
+        "id": "fixture-other-fatty-acids-rollup",
+        "fullName": "Organic Flaxseed Oil",
+        "ingredientRows": [
+            {
+                "name": "Organic Flaxseed Oil",
+                "ingredientGroup": "Flaxseed",
+                "category": "botanical",
+                "quantity": [{"quantity": 1000, "unit": "mg"}],
+                "nestedRows": [
+                    {
+                        "name": "Other Fatty Acids",
+                        "ingredientGroup": "Fatty acids",
+                        "category": "fatty acid",
+                        "quantity": [{"quantity": 50, "unit": "mg"}],
+                    }
+                ],
+            }
+        ],
+        "otheringredients": {"ingredients": []},
+    }
+
+    cleaned = _clean(raw)
+
+    active_names = _active_names(cleaned)
+    assert "other fatty acids" not in active_names
+    assert any(
+        row.get("display_type") == "nutrition_fact"
+        and str(row.get("raw_source_text") or row.get("name") or "").lower()
+        == "other fatty acids"
+        for row in cleaned.get("display_ingredients", [])
+    )
+
+
+def test_total_carotenoids_is_a_rollup_not_a_second_active():
+    raw = {
+        "id": "fixture-total-carotenoids-rollup",
+        "fullName": "Mixed Carotenoid Formula",
+        "ingredientRows": [
+            {
+                "name": "Total Carotenoids",
+                "ingredientGroup": "carotenoids",
+                "category": "non-nutrient/non-botanical",
+                "quantity": [{"quantity": 10, "unit": "mg"}],
+            }
+        ],
+        "otheringredients": {"ingredients": []},
+    }
+
+    cleaned = _clean(raw)
+
+    assert "total carotenoids" not in _active_names(cleaned)
+    assert any(
+        row.get("display_type") == "nutrition_fact"
+        for row in cleaned.get("display_ingredients", [])
+    )
+
+
 def test_active_omega_nested_compound_forms_split_to_epa_and_dha():
     raw = {
         "id": "fixture-omega-nested-compound-forms",
