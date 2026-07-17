@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1421,
-      "total_form_aliases": 12087,
+      "total_form_aliases": 12088,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -61,7 +61,7 @@
       "vitamins": 23
     },
   "schema_version": "5.4.11",
-    "last_updated": "2026-07-16",
+    "last_updated": "2026-07-17",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -42487,6 +42487,7 @@
         "notes": "Fish liver oil contains EPA/DHA plus vitamins A and D. Cod liver oil is the most common form. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "shark liver oil",
+          "highly refined shark liver oil",
           "halibut liver oil",
           "ecoMarine Shark Liver Oil"
         ],
