@@ -3511,6 +3511,18 @@ class EnhancedDSLDNormalizer:
                 "standardized_botanical",
             }:
                 return latin_result["standard_name"], True, forms or []
+
+        # HOWARU is a family brand, not a strain identity. Some DSLD labels put
+        # the brand in the primary row and the actual strain in its sole form.
+        # Promote only that one unambiguous child and only through the existing
+        # clinically-relevant-strain matcher. With zero/multiple children (or a
+        # non-strain child), retain HOWARU as unmapped rather than guessing.
+        if name_lower == "howaru" and len(forms) == 1:
+            child_strain = self._match_probiotic_strain(
+                self.matcher.preprocess_text(forms[0])
+            )
+            if child_strain:
+                return child_strain, True, forms
         
         # NOTE: Fuzzy matching for active ingredients is INTENTIONALLY DISABLED for safety.
         # The "active" category is NOT in safe_fuzzy_categories, so this returns (None, 0).

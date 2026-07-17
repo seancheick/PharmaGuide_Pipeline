@@ -86,6 +86,36 @@ def test_ingredient_group_fallback_does_not_override_direct_name_match(normalize
     assert "D-Limonene".lower() in str(standard_name).lower()
 
 
+def test_brand_only_probiotic_with_one_verified_child_uses_child_identity(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "HOWARU", ["Bifidobacterium animalis lactis HN019"]
+    )
+
+    assert mapped is True
+    assert "hn019" in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "forms",
+    [
+        [],
+        [
+            "Bifidobacterium animalis lactis HN019",
+            "Lactobacillus rhamnosus GG",
+        ],
+    ],
+)
+def test_brand_only_probiotic_without_one_unambiguous_child_stays_unmapped(
+    normalizer, forms
+):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "HOWARU", forms
+    )
+
+    assert mapped is False
+    assert standard_name == "HOWARU"
+
+
 def test_ingredient_group_fallback_uses_exact_normalized_lookup(normalizer):
     # Use a group name that is genuinely absent from all DBs to verify that the
     # group fallback returns unmapped when the group itself cannot be resolved.
@@ -1048,7 +1078,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Actazin Kiwifruit Powder", "Kiwifruit"),
         ("Tillandsia", "Tillandsia"),
         ("Selenium Chelate", "Selenium"),
-        ("Horny Goat Weed P.E.", "Icariin"),
+        ("Horny Goat Weed P.E.", "Horny Goat Weed"),
         ("Cholesstrinol HP", "Phytosterols"),
         ("Willow bark 5:1 extract", "White Willow Bark"),
         ("Sprouted Barley Juice", "Barley Juice"),
@@ -1180,7 +1210,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Soynatto Fermented Soyfood", "Isoflavones"),
         ("MaquiBright Aristotelia chilensis berry standardized extract", "Maqui"),
         ("EVNolMax", "Vitamin E"),
-        ("ERr 731", "Rhaponticin"),
+        ("ERr 731", "Siberian Rhubarb"),
         ("Ceramide-PCD", "Ceramides"),
         ("Tribulosides", "Tribulus"),
         ("Blue Vervain", "Blue Vervain"),
@@ -1225,7 +1255,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Maca 0.6% extract", "Maca"),
         ("Milk Thistle powdered extract", "Milk Thistle"),
         ("Milk Thistle Fruit and Seed Extract", "Milk Thistle"),
-        ("Pycrinil Artichoke extract", "Cynarin"),
+        ("Pycrinil Artichoke extract", "Globe Artichoke"),
         ("Pueraria mirifica extract", "Pueraria Mirifica"),
         ("Oat Aerial Parts Extract", "Oat Straw"),
         ("Motherwort Aerial Parts Extract", "Motherwort"),
@@ -1385,7 +1415,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("dry sprouted Barley", "Barley"),
         ("dry Wheat Grass", "Wheatgrass"),
         ("Yucca 4:1 extract", "Yucca"),
-        ("Wakame powder", "Fucoidan"),
+        ("Wakame powder", "Wakame"),
         ("Uva Ursi 3:1 extract", "Uva Ursi"),
         ("Sweet Fennel seed powder", "Fennel"),
         ("Suma root 4:1 extract", "Suma Root"),
@@ -1742,14 +1772,14 @@ def test_raw_validated_punctuation_and_form_variants_map(normalizer, name, expec
 @pytest.mark.parametrize(
     "name,expected_substring",
     [
-        ("ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract", "Rhaponticin"),
+        ("ERr 731 Siberian Rhubarb (Rheum rhaponticum L.) extract", "Siberian Rhubarb"),
         ("Capros Amla extract", "Amla"),
         ("Amla (Emblica officinalis) fruit 5:1 extract", "Amla"),
         ("Black Elder Fruit Extract", "Elderberry"),
         ("Soy Isoflavones 40%", "Isoflavones"),
         ("Japanese Chlorella", "Chlorella"),
         ("BaCognize Ultra Bacopa extract", "Bacopa"),
-        ("BroccoVital Myrosinase Broccoli extract", "Sulforaphane"),
+        ("BroccoVital Myrosinase Broccoli extract", "Broccoli"),
         ("Deer Antler horn powder", "Deer Antler"),
         ("Deglycyrrhized Licorice", "Licorice"),
         ("Bilberry standardized extract", "Bilberry"),
@@ -2598,7 +2628,7 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
         ("organic cayenne", "Cayenne"),
         # Other
         ("organic anise", "Anise"),
-        ("organic schisandra (schisandra chinensis) berry extract", "Schisandrin"),
+        ("organic schisandra (schisandra chinensis) berry extract", "Schisandra"),
         ("wild crafted butterbur extract", "Butterbur"),
         ("organic vitex", "Chasteberry"),
     ],

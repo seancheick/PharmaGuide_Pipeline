@@ -3,10 +3,10 @@
     "description": "Clinically relevant probiotic strains and prebiotic compounds",
     "purpose": "probiotic_strain_validation",
     "schema_version": "5.1.0",
-    "last_updated": "2026-07-13",
+    "last_updated": "2026-07-17",
     "total_entries": 49,
     "data_source": null,
-    "version": "2.2.7",
+    "version": "2.2.8",
     "signoff_status_note": "42/49 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. 2026-05-22 unmapped-resolution batch added 2 new entries pending Dr Pham review: STRAIN_PLANTARUM_LP01 (Probiotical LMG P-21021, 3 content-verified PMIDs) and STRAIN_LACTIS_BS01 (Probiotical LMG P-21384, 2 content-verified PMIDs). 2026-06-05 Seed DS-01 exact-code batch added 4 formula-backed SD-* strains pending Dr Pham review; PMIDs 40944126 and 41750436 are DS-01 product/formula RCTs, not isolated strain-specific trials. 2026-07-13 added exact M-63 identity with two content-verified single-strain RCTs (PMIDs 36986131 and 42056537), conservatively classified moderate pending clinician review.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
@@ -576,6 +576,7 @@
       "aliases": [
         "B. lactis HN019",
         "Bifidobacterium animalis HN019",
+        "Bifidobacterium animalis lactis HN019",
         "DR10",
         "HOWARU Bifido"
       ],
