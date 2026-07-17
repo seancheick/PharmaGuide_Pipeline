@@ -1,6 +1,6 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "frozen_on": "2026-07-15",
   "fixture_schema": {
     "frozen_fields": [
@@ -9,6 +9,8 @@
       "brand_name",
       "score_80",
       "score_100_equivalent",
+      "quality_score_v4_100",
+      "quality_score_status",
       "grade",
       "verdict",
       "safety_verdict",
@@ -191,6 +193,12 @@
     }
   ],
   "changelog": [
+    {
+      "date": "2026-07-17",
+      "action": "refrozen_v3_to_v4_scoring_cutover",
+      "products": "all 30",
+      "notes": "The prior baselines (last frozen at e2583594, the v3-era completion merge) were captured under the retired v3 /80 scorer. Stage 3 has since cut over to the v4 six-pillar producer (refactor f3bed2f2), so EVERY fixture drifted identically and structurally: output_schema_version 3.6.0->4.0.0, score_basis bioactives_scored->v4_six_pillar, evaluation_stage scoring->scored_v4, and the v3-only fields score_80/section_scores/breakdown/supp_type dropped (they do not exist in v4 output). This is the intended, already-shipped v3->v4 cutover, not a scoring regression: v4 is the production scorer (AGENTS.md). Re-frozen all 30 from the current v4 scored output. Added quality_score_v4_100 and quality_score_status to frozen_fields so the gate now pins the canonical v4 score, not only its score_100_equivalent compat mirror. Representative shifts (v3->v4, all shipped v4 numbers): Thorne Vitamin D 72.1->95.0, Iron Bisglycinate 69.2->90.5, Zinc 71.1->86.3 (v4 rewards clean single-ingredient forms); Thorne Catalyte 83.8->71.8, GoL Perfect Food 66.0->50.8 (v4 blend/transparency penalties). Two safety-relevant verdict moves reviewed: 306381 Nutricost PRE SAFE->CAUTION (STIMULANT_CAFFEINE_HIGH_DOSE, correct), 298070 Thorne FloraMend SAFE->POOR (v4 tier label, not a safety block)."
+    },
     {
       "date": "2026-04-20",
       "action": "frozen",
