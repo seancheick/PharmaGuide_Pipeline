@@ -738,6 +738,9 @@ class SupplementEnricherV3:
         # recompilation on large labels with many active/nested rows.
         self._regex_pattern_cache: Dict[str, re.Pattern] = {}
         self._token_bounded_pattern_cache: Dict[str, re.Pattern] = {}
+        self._short_acronym_alias_cache: Dict[str, bool] = {}
+        self._low_precision_token_alias_cache: Dict[str, bool] = {}
+        self._safe_token_alias_cache: Dict[Tuple[str, Tuple[str, ...]], Tuple[str, ...]] = {}
         self._hyphen_space_pattern_cache: Dict[str, re.Pattern] = {}
         self._color_context_pattern = re.compile(
             r"(?<![a-z0-9])(dye|color|colour|fd\s*&\s*c|fdc|lake|pigment)(?![a-z0-9])"
@@ -1461,6 +1464,34 @@ class SupplementEnricherV3:
         self._iqm_exact_index = exact_idx
         self._iqm_norm_index = norm_idx
 
+        # Clinical evidence matching is exact under two deterministic
+        # normalizations. Build a candidate index once so each active/marker
+        # does not rescan every study; _clinical_study_match remains the sole
+        # authority for exclusions and final match provenance.
+        clinical_db = self.databases.get("backed_clinical_studies", {})
+        clinical_studies = (
+            clinical_db.get("backed_clinical_studies", [])
+            if isinstance(clinical_db, dict)
+            else []
+        )
+        clinical_norm_index: Dict[str, set[int]] = {}
+        clinical_key_index: Dict[str, set[int]] = {}
+        for study_index, study in enumerate(clinical_studies):
+            if not isinstance(study, dict):
+                continue
+            study_names = [study.get("standard_name", "")]
+            study_names.extend(self._collect_clinical_aliases(study))
+            for study_name in study_names:
+                normalized = self._normalize_text(study_name)
+                normalized_key = norm_module.make_normalized_key(study_name)
+                if normalized:
+                    clinical_norm_index.setdefault(normalized, set()).add(study_index)
+                if normalized_key:
+                    clinical_key_index.setdefault(normalized_key, set()).add(study_index)
+        self._clinical_study_index_source = clinical_studies
+        self._clinical_study_norm_index = clinical_norm_index
+        self._clinical_study_key_index = clinical_key_index
+
         # ── Non-scorable DB index: normalized_name → result dict ──
         nonscorable_idx: Dict[str, Dict] = {}
 
@@ -1666,22 +1697,32 @@ class SupplementEnricherV3:
 
         # Fail-safe for replaying older cleaned artifacts: current exact raw
         # source identity outranks a stale marker-valued standardName/canonical.
+        # This guard runs for every IQM candidate, so it must remain bounded:
+        # never fall through to _is_recognized_non_scorable's exhaustive DB
+        # scans on a normal index miss.
         raw_label = ingredient.get("raw_source_text") or ingredient.get("name") or ""
-        recognition = self._is_recognized_non_scorable(
+        indexed_variants = (
             raw_label,
-            raw_label,
-            raw_row=ingredient,
+            norm_module.preprocess_text(raw_label),
+            re.sub(r"\([^)]*\)", " ", raw_label),
         )
-        if (
-            recognition
-            and recognition.get("recognition_source")
-            in BOTANICAL_CANONICAL_SOURCE_DBS
-            and recognition.get("matched_entry_id")
-        ):
-            return (
-                recognition["matched_entry_id"],
-                recognition["recognition_source"],
-            )
+        seen_keys: set[str] = set()
+        for variant in indexed_variants:
+            normalized = norm_module.normalize_text(variant)
+            if not normalized or normalized in seen_keys:
+                continue
+            seen_keys.add(normalized)
+            recognition = self._nonscorable_index.get(normalized)
+            if (
+                recognition
+                and recognition.get("recognition_source")
+                in BOTANICAL_CANONICAL_SOURCE_DBS
+                and recognition.get("matched_entry_id")
+            ):
+                return (
+                    recognition["matched_entry_id"],
+                    recognition["recognition_source"],
+                )
         return None
 
     def _is_blocked_botanical_source_marker_match(
@@ -2281,6 +2322,33 @@ class SupplementEnricherV3:
                 aliases.extend([str(item) for item in value if item])
         return aliases
 
+    def _candidate_clinical_studies(
+        self,
+        candidates: List[str],
+        studies: List[Dict],
+    ) -> List[Dict]:
+        """Return exact-normalization candidates in original study order.
+
+        Tests and audit callers sometimes replace the clinical DB after
+        initialization. In that case, fall back to the authoritative full
+        scan rather than consulting an index built for a different list.
+        """
+        if studies is not self._clinical_study_index_source:
+            return studies
+        study_indexes: set[int] = set()
+        for candidate in candidates:
+            normalized = self._normalize_text(candidate)
+            normalized_key = norm_module.make_normalized_key(candidate)
+            if normalized:
+                study_indexes.update(
+                    self._clinical_study_norm_index.get(normalized, ())
+                )
+            if normalized_key:
+                study_indexes.update(
+                    self._clinical_study_key_index.get(normalized_key, ())
+                )
+        return [studies[index] for index in sorted(study_indexes)]
+
     def _clinical_study_match(self, candidates: List[str], study: Dict) -> Optional[Dict]:
         """
         Exact clinical-study matching with optional false-positive suppression.
@@ -2567,13 +2635,20 @@ class SupplementEnricherV3:
 
     def _is_short_acronym_alias(self, alias: str) -> bool:
         """Return true for short acronym aliases that need literal bounds."""
-        compact = re.sub(r"[^A-Za-z0-9]", "", str(alias or ""))
+        alias_text = str(alias or "")
+        cached = self._short_acronym_alias_cache.get(alias_text)
+        if cached is not None:
+            return cached
+        compact = re.sub(r"[^A-Za-z0-9]", "", alias_text)
         if compact.lower() in {"pho", "phos"}:
-            return True
-        if not (2 <= len(compact) <= 5):
-            return False
-        uppercase_count = sum(1 for ch in compact if ch.isupper())
-        return compact.isupper() or uppercase_count >= 2
+            result = True
+        elif not (2 <= len(compact) <= 5):
+            result = False
+        else:
+            uppercase_count = sum(1 for ch in compact if ch.isupper())
+            result = compact.isupper() or uppercase_count >= 2
+        self._short_acronym_alias_cache[alias_text] = result
+        return result
 
     def _literal_short_acronym_match(self, ingredient_name: str, alias: str) -> bool:
         """Match short acronym aliases only as raw standalone tokens.
@@ -2599,8 +2674,14 @@ class SupplementEnricherV3:
         These phrases are too generic and create false positives
         (e.g. "mushroom extract", "disodium salt").
         """
-        alias_norm = self._normalize_text(alias)
+        alias_text = str(alias or "")
+        cached = self._low_precision_token_alias_cache.get(alias_text)
+        if cached is not None:
+            return cached
+
+        alias_norm = self._normalize_text(alias_text)
         if not alias_norm:
+            self._low_precision_token_alias_cache[alias_text] = True
             return True
 
         explicit_deny = {
@@ -2614,6 +2695,7 @@ class SupplementEnricherV3:
             "salt",
         }
         if alias_norm in explicit_deny:
+            self._low_precision_token_alias_cache[alias_text] = True
             return True
 
         generic_tokens = {
@@ -2623,25 +2705,30 @@ class SupplementEnricherV3:
         }
         tokens = [t for t in re.split(r"[\s/-]+", alias_norm) if t]
         if not tokens:
+            self._low_precision_token_alias_cache[alias_text] = True
             return True
 
         informative = [
             t for t in tokens
             if len(t) >= 4 and t not in generic_tokens and not t.isdigit()
         ]
-        return len(informative) == 0
+        result = len(informative) == 0
+        self._low_precision_token_alias_cache[alias_text] = result
+        return result
 
     def _filter_safe_token_aliases(self, target_name: str, aliases: List[str]) -> List[str]:
         """Return aliases safe for token-bounded matching."""
-        safe = []
-        for alias in aliases:
-            if not self._is_low_precision_token_alias(alias):
-                safe.append(alias)
-
-        # Always include canonical target if present.
-        if target_name:
-            safe.insert(0, target_name)
-        return safe
+        cache_key = (str(target_name or ""), tuple(str(alias) for alias in aliases))
+        cached = self._safe_token_alias_cache.get(cache_key)
+        if cached is not None:
+            return list(cached)
+        safe = tuple(
+            alias
+            for alias in cache_key[1]
+            if not self._is_low_precision_token_alias(alias)
+        )
+        self._safe_token_alias_cache[cache_key] = safe
+        return list(safe)
 
     def _token_match_has_required_context(
         self,
@@ -13591,7 +13678,7 @@ class SupplementEnricherV3:
                 candidate_names.append(branded_token)
             seen_study_ids = set()
 
-            for study in studies:
+            for study in self._candidate_clinical_studies(candidate_names, studies):
                 study_name = study.get('standard_name', '')
                 study_aliases = self._collect_clinical_aliases(study)
                 matched = self._clinical_study_match(candidate_names, study)
@@ -13709,7 +13796,10 @@ class SupplementEnricherV3:
                 if not marker_id:
                     continue
                 marker_candidate_names = [marker_id, marker_id.replace("_", " ")]
-                for study in studies:
+                for study in self._candidate_clinical_studies(
+                    marker_candidate_names,
+                    studies,
+                ):
                     study_id = study.get("id", "")
                     if not study_id or study_id in existing_study_ids:
                         continue

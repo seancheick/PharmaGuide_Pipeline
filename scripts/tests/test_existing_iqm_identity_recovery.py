@@ -802,6 +802,71 @@ def test_source_extract_alias_does_not_become_marker_identity(
     assert recognized[0]["role_classification"] == "recognized_non_scorable"
 
 
+def test_stale_botanical_source_recovery_uses_bounded_identity_index(
+    enricher: SupplementEnricherV3,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The source-marker guard must never fall into exhaustive recognition.
+
+    This path runs for every IQM candidate. A full non-scorable scan on an
+    ordinary miss caused a 3-7x corpus enrichment regression. Stale source
+    recovery is intentionally limited to aliases already present in the
+    deterministic normalized identity index.
+    """
+
+    def fail_full_scan(*_args, **_kwargs):
+        raise AssertionError("source recovery invoked exhaustive recognition")
+
+    monkeypatch.setattr(enricher, "_is_recognized_non_scorable", fail_full_scan)
+
+    ordinary_iqm_row = _active_row(
+        name="Magnesium",
+        raw_source_text="Magnesium",
+        standardName="Magnesium",
+        canonical_id="magnesium",
+        canonical_source_db="ingredient_quality_map",
+    )
+    assert enricher._botanical_source_identity(ordinary_iqm_row) is None
+
+    stale_pycrinil_row = _active_row(
+        name="Pycrinil Artichoke extract",
+        raw_source_text="Pycrinil Artichoke extract",
+        standardName="Cynarin",
+        canonical_id="cynarin",
+        canonical_source_db="ingredient_quality_map",
+    )
+    assert enricher._botanical_source_identity(stale_pycrinil_row) == (
+        "globe_artichoke",
+        "botanical_ingredients",
+    )
+
+
+def test_static_banned_alias_filter_is_reused(
+    enricher: SupplementEnricherV3,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    aliases = [
+        "performance-cache-specific-substance",
+        "performance-cache extract",
+    ]
+    calls = 0
+    original = enricher._is_low_precision_token_alias
+
+    def counted(alias: str) -> bool:
+        nonlocal calls
+        calls += 1
+        return original(alias)
+
+    monkeypatch.setattr(enricher, "_is_low_precision_token_alias", counted)
+    first = enricher._filter_safe_token_aliases("Performance Cache", aliases)
+    first_calls = calls
+    second = enricher._filter_safe_token_aliases("Performance Cache", aliases)
+
+    assert first == second
+    assert first_calls == len(aliases)
+    assert calls == first_calls
+
+
 @pytest.mark.parametrize(
     ("source_id", "marker_id"),
     [

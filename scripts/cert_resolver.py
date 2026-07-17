@@ -30,6 +30,7 @@ import json
 import re
 import unicodedata
 from dataclasses import asdict, dataclass, field, replace
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -222,6 +223,7 @@ _PRODUCT_NOISE_PATTERN = re.compile(
 )
 
 
+@lru_cache(maxsize=65_536)
 def normalize_brand(text: str) -> str:
     if not text:
         return ""
@@ -319,6 +321,7 @@ _MARINE_PRODUCT_RE = re.compile(
 )
 
 
+@lru_cache(maxsize=65_536)
 def normalize_product(text: str) -> str:
     if not text:
         return ""
@@ -423,6 +426,7 @@ def _sku_variant_conflict(product_a: str, product_b: str) -> bool:
     return False
 
 
+@lru_cache(maxsize=1_024)
 def normalize_program(text: str) -> str:
     """Map alternate program names to canonical IDs."""
     if not text:

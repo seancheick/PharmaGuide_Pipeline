@@ -106,6 +106,27 @@ def test_explicit_astareal_marker_unlocks_astareal_study(enricher) -> None:
     ) is True
 
 
+def test_clinical_candidate_index_preserves_full_scan_matches(enricher) -> None:
+    studies = enricher.databases["backed_clinical_studies"]["backed_clinical_studies"]
+    candidates = ["Vitamin C", "PureWay-C", "Ascorbic Acid"]
+
+    indexed = enricher._candidate_clinical_studies(candidates, studies)
+    indexed_matches = {
+        study.get("id")
+        for study in indexed
+        if enricher._clinical_study_match(candidates, study)
+    }
+    full_scan_matches = {
+        study.get("id")
+        for study in studies
+        if enricher._clinical_study_match(candidates, study)
+    }
+
+    assert indexed_matches == full_scan_matches
+    assert indexed_matches
+    assert len(indexed) < len(studies)
+
+
 def test_standardization_percentage_stays_with_its_ingredient(enricher) -> None:
     result = enricher._collect_standardized_botanicals({
         "activeIngredients": [

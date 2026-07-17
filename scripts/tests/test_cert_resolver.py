@@ -75,6 +75,24 @@ def _make_registry(
 
 
 class TestNormalization:
+    def test_normalizers_reuse_exact_registry_values(self) -> None:
+        normalize_brand.cache_clear()
+        normalize_product.cache_clear()
+        normalize_program.cache_clear()
+
+        assert normalize_brand("Performance Cache Brand LLC") == "performance cache"
+        assert normalize_product("Performance Cache Product 250 mg Capsules") == "performance cache product"
+        assert normalize_program("NSF Certified for Sport") == "NSF Sport"
+
+        for _ in range(3):
+            normalize_brand("Performance Cache Brand LLC")
+            normalize_product("Performance Cache Product 250 mg Capsules")
+            normalize_program("NSF Certified for Sport")
+
+        assert normalize_brand.cache_info().hits == 3
+        assert normalize_product.cache_info().hits == 3
+        assert normalize_program.cache_info().hits == 3
+
     def test_normalize_brand_strips_legal_suffixes(self) -> None:
         assert normalize_brand("Thorne Research, Inc.") == "thorne research"
         assert normalize_brand("Garden of Life LLC") == "garden of life"
