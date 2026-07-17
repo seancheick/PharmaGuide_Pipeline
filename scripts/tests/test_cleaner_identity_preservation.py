@@ -80,6 +80,13 @@ SOURCE_BOTANICAL_CASES = [
     ("Ananas comosus",                 "pineapple", "source fruit, not a declared digestive-enzyme dose"),
     ("Maritech 926 wild-harvested Patagonian Wakame", "wakame", "seaweed preparation, not a pure fucoidan dose"),
     ("Shark Cartilage",                "shark cartilage", "animal tissue source, not pure chondroitin sulfate"),
+    ("Broccoli Aerial Parts, Plant, Seed Extract Concentrate", "broccoli", "source preparation, not a sulforaphane dose"),
+    ("Vitis vinifera",                 "grape", "grape species identity, not red-wine extract"),
+    ("green coffee bean extract",      "coffee", "coffee-bean identity, not chlorogenic-acid dose"),
+    ("green coffee bean extract standardized to 45% chlorogenic acids", "coffee", "quantified marker decorates the coffee source identity"),
+    ("coleus forskohlii extract powder", "coleus", "coleus source, not isolated forskolin"),
+    ("Coleus forskohlii extract standardized to 10% forskolin", "coleus", "quantified marker decorates the coleus source identity"),
+    ("Schisandra berry extract",       "schisandra", "schisandra source, not isolated schisandrin"),
 ]
 
 
@@ -170,6 +177,13 @@ MARKER_FORBIDDEN_FOR_SOURCE = [
     ("Ananas comosus",               "digestive enzyme"),
     ("Maritech 926 wild-harvested Patagonian Wakame", "fucoidan"),
     ("Shark Cartilage",              "chondroitin"),
+    ("Broccoli Aerial Parts, Plant, Seed Extract Concentrate", "sulforaphane"),
+    ("Vitis vinifera",               "red wine"),
+    ("green coffee bean extract",    "chlorogenic"),
+    ("green coffee bean extract standardized to 45% chlorogenic acids", "chlorogenic"),
+    ("coleus forskohlii extract powder", "forskolin"),
+    ("Coleus forskohlii extract standardized to 10% forskolin", "forskolin"),
+    ("Schisandra berry extract",     "schisandrin"),
 ]
 
 
@@ -211,7 +225,8 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
                "linalool", "cynarin", "eugenol",
                "dnj_1_deoxynojirimycin", "icariin", "beta_glucan",
                "rhaponticin", "apple_polyphenols", "digestive_enzymes",
-               "fucoidan", "chondroitin"]
+               "fucoidan", "chondroitin", "chlorogenic_acids",
+               "forskolin", "schisandrin", "red_wine_extract"]
     FORBIDDEN_PATTERNS = [
         ("acerola", "acerola"),       # bare acerola anywhere
         ("camu camu", "camu_camu"),
@@ -241,6 +256,11 @@ def test_iqm_no_source_botanical_aliases_remain(normalizer):
         ("maritech", "wakame"),
         ("patagonian wakame", "wakame"),
         ("shark cartilage", "shark_cartilage"),
+        ("broccoli aerial parts", "broccoli"),
+        ("vitis vinifera", "grape"),
+        ("green coffee bean", "coffee_bean_plain"),
+        ("coleus forskohlii", "coleus_forskohlii_root"),
+        ("schisandra berry", "schisandra_berry"),
     ]
 
     import re

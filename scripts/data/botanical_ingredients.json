@@ -2108,6 +2108,7 @@
         "TrueBroc",
         "TrueBroc Broccoli extract",
         "BroccoVital Myrosinase Broccoli extract",
+        "BroccoPlus Brassica concentrate",
         "Broccoli Aerial Parts, Plant, Seed Extract Concentrate",
         "Broccoli Plant, Seed Extract Concentrate",
         "Brassica oleracea var. italica"
@@ -3959,10 +3960,16 @@
       "aliases": [
         "forskohlii extract",
         "coleus forskohlii extract",
+        "coleus forskohlii extract powder",
         "forskolin source",
         "coleus root extract",
         "Coleus root extract",
-        "Coleus forskohlii"
+        "Coleus forskohlii",
+        "coleus forskohlii root extract",
+        "forskohlii root extract",
+        "coleus forskohlii root powder",
+        "plectranthus barbatus",
+        "plectranthus barbatus extract"
       ],
       "category": "root",
       "notes": "Coleus forskohlii (Lamiaceae) root. Contains forskolin diterpene that directly activates adenylate cyclase/cAMP pathway. RCT evidence for body composition (PMID 15947455). Botanical root form.",
@@ -12542,7 +12549,9 @@
         "Schisandra",
         "Schizandra berry extract",
         "Schisandra Fruit, Seed Extract",
-        "Schisandra chinensis"
+        "Schisandra chinensis",
+        "schisandra chinensis extract",
+        "organic schisandra (schisandra chinensis) berry extract"
       ],
       "category": "fruit",
       "notes": "Schisandra chinensis (Schisandraceae) fruit. Wu Wei Zi ('five flavor fruit') in TCM. Contains schisandrin and gomisin lignans. Adaptogenic hepatoprotective herb. Botanical berry form.",

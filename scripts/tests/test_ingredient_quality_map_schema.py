@@ -255,6 +255,32 @@ class TestAliasQuality:
             )
         )
 
+    def test_form_names_do_not_alias_sibling_forms(self, entries):
+        """An exact form name must resolve to that form, not a sibling form."""
+        collisions = []
+
+        for parent_key, parent_data in entries.items():
+            forms = parent_data.get("forms", {})
+            form_names = {
+                str(form_name).strip().casefold(): form_name
+                for form_name in forms
+            }
+            for form_name, form_data in forms.items():
+                if not isinstance(form_data, dict):
+                    continue
+                for alias in form_data.get("aliases", []):
+                    sibling = form_names.get(str(alias).strip().casefold())
+                    if sibling and sibling != form_name:
+                        collisions.append((parent_key, form_name, alias, sibling))
+
+        assert collisions == [], (
+            "Form names must not be aliases on sibling forms:\n"
+            + "\n".join(
+                f"  {parent}: {alias!r} on {alias_form!r} shadows {sibling!r}"
+                for parent, alias_form, alias, sibling in collisions[:10]
+            )
+        )
+
 
 # =============================================================================
 # MATCH RULES TESTS (A-IQM-2 Enforcement)

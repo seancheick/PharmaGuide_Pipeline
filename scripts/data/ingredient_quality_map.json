@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1421,
-      "total_form_aliases": 12123,
+      "total_form_aliases": 12087,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -11253,16 +11253,13 @@
         "notes": "The most clinically studied saw palmetto form — standardized to 85–95% fatty acids and sterols (the active compounds for 5-alpha reductase inhibition). This is the form used in the major European prostate trials (PERMIXON). Extraction may use ethanol or hexane, which is less clean than CO2 but still produces an effective concentrate. Supports urinary flow and prostate comfort at 320 mg/day.",
         "aliases": [
           "standardized saw palmetto extract",
-          "serenoa repens extract",
           "liposterolic serenoa",
-          "saw palmetto berry extract",
           "fatty acid-rich saw palmetto",
           "USP-grade saw palmetto",
           "hexane-extracted saw palmetto",
           "ethanol-extracted saw palmetto",
           "concentrated saw palmetto",
           "active compound saw palmetto",
-          "sabal serrulata extract",
           "BP/EP compliant extract",
           "phytosterol-rich saw palmetto",
           "myristic acid saw palmetto",
@@ -11287,8 +11284,7 @@
           "myristic acid saw palmetto supplement",
           "oleic acid saw palmetto supplement",
           "palmitic acid saw palmetto supplement",
-          "serenoa repens berry extract",
-          "Serenoa repens Fruit Extract"
+          "serenoa repens berry extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -11374,7 +11370,11 @@
           "Saw Palmetto (Serenoa repens) Fruit Extract 12:1",
           "Fatty Acids and Sterols",
           "saw palmetto fatty acids and sterols",
-          "Serenoa repens"
+          "Serenoa repens",
+          "serenoa repens extract",
+          "saw palmetto berry extract",
+          "sabal serrulata extract",
+          "Serenoa repens Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18785,11 +18785,7 @@
           "broccosinolate",
           "broccophane",
           "broccoraphanin",
-          "sulphoraphane",
-          "BroccoPlus Brassica concentrate",
-          "Broccoli Aerial Parts, Plant, Seed Extract Concentrate",
-          "Broccoli Plant, Seed Extract Concentrate",
-          "watercress (nasturtium officinale) aerial parts 4:1 extract"
+          "sulphoraphane"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20308,38 +20304,27 @@
         "absorption": "very good (terpene lactones 79-88% F, PMID:7631288)",
         "notes": "Gold-standard ginkgo extract standardized to 24% flavone glycosides and 6% terpene lactones. Absolute oral bioavailability: ginkgolide A 80%, ginkgolide B 88%, bilobalide 79% (PMID:7631288, Fourtillan 1995 IV reference). Flavone glycosides extensively conjugated (low free form). EGb 761 is the most-studied branded version with strong evidence for cerebral blood flow and cognitive function.",
         "aliases": [
-          "ginkgo biloba extract",
           "24% flavone glycosides 6% terpene lactones",
           "EGb 761",
           "standardized ginkgo",
           "ginkgo biloba 50:1",
-          "ginkgo extract",
           "flavone-rich ginkgo",
-          "ginkgo biloba leaf extract",
           "standard ginkgo biloba",
           "ginkgo standardized extract",
           "standardized ginkgo extract",
           "ginkgo biloba standardized extract",
-          "gingko extract",
           "ginkgo biloba leaves extract",
-          "ginkgo bilboa extract",
           "ginkgold ginkgo biloba extract",
-          "ginkgo leaf ext.",
-          "gingko leaf extract",
-          "ginkgo biloba 50:1 leaf extract",
           "standardized ginkgo biloba extract",
           "ginkgold",
           "ginkgoflavonglycosides",
-          "Ginkgo Biloba 4:1 Extract",
-          "Ginkgo [leaf] 50:1 Extract",
           "Ginkgo biloba 24% extract",
           "Ginkgo (Ginkgo biloba) leaf std. extract",
           "european ginkgo biloba extract",
           "flavonoid glycosides",
           "ginkgo flavonol glycosides",
           "ginkgo flavone glycosides",
-          "ginkgo flavone glycoside",
-          "gingko biloba extract"
+          "ginkgo flavone glycoside"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20380,7 +20365,20 @@
         "score": 8,
         "absorption": "moderate (flavonoid + terpene lactone class)",
         "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed. B33 audit 2026-04-25: ginkgo class baseline.",
-        "aliases": ["ginkgo"],
+        "aliases": [
+          "ginkgo",
+          "ginkgo biloba extract",
+          "ginkgo extract",
+          "ginkgo biloba leaf extract",
+          "gingko extract",
+          "ginkgo bilboa extract",
+          "ginkgo leaf ext.",
+          "gingko leaf extract",
+          "ginkgo biloba 50:1 leaf extract",
+          "Ginkgo Biloba 4:1 Extract",
+          "Ginkgo [leaf] 50:1 Extract",
+          "gingko biloba extract"
+        ],
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.45,
@@ -20488,9 +20486,7 @@
         "absorption": "moderate (~20–30%)",
         "notes": "Conventional milk thistle extract standardized to ~80% silymarin. GI absorption 23-47%, but systemic free silybin only ~0.73% due to extensive glucuronidation (PMID:1572758, Weyhenmeyer 1992). Conjugated metabolites 4-30x higher than free fractions (PMID:17913795, Wen 2008). Most common and affordable form.",
         "aliases": [
-          "milk thistle extract",
           "80% silymarin",
-          "silybum marianum",
           "standardized milk thistle",
           "milk thistle silymarin",
           "silybin extract",
@@ -20498,22 +20494,14 @@
           "liver health silymarin",
           "isosilybin a and isosilybin b",
           "isosilybin a & b",
-          "milk thistle 4:1 ext.",
-          "milk thistle ext.",
           "silymarin seed powder",
           "milk thistle standarized extract",
           "silymarin flavonoids",
-          "milk thistle fruit seed extract",
-          "milk thistle fruit, seed extract",
-          "milk thistle seed 30:1 extract",
           "milk thistle 80% extract",
-          "european milk thistle extract",
           "silymarin",
           "silymarin extract",
           "silymarin 80%",
-          "silymarin standardized extract",
-          "Milk Thistle seed extract",
-          "silybum marianum extract"
+          "silymarin standardized extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20561,7 +20549,17 @@
           "silymarins",
           "biosorb",
           "Milk Thistle Extract, Natural",
-          "milk thistle polysaccharides"
+          "milk thistle polysaccharides",
+          "milk thistle extract",
+          "silybum marianum",
+          "milk thistle 4:1 ext.",
+          "milk thistle ext.",
+          "milk thistle fruit seed extract",
+          "milk thistle fruit, seed extract",
+          "milk thistle seed 30:1 extract",
+          "european milk thistle extract",
+          "Milk Thistle seed extract",
+          "silybum marianum extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21868,9 +21866,7 @@
           "red wine concentrate",
           "wine polyphenol extract",
           "red wine phenolics",
-          "grape wine extract",
-          "Vitis vinifera",
-          "vitis vinifera extract"
+          "grape wine extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28453,22 +28449,12 @@
           "chlorogenic acids",
           "chlorogenic acid",
           "5-caffeoylquinic acid",
-          "svetol",
-          "organic svetol",
-          "green coffee bean 50% extract",
-          "CoffeeGenic Green Coffee extract",
-          "green coffee bean extract",
           "GCA",
           "coffee polyphenols",
           "high-cga",
           "high cga",
           "high chlorogenic acid",
-          "coffee extract high-cga",
-          "svetol green coffee extract",
-          "coffee bean extract",
-          "coffea robusta seed extract",
-          "coffee, powder",
-          "coffee powder"
+          "coffee extract high-cga"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -29584,22 +29570,8 @@
         "notes": "Diterpene from Coleus forskohlii root (branded: ForsLean, Sabinsa). Direct adenylate cyclase activation elevates intracellular cAMP, stimulating hormone-sensitive lipase. DB-RCT (PMID 16129715, n=30 men, 12 wk): 500 mg/day 10% ForsLean decreased body fat -4.52% and increased free testosterone vs placebo. Women trial (PMC2129145) showed weight stabilization but not loss.",
         "aliases": [
           "forskolin",
-          "coleus forskohlii",
-          "coleus forskohlii extract",
-          "coleus forskohlii extract powder",
-          "forslean",
-          "forslean coleus forskohlii extract",
-          "coleus forskohlii root extract",
           "forskolin extract",
-          "forskohlii root extract",
-          "coleus forskohlii extract standardized",
-          "ForsLean 10%",
-          "10% forskolin coleus",
-          "20% forskolin",
-          "coleus forskohlii root powder",
-          "plectranthus barbatus",
-          "plectranthus barbatus extract",
-          "forskohlii extract"
+          "20% forskolin"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -32583,15 +32555,10 @@
         "notes": "Signature lignan of Schisandra chinensis (Wu Wei Zi). Oral F ~15.6% for schisandrin A (PMID 29342955); schisandrin B F 19-55% sex-dependent with enterohepatic recirculation (PMID 28833320). Hepatoprotective via CYP modulation and antioxidant defense upregulation. TCM adaptogen with 2000-year use history (PMC11984061). Extract bioavailability exceeds isolated compound.",
         "aliases": [
           "schisandrin",
-          "schisandra chinensis extract",
-          "wu wei zi",
-          "five flavor berry",
           "schisandrin a",
           "schisandrin b",
           "schisandrin c",
-          "gomisin",
-          "schisandra berry extract",
-          "organic schisandra (schisandra chinensis) berry extract"
+          "gomisin"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -39669,30 +39636,18 @@
         "absorption": "65% boswellic acids; food-dependent absorption (Sterk 2004); class-poor F",
         "notes": "Boswellia serrata extract standardized to 65% boswellic acids (AKBA is the most active). Anti-inflammatory via 5-LOX inhibition. Multiple RCTs support efficacy for osteoarthritis and IBD at 300-500 mg/day. Generic standardized extracts are less studied than 5-Loxin or Aflapin branded forms. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper). Evidence update 2026-05-25: Dr Pham C3 Class Finding extension applied — bio_score 12→7 (score 15→10). Original 12 was based on disclosed concentration (65% BAs), which is NOT absorption. Under the same Class Finding that downgraded branded 5-Loxin/Aflapin 14→7 (no human absolute F study exists for any boswellic acid form), a generic standardized form with LOWER measured absorption_structured.value (0.04 vs branded 0.05) and notes stating it is \"less studied than 5-Loxin or Aflapin branded forms\" cannot exceed the branded floor. Per Dr Pham rule D3, F is set by parent class baseline, not by concentration.",
         "aliases": [
-          "boswellia extract",
-          "boswellia serrata extract",
-          "frankincense extract",
-          "olibanum extract",
-          "indian frankincense",
           "boswellia 65%",
           "boswellia 70%",
           "standardized boswellia",
           "Indian Frankincense Phytosome",
           "Indian Frankinscense extract",
-          "boswellia gum resin extract",
-          "boswellia boswellia serrata gum resin extract",
           "boswellic acid",
-          "boswellia whole plant extract",
           "boswellin indian frankincense extract",
           "boswellin boswellia serrata extract",
           "bospure",
           "bos-10",
-          "indian frankincense gum resin extract",
           "boswellia g301 phytoextract",
-          "boswellia extracts",
-          "boswellia serrata gum resin extract",
           "boswellin super (boswellia serrata) gum resin extract",
-          "boswellia serrata dried extract",
           "boswellin super",
           "Boswellin Forte",
           "boswellic acids",
@@ -39703,7 +39658,6 @@
           "Beta-Boswellic Acids",
           "AKBA, Beta-Boswellic Acids, total organic and Boswellic Acid",
           "AKBAs",
-          "Indian Frankincense (Boswellia serrata) extract",
           "Boswellia serrata, Phospholipid complex"
         ],
         "dosage_importance": 1.0,
@@ -39751,7 +39705,20 @@
           "boswellia serrata gum extract",
           "indian frankincense gum extract",
           "Boswellia serrata Whole Plant Extract",
-          "Boswella extract"
+          "Boswella extract",
+          "boswellia extract",
+          "boswellia serrata extract",
+          "frankincense extract",
+          "olibanum extract",
+          "indian frankincense",
+          "boswellia gum resin extract",
+          "boswellia boswellia serrata gum resin extract",
+          "boswellia whole plant extract",
+          "indian frankincense gum resin extract",
+          "boswellia extracts",
+          "boswellia serrata gum resin extract",
+          "boswellia serrata dried extract",
+          "Indian Frankincense (Boswellia serrata) extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40607,9 +40574,6 @@
         "absorption": "moderate (valerenic acid measurable; high inter-subject CV)",
         "notes": "Valeriana officinalis root extract standardized to valerenic acids (typically 0.8%). Clinical evidence for mild sleep improvement and anxiety reduction, though results are mixed across meta-analyses. May modulate GABA-A receptors. Generally safe with minimal hangover effect. 300-600 mg before bedtime standard dose. B23 audit 2026-04-25: valerenic acid PK measurable but high variability (PMID:20878691). Standardized > root powder > unspecified by class-extract gradient.",
         "aliases": [
-          "valerian extract",
-          "valeriana officinalis extract",
-          "valerian root extract",
           "valerenic acid extract",
           "valerian 0.8%",
           "valerenic acid",
@@ -40657,7 +40621,10 @@
           "valerian root unspecified",
           "Valerian (Valeriana officinalis) (root) supercritical extract",
           "16 mg {Valerian} supercritical extract",
-          "Valerenic Acids"
+          "Valerenic Acids",
+          "valerian extract",
+          "valeriana officinalis extract",
+          "valerian root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47228,8 +47195,7 @@
           "organic amla berry (fruit) extract",
           "Emblica officinalis Fruit Extract",
           "Amla fruit juice powder",
-          "amla juice powder",
-          "amla fruit powder"
+          "amla juice powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

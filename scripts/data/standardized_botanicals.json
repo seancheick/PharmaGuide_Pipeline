@@ -91,7 +91,7 @@
       "vegetable_greens": 6
     },
     "statistics": {
-      "total_aliases": 976,
+      "total_aliases": 982,
       "entries_with_threshold": 108,
       "high_priority": 68,
       "medium_priority": 170
@@ -1764,7 +1764,13 @@
       "aliases": [
         "coleus extract",
         "indian coleus",
-        "plectranthus barbatus"
+        "plectranthus barbatus",
+        "ForsLean",
+        "ForsLean Coleus forskohlii extract",
+        "ForsLean (Coleus forskohlii) root extract",
+        "ForsLean 10%",
+        "10% forskolin Coleus",
+        "coleus forskohlii extract standardized"
       ],
       "markers": [
         "forskolin"
