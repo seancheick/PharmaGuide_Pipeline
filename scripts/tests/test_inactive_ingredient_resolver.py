@@ -340,6 +340,25 @@ def test_unmatched_inactive_returns_well_formed_unknown(resolver) -> None:
     assert r.functional_roles == []
 
 
+def test_slash_joined_safety_additives_resolve_to_highest_severity(resolver) -> None:
+    """DSLD sometimes prints independently authored preservatives as one row."""
+    r = resolver.resolve(raw_name="BHA/BHT")
+
+    assert r.matched_source == "harmful_additives"
+    assert r.matched_rule_id == "ADD_BHA"
+    assert r.harmful_severity == "high"
+    assert r.severity_status == "critical"
+    assert r.is_safety_concern is True
+
+
+def test_slash_composite_requires_every_component_to_be_a_safety_match(resolver) -> None:
+    """A partial match must not turn arbitrary slash text into a safety hit."""
+    r = resolver.resolve(raw_name="BHA/cellulose")
+
+    assert r.matched_source is None
+    assert r.severity_status == "n/a"
+
+
 def test_resolver_returns_matched_source_for_provenance(resolver) -> None:
     """Audit trail: every resolution carries matched_source + matched_rule_id
     so a downstream verifier can prove WHICH file + WHICH entry triggered

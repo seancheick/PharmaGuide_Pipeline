@@ -394,6 +394,15 @@ class InactiveIngredientResolver:
             if entry:
                 return self._from_harmful(raw_name, entry)
 
+        # Some DSLD rows join multiple independently authored additives with
+        # a slash (for example ``BHA/BHT``). Resolve that narrow structural
+        # shape only when *every* component is an exact safety-database term;
+        # partial matches such as ``BHA/cellulose`` remain unmatched. This is
+        # deliberately not a general token splitter or fuzzy fallback.
+        composite = self._resolve_safety_composite(raw_name, terms)
+        if composite is not None:
+            return composite
+
         # 3. other_ingredients
         for t in terms:
             entry = self._other_index.get(t)
@@ -402,6 +411,51 @@ class InactiveIngredientResolver:
 
         # 4. unmatched — well-formed unknown
         return self._unmatched(raw_name)
+
+    def _resolve_safety_composite(
+        self,
+        raw_name: str,
+        terms: Iterable[str],
+    ) -> Optional[InactiveResolution]:
+        """Resolve slash-joined exact safety terms to the strongest finding."""
+        for term in terms:
+            if "/" not in term:
+                continue
+            parts = [_normalize(part) for part in term.split("/")]
+            if len(parts) < 2 or any(not part for part in parts):
+                continue
+
+            candidates: list[InactiveResolution] = []
+            for part in parts:
+                banned = self._banned_index.get(part)
+                harmful = self._harmful_index.get(part)
+                if banned is not None:
+                    candidates.append(self._from_banned(raw_name, banned))
+                elif harmful is not None:
+                    candidates.append(self._from_harmful(raw_name, harmful))
+                else:
+                    candidates = []
+                    break
+
+            if not candidates:
+                continue
+
+            severity_rank = {
+                SEVERITY_NA: 0,
+                SEVERITY_SUPPRESS: 1,
+                SEVERITY_INFORMATIONAL: 2,
+                SEVERITY_CRITICAL: 3,
+            }
+            return max(
+                candidates,
+                key=lambda item: (
+                    severity_rank.get(item.severity_status, 0),
+                    bool(item.is_banned),
+                    item.matched_source == SOURCE_BANNED_RECALLED,
+                ),
+            )
+
+        return None
 
     def active_form_candidates(
         self,
