@@ -8249,10 +8249,15 @@ class SupplementEnricherV3:
             ing_name,
             quality_map,
         )
-        if reviewed_label_parent:
+        if reviewed_label_parent and not (
+            _form_extraction_attempt and cleaner_iqm_canonical
+        ):
             # Printed label identity outranks a broader cleaner/source-form
             # canonical. This must happen before structured form selection so
             # source_form_aliases are evaluated only inside the reviewed parent.
+            # Recursive form lookups are different: ``ing_name`` is then a
+            # form/marker candidate rather than the printed ingredient label,
+            # so it must not replace an authoritative cleaner parent.
             cleaner_iqm_canonical = reviewed_label_parent
         cleaner_form_constraint_enforced = False
         cleaner_form_constraint_fallback = False

@@ -56,7 +56,7 @@
     },
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-07-16",
+    "last_updated": "2026-07-17",
     "total_entries": 180,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
@@ -3043,6 +3043,7 @@
         "Slimpure decaffeinated green coffee extract",
         "Slimpure(R) Decaffeinated Green Coffee Extract",
         "slimpure green coffee extract",
+        "CoffeeGenic Green Coffee extract",
         "green coffee bean extract standardized to 45% chlorogenic acids",
         "green coffee bean extract standardized to 50% chlorogenic acids",
         "green coffee bean extract standardized to chlorogenic acids",
@@ -3066,7 +3067,7 @@
         "Onakpoya et al. 2011 meta-analysis on green coffee bean extract and weight loss (PMID 21861914) \u2014 used Svetol/GCA-standardized preparations"
       ],
       "priority": "medium",
-      "last_updated": "2026-05-22",
+      "last_updated": "2026-07-17",
       "id": "green_coffee_bean",
       "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA). v6 annotation 2026-05-22 (SB-2): this entry was the first to carry the new schema fields (bonus_eligible / standardization_basis / marker_compounds / bonus_rationale / sources) under the bonus-eligibility contract. Plain aliases ('green coffee bean extract', 'coffea robusta', etc.) preserved for runtime matching \u2014 the enricher's meets_threshold gate (score_supplements.py:1148) is the authoritative bonus-eligibility check at scoring time. RC-1 2026-05-22: external_ids.unii set to V5032728L7 (FDA ROBUSTA COFFEE BEAN / COFFEA ROBUSTA SEED POWDER \u2014 closest single canonical substance UNII for the chlorogenic-acid extract pathway, which is predominantly robusta-sourced; verified via scripts/data/fda_unii_cache.json). Absorbed \u00a78.5-misplaced branded aliases from coffee_fruit (Svetol\u00ae variants, Slimpure\u00ae variants \u2014 both Naturex-branded green coffee BEAN extracts, not fruit). Shadow-score audit pre-commit confirmed 53/53 products that match this entry today have has_standardized_botanical=True via the percentage detection block; ~50% of spot-checked cases have explicit chlorogenic-acid % evidence in the broader product text (the gate works). Marker (chlorogenic acid) is what makes the extract bonus-worthy, not species \u2014 both Coffea arabica and Coffea canephora robusta source variants are valid.",
       "category": "herb",

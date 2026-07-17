@@ -1070,6 +1070,116 @@ def test_botanical_marker_demotion_replaces_stale_identity_conflict(
     assert recognized[0]["scoreable_identity"] is False
 
 
+def test_iqm_source_parent_is_not_replaced_by_structured_marker_form(
+    enricher: SupplementEnricherV3,
+) -> None:
+    """A standardized marker decorates the source; it is not the active identity."""
+    row = _active_row(
+        name="Phase 2 Carb Controller White Kidney Bean extract",
+        raw_source_text="Phase 2 Carb Controller White Kidney Bean extract",
+        standardName="Common Bean Extract",
+        canonical_id="common_bean_extract",
+        canonical_source_db="ingredient_quality_map",
+        cleaner_match_method=None,
+        quantity=1.0,
+        unit="Gram(s)",
+        ingredientGroup="Bean",
+        forms=[
+            {
+                "name": "Alpha-Amylase",
+                "prefix": "standardized for",
+                "category": "enzyme",
+                "ingredientGroup": "Amylase",
+                "uniiCode": "0",
+            }
+        ],
+        raw_taxonomy={
+            "category": "botanical",
+            "ingredientGroup": "Bean",
+            "forms": [
+                {
+                    "name": "Alpha-Amylase",
+                    "prefix": "standardized for",
+                    "category": "enzyme",
+                    "ingredientGroup": "Amylase",
+                    "uniiCode": "0",
+                }
+            ],
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "213183",
+            "fullName": "White Kidney Bean 1,000 mg",
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    assert len(result["ingredients_scorable"]) == 1
+    scored = result["ingredients_scorable"][0]
+    assert scored["canonical_id"] == "common_bean_extract"
+    assert scored["identity_disposition"] in {"clean", "repaired"}
+    assert scored["scoreable_identity"] is True
+
+
+def test_branded_green_coffee_source_is_not_replaced_by_chlorogenic_marker(
+    enricher: SupplementEnricherV3,
+) -> None:
+    row = _active_row(
+        name="CoffeeGenic Green Coffee extract",
+        raw_source_text="CoffeeGenic Green Coffee extract",
+        standardName="Green Coffee Bean",
+        canonical_id="green_coffee_bean",
+        canonical_source_db="standardized_botanicals",
+        cleaner_match_method=None,
+        branded_token_extracted="CoffeeGenic",
+        quantity=400.0,
+        ingredientGroup="Green Coffee",
+        forms=[
+            {
+                "name": "Chlorogenic Acids",
+                "prefix": "std. to",
+                "percent": 50,
+                "category": "non-nutrient/non-botanical",
+                "ingredientGroup": "chlorogenic acid",
+            }
+        ],
+        raw_taxonomy={
+            "category": "botanical",
+            "ingredientGroup": "Green Coffee",
+            "forms": [
+                {
+                    "name": "Chlorogenic Acids",
+                    "prefix": "std. to",
+                    "percent": 50,
+                    "category": "non-nutrient/non-botanical",
+                    "ingredientGroup": "chlorogenic acid",
+                }
+            ],
+        },
+    )
+
+    result = enricher._collect_ingredient_quality_data(
+        {
+            "id": "231908",
+            "fullName": "Green Coffee Extract CoffeeGenic 400 mg",
+            "activeIngredients": [row],
+            "inactiveIngredients": [],
+        }
+    )
+
+    assert result["unmapped_scorable_count"] == 0
+    assert result["ingredients_scorable"] == []
+    assert len(result["ingredients_recognized_non_scorable"]) == 1
+    recognized = result["ingredients_recognized_non_scorable"][0]
+    assert recognized["canonical_id"] == "green_coffee_bean"
+    assert recognized["identity_disposition"] == "taxonomy_only"
+    assert recognized["scoreable_identity"] is False
+
+
 def test_stale_botanical_source_recovery_uses_bounded_identity_index(
     enricher: SupplementEnricherV3,
     monkeypatch: pytest.MonkeyPatch,

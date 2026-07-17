@@ -84,6 +84,7 @@ SOURCE_BOTANICAL_CASES = [
     ("Vitis vinifera",                 "grape", "grape species identity, not red-wine extract"),
     ("green coffee bean extract",      "coffee", "coffee-bean identity, not chlorogenic-acid dose"),
     ("green coffee bean extract standardized to 45% chlorogenic acids", "coffee", "quantified marker decorates the coffee source identity"),
+    ("CoffeeGenic Green Coffee extract", "green coffee", "verified branded preparation preserves the coffee source identity"),
     ("coleus forskohlii extract powder", "coleus", "coleus source, not isolated forskolin"),
     ("Coleus forskohlii extract standardized to 10% forskolin", "coleus", "quantified marker decorates the coleus source identity"),
     ("ForsLean (Coleus forskohlii) root extract", "coleus", "branded source extract remains Coleus identity"),
