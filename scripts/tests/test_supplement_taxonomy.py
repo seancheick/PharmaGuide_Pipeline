@@ -120,14 +120,14 @@ class TestParadisePatterns:
         assert result["primary_type"] == "herbal_botanical"
         assert result["secondary_type"] == "quercetin"
 
-    def test_vitamin_d3_k2_is_single_vitamin(self):
+    def test_vitamin_d3_k2_is_vitamin_complex(self):
         """Paradise Vitamin D3 + K2 is a vitamin combo."""
         p = self._paradise_product("Vitamin D3 + K2", [
             {"name": "Vitamin D3", "cid": "vitamin_d", "cat": "vitamin", "qty": 5000, "unit": "IU"},
             {"name": "Vitamin K2", "cid": "vitamin_k", "cat": "vitamin", "qty": 90, "unit": "mcg"},
         ])
         result = classify_supplement(p)
-        assert result["primary_type"] == "single_vitamin"
+        assert result["primary_type"] == "vitamin_complex"
         assert result["secondary_type"] == "vitamin_d"
 
 

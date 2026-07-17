@@ -5,7 +5,7 @@ Supplement Taxonomy Classification Engine
 Canonical taxonomy for PharmaGuide supplement classification.
 
 Produces structured classification with:
-  - primary_type: broad product category (20 types)
+  - primary_type: broad product category (22 types)
   - secondary_type: specific compound/focus (e.g. zinc, vitamin_d, ashwagandha)
   - percentile_category: peer-comparison cohort key
   - classification_confidence: 0.0–1.0
@@ -45,7 +45,7 @@ from scoring_input_contract import (
 # Release gates consume THIS, not prose. Bump the version when the meaning of
 # an existing field changes; strict release mode accepts only the current
 # version (see audit_source_of_truth_contract.py).
-CLASSIFICATION_CONTRACT_VERSION = "1.2.0"
+CLASSIFICATION_CONTRACT_VERSION = "1.3.0"
 
 # Stable, contract-level identifiers for the row population classification
 # consumed. Policy branches on these; `classification_input_source` stays a
@@ -140,7 +140,8 @@ def _load_primary_types() -> list[str]:
             "product_type_vocab.json not found or invalid; using hardcoded PRIMARY_TYPES"
         )
     return [
-        "single_vitamin", "single_mineral", "vitamin_mineral_combo",
+        "single_vitamin", "single_mineral", "vitamin_complex",
+        "mineral_complex", "vitamin_mineral_combo",
         "multivitamin", "b_complex", "omega_3", "probiotic",
         "herbal_botanical", "protein_powder", "collagen", "greens_powder",
         "electrolyte", "pre_workout", "amino_acid", "fiber_digestive",
@@ -601,12 +602,23 @@ def _cid_in_product_name(cid: str, product_name: str) -> bool:
         "vitamin_b5_pantothenic_acid": "b5",
         "pantothenic_acid": "pantothenic acid",
         "vitamin_b6": "b6", "vitamin_b7_biotin": "biotin",
+        "vitamin_k": "k2",
+        "magnesium": "mag",
         "tmg_betaine": "betaine",
     }
     short = short_forms.get(cid)
     if short:
         candidates.add(short)
-    return any(token and token in product_name for token in candidates)
+    if cid == "vitamin_d":
+        candidates.update({"vitamin d3", "d3"})
+    return any(
+        token
+        and re.search(
+            rf"(?<![a-z0-9]){re.escape(token)}(?![a-z0-9])",
+            product_name,
+        )
+        for token in candidates
+    )
 
 
 def _has_omega_name_signal(product_name: str) -> bool:
@@ -1365,13 +1377,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             vm_count = len(vitamin_ids) + len(mineral_ids)
             if vm_count >= active_count * 0.7:
                 if mineral_ids and not vitamin_ids:
-                    primary_type = "single_mineral"
-                    decision_code = "homogeneous_mineral_panel"
+                    primary_type = "mineral_complex"
+                    decision_code = "mineral_complex_panel"
                     confidence = 0.8
                     reasons.append(f"mineral combo: {sorted(mineral_ids)}")
                 elif vitamin_ids and not mineral_ids:
-                    primary_type = "single_vitamin"
-                    decision_code = "homogeneous_vitamin_panel"
+                    primary_type = "vitamin_complex"
+                    decision_code = "vitamin_complex_panel"
                     confidence = 0.8
                     reasons.append(f"vitamin combo: {sorted(vitamin_ids)}")
                 else:
@@ -1409,13 +1421,13 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             vm_count = len(vitamin_ids) + len(mineral_ids)
             if vm_count >= active_count * 0.7:
                 if mineral_ids and not vitamin_ids:
-                    primary_type = "single_mineral"
-                    decision_code = "homogeneous_mineral_panel"
+                    primary_type = "mineral_complex"
+                    decision_code = "mineral_complex_panel"
                     confidence = 0.8
                     reasons.append(f"mineral combo: {sorted(mineral_ids)}")
                 elif vitamin_ids and not mineral_ids:
-                    primary_type = "single_vitamin"
-                    decision_code = "homogeneous_vitamin_panel"
+                    primary_type = "vitamin_complex"
+                    decision_code = "vitamin_complex_panel"
                     confidence = 0.8
                     reasons.append(f"vitamin combo: {sorted(vitamin_ids)}")
                 else:
@@ -1433,6 +1445,21 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 decision_code = "mixed_targeted_panel"
                 confidence = 0.5
                 reasons.append(f"mixed targeted: {dict(category_counts)}")
+
+    # --- Homogeneous vitamin/mineral complexes (>5 identities) ---
+    # The 2-5 bands above retain their targeted handling. This closes the pure
+    # 6+ mineral/vitamin gap without calling a mineral-only panel a
+    # multivitamin or letting it fall to a generic composition residual.
+    elif active_count >= 2 and len(mineral_ids) == active_count:
+        primary_type = "mineral_complex"
+        decision_code = "mineral_complex_panel"
+        confidence = 0.85
+        reasons.append(f"mineral complex: {sorted(mineral_ids)}")
+    elif active_count >= 2 and len(vitamin_ids) == active_count:
+        primary_type = "vitamin_complex"
+        decision_code = "vitamin_complex_panel"
+        confidence = 0.85
+        reasons.append(f"vitamin complex: {sorted(vitamin_ids)}")
 
     # --- Pre-workout ---
     elif any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) or len(cid_set & _PRE_WORKOUT_IDS) >= 3:
@@ -1815,10 +1842,10 @@ def _has_greens_powder_signal(
 
 # Maps DSLD langualCodeDescription → set of compatible primary_types
 _DSLD_TYPE_COMPAT = {
-    "vitamin": {"single_vitamin", "b_complex", "vitamin_mineral_combo"},
-    "mineral": {"single_mineral", "vitamin_mineral_combo"},
+    "vitamin": {"single_vitamin", "vitamin_complex", "b_complex", "vitamin_mineral_combo"},
+    "mineral": {"single_mineral", "mineral_complex", "vitamin_mineral_combo"},
     "multi-vitamin and mineral (mvm)": {"multivitamin"},
-    "single vitamin and mineral": {"single_vitamin", "single_mineral", "vitamin_mineral_combo"},
+    "single vitamin and mineral": {"single_vitamin", "single_mineral", "vitamin_complex", "mineral_complex", "vitamin_mineral_combo"},
     "botanical": {"herbal_botanical"},
     "botanical with nutrients": {"herbal_botanical", "immune_support", "sleep_support", "joint_support", "beauty_hair_skin_nails"},
     "fat/fatty acid": {"omega_3"},
@@ -1847,6 +1874,8 @@ def _check_dsld_agreement(primary_type: str, dsld_product_type: str) -> bool:
 _PERCENTILE_CATEGORY_MAP = {
     "single_vitamin": "single_vitamin",
     "single_mineral": "single_mineral",
+    "vitamin_complex": "vitamin_complex",
+    "mineral_complex": "mineral_complex",
     "vitamin_mineral_combo": "vitamin_mineral_combo",
     "multivitamin": "multivitamin",
     "b_complex": "b_complex",

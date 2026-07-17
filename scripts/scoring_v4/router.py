@@ -1098,7 +1098,7 @@ def _is_sports_class(product: Dict[str, Any], name_text: str) -> bool:
     return False
 
 
-# Taxonomy primary_type → v4 module mapping. The taxonomy emits 20 types
+# Taxonomy primary_type → v4 module mapping. The taxonomy emits 22 types
 # (see scripts/data/product_type_vocab.json); v4 has 4 scoring modules.
 # Most product classes route to `generic` because their scoring rubric is
 # adequately handled by the generic dimensions; only probiotic / multi /
@@ -1113,6 +1113,8 @@ _TAXONOMY_TO_MODULE = {
     # taxonomy types are caught by the unknown-key fallthrough below:
     "single_vitamin": "generic",
     "single_mineral": "generic",
+    "vitamin_complex": "generic",
+    "mineral_complex": "generic",
     "vitamin_mineral_combo": "generic",
     "herbal_botanical": "generic",
     "protein_powder": "generic",
@@ -1224,7 +1226,7 @@ def _legacy_class_for_product(product: Dict[str, Any]) -> str:
         return "fiber_digestive"
 
     # Priority 4: taxonomy primary_type — canonical signal when present.
-    # Maps the 20 taxonomy types to the 4 v4 modules. Unknown taxonomy
+    # Maps the 22 taxonomy types to the v4 modules. Unknown taxonomy
     # values (new types added later that aren't in _TAXONOMY_TO_MODULE)
     # fall through to the omega / generic logic below rather than crashing.
     if primary_type:

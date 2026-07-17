@@ -576,7 +576,7 @@ def test_coq10_does_not_pollute_fiber_digestive_category():
 
 
 def test_BUG_14_sodium_chloride_are_mineral_canonicals():
-    """Electrolyte minerals should count as mineral actives in taxonomy."""
+    """Two distinct electrolyte minerals form a mineral complex."""
     product = {
         "product_name": "Sodium Chloride",
         "ingredient_quality_data": {"ingredients": [
@@ -585,7 +585,7 @@ def test_BUG_14_sodium_chloride_are_mineral_canonicals():
         ]},
     }
     result = classify_supplement(product)
-    assert result["primary_type"] == "single_mineral"
+    assert result["primary_type"] == "mineral_complex"
 
 
 # ============================================================================
@@ -806,7 +806,8 @@ def test_BUG_16_multi_omega_row_product_still_routes_omega_3():
 # but has no test anywhere, this assertion fails — flagging the gap.
 COVERED_TYPES = {
     # Covered in test_supplement_taxonomy.py
-    "single_vitamin", "single_mineral", "vitamin_mineral_combo",
+    "single_vitamin", "single_mineral", "vitamin_complex",
+    "mineral_complex", "vitamin_mineral_combo",
     "multivitamin", "b_complex", "omega_3", "herbal_botanical",
     "sleep_support", "beauty_hair_skin_nails",
     # Covered by BUG-N tests in this file

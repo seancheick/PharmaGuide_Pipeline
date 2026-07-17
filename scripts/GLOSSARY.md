@@ -71,6 +71,16 @@ contract name elsewhere.
 | `same_identity_aliases` | Narrow per-alias alternative to form-wide `same_identity`; only exact listed labels receive parent-identity authority. |
 | `source_form_aliases` | Parent-scoped form-selection clues evaluated only after the cleaner/reviewer has established that IQM parent. They are absent from global identity indexes. |
 
+## Product taxonomy terms
+
+| Term | Meaning |
+|---|---|
+| **Single vitamin / single mineral** | Exactly one distinct quantified vitamin or mineral identity after canonical identity deduplication. Multiple label forms of the same identity remain single. |
+| **Vitamin complex** | Two or more distinct quantified vitamin identities with no mineral identity and no more-specific product class such as B-complex or multivitamin. |
+| **Mineral complex** | Two or more distinct quantified mineral identities with no vitamin identity and no more-specific product class such as electrolyte. |
+| **Vitamin/mineral combo** | A mixed panel containing both vitamin and mineral identities that does not meet the broad multivitamin contract. |
+| **Name-dominant identity** | A multi-row product whose bounded title names exactly one clinically meaningful identity while the companion does not define the product. This may retain a single-family cohort, but never sets `is_single_scorable_active=true`. |
+
 ## Production scoring terms
 
 | Term | Meaning |

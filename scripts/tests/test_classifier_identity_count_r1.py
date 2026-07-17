@@ -32,8 +32,6 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import pytest
-
 SCRIPTS_DIR = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SCRIPTS_DIR))
 
@@ -136,19 +134,12 @@ def test_two_distinct_minerals_are_not_collapsed():
     assert taxonomy["quantified_active_count"] == 2
 
 
-@pytest.mark.xfail(
-    strict=True,
-    reason="§7 #5 / spec R7: a homogeneous combo of DISTINCT identities still "
-           "collapses to a single_* type (346 products corpus-wide). R1 fixes "
-           "the count, not the branch. Delete this xfail when R7 lands — strict "
-           "means it will fail loudly the moment it starts passing.",
-)
 def test_r7_distinct_identities_must_not_yield_a_single_type():
     taxonomy = classify_supplement(_product("Mag + Zinc", [
         _row("Magnesium Glycinate", "magnesium", "mineral", 200.0),
         _row("Zinc Picolinate", "zinc", "mineral", 15.0),
     ]))
-    assert taxonomy["primary_type"] != "single_mineral"
+    assert taxonomy["primary_type"] == "mineral_complex"
 
 
 def test_unresolved_rows_each_count_as_their_own_identity():

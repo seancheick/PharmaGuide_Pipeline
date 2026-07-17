@@ -2719,6 +2719,8 @@ _ROUTE_TAXONOMY_TO_MODULE = {
     "omega_3": "omega",
     "single_vitamin": "generic",
     "single_mineral": "generic",
+    "vitamin_complex": "generic",
+    "mineral_complex": "generic",
     "vitamin_mineral_combo": "generic",
     "herbal_botanical": "generic",
     "protein_powder": "generic",
@@ -3744,6 +3746,8 @@ _PROFILE_ENZYME_TITLE_RE = re.compile(r"\b(enzymes?|digest\w*)\b", re.IGNORECASE
 _PROFILE_NON_BOTANICAL_INTENT_TYPES = frozenset({
     "single_vitamin",
     "single_mineral",
+    "vitamin_complex",
+    "mineral_complex",
     "vitamin_mineral_combo",
     "multivitamin",
     "b_complex",
