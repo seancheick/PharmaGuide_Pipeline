@@ -1,6 +1,6 @@
 # Supplement-Type Consolidation — Implementation Plan
 
-**Status (2026-07-16):** Phases -1 through 4 and classifier rules R1-R7b are
+**Status (2026-07-17):** Phases -1 through 4 and classifier rules R1-R7b are
 implemented. RC1 is complete. R5 adds evidence-backed specialized-panel
 precedence, R6 defines a conservative B-complex dominance rule, and R7b adds
 the honest `vitamin_complex` / `mineral_complex` vocabulary. The clean fast
@@ -11,9 +11,10 @@ verdict, safety, status, suppression, blocking, or `mapped_coverage` changes.
 The next blocking action is the user-owned full-corpus rebuild and Phase-5
 artifact review. Do not delete the retired scorer or temporary audit harness
 until that fresh corpus proves the v4-only path.
-**Branch:** `codex/supp-type-r5-phase5` in worktree
-`worktrees/codex-supp-type-r5-phase5`. Resolve the live branch tip with
-`git rev-parse --short HEAD`; do not trust a copied commit hash in this document.
+**Integration:** merged and pushed to `main` at `45ae4b56`; the temporary R5
+feature branch/worktree was deleted after the merged fast suite passed. Resolve
+the live tip with `git rev-parse --short HEAD`; do not trust a copied commit hash
+after subsequent work.
 **Plan baseline:** catalog `v2026.07.15.200540`. The branch was independently
 reviewed through local commit `4ed09667`; resolve the live tip rather than
 assuming that hash is still current. The temporary audit harness is now
@@ -30,9 +31,9 @@ baseline schema/content hash and refuse an incompatible file.
 The next agent can execute this plan end to end, subject to the two explicit user-approval checkpoints. Start here:
 
 1. Read the repository `AGENTS.md` and this entire plan before editing.
-2. Confirm the live branch contains the R5, R6, and R7b commits, inspect
-   `git log --oneline -8`, and compare it against main. Do not recreate the
-   branch or reset it to a copied hash.
+2. Confirm `main` contains the R5, R6, and R7b commits, inspect
+   `git log --oneline -8`, and compare it with `origin/main`. Do not recreate
+   the retired feature branch or reset to a copied hash.
 3. Inspect `git status --short`. At the documented baseline, `scripts/PIPELINE_OPERATIONS_README.md` has an unrelated user-owned modification. Preserve it, do not stage it, and do not overwrite it. Re-evaluate live status because the user may have changed it since this plan was written.
 4. Confirm no pipeline or release process is running before changing operational entrypoints. The shipped baseline is already green; do **not** rerun the full pipeline during development. The user owns the full-corpus pipeline execution and production release/promotion unless they explicitly authorize the agent to run them in the active session.
 5. Add this plan to the working plan and execute one atomic RED-first slice at a time. Use only `scripts/test.sh` for tests.
@@ -392,7 +393,11 @@ Strict release mode accepts only the current structured contract version. If tem
 > **0d COMPLETE:** every decisive branch emits `classification_reason_codes`;
 > missing codes raise rather than publish an unexplained classification.
 >
-> ⚠️ **Operational consequence, by design:** once this branch merges, `release_full.sh` blocks at the clinical gate (`CLINICAL_TAXONOMY_CONTRACT_VERSION`, one aggregated finding per file) until the corpus is re-enriched, because current artifacts predate the contract. That is the plan's Phase 5 sequencing — "never ship a code+artifact combination known to be out of sync" — not a regression. Main is unaffected while this branch is unmerged.
+> ⚠️ **Operational consequence, now active:** the code is merged and
+> `release_full.sh` must block at the clinical gate until the corpus is
+> re-enriched. Existing enriched artifacts carry contract `1.2.0`; current code
+> requires `1.3.0`. That is Phase 5's intentional fail-closed sequencing, not a
+> regression. Do not run snapshot/release against the stale artifacts.
 
 **Two row populations (mandatory design).** Classification must see unmapped-but-genuine label-active rows; scoring must reject unresolved identities. **Do not** make taxonomy's classification population equal to `get_scoring_ingredients(strict=True)`. Define one classification-input contract that composes the existing scoring-input owner rather than copying its eligibility rules:
 
