@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict
 
 from score_supplements_v4 import SCORING_ENGINE_VERSION, score_product_v4
-from scoring_input_contract import get_scoring_ingredients
+from scoring_input_contract import get_scoring_ingredients, scoring_input_scope
 from supplement_taxonomy import percentile_label_for
 
 
@@ -203,10 +203,14 @@ def build_scored_artifact(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(enriched_product, dict):
         raise TypeError("enriched product must be an object")
-    return assemble_scored_artifact(
-        enriched_product,
-        score_product_v4(enriched_product),
-    )
+    # Router, modules, gates, confidence, and assembly all consume the same
+    # contract. Build it once per strictness variant for this product instead
+    # of repeatedly deriving and regex-scanning identical evidence rows.
+    with scoring_input_scope(enriched_product):
+        return assemble_scored_artifact(
+            enriched_product,
+            score_product_v4(enriched_product),
+        )
 
 
 def suppress_scored_artifact_for_hard_block(

@@ -228,3 +228,18 @@ def test_hard_block_suppresses_every_public_score_surface(
     assert blocked["scoring_metadata"]["scoring_status"] == "suppressed_safety"
     assert blocked["_v4_safety_gate"]["verdict"] == "BLOCKED"
     assert blocked["_v4_pillars"] == original["_v4_pillars"]
+
+
+def test_scoped_contract_reuse_is_output_equivalent_to_uncached_assembly() -> None:
+    product = _product()
+    uncached = scored_artifact.assemble_scored_artifact(
+        product,
+        scored_artifact.score_product_v4(product),
+    )
+    scoped = scored_artifact.build_scored_artifact(product)
+
+    # Wall-clock provenance is expected to differ between sequential calls;
+    # every clinical, score, verdict, and contract field must remain identical.
+    uncached["scoring_metadata"].pop("scored_date", None)
+    scoped["scoring_metadata"].pop("scored_date", None)
+    assert scoped == uncached

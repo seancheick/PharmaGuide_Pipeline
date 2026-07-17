@@ -3,10 +3,14 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
+import pytest
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
+
+import scoring_input_contract as scoring_contract  # noqa: E402
 
 from scoring_input_contract import (  # noqa: E402
     LEGACY_IQD_SOURCE,
@@ -15,6 +19,7 @@ from scoring_input_contract import (  # noqa: E402
     derive_product_scoring_evidence,
     get_scoring_ingredients,
     is_nutrition_only_product,
+    scoring_input_scope,
 )
 
 
@@ -1195,3 +1200,32 @@ def test_derived_active_evidence_carries_its_clean_iqd_disposition():
     assert evidence[0]["identity_contract_required"] is True
     result = get_scoring_ingredients(product, strict=True)
     assert [row["canonical_id"] for row in result.rows] == ["magnesium"]
+
+
+def test_scoring_input_scope_builds_each_contract_variant_once(
+    monkeypatch: pytest.MonkeyPatch,
+):
+    product = _product([_row()])
+    calls = 0
+    original = scoring_contract._build_scoring_ingredients
+
+    def counted(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(scoring_contract, "_build_scoring_ingredients", counted)
+
+    with scoring_input_scope(product):
+        first = get_scoring_ingredients(product, strict=True)
+        second = get_scoring_ingredients(product, strict=True)
+        permissive = get_scoring_ingredients(product, strict=False)
+
+    assert first is second
+    assert permissive is not first
+    assert calls == 2
+
+    # The cache is request-scoped: a later product pass cannot observe stale
+    # rows or a mutated result from an earlier scored artifact.
+    assert get_scoring_ingredients(product, strict=True) is not first
+    assert calls == 3

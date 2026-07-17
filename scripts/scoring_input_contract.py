@@ -7,6 +7,8 @@ rediscovering active rows from labels or legacy raw fields.
 
 from __future__ import annotations
 
+from contextlib import contextmanager
+from contextvars import ContextVar
 from copy import deepcopy
 from dataclasses import dataclass, field
 from functools import lru_cache
@@ -1615,6 +1617,37 @@ class ScoringInputResult:
 
 
 @dataclass
+class _ScoringInputScope:
+    """Per-product memoization owned by one scored-artifact assembly."""
+
+    product: Dict[str, Any]
+    cache: Dict[tuple[bool, bool], ScoringInputResult] = field(default_factory=dict)
+
+
+_ACTIVE_SCORING_INPUT_SCOPE: ContextVar[Optional[_ScoringInputScope]] = ContextVar(
+    "active_scoring_input_scope",
+    default=None,
+)
+
+
+@contextmanager
+def scoring_input_scope(product: Dict[str, Any]):
+    """Reuse derived scoring evidence during one product-scoring pass.
+
+    The v4 router, modules, confidence calculation, gates, and final assembler
+    all consume the same immutable-by-convention contract. A ContextVar keeps
+    that reuse local to the current call/task, with no product mutation and no
+    cross-product or cross-thread cache lifetime.
+    """
+    scope = _ScoringInputScope(product=product)
+    token = _ACTIVE_SCORING_INPUT_SCOPE.set(scope)
+    try:
+        yield scope
+    finally:
+        _ACTIVE_SCORING_INPUT_SCOPE.reset(token)
+
+
+@dataclass
 class ClassificationInputResult:
     """The label-active and score-eligible views from one contract owner."""
 
@@ -1977,7 +2010,7 @@ def _is_genuine_unresolved_label_active(row: Dict[str, Any]) -> bool:
     )
 
 
-def get_scoring_ingredients(
+def _build_scoring_ingredients(
     product: Dict[str, Any],
     *,
     strict: bool = True,
@@ -2134,6 +2167,32 @@ def get_scoring_ingredients(
         unmapped_count=unmapped_count,
         mapped_coverage=mapped_coverage,
         contract_findings=contract_findings,
+    )
+
+
+def get_scoring_ingredients(
+    product: Dict[str, Any],
+    *,
+    strict: bool = True,
+    allow_legacy_fallback: bool = False,
+) -> ScoringInputResult:
+    """Return the shared scoring contract, reusing it within an active scope."""
+    scope = _ACTIVE_SCORING_INPUT_SCOPE.get()
+    cache_key = (strict, allow_legacy_fallback)
+    if scope is not None and product is scope.product:
+        cached = scope.cache.get(cache_key)
+        if cached is None:
+            cached = _build_scoring_ingredients(
+                product,
+                strict=strict,
+                allow_legacy_fallback=allow_legacy_fallback,
+            )
+            scope.cache[cache_key] = cached
+        return cached
+    return _build_scoring_ingredients(
+        product,
+        strict=strict,
+        allow_legacy_fallback=allow_legacy_fallback,
     )
 
 
