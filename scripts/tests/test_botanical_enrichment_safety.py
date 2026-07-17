@@ -46,6 +46,60 @@ def test_citrus_bergamot_does_not_borrow_leaf_oil_identity():
     assert bergamot.get("gsrs") is None
 
 
+def test_standardized_botanical_marker_rows_have_bonus_basis():
+    """Marker names alone cannot authorize standardized-extract bonus credit."""
+    standardized = _load_rows(STANDARDIZED_PATH, "standardized_botanicals")
+    valid_v6_bases = {
+        "marker_percent",
+        "branded_extract",
+        "pharmacopeial_marker",
+        "mushroom_fraction",
+    }
+
+    offenders = []
+    for entry in standardized.values():
+        if not entry.get("markers"):
+            continue
+        has_legacy_basis = bool(
+            entry.get("branded_form") is True
+            or entry.get("min_threshold") is not None
+            or (
+                entry.get("standardization_type")
+                and entry.get("standardization_unit")
+            )
+        )
+        has_v6_basis = bool(
+            entry.get("bonus_eligible") is True
+            and entry.get("standardization_basis") in valid_v6_bases
+        )
+        if not (has_legacy_basis or has_v6_basis):
+            offenders.append(entry["id"])
+
+    assert offenders == [], (
+        "Marker-bearing standardized-botanical rows need an explicit legacy "
+        "or v6 bonus basis: " + ", ".join(offenders)
+    )
+
+
+def test_legacy_identity_only_rows_stay_out_of_standardized_bonus_table():
+    standardized = _load_rows(STANDARDIZED_PATH, "standardized_botanicals")
+    identity_only_ids = {
+        "african_mango", "akarkara", "alfalfa", "baobab", "barley_grass",
+        "bee_pollen", "black_musli", "black_sesame", "blackberry",
+        "blue_green_algae", "camu_camu", "caraway", "carrot", "catuaba",
+        "century_plant", "cucumber", "d_mannose", "damiana", "elder_flower",
+        "fennel", "grapefruit_seed", "graviola", "inulin", "kale", "kelp",
+        "linden_flower", "mallow", "marshmallow_root", "mullein", "mulungu",
+        "onion", "polygala", "psyllium", "sarsaparilla", "slippery_elm",
+        "spinach", "wheatgrass", "yellow_dock", "yucca",
+    }
+
+    assert identity_only_ids.isdisjoint(standardized), (
+        "Identity-only botanicals cannot re-enter the bonus registry: "
+        + ", ".join(sorted(identity_only_ids.intersection(standardized)))
+    )
+
+
 def test_enrich_botanicals_dry_run_does_not_write_pre_enrichment_changes(tmp_path, monkeypatch):
     from api_audit import enrich_botanicals
 

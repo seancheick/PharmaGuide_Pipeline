@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Batch 2 — `harmful_additives.json` entries 41-80.
+Batch 2 — `harmful_additives.json` entries 41-80 plus the later Polysorbate 60 addition.
 Source: scripts/audits/functional_roles/batch_02/research.md
 Coverage after batch 2: 71/115 = 62% populated.
 """
@@ -43,6 +43,7 @@ EXPECTED_ROLES = {
     "ADD_POLYSORBATE80":                    ["emulsifier", "surfactant"],
     "ADD_POLYSORBATE_20":                   ["emulsifier", "surfactant"],
     "ADD_POLYSORBATE_40":                   ["emulsifier", "surfactant"],
+    "ADD_POLYSORBATE_60":                   ["emulsifier", "surfactant"],
     "ADD_POLYSORBATE_65":                   ["emulsifier", "surfactant"],
     "ADD_POLYVINYLPYRROLIDONE":             ["binder"],
     "ADD_POTASSIUM_BENZOATE":               ["preservative"],
@@ -67,7 +68,7 @@ DEFERRED_EMPTY = {
 
 def test_batch_2_scope_complete(by_id):
     in_scope = set(EXPECTED_ROLES) | set(DEFERRED_EMPTY)
-    assert len(in_scope) == 40
+    assert len(in_scope) == 41
     missing = in_scope - set(by_id)
     assert not missing, f"missing: {missing}"
 
@@ -93,4 +94,4 @@ def test_batch_2_deferred_empty(by_id):
 def test_batch_2_coverage(by_id):
     in_scope = set(EXPECTED_ROLES) | set(DEFERRED_EMPTY)
     populated = sum(1 for e in in_scope if by_id[e].get("functional_roles"))
-    assert populated == 38, f"want 38/40 populated; got {populated}"
+    assert populated == 39, f"want 39/41 populated; got {populated}"
