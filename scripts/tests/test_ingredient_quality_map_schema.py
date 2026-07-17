@@ -110,7 +110,6 @@ class TestAliasQuality:
             # so cross-parent occurrence is safe (form lookup is parent-scoped, not global)
             'triglycerides',        # dha/fish_oil triglyceride, epa/fish_oil triglyceride, omega_3 natural TG
             'triglyceride',         # same as above (singular form)
-            'triglyceride form',    # same evidence phrase across DHA/EPA/fish-oil parents
             'triglycerides natural', # natural TG form — dha + epa + omega_3 entries
             'ethyl esters',         # EE form — dha/epa/fish_oil/omega_3 ethyl ester entries
             # Prebiotic/oligosaccharide overlap — FOS/GOS/XOS are both prebiotics AND oligosaccharides

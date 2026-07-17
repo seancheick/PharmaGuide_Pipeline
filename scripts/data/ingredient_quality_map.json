@@ -40,7 +40,7 @@
     "statistics": {
       "total_parents": 629,
       "total_forms": 1421,
-      "total_form_aliases": 12089,
+      "total_form_aliases": 12087,
       "parents_with_parent_aliases": 115,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -41198,8 +41198,7 @@
           "EPA Triglycerides",
           "Eicosapentaenoic Acid Triglyceride",
           "EPA Triglycerides Natural",
-          "Triglycerides Natural",
-          "Triglyceride form"
+          "Triglycerides Natural"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42379,7 +42378,6 @@
           "marine triglyceride concentrate",
           "marine oil triglyceride concentrate",
           "marine triglycerides",
-          "Triglyceride form",
           "Natural Triglyceride Marine Lipid Concentrate",
           "active fractionated Marine Lipid Concentrate",
           "sardine oil",

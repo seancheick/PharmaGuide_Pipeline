@@ -7954,6 +7954,17 @@ class SupplementEnricherV3:
                 if ing_stripped and ing_stripped not in match_candidates:
                     match_candidates.insert(0, ing_stripped)
 
+            # Canonicalize generic form prose once, then resolve it only inside
+            # the already-authoritative ingredient parent. Do not duplicate the
+            # phrase across chemically distinct IQM entries: "Triglyceride form"
+            # is evidence about DHA/EPA/fish-oil form, not a compound alias.
+            _GENERIC_FORM_CANONICAL = {
+                "triglyceride form": "Triglyceride",
+            }
+            canonical_form = _GENERIC_FORM_CANONICAL.get(form_name_lower)
+            if canonical_form:
+                match_candidates.append(canonical_form)
+
             # Then try the form name itself + common variations
             match_candidates.append(form_name)
             # Also try lowercase and stripped version

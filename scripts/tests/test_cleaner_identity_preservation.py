@@ -86,6 +86,7 @@ SOURCE_BOTANICAL_CASES = [
     ("green coffee bean extract standardized to 45% chlorogenic acids", "coffee", "quantified marker decorates the coffee source identity"),
     ("coleus forskohlii extract powder", "coleus", "coleus source, not isolated forskolin"),
     ("Coleus forskohlii extract standardized to 10% forskolin", "coleus", "quantified marker decorates the coleus source identity"),
+    ("ForsLean (Coleus forskohlii) root extract", "coleus", "branded source extract remains Coleus identity"),
     ("Schisandra berry extract",       "schisandra", "schisandra source, not isolated schisandrin"),
 ]
 
@@ -183,6 +184,7 @@ MARKER_FORBIDDEN_FOR_SOURCE = [
     ("green coffee bean extract standardized to 45% chlorogenic acids", "chlorogenic"),
     ("coleus forskohlii extract powder", "forskolin"),
     ("Coleus forskohlii extract standardized to 10% forskolin", "forskolin"),
+    ("ForsLean (Coleus forskohlii) root extract", "forskolin"),
     ("Schisandra berry extract",     "schisandrin"),
 ]
 

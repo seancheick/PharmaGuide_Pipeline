@@ -68,22 +68,14 @@ def test_unmapped_label_maps_to_verified_iqm_parent(enricher, label, expected):
 
 # REAL cleaned forms[] captured from the corpus (output_<brand>/cleaned/*.json),
 # NOT a hand-faked bare {"name": "extract"} token. The cleaner emits the
-# standardization marker (Forskolin), adjective qualifiers (extract+standardized),
-# or the botanical genus (Amorphophallus konjac) — none is a literal bare
+# adjective qualifiers (extract+standardized) or the botanical genus
+# (Amorphophallus konjac) — none is a literal bare
 # "extract" — so these are the ACTUAL inputs the clean→enrich seam sees. A
 # low-level _match_quality_map(label, label, iqm) probe (no cleaned_forms) cannot
 # exercise this boundary; an earlier fictional bare-"extract" test gave false green.
 @pytest.mark.parametrize(
     "label,cleaned_forms,expected",
     [
-        (
-            "ForsLean (Coleus forskohlii) root extract",
-            [{"name": "Forskolin", "ingredientId": 121474, "order": 1,
-              "prefix": "standardized to ", "percent": 20,
-              "category": "non-nutrient/non-botanical",
-              "ingredientGroup": "Forskolin", "uniiCode": None}],
-            "forskolin",
-        ),
         (
             "Boswellia serrata AKBA standardized extract (wood) resin",
             [{"name": "extract", "source": "name_extraction"},
@@ -106,7 +98,9 @@ def test_branded_extract_labels_resolve_through_real_seam(enricher, label, clean
     """Branded extract labels reach the verified IQM parent with their REAL
     cleaned forms[], so the clean→enrich seam (not just label text) is exercised.
     The Boswellia case is the guard for the extract+standardized adjective-qualifier
-    exemption; Forskolin/konjac exercise marker- and botanical-form resolution.
+    exemption; konjac exercises botanical-form resolution. Source-botanical
+    ForsLean is intentionally tested at the cleaner identity seam instead: it
+    remains Coleus while forskolin is separate marker evidence.
     """
     iqm = enricher.databases["ingredient_quality_map"]
     m = enricher._match_quality_map(label, label, iqm, cleaned_forms=cleaned_forms)
