@@ -233,7 +233,7 @@
       "forbidden_recomputation": ["supplement_type is a mechanical compatibility projection and cannot be read for routing, scoring, confidence, or taxonomy decisions"],
       "fallback_class": "flutter_backward_compat",
       "release_gate": "scripts/audit_source_of_truth_contract.py matrix",
-      "tests": ["scripts/tests/test_supp_type_one_brain_phase2.py", "scripts/tests/test_taxonomy_evidence_contract.py"],
+      "tests": ["scripts/tests/test_enrich_taxonomy_dependency_order.py", "scripts/tests/test_taxonomy_evidence_contract.py"],
       "retirement_status": "active"
     },
     {
@@ -519,7 +519,7 @@
       "forbidden_recomputation": ["Flutter and export consume severity and interaction profile semantics from pipeline contracts; they do not remap severity meaning"],
       "fallback_class": "clinical_fail_safe",
       "release_gate": "scripts/audit_source_of_truth_contract.py enrichment",
-      "tests": ["scripts/tests/test_interaction_tracker.py", "scripts/tests/test_source_of_truth_contract.py"],
+      "tests": ["scripts/tests/test_verify_interactions.py", "scripts/tests/test_source_of_truth_contract.py"],
       "retirement_status": "active"
     },
     {
