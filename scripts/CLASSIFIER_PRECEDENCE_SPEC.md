@@ -1,11 +1,13 @@
 # Classifier Precedence Specification (consolidation Phase 0d)
 
-**Status:** authored 2026-07-16, before any 0d code, as required by
-`SUPP_TYPE_CONSOLIDATION_PLAN.md` §9 ("Branch reordering alone is not an
-implementation specification").
+**Status:** implemented through R7b on 2026-07-16. The original measurements
+below remain as historical evidence; the as-built R5/R6/R7b disposition is
+recorded beside each rule.
 **Scope:** `supplement_taxonomy.classify_supplement` only.
-**Baseline:** 14,193 enriched products; every number below was measured by
-recomputing the taxonomy with current code, not read from artifacts.
+**Original baseline:** 14,193 enriched products; every original number below
+was measured by recomputing taxonomy, not read from embedded artifacts. The
+post-R7b verification used the current 13,143-product manifest set and exact ID
+parity rather than assuming the historical count.
 
 > ⚠️ **Measure before you fix.** The on-disk enriched artifacts predate the 0a
 > evidence contract, so reading `classification_row_evidence` off them yields
@@ -192,7 +194,7 @@ collagen branch `:1085`, DSLD-disagreement gate `:1130`,
 
 ---
 
-## 5. Electrolyte — **decision: no change, reason-coded residual**
+## 5. Electrolyte accessory pool — **preserve owning identity**
 
 §7 rated this MED-HIGH. The corpus does not support a fix.
 
@@ -213,9 +215,11 @@ investigation target" is **not** supported: the catalog appears to contain few
 genuine hydration products, and promoting these 17 would be inventing certainty
 to make a distribution look plausible (**TRAP 4**).
 
-**Action:** none. Keep the name-token requirement. Per §9, retain a reason-coded
-conservative residual rather than a speculative rule. Revisit only if a
-hydration-brand ingest lands. **No new vocabulary; no GLOSSARY change.**
+**As-built disposition:** these 17 accessory/cofactor products remain unchanged.
+R5 addresses a different pool: bounded hydration/electrolyte title intent plus
+at least three canonical electrolyte anchors. Accessory phrases such as "with
+hydration" are explicitly excluded, so the guard above and R5 are consistent.
+No new electrolyte vocabulary was added.
 
 ---
 
@@ -225,9 +229,9 @@ hydration-brand ingest lands. **No new vocabulary; no GLOSSARY change.**
 > One-line bound `len(vitamin_ids) >= 1` added to `multi_panel_signal`. Measured:
 > 8 products, all `multivitamin → vitamin_mineral_combo` ("Trace Minerals", "Only
 > Trace Minerals", …). multivitamin 1463 → 1455; §10 empty-reason gate stays 0.
-> The mineral-only panel lands on `vitamin_mineral_combo` (the closest existing
-> term) rather than a new `mineral_complex` — that refinement is the R6/R7b
-> vocabulary decision below. Near-miss negatives pinned: one vitamin is enough to
+> The mineral-only panel originally landed on `vitamin_mineral_combo`; R7b now
+> routes homogeneous mineral panels to `mineral_complex`. Near-miss negatives
+> remain pinned: one vitamin is enough to
 > stay `multivitamin`; a real multivitamin is unaffected.
 
 **RULE R4 — `multivitamin` requires vitamins.** `multi_panel_signal`
@@ -245,72 +249,40 @@ pure 6-mineral panel becomes a "multivitamin".
   `multivitamin`.
 - **Reason code:** `multi_panel_requires_vitamin_evidence`.
 
-**RULE R5 — a name that contradicts the panel blocks the panel.** 24 products
+**RULE R5 — bounded intent plus panel evidence outranks a generic panel.** The
+original 24-candidate pool was re-measured against current artifacts; the final
+rule changes 20 primary types and emits fact-only evidence for 14 more products.
 classify `multivitamin` while their title says pre-workout / hydration /
 electrolyte (`309959` Preseries Lean Pre-Workout → `multivitamin`;
 `295773` Bulk Strawberry Kiwi → `multivitamin`).
 
-- **Action:** DSLD/title intent is **corroborating, not sufficient** — it may
-  **veto** a panel claim but must not by itself mint a type. A pre-workout's
-  vitamin panel must not own the product.
-- **Open:** whether these become `pre_workout` needs the `pre_workout` identity
-  rule below; a vetoed panel falls to the residual with a code, not to a guess.
-- **Reason code:** `panel_vetoed_by_product_intent`.
+- **Implemented:** pre-workout/endurance/N.O. title intent requires at least two
+  canonical pre-workout anchors; electrolyte/hydration intent requires at least
+  three canonical electrolyte anchors. Title intent alone cannot mint a type.
+- **Accessory guard:** "with hydration" / "with electrolytes" is companion
+  language and cannot steal the owning amino-acid or other specialized class.
+- **Measured result:** 14 `multivitamin → electrolyte`, three
+  `multivitamin → pre_workout`, and three
+  `general_supplement → pre_workout`; the BCAA hydration negative is unchanged.
+- **Tests:** `test_classifier_specialized_panel_precedence_r5.py`.
 
-**RULE R6 — B-complex bound.** `non_b_minerals <= 2` (`:803`) sends
-B-vitamins + ≥3 minerals to `multivitamin`. **33 products.** Decide explicitly:
-`b_complex` (B-dominant) vs `vitamin_mineral_combo`. Requires the vocabulary
-decision below before code.
+**RULE R6 — B-complex dominance is explicit.** A mineral-containing panel is
+`b_complex` only when the title is explicitly B-complex, it has at least three
+distinct B vitamins, at most one non-B vitamin, at least three minerals, and B
+vitamins are at least 60% of all vitamin/mineral identities. Broad panels stay
+`multivitamin`; no distribution quota is used. Positive and near-miss tests live
+in `test_classifier_b_complex_dominance_r6.py`.
 
-> ### ⏸ R5 and R6 DEFERRED 2026-07-16 — separate evidence decisions
->
-> Both were re-measured post-R1/R3 (R5 = 24 products, R6 = 33) and both are
-> genuinely ambiguous in a way R4 was not:
->
-> **R5 (name contradicts panel).** The 24 are hydration/pre-workout products with
-> a vitamin panel (`316790 "Amplified Hydration"`, `18529 "Amplified Endurance
-> Booster"`). "multivitamin" is wrong for them — but where they *should* go is
-> the open `pre_workout`/`electrolyte` identity question. §5 already declined to
-> route to `electrolyte` on this corpus, and vetoing the panel only sends them to
-> the residual, trading a wrong-specific label for a vague one with no clear win.
-> Needs a bounded `pre_workout`/hydration rule using positive identity evidence
-> plus intent, with near-miss negatives. The vocabulary already exists; this is
-> an evidence/precedence decision, not a request for `mineral_complex`.
->
-> **R6 (b-complex + ≥3 minerals).** The 33 are genuine broad panels —
-> `239602 "Vitamin C Fizzy"` is 7 vitamins + 6 minerals — so "multivitamin" may
-> be *correct*, or they are `vitamin_mineral_combo`. This is exactly the
-> panel-policy decision below, not a new-label decision.
->
-> Forcing either would violate TRAP 4 (don't reclassify to reshape a
-> distribution) and could make a legitimately-broad-panel product *worse*.
-> R5 and R6 require independent rules and must not be resolved by R7b's label.
+### Vocabulary decision — ✅ R7b COMPLETE
 
-### Vocabulary decision (required by §9, still OPEN — R7b only)
-
-> **R7b is the only cross-repo vocabulary call here.** Its 346 mislabeled
-> `single_*` products ask what to call homogeneous multi-identity vitamin and
-> mineral families. That may require `mineral_complex` and/or `vitamin_complex`,
-> with `scripts/GLOSSARY.md` first and `product_type_vocab.json`/Flutter updated
-> atomically. R5 already has `pre_workout`/`electrolyte` vocabulary and needs
-> evidence; R6 can be expressed with existing `b_complex`, `multivitamin`, and
-> `vitamin_mineral_combo` labels after a dominance policy is chosen. Do not use
-> a new mineral label as a shortcut for either problem.
-
-
-Pure multi-mineral, pure multi-vitamin, and B-plus-mineral panels need an
-explicit vocabulary call backed by corpus evidence. The existing vocab has
-`vitamin_mineral_combo` but **no mineral-only panel term**. Options:
-
-1. reuse `vitamin_mineral_combo` for mineral-only panels (dishonest name);
-2. add `mineral_complex` — **requires a `scripts/GLOSSARY.md` entry first** and
-   a `product_type_vocab.json` change that ships to Flutter;
-3. route mineral-only panels to `single_mineral` when one mineral dominates,
-   else the reason-coded residual.
-
-**Recommendation: option 3** — it needs no new term and only 8 products are
-affected. Do not add vocabulary for 8 products (**TRAP 4** / §13
-"evidence-only vocabulary").
+Corpus evidence supported honest family terms: the current preview contains
+143 `single_mineral → mineral_complex` and 71
+`single_vitamin → vitamin_complex` changes. Both terms are defined in
+`scripts/GLOSSARY.md`, declared in the canonical 22-entry
+`product_type_vocab.json`, routed through the existing generic v4 module, and
+synced into Flutter by the release reference-data gate. Multiple forms of one
+canonical identity remain `single_*`; a bounded name-dominant multi-row product
+may retain a single-family cohort but never earns the single-active fact.
 
 ---
 
@@ -324,7 +296,7 @@ duplicate rows, so this is *not* RC2 — it is the homogeneous-combo collapse
     primary_type = "single_mineral"
     reasons.append(f"mineral combo: {sorted(mineral_ids)}")   # says "combo"
 
-> ### R7 SPLIT — ✅ R7a SHIPPED 2026-07-16 / ⏸ R7b DEFERRED (needs vocabulary)
+> ### R7 SPLIT — ✅ R7a AND R7b COMPLETE 2026-07-16
 >
 > **R7a — the fact (done).** The *clinical* harm is `is_single=True` granting a
 > single-ingredient bonus to a multi-ingredient product, and that flows from
@@ -342,21 +314,10 @@ duplicate rows, so this is *not* RC2 — it is the homogeneous-combo collapse
 > requirement ("a multi-active amino-acid product is not reported as single from
 > its type name"), now confirmed on real data.
 >
-> **R7b — the type name (deferred, with evidence).** Renaming the 346 needs a
-> vocabulary call and neither available option is acceptable unilaterally:
-> - route them to `general_supplement` → **+346 to the catch-all**, undoing the
->   −348 that R1–R3 just won, and it is less honest than `single_mineral`
->   ("Cal Mag Zinc" is a mineral product, not a general supplement);
-> - mint `mineral_complex` / `multimineral` → a **cross-repo contract change**
->   (`scripts/GLOSSARY.md` first per §9, then `product_type_vocab.json`, which
->   ships to Flutter).
->
-> §13's evidence-only rule now *supports* a term — 346 products is a real base,
-> unlike the 8 that R4's pure-panel case would have justified. **This is a user
-> decision, not an agent one.** Until then the name stays and the fact is
-> correct, so no scoring is wrong; only the cohort label is imprecise.
-> `test_classifier_identity_count_r1.py::test_r7_distinct_identities_must_not_yield_a_single_type`
-> is a **strict xfail** holding the place — it fails loudly the moment R7b lands.
+> **R7b — the type name (done).** Homogeneous panels of two or more distinct
+> vitamin or mineral identities now use `vitamin_complex` or `mineral_complex`.
+> The former strict xfail is a normal passing regression test. The canonical
+> vocabulary has 22 types and the classification contract is `1.3.0`.
 
 - **Action:** a homogeneous 2–5 combo of *distinct* identities is not "single".
   It keeps its family type only if one identity is dominant; otherwise it is a
@@ -382,14 +343,14 @@ fiber-primary-with-accessory-probiotics; **and the 17 electrolyte candidates in
 
 ---
 
-## 9. Implementation order
+## 9. Historical implementation order (complete)
 
 1. **R1** (RC2 dedup) — biggest win; likely resolves a large share of the 503
    empty-reason residuals on its own. Re-measure after landing.
 2. **R2** (no silent residual) — then assert the §10 gate at 0.
 3. **R3** (collagen precedence + empty-id protein branch).
 4. **R7** (`single_*` ⇒ one identity) — unblocks Phase 1.
-5. **R4/R5/R6** (panels) — smallest impact; R6 needs the vocabulary call.
+5. **R4/R5/R6** (panels) — completed as independent evidence decisions.
 6. **RC1** (two row populations) — sequence last among classifier changes: it
    changes the row population itself, so land it when the counts above are
    stable, and re-measure everything. The 0a contract already carries
@@ -506,12 +467,11 @@ four contract defects in the completed classifier work:
 4. strict SoT mode accepted missing taxonomy and malformed current-version
    evidence, while the harness omitted the new identity/raw-row count fields.
 
-All four are fixed. Category decisions use one deterministic category vote per
+All four were fixed at contract `1.1.0`. Category decisions use one deterministic category vote per
 identity and emit raw `category_row_breakdown` separately; multi-ingredient
 secondary type is absent unless product-name or family evidence identifies it;
 every branch emits a decision code or raises; strict SoT fails closed; and the
-harness is schema 3. The contract version is `1.1.0` because these are semantic,
-not cosmetic, changes.
+harness is schema 3. R7b subsequently advanced the current contract to `1.3.0`.
 
 Adversarial canaries added during this review include duplicate botanical forms,
 two-botanical and two-amino panels, probiotic-plus-fiber support, collagen ties,
@@ -530,8 +490,6 @@ suppression/blocking/coverage flips. Explicit quality review items:
 - `298079` and `336322` Metabolic Health: `general_supplement` →
   `herbal_botanical`, confidence `moderate` → `high`, score unchanged.
 
-Verification: one clean `scripts/test.sh fast` run = 10,835 passed, 42 skipped,
-one strict R7b xfail; focused evidence/harness/adversarial suite = 48 passed. A
-later run after two full-corpus score previews had two unrelated 120-second test
-timeouts; the exact two tests passed in isolation (2/2 in 2.29s). Do not treat a
-repeated timeout on a rested host as accepted.
+Historical verification at that checkpoint was 10,835 passed, 42 skipped, and
+one strict R7b xfail. The completed R7b state is 10,896 passed, 134 skipped,
+with no xfail; the former xfail is now a passing regression test.
