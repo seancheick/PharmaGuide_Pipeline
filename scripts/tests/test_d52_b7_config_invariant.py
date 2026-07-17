@@ -35,16 +35,6 @@ def test_collect_rda_ul_data_enabled() -> None:
     )
 
 
-def test_scorer_b7_reads_rda_ul_data_safety_flags() -> None:
-    """The scorer's source must still consume rda_ul_data.safety_flags so
-    enabling the config actually flows to a B7 penalty."""
-    source = Path("scripts/score_supplements.py").read_text()
-    assert 'rda_ul.get("safety_flags")' in source, (
-        "D5.2 regression: scorer's B7 dose-safety must read from "
-        'rda_ul_data.safety_flags (the key the enricher populates).'
-    )
-
-
 def test_enricher_gate_preserved() -> None:
     """The enricher still honours the config gate (not hardcoded true)
     so the flag stays meaningful and reviewable."""

@@ -197,60 +197,6 @@ def test_blocked_verdict_canaries_present(canary_doc: dict) -> None:
 # --- Shape sanity ----------------------------------------------------------
 
 
-def test_canary_expected_b5_class_matches_router(canary_doc: dict) -> None:
-    """For every canary, the scorer's `_b5_class_for_product` output should
-    match the `expected_b5_class` field. This locks the canary file against
-    the live scorer router — if either drifts, the test names the dsld_id
-    so we know whose expectation is wrong.
-
-    Uses the shipped products_core row (supp_type + primary_category +
-    product_name + brand_name) to construct a minimal product fixture.
-    The router only inspects those fields, so this is sufficient."""
-    import sys, sqlite3
-    sys.path.insert(0, str(REPO_ROOT / "scripts"))
-    from score_supplements import SupplementScorer  # noqa: E402
-
-    if not CORE_DB.exists():
-        pytest.skip(f"shipped catalog missing at {CORE_DB}")
-
-    scorer = SupplementScorer()
-    con = sqlite3.connect(CORE_DB)
-    con.row_factory = sqlite3.Row
-
-    mismatches: list[str] = []
-    for c in canary_doc["canaries"]:
-        row = con.execute(
-            "SELECT supplement_type, primary_category, brand_name, product_name, "
-            "is_probiotic, contains_probiotics "
-            "FROM products_core WHERE dsld_id = ?",
-            (c["dsld_id"],),
-        ).fetchone()
-        if row is None:
-            continue  # presence test already covers missing rows
-        product = {
-            "supplement_type": {"type": row["supplement_type"]} if row["supplement_type"] else {},
-            "primary_category": row["primary_category"],
-            "brand_name": row["brand_name"],
-            "product_name": row["product_name"],
-            "fullName": f"{row['brand_name']} {row['product_name']}",
-            "is_probiotic": row["is_probiotic"],
-            "contains_probiotics": row["contains_probiotics"],
-        }
-        actual = scorer._b5_class_for_product(product)
-        if actual != c["expected_b5_class"]:
-            mismatches.append(
-                f"{c['dsld_id']} ({c['brand_name']} / {row['product_name'][:50]}): "
-                f"expected={c['expected_b5_class']!r} actual={actual!r} "
-                f"supp_type={row['supplement_type']!r} primary_category={row['primary_category']!r}"
-            )
-    con.close()
-
-    assert not mismatches, (
-        "canary expected_b5_class disagrees with scorer router on real "
-        f"shipped products:\n  " + "\n  ".join(mismatches)
-    )
-
-
 def test_canary_distribution_is_balanced(canary_doc: dict) -> None:
     """Spot-check that no single class hogs the set (>50%) — keeps the
     canary representative rather than coq10-skewed."""

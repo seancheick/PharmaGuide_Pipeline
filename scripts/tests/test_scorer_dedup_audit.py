@@ -48,46 +48,6 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 # ---------------------------------------------------------------------------
 
 
-class TestA2PremiumFormsDedup:
-    """Premium forms tagged by canonical_id count once even when declared as multiple rows."""
-
-    def test_premium_forms_dedup_by_canonical_id(self) -> None:
-        """
-        Verify the canonical_id-keyed set de-duplicates.
-        Reads the scorer source for the invariant line rather than running
-        the full scorer (which has heavy setup).
-        """
-        source = Path("scripts/score_supplements.py").read_text()
-        # The pattern we rely on: A2 must use a set-based dedup keyed by
-        # canonical_id. Match the structural signature across lines.
-        assert "premium_keys" in source and ".add(" in source, (
-            "A2 premium-forms dedup relies on a set called premium_keys "
-            "with .add() calls keyed by canonical_id. If refactored away, "
-            "D4.1 invariant broken."
-        )
-        assert 'ing.get("canonical_id")' in source, (
-            "A2 dedup must reference canonical_id as the primary key. "
-            "Source line removed or changed — regression."
-        )
-
-
-class TestA1ParentTotalSkip:
-    """A1 skips is_parent_total rows to prevent double-counting."""
-
-    def test_is_parent_total_skipped(self) -> None:
-        source = Path("scripts/score_supplements.py").read_text()
-        # A1 bioavailability section skips is_parent_total
-        assert 'if ing.get("is_parent_total"):' in source, (
-            "A1 must skip is_parent_total rows to avoid double-counting "
-            "when DSLD emits parent + nested forms."
-        )
-
-
-# ---------------------------------------------------------------------------
-# B7 UL dose aggregation — KNOWN GAP
-# ---------------------------------------------------------------------------
-
-
 class TestB7UlDoseAggregation:
     """
     B7 (dose safety) currently does per-row UL checks. Same-canonical

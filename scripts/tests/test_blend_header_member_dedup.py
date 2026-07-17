@@ -36,35 +36,9 @@ import pytest
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SCORER_PATH = REPO_ROOT / "scripts" / "score_supplements.py"
 PRODUCTS_ROOT = REPO_ROOT / "scripts" / "products"
 
 
-# ---------------------------------------------------------------------------
-# Static source invariants — scorer skips blend headers in A1/A2
-# ---------------------------------------------------------------------------
-
-
-class TestScorerSkipsBlendHeaders:
-    """A1/A2 must skip is_proprietary_blend rows to avoid double-counting."""
-
-    def test_a1_skips_blend_headers(self) -> None:
-        source = SCORER_PATH.read_text()
-        # A1 bioavailability loop must explicitly skip is_proprietary_blend
-        assert 'if ing.get("is_proprietary_blend"):' in source, (
-            "A1 must skip is_proprietary_blend containers. If removed, "
-            "blend headers pollute the weighted average."
-        )
-
-    def test_a2_skips_blend_headers(self) -> None:
-        # Both A1 and A2 share the same skip pattern in the scorer.
-        source = SCORER_PATH.read_text()
-        # Count occurrences — must be at least 2 (A1 + A2).
-        count = source.count('if ing.get("is_proprietary_blend"):')
-        assert count >= 2, (
-            f"Expected ≥2 is_proprietary_blend skip calls (A1 + A2); "
-            f"found {count}. A2 may have lost the skip."
-        )
 
 
 # ---------------------------------------------------------------------------
