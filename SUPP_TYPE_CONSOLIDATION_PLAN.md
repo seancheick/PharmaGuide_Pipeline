@@ -11,6 +11,9 @@ verdict, safety, status, suppression, blocking, or `mapped_coverage` changes.
 The next blocking action is the user-owned full-corpus rebuild and Phase-5
 artifact review. Do not delete the retired scorer or temporary audit harness
 until that fresh corpus proves the v4-only path.
+**Flutter contract:** the canonical 22-type vocabulary, loader documentation,
+and drift test are merged and pushed to Flutter `main` at `b5eabfa`; the
+pipeline remains the only vocabulary source and release sync enforces parity.
 **Integration:** merged and pushed to `main` at `45ae4b56`; the temporary R5
 feature branch/worktree was deleted after the merged fast suite passed. Resolve
 the live tip with `git rev-parse --short HEAD`; do not trust a copied commit hash
