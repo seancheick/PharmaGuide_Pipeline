@@ -237,6 +237,11 @@ _DIGESTIVE_ENZYME_NAME_TOKENS = {
     "pepsin", "bitters", "betaine hcl",
 }
 _PRE_WORKOUT_NAME_TOKENS = {"pre-workout", "pre workout", "preworkout"}
+_PRE_WORKOUT_PANEL_INTENT_RE = re.compile(
+    r"\b(?:pre[\s-]?workout|endurance\s+booster)\b|\bn\.?\s*o\.?\s+loaded\b"
+)
+_HYDRATION_PANEL_INTENT_RE = re.compile(r"\b(?:electrolytes?|hydration)\b")
+_ACCESSORY_HYDRATION_RE = re.compile(r"\bwith\s+(?:electrolytes?|hydration)\b")
 _PROTEIN_NAME_TOKENS = {
     "protein powder", "whey", "casein", "pea protein", "protein isolate",
     "protein blend",
@@ -272,6 +277,43 @@ _ENZYME_CANONICAL_IDS = frozenset({
 _SYSTEMIC_ENZYME_CANONICAL_IDS = frozenset({
     "nattokinase", "serrapeptase", "lumbrokinase",
 })
+
+
+def _specialized_panel_identity(
+    product_name: str,
+    canonical_ids: frozenset[str],
+) -> tuple[str, str, list[str]] | None:
+    """Return a panel's specialized identity when intent and anchors agree.
+
+    A marketing phrase cannot mint a clinical peer group by itself. Conversely,
+    common ingredients such as magnesium or caffeine do not establish product
+    intent without a bounded title signal. R5 requires both sides and runs
+    before broad B-complex/multivitamin panel ownership.
+    """
+    pre_workout_anchors = sorted(canonical_ids & _PRE_WORKOUT_IDS)
+    if (
+        _PRE_WORKOUT_PANEL_INTENT_RE.search(product_name)
+        and len(pre_workout_anchors) >= 2
+    ):
+        return (
+            "pre_workout",
+            "specialized_panel_pre_workout",
+            pre_workout_anchors,
+        )
+
+    electrolyte_anchors = sorted(canonical_ids & _ELECTROLYTE_IDS)
+    if (
+        _HYDRATION_PANEL_INTENT_RE.search(product_name)
+        and not _ACCESSORY_HYDRATION_RE.search(product_name)
+        and len(electrolyte_anchors) >= 3
+    ):
+        return (
+            "electrolyte",
+            "specialized_panel_electrolyte",
+            electrolyte_anchors,
+        )
+
+    return None
 
 # Secondary type detection: compound → secondary_type
 _SECONDARY_TYPE_MAP = {
@@ -876,6 +918,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             or any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal"))
         )
     )
+    specialized_panel_identity = _specialized_panel_identity(product_name, cid_set)
     ala_only_signal = bool(cid_set & _ALA_CANONICAL_IDS) and not bool(cid_set & _OMEGA_CANONICAL_IDS)
 
     # --- Probiotic ---
@@ -954,6 +997,17 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         decision_code = "probiotic_active_identity"
         confidence = 0.9 if probiotic_majority else 0.7
         reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
+
+    # --- Specialized sports/hydration panels (R5) ---
+    # Broad vitamin/mineral panels are common in these products, but they do
+    # not define the peer group when bounded product intent and category-owned
+    # ingredient anchors agree. This must precede B-complex/multivitamin.
+    elif specialized_panel_identity is not None:
+        primary_type, decision_code, anchors = specialized_panel_identity
+        confidence = 0.9
+        reasons.append(
+            f"{primary_type} intent corroborated by anchors: {anchors}"
+        )
 
     # --- B-Complex ---
     # Checked before the broad multivitamin panel: B-complexes can have 6+
