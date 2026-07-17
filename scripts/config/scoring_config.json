@@ -36,10 +36,10 @@
     "_enable_d1_middle_tier_note": "When true, manufacturers with verifiable mid-tier evidence (NSF GMP, FDA registered, USP, named GMP cert) receive D1_mid_tier_reputation points. Enricher computes eligibility via _has_verifiable_mid_tier_manufacturer_evidence."
   },
   "_usage": {
-    "run_scoring": "python score_supplements.py",
+    "_note": "Stage 3 is the v4 six-pillar producer (score_products_v4.py). The v3 /80 score_supplements.py scorer was retired 2026-07-17; this file survives as shared calibration config (omega dose bands, enricher prebiotic/botanical vocab).",
+    "run_scoring": "python score_products_v4.py --input-dir path/to/enriched --output-dir path/to/scored",
     "run_pipeline": "python run_pipeline.py --stages clean,enrich,score",
-    "custom_input": "python score_supplements.py --input-dir path/to/enriched --output-dir path/to/scored",
-    "dry_run": "python score_supplements.py --dry-run"
+    "dry_run": "python score_products_v4.py --input-dir path/to/enriched --output-dir path/to/scored --dry-run"
   },
   "paths": {
     "input_directory": "output_Lozenges_enriched/enriched",
@@ -598,7 +598,8 @@
     "poor_threshold_quality_score": 32
   },
   "display_format": {
-    "primary": "{score}/80",
+    "_note": "Unused legacy template. The shipped v4 display is /100 (quality_score_v4_100), emitted by scoring_v4/export_adapter.",
+    "primary": "{score_100}/100",
     "equivalent": "{score_100}/100"
   },
   "verdict_logic": {
