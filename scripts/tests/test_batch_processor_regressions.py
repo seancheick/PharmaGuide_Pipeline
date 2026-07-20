@@ -3,6 +3,8 @@ from pathlib import Path
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from batch_processor import (
@@ -43,6 +45,28 @@ def test_input_discovery_excludes_dotfiles_and_temporary_json(tmp_path):
     assert [path.name for path in processor.get_input_files(str(input_dir))] == [
         "visible.json"
     ]
+
+
+def test_input_discovery_fails_fast_for_macos_dataless_files(tmp_path, monkeypatch):
+    processor = BatchProcessor(_make_config(tmp_path))
+    input_dir = tmp_path / "input"
+    input_dir.mkdir()
+    local = input_dir / "local.json"
+    cloud_only = input_dir / "cloud-only.json"
+    local.write_text("{}", encoding="utf-8")
+    cloud_only.write_text("{}", encoding="utf-8")
+
+    monkeypatch.setattr(
+        BatchProcessor,
+        "_is_dataless_file",
+        staticmethod(lambda path: path == cloud_only),
+        raising=False,
+    )
+
+    with pytest.raises(RuntimeError, match="not downloaded") as exc_info:
+        processor.get_input_files(str(input_dir))
+
+    assert str(cloud_only) in str(exc_info.value)
 
 
 def test_worker_timeout_contains_pathological_file(monkeypatch):

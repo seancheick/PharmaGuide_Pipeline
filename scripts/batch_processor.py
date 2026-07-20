@@ -32,6 +32,7 @@ import traceback
 import os
 import hashlib
 import signal
+import stat
 
 logger = logging.getLogger(__name__)
 
@@ -485,9 +486,32 @@ class BatchProcessor:
         
         # Sort for consistent processing order
         files.sort()
+
+        dataless_files = [path for path in files if self._is_dataless_file(path)]
+        if dataless_files:
+            examples = "\n".join(f"  - {path}" for path in dataless_files[:10])
+            remaining = len(dataless_files) - min(len(dataless_files), 10)
+            suffix = f"\n  - ... and {remaining} more" if remaining else ""
+            raise RuntimeError(
+                f"Input dataset contains {len(dataless_files)} file(s) that are not "
+                "downloaded on this Mac (macOS 'dataless' cloud placeholders). "
+                "The pipeline would block while opening them. In Finder, right-click "
+                f"the dataset folder and choose 'Download Now', then rerun.\n{examples}{suffix}"
+            )
         
         logger.info(f"Found {len(files)} input files")
         return files
+
+    @staticmethod
+    def _is_dataless_file(path: Path) -> bool:
+        """Return whether macOS has evicted a file's contents to cloud storage."""
+        dataless_flag = getattr(stat, "SF_DATALESS", 0)
+        if not dataless_flag:
+            return False
+        try:
+            return bool(getattr(path.stat(), "st_flags", 0) & dataless_flag)
+        except OSError:
+            return False
     
     def load_state(self) -> Optional[BatchState]:
         """Load processing state if exists"""
