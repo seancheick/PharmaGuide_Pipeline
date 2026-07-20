@@ -3538,7 +3538,30 @@ class SupplementEnricherV3:
                     literal_match,
                     quality_map,
                 )
-                if literal_canonical_id and literal_canonical_id != canonical_id:
+                # A literal match to the SELECTED canonical's own generic
+                # category umbrella is a broader parent, not a competing
+                # substance, so it must not out-rank a cleaner-enforced specific
+                # member. Example: "Probiotic (L. rhamnosus GG)" — the outer
+                # "Probiotic" token normalizes to the generic ``probiotics``
+                # canonical while the cleaner enforced the specific strain
+                # ``lactobacillus_rhamnosus`` (whose category IS ``probiotics``)
+                # from the disambiguating parenthetical. The species/strain-code
+                # clinical-evidence match stays gated by _species_matches_strain
+                # (ce688c96); this only restores scorability of the parent form.
+                selected_category = self._normalize_text(
+                    registry_entry.get("category") or ""
+                )
+                literal_is_generic_parent_of_selected = (
+                    match_result.get("cleaner_canonical_enforced") is True
+                    and bool(selected_category)
+                    and self._normalize_text(literal_canonical_id)
+                    == selected_category
+                )
+                if (
+                    literal_canonical_id
+                    and literal_canonical_id != canonical_id
+                    and not literal_is_generic_parent_of_selected
+                ):
                     return False
                 literal_identity_confirms_selected = (
                     literal_canonical_id == canonical_id
