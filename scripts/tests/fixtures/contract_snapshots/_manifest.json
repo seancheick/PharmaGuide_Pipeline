@@ -1,7 +1,7 @@
 {
   "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
   "schema_version": "2.0.0",
-  "frozen_on": "2026-07-15",
+  "frozen_on": "2026-07-20",
   "fixture_schema": {
     "frozen_fields": [
       "dsld_id",
@@ -454,6 +454,17 @@
         "Release snapshot regression reconcile (f3ad121e, 719d023c)"
       ],
       "notes": "Re-froze 17 fixtures after a fresh full 28-brand pipeline run. All 28 brands passed; the other 21 brands produced zero drift, so this is the complete delta set. Each line was reviewed; none are regressions. (1) B5 BLEND DETECTION (9 products: 182730, 288344, 18141, 204571, 241353, 274498, 327416, +): the detector now resolves real named blends with their declared totals and children instead of collapsing them into an anonymous 'General Proprietary Blends' bucket with blend_total_mg=null penalized at the harshest 'none' tier. disclosure_tier now reflects actual label disclosure (none/partial/full) and impact_source moves count_share->mg_share. Net effect is penalty reduction where the label genuinely discloses: 18141 CVS Omega-3 blend is fully disclosed (alpha linolenic acid 50mg of 300mg) -> B5 2.0->0.0; 204571 Organic Adrenal Blend 850mg fully disclosed -> 3.25->0.0. Accuracy correction, not a loosening. (2) A1 MULTIVITAMIN/PRENATAL TRUE-FLOOR (6 products land on 10.8: 288344, 239600, 204571, 241353, 274498, 327416): A1 now uses max(avg, floor) per the SCORING_LOGIC 'floor' spec rather than 0.7*avg+0.3*floor. The repeated 10.8 is the floor. (3) A3 DELIVERY EVIDENCE (18141 1.0->0.0, 321969 2.0->0.0): delivery matches sourced from internal reference notes are no longer trusted; only label-authored evidence (name/fullName, active-ingredient rows, typed DSLD statements) counts. Verified 'bisglycinate' is NOT a listed term in enhanced_delivery.json, so Thorne Iron Bisglycinate (321969) loses previously false-positive tier-2 credit (grade Good->Fair). FOLLOW-UP: enhanced_delivery.json has a genuine vocabulary gap for amino-acid chelates (bisglycinate/glycinate) - the code is correct, the delivery data is incomplete. (4) ROUNDING (293943 score_80 51.5->51.6 only): Python round() is banker's rounding, so 31.95 -> 31.9 while the display showed 32.0 - display and verdict contradicted each other. Now Decimal ROUND_HALF_UP for both consistently. (5) A5/A5b STANDARDIZATION (245156 Goli 1.0->4.0 / 0.0->3.0): standardization credit restored. (6) COSMETIC (298070): activeIngredients[1]->[0] source_path/fingerprint shift from preserving linked display-only blend members; no score change, FloraMend's earlier SAFE->POOR regression is resolved."
+    },
+    {
+      "date": "2026-07-20",
+      "action": "refrozen_caffeine_mirror_deduplication",
+      "products": [
+        306381
+      ],
+      "sprints_covered": [
+        "Label identity ledger and scoring-contract deduplication"
+      ],
+      "notes": "Re-froze Nutricost PRE Pre-Workout Complex after fixing the safety gate's treatment of activeIngredients, display_ingredients, and ingredient_quality_data as additive dose sources. They are mirror contracts for the same label row. The disclosed Caffeine Anhydrous 300 mg row was previously summed two or three times, creating false HIGH_DOSE and UNDISCLOSED_PREWORKOUT flags and an unsupported CAUTION verdict. It now emits one STIMULANT_CAFFEINE_MODERATE_DOSE signal and follows the existing disclosed-caffeine policy (SAFE global verdict). Score remains 69.5. A score-only propagation across all 28 fresh enriched brand outputs completed successfully; no other frozen contract product drifted."
     }
   ]
 }
