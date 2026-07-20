@@ -135,34 +135,6 @@ def test_ascorbate_salts_class_consistent(iqm):
     )
 
 
-@pytest.mark.skip(
-    reason=(
-        "identity_bioactivity_split Phase 2: camu camu and acerola are no longer "
-        "vitamin_c IQM forms (relocated to source-botanical canonicals camu_camu / "
-        "acerola_cherry). New equivalent assertion lives in T6 (scorer Section A "
-        "+ delivers_markers Section C bands)."
-    )
-)
-def test_camu_acerola_not_above_ascorbic_acid(iqm):
-    """Per Carr & Vissers 2013 (PMID:24067392) and Uchida 2011 (PMID:22040889),
-    whole-food vit C does NOT exceed ascorbic acid in absolute F. The
-    SVCT1 transporter is rate-limiting.
-    """
-    forms = iqm['vitamin_c']['forms']
-    aa = (forms['ascorbic acid'].get('absorption_structured') or {}).get('value')
-    camu = (forms['camu camu extract'].get('absorption_structured') or {}).get('value')
-    acerola = (forms['acerola cherry extract'].get('absorption_structured') or {}).get('value')
-    # Within 0.05 either direction is acceptable; whole-food cannot dramatically exceed
-    assert camu <= aa + 0.05, (
-        f'camu camu ({camu}) must not exceed ascorbic acid ({aa}) by >0.05 — '
-        f'SVCT1 saturable per Carr & Vissers 2013 (PMID:24067392)'
-    )
-    assert acerola <= aa + 0.05, (
-        f'acerola ({acerola}) must not exceed ascorbic acid ({aa}) by >0.05 — '
-        f'Uchida 2011 (PMID:22040889) AUC trend was NS'
-    )
-
-
 def test_no_phantom_yap_2003_human_citation(iqm):
     """"Yap 2003 tocotrienol PK" PMID:12625867 is RAT study, not human.
     If cited, must be flagged as rat-only.

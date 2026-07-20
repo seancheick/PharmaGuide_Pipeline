@@ -662,16 +662,26 @@ class TestIdentityIntegrityBoundary:
         )
         skipped = {row["name"]: row for row in result["ingredients_skipped"]}
 
+        # Non-alarmist invariant: both are cleanly skipped (taxonomy_only),
+        # never scored, and carry no prior scoring canonical.
         for name in ("Sorbitol", "Stevia leaf extract"):
             row = skipped[name]
             assert row["identity_disposition"] == "taxonomy_only"
             assert row["scoreable_identity"] is False
             assert row["canonical_id_before"] is None
-            assert row["canonical_id_after"] is None
-            assert row["canonical_id"] is None
             assert row not in result["ingredients_scorable"]
 
+        # Sorbitol is taxonomy-only with no recognized-source identity.
+        assert skipped["Sorbitol"]["canonical_id_after"] is None
+        assert skipped["Sorbitol"]["canonical_id"] is None
+
+        # Stevia is a recognized non-scorable (NHA lane). Post-04358651 the
+        # recognition identity is restamped onto the row for provenance while it
+        # stays non-scorable — recording what it was recognized as does not make
+        # it scored (scoreable_identity is False, asserted above).
         assert skipped["Stevia leaf extract"]["recognized_non_scorable"] is True
+        assert skipped["Stevia leaf extract"]["canonical_id_after"] == "NHA_STEVIA"
+        assert skipped["Stevia leaf extract"]["canonical_id"] == "NHA_STEVIA"
 
     def test_identity_integrity_reclassifies_recognized_active_without_false_conflict(
         self, enricher

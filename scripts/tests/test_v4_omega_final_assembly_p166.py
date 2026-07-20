@@ -230,12 +230,18 @@ def _load_canaries(ids):
 # Expected ranges are tight (±3 pts) around the P1.6.6 smoke results.
 # Wider than ±0.5 to tolerate small drifts in generic_evidence /
 # manufacturer pipeline; tighter than ±10 to catch real regressions.
+# Re-baselined 2026-07-19 after committed omega calibration (d03223b6 "Calibrate
+# scoring modules" + 1ce39d75 evidence audit + the 2026-07-04 config-magnitude
+# hoist) moved these raw-rubric scores; the ranges had not been updated since
+# 0828f18b (2026-06-05). These products are unaffected by the pending enricher
+# changes, so the recompute is stable. 239592 (krill + astaxanthin) dropped ~3.3
+# from an evidence-credit recalc — verify it holds at the next full-corpus rebuild.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research", 83.9, 84.9),
-    ("326270", "Sports Research", 83.9, 84.9),
+    ("327776", "Sports Research", 84.9, 85.9),
+    ("326270", "Sports Research", 84.9, 85.9),
     ("288740", "Nordic Naturals", 62.6, 63.6),
-    ("273630", "Garden of Life", 76.1, 77.1),
-    ("239592", "CVS Health", 52.7, 53.7),
+    ("273630", "Garden of Life", 77.1, 78.1),
+    ("239592", "CVS Health", 49.4, 50.4),
     ("182968", "Pure Encapsulations",  52.0, 59.0),
 ])
 def test_canary_final_score_in_range(dsld_id, brand, expected_score_min, expected_score_max):

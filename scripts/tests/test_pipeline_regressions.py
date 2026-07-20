@@ -3013,10 +3013,15 @@ class TestExplicitDyePriority:
             f"Blue 1 Lake should map to 'artificial colors', got: {standard_name}"
 
     def test_explicit_natural_dye_annatto(self, normalizer):
-        """Explicit natural dye: 'Annatto' maps to 'natural colors'"""
+        """Explicit natural dye naming a known ingredient source keeps its
+        specific identity (04358651): 'Annatto' resolves to 'Annatto Extract',
+        not the generic 'natural colors'. Color is a functional role, not
+        permission to overwrite a recognized source identity. The generic
+        natural-colors path is still covered by test_colors_with_natural_indicator."""
         standard_name, mapped, forms = normalizer._enhanced_ingredient_mapping("Annatto", [])
-        assert standard_name == "natural colors", \
-            f"Annatto (explicit natural dye) should map to 'natural colors', got: {standard_name}"
+        assert standard_name == "Annatto Extract", \
+            f"Annatto should keep its recognized source identity, got: {standard_name}"
+        assert standard_name != "artificial colors"
 
     def test_turmeric_maps_to_iqm_not_natural_colors(self, normalizer):
         """Turmeric has IQM therapeutic entry — should NOT be intercepted by dye matcher"""
@@ -3025,10 +3030,13 @@ class TestExplicitDyePriority:
             f"Turmeric should map to IQM (Curcumin/Turmeric), got: {standard_name}"
 
     def test_explicit_natural_dye_beet_juice(self, normalizer):
-        """Explicit natural dye: 'Beet Juice' maps to 'natural colors'"""
+        """Explicit natural dye naming a known source keeps its specific identity
+        (04358651): 'Beet Juice' resolves to 'Beet Juice Color', not the generic
+        'natural colors'."""
         standard_name, mapped, forms = normalizer._enhanced_ingredient_mapping("Beet Juice", [])
-        assert standard_name == "natural colors", \
-            f"Beet Juice should map to 'natural colors', got: {standard_name}"
+        assert standard_name == "Beet Juice Color", \
+            f"Beet Juice should keep its recognized source identity, got: {standard_name}"
+        assert standard_name != "artificial colors"
 
     def test_beta_carotene_maps_to_iqm_not_natural_colors(self, normalizer):
         """Beta-Carotene has IQM therapeutic entry — should NOT be intercepted by dye matcher"""
@@ -3065,12 +3073,17 @@ class TestExplicitDyePriority:
             f"Red 40 should ALWAYS be artificial regardless of forms, got: {standard_name}"
 
     def test_explicit_natural_overrides_artificial_indicator_in_forms(self, normalizer):
-        """Explicit natural dye name overrides artificial indicators in forms"""
-        # Annatto should be natural even if forms mention "synthetic"
+        """A recognized natural dye name is never downgraded to 'artificial colors'
+        by artificial form indicators. Post-04358651 the known source keeps its
+        specific identity ('Annatto Extract'); the safety-relevant invariant is
+        that it never resolves to artificial regardless of misleading forms."""
+        # Annatto must not become artificial even if forms mention "synthetic".
         forms = ["synthetic process"]  # This would normally indicate artificial
         standard_name, mapped, forms_out = normalizer._enhanced_ingredient_mapping("Annatto", forms)
-        assert standard_name == "natural colors", \
-            f"Annatto should ALWAYS be natural regardless of forms, got: {standard_name}"
+        assert standard_name == "Annatto Extract", \
+            f"Annatto should keep its recognized source identity, got: {standard_name}"
+        assert standard_name != "artificial colors", \
+            "explicit natural dye must never be classified artificial via form indicators"
 
 
 class TestColorIndicatorsMissingFile:

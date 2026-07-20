@@ -74,9 +74,11 @@ V4_CANARIES = {
         # re-baseline 2026-06-06: native clinical-strain credit lifted score
         # 30.7 -> 47.2, crossing the 40 SAFE cutoff. SAFE = no safety concern
         # (low quality is conveyed by the score, not the verdict).
+        # 2026-07-19: current raw is 47.2 (matches the documented value above);
+        # the old hi=47.1 was an off-by-0.1 window set below the real score.
         "verdict": "SAFE",
         "confidence": "low",
-        "score_range": (45.7, 47.1),
+        "score_range": (46.5, 47.9),
     },
     # Fish-oil parent mass with no EPA/DHA breakdown: scoreable as aggregate
     # evidence with moderate uncertainty, no score cap, and no CAUTION ceiling.
@@ -135,7 +137,9 @@ V4_CANARIES = {
         "module": "generic",
         "verdict": "SAFE",
         "confidence": "moderate",
-        "score_range": (63.8, 65.2),
+        # Re-baseline 2026-07-19: committed formulation calibration after 2026-07-10
+        # (c92cada1) lifted raw 65.2 -> 65.5. Verdict/confidence unchanged.
+        "score_range": (64.8, 66.2),
     },
     # Typed confidence high on the probiotic module.
     "230149": {

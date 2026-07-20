@@ -49,6 +49,7 @@ import release_catalog_artifact as rca  # noqa: E402
 # builds a "valid" pipeline output, the contract test follows.
 from test_release_catalog_artifact import (  # noqa: E402
     _make_fake_db,
+    _write_empty_audit,
     _write_manifest_json,
 )
 
@@ -103,6 +104,11 @@ def _staged_manifest(tmp_path: Path, *, db_version: str) -> Dict[str, Any]:
         row_count=600,
         db_version=db_version,
     )
+    # The release gate now requires the contract-quarantine ledger
+    # (release_catalog_artifact.py:333, added in 2d782324). A real build always
+    # emits it; stage the empty-ledger shape here exactly as the sibling
+    # release-artifact suite does so this fixture stays in lock-step.
+    _write_empty_audit(input_dir)
 
     validation = rca.validate_release_candidate(
         input_dir=input_dir, min_products=500

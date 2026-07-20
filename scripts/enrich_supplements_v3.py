@@ -4378,6 +4378,7 @@ class SupplementEnricherV3:
                         branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                     )
             context_match_reason = pre_context_match_reason
+            authoritative_marker_context = False
             if context_match_reason == "kelp_fucoidan_marker_context":
                 context_match = self._match_quality_map(
                     "Fucoidan extract",
@@ -4387,8 +4388,16 @@ class SupplementEnricherV3:
                 )
                 if context_match:
                     match_result = context_match
+                    authoritative_marker_context = True
+            # The kelp->fucoidan marker context (cdfca23f) is an explicit, authored
+            # exception and must win over the general blocked-botanical-source-marker
+            # rule (04358651). Without this guard that rule nulls the fucoidan match
+            # and clears context_match_reason below, defeating the
+            # authoritative_context_override and dropping a scorable row to the
+            # non-scorable lane.
             blocked_botanical_marker_match = (
-                self._is_blocked_botanical_source_marker_match(
+                not authoritative_marker_context
+                and self._is_blocked_botanical_source_marker_match(
                     ingredient, match_result
                 )
             )

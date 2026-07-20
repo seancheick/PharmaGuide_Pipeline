@@ -7,8 +7,10 @@ evidence_canonical_id, canonical_source_db, evidence_origin.
 """
 from __future__ import annotations
 
+import copy
 import json
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 import pytest
@@ -30,14 +32,32 @@ IDENTITY_FIELDS = {
 }
 
 
-def _load_product(dsld_id: str) -> dict:
-    for path in (SCRIPTS_ROOT / "products").glob("output_*_enriched/enriched/*.json"):
+@lru_cache(maxsize=1)
+def _golden_index() -> dict:
+    # Scan the enriched corpus ONCE for every golden product (early-exit once all
+    # are found) instead of re-parsing the whole corpus per parametrized call.
+    # sorted() makes the scan deterministic (glob order is FS-dependent).
+    wanted = set(GOLDEN_IDS)
+    index: dict[str, dict] = {}
+    for path in sorted((SCRIPTS_ROOT / "products").glob("output_*_enriched/enriched/*.json")):
         payload = json.loads(path.read_text())
         products = payload if isinstance(payload, list) else payload.get("products", [])
         for product in products:
-            if str(product.get("dsld_id") or product.get("id")) == dsld_id:
-                return product
-    raise AssertionError(f"Could not find enriched product {dsld_id}")
+            pid = str(product.get("dsld_id") or product.get("id"))
+            if pid in wanted and pid not in index:
+                index[pid] = product
+        if len(index) == len(wanted):
+            break
+    return index
+
+
+def _load_product(dsld_id: str) -> dict:
+    product = _golden_index().get(dsld_id)
+    if product is None:
+        raise AssertionError(f"Could not find enriched product {dsld_id}")
+    # Deepcopy so a test mutating the product (e.g. scoring derivation) cannot
+    # corrupt the shared cached parse used by the other parametrized tests.
+    return copy.deepcopy(product)
 
 
 def _evidence_rows(product: dict) -> list[dict]:

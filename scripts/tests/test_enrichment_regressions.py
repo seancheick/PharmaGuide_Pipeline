@@ -316,7 +316,16 @@ class TestProbioticCFU:
         assert result == "at_expiration"
 
     def test_probiotic_type_classification_does_not_drop_missing_category_actives(self, enricher):
-        """Missing category metadata must not suppress probiotic classification."""
+        """Missing category metadata must not suppress probiotic classification.
+
+        classify_supplement trusts upstream probiotic_data enrichment (documented
+        precondition: probiotic_data is populated before classification), so this
+        fixture mirrors the real pipeline by running _collect_probiotic_data first
+        instead of feeding a raw, pre-enrichment row. The three species carry no
+        quantity, so they are recognized as non_quantified_base_count. (The old
+        `active_count == 3` assertion was migrated to `quantified_active_count` in
+        the 4f31ff28 taxonomy refactor, which counts only quantified rows — 0 here;
+        the "not dropped" intent is now non_quantified_base_count == 3.)"""
         product = {
             'id': 'test_probiotic_missing_category',
             'product_name': 'Restore',
@@ -330,11 +339,12 @@ class TestProbioticCFU:
                 {'name': 'Hypromellose Capsule'},
             ],
         }
+        product['probiotic_data'] = enricher._collect_probiotic_data(product)
 
         result = classify_supplement(product)
 
         assert result['primary_type'] == 'probiotic'
-        assert result['quantified_active_count'] == 3
+        assert result['non_quantified_base_count'] == 3
 
 
 class TestServingBasis:
@@ -1453,7 +1463,12 @@ class TestCompoundParentDisambiguation:
             ("Nicotinamide Mononucleotide", "nmn", "nicotinamide mononucleotide (unspecified)"),
             ("MaquiBright", "maqui_berry", "maqui berry (unspecified)"),
             ("Vitexin", "vitexin", "vitexin (unspecified)"),
-            ("Life's DHA", "dha", "algal triglyceride"),
+            # Post-B38 / D8.1 re-architecture (2026-04-25): algal DHA sources
+            # moved to the algae_oil parent (source oil), matching the
+            # fish_oil-style matrix model. The bare "Life's DHA" alias is an
+            # exact-tier match on algae_oil's 'algae oil (dha)' form; the 'dha'
+            # parent only carries the compound-suffixed "life's dha dha".
+            ("Life's DHA", "algae_oil", "algae oil (dha)"),
             # Post-B38 (2026-04-25) alias dedup: "concentrated fish oil" was
             # duplicated in both 'ethyl ester' and 'fish oil (unspecified)';
             # the more specific 'ethyl ester' kept the alias.

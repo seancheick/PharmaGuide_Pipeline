@@ -12,7 +12,8 @@ What ships (verdict shows in app):
 What does NOT ship (gate-quarantined):
     NOT_SCORED          — mapping/dosage gate failure; can't claim accuracy
     score_100=None on a non-blocked verdict — incomplete computation
-    breakdown.A/B/C/D missing or non-numeric — partial scoring failure
+    strict_scoring_contract not passed / missing — partial scoring failure
+    (v4 six-pillar gate; the retired v3 /80 "section A-D" checks are gone)
 """
 
 import os
@@ -118,12 +119,28 @@ def test_unsafe_with_null_score_is_allowed():
 # ---------------------------------------------------------------------------
 
 
-def test_missing_section_a_is_quarantined():
-    """Section A must be a numeric score for non-BLOCKED/UNSAFE verdicts."""
+def test_failed_strict_scoring_contract_is_quarantined():
+    """A non-BLOCKED/UNSAFE product whose v4 scoring contract did not pass is a
+    partial-scoring failure and must never ship.
+
+    This is the v4 six-pillar successor to the retired v3 "Section A must be
+    numeric" gate: under v4 the export contract validates
+    ``strict_scoring_contract.passed`` (build_final_db.validate_export_contract),
+    not the old /80 ``section_scores`` sub-scores.
+    """
     scored = make_scored("SAFE")
-    scored["section_scores"]["A_ingredient_quality"] = {}  # missing score
+    scored["strict_scoring_contract"] = {"passed": False, "findings": ["incomplete"]}
     issues = validate_export_contract(make_enriched(), scored)
-    assert issues, "Missing A section score must be rejected"
+    assert issues, "SAFE verdict with a failed strict_scoring_contract must be rejected"
+
+
+def test_missing_strict_scoring_contract_is_quarantined():
+    """The v4 gate also rejects a scored product missing its scoring contract."""
+    scored = make_scored("SAFE")
+    del scored["strict_scoring_contract"]
+    scored.get("scoring_metadata", {}).pop("strict_scoring_contract", None)
+    issues = validate_export_contract(make_enriched(), scored)
+    assert issues, "SAFE verdict with no strict_scoring_contract must be rejected"
 
 
 def test_non_finite_score_is_quarantined():
