@@ -589,7 +589,10 @@ class TestSafetyCategoryRouting:
         }
         s = _base_scored(verdict="BLOCKED")
 
-        assert "Banned substance: Test Substance" in build_top_warnings(e)
+        assert any(
+            warning["title"] == "Banned substance: Test Substance"
+            for warning in build_top_warnings(e)
+        )
 
         blob = build_detail_blob(e, s)
         warnings = [
@@ -721,9 +724,9 @@ class TestTopWarningsPriority:
 },
         ]
         warnings = build_top_warnings(e)
-        assert warnings[0].startswith("Banned substance:")
-        assert warnings[1].startswith("Recalled ingredient:")
-        assert any("Watchlist" in w for w in warnings)
+        assert warnings[0]["title"].startswith("Banned substance:")
+        assert warnings[1]["title"].startswith("Recalled ingredient:")
+        assert any("Watchlist" in w["title"] for w in warnings)
 
     def test_structured_allergens_do_not_fill_top_warnings(self):
         e = _base_enriched()
@@ -732,7 +735,7 @@ class TestTopWarningsPriority:
             for i in range(10)
         ]
         warnings = build_top_warnings(e)
-        assert not any("Allergen" in w for w in warnings)
+        assert not any("Allergen" in w["title"] for w in warnings)
 
     def test_dietary_warning_surfaces_without_allergen_top_warning_noise(self):
         e = _base_enriched()
@@ -745,8 +748,8 @@ class TestTopWarningsPriority:
             {"type": "diabetes", "severity": "moderate", "message": "Contains sugar."}
         ]
         warnings = build_top_warnings(e)
-        assert not any("Allergen" in w for w in warnings)
-        assert any("sugar" in w.lower() for w in warnings)
+        assert not any("Allergen" in w["title"] for w in warnings)
+        assert any("sugar" in w["title"].lower() for w in warnings)
 
 
 # ═══════════════════════════════════════════════════════════════
@@ -837,7 +840,7 @@ class TestGoldenProducts:
         blob = build_detail_blob(e, s)
         assert any(w["type"] == "banned_substance" for w in blob["warnings"])
         top = build_top_warnings(e)
-        assert top[0].startswith("Banned substance:")
+        assert top[0]["title"].startswith("Banned substance:")
 
     def test_golden_recalled_product(self):
         """Product with recalled ingredient: flag recalled, not banned."""
@@ -866,7 +869,7 @@ class TestGoldenProducts:
         assert row["has_recalled_ingredient"] == 0
         assert row["blocking_reason"] is None
         top = build_top_warnings(e)
-        assert any("Watchlist" in w for w in top)
+        assert any("Watchlist" in w["title"] for w in top)
 
     def test_golden_allergen_product(self):
         """Product with allergen: row flag + structured detail blob only."""

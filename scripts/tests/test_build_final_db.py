@@ -25,6 +25,7 @@ from build_final_db import (
     fetch_staged_product,
     generate_share_metadata,
     generate_ingredient_fingerprint,
+    generate_allergen_summary,
     generate_key_nutrients_summary,
     generate_dosing_summary,
     has_banned_substance,
@@ -36,6 +37,35 @@ from build_final_db import (
     stage_products_by_id,
     validate_export_contract,
 )
+
+
+def test_allergen_summary_reads_enricher_allergen_name_contract():
+    enriched = {
+        "allergen_hits": [
+            {"allergen_name": "Soy", "presence_type": "contains"},
+            {"allergen_name": "Tree Nuts", "presence_type": "contains"},
+        ]
+    }
+
+    assert generate_allergen_summary(enriched) == "Contains: Soy, Tree Nuts"
+
+
+def test_allergen_summary_preserves_presence_language():
+    enriched = {
+        "allergen_hits": [
+            {"allergen_name": "Milk", "presence_type": "contains"},
+            {"allergen_name": "Soy", "presence_type": "may_contain"},
+            {
+                "allergen_name": "Tree Nuts",
+                "presence_type": "manufactured_in_facility",
+            },
+        ]
+    }
+
+    assert generate_allergen_summary(enriched) == (
+        "Contains: Milk. May contain: Soy. "
+        "Made in a facility that also handles: Tree Nuts"
+    )
 
 
 PRODUCTS_CORE_COLUMNS = [
@@ -2158,7 +2188,7 @@ def test_watchlist_is_exported_as_warning_but_not_blocking_reason():
     warnings = build_top_warnings(enriched)
 
     assert row["blocking_reason"] is None
-    assert any("Watchlist ingredient:" in warning for warning in warnings)
+    assert any("Watchlist ingredient:" in warning["title"] for warning in warnings)
     assert any(w["type"] == "watchlist_substance" for w in blob["warnings"])
 
 
@@ -2215,12 +2245,12 @@ def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
     warnings = build_top_warnings(enriched)
 
     assert len(warnings) <= 5
-    assert warnings[0].startswith("Banned substance:")
-    assert warnings[1].startswith("Recalled ingredient:")
-    assert not any(w.startswith("Allergen:") for w in warnings)
-    assert any("Interaction:" in w for w in warnings)
-    assert any("sugar" in w.lower() for w in warnings)
-    assert all("Discontinued" not in warning for warning in warnings)
+    assert warnings[0]["title"].startswith("Banned substance:")
+    assert warnings[1]["title"].startswith("Recalled ingredient:")
+    assert not any(w["title"].startswith("Allergen:") for w in warnings)
+    assert any("Interaction:" in w["title"] for w in warnings)
+    assert any("sugar" in w["title"].lower() for w in warnings)
+    assert all("Discontinued" not in warning["title"] for warning in warnings)
 
 
 def test_top_warnings_include_rda_ul_safety_flags():
@@ -2234,9 +2264,26 @@ def test_top_warnings_include_rda_ul_safety_flags():
     warnings = build_top_warnings(enriched)
 
     assert any(
-        warning == "Upper-limit warning: Vitamin B6 at 588% of UL"
+        warning["title"] == "Upper-limit warning: Vitamin B6 at 588% of UL"
         for warning in warnings
     )
+
+
+def test_top_warnings_preserve_structured_identity_for_flutter():
+    enriched = make_enriched()
+    enriched["rda_ul_data"] = {
+        "safety_flags": [
+            {"nutrient": "Vitamin B6", "pct_ul": 588, "severity": "high"},
+        ]
+    }
+
+    warnings = build_top_warnings(enriched)
+
+    assert {
+        "type": "dose_safety",
+        "severity": "high",
+        "title": "Upper-limit warning: Vitamin B6 at 588% of UL",
+    } in warnings
 
 
 def test_export_contract_validator_fails_loudly_when_real_upstream_field_is_missing():
@@ -2809,7 +2856,7 @@ class TestDetailBlobNutritionAndUnmapped:
         assert CORE_COLUMN_COUNT == 110
 
     def test_schema_version_bumped_to_200(self):
-        assert EXPORT_SCHEMA_VERSION == "2.0.0"
+        assert EXPORT_SCHEMA_VERSION == "2.1.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces

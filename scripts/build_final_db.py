@@ -85,7 +85,7 @@ from scoring_v4.scored_artifact import (
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "2.0.0"  # v4 /100 six-pillar contract + provenance cols; ranking/dedup use quality_score_v4_100. v1.6.0 added profile_gate passthrough on warnings
+EXPORT_SCHEMA_VERSION = "2.1.0"  # v4 /100 contract; v2.1 structures core top_warnings for offline consumers
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -4671,8 +4671,13 @@ def apply_sqlite_build_pragmas(conn: sqlite3.Connection) -> None:
 
 # ─── Warning Builder ───
 
-def build_top_warnings(enriched: Dict) -> List[str]:
-    """Build prioritized warning list from enriched product data."""
+def build_top_warnings(enriched: Dict) -> List[Dict]:
+    """Build prioritized, structured warning summaries for Flutter.
+
+    The core database stores this list as JSON.  Retaining type and severity
+    here lets the offline UI interpret the same warning identity as the detail
+    blob instead of attempting to recover semantics from display copy.
+    """
     raw_warnings = []
     warning_messages = set()
 
@@ -4791,7 +4796,10 @@ def build_top_warnings(enriched: Dict) -> List[str]:
         SEVERITY_PRIORITY.get(w[1], 99),
     ))
 
-    return [w[2] for w in raw_warnings[:TOP_WARNINGS_MAX]]
+    return [
+        {"type": kind, "severity": severity, "title": message}
+        for kind, severity, message in raw_warnings[:TOP_WARNINGS_MAX]
+    ]
 
 
 # ─── Blocking Reason ───
@@ -8750,7 +8758,7 @@ def build_structured_allergens(enriched: Dict) -> List[Dict]:
     return out
 
 
-def generate_allergen_summary(enriched: Dict) -> str:
+def generate_allergen_summary(enriched: Dict) -> Optional[str]:
     """Generate allergen summary string.
 
     Returns: "Contains: Soy, Tree Nuts" or None
@@ -8760,17 +8768,33 @@ def generate_allergen_summary(enriched: Dict) -> str:
     if not allergen_hits:
         return None
 
-    allergen_names = []
+    grouped_names = {
+        "contains": [],
+        "may_contain": [],
+        "manufactured_in_facility": [],
+    }
     for hit in allergen_hits:
         if isinstance(hit, dict):
-            name = safe_str(hit.get("standard_name"))
-            if name:
-                allergen_names.append(name)
+            name = safe_str(hit.get("allergen_name") or hit.get("standard_name"))
+            presence = safe_str(hit.get("presence_type"), "contains")
+            names = grouped_names.get(presence, grouped_names["contains"])
+            if name and name not in names:
+                names.append(name)
 
-    if not allergen_names:
+    if not any(grouped_names.values()):
         return None
 
-    return f"Contains: {', '.join(allergen_names)}"
+    summaries = []
+    if grouped_names["contains"]:
+        summaries.append(f"Contains: {', '.join(grouped_names['contains'])}")
+    if grouped_names["may_contain"]:
+        summaries.append(f"May contain: {', '.join(grouped_names['may_contain'])}")
+    if grouped_names["manufactured_in_facility"]:
+        summaries.append(
+            "Made in a facility that also handles: "
+            f"{', '.join(grouped_names['manufactured_in_facility'])}"
+        )
+    return ". ".join(summaries)
 
 
 def registry_verified_cert_display_programs(enriched: Dict) -> List[str]:

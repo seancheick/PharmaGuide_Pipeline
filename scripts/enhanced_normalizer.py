@@ -86,6 +86,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from unmapped_ingredient_tracker import UnmappedIngredientTracker
 from functional_grouping_handler import FunctionalGroupingHandler
 import normalization as norm_module  # Single-source normalization
+from unit_converter import get_converter
 
 
 # ---------------------------------------------------------------------------
@@ -2489,7 +2490,10 @@ class EnhancedDSLDNormalizer:
 
         reinterpreted_amount = amount
         relative_error = abs(reinterpreted_amount - expected_amount) / expected_amount
-        if relative_error > 0.20:
+        # DSLD percentages are label-rounded and some products use a target
+        # group whose published DV has since changed.  The unit correction is
+        # already guarded by a >=100x mismatch, so allow modest DV drift.
+        if relative_error > 0.25:
             return None
 
         return {
@@ -2508,6 +2512,65 @@ class EnhancedDSLDNormalizer:
             "declared_amount_in_reference_unit": declared_amount_in_target_unit,
             "mismatch_ratio": mismatch_ratio,
             "correction_factor": reinterpreted_amount / declared_amount_in_target_unit,
+            "relative_error": relative_error,
+            "confidence": "high",
+        }
+
+    def _maybe_correct_parent_equivalent_unit(
+        self,
+        *,
+        ingredient_name: str,
+        quantity: Any,
+        unit: str,
+        parent_name: Any,
+        parent_quantity: Any,
+        parent_unit: Any,
+    ) -> Optional[Dict[str, Any]]:
+        """Correct a nested unit when the reference converter proves its parent total."""
+        if (
+            self._normalize_daily_value_unit(unit) != "mg"
+            or not self._normalize_daily_value_unit(parent_unit).startswith("mcg")
+            or not str(parent_name or "").strip()
+        ):
+            return None
+        try:
+            amount = float(quantity)
+            parent_amount = float(parent_quantity)
+        except (TypeError, ValueError):
+            return None
+        if amount <= 0 or parent_amount <= 0:
+            return None
+
+        conversion = get_converter().convert_nutrient(
+            nutrient=str(parent_name),
+            amount=amount,
+            from_unit="mcg",
+            to_unit=str(parent_unit),
+            ingredient_name=ingredient_name,
+        )
+        if (
+            not conversion.success
+            or conversion.confidence != "high"
+            or conversion.converted_value is None
+            or conversion.conversion_factor is None
+        ):
+            return None
+        expected_parent = conversion.converted_value
+        relative_error = abs(expected_parent - parent_amount) / parent_amount
+        if relative_error > 0.05:
+            return None
+
+        return {
+            "status": "corrected",
+            "reason": "parent_equivalence_unit_mismatch",
+            "nutrient_key": conversion.conversion_rule_id,
+            "raw_amount": amount,
+            "raw_unit": unit,
+            "corrected_amount": amount,
+            "corrected_unit": "mcg",
+            "parent_amount": parent_amount,
+            "parent_unit": parent_unit,
+            "conversion_factor": conversion.conversion_factor,
             "relative_error": relative_error,
             "confidence": "high",
         }
@@ -6655,6 +6718,15 @@ class EnhancedDSLDNormalizer:
             daily_value=daily_value,
             quantity_variants=quantity_variants,
         )
+        if not dose_data_quality:
+            dose_data_quality = self._maybe_correct_parent_equivalent_unit(
+                ingredient_name=name,
+                quantity=quantity,
+                unit=unit,
+                parent_name=ing.get("parentBlend"),
+                parent_quantity=ing.get("parentBlendMass"),
+                parent_unit=ing.get("parentBlendUnit"),
+            )
         if dose_data_quality:
             quantity = dose_data_quality["corrected_amount"]
             unit = dose_data_quality["corrected_unit"]
@@ -8985,6 +9057,7 @@ class EnhancedDSLDNormalizer:
                         "parent_label": ing.get("parentBlend"),
                         "parent_source_path": ing.get("parent_source_path"),
                         "exact_dose_text": self._exact_label_dose_text(ing),
+                        "dose_data_quality": ing.get("dose_data_quality"),
                     }
                 )
         candidates.extend(list(getattr(self, "_display_ingredients_buffer", [])))
@@ -9026,6 +9099,12 @@ class EnhancedDSLDNormalizer:
             row = dict(candidate)
             for key, value in source.items():
                 if key == "label_display_name" and row.get("label_display_name"):
+                    continue
+                if (
+                    key == "exact_dose_text"
+                    and isinstance(row.get("dose_data_quality"), dict)
+                    and row["dose_data_quality"].get("status") == "corrected"
+                ):
                     continue
                 if value is not None and value != "":
                     row[key] = value

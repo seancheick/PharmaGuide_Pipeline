@@ -22,8 +22,8 @@ def test_export_schema_version_is_v4_cutover():
     """Schema version must reflect the v4 production contract (v2.0.0)."""
     # v2.0.0 indicates v4 is the default scoring model: legacy /80 columns dropped,
     # v4 /100 six-pillar contract + provenance columns added.
-    assert EXPORT_SCHEMA_VERSION == "2.0.0", (
-        f"EXPORT_SCHEMA_VERSION={EXPORT_SCHEMA_VERSION!r}; expected '2.0.0' for v4"
+    assert EXPORT_SCHEMA_VERSION == "2.1.0", (
+        f"EXPORT_SCHEMA_VERSION={EXPORT_SCHEMA_VERSION!r}; expected '2.1.0' for v4"
     )
 
 

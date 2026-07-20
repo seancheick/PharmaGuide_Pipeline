@@ -135,6 +135,72 @@ def test_vitamin_d_mg_with_prenatal_dv_corrects_to_mcg_and_preserves_raw() -> No
     assert dq["mismatch_ratio"] >= 100
 
 
+def test_vitamin_d_real_adult_label_math_allows_rounding_drift() -> None:
+    """DSLD 223563: 100 mg + 660% DV is a source-unit typo for 100 mcg."""
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Vitamin D3",
+            "category": "vitamin",
+            "ingredientGroup": "Vitamin D (cholecalciferol)",
+            "quantity": _quantity(100, "mg", percent_dv=660),
+        }
+    ])
+
+    active = _cleaned_active(raw)
+
+    assert active["quantity"] == pytest.approx(100.0)
+    assert active["unit"] == "mcg"
+    assert active["dose_data_quality"]["status"] == "corrected"
+
+
+def test_nested_folic_acid_unit_uses_parent_dfe_equivalence() -> None:
+    """A nested component can prove its unit from its measured DFE parent."""
+    raw = _raw_product([
+        {
+            "order": 1,
+            "name": "Folate",
+            "category": "vitamin",
+            "ingredientGroup": "Folate",
+            "quantity": _quantity(666, "mcg DFE", percent_dv=167),
+            "nestedRows": [
+                {
+                    "order": 2,
+                    "name": "Folic Acid",
+                    "category": "vitamin",
+                    "ingredientGroup": "Folate",
+                    "quantity": _quantity(400, "mg"),
+                    "nestedRows": [],
+                    "forms": [],
+                }
+            ],
+        }
+    ])
+
+    cleaned = EnhancedDSLDNormalizer().normalize_product(raw)
+    folic_acid = next(
+        row for row in cleaned["activeIngredients"]
+        if row["name"] == "Folic Acid"
+    )
+
+    assert folic_acid["quantity"] == pytest.approx(400.0)
+    assert folic_acid["unit"] == "mcg"
+    assert folic_acid["dose_data_quality"]["reason"] == (
+        "parent_equivalence_unit_mismatch"
+    )
+
+    enriched, warnings = SupplementEnricherV3().enrich_product(cleaned)
+    assert not warnings
+    blob = build_detail_blob(enriched, _minimal_scored())
+    folate_rows = [
+        row for row in blob["display_ingredients"]
+        if row.get("label_display_name") == "Folate"
+    ]
+    assert len(folate_rows) == 1
+    assert folate_rows[0]["exact_dose_text"] == "666 mcg DFE"
+    assert folate_rows[0]["parenthetical_dose_text"] == "400 mcg folic acid"
+
+
 def test_iodine_adult_dv_corrects_mg_to_mcg() -> None:
     raw = _raw_product([
         {
