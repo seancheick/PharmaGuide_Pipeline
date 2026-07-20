@@ -8186,6 +8186,12 @@ class EnhancedDSLDNormalizer:
                 "context": "single_dict",
                 "quantity_parsed": qty_parsed,
             }
+            if quantities.get("servingSizeOrder") is not None:
+                variant["serving_size_order"] = quantities["servingSizeOrder"]
+            if quantities.get("servingSizeQuantity") is not None:
+                variant["serving_size_quantity"] = quantities["servingSizeQuantity"]
+            if quantities.get("servingSizeUnit") is not None:
+                variant["serving_size_unit"] = quantities["servingSizeUnit"]
             if daily_value:
                 variant["daily_value"] = daily_value
             if daily_value_target_group:
@@ -8232,6 +8238,12 @@ class EnhancedDSLDNormalizer:
                         "index": idx,
                         "quantity_parsed": qty_parsed,
                     }
+                    if q.get("servingSizeOrder") is not None:
+                        variant["serving_size_order"] = q["servingSizeOrder"]
+                    if q.get("servingSizeQuantity") is not None:
+                        variant["serving_size_quantity"] = q["servingSizeQuantity"]
+                    if q.get("servingSizeUnit") is not None:
+                        variant["serving_size_unit"] = q["servingSizeUnit"]
                     if dv:
                         variant["daily_value"] = dv
                     if daily_value_target_group:
@@ -8372,9 +8384,11 @@ class EnhancedDSLDNormalizer:
             daily_from_label = raw_min_daily is not None or raw_max_daily is not None
 
             processed.append({
+                "order": serving.get("order"),
                 "minQuantity": min_qty,
                 "maxQuantity": max_qty,
                 "unit": serving.get("unit", "serving"),
+                "notes": serving.get("notes", ""),
                 "minDailyServings": self._safe_int(raw_min_daily if raw_min_daily is not None else DEFAULT_DAILY_SERVINGS),
                 "maxDailyServings": self._safe_int(raw_max_daily if raw_max_daily is not None else DEFAULT_DAILY_SERVINGS),
                 "normalizedServing": max_qty,  # Use max as normalized

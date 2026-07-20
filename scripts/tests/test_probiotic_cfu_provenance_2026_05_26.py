@@ -226,6 +226,126 @@ def test_generic_flattened_header_carries_aggregate_live_cell_guarantee(enricher
     assert probiotic_data["cfu_raw_source_path"] == "ingredientRows[0]"
 
 
+def test_multi_serving_probiotic_uses_canonical_header_without_counting_it_as_strain(enricher):
+    """Ages-based label columns are alternatives, never additive strains/CFU."""
+    product = {
+        "id": "184730_like",
+        "product_name": "Probiotic 123",
+        "serving_basis": {"canonical_serving_size_quantity": 0.5},
+        "statements": [],
+        "activeIngredients": [
+            {
+                "name": "Probiotic Blend",
+                "standardName": "Probiotic & Microbiome Blends",
+                "category": "blend",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "hierarchyType": "blend_header",
+                "score_exclusion_reason": "blend_header_total",
+                "raw_taxonomy": {"quantityVariants": [{"serving_size_quantity": 0.25}]},
+                "nestedIngredients": [],
+                "notes": "Probiotic Blend Note: (providing:) (1.12 billion CFU)",
+            },
+            {
+                "name": "Probiotic Blend",
+                "standardName": "Probiotic & Microbiome Blends",
+                "category": "blend",
+                "raw_source_path": "ingredientRows[1]",
+                "cleaner_row_role": "blend_header_total",
+                "hierarchyType": "blend_header",
+                "score_exclusion_reason": "blend_header_total",
+                "raw_taxonomy": {"quantityVariants": [{"serving_size_quantity": 0.5}]},
+                "nestedIngredients": [],
+                "notes": "Probiotic Blend Note: (providing:) (2.25 billion CFU)",
+            },
+            {
+                "name": "Bifidobacterium bifidum (Bb-06)",
+                "standardName": "Bifidobacterium Bifidum",
+                "category": "bacteria",
+                "raw_source_path": "ingredientRows[1].nestedRows[0]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Bifidobacterium lactis (Bl-04)",
+                "standardName": "Bifidobacterium Lactis",
+                "category": "bacteria",
+                "raw_source_path": "ingredientRows[1].nestedRows[1]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Lactobacillus acidophilus (La-14)",
+                "standardName": "Lactobacillus Acidophilus",
+                "category": "bacteria",
+                "raw_source_path": "ingredientRows[1].nestedRows[2]",
+                "parentBlend": "Probiotic Blend",
+                "nestedIngredients": [],
+            },
+        ],
+        "inactiveIngredients": [],
+    }
+
+    probiotic_data = enricher._collect_probiotic_data(product)
+
+    assert probiotic_data["total_strain_count"] == 3
+    assert probiotic_data["total_billion_count"] == pytest.approx(2.25)
+    assert probiotic_data["cfu_linked_rows"] == ["ingredientRows[1]"]
+    assert all(
+        "Probiotic Blend" not in (blend.get("strains") or [])
+        for blend in probiotic_data["probiotic_blends"]
+    )
+
+
+def test_distinct_same_name_blends_without_serving_evidence_remain_additive(enricher):
+    product = {
+        "id": "two_distinct_blends",
+        "product_name": "Two Blend Probiotic",
+        "statements": [],
+        "activeIngredients": [
+            {
+                "name": "Probiotic Blend",
+                "category": "blend",
+                "raw_source_path": "ingredientRows[0]",
+                "cleaner_row_role": "blend_header_total",
+                "nestedIngredients": [],
+                "notes": "1 billion CFU",
+            },
+            {
+                "name": "Lactobacillus acidophilus La-14",
+                "category": "bacteria",
+                "raw_source_path": "ingredientRows[0].nestedRows[0]",
+                "nestedIngredients": [],
+            },
+            {
+                "name": "Probiotic Blend",
+                "category": "blend",
+                "raw_source_path": "ingredientRows[1]",
+                "cleaner_row_role": "blend_header_total",
+                "nestedIngredients": [],
+                "notes": "2 billion CFU",
+            },
+            {
+                "name": "Bifidobacterium lactis Bl-04",
+                "category": "bacteria",
+                "raw_source_path": "ingredientRows[1].nestedRows[0]",
+                "nestedIngredients": [],
+            },
+        ],
+        "inactiveIngredients": [],
+    }
+
+    probiotic_data = enricher._collect_probiotic_data(product)
+
+    assert probiotic_data["total_strain_count"] == 2
+    assert probiotic_data["total_billion_count"] == pytest.approx(3.0)
+    assert len([
+        blend
+        for blend in probiotic_data["probiotic_blends"]
+        if blend.get("is_blend_header_total")
+    ]) == 2
+
+
 def test_fiber_support_row_does_not_block_probiotic_cfu_product_evidence(enricher):
     enriched = {
         "activeIngredients": [

@@ -155,6 +155,25 @@ def _reason_transparency(band: str) -> str:
     }[band]
 
 
+def _probiotic_transparency_reason(dim: Dict[str, Any], fallback: str) -> str:
+    components = dim.get("components") if isinstance(dim, dict) else None
+    if not isinstance(components, dict):
+        return fallback
+    named = _num(components.get("strain_identities_named"))
+    per_strain = _num(components.get("per_strain_cfu_on_label"))
+    aggregate = _num(components.get("aggregate_cfu_disclosure_proxy"))
+    if named >= 8.0 and per_strain <= 0.0 and aggregate > 0.0:
+        return (
+            "All strains are named and total CFU is disclosed, but amounts "
+            "for each strain are not."
+        )
+    if named >= 8.0 and per_strain <= 0.0:
+        return "All strains are named, but their CFU amounts are not disclosed."
+    if named > 0.0 and per_strain < 7.0:
+        return "Some strain identities or CFU amounts are not fully disclosed."
+    return fallback
+
+
 # Generic dispatcher for any pillar that routes through the plain linear builders
 # (only ``transparency`` does today). Keeps a jargon-free fallback so a future
 # reconfigured pillar can never leak internal copy to consumers.
@@ -669,6 +688,12 @@ def _build_pillars(module_bd: Dict[str, Any], cfg: Dict[str, Any],
         else:
             pillars[name] = _pillar_from_bonuses(name, module_bd,
                                                  spec["source_bonuses"], weight)
+    if module == "probiotic" and "transparency" in pillars:
+        transparency_dim = dims.get("transparency") or {}
+        pillars["transparency"]["reason"] = _probiotic_transparency_reason(
+            transparency_dim,
+            pillars["transparency"]["reason"],
+        )
     return pillars
 
 

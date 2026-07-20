@@ -1340,6 +1340,7 @@ class TestLabelLedgerReleaseContract:
     def test_release_audit_blocks_published_score_for_identity_failure(self):
         product = {
             "id": "published-conflict",
+            "label_record": {},
             "quality_score_status": "scored",
             "quality_score_v4_100": 82.0,
             "activeIngredients": [
@@ -1389,6 +1390,7 @@ class TestLabelLedgerReleaseContract:
         row.update(claim_fields)
         product = {
             "id": "review-claim",
+            "label_record": {},
             "activeIngredients": [
                 {
                     "name": "Magnesium",

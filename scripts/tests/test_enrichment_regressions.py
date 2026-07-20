@@ -513,6 +513,39 @@ class TestQuantityVariants:
         assert variants[0]['quantity'] == 250000000
         assert variants[1]['quantity'] == 500000000
 
+    def test_quantity_variants_preserve_direct_serving_identity(self):
+        """DSLD serving columns must remain distinguishable after cleaning."""
+        from enhanced_normalizer import EnhancedDSLDNormalizer
+
+        normalizer = EnhancedDSLDNormalizer()
+        quantities = [
+            {
+                'quantity': 1.12,
+                'unit': 'Billion CFU',
+                'servingSizeOrder': 1,
+                'servingSizeQuantity': 0.25,
+                'servingSizeUnit': 'Gram(s)',
+                'dailyValueTargetGroup': [],
+            },
+            {
+                'quantity': 2.25,
+                'unit': 'Billion CFU',
+                'servingSizeOrder': 2,
+                'servingSizeQuantity': 0.5,
+                'servingSizeUnit': 'Gram(s)',
+                'dailyValueTargetGroup': [],
+            },
+        ]
+
+        _, _, _, variants = normalizer._process_quantity(quantities)
+
+        assert variants[0]['serving_size_order'] == 1
+        assert variants[0]['serving_size_quantity'] == 0.25
+        assert variants[0]['serving_size_unit'] == 'Gram(s)'
+        assert variants[1]['serving_size_order'] == 2
+        assert variants[1]['serving_size_quantity'] == 0.5
+        assert variants[1]['serving_size_unit'] == 'Gram(s)'
+
     def test_single_quantity_no_variants(self):
         """Single quantity returns no variants list"""
         from enhanced_normalizer import EnhancedDSLDNormalizer
@@ -527,6 +560,24 @@ class TestQuantityVariants:
         assert unit == 'mg'
         # Single quantity should still return a list with 1 item
         assert len(variants) == 1
+
+
+def test_serving_sizes_preserve_order_and_label_notes():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    servings = normalizer._process_serving_sizes([
+        {
+            'order': 1,
+            'minQuantity': 0.25,
+            'maxQuantity': 0.25,
+            'unit': 'Gram(s)',
+            'notes': 'Ages 1-3 (1/2 scoop)',
+        },
+    ])
+
+    assert servings[0]['order'] == 1
+    assert servings[0]['notes'] == 'Ages 1-3 (1/2 scoop)'
 
 
 class TestRDAULPerDayBasis:

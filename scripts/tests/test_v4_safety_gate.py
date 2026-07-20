@@ -49,6 +49,22 @@ COMPLETE_GENERIC_PRODUCT = {
 }
 
 
+def _with_scorable_caffeine(product: dict, *, name: str, quantity: float | None) -> dict:
+    """Stamp caffeine through the same cleaner-owned contract used in production."""
+    result = dict(product)
+    result["ingredient_quality_data"] = {
+        "ingredients_scorable": [
+            {
+                "name": name,
+                "canonical_id": "caffeine",
+                "quantity": quantity,
+                "unit": "mg" if quantity is not None else None,
+            }
+        ]
+    }
+    return result
+
+
 # --- Direct gate contract -------------------------------------------------
 
 
@@ -210,11 +226,7 @@ def test_disease_claims_alone_returns_caution() -> None:
 
 def test_caffeine_at_or_below_200_mg_does_not_change_safety_verdict() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
-    product = {
-        "activeIngredients": [
-            {"name": "Caffeine", "canonical_id": "caffeine", "quantity": 200, "unit": "mg"}
-        ]
-    }
+    product = _with_scorable_caffeine({}, name="Caffeine", quantity=200)
 
     result = evaluate_safety_gate(product)
 
@@ -224,11 +236,7 @@ def test_caffeine_at_or_below_200_mg_does_not_change_safety_verdict() -> None:
 
 def test_high_caffeine_over_400_mg_forces_caution_without_short_circuit() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
-    product = {
-        "activeIngredients": [
-            {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": 425, "unit": "mg"}
-        ]
-    }
+    product = _with_scorable_caffeine({}, name="Caffeine Anhydrous", quantity=425)
 
     result = evaluate_safety_gate(product)
 
@@ -239,11 +247,7 @@ def test_high_caffeine_over_400_mg_forces_caution_without_short_circuit() -> Non
 
 def test_caffeine_300_to_400_mg_surfaces_signal_without_global_caution() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
-    product = {
-        "activeIngredients": [
-            {"name": "Caffeine", "canonical_id": "caffeine", "quantity": 325, "unit": "mg"}
-        ]
-    }
+    product = _with_scorable_caffeine({}, name="Caffeine", quantity=325)
 
     result = evaluate_safety_gate(product)
 
@@ -278,16 +282,13 @@ def test_caffeine_mirrored_across_contract_buckets_is_counted_once() -> None:
 
 def test_hidden_caffeine_in_preworkout_blend_forces_caution_and_review() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
-    product = {
+    product = _with_scorable_caffeine({
         "product_name": "Explosive Pre-Workout",
         "primary_type": "pre_workout",
-        "activeIngredients": [
-            {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": None, "unit": None}
-        ],
         "proprietary_blends": [
             {"name": "Energy Matrix", "disclosure_level": "partial"}
         ],
-    }
+    }, name="Caffeine Anhydrous", quantity=None)
 
     result = evaluate_safety_gate(product)
 
@@ -299,13 +300,10 @@ def test_hidden_caffeine_in_preworkout_blend_forces_caution_and_review() -> None
 
 def test_undosed_green_tea_caffeine_outside_stimulant_context_is_review_signal_only() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
-    product = {
+    product = _with_scorable_caffeine({
         "product_name": "Green Tea Extract",
         "primary_type": "botanical",
-        "activeIngredients": [
-            {"name": "Caffeine", "canonical_id": "caffeine", "quantity": None, "unit": None}
-        ],
-    }
+    }, name="Caffeine", quantity=None)
 
     result = evaluate_safety_gate(product)
 

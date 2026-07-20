@@ -231,3 +231,20 @@ def test_all_six_pillars_covered_across_corpus() -> None:
         "formulation", "dose", "evidence",
         "transparency", "verification", "safety_hygiene",
     }, f"corpus does not cover all six pillars, saw {sorted(seen)}"
+
+
+def test_probiotic_aggregate_cfu_copy_does_not_claim_every_amount_is_disclosed() -> None:
+    bd = _module_bd(transparency=13, transp_max=15)
+    bd["dimensions"]["transparency"]["components"] = {
+        "strain_identities_named": 8.0,
+        "per_strain_cfu_on_label": 0.0,
+        "aggregate_cfu_disclosure_proxy": 3.0,
+    }
+    out = _assemble(_shadow(module="probiotic", bd=bd))
+
+    reason = out["quality_pillars_v4"]["transparency"]["reason"]
+    assert reason == (
+        "All strains are named and total CFU is disclosed, but amounts "
+        "for each strain are not."
+    )
+    assert "every amount is disclosed" not in reason.lower()

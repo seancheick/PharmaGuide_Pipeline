@@ -3524,6 +3524,136 @@ def test_cleaner_correction_updates_nested_parent_lineage_and_allows_folate_fold
     assert rows[0]["folded_label_components"][0]["parent_label"] == "Folate"
 
 
+def test_final_ledger_folds_multi_serving_probiotic_headers_into_one_parent():
+    from build_final_db import _fold_probiotic_serving_headers
+
+    ledger = [
+        {
+            "label_display_name": "Probiotic Blend",
+            "raw_source_text": "Probiotic Blend",
+            "raw_source_path": "ingredientRows[0]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 0,
+        },
+        {
+            "label_display_name": "Probiotic Blend",
+            "raw_source_text": "Probiotic Blend",
+            "raw_source_path": "ingredientRows[1]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 1,
+            "children": ["Bifidobacterium bifidum (Bb-06)"],
+        },
+        {
+            "label_display_name": "Bifidobacterium bifidum (Bb-06)",
+            "raw_source_path": "ingredientRows[1].nestedRows[0]",
+            "source_section": "activeIngredients",
+            "nested_depth": 1,
+            "parent_label": "Probiotic Blend",
+            "label_order": 2,
+        },
+        {
+            "label_display_name": "Rice Starch",
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "source_section": "inactiveIngredients",
+            "nested_depth": 0,
+            "label_order": 3,
+        },
+    ]
+    enriched = {
+        "servingSizes": [
+            {"order": 1, "normalizedServing": 0.25, "unit": "Gram(s)", "notes": "Ages 1-3 (1/2 scoop)"},
+            {"order": 2, "normalizedServing": 0.5, "unit": "Gram(s)", "notes": "Ages 4 and up (1 scoop)"},
+        ],
+        "activeIngredients": [
+            {
+                "raw_source_path": "ingredientRows[0]",
+                "notes": "Probiotic Blend Note: (providing:) (1.12 billion CFU)",
+                "raw_taxonomy": {"quantityVariants": [{"serving_size_order": 1, "serving_size_quantity": 0.25, "serving_size_unit": "Gram(s)"}]},
+            },
+            {
+                "raw_source_path": "ingredientRows[1]",
+                "notes": "Probiotic Blend Note: (providing:) (2.25 billion CFU)",
+                "raw_taxonomy": {"quantityVariants": [{"serving_size_order": 2, "serving_size_quantity": 0.5, "serving_size_unit": "Gram(s)"}]},
+            },
+        ],
+        "probiotic_data": {
+            "total_billion_count": 2.25,
+            "probiotic_blends": [
+                {
+                    "name": "Probiotic Blend",
+                    "raw_source_path": "ingredientRows[1]",
+                    "is_blend_header_total": True,
+                },
+            ],
+        },
+    }
+
+    rows = _fold_probiotic_serving_headers(enriched, ledger)
+
+    assert [row["label_display_name"] for row in rows] == [
+        "Probiotic Blend",
+        "Bifidobacterium bifidum (Bb-06)",
+        "Rice Starch",
+    ]
+    assert rows[0]["raw_source_path"] == "ingredientRows[1]"
+    assert rows[0]["display_type"] == "structural_container"
+    assert rows[0]["exact_dose_text"] == "2.25 billion CFU"
+    assert rows[0]["serving_variants"] == [
+        {
+            "serving_size_order": 1,
+            "serving_size_quantity": 0.25,
+            "serving_size_unit": "Gram(s)",
+            "serving_note": "Ages 1-3 (1/2 scoop)",
+            "exact_dose_text": "1.12 billion CFU",
+            "is_canonical": False,
+        },
+        {
+            "serving_size_order": 2,
+            "serving_size_quantity": 0.5,
+            "serving_size_unit": "Gram(s)",
+            "serving_note": "Ages 4 and up (1 scoop)",
+            "exact_dose_text": "2.25 billion CFU",
+            "is_canonical": True,
+        },
+    ]
+    assert rows[0]["folded_label_components"][0]["omission_reason"] == "alternate_serving_variant"
+
+
+def test_final_ledger_keeps_distinct_same_name_probiotic_headers():
+    from build_final_db import _fold_probiotic_serving_headers
+
+    ledger = [
+        {
+            "label_display_name": "Probiotic Blend",
+            "raw_source_path": "ingredientRows[0]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 0,
+        },
+        {
+            "label_display_name": "Probiotic Blend",
+            "raw_source_path": "ingredientRows[1]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 1,
+        },
+    ]
+    enriched = {
+        "probiotic_data": {
+            "probiotic_blends": [
+                {"name": "Probiotic Blend", "raw_source_path": "ingredientRows[0]", "is_blend_header_total": True},
+                {"name": "Probiotic Blend", "raw_source_path": "ingredientRows[1]", "is_blend_header_total": True},
+            ],
+        },
+    }
+
+    rows = _fold_probiotic_serving_headers(enriched, ledger)
+
+    assert len(rows) == 2
+
+
 def test_cleaner_label_ledger_preserves_omega_order_hierarchy_and_exact_doses():
     from enhanced_normalizer import EnhancedDSLDNormalizer
 

@@ -47,6 +47,7 @@ from identity.safety import (
     normalize_safety_signals,
 )
 from rda_ul_calculator import get_actionable_ul_review_signals
+from scoring_input_contract import get_scoring_ingredients
 
 
 # Verdict precedence — index = severity rank.
@@ -428,26 +429,19 @@ def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> No
     caffeine dose (>400 mg) or undisclosed caffeine in a stimulant/pre-workout
     context is different: the user cannot judge safe use without taking action.
     """
-    # These are alternative representations of the same label rows, not
-    # additive dose sources. Use the first representation that surfaces
-    # caffeine so a 300 mg row mirrored across all three contracts is not
-    # summed as 600/900 mg. Multiple caffeine rows within the authoritative
-    # representation remain additive.
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    active_representations = (
-        _safe_list(product.get("activeIngredients")),
-        _safe_list(product.get("display_ingredients")),
-        _safe_list(iqd.get("ingredients_scorable"))
-        + _safe_list(iqd.get("ingredients_skipped")),
-    )
-    caffeine_rows: List[Dict[str, Any]] = []
-    for rows in active_representations:
-        caffeine_rows = [
-            row for row in rows
-            if isinstance(row, dict) and _is_caffeine_row(row)
-        ]
-        if caffeine_rows:
-            break
+    # The shared scoring-input contract owns row selection and deduplication.
+    # Compatibility fixtures without a current IQD contract still flow through
+    # that same resolver; release audits separately reject such fallbacks.
+    scoring_rows = get_scoring_ingredients(
+        product,
+        strict=False,
+        allow_legacy_fallback=True,
+    ).rows
+    caffeine_rows = [
+        row
+        for row in scoring_rows
+        if isinstance(row, dict) and _is_caffeine_row(row)
+    ]
     if not caffeine_rows:
         # No SURFACED caffeine row — but a stimulant may be HIDDEN inside an
         # opaque proprietary blend (undisclosed dose). That is exactly the

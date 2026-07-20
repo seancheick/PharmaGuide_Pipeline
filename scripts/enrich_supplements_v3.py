@@ -14548,6 +14548,24 @@ class SupplementEnricherV3:
                 or dose_class == "blend_total_weight"
             )
 
+        def _serving_size_quantities(ingredient: Dict) -> List[float]:
+            variants = ingredient.get("quantityVariants")
+            if not isinstance(variants, list):
+                raw_taxonomy = ingredient.get("raw_taxonomy") or {}
+                variants = raw_taxonomy.get("quantityVariants")
+            values: List[float] = []
+            for variant in variants or []:
+                if not isinstance(variant, dict):
+                    continue
+                value = variant.get("serving_size_quantity")
+                try:
+                    number = float(value)
+                except (TypeError, ValueError):
+                    continue
+                if number not in values:
+                    values.append(number)
+            return values
+
         flattened_child_parent_paths = {
             _parent_path(_row_path(ingredient))
             for ingredient in active_ingredients
@@ -14585,14 +14603,11 @@ class SupplementEnricherV3:
                     cfu_data,
                 )
 
-                header_has_flattened_children = (
-                    _is_blend_header_total(ingredient)
-                    and ingredient_source_path in flattened_child_parent_paths
-                )
+                is_blend_header = _is_blend_header_total(ingredient)
                 strain_names = (
                     [n.get('name', '') for n in nested]
                     if nested
-                    else ([] if header_has_flattened_children else [ingredient.get('name', '')])
+                    else ([] if is_blend_header else [ingredient.get('name', '')])
                 )
                 strain_identity_texts = [
                     " ".join(
@@ -14611,7 +14626,7 @@ class SupplementEnricherV3:
                         if str(piece or "").strip()
                     )
                     for n in nested
-                ] if nested else ([] if header_has_flattened_children else [ingredient.get('name', '')])
+                ] if nested else ([] if is_blend_header else [ingredient.get('name', '')])
 
                 probiotic_blends.append({
                     "name": ingredient.get('name', ''),
@@ -14620,11 +14635,84 @@ class SupplementEnricherV3:
                     "strain_identity_texts": strain_identity_texts,
                     "cfu_data": cfu_data,
                     "raw_source_path": ingredient_source_path,
-                    "is_blend_header_total": header_has_flattened_children,
+                    "is_blend_header_total": is_blend_header,
+                    "serving_size_quantities": _serving_size_quantities(ingredient),
                 })
 
                 total_strains += len(strain_names)
                 all_nested_strains.extend(strain_names)
+
+        # DSLD can emit the same blend header once per serving column (for
+        # example, child and adult CFU totals). These rows are alternatives,
+        # not additive blends. Retain the canonical serving row when serving
+        # provenance is available; for legacy cleaned data, prefer the header
+        # that owns the flattened children, then the largest disclosed CFU.
+        canonical_serving = (product.get("serving_basis") or {}).get(
+            "canonical_serving_size_quantity"
+        )
+        header_groups: Dict[str, List[Dict]] = {}
+        for blend in probiotic_blends:
+            if not blend.get("is_blend_header_total"):
+                continue
+            key = re.sub(r"\s+", " ", str(blend.get("name") or "").strip().lower())
+            if key:
+                header_groups.setdefault(key, []).append(blend)
+
+        removed_header_paths = set()
+        for group in header_groups.values():
+            if len(group) < 2:
+                continue
+            distinct_servings = {
+                float(value)
+                for blend in group
+                for value in (blend.get("serving_size_quantities") or [])
+            }
+            child_ownership = [
+                str(blend.get("raw_source_path") or "")
+                in flattened_child_parent_paths
+                for blend in group
+            ]
+            explicit_serving_alternatives = len(distinct_servings) >= 2
+            legacy_split_header = any(child_ownership) and not all(child_ownership)
+            if not explicit_serving_alternatives and not legacy_split_header:
+                continue
+
+            def _header_rank(blend: Dict) -> tuple:
+                serving_match = False
+                if canonical_serving is not None:
+                    try:
+                        target = float(canonical_serving)
+                        serving_match = any(
+                            abs(float(value) - target) < 1e-9
+                            for value in (blend.get("serving_size_quantities") or [])
+                        )
+                    except (TypeError, ValueError):
+                        serving_match = False
+                path = str(blend.get("raw_source_path") or "")
+                owns_children = path in flattened_child_parent_paths
+                cfu = float((blend.get("cfu_data") or {}).get("cfu_count") or 0)
+                return serving_match, owns_children, cfu
+
+            selected = max(group, key=_header_rank)
+            removed_header_paths.update(
+                str(blend.get("raw_source_path") or "")
+                for blend in group
+                if blend is not selected
+            )
+
+        if removed_header_paths:
+            probiotic_blends = [
+                blend for blend in probiotic_blends
+                if str(blend.get("raw_source_path") or "") not in removed_header_paths
+            ]
+
+        unique_strains = {
+            str(strain).strip().casefold()
+            for blend in probiotic_blends
+            for strain in (blend.get("strains") or [])
+            if str(strain or "").strip()
+        }
+        total_strains = len(unique_strains)
 
         if not probiotic_blends:
             return {"is_probiotic_product": False}
@@ -18099,7 +18187,7 @@ class SupplementEnricherV3:
                 enriched["rda_ul_data"] = self._empty_rda_ul_payload("disabled_by_config")
 
             # Probiotic-specific data
-            enriched["probiotic_data"] = self._collect_probiotic_data(product)
+            enriched["probiotic_data"] = self._collect_probiotic_data(enriched)
 
             # Canonical taxonomy classification (v2) — NP-filtered, expanded types
             # — plus every field derived from it. MUST run AFTER probiotic_data

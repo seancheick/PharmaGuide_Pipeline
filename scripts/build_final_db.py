@@ -3952,6 +3952,130 @@ def _build_canonical_label_ledger(
     return ledger
 
 
+def _fold_probiotic_serving_headers(
+    enriched: Dict[str, Any],
+    ledger: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Represent alternative serving columns as one blend parent + variants."""
+    probiotic_data = enriched.get("probiotic_data") or {}
+    selected_headers = [
+        row
+        for row in safe_list(probiotic_data.get("probiotic_blends"))
+        if isinstance(row, dict) and row.get("is_blend_header_total")
+    ]
+    if not selected_headers:
+        return ledger
+    selected_name_counts: Dict[str, int] = {}
+    for row in selected_headers:
+        key = safe_str(row.get("name")).casefold()
+        selected_name_counts[key] = selected_name_counts.get(key, 0) + 1
+
+    output = [dict(row) for row in ledger]
+    for selected_header in selected_headers:
+        selected_path = safe_str(selected_header.get("raw_source_path"))
+        selected_name = safe_str(selected_header.get("name")).casefold()
+        if not selected_path or not selected_name:
+            continue
+        if selected_name_counts.get(selected_name, 0) != 1:
+            continue
+        alternatives = [
+            row
+            for row in output
+            if int(safe_float(row.get("nested_depth"), 0) or 0) == 0
+            and safe_str(row.get("label_display_name")).casefold() == selected_name
+            and safe_str(row.get("source_section"))
+            not in {"inactive", "inactiveIngredients"}
+        ]
+        if len(alternatives) < 2:
+            continue
+        selected = next(
+            (
+                row
+                for row in alternatives
+                if safe_str(row.get("raw_source_path")) == selected_path
+            ),
+            None,
+        )
+        if selected is None:
+            continue
+
+        child_names = [
+            safe_str(row.get("label_display_name"))
+            for row in output
+            if int(safe_float(row.get("nested_depth"), 0) or 0) > 0
+            and safe_str(row.get("parent_label")).casefold() == selected_name
+        ]
+        selected["display_type"] = "structural_container"
+        selected["children"] = child_names or safe_list(selected.get("children"))
+        total_billion = safe_float(probiotic_data.get("total_billion_count"), 0) or 0
+        if total_billion > 0:
+            selected["exact_dose_text"] = f"{total_billion:g} billion CFU"
+
+        serving_notes = {
+            safe_float(row.get("order")): safe_str(row.get("notes"))
+            for row in safe_list(enriched.get("servingSizes"))
+            if isinstance(row, dict) and row.get("order") is not None
+        }
+        active_by_path = {
+            safe_str(row.get("raw_source_path")): row
+            for row in safe_list(enriched.get("activeIngredients"))
+            if isinstance(row, dict) and row.get("raw_source_path")
+        }
+        variants: List[Dict[str, Any]] = []
+        for alternative in alternatives:
+            path = safe_str(alternative.get("raw_source_path"))
+            active = active_by_path.get(path) or {}
+            raw_taxonomy = active.get("raw_taxonomy") or {}
+            quantity_variants = active.get("quantityVariants")
+            if not isinstance(quantity_variants, list):
+                quantity_variants = raw_taxonomy.get("quantityVariants")
+            cfu_match = re.search(
+                r"(\d+(?:\.\d+)?)\s*billion\s*(?:cfu|colony\s+forming\s+units?)",
+                safe_str(active.get("notes")),
+                re.IGNORECASE,
+            )
+            dose_text = f"{float(cfu_match.group(1)):g} billion CFU" if cfu_match else ""
+            for raw_variant in quantity_variants or []:
+                if not isinstance(raw_variant, dict):
+                    continue
+                order = raw_variant.get("serving_size_order")
+                serving_quantity = raw_variant.get("serving_size_quantity")
+                variants.append({
+                    "serving_size_order": order,
+                    "serving_size_quantity": serving_quantity,
+                    "serving_size_unit": safe_str(raw_variant.get("serving_size_unit")),
+                    "serving_note": serving_notes.get(safe_float(order), ""),
+                    "exact_dose_text": dose_text,
+                    "is_canonical": path == selected_path,
+                })
+        if variants:
+            variants.sort(
+                key=lambda row: (
+                    safe_float(row.get("serving_size_order"), float("inf")),
+                    safe_float(row.get("serving_size_quantity"), float("inf")),
+                )
+            )
+            selected["serving_variants"] = variants
+
+        for alternative in alternatives:
+            if alternative is selected:
+                continue
+            selected.setdefault("folded_label_components", []).append({
+                "label_display_name": alternative.get("label_display_name"),
+                "raw_source_text": alternative.get("raw_source_text"),
+                "raw_source_path": alternative.get("raw_source_path"),
+                "source_section": alternative.get("source_section"),
+                "exact_dose_text": alternative.get("exact_dose_text"),
+                "omission_reason": "alternate_serving_variant",
+            })
+            output.remove(alternative)
+
+    output.sort(key=lambda row: safe_float(row.get("label_order"), float("inf")))
+    for index, row in enumerate(output):
+        row["label_order"] = index
+    return output
+
+
 def _final_label_ledger_omissions(
     enriched: Dict[str, Any],
     display_rows: List[Dict[str, Any]],
@@ -3980,7 +4104,11 @@ def _final_label_ledger_omissions(
     for display_row in display_rows:
         for folded in safe_list(display_row.get("folded_label_components")):
             if isinstance(folded, dict):
-                add(folded, "duplicate_source_line")
+                add(
+                    folded,
+                    safe_str(folded.get("omission_reason"))
+                    or "duplicate_source_line",
+                )
     return omissions
 
 
@@ -5796,6 +5924,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         reconciled_display_rows,
         ingredients,
         inactive,
+    )
+    display_ingredients = _fold_probiotic_serving_headers(
+        enriched,
+        display_ingredients,
     )
     label_ledger_omissions = _final_label_ledger_omissions(
         enriched,
