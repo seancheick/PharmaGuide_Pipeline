@@ -33,7 +33,10 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from enrich_supplements_v3 import SupplementEnricherV3  # noqa: E402
+from enrich_supplements_v3 import (  # noqa: E402
+    SupplementEnricherV3,
+    _probiotic_research_presentation,
+)
 
 
 @pytest.fixture(scope="module")
@@ -83,6 +86,81 @@ def _probiotic_product(
         "activeIngredients": actives,
         "inactiveIngredients": extra_inactive or [],
     }
+
+
+def _clinical_entry(
+    *,
+    evidence_type: str = "strain_specific_rct",
+    strain_explicit: str = "YES",
+    human_clinical: str = "YES",
+    signoff: bool = True,
+) -> dict:
+    return {
+        "cfu_thresholds": {
+            "indication_primary": "digestive support",
+            "evidence": {
+                "type": evidence_type,
+                "pmid": "12345678",
+                "additional_pmids": ["87654321", "12345678"],
+                "evidence_strength": "medium",
+                "clinical_support_level": "moderate",
+                "clinical_validation": {
+                    "q1_strain_explicit": strain_explicit,
+                    "q3_human_clinical": human_clinical,
+                },
+            },
+            "dr_pham_signoff": signoff,
+        }
+    }
+
+
+def test_verified_exact_strain_emits_research_presentation_contract() -> None:
+    result = _probiotic_research_presentation(_clinical_entry())
+
+    assert result == {
+        "research_match_status": "exact_strain",
+        "evidence_scope": "strain_specific",
+        "review_status": "clinician_verified",
+        "human_evidence": True,
+        "indication_primary": "digestive support",
+        "source_urls": [
+            "https://pubmed.ncbi.nlm.nih.gov/12345678/",
+            "https://pubmed.ncbi.nlm.nih.gov/87654321/",
+        ],
+        "source_count": 2,
+    }
+
+
+def test_pending_review_never_emits_positive_exact_strain_status() -> None:
+    result = _probiotic_research_presentation(
+        _clinical_entry(signoff=False),
+    )
+
+    assert result["research_match_status"] == "pending_review"
+    assert result["review_status"] == "pending_review"
+
+
+def test_formula_level_human_research_is_not_strain_specific() -> None:
+    result = _probiotic_research_presentation(
+        _clinical_entry(
+            evidence_type="product_formula_rct",
+            strain_explicit="FORMULA_LEVEL",
+            signoff=False,
+        ),
+    )
+
+    assert result["research_match_status"] == "formula_only"
+    assert result["evidence_scope"] == "formula_specific"
+    assert result["human_evidence"] is True
+
+
+def test_rejected_row_overrides_any_research_metadata() -> None:
+    result = _probiotic_research_presentation(
+        _clinical_entry(),
+        is_blocked=True,
+    )
+
+    assert result["research_match_status"] == "rejected"
 
 
 def test_exact_lgg_and_bb12_nested_blend_resolve_to_exact_clinical_strains(enricher) -> None:

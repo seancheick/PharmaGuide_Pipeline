@@ -511,6 +511,90 @@ def _derive_clinical_support_level(strain_entry) -> str:
     return "weak"
 
 
+def _probiotic_research_presentation(
+    strain_entry,
+    *,
+    is_blocked: bool = False,
+) -> Dict[str, Any]:
+    """Derive conservative, display-only research semantics for one strain.
+
+    This contract does not participate in scoring. It prevents Flutter from
+    treating membership in ``clinical_strains`` as proof that the exact strain,
+    product, dose, and intended use were all clinically validated.
+    """
+    entry = strain_entry if isinstance(strain_entry, dict) else {}
+    thresholds = entry.get("cfu_thresholds") or {}
+    thresholds = thresholds if isinstance(thresholds, dict) else {}
+    evidence = thresholds.get("evidence") or {}
+    evidence = evidence if isinstance(evidence, dict) else {}
+    validation = evidence.get("clinical_validation") or {}
+    validation = validation if isinstance(validation, dict) else {}
+
+    evidence_type = str(evidence.get("type") or "").strip().lower()
+    strain_explicit = str(validation.get("q1_strain_explicit") or "").strip().upper()
+    human_token = str(validation.get("q3_human_clinical") or "").strip().upper()
+    human_evidence = human_token == "YES"
+    if not human_token:
+        human_evidence = any(
+            token in evidence_type
+            for token in ("rct", "meta_analysis", "clinical", "guideline", "human")
+        )
+
+    if strain_explicit == "FORMULA_LEVEL" or evidence_type == "product_formula_rct":
+        evidence_scope = "formula_specific"
+    elif strain_explicit == "YES" or "strain_specific" in evidence_type:
+        evidence_scope = "strain_specific"
+    else:
+        evidence_scope = "species_general"
+
+    review_status = (
+        "clinician_verified"
+        if thresholds.get("dr_pham_signoff") is True
+        else "pending_review"
+    )
+    if is_blocked:
+        match_status = "rejected"
+    elif evidence_scope == "formula_specific":
+        match_status = "formula_only"
+    elif review_status != "clinician_verified":
+        match_status = "pending_review"
+    elif evidence_scope == "strain_specific" and human_evidence:
+        match_status = "exact_strain"
+    else:
+        match_status = "species_level"
+
+    source_urls: List[str] = []
+
+    def _add_source(value: Any) -> None:
+        source = str(value or "").strip()
+        if source and source not in source_urls:
+            source_urls.append(source)
+
+    _add_source(evidence.get("url"))
+    primary_pmid = str(evidence.get("pmid") or "").strip()
+    if primary_pmid and not source_urls:
+        _add_source(f"https://pubmed.ncbi.nlm.nih.gov/{primary_pmid}/")
+    for field in ("secondary_pmid",):
+        pmid = str(evidence.get(field) or "").strip()
+        if pmid:
+            _add_source(f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/")
+    _add_source(evidence.get("secondary_url"))
+    for pmid in evidence.get("additional_pmids") or []:
+        clean_pmid = str(pmid or "").strip()
+        if clean_pmid:
+            _add_source(f"https://pubmed.ncbi.nlm.nih.gov/{clean_pmid}/")
+
+    return {
+        "research_match_status": match_status,
+        "evidence_scope": evidence_scope,
+        "review_status": review_status,
+        "human_evidence": human_evidence,
+        "indication_primary": str(thresholds.get("indication_primary") or "").strip(),
+        "source_urls": source_urls,
+        "source_count": len(source_urls),
+    }
+
+
 class SupplementEnricherV3:
     """
     Lean enrichment system focused on data collection for scoring.
@@ -14783,6 +14867,7 @@ class SupplementEnricherV3:
                         "cfu_confidence": "low",
                         "dose_basis": "inferred",
                         "ui_copy_hint": "blend_not_individually_disclosed",
+                        **_probiotic_research_presentation({}, is_blocked=True),
                     })
                     continue
                 postbiotic = _is_postbiotic(str(strain_identity), blend_name)
@@ -14816,6 +14901,7 @@ class SupplementEnricherV3:
                             "cfu_confidence": hybrid["cfu_confidence"],
                             "dose_basis": hybrid["dose_basis"],
                             "ui_copy_hint": hybrid["ui_copy_hint"],
+                            **_probiotic_research_presentation(clinical),
                         }
                         # Postbiotic / inactivated form — CFU scoring does
                         # not apply (different mechanism). Scorer hard-gates
