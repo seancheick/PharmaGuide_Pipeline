@@ -83,6 +83,54 @@ def _reason_formulation(band: str) -> str:
     }[band]
 
 
+_OMEGA_MOLECULAR_FORM_COPY = {
+    "tg": "triglyceride",
+    "rtg": "re-esterified triglyceride",
+    "pl": "phospholipid",
+    "ee": "ethyl ester",
+}
+
+
+def _omega_formulation_reason(dim: Dict[str, Any], fallback: str) -> str:
+    """Explain omega formulation from the signals that produced its score.
+
+    A bare parent identity such as ``Fish Oil`` is not a molecular-form
+    disclosure. The omega formulation module records that distinction in
+    ``form_detected`` and separately records label-derived EPA+DHA
+    concentration; this adapter describes both without changing either score.
+    """
+    metadata = dim.get("metadata") if isinstance(dim, dict) else None
+    if not isinstance(metadata, dict) or "form_detected" not in metadata:
+        return fallback
+
+    form_code = str(metadata.get("form_detected") or "").strip().lower()
+    form_name = _OMEGA_MOLECULAR_FORM_COPY.get(form_code)
+    if form_name:
+        form_clause = f"Molecular form is disclosed as {form_name}"
+    elif form_code == "undefined":
+        form_clause = "Molecular form is not disclosed on the label"
+    else:
+        form_clause = "Molecular-form data needs review"
+
+    concentration = metadata.get("epa_dha_concentration")
+    if not isinstance(concentration, dict):
+        return form_clause + "."
+
+    ratio = concentration.get("ratio")
+    if isinstance(ratio, (int, float)) and not isinstance(ratio, bool) and ratio >= 0:
+        percentage = round(float(ratio) * 100, 1)
+        percentage_display = _g(percentage)
+        return (
+            f"{form_clause}; EPA + DHA make up {percentage_display}% of the "
+            "disclosed omega-oil amount."
+        )
+
+    return (
+        f"{form_clause}; EPA + DHA concentration could not be calculated from "
+        "the disclosed amounts."
+    )
+
+
 def _reason_dose(band: str) -> str:
     return {
         "high": "Doses land in the clinically studied range.",
@@ -402,10 +450,13 @@ def _pillar_formulation(dim: Dict[str, Any], weight: float, archetype: str,
     ref = sub["archetype_reference"].get(archetype, sub["default_reference"])
     score = _num(dim.get("score"))
     val = round(max(0.0, min(float(weight), (score / ref) * weight)), 1) if ref else 0.0
+    reason = _reason_formulation(_band(val, weight))
+    if archetype == "omega":
+        reason = _omega_formulation_reason(dim, reason)
     return {
         "score": val,
         "max": weight,
-        "reason": _reason_formulation(_band(val, weight)),
+        "reason": reason,
         "components": {"raw_formulation": score, "archetype": archetype, "reference": ref},
     }
 

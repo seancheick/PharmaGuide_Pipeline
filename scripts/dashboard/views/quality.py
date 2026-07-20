@@ -16,6 +16,9 @@ def render_quality(data):
     filtered_products = filter_product_catalog(data)
     st.caption(f"Dataset scope: {dataset_scope} | Release rows in scope: {len(filtered_products)}")
 
+    _render_label_trust_quality(data)
+    st.divider()
+
     # Graceful degradation: when the release DB is absent, filter_product_catalog
     # returns an empty DataFrame with no columns. Every sub-renderer that
     # references a specific column (dsld_id, verdict, score_100_equivalent, etc.)
@@ -53,6 +56,184 @@ def render_quality(data):
         _render_fallback_tables(data, dataset_scope)
     with tab_config:
         _render_config_snapshot(data)
+
+
+def _count_rows(values: dict, *, label: str) -> pd.DataFrame:
+    return pd.DataFrame(
+        [
+            {label: name.replace("_", " ").title(), "count": count}
+            for name, count in sorted(values.items())
+        ]
+    )
+
+
+def _render_label_trust_quality(data):
+    st.write("### Label Fidelity & Trust QA")
+    st.caption(
+        "Only aggregate release diagnostics are rendered. Private report photos, "
+        "user identifiers, free text, and health data are never displayed."
+    )
+    metrics = data.blob_analytics.get("label_trust", {})
+    if not isinstance(metrics, dict):
+        metrics = {}
+
+    total_products = int(metrics.get("total_products") or 0)
+    history_coverage = metrics.get("formula_history_coverage_pct")
+    average_completeness = metrics.get("average_completeness_pct")
+    metric_row([
+        ("Products audited", total_products),
+        ("Supported ledger", int(metrics.get("supported_products") or 0)),
+        ("Unsupported ledger", int(metrics.get("unsupported_products") or 0)),
+        ("Complete labels", int(metrics.get("complete_products") or 0)),
+        ("Incomplete labels", int(metrics.get("incomplete_products") or 0)),
+        (
+            "Completeness unavailable",
+            int(metrics.get("unavailable_products") or 0),
+        ),
+        ("Invalid audit contract", int(metrics.get("invalid_audit_products") or 0)),
+    ])
+    metric_row([
+        (
+            "Average completeness",
+            f"{average_completeness:.1f}%"
+            if average_completeness is not None
+            else "N/A",
+        ),
+        ("Displayed label rows", int(metrics.get("total_display_rows") or 0)),
+        (
+            "Ingredient identity failures",
+            int(metrics.get("integrity_failures") or 0),
+        ),
+        (
+            "Products with identity failures",
+            int(metrics.get("identity_failure_products") or 0),
+        ),
+        (
+            "Formula history coverage",
+            f"{history_coverage:.1f}%" if history_coverage is not None else "N/A",
+        ),
+    ])
+    if total_products == 0:
+        st.info(
+            "No label-ledger detail blobs are available. Counts are zero and "
+            "percentage metrics remain unavailable rather than implying 0% quality."
+        )
+
+    state_groups = [
+        ("Display disposition", metrics.get("display_dispositions") or {}),
+        ("Form disclosure / assessment", metrics.get("form_states") or {}),
+        ("Identity integrity", metrics.get("identity_states") or {}),
+    ]
+    try:
+        columns = st.columns(3)
+        if not isinstance(columns, (list, tuple)) or len(columns) < 3:
+            raise ValueError("columns unavailable")
+    except Exception:
+        columns = [st, st, st]
+    for column, (heading, values) in zip(columns, state_groups):
+        with column:
+            st.write(f"#### {heading}")
+            if values:
+                st.dataframe(
+                    _count_rows(values, label="state"),
+                    width="stretch",
+                    hide_index=True,
+                )
+            else:
+                st.info("No rows available.")
+
+    rejected_signals = {
+        "Unrecognized display dispositions": int(
+            metrics.get("unrecognized_display_dispositions") or 0
+        ),
+        "Unrecognized form states": int(
+            metrics.get("unrecognized_form_states") or 0
+        ),
+        "Unrecognized identity states": int(
+            metrics.get("unrecognized_identity_states") or 0
+        ),
+        "Rejected mismatch outcomes": int(
+            metrics.get("rejected_mismatch_outcomes") or 0
+        ),
+        "Rejected mismatch categories": int(
+            metrics.get("rejected_mismatch_categories") or 0
+        ),
+        "Invalid mismatch summary": int(
+            metrics.get("invalid_mismatch_summary") or 0
+        ),
+    }
+    if any(rejected_signals.values()):
+        st.warning(
+            "Unrecognized or privacy-invalid aggregate rows were excluded. "
+            "Investigate schema drift before treating the dashboard as clean."
+        )
+        st.dataframe(
+            pd.DataFrame(
+                [
+                    {"signal": name, "count": count}
+                    for name, count in rejected_signals.items()
+                    if count
+                ]
+            ),
+            width="stretch",
+            hide_index=True,
+        )
+
+    st.write("#### Completeness by product group")
+    try:
+        columns = st.columns(2)
+        if not isinstance(columns, (list, tuple)) or len(columns) < 2:
+            raise ValueError("columns unavailable")
+    except Exception:
+        columns = [st, st]
+    for column, heading, rows in (
+        (columns[0], "Brand", metrics.get("by_brand") or []),
+        (columns[1], "Category", metrics.get("by_category") or []),
+    ):
+        with column:
+            st.write(f"##### {heading}")
+            if rows:
+                data_table(pd.DataFrame(rows), max_rows=200, height=320)
+            else:
+                st.info(f"No {heading.lower()} breakdown available.")
+
+    st.write("#### Label mismatch workflow")
+    mismatch_outcomes = metrics.get("mismatch_outcomes") or {}
+    mismatch_categories = metrics.get("mismatch_categories") or {}
+    if not mismatch_outcomes and not mismatch_categories:
+        if int(metrics.get("invalid_mismatch_summary") or 0):
+            st.error(
+                "The aggregate mismatch summary was rejected because its schema "
+                "was invalid. Fix the export before using workflow metrics."
+            )
+        else:
+            st.info(
+                "No aggregate mismatch summary is loaded. Private reports and photos "
+                "are intentionally not queried by this dashboard."
+            )
+        return
+    try:
+        columns = st.columns(2)
+        if not isinstance(columns, (list, tuple)) or len(columns) < 2:
+            raise ValueError("columns unavailable")
+    except Exception:
+        columns = [st, st]
+    with columns[0]:
+        st.write("##### Outcomes")
+        if mismatch_outcomes:
+            st.dataframe(
+                _count_rows(mismatch_outcomes, label="status"),
+                width="stretch",
+                hide_index=True,
+            )
+    with columns[1]:
+        st.write("##### Categories")
+        if mismatch_categories:
+            st.dataframe(
+                _count_rows(mismatch_categories, label="category"),
+                width="stretch",
+                hide_index=True,
+            )
 
 
 def _render_safety_summary(data, filtered_products):

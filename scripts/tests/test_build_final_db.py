@@ -3437,3 +3437,1749 @@ def test_export_contract_rejects_unresolved_identity_before_blob_publication():
     issues = validate_export_contract(enriched, make_scored())
 
     assert any("identity integrity" in issue for issue in issues)
+
+
+# ---------------------------------------------------------------------------
+# Canonical source-label ledger (Label Truth P0 Task 1)
+# ---------------------------------------------------------------------------
+
+
+def test_cleaner_label_ledger_prefers_reviewed_correction_over_source_snapshot():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_corrections_by_dsld_id = {
+        "LABEL-CORRECTION": {
+            "raw_ingredient_text": "Magneisum",
+            "corrected_ingredient_text": "Magnesium",
+            "provenance_tag": "reviewed_label_correction",
+        },
+    }
+    normalized = normalizer.normalize_product({
+        "id": "LABEL-CORRECTION",
+        "fullName": "Reviewed Label Correction",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Magneisum",
+                "ingredientGroup": "Magnesium",
+                "quantity": [{"quantity": 100, "unit": "mg"}],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    assert normalized["display_ingredients"][0]["label_display_name"] == "Magnesium"
+    assert normalized["display_ingredients"][0]["raw_source_text"] == "Magneisum"
+    assert normalized["activeIngredients"][0]["source_correction"] == {
+        "provenance_tag": "reviewed_label_correction",
+        "original_ingredient_text": "Magneisum",
+        "corrected_ingredient_text": "Magnesium",
+    }
+
+
+def test_cleaner_correction_updates_nested_parent_lineage_and_allows_folate_fold():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._label_corrections_by_dsld_id = {
+        "NESTED-LABEL-CORRECTION": {
+            "raw_ingredient_text": "Foltae",
+            "corrected_ingredient_text": "Folate",
+            "provenance_tag": "reviewed_label_correction",
+        },
+    }
+    normalized = normalizer.normalize_product({
+        "id": "NESTED-LABEL-CORRECTION",
+        "fullName": "Reviewed Nested Label Correction",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Foltae",
+                "ingredientGroup": "Folate",
+                "category": "vitamin",
+                "quantity": [{"quantity": 665, "unit": "mcg DFE"}],
+                "nestedRows": [
+                    {
+                        "order": 2,
+                        "name": "Folic Acid",
+                        "ingredientGroup": "Folate",
+                        "category": "vitamin",
+                        "quantity": [{"quantity": 400, "unit": "mcg"}],
+                    },
+                ],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    rows = normalized["display_ingredients"]
+    assert len(rows) == 1
+    assert rows[0]["label_display_name"] == "Folate"
+    assert rows[0]["raw_source_text"] == "Foltae"
+    assert rows[0]["parenthetical_dose_text"] == "400 mcg folic acid"
+    assert rows[0]["folded_label_components"][0]["label_display_name"] == "Folic Acid"
+    assert rows[0]["folded_label_components"][0]["parent_label"] == "Folate"
+
+
+def test_cleaner_label_ledger_preserves_omega_order_hierarchy_and_exact_doses():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "LABEL-LEDGER-OMEGA",
+        "fullName": "Label Ledger Omega",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Fish Oil",
+                "ingredientGroup": "Fish Oil",
+                "quantity": [{"quantity": 2400, "unit": "mg"}],
+                "forms": [{"name": "Fish Oil"}],
+                "nestedRows": [
+                    {
+                        "order": 2,
+                        "name": "Total Omega-3 Fatty Acids",
+                        "ingredientGroup": "Omega-3",
+                        "category": "fatty acid",
+                        "quantity": [{"quantity": 720, "unit": "mg"}],
+                        "nestedRows": [
+                            {
+                                "order": 3,
+                                "name": "EPA",
+                                "ingredientGroup": "EPA",
+                                "category": "fatty acid",
+                                "quantity": [{"quantity": 360, "unit": "mg"}],
+                            },
+                            {
+                                "order": 4,
+                                "name": "DHA",
+                                "ingredientGroup": "DHA",
+                                "category": "fatty acid",
+                                "quantity": [{"quantity": 240, "unit": "mg"}],
+                            },
+                            {
+                                "order": 5,
+                                "name": "Other Omega-3 Fatty Acids",
+                                "ingredientGroup": "Omega-3",
+                                "category": "fatty acid",
+                                "quantity": [{"quantity": 120, "unit": "mg"}],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    rows = normalized["display_ingredients"]
+    assert [row["label_display_name"] for row in rows] == [
+        "Fish Oil",
+        "Total Omega-3 Fatty Acids",
+        "EPA",
+        "DHA",
+        "Other Omega-3 Fatty Acids",
+    ]
+    assert [row["label_order"] for row in rows] == [0, 1, 2, 3, 4]
+    assert [row["nested_depth"] for row in rows] == [0, 1, 2, 2, 2]
+    assert [row["parent_label"] for row in rows] == [
+        None,
+        "Fish Oil",
+        "Total Omega-3 Fatty Acids",
+        "Total Omega-3 Fatty Acids",
+        "Total Omega-3 Fatty Acids",
+    ]
+    assert [row["exact_dose_text"] for row in rows] == [
+        "2,400 mg",
+        "720 mg",
+        "360 mg",
+        "240 mg",
+        "120 mg",
+    ]
+    assert [row["score_included"] for row in rows] == [True, False, True, True, False]
+    assert [row["is_label_context"] for row in rows] == [False, True, False, False, True]
+    assert len({row["raw_source_path"] for row in rows}) == 5
+    assert rows[0].get("label_display_form") is None
+    assert rows[0]["form_display_state"] == "not_disclosed"
+
+
+def test_cleaner_keeps_same_name_display_rows_from_distinct_parent_branches():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "REPEATED-OMEGA-TOTALS",
+        "fullName": "Fish and Krill Oil",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Fish Oil",
+                "ingredientGroup": "Fish Oil",
+                "quantity": [{"quantity": 2400, "unit": "mg"}],
+                "nestedRows": [
+                    {
+                        "order": 2,
+                        "name": "Total Omega-3 Fatty Acids",
+                        "ingredientGroup": "Omega-3",
+                        "category": "fatty acid",
+                        "quantity": [{"quantity": 720, "unit": "mg"}],
+                        "nestedRows": [
+                            {
+                                "order": 3,
+                                "name": "EPA",
+                                "ingredientGroup": "EPA",
+                                "category": "fatty acid",
+                                "quantity": [{"quantity": 360, "unit": "mg"}],
+                            },
+                        ],
+                    },
+                ],
+            },
+            {
+                "order": 4,
+                "name": "Krill Oil",
+                "ingredientGroup": "Krill Oil",
+                "quantity": [{"quantity": 1000, "unit": "mg"}],
+                "nestedRows": [
+                    {
+                        "order": 5,
+                        "name": "Total Omega-3 Fatty Acids",
+                        "ingredientGroup": "Omega-3",
+                        "category": "fatty acid",
+                        "quantity": [{"quantity": 500, "unit": "mg"}],
+                        "nestedRows": [
+                            {
+                                "order": 6,
+                                "name": "DHA",
+                                "ingredientGroup": "DHA",
+                                "category": "fatty acid",
+                                "quantity": [{"quantity": 250, "unit": "mg"}],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    totals = [
+        row
+        for row in normalized["display_ingredients"]
+        if row["label_display_name"] == "Total Omega-3 Fatty Acids"
+    ]
+    assert [
+        (row["parent_label"], row["raw_source_path"], row["exact_dose_text"])
+        for row in totals
+    ] == [
+        ("Fish Oil", "ingredientRows[0].nestedRows[0]", "720 mg"),
+        ("Krill Oil", "ingredientRows[1].nestedRows[0]", "500 mg"),
+    ]
+
+
+def test_cleaner_mixed_path_and_pathless_candidates_claim_distinct_source_rows():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = EnhancedDSLDNormalizer()
+    normalizer._display_source_rows = [
+        {
+            "raw_source_text": "Total Omega-3 Fatty Acids",
+            "label_display_name": "Total Omega-3 Fatty Acids",
+            "raw_source_path": "ingredientRows[0]",
+            "source_section": "activeIngredients",
+            "label_order": 0,
+            "nested_depth": 0,
+            "parent_label": "Fish Oil",
+            "exact_dose_text": "100 mg",
+        },
+        {
+            "raw_source_text": "Total Omega-3 Fatty Acids",
+            "label_display_name": "Total Omega-3 Fatty Acids",
+            "raw_source_path": "ingredientRows[1]",
+            "source_section": "activeIngredients",
+            "label_order": 1,
+            "nested_depth": 0,
+            "parent_label": "Krill Oil",
+            "exact_dose_text": "200 mg",
+        },
+    ]
+    normalizer._display_ingredients_buffer = [
+        {
+            "raw_source_text": "Total Omega-3 Fatty Acids",
+            "display_name": "Total Omega-3 Fatty Acids",
+            "source_section": "activeIngredients",
+            "display_type": "summary_wrapper",
+            "resolution_type": "suppressed_parent",
+            "score_included": False,
+            "children": [],
+        },
+    ]
+
+    rows = normalizer._build_display_ingredients(
+        [
+            {
+                "name": "Total Omega-3 Fatty Acids",
+                "raw_source_text": "Total Omega-3 Fatty Acids",
+                "raw_source_path": "ingredientRows[0]",
+                "quantity": 100,
+                "unit": "mg",
+                "canonical_id": "omega_3_fatty_acids",
+            },
+        ],
+        [],
+    )
+
+    assert [
+        (
+            row["raw_source_path"],
+            row["exact_dose_text"],
+            row["score_included"],
+        )
+        for row in rows
+    ] == [
+        ("ingredientRows[0]", "100 mg", True),
+        ("ingredientRows[1]", "200 mg", False),
+    ]
+
+
+def test_cleaner_merges_annotations_for_same_group_blend_source_occurrence():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "WELLBODY-ONE-SOURCE",
+        "fullName": "WellBody Blend",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "WellBody 365",
+                "ingredientGroup": "Blend (Mineral)",
+                "category": "blend",
+                "quantity": [{"quantity": 500, "unit": "mg"}],
+                "nestedRows": [
+                    {
+                        "order": 2,
+                        "name": "Magnesium",
+                        "ingredientGroup": "Magnesium",
+                        "category": "mineral",
+                        "quantity": [{"quantity": 100, "unit": "mg"}],
+                    },
+                ],
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    wellbody_rows = [
+        row
+        for row in normalized["display_ingredients"]
+        if row["label_display_name"] == "WellBody 365"
+    ]
+    assert len(wellbody_rows) == 1
+    assert wellbody_rows[0]["raw_source_path"] == "ingredientRows[0]"
+    assert wellbody_rows[0]["exact_dose_text"] == "500 mg"
+
+
+def test_cleaner_preserves_distinct_inactive_string_form_siblings():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "CAPSULE-STRING-FORMS",
+        "fullName": "Capsule String Forms",
+        "brandName": "Test Brand",
+        "ingredientRows": [],
+        "otheringredients": {
+            "ingredients": [
+                {
+                    "order": 1,
+                    "name": "Capsule Ingredients",
+                    "forms": ["Gelatin", "Glycerin"],
+                },
+            ],
+        },
+    })
+
+    other_rows = [
+        row
+        for row in normalized["display_ingredients"]
+        if row["source_section"] == "inactiveIngredients"
+    ]
+    assert [row["label_display_name"] for row in other_rows] == [
+        "Gelatin",
+        "Glycerin",
+    ]
+    assert len({row["raw_source_path"] for row in other_rows}) == 2
+    parent_source_path = "otheringredients.ingredients[0]"
+    assert [
+        (
+            row["nested_depth"],
+            row["parent_label"],
+            row["parent_source_path"],
+        )
+        for row in other_rows
+    ] == [
+        (1, "Capsule Ingredients", parent_source_path),
+        (1, "Capsule Ingredients", parent_source_path),
+    ]
+    assert normalized["label_ledger_omissions"] == [
+        {
+            "raw_source_path": parent_source_path,
+            "raw_source_text": "Capsule Ingredients",
+            "omission_reason": "decorative_or_header_text",
+        },
+    ]
+
+    blob = build_detail_blob(normalized, make_scored())
+    final_other_rows = [
+        row
+        for row in blob["display_ingredients"]
+        if row["source_section"] == "inactiveIngredients"
+    ]
+    assert [
+        (
+            row["label_display_name"],
+            row["nested_depth"],
+            row["parent_label"],
+            row["parent_source_path"],
+        )
+        for row in final_other_rows
+    ] == [
+        ("Gelatin", 1, "Capsule Ingredients", parent_source_path),
+        ("Glycerin", 1, "Capsule Ingredients", parent_source_path),
+    ]
+    assert blob["label_ledger_omissions"] == normalized["label_ledger_omissions"]
+
+
+def test_cleaner_audits_empty_structural_header_omission():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "EMPTY-STRUCTURAL-HEADER",
+        "fullName": "Empty Structural Header",
+        "brandName": "Test Brand",
+        "ingredientRows": [],
+        "otheringredients": {
+            "ingredients": [
+                {
+                    "order": 1,
+                    "name": "Less than 2% of:",
+                    "forms": [],
+                },
+            ],
+        },
+    })
+
+    assert all(
+        row["label_display_name"] != "Less than 2% of:"
+        for row in normalized["display_ingredients"]
+    )
+    expected_omissions = [
+        {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "Less than 2% of:",
+            "omission_reason": "decorative_or_header_text",
+        },
+    ]
+    assert normalized["label_ledger_omissions"] == expected_omissions
+
+    blob = build_detail_blob(normalized, make_scored())
+    assert all(
+        row["label_display_name"] != "Less than 2% of:"
+        for row in blob["display_ingredients"]
+    )
+    assert blob["label_ledger_omissions"] == expected_omissions
+
+
+def test_cleaner_audits_blank_active_and_other_source_occurrences():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "BLANK-SOURCE-OCCURRENCES",
+        "fullName": "Blank Source Occurrences",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "",
+            },
+        ],
+        "otheringredients": {
+            "ingredients": [
+                {
+                    "order": 2,
+                    "name": "   ",
+                },
+            ],
+        },
+    })
+
+    assert normalized["display_ingredients"] == []
+    expected_omissions = [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "",
+            "omission_reason": "empty_source_text",
+        },
+        {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "   ",
+            "omission_reason": "empty_source_text",
+        },
+    ]
+    assert normalized["label_ledger_omissions"] == expected_omissions
+
+    blob = build_detail_blob(normalized, make_scored())
+    assert blob["display_ingredients"] == []
+    assert blob["label_ledger_omissions"] == expected_omissions
+
+
+def _omega_label_ledger_enriched():
+    enriched = make_enriched()
+    enriched["harmful_additives"] = []
+    enriched["allergen_hits"] = []
+    enriched["activeIngredients"] = [
+        {
+            "name": "Fish Oil",
+            "raw_source_text": "Fish Oil",
+            "raw_source_path": "ingredientRows[0]",
+            "quantity": 2400,
+            "unit": "mg",
+            "canonical_id": "fish_oil",
+        },
+        {
+            "name": "EPA",
+            "raw_source_text": "EPA",
+            "raw_source_path": "ingredientRows[0].nestedRows[0].nestedRows[0]",
+            "quantity": 360,
+            "unit": "mg",
+            "canonical_id": "epa",
+            "parentBlend": "Total Omega-3 Fatty Acids",
+            "isNestedIngredient": True,
+        },
+        {
+            "name": "DHA",
+            "raw_source_text": "DHA",
+            "raw_source_path": "ingredientRows[0].nestedRows[0].nestedRows[1]",
+            "quantity": 240,
+            "unit": "mg",
+            "canonical_id": "dha",
+            "parentBlend": "Total Omega-3 Fatty Acids",
+            "isNestedIngredient": True,
+        },
+    ]
+    enriched["ingredient_quality_data"] = {
+        "ingredients": [
+            {
+                "name": "Fish Oil",
+                "raw_source_text": "Fish Oil",
+                "raw_source_path": "ingredientRows[0]",
+                "standard_name": "Fish Oil",
+                "canonical_id": "fish_oil",
+                "parent_key": "fish_oil",
+                "matched_form": "fish oil",
+                "mapped": True,
+                "bio_score": 8,
+            },
+            {
+                "name": "EPA",
+                "raw_source_text": "EPA",
+                "raw_source_path": "ingredientRows[0].nestedRows[0].nestedRows[0]",
+                "standard_name": "Eicosapentaenoic Acid",
+                "canonical_id": "epa",
+                "parent_key": "epa",
+                "matched_form": "standard",
+                "mapped": True,
+                "bio_score": 10,
+            },
+            {
+                "name": "DHA",
+                "raw_source_text": "DHA",
+                "raw_source_path": "ingredientRows[0].nestedRows[0].nestedRows[1]",
+                "standard_name": "Docosahexaenoic Acid",
+                "canonical_id": "dha",
+                "parent_key": "dha",
+                "matched_form": "standard",
+                "mapped": True,
+                "bio_score": 10,
+            },
+        ],
+    }
+    names = [
+        "Fish Oil",
+        "Total Omega-3 Fatty Acids",
+        "EPA",
+        "DHA",
+        "Other Omega-3 Fatty Acids",
+    ]
+    doses = ["2,400 mg", "720 mg", "360 mg", "240 mg", "120 mg"]
+    depths = [0, 1, 2, 2, 2]
+    parents = [
+        None,
+        "Fish Oil",
+        "Total Omega-3 Fatty Acids",
+        "Total Omega-3 Fatty Acids",
+        "Total Omega-3 Fatty Acids",
+    ]
+    score_included = [True, False, True, True, False]
+    enriched["display_ingredients"] = [
+        {
+            "label_display_name": name,
+            "raw_source_text": name,
+            "raw_source_path": f"label[{index}]",
+            "label_order": index,
+            "nested_depth": depths[index],
+            "parent_label": parents[index],
+            "exact_dose_text": doses[index],
+            "score_included": score_included[index],
+            "is_label_context": not score_included[index],
+            "display_disposition": "scored" if score_included[index] else "label_context",
+        }
+        for index, name in enumerate(names)
+    ]
+    enriched["display_ingredients"][0]["label_display_form"] = "Fish Oil"
+    enriched["display_ingredients"][0]["form_display_state"] = "assessed"
+    return enriched
+
+
+def test_final_blob_uses_label_ledger_without_promoting_context_into_analysis():
+    blob = build_detail_blob(_omega_label_ledger_enriched(), make_scored())
+    rows = blob["display_ingredients"]
+
+    assert [row["label_display_name"] for row in rows] == [
+        "Fish Oil",
+        "Total Omega-3 Fatty Acids",
+        "EPA",
+        "DHA",
+        "Other Omega-3 Fatty Acids",
+    ]
+    assert [row["exact_dose_text"] for row in rows] == [
+        "2,400 mg",
+        "720 mg",
+        "360 mg",
+        "240 mg",
+        "120 mg",
+    ]
+    assert [row["score_included"] for row in rows] == [True, False, True, True, False]
+    assert [row["is_label_context"] for row in rows] == [False, True, False, False, True]
+    assert len(rows) == len({row["ledger_fingerprint"] for row in rows})
+    assert {row["display_label"] for row in blob["ingredients"]} == {"Fish Oil", "EPA", "DHA"}
+    assert rows[1]["analysis"] is None
+    assert rows[4]["analysis"] is None
+    assert rows[0].get("label_display_form") is None
+    assert rows[0]["form_display_state"] == "not_disclosed"
+
+    fish_oil = next(row for row in blob["ingredients"] if row["display_label"] == "Fish Oil")
+    assert fish_oil["display_form_label"] is None
+    assert fish_oil["form_status"] == "unknown"
+
+
+def test_final_ledger_uses_unmapped_analysis_over_stale_assessed_form_state():
+    from build_final_db import _build_canonical_label_ledger
+
+    rows = _build_canonical_label_ledger(
+        [
+            {
+                "label_display_name": "Magnesium",
+                "label_display_form": "as Citrate",
+                "form_display_state": "assessed",
+                "raw_source_text": "Magnesium",
+                "raw_source_path": "ingredientRows[0]",
+                "label_order": 0,
+                "nested_depth": 0,
+                "exact_dose_text": "100 mg",
+                "score_included": True,
+                "display_disposition": "scored",
+                "identity_integrity_state": "clean",
+            },
+        ],
+        [
+            {
+                "raw_source_text": "Magnesium",
+                "raw_source_path": "ingredientRows[0]",
+                "display_label": "Magnesium",
+                "display_form_label": "as Citrate",
+                "form_match_status": "unmapped",
+                "canonical_id": "magnesium",
+                "identity_disposition": "clean",
+            },
+        ],
+        [],
+    )
+
+    assert rows[0]["label_display_form"] == "as Citrate"
+    assert rows[0]["form_display_state"] == "listed_not_assessed"
+    assert rows[0]["analysis"]["form_display_state"] == "listed_not_assessed"
+
+
+def test_form_contract_does_not_treat_canonical_standard_name_as_label_identity():
+    from build_final_db import _compute_form_contract
+
+    contract = _compute_form_contract(
+        {
+            "name": "Magnesium",
+            "raw_source_text": "Magnesium",
+            "forms": [{"name": "Magnesium Citrate"}],
+        },
+        {
+            "standard_name": "Magnesium Citrate",
+            "matched_form": "magnesium citrate",
+            "identity_disposition": "clean",
+        },
+    )
+
+    assert contract["display_form_label"] == "Magnesium Citrate"
+    assert contract["form_status"] == "known"
+
+
+def test_final_blob_folds_folate_dfe_equivalence_into_one_logical_label_row():
+    enriched = make_enriched()
+    enriched["harmful_additives"] = []
+    enriched["allergen_hits"] = []
+    enriched["activeIngredients"] = [
+        {
+            "name": "Folate",
+            "raw_source_text": "Folate",
+            "raw_source_path": "ingredientRows[0]",
+            "quantity": 665,
+            "unit": "mcg DFE",
+            "canonical_id": "vitamin_b9_folate",
+        },
+        {
+            "name": "Folic Acid",
+            "raw_source_text": "Folic Acid",
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "quantity": 400,
+            "unit": "mcg",
+            "canonical_id": "vitamin_b9_folate",
+            "parentBlend": "Folate",
+            "isNestedIngredient": True,
+        },
+    ]
+    enriched["ingredient_quality_data"] = {
+        "ingredients": [
+            {
+                "name": row["name"],
+                "raw_source_text": row["raw_source_text"],
+                "raw_source_path": row["raw_source_path"],
+                "standard_name": "Folate",
+                "canonical_id": "vitamin_b9_folate",
+                "parent_key": "vitamin_b9_folate",
+                "matched_form": "folic acid" if row["name"] == "Folic Acid" else "standard",
+                "mapped": True,
+            }
+            for row in enriched["activeIngredients"]
+        ],
+    }
+    enriched["display_ingredients"] = [
+        {
+            "label_display_name": "Folate",
+            "raw_source_text": "Folate",
+            "raw_source_path": "ingredientRows[0]",
+            "label_order": 0,
+            "nested_depth": 0,
+            "parent_label": None,
+            "exact_dose_text": "665 mcg DFE",
+            "score_included": False,
+            "is_label_context": True,
+            "display_disposition": "label_context",
+            "canonical_id": "vitamin_b9_folate",
+        },
+        {
+            "label_display_name": "Folic Acid",
+            "raw_source_text": "Folic Acid",
+            "raw_source_path": "ingredientRows[0].nestedRows[0]",
+            "label_order": 1,
+            "nested_depth": 1,
+            "parent_label": "Folate",
+            "exact_dose_text": "400 mcg",
+            "score_included": True,
+            "is_label_context": False,
+            "display_disposition": "scored",
+            "canonical_id": "vitamin_b9_folate",
+        },
+    ]
+
+    rows = build_detail_blob(enriched, make_scored())["display_ingredients"]
+
+    assert len(rows) == 1
+    assert rows[0]["label_display_name"] == "Folate"
+    assert rows[0]["exact_dose_text"] == "665 mcg DFE"
+    assert rows[0]["parenthetical_dose_text"] == "400 mcg folic acid"
+    assert rows[0]["score_included"] is True
+    assert rows[0]["is_label_context"] is False
+    assert rows[0]["display_disposition"] == "scored"
+    assert rows[0]["score_participation_source"] == "Folic Acid"
+    assert rows[0]["identity_integrity_state"] != "taxonomy_only"
+    assert rows[0]["form_display_state"] != "not_applicable"
+    assert rows[0]["analysis"]["identity_integrity_state"] == rows[0]["identity_integrity_state"]
+    assert rows[0]["analysis"]["form_display_state"] == rows[0]["form_display_state"]
+
+
+# ---------------------------------------------------------------------------
+# Mandatory label-ledger reconciliation audit (Label Truth P0 Task 2B)
+# ---------------------------------------------------------------------------
+
+
+def test_cleaner_and_final_blob_emit_label_source_inventory_and_complete_audit():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "LABEL-AUDIT-FLAT",
+        "fullName": "Magnesium Capsule",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "order": 1,
+                "name": "Magnesium",
+                "quantity": [{"quantity": 100, "unit": "mg"}],
+            },
+        ],
+        "otheringredients": {
+            "ingredients": [{"order": 2, "name": "Gelatin"}],
+        },
+    })
+
+    assert normalized["label_source_rows"] == [
+        {
+            "raw_source_path": "ingredientRows[0]",
+            "raw_source_text": "Magnesium",
+            "source_section": "activeIngredients",
+        },
+        {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "Gelatin",
+            "source_section": "inactiveIngredients",
+        },
+    ]
+    assert normalized["label_ledger_audit"] == {
+        "support_status": "supported",
+        "source_structure": "flat_supplement_facts",
+        "meaningful_source_rows": 2,
+        "displayed_rows": 2,
+        "omitted_rows": 0,
+        "completeness_percentage": 100.0,
+        "completeness_status": "complete",
+    }
+
+    blob = build_detail_blob(normalized, make_scored())
+    assert blob["label_source_rows"] == normalized["label_source_rows"]
+    assert blob["label_ledger_audit"] == normalized["label_ledger_audit"]
+
+
+@pytest.mark.parametrize(
+    "source_structure,ingredient_rows,other_ingredients",
+    [
+        (
+            "flat_supplement_facts",
+            [
+                {
+                    "name": "Creatine Monohydrate",
+                    "quantity": [{"quantity": 5, "unit": "g"}],
+                },
+            ],
+            [],
+        ),
+        (
+            "vitamin_mineral_panel",
+            [
+                {
+                    "name": "Vitamin C",
+                    "category": "vitamin",
+                    "ingredientGroup": "Vitamin C",
+                    "quantity": [{"quantity": 100, "unit": "mg"}],
+                },
+                {
+                    "name": "Magnesium",
+                    "category": "mineral",
+                    "ingredientGroup": "Magnesium",
+                    "quantity": [{"quantity": 50, "unit": "mg"}],
+                },
+            ],
+            [],
+        ),
+        (
+            "omega_parent_component",
+            [
+                {
+                    "name": "Fish Oil",
+                    "quantity": [{"quantity": 2400, "unit": "mg"}],
+                    "nestedRows": [
+                        {
+                            "name": "Total Omega-3 Fatty Acids",
+                            "quantity": [{"quantity": 720, "unit": "mg"}],
+                            "nestedRows": [
+                                {
+                                    "name": "EPA",
+                                    "quantity": [{"quantity": 360, "unit": "mg"}],
+                                },
+                                {
+                                    "name": "DHA",
+                                    "quantity": [{"quantity": 240, "unit": "mg"}],
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+            [],
+        ),
+        (
+            "folate_dfe_equivalent",
+            [
+                {
+                    "name": "Folate",
+                    "quantity": [{"quantity": 665, "unit": "mcg DFE"}],
+                    "nestedRows": [
+                        {
+                            "name": "Folic Acid",
+                            "quantity": [{"quantity": 400, "unit": "mcg"}],
+                        },
+                    ],
+                },
+            ],
+            [],
+        ),
+        (
+            "elemental_mineral_source_compound",
+            [
+                {
+                    "name": "Magnesium",
+                    "category": "mineral",
+                    "ingredientGroup": "Magnesium",
+                    "quantity": [{"quantity": 100, "unit": "mg"}],
+                    "forms": [
+                        {
+                            "name": "Magnesium Citrate",
+                            "category": "source material",
+                        },
+                    ],
+                },
+            ],
+            [],
+        ),
+        (
+            "proprietary_blend",
+            [
+                {
+                    "name": "Botanical Blend",
+                    "ingredientGroup": "Blend (Botanical)",
+                    "quantity": [{"quantity": 500, "unit": "mg"}],
+                    "nestedRows": [{"name": "Ashwagandha Root Extract"}],
+                },
+            ],
+            [],
+        ),
+        (
+            "botanical_plant_part_extract",
+            [
+                {
+                    "name": "Ashwagandha Root Extract",
+                    "category": "botanical",
+                    "ingredientGroup": "Ashwagandha",
+                    "quantity": [{"quantity": 300, "unit": "mg"}],
+                },
+            ],
+            [],
+        ),
+        (
+            "probiotic_strain_cfu",
+            [
+                {
+                    "name": "Lactobacillus rhamnosus GG",
+                    "category": "probiotic",
+                    "ingredientGroup": "Probiotic",
+                    "quantity": [{"quantity": 10, "unit": "Billion CFU"}],
+                },
+            ],
+            [],
+        ),
+        (
+            "other_ingredients",
+            [],
+            [{"name": "Gelatin"}, {"name": "Glycerin"}],
+        ),
+        (
+            "empty_panel",
+            [],
+            [],
+        ),
+    ],
+)
+def test_cleaner_audit_classifies_first_release_label_archetypes(
+    source_structure, ingredient_rows, other_ingredients
+):
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrichment_contract_validator import EnrichmentContractValidator
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": f"ARCHETYPE-{source_structure}",
+        "fullName": "Label Archetype Fixture",
+        "brandName": "Test Brand",
+        "ingredientRows": ingredient_rows,
+        "otheringredients": {"ingredients": other_ingredients},
+    })
+
+    assert normalized["label_ledger_audit"]["source_structure"] == source_structure
+    assert normalized["label_ledger_audit"]["completeness_percentage"] == 100.0
+    assert normalized["label_ledger_audit"]["completeness_status"] == "complete"
+
+    source_paths = {row["raw_source_path"] for row in normalized["label_source_rows"]}
+    resolved_paths = {
+        row["raw_source_path"] for row in normalized["display_ingredients"]
+    } | {
+        row["raw_source_path"] for row in normalized["label_ledger_omissions"]
+    }
+    assert source_paths == resolved_paths
+
+    validator = EnrichmentContractValidator()
+    assert not [
+        violation
+        for violation in validator.validate(normalized)
+        if violation.rule.startswith("H.")
+    ]
+
+    final_input = dict(normalized)
+    final_input.pop("label_ledger_audit")
+    final_blob = build_detail_blob(final_input, make_scored())
+    assert final_blob["label_ledger_audit"]["source_structure"] == source_structure
+    assert not [
+        violation
+        for violation in validator.validate(final_blob)
+        if violation.rule.startswith("H.")
+    ]
+
+
+def test_cleaner_audit_tracks_blank_header_and_string_form_source_occurrences():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "LABEL-AUDIT-OMISSIONS",
+        "fullName": "Capsule Fixture",
+        "brandName": "Test Brand",
+        "ingredientRows": [{"name": ""}],
+        "otheringredients": {
+            "ingredients": [
+                {"name": "Less than 2% of:", "forms": []},
+                {"name": "Capsule Ingredients", "forms": ["Gelatin", "Glycerin"]},
+            ],
+        },
+    })
+
+    assert {
+        (row["raw_source_path"], row["source_section"])
+        for row in normalized["label_source_rows"]
+    } == {
+        ("ingredientRows[0]", "activeIngredients"),
+        ("otheringredients.ingredients[0]", "inactiveIngredients"),
+        ("otheringredients.ingredients[1]", "inactiveIngredients"),
+        ("otheringredients.ingredients[1].forms[0]", "inactiveIngredients"),
+        ("otheringredients.ingredients[1].forms[1]", "inactiveIngredients"),
+    }
+    assert {
+        (row["raw_source_path"], row["omission_reason"])
+        for row in normalized["label_ledger_omissions"]
+    } == {
+        ("ingredientRows[0]", "empty_source_text"),
+        ("otheringredients.ingredients[0]", "decorative_or_header_text"),
+        ("otheringredients.ingredients[1]", "decorative_or_header_text"),
+    }
+    assert normalized["label_ledger_audit"] == {
+        "support_status": "supported",
+        "source_structure": "other_ingredients",
+        "meaningful_source_rows": 2,
+        "displayed_rows": 2,
+        "omitted_rows": 3,
+        "completeness_percentage": 100.0,
+        "completeness_status": "complete",
+    }
+
+
+def test_cleaner_and_final_blob_make_malformed_source_completeness_unavailable():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+    from enrichment_contract_validator import EnrichmentContractValidator
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "LABEL-AUDIT-UNSUPPORTED",
+        "fullName": "Malformed Fixture",
+        "brandName": "Test Brand",
+        "ingredientRows": {"name": "Unexpected mapping instead of rows"},
+        "otheringredients": {"ingredients": []},
+    })
+
+    assert normalized["label_source_rows"] == [
+        {
+            "raw_source_path": "ingredientRows",
+            "raw_source_text": "Unexpected mapping instead of rows",
+            "source_section": "activeIngredients",
+        },
+    ]
+    assert normalized["label_ledger_omissions"] == [
+        {
+            "raw_source_path": "ingredientRows",
+            "raw_source_text": "Unexpected mapping instead of rows",
+            "omission_reason": "unsupported_source_structure",
+        },
+    ]
+    assert normalized["label_ledger_audit"] == {
+        "support_status": "unsupported",
+        "source_structure": "unsupported_source_structure",
+        "meaningful_source_rows": 0,
+        "displayed_rows": 0,
+        "omitted_rows": 1,
+        "completeness_percentage": None,
+        "completeness_status": "unavailable",
+    }
+
+    final_blob = build_detail_blob(normalized, make_scored())
+    assert final_blob["label_source_rows"] == normalized["label_source_rows"]
+    assert final_blob["label_ledger_audit"] == normalized["label_ledger_audit"]
+    validator = EnrichmentContractValidator()
+    assert not [
+        violation
+        for violation in validator.validate(final_blob)
+        if violation.rule.startswith("H.")
+    ]
+
+
+def test_cleaner_marks_nested_malformed_source_structure_unsupported():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalized = EnhancedDSLDNormalizer().normalize_product({
+        "id": "LABEL-AUDIT-NESTED-UNSUPPORTED",
+        "fullName": "Malformed Nested Fixture",
+        "brandName": "Test Brand",
+        "ingredientRows": [
+            {
+                "name": "Botanical Blend",
+                "nestedRows": {"name": "Unexpected mapping instead of rows"},
+            },
+        ],
+        "otheringredients": {"ingredients": []},
+    })
+
+    assert {
+        row["raw_source_path"] for row in normalized["label_source_rows"]
+    } == {"ingredientRows[0]", "ingredientRows[0].nestedRows"}
+    assert normalized["label_ledger_omissions"] == [
+        {
+            "raw_source_path": "ingredientRows[0].nestedRows",
+            "raw_source_text": "Unexpected mapping instead of rows",
+            "omission_reason": "unsupported_source_structure",
+        },
+    ]
+    assert normalized["label_ledger_audit"]["support_status"] == "unsupported"
+    assert normalized["label_ledger_audit"]["completeness_percentage"] is None
+    assert normalized["label_ledger_audit"]["completeness_status"] == "unavailable"
+
+
+def test_final_blob_recomputes_label_audit_from_final_folded_ledger():
+    from enrichment_contract_validator import EnrichmentContractValidator
+
+    enriched = _omega_label_ledger_enriched()
+    enriched["label_source_rows"] = [
+        {
+            "raw_source_path": row["raw_source_path"],
+            "raw_source_text": row["raw_source_text"],
+            "source_section": "activeIngredients",
+        }
+        for row in enriched["display_ingredients"]
+    ]
+    enriched["label_ledger_omissions"] = []
+    enriched["label_ledger_audit"] = {
+        "support_status": "supported",
+        "source_structure": "omega_parent_component",
+        "meaningful_source_rows": 999,
+        "displayed_rows": 999,
+        "omitted_rows": 999,
+        "completeness_percentage": 1.0,
+        "completeness_status": "incomplete",
+    }
+
+    blob = build_detail_blob(enriched, make_scored())
+
+    assert blob["label_ledger_audit"] == {
+        "support_status": "supported",
+        "source_structure": "omega_parent_component",
+        "meaningful_source_rows": 5,
+        "displayed_rows": 5,
+        "omitted_rows": 0,
+        "completeness_percentage": 100.0,
+        "completeness_status": "complete",
+    }
+    validator = EnrichmentContractValidator()
+    assert not [
+        violation
+        for violation in validator.validate(blob)
+        if violation.rule in {"H.7", "H.8"}
+    ]
+
+
+def test_final_ledger_prefers_authoritative_identity_conflict_over_clean_source():
+    from audit_identity_integrity import audit_product
+    from enrichment_contract_validator import EnrichmentContractValidator
+
+    enriched = _enriched_with_label_identity(disposition="identity_conflict")
+    enriched["activeIngredients"][0]["raw_source_path"] = "ingredientRows[0]"
+    enriched["ingredient_quality_data"]["ingredients"][0][
+        "raw_source_path"
+    ] = "ingredientRows[0]"
+    enriched["display_ingredients"] = [
+        {
+            "raw_source_text": "Docosahexaenoic Acid Ethyl Ester",
+            "display_name": "EPA",
+            "label_display_name": "EPA",
+            "label_display_form": "as Ethyl Esters",
+            "raw_source_path": "ingredientRows[0]",
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "label_order": 0,
+            "nested_depth": 0,
+            "exact_dose_text": "360 mg",
+            "score_included": True,
+            "is_label_context": False,
+            "display_disposition": "scored",
+            "identity_integrity_state": "clean",
+            "form_display_state": "assessed",
+        },
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+    row = blob["display_ingredients"][0]
+
+    assert row["identity_integrity_state"] == "identity_conflict"
+    assert row["form_display_state"] == "needs_review"
+    assert row["analysis"]["identity_integrity_state"] == "identity_conflict"
+    assert row["analysis"]["form_display_state"] == "needs_review"
+
+    violations = EnrichmentContractValidator().validate_release_integrity(blob)
+    assert any(
+        violation.evidence.get("audit_code")
+        == "score_included_identity_conflict"
+        for violation in violations
+    )
+    assert any(
+        record.violation == "score_included_identity_conflict"
+        for record in audit_product(blob, classify=lambda _product: "generic")
+    )
+
+
+@pytest.mark.parametrize(
+    "collection_name",
+    [
+        "display_ingredients",
+        "label_ledger_omissions",
+        "label_source_rows",
+    ],
+)
+def test_final_builder_rejects_duplicate_upstream_label_source_paths(
+    collection_name,
+):
+    enriched = _omega_label_ledger_enriched()
+    duplicate_path = "label[0]"
+    if collection_name == "display_ingredients":
+        enriched[collection_name].append(dict(enriched[collection_name][0]))
+    elif collection_name == "label_ledger_omissions":
+        enriched[collection_name] = [
+            {
+                "raw_source_path": duplicate_path,
+                "raw_source_text": "Header",
+                "omission_reason": "decorative_or_header_text",
+            },
+            {
+                "raw_source_path": duplicate_path,
+                "raw_source_text": "Header repeated",
+                "omission_reason": "duplicate_source_line",
+            },
+        ]
+    else:
+        enriched[collection_name] = [
+            {
+                "raw_source_path": duplicate_path,
+                "raw_source_text": "Fish Oil",
+                "source_section": "activeIngredients",
+            },
+            {
+                "raw_source_path": duplicate_path,
+                "raw_source_text": "Fish Oil repeated",
+                "source_section": "activeIngredients",
+            },
+        ]
+
+    with pytest.raises(
+        ValueError,
+        match=rf"duplicate upstream {collection_name} raw_source_path: label\[0\]",
+    ):
+        build_detail_blob(enriched, make_scored())
+
+
+def test_final_builder_legacy_fallback_emits_complete_canonical_label_contract():
+    from enrichment_contract_validator import EnrichmentContractValidator
+
+    enriched = make_enriched()
+    for field_name in (
+        "display_ingredients",
+        "label_source_rows",
+        "label_ledger_omissions",
+        "label_ledger_audit",
+    ):
+        enriched.pop(field_name, None)
+    for source_row in (
+        enriched["activeIngredients"] + enriched["inactiveIngredients"]
+    ):
+        source_row.pop("raw_source_path", None)
+    for analysis_row in enriched["ingredient_quality_data"]["ingredients"]:
+        analysis_row.pop("raw_source_path", None)
+
+    blob = build_detail_blob(enriched, make_scored())
+    rows = blob["display_ingredients"]
+
+    assert [row["raw_source_path"] for row in rows] == [
+        "activeIngredients[0]",
+        "activeIngredients[1]",
+        "inactiveIngredients[0]",
+    ]
+    assert [row["source_section"] for row in rows] == [
+        "activeIngredients",
+        "activeIngredients",
+        "inactiveIngredients",
+    ]
+    assert [row["display_type"] for row in rows] == [
+        "mapped_ingredient",
+        "mapped_ingredient",
+        "inactive_ingredient",
+    ]
+    assert [row["resolution_type"] for row in rows] == [
+        "direct_mapped",
+        "direct_mapped",
+        "inactive_mapped",
+    ]
+    required_fields = {
+        "raw_source_path",
+        "raw_source_text",
+        "display_name",
+        "label_display_name",
+        "label_order",
+        "nested_depth",
+        "source_section",
+        "display_type",
+        "resolution_type",
+        "score_included",
+        "display_disposition",
+        "form_display_state",
+        "identity_integrity_state",
+        "ledger_fingerprint",
+    }
+    assert all(required_fields <= row.keys() for row in rows)
+    assert [row["raw_source_path"] for row in blob["label_source_rows"]] == [
+        "activeIngredients[0]",
+        "activeIngredients[1]",
+        "inactiveIngredients[0]",
+    ]
+    assert blob["label_ledger_audit"] == {
+        "support_status": "supported",
+        "source_structure": "flat_supplement_facts",
+        "meaningful_source_rows": 3,
+        "displayed_rows": 3,
+        "omitted_rows": 0,
+        "completeness_percentage": 100.0,
+        "completeness_status": "complete",
+    }
+    assert not [
+        violation
+        for violation in EnrichmentContractValidator().validate(blob)
+        if violation.rule.startswith("H.")
+    ]
+
+
+# ---------------------------------------------------------------------------
+# Defensible label provenance + formula versions (Label Truth P1 Task 12)
+# ---------------------------------------------------------------------------
+
+
+def _copy_json(value):
+    return json.loads(json.dumps(value))
+
+
+def test_formula_fingerprint_is_deterministic_and_ignores_analysis_scores_and_map_order():
+    enriched = _omega_label_ledger_enriched()
+    scored = make_scored()
+    first = build_detail_blob(enriched, scored)["label_record"][
+        "formula_fingerprint"
+    ]
+
+    reordered = _copy_json(enriched)
+    reordered["display_ingredients"] = [
+        dict(reversed(list(row.items())))
+        for row in reordered["display_ingredients"]
+    ]
+    rescored = _copy_json(scored)
+    rescored["score_100_equivalent"] = 1
+    rescored["section_scores"] = {"evidence": {"score": 0}}
+    second = build_detail_blob(reordered, rescored)["label_record"][
+        "formula_fingerprint"
+    ]
+
+    assert len(first) == 64
+    assert first == second
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        "identity",
+        "dose",
+        "form",
+        "order",
+    ],
+)
+def test_formula_fingerprint_changes_with_label_formula_identity(mutation):
+    baseline_enriched = _omega_label_ledger_enriched()
+    baseline = build_detail_blob(baseline_enriched, make_scored())[
+        "label_record"
+    ]["formula_fingerprint"]
+    changed = _copy_json(baseline_enriched)
+
+    if mutation == "identity":
+        changed["display_ingredients"][2]["label_display_name"] = "EPA concentrate"
+    elif mutation == "dose":
+        changed["display_ingredients"][2]["exact_dose_text"] = "361 mg"
+    elif mutation == "form":
+        changed["display_ingredients"][0]["label_display_form"] = "Ethyl ester"
+    else:
+        changed["display_ingredients"][0]["label_order"] = 1
+        changed["display_ingredients"][1]["label_order"] = 0
+
+    fingerprint = build_detail_blob(changed, make_scored())["label_record"][
+        "formula_fingerprint"
+    ]
+    assert fingerprint != baseline
+
+
+def test_label_record_emits_only_present_source_metadata_and_product_status():
+    enriched = _omega_label_ledger_enriched()
+    enriched.update(
+        {
+            "productVersionCode": "7",
+            "entryDate": "2024-01-02",
+            "updatedDate": "2025-03-04T10:11:12Z",
+            "label_record_metadata": {
+                "label_source_url": "https://api.ods.od.nih.gov/dsld/v9/label/999?view=full",
+                "product_status": "discontinued",
+            },
+        }
+    )
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["source_name"] == "NIH DSLD"
+    assert record["source_record_id"] == "999"
+    assert record["catalog_version"] == "7"
+    assert record["source_date"] == "2024-01-02"
+    assert record["source_updated_date"] == "2025-03-04T10:11:12Z"
+    assert record["product_status"] == "discontinued"
+    assert record["label_source_url"] == (
+        "https://api.ods.od.nih.gov/dsld/v9/label/999?view=full"
+    )
+    assert record["lineage_key"] == "dsld:999"
+    assert record["field_statuses"] == {
+        "source_name": "available",
+        "source_record_id": "available",
+        "catalog_version": "available",
+        "formula_fingerprint": "available",
+        "source_date": "available",
+        "source_updated_date": "available",
+        "product_status": "available",
+        "label_source_url": "available",
+        "lineage_key": "available",
+    }
+
+
+def test_label_record_marks_optional_metadata_unavailable_without_synthesizing_it():
+    enriched = _omega_label_ledger_enriched()
+    enriched["offMarket"] = 0
+    enriched["enriched_date"] = "2026-07-19T12:00:00Z"
+    enriched["imageUrl"] = "https://example.test/bottle-2026-07-19.jpg"
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["catalog_version"] is None
+    assert record["source_date"] is None
+    assert record["source_updated_date"] is None
+    assert record["product_status"] is None
+    assert record["label_source_url"] is None
+    assert record["field_statuses"]["catalog_version"] == "unavailable"
+    assert record["field_statuses"]["source_date"] == "unavailable"
+    assert record["field_statuses"]["source_updated_date"] == "unavailable"
+    assert record["field_statuses"]["product_status"] == "unavailable"
+    assert record["field_statuses"]["label_source_url"] == "unavailable"
+    assert record["metadata_status"] == "partial"
+    assert record["formula_history"] == []
+    assert record["history_status"] == "unavailable"
+
+
+@pytest.mark.parametrize(
+    ("raw_status", "canonical_status"),
+    [
+        ("ACTIVE", "active"),
+        ("Limited Availability", "limited_availability"),
+        ("off-market", "off_market"),
+    ],
+)
+def test_label_record_normalizes_documented_product_statuses(
+    raw_status,
+    canonical_status,
+):
+    enriched = _omega_label_ledger_enriched()
+    enriched["label_record_metadata"] = {"product_status": raw_status}
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["product_status"] == canonical_status
+
+
+@pytest.mark.parametrize("raw_status", [123, "ACTIVE-ish", "pending"])
+def test_label_record_rejects_undocumented_product_statuses(raw_status):
+    enriched = _omega_label_ledger_enriched()
+    enriched["label_record_metadata"] = {"product_status": raw_status}
+
+    with pytest.raises(ValueError, match="product_status"):
+        build_detail_blob(enriched, make_scored())
+
+
+def test_label_record_metadata_cannot_be_available_without_source_name():
+    enriched = _omega_label_ledger_enriched()
+    enriched.update(
+        {
+            "source_type": "external_manual",
+            "dsld_id": "manual-record",
+            "entryDate": "2024-01-02",
+            "updatedDate": "2025-03-04",
+            "label_record_metadata": {
+                "source_record_id": "publisher-123",
+                "catalog_version": "7",
+                "product_status": "active",
+                "label_source_url": "https://example.test/label/123",
+                "lineage_key": "publisher:123",
+            },
+        }
+    )
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["source_name"] is None
+    assert record["field_statuses"]["source_name"] == "unavailable"
+    assert "unavailable:source_name" in record["metadata_issues"]
+    assert record["metadata_status"] == "partial"
+
+
+def test_label_record_derives_discontinued_only_from_non_default_source_evidence():
+    enriched = _omega_label_ledger_enriched()
+    enriched["offMarket"] = True
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["product_status"] == "discontinued"
+    assert record["field_statuses"]["product_status"] == "available"
+
+
+@pytest.mark.parametrize("source_type", ["external_manual", "EXTERNAL_MANUAL"])
+def test_external_manual_label_record_does_not_promote_local_slug_or_verification_time(
+    source_type,
+):
+    enriched = _omega_label_ledger_enriched()
+    enriched.update(
+        {
+            "source_type": source_type,
+            "dsld_id": "manual-magnesium-glycinate-200-mg",
+            "manual_product_provenance": {
+                "label_verified_at": "2026-07-19T12:00:00Z",
+            },
+        }
+    )
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["source_updated_date"] is None
+    assert record["source_record_id"] is None
+    assert record["lineage_key"] is None
+    assert record["field_statuses"]["source_record_id"] == "unavailable"
+    assert record["field_statuses"]["source_updated_date"] == "unavailable"
+    assert record["field_statuses"]["lineage_key"] == "unavailable"
+    assert record["metadata_status"] == "partial"
+
+
+@pytest.mark.parametrize(
+    ("field_name", "value", "message"),
+    [
+        ("entryDate", "newest-label", "source_date"),
+        ("updatedDate", "recent", "source_updated_date"),
+        ("label_source_url", "javascript:alert(1)", "label_source_url"),
+    ],
+)
+def test_label_record_malformed_metadata_fails_closed(field_name, value, message):
+    enriched = _omega_label_ledger_enriched()
+    if field_name == "label_source_url":
+        enriched["label_record_metadata"] = {field_name: value}
+    else:
+        enriched[field_name] = value
+
+    with pytest.raises(ValueError, match=message):
+        build_detail_blob(enriched, make_scored())
+
+
+def test_formula_history_requires_explicit_matching_lineage_and_real_snapshots():
+    enriched = _omega_label_ledger_enriched()
+    older_ledger = _copy_json(enriched["display_ingredients"])
+    older_ledger[2]["exact_dose_text"] = "300 mg"
+    undated_ledger = _copy_json(enriched["display_ingredients"])
+    undated_ledger[3]["exact_dose_text"] = "200 mg"
+    enriched["label_record_snapshots"] = [
+        {
+            "snapshot_id": "dsld-999-v5",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "catalog_version": "5",
+            "source_date": "2023-05-06",
+            "display_ingredients": older_ledger,
+        },
+        {
+            "snapshot_id": "formula-2024-07-08",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "catalog_version": "6",
+            "display_ingredients": undated_ledger,
+        },
+        {
+            "snapshot_id": "different-record",
+            "source_record_id": "OTHER",
+            "lineage_key": "dsld:OTHER",
+            "source_date": "2022-01-01",
+            "display_ingredients": older_ledger,
+        },
+        {
+            "snapshot_id": "same-lineage-wrong-source-record",
+            "source_record_id": "OTHER",
+            "lineage_key": "dsld:999",
+            "source_date": "2022-02-02",
+            "display_ingredients": older_ledger,
+        },
+        {
+            "snapshot_id": "name-only-2021-01-01",
+            "source_record_id": "999",
+            "display_ingredients": older_ledger,
+        },
+    ]
+
+    record = build_detail_blob(enriched, make_scored())["label_record"]
+
+    assert record["history_status"] == "available"
+    assert [entry["snapshot_id"] for entry in record["formula_history"]] == [
+        "dsld-999-v5",
+        "formula-2024-07-08",
+    ]
+    assert record["formula_history"][0]["source_date"] == "2023-05-06"
+    assert record["formula_history"][1]["source_date"] is None
+    assert record["formula_history"][1]["source_updated_date"] is None
+    assert all(
+        entry["lineage_key"] == "dsld:999"
+        for entry in record["formula_history"]
+    )
+    assert all(
+        len(entry["formula_fingerprint"]) == 64
+        for entry in record["formula_history"]
+    )
+
+
+def test_malformed_formula_history_container_fails_closed():
+    enriched = _omega_label_ledger_enriched()
+    enriched["label_record_snapshots"] = {
+        "formula-2024": {"display_ingredients": enriched["display_ingredients"]}
+    }
+
+    with pytest.raises(ValueError, match="label_record_snapshots"):
+        build_detail_blob(enriched, make_scored())
+
+
+def test_duplicate_formula_history_snapshot_id_fails_closed():
+    enriched = _omega_label_ledger_enriched()
+    ledger = _copy_json(enriched["display_ingredients"])
+    enriched["label_record_snapshots"] = [
+        {
+            "snapshot_id": "dsld-999-v1",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "display_ingredients": ledger,
+        },
+        {
+            "snapshot_id": "dsld-999-v1",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "display_ingredients": ledger,
+        },
+    ]
+
+    with pytest.raises(ValueError, match="duplicate snapshot_id"):
+        build_detail_blob(enriched, make_scored())
+
+
+def test_formula_history_rejects_undocumented_snapshot_product_status():
+    enriched = _omega_label_ledger_enriched()
+    enriched["label_record_snapshots"] = [
+        {
+            "snapshot_id": "dsld-999-v1",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "product_status": "ACTIVE-ish",
+            "display_ingredients": _copy_json(enriched["display_ingredients"]),
+        }
+    ]
+
+    with pytest.raises(ValueError, match="product_status"):
+        build_detail_blob(enriched, make_scored())
+
+
+def test_formula_history_order_is_deterministic_from_explicit_dates_and_snapshot_id():
+    enriched = _omega_label_ledger_enriched()
+    ledger = _copy_json(enriched["display_ingredients"])
+    snapshots = [
+        {
+            "snapshot_id": "dsld-999-v2",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "source_date": "2024-01-02",
+            "display_ingredients": ledger,
+        },
+        {
+            "snapshot_id": "dsld-999-v1",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "source_date": "2024-01-01",
+            "display_ingredients": ledger,
+        },
+        {
+            "snapshot_id": "undated",
+            "source_record_id": "999",
+            "lineage_key": "dsld:999",
+            "display_ingredients": ledger,
+        },
+    ]
+    enriched["label_record_snapshots"] = snapshots
+    first = build_detail_blob(enriched, make_scored())["label_record"][
+        "formula_history"
+    ]
+    enriched["label_record_snapshots"] = list(reversed(snapshots))
+    second = build_detail_blob(enriched, make_scored())["label_record"][
+        "formula_history"
+    ]
+
+    assert first == second
+    assert [entry["snapshot_id"] for entry in first] == [
+        "dsld-999-v1",
+        "dsld-999-v2",
+        "undated",
+    ]
+    assert len({entry["formula_fingerprint"] for entry in first}) == 1

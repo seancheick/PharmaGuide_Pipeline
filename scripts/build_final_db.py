@@ -66,6 +66,7 @@ from identity.interaction import (
 )
 from scoring_input_contract import get_scoring_ingredients
 from identity_integrity import is_identity_scoreable
+from label_record_contract import build_label_record_contract
 from scoring_v4.modules.fiber_digestive_helpers import (
     fiber_rows as _fiber_goal_rows,
     has_fiber_context as _has_fiber_goal_context,
@@ -305,6 +306,29 @@ def _label_form_is_iqm_alias(label_form: str, ingredient: Dict[str, Any], match:
     return False
 
 
+def _label_form_repeats_identity(
+    label_form: str, ingredient: Dict[str, Any], match: Dict[str, Any]
+) -> bool:
+    """Return True when a supposed form is only the row identity repeated."""
+    label_key = _form_alias_key(label_form)
+    if not label_key:
+        return False
+    identity_values = (
+        ingredient.get("name"),
+        ingredient.get("raw_source_text"),
+        ingredient.get("label_display_name"),
+        ingredient.get("display_name"),
+        ingredient.get("display_label"),
+        match.get("label_display_name"),
+        match.get("source_label_name"),
+    )
+    return any(
+        label_key == _form_alias_key(value)
+        for value in identity_values
+        if value
+    )
+
+
 def _compute_form_contract(
     ingredient: Dict[str, Any], match: Dict[str, Any]
 ) -> Dict[str, Any]:
@@ -327,10 +351,19 @@ def _compute_form_contract(
     # display form wins for resolved rows, so "as Ethyl Esters" survives instead
     # of collapsing to a bare "Ethyl Esters" reconstruction.
     label_display_form = safe_str(match.get("label_display_form"))
-    if label_display_form and is_identity_scoreable(safe_str(match.get("identity_disposition"))):
+    if (
+        label_display_form
+        and is_identity_scoreable(safe_str(match.get("identity_disposition")))
+        and not _label_form_repeats_identity(label_display_form, ingredient, match)
+    ):
         label_form = label_display_form
+    if label_form and _label_form_repeats_identity(label_form, ingredient, match):
+        label_form = ""
     matched = safe_str(match.get("matched_form") or ingredient.get("matched_form"))
-    matched_is_real = not _is_placeholder_form(matched)
+    matched_is_real = (
+        not _is_placeholder_form(matched)
+        and not _label_form_repeats_identity(matched, ingredient, match)
+    )
 
     if label_form:
         return {
@@ -3501,6 +3534,527 @@ def _suppress_zero_dose_duplicate_active_rows(
     ]
 
 
+def _ledger_fingerprint(row: Dict[str, Any]) -> str:
+    payload = "|".join(
+        (
+            safe_str(row.get("raw_source_path")),
+            safe_str(row.get("label_display_name")).casefold(),
+            safe_str(row.get("exact_dose_text")).casefold(),
+            safe_str(row.get("parent_label")).casefold(),
+        )
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _assert_unique_upstream_label_source_paths(enriched: Dict[str, Any]) -> None:
+    """Fail closed on producer duplicates before any final reconciliation."""
+    for collection_name in (
+        "display_ingredients",
+        "label_ledger_omissions",
+        "label_source_rows",
+    ):
+        seen_paths: set[str] = set()
+        for row in safe_list(enriched.get(collection_name)):
+            if not isinstance(row, dict):
+                continue
+            source_path = safe_str(row.get("raw_source_path"))
+            if not source_path:
+                continue
+            if source_path in seen_paths:
+                raise ValueError(
+                    f"duplicate upstream {collection_name} raw_source_path: "
+                    f"{source_path}"
+                )
+            seen_paths.add(source_path)
+
+
+def _ledger_form_state(
+    source_row: Dict[str, Any], analysis_row: Optional[Dict[str, Any]]
+) -> str:
+    # A matched analysis row is authoritative for score-included identity.
+    # Cleaner display rows are provisional and may legitimately still say
+    # ``clean`` when enrichment later detects a conflict.
+    identity_state = safe_str(
+        (analysis_row or {}).get("identity_disposition")
+        or source_row.get("identity_integrity_state")
+    )
+    if identity_state in {
+        "identity_conflict",
+        "missing_display_label",
+    }:
+        return "needs_review"
+
+    label_form = _ledger_label_form(source_row, analysis_row)
+    if label_form and analysis_row is not None:
+        return (
+            "assessed"
+            if safe_str(analysis_row.get("form_match_status")) == "mapped"
+            else "listed_not_assessed"
+        )
+    explicit = safe_str(source_row.get("form_display_state"))
+    incompatible_explicit = (
+        bool(label_form) and explicit == "not_disclosed"
+    ) or (
+        not label_form
+        and explicit in {"assessed", "listed_not_assessed"}
+    ) or (
+        not label_form
+        and analysis_row is not None
+        and explicit == "not_applicable"
+    )
+    if explicit and not incompatible_explicit:
+        return explicit
+    if safe_str(source_row.get("display_disposition")) in {
+        "label_context",
+        "other_ingredient",
+    }:
+        return "not_applicable"
+    if label_form:
+        return (
+            "assessed"
+            if safe_str((analysis_row or {}).get("form_match_status")) == "mapped"
+            else "listed_not_assessed"
+        )
+    return "not_disclosed" if analysis_row is not None else "not_applicable"
+
+
+def _ledger_label_form(
+    source_row: Dict[str, Any], analysis_row: Optional[Dict[str, Any]]
+) -> Optional[str]:
+    label_form = safe_str(
+        source_row.get("label_display_form")
+        or (analysis_row or {}).get("label_display_form")
+        or (analysis_row or {}).get("source_label_form")
+    )
+    if not label_form:
+        return None
+    identity_row = dict(source_row)
+    identity_row.setdefault("name", source_row.get("label_display_name"))
+    if _label_form_repeats_identity(label_form, identity_row, analysis_row or {}):
+        return None
+    return label_form
+
+
+def _build_canonical_label_ledger(
+    display_rows: List[Any],
+    ingredients: List[Dict[str, Any]],
+    inactive_ingredients: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Merge source-label rows with interpretation while keeping analysis separate."""
+    source_rows = [dict(row) for row in display_rows if isinstance(row, dict)]
+    if not source_rows:
+        source_rows = [
+            {
+                "raw_source_text": row.get("raw_source_text"),
+                "display_name": row.get("display_label") or row.get("name"),
+                "label_display_name": row.get("display_label") or row.get("name"),
+                "raw_source_path": (
+                    row.get("raw_source_path") or f"activeIngredients[{index}]"
+                ),
+                "label_order": index,
+                "nested_depth": row.get("nested_depth", 0),
+                "parent_label": row.get("parent_label"),
+                "exact_dose_text": row.get("display_dose_label"),
+                "source_section": "activeIngredients",
+                "display_type": "mapped_ingredient",
+                "resolution_type": "direct_mapped",
+                "score_included": True,
+                "is_label_context": False,
+                "display_disposition": "scored",
+            }
+            for index, row in enumerate(ingredients)
+        ]
+        inactive_offset = len(source_rows)
+        source_rows.extend(
+            {
+                "raw_source_text": row.get("raw_source_text"),
+                "display_name": row.get("display_label") or row.get("name"),
+                "label_display_name": row.get("display_label") or row.get("name"),
+                "raw_source_path": (
+                    row.get("raw_source_path") or f"inactiveIngredients[{index}]"
+                ),
+                "label_order": inactive_offset + index,
+                "nested_depth": 0,
+                "parent_label": None,
+                "exact_dose_text": "",
+                "source_section": "inactiveIngredients",
+                "display_type": "inactive_ingredient",
+                "resolution_type": "inactive_mapped",
+                "score_included": False,
+                "is_label_context": False,
+                "display_disposition": "other_ingredient",
+            }
+            for index, row in enumerate(inactive_ingredients)
+        )
+
+    active_used: set[int] = set()
+    inactive_used: set[int] = set()
+
+    def take_match(
+        source: Dict[str, Any],
+        candidates: List[Dict[str, Any]],
+        used: set[int],
+    ) -> Optional[Dict[str, Any]]:
+        source_path = safe_str(source.get("raw_source_path"))
+        raw_text = safe_str(
+            source.get("raw_source_text") or source.get("label_display_name")
+        ).casefold()
+        if source_path:
+            for index, candidate in enumerate(candidates):
+                if index not in used and safe_str(candidate.get("raw_source_path")) == source_path:
+                    used.add(index)
+                    return candidate
+        if raw_text:
+            for index, candidate in enumerate(candidates):
+                candidate_text = safe_str(
+                    candidate.get("raw_source_text")
+                    or candidate.get("display_label")
+                    or candidate.get("name")
+                ).casefold()
+                if index not in used and candidate_text == raw_text:
+                    used.add(index)
+                    return candidate
+        return None
+
+    ledger: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    for source_index, source in enumerate(source_rows):
+        source_section = safe_str(source.get("source_section"))
+        is_other = (
+            source_section in {"inactive", "inactiveIngredients"}
+            or safe_str(source.get("display_disposition")) == "other_ingredient"
+            or safe_str(source.get("display_type")) == "inactive_ingredient"
+        )
+        analysis = take_match(
+            source,
+            inactive_ingredients if is_other else ingredients,
+            inactive_used if is_other else active_used,
+        )
+        score_included = (
+            bool(source.get("score_included"))
+            if "score_included" in source
+            else bool(analysis is not None and not is_other)
+        )
+        disposition = safe_str(source.get("display_disposition")) or (
+            "scored"
+            if score_included
+            else "other_ingredient"
+            if is_other
+            else "label_context"
+        )
+        label_name = safe_str(
+            source.get("label_display_name")
+            or source.get("display_name")
+            or source.get("raw_source_text")
+            or (analysis or {}).get("display_label")
+        )
+        identity_state = safe_str(
+            (analysis or {}).get("identity_disposition")
+            if score_included and analysis is not None
+            else None
+        ) or safe_str(source.get("identity_integrity_state")) or (
+            "clean" if analysis is not None and score_included else "taxonomy_only"
+        )
+        row = dict(source)
+        row.update({
+            "label_display_name": label_name,
+            "label_display_form": _ledger_label_form(source, analysis),
+            "exact_dose_text": safe_str(
+                source.get("exact_dose_text") or (analysis or {}).get("display_dose_label")
+            ),
+            "label_order": safe_float(source.get("label_order"), source_index),
+            "nested_depth": int(safe_float(source.get("nested_depth"), 0) or 0),
+            "parent_label": source.get("parent_label"),
+            "raw_source_path": source.get("raw_source_path"),
+            "score_included": score_included,
+            "is_label_context": not score_included and not is_other,
+            "display_disposition": disposition,
+            "identity_integrity_state": identity_state,
+            "form_display_state": _ledger_form_state(source, analysis if score_included else None),
+            "canonical_id": source.get("canonical_id") or (analysis or {}).get("canonical_id"),
+            "analysis": (
+                {
+                    "canonical_id": analysis.get("canonical_id"),
+                    "display_label": analysis.get("display_label"),
+                    "form_display_state": _ledger_form_state(source, analysis),
+                    "identity_integrity_state": identity_state,
+                    "display_form_label": analysis.get("display_form_label"),
+                }
+                if score_included and analysis is not None
+                else None
+            ),
+        })
+        fingerprint = safe_str(source.get("ledger_fingerprint")) or _ledger_fingerprint(row)
+        if fingerprint in seen:
+            continue
+        seen.add(fingerprint)
+        row["ledger_fingerprint"] = fingerprint
+        ledger.append(row)
+
+    ledger.sort(key=lambda row: safe_float(row.get("label_order"), float("inf")))
+
+    removed: set[int] = set()
+    for parent_index, parent in enumerate(ledger):
+        parent_name = safe_str(parent.get("label_display_name")).casefold()
+        parent_dose = safe_str(parent.get("exact_dose_text")).casefold()
+        if "folate" not in parent_name or "dfe" not in parent_dose:
+            continue
+        for child_index, child in enumerate(ledger):
+            if child_index == parent_index or child_index in removed:
+                continue
+            child_name = safe_str(child.get("label_display_name")).casefold()
+            if safe_str(child.get("parent_label")).casefold() != parent_name:
+                continue
+            if not any(token in child_name for token in ("folic acid", "mthf", "methylfolate")):
+                continue
+            parent["parenthetical_dose_text"] = " ".join(
+                part for part in (safe_str(child.get("exact_dose_text")), child_name) if part
+            )
+            parent.setdefault("folded_label_components", []).append({
+                "label_display_name": child.get("label_display_name"),
+                "raw_source_text": child.get("raw_source_text"),
+                "raw_source_path": child.get("raw_source_path"),
+                "source_section": child.get("source_section"),
+                "exact_dose_text": child.get("exact_dose_text"),
+            })
+            if child.get("score_included"):
+                parent["score_included"] = True
+                parent["is_label_context"] = False
+                parent["display_disposition"] = "scored"
+                parent["score_participation_source"] = child.get("label_display_name")
+                adopted_analysis = dict(child.get("analysis") or {})
+                parent["analysis"] = adopted_analysis or None
+                parent["canonical_id"] = child.get("canonical_id") or parent.get("canonical_id")
+                parent["identity_integrity_state"] = safe_str(
+                    child.get("identity_integrity_state")
+                    or adopted_analysis.get("identity_integrity_state")
+                ) or "clean"
+                parent["form_display_state"] = _ledger_form_state(
+                    parent,
+                    adopted_analysis or None,
+                )
+                if adopted_analysis:
+                    adopted_analysis["identity_integrity_state"] = parent[
+                        "identity_integrity_state"
+                    ]
+                    adopted_analysis["form_display_state"] = parent[
+                        "form_display_state"
+                    ]
+            removed.add(child_index)
+            break
+    if removed:
+        ledger = [row for index, row in enumerate(ledger) if index not in removed]
+    for index, row in enumerate(ledger):
+        row["label_order"] = index
+    return ledger
+
+
+def _final_label_ledger_omissions(
+    enriched: Dict[str, Any],
+    display_rows: List[Dict[str, Any]],
+) -> List[Dict[str, str]]:
+    """Normalize omissions and account for source lines folded into one row."""
+    omissions: List[Dict[str, str]] = []
+    seen_paths: set[str] = set()
+
+    def add(row: Dict[str, Any], reason: str) -> None:
+        source_path = safe_str(row.get("raw_source_path"))
+        if not source_path or source_path in seen_paths:
+            return
+        raw_source_value = row.get("raw_source_text")
+        omissions.append({
+            "raw_source_path": source_path,
+            "raw_source_text": (
+                "" if raw_source_value is None else str(raw_source_value)
+            ),
+            "omission_reason": reason,
+        })
+        seen_paths.add(source_path)
+
+    for omission in safe_list(enriched.get("label_ledger_omissions")):
+        if isinstance(omission, dict):
+            add(omission, safe_str(omission.get("omission_reason")))
+    for display_row in display_rows:
+        for folded in safe_list(display_row.get("folded_label_components")):
+            if isinstance(folded, dict):
+                add(folded, "duplicate_source_line")
+    return omissions
+
+
+def _final_label_source_rows(
+    enriched: Dict[str, Any],
+    display_rows: List[Dict[str, Any]],
+    omissions: List[Dict[str, Any]],
+) -> List[Dict[str, str]]:
+    """Copy the canonical source inventory, filling only missing stable paths."""
+    source_rows: List[Dict[str, str]] = []
+    seen_paths: set[str] = set()
+
+    def add(row: Dict[str, Any]) -> None:
+        source_path = safe_str(row.get("raw_source_path"))
+        if not source_path or source_path in seen_paths:
+            return
+        section = safe_str(row.get("source_section"))
+        if not section:
+            section = (
+                "inactiveIngredients"
+                if source_path.startswith(("inactiveIngredients", "otheringredients"))
+                else "activeIngredients"
+            )
+        raw_source_value = row.get("raw_source_text")
+        source_rows.append({
+            "raw_source_path": source_path,
+            "raw_source_text": (
+                "" if raw_source_value is None else str(raw_source_value)
+            ),
+            "source_section": section,
+        })
+        seen_paths.add(source_path)
+
+    for source_row in safe_list(enriched.get("label_source_rows")):
+        if isinstance(source_row, dict):
+            add(source_row)
+    for display_row in display_rows:
+        if isinstance(display_row, dict):
+            add(display_row)
+        for folded in safe_list(display_row.get("folded_label_components")):
+            if isinstance(folded, dict):
+                add(folded)
+    for omission in omissions:
+        add(omission)
+    return source_rows
+
+
+def _infer_final_label_source_structure(
+    display_rows: List[Dict[str, Any]],
+    meaningful_source_rows: int,
+) -> str:
+    if meaningful_source_rows == 0:
+        return "empty_panel"
+    if any(
+        row.get("folded_label_components")
+        and "folate" in safe_str(row.get("label_display_name")).casefold()
+        for row in display_rows
+    ):
+        return "folate_dfe_equivalent"
+    active_rows = [
+        row
+        for row in display_rows
+        if safe_str(row.get("source_section")) != "inactiveIngredients"
+    ]
+    if not active_rows:
+        return "other_ingredients"
+    if any(
+        (
+            "omega" in safe_str(row.get("label_display_name")).casefold()
+            or safe_str(row.get("label_display_name")).casefold() in {"epa", "dha"}
+        )
+        and int(safe_float(row.get("nested_depth"), 0) or 0) > 0
+        for row in active_rows
+    ):
+        return "omega_parent_component"
+    if any(
+        "mineral" in safe_str(row.get("raw_category")).casefold()
+        and bool(row.get("label_display_form"))
+        and bool(row.get("folded_label_components") or row.get("children"))
+        for row in active_rows
+    ):
+        return "elemental_mineral_source_compound"
+    if any(
+        safe_str(row.get("display_type")) in {
+            "structural_container",
+            "summary_wrapper",
+        }
+        or "blend" in safe_str(row.get("ingredient_group")).casefold()
+        for row in active_rows
+    ):
+        return "proprietary_blend"
+    if any(
+        "probiotic" in safe_str(row.get("raw_category")).casefold()
+        or "probiotic" in safe_str(row.get("ingredient_group")).casefold()
+        or "cfu" in safe_str(row.get("exact_dose_text")).casefold()
+        for row in active_rows
+    ):
+        return "probiotic_strain_cfu"
+    if any(
+        any(
+            token in safe_str(row.get("raw_category")).casefold()
+            for token in ("botanical", "plant part", "extract")
+        )
+        for row in active_rows
+    ):
+        return "botanical_plant_part_extract"
+    if any(
+        safe_str(row.get("raw_category")).casefold() in {"vitamin", "mineral"}
+        for row in active_rows
+    ):
+        return "vitamin_mineral_panel"
+    return "flat_supplement_facts"
+
+
+def _final_label_ledger_audit(
+    enriched: Dict[str, Any],
+    display_rows: List[Dict[str, Any]],
+    source_rows: List[Dict[str, Any]],
+    omissions: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    """Recompute completeness from the final ledger; never trust stale counts."""
+    omission_paths = {
+        safe_str(row.get("raw_source_path"))
+        for row in omissions
+        if safe_str(row.get("raw_source_path"))
+    }
+    meaningful_source_rows = sum(
+        1
+        for row in source_rows
+        if safe_str(row.get("raw_source_path")) not in omission_paths
+    )
+    displayed_rows = len(display_rows)
+    upstream_audit = enriched.get("label_ledger_audit")
+    upstream_audit = upstream_audit if isinstance(upstream_audit, dict) else {}
+    unsupported = (
+        upstream_audit.get("support_status") == "unsupported"
+        or any(
+            row.get("omission_reason") == "unsupported_source_structure"
+            for row in omissions
+        )
+        or any(not safe_str(row.get("raw_source_path")) for row in display_rows)
+    )
+    if unsupported:
+        return {
+            "support_status": "unsupported",
+            "source_structure": "unsupported_source_structure",
+            "meaningful_source_rows": meaningful_source_rows,
+            "displayed_rows": displayed_rows,
+            "omitted_rows": len(omissions),
+            "completeness_percentage": None,
+            "completeness_status": "unavailable",
+        }
+
+    source_structure = safe_str(upstream_audit.get("source_structure"))
+    if not source_structure or source_structure == "unsupported_source_structure":
+        source_structure = _infer_final_label_source_structure(
+            display_rows,
+            meaningful_source_rows,
+        )
+    completeness_percentage = (
+        round(displayed_rows / meaningful_source_rows * 100.0, 2)
+        if meaningful_source_rows
+        else 100.0
+    )
+    return {
+        "support_status": "supported",
+        "source_structure": source_structure,
+        "meaningful_source_rows": meaningful_source_rows,
+        "displayed_rows": displayed_rows,
+        "omitted_rows": len(omissions),
+        "completeness_percentage": completeness_percentage,
+        "completeness_status": (
+            "complete" if completeness_percentage == 100.0 else "incomplete"
+        ),
+    }
+
+
 def _validate_banned_preflight_propagation(
     blob: Dict[str, Any], enriched: Dict[str, Any], dsld_id: str
 ) -> None:
@@ -5126,6 +5680,32 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "safety_warning":          res.safety_warning,
         })
 
+    # Canonical display source of truth. This is assembled only after the
+    # scored active and inactive adapters exist, and never flows back into
+    # dose, safety, warning, or scoring calculations below.
+    _assert_unique_upstream_label_source_paths(enriched)
+    display_ingredients = _build_canonical_label_ledger(
+        safe_list(enriched.get("display_ingredients")),
+        ingredients,
+        inactive,
+    )
+    label_ledger_omissions = _final_label_ledger_omissions(
+        enriched,
+        display_ingredients,
+    )
+    label_source_rows = _final_label_source_rows(
+        enriched,
+        display_ingredients,
+        label_ledger_omissions,
+    )
+    label_ledger_audit = _final_label_ledger_audit(
+        enriched,
+        display_ingredients,
+        label_source_rows,
+        label_ledger_omissions,
+    )
+    label_record = build_label_record_contract(enriched, display_ingredients)
+
     # Warnings
     #
     # Every warning now carries a `display_mode_default` enum that tells
@@ -5659,6 +6239,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "product_role_evidence": role_context["role_evidence"],
         "blob_version": 1,
         "ingredients": ingredients,
+        "display_ingredients": display_ingredients,
+        "label_ledger_omissions": label_ledger_omissions,
+        "label_source_rows": label_source_rows,
+        "label_ledger_audit": label_ledger_audit,
+        "label_record": label_record,
         "inactive_ingredients": inactive,
         "warnings": warnings,
         # Phase 8: structured per-allergen array for client-side

@@ -90,6 +90,43 @@ def _product(
     return product
 
 
+def _vitamin_d_product(
+    quantity: float,
+    unit: str,
+    *,
+    min_clinical_dose: float | None = None,
+) -> dict:
+    evidence_dose = {}
+    if min_clinical_dose is not None:
+        evidence_dose = {
+            "min_clinical_dose": min_clinical_dose,
+            "dose_unit": "mcg",
+        }
+    return _product(
+        ingredients=[
+            _ingredient(
+                name="Vitamin D3",
+                standard_name="Vitamin D",
+                canonical_id="vitamin_d",
+                quantity=quantity,
+                unit=unit,
+            )
+        ],
+        matches=[
+            _match(
+                id="INGR_VITAMIN_D3",
+                ingredient="Vitamin D3",
+                standard_name="Vitamin D3",
+                study_type="systematic_review_meta",
+                evidence_level="ingredient-human",
+                effect_direction="positive_strong",
+                total_enrollment=576,
+                **evidence_dose,
+            )
+        ],
+    )
+
+
 def test_evidence_payload_shape_and_phase() -> None:
     from scoring_v4.modules.generic_evidence import score_evidence
 
@@ -598,6 +635,139 @@ def test_folate_mcg_dfe_gets_nutrition_authority_floor() -> None:
 
     assert payload["metadata"]["nutrition_authority_canonical"] == "vitamin_b9_folate"
     assert payload["score"] == 10.0
+
+
+def test_vitamin_d_iu_resolves_same_ingredient_evidence_as_equivalent_mcg() -> None:
+    """Vitamin D evidence matching treats 1,000 IU as the supported 25 mcg.
+
+    This reconciles label-unit variants only. Both products use the same
+    ingredient-human evidence row; neither claims exact-product evidence.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    def score(quantity: float, unit: str) -> dict:
+        return score_evidence(
+            _vitamin_d_product(quantity, unit),
+            apply_primary_floor=True,
+        )
+
+    iu_payload = score(1000, "IU")
+    mcg_payload = score(25, "mcg")
+
+    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["components"] == mcg_payload["components"]
+    assert iu_payload["metadata"]["primary_evidence_floor_canonical"] == "vitamin d3"
+    assert iu_payload["metadata"]["recovered_matches"] == []
+
+
+def test_vitamin_d_iu_without_clinical_match_gets_no_evidence_sentinel() -> None:
+    """IU normalization cannot create evidence when no study row exists."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(
+            ingredients=[
+                _ingredient(
+                    name="Vitamin D3",
+                    standard_name="Vitamin D",
+                    canonical_id="vitamin_d",
+                    quantity=1000,
+                    unit="IU",
+                )
+            ],
+            matches=[],
+        ),
+        apply_primary_floor=True,
+    )
+
+    assert payload["score"] == 0.0
+    assert "primary_evidence_floor" not in payload["components"]
+    assert payload["metadata"]["nutrition_authority_canonical"] is None
+    assert payload["metadata"]["recovered_matches"] == []
+
+
+def test_vitamin_d_iu_and_mcg_apply_same_subclinical_dose_guard() -> None:
+    """1,000 IU and 25 mcg are both below a 50 mcg evidence threshold."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    def score(quantity: float, unit: str) -> dict:
+        return score_evidence(
+            _vitamin_d_product(quantity, unit, min_clinical_dose=50),
+            apply_primary_floor=True,
+        )
+
+    iu_payload = score(1000, "IU")
+    mcg_payload = score(25, "mcg")
+
+    assert iu_payload["score"] == 1.485
+    # This independent mass-backed nutrition-authority floor is intentionally
+    # unavailable to the IU-only row; IU conversion remains evidence-match-only.
+    assert mcg_payload["score"] == 10.0
+    assert iu_payload["metadata"]["flags"] == mcg_payload["metadata"]["flags"]
+    assert iu_payload["metadata"]["flags"] == ["SUB_CLINICAL_DOSE_DETECTED"]
+    assert (
+        iu_payload["metadata"]["sub_clinical_canonicals"]
+        == mcg_payload["metadata"]["sub_clinical_canonicals"]
+    )
+    assert iu_payload["metadata"]["sub_clinical_canonicals"] == ["vitamin d3"]
+    assert "primary_evidence_floor" not in iu_payload["components"]
+
+
+def test_vitamin_d_iu_and_mcg_both_pass_at_clinical_threshold() -> None:
+    """2,000 IU and 50 mcg both satisfy a 50 mcg evidence threshold."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    def score(quantity: float, unit: str) -> dict:
+        return score_evidence(
+            _vitamin_d_product(quantity, unit, min_clinical_dose=50),
+            apply_primary_floor=True,
+        )
+
+    iu_payload = score(2000, "IU")
+    mcg_payload = score(50, "mcg")
+
+    assert iu_payload["score"] == mcg_payload["score"] == 18.0
+    assert iu_payload["metadata"]["flags"] == []
+    assert iu_payload["metadata"]["sub_clinical_canonicals"] == []
+    assert iu_payload["components"]["primary_evidence_floor"] == 18.0
+
+
+def test_non_vitamin_d_iu_is_not_given_a_generic_primary_sentinel() -> None:
+    """IU conversion is nutrient-specific; arbitrary IU rows stay unresolved."""
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(
+            ingredients=[
+                _ingredient(
+                    name="Vitamin A",
+                    standard_name="Vitamin A",
+                    canonical_id="vitamin_a",
+                    quantity=1000,
+                    unit="IU",
+                )
+            ],
+            matches=[
+                _match(
+                    id="INGR_VITAMIN_A_TEST",
+                    ingredient="Vitamin A",
+                    standard_name="Vitamin A",
+                    study_type="systematic_review_meta",
+                    evidence_level="ingredient-human",
+                    effect_direction="positive_strong",
+                    total_enrollment=576,
+                    min_clinical_dose=50,
+                    dose_unit="mcg",
+                )
+            ],
+        ),
+        apply_primary_floor=True,
+    )
+
+    assert payload["score"] == 5.94
+    assert "primary_evidence_floor" not in payload["components"]
+    assert payload["metadata"]["nutrition_authority_canonical"] is None
+    assert payload["metadata"]["flags"] == []
 
 
 def test_hidden_coactive_does_not_recover_generic_ingredient_evidence() -> None:

@@ -179,6 +179,14 @@ _EFFECT_FLOOR_MULTIPLIER = {
 PRIMARY_FLOOR_ENABLED = True
 PRIMARY_MASS_FRACTION = _EM["primary_mass_fraction"]
 
+# NIH ODS/FNB conversion for Vitamin D label quantities: 1 mcg = 40 IU.
+# This is intentionally scoped to evidence matching. Other IU nutrients have
+# different, sometimes form-dependent conversions and must remain unresolved.
+_VITAMIN_D_IU_PER_MCG = 40.0
+_VITAMIN_D_EVIDENCE_KEYS = frozenset(
+    {"vitamin d", "vitamin d3", "cholecalciferol"}
+)
+
 _RECOVERED_COLLAGEN_PEPTIDES_MATCH = {
     "id": "RECOVERED_COLLAGEN_PEPTIDES_V1",
     "ingredient": "collagen",
@@ -832,7 +840,7 @@ def _active_mass_index(product: Dict[str, Any]) -> Tuple[Dict[str, float], float
     for row in get_active_ingredients(product):
         if not isinstance(row, dict):
             continue
-        mass = _mass_mg(row) or 0.0
+        mass = _evidence_matching_mass_mg(row) or 0.0
         if mass <= 0:
             continue
         max_mass = max(max_mass, mass)
@@ -901,6 +909,25 @@ def _mass_dominant_essential_canonical(product: Dict[str, Any]) -> Optional[str]
             best_cid = str(row.get("canonical_id") or "").strip().lower()
     if best_mass > 0 and best_cid in _DRI_ESSENTIAL_NUTRIENTS:
         return best_cid
+    return None
+
+
+def _evidence_matching_mass_mg(row: Dict[str, Any]) -> Optional[float]:
+    """Comparable mass used only to link label doses to ingredient evidence."""
+    mass = _mass_mg(row)
+    if mass is not None:
+        return mass
+
+    canonical_id = str(row.get("canonical_id") or "").strip().lower()
+    unit = _norm_text(row.get("unit_normalized") or row.get("unit")).replace(" ", "")
+    quantity = _as_float(row.get("quantity"), None)
+    if (
+        canonical_id == "vitamin_d"
+        and unit == "iu"
+        and quantity is not None
+        and quantity > 0
+    ):
+        return _convert_vitamin_d_evidence_unit(quantity, unit, "mg")
     return None
 
 
@@ -1043,7 +1070,33 @@ def _converted_product_dose(
     if product_dose is None:
         return None, lookup_key
     dose_unit = _norm_text(entry.get("dose_unit") or "mg")
-    return _convert_unit(product_dose[0], product_dose[1], dose_unit), lookup_key
+    converted = _convert_unit(product_dose[0], product_dose[1], dose_unit)
+    if converted is None and _is_vitamin_d_evidence_entry(entry):
+        converted = _convert_vitamin_d_evidence_unit(
+            product_dose[0], product_dose[1], dose_unit
+        )
+    return converted, lookup_key
+
+
+def _is_vitamin_d_evidence_entry(entry: Dict[str, Any]) -> bool:
+    return bool(_entry_identity_keys(entry) & _VITAMIN_D_EVIDENCE_KEYS)
+
+
+def _convert_vitamin_d_evidence_unit(
+    quantity: float,
+    from_unit: str,
+    to_unit: str,
+) -> Optional[float]:
+    """Convert Vitamin D IU only for matching an existing evidence row."""
+    from_u = _norm_text(from_unit)
+    to_u = _norm_text(to_unit)
+    if from_u == "iu":
+        return _convert_unit(quantity / _VITAMIN_D_IU_PER_MCG, "mcg", to_u)
+    if to_u == "iu":
+        quantity_mcg = _convert_unit(quantity, from_u, "mcg")
+        if quantity_mcg is not None:
+            return quantity_mcg * _VITAMIN_D_IU_PER_MCG
+    return None
 
 
 def _convert_unit(quantity: float, from_unit: str, to_unit: str) -> Optional[float]:

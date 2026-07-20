@@ -5,6 +5,7 @@ Improved ingredient mapping with fuzzy matching, better preprocessing, and expan
 """
 import re
 import json
+import hashlib
 import logging
 import string
 import os
@@ -4183,7 +4184,72 @@ class EnhancedDSLDNormalizer:
             return q, raw_ingredient.get("unit", "") or ""
         return None, ""
 
-    def _stamp_raw_source_paths(self, rows: List[Dict], base_path: str, depth: int = 0) -> None:
+    @staticmethod
+    def _format_label_quantity(value: Any) -> str:
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            return str(value).strip() if value is not None else ""
+        if number.is_integer():
+            return f"{int(number):,}"
+        return f"{number:g}"
+
+    def _exact_label_dose_text(self, row: Dict[str, Any]) -> str:
+        """Preserve an authored dose string, or deterministically format DSLD quantity."""
+        for key in ("exact_dose_text", "amountDisplay", "quantityDisplay", "displayAmount"):
+            value = row.get(key)
+            if isinstance(value, str) and value.strip():
+                return value.strip()
+
+        quantity = row.get("quantity")
+        if isinstance(quantity, list):
+            quantity = next((item for item in quantity if isinstance(item, dict)), None)
+        if isinstance(quantity, dict):
+            for key in ("display", "amountDisplay", "quantityDisplay"):
+                value = quantity.get(key)
+                if isinstance(value, str) and value.strip():
+                    return value.strip()
+            amount = quantity.get("quantity", quantity.get("amount", quantity.get("value")))
+            unit = quantity.get("unit") or row.get("unit")
+        else:
+            amount = quantity
+            unit = row.get("unit")
+        amount_text = self._format_label_quantity(amount)
+        unit_text = str(unit or "").strip()
+        if not amount_text or not unit_text or unit_text.lower() in {"np", "unspecified"}:
+            return ""
+        return f"{amount_text} {unit_text}"
+
+    @staticmethod
+    def _label_form_distinct_from_identity(form_text: Any, row: Dict[str, Any]) -> bool:
+        """Return True only for source form text distinct from the row identity."""
+        def normalize(value: Any) -> str:
+            return re.sub(
+                r"[^a-z0-9]+", " ", str(value or "").casefold()
+            ).strip()
+
+        form_key = normalize(form_text)
+        if not form_key:
+            return False
+        return all(
+            form_key != normalize(identity)
+            for identity in (
+                row.get("name"),
+                row.get("raw_source_text"),
+                row.get("standardName"),
+                row.get("standard_name"),
+            )
+            if identity
+        )
+
+    def _stamp_raw_source_paths(
+        self,
+        rows: List[Dict],
+        base_path: str,
+        depth: int = 0,
+        parent_label: Optional[str] = None,
+        parent_source_path: Optional[str] = None,
+    ) -> None:
         if not isinstance(rows, list):
             return
         for idx, row in enumerate(rows):
@@ -4192,12 +4258,52 @@ class EnhancedDSLDNormalizer:
             path = f"{base_path}[{idx}]"
             row.setdefault("raw_source_path", path)
             row.setdefault("_raw_nested_depth", depth)
+            original_raw_source_text = (
+                "" if row.get("name") is None else str(row.get("name"))
+            )
+            if not original_raw_source_text.strip():
+                self._queue_label_ledger_omission(
+                    row,
+                    omission_reason="empty_source_text",
+                )
+            if hasattr(self, "_display_source_rows"):
+                self._display_source_rows.append({
+                    "raw_source_text": str(row.get("name") or "").strip(),
+                    "label_display_name": str(row.get("name") or "").strip(),
+                    "raw_source_path": row.get("raw_source_path"),
+                    "source_section": (
+                        "inactiveIngredients"
+                        if self._source_path_is_inactive(row.get("raw_source_path"))
+                        else "activeIngredients"
+                    ),
+                    "label_order": len(self._display_source_rows),
+                    "source_order": row.get("order"),
+                    "nested_depth": depth,
+                    "parent_label": parent_label,
+                    "parent_source_path": parent_source_path,
+                    "exact_dose_text": self._exact_label_dose_text(row),
+                    "raw_category": row.get("category"),
+                    "ingredient_group": row.get("ingredientGroup"),
+                    "children": self._raw_child_names_for_display(row),
+                })
             nested = row.get("nestedRows")
             if isinstance(nested, list):
-                self._stamp_raw_source_paths(nested, f"{path}.nestedRows", depth + 1)
+                self._stamp_raw_source_paths(
+                    nested,
+                    f"{path}.nestedRows",
+                    depth + 1,
+                    parent_label=str(row.get("name") or "").strip() or parent_label,
+                    parent_source_path=path,
+                )
             forms = row.get("forms")
             if isinstance(forms, list):
-                self._stamp_raw_source_paths(forms, f"{path}.forms", depth + 1)
+                self._stamp_raw_source_paths(
+                    forms,
+                    f"{path}.forms",
+                    depth + 1,
+                    parent_label=str(row.get("name") or "").strip() or parent_label,
+                    parent_source_path=path,
+                )
 
     def _raw_child_names_for_display(self, row: Dict[str, Any]) -> List[str]:
         """Return direct child names from DSLD nestedRows/forms for display provenance."""
@@ -4216,6 +4322,90 @@ class EnhancedDSLDNormalizer:
     def _source_path_is_inactive(source_path: str) -> bool:
         source = str(source_path or "")
         return source.startswith("inactiveIngredients") or source.startswith("otheringredients")
+
+    def _record_unsupported_label_source(
+        self,
+        raw_source_path: str,
+        value: Any,
+        source_section: str,
+    ) -> None:
+        """Inventory a malformed label occurrence without attempting analysis."""
+        raw_source_text = (
+            str(value.get("name") or "")
+            if isinstance(value, dict)
+            else str(value or "")
+        )
+        source_row = {
+            "raw_source_path": raw_source_path,
+            "raw_source_text": raw_source_text,
+            "source_section": source_section,
+        }
+        self._display_source_rows.append(source_row)
+        self._queue_label_ledger_omission(
+            source_row,
+            omission_reason="unsupported_source_structure",
+        )
+
+    def _sanitize_label_source_container(
+        self,
+        value: Any,
+        base_path: str,
+        source_section: str,
+    ) -> List[Dict[str, Any]]:
+        """Keep supported row shapes and audit malformed nested containers."""
+        if value is None:
+            return []
+        if not isinstance(value, list):
+            self._record_unsupported_label_source(
+                base_path,
+                value,
+                source_section,
+            )
+            return []
+
+        def sanitize_row(row: Dict[str, Any], row_path: str) -> None:
+            for child_key in ("nestedRows", "forms"):
+                if child_key not in row or row.get(child_key) is None:
+                    continue
+                child_value = row.get(child_key)
+                child_base_path = f"{row_path}.{child_key}"
+                if not isinstance(child_value, list):
+                    self._record_unsupported_label_source(
+                        child_base_path,
+                        child_value,
+                        source_section,
+                    )
+                    row[child_key] = []
+                    continue
+                sanitized_children: List[Any] = []
+                for child_index, child in enumerate(child_value):
+                    child_path = f"{child_base_path}[{child_index}]"
+                    if isinstance(child, dict):
+                        sanitize_row(child, child_path)
+                        sanitized_children.append(child)
+                    elif child_key == "forms" and isinstance(child, str):
+                        sanitized_children.append(child)
+                    else:
+                        self._record_unsupported_label_source(
+                            child_path,
+                            child,
+                            source_section,
+                        )
+                row[child_key] = sanitized_children
+
+        rows: List[Dict[str, Any]] = []
+        for source_index, source_row in enumerate(value):
+            source_path = f"{base_path}[{source_index}]"
+            if not isinstance(source_row, dict):
+                self._record_unsupported_label_source(
+                    source_path,
+                    source_row,
+                    source_section,
+                )
+                continue
+            sanitize_row(source_row, source_path)
+            rows.append(source_row)
+        return rows
 
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
@@ -4256,6 +4446,7 @@ class EnhancedDSLDNormalizer:
                     source_section="activeIngredients",
                     display_type="structural_container",
                     score_included=False,
+                    source_row=ing,
                     children=[
                         ni.get("name", "") for ni in nested if ni.get("name")
                     ],
@@ -4300,6 +4491,7 @@ class EnhancedDSLDNormalizer:
                         else "structural_container"
                     ),
                     score_included=False,
+                    source_row=ing,
                     children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
                 )
                 # Sprint E1.2.1: same parent-mass propagation as above.
@@ -4333,6 +4525,7 @@ class EnhancedDSLDNormalizer:
                     source_section="activeIngredients",
                     display_type="structural_container",
                     score_included=False,
+                    source_row=ing,
                     children=[],
                 )
                 continue
@@ -4344,6 +4537,7 @@ class EnhancedDSLDNormalizer:
                     source_section="activeIngredients",
                     display_type="structural_container",
                     score_included=False,
+                    source_row=ing,
                     children=[],
                 )
                 continue
@@ -4365,6 +4559,7 @@ class EnhancedDSLDNormalizer:
                         source_section="activeIngredients",
                         display_type="summary_wrapper",
                         score_included=False,
+                        source_row=ing,
                         children=self._raw_child_names_for_display(ing),
                     )
                 if ing.get("forms"):
@@ -4466,6 +4661,7 @@ class EnhancedDSLDNormalizer:
                                 source_section="activeIngredients",
                                 display_type="summary_wrapper",
                                 score_included=False,
+                                source_row=nested_ing,
                                 children=[child.get("name", "") for child in grand_nested if child.get("name")],
                             )
                         # Rescue grandchildren from skipped nested items
@@ -4860,6 +5056,8 @@ class EnhancedDSLDNormalizer:
         """
         try:
             self._display_ingredients_buffer = []
+            self._display_source_rows = []
+            self._label_ledger_omissions = []
             # Extract basic product info
             product_id = str(raw_data.get("id", ""))
             
@@ -4872,7 +5070,12 @@ class EnhancedDSLDNormalizer:
             image_url = self._generate_image_url(raw_data.get("thumbnail", ""), product_id)
             
             # Flatten and process ingredients with enhanced mapping
-            raw_ingredients = raw_data.get("ingredientRows", []) or []
+            raw_ingredients_value = raw_data.get("ingredientRows", []) or []
+            raw_ingredients = self._sanitize_label_source_container(
+                raw_ingredients_value,
+                "ingredientRows",
+                "activeIngredients",
+            )
             self._stamp_raw_source_paths(raw_ingredients, "ingredientRows")
 
             # RC-5: apply reviewer-signed per-product label-typo corrections
@@ -4892,11 +5095,26 @@ class EnhancedDSLDNormalizer:
                 if key in raw_data:
                     other_ing_data = raw_data[key] or {}
                     break
-            other_ingredients_raw = other_ing_data.get("ingredients", [])
+            if not isinstance(other_ing_data, dict):
+                self._record_unsupported_label_source(
+                    "otheringredients",
+                    other_ing_data,
+                    "inactiveIngredients",
+                )
+                other_ing_data = {}
+            other_ingredients_value = other_ing_data.get("ingredients", [])
             # Handle None values from DSLD data
-            if other_ingredients_raw is None:
-                other_ingredients_raw = []
-            self._stamp_raw_source_paths(other_ingredients_raw, "otheringredients.ingredients")
+            if other_ingredients_value is None:
+                other_ingredients_value = []
+            other_ingredients_raw = self._sanitize_label_source_container(
+                other_ingredients_value,
+                "otheringredients.ingredients",
+                "inactiveIngredients",
+            )
+            self._stamp_raw_source_paths(
+                other_ingredients_raw,
+                "otheringredients.ingredients",
+            )
 
             # Sprint E1.2.5 — count RAW actives by walking ingredientRows
             # recursively (including nested blend members). Excludes DSLD
@@ -5362,6 +5580,18 @@ class EnhancedDSLDNormalizer:
                 proprietary_blends
             )
 
+            # Label truth is emitted as a separate reconciliation contract.
+            # These rows are display/provenance only and never feed analysis.
+            display_ingredients = self._build_display_ingredients(
+                active_ingredients,
+                inactive_ingredients,
+            )
+            label_source_rows = self._build_label_source_rows(display_ingredients)
+            label_ledger_audit = self._build_label_ledger_audit(
+                display_ingredients,
+                label_source_rows,
+            )
+
             # Build cleaned product - PRESERVE ORIGINAL DSLD FIELDS
             cleaned = {
                 # ========== ORIGINAL DSLD FIELDS (PRESERVE) ==========
@@ -5416,7 +5646,10 @@ class EnhancedDSLDNormalizer:
                 "raw_inactives_count": raw_inactives_count,
                 # Sprint E1.2.5 — same for actives (walks nested rows).
                 "raw_actives_count": raw_actives_count,
-                "display_ingredients": self._build_display_ingredients(active_ingredients, inactive_ingredients),
+                "display_ingredients": display_ingredients,
+                "label_ledger_omissions": list(self._label_ledger_omissions),
+                "label_source_rows": label_source_rows,
+                "label_ledger_audit": label_ledger_audit,
 
                 # ========== NUTRITIONAL INFORMATION ==========
                 "nutritionalInfo": nutritional_info,  # Calories, Carbs, Sugar, etc.
@@ -7234,14 +7467,21 @@ class EnhancedDSLDNormalizer:
         name = ingredient.get("name", "")
         forms = ingredient.get("forms", []) or []
         expanded: List[Dict[str, Any]] = []
+        ingredient_source_path = ingredient.get("raw_source_path") or source_path
+        if self._is_label_header(name):
+            self._queue_label_ledger_omission(
+                ingredient,
+                omission_reason="decorative_or_header_text",
+            )
 
         if not forms:
             logger.debug(f"Dropping label header with no forms: {name}")
             return expanded
 
         logger.debug(f"Extracting {len(forms)} ingredients from label header: {name}")
-        is_active_source = not self._source_path_is_inactive(source_path)
-        for form in forms:
+        is_active_source = not self._source_path_is_inactive(ingredient_source_path)
+        for form_index, form in enumerate(forms):
+            indexed_form_source_path = f"{ingredient_source_path}.forms[{form_index}]"
             if isinstance(form, dict):
                 form_name = form.get("name", "")
                 form_category = str(form.get("category") or "").strip().lower()
@@ -7262,7 +7502,7 @@ class EnhancedDSLDNormalizer:
                 ):
                     continue
                 form_group = form.get("ingredientGroup") or ingredient.get("ingredientGroup")
-                form_source_path = form.get("raw_source_path") or source_path
+                form_source_path = form.get("raw_source_path") or indexed_form_source_path
                 inherited_quantity = self._quantity_for_single_form_protein_child(ingredient, forms)
                 expanded_names = self._expand_compound_form_name(form_name, source_path)
                 if expanded_names:
@@ -7320,13 +7560,13 @@ class EnhancedDSLDNormalizer:
                         row["quantity"] = inherited_quantity
                     expanded.append(row)
             elif isinstance(form, str):
-                expanded_names = self._expand_compound_form_name(form, source_path)
+                expanded_names = self._expand_compound_form_name(form, indexed_form_source_path)
                 if expanded_names:
                     for expanded_name in expanded_names:
                         expanded.append({
                             "order": ingredient.get("order", 0),
                             "raw_source_text": expanded_name,
-                            "raw_source_path": source_path,
+                            "raw_source_path": indexed_form_source_path,
                             "normalized_key": norm_module.make_normalized_key(expanded_name),
                             "name": expanded_name,
                             "ingredientGroup": ingredient.get("ingredientGroup"),
@@ -7341,16 +7581,16 @@ class EnhancedDSLDNormalizer:
                 ):
                     self._queue_display_ingredient(
                         raw_source_text=form,
-                        source_section=source_path,
+                        source_section=ingredient_source_path,
                         display_type="structural_container",
                         score_included=False,
                     )
                     continue
-                if self._should_preserve_expanded_form(form, source_path):
+                if self._should_preserve_expanded_form(form, indexed_form_source_path):
                     expanded.append({
                         "order": ingredient.get("order", 0),
                         "raw_source_text": form,
-                        "raw_source_path": source_path,
+                        "raw_source_path": indexed_form_source_path,
                         "normalized_key": norm_module.make_normalized_key(form),
                         "name": form,
                         "ingredientGroup": ingredient.get("ingredientGroup"),
@@ -7361,7 +7601,16 @@ class EnhancedDSLDNormalizer:
                     })
 
         for row in expanded:
-            self._stamp_expanded_form_cleaner_contract(row, source_path)
+            row.setdefault(
+                "_raw_nested_depth",
+                self._safe_int(ingredient.get("_raw_nested_depth"), default=0) + 1,
+            )
+            row.setdefault("parentBlend", name)
+            row.setdefault("parent_source_path", ingredient_source_path)
+            self._stamp_expanded_form_cleaner_contract(
+                row,
+                row.get("raw_source_path") or ingredient_source_path,
+            )
 
         return expanded
 
@@ -8384,18 +8633,223 @@ class EnhancedDSLDNormalizer:
             "transparencyScore": round(transparency_score, 1)
         }
 
+    def _queue_label_ledger_omission(
+        self,
+        source_row: Dict[str, Any],
+        omission_reason: str,
+    ) -> None:
+        """Record a source occurrence intentionally omitted from the label ledger."""
+        source_path = str(source_row.get("raw_source_path") or "").strip()
+        if not source_path:
+            return
+        if not hasattr(self, "_label_ledger_omissions"):
+            self._label_ledger_omissions = []
+        if any(
+            row.get("raw_source_path") == source_path
+            for row in self._label_ledger_omissions
+        ):
+            return
+        raw_source_value = (
+            source_row.get("raw_source_text")
+            if "raw_source_text" in source_row
+            else source_row.get("name")
+        )
+        self._label_ledger_omissions.append({
+            "raw_source_path": source_path,
+            "raw_source_text": "" if raw_source_value is None else str(raw_source_value),
+            "omission_reason": omission_reason,
+        })
+
+    def _build_label_source_rows(
+        self,
+        display_rows: List[Dict[str, Any]],
+    ) -> List[Dict[str, str]]:
+        """Return one canonical inventory entry for every stable source path."""
+        inventory: List[Dict[str, str]] = []
+        seen_paths: Set[str] = set()
+
+        def add(source_row: Dict[str, Any]) -> None:
+            source_path = str(source_row.get("raw_source_path") or "").strip()
+            if not source_path or source_path in seen_paths:
+                return
+            source_section = str(source_row.get("source_section") or "").strip()
+            if not source_section:
+                source_section = (
+                    "inactiveIngredients"
+                    if self._source_path_is_inactive(source_path)
+                    else "activeIngredients"
+                )
+            raw_source_value = source_row.get("raw_source_text")
+            inventory.append({
+                "raw_source_path": source_path,
+                "raw_source_text": (
+                    "" if raw_source_value is None else str(raw_source_value)
+                ),
+                "source_section": source_section,
+            })
+            seen_paths.add(source_path)
+
+        # The pre-correction snapshot owns literal label text. Display rows are
+        # consulted only for synthetic occurrences such as string-form children.
+        for source_row in getattr(self, "_display_source_rows", []):
+            if isinstance(source_row, dict):
+                add(source_row)
+        for display_row in display_rows:
+            if isinstance(display_row, dict):
+                add(display_row)
+        for omission in getattr(self, "_label_ledger_omissions", []):
+            if isinstance(omission, dict):
+                add(omission)
+        return inventory
+
+    @staticmethod
+    def _classify_label_source_structure(
+        display_rows: List[Dict[str, Any]],
+        meaningful_source_rows: int,
+        unsupported: bool,
+    ) -> str:
+        if unsupported:
+            return "unsupported_source_structure"
+        if meaningful_source_rows == 0:
+            return "empty_panel"
+        if any(
+            row.get("folded_label_components")
+            and "folate" in str(row.get("label_display_name") or "").casefold()
+            for row in display_rows
+        ):
+            return "folate_dfe_equivalent"
+
+        active_rows = [
+            row
+            for row in display_rows
+            if row.get("source_section") == "activeIngredients"
+        ]
+        if not active_rows:
+            return "other_ingredients"
+        if any(
+            (
+                "omega" in str(row.get("label_display_name") or "").casefold()
+                or str(row.get("label_display_name") or "").casefold()
+                in {"epa", "dha"}
+            )
+            and int(row.get("nested_depth") or 0) > 0
+            for row in active_rows
+        ):
+            return "omega_parent_component"
+        if any(
+            "mineral" in str(row.get("raw_category") or "").casefold()
+            and bool(row.get("label_display_form"))
+            and bool(row.get("folded_label_components") or row.get("children"))
+            for row in active_rows
+        ):
+            return "elemental_mineral_source_compound"
+        if any(
+            row.get("display_type") in {"structural_container", "summary_wrapper"}
+            or "blend" in str(row.get("ingredient_group") or "").casefold()
+            for row in active_rows
+        ):
+            return "proprietary_blend"
+        if any(
+            "probiotic" in str(row.get("raw_category") or "").casefold()
+            or "probiotic" in str(row.get("ingredient_group") or "").casefold()
+            or "cfu" in str(row.get("exact_dose_text") or "").casefold()
+            for row in active_rows
+        ):
+            return "probiotic_strain_cfu"
+        if any(
+            any(
+                token in str(row.get("raw_category") or "").casefold()
+                for token in ("botanical", "plant part", "extract")
+            )
+            for row in active_rows
+        ):
+            return "botanical_plant_part_extract"
+        if any(
+            str(row.get("raw_category") or "").casefold()
+            in {"vitamin", "mineral"}
+            for row in active_rows
+        ):
+            return "vitamin_mineral_panel"
+        return "flat_supplement_facts"
+
+    def _build_label_ledger_audit(
+        self,
+        display_rows: List[Dict[str, Any]],
+        source_rows: List[Dict[str, str]],
+    ) -> Dict[str, Any]:
+        omissions = [
+            row
+            for row in getattr(self, "_label_ledger_omissions", [])
+            if isinstance(row, dict)
+        ]
+        omission_paths = {
+            str(row.get("raw_source_path") or "").strip()
+            for row in omissions
+        }
+        meaningful_source_rows = sum(
+            1
+            for row in source_rows
+            if str(row.get("raw_source_path") or "").strip() not in omission_paths
+        )
+        displayed_rows = len(display_rows)
+        unsupported = any(
+            row.get("omission_reason") == "unsupported_source_structure"
+            for row in omissions
+        ) or any(not row.get("raw_source_path") for row in display_rows)
+        source_structure = self._classify_label_source_structure(
+            display_rows,
+            meaningful_source_rows,
+            unsupported,
+        )
+        if unsupported:
+            completeness_percentage = None
+            completeness_status = "unavailable"
+            support_status = "unsupported"
+        else:
+            completeness_percentage = (
+                round(displayed_rows / meaningful_source_rows * 100.0, 2)
+                if meaningful_source_rows
+                else 100.0
+            )
+            completeness_status = (
+                "complete" if completeness_percentage == 100.0 else "incomplete"
+            )
+            support_status = "supported"
+        return {
+            "support_status": support_status,
+            "source_structure": source_structure,
+            "meaningful_source_rows": meaningful_source_rows,
+            "displayed_rows": displayed_rows,
+            "omitted_rows": len(omissions),
+            "completeness_percentage": completeness_percentage,
+            "completeness_status": completeness_status,
+        }
+
     def _queue_display_ingredient(
         self,
         raw_source_text: str,
         source_section: str,
         display_type: str,
         score_included: bool,
+        source_row: Optional[Dict[str, Any]] = None,
         children: Optional[List[str]] = None,
         resolution_type: Optional[str] = None,
     ) -> None:
         """Queue a display-only ingredient row captured before scoring suppression."""
         if not hasattr(self, "_display_ingredients_buffer"):
             self._display_ingredients_buffer = []
+        source_metadata: Dict[str, Any] = {}
+        if isinstance(source_row, dict):
+            source_metadata = {
+                "raw_source_path": source_row.get("raw_source_path"),
+                "source_order": source_row.get("order"),
+                "nested_depth": source_row.get("_raw_nested_depth", 0),
+                "parent_label": source_row.get("parentBlend"),
+                "parent_source_path": source_row.get("parent_source_path"),
+                "exact_dose_text": self._exact_label_dose_text(source_row),
+                "raw_category": source_row.get("category"),
+                "ingredient_group": source_row.get("ingredientGroup"),
+            }
         self._display_ingredients_buffer.append(
             {
                 "raw_source_text": raw_source_text,
@@ -8405,6 +8859,7 @@ class EnhancedDSLDNormalizer:
                 "resolution_type": resolution_type or self._default_display_resolution_type(display_type, score_included),
                 "score_included": score_included,
                 "children": children or [],
+                **source_metadata,
             }
         )
 
@@ -8421,19 +8876,24 @@ class EnhancedDSLDNormalizer:
         return "display_only"
 
     def _build_display_ingredients(self, active_ingredients: List[Dict], inactive_ingredients: List[Dict]) -> List[Dict]:
-        """Build a minimal user-facing ingredient ledger without changing scoring inputs."""
-        display_rows: List[Dict[str, Any]] = list(getattr(self, "_display_ingredients_buffer", []))
-
+        """Build the ordered source-label ledger without changing scoring inputs."""
+        candidates: List[Dict[str, Any]] = []
         for section_name, ingredients, score_included in (
             ("activeIngredients", active_ingredients, True),
             ("inactiveIngredients", inactive_ingredients, False),
         ):
             for ing in ingredients:
                 raw_text = ing.get("raw_source_text") or ing.get("name") or ""
-                display_rows.append(
+                first_form = (
+                    (ing.get("forms") or [{}])[0].get("name")
+                    if isinstance((ing.get("forms") or [{}])[0], dict)
+                    else None
+                )
+                candidates.append(
                     {
                         "raw_source_text": raw_text,
                         "display_name": raw_text,
+                        "label_display_name": raw_text,
                         "source_section": section_name,
                         "display_type": "mapped_ingredient" if score_included else "inactive_ingredient",
                         "resolution_type": self._default_display_resolution_type(
@@ -8441,8 +8901,232 @@ class EnhancedDSLDNormalizer:
                             score_included,
                         ),
                         "score_included": score_included,
+                        "canonical_id": ing.get("canonical_id"),
+                        "label_display_form": first_form
+                        if self._label_form_distinct_from_identity(first_form, ing)
+                        else None,
+                        "raw_source_path": ing.get("raw_source_path"),
+                        "source_order": ing.get("order"),
+                        "nested_depth": ing["raw_taxonomy"].get("nested_depth")
+                        if isinstance(ing.get("raw_taxonomy"), dict)
+                        else ing.get("_raw_nested_depth", 0),
+                        "parent_label": ing.get("parentBlend"),
+                        "parent_source_path": ing.get("parent_source_path"),
+                        "exact_dose_text": self._exact_label_dose_text(ing),
                     }
                 )
+        candidates.extend(list(getattr(self, "_display_ingredients_buffer", [])))
+
+        source_rows = list(getattr(self, "_display_source_rows", []))
+        claimed_source_indices: Set[int] = set()
+
+        def section_kind(value: Any) -> str:
+            return "inactive" if self._source_path_is_inactive(str(value or "")) else "active"
+
+        def source_for(candidate: Dict[str, Any]) -> Dict[str, Any]:
+            source_path = candidate.get("raw_source_path")
+            if source_path:
+                for source_index, source in enumerate(source_rows):
+                    if (
+                        source_index not in claimed_source_indices
+                        and source.get("raw_source_path") == source_path
+                    ):
+                        claimed_source_indices.add(source_index)
+                        return source
+            raw_text = str(candidate.get("raw_source_text") or "").strip()
+            candidate_section = section_kind(candidate.get("source_section"))
+            for source_index, source in enumerate(source_rows):
+                if source_index in claimed_source_indices:
+                    continue
+                if (
+                    source.get("raw_source_text") == raw_text
+                    and section_kind(source.get("source_section")) == candidate_section
+                ):
+                    claimed_source_indices.add(source_index)
+                    return source
+            return {}
+
+        by_identity: Dict[str, Dict[str, Any]] = {}
+        for candidate in candidates:
+            if not isinstance(candidate, dict):
+                continue
+            source = source_for(candidate)
+            row = dict(candidate)
+            for key, value in source.items():
+                if key == "label_display_name" and row.get("label_display_name"):
+                    continue
+                if value is not None and value != "":
+                    row[key] = value
+            raw_text = str(row.get("raw_source_text") or "").strip()
+            if not raw_text:
+                continue
+            row["label_display_name"] = str(
+                row.get("label_display_name") or row.get("display_name") or raw_text
+            ).strip()
+            row["exact_dose_text"] = str(row.get("exact_dose_text") or "").strip()
+            row["nested_depth"] = self._safe_int(row.get("nested_depth"), default=0)
+            row["score_included"] = bool(row.get("score_included"))
+            row["is_label_context"] = not row["score_included"]
+            row["display_disposition"] = (
+                "scored"
+                if row["score_included"]
+                else "other_ingredient"
+                if row.get("source_section") == "inactiveIngredients"
+                else "label_context"
+            )
+            row["identity_integrity_state"] = (
+                "clean" if row["score_included"] and row.get("canonical_id") else "taxonomy_only"
+            )
+            row["form_display_state"] = (
+                "listed_not_assessed"
+                if row.get("label_display_form")
+                else "not_disclosed"
+                if row["score_included"]
+                else "not_applicable"
+            )
+            identity = str(row.get("raw_source_path") or "").strip()
+            if not identity:
+                identity = "|".join(
+                    (
+                        str(row.get("source_section") or ""),
+                        raw_text.casefold(),
+                        str(row.get("exact_dose_text") or "").casefold(),
+                        str(row.get("nested_depth") or 0),
+                        str(row.get("parent_label") or "").casefold(),
+                    )
+                )
+            existing = by_identity.get(identity)
+            if existing is None:
+                by_identity[identity] = row
+            else:
+                # A source row can be observed both while flattening and after
+                # mapping. Keep one ledger row and prefer the scored annotation.
+                if row["score_included"] and not existing.get("score_included"):
+                    preserved_order = existing.get("label_order")
+                    by_identity[identity] = row
+                    if preserved_order is not None:
+                        by_identity[identity]["label_order"] = preserved_order
+
+        display_rows = list(by_identity.values())
+        rows_by_source_path = {
+            str(row.get("raw_source_path")): row
+            for row in display_rows
+            if row.get("raw_source_path")
+        }
+        for row in display_rows:
+            parent_row = rows_by_source_path.get(str(row.get("parent_source_path") or ""))
+            corrected_parent = (
+                str(parent_row.get("label_display_name") or "").strip()
+                if parent_row
+                else ""
+            )
+            if corrected_parent and corrected_parent != row.get("parent_label"):
+                row["source_parent_label"] = row.get("parent_label")
+                row["parent_label"] = corrected_parent
+        display_rows.sort(
+            key=lambda row: (
+                self._safe_int(row.get("label_order"), default=10**9),
+                self._safe_int(row.get("source_order"), default=10**9),
+            )
+        )
+        for index, row in enumerate(display_rows):
+            row["label_order"] = index
+            fingerprint_payload = "|".join(
+                (
+                    str(row.get("raw_source_path") or ""),
+                    str(row.get("label_display_name") or "").casefold(),
+                    str(row.get("exact_dose_text") or "").casefold(),
+                    str(row.get("parent_label") or "").casefold(),
+                )
+            )
+            row["ledger_fingerprint"] = hashlib.sha256(
+                fingerprint_payload.encode("utf-8")
+            ).hexdigest()
+
+        # Source-compound forms are represented on their elemental parent row,
+        # not as a second ingredient tile. Retain the source occurrence in the
+        # fold trail and omission audit so completeness remains path-reconciled.
+        displayed_paths = {
+            str(row.get("raw_source_path") or "").strip()
+            for row in display_rows
+        }
+        for parent in display_rows:
+            parent_path = str(parent.get("raw_source_path") or "").strip()
+            label_form = str(parent.get("label_display_form") or "").strip()
+            if (
+                not parent_path
+                or not label_form
+                or parent.get("source_section") != "activeIngredients"
+            ):
+                continue
+            for source in source_rows:
+                source_path = str(source.get("raw_source_path") or "").strip()
+                if (
+                    source_path in displayed_paths
+                    or source.get("parent_source_path") != parent_path
+                    or ".forms[" not in source_path
+                    or str(source.get("raw_source_text") or "").strip().casefold()
+                    != label_form.casefold()
+                ):
+                    continue
+                parent.setdefault("folded_label_components", []).append({
+                    "label_display_name": source.get("label_display_name"),
+                    "raw_source_text": source.get("raw_source_text"),
+                    "raw_source_path": source.get("raw_source_path"),
+                    "parent_label": parent.get("label_display_name"),
+                    "exact_dose_text": source.get("exact_dose_text"),
+                    "score_included": False,
+                })
+                self._queue_label_ledger_omission(
+                    source,
+                    omission_reason="duplicate_source_line",
+                )
+
+        # Folate DFE and its nested folic-acid equivalent are one logical
+        # label row. Preserve the equivalent as parenthetical label context.
+        removed: set[int] = set()
+        for parent_index, parent in enumerate(display_rows):
+            parent_name = str(parent.get("label_display_name") or "").casefold()
+            if "folate" not in parent_name or "dfe" not in str(parent.get("exact_dose_text") or "").casefold():
+                continue
+            for child_index, child in enumerate(display_rows):
+                if child_index == parent_index or child_index in removed:
+                    continue
+                child_name = str(child.get("label_display_name") or "").casefold()
+                if child.get("parent_label") != parent.get("label_display_name"):
+                    continue
+                if not any(token in child_name for token in ("folic acid", "mthf", "methylfolate")):
+                    continue
+                child_dose = str(child.get("exact_dose_text") or "").strip()
+                parent["parenthetical_dose_text"] = " ".join(
+                    part for part in (child_dose, child_name) if part
+                )
+                parent["score_included"] = bool(
+                    parent.get("score_included") or child.get("score_included")
+                )
+                parent["is_label_context"] = not parent["score_included"]
+                parent["score_participation_source"] = child.get("label_display_name")
+                parent.setdefault("folded_label_components", []).append({
+                    "label_display_name": child.get("label_display_name"),
+                    "raw_source_text": child.get("raw_source_text"),
+                    "raw_source_path": child.get("raw_source_path"),
+                    "parent_label": child.get("parent_label"),
+                    "source_parent_label": child.get("source_parent_label"),
+                    "exact_dose_text": child.get("exact_dose_text"),
+                    "score_included": child.get("score_included"),
+                })
+                self._queue_label_ledger_omission(
+                    child,
+                    omission_reason="duplicate_source_line",
+                )
+                removed.add(child_index)
+                break
+        if removed:
+            display_rows = [
+                row for index, row in enumerate(display_rows) if index not in removed
+            ]
+            for index, row in enumerate(display_rows):
+                row["label_order"] = index
 
         return display_rows
 

@@ -600,8 +600,178 @@ def filter_product_catalog(data: DashboardData) -> pd.DataFrame:
     return frame.reset_index(drop=True)
 
 
-def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Connection | None) -> dict[str, Any]:
+_LABEL_TRUST_FORM_STATES = frozenset({
+    "assessed",
+    "not_disclosed",
+    "listed_not_assessed",
+    "not_applicable",
+    "needs_review",
+})
+_LABEL_TRUST_IDENTITY_STATES = frozenset({
+    "clean",
+    "repaired",
+    "taxonomy_only",
+    "identity_conflict",
+    "missing_display_label",
+})
+_LABEL_TRUST_DISPOSITIONS = frozenset({
+    "scored",
+    "label_context",
+    "other_ingredient",
+    "needs_review",
+})
+_LABEL_MISMATCH_STATUSES = frozenset({
+    "submitted",
+    "under_review",
+    "resolved",
+    "dismissed",
+})
+_LABEL_MISMATCH_CATEGORIES = frozenset({
+    "product_identity",
+    "ingredient_missing",
+    "ingredient_extra",
+    "amount_or_unit",
+    "form_or_parenthetical",
+    "serving_size_or_directions",
+    "other_ingredients",
+    "catalog_version_or_status",
+})
+
+
+def _empty_label_trust_metrics() -> dict[str, Any]:
+    return {
+        "total_products": 0,
+        "supported_products": 0,
+        "unsupported_products": 0,
+        "complete_products": 0,
+        "incomplete_products": 0,
+        "unavailable_products": 0,
+        "invalid_audit_products": 0,
+        "average_completeness_pct": None,
+        "display_dispositions": {},
+        "form_states": {},
+        "identity_states": {},
+        "integrity_failures": 0,
+        "identity_failure_products": 0,
+        "total_display_rows": 0,
+        "unrecognized_display_dispositions": 0,
+        "unrecognized_form_states": 0,
+        "unrecognized_identity_states": 0,
+        "formula_history_products": 0,
+        "formula_history_coverage_pct": None,
+        "mismatch_outcomes": {},
+        "mismatch_categories": {},
+        "rejected_mismatch_outcomes": 0,
+        "rejected_mismatch_categories": 0,
+        "invalid_mismatch_summary": 0,
+        "by_brand": [],
+        "by_category": [],
+    }
+
+
+def _safe_aggregate_counts(
+    rows: Any,
+    *,
+    key: str,
+    allowed: frozenset[str],
+) -> tuple[dict[str, int], int]:
+    counts: Counter[str] = Counter()
+    rejected = 0
+    if not isinstance(rows, list):
+        return {}, 0
+    for row in rows:
+        if not isinstance(row, dict):
+            rejected += 1
+            continue
+        name = row.get(key)
+        count = row.get("count")
+        if (
+            set(row) != {key, "count"}
+            or not isinstance(name, str)
+            or name not in allowed
+            or isinstance(count, bool)
+            or not isinstance(count, int)
+            or count < 0
+        ):
+            rejected += 1
+            continue
+        counts[name] += count
+    return dict(sorted(counts.items())), rejected
+
+
+def _load_label_mismatch_summary(
+    path: Path | None,
+) -> tuple[dict[str, int], dict[str, int], int, int, int]:
+    if path is None or not path.exists():
+        return {}, {}, 0, 0, 0
+    summary = safe_load_json(path)
+    if (
+        not isinstance(summary, dict)
+        or set(summary) != {"schema_version", "outcomes", "categories"}
+        or type(summary.get("schema_version")) is not int
+        or summary.get("schema_version") != 1
+        or not isinstance(summary.get("outcomes"), list)
+        or not isinstance(summary.get("categories"), list)
+    ):
+        return {}, {}, 0, 0, 1
+    outcomes, rejected_outcomes = _safe_aggregate_counts(
+        summary.get("outcomes"),
+        key="status",
+        allowed=_LABEL_MISMATCH_STATUSES,
+    )
+    categories, rejected_categories = _safe_aggregate_counts(
+        summary.get("categories"),
+        key="category",
+        allowed=_LABEL_MISMATCH_CATEGORIES,
+    )
+    return outcomes, categories, rejected_outcomes, rejected_categories, 0
+
+
+def _label_trust_breakdown_rows(
+    stats: dict[str, dict[str, Any]],
+    *,
+    dimension: str,
+) -> list[dict[str, Any]]:
+    rows = []
+    for name, values in sorted(stats.items()):
+        percentages = values["percentages"]
+        rows.append({
+            dimension: name,
+            "total_products": values["total_products"],
+            "supported_products": values["supported_products"],
+            "unsupported_products": values["unsupported_products"],
+            "complete_products": values["complete_products"],
+            "incomplete_products": values["incomplete_products"],
+            "unavailable_products": values["unavailable_products"],
+            "invalid_audit_products": values["invalid_audit_products"],
+            "average_completeness_pct": (
+                round(sum(percentages) / len(percentages), 2)
+                if percentages
+                else None
+            ),
+        })
+    return rows
+
+
+def _compute_blob_analytics(
+    detail_blobs_dir: Path | None,
+    db_conn: sqlite3.Connection | None,
+    mismatch_summary_path: Path | None = None,
+) -> dict[str, Any]:
+    (
+        mismatch_outcomes,
+        mismatch_categories,
+        rejected_mismatch_outcomes,
+        rejected_mismatch_categories,
+        invalid_mismatch_summary,
+    ) = _load_label_mismatch_summary(mismatch_summary_path)
     if detail_blobs_dir is None or not detail_blobs_dir.exists():
+        label_trust = _empty_label_trust_metrics()
+        label_trust["mismatch_outcomes"] = mismatch_outcomes
+        label_trust["mismatch_categories"] = mismatch_categories
+        label_trust["rejected_mismatch_outcomes"] = rejected_mismatch_outcomes
+        label_trust["rejected_mismatch_categories"] = rejected_mismatch_categories
+        label_trust["invalid_mismatch_summary"] = invalid_mismatch_summary
         return {
             "ingredient_forms": [],
             "ingredient_usage": [],
@@ -611,6 +781,7 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
             "driver_impacts": [],
             "ingredient_products": {},
             "completeness_records": [],
+            "label_trust": label_trust,
         }
 
     lookup = _db_lookup(db_conn)
@@ -634,6 +805,36 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
     )
     product_explainers: list[dict[str, Any]] = []
     completeness_records: list[dict[str, Any]] = []
+    label_trust = _empty_label_trust_metrics()
+    label_trust_percentages: list[float] = []
+    label_trust_dispositions: Counter[str] = Counter()
+    label_trust_form_states: Counter[str] = Counter()
+    label_trust_identity_states: Counter[str] = Counter()
+    label_trust_identity_failure_products: set[str] = set()
+    label_trust_by_brand: defaultdict[str, dict[str, Any]] = defaultdict(
+        lambda: {
+            "total_products": 0,
+            "supported_products": 0,
+            "unsupported_products": 0,
+            "complete_products": 0,
+            "incomplete_products": 0,
+            "unavailable_products": 0,
+            "invalid_audit_products": 0,
+            "percentages": [],
+        }
+    )
+    label_trust_by_category: defaultdict[str, dict[str, Any]] = defaultdict(
+        lambda: {
+            "total_products": 0,
+            "supported_products": 0,
+            "unsupported_products": 0,
+            "complete_products": 0,
+            "incomplete_products": 0,
+            "unavailable_products": 0,
+            "invalid_audit_products": 0,
+            "percentages": [],
+        }
+    )
 
     for blob_path in sorted(detail_blobs_dir.glob("*.json")):
         blob = safe_load_json(blob_path)
@@ -649,6 +850,121 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
         interaction_summary = blob.get("interaction_summary") or {}
         bonuses = blob.get("score_bonuses") or []
         penalties = blob.get("score_penalties") or []
+
+        label_trust["total_products"] += 1
+        audit = blob.get("label_ledger_audit")
+        audit = audit if isinstance(audit, dict) else {}
+        support_status = audit.get("support_status")
+        completeness_status = audit.get("completeness_status")
+        completeness_percentage = audit.get("completeness_percentage")
+        percentage_is_valid_number = (
+            not isinstance(completeness_percentage, bool)
+            and isinstance(completeness_percentage, (int, float))
+            and 0 <= completeness_percentage <= 100
+        )
+        audit_tuple_is_valid = (
+            support_status == "supported"
+            and (
+                (
+                    completeness_status == "complete"
+                    and completeness_percentage == 100
+                )
+                or (
+                    completeness_status == "incomplete"
+                    and percentage_is_valid_number
+                    and completeness_percentage < 100
+                )
+            )
+        ) or (
+            support_status == "unsupported"
+            and completeness_status == "unavailable"
+            and completeness_percentage is None
+        )
+        audit_completeness_bucket: str | None = None
+        if not audit_tuple_is_valid:
+            label_trust["invalid_audit_products"] += 1
+        elif support_status == "supported":
+            label_trust["supported_products"] += 1
+            audit_completeness_bucket = completeness_status
+            label_trust[f"{audit_completeness_bucket}_products"] += 1
+        else:
+            label_trust["unsupported_products"] += 1
+            audit_completeness_bucket = "unavailable"
+            label_trust["unavailable_products"] += 1
+        if audit_tuple_is_valid and percentage_is_valid_number:
+            label_trust_percentages.append(float(completeness_percentage))
+
+        brand_name = str(
+            blob.get("brand_name")
+            or product_meta.get("brand_name")
+            or "Unspecified"
+        ).strip() or "Unspecified"
+        primary_type = str(
+            blob.get("primary_type")
+            or product_meta.get("primary_category")
+            or "Unspecified"
+        ).strip() or "Unspecified"
+        for dimension_stats, name in (
+            (label_trust_by_brand, brand_name),
+            (label_trust_by_category, primary_type),
+        ):
+            dimension_stats[name]["total_products"] += 1
+            if not audit_tuple_is_valid:
+                dimension_stats[name]["invalid_audit_products"] += 1
+            else:
+                dimension_stats[name][f"{support_status}_products"] += 1
+                dimension_stats[name][
+                    f"{audit_completeness_bucket}_products"
+                ] += 1
+            if audit_tuple_is_valid and percentage_is_valid_number:
+                dimension_stats[name]["percentages"].append(
+                    float(completeness_percentage)
+                )
+
+        display_rows = blob.get("display_ingredients")
+        if isinstance(display_rows, list):
+            for row in display_rows:
+                if not isinstance(row, dict):
+                    continue
+                label_trust["total_display_rows"] += 1
+                disposition = row.get("display_disposition")
+                if (
+                    isinstance(disposition, str)
+                    and disposition in _LABEL_TRUST_DISPOSITIONS
+                ):
+                    label_trust_dispositions[disposition] += 1
+                else:
+                    label_trust["unrecognized_display_dispositions"] += 1
+                form_state = row.get("form_display_state")
+                if isinstance(form_state, str) and form_state in _LABEL_TRUST_FORM_STATES:
+                    label_trust_form_states[form_state] += 1
+                else:
+                    label_trust["unrecognized_form_states"] += 1
+                identity_state = row.get("identity_integrity_state")
+                identity_state_is_known = (
+                    isinstance(identity_state, str)
+                    and identity_state in _LABEL_TRUST_IDENTITY_STATES
+                )
+                if identity_state_is_known:
+                    label_trust_identity_states[identity_state] += 1
+                else:
+                    label_trust["unrecognized_identity_states"] += 1
+                if not identity_state_is_known or identity_state in {
+                    "identity_conflict",
+                    "missing_display_label",
+                }:
+                    label_trust["integrity_failures"] += 1
+                    label_trust_identity_failure_products.add(dsld_id)
+
+        label_record = blob.get("label_record")
+        if isinstance(label_record, dict):
+            formula_history = label_record.get("formula_history")
+            if (
+                label_record.get("history_status") == "available"
+                and isinstance(formula_history, list)
+                and bool(formula_history)
+            ):
+                label_trust["formula_history_products"] += 1
 
         completeness_checks = {
             "ingredients_mapped": bool(ingredients) and all(bool(ing.get("mapped", True)) for ing in ingredients),
@@ -818,6 +1134,45 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
     completeness_records.sort(key=lambda row: row["completeness_pct"])
     product_explainers.sort(key=lambda row: (float(row.get("score") or 0.0), row.get("ingredient_count", 0)), reverse=True)
 
+    label_trust["average_completeness_pct"] = (
+        round(sum(label_trust_percentages) / len(label_trust_percentages), 2)
+        if label_trust_percentages
+        else None
+    )
+    label_trust["display_dispositions"] = dict(
+        sorted(label_trust_dispositions.items())
+    )
+    label_trust["form_states"] = dict(sorted(label_trust_form_states.items()))
+    label_trust["identity_states"] = dict(
+        sorted(label_trust_identity_states.items())
+    )
+    label_trust["identity_failure_products"] = len(
+        label_trust_identity_failure_products
+    )
+    label_trust["formula_history_coverage_pct"] = (
+        round(
+            label_trust["formula_history_products"]
+            / label_trust["total_products"]
+            * 100,
+            2,
+        )
+        if label_trust["total_products"]
+        else None
+    )
+    label_trust["mismatch_outcomes"] = mismatch_outcomes
+    label_trust["mismatch_categories"] = mismatch_categories
+    label_trust["rejected_mismatch_outcomes"] = rejected_mismatch_outcomes
+    label_trust["rejected_mismatch_categories"] = rejected_mismatch_categories
+    label_trust["invalid_mismatch_summary"] = invalid_mismatch_summary
+    label_trust["by_brand"] = _label_trust_breakdown_rows(
+        label_trust_by_brand,
+        dimension="brand_name",
+    )
+    label_trust["by_category"] = _label_trust_breakdown_rows(
+        label_trust_by_category,
+        dimension="primary_type",
+    )
+
     return {
         "ingredient_forms": ingredient_forms,
         "ingredient_usage": ingredient_usage_rows,
@@ -829,6 +1184,7 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
         "ingredient_products": dict(ingredient_products),
         "product_explainers": product_explainers,
         "completeness_records": completeness_records,
+        "label_trust": label_trust,
     }
 
 
@@ -1128,10 +1484,18 @@ def load_dashboard_data(config: Any) -> DashboardData:
         data.latest_batch_at = max(live_pipeline_candidates)
 
     data.shared_metrics = _compute_shared_metrics(data.db_conn, data.export_manifest, data.export_audit, data.integrity_data)
-    data.blob_analytics = _compute_blob_analytics(data.detail_blobs_dir, data.db_conn)
+    data.blob_analytics = _compute_blob_analytics(
+        data.detail_blobs_dir,
+        data.db_conn,
+        config.build_root / "label_mismatch_summary.json",
+    )
     # Fallback: if detail blobs are missing, compute analytics from the DB
     if not data.blob_analytics.get("bonus_frequency") and data.db_conn is not None:
+        label_trust = data.blob_analytics.get("label_trust")
         data.blob_analytics = _compute_blob_analytics_from_db(data.db_conn)
+        data.blob_analytics["label_trust"] = (
+            label_trust if isinstance(label_trust, dict) else _empty_label_trust_metrics()
+        )
     data.product_catalog = _load_product_catalog(data.db_conn)
 
     # Load CAERS adverse event signals

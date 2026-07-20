@@ -11,6 +11,8 @@ per active row and fails the release for:
 - a resolved (``clean``/``repaired``) row whose authoritative canonical identity
   does not match the repaired label evidence;
 - a missing or unrecognized disposition (a Task-2 stamping regression).
+- any label-ledger form, identity, omission, completeness, review-claim, or
+  score-publication failure returned by the enrichment release contract.
 
 Disposition vocabulary and scoreability come from ``identity_integrity``; the
 route inventory comes from the v4 router. Neither is duplicated here.
@@ -25,6 +27,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Iterator, Optional
 
+from enrichment_contract_validator import EnrichmentContractValidator
 from identity_integrity import IDENTITY_DISPOSITIONS, normalize_label_display
 from scoring_v4.router import VALID_CLASSES, class_for_product
 from stage_manifest import select_stage_files
@@ -33,6 +36,7 @@ Classifier = Callable[[dict[str, Any]], str]
 
 DEFAULT_PRODUCTS_DIR = "scripts/products"
 _FAILURE_CAP = 40
+_RELEASE_VALIDATOR = EnrichmentContractValidator()
 
 
 @dataclass(frozen=True)
@@ -182,6 +186,41 @@ def audit_product(
                 scoreable_identity=bool(row.get("scoreable_identity")),
                 rationale=str(row.get("identity_resolution_rationale") or ""),
                 violation=pair_violation or _row_violation(row),
+            )
+        )
+
+    # The canonical display ledger owns form and display integrity. Reuse the
+    # validator's release-only contract so direct final builds and release_full
+    # fail on the same stable audit codes without mutating identity or scores.
+    for violation in _RELEASE_VALIDATOR.validate_release_integrity(product):
+        if violation.severity != "error":
+            continue
+        audit_code = str(
+            violation.evidence.get("audit_code")
+            or f"label_ledger_contract:{violation.rule}"
+        )
+        records.append(
+            DispositionRecord(
+                product_id=product_id,
+                route=route,
+                source_path=str(
+                    violation.evidence.get("raw_source_path")
+                    or violation.field_path
+                    or source
+                    or ""
+                ),
+                label_display_name=str(
+                    violation.evidence.get("raw_source_text")
+                    or violation.evidence.get("disclosed_form")
+                    or violation.field_path
+                ),
+                label_display_form=None,
+                supplied_canonical=None,
+                final_canonical=None,
+                disposition="label_ledger_contract",
+                scoreable_identity=False,
+                rationale=violation.message,
+                violation=audit_code,
             )
         )
     return records

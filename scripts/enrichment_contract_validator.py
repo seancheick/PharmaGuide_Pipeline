@@ -12,7 +12,7 @@ D. Serving Basis Integrity - form_factor and basis_unit must be consistent
 E. Claims Consistency - claims must have valid evidence and no scoring conflicts
 F. Provenance Integrity - raw_source_text and normalized_key must be present and immutable
 G. Match Ledger Consistency - match_ledger must be present and consistent with unmatched lists
-H. Display Ledger Contract - display_ingredients is optional, but must be well-formed when present
+H. Label Ledger Release Contract - display, form, identity, omission, and completeness integrity
 
 Usage:
     validator = EnrichmentContractValidator()
@@ -49,8 +49,9 @@ logger = logging.getLogger(__name__)
 # Version history:
 # - 1.0.0: Initial hardened pipeline with match_ledger, provenance fields,
 #          coverage gates, and invariant validation
+# - 1.1.0: Label-ledger form, identity, omission, and completeness release gates
 # =============================================================================
-PIPELINE_CONTRACT_VERSION = "1.0.0"
+PIPELINE_CONTRACT_VERSION = "1.1.0"
 
 
 @dataclass
@@ -147,15 +148,93 @@ class EnrichmentContractValidator:
     }
 
     DISPLAY_LEDGER_REQUIRED_FIELDS = frozenset({
+        "raw_source_path",
         "raw_source_text",
         "display_name",
+        "label_display_name",
+        "label_order",
+        "nested_depth",
         "source_section",
         "display_type",
         "resolution_type",
         "score_included",
+        "display_disposition",
+        "form_display_state",
+        "identity_integrity_state",
+        "ledger_fingerprint",
     })
 
     DISPLAY_LEDGER_ALLOWED_SOURCE_SECTIONS = DISPLAY_LEDGER_SOURCE_SECTIONS
+
+    DISPLAY_LEDGER_FORM_STATES = frozenset({
+        "assessed",
+        "not_disclosed",
+        "listed_not_assessed",
+        "not_applicable",
+        "needs_review",
+    })
+
+    DISPLAY_LEDGER_IDENTITY_STATES = frozenset({
+        "clean",
+        "repaired",
+        "taxonomy_only",
+        "identity_conflict",
+        "missing_display_label",
+    })
+
+    DISPLAY_LEDGER_ACTIVE_SECTIONS = frozenset({"active", "activeIngredients"})
+
+    LABEL_LEDGER_OMISSION_REASONS = frozenset({
+        "nutrition_fact_not_applicable",
+        "decorative_or_header_text",
+        "duplicate_source_line",
+        "empty_source_text",
+        "unsupported_source_structure",
+    })
+
+    LABEL_LEDGER_AUDIT_REQUIRED_FIELDS = frozenset({
+        "support_status",
+        "source_structure",
+        "meaningful_source_rows",
+        "displayed_rows",
+        "omitted_rows",
+        "completeness_percentage",
+        "completeness_status",
+    })
+
+    LABEL_LEDGER_SUPPORT_STATES = frozenset({"supported", "unsupported"})
+    LABEL_LEDGER_SUPPORTED_EMPTY_STRUCTURES = frozenset({"empty_panel"})
+    LABEL_LEDGER_COMPLETENESS_STATES = frozenset({
+        "complete",
+        "incomplete",
+        "unavailable",
+    })
+
+    NEEDS_REVIEW_CLAIM_PATHS = (
+        ("exact_dose_text",),
+        ("display_dose_label",),
+        ("dose_claim",),
+        ("form_quality_claim",),
+        ("form_quality",),
+        ("form_quality_rating",),
+        ("bio_score",),
+        ("safety_claim",),
+        ("safety_status",),
+        ("safety_rating",),
+        ("safety_verdict",),
+        ("is_safe",),
+        ("analysis", "display_dose_label"),
+        ("analysis", "dose_claim"),
+        ("analysis", "form_quality_claim"),
+        ("analysis", "form_quality"),
+        ("analysis", "form_quality_rating"),
+        ("analysis", "bio_score"),
+        ("analysis", "safety_claim"),
+        ("analysis", "safety_status"),
+        ("analysis", "safety_rating"),
+        ("analysis", "safety_verdict"),
+        ("analysis", "is_safe"),
+    )
 
     CLEANER_ALLOWED_SOURCE_SECTIONS = frozenset({
         "active",
@@ -277,6 +356,17 @@ class EnrichmentContractValidator:
         violations.extend(self._validate_scoring_classification_contract(product, product_id))
 
         return violations
+
+    def validate_release_integrity(self, product: Dict) -> List[ContractViolation]:
+        """Return the label-ledger failures consumed by release audits.
+
+        This is validation-only: it never repairs identity, rewrites form state,
+        or mutates score publication fields.
+        """
+        product_id = product.get(
+            "dsld_id", product.get("id", product.get("productId", "unknown"))
+        )
+        return self._validate_display_ledger_contract(product, product_id)
 
     def validate_batch(self, products: List[Dict]) -> Dict[str, List[ContractViolation]]:
         """
@@ -1519,12 +1609,49 @@ class EnrichmentContractValidator:
 
         H.1: Each display row must include the required display-ledger fields.
         H.2: mapped_to, when present, must include standard_name and source_section.
+        H.3: Form and identity states use their exact closed enums.
+        H.4: Disclosed source form text cannot be marked not_disclosed.
+        H.5: Score-included conflicts and active missing labels block release.
+        H.6: needs_review rows cannot carry dose, form-quality, or safety claims.
+        H.7: Source omissions require evidence with a closed omission reason.
+        H.8: Ledger fields require label_ledger_audit; completeness is
+             unavailable for unsupported source structures and must be 100%
+             for supported archetypes.
+        H.9: Identity-blocked products cannot publish a v4 quality score.
         """
         violations = []
+        identity_blocking_paths = []
         display_rows = product.get("display_ingredients")
+        ledger_fields_present = any(
+            field_name in product
+            for field_name in (
+                "display_ingredients",
+                "label_ledger_omissions",
+                "label_source_rows",
+            )
+        )
+
+        if not ledger_fields_present and "label_ledger_audit" not in product:
+            return violations
+
+        if ledger_fields_present and product.get("label_ledger_audit") is None:
+            violations.append(ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - required audit",
+                severity="error",
+                message=(
+                    "label_ledger_audit is required when display_ingredients, "
+                    "label_ledger_omissions, or label_source_rows is present"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_audit",
+                expected="label-ledger audit object",
+                actual=product.get("label_ledger_audit"),
+                evidence={"audit_code": "missing_label_ledger_audit"},
+            ))
 
         if display_rows is None:
-            return violations
+            display_rows = []
 
         if not isinstance(display_rows, list):
             violations.append(ContractViolation(
@@ -1585,6 +1712,150 @@ class EnrichmentContractValidator:
                     evidence={"raw_source_text": row.get("raw_source_text")},
                 ))
 
+            form_state = row.get("form_display_state")
+            if (
+                "form_display_state" in row
+                and form_state not in self.DISPLAY_LEDGER_FORM_STATES
+            ):
+                violations.append(ContractViolation(
+                    rule="H.3",
+                    rule_name="Display Ledger Contract - form state enum",
+                    severity="error",
+                    message=(
+                        "form_display_state must be one of the closed label-ledger "
+                        f"states; got {form_state!r}"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{field_path}.form_display_state",
+                    expected=sorted(self.DISPLAY_LEDGER_FORM_STATES),
+                    actual=form_state,
+                    evidence={
+                        "audit_code": "invalid_form_display_state",
+                        "raw_source_path": row.get("raw_source_path"),
+                    },
+                ))
+
+            identity_state = row.get("identity_integrity_state")
+            if (
+                "identity_integrity_state" in row
+                and identity_state not in self.DISPLAY_LEDGER_IDENTITY_STATES
+            ):
+                violations.append(ContractViolation(
+                    rule="H.3",
+                    rule_name="Display Ledger Contract - identity state enum",
+                    severity="error",
+                    message=(
+                        "identity_integrity_state must be one of the closed "
+                        f"label-ledger states; got {identity_state!r}"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{field_path}.identity_integrity_state",
+                    expected=sorted(self.DISPLAY_LEDGER_IDENTITY_STATES),
+                    actual=identity_state,
+                    evidence={
+                        "audit_code": "invalid_identity_integrity_state",
+                        "raw_source_path": row.get("raw_source_path"),
+                    },
+                ))
+
+            disclosed_form = self._first_nonempty_string(
+                row.get("label_display_form"),
+                row.get("source_label_form"),
+            )
+            if disclosed_form and form_state == "not_disclosed":
+                violations.append(ContractViolation(
+                    rule="H.4",
+                    rule_name="Display Ledger Contract - form disclosure truth",
+                    severity="error",
+                    message=(
+                        "A source-label form is present but form_display_state is "
+                        "not_disclosed"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{field_path}.form_display_state",
+                    expected="assessed, listed_not_assessed, or needs_review",
+                    actual=form_state,
+                    evidence={
+                        "audit_code": "disclosed_form_marked_not_disclosed",
+                        "disclosed_form": disclosed_form,
+                        "raw_source_path": row.get("raw_source_path"),
+                    },
+                ))
+
+            score_included_conflict = (
+                row.get("score_included") is True
+                and identity_state == "identity_conflict"
+            )
+            active_missing_label = (
+                row.get("source_section") in self.DISPLAY_LEDGER_ACTIVE_SECTIONS
+                and identity_state == "missing_display_label"
+            )
+            if score_included_conflict:
+                identity_blocking_paths.append(field_path)
+                violations.append(ContractViolation(
+                    rule="H.5",
+                    rule_name="Display Ledger Contract - score identity integrity",
+                    severity="error",
+                    message=(
+                        "A score-included row cannot carry "
+                        "identity_integrity_state=identity_conflict"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{field_path}.identity_integrity_state",
+                    expected="clean, repaired, or taxonomy_only",
+                    actual=identity_state,
+                    evidence={
+                        "audit_code": "score_included_identity_conflict",
+                        "raw_source_path": row.get("raw_source_path"),
+                    },
+                ))
+            if active_missing_label:
+                identity_blocking_paths.append(field_path)
+                violations.append(ContractViolation(
+                    rule="H.5",
+                    rule_name="Display Ledger Contract - active display identity",
+                    severity="error",
+                    message=(
+                        "An active label row cannot carry "
+                        "identity_integrity_state=missing_display_label"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{field_path}.identity_integrity_state",
+                    expected="a resolved label display identity",
+                    actual=identity_state,
+                    evidence={
+                        "audit_code": "active_missing_display_label",
+                        "raw_source_path": row.get("raw_source_path"),
+                    },
+                ))
+
+            if (
+                form_state == "needs_review"
+                or row.get("display_disposition") == "needs_review"
+            ):
+                for claim_path in self.NEEDS_REVIEW_CLAIM_PATHS:
+                    present, claim_value = self._claim_value(row, claim_path)
+                    if not present:
+                        continue
+                    dotted_path = ".".join(claim_path)
+                    violations.append(ContractViolation(
+                        rule="H.6",
+                        rule_name="Display Ledger Contract - review claim suppression",
+                        severity="error",
+                        message=(
+                            "needs_review row cannot ship a dose, form-quality, "
+                            f"or safety claim at {dotted_path}"
+                        ),
+                        product_id=product_id,
+                        field_path=f"{field_path}.{dotted_path}",
+                        expected="claim absent while row needs review",
+                        actual=claim_value,
+                        evidence={
+                            "audit_code": f"needs_review_claim_present:{dotted_path}",
+                            "raw_source_path": row.get("raw_source_path"),
+                        },
+                    ))
+
             mapped_to = row.get("mapped_to")
             if mapped_to is None:
                 continue
@@ -1629,7 +1900,895 @@ class EnrichmentContractValidator:
                     evidence={"raw_source_text": row.get("raw_source_text")},
                 ))
 
+        if identity_blocking_paths and self._score_is_published(product):
+            violations.append(ContractViolation(
+                rule="H.9",
+                rule_name="Display Ledger Contract - score publication",
+                severity="error",
+                message=(
+                    "quality_score_v4_100 cannot be published while label-ledger "
+                    "identity integrity is blocked"
+                ),
+                product_id=product_id,
+                field_path="quality_score_status",
+                expected="not_scored or suppressed_safety with no published score",
+                actual={
+                    "quality_score_status": product.get("quality_score_status"),
+                    "quality_score_v4_100": product.get("quality_score_v4_100"),
+                },
+                evidence={
+                    "audit_code": "score_publication_blocked_by_identity_integrity",
+                    "blocking_rows": identity_blocking_paths,
+                },
+            ))
+
+        violations.extend(
+            self._validate_label_ledger_omissions(
+                product,
+                product_id,
+                display_rows,
+            )
+        )
+        violations.extend(self._validate_label_ledger_audit(product, product_id))
         return violations
+
+    def _validate_label_ledger_omissions(
+        self,
+        product: Dict,
+        product_id: str,
+        display_rows: List[Dict],
+    ) -> List[ContractViolation]:
+        violations = []
+        omissions_value = product.get("label_ledger_omissions", [])
+        if not isinstance(omissions_value, list):
+            return [ContractViolation(
+                rule="H.7",
+                rule_name="Label Ledger Omission Contract - structure",
+                severity="error",
+                message="label_ledger_omissions must be a list when present",
+                product_id=product_id,
+                field_path="label_ledger_omissions",
+                expected="list",
+                actual=type(omissions_value).__name__,
+                evidence={"audit_code": "invalid_label_ledger_omissions"},
+            )]
+
+        omission_paths = set()
+        omission_path_counts = {}
+        omission_reasons = {}
+        unsupported_omission = False
+        for index, omission in enumerate(omissions_value):
+            field_path = f"label_ledger_omissions[{index}]"
+            if not isinstance(omission, dict):
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Ledger Omission Contract - structure",
+                    severity="error",
+                    message=f"Label-ledger omission at index {index} must be an object",
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected="object",
+                    actual=type(omission).__name__,
+                    evidence={"audit_code": "invalid_label_ledger_omission"},
+                ))
+                continue
+
+            source_path = self._nonempty_string(omission.get("raw_source_path"))
+            reason = omission.get("omission_reason")
+            missing_fields = [
+                key
+                for key in ("raw_source_path", "raw_source_text", "omission_reason")
+                if key not in omission
+            ]
+            if missing_fields or not source_path:
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Ledger Omission Contract - required evidence",
+                    severity="error",
+                    message=(
+                        "Label-ledger omission requires raw_source_path, "
+                        "raw_source_text, and omission_reason"
+                    ),
+                    product_id=product_id,
+                    field_path=field_path,
+                    expected=[
+                        "raw_source_path",
+                        "raw_source_text",
+                        "omission_reason",
+                    ],
+                    actual=sorted(omission.keys()),
+                    evidence={"audit_code": "invalid_label_ledger_omission"},
+                ))
+            if source_path:
+                omission_paths.add(source_path)
+                omission_path_counts[source_path] = (
+                    omission_path_counts.get(source_path, 0) + 1
+                )
+                omission_reasons.setdefault(source_path, set()).add(reason)
+            if reason not in self.LABEL_LEDGER_OMISSION_REASONS:
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Ledger Omission Contract - reason enum",
+                    severity="error",
+                    message=(
+                        "omission_reason must be one of the exact closed-set "
+                        f"values; got {reason!r}"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{field_path}.omission_reason",
+                    expected=sorted(self.LABEL_LEDGER_OMISSION_REASONS),
+                    actual=reason,
+                    evidence={
+                        "audit_code": "invalid_label_ledger_omission_reason",
+                        "raw_source_path": source_path,
+                    },
+                ))
+            elif reason == "unsupported_source_structure":
+                unsupported_omission = True
+
+        for source_path, count in omission_path_counts.items():
+            if count <= 1:
+                continue
+            violations.append(ContractViolation(
+                rule="H.7",
+                rule_name="Label Ledger Omission Contract - unique path",
+                severity="error",
+                message=(
+                    "A canonical source path may appear only once in "
+                    "label_ledger_omissions"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_omissions",
+                expected="unique raw_source_path values",
+                actual=source_path,
+                evidence={
+                    "audit_code": "duplicate_omission_source_path",
+                    "raw_source_path": source_path,
+                    "occurrences": count,
+                },
+            ))
+
+        display_path_counts = {}
+        folded_path_counts = {}
+        for row_index, row in enumerate(display_rows):
+            if not isinstance(row, dict):
+                continue
+            source_path = self._nonempty_string(row.get("raw_source_path"))
+            if source_path:
+                display_path_counts[source_path] = (
+                    display_path_counts.get(source_path, 0) + 1
+                )
+            folded_components = row.get("folded_label_components", [])
+            if folded_components is None:
+                folded_components = []
+            if not isinstance(folded_components, list):
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Display Ledger Contract - folded components",
+                    severity="error",
+                    message="folded_label_components must be a list when present",
+                    product_id=product_id,
+                    field_path=(
+                        f"display_ingredients[{row_index}].folded_label_components"
+                    ),
+                    expected="list",
+                    actual=type(folded_components).__name__,
+                    evidence={"audit_code": "invalid_folded_label_components"},
+                ))
+                continue
+            for folded_index, component in enumerate(folded_components):
+                component_path = (
+                    self._nonempty_string(component.get("raw_source_path"))
+                    if isinstance(component, dict)
+                    else ""
+                )
+                if not component_path:
+                    violations.append(ContractViolation(
+                        rule="H.7",
+                        rule_name="Display Ledger Contract - folded source path",
+                        severity="error",
+                        message=(
+                            "Each folded label component requires a non-empty "
+                            "raw_source_path"
+                        ),
+                        product_id=product_id,
+                        field_path=(
+                            f"display_ingredients[{row_index}]."
+                            f"folded_label_components[{folded_index}]"
+                        ),
+                        expected="non-empty raw_source_path",
+                        actual=component,
+                        evidence={"audit_code": "invalid_folded_source_path"},
+                    ))
+                    continue
+                folded_path_counts[component_path] = (
+                    folded_path_counts.get(component_path, 0) + 1
+                )
+
+        for source_path, count in display_path_counts.items():
+            if count <= 1:
+                continue
+            violations.append(ContractViolation(
+                rule="H.7",
+                rule_name="Display Ledger Contract - unique source path",
+                severity="error",
+                message=(
+                    "A canonical source path may resolve to only one primary "
+                    "display row"
+                ),
+                product_id=product_id,
+                field_path="display_ingredients",
+                expected="unique raw_source_path values",
+                actual=source_path,
+                evidence={
+                    "audit_code": "duplicate_display_source_path",
+                    "raw_source_path": source_path,
+                    "occurrences": count,
+                },
+            ))
+        for source_path, count in folded_path_counts.items():
+            if count <= 1:
+                continue
+            violations.append(ContractViolation(
+                rule="H.7",
+                rule_name="Display Ledger Contract - unique folded source path",
+                severity="error",
+                message=(
+                    "A source path may appear in only one folded label component"
+                ),
+                product_id=product_id,
+                field_path="display_ingredients",
+                expected="unique folded raw_source_path values",
+                actual=source_path,
+                evidence={
+                    "audit_code": "duplicate_folded_source_path",
+                    "raw_source_path": source_path,
+                    "occurrences": count,
+                },
+            ))
+
+        display_paths = set(display_path_counts)
+        for source_path in sorted(display_paths & omission_paths):
+            violations.append(ContractViolation(
+                rule="H.7",
+                rule_name="Label Ledger Contract - exclusive resolution",
+                severity="error",
+                message=(
+                    "A source path cannot be both a primary display row and an "
+                    "omission"
+                ),
+                product_id=product_id,
+                field_path="display_ingredients",
+                expected="display or omission, never both",
+                actual=source_path,
+                evidence={
+                    "audit_code": "display_omission_source_path_overlap",
+                    "raw_source_path": source_path,
+                },
+            ))
+
+        canonical_sources_present = "label_source_rows" in product
+        canonical_source_paths = set()
+        canonical_source_path_counts = {}
+        if canonical_sources_present:
+            canonical_source_rows = product.get("label_source_rows")
+            if not isinstance(canonical_source_rows, list):
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Source Row Contract - structure",
+                    severity="error",
+                    message="label_source_rows must be a list when present",
+                    product_id=product_id,
+                    field_path="label_source_rows",
+                    expected="list",
+                    actual=type(canonical_source_rows).__name__,
+                    evidence={"audit_code": "invalid_label_source_rows"},
+                ))
+                source_collections = []
+            else:
+                source_collections = [("label_source_rows", canonical_source_rows)]
+        else:
+            source_collections = [
+                (source_section, product.get(source_section, []))
+                for source_section in ("activeIngredients", "inactiveIngredients")
+            ]
+
+        for source_section, source_rows in source_collections:
+            if not isinstance(source_rows, list):
+                continue
+            for index, source_row in enumerate(source_rows):
+                if not isinstance(source_row, dict):
+                    if canonical_sources_present:
+                        violations.append(ContractViolation(
+                            rule="H.7",
+                            rule_name="Label Source Row Contract - structure",
+                            severity="error",
+                            message=f"label_source_rows[{index}] must be an object",
+                            product_id=product_id,
+                            field_path=f"label_source_rows[{index}]",
+                            expected="object",
+                            actual=type(source_row).__name__,
+                            evidence={"audit_code": "invalid_label_source_row"},
+                        ))
+                    continue
+                source_text = self._source_row_text(source_row)
+                source_path = self._nonempty_string(source_row.get("raw_source_path"))
+                if canonical_sources_present:
+                    missing_fields = [
+                        field_name
+                        for field_name in (
+                            "raw_source_path",
+                            "raw_source_text",
+                            "source_section",
+                        )
+                        if field_name not in source_row
+                    ]
+                    if (
+                        missing_fields
+                        or not source_path
+                        or not self._nonempty_string(source_row.get("source_section"))
+                    ):
+                        violations.append(ContractViolation(
+                            rule="H.7",
+                            rule_name="Label Source Row Contract - required fields",
+                            severity="error",
+                            message=(
+                                "Each label_source_rows entry requires "
+                                "raw_source_path, raw_source_text, and source_section"
+                            ),
+                            product_id=product_id,
+                            field_path=f"label_source_rows[{index}]",
+                            expected=[
+                                "raw_source_path",
+                                "raw_source_text",
+                                "source_section",
+                            ],
+                            actual=sorted(source_row.keys()),
+                            evidence={"audit_code": "invalid_label_source_row"},
+                        ))
+                        continue
+                    canonical_source_paths.add(source_path)
+                    canonical_source_path_counts[source_path] = (
+                        canonical_source_path_counts.get(source_path, 0) + 1
+                    )
+                if (
+                    (not canonical_sources_present and not source_text)
+                    or not source_path
+                    or source_path in display_paths
+                    or source_path in omission_paths
+                ):
+                    continue
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Ledger Omission Contract - source reconciliation",
+                    severity="error",
+                    message=(
+                        "Source row is absent from display_ingredients "
+                        "without label_ledger_omissions evidence"
+                    ),
+                    product_id=product_id,
+                    field_path=f"{source_section}[{index}].raw_source_path",
+                    expected="display ledger row or allowed omission evidence",
+                    actual=source_path,
+                    evidence={
+                        "audit_code": "missing_label_ledger_omission",
+                        "raw_source_path": source_path,
+                        "raw_source_text": source_text,
+                    },
+                ))
+
+        if canonical_sources_present:
+            for source_path, count in canonical_source_path_counts.items():
+                if count <= 1:
+                    continue
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Source Row Contract - unique source path",
+                    severity="error",
+                    message=(
+                        "label_source_rows must contain one row per canonical "
+                        "source path"
+                    ),
+                    product_id=product_id,
+                    field_path="label_source_rows",
+                    expected="unique raw_source_path values",
+                    actual=source_path,
+                    evidence={
+                        "audit_code": "duplicate_label_source_path",
+                        "raw_source_path": source_path,
+                        "occurrences": count,
+                    },
+                ))
+
+            for source_path in sorted(display_paths - canonical_source_paths):
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Ledger Contract - canonical inventory",
+                    severity="error",
+                    message=(
+                        "A primary display path must exist in label_source_rows"
+                    ),
+                    product_id=product_id,
+                    field_path="display_ingredients",
+                    expected="path registered in label_source_rows",
+                    actual=source_path,
+                    evidence={
+                        "audit_code": "unregistered_display_source_path",
+                        "raw_source_path": source_path,
+                    },
+                ))
+            for source_path in sorted(omission_paths - canonical_source_paths):
+                violations.append(ContractViolation(
+                    rule="H.7",
+                    rule_name="Label Ledger Contract - canonical inventory",
+                    severity="error",
+                    message=(
+                        "An omission path must exist in label_source_rows"
+                    ),
+                    product_id=product_id,
+                    field_path="label_ledger_omissions",
+                    expected="path registered in label_source_rows",
+                    actual=source_path,
+                    evidence={
+                        "audit_code": "unregistered_omission_source_path",
+                        "raw_source_path": source_path,
+                    },
+                ))
+            for source_path in sorted(folded_path_counts):
+                if source_path not in canonical_source_paths:
+                    violations.append(ContractViolation(
+                        rule="H.7",
+                        rule_name="Display Ledger Contract - folded inventory",
+                        severity="error",
+                        message=(
+                            "A folded component path must exist in "
+                            "label_source_rows"
+                        ),
+                        product_id=product_id,
+                        field_path="display_ingredients",
+                        expected="path registered in label_source_rows",
+                        actual=source_path,
+                        evidence={
+                            "audit_code": "unregistered_folded_source_path",
+                            "raw_source_path": source_path,
+                        },
+                    ))
+                elif (
+                    source_path not in omission_paths
+                    or "duplicate_source_line"
+                    not in omission_reasons.get(source_path, set())
+                ):
+                    violations.append(ContractViolation(
+                        rule="H.7",
+                        rule_name="Display Ledger Contract - folded resolution",
+                        severity="error",
+                        message=(
+                            "A folded component must be reconciled as a "
+                            "duplicate_source_line omission"
+                        ),
+                        product_id=product_id,
+                        field_path="display_ingredients",
+                        expected="duplicate_source_line omission evidence",
+                        actual=source_path,
+                        evidence={
+                            "audit_code": "folded_source_path_not_reconciled",
+                            "raw_source_path": source_path,
+                        },
+                    ))
+
+        audit = product.get("label_ledger_audit")
+        if unsupported_omission and isinstance(audit, dict):
+            audit_declares_unsupported = (
+                audit.get("support_status") == "unsupported"
+                or audit.get("source_structure") == "unsupported_source_structure"
+            )
+            if not audit_declares_unsupported and (
+                audit.get("support_status") != "unsupported"
+                or audit.get("completeness_status") != "unavailable"
+                or audit.get("completeness_percentage") is not None
+            ):
+                violations.append(self._unsupported_completeness_violation(
+                    product_id,
+                    audit,
+                    "label_ledger_omissions",
+                ))
+        return violations
+
+    def _validate_label_ledger_audit(
+        self,
+        product: Dict,
+        product_id: str,
+    ) -> List[ContractViolation]:
+        audit = product.get("label_ledger_audit")
+        if audit is None:
+            return []
+        if not isinstance(audit, dict):
+            return [ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - structure",
+                severity="error",
+                message="label_ledger_audit must be an object when present",
+                product_id=product_id,
+                field_path="label_ledger_audit",
+                expected="object",
+                actual=type(audit).__name__,
+                evidence={"audit_code": "invalid_label_ledger_audit"},
+            )]
+
+        violations = []
+        missing_fields = sorted(
+            field
+            for field in self.LABEL_LEDGER_AUDIT_REQUIRED_FIELDS
+            if field not in audit
+        )
+        if missing_fields:
+            violations.append(ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - required fields",
+                severity="error",
+                message=(
+                    "label_ledger_audit missing required fields: "
+                    f"{', '.join(missing_fields)}"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_audit",
+                expected=sorted(self.LABEL_LEDGER_AUDIT_REQUIRED_FIELDS),
+                actual=sorted(audit.keys()),
+                evidence={"audit_code": "invalid_label_ledger_audit"},
+            ))
+
+        support_status = audit.get("support_status")
+        completeness_status = audit.get("completeness_status")
+        if support_status not in self.LABEL_LEDGER_SUPPORT_STATES:
+            violations.append(ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - support state enum",
+                severity="error",
+                message=(
+                    "label_ledger_audit.support_status must be supported or "
+                    f"unsupported; got {support_status!r}"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_audit.support_status",
+                expected=sorted(self.LABEL_LEDGER_SUPPORT_STATES),
+                actual=support_status,
+                evidence={"audit_code": "invalid_label_ledger_audit"},
+            ))
+        if completeness_status not in self.LABEL_LEDGER_COMPLETENESS_STATES:
+            violations.append(ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - completeness state enum",
+                severity="error",
+                message=(
+                    "label_ledger_audit.completeness_status must be one of the "
+                    f"closed states; got {completeness_status!r}"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_audit.completeness_status",
+                expected=sorted(self.LABEL_LEDGER_COMPLETENESS_STATES),
+                actual=completeness_status,
+                evidence={"audit_code": "invalid_label_ledger_audit"},
+            ))
+
+        count_values = {}
+        for field_name in (
+            "meaningful_source_rows",
+            "displayed_rows",
+            "omitted_rows",
+        ):
+            value = audit.get(field_name)
+            if isinstance(value, bool) or not isinstance(value, int) or value < 0:
+                violations.append(ContractViolation(
+                    rule="H.8",
+                    rule_name="Label Ledger Audit Contract - counts",
+                    severity="error",
+                    message=f"label_ledger_audit.{field_name} must be a non-negative integer",
+                    product_id=product_id,
+                    field_path=f"label_ledger_audit.{field_name}",
+                    expected="non-negative integer",
+                    actual=value,
+                    evidence={"audit_code": "invalid_label_ledger_audit"},
+                ))
+            else:
+                count_values[field_name] = value
+
+        actual_display_mismatch = False
+        display_rows = product.get("display_ingredients")
+        if (
+            "displayed_rows" in count_values
+            and "display_ingredients" in product
+            and isinstance(display_rows, list)
+            and count_values["displayed_rows"] != len(display_rows)
+        ):
+            actual_display_mismatch = True
+            violations.append(ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - display count",
+                severity="error",
+                message=(
+                    "label_ledger_audit.displayed_rows must equal the actual "
+                    "display_ingredients length"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_audit.displayed_rows",
+                expected=len(display_rows),
+                actual=count_values["displayed_rows"],
+                evidence={"audit_code": "displayed_rows_count_mismatch"},
+            ))
+
+        omissions = product.get("label_ledger_omissions")
+        if (
+            "omitted_rows" in count_values
+            and "label_ledger_omissions" in product
+            and isinstance(omissions, list)
+            and count_values["omitted_rows"] != len(omissions)
+        ):
+            violations.append(ContractViolation(
+                rule="H.8",
+                rule_name="Label Ledger Audit Contract - omission count",
+                severity="error",
+                message=(
+                    "label_ledger_audit.omitted_rows must equal the actual "
+                    "label_ledger_omissions length"
+                ),
+                product_id=product_id,
+                field_path="label_ledger_audit.omitted_rows",
+                expected=len(omissions),
+                actual=count_values["omitted_rows"],
+                evidence={"audit_code": "omitted_rows_count_mismatch"},
+            ))
+
+        canonical_source_rows = product.get("label_source_rows")
+        if isinstance(canonical_source_rows, list):
+            canonical_source_paths = {
+                self._nonempty_string(row.get("raw_source_path"))
+                for row in canonical_source_rows
+                if isinstance(row, dict)
+                and self._nonempty_string(row.get("raw_source_path"))
+            }
+            omission_paths = {
+                self._nonempty_string(row.get("raw_source_path"))
+                for row in (omissions if isinstance(omissions, list) else [])
+                if isinstance(row, dict)
+                and self._nonempty_string(row.get("raw_source_path"))
+            }
+            expected_meaningful_rows = len(
+                canonical_source_paths - omission_paths
+            )
+            expected_displayed_rows = expected_meaningful_rows
+            if (
+                "meaningful_source_rows" in count_values
+                and count_values["meaningful_source_rows"]
+                != expected_meaningful_rows
+            ):
+                violations.append(ContractViolation(
+                    rule="H.8",
+                    rule_name="Label Ledger Audit Contract - source inventory",
+                    severity="error",
+                    message=(
+                        "meaningful_source_rows must be derived from unique "
+                        "label_source_rows paths minus allowed omission paths"
+                    ),
+                    product_id=product_id,
+                    field_path="label_ledger_audit.meaningful_source_rows",
+                    expected=expected_meaningful_rows,
+                    actual=count_values["meaningful_source_rows"],
+                    evidence={
+                        "audit_code":
+                        "meaningful_source_rows_inventory_mismatch"
+                    },
+                ))
+            if (
+                "displayed_rows" in count_values
+                and count_values["displayed_rows"] != expected_displayed_rows
+            ):
+                violations.append(ContractViolation(
+                    rule="H.8",
+                    rule_name="Label Ledger Audit Contract - source inventory",
+                    severity="error",
+                    message=(
+                        "displayed_rows must equal the canonical source paths "
+                        "remaining after allowed omissions"
+                    ),
+                    product_id=product_id,
+                    field_path="label_ledger_audit.displayed_rows",
+                    expected=expected_displayed_rows,
+                    actual=count_values["displayed_rows"],
+                    evidence={
+                        "audit_code": "displayed_rows_inventory_mismatch"
+                    },
+                ))
+
+        source_structure = self._nonempty_string(audit.get("source_structure"))
+        percentage = audit.get("completeness_percentage")
+        is_unsupported = (
+            support_status == "unsupported"
+            or source_structure == "unsupported_source_structure"
+        )
+        if is_unsupported:
+            if completeness_status != "unavailable" or percentage is not None:
+                violations.append(self._unsupported_completeness_violation(
+                    product_id,
+                    audit,
+                    "label_ledger_audit",
+                ))
+        elif support_status == "supported":
+            supported_contract_error = actual_display_mismatch
+            meaningful_rows = count_values.get("meaningful_source_rows")
+            displayed_count = count_values.get("displayed_rows")
+            expected_percentage = None
+
+            if meaningful_rows is not None and displayed_count is not None:
+                if meaningful_rows != displayed_count:
+                    supported_contract_error = True
+                    violations.append(ContractViolation(
+                        rule="H.8",
+                        rule_name="Label Ledger Audit Contract - supported counts",
+                        severity="error",
+                        message=(
+                            "Supported structures require meaningful_source_rows "
+                            "to equal displayed_rows; omissions track only "
+                            "non-meaningful source rows"
+                        ),
+                        product_id=product_id,
+                        field_path="label_ledger_audit.meaningful_source_rows",
+                        expected=displayed_count,
+                        actual=meaningful_rows,
+                        evidence={
+                            "audit_code":
+                            "supported_meaningful_display_count_mismatch"
+                        },
+                    ))
+
+                if meaningful_rows > 0:
+                    expected_percentage = round(
+                        displayed_count / meaningful_rows * 100.0,
+                        2,
+                    )
+                elif displayed_count == 0:
+                    if (
+                        source_structure
+                        in self.LABEL_LEDGER_SUPPORTED_EMPTY_STRUCTURES
+                    ):
+                        expected_percentage = 100.0
+                    else:
+                        supported_contract_error = True
+                        violations.append(ContractViolation(
+                            rule="H.8",
+                            rule_name=(
+                                "Label Ledger Audit Contract - supported empty panel"
+                            ),
+                            severity="error",
+                            message=(
+                                "A zero-row supported ledger may claim 100% only "
+                                "when source_structure explicitly identifies an "
+                                "empty panel"
+                            ),
+                            product_id=product_id,
+                            field_path="label_ledger_audit.source_structure",
+                            expected=sorted(
+                                self.LABEL_LEDGER_SUPPORTED_EMPTY_STRUCTURES
+                            ),
+                            actual=source_structure,
+                            evidence={
+                                "audit_code":
+                                "supported_empty_panel_not_declared"
+                            },
+                        ))
+
+            percentage_is_number = (
+                not isinstance(percentage, bool)
+                and isinstance(percentage, (int, float))
+            )
+            if expected_percentage is not None and (
+                not percentage_is_number
+                or round(float(percentage), 2) != expected_percentage
+            ):
+                supported_contract_error = True
+                violations.append(ContractViolation(
+                    rule="H.8",
+                    rule_name="Label Ledger Audit Contract - completeness math",
+                    severity="error",
+                    message=(
+                        "completeness_percentage must equal displayed_rows / "
+                        "meaningful_source_rows * 100"
+                    ),
+                    product_id=product_id,
+                    field_path="label_ledger_audit.completeness_percentage",
+                    expected=expected_percentage,
+                    actual=percentage,
+                    evidence={
+                        "audit_code": "label_completeness_percentage_mismatch"
+                    },
+                ))
+
+            if (
+                completeness_status != "complete"
+                or not percentage_is_number
+                or float(percentage) != 100.0
+                or supported_contract_error
+            ):
+                violations.append(ContractViolation(
+                    rule="H.8",
+                    rule_name="Label Ledger Audit Contract - supported completeness",
+                    severity="error",
+                    message=(
+                        "Supported label archetypes must be internally consistent "
+                        "and 100% complete before release"
+                    ),
+                    product_id=product_id,
+                    field_path="label_ledger_audit.completeness_percentage",
+                    expected=100.0,
+                    actual=percentage,
+                    evidence={"audit_code": "supported_archetype_incomplete"},
+                ))
+        return violations
+
+    @staticmethod
+    def _unsupported_completeness_violation(
+        product_id: str,
+        audit: Dict,
+        field_path: str,
+    ) -> ContractViolation:
+        return ContractViolation(
+            rule="H.8",
+            rule_name="Label Ledger Audit Contract - unsupported completeness",
+            severity="error",
+            message=(
+                "unsupported_source_structure makes completeness unavailable; "
+                "a completeness percentage or complete claim cannot ship"
+            ),
+            product_id=product_id,
+            field_path=field_path,
+            expected={
+                "support_status": "unsupported",
+                "completeness_percentage": None,
+                "completeness_status": "unavailable",
+            },
+            actual={
+                "support_status": audit.get("support_status"),
+                "source_structure": audit.get("source_structure"),
+                "completeness_percentage": audit.get("completeness_percentage"),
+                "completeness_status": audit.get("completeness_status"),
+            },
+            evidence={"audit_code": "unsupported_structure_completeness_claim"},
+        )
+
+    @staticmethod
+    def _nonempty_string(value: Any) -> str:
+        return value.strip() if isinstance(value, str) else ""
+
+    @classmethod
+    def _first_nonempty_string(cls, *values: Any) -> str:
+        for value in values:
+            text = cls._nonempty_string(value)
+            if text:
+                return text
+        return ""
+
+    @classmethod
+    def _source_row_text(cls, row: Dict) -> str:
+        if "raw_source_text" in row:
+            return cls._nonempty_string(row.get("raw_source_text"))
+        return cls._nonempty_string(row.get("name"))
+
+    @staticmethod
+    def _claim_value(row: Dict, path: tuple) -> tuple:
+        current: Any = row
+        for segment in path:
+            if not isinstance(current, dict) or segment not in current:
+                return False, None
+            current = current[segment]
+        if current is None or current == "" or current == [] or current == {}:
+            return False, current
+        return True, current
+
+    @staticmethod
+    def _score_is_published(product: Dict) -> bool:
+        return (
+            product.get("quality_score_status") == "scored"
+            or product.get("quality_score_v4_100") is not None
+        )
 
     # =========================================================================
     # RULE I: Identity / Safety Separation

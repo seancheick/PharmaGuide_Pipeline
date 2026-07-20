@@ -12,6 +12,23 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from enrichment_contract_validator import EnrichmentContractValidator, ContractViolation
+from audit_identity_integrity import audit_product
+
+
+def _complete_label_ledger_audit(
+    meaningful_source_rows,
+    displayed_rows,
+    omitted_rows=0,
+):
+    return {
+        "support_status": "supported",
+        "source_structure": "flat_supplement_facts",
+        "meaningful_source_rows": meaningful_source_rows,
+        "displayed_rows": displayed_rows,
+        "omitted_rows": omitted_rows,
+        "completeness_percentage": 100.0,
+        "completeness_status": "complete",
+    }
 
 
 class TestSugarConsistencyContract:
@@ -904,14 +921,23 @@ class TestDisplayLedgerContract:
     def test_H_valid_display_ledger_no_violations(self, validator):
         product = {
             "id": "test_display_valid",
+            "label_ledger_audit": _complete_label_ledger_audit(2, 2),
             "display_ingredients": [
                 {
+                    "raw_source_path": "activeIngredients[0]",
                     "raw_source_text": "Vitamin C",
                     "display_name": "Vitamin C",
+                    "label_display_name": "Vitamin C",
+                    "label_order": 0,
+                    "nested_depth": 0,
                     "source_section": "activeIngredients",
                     "display_type": "mapped_ingredient",
                     "resolution_type": "direct_mapped",
                     "score_included": True,
+                    "display_disposition": "scored",
+                    "form_display_state": "not_disclosed",
+                    "identity_integrity_state": "clean",
+                    "ledger_fingerprint": "vitamin-c",
                     "mapped_to": {
                         "standard_name": "Vitamin C",
                         "source_section": "active",
@@ -919,12 +945,20 @@ class TestDisplayLedgerContract:
                     },
                 },
                 {
+                    "raw_source_path": "activeIngredients[1]",
                     "raw_source_text": "Other Omega-3's",
                     "display_name": "Other Omega-3's",
+                    "label_display_name": "Other Omega-3's",
+                    "label_order": 1,
+                    "nested_depth": 0,
                     "source_section": "activeIngredients",
                     "display_type": "summary_wrapper",
                     "resolution_type": "suppressed_parent",
                     "score_included": False,
+                    "display_disposition": "label_context",
+                    "form_display_state": "not_applicable",
+                    "identity_integrity_state": "taxonomy_only",
+                    "ledger_fingerprint": "other-omega-3",
                     "children": [],
                 },
             ],
@@ -937,14 +971,23 @@ class TestDisplayLedgerContract:
     def test_H_product_name_fallback_is_a_valid_display_source(self, validator):
         product = {
             "id": "test_display_product_name",
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1),
             "display_ingredients": [
                 {
+                    "raw_source_path": "product_name",
                     "raw_source_text": "Vitamin D3 1000 IU",
                     "display_name": "Vitamin D3",
+                    "label_display_name": "Vitamin D3",
+                    "label_order": 0,
+                    "nested_depth": 0,
                     "source_section": "product_name",
                     "display_type": "inferred_from_name",
                     "resolution_type": "product_name_fallback",
                     "score_included": False,
+                    "display_disposition": "label_context",
+                    "form_display_state": "listed_not_assessed",
+                    "identity_integrity_state": "taxonomy_only",
+                    "ledger_fingerprint": "vitamin-d3-product-name",
                     "mapped_to": {
                         "standard_name": "Vitamin D3",
                         "source_section": "inferred",
@@ -963,12 +1006,20 @@ class TestDisplayLedgerContract:
             "id": "test_display_invalid_missing",
             "display_ingredients": [
                 {
+                    "raw_source_path": "activeIngredients[0]",
                     "raw_source_text": "Vitamin C",
                     "display_name": "Vitamin C",
+                    "label_display_name": "Vitamin C",
+                    "label_order": 0,
+                    "nested_depth": 0,
                     "source_section": "activeIngredients",
                     "display_type": "mapped_ingredient",
                     # resolution_type missing
                     "score_included": True,
+                    "display_disposition": "scored",
+                    "form_display_state": "not_disclosed",
+                    "identity_integrity_state": "clean",
+                    "ledger_fingerprint": "vitamin-c-missing-resolution",
                 }
             ],
         }
@@ -983,12 +1034,20 @@ class TestDisplayLedgerContract:
             "id": "test_display_invalid_mapped_to",
             "display_ingredients": [
                 {
+                    "raw_source_path": "activeIngredients[0]",
                     "raw_source_text": "Vitamin C",
                     "display_name": "Vitamin C",
+                    "label_display_name": "Vitamin C",
+                    "label_order": 0,
+                    "nested_depth": 0,
                     "source_section": "activeIngredients",
                     "display_type": "mapped_ingredient",
                     "resolution_type": "direct_mapped",
                     "score_included": True,
+                    "display_disposition": "scored",
+                    "form_display_state": "not_disclosed",
+                    "identity_integrity_state": "clean",
+                    "ledger_fingerprint": "vitamin-c-invalid-map",
                     "mapped_to": {
                         "source_section": "active",
                         "raw_source_path": "activeIngredients",
@@ -1143,6 +1202,784 @@ class TestGummyBasisUnitAcceptsLabelFaithfulUnits:
         assert [
             v for v in violations if v.rule == "D.1a" and v.severity == "error"
         ], "truncated basis_unit must still be a hard error"
+
+
+class TestLabelLedgerReleaseContract:
+    """P0 label-truth integrity gates fail closed without repairing data."""
+
+    @pytest.fixture
+    def validator(self):
+        return EnrichmentContractValidator()
+
+    @staticmethod
+    def _row(**overrides):
+        row = {
+            "raw_source_text": "Magnesium",
+            "display_name": "Magnesium",
+            "label_display_name": "Magnesium",
+            "raw_source_path": "activeIngredients[0]",
+            "label_order": 0,
+            "nested_depth": 0,
+            "source_section": "activeIngredients",
+            "display_type": "mapped_ingredient",
+            "resolution_type": "direct_mapped",
+            "score_included": True,
+            "display_disposition": "scored",
+            "form_display_state": "not_disclosed",
+            "identity_integrity_state": "clean",
+            "ledger_fingerprint": "test-ledger-fingerprint",
+        }
+        row.update(overrides)
+        return row
+
+    @staticmethod
+    def _identity_audit_row():
+        return {
+            "raw_source_path": "activeIngredients[0]",
+            "source_label_key": "label:magnesium:magnesium:200:mg",
+            "source_label_name": "Magnesium",
+            "label_display_name": "Magnesium",
+            "canonical_id_before": "magnesium",
+            "canonical_id_after": "magnesium",
+            "canonical_id": "magnesium",
+            "identity_disposition": "clean",
+            "scoreable_identity": True,
+            "identity_resolution_rationale": "test fixture",
+        }
+
+    @pytest.mark.parametrize("state", ["unknown", "pending", ""])
+    def test_H3_form_display_state_is_closed(self, validator, state):
+        product = {
+            "id": "invalid-form-state",
+            "display_ingredients": [self._row(form_display_state=state)],
+        }
+
+        violations = validator.validate(product)
+
+        assert [v for v in violations if v.rule == "H.3"]
+        assert any(
+            v.field_path == "display_ingredients[0].form_display_state"
+            and v.evidence.get("audit_code") == "invalid_form_display_state"
+            for v in violations
+        )
+
+    @pytest.mark.parametrize("state", ["unknown", "pending", ""])
+    def test_H3_identity_integrity_state_is_closed(self, validator, state):
+        product = {
+            "id": "invalid-identity-state",
+            "display_ingredients": [self._row(identity_integrity_state=state)],
+        }
+
+        violations = validator.validate(product)
+
+        assert [v for v in violations if v.rule == "H.3"]
+        assert any(
+            v.field_path == "display_ingredients[0].identity_integrity_state"
+            and v.evidence.get("audit_code") == "invalid_identity_integrity_state"
+            for v in violations
+        )
+
+    @pytest.mark.parametrize("form_field", ["label_display_form", "source_label_form"])
+    def test_H4_disclosed_form_cannot_be_not_disclosed(
+        self, validator, form_field
+    ):
+        product = {
+            "id": "false-not-disclosed",
+            "display_ingredients": [
+                self._row(**{form_field: "as Magnesium Glycinate"})
+            ],
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.4"
+            and v.field_path == "display_ingredients[0].form_display_state"
+            and v.evidence.get("audit_code")
+            == "disclosed_form_marked_not_disclosed"
+            for v in violations
+        )
+
+    def test_H5_score_included_identity_conflict_blocks_release(self, validator):
+        product = {
+            "id": "scored-conflict",
+            "display_ingredients": [
+                self._row(identity_integrity_state="identity_conflict")
+            ],
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.5"
+            and v.evidence.get("audit_code") == "score_included_identity_conflict"
+            for v in violations
+        )
+
+    def test_H5_any_active_missing_display_label_blocks_release(self, validator):
+        product = {
+            "id": "active-missing-label",
+            "display_ingredients": [
+                self._row(
+                    score_included=False,
+                    display_disposition="needs_review",
+                    form_display_state="needs_review",
+                    identity_integrity_state="missing_display_label",
+                )
+            ],
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.5"
+            and v.evidence.get("audit_code") == "active_missing_display_label"
+            for v in violations
+        )
+
+    def test_release_audit_blocks_published_score_for_identity_failure(self):
+        product = {
+            "id": "published-conflict",
+            "quality_score_status": "scored",
+            "quality_score_v4_100": 82.0,
+            "activeIngredients": [
+                {
+                    "name": "Magnesium",
+                    "raw_source_text": "Magnesium",
+                    "raw_source_path": "activeIngredients[0]",
+                }
+            ],
+            "ingredient_quality_data": {
+                "ingredients": [self._identity_audit_row()]
+            },
+            "display_ingredients": [
+                self._row(identity_integrity_state="identity_conflict")
+            ],
+        }
+
+        records = audit_product(product, classify=lambda _: "generic")
+
+        assert any(
+            record.violation == "score_publication_blocked_by_identity_integrity"
+            for record in records
+        )
+
+    @pytest.mark.parametrize(
+        "claim_fields,expected_path",
+        [
+            ({"exact_dose_text": "200 mg"}, "exact_dose_text"),
+            (
+                {"analysis": {"form_quality_claim": "Excellent"}},
+                "analysis.form_quality_claim",
+            ),
+            (
+                {"analysis": {"safety_claim": "Safe"}},
+                "analysis.safety_claim",
+            ),
+        ],
+    )
+    def test_release_audit_blocks_needs_review_rows_with_claims(
+        self, claim_fields, expected_path
+    ):
+        row = self._row(
+            display_disposition="needs_review",
+            form_display_state="needs_review",
+            score_included=False,
+        )
+        row.update(claim_fields)
+        product = {
+            "id": "review-claim",
+            "activeIngredients": [
+                {
+                    "name": "Magnesium",
+                    "raw_source_text": "Magnesium",
+                    "raw_source_path": "activeIngredients[0]",
+                }
+            ],
+            "ingredient_quality_data": {
+                "ingredients": [self._identity_audit_row()]
+            },
+            "display_ingredients": [row],
+        }
+
+        records = audit_product(product, classify=lambda _: "generic")
+
+        assert any(
+            record.violation == f"needs_review_claim_present:{expected_path}"
+            for record in records
+        )
+
+    def test_H7_meaningful_source_row_requires_ledger_or_omission_evidence(
+        self, validator
+    ):
+        product = {
+            "id": "missing-ledger-source",
+            "activeIngredients": [
+                {
+                    "name": "Magnesium",
+                    "raw_source_text": "Magnesium",
+                    "raw_source_path": "activeIngredients[0]",
+                }
+            ],
+            "display_ingredients": [],
+            "label_ledger_omissions": [],
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.7"
+            and v.field_path == "activeIngredients[0].raw_source_path"
+            and v.evidence.get("audit_code") == "missing_label_ledger_omission"
+            for v in violations
+        )
+
+    @pytest.mark.parametrize(
+        "reason",
+        [
+            "nutrition_fact_not_applicable",
+            "decorative_or_header_text",
+            "duplicate_source_line",
+            "empty_source_text",
+            "unsupported_source_structure",
+        ],
+    )
+    def test_H7_omission_reason_closed_set_accepts_exact_values(
+        self, validator, reason
+    ):
+        product = {
+            "id": "allowed-omission",
+            "display_ingredients": [],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "label[0]",
+                    "raw_source_text": "Header",
+                    "omission_reason": reason,
+                }
+            ],
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule == "H.7"]
+
+    def test_H7_omission_reason_outside_closed_set_is_error(self, validator):
+        product = {
+            "id": "bad-omission",
+            "display_ingredients": [],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "label[0]",
+                    "raw_source_text": "Mystery",
+                    "omission_reason": "not_useful",
+                }
+            ],
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.7"
+            and v.field_path == "label_ledger_omissions[0].omission_reason"
+            and v.evidence.get("audit_code")
+            == "invalid_label_ledger_omission_reason"
+            for v in violations
+        )
+
+    def test_H8_unsupported_structure_forbids_completeness_claim(self, validator):
+        product = {
+            "id": "unsupported-complete",
+            "display_ingredients": [],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "label[0]",
+                    "raw_source_text": "Two-column panel",
+                    "omission_reason": "unsupported_source_structure",
+                }
+            ],
+            "label_ledger_audit": {
+                "support_status": "unsupported",
+                "source_structure": "unsupported_source_structure",
+                "meaningful_source_rows": 1,
+                "displayed_rows": 0,
+                "omitted_rows": 1,
+                "completeness_percentage": 100.0,
+                "completeness_status": "complete",
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.evidence.get("audit_code")
+            == "unsupported_structure_completeness_claim"
+            for v in violations
+        )
+
+    def test_H8_supported_archetype_below_full_completeness_is_error(
+        self, validator
+    ):
+        product = {
+            "id": "supported-incomplete",
+            "display_ingredients": [self._row()],
+            "label_ledger_audit": {
+                "support_status": "supported",
+                "source_structure": "flat_supplement_facts",
+                "meaningful_source_rows": 2,
+                "displayed_rows": 1,
+                "omitted_rows": 0,
+                "completeness_percentage": 50.0,
+                "completeness_status": "incomplete",
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.evidence.get("audit_code") == "supported_archetype_incomplete"
+            for v in violations
+        )
+
+    def test_H8_supported_full_completeness_and_low_analysis_coverage_pass(
+        self, validator
+    ):
+        product = {
+            "id": "supported-complete",
+            "mapped_coverage": 0.2,
+            "display_ingredients": [self._row()],
+            "label_ledger_audit": {
+                "support_status": "supported",
+                "source_structure": "flat_supplement_facts",
+                "meaningful_source_rows": 1,
+                "displayed_rows": 1,
+                "omitted_rows": 0,
+                "completeness_percentage": 100.0,
+                "completeness_status": "complete",
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule.startswith("H.")]
+
+    @pytest.mark.parametrize(
+        "ledger_field,ledger_value",
+        [
+            ("display_ingredients", []),
+            ("label_ledger_omissions", []),
+            (
+                "label_source_rows",
+                [
+                    {
+                        "raw_source_path": "nutritionFacts[0]",
+                        "raw_source_text": "Calories",
+                        "source_section": "nutritionFacts",
+                    }
+                ],
+            ),
+        ],
+    )
+    def test_H8_label_ledger_fields_require_label_ledger_audit(
+        self, validator, ledger_field, ledger_value
+    ):
+        product = {"id": "missing-ledger-audit", ledger_field: ledger_value}
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.field_path == "label_ledger_audit"
+            and v.evidence.get("audit_code") == "missing_label_ledger_audit"
+            for v in violations
+        )
+
+    def test_H7_reconciles_non_active_canonical_label_source_row(self, validator):
+        product = {
+            "id": "missing-nutrition-source-row",
+            "label_source_rows": [
+                {
+                    "raw_source_path": "nutritionFacts[0]",
+                    "raw_source_text": "Calories 10",
+                    "source_section": "nutritionFacts",
+                }
+            ],
+            "display_ingredients": [],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 0),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.7"
+            and v.field_path == "label_source_rows[0].raw_source_path"
+            and v.evidence.get("audit_code") == "missing_label_ledger_omission"
+            for v in violations
+        )
+
+    def test_H7_label_source_rows_replace_active_inactive_fallback(self, validator):
+        displayed = self._row(
+            raw_source_path="labelSourceRows[0]",
+            source_section="product_name",
+            score_included=False,
+            display_disposition="label_context",
+            form_display_state="not_applicable",
+            identity_integrity_state="taxonomy_only",
+        )
+        product = {
+            "id": "canonical-source-precedence",
+            "label_source_rows": [
+                {
+                    "raw_source_path": "labelSourceRows[0]",
+                    "raw_source_text": "Magnesium Gummies",
+                    "source_section": "product_name",
+                }
+            ],
+            "activeIngredients": [
+                {
+                    "raw_source_path": "legacyActive[0]",
+                    "raw_source_text": "Legacy duplicate",
+                }
+            ],
+            "display_ingredients": [displayed],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert not [
+            v
+            for v in violations
+            if v.rule == "H.7"
+            and v.evidence.get("audit_code") == "missing_label_ledger_omission"
+        ]
+
+    def test_H8_supported_counts_cannot_claim_complete_when_rows_are_missing(
+        self, validator
+    ):
+        audit = _complete_label_ledger_audit(2, 1)
+        product = {
+            "id": "contradictory-supported-counts",
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": audit,
+        }
+
+        violations = validator.validate(product)
+        audit_codes = {v.evidence.get("audit_code") for v in violations}
+
+        assert "supported_meaningful_display_count_mismatch" in audit_codes
+        assert "label_completeness_percentage_mismatch" in audit_codes
+
+    def test_H8_displayed_rows_matches_actual_display_ledger_length(self, validator):
+        product = {
+            "id": "declared-display-count-drift",
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": _complete_label_ledger_audit(2, 2),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.field_path == "label_ledger_audit.displayed_rows"
+            and v.evidence.get("audit_code") == "displayed_rows_count_mismatch"
+            for v in violations
+        )
+
+    def test_H8_omitted_rows_matches_actual_omission_list_length(self, validator):
+        product = {
+            "id": "declared-omission-count-drift",
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "label[1]",
+                    "raw_source_text": "Supplement Facts",
+                    "omission_reason": "decorative_or_header_text",
+                }
+            ],
+            "label_ledger_audit": {
+                **_complete_label_ledger_audit(1, 1),
+                "omitted_rows": 2,
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.field_path == "label_ledger_audit.omitted_rows"
+            and v.evidence.get("audit_code") == "omitted_rows_count_mismatch"
+            for v in violations
+        )
+
+    def test_H8_percentage_must_equal_displayed_over_meaningful(self, validator):
+        product = {
+            "id": "declared-percentage-drift",
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": {
+                **_complete_label_ledger_audit(1, 1),
+                "completeness_percentage": 99.0,
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.field_path == "label_ledger_audit.completeness_percentage"
+            and v.expected == 100.0
+            and v.evidence.get("audit_code")
+            == "label_completeness_percentage_mismatch"
+            for v in violations
+        )
+
+    def test_H8_zero_rows_require_explicit_supported_empty_panel(self, validator):
+        product = {
+            "id": "implicit-empty-panel",
+            "display_ingredients": [],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": _complete_label_ledger_audit(0, 0),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.8"
+            and v.evidence.get("audit_code")
+            == "supported_empty_panel_not_declared"
+            for v in violations
+        )
+
+    def test_H8_explicit_supported_empty_panel_may_be_complete(self, validator):
+        product = {
+            "id": "explicit-empty-panel",
+            "display_ingredients": [],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": {
+                **_complete_label_ledger_audit(0, 0),
+                "source_structure": "empty_panel",
+            },
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule.startswith("H.")]
+
+    def test_H8_nonmeaningful_omissions_do_not_reduce_completeness(
+        self, validator
+    ):
+        product = {
+            "id": "complete-with-header-omission",
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "label[1]",
+                    "raw_source_text": "Supplement Facts",
+                    "omission_reason": "decorative_or_header_text",
+                }
+            ],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule.startswith("H.")]
+
+    @pytest.mark.parametrize(
+        "required_field",
+        [
+            "raw_source_path",
+            "label_display_name",
+            "label_order",
+            "nested_depth",
+            "score_included",
+            "display_disposition",
+            "form_display_state",
+            "identity_integrity_state",
+            "ledger_fingerprint",
+        ],
+    )
+    def test_H1_canonical_display_fields_are_mandatory(
+        self, validator, required_field
+    ):
+        row = self._row()
+        row.pop(required_field)
+        product = {
+            "id": f"missing-{required_field}",
+            "display_ingredients": [row],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.1"
+            and v.field_path == "display_ingredients[0]"
+            and required_field in v.expected
+            for v in violations
+        )
+
+    def test_H7_duplicate_display_paths_cannot_fake_complete_audit(
+        self, validator
+    ):
+        product = {
+            "id": "duplicate-display-path",
+            "label_source_rows": [
+                {
+                    "raw_source_path": "activeIngredients[0]",
+                    "raw_source_text": "Magnesium",
+                    "source_section": "activeIngredients",
+                }
+            ],
+            "display_ingredients": [
+                self._row(),
+                self._row(
+                    label_order=1,
+                    ledger_fingerprint="duplicate-logical-row",
+                ),
+            ],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": _complete_label_ledger_audit(2, 2),
+        }
+
+        violations = validator.validate(product)
+        audit_codes = {v.evidence.get("audit_code") for v in violations}
+
+        assert "duplicate_display_source_path" in audit_codes
+        assert "meaningful_source_rows_inventory_mismatch" in audit_codes
+
+    def test_H7_duplicate_canonical_source_paths_are_rejected(self, validator):
+        source_row = {
+            "raw_source_path": "activeIngredients[0]",
+            "raw_source_text": "Magnesium",
+            "source_section": "activeIngredients",
+        }
+        product = {
+            "id": "duplicate-source-inventory",
+            "label_source_rows": [dict(source_row), dict(source_row)],
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.7"
+            and v.evidence.get("audit_code")
+            == "duplicate_label_source_path"
+            for v in violations
+        )
+
+    def test_H7_display_and_omission_paths_are_disjoint(self, validator):
+        product = {
+            "id": "display-omission-overlap",
+            "label_source_rows": [
+                {
+                    "raw_source_path": "activeIngredients[0]",
+                    "raw_source_text": "Magnesium",
+                    "source_section": "activeIngredients",
+                }
+            ],
+            "display_ingredients": [self._row()],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "activeIngredients[0]",
+                    "raw_source_text": "Magnesium",
+                    "omission_reason": "duplicate_source_line",
+                }
+            ],
+            "label_ledger_audit": _complete_label_ledger_audit(0, 1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.7"
+            and v.evidence.get("audit_code")
+            == "display_omission_source_path_overlap"
+            for v in violations
+        )
+
+    def test_H7_folded_component_path_is_unique_and_omitted_as_duplicate(
+        self, validator
+    ):
+        parent = self._row(
+            raw_source_text="Folate 665 mcg DFE (400 mcg Folic Acid)",
+            display_name="Folate",
+            label_display_name="Folate",
+            raw_source_path="activeIngredients[0]",
+            ledger_fingerprint="folate-parent",
+            folded_label_components=[
+                {
+                    "raw_source_path": "activeIngredients[0].children[0]",
+                    "raw_source_text": "Folic Acid 400 mcg",
+                    "label_display_name": "Folic Acid",
+                }
+            ],
+        )
+        product = {
+            "id": "folded-folate-traceability",
+            "label_source_rows": [
+                {
+                    "raw_source_path": "activeIngredients[0]",
+                    "raw_source_text": parent["raw_source_text"],
+                    "source_section": "activeIngredients",
+                },
+                {
+                    "raw_source_path": "activeIngredients[0].children[0]",
+                    "raw_source_text": "Folic Acid 400 mcg",
+                    "source_section": "activeIngredients",
+                },
+            ],
+            "display_ingredients": [parent],
+            "label_ledger_omissions": [
+                {
+                    "raw_source_path": "activeIngredients[0].children[0]",
+                    "raw_source_text": "Folic Acid 400 mcg",
+                    "omission_reason": "duplicate_source_line",
+                }
+            ],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert not [v for v in violations if v.rule.startswith("H.")]
+
+    def test_H7_duplicate_folded_component_paths_are_rejected(self, validator):
+        folded = {
+            "raw_source_path": "activeIngredients[0].children[0]",
+            "raw_source_text": "Folic Acid 400 mcg",
+            "label_display_name": "Folic Acid",
+        }
+        row = self._row(folded_label_components=[dict(folded), dict(folded)])
+        product = {
+            "id": "duplicate-folded-path",
+            "display_ingredients": [row],
+            "label_ledger_omissions": [
+                {
+                    **folded,
+                    "omission_reason": "duplicate_source_line",
+                }
+            ],
+            "label_ledger_audit": _complete_label_ledger_audit(1, 1, 1),
+        }
+
+        violations = validator.validate(product)
+
+        assert any(
+            v.rule == "H.7"
+            and v.evidence.get("audit_code")
+            == "duplicate_folded_source_path"
+            for v in violations
+        )
 
 
 if __name__ == "__main__":

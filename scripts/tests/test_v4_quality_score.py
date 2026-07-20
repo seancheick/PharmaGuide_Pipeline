@@ -160,6 +160,104 @@ def test_formulation_never_exceeds_20() -> None:
     assert out["quality_pillars_v4"]["formulation"]["score"] <= 20.0
 
 
+def _fish_oil_formulation_breakdown(*, disclosed_form: str | None = None) -> dict:
+    from scoring_v4.modules.omega_formulation import score_formulation
+
+    product = {
+        "product_name": "Fish Oil 1200 mg",
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Fish Oil",
+                    "canonical_id": "fish_oil",
+                    "quantity": 2400,
+                    "unit": "mg",
+                },
+                {
+                    "name": "EPA (Eicosapentaenoic Acid)",
+                    "canonical_id": "epa",
+                    "quantity": 360,
+                    "unit": "mg",
+                },
+                {
+                    "name": "DHA (Docosahexaenoic Acid)",
+                    "canonical_id": "dha",
+                    "quantity": 240,
+                    "unit": "mg",
+                },
+            ],
+        },
+    }
+    if disclosed_form:
+        product["labelText"] = {"raw": f"Fish oil in {disclosed_form} form"}
+
+    formulation = score_formulation(product)
+    bd = _module_bd(form=formulation["score"], form_max=formulation["max"])
+    bd["dimensions"]["formulation"] = formulation
+    return bd
+
+
+def test_fish_oil_parent_identity_does_not_imply_molecular_form() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    out = assemble_quality_score(_shadow(
+        module="omega",
+        bd=_fish_oil_formulation_breakdown(),
+    ))
+    formulation = out["quality_pillars_v4"]["formulation"]
+
+    assert formulation["score"] == 6.1
+    assert formulation["components"]["raw_formulation"] == 7.0
+    assert "molecular form is not disclosed" in formulation["reason"].lower()
+    assert "basic" not in formulation["reason"].lower()
+    assert "low-cost" not in formulation["reason"].lower()
+    assert "omega_form" not in {
+        fact["id"]
+        for fact in formulation.get("explanation", {}).get("facts", [])
+    }
+
+
+def test_omega_formulation_reason_separates_form_disclosure_from_concentration() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    undisclosed = assemble_quality_score(_shadow(
+        module="omega",
+        bd=_fish_oil_formulation_breakdown(),
+    ))["quality_pillars_v4"]["formulation"]
+    disclosed = assemble_quality_score(_shadow(
+        module="omega",
+        bd=_fish_oil_formulation_breakdown(disclosed_form="triglyceride"),
+    ))["quality_pillars_v4"]["formulation"]
+
+    assert "molecular form is not disclosed" in undisclosed["reason"].lower()
+    assert "epa + dha make up 25%" in undisclosed["reason"].lower()
+    assert "molecular form is disclosed as triglyceride" in disclosed["reason"].lower()
+    assert "epa + dha make up 25%" in disclosed["reason"].lower()
+    assert disclosed["explanation"]["facts"] == [
+        {
+            "id": "omega_form",
+            "label": "Molecular form",
+            "value": "tg",
+            "value_display": "Triglyceride",
+        },
+    ]
+
+
+def test_invalid_omega_form_state_is_not_silently_called_undisclosed() -> None:
+    from scoring_v4.quality_score import assemble_quality_score
+
+    bd = _fish_oil_formulation_breakdown()
+    bd["dimensions"]["formulation"]["metadata"]["form_detected"] = "unexpected_code"
+
+    formulation = assemble_quality_score(_shadow(
+        module="omega",
+        bd=bd,
+    ))["quality_pillars_v4"]["formulation"]
+
+    assert "molecular-form data needs review" in formulation["reason"].lower()
+    assert "not disclosed" not in formulation["reason"].lower()
+
+
 def test_archetype_classification() -> None:
     from scoring_v4.quality_score import _archetype
     assert _archetype("sports", {}) == "sports_single"
