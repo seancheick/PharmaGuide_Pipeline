@@ -4274,8 +4274,6 @@ class EnhancedDSLDNormalizer:
             for identity in (
                 row.get("name"),
                 row.get("raw_source_text"),
-                row.get("standardName"),
-                row.get("standard_name"),
             )
             if identity
         )
@@ -4299,7 +4297,7 @@ class EnhancedDSLDNormalizer:
             original_raw_source_text = (
                 "" if row.get("name") is None else str(row.get("name"))
             )
-            if not original_raw_source_text.strip():
+            if original_raw_source_text.strip().casefold() in {"", "none"}:
                 self._queue_label_ledger_omission(
                     row,
                     omission_reason="empty_source_text",
@@ -4601,19 +4599,21 @@ class EnhancedDSLDNormalizer:
                 ing.get("raw_source_path") or "activeIngredients",
             ):
                 logger.debug(f"Skipping ingredient during flattening: {name}")
-                if not self._is_nutrition_fact(
+                is_nutrition_fact = self._is_nutrition_fact(
                     name,
                     ing.get("ingredientGroup"),
                     (ing.get("amount") or {}).get("unit"),
-                ):
-                    self._queue_display_ingredient(
-                        raw_source_text=name,
-                        source_section="activeIngredients",
-                        display_type="summary_wrapper",
-                        score_included=False,
-                        source_row=ing,
-                        children=self._raw_child_names_for_display(ing),
-                    )
+                )
+                self._queue_display_ingredient(
+                    raw_source_text=name,
+                    source_section="activeIngredients",
+                    display_type=(
+                        "nutrition_fact" if is_nutrition_fact else "summary_wrapper"
+                    ),
+                    score_included=False,
+                    source_row=ing,
+                    children=self._raw_child_names_for_display(ing),
+                )
                 if ing.get("forms"):
                     logger.debug(
                         "Extracting %d forms from skipped parent during flattening: %s",
@@ -4703,19 +4703,23 @@ class EnhancedDSLDNormalizer:
                     if self._should_skip_ingredient(nested_name):
                         logger.debug(f"Skipping nested ingredient: {nested_name}")
                         grand_nested = nested_ing.get("nestedRows") or []
-                        if not self._is_nutrition_fact(
+                        is_nutrition_fact = self._is_nutrition_fact(
                             nested_name,
                             nested_ing.get("ingredientGroup"),
                             (nested_ing.get("amount") or {}).get("unit"),
-                        ):
-                            self._queue_display_ingredient(
-                                raw_source_text=nested_name,
-                                source_section="activeIngredients",
-                                display_type="summary_wrapper",
-                                score_included=False,
-                                source_row=nested_ing,
-                                children=[child.get("name", "") for child in grand_nested if child.get("name")],
-                            )
+                        )
+                        self._queue_display_ingredient(
+                            raw_source_text=nested_name,
+                            source_section="activeIngredients",
+                            display_type=(
+                                "nutrition_fact"
+                                if is_nutrition_fact
+                                else "summary_wrapper"
+                            ),
+                            score_included=False,
+                            source_row=nested_ing,
+                            children=[child.get("name", "") for child in grand_nested if child.get("name")],
+                        )
                         # Rescue grandchildren from skipped nested items
                         if nested_ing.get("forms"):
                             flattened.extend(
@@ -6077,6 +6081,7 @@ class EnhancedDSLDNormalizer:
                     source_section="activeIngredients" if is_active else "inactiveIngredients",
                     display_type="summary_wrapper",
                     score_included=False,
+                    source_row=ing,
                     children=self._raw_child_names_for_display(ing),
                 )
             if is_active and ing.get("forms"):
@@ -6250,6 +6255,7 @@ class EnhancedDSLDNormalizer:
                 source_section="activeIngredients" if is_active else "inactiveIngredients",
                 display_type="nutrition_fact",
                 score_included=False,
+                source_row=ing,
                 children=_form_names_for_display,
             )
 
@@ -9117,32 +9123,35 @@ class EnhancedDSLDNormalizer:
                 fingerprint_payload.encode("utf-8")
             ).hexdigest()
 
-        # Source-compound forms are represented on their elemental parent row,
-        # not as a second ingredient tile. Retain the source occurrence in the
-        # fold trail and omission audit so completeness remains path-reconciled.
+        # Source forms that did not become their own display row are label
+        # context for the parent, not standalone ingredients. Preserve every
+        # disclosed form in source order and reconcile every source path.
         displayed_paths = {
             str(row.get("raw_source_path") or "").strip()
             for row in display_rows
         }
         for parent in display_rows:
             parent_path = str(parent.get("raw_source_path") or "").strip()
-            label_form = str(parent.get("label_display_form") or "").strip()
-            if (
-                not parent_path
-                or not label_form
-                or parent.get("source_section") != "activeIngredients"
-            ):
+            if not parent_path:
                 continue
+            folded_form_names: List[str] = []
+            folded_form_keys: Set[str] = set()
             for source in source_rows:
                 source_path = str(source.get("raw_source_path") or "").strip()
                 if (
                     source_path in displayed_paths
                     or source.get("parent_source_path") != parent_path
                     or ".forms[" not in source_path
-                    or str(source.get("raw_source_text") or "").strip().casefold()
-                    != label_form.casefold()
                 ):
                     continue
+                source_form = str(source.get("raw_source_text") or "").strip()
+                if (
+                    source_form
+                    and self._label_form_distinct_from_identity(source_form, parent)
+                    and source_form.casefold() not in folded_form_keys
+                ):
+                    folded_form_names.append(source_form)
+                    folded_form_keys.add(source_form.casefold())
                 parent.setdefault("folded_label_components", []).append({
                     "label_display_name": source.get("label_display_name"),
                     "raw_source_text": source.get("raw_source_text"),
@@ -9155,6 +9164,9 @@ class EnhancedDSLDNormalizer:
                     source,
                     omission_reason="duplicate_source_line",
                 )
+            if folded_form_names:
+                parent["label_display_form"] = "; ".join(folded_form_names)
+                parent["form_display_state"] = "listed_not_assessed"
 
         # Folate DFE and its nested folic-acid equivalent are one logical
         # label row. Preserve the equivalent as parenthetical label context.

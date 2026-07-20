@@ -4,11 +4,128 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from enrichment_contract_validator import EnrichmentContractValidator
+from enhanced_normalizer import EnhancedDSLDNormalizer
 
 
 def _f_rules(product):
     violations = EnrichmentContractValidator().validate(product)
     return [v for v in violations if v.rule.startswith("F.")]
+
+
+def _h_rules(product):
+    violations = EnrichmentContractValidator().validate(product)
+    return [v for v in violations if v.rule.startswith("H.")]
+
+
+def _normalize_label_product(*, ingredient_rows=None, other_ingredients=None):
+    return EnhancedDSLDNormalizer().normalize_product(
+        {
+            "id": "label-ledger-producer-contract",
+            "fullName": "Label Ledger Producer Contract",
+            "brandName": "Test Brand",
+            "productVersionCode": "1",
+            "ingredientRows": ingredient_rows or [],
+            "otheringredients": {"ingredients": other_ingredients or []},
+        }
+    )
+
+
+def test_label_ledger_omits_literal_none_placeholder_without_contract_drift():
+    product = _normalize_label_product(other_ingredients=[{"name": "None"}])
+
+    assert _h_rules(product) == []
+    assert product["display_ingredients"] == []
+    assert product["label_ledger_omissions"] == [
+        {
+            "raw_source_path": "otheringredients.ingredients[0]",
+            "raw_source_text": "None",
+            "omission_reason": "empty_source_text",
+        }
+    ]
+
+
+def test_nested_nutrition_fact_is_displayed_but_never_scored():
+    product = _normalize_label_product(
+        ingredient_rows=[
+            {
+                "name": "Calories",
+                "ingredientGroup": "Amount Per Serving",
+                "order": 1,
+                "quantity": [{"quantity": 35, "unit": "cal"}],
+                "nestedRows": [
+                    {
+                        "name": "Calories from Fat",
+                        "ingredientGroup": "Amount Per Serving",
+                        "order": 2,
+                        "quantity": [{"quantity": 10, "unit": "cal"}],
+                    }
+                ],
+            }
+        ]
+    )
+
+    assert _h_rules(product) == []
+    rows = {
+        row["raw_source_text"]: row for row in product["display_ingredients"]
+    }
+    assert rows["Calories"]["display_type"] == "nutrition_fact"
+    assert rows["Calories from Fat"]["display_type"] == "nutrition_fact"
+    assert rows["Calories"]["score_included"] is False
+    assert rows["Calories from Fat"]["score_included"] is False
+
+
+def test_inactive_disclosed_form_is_folded_into_parent_label_row():
+    product = _normalize_label_product(
+        other_ingredients=[
+            {
+                "name": "Gelatin",
+                "forms": [{"name": "Bovine", "category": "Animal Part or Source"}],
+            }
+        ]
+    )
+
+    assert _h_rules(product) == []
+    assert len(product["display_ingredients"]) == 1
+    parent = product["display_ingredients"][0]
+    assert parent["label_display_name"] == "Gelatin"
+    assert parent["label_display_form"] == "Bovine"
+    assert parent["form_display_state"] == "listed_not_assessed"
+    assert [
+        component["raw_source_text"]
+        for component in parent["folded_label_components"]
+    ] == ["Bovine"]
+
+
+def test_structural_blend_parent_has_one_path_bound_display_row():
+    product = _normalize_label_product(
+        ingredient_rows=[
+            {
+                "name": "Organic Alkalizing Green Juice Powders",
+                "ingredientGroup": "Blend (Herb/Botanical)",
+                "category": "blend",
+                "order": 1,
+                "quantity": [{"quantity": 117, "unit": "mg"}],
+                "nestedRows": [
+                    {
+                        "name": "Organic Wheat Grass Juice Powder",
+                        "ingredientGroup": "Wheat grass",
+                        "category": "botanical",
+                        "order": 2,
+                    }
+                ],
+            }
+        ]
+    )
+
+    assert _h_rules(product) == []
+    parent_rows = [
+        row
+        for row in product["display_ingredients"]
+        if row["raw_source_text"] == "Organic Alkalizing Green Juice Powders"
+    ]
+    assert len(parent_rows) == 1
+    assert parent_rows[0]["raw_source_path"] == "ingredientRows[0]"
+    assert parent_rows[0]["display_type"] == "structural_container"
 
 
 def _row(**overrides):

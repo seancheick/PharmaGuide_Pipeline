@@ -1911,7 +1911,7 @@ class TestBatch11WrapperAndSummaryRows:
         assert display_by_raw["High Choline Lecithin"]["score_included"] is False
         assert display_by_raw["High Choline Lecithin"]["source_section"] == "activeIngredients"
 
-    def test_display_ledger_keeps_wrappers_but_excludes_nutrition_facts(self, normalizer):
+    def test_display_ledger_keeps_wrappers_and_unscored_nutrition_facts(self, normalizer):
         raw_product = {
             "id": "display-ledger-no-nutrition",
             "fullName": "Display Ledger Nutrition Guard",
@@ -1946,9 +1946,11 @@ class TestBatch11WrapperAndSummaryRows:
         normalized = normalizer.normalize_product(raw_product)
         display_rows = normalized.get("display_ingredients", [])
         display_raw = [row.get("raw_source_text") for row in display_rows]
+        display_by_raw = {row.get("raw_source_text"): row for row in display_rows}
 
         assert "Other Omega-3's" in display_raw
-        assert "Calories from Fat" not in display_raw
+        assert display_by_raw["Calories from Fat"]["display_type"] == "nutrition_fact"
+        assert display_by_raw["Calories from Fat"]["score_included"] is False
 
 
 class TestCleaningUnmappedBatch1Regressions:
