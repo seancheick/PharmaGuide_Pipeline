@@ -327,20 +327,6 @@ def _dose_mg(row: Dict[str, Any]) -> Optional[float]:
     return None
 
 
-def _iter_active_rows(product: Dict[str, Any]) -> List[Dict[str, Any]]:
-    rows: List[Dict[str, Any]] = []
-    for key in ("activeIngredients", "display_ingredients"):
-        for row in _safe_list(product.get(key)):
-            if isinstance(row, dict):
-                rows.append(row)
-    iqd = _safe_dict(product.get("ingredient_quality_data"))
-    for key in ("ingredients_scorable", "ingredients_skipped"):
-        for row in _safe_list(iqd.get(key)):
-            if isinstance(row, dict):
-                rows.append(row)
-    return rows
-
-
 def _is_caffeine_row(row: Dict[str, Any]) -> bool:
     text = " ".join(
         _norm(row.get(field))
@@ -442,7 +428,26 @@ def _apply_stimulant_policy(result: SafetyResult, product: Dict[str, Any]) -> No
     caffeine dose (>400 mg) or undisclosed caffeine in a stimulant/pre-workout
     context is different: the user cannot judge safe use without taking action.
     """
-    caffeine_rows = [row for row in _iter_active_rows(product) if _is_caffeine_row(row)]
+    # These are alternative representations of the same label rows, not
+    # additive dose sources. Use the first representation that surfaces
+    # caffeine so a 300 mg row mirrored across all three contracts is not
+    # summed as 600/900 mg. Multiple caffeine rows within the authoritative
+    # representation remain additive.
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    active_representations = (
+        _safe_list(product.get("activeIngredients")),
+        _safe_list(product.get("display_ingredients")),
+        _safe_list(iqd.get("ingredients_scorable"))
+        + _safe_list(iqd.get("ingredients_skipped")),
+    )
+    caffeine_rows: List[Dict[str, Any]] = []
+    for rows in active_representations:
+        caffeine_rows = [
+            row for row in rows
+            if isinstance(row, dict) and _is_caffeine_row(row)
+        ]
+        if caffeine_rows:
+            break
     if not caffeine_rows:
         # No SURFACED caffeine row — but a stimulant may be HIDDEN inside an
         # opaque proprietary blend (undisclosed dose). That is exactly the

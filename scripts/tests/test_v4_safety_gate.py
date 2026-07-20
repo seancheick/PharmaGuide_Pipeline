@@ -251,6 +251,31 @@ def test_caffeine_300_to_400_mg_surfaces_signal_without_global_caution() -> None
     assert "STIMULANT_CAFFEINE_ELEVATED_DOSE" in result.safety_signals
 
 
+def test_caffeine_mirrored_across_contract_buckets_is_counted_once() -> None:
+    from scoring_v4.gate_safety import evaluate_safety_gate
+    product = {
+        "product_name": "Disclosed Pre-Workout",
+        "primary_type": "pre_workout",
+        "activeIngredients": [
+            {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": 300, "unit": "mg"}
+        ],
+        "display_ingredients": [
+            {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": 300, "unit": "mg"}
+        ],
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {"name": "Caffeine Anhydrous", "canonical_id": "caffeine", "quantity": 300, "unit": "mg"}
+            ]
+        },
+    }
+
+    result = evaluate_safety_gate(product)
+
+    assert result.verdict is None
+    assert result.needs_review is False
+    assert result.safety_signals == ["STIMULANT_CAFFEINE_MODERATE_DOSE"]
+
+
 def test_hidden_caffeine_in_preworkout_blend_forces_caution_and_review() -> None:
     from scoring_v4.gate_safety import evaluate_safety_gate
     product = {
