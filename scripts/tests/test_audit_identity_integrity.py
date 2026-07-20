@@ -165,3 +165,22 @@ def test_audit_requires_literal_label_identity_and_source_key_for_scorable_rows(
 
     assert label_records[0].violation == "missing_literal_source_label"
     assert key_records[0].violation == "missing_source_label_key"
+
+
+def test_enriched_identity_audit_defers_final_label_ledger_contract():
+    product = _product([_active_row()])
+    product["display_ingredients"] = [
+        {
+            "raw_source_text": "Magnesium",
+            "display_name": "Magnesium",
+            "raw_source_path": "ingredientRows[0]",
+            "quantity": 200,
+            "unit": "mg",
+        }
+    ]
+
+    records = audit_product(product, classify=_force("generic"))
+
+    assert len(records) == 1
+    assert records[0].disposition == "clean"
+    assert not records[0].failed

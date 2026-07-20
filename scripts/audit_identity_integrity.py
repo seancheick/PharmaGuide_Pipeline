@@ -189,10 +189,18 @@ def audit_product(
             )
         )
 
-    # The canonical display ledger owns form and display integrity. Reuse the
-    # validator's release-only contract so direct final builds and release_full
-    # fail on the same stable audit codes without mutating identity or scores.
-    for violation in _RELEASE_VALIDATOR.validate_release_integrity(product):
+    # The canonical display ledger is finalized by build_final_db. Enriched
+    # stage rows intentionally lack final-only fields such as ledger_fingerprint
+    # and form_display_state, so applying the release contract here would mark
+    # every source row unresolved before the final adapter can build it. A
+    # label_record is the explicit final-blob boundary; direct final-blob audits
+    # still reuse the same release contract below.
+    release_violations = (
+        _RELEASE_VALIDATOR.validate_release_integrity(product)
+        if isinstance(product.get("label_record"), dict)
+        else []
+    )
+    for violation in release_violations:
         if violation.severity != "error":
             continue
         audit_code = str(

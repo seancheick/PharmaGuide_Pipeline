@@ -3546,6 +3546,109 @@ def _ledger_fingerprint(row: Dict[str, Any]) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def _reconcile_display_source_rows(rows: List[Any]) -> List[Dict[str, Any]]:
+    """Collapse the cleaner's two compatible views of one blend source row.
+
+    Older fresh outputs can contain both a structural-container row (which
+    owns the blend children) and a scored mapped row for the exact same source
+    path. They are complementary projections of one printed line, not two
+    label lines. Reconcile only that explicit pair; every other duplicate path
+    remains a hard failure so real source corruption cannot be hidden.
+    """
+    materialized = [dict(row) for row in rows if isinstance(row, dict)]
+    by_path: Dict[str, List[Dict[str, Any]]] = {}
+    for row in materialized:
+        source_path = safe_str(row.get("raw_source_path"))
+        if source_path:
+            by_path.setdefault(source_path, []).append(row)
+
+    replacements: Dict[str, Dict[str, Any]] = {}
+    for source_path, duplicates in by_path.items():
+        if len(duplicates) == 1:
+            continue
+        structural = [
+            row
+            for row in duplicates
+            if safe_str(row.get("display_type")) == "structural_container"
+            and not safe_bool(row.get("score_included"))
+        ]
+        interpretations = [
+            row
+            for row in duplicates
+            if safe_str(row.get("display_type"))
+            in {"mapped_ingredient", "nutrition_fact"}
+        ]
+        structural_quantity = safe_float(
+            structural[0].get("quantity") if structural else None
+        )
+        interpretation_quantity = safe_float(
+            interpretations[0].get("quantity") if interpretations else None
+        )
+        both_disclosed = (
+            structural_quantity is not None
+            and structural_quantity > 0
+            and interpretation_quantity is not None
+            and interpretation_quantity > 0
+        )
+        neither_disclosed = not (
+            structural_quantity is not None and structural_quantity > 0
+        ) and not (
+            interpretation_quantity is not None and interpretation_quantity > 0
+        )
+        dose_compatible = neither_disclosed or (
+            both_disclosed
+            and structural_quantity == interpretation_quantity
+            and safe_str(structural[0].get("unit")).casefold()
+            == safe_str(interpretations[0].get("unit")).casefold()
+        )
+        compatible = (
+            len(duplicates) == 2
+            and len(structural) == 1
+            and len(interpretations) == 1
+            and _form_alias_key(structural[0].get("raw_source_text"))
+            == _form_alias_key(interpretations[0].get("raw_source_text"))
+            and dose_compatible
+            and safe_float(structural[0].get("nested_depth"), 0)
+            == safe_float(interpretations[0].get("nested_depth"), 0)
+            and _form_alias_key(structural[0].get("parent_label"))
+            == _form_alias_key(interpretations[0].get("parent_label"))
+        )
+        if not compatible:
+            raise ValueError(
+                "duplicate upstream display_ingredients raw_source_path: "
+                f"{source_path}"
+            )
+        merged = dict(interpretations[0])
+        merged.update({
+            "display_type": "structural_container",
+            "resolution_type": structural[0].get("resolution_type"),
+            "children": safe_list(structural[0].get("children")),
+            "score_included": safe_bool(
+                interpretations[0].get("score_included")
+            ),
+        })
+        if neither_disclosed:
+            # Preserve the printed disclosure state. Internal mapped rows may
+            # encode a missing total as 0/NP, but that sentinel must never
+            # become a user-facing label amount.
+            merged["quantity"] = structural[0].get("quantity")
+            merged["unit"] = structural[0].get("unit")
+            merged["exact_dose_text"] = structural[0].get("exact_dose_text")
+        replacements[source_path] = merged
+
+    output: List[Dict[str, Any]] = []
+    emitted_paths: set[str] = set()
+    for row in materialized:
+        source_path = safe_str(row.get("raw_source_path"))
+        if source_path in replacements:
+            if source_path not in emitted_paths:
+                output.append(replacements[source_path])
+                emitted_paths.add(source_path)
+            continue
+        output.append(row)
+    return output
+
+
 def _assert_unique_upstream_label_source_paths(enriched: Dict[str, Any]) -> None:
     """Fail closed on producer duplicates before any final reconciliation."""
     for collection_name in (
@@ -5683,9 +5786,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Canonical display source of truth. This is assembled only after the
     # scored active and inactive adapters exist, and never flows back into
     # dose, safety, warning, or scoring calculations below.
-    _assert_unique_upstream_label_source_paths(enriched)
+    reconciled_display_rows = _reconcile_display_source_rows(
+        safe_list(enriched.get("display_ingredients"))
+    )
+    reconciled_enriched = dict(enriched)
+    reconciled_enriched["display_ingredients"] = reconciled_display_rows
+    _assert_unique_upstream_label_source_paths(reconciled_enriched)
     display_ingredients = _build_canonical_label_ledger(
-        safe_list(enriched.get("display_ingredients")),
+        reconciled_display_rows,
         ingredients,
         inactive,
     )

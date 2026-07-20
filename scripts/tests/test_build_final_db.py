@@ -4114,6 +4114,59 @@ def test_final_ledger_uses_unmapped_analysis_over_stale_assessed_form_state():
     assert rows[0]["analysis"]["form_display_state"] == "listed_not_assessed"
 
 
+def test_final_ledger_preserves_vitamin_totals_with_nested_label_components():
+    from build_final_db import _build_canonical_label_ledger
+
+    source_rows = [
+        ("Vitamin A", "1.05 mg", 0, None),
+        ("Beta-Carotene", "450 mcg", 1, "Vitamin A"),
+        ("Vitamin A Palmitate", "600 mcg", 1, "Vitamin A"),
+        ("Vitamin K", "400 mcg", 0, None),
+        ("Vitamin K1", "200 mcg", 1, "Vitamin K"),
+        ("Vitamin K2", "200 mcg", 1, "Vitamin K"),
+    ]
+    display_rows = [
+        {
+            "raw_source_text": name,
+            "display_name": name,
+            "raw_source_path": f"ingredientRows[{index}]",
+            "label_order": index,
+            "nested_depth": depth,
+            "parent_label": parent,
+            "exact_dose_text": dose,
+            "source_section": "activeIngredients",
+            "score_included": True,
+        }
+        for index, (name, dose, depth, parent) in enumerate(source_rows)
+    ]
+    analysis_rows = [
+        {
+            "raw_source_text": name,
+            "raw_source_path": f"ingredientRows[{index}]",
+            "display_label": name,
+            "display_dose_label": dose,
+            "canonical_id": "vitamin_a" if index < 3 else "vitamin_k",
+            "identity_disposition": "clean",
+        }
+        for index, (name, dose, _depth, _parent) in enumerate(source_rows)
+    ]
+
+    rows = _build_canonical_label_ledger(display_rows, analysis_rows, [])
+
+    assert [row["label_display_name"] for row in rows] == [
+        name for name, _dose, _depth, _parent in source_rows
+    ]
+    assert [row["nested_depth"] for row in rows] == [0, 1, 1, 0, 1, 1]
+    assert [row["parent_label"] for row in rows] == [
+        None,
+        "Vitamin A",
+        "Vitamin A",
+        None,
+        "Vitamin K",
+        "Vitamin K",
+    ]
+
+
 def test_form_contract_does_not_treat_canonical_standard_name_as_label_identity():
     from build_final_db import _compute_form_contract
 
@@ -4714,6 +4767,71 @@ def test_final_builder_rejects_duplicate_upstream_label_source_paths(
         match=rf"duplicate upstream {collection_name} raw_source_path: label\[0\]",
     ):
         build_detail_blob(enriched, make_scored())
+
+
+@pytest.mark.parametrize(
+    ("interpretation_type", "score_included", "structural_dose", "mapped_dose"),
+    [
+        ("mapped_ingredient", True, (720, "mg"), (720.0, "mg")),
+        ("nutrition_fact", False, (720, "mg"), (720, "mg")),
+        ("mapped_ingredient", True, (None, ""), (0.0, "NP")),
+    ],
+)
+def test_final_builder_reconciles_complementary_views_of_same_blend_row(
+    interpretation_type,
+    score_included,
+    structural_dose,
+    mapped_dose,
+):
+    enriched = _omega_label_ledger_enriched()
+    structural = {
+        "raw_source_text": "Marine Lipid Blend",
+        "display_name": "Marine Lipid Blend",
+        "raw_source_path": "ingredientRows[9]",
+        "label_order": 9,
+        "nested_depth": 0,
+        "quantity": structural_dose[0],
+        "unit": structural_dose[1],
+        "source_section": "activeIngredients",
+        "display_type": "structural_container",
+        "resolution_type": "structural_parent",
+        "score_included": False,
+        "children": ["EPA", "DHA"],
+    }
+    scored = {
+        **structural,
+        "display_type": interpretation_type,
+        "resolution_type": (
+            "direct_mapped"
+            if interpretation_type == "mapped_ingredient"
+            else "display_only"
+        ),
+        "score_included": score_included,
+        "quantity": mapped_dose[0],
+        "unit": mapped_dose[1],
+        "mapped_to": {
+            "standard_name": "Marine Lipid Blend",
+            "raw_source_path": "ingredientRows[9]",
+        },
+    }
+    enriched["display_ingredients"].extend([structural, scored])
+
+    blob = build_detail_blob(enriched, make_scored())
+    rows = [
+        row
+        for row in blob["display_ingredients"]
+        if row["raw_source_path"] == "ingredientRows[9]"
+    ]
+
+    assert len(rows) == 1
+    assert rows[0]["score_included"] is score_included
+    assert rows[0]["display_type"] == "structural_container"
+    assert rows[0]["children"] == ["EPA", "DHA"]
+    assert rows[0]["mapped_to"]["standard_name"] == "Marine Lipid Blend"
+    if structural_dose[0] is None:
+        assert rows[0]["quantity"] is None
+        assert rows[0]["unit"] == ""
+        assert rows[0]["exact_dose_text"] in {"", "—"}
 
 
 def test_final_builder_legacy_fallback_emits_complete_canonical_label_contract():
