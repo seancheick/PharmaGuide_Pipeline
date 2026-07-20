@@ -3621,6 +3621,163 @@ def test_final_ledger_folds_multi_serving_probiotic_headers_into_one_parent():
     assert rows[0]["folded_label_components"][0]["omission_reason"] == "alternate_serving_variant"
 
 
+def test_final_ledger_folds_general_audience_servings_without_summing():
+    from build_final_db import _fold_general_serving_variants
+
+    ledger = [
+        {
+            "label_display_name": "Zinc",
+            "raw_source_path": "ingredientRows[2]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 0,
+            "exact_dose_text": "22 mg",
+            "serving_size_order": 2,
+            "serving_size_quantity": 2,
+            "serving_size_unit": "Gummy(ies)",
+        },
+        {
+            "label_display_name": "Zinc",
+            "raw_source_path": "ingredientRows[6]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 1,
+            "exact_dose_text": "11 mg",
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "Gummy(ies)",
+        },
+    ]
+    enriched = {
+        "servingSizes": [
+            {"order": 1, "notes": "Children 9 years of age and older"},
+            {"order": 2, "notes": "Adults"},
+        ]
+    }
+
+    rows = _fold_general_serving_variants(enriched, ledger)
+
+    assert len(rows) == 1
+    assert rows[0]["label_display_name"] == "Zinc"
+    assert rows[0]["exact_dose_text"] == ""
+    assert rows[0]["serving_variants"] == [
+        {
+            "serving_size_order": 1,
+            "serving_size_quantity": 1,
+            "serving_size_unit": "Gummy(ies)",
+            "serving_note": "Children 9 years of age and older",
+            "exact_dose_text": "11 mg",
+            "is_canonical": False,
+        },
+        {
+            "serving_size_order": 2,
+            "serving_size_quantity": 2,
+            "serving_size_unit": "Gummy(ies)",
+            "serving_note": "Adults",
+            "exact_dose_text": "22 mg",
+            "is_canonical": False,
+        },
+    ]
+    assert rows[0]["folded_label_components"][0]["omission_reason"] == "alternate_serving_variant"
+
+
+def test_final_ledger_does_not_fold_same_name_rows_for_one_serving():
+    from build_final_db import _fold_general_serving_variants
+
+    ledger = [
+        {
+            "label_display_name": "Protease",
+            "raw_source_path": "ingredientRows[18]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 0,
+            "exact_dose_text": "3,030 HUT · high pH",
+            "serving_size_order": 1,
+        },
+        {
+            "label_display_name": "Protease",
+            "raw_source_path": "ingredientRows[19]",
+            "source_section": "activeIngredients",
+            "nested_depth": 0,
+            "label_order": 1,
+            "exact_dose_text": "25 SAPU · low pH",
+            "serving_size_order": 1,
+        },
+    ]
+
+    rows = _fold_general_serving_variants(
+        {"servingSizes": [{"order": 1, "notes": "Adults"}]},
+        ledger,
+    )
+
+    assert len(rows) == 2
+    assert [row["exact_dose_text"] for row in rows] == [
+        "3,030 HUT · high pH",
+        "25 SAPU · low pH",
+    ]
+
+
+def test_label_dose_text_normalizes_dsld_units_and_preserves_enzyme_activity():
+    from enhanced_normalizer import EnhancedDSLDNormalizer
+
+    normalizer = object.__new__(EnhancedDSLDNormalizer)
+
+    assert normalizer._exact_label_dose_text(
+        {"quantity": [{"quantity": 20, "unit": "Calorie(s)"}]}
+    ) == "20 Calories"
+    assert normalizer._exact_label_dose_text(
+        {"quantity": [{"quantity": 4, "unit": "Gram(s)"}]}
+    ) == "4 g"
+    assert normalizer._exact_label_dose_text(
+        {
+            "quantity": [{"quantity": 0, "unit": "NP"}],
+            "notes": "Protease Note: (high pH) (3,030 HUT) (Dairy Digesting)",
+        }
+    ) == "3,030 HUT · high pH"
+
+
+def test_warning_dedup_merges_active_and_inactive_producers_for_one_hazard():
+    from build_final_db import _dedup_warnings
+
+    rows = _dedup_warnings(
+        [
+            {
+                "type": "banned_substance",
+                "source": "inactive_ingredient_resolver",
+                "matched_rule_id": "BANNED_DHEA",
+                "ingredient_name": "DHEA",
+                "severity": "caution",
+                "display_mode_default": "critical",
+                "title": "High-risk hormonal ingredient",
+                "sources": ["https://example.test/inactive"],
+            },
+            {
+                "type": "high_risk_ingredient",
+                "source": "banned_recalled",
+                "matched_rule_id": "BANNED_DHEA",
+                "ingredient_name": "DHEA",
+                "severity": "avoid",
+                "display_mode_default": "critical",
+                "alert_headline": "Avoid DHEA",
+                "alert_body": "DHEA has material hormonal activity.",
+                "sources": ["https://example.test/active"],
+            },
+        ]
+    )
+
+    assert len(rows) == 1
+    assert rows[0]["severity"] == "avoid"
+    assert rows[0]["alert_headline"] == "Avoid DHEA"
+    assert rows[0]["sources"] == [
+        "https://example.test/active",
+        "https://example.test/inactive",
+    ]
+    assert rows[0]["source_producers"] == [
+        "banned_recalled",
+        "inactive_ingredient_resolver",
+    ]
+
+
 def test_final_ledger_keeps_distinct_same_name_probiotic_headers():
     from build_final_db import _fold_probiotic_serving_headers
 

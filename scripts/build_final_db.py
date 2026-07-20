@@ -3154,6 +3154,23 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         s = str(v)
         return (s,) if s else ()
 
+    severity = safe_str(w.get("severity")).casefold()
+    display_mode = safe_str(w.get("display_mode_default")).casefold()
+    subject = safe_str(
+        w.get("ingredient_name") or w.get("matched_rule_id")
+    ).casefold()
+    if subject and (
+        display_mode == "critical"
+        or severity in {"contraindicated", "avoid", "critical", "blocked"}
+    ):
+        return (
+            ("critical_subject",),
+            (subject,),
+            _norm(w.get("condition_id") or w.get("condition_ids")),
+            _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
+            _norm(w.get("ban_context")),
+        )
+
     # Per-ingredient identity: include matched_rule_id (when present) or
     # ingredient_name so two resolver-synthesized warnings for DIFFERENT
     # banned actives (e.g. 7-Keto-DHEA + Garcinia on the same product)
@@ -3211,12 +3228,47 @@ def _dedup_warnings(warnings_list: Optional[List[Dict[str, Any]]]) -> List[Dict[
         key = _warning_dedup_key(w)
         best = by_key.get(key)
         if best is None:
-            by_key[key] = w
+            initial = dict(w)
+            producer = safe_str(w.get("source"))
+            if producer:
+                initial["source_producers"] = [producer]
+            by_key[key] = initial
             first_index[key] = idx
             continue
-        if _warning_completeness_score(w) > _warning_completeness_score(best):
-            by_key[key] = w
-            # keep the earliest first_index — don't promote position on replacement
+        severity_rank = {
+            "safe": 0,
+            "informational": 1,
+            "monitor": 2,
+            "caution": 3,
+            "avoid": 4,
+            "contraindicated": 5,
+            "critical": 5,
+            "blocked": 5,
+        }
+        incoming_rank = severity_rank.get(safe_str(w.get("severity")).casefold(), 3)
+        best_rank = severity_rank.get(safe_str(best.get("severity")).casefold(), 3)
+        choose_incoming = incoming_rank > best_rank or (
+            incoming_rank == best_rank
+            and _warning_completeness_score(w) > _warning_completeness_score(best)
+        )
+        selected = dict(w if choose_incoming else best)
+        selected["sources"] = sorted({
+            str(source).strip()
+            for candidate in (best, w)
+            for source in safe_list(candidate.get("sources"))
+            if str(source).strip()
+        })
+        selected["source_producers"] = sorted({
+            producer
+            for candidate in (best, w)
+            for producer in (
+                *safe_list(candidate.get("source_producers")),
+                safe_str(candidate.get("source")),
+            )
+            if producer
+        })
+        by_key[key] = selected
+        # keep the earliest first_index — don't promote position on replacement
 
     # Second pass — emit in earliest-appearance order for UX stability.
     return [by_key[k] for k in sorted(by_key, key=lambda kk: first_index[kk])]
@@ -4057,6 +4109,95 @@ def _fold_probiotic_serving_headers(
             )
             selected["serving_variants"] = variants
 
+        for alternative in alternatives:
+            if alternative is selected:
+                continue
+            selected.setdefault("folded_label_components", []).append({
+                "label_display_name": alternative.get("label_display_name"),
+                "raw_source_text": alternative.get("raw_source_text"),
+                "raw_source_path": alternative.get("raw_source_path"),
+                "source_section": alternative.get("source_section"),
+                "exact_dose_text": alternative.get("exact_dose_text"),
+                "omission_reason": "alternate_serving_variant",
+            })
+            output.remove(alternative)
+
+    output.sort(key=lambda row: safe_float(row.get("label_order"), float("inf")))
+    for index, row in enumerate(output):
+        row["label_order"] = index
+    return output
+
+
+def _fold_general_serving_variants(
+    enriched: Dict[str, Any],
+    ledger: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Fold repeated label rows only when they belong to different servings.
+
+    DSLD represents audience-specific Supplement Facts columns as repeated row
+    blocks. They are alternatives, not additive ingredients. Preserve every
+    authored amount in ``serving_variants`` and deliberately clear the parent
+    amount so no audience is silently presented as the universal serving.
+    Same-name rows within one serving (for example distinct Protease activity
+    bands) remain separate.
+    """
+    serving_notes = {
+        safe_float(row.get("order")): safe_str(row.get("notes"))
+        for row in safe_list(enriched.get("servingSizes"))
+        if isinstance(row, dict) and row.get("order") is not None
+    }
+    if len(serving_notes) < 2:
+        return ledger
+
+    output = [dict(row) for row in ledger]
+    groups: Dict[tuple, List[Dict[str, Any]]] = {}
+    for row in output:
+        if row.get("serving_variants"):
+            continue
+        serving_order = safe_float(row.get("serving_size_order"))
+        label_name = safe_str(row.get("label_display_name")).casefold()
+        if serving_order is None or not label_name:
+            continue
+        key = (
+            safe_str(row.get("source_section")),
+            safe_str(row.get("display_type")),
+            int(safe_float(row.get("nested_depth"), 0) or 0),
+            safe_str(row.get("parent_label")).casefold(),
+            label_name,
+        )
+        groups.setdefault(key, []).append(row)
+
+    for alternatives in groups.values():
+        serving_orders = {
+            safe_float(row.get("serving_size_order")) for row in alternatives
+        }
+        if len(alternatives) < 2 or len(serving_orders) < 2:
+            continue
+        selected = min(
+            alternatives,
+            key=lambda row: safe_float(row.get("label_order"), float("inf")),
+        )
+        variants = [
+            {
+                "serving_size_order": safe_float(row.get("serving_size_order")),
+                "serving_size_quantity": safe_float(row.get("serving_size_quantity")),
+                "serving_size_unit": safe_str(row.get("serving_size_unit")),
+                "serving_note": serving_notes.get(
+                    safe_float(row.get("serving_size_order")), ""
+                ),
+                "exact_dose_text": safe_str(row.get("exact_dose_text")),
+                "is_canonical": False,
+            }
+            for row in alternatives
+        ]
+        variants.sort(
+            key=lambda row: (
+                safe_float(row.get("serving_size_order"), float("inf")),
+                safe_float(row.get("serving_size_quantity"), float("inf")),
+            )
+        )
+        selected["exact_dose_text"] = ""
+        selected["serving_variants"] = variants
         for alternative in alternatives:
             if alternative is selected:
                 continue
@@ -5926,6 +6067,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         inactive,
     )
     display_ingredients = _fold_probiotic_serving_headers(
+        enriched,
+        display_ingredients,
+    )
+    display_ingredients = _fold_general_serving_variants(
         enriched,
         display_ingredients,
     )

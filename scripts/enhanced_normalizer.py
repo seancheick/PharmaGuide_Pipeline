@@ -4194,6 +4194,44 @@ class EnhancedDSLDNormalizer:
             return f"{int(number):,}"
         return f"{number:g}"
 
+    @staticmethod
+    def _normalize_label_unit(value: Any) -> str:
+        """Return consumer-readable DSLD units without changing the amount."""
+        unit = str(value or "").strip()
+        replacements = {
+            "calorie(s)": "Calories",
+            "gram(s)": "g",
+            "capsule(s)": "capsules",
+            "tablet(s)": "tablets",
+            "softgel(s)": "softgels",
+            "gummy(ies)": "gummies",
+        }
+        return replacements.get(unit.casefold(), unit)
+
+    @staticmethod
+    def _activity_dose_from_notes(value: Any) -> str:
+        """Preserve authored enzyme activity when DSLD stores the dose in notes."""
+        notes = str(value or "").strip()
+        if not notes:
+            return ""
+        activity = re.search(
+            r"\(([\d,]+(?:\.\d+)?)\s*"
+            r"(HUT|SAPU|PC|FIP|FCC|DU|ALU|SU|SPU|CU|HDU)\)",
+            notes,
+            re.IGNORECASE,
+        )
+        if not activity:
+            return ""
+        qualifier = re.search(
+            r"\((high pH|low pH|mid pH|neutral pH)\)",
+            notes,
+            re.IGNORECASE,
+        )
+        result = f"{activity.group(1)} {activity.group(2).upper()}"
+        if qualifier:
+            result += f" · {qualifier.group(1)}"
+        return result
+
     def _exact_label_dose_text(self, row: Dict[str, Any]) -> str:
         """Preserve an authored dose string, or deterministically format DSLD quantity."""
         for key in ("exact_dose_text", "amountDisplay", "quantityDisplay", "displayAmount"):
@@ -4215,9 +4253,9 @@ class EnhancedDSLDNormalizer:
             amount = quantity
             unit = row.get("unit")
         amount_text = self._format_label_quantity(amount)
-        unit_text = str(unit or "").strip()
+        unit_text = self._normalize_label_unit(unit)
         if not amount_text or not unit_text or unit_text.lower() in {"np", "unspecified"}:
-            return ""
+            return self._activity_dose_from_notes(row.get("notes"))
         return f"{amount_text} {unit_text}"
 
     @staticmethod
@@ -4267,6 +4305,15 @@ class EnhancedDSLDNormalizer:
                     omission_reason="empty_source_text",
                 )
             if hasattr(self, "_display_source_rows"):
+                raw_quantities = row.get("quantity")
+                first_quantity = (
+                    next(
+                        (item for item in raw_quantities if isinstance(item, dict)),
+                        {},
+                    )
+                    if isinstance(raw_quantities, list)
+                    else {}
+                )
                 self._display_source_rows.append({
                     "raw_source_text": str(row.get("name") or "").strip(),
                     "label_display_name": str(row.get("name") or "").strip(),
@@ -4282,6 +4329,11 @@ class EnhancedDSLDNormalizer:
                     "parent_label": parent_label,
                     "parent_source_path": parent_source_path,
                     "exact_dose_text": self._exact_label_dose_text(row),
+                    "serving_size_order": first_quantity.get("servingSizeOrder"),
+                    "serving_size_quantity": first_quantity.get("servingSizeQuantity"),
+                    "serving_size_unit": self._normalize_label_unit(
+                        first_quantity.get("servingSizeUnit")
+                    ),
                     "raw_category": row.get("category"),
                     "ingredient_group": row.get("ingredientGroup"),
                     "children": self._raw_child_names_for_display(row),
@@ -9037,6 +9089,14 @@ class EnhancedDSLDNormalizer:
             if corrected_parent and corrected_parent != row.get("parent_label"):
                 row["source_parent_label"] = row.get("parent_label")
                 row["parent_label"] = corrected_parent
+            if self._safe_int(row.get("nested_depth"), default=0) > 0 and not str(
+                row.get("parent_label") or ""
+            ).strip():
+                # A nested visual row without an identifiable parent is more
+                # misleading than a standalone row. Preserve the source path
+                # for audit, but do not invent hierarchy in the app.
+                row["nested_depth"] = 0
+                row["hierarchy_disposition"] = "standalone_missing_parent"
         display_rows.sort(
             key=lambda row: (
                 self._safe_int(row.get("label_order"), default=10**9),
